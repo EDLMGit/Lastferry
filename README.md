@@ -7,6 +7,8 @@ M1 is a playable 3D tutorial cove: rescue Moss the sheep with Pip and Rue alread
 Use **Node 24** (`.nvmrc`). Verified locally with Node **24.15.0** and npm **11.12.1**.
 
 ```sh
+git clone --branch m1-first-crossing https://github.com/EDLMGit/Lastferry.git
+cd Lastferry
 npm ci
 npm run dev
 ```
@@ -58,7 +60,9 @@ Reproduce the detour manually: Sheep pier → Board Moss → East buoy → South
 
 ## Evidence and source
 
-See [M1 review](reviews/m1/REVIEW.md), [status](STATUS.md), [capture manifest](reviews/m1/capture-manifest.json), and [tested source hashes](reviews/m1/source-manifest.json). Small PNGs are actual gameplay captures, including 1440×900 desktop, 844×390 emulated touch landscape and 390×844 portrait. Unedited desktop and phone recordings remain locally under `reviews/m1/raw/` and are ignored by Git. This directory had no Git repository or first commit at capture; no remote action was taken.
+See the current [M1 first-pass review](reviews/m1-first-pass/REVIEW.md), [evidence reuse audit](reviews/m1-first-pass/evidence-reuse.json), [status](STATUS.md), [capture manifest](reviews/m1/capture-manifest.json), and [original tested source hashes](reviews/m1/source-manifest.json). Small PNGs are actual gameplay captures, including 1440×900 desktop, 844×390 emulated touch landscape and 390×844 portrait. All 36 files in the original source manifest match the imported implementation commit byte-for-byte, and its compiled JS/CSS matches the original production build. The earlier captures remain evidence of that matching uncommitted snapshot, not captures made from a later Git commit.
+
+The [original implementation report](reviews/m1/REVIEW.md) is retained as a historical record. Unedited desktop and phone recordings remain outside this checkout at `C:/Users/ernes/Documents/last-ferry-codex-starter/reviews/m1/raw/`; exact paths and hashes are in the current report and audit. They are local-only, ignored by Git, and unavailable in a fresh clone. The committed screenshots provide the remote review evidence.
 
 Touch coverage is Chromium emulation, not a physical phone test. Safari, Firefox, real device performance and listening to audio on speakers remain outside the verified environment. The build reports a Three.js bundle size warning (about 604 kB raw / 158 kB gzip); no frame-rate or device-performance guarantee is claimed.
 
