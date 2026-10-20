@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { productionURL } from './evidence';
 test('production bundle: real rescue without debug globals or external assets', async ({
   page,
 }) => {
@@ -6,9 +7,9 @@ test('production bundle: real rescue without debug globals or external assets', 
     external: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   page.on('request', (r) => {
-    if (!r.url().startsWith('http://127.0.0.1:4173')) external.push(r.url());
+    if (!r.url().startsWith(productionURL)) external.push(r.url());
   });
-  await page.goto('http://127.0.0.1:4173');
+  await page.goto(productionURL);
   await expect(page.locator('canvas')).toBeVisible();
   expect(await page.evaluate(() => typeof (window as any).__LAST_FERRY__)).toBe('undefined');
   async function act(id: string) {

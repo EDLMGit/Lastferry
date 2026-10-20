@@ -14,3 +14,5 @@ All runtime geometry is original code authored for this project by Codex on 2026
 | Library geometry helpers | npm `three`, `three/addons/geometries/RoundedBoxGeometry.js` | Three.js MIT-licensed library code. License retained at `node_modules/three/LICENSE` after installation. Exact versions in `package-lock.json`. |
 
 The supplied images in `references/` remain generated concept references only. `first-crossing.png` was inspected for direction; it is never loaded by the runtime. Gameplay evidence lives separately under `reviews/m1/`.
+
+M1.1 refines the same original animal meshes: taller silhouettes, wider separated rabbit ears, cream/tan coats and a darker sheep face. Named passenger anchors under the ferry's animated hull now carry aboard animals through draft, bob, tide and travel. The phone camera fits actual scene bounds without changing authored gameplay coordinates. No acquired or generated bitmap assets were added. Fresh refinement evidence is under `reviews/m1-1/`.

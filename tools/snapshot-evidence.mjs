@@ -1,7 +1,26 @@
-import { readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import { readdirSync, readFileSync, statSync, writeFileSync, existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import os from 'node:os';
 const root = new URL('../', import.meta.url);
+const option = (name) => {
+  const i = process.argv.indexOf(name);
+  return i < 0 ? undefined : process.argv[i + 1];
+};
+const reviewDir = option('--review-dir') ?? 'reviews/m1';
+const git = (...args) => execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim();
+const gitIdentity = () => {
+  try {
+    return {
+      head: git('rev-parse', 'HEAD'),
+      branch: git('branch', '--show-current'),
+      comparisonBase: option('--base') ?? null,
+      workingTree: git('status', '--porcelain=v1'),
+    };
+  } catch {
+    return null;
+  }
+};
 const digest = (value) => createHash('sha256').update(value).digest('hex');
 function walk(dir) {
   return readdirSync(new URL(dir, root), { withFileTypes: true }).flatMap((e) =>
@@ -30,13 +49,13 @@ const paths = [
 ].sort();
 const files = Object.fromEntries(paths.map((p) => [p, digest(readFileSync(new URL(p, root)))]));
 const sourceHash = digest(JSON.stringify(files));
-const target = new URL('reviews/m1/source-manifest.json', root);
+const target = new URL(`${reviewDir}/source-manifest.json`, root);
 if (!process.argv.includes('--finalize')) {
   writeFileSync(
     target,
     JSON.stringify(
       {
-        source: 'No commit yet; directory is not a Git repository.',
+        source: gitIdentity() ?? 'No commit yet; directory is not a Git repository.',
         snapshotTime: new Date().toISOString(),
         hashAlgorithm: 'SHA-256',
         sourceHash,
@@ -55,28 +74,34 @@ if (!process.argv.includes('--finalize')) {
     throw new Error(
       'Tested source changed after the snapshot. Repeat affected checks and captures.',
     );
-  const captures = readdirSync(new URL('reviews/m1/', root))
-    .filter((n) => n.endsWith('.png'))
+  const captures = readdirSync(new URL(`${reviewDir}/`, root))
+    .filter((n) => n.endsWith('.png') && !n.includes('prototype'))
     .map((name) => {
-      const path = `reviews/m1/${name}`,
+      const path = `${reviewDir}/${name}`,
         p = new URL(path, root),
         b = readFileSync(p);
       return {
         path,
         captureTime: statSync(p).mtime.toISOString(),
         sha256: digest(b),
+        sourceIdentity: name.startsWith('baseline-') ? option('--base') : stored.source,
         viewport: [b.readUInt32BE(16), b.readUInt32BE(20)],
-        input: name.startsWith('phone-')
-          ? 'Chromium emulated touch'
-          : name === 'portrait.png'
-            ? 'Mouse, portrait and reduced motion'
-            : 'Mouse; keyboard tested separately',
+        input:
+          /^(desktop|phone)-(loading|loaded)\./.test(name) ||
+          name.includes('keyboard-success') ||
+          name.startsWith('baseline-')
+            ? 'Keyboard: Tab, Shift+Tab, Enter and Escape'
+            : name.startsWith('phone-')
+              ? 'Chromium emulated touch'
+              : name === 'portrait.png'
+                ? 'Mouse, portrait and reduced motion'
+                : 'Mouse; keyboard tested separately',
         method: 'Playwright screenshot of the actual WebGL application',
       };
     });
   const pkg = JSON.parse(readFileSync(new URL('package.json', root), 'utf8'));
   writeFileSync(
-    new URL('reviews/m1/capture-manifest.json', root),
+    new URL(`${reviewDir}/capture-manifest.json`, root),
     JSON.stringify(
       {
         sourceHash,
@@ -94,21 +119,30 @@ if (!process.argv.includes('--finalize')) {
             'Chromium with SwiftShader software WebGL; no physical device or native GPU performance claim',
         },
         captures,
-        videos: ['reviews/m1/raw/desktop-rescue.webm', 'reviews/m1/raw/phone-rescue.webm'].map(
-          (path) => ({
+        videos: [
+          'desktop-rescue',
+          'phone-rescue',
+          'boarding-unloading',
+          'boarding-unloading-closeup',
+        ]
+          .map((name) => `${reviewDir}/raw/${name}.webm`)
+          .filter((path) => existsSync(new URL(path, root)))
+          .map((path) => ({
             path,
             sha256: digest(readFileSync(new URL(path, root))),
             mtime: statSync(new URL(path, root)).mtime.toISOString(),
-            edited: false,
+            edited: path.includes('closeup'),
+            transformation: path.includes('closeup')
+              ? 'Spatial crop at 730,350, size 300x260, enlarged 3x; no temporal cuts. Derived from boarding-unloading.webm.'
+              : null,
             sourceHash,
-          }),
-        ),
+          })),
       },
       null,
       2,
     ),
   );
   console.log(
-    `Source unchanged; ${captures.length} gameplay screenshots and two unedited recordings recorded.`,
+    `Source unchanged; ${captures.length} gameplay screenshots and available local recordings recorded.`,
   );
 }

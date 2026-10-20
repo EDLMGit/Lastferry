@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { reviewDir } from './evidence';
 test('A: first in-engine checkpoint', async ({ page }) => {
   page.on('pageerror', (e) => console.log('PAGE ERROR:', e.message));
   page.on('console', (m) => {
@@ -7,5 +8,5 @@ test('A: first in-engine checkpoint', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('canvas')).toBeVisible();
   await page.waitForFunction(() => ((window as any).__LAST_FERRY__?.getMetrics().frames ?? 0) > 5);
-  await page.screenshot({ path: 'reviews/m1/checkpoint-a.png' });
+  await page.screenshot({ path: `${reviewDir}/checkpoint-a.png` });
 });

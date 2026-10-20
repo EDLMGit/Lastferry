@@ -12,6 +12,7 @@ export class World {
   boatRoot = new T.Group();
   hull = ferry();
   animals = new Map<string, T.Group>();
+  passengerAnchors = new Map<string, T.Object3D>();
   markers = new Map<string, T.Group>();
   routes = new Map<string, T.Line>();
   forecast = new T.Group();
@@ -29,6 +30,7 @@ export class World {
     positions: Map<string, T.Vector3>;
     path: T.Vector3[];
     fromAngle: number;
+    fromHullY: number;
   } = null;
   frame = 0;
   lastTime = 0;
@@ -191,8 +193,24 @@ export class World {
     this.boatRoot.add(this.hull);
     this.scene.add(this.boatRoot);
     for (const p of level.passengers) {
+      const anchor = new T.Object3D();
+      anchor.name = `deck-anchor-${p.id}`;
+      anchor.position.set(
+        ...((p.id === 'rabbit-1'
+          ? [-0.22, 0.26, -0.02]
+          : p.id === 'rabbit-2'
+            ? [0.22, 0.26, 0.3]
+            : [0, 0.26, 0.69]) as [number, number, number]),
+      );
+      this.hull.add(anchor);
+      this.passengerAnchors.set(p.id, anchor);
       const g = animal(p.species, p.id === 'rabbit-2' ? 1 : 0);
       g.name = p.id;
+      g.scale.set(
+        p.species === 'rabbit' ? 1.25 : 1.15,
+        p.species === 'rabbit' ? 1.65 : 1.5,
+        p.species === 'rabbit' ? 1.25 : 1.15,
+      );
       this.scene.add(g);
       this.animals.set(p.id, g);
     }
@@ -355,7 +373,7 @@ export class World {
     this.renderer.setSize(w, h);
     const aspect = w / h;
     const smallLandscape = matchMedia('(max-height: 480px) and (min-width: 701px)').matches;
-    const span = Math.max(smallLandscape ? 12.4 : 13.2, 20.3 / aspect);
+    const span = Math.max(13.2, 20.3 / aspect);
     this.camera.left = (-span * aspect) / 2;
     this.camera.right = (span * aspect) / 2;
     this.camera.top = span / 2;
@@ -363,26 +381,53 @@ export class World {
     this.camera.near = 0.1;
     this.camera.far = 100;
     this.camera.position.set(7, 34, 23);
+    if (smallLandscape) this.camera.position.set(0, 34, 24);
     this.camera.lookAt(0, 0, 0.05);
+    if (smallLandscape) {
+      // Fit the actual tall lighthouse and the complete possible ferry envelope,
+      // rather than relying on a water-plane span that clips the lantern roof.
+      this.scene.updateMatrixWorld(true);
+      this.camera.updateMatrixWorld(true);
+      const points: T.Vector3[] = [];
+      const corners = (b: T.Box3) => {
+        if (b.isEmpty()) return;
+        for (const x of [b.min.x, b.max.x])
+          for (const y of [b.min.y, b.max.y])
+            for (const z of [b.min.z, b.max.z])
+              points.push(new T.Vector3(x, y, z).applyMatrix4(this.camera.matrixWorldInverse));
+      };
+      for (const object of this.scene.children) {
+        if (
+          object === this.water ||
+          object === this.shadow ||
+          object === this.boatRoot ||
+          object === this.forecast ||
+          [...this.animals.values()].includes(object as T.Group)
+        )
+          continue;
+        corners(new T.Box3().setFromObject(object));
+      }
+      for (const node of level.nodes)
+        corners(
+          new T.Box3(
+            V([node.positionXZ[0] - 1.25, node.positionXZ[1] - 1.25], 0),
+            V([node.positionXZ[0] + 1.25, node.positionXZ[1] + 1.25], 2),
+          ),
+        );
+      const bounds = new T.Box3().setFromPoints(points),
+        center = bounds.getCenter(new T.Vector3()),
+        size = bounds.getSize(new T.Vector3());
+      const scale = Math.min((w - 24) / size.x, (h - 20) / size.y);
+      this.camera.left = center.x - w / scale / 2;
+      this.camera.right = center.x + w / scale / 2;
+      this.camera.top = center.y + h / scale / 2;
+      this.camera.bottom = center.y - h / scale / 2;
+    }
     this.camera.updateProjectionMatrix();
   }
-  passengerPos(
-    id: string,
-    s: State,
-    boatPos = this.boatRoot.position,
-    angle = this.boatRoot.rotation.y,
-  ) {
-    const water = s.tideLevel * 0.18;
+  passengerPos(id: string, s: State) {
     if (s.aboard.includes(id)) {
-      const anchor =
-        id === 'rabbit-1'
-          ? [-0.22, 0.26, 0.02]
-          : id === 'rabbit-2'
-            ? [0.22, 0.26, 0.22]
-            : [0, 0.26, 0.59];
-      const v = new T.Vector3(...(anchor as [number, number, number]));
-      v.applyAxisAngle(new T.Vector3(0, 1, 0), angle);
-      return v.add(boatPos).add(new T.Vector3(0, this.draftY(s), 0));
+      return this.passengerAnchors.get(id)!.getWorldPosition(new T.Vector3());
     }
     if (s.delivered.includes(id)) {
       const i = level.passengers.findIndex((p) => p.id === id);
@@ -393,7 +438,7 @@ export class World {
     return new T.Vector3(
       p.positionXZ[0] + (i % 2) * 0.23,
       p.elevation * 0.18 - 0.005,
-      p.positionXZ[1] - 0.28 - Math.floor(i / 2) * 0.3,
+      p.positionXZ[1] - 0.12 - Math.floor(i / 2) * 0.3,
     );
   }
   draftY(s: State) {
@@ -408,8 +453,14 @@ export class World {
     this.boatRoot.rotation.y = Math.PI / 2;
     this.hull.position.y = this.draftY(s);
     for (const [id, g] of this.animals) {
-      g.position.copy(this.passengerPos(id, s));
-      g.rotation.set(0, s.aboard.includes(id) ? Math.PI / 2 : 0, 0);
+      if (s.aboard.includes(id)) {
+        this.passengerAnchors.get(id)!.add(g);
+        g.position.set(0, 0, 0);
+      } else {
+        this.scene.add(g);
+        g.position.copy(this.passengerPos(id, s));
+      }
+      g.rotation.set(0, 0, 0);
     }
     this.indicate(s);
   }
@@ -438,7 +489,11 @@ export class World {
   animate(before: State, after: State, action: Action, done: () => void) {
     this.cancel();
     this.state = after;
-    const positions = new Map([...this.animals].map(([id, g]) => [id, g.position.clone()]));
+    const positions = new Map(
+      [...this.animals].map(([id, g]) => [id, g.getWorldPosition(new T.Vector3())]),
+    );
+    for (const [id, g] of this.animals)
+      if (before.aboard.includes(id) && !after.aboard.includes(id)) this.scene.attach(g);
     let path: T.Vector3[] = [];
     if (action.type === 'move') {
       const edge = edgeTo(before, action.to)!;
@@ -462,6 +517,7 @@ export class World {
       positions,
       path,
       fromAngle: this.boatRoot.rotation.y,
+      fromHullY: this.hull.position.y,
     };
   }
   cancel() {
@@ -493,12 +549,12 @@ export class World {
         this.boatRoot.rotation.y = pose.angle;
       }
       this.boatRoot.position.y = this.water.position.y;
-      this.hull.position.y = T.MathUtils.lerp(this.draftY(tr.before), this.draftY(tr.after), k);
+      this.hull.position.y = T.MathUtils.lerp(tr.fromHullY, this.draftY(tr.after), k);
       for (const [id, g] of this.animals) {
         const dest = this.passengerPos(id, tr.after);
         if (tr.before.aboard.includes(id) && tr.after.aboard.includes(id)) {
-          g.position.copy(dest);
-          g.rotation.y = this.boatRoot.rotation.y;
+          // Already aboard: local feet stay on the deck anchor throughout draft,
+          // tide, travel and bobbing. The parent transform does all the work.
         } else if (tr.before.aboard.includes(id) !== tr.after.aboard.includes(id)) {
           const pier = level.piers.find((p) => p.nodeId === tr.before.boatNodeId)!;
           const offset = id === 'rabbit-1' ? -0.07 : id === 'rabbit-2' ? 0.07 : 0;
@@ -534,8 +590,9 @@ export class World {
         this.sync(tr.after);
         tr.done();
       }
-    } else if (!this.reduced) {
-      this.hull.position.y = this.draftY(this.state) + Math.sin(time * 0.0018) * 0.012;
+    } else {
+      this.hull.position.y =
+        this.draftY(this.state) + (this.reduced ? 0 : Math.sin(time * 0.0018) * 0.012);
     }
     this.renderer.render(this.scene, this.camera);
     requestAnimationFrame((t) => this.tick(t));
@@ -547,6 +604,42 @@ export class World {
       triangles: this.renderer.info.render.triangles,
       webgl: this.renderer.getContext().getParameter(this.renderer.getContext().VERSION),
       pixelRatio: this.renderer.getPixelRatio(),
+    };
+  }
+  passengerPresentation() {
+    return [...this.animals].map(([id, g]) => {
+      const position = g.getWorldPosition(new T.Vector3());
+      return {
+        id,
+        position: position.toArray(),
+        parent: g.parent?.name,
+        deckLocalFoot: this.hull.worldToLocal(position.clone()).toArray(),
+      };
+    });
+  }
+  frameStatus() {
+    const rectangle = (object: T.Object3D) => {
+      const b = new T.Box3().setFromObject(object),
+        points: T.Vector3[] = [];
+      for (const x of [b.min.x, b.max.x])
+        for (const y of [b.min.y, b.max.y])
+          for (const z of [b.min.z, b.max.z])
+            points.push(new T.Vector3(x, y, z).project(this.camera));
+      const xs = points.map((p) => ((p.x + 1) * this.host.clientWidth) / 2),
+        ys = points.map((p) => ((1 - p.y) * this.host.clientHeight) / 2);
+      return {
+        left: Math.min(...xs),
+        right: Math.max(...xs),
+        top: Math.min(...ys),
+        bottom: Math.max(...ys),
+        height: Math.max(...ys) - Math.min(...ys),
+      };
+    };
+    return {
+      canvas: { width: this.host.clientWidth, height: this.host.clientHeight },
+      lighthouse: rectangle(this.scene.getObjectByName('lighthouse')!),
+      passengers: [...this.animals].map(([id, g]) => ({ id, ...rectangle(g) })),
+      nodes: level.nodes.map((n) => ({ id: n.id, ...this.project(n.positionXZ) })),
     };
   }
 }

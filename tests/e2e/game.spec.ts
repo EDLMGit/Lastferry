@@ -1,12 +1,13 @@
 import { test, expect, type Page } from '@playwright/test';
 import { writeFileSync } from 'node:fs';
+import { reviewDir } from './evidence';
 const state = (p: Page) => p.evaluate(() => (window as any).__LAST_FERRY__.getState());
 const rendered = (p: Page) => p.evaluate(() => (window as any).__LAST_FERRY__.getRenderStatus());
 test.afterEach(async ({ page, context }, info) => {
   if (info.title.startsWith('desktop:')) {
     const video = page.video();
     await context.close();
-    await video?.saveAs('reviews/m1/raw/desktop-rescue.webm');
+    await video?.saveAs(`${reviewDir}/raw/desktop-rescue.webm`);
   }
 });
 async function ready(p: Page) {
@@ -23,7 +24,7 @@ async function action(p: Page, id: string) {
   await idle(p);
 }
 async function shot(p: Page, name: string) {
-  await p.screenshot({ path: `reviews/m1/${name}.png` });
+  await p.screenshot({ path: `${reviewDir}/${name}.png` });
 }
 test('desktop: real rescue, blocked preview, tide undo, terminal undo and restart', async ({
   page,
@@ -67,7 +68,15 @@ test('desktop: real rescue, blocked preview, tide undo, terminal undo and restar
   await page.locator('#undo').click();
   expect(await state(page)).toEqual(beforeRise);
   const restored = await rendered(page);
-  expect(restored.passengers).toEqual(beforeRender.passengers);
+  for (const prior of beforeRender.passengers) {
+    const actual = restored.passengers.find((p: any) => p.id === prior.id);
+    expect(actual.parent).toBe(prior.parent);
+    for (let axis = 0; axis < 3; axis++) {
+      expect(actual.deckLocalFoot[axis]).toBeCloseTo(prior.deckLocalFoot[axis], 8);
+      // Idle wave phase is cosmetic and is not part of the undo snapshot.
+      expect(Math.abs(actual.position[axis] - prior.position[axis])).toBeLessThan(0.025);
+    }
+  }
   expect(restored.boatPosition).toEqual(beforeRender.boatPosition);
   expect(restored.waterY).toBe(0);
   await action(page, 'route-outer-south');
@@ -94,7 +103,7 @@ test('desktop: real rescue, blocked preview, tide undo, terminal undo and restar
   await expect(page.locator('#sound')).toHaveAttribute('aria-label', 'Unmute sound');
   expect(errors).toEqual([]);
   writeFileSync(
-    'reviews/m1/browser-environment.json',
+    `${reviewDir}/browser-environment.json`,
     JSON.stringify(
       await page.evaluate(() => ({
         userAgent: navigator.userAgent,
@@ -115,7 +124,7 @@ test('emulated phone landscape: touch preview, double tap guard, tide undo and c
     deviceScaleFactor: 1,
     hasTouch: true,
     isMobile: true,
-    recordVideo: { dir: 'reviews/m1/raw', size: { width: 844, height: 390 } },
+    recordVideo: { dir: `${reviewDir}/raw`, size: { width: 844, height: 390 } },
   });
   const page = await context.newPage();
   await ready(page);
@@ -150,7 +159,7 @@ test('emulated phone landscape: touch preview, double tap guard, tide undo and c
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   const video = page.video();
   await context.close();
-  await video?.saveAs('reviews/m1/raw/phone-rescue.webm');
+  await video?.saveAs(`${reviewDir}/raw/phone-rescue.webm`);
 });
 test('keyboard-only tide-wait witness and subset selection', async ({ page }) => {
   await ready(page);

@@ -124,12 +124,12 @@ export function ferry() {
 export function animal(species: string, variant = 0) {
   const g = new T.Group();
   g.name = species;
-  const wool = variant ? '#e2c8a8' : palette.wool;
+  const wool = variant ? '#b78d6c' : palette.wool;
   if (species === 'rabbit') {
     ball(g, wool, [0, 0.2, 0], [0.14, 0.2, 0.13]);
     ball(g, wool, [0, 0.4, 0.04], [0.135, 0.13, 0.12]);
-    for (const x of [-0.065, 0.065]) {
-      const ear = ball(g, wool, [x, 0.6, 0.04], [0.04, 0.18, 0.045]);
+    for (const x of [-0.085, 0.085]) {
+      const ear = ball(g, wool, [x, 0.6, 0.04], [0.05, 0.19, 0.045]);
       ear.rotation.z = x * (variant ? 3 : 1.5);
       ball(g, '#d8a996', [x, 0.62, 0.079], [0.022, 0.11, 0.012]);
     }
@@ -153,9 +153,9 @@ export function animal(species: string, variant = 0) {
         [0.11, 0.12, 0.11],
       );
     }
-    ball(g, '#737566', [0, 0.34, 0.29], [0.14, 0.16, 0.13]);
+    ball(g, '#414d49', [0, 0.34, 0.29], [0.14, 0.16, 0.13]);
     for (const x of [-0.16, 0.16]) {
-      ball(g, '#737566', [x, 0.42, 0.23], [0.1, 0.045, 0.06]);
+      ball(g, '#414d49', [x, 0.42, 0.23], [0.1, 0.045, 0.06]);
       ball(g, '#273d3f', [x * 0.48, 0.38, 0.4], [0.018, 0.023, 0.012]);
     }
     ball(g, palette.wool, [0, 0.48, 0.25], [0.12, 0.08, 0.1]);
@@ -182,6 +182,7 @@ export function pine(parent: T.Object3D, x: number, y: number, z: number, s: num
 }
 export function lighthouse(parent: T.Object3D, x: number, y: number, z: number) {
   const g = new T.Group();
+  g.name = 'lighthouse';
   g.position.set(x, y, z);
   parent.add(g);
   cylinder(g, '#b3b09b', 0.68, 0.8, 0.15, [0, 0.075, 0]);

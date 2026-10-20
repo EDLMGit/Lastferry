@@ -4,6 +4,8 @@ Updated: 2026-10-20
 
 ## Current state
 
+**M1.1 refinement in final verification.** On reviewed baseline `c224fe07a1f4391ae481af4bab77b16d9b4322a3`, the phone camera now fits actual scene bounds and the complete route envelope, characters have clearer silhouettes/spacing/contrast, and aboard passengers inherit the animated hull transform through named deck anchors. Natural keyboard focus recovery is implemented; a baseline Tab-only run reproduced focus falling to BODY. Four focused refinement browser tests and the existing 16 unit tests pass in preliminary verification. Fresh consolidated evidence and report will be retained under `reviews/m1-1/` before the authorized push to draft PR #1.
+
 **M1 first pass complete — prepared for independent review within the tested Chromium environment.** The independent reducer, complete 3D rescue loop, responsive controls, animation locks, sound and arrival are implemented. Results: 16/16 unit tests, 9/9 browser tests, typecheck and production build pass. See the current [first-pass review](reviews/m1-first-pass/REVIEW.md) and [evidence identity audit](reviews/m1-first-pass/evidence-reuse.json). No confirmed remaining gameplay defects in the performed checks.
 
 ## Scope

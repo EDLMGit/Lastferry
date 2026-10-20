@@ -22,7 +22,33 @@ const session = new Session(),
 let selected: Action | null = null,
   forecastOpen = false,
   fallback: ReturnType<typeof setTimeout> | undefined;
+let keyboardInput = false,
+  previewReturnId = '',
+  recoverAfterCommit = false;
+document.addEventListener('keydown', (e) => {
+  if (['Tab', 'Enter', ' ', 'Escape'].includes(e.key)) keyboardInput = true;
+});
+document.addEventListener('pointerdown', () => {
+  keyboardInput = false;
+});
 const $ = (id: string) => document.getElementById(id)!;
+function focusAvailable(preferred?: string) {
+  const target = (preferred ? $(preferred) : null) as HTMLButtonElement | null;
+  if (target && !target.disabled && target.getClientRects().length) {
+    target.focus();
+    return;
+  }
+  const fallback =
+    session.state.status !== 'playing'
+      ? $('undo')
+      : document.querySelector<HTMLButtonElement>('#controls button:not(:disabled)');
+  fallback?.focus();
+}
+function closePreview() {
+  selected = null;
+  render();
+  if (keyboardInput) focusAvailable(previewReturnId);
+}
 const actionTitle = (a: Action) =>
   a.type === 'move'
     ? `Sail to ${nodeNames[a.to]}`
@@ -31,14 +57,26 @@ const actionTitle = (a: Action) =>
       : `${a.type === 'board' ? 'Board' : 'Unload'} ${a.passengerIds.length === 3 ? 'everyone' : a.passengerIds.map((id) => passengerNames[id].split(' ·')[0]).join(' & ')}`;
 function select(a: Action) {
   if (session.busy || session.state.status !== 'playing') return;
+  previewReturnId = (document.activeElement as HTMLElement)?.id ?? '';
   selected = a;
   render();
   document.querySelector('.panel')!.scrollTop = 0;
+  if (keyboardInput) $('cancel').focus();
 }
 function finish() {
+  const recoverFocus =
+    recoverAfterCommit &&
+    (!document.activeElement ||
+      document.activeElement === document.body ||
+      document.activeElement.id === 'transition-status');
   clearTimeout(fallback);
   session.finish();
   render();
+  if (recoverFocus) {
+    document.querySelector('.panel')!.scrollTop = 0;
+    focusAvailable();
+  }
+  recoverAfterCommit = false;
   $('announcement').textContent =
     session.state.status === 'won'
       ? 'Everyone is home. All three passengers are safe.'
@@ -51,9 +89,11 @@ function commit() {
   const a = copy(selected),
     transaction = session.commit(a);
   if (!transaction) return;
+  recoverAfterCommit = keyboardInput;
   selected = null;
   forecastOpen = false;
   render();
+  if (keyboardInput) $('transition-status').focus();
   sound.play(transaction.after.status === 'won' ? 'arrival' : a.type);
   fallback = setTimeout(() => {
     world.cancel();
@@ -114,15 +154,11 @@ function render() {
   const next = pr?.state;
   const cutBlocked = next && draft(next) > 2 + next.tideLevel;
   $('preview').innerHTML = busy
-    ? `<div class="preview busy" role="status"><span class="eyebrow">A MOMENT ON THE WATER</span><p>Finishing this turn…</p></div>`
+    ? `<div id="transition-status" class="preview busy" role="status" tabindex="-1"><span class="eyebrow">A MOMENT ON THE WATER</span><p>Finishing this turn…</p></div>`
     : selected && pr
       ? `<div class="preview ${pr.error || next?.status === 'lost' ? 'warning' : ''}"><div class="preview-head"><span class="eyebrow">ACTION PREVIEW · FREE</span><button id="cancel" aria-label="Close preview">×</button></div><h3>${actionTitle(selected)}</h3>${subset}<p>${pr.error ?? `Turn ${next!.turn} · tide ${next!.tideLevel} · ${load(next!)} / 4 spaces · draft ${draft(next!)}`}</p>${!pr.error ? `<p class="consequence">${next!.status === 'lost' ? '⚠ The rise will reach a waiting passenger. This action ends the crossing.' : next!.status === 'won' ? 'All three passengers will be safe at the lighthouse.' : `${cutBlocked ? '⊘ Shallow cut blocked' : '◇ Shallow cut open'}: depth ${2 + next!.tideLevel}, draft ${draft(next!)}.${next!.tideLevel > s.tideLevel ? ' The tide rises after this action.' : ''}`}</p>` : ''}<button id="commit" class="commit" ${pr.error ? 'disabled' : ''}>${pr.error ? 'Action unavailable' : `Confirm · ${actionTitle(selected)}`} <span>${pr.error ? '' : '→'}</span></button></div>`
       : '';
-  if ($('cancel'))
-    $('cancel').onclick = () => {
-      selected = null;
-      render();
-    };
+  if ($('cancel')) $('cancel').onclick = closePreview;
   if ($('commit')) $('commit').onclick = commit;
   if (selected && (selected.type === 'board' || selected.type === 'unload')) {
     const a = selected;
@@ -190,9 +226,9 @@ document.addEventListener('visibilitychange', () => {
 });
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && !session.busy) {
-    selected = null;
     forecastOpen = false;
-    render();
+    if (selected) closePreview();
+    else render();
   }
 });
 render();
@@ -204,10 +240,12 @@ if (import.meta.env.DEV) {
       getRenderStatus: () => ({
         pendingAnimation: session.busy,
         historyLength: session.history.length,
-        passengers: [...world.animals].map(([id, g]) => ({ id, position: g.position.toArray() })),
+        passengers: world.passengerPresentation(),
         boatPosition: world.boatRoot.position.toArray(),
         waterY: world.water.position.y,
+        hullY: world.hull.position.y,
       }),
+      getFrameStatus: () => world.frameStatus(),
       getMetrics: () => world.metrics(),
     },
   });
