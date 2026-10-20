@@ -1,0 +1,90 @@
+# Last Ferry — Art Direction
+
+## Intent and milestone
+
+Make a small coastal world that feels carefully made and worth looking after. The player should read the puzzle immediately, then notice the charming details. M1 is **one polished, playable cove**: a yellow ferry with a red cabin, one sheep, two rabbits, and a lighthouse refuge. The broader aspiration is a finite, authored story of roughly twelve puzzles and one to two hours; that is context, not an M1 content requirement.
+
+Use actual 3D terrain, structures, ferry, and animals. Generated concept images establish mood, shapes, and composition; they are not screenshot backgrounds or a substitute for a playable scene. Their exact realism is not a promise of a pixel-identical real-time result.
+
+### Reference order
+
+1. [`first-crossing.png`](../references/first-crossing.png): primary guide for the cove, visual hierarchy, ferry, and inviting coastal atmosphere.
+2. [`original-concept.png`](../references/original-concept.png): secondary guide for miniature character and coastal charm.
+3. [`drowned-orchard.png`](../references/drowned-orchard.png): future mood only; cooler water, vulnerable land, and restrained tension.
+4. [`sanctuary-ending.png`](../references/sanctuary-ending.png): future mood only; warm light and the satisfaction of arrival.
+
+The implemented level data and rules determine coordinates, connections, depth, tide, passenger occupancy, and available actions. Never copy invented numbers, extra passengers, decorative routes, or UI claims from an image.
+
+## Forms, materials, and color
+
+Aim for a handcrafted coastal miniature: rounded terrain edges, gently irregular stone, thick wooden boards, simplified foliage, and soft painted surfaces. A few intentional seams and asymmetries are more useful than dense texture noise. Avoid a generic collection of unmodified cubes, glossy toy plastic, photoreal vegetation, or excessively faceted terrain.
+
+The ferry must read first as a yellow hull and red cabin. Give it a shaped bow, visible gunwale, open passenger deck, and a few substantial details. Its passengers must remain distinguishable from both the deck and shoreline. The sheep reads through a cream wool mass and darker face; rabbits through upright ears, compact bodies, and slightly different poses. Do not introduce visual differences that imply unimplemented abilities.
+
+Starting palette; tune it in the rendered scene rather than treating these as exact reference samples:
+
+| Role | Suggested color | Use |
+| --- | --- | --- |
+| Deep water | `#285F73` | Clear navigable water; restrained variation |
+| Shallows | `#81C9C9` | Readable sandbanks and coastline |
+| Sand | `#E8D8B6` | Soft light shoreline |
+| Rock | `#8E9D99` | Quiet support for the focal objects |
+| Grass | `#A6B68A` | Muted coastal green |
+| Ferry hull | `#E7B84B` | Principal moving focal point |
+| Cabin | `#B95045` | Recognizable warm accent |
+| Wool and trim | `#F6EDDC` | Animals, lighthouse, selected details |
+| UI ink | `#213F4B` | Text and strong outlines |
+| Caution accent | `#A65338` | Sparse warnings, always with text or shape |
+
+Use matte or softly rough materials with subtle color variation. Keep metal accents small. Ensure interactive states and text have adequate contrast in the final UI; palette membership alone does not establish accessibility.
+
+## Camera, framing, and readable scale
+
+Use a fixed orthographic camera at approximately **55 degrees above the water plane**. Choose the azimuth around the authored cove so every relevant pier and passage is visible. Do not add camera orbit as a required interaction.
+
+Fit the complete playable cove in mobile landscape and desktop views. Preserve space for controls and device safe areas. Resize through camera framing and UI layout, not by moving gameplay locations. If a narrow viewport needs a different framing, retain clear access to every valid action.
+
+Piers should extend beyond foliage and face a readable direction. Keep trees, roofs, and lighthouse details away from route junctions and waiting animals. Decorate around the route network. A decorative inlet must not resemble an actionable route unless the data permits travel there.
+
+At a representative small landscape viewport such as 844 × 390 CSS pixels, users must identify the ferry, all three passengers, refuge, and actionable piers without zooming. Keep selection rings and destination labels clear of passengers. Increase invisible hit areas instead of enlarging every prop.
+
+## Water, depth, and tide
+
+Water is calm and stylized: broad color fields, quiet highlights, and sparse ripples. Prefer a simple water surface and authored shoreline shapes over fluid simulation. Use discrete tide states from the rules, with authored land exposure and waterlines for each state. The scene must clearly distinguish exposed sand, shallow passage, navigable water, and a flooded boarding point.
+
+Represent increasing load with a modest, readable change in ferry draft. The hull settles; occupants stay correctly attached to the deck. This movement illustrates the model and never computes navigation validity.
+
+Forecasts must display the actual next state. When the implemented interface offers a next-action or tide preview, use a thin shoreline contour, a clear pier waterline, and route emphasis to show its consequences. Pair this with a compact DOM explanation. Do not invent a separate forecast action or another rule. Color alone must not distinguish safe and unavailable routes.
+
+## Light and motion
+
+Use bright, warm late-afternoon light, soft shadows, and enough ambient fill to keep cabin sides and animals readable. This begins the captain's evening journey while preserving the reference's clear, inviting palette. Gentle contact shadows can anchor objects. Avoid hard black ambient occlusion, cinematic depth of field, intense bloom, and reflections that obscure depth cues. Future orchard and sanctuary lighting should not expand M1 scope.
+
+Motion should reward a decision without making the player wait:
+
+| Event | Suggested duration | Treatment |
+| --- | --- | --- |
+| Ferry journey | 400–850 ms | Gentle acceleration and a short, fading wake |
+| Boarding or arrival | 250–450 ms | Small rabbit hop or sheep step, then settle |
+| Draft adjustment | 200–350 ms | Smooth vertical settling without exaggerated rocking |
+| Tide transition | 350–650 ms | Waterline change and corresponding route feedback |
+| Completion accent | 500–900 ms | Warm refuge response and small passenger gestures |
+
+Use occasional head turns, ear movement, or subtle breathing for personality. Avoid constant synchronized bouncing. Animate a logical turn once; animation callbacks must not trigger additional simulation steps. Follow the technical plan's brief input lock during transitions. After a transition finishes or is cancelled, Undo must restore a coherent scene without stale effects or stranded models.
+
+Honor reduced motion: disable bobbing and decorative loops, minimize travel and tide motion, and retain immediate state feedback. Keep the camera stable.
+
+## Interface and M1 visual acceptance
+
+Use restrained, keyboard-accessible DOM controls for actions, undo, restart, and state explanations. Provide visible focus, accessible names, and touch targets of at least **44 × 44 CSS pixels**. Canvas targets need equivalent keyboard-operable controls. Show passenger load and tide through the canonical state, not decorative counters.
+
+M1 is visually complete when:
+
+- The cove is rendered as coherent 3D scenery, with finished silhouettes and materials.
+- The ferry, sheep, two rabbits, and lighthouse remain recognizable at mobile scale.
+- Current and previewed depth, access, load, and occupancy agree with the rules.
+- Every action is readable without camera manipulation or relying only on color.
+- Turns, undo, restart, and completion leave no stranded models or stale effects.
+- Mobile landscape, desktop, keyboard use, and reduced motion remain legible and usable.
+
+Resolve these checks directly during implementation. Additional chapters, cinematic sequences, and large prop collections are outside this milestone.

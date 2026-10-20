@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "levelId": "first-crossing",
+  "id": "wait-for-tide",
+  "purpose": "Equally valid tutorial solution: wait safely with everyone aboard until the shallow cut becomes deep enough.",
+  "actions": [
+    { "type": "move", "to": "sheep-pier" },
+    { "type": "board", "passengerIds": ["sheep-1"] },
+    { "type": "wait" },
+    { "type": "wait" },
+    { "type": "move", "to": "cut" },
+    { "type": "move", "to": "harbor" },
+    { "type": "unload", "passengerIds": ["rabbit-1", "rabbit-2", "sheep-1"] }
+  ],
+  "expected": { "status": "won", "turn": 7, "tideLevel": 1, "boatNodeId": "harbor", "delivered": ["rabbit-1", "rabbit-2", "sheep-1"] }
+}
