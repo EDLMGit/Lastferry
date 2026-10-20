@@ -34,12 +34,14 @@ PowerShell:
 ```powershell
 $env:PLAYWRIGHT_BROWSERS_PATH = Join-Path $PWD '.cache/ms-playwright'
 npx playwright install chromium
+$env:LAST_FERRY_REVIEW_DIR = 'reviews/m1-1'
 ```
 
 macOS/Linux:
 
 ```sh
 PLAYWRIGHT_BROWSERS_PATH=.cache/ms-playwright npx playwright install chromium
+export LAST_FERRY_REVIEW_DIR=reviews/m1-1
 ```
 
 Then run:
@@ -54,17 +56,19 @@ node tools/verify-design.mjs
 
 The browser suite uses ports 5173 and 4173, launches the development and production servers when necessary, and reuses already-running servers. Rebuild before testing if an existing production server is running. In this Windows sandbox, Playwright's process-tree shutdown stalled on an earlier attempt, so the final run used separately launched `npm run dev -- --port 5173` and `npm run serve:test` servers. All browser tests then completed with normal exit.
 
+`LAST_FERRY_REVIEW_DIR` selects the capture/report folder, so refinement evidence does not overwrite the first-pass record. `LAST_FERRY_DEV_PORT` and `LAST_FERRY_PRODUCTION_PORT` optionally select isolated servers; the M1.1 verification used 5174/4174 while preserving the already-open first-pass game. Its new tests navigate through actual Tab/Shift+Tab, Enter and Escape input without test-side `.focus()` calls, and sample attached passenger feet during draft, tide, idle bobbing and reduced motion.
+
 `test:unit` checks the independent application reducer, all five supplied replays, boundaries, history, locking and the actual modeled ferry's sampled clearance. The separate design verifier checks only the supplied reference model. `test:e2e` operates the real interface: desktop detour, touch and keyboard tide-wait rescues, tide undo, invalid preview, double input, terminal undo, loss recovery, restart, mute persistence, reduced motion, portrait, interrupted/stalled presentation and a production rescue.
 
 Reproduce the detour manually: Sheep pier → Board Moss → East buoy → South buoy → West buoy → Lighthouse harbor → Deliver everyone. This wins on turn 7. Undo after reaching South buoy restores turn 3 and tide 0. Alternatively board Moss, Wait twice, then Shallow cut → Lighthouse harbor → Deliver everyone; also turn 7.
 
 ## Evidence and source
 
-See the current [M1 first-pass review](reviews/m1-first-pass/REVIEW.md), [evidence reuse audit](reviews/m1-first-pass/evidence-reuse.json), [status](STATUS.md), [capture manifest](reviews/m1/capture-manifest.json), and [original tested source hashes](reviews/m1/source-manifest.json). Small PNGs are actual gameplay captures, including 1440×900 desktop, 844×390 emulated touch landscape and 390×844 portrait. All 36 files in the original source manifest match the imported implementation commit byte-for-byte, and its compiled JS/CSS matches the original production build. The earlier captures remain evidence of that matching uncommitted snapshot, not captures made from a later Git commit.
+See the current [M1.1 refinement review](reviews/m1-1/REVIEW.md), [fresh capture manifest](reviews/m1-1/capture-manifest.json), [tested source identity](reviews/m1-1/source-manifest.json) and [status](STATUS.md). Fresh actual gameplay PNGs include desktop and 844×390 phone loading/success views. The phone camera fits the full lighthouse and network, larger cream/tan rabbits and a dark-faced sheep improve silhouettes, and aboard passengers inherit the moving deck transform. Keyboard selection, cancellation, continuation and terminal Undo recover focus naturally.
 
-The [original implementation report](reviews/m1/REVIEW.md) is retained as a historical record. Unedited desktop and phone recordings remain outside this checkout at `C:/Users/ernes/Documents/last-ferry-codex-starter/reviews/m1/raw/`; exact paths and hashes are in the current report and audit. They are local-only, ignored by Git, and unavailable in a fresh clone. The committed screenshots provide the remote review evidence.
+The [M1 first-pass review](reviews/m1-first-pass/REVIEW.md), its [reuse audit](reviews/m1-first-pass/evidence-reuse.json), and the [original implementation report](reviews/m1/REVIEW.md) remain historical records of the earlier source. Their captures are not relabeled as M1.1 evidence. New desktop, phone and boarding/unloading recordings remain locally under `reviews/m1-1/raw/`; the original recordings are preserved in the parent workspace. Raw videos are ignored and unavailable in a fresh clone. The committed screenshots and manifests provide remote review evidence.
 
-Touch coverage is Chromium emulation, not a physical phone test. Safari, Firefox, real device performance and listening to audio on speakers remain outside the verified environment. The build reports a Three.js bundle size warning (about 604 kB raw / 158 kB gzip); no frame-rate or device-performance guarantee is claimed.
+Touch coverage is Chromium emulation, not a physical phone test. Safari, Firefox, real device performance and listening to audio on speakers remain outside the verified environment. The build reports a Three.js bundle size warning (about 607 kB raw / 159 kB gzip); no frame-rate or device-performance guarantee is claimed.
 
 ## Project contract and assets
 
