@@ -22,6 +22,21 @@ export function actionLabel(s: State, a: Action, l: Level): string {
   return pierAt(s, l)?.isDeliveryPier ? `Deliver ${who}` : `Let ${who} ashore`;
 }
 
+export function objectiveCopy(s: State, l: Level): { headline: string; progress: string } {
+  const required = l.objective.requiredPassengerIds,
+    total = required.length,
+    count =
+      ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'][
+        total
+      ] ?? total,
+    destination = stop(l.piers.find((p) => p.id === l.objective.deliveryPierId)!.nodeId),
+    home = required.filter((id) => s.delivered.includes(id)).length;
+  return {
+    headline: `Bring ${total === 1 ? 'one passenger' : `all ${count} passengers`} to ${destination}`,
+    progress: `Home ${home}/${total}`,
+  };
+}
+
 export function passageCopy(s: State, to: string, l: Level): string {
   if (to === s.boatNodeId) return `You are at ${stop(to)}.`;
   const edge = edgeTo(s, to, l);
@@ -161,7 +176,7 @@ export function previewCopy(
     return {
       summary,
       error: plainMoveError && a.type === 'move' ? passageCopy(s, a.to, l) : proposed.error,
-      consequence: 'Inspection is free. No action has been spent.',
+      consequence: '',
       requirement: '',
     };
   }

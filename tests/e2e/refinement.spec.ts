@@ -1,31 +1,18 @@
-import { test, expect, type Page } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { writeFileSync } from 'node:fs';
 import { reviewDir } from './evidence';
-const api = (p: Page) => p.evaluate(() => (window as any).__LAST_FERRY__.getState());
-const render = (p: Page) => p.evaluate(() => (window as any).__LAST_FERRY__.getRenderStatus());
-const active = (p: Page) => p.evaluate(() => document.activeElement?.id);
-async function idle(p: Page) {
-  await p.waitForFunction(() => !(window as any).__LAST_FERRY__.getRenderStatus().pendingAnimation);
-}
-async function ready(p: Page) {
-  await p.goto('/');
-  await p.waitForFunction(() => ((window as any).__LAST_FERRY__?.getMetrics().frames ?? 0) > 3);
-}
-async function tabTo(p: Page, id: string, backwards = false) {
-  for (let i = 0; i < 64; i++) {
-    if ((await active(p)) === id) return;
-    await p.keyboard.press(backwards ? 'Shift+Tab' : 'Tab');
-  }
-  throw Error(`Tab order did not reach ${id}; active=${await active(p)}`);
-}
-async function keyAction(p: Page, id: string) {
-  await tabTo(p, id);
-  await p.keyboard.press('Enter');
-  await expect(p.locator('#cancel')).toBeFocused();
-  await tabTo(p, 'commit');
-  await p.keyboard.press('Enter');
-  await idle(p);
-}
+import {
+  state as api,
+  rendered as render,
+  active,
+  idle,
+  ready,
+  tabTo,
+  keyAct as keyAction,
+  act,
+  fullyVisible,
+} from './ui';
+
 for (const [name, width, height] of [
   ['desktop', 1440, 900],
   ['phone', 844, 390],
@@ -35,21 +22,17 @@ for (const [name, width, height] of [
   }) => {
     await page.setViewportSize({ width, height });
     await ready(page);
-    await tabTo(page, 'route-sheep-pier');
-    await tabTo(page, 'route-harbor', true);
-    await expect(page.locator('#route-harbor')).toBeFocused();
+    await tabTo(page, 'map-sheep-pier');
+    await tabTo(page, 'inspect-harbor', true);
+    await expect(page.locator('#inspect-harbor')).toBeFocused();
     await page.keyboard.press('Enter');
     await expect(page.locator('#cancel')).toBeFocused();
     await page.keyboard.press('Escape');
-    await expect(page.locator('#route-harbor')).toBeFocused();
+    await expect(page.locator('#inspect-harbor')).toBeFocused();
     expect((await api(page)).turn).toBe(0);
-    await tabTo(page, 'route-sheep-pier');
-    await page.keyboard.press('Enter');
-    await tabTo(page, 'commit');
-    await page.keyboard.press('Enter');
-    await idle(page);
-    expect(await active(page)).toMatch(/^(board|unload|wait|route-)/);
-    if (name === 'phone') await expect(page.locator('.panel')).toHaveJSProperty('scrollTop', 0);
+    await keyAction(page, 'map-sheep-pier');
+    expect(await active(page)).toMatch(/^(board|unload|wait|map-|inspect-)/);
+    await fullyVisible(page, page.locator('#board'));
     await tabTo(page, 'board');
     await page.keyboard.press('Enter');
     await expect(page.locator('#cancel')).toBeFocused();
@@ -77,16 +60,13 @@ for (const [name, width, height] of [
     await tabTo(page, 'undo', true);
     await page.keyboard.press('Enter');
     expect(await api(page)).toMatchObject({ turn: 3, tideLevel: 0 });
-    await keyAction(page, 'wait');
-    await keyAction(page, 'route-cut');
-    await keyAction(page, 'route-harbor');
-    await keyAction(page, 'unload');
+    for (const id of ['wait', 'map-cut', 'map-harbor', 'unload']) await keyAction(page, id);
     expect(await api(page)).toMatchObject({ turn: 7, status: 'won' });
-    await expect(page.locator('#undo')).toBeFocused();
+    await expect(page.locator('#terminal-undo')).toBeFocused();
     await page.screenshot({ path: `${reviewDir}/${name}-keyboard-success.png` });
     await page.keyboard.press('Enter');
     expect(await api(page)).toMatchObject({ status: 'playing', turn: 6, delivered: [] });
-    await expect(page.locator('#undo')).toBeFocused();
+    expect(await active(page)).toMatch(/^(board|unload|wait|undo|map-|inspect-)/);
     await keyAction(page, 'unload');
     expect((await api(page)).status).toBe('won');
   });
@@ -97,12 +77,7 @@ for (const reduced of [false, true])
   }) => {
     await page.emulateMedia({ reducedMotion: reduced ? 'reduce' : 'no-preference' });
     await ready(page);
-    async function act(id: string) {
-      await page.locator(`#${id}`).click();
-      await page.locator('#commit').click();
-      await idle(page);
-    }
-    await act('route-sheep-pier');
+    await act(page, 'map-sheep-pier');
     const initial = await render(page),
       feet = new Map(
         initial.passengers
@@ -121,11 +96,11 @@ for (const reduced of [false, true])
       };
       requestAnimationFrame(sample);
     });
-    await act('board');
+    await act(page, 'board');
     await page.locator('#unload').click();
     await page.locator('#passenger-rabbit-1').click();
     await page.locator('#passenger-rabbit-2').click();
-    await expect(page.locator('#preview')).toContainText('Let Moss ashore');
+    await expect(page.locator('#dialog')).toContainText('Let Moss ashore');
     await page.locator('#commit').click();
     await idle(page);
     expect((await api(page)).aboard).toEqual(['rabbit-1', 'rabbit-2']);
@@ -138,8 +113,8 @@ for (const reduced of [false, true])
     });
     await page.locator('#undo').click();
     expect((await api(page)).aboard).toContain('sheep-1');
-    await act('wait');
-    await act('wait');
+    await act(page, 'wait');
+    await act(page, 'wait');
     expect((await api(page)).tideLevel).toBe(1);
     await page.locator('#undo').click();
     expect((await api(page)).tideLevel).toBe(0);

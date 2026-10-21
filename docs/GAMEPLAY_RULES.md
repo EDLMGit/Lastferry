@@ -149,3 +149,8 @@ The script is **not** a production engine or a test of a playable implementation
 ## Holding Pier experiment
 
 The later user-requested experiment uses `data/holding-pier.level.json` and is documented in `HOLDING_PIER.md`. It retains the common action, load/draft, depth, tide-order and Undo rules above; its different layout, starting occupants and low pier elevation are intentional. Original First Crossing values and witness files remain unchanged. In the experiment, routine safe movement commits with one deliberate activation, while a separate free Preview remains available. Transfers, Wait, invalid moves and immediately losing moves retain the explicit preview flow. This interaction experiment supersedes the baseline's mandatory move confirmation only within Holding Pier.
+
+
+## Full-width contextual interface
+
+The later full-width interface task in `NEXT_TASK.md` unifies safe sailing in both coves: one deliberate activation commits one adjacent safe passage. Each adjacent map destination has a separate free Inspect control. Invalid or immediately losing passages open a consequence card; a losing action still requires explicit confirmation. Transfers and Wait retain preview and confirmation. This replaces the original baseline mandatory travel-confirmation policy above; it does not change validation, action cost, event order, readonly preview behavior or Undo. Both authored level files and their solutions are unchanged.

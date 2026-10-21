@@ -1,8 +1,22 @@
-import { test, expect, type Page } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { writeFileSync } from 'node:fs';
 import { reviewDir } from './evidence';
-const state = (p: Page) => p.evaluate(() => (window as any).__LAST_FERRY__.getState());
-const rendered = (p: Page) => p.evaluate(() => (window as any).__LAST_FERRY__.getRenderStatus());
+import {
+  act,
+  ready,
+  state,
+  rendered,
+  idle,
+  undo,
+  restart,
+  keyAct,
+  tabTo,
+  fullyVisible,
+} from './ui';
+
+const shot = (page: import('@playwright/test').Page, name: string) =>
+  page.screenshot({ path: `${reviewDir}/${name}.png` });
+
 test.afterEach(async ({ page, context }, info) => {
   if (info.title.startsWith('desktop:')) {
     const video = page.video();
@@ -10,69 +24,55 @@ test.afterEach(async ({ page, context }, info) => {
     await video?.saveAs(`${reviewDir}/raw/desktop-rescue.webm`);
   }
 });
-async function ready(p: Page) {
-  await p.goto('/');
-  await p.waitForFunction(() => ((window as any).__LAST_FERRY__?.getMetrics().frames ?? 0) > 3);
-}
-async function idle(p: Page) {
-  await p.waitForFunction(() => !(window as any).__LAST_FERRY__.getRenderStatus().pendingAnimation);
-}
-async function action(p: Page, id: string) {
-  await p.locator(`#${id}`).click();
-  await expect(p.locator('#commit')).toBeEnabled();
-  await p.locator('#commit').click();
-  await idle(p);
-}
-async function shot(p: Page, name: string) {
-  await p.screenshot({ path: `${reviewDir}/${name}.png` });
-}
+
 test('desktop: real rescue, blocked preview, tide undo, terminal undo and restart', async ({
   page,
 }) => {
   const errors: string[] = [];
-  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('pageerror', (error) => errors.push(error.message));
   await ready(page);
   await shot(page, 'normal-play');
   const original = await state(page);
-  await page.locator('#forecast-toggle').click();
+  await page.locator('#status-toggle').click();
   await expect(page.locator('.forecast-detail')).toContainText('The tide rises in 4 actions.');
   expect(await state(page)).toEqual(original);
-  await page.locator('#forecast-toggle').click();
-  await page.locator('#route-sheep-pier').click();
+  await page.keyboard.press('Escape');
+  await page.locator('#inspect-sheep-pier').click();
   expect(await state(page)).toEqual(original);
   await page.locator('#cancel').click();
   expect(await state(page)).toEqual(original);
-  await action(page, 'route-sheep-pier');
+  await act(page, 'map-sheep-pier');
   await page.locator('#board').click();
-  await expect(page.locator('#preview')).toContainText('After boarding: boat needs depth 3.');
-  await expect(page.locator('#preview')).toContainText(
+  await expect(page.locator('#dialog')).toContainText('After boarding: boat needs depth 3.');
+  await expect(page.locator('#dialog')).toContainText(
     'Passage to Shallow Cut has depth 2: too shallow.',
   );
   await shot(page, 'loading-preview');
   await page.locator('#commit').click({ clickCount: 2 });
   await expect(page.locator('#undo')).toBeDisabled();
-  await expect(page.locator('#restart')).toBeDisabled();
+  await expect(page.locator('#wait')).toBeDisabled();
+  await expect(page.locator('#menu')).toBeDisabled();
   await idle(page);
   expect((await state(page)).turn).toBe(2);
   const full = await state(page);
-  await page.locator('#route-cut').click();
+  await page.locator('#map-cut').click();
   await expect(page.locator('#commit')).toBeDisabled();
-  await expect(page.locator('#preview')).toContainText(
+  await expect(page.locator('#dialog')).toContainText(
     'Boat needs depth 3. Passage has depth 2: too shallow.',
   );
   expect(await state(page)).toEqual(full);
   await page.locator('#cancel').click();
-  await action(page, 'route-outer-east');
+  await act(page, 'map-outer-east');
   const beforeRise = await state(page),
     beforeRender = await rendered(page);
-  await action(page, 'route-outer-south');
+  await act(page, 'map-outer-south');
   expect(await state(page)).toMatchObject({ turn: 4, tideLevel: 1 });
   await shot(page, 'after-tide');
-  await page.locator('#undo').click();
+  await undo(page);
   expect(await state(page)).toEqual(beforeRise);
   const restored = await rendered(page);
   for (const prior of beforeRender.passengers) {
-    const actual = restored.passengers.find((p: any) => p.id === prior.id);
+    const actual = restored.passengers.find((passenger: any) => passenger.id === prior.id);
     expect(actual.parent).toBe(prior.parent);
     for (let axis = 0; axis < 3; axis++) {
       expect(actual.deckLocalFoot[axis]).toBeCloseTo(prior.deckLocalFoot[axis], 8);
@@ -81,10 +81,8 @@ test('desktop: real rescue, blocked preview, tide undo, terminal undo and restar
   }
   expect(restored.boatPosition).toEqual(beforeRender.boatPosition);
   expect(restored.waterY).toBe(0);
-  await action(page, 'route-outer-south');
-  await action(page, 'route-outer-west');
-  await action(page, 'route-harbor');
-  await action(page, 'unload');
+  for (const id of ['map-outer-south', 'map-outer-west', 'map-harbor', 'unload'])
+    await act(page, id);
   expect(await state(page)).toMatchObject({
     status: 'won',
     turn: 7,
@@ -93,15 +91,17 @@ test('desktop: real rescue, blocked preview, tide undo, terminal undo and restar
   });
   await expect(page.getByText('Everyone home.')).toBeVisible();
   await shot(page, 'success');
-  await page.locator('#undo').click();
+  await undo(page);
   expect(await state(page)).toMatchObject({ status: 'playing', turn: 6, delivered: [] });
-  await action(page, 'unload');
+  await act(page, 'unload');
   expect((await state(page)).status).toBe('won');
-  await page.locator('#restart').click();
+  await restart(page);
   expect(await state(page)).toEqual(original);
+  await page.locator('#menu').click();
   await page.locator('#sound').click();
   await page.reload();
   await page.waitForFunction(() => (window as any).__LAST_FERRY__);
+  await page.locator('#menu').click();
   await expect(page.locator('#sound')).toHaveAttribute('aria-label', 'Unmute sound');
   expect(errors).toEqual([]);
   writeFileSync(
@@ -118,6 +118,7 @@ test('desktop: real rescue, blocked preview, tide undo, terminal undo and restar
     ),
   );
 });
+
 test('emulated phone landscape: touch preview, double tap guard, tide undo and complete rescue', async ({
   browser,
 }) => {
@@ -130,14 +131,9 @@ test('emulated phone landscape: touch preview, double tap guard, tide undo and c
   });
   const page = await context.newPage();
   await ready(page);
-  async function tapAction(id: string) {
-    await page.locator(`#${id}`).tap();
-    await page.locator('#commit').tap();
-    await idle(page);
-  }
-  await tapAction('route-sheep-pier');
+  await act(page, 'map-sheep-pier', true);
   await page.locator('#board').tap();
-  await expect(page.locator('#preview')).toContainText(
+  await expect(page.locator('#dialog')).toContainText(
     'Passage to Shallow Cut has depth 2: too shallow.',
   );
   await shot(page, 'phone-loading-preview');
@@ -147,82 +143,69 @@ test('emulated phone landscape: touch preview, double tap guard, tide undo and c
   await page.touchscreen.tap(bounds!.x + bounds!.width / 2, bounds!.y + bounds!.height / 2);
   await idle(page);
   expect((await state(page)).turn).toBe(2);
-  await tapAction('wait');
+  await act(page, 'wait', true);
   const before = await state(page);
-  await tapAction('wait');
+  await act(page, 'wait', true);
   expect((await state(page)).tideLevel).toBe(1);
-  await page.locator('#undo').tap();
+  await undo(page, true);
   expect(await state(page)).toEqual(before);
-  await tapAction('wait');
-  await tapAction('route-cut');
-  await tapAction('route-harbor');
-  await tapAction('unload');
+  for (const id of ['wait', 'map-cut', 'map-harbor', 'unload']) await act(page, id, true);
   expect(await state(page)).toMatchObject({ status: 'won', turn: 7 });
-  await expect(page.locator('.panel')).toHaveJSProperty('scrollTop', 0);
+  await fullyVisible(page, page.locator('#terminal-undo'));
+  await fullyVisible(page, page.locator('#terminal-restart'));
   await shot(page, 'phone-success');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   const video = page.video();
   await context.close();
   await video?.saveAs(`${reviewDir}/raw/phone-rescue.webm`);
 });
+
 test('keyboard-only tide-wait witness and subset selection', async ({ page }) => {
   await ready(page);
-  async function key(id: string) {
-    await page.locator(`#${id}`).focus();
-    await page.keyboard.press('Enter');
-  }
-  async function keyAction(id: string) {
-    await key(id);
-    await key('commit');
-    await idle(page);
-  }
-  await keyAction('route-sheep-pier');
-  await key('unload');
+  await keyAct(page, 'map-sheep-pier');
+  await tabTo(page, 'unload');
+  await page.keyboard.press('Enter');
   await expect(page.locator('#passenger-rabbit-1')).toHaveAttribute('aria-pressed', 'true');
-  await key('passenger-rabbit-2');
-  await expect(page.locator('#preview')).toContainText('After unloading: boat needs depth 2.');
+  await tabTo(page, 'passenger-rabbit-2');
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#dialog')).toContainText('After unloading: boat needs depth 2.');
   expect((await state(page)).turn).toBe(1);
   await page.keyboard.press('Escape');
-  await keyAction('board');
-  await keyAction('wait');
-  await key('route-cut');
+  await keyAct(page, 'board');
+  await keyAct(page, 'wait');
+  await tabTo(page, 'map-cut');
+  await page.keyboard.press('Enter');
   await expect(page.locator('#commit')).toBeDisabled();
   expect((await state(page)).turn).toBe(3);
   await page.keyboard.press('Escape');
-  await keyAction('wait');
-  await keyAction('route-cut');
-  await keyAction('route-harbor');
-  await keyAction('unload');
+  for (const id of ['wait', 'map-cut', 'map-harbor', 'unload']) await keyAct(page, id);
   expect(await state(page)).toMatchObject({ status: 'won', turn: 7 });
 });
+
 test('flood loss, undo and alternate safe boarding through real interface', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await ready(page);
-  await action(page, 'route-sheep-pier');
-  for (let i = 0; i < 6; i++) await action(page, 'wait');
+  await act(page, 'map-sheep-pier');
+  for (let count = 0; count < 6; count++) await act(page, 'wait');
   const saved = await state(page);
-  await action(page, 'wait');
+  await act(page, 'wait');
   expect(await state(page)).toMatchObject({ status: 'lost', turn: 8, tideLevel: 2 });
   await expect(page.getByText('A turn too late.')).toBeVisible();
   await shot(page, 'flood-loss');
-  await page.locator('#undo').click();
+  await undo(page);
   expect(await state(page)).toEqual(saved);
-  await action(page, 'board');
+  await act(page, 'board');
   expect(await state(page)).toMatchObject({ status: 'playing', turn: 8, tideLevel: 2 });
   await expect(page.locator('#board')).toHaveCount(0);
-  await action(page, 'wait');
-  expect((await state(page)).status).toBe('playing');
-  await action(page, 'route-cut');
-  await action(page, 'route-harbor');
-  await action(page, 'unload');
+  for (const id of ['wait', 'map-cut', 'map-harbor', 'unload']) await act(page, id);
   expect((await state(page)).status).toBe('won');
 });
+
 test('visibility cancellation releases lock and reconciles to committed state', async ({
   page,
 }) => {
   await ready(page);
-  await page.locator('#route-sheep-pier').click();
-  await page.locator('#commit').click();
+  await page.locator('#map-sheep-pier').click();
   await page.evaluate(() => {
     Object.defineProperty(document, 'hidden', { configurable: true, value: true });
     document.dispatchEvent(new Event('visibilitychange'));
@@ -230,9 +213,10 @@ test('visibility cancellation releases lock and reconciles to committed state', 
   await idle(page);
   expect((await state(page)).turn).toBe(1);
   await expect(page.locator('#undo')).toBeEnabled();
-  await page.locator('#undo').click();
+  await undo(page);
   expect((await state(page)).turn).toBe(0);
 });
+
 test('portrait: complete frame, usable controls, reduced motion and no horizontal clipping', async ({
   page,
 }) => {
@@ -240,10 +224,11 @@ test('portrait: complete frame, usable controls, reduced motion and no horizonta
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await ready(page);
   await shot(page, 'portrait');
-  await expect(page.locator('.portrait-note')).toBeVisible();
-  await action(page, 'route-sheep-pier');
+  await fullyVisible(page, page.locator('#map-sheep-pier'));
+  await fullyVisible(page, page.locator('#undo'));
+  await act(page, 'map-sheep-pier');
   expect((await state(page)).turn).toBe(1);
-  await page.locator('#undo').click();
+  await undo(page);
   expect((await state(page)).turn).toBe(0);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });

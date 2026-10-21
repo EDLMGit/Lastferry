@@ -5,6 +5,7 @@ import {
   actionCostCopy,
   actionLabel,
   forecastCopy,
+  objectiveCopy,
   passageCopy,
   passengerList,
   pierSafetyCopy,
@@ -24,6 +25,25 @@ const atRabbits = () =>
   ]);
 
 describe('plain action and consequence presentation', () => {
+  test('derives the objective and required-passenger progress from each cove', () => {
+    for (const l of [holdingPier, baseline]) {
+      const s = initial(l);
+      expect(objectiveCopy(s, l)).toEqual({
+        headline: 'Bring all three passengers to Harbor',
+        progress: 'Home 0/3',
+      });
+      s.delivered = ['rabbit-1', 'unrequired-passenger'];
+      expect(objectiveCopy(s, l).progress).toBe('Home 1/3');
+    }
+    const altered = structuredClone(holdingPier);
+    altered.objective.deliveryPierId = 'stone-pier';
+    altered.objective.requiredPassengerIds = ['sheep-1'];
+    expect(objectiveCopy(initial(altered), altered)).toEqual({
+      headline: 'Bring one passenger to Stone Pier',
+      progress: 'Home 0/1',
+    });
+  });
+
   test('uses passenger names and direct current-depth comparisons', () => {
     const s = initial(holdingPier);
     expect(passengerList(['rabbit-1', 'rabbit-2'])).toBe('Pip and Rue');
@@ -70,10 +90,21 @@ describe('plain action and consequence presentation', () => {
     expect(rue.consequence).toContain('Pip is still waiting at Rabbit Pier');
     const nobody = previewCopy(s, { type: 'board', passengerIds: [] }, holdingPier);
     expect(nobody.error).toBe('Select at least one passenger.');
+    expect(nobody.consequence).toBe('');
     expect(nobody.requirement).toBe('');
     expect(s.turn).toBe(3);
     expect(s.tideLevel).toBe(0);
     expect(s.waitingByPier['rabbit-pier']).toHaveLength(2);
+  });
+
+  test('keeps blocked inspection reasons without repeating the dialog inspection label', () => {
+    const s = initial(holdingPier),
+      before = structuredClone(s),
+      blocked = previewCopy(s, { type: 'move', to: 'shallows' }, holdingPier);
+    expect(blocked.error).toBe('Boat needs depth 2. Passage has depth 1: too shallow.');
+    expect(blocked.consequence).toBe('');
+    expect(blocked.requirement).toBe('');
+    expect(s).toEqual(before);
   });
 
   test('prioritizes the remaining action window, then replaces urgency with rescued-passenger facts', () => {

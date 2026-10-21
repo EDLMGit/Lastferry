@@ -7,8 +7,7 @@ test('fallback completes a stalled presentation without another gameplay action'
   await page.evaluate(() => {
     window.requestAnimationFrame = () => 0;
   });
-  await page.locator('#route-sheep-pier').click();
-  await page.locator('#commit').click();
+  await page.locator('#map-sheep-pier').click();
   await page.waitForFunction(
     () => !(window as any).__LAST_FERRY__.getRenderStatus().pendingAnimation,
   );

@@ -40,6 +40,7 @@ const paths = [
   '.nvmrc',
   'AGENTS.md',
   'FIRST_TASK.md',
+  ...(existsSync(new URL('NEXT_TASK.md', root)) ? ['NEXT_TASK.md'] : []),
   'docs/GAMEPLAY_RULES.md',
   'docs/FIRST_COVE.md',
   'docs/ART_DIRECTION.md',

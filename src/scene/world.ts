@@ -37,6 +37,7 @@ export class World {
   frame = 0;
   lastTime = 0;
   onSelect: (id: string) => void = () => {};
+  onCurrent: () => void = () => {};
   constructor(
     public host: HTMLElement,
     state: State,
@@ -282,12 +283,37 @@ export class World {
         point.x <= Math.max(...boatX) + 6 &&
         point.y >= Math.min(...boatY) - 6 &&
         point.y <= Math.max(...boatY) + 6
-      )
+      ) {
+        this.onCurrent();
         return;
+      }
+      const currentPier = this.level.piers.find((pier) => pier.nodeId === this.state.boatNodeId);
+      if (currentPier) {
+        const corners = [
+          V(
+            [currentPier.positionXZ[0] - currentPier.width / 2, currentPier.positionXZ[1] + 0.5],
+            currentPier.elevation * 0.18,
+          ),
+          V(
+            [currentPier.positionXZ[0] + currentPier.width / 2, currentPier.landAnchorXZ[1]],
+            currentPier.elevation * 0.18,
+          ),
+        ].map((p) => p.project(this.camera));
+        const xs = corners.map((p) => ((p.x + 1) * host.clientWidth) / 2);
+        const ys = corners.map((p) => ((1 - p.y) * host.clientHeight) / 2);
+        if (
+          point.x >= Math.min(...xs) - 6 &&
+          point.x <= Math.max(...xs) + 6 &&
+          point.y >= Math.min(...ys) - 6 &&
+          point.y <= Math.max(...ys) + 6
+        ) {
+          this.onCurrent();
+          return;
+        }
+      }
       let closest: string | undefined,
         dist = 32;
       for (const n of this.level.nodes) {
-        if (n.id === this.state.boatNodeId) continue;
         const p = this.project(n.positionXZ);
         const d = Math.hypot(p.x - point.x, p.y - point.y);
         if (d < dist) {
@@ -295,7 +321,8 @@ export class World {
           dist = d;
         }
       }
-      if (closest) this.onSelect(closest);
+      if (closest === this.state.boatNodeId) this.onCurrent();
+      else if (closest) this.onSelect(closest);
     });
     this.renderer.domElement.addEventListener('webglcontextlost', (ev) => {
       ev.preventDefault();
@@ -438,7 +465,6 @@ export class World {
     if (!w || !h) return;
     this.renderer.setSize(w, h);
     const aspect = w / h;
-    const smallLandscape = matchMedia('(max-height: 480px) and (min-width: 701px)').matches;
     const span = Math.max(13.2, 20.3 / aspect);
     this.camera.left = (-span * aspect) / 2;
     this.camera.right = (span * aspect) / 2;
@@ -446,10 +472,12 @@ export class World {
     this.camera.bottom = -span / 2;
     this.camera.near = 0.1;
     this.camera.far = 100;
-    this.camera.position.set(7, 34, 23);
-    if (smallLandscape || this.level.id === 'holding-pier') this.camera.position.set(0, 34, 24);
+    const baselineLandscape =
+      this.level.id === 'first-crossing' &&
+      matchMedia('(max-height: 480px) and (min-width: 701px)').matches;
+    this.camera.position.set(0, baselineLandscape ? 30 : 34, baselineLandscape ? 30 : 24);
     this.camera.lookAt(0, 0, 0.05);
-    if (smallLandscape || this.level.id === 'holding-pier') {
+    {
       this.scene.updateMatrixWorld(true);
       this.camera.updateMatrixWorld(true);
       const points: T.Vector3[] = [];
@@ -775,6 +803,7 @@ export class World {
     };
     return {
       canvas: { width: this.host.clientWidth, height: this.host.clientHeight },
+      boat: rectangle(this.boatRoot),
       lighthouse: rectangle(this.scene.getObjectByName('lighthouse')!),
       passengers: [...this.animals].map(([id, g]) => ({ id, ...rectangle(g) })),
       nodes: this.level.nodes.map((n) => ({ id: n.id, ...this.project(n.positionXZ) })),
