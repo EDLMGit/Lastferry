@@ -125,3 +125,13 @@ Visual verification is **complete for these stated desktop/phone Chromium states
 **No confirmed gameplay defect remains in the checks performed.** The phone confirmation and arrival-label defects found during implementation were corrected and recaptured. No rules or deadline compromise was needed.
 
 The remaining milestone question is design validation: have a first-time player try the experiment without developer notes, then report whether they noticed safe unloading, understood why the two shortcuts failed, and enjoyed the resulting plan. Automated solution/necessity proofs do not establish that discovery feels satisfying. Physical-phone/browser coverage and the bundle advisory remain as listed above. No campaign or additional cove expansion was started.
+
+## Commit and PR handoff
+
+The experiment implementation and twelve selected gameplay PNGs are committed at [0ee5d1477562be6f11c9ee3059ab9d3fb86c435b](https://github.com/EDLMGit/Lastferry/commit/0ee5d1477562be6f11c9ee3059ab9d3fb86c435b) on `m1-first-crossing`. A subsequent documentation-only handoff commit records this audit; its final SHA and verified remote tip are provided in draft PR #1 and the handoff response.
+
+[packaging-audit.json](packaging-audit.json) checks all 43 committed source files against the original tested working tree: 40 match byte-for-byte and three documentation files differ only by CRLF-to-LF normalization required by existing attributes. All twelve committed screenshots and the retained local recording match their captured hashes. The archived diff is marked binary to preserve its exact unified-diff bytes. Capture identity remains the original precommit snapshot; these assets were not recaptured or relabeled as later-commit captures.
+
+This handoff reuses the recorded build/typecheck, 20 unit checks, 19-check browser regression and six final affected browser checks after the content audit. Tests were not rerun during commit/push packaging because runtime, assets, dependencies and tests are unchanged. The PR links the versioned review and screenshots. The 32.28-second raw video remains local and ignored: the available GitHub integration has no attachment-upload capability. No new release or hosting service is created.
+
+The authorized operation is a normal push to the implementation branch and a draft PR update against main at `386de54d20fdd4a513a06115471d70bf94738cc0`. No merge, force push or deployment.
