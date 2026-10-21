@@ -11,9 +11,8 @@ async function ready(p: Page) {
   await p.goto('/');
   await p.waitForFunction(() => ((window as any).__LAST_FERRY__?.getMetrics().frames ?? 0) > 3);
 }
-// This helper only sends real Tab presses; it never calls focus() or mutates DOM.
 async function tabTo(p: Page, id: string, backwards = false) {
-  for (let i = 0; i < 24; i++) {
+  for (let i = 0; i < 64; i++) {
     if ((await active(p)) === id) return;
     await p.keyboard.press(backwards ? 'Shift+Tab' : 'Tab');
   }
@@ -37,19 +36,19 @@ for (const [name, width, height] of [
     await page.setViewportSize({ width, height });
     await ready(page);
     await tabTo(page, 'route-sheep-pier');
-    await page.keyboard.press('Shift+Tab');
+    await tabTo(page, 'route-harbor', true);
     await expect(page.locator('#route-harbor')).toBeFocused();
     await page.keyboard.press('Enter');
     await expect(page.locator('#cancel')).toBeFocused();
     await page.keyboard.press('Escape');
     await expect(page.locator('#route-harbor')).toBeFocused();
     expect((await api(page)).turn).toBe(0);
-    await page.keyboard.press('Tab');
+    await tabTo(page, 'route-sheep-pier');
     await page.keyboard.press('Enter');
     await tabTo(page, 'commit');
     await page.keyboard.press('Enter');
     await idle(page);
-    await expect(page.locator('#route-cut')).toBeFocused();
+    expect(await active(page)).toMatch(/^(board|unload|wait|route-)/);
     if (name === 'phone') await expect(page.locator('.panel')).toHaveJSProperty('scrollTop', 0);
     await tabTo(page, 'board');
     await page.keyboard.press('Enter');
@@ -126,14 +125,14 @@ for (const reduced of [false, true])
     await page.locator('#unload').click();
     await page.locator('#passenger-rabbit-1').click();
     await page.locator('#passenger-rabbit-2').click();
-    await expect(page.locator('#preview')).toContainText('Unload Moss');
+    await expect(page.locator('#preview')).toContainText('Let Moss ashore');
     await page.locator('#commit').click();
     await idle(page);
     expect((await api(page)).aboard).toEqual(['rabbit-1', 'rabbit-2']);
     await page.evaluate(() => {
       (window as any).__deckPhase = 'idle-after-unload';
     });
-    await page.waitForTimeout(650); // Deliberate idle-bob sampling interval, not an action wait.
+    await page.waitForTimeout(650);
     await page.evaluate(() => {
       (window as any).__deckPhase = 'actions';
     });

@@ -24,7 +24,7 @@ async function act(p: Page, id: string, touch = false) {
   await idle(p);
 }
 async function tabTo(p: Page, id: string, backwards = false) {
-  for (let i = 0; i < 32; i++) {
+  for (let i = 0; i < 64; i++) {
     if ((await p.evaluate(() => document.activeElement?.id)) === id) return;
     await p.keyboard.press(backwards ? 'Shift+Tab' : 'Tab');
   }
@@ -51,13 +51,15 @@ test('Holding Pier: uninterrupted nine-action actual UI rescue and gameplay evid
   const trace = [await state(page)];
   await page.waitForTimeout(700);
   await page.locator('#route-shallows').click();
-  await expect(page.locator('#preview')).toContainText('depth 1 is below draft 2');
+  await expect(page.locator('#preview')).toContainText(
+    'Boat needs depth 2. Passage has depth 1: too shallow.',
+  );
   expect(await state(page)).toEqual(trace[0]);
   await page.waitForTimeout(600);
   await page.locator('#cancel').click();
   await page.locator('#unload').click();
-  await expect(page.locator('#preview')).toContainText('0 / 4 spaces · draft 1');
-  await expect(page.locator('#preview')).toContainText('Shallow channel open');
+  await expect(page.locator('#preview')).toContainText('After unloading: boat needs depth 1.');
+  await expect(page.locator('#preview')).toContainText('Moss will wait at Stone Pier.');
   await expect(page.locator('#commit')).toBeInViewport({ ratio: 1 });
   await shot(page, 'desktop-unloading-preview');
   await page.waitForTimeout(600);
@@ -74,8 +76,10 @@ test('Holding Pier: uninterrupted nine-action actual UI rescue and gameplay evid
   }
   const before = await state(page);
   await page.locator('#board').click();
-  await expect(page.locator('#preview')).toContainText('Turn 4 · tide 1 · 2 / 4 spaces · draft 2');
-  await expect(page.locator('#preview')).toContainText('The tide rises after this action');
+  await expect(page.locator('#preview')).toContainText('After boarding: boat needs depth 2.');
+  await expect(page.locator('#preview')).toContainText(
+    'Pip and Rue board, then the tide rises. Both are safe aboard.',
+  );
   expect(await state(page)).toEqual(before);
   await shot(page, 'desktop-loading-preview');
   await page.waitForTimeout(900);
@@ -98,7 +102,7 @@ test('Holding Pier: uninterrupted nine-action actual UI rescue and gameplay evid
   expect(trace.map((s) => s.turn)).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
   expect(trace.at(-1)).toMatchObject({ status: 'won', turn: 9, tideLevel: 2, aboard: [] });
   await expect(page.getByText('Everyone home.')).toBeVisible();
-  await expect(page.locator('[data-pier="harbor-pier"]')).toBeHidden();
+  await expect(page.locator('#map-harbor')).toHaveAttribute('aria-current', 'location');
   await shot(page, 'desktop-success');
   expect(errors).toEqual([]);
   await page.waitForTimeout(900);
@@ -116,7 +120,6 @@ test('Holding Pier: uninterrupted nine-action actual UI rescue and gameplay evid
       2,
     ),
   );
-  // The default per-test video is a single continuous capture, with no edits.
   const video = page.video()!;
   await page.close();
   await video.saveAs(`${folder}/raw/uninterrupted-rescue.webm`);
@@ -154,10 +157,12 @@ test('Holding Pier: unloading Undo, tide Undo, losing alternatives and baseline 
   await page.locator('#restart').click();
   await act(page, 'route-harbor');
   await act(page, 'unload');
-  await expect(page.locator('[data-pier="harbor-pier"]')).toBeHidden();
+  await expect(page.locator('#map-harbor')).toHaveAttribute('aria-current', 'location');
   await act(page, 'route-stone');
   await page.locator('#route-shallows').click();
-  await expect(page.locator('#preview')).toContainText('Rabbit Pier floods');
+  await expect(page.locator('#preview')).toContainText(
+    'still waiting at Rabbit Pier when it floods',
+  );
   expect((await state(page)).turn).toBe(3);
   await page.locator('#commit').click();
   await idle(page);
@@ -172,7 +177,9 @@ test('Holding Pier: unloading Undo, tide Undo, losing alternatives and baseline 
   expect((await state(page)).turn).toBe(3);
   await page.locator('#cancel').click();
   await page.locator('#wait').click();
-  await expect(page.locator('#preview')).toContainText('Rabbit Pier floods');
+  await expect(page.locator('#preview')).toContainText(
+    'still waiting at Rabbit Pier when it floods',
+  );
   await page.locator('#commit').click();
   await idle(page);
   expect(await state(page)).toMatchObject({ turn: 4, tideLevel: 1, status: 'lost' });
@@ -229,7 +236,7 @@ test('Holding Pier: phone landscape touch, direct double-tap guard, preview and 
   for (const id of ['route-shallows', 'route-stone', 'board', 'route-harbor', 'unload'])
     await act(page, id, true);
   expect(await state(page)).toMatchObject({ status: 'won', turn: 9 });
-  await expect(page.locator('[data-pier="harbor-pier"]')).toBeHidden();
+  await expect(page.locator('#map-harbor')).toHaveAttribute('aria-current', 'location');
   await shot(page, 'phone-success');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   writeFileSync(`${folder}/phone-frame.json`, JSON.stringify(frame, null, 2));
@@ -272,7 +279,7 @@ for (const [label, width, height] of [
     await expect(page.locator('#undo')).toBeFocused();
     await page.keyboard.press('Enter');
     expect(await state(page)).toMatchObject({ status: 'playing', turn: 8, delivered: [] });
-    await expect(page.locator('[data-pier="harbor-pier"]')).toBeVisible();
+    await expect(page.locator('#map-harbor')).toHaveAttribute('aria-current', 'location');
     await keyAct(page, 'unload');
     expect((await state(page)).status).toBe('won');
   });

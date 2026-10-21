@@ -1,7 +1,5 @@
 import data from '../../data/first-crossing.level.json';
 import holdingData from '../../data/holding-pier.level.json';
-// Shared authored schema; the original JSON remains the baseline and default
-// for rule callers. A session owns its level, never a mutable global selection.
 export type Level = Pick<
   typeof data,
   | 'id'
@@ -20,12 +18,12 @@ export type Level = Pick<
 export const level: Level = data;
 export const holdingPier: Level = holdingData;
 export const nodeNames: Record<string, string> = {
-  harbor: 'Lighthouse harbor',
-  cut: 'Shallow cut',
-  'sheep-pier': 'Sheep pier',
-  'outer-east': 'East buoy',
-  'outer-south': 'South buoy',
-  'outer-west': 'West buoy',
+  harbor: 'Harbor',
+  cut: 'Shallow Cut',
+  'sheep-pier': 'Sheep Pier',
+  'outer-east': 'East Buoy',
+  'outer-south': 'South Buoy',
+  'outer-west': 'West Buoy',
   stone: 'Stone Pier',
   shallows: 'Shallows',
   'rabbit-pier': 'Rabbit Pier',

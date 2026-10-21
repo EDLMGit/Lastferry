@@ -35,7 +35,7 @@ test('desktop: real rescue, blocked preview, tide undo, terminal undo and restar
   await shot(page, 'normal-play');
   const original = await state(page);
   await page.locator('#forecast-toggle').click();
-  await expect(page.locator('.forecast-detail')).toContainText('Tide 1 after turn 4');
+  await expect(page.locator('.forecast-detail')).toContainText('The tide rises in 4 actions.');
   expect(await state(page)).toEqual(original);
   await page.locator('#forecast-toggle').click();
   await page.locator('#route-sheep-pier').click();
@@ -44,10 +44,11 @@ test('desktop: real rescue, blocked preview, tide undo, terminal undo and restar
   expect(await state(page)).toEqual(original);
   await action(page, 'route-sheep-pier');
   await page.locator('#board').click();
-  await expect(page.locator('#preview')).toContainText('4 / 4 spaces · draft 3');
-  await expect(page.locator('#preview')).toContainText('Shallow cut blocked');
+  await expect(page.locator('#preview')).toContainText('After boarding: boat needs depth 3.');
+  await expect(page.locator('#preview')).toContainText(
+    'Passage to Shallow Cut has depth 2: too shallow.',
+  );
   await shot(page, 'loading-preview');
-  // A double click is still one atomic action; presentation disables all mutation controls.
   await page.locator('#commit').click({ clickCount: 2 });
   await expect(page.locator('#undo')).toBeDisabled();
   await expect(page.locator('#restart')).toBeDisabled();
@@ -56,7 +57,9 @@ test('desktop: real rescue, blocked preview, tide undo, terminal undo and restar
   const full = await state(page);
   await page.locator('#route-cut').click();
   await expect(page.locator('#commit')).toBeDisabled();
-  await expect(page.locator('#preview')).toContainText('depth 2 is below draft 3');
+  await expect(page.locator('#preview')).toContainText(
+    'Boat needs depth 3. Passage has depth 2: too shallow.',
+  );
   expect(await state(page)).toEqual(full);
   await page.locator('#cancel').click();
   await action(page, 'route-outer-east');
@@ -73,7 +76,6 @@ test('desktop: real rescue, blocked preview, tide undo, terminal undo and restar
     expect(actual.parent).toBe(prior.parent);
     for (let axis = 0; axis < 3; axis++) {
       expect(actual.deckLocalFoot[axis]).toBeCloseTo(prior.deckLocalFoot[axis], 8);
-      // Idle wave phase is cosmetic and is not part of the undo snapshot.
       expect(Math.abs(actual.position[axis] - prior.position[axis])).toBeLessThan(0.025);
     }
   }
@@ -135,7 +137,9 @@ test('emulated phone landscape: touch preview, double tap guard, tide undo and c
   }
   await tapAction('route-sheep-pier');
   await page.locator('#board').tap();
-  await expect(page.locator('#preview')).toContainText('Shallow cut blocked');
+  await expect(page.locator('#preview')).toContainText(
+    'Passage to Shallow Cut has depth 2: too shallow.',
+  );
   await shot(page, 'phone-loading-preview');
   const bounds = await page.locator('#commit').boundingBox();
   expect(bounds).not.toBeNull();
@@ -176,7 +180,7 @@ test('keyboard-only tide-wait witness and subset selection', async ({ page }) =>
   await key('unload');
   await expect(page.locator('#passenger-rabbit-1')).toHaveAttribute('aria-pressed', 'true');
   await key('passenger-rabbit-2');
-  await expect(page.locator('#preview')).toContainText('1 / 4 spaces · draft 2');
+  await expect(page.locator('#preview')).toContainText('After unloading: boat needs depth 2.');
   expect((await state(page)).turn).toBe(1);
   await page.keyboard.press('Escape');
   await keyAction('board');

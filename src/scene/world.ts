@@ -15,6 +15,8 @@ export class World {
   passengerAnchors = new Map<string, T.Object3D>();
   markers = new Map<string, T.Group>();
   routes = new Map<string, T.Line>();
+  navigationCurrent = '';
+  navigationSelected: string | null = null;
   forecast = new T.Group();
   water: T.Mesh;
   shadow: T.Mesh;
@@ -123,7 +125,7 @@ export class World {
           cylinder(this.scene, '#79644a', 0.065, 0.07, 0.83, [px, y - 0.27, pz], 9);
           cylinder(this.scene, '#dbc799', 0.075, 0.075, 0.055, [px, y + 0.17, pz], 9);
         }
-      box(this.scene, '#b68f5b', [0.35, 0.055, 0.49], [x, y - 0.015, z + 0.25], 0.015); // boarding gangway
+      box(this.scene, '#b68f5b', [0.35, 0.055, 0.49], [x, y - 0.015, z + 0.25], 0.015);
       cylinder(this.scene, '#655b43', 0.025, 0.025, 0.65, [x + 0.36, y + 0.33, z - 0.1], 7);
       box(this.scene, '#f5cb77', [0.13, 0.19, 0.13], [x + 0.36, y + 0.68, z - 0.1]);
     }
@@ -180,13 +182,37 @@ export class World {
       this.scene.add(g);
       this.markers.set(n.id, g);
       const ring = mesh(new T.TorusGeometry(0.25, 0.025, 6, 36), '#f3db9a', g);
+      ring.name = 'stop-ring';
       ring.rotation.x = Math.PI / 2;
+      const halo = mesh(new T.TorusGeometry(0.37, 0.025, 6, 36), '#ffe09a', g);
+      halo.name = 'selection-ring';
+      halo.rotation.x = Math.PI / 2;
+      const current = mesh(new T.TorusGeometry(0.44, 0.014, 6, 36), '#fff1d7', g);
+      current.name = 'current-ring';
+      current.rotation.x = Math.PI / 2;
+      const blocked = new T.Group();
+      blocked.name = 'blocked-cross';
+      g.add(blocked);
+      for (const angle of [-Math.PI / 4, Math.PI / 4]) {
+        const bar = box(blocked, '#dca180', [0.34, 0.024, 0.045], [0, 0.01, 0], 0.008);
+        bar.rotation.y = angle;
+      }
+      const remote = new T.LineLoop(
+        new T.BufferGeometry().setFromPoints([
+          V([0, -0.2]),
+          V([0.2, 0]),
+          V([0, 0.2]),
+          V([-0.2, 0]),
+        ]),
+        new T.LineBasicMaterial({ color: '#8fada9', transparent: true, opacity: 0.65 }),
+      );
+      remote.name = 'nonadjacent-diamond';
+      g.add(remote);
       if (!n.pierId && n.id !== 'cut') {
         cylinder(g, '#e2bf70', 0.055, 0.13, 0.2, [0, 0.07, 0], 10);
         cylinder(g, '#eee2bc', 0.025, 0.025, 0.25, [0, 0.28, 0], 7);
       }
     }
-    // Sparse broken foam accents hugging the three authored footprints.
     for (const island of this.level.world.islands) {
       const points = island.footprintXZ;
       const cx = points.reduce((n, p) => n + p[0], 0) / points.length,
@@ -240,12 +266,30 @@ export class World {
     new ResizeObserver(() => this.resize()).observe(host);
     this.resize();
     this.renderer.domElement.addEventListener('click', (ev) => {
+      if (this.transition || this.state.status !== 'playing') return;
       const bounds = host.getBoundingClientRect();
+      const point = { x: ev.clientX - bounds.left, y: ev.clientY - bounds.top };
+      const boatBounds = new T.Box3().setFromObject(this.boatRoot);
+      const boatCorners: T.Vector3[] = [];
+      for (const x of [boatBounds.min.x, boatBounds.max.x])
+        for (const y of [boatBounds.min.y, boatBounds.max.y])
+          for (const z of [boatBounds.min.z, boatBounds.max.z])
+            boatCorners.push(new T.Vector3(x, y, z).project(this.camera));
+      const boatX = boatCorners.map((p) => ((p.x + 1) * host.clientWidth) / 2);
+      const boatY = boatCorners.map((p) => ((1 - p.y) * host.clientHeight) / 2);
+      if (
+        point.x >= Math.min(...boatX) - 6 &&
+        point.x <= Math.max(...boatX) + 6 &&
+        point.y >= Math.min(...boatY) - 6 &&
+        point.y <= Math.max(...boatY) + 6
+      )
+        return;
       let closest: string | undefined,
         dist = 32;
       for (const n of this.level.nodes) {
+        if (n.id === this.state.boatNodeId) continue;
         const p = this.project(n.positionXZ);
-        const d = Math.hypot(p.x - (ev.clientX - bounds.left), p.y - (ev.clientY - bounds.top));
+        const d = Math.hypot(p.x - point.x, p.y - point.y);
         if (d < dist) {
           closest = n.id;
           dist = d;
@@ -406,8 +450,6 @@ export class World {
     if (smallLandscape || this.level.id === 'holding-pier') this.camera.position.set(0, 34, 24);
     this.camera.lookAt(0, 0, 0.05);
     if (smallLandscape || this.level.id === 'holding-pier') {
-      // Fit the actual tall lighthouse and the complete possible ferry envelope,
-      // rather than relying on a water-plane span that clips the lantern roof.
       this.scene.updateMatrixWorld(true);
       this.camera.updateMatrixWorld(true);
       const points: T.Vector3[] = [];
@@ -497,25 +539,62 @@ export class World {
     this.indicate(s);
   }
   indicate(s: State, selected?: string) {
+    const selectedEdge = selected ? edgeTo(s, selected, this.level) : undefined;
+    this.navigationCurrent = s.boatNodeId;
+    this.navigationSelected = selectedEdge ? selected! : null;
     for (const [id, g] of this.markers) {
       const e = edgeTo(s, id, this.level);
-      g.visible = id !== s.boatNodeId;
-      const color =
-        id === selected
-          ? '#ffe09a'
-          : e && e.baseDepth + s.tideLevel < draft(s, this.level)
-            ? '#d19272'
+      const status =
+        id === s.boatNodeId
+          ? 'current'
+          : !e
+            ? 'nonadjacent'
+            : e.baseDepth + s.tideLevel < draft(s, this.level)
+              ? 'too-shallow'
+              : 'available';
+      const active = id === this.navigationSelected;
+      g.visible = true;
+      const color = active
+        ? '#ffe09a'
+        : status === 'too-shallow'
+          ? '#d19272'
+          : status === 'current'
+            ? '#fff1d7'
             : '#cce2d6';
-      (g.children[0] as T.Mesh).material = mat(color);
-      g.scale.setScalar(id === selected ? 1.3 : 1);
+      const ring = g.getObjectByName('stop-ring') as T.Mesh;
+      ring.material = mat(color);
+      ring.visible = status !== 'nonadjacent';
+      g.getObjectByName('selection-ring')!.visible = active;
+      g.getObjectByName('current-ring')!.visible = status === 'current';
+      g.getObjectByName('blocked-cross')!.visible = status === 'too-shallow';
+      g.getObjectByName('nonadjacent-diamond')!.visible = status === 'nonadjacent';
+      g.userData.navigationStatus = status;
+      g.userData.selected = active;
+      g.scale.setScalar(active ? 1.15 : 1);
       g.position.y = s.tideLevel * 0.18 + 0.04;
     }
     for (const [id, line] of this.routes) {
       const e = this.level.edges.find((e) => e.id === id)!;
       line.position.y = s.tideLevel * 0.18;
       const m = line.material as T.LineDashedMaterial;
-      m.opacity = e.nodes.includes(s.boatNodeId) ? 0.85 : 0.3;
-      m.color.set(e.baseDepth + s.tideLevel < draft(s, this.level) ? '#dca180' : '#a6d3cc');
+      const highlighted = selectedEdge?.id === id;
+      line.userData.highlighted = highlighted;
+      m.opacity = highlighted
+        ? 1
+        : selectedEdge
+          ? 0.2
+          : e.nodes.includes(s.boatNodeId)
+            ? 0.85
+            : 0.3;
+      m.dashSize = highlighted ? 0.35 : 0.09;
+      m.gapSize = highlighted ? 0.055 : 0.16;
+      m.color.set(
+        highlighted
+          ? '#ffe09a'
+          : e.baseDepth + s.tideLevel < draft(s, this.level)
+            ? '#dca180'
+            : '#a6d3cc',
+      );
     }
   }
   animate(before: State, after: State, action: Action, done: () => void) {
@@ -584,10 +663,8 @@ export class World {
       this.hull.position.y = T.MathUtils.lerp(tr.fromHullY, this.draftY(tr.after), k);
       for (const [id, g] of this.animals) {
         const dest = this.passengerPos(id, tr.after);
-        if (tr.before.aboard.includes(id) && tr.after.aboard.includes(id)) {
-          // Already aboard: local feet stay on the deck anchor throughout draft,
-          // tide, travel and bobbing. The parent transform does all the work.
-        } else if (tr.before.aboard.includes(id) !== tr.after.aboard.includes(id)) {
+        if (tr.before.aboard.includes(id) && tr.after.aboard.includes(id)) continue;
+        if (tr.before.aboard.includes(id) !== tr.after.aboard.includes(id)) {
           const pier = this.level.piers.find((p) => p.nodeId === tr.before.boatNodeId)!;
           const offset = id === 'rabbit-1' ? -0.07 : id === 'rabbit-2' ? 0.07 : 0;
           const bridge = new T.Vector3(
@@ -648,6 +725,35 @@ export class World {
         deckLocalFoot: this.hull.worldToLocal(position.clone()).toArray(),
       };
     });
+  }
+  navigationPresentation() {
+    return {
+      currentNode: this.navigationCurrent,
+      selectedDestination: this.navigationSelected,
+      routes: [...this.routes].map(([id, route]) => {
+        const material = route.material as T.LineDashedMaterial;
+        return {
+          id,
+          nodes: [...this.level.edges.find((edge) => edge.id === id)!.nodes],
+          highlighted: route.userData.highlighted === true,
+          dashSize: material.dashSize,
+          gapSize: material.gapSize,
+        };
+      }),
+      markers: [...this.markers].map(([id, marker]) => ({
+        id,
+        status: marker.userData.navigationStatus as string,
+        selected: marker.userData.selected === true,
+        shape:
+          marker.userData.navigationStatus === 'current'
+            ? 'double ring'
+            : marker.userData.navigationStatus === 'too-shallow'
+              ? 'crossed ring'
+              : marker.userData.navigationStatus === 'nonadjacent'
+                ? 'diamond'
+                : 'open ring',
+      })),
+    };
   }
   frameStatus() {
     const rectangle = (object: T.Object3D) => {

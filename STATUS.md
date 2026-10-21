@@ -1,4 +1,16 @@
-# Current milestone — The Holding Pier
+# Current milestone — Holding Pier navigation and phone readability
+
+2026-10-21: The player accepted the Holding Pier puzzle. Preserve its existing topology and required holding decision, with First Crossing available as the baseline. This pass adds consistent named map controls, exact passage highlighting, free inspection, plain action/depth/tide explanations, local passenger actions and a phone layout with readable essential text and practical targets. The rules, authored coordinates, reducer, session history and dependency lockfile are unchanged.
+
+**Complete for the stated coverage.** Production build/typecheck, **26/26 unit checks** and **22/22 browser checks** pass on the final source. Actual UI coverage includes named map targets, exact passage inspection/highlighting, current-stop/boat clicks, natural keyboard and emulated touch, passenger subsets at the boundary, unloading/tide/terminal Undo, both tempting losing alternatives, nine-action rescue and First Crossing regression. Exhaustive actual reducer search remains 154 canonical states, shortest win 9 and zero wins without temporary holding.
+
+An independent review caught a clipped phone subset-loss sentence and an omitted map flood-warning cue. Both were fixed; the final suite asserts full consequence visibility inside every clipping ancestor, 44px controls, ≥14px essential text, and fully visible initial unloading and confirmation at **1440×900, 844×390 and 780×390**. All four stops and the lighthouse remain framed. No code comments were added; existing comments in touched code were removed.
+
+Evidence: [review](reviews/navigation/REVIEW.md), [source identity](reviews/navigation/source-manifest.json), [capture manifest](reviews/navigation/capture-manifest.json), and [verification summary](reviews/navigation/verification-summary.json). **17 fresh gameplay screenshots** were inspected at native size, with a **29.44-second uninterrupted local gameplay recording**. The tested source is reviewed HEAD `7e37214c3a06b224a6e2449f3216c15f9079b4bc` plus the retained working-tree patch; final 46-file snapshot SHA-256 `43eba503a9cbc1bdc62249a2f23299c76563c821db9084b1e252003f5f6c76f5`. A content audit ties the committed files to that capture state without relabeling the evidence.
+
+Remaining limits: physical devices, Safari/Firefox, platform font variation, screen-reader speech, native GPU performance and speaker listening. Normal phone secondary controls/result details can scroll; primary safety/loss consequences and confirmation fit. Vite retains the bundle advisory (620.10 kB raw / 162.11 kB gzip JS). No confirmed outstanding defect in the requested coverage. The accepted Holding Pier puzzle and First Crossing baseline are preserved. This focused pass ends with the authorized normal push and draft PR #1 update; main is unchanged. Raw recordings/builds/dependencies stay out of Git. The final SHA and PR link are supplied in the handoff.
+
+## Historical Holding Pier experiment handoff
 
 **Playable experiment complete; ready for the discovery/satisfaction review.** Open `http://127.0.0.1:4175/?cove=holding-pier` (tested production server) or run the commands in README. First Crossing remains selectable as the baseline. No campaign expansion was added.
 
