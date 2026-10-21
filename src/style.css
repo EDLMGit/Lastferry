@@ -757,3 +757,141 @@ p {
     margin-top: 10px;
   }
 }
+/* The experiment keeps the same miniature and adds only its decision cues. */
+.route-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 58px;
+  gap: 4px;
+}
+.inspect-route {
+  border: 1px solid #c5cdb7;
+  border-radius: 7px;
+  background: #ece8d7;
+  font-size: 10px;
+  min-width: 44px;
+}
+.voyage-note {
+  font-size: 11px;
+  line-height: 1.6;
+  color: #5b4938;
+  background: #eee1c8;
+  border-left: 3px solid #aa6844;
+  padding: 9px 10px;
+  margin: -10px 0 18px;
+}
+.voyage-note p {
+  font-size: 10px;
+  color: #53695b;
+  margin-top: 3px;
+}
+.cove-picker {
+  display: grid;
+  gap: 5px;
+  margin-top: 18px;
+  color: #53695b;
+  font-size: 11px;
+}
+.cove-picker select {
+  font: inherit;
+  color: #29434a;
+  background: #fffaee;
+  border: 1px solid #b7c4ae;
+  border-radius: 5px;
+  min-height: 44px;
+  width: 100%;
+  padding: 7px;
+}
+select:focus-visible {
+  outline: 3px solid #af5d36;
+  outline-offset: 2px;
+}
+.pier-tag {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  pointer-events: none;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 5px 7px;
+  border-radius: 5px;
+  background: #e9edd7ed;
+  color: #254b49;
+  box-shadow: 0 2px 5px #163d4c40;
+  white-space: nowrap;
+}
+.pier-tag.low {
+  background: #f4dfb9ed;
+  color: #704729;
+}
+@media (max-height: 480px) and (min-width: 701px) {
+  .experiment .counters {
+    margin: 6px 0;
+  }
+  .experiment .cargo {
+    padding: 7px 10px;
+    margin-bottom: 8px;
+  }
+  .experiment .voyage-note {
+    font-size: 10px;
+    padding: 5px 7px;
+    margin: 0 0 7px;
+    line-height: 1.45;
+  }
+  .experiment .voyage-note p {
+    font-size: 9px;
+    margin: 0;
+  }
+  .experiment .voyage-note p:last-child {
+    display: none;
+  }
+  .experiment .instruction {
+    font-size: 9px;
+    line-height: 1.4;
+  }
+  .experiment .action small {
+    margin-left: 0;
+    line-height: 1.4;
+  }
+  .experiment .route-row {
+    grid-template-columns: minmax(0, 1fr) 49px;
+  }
+  .experiment .inspect-route {
+    font-size: 9px;
+  }
+  .experiment .selecting .voyage-note p {
+    display: none;
+  }
+  .experiment .selecting .voyage-note {
+    margin-bottom: 4px;
+  }
+  .experiment .selecting .preview p {
+    line-height: 1.45;
+  }
+  .experiment .pier-tag {
+    font-size: 7px;
+    padding: 3px 4px;
+    letter-spacing: 0;
+  }
+}
+@media (max-height: 480px) and (min-width: 701px) {
+  .experiment .panel-kicker {
+    display: none;
+  }
+  .experiment .slots {
+    display: none;
+  }
+  .experiment .cargo p {
+    margin-top: 6px;
+  }
+  .experiment .location .eyebrow {
+    display: none;
+  }
+  .experiment .location h2 {
+    margin: 4px 0 6px;
+  }
+}
+/* Keep the chosen action and its confirmation together at every viewport. */
+.experiment .selecting .action-list,
+.experiment .selecting .instruction {
+  display: none;
+}

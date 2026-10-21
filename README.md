@@ -1,6 +1,8 @@
-# Last Ferry — The First Crossing
+# Last Ferry — playable coves
 
-M1 is a playable 3D tutorial cove: rescue Moss the sheep with Pip and Rue already aboard, manage the ferry's draft, and bring everyone to the lighthouse. Time advances only when you confirm a valid action. The scene, sounds and rules run locally in the browser.
+**Current experiment: The Holding Pier.** Run the game, then open `/?cove=holding-pier`. First Crossing remains the baseline at `/` and in the cove selector. See [the experiment notes](docs/HOLDING_PIER.md) and [verification report](reviews/holding-pier/REVIEW.md).
+
+Baseline M1 is a playable 3D tutorial cove: rescue Moss the sheep with Pip and Rue already aboard, manage the ferry's draft, and bring everyone to the lighthouse. Time advances only on accepted actions. The scene, sounds and rules run locally in the browser.
 
 ## Run
 
@@ -77,3 +79,11 @@ The preserved [first task](FIRST_TASK.md), [gameplay rules](docs/GAMEPLAY_RULES.
 Production meshes and tones are original procedural code, documented in [the asset ledger](docs/ASSET_LEDGER.md). Supplied images under `references/` are concept art only; they are never used as gameplay backgrounds. `PACKAGE_MANIFEST.json` is the historical starter-package manifest, not the current implementation manifest. The selected dependencies follow the official [Vite guide](https://vite.dev/guide/), [Three.js installation](https://threejs.org/manual/pages/installation.html), [Vitest guide](https://vitest.dev/guide/) and [Playwright installation](https://playwright.dev/docs/intro); exact installed versions are locked in `package-lock.json`.
 
 M1 stops at the small lighthouse arrival. Later chapters, progression, publishing and a large asset catalog remain outside this implementation.
+
+## Playable experiment: The Holding Pier
+
+Open `http://127.0.0.1:5173/?cove=holding-pier` after `npm ci` and `npm run dev` (use the printed port if 5173 is occupied). The cove selector in the controls switches between the experiment and **First Crossing · baseline**. The original six-node layout and starting arrangement are preserved.
+
+The experiment starts at a safe Stone Pier with Moss aboard and two rabbits waiting at a low pier. Bring all three to Harbor. Each safe passage uses one click, tap, Enter or Space; its separate **Preview** button inspects the outcome for free. Blocked and immediately losing passages open their explanation. Board, Unload and Wait retain selection/confirmation. Undo works through unloading, tide changes and endings. Time still advances only on accepted actions.
+
+This is one puzzle experiment, not a new campaign. Developer rationale and solution are in [docs/HOLDING_PIER.md](docs/HOLDING_PIER.md); the game does not display the solution. Actual checks and gameplay evidence are in [reviews/holding-pier/REVIEW.md](reviews/holding-pier/REVIEW.md).

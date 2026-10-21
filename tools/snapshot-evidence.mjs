@@ -45,6 +45,7 @@ const paths = [
   'docs/ART_DIRECTION.md',
   'docs/TECHNICAL_PLAN.md',
   'docs/ASSET_LEDGER.md',
+  ...(existsSync(new URL('docs/HOLDING_PIER.md', root)) ? ['docs/HOLDING_PIER.md'] : []),
   'tools/snapshot-evidence.mjs',
 ].sort();
 const files = Object.fromEntries(paths.map((p) => [p, digest(readFileSync(new URL(p, root)))]));
@@ -124,6 +125,7 @@ if (!process.argv.includes('--finalize')) {
           'phone-rescue',
           'boarding-unloading',
           'boarding-unloading-closeup',
+          'uninterrupted-rescue',
         ]
           .map((name) => `${reviewDir}/raw/${name}.webm`)
           .filter((path) => existsSync(new URL(path, root)))

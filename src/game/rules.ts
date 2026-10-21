@@ -1,4 +1,5 @@
-import { level } from '../levels/level';
+import { level, type Level } from '../levels/level';
+export type { Level } from '../levels/level';
 export type Action =
   | { type: 'move'; to: string }
   | { type: 'board' | 'unload'; passengerIds: string[] }
@@ -13,7 +14,6 @@ export type State = {
   status: 'playing' | 'won' | 'lost';
   lossReason: null | { code: 'PASSENGER_STRANDED'; pierId: string; passengerIds: string[] };
 };
-export type Level = typeof level;
 export const copy = <T>(v: T): T => structuredClone(v);
 export function initial(l: Level = level): State {
   return {
@@ -43,7 +43,7 @@ export function validate(s: State, a: Action, l = level): string | null {
       node = l.nodes.find((n) => n.id === a.to);
     if (!edge || !node) return 'Choose an adjacent waypoint. Each passage is one turn.';
     if (edge.baseDepth + s.tideLevel < draft(s, l))
-      return `Too shallow: depth ${edge.baseDepth + s.tideLevel} is below draft ${draft(s, l)}. Take the outer route or wait for the tide.`;
+      return `Too shallow: depth ${edge.baseDepth + s.tideLevel} is below draft ${draft(s, l)}. A lighter load needs less depth. Tide changes after an action.`;
     if (node.baseDepth + s.tideLevel < draft(s, l)) return 'The destination berth is too shallow.';
     return null;
   }
@@ -104,20 +104,20 @@ export function reduce(s: State, a: Action, l = level): State {
     n.status = 'won';
   return n;
 }
-export function preview(s: State, a: Action) {
-  const error = validate(s, a);
-  return { error, state: error ? copy(s) : reduce(s, a) };
+export function preview(s: State, a: Action, l = level) {
+  const error = validate(s, a, l);
+  return { error, state: error ? copy(s) : reduce(s, a, l) };
 }
-export function legalActions(s: State): Action[] {
-  const p = pierAt(s),
+export function legalActions(s: State, l = level): Action[] {
+  const p = pierAt(s, l),
     actions: Action[] = [
       { type: 'wait' },
-      ...level.nodes.map((n) => ({ type: 'move' as const, to: n.id })),
+      ...l.nodes.map((n) => ({ type: 'move' as const, to: n.id })),
     ];
   for (const type of ['board', 'unload'] as const) {
     const ids = type === 'board' ? (p ? s.waitingByPier[p.id] : []) : s.aboard;
     for (let mask = 1; mask < 1 << ids.length; mask++)
       actions.push({ type, passengerIds: ids.filter((_, i) => mask & (1 << i)) });
   }
-  return actions.filter((a) => !validate(s, a));
+  return actions.filter((a) => !validate(s, a, l));
 }

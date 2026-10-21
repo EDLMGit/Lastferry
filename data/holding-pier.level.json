@@ -1,0 +1,178 @@
+{
+  "id": "holding-pier",
+  "title": "The Holding Pier",
+  "chapter": 1,
+  "source": {
+    "referenceImage": "references/first-crossing.png",
+    "imageIsConceptOnly": true,
+    "numbersAndTopologyAreAuthoritative": true,
+    "requiresImplementedGameplay": true
+  },
+  "rules": {
+    "capacity": 4,
+    "draftBands": [
+      { "maxLoad": 0, "draft": 1 },
+      { "maxLoad": 2, "draft": 2 },
+      { "maxLoad": 4, "draft": 3 }
+    ],
+    "tide": {
+      "initialLevel": 0,
+      "rises": [
+        { "afterTurn": 4, "level": 1 },
+        { "afterTurn": 8, "level": 2 }
+      ]
+    },
+    "actionCost": 1,
+    "depthFormula": "baseDepth + tideLevel",
+    "pierDryWhen": "tideLevel < elevation",
+    "failureRule": "required passenger waiting at a flooded pier"
+  },
+  "world": {
+    "plane": "XZ",
+    "north": "negative Z",
+    "waterYPerTideLevel": 0.18,
+    "referenceBoatRadius": 0.3,
+    "requiredRouteClearance": 0.45,
+    "clearanceScope": "Actual ferry geometry is checked independently along both directions of each route.",
+    "presentationNote": "Three islands: safe stone terrace, low rabbit shore, lighthouse refuge. Shallow water follows the authored shallow edges.",
+    "suggestedCamera": {
+      "projection": "orthographic",
+      "positionXYZ": [0, 34, 24],
+      "targetXYZ": [0, 0, -1],
+      "verticalSpan": 11
+    },
+    "islands": [
+      {
+        "id": "lighthouse-island",
+        "elevation": 3,
+        "footprintXZ": [
+          [-8, -4.6],
+          [-4.2, -4.6],
+          [-3.8, -3.2],
+          [-4.5, -1.9],
+          [-7.5, -1.9],
+          [-8.2, -3.2]
+        ]
+      },
+      {
+        "id": "stone-island",
+        "elevation": 3,
+        "footprintXZ": [
+          [-1.5, -5.4],
+          [1.5, -5.4],
+          [1.9, -4.1],
+          [1.25, -2.9],
+          [-1.25, -2.9],
+          [-1.9, -4.1]
+        ]
+      },
+      {
+        "id": "rabbit-island",
+        "elevation": 1,
+        "footprintXZ": [
+          [4.3, -4.4],
+          [7.7, -4.4],
+          [8.1, -3],
+          [7.4, -1.9],
+          [4.6, -1.9],
+          [3.9, -3]
+        ]
+      }
+    ]
+  },
+  "nodes": [
+    { "id": "harbor", "positionXZ": [-6, 0], "baseDepth": 3, "pierId": "harbor-pier" },
+    { "id": "stone", "positionXZ": [0, -1], "baseDepth": 3, "pierId": "stone-pier" },
+    { "id": "shallows", "positionXZ": [3, 2], "baseDepth": 3 },
+    { "id": "rabbit-pier", "positionXZ": [6, 0], "baseDepth": 3, "pierId": "rabbit-pier" }
+  ],
+  "edges": [
+    {
+      "id": "harbor-stone",
+      "nodes": ["harbor", "stone"],
+      "baseDepth": 3,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [-6, 0],
+        [-3, 0.2],
+        [0, -1]
+      ]
+    },
+    {
+      "id": "stone-shallows",
+      "nodes": ["stone", "shallows"],
+      "baseDepth": 1,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [0, -1],
+        [2, 0.2],
+        [3, 2]
+      ]
+    },
+    {
+      "id": "shallows-rabbit",
+      "nodes": ["shallows", "rabbit-pier"],
+      "baseDepth": 1,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [3, 2],
+        [5, 1.5],
+        [6, 0]
+      ]
+    }
+  ],
+  "piers": [
+    {
+      "id": "harbor-pier",
+      "nodeId": "harbor",
+      "islandId": "lighthouse-island",
+      "elevation": 3,
+      "positionXZ": [-6, -0.9],
+      "landAnchorXZ": [-6, -2.1],
+      "width": 0.6,
+      "isDeliveryPier": true
+    },
+    {
+      "id": "stone-pier",
+      "nodeId": "stone",
+      "islandId": "stone-island",
+      "elevation": 3,
+      "positionXZ": [0, -1.9],
+      "landAnchorXZ": [0, -3.1],
+      "width": 0.8,
+      "isDeliveryPier": false
+    },
+    {
+      "id": "rabbit-pier",
+      "nodeId": "rabbit-pier",
+      "islandId": "rabbit-island",
+      "elevation": 1,
+      "positionXZ": [6, -0.9],
+      "landAnchorXZ": [6, -2.1],
+      "width": 0.9,
+      "isDeliveryPier": false
+    }
+  ],
+  "passengers": [
+    { "id": "rabbit-1", "species": "rabbit", "slots": 1 },
+    { "id": "rabbit-2", "species": "rabbit", "slots": 1 },
+    { "id": "sheep-1", "species": "sheep", "slots": 2 }
+  ],
+  "start": {
+    "boatNodeId": "stone",
+    "aboard": ["sheep-1"],
+    "waitingByPier": {
+      "harbor-pier": [],
+      "stone-pier": [],
+      "rabbit-pier": ["rabbit-1", "rabbit-2"]
+    }
+  },
+  "objective": {
+    "deliveryPierId": "harbor-pier",
+    "requiredPassengerIds": ["rabbit-1", "rabbit-2", "sheep-1"]
+  },
+  "validation": {
+    "searchDepthLimit": 0,
+    "witnessReplays": ["data/experiments/holding-pier-solution.json"]
+  }
+}

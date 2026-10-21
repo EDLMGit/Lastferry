@@ -145,3 +145,7 @@ Restart reconstructs the authored starting state, clears history and UI selectio
 Run `node tools/verify-design.mjs --write-report` from the repository root. It checks the authored reference reducer, replays, geometry exclusions, and bounded reachability, then writes `docs/validation/design-validation.json`.
 
 The script is **not** a production engine or a test of a playable implementation. Do not import it as the game's reducer. Implement and independently test the actual game against these rules, especially event order, input locking, previews, snapshot restoration, terminal states, and the real rendered water paths.
+
+## Holding Pier experiment
+
+The later user-requested experiment uses `data/holding-pier.level.json` and is documented in `HOLDING_PIER.md`. It retains the common action, load/draft, depth, tide-order and Undo rules above; its different layout, starting occupants and low pier elevation are intentional. Original First Crossing values and witness files remain unchanged. In the experiment, routine safe movement commits with one deliberate activation, while a separate free Preview remains available. Transfers, Wait, invalid moves and immediately losing moves retain the explicit preview flow. This interaction experiment supersedes the baseline's mandatory move confirmation only within Holding Pier.

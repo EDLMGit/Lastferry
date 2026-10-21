@@ -1,5 +1,5 @@
 import * as T from 'three';
-import { level } from '../levels/level';
+import { level as baseline, type Level } from '../levels/level';
 import { draft, edgeTo, type State, type Action } from '../game/rules';
 import { animal, ball, box, cylinder, ferry, lighthouse, mat, mesh, palette, pine } from './models';
 import { sampleJourney } from './motion';
@@ -38,6 +38,7 @@ export class World {
   constructor(
     public host: HTMLElement,
     state: State,
+    public level: Level = baseline,
   ) {
     this.state = state;
     this.renderer = new T.WebGLRenderer({ antialias: true, alpha: false });
@@ -50,7 +51,7 @@ export class World {
     host.append(this.renderer.domElement);
     this.renderer.domElement.setAttribute(
       'aria-label',
-      'Three-dimensional first cove. Use the labeled waypoint controls to navigate.',
+      `${this.level.title}. Use the labeled waypoint controls to navigate.`,
     );
     this.scene.background = new T.Color('#245f70');
     this.scene.add(new T.HemisphereLight('#fff1dc', '#5f8c9a', 1.8));
@@ -69,12 +70,28 @@ export class World {
     sun.shadow.normalBias = 0.035;
     sun.shadow.bias = -0.0003;
     this.scene.add(sun);
+    const shallowSegments = this.level.edges
+      .filter((e) => e.baseDepth < 3)
+      .flatMap((e) =>
+        e.waypointsXZ
+          .slice(1)
+          .map(
+            (b, i) =>
+              new T.Vector4(...([...e.waypointsXZ[i], ...b] as [number, number, number, number])),
+          ),
+      );
+    const shallowCount = shallowSegments.length;
+    while (shallowSegments.length < 16) shallowSegments.push(new T.Vector4());
     const waterMat = new T.ShaderMaterial({
-      uniforms: { time: { value: 0 } },
+      uniforms: {
+        time: { value: 0 },
+        shallowSegments: { value: shallowSegments },
+        shallowCount: { value: shallowCount },
+      },
       vertexShader: `varying vec3 world; void main(){world=(modelMatrix*vec4(position,1.)).xyz;gl_Position=projectionMatrix*viewMatrix*vec4(world,1.);}`,
-      fragmentShader: `varying vec3 world;uniform float time;
+      fragmentShader: `varying vec3 world;uniform float time;uniform vec4 shallowSegments[16];uniform int shallowCount;
     float line(vec2 p,vec2 a,vec2 b){vec2 ab=b-a;return length(p-a-clamp(dot(p-a,ab)/dot(ab,ab),0.,1.)*ab);}
-    void main(){vec2 p=world.xz;float d=min(min(line(p,vec2(-6.,0.),vec2(-3.,.2)),line(p,vec2(-3.,.2),vec2(0.,-1.))),min(line(p,vec2(0.,-1.),vec2(3.,.2)),line(p,vec2(3.,.2),vec2(6.,0.))));
+    void main(){vec2 p=world.xz;float d=100.;for(int i=0;i<16;i++){if(i>=shallowCount)break;vec4 s=shallowSegments[i];d=min(d,line(p,s.xy,s.zw));}
     float bank=exp(-d*d/.9)*.7;float n=sin(p.x*1.8+p.y*2.3)*sin(p.y*3.1-p.x*.7);vec3 c=mix(vec3(.12,.31,.38),vec3(.32,.65,.62),clamp(bank+n*.045,0.,1.));float ripple=smoothstep(.94,1.,sin(p.x*16.+p.y*24.+sin(p.x*2.)*2.+time*.7)*sin(p.y*11.-p.x*3.+time*.3));c+=ripple*.10;gl_FragColor=vec4(c,1.);}`,
     });
     this.water = new T.Mesh(new T.PlaneGeometry(200, 200), waterMat);
@@ -88,15 +105,15 @@ export class World {
     this.shadow.position.y = 0.008;
     this.shadow.receiveShadow = true;
     this.scene.add(this.shadow);
-    for (const island of level.world.islands) this.island(island);
-    for (const p of level.piers) {
+    for (const island of this.level.world.islands) this.island(island);
+    for (const p of this.level.piers) {
       const [x, z] = p.positionXZ,
         end = p.landAnchorXZ[1],
         y = p.elevation * 0.18 - 0.06;
       for (let i = 0; i < 9; i++)
         box(
           this.scene,
-          i % 2 ? '#c09560' : '#b78b58',
+          p.id === 'stone-pier' ? (i % 2 ? '#a9b6ac' : '#899d97') : i % 2 ? '#c09560' : '#b78b58',
           [p.width, 0.09, 0.14],
           [x, y, z + ((end - z) * i) / 8],
           0.015,
@@ -112,7 +129,12 @@ export class World {
     }
     lighthouse(this.scene, -6.15, 0.54, -3.25);
     const house = new T.Group();
-    house.position.set(6.3, 0.36, -3.25);
+    house.position.set(
+      6.3,
+      (this.level.piers.find((p) => p.id !== 'harbor-pier' && p.id !== 'stone-pier')?.elevation ??
+        2) * 0.18,
+      -3.25,
+    );
     this.scene.add(house);
     box(house, '#c78155', [1.35, 0.9, 1.05], [0, 0.45, 0], 0.08);
     for (const x of [-0.42, 0.42]) box(house, '#f9d084', [0.24, 0.29, 0.03], [x, 0.52, 0.54]);
@@ -135,13 +157,13 @@ export class World {
       for (const y of [0.42, 0.62]) box(house, '#edc28c', [0.27, 0.025, 0.045], [x, y, 0.56]);
     box(house, '#ead5a6', [0.026, 0.32, 0.04], [-0.42, 0.52, 0.56]);
     box(house, '#93816a', [0.19, 0.6, 0.2], [0.43, 1.35, -0.25]);
-    for (const e of level.edges) {
+    for (const e of this.level.edges) {
       const pts = e.waypointsXZ.map((p) => V(p, 0.035));
       const geom = new T.BufferGeometry().setFromPoints(pts);
       const line = new T.Line(
         geom,
         new T.LineDashedMaterial({
-          color: e.baseDepth === 2 ? '#b4d9c4' : '#89b8ba',
+          color: e.baseDepth < 3 ? '#b4d9c4' : '#89b8ba',
           dashSize: 0.09,
           gapSize: 0.16,
           transparent: true,
@@ -152,7 +174,7 @@ export class World {
       this.scene.add(line);
       this.routes.set(e.id, line);
     }
-    for (const n of level.nodes) {
+    for (const n of this.level.nodes) {
       const g = new T.Group();
       g.position.copy(V(n.positionXZ, 0.05));
       this.scene.add(g);
@@ -165,7 +187,7 @@ export class World {
       }
     }
     // Sparse broken foam accents hugging the three authored footprints.
-    for (const island of level.world.islands) {
+    for (const island of this.level.world.islands) {
       const points = island.footprintXZ;
       const cx = points.reduce((n, p) => n + p[0], 0) / points.length,
         cz = points.reduce((n, p) => n + p[1], 0) / points.length;
@@ -192,7 +214,7 @@ export class World {
     this.makeForecast();
     this.boatRoot.add(this.hull);
     this.scene.add(this.boatRoot);
-    for (const p of level.passengers) {
+    for (const p of this.level.passengers) {
       const anchor = new T.Object3D();
       anchor.name = `deck-anchor-${p.id}`;
       anchor.position.set(
@@ -221,7 +243,7 @@ export class World {
       const bounds = host.getBoundingClientRect();
       let closest: string | undefined,
         dist = 32;
-      for (const n of level.nodes) {
+      for (const n of this.level.nodes) {
         const p = this.project(n.positionXZ);
         const d = Math.hypot(p.x - (ev.clientX - bounds.left), p.y - (ev.clientY - bounds.top));
         if (d < dist) {
@@ -240,7 +262,7 @@ export class World {
     });
     requestAnimationFrame((t) => this.tick(t));
   }
-  island(island: (typeof level.world.islands)[number]) {
+  island(island: Level['world']['islands'][number]) {
     const points = island.footprintXZ,
       cx = points.reduce((a, p) => a + p[0], 0) / points.length,
       cz = points.reduce((a, p) => a + p[1], 0) / points.length;
@@ -343,7 +365,7 @@ export class World {
       }
   }
   makeForecast() {
-    for (const island of level.world.islands) {
+    for (const island of this.level.world.islands) {
       const pts = island.footprintXZ.map((p) => V(p, 0.195));
       pts.push(pts[0].clone());
       const line = new T.Line(
@@ -381,9 +403,9 @@ export class World {
     this.camera.near = 0.1;
     this.camera.far = 100;
     this.camera.position.set(7, 34, 23);
-    if (smallLandscape) this.camera.position.set(0, 34, 24);
+    if (smallLandscape || this.level.id === 'holding-pier') this.camera.position.set(0, 34, 24);
     this.camera.lookAt(0, 0, 0.05);
-    if (smallLandscape) {
+    if (smallLandscape || this.level.id === 'holding-pier') {
       // Fit the actual tall lighthouse and the complete possible ferry envelope,
       // rather than relying on a water-plane span that clips the lantern roof.
       this.scene.updateMatrixWorld(true);
@@ -407,7 +429,7 @@ export class World {
           continue;
         corners(new T.Box3().setFromObject(object));
       }
-      for (const node of level.nodes)
+      for (const node of this.level.nodes)
         corners(
           new T.Box3(
             V([node.positionXZ[0] - 1.25, node.positionXZ[1] - 1.25], 0),
@@ -430,25 +452,35 @@ export class World {
       return this.passengerAnchors.get(id)!.getWorldPosition(new T.Vector3());
     }
     if (s.delivered.includes(id)) {
-      const i = level.passengers.findIndex((p) => p.id === id);
-      return new T.Vector3(-6.45 + i * 0.42, 0.57, -2.05 - i * 0.21);
+      const i = this.level.passengers.findIndex((p) => p.id === id);
+      const p = this.level.piers.find((p) => p.id === this.level.objective.deliveryPierId)!;
+      return new T.Vector3(
+        p.landAnchorXZ[0] - 0.45 + i * 0.42,
+        p.elevation * 0.18 + 0.03,
+        p.landAnchorXZ[1] + 0.05 - i * 0.21,
+      );
     }
-    const p = level.piers.find((p) => s.waitingByPier[p.id].includes(id))!;
+    const p = this.level.piers.find((p) => s.waitingByPier[p.id].includes(id))!;
     const i = s.waitingByPier[p.id].indexOf(id);
     return new T.Vector3(
-      p.positionXZ[0] + (i % 2) * 0.23,
+      p.positionXZ[0] +
+        (this.level.id === 'holding-pier' && s.waitingByPier[p.id].length > 1
+          ? i % 2
+            ? 0.21
+            : -0.21
+          : (i % 2) * 0.23),
       p.elevation * 0.18 - 0.005,
       p.positionXZ[1] - 0.12 - Math.floor(i / 2) * 0.3,
     );
   }
   draftY(s: State) {
-    return 0.03 - (draft(s) - 1) * 0.075;
+    return 0.03 - (draft(s, this.level) - 1) * 0.075;
   }
   sync(s: State) {
     this.state = s;
     this.water.position.y = s.tideLevel * 0.18;
     this.shadow.position.y = this.water.position.y + 0.008;
-    const n = level.nodes.find((n) => n.id === s.boatNodeId)!;
+    const n = this.level.nodes.find((n) => n.id === s.boatNodeId)!;
     this.boatRoot.position.copy(V(n.positionXZ, s.tideLevel * 0.18));
     this.boatRoot.rotation.y = Math.PI / 2;
     this.hull.position.y = this.draftY(s);
@@ -466,12 +498,12 @@ export class World {
   }
   indicate(s: State, selected?: string) {
     for (const [id, g] of this.markers) {
-      const e = edgeTo(s, id);
+      const e = edgeTo(s, id, this.level);
       g.visible = id !== s.boatNodeId;
       const color =
         id === selected
           ? '#ffe09a'
-          : e && e.baseDepth + s.tideLevel < draft(s)
+          : e && e.baseDepth + s.tideLevel < draft(s, this.level)
             ? '#d19272'
             : '#cce2d6';
       (g.children[0] as T.Mesh).material = mat(color);
@@ -479,11 +511,11 @@ export class World {
       g.position.y = s.tideLevel * 0.18 + 0.04;
     }
     for (const [id, line] of this.routes) {
-      const e = level.edges.find((e) => e.id === id)!;
+      const e = this.level.edges.find((e) => e.id === id)!;
       line.position.y = s.tideLevel * 0.18;
       const m = line.material as T.LineDashedMaterial;
       m.opacity = e.nodes.includes(s.boatNodeId) ? 0.85 : 0.3;
-      m.color.set(e.baseDepth + s.tideLevel < draft(s) ? '#dca180' : '#a6d3cc');
+      m.color.set(e.baseDepth + s.tideLevel < draft(s, this.level) ? '#dca180' : '#a6d3cc');
     }
   }
   animate(before: State, after: State, action: Action, done: () => void) {
@@ -496,7 +528,7 @@ export class World {
       if (before.aboard.includes(id) && !after.aboard.includes(id)) this.scene.attach(g);
     let path: T.Vector3[] = [];
     if (action.type === 'move') {
-      const edge = edgeTo(before, action.to)!;
+      const edge = edgeTo(before, action.to, this.level)!;
       const points =
         edge.nodes[0] === before.boatNodeId ? edge.waypointsXZ : [...edge.waypointsXZ].reverse();
       path = points.map((p) => V(p, before.tideLevel * 0.18));
@@ -556,7 +588,7 @@ export class World {
           // Already aboard: local feet stay on the deck anchor throughout draft,
           // tide, travel and bobbing. The parent transform does all the work.
         } else if (tr.before.aboard.includes(id) !== tr.after.aboard.includes(id)) {
-          const pier = level.piers.find((p) => p.nodeId === tr.before.boatNodeId)!;
+          const pier = this.level.piers.find((p) => p.nodeId === tr.before.boatNodeId)!;
           const offset = id === 'rabbit-1' ? -0.07 : id === 'rabbit-2' ? 0.07 : 0;
           const bridge = new T.Vector3(
             pier.positionXZ[0] + offset,
@@ -639,7 +671,7 @@ export class World {
       canvas: { width: this.host.clientWidth, height: this.host.clientHeight },
       lighthouse: rectangle(this.scene.getObjectByName('lighthouse')!),
       passengers: [...this.animals].map(([id, g]) => ({ id, ...rectangle(g) })),
-      nodes: level.nodes.map((n) => ({ id: n.id, ...this.project(n.positionXZ) })),
+      nodes: this.level.nodes.map((n) => ({ id: n.id, ...this.project(n.positionXZ) })),
     };
   }
 }
