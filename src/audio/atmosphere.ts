@@ -7,9 +7,12 @@ import {
   phraseSeconds,
   score,
 } from './score';
+import { arrangementForState, companionNote, type Arrangement } from './arrangement';
+import type { State } from '../game/rules';
+import type { Level } from '../levels/level';
 
 type OwnedSource = {
-  kind: 'music' | 'bed' | 'travel' | 'effect';
+  kind: 'music' | 'companion' | 'bed' | 'travel' | 'effect';
   nodes: AudioNode[];
   endAt: number | null;
   gain?: GainNode;
@@ -51,6 +54,15 @@ export class Sound {
   private sourcesCreated = 0;
   private peakOwned = 0;
   private deliveryCount = 0;
+  private desiredArrangement: Arrangement = 'ordinary';
+  private arrangement: Arrangement = 'ordinary';
+  private pendingTerminal = false;
+  private arrangementBeat = 0;
+  private companionBeat = 0;
+  private companionNotes = 0;
+  private companionDeferrals = 0;
+  private droppedTones = 0;
+  private accompanimentEnabled = true;
   private contextChanged = () => {
     const context = this.context;
     if (!context || this.disposed) return;
@@ -147,8 +159,7 @@ export class Sound {
     if (!record || (record.stopping && !immediate)) return;
     record.stopping = true;
     if (record.gain) {
-      record.gain.gain.cancelScheduledValues(now);
-      record.gain.gain.setValueAtTime(Math.max(0.0001, record.gain.gain.value), now);
+      this.hold(record.gain.gain, now);
       record.gain.gain.linearRampToValueAtTime(0, now + (immediate ? 0 : 0.045));
     }
     try {
@@ -156,6 +167,70 @@ export class Sound {
     } catch {}
     record.endAt = now + (immediate ? 0 : 0.06);
     if (immediate) this.release(source);
+  }
+  private hold(parameter: AudioParam, now: number) {
+    if (typeof parameter.cancelAndHoldAtTime === 'function') parameter.cancelAndHoldAtTime(now);
+    else {
+      const value = parameter.value;
+      parameter.cancelScheduledValues(now);
+      parameter.setValueAtTime(value, now);
+    }
+  }
+  reconcileState(state: State, level: Level, deferTerminal = false) {
+    const next = arrangementForState(state, level);
+    const pending = deferTerminal && (next === 'won' || next === 'lost');
+    if (this.desiredArrangement === next && this.pendingTerminal === pending) return;
+    this.desiredArrangement = next;
+    this.pendingTerminal = pending;
+    if (!pending) this.requestArrangement();
+  }
+  settleArrangement() {
+    if (!this.pendingTerminal) return;
+    this.pendingTerminal = false;
+    this.requestArrangement();
+  }
+  setAccompanimentEnabled(enabled: boolean) {
+    if (!import.meta.env.DEV || this.accompanimentEnabled === enabled) return;
+    this.accompanimentEnabled = enabled;
+    this.requestArrangement();
+  }
+  private requestArrangement() {
+    const now = this.context?.currentTime ?? 0;
+    this.arrangementBeat = this.context
+      ? Math.max(0, Math.ceil((now - this.epoch + 0.06) / beatSeconds))
+      : 0;
+    this.companionBeat = this.arrangementBeat;
+    for (const [source, record] of this.owned) if (record.kind === 'companion') this.stop(source);
+  }
+  private pumpCompanion(now: number) {
+    const beat = Math.max(0, Math.ceil((now - this.epoch - 0.06) / beatSeconds));
+    if (this.companionBeat < beat) this.companionBeat = beat;
+    const at = this.epoch + this.companionBeat * beatSeconds;
+    if (at > now + 0.15) return;
+    if (!this.pendingTerminal && this.companionBeat >= this.arrangementBeat) {
+      if (this.arrangement !== this.desiredArrangement) {
+        this.arrangement = this.desiredArrangement;
+        const gain = this.music!.gain;
+        this.hold(gain, now);
+        gain.linearRampToValueAtTime(
+          this.arrangement === 'lost' ? 0.53 : this.arrangement === 'won' ? 0.62 : 0.72,
+          now + 0.8,
+        );
+      }
+    }
+    const note = this.accompanimentEnabled
+      ? companionNote(this.companionBeat, this.arrangement)
+      : null;
+    const companions = [...this.owned.values()].filter((record) => record.kind === 'companion');
+    if (note && companions.length < 2) {
+      this.tone(note.note, Math.max(now, at), note.duration, note.strength, 'companion');
+      this.companionNotes++;
+    } else if (note) {
+      this.companionDeferrals++;
+      this.companionBeat++;
+      return;
+    }
+    this.companionBeat += this.arrangement === 'won' ? 8 : 4;
   }
   private clearActions(preserveTravel: boolean) {
     if (!preserveTravel) this.travelling = false;
@@ -212,25 +287,33 @@ export class Sound {
     at: number,
     duration: number,
     strength: number,
-    voice: 'pad' | 'motif' | 'delivery',
+    voice: 'pad' | 'motif' | 'delivery' | 'companion',
   ) {
     const context = this.context!;
-    if (this.owned.size > 28) return;
+    if (this.owned.size > 28) {
+      this.droppedTones++;
+      return;
+    }
     const source = context.createOscillator(),
       filter = context.createBiquadFilter(),
       gain = context.createGain(),
       panner = context.createStereoPanner();
-    source.setPeriodicWave(voice === 'pad' ? this.padWave! : this.pluckWave!);
+    source.setPeriodicWave(
+      voice === 'pad' || voice === 'companion' ? this.padWave! : this.pluckWave!,
+    );
     source.frequency.value = frequency(note);
     source.detune.value = voice === 'pad' ? ((note % 3) - 1) * 3.1 : 0;
     filter.type = 'lowpass';
     filter.Q.value = 0.45;
-    filter.frequency.setValueAtTime(voice === 'pad' ? 800 : voice === 'delivery' ? 1300 : 2400, at);
+    filter.frequency.setValueAtTime(
+      voice === 'pad' ? 800 : voice === 'companion' ? 1100 : voice === 'delivery' ? 1300 : 2400,
+      at,
+    );
     filter.frequency.exponentialRampToValueAtTime(
       voice === 'pad' ? 1100 : 750,
       at + Math.min(duration * 0.7, 2),
     );
-    const attack = voice === 'pad' ? 1.6 : 0.018,
+    const attack = voice === 'pad' ? 1.6 : voice === 'companion' ? 0.12 : 0.018,
       peak = strength * (voice === 'pad' ? 0.035 : voice === 'delivery' ? 0.14 : 0.105),
       end = at + duration;
     gain.gain.setValueAtTime(0, at);
@@ -245,7 +328,7 @@ export class Sound {
     gain.connect(panner);
     panner.connect(voice === 'delivery' ? this.effects! : this.music!);
     this.own(source, {
-      kind: voice === 'delivery' ? 'effect' : 'music',
+      kind: voice === 'delivery' ? 'effect' : voice === 'companion' ? 'companion' : 'music',
       nodes: [filter, gain, panner],
       endAt: end + 0.02,
       gain,
@@ -288,6 +371,7 @@ export class Sound {
         this.cycle++;
       }
     }
+    this.pumpCompanion(now);
   }
   private stopScheduler() {
     if (this.scheduler !== null) clearInterval(this.scheduler);
@@ -445,6 +529,15 @@ export class Sound {
       travelActive: records.some((record) => record.kind === 'travel' && !record.stopping),
       arrivalActive: records.some((record) => record.kind === 'effect' && !record.stopping),
       deliveryCount: this.deliveryCount,
+      desiredArrangement: this.desiredArrangement,
+      arrangement: this.arrangement,
+      pendingTerminal: this.pendingTerminal,
+      accompanimentEnabled: this.accompanimentEnabled,
+      companionSources: records.filter((record) => record.kind === 'companion' && !record.stopping)
+        .length,
+      companionNotes: this.companionNotes,
+      companionDeferrals: this.companionDeferrals,
+      droppedTones: this.droppedTones,
       masterGain: this.master?.gain.value ?? 0,
       phrase: score.title,
       bpm: score.bpm,

@@ -49,6 +49,7 @@ const paths = [
   ...(existsSync(new URL('docs/HOLDING_PIER.md', root)) ? ['docs/HOLDING_PIER.md'] : []),
   ...(existsSync(new URL('docs/BELLWATER.md', root)) ? ['docs/BELLWATER.md'] : []),
   ...(existsSync(new URL('docs/ENVIRONMENT.md', root)) ? ['docs/ENVIRONMENT.md'] : []),
+  ...(existsSync(new URL('docs/AUDIO.md', root)) ? ['docs/AUDIO.md'] : []),
   'tools/snapshot-evidence.mjs',
   ...(existsSync(new URL('tools/capture-environment.mjs', root))
     ? ['tools/capture-environment.mjs']
@@ -59,6 +60,7 @@ const paths = [
   ...(existsSync(new URL('tools/compare-atmosphere-timing.mjs', root))
     ? ['tools/compare-atmosphere-timing.mjs']
     : []),
+  ...walk('tools/').filter((path) => path.includes('refinement')),
 ].sort();
 const files = Object.fromEntries(paths.map((p) => [p, digest(readFileSync(new URL(p, root)))]));
 const sourceHash = digest(JSON.stringify(files));

@@ -1,6 +1,8 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { Sound } from '../../src/audio/sound';
 import { phraseSeconds } from '../../src/audio/score';
+import { initial } from '../../src/game/rules';
+import { holdingPier } from '../../src/levels/level';
 
 class Parameter {
   value = 1;
@@ -287,6 +289,9 @@ describe('continuous audio ownership and phase', () => {
     expect(view.contextCount).toBe(1);
     expect(view.schedulerStarts).toBe(1);
     expect(view.ambienceSources).toBe(2);
+    expect(view.desiredArrangement).toBe('ordinary');
+    expect(view.arrangement).toBe('ordinary');
+    expect(view.companionNotes).toBe(0);
   });
 
   test('rejected activation is quiet and retryable, and teardown clears fading action nodes', async () => {
@@ -342,5 +347,174 @@ describe('continuous audio ownership and phase', () => {
       ambienceSources: 2,
     });
     expect(value.presentation().sourceCount).toBeLessThan(12);
+  });
+
+  test('latest desired arrangement survives preactivation, mute, hide and rapid replacements without replay', async () => {
+    const value = sound();
+    const ordinary = initial(holdingPier);
+    const deadline = { ...ordinary, turn: 2 };
+    const homeward = {
+      ...ordinary,
+      aboard: [...holdingPier.objective.requiredPassengerIds],
+      waitingByPier: {},
+    };
+    value.reconcileState(deadline, holdingPier);
+    value.reconcileState(homeward, holdingPier);
+    expect(value.presentation()).toMatchObject({ desiredArrangement: 'homeward', contextCount: 0 });
+    await value.activate();
+    const context = Context.instances[0];
+    expect(value.presentation()).toMatchObject({ arrangement: 'homeward', companionSources: 1 });
+    const phase = value.presentation().phaseSeconds;
+    for (let i = 0; i < 50; i++) {
+      value.reconcileState(deadline, holdingPier);
+      value.reconcileState(homeward, holdingPier);
+    }
+    value.reconcileState(ordinary, holdingPier);
+    for (let i = 0; i < 12; i++) {
+      context.advance(0.1);
+      await vi.advanceTimersByTimeAsync(100);
+    }
+    expect(value.presentation()).toMatchObject({
+      arrangement: 'ordinary',
+      companionSources: 0,
+      deliveryCount: 0,
+      schedulerStarts: 1,
+    });
+    expect(value.presentation().phaseSeconds).toBeGreaterThan(phase);
+    await value.toggle();
+    value.reconcileState(deadline, holdingPier);
+    await value.visibility(true);
+    value.reconcileState(homeward, holdingPier);
+    await value.visibility(false);
+    await value.toggle();
+    for (let i = 0; i < 12; i++) {
+      context.advance(0.1);
+      await vi.advanceTimersByTimeAsync(100);
+    }
+    expect(value.presentation()).toMatchObject({
+      arrangement: 'homeward',
+      contextCount: 1,
+      schedulerCount: 1,
+      deliveryCount: 0,
+    });
+  });
+
+  test('terminal targets wait for visible settlement and delivery does not clear the companion', async () => {
+    const value = sound();
+    const homeward = {
+      ...initial(holdingPier),
+      aboard: [...holdingPier.objective.requiredPassengerIds],
+      waitingByPier: {},
+    };
+    value.reconcileState(homeward, holdingPier);
+    await value.activate();
+    const context = Context.instances[0];
+    value.reconcileState(
+      { ...homeward, status: 'won', aboard: [], delivered: homeward.aboard },
+      holdingPier,
+      true,
+    );
+    for (let i = 0; i < 12; i++) {
+      context.advance(0.1);
+      await vi.advanceTimersByTimeAsync(100);
+    }
+    expect(value.presentation()).toMatchObject({
+      desiredArrangement: 'won',
+      arrangement: 'homeward',
+      pendingTerminal: true,
+    });
+    const companions = value.presentation().companionSources;
+    value.delivery();
+    expect(value.presentation().companionSources).toBe(companions);
+    value.settleArrangement();
+    for (let i = 0; i < 12; i++) {
+      context.advance(0.1);
+      await vi.advanceTimersByTimeAsync(100);
+    }
+    expect(value.presentation()).toMatchObject({
+      arrangement: 'won',
+      pendingTerminal: false,
+      deliveryCount: 1,
+    });
+    value.reconcileState(homeward, holdingPier);
+    for (let i = 0; i < 12; i++) {
+      context.advance(0.1);
+      await vi.advanceTimersByTimeAsync(100);
+    }
+    expect(value.presentation().arrangement).toBe('homeward');
+    value.reconcileState({ ...homeward, status: 'lost' }, holdingPier, true);
+    expect(value.presentation().arrangement).toBe('homeward');
+    value.settleArrangement();
+    value.settleArrangement();
+    for (let i = 0; i < 12; i++) {
+      context.advance(0.1);
+      await vi.advanceTimersByTimeAsync(100);
+    }
+    expect(value.presentation()).toMatchObject({
+      arrangement: 'lost',
+      companionSources: 0,
+      deliveryCount: 1,
+    });
+  });
+
+  test('companion plus travel and delivery remains bounded across the phrase with no dropped tones', async () => {
+    const value = sound();
+    value.reconcileState(
+      {
+        ...initial(holdingPier),
+        aboard: [...holdingPier.objective.requiredPassengerIds],
+        waitingByPier: {},
+      },
+      holdingPier,
+    );
+    await value.activate();
+    value.startTravel();
+    const context = Context.instances[0];
+    for (let step = 0; step < 800; step++) {
+      if (step % 75 === 0) value.delivery();
+      context.advance(0.1);
+      await vi.advanceTimersByTimeAsync(100);
+      expect(value.presentation().companionSources).toBeLessThanOrEqual(2);
+      expect(value.presentation().sourceCount).toBeLessThanOrEqual(29);
+    }
+    expect(value.presentation()).toMatchObject({
+      loopCount: 1,
+      droppedTones: 0,
+      skippedEvents: 0,
+      schedulerStarts: 1,
+      contextCount: 1,
+    });
+    expect(value.presentation().companionNotes).toBeGreaterThan(20);
+  });
+
+  test('rapid changes during active companion notes release obsolete voices without a mood queue', async () => {
+    const value = sound();
+    const deadline = { ...initial(holdingPier), turn: 2 };
+    const homeward = {
+      ...initial(holdingPier),
+      aboard: [...holdingPier.objective.requiredPassengerIds],
+      waitingByPier: {},
+    };
+    await value.activate();
+    const context = Context.instances[0];
+    for (let step = 0; step < 120; step++) {
+      value.reconcileState(step % 2 ? deadline : homeward, holdingPier);
+      context.advance(0.1);
+      await vi.advanceTimersByTimeAsync(100);
+      expect(value.presentation().companionSources).toBeLessThanOrEqual(2);
+    }
+    value.reconcileState(homeward, holdingPier);
+    for (let step = 0; step < 12; step++) {
+      context.advance(0.1);
+      await vi.advanceTimersByTimeAsync(100);
+    }
+    expect(value.presentation()).toMatchObject({
+      desiredArrangement: 'homeward',
+      arrangement: 'homeward',
+      schedulerStarts: 1,
+      droppedTones: 0,
+      companionDeferrals: 0,
+      deliveryCount: 0,
+    });
   });
 });

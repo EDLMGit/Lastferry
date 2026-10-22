@@ -57,9 +57,21 @@ export function buildCoastGeometry(island: Island, style: IslandStyle = 'garden'
     '#d6c8a3',
     style === 'reeds' ? '#c4bc91' : style === 'rocky' ? '#98a18a' : '#91a578',
   ];
+  const exposed = style === 'reeds' || island.elevation <= 1;
+  const sand = new T.Color(exposed ? '#c7bb91' : '#d3c49c'),
+    stone = new T.Color('#8c9b8c'),
+    grass = new T.Color(exposed ? '#a2aa80' : '#91a578');
+  const surfaceColor = (x: number, z: number) => {
+    const sandy = T.MathUtils.smoothstep((z - center.y) * 0.65 + (x - center.x) * 0.24, -0.25, 0.7);
+    const rocky = T.MathUtils.smoothstep((center.x - x) * 0.6 - (z - center.y) * 0.22, 0.1, 1.05);
+    return grass
+      .clone()
+      .lerp(sand, exposed ? 0.6 + sandy * 0.4 : sandy * 0.7)
+      .lerp(stone, rocky * (style === 'rocky' || style === 'crag' ? 0.7 : 0.26));
+  };
   for (const [ring, [scale, y]] of profile(island).entries()) {
-    const color = new T.Color(tones[ring]);
     for (const point of contour) {
+      const color = ring === 3 ? surfaceColor(point.x, point.y) : new T.Color(tones[ring]);
       positions.push(
         center.x + (point.x - center.x) * scale,
         y,
@@ -79,7 +91,7 @@ export function buildCoastGeometry(island: Island, style: IslandStyle = 'garden'
       indices.push(a, c, b, b, c, d);
     }
   positions.push(center.x, shoreTop(island), center.y);
-  const topColor = new T.Color(tones[3]);
+  const topColor = surfaceColor(center.x, center.y);
   colors.push(topColor.r, topColor.g, topColor.b);
   for (let i = 0; i < count; i++)
     indices.push(count * 4, count * 3 + ((i + 1) % count), count * 3 + i);

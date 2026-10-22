@@ -1,219 +1,168 @@
-# Last Ferry — luminous water, unhurried crossings and a musical atmosphere
+# Last Ferry — shallow detail, a light for home, and music that follows the rescue
 
-## Current task and working agreement
+## Working agreement
 
-Continue on m1-first-crossing from reviewed commit **7346b91c23331b7c1e8ad4b147c8fa4006767a89**, preserving newer user work. Read AGENTS.md, the current scene/audio code, docs/ART_DIRECTION.md, docs/ENVIRONMENT.md, docs/TECHNICAL_PLAN.md and reviews/environment/REVIEW.md. Use Node 24.
+Continue on `m1-first-crossing` from reviewed commit **31ad851a97907c8e86aa6f215b78b38caed7c48b**, preserving any newer user work. Use Node 24. Read `AGENTS.md`, this task, `docs/ART_DIRECTION.md`, `docs/ENVIRONMENT.md`, the current audio/scene code, and `reviews/atmosphere/REVIEW.md`.
 
-This is the authorized task following the completed environment pass and advances beyond the original M1 stopping point. Implement this complete milestone, verify it, and perform the established commit/push/draft-PR handoff. Keep PR #1 draft and main unchanged. Make routine art and implementation decisions independently; the user will playtest the result.
+This is the authorized next milestone beyond the original M1 stopping point. Implement it, verify the affected experience, commit normally, push the existing branch, and update draft PR #1. Keep `main` unchanged and the PR draft. The user remains the playtester. Make routine art and implementation decisions independently and deliver one chosen result.
 
-The user likes the rounded routes. The water is better, but the scene still lacks the beautiful, absorbing quality they want. They suggest a slightly slower boat and describe the desired feeling through listening to a beautiful AURORA song.
+The user likes the current music and water direction. Treat the original **“Between the lamps”** composition and the luminous evening cove as accepted foundations. This pass should give the scene more convincing material depth, make Harbor recognizable as home from the start, and let the accompaniment respond gently to the rescue's changing situation.
 
-**The goal is a cove that is pleasurable to watch and listen to while considering a puzzle.** Treat that musical reference as tenderness, air, wonder and a little longing. As a deliberate product decision, this brief also adds one original instrumental proposal alongside the water and pacing changes. Water and travel are the primary work; keep the score to the small arrangement below.
+Use Astra for the visual and musical judgment where it is available in the current workflow. Inspect the rendered result and choose the strongest coherent treatment. Do not spend the milestone producing a menu of proposals for the user to select.
 
-## Creative decision
+## Preserve the accepted experience
 
-Create a **luminous evening cove** within the existing coastal miniature:
+Keep all three coves, Holding Pier as default, progression, contextual controls, compact dialogs, accessible interaction, all puzzle rules and complete Undo. Preserve topology, positions, pier elevations, authored navigation depths, load/draft bands, action costs, tide schedule and boarding/flood event order. Decorative seabed depth must remain separate from navigability.
 
-- Deeper blue-green open water and clearer sea-glass shallows.
-- One broad, soft region of pearly reflected sky light, gently broken by moving wavelets.
-- Selective submerged sand/rock detail that makes the shallows look transparent and substantial.
-- A quiet amber reflection near Harbor, connected to its existing refuge light.
-- A small ferry that visibly departs, cruises through the light and settles at its destination.
-- A continuous, spacious instrumental phrase with quiet water ambience, including while the player is idle.
+Keep the accepted rounded courses, steering/docking, travel durations, fading wake, ferry/card placement and transit controls. The last pass already established calmer departures and arrivals; this task does not need another speed change.
 
-Keep land, cabin, passengers, piers, warnings and routes readable. This is a light and material improvement to the accepted miniature, not a change to its composition. A dark night scene, literal aurora spectacle, all-over sparkle or larger prop collection is outside this task.
+Preserve the score's 64 BPM, 80-beat/75-second phrase, existing harmony sequence, recognizable motif, spacious rests and general mix. Add a small compatible accompaniment. Retain intentional audio activation, live mute, the accessible Sound control and the user's preference.
 
-The previous task successfully reduced visual noise. This task needs a clearly visible increase in depth, coherent reflected light and living motion. Recoloring the same flat surface and declaring it more subtle does not meet the goal.
+Watching, listening, opening a dialog and inspecting remain free. The rules contain flood deadlines and allow play beyond the final rise. Do not introduce an overall turn allowance or real-time pressure.
 
-## Preserve the accepted game
+## 1. Make the shallows look like a place beneath the water
 
-Retain the three coves, default Holding Pier, Next cove progression, level selection, contextual controls, accessible compact dialogs, named passengers and complete Undo.
+### Review finding
 
-Keep puzzle topology, node coordinates, pier elevations, route control geometry, capacity/draft bands, authored depths, action costs, tide schedule, flood/boarding event order, winning alternatives and losing consequences unchanged. The rounded canonical courses and docking clearance are accepted. This task changes presentation and sound, not puzzle difficulty or available routes.
+The current open water and connected pearl reflection are a clear improvement. Some coastal margins still read as broad pale halos, and some submerged forms look like soft oval patches. The tide-2 low island especially loses its material identity. Improve the organization of those forms while keeping the calm surface.
 
-Real time remains free: watching water, listening, opening Menu or inspecting a route never spends an action or raises the tide.
+Relevant code: `src/scene/seabed.ts`, `src/scene/water.ts`, `src/scene/water-shader.ts` and `src/scene/shore.ts`. The seabed currently repeats two similarly offset patches around each island and uses a broad distance-based coastal shelf.
 
-## 1. Build water that responds to light
+### Required result
 
-### What the reviewed implementation lacks
+- Shape a narrower, irregular coastal shelf with a clear transition into deeper blue-green water. Vary its width where the island's form suggests sand, a rocky edge or a sheltered pocket. Avoid a uniform pale border around every island.
+- Compose a few recognizable submerged sand tongues and darker stone forms connected to the coast. Two or three useful forms in a visible shallow region are enough. Give them distinct edges, orientation and internal value variation at native phone scale; keep fine grain quiet.
+- Make the low flooded shore retain a recognizable submerged outline and some ground character. At the next tide it should visibly sit deeper beneath the moving surface. Undo must restore the earlier water/ground relationship.
+- Preserve separate reads for the bottom, the water body and reflected sky. Passing wavelets may distort and illuminate the substrate gently without dissolving every form into blur. Keep most open water quiet and deep.
+- Rebalance existing caustics, refraction, absorption and coast brightness together. Increasing all strengths is unlikely to improve depth. The current pearl sheen should remain a deliberate broad feature, and Harbor's warm reflection should stay localized.
 
-src/scene/water.ts currently supplies an opaque color field, coastal masks, very slow color drift and world-cell glints whose brightness changes. It has no wave normals, sun/sky response, reflected environment or visible seabed surface. The scene's standard lights do not automatically illuminate this custom shader.
+Use the existing cached fields and material. You may revise the authored field construction and baked color detail, but do not increase texture resolution or add another water render pass. Keep world-space tide height, the orthographic view direction and correct color-space handling intact. The water remains an inexpensive approximation; do not claim it renders real submerged geometry when it samples a decorative field.
 
-The existing 256×256 coastal mask is useful. Its blue channel represents nearby land elevation, including outside land; it is **not a continuous seabed height field**. Keep its shoreline/bank information, but do not mistake that channel for bathymetry.
+## 2. Improve contact and material distinction on existing assets
 
-### Required visible layers
+Focus on the connections the player watches: ferry to water, pier piles to water, shore to sea, and lighthouse to its warm reflection.
 
-**A. Coherent wavelets.** Use a small number of compatible, low-amplitude normal layers at different scales. They should move slowly enough to feel calm, but visibly change reflected light during an ordinary five-to-ten-second look. Fine detail stays subordinate to the broad movement and must survive native phone scale without crawling or aliasing. Use seamless local normal textures or an economical analytic equivalent. Any flow-map animation must avoid an obvious synchronized reset.
+Give selected pier piles and the lower hull a restrained wet/contact treatment tied to the actual water height. It should move correctly with tide, ferry draft, bobbing and Undo. Check unloaded and loaded states. A permanently painted horizontal stripe that ignores those transforms is insufficient.
 
-Large geometric wave displacement is unnecessary. Keep the gameplay waterline, ferry draft and shore contact stable and controlled by the real tide.
+Use the existing shore/rock wetness as a starting point. Prefer small changes to existing materials, vertex colors or inexpensive local shading. Keep the waterline narrow and legible; avoid a dark outline around every object. Limit special attention to Harbor, the ferry and one vulnerable pier before deciding whether the same treatment helps elsewhere.
 
-**B. Soft reflected light.** Give the shader explicit sky/light parameters coordinated with the scene lighting. Establish a broad pearl-blue sheen, broken into connected soft streaks by the wavelets. Preserve darker, quiet water around it. Highlights should respond coherently to surface orientation and lighting, instead of independently blinking at fixed hashed cells.
+Distinguish a few existing land surfaces: sandy low ground, rougher stone, subdued grass and wet edges. Break the uniform island-top color in broad, purposeful regions. Low Pier can feel exposed and sandy; Harbor can feel established and sheltered. Preserve island silhouettes, crossing clearances, composition and the readable cabin/passenger shapes.
 
-Use an inexpensive painterly sky/environment reflection as the starting architecture. Make its spatial composition readable from the fixed camera: the sheen should occupy a deliberate area of open water, rather than turning the entire surface into equally glossy plastic. Subtle variation in the reflected sky or an authored light field can provide that composition.
+Materials are shared in the current model helpers. Keep wet or emissive changes scoped to their intended meshes; do not accidentally darken houses or illuminate unrelated objects through a shared material. Add geometry only when the visible improvement justifies its cost. Avoid expanding prop density, particle systems or the asset catalog.
 
-**C. Visible shallow depth.** Extend the existing coast/bank data into an explicit, bounded seabed height/color representation, or render a small appropriate substrate. Distinguish deep water, shallow sand/rock, and formerly dry ground submerged by a tide. The actual rendered water height must determine the wet/depth relationship.
+## 3. Give Harbor a persistent identity as home
 
-A compact authored seabed field composited in the shader is acceptable if it visibly conveys depth: a shallow coastal apron, a few irregular sand/rock forms with gentle bottom lighting, color absorption with increasing depth, and distortion tied to the same moving wavelets. Sample the substrate at an estimated point beneath the surface along the orthographic view ray; a small bounded approximation is sufficient. It must remain a separate read beneath the moving surface reflection, rather than another color texture painted directly on the plane.
+### Presentation
 
-Keep reflected-light and submerged-detail strengths independently tunable, so the sheen does not erase the depth. A recognizable shallow form should remain visible under passing ripples and become less visible in deeper water. Weaken distortion at shore contact to avoid smearing dry land. A uniform green tint is insufficient. Do not turn shallow banks into bright painted tracks following route centerlines. Keep decorative depth separate from the reducer's authored navigation depths.
+The destination should be recognizable during ordinary play, including before the first action:
 
-Add restrained moving light patterns beneath selected shallow patches only if they improve the result. Their intensity should fade with depth. Keep the large open areas quiet; full-screen caustic patterning would recreate the noise removed in the previous milestone.
+1. A small, steady warm light in the lighthouse lens, supported by the existing soft glow sprite.
+2. The existing broken amber reflection, visibly connected to that light and kept secondary to the ferry and routes.
+3. A compact **Home** marker within Harbor's existing map label, such as **Harbor · Home**. Include the destination's role in its accessible name without dropping its current passage or location information.
 
-**D. Shore and Harbor contact.** Preserve the continuous shore geometry and exact flood thresholds. Refine the immediate wet edge and selective soft lapping so land feels seated in water. Flooded piers must still look flooded. Avoid tracing every shore with a solid bright rim.
+Keep the cue restrained in size and brightness. Its identity should survive a still frame, muted audio and reduced motion. No extra objective panel is needed. Avoid pulsing rings, bouncing arrows, rotating beams, full-scene bloom or new shadow-casting lights.
 
-Make the Harbor lamp's warmth perceptible in nearby water as a small, elongated, broken reflection. It should belong to the lamp's location and water surface, distort with the same wavelets and remain secondary to the ferry. Let successful delivery gently warm this existing cue. Restore the correct effect on Undo and cancellation.
+Derive the destination from `level.objective.deliveryPierId` and its node. The cue describes the delivery objective; it must not imply that a nonadjacent, shallow or otherwise invalid passage is currently available. Preserve Inspect, focus order, disabled/busy behavior, warning states and the existing route status text. Check label placement at both phone widths, especially while Harbor is the current location.
 
-### Renderer constraints and practical implementation
+### State and effects
 
-Stay within the current Three.js WebGL renderer and ShaderMaterial architecture. Favor one bounded water material and cached local data/textures. Full fluid simulation, an engine migration and a general post-processing stack are unnecessary.
+Separate persistent home-light strength from the transient delivery response. The current `CrossingEffects.reset()` hides the glow and zeroes the lens emissive intensity; resetting an action must instead restore the ordinary home-light baseline. A winning delivery can strengthen the same light briefly, then settle into a warm resting state. Preserve the current visible-unloading timing and exactly-once arrival response. Simply reaching Harbor with passengers aboard is not success.
 
-The current camera is orthographic. Use its constant world-space view direction for reflection/Fresnel calculations, in the same coordinate space as the normals. Do not copy perspective camera-position formulas or perspective depth reconstruction unmodified. On a flat orthographic surface the base view angle is constant; varying normals and a composed reflected-light field supply variation.
+Undo from success restores the appropriate playing appearance; Restart restores the initial baseline. Cancelling/recovering a transition must clear transient effects while preserving destination identity. Reduced motion should use steady states and restrained fades.
 
-Follow Three.js color management deliberately: color textures and scalar/vector data need the appropriate color-space treatment; shader output must use the intended tone-mapping and output conversion once. Audit this before final palette tuning.
+`effects.ts` currently finds the lens by an exact material color, while the glow and water reflection assume a lighthouse-local lamp position. If you touch that model or material, expose a small explicit lens/anchor reference and use it consistently. Keep this a local model/effect connection, not a new asset framework.
 
-The installed Three.js 0.186.1 Reflector supports orthographic cameras, but the bundled Water and Refractor implementations still contain perspective assumptions. Water2 also needs review of its view-direction/refraction path. These are references or building blocks, not automatic replacements for this game's shader.
+## 4. Let the accompaniment follow the rescue
 
-A low-resolution, cached reflection of static landmarks is an optional addition **only if** the basic material is strong and the visual gain merits its measured cost. Start small, exclude routes/UI and transient actors from a static capture, and refresh correctly for cove/camera/viewport/water-height changes. Avoid a full extra scene render every animation frame as the default. Do not leave stale reflections through a tide or Undo.
+### Musical decision
 
-Keep resources bounded and dispose them on teardown. Bundle runtime assets locally and record their provenance. The existing software-rendered frame timings do not establish native-phone performance headroom.
+Treat this as a small secondary experiment within the visual milestone. Make one bounded accompaniment proposal and compare it with the accepted mix. Keep it when it adds a clear, restrained improvement; if it makes the music busy or less inviting, retain the accepted base and explain that decision. Complete the visual and Harbor work either way.
 
-### Tune in the actual game
+Keep “Between the lamps” playing continuously. Add one sparse, soft companion voice whose authored notes fit the existing harmony cells. A little more presence can accompany an approaching occupied-pier deadline; a warmer answering phrase can accompany the journey home. Preserve the gentle character and ample silence. Avoid per-action jingles, drums, ticking, faster tempo or escalating volume while the player thinks.
 
-Keep the small set of artistic parameters together: depth palette, absorption, normal scale/speed/strength, sheen width/strength, warm reflection and shallow-detail contrast. A temporary development-only tuning panel is useful if it makes iteration faster; lil-gui is one option. Select and commit one authored default. Remove/exclude development controls from production.
+Use three playing arrangements, plus quiet terminal handling:
 
-Judge it in Holding Pier and Bellwater, at the actual camera and both phone widths. Make internal comparisons and choose the strongest version without asking the user to art-direct sliders. Inspect motion as well as stills before considering the material complete.
-
-## 2. Give the ferry time to inhabit the water
-
-All normal moves currently take 780 ms. Longer passages therefore move much faster through the world. Use the accepted canonical path length to choose a modestly longer, deterministic duration.
-
-Start with this policy, expressed in milliseconds:
-
-    duration = clamp(900 + 150 * canonicalPath.length, 1400, 2400)
-
-Calculated against the reviewed paths, this gives approximately:
-
-| Passage | Initial target |
+| Committed situation | Arrangement |
 | --- | --- |
-| Holding: Shallows → Rabbit Pier | 1.47 s |
-| Holding: Harbor → Stone Pier | 1.83 s |
-| Bellwater: Harbor → Bell Pier | 2.04 s |
-| Bellwater: West → East outer passage | 2.27 s |
+| Ordinary planning, including a distant flood deadline or safe passengers waiting on high ground | Accepted base score; companion absent or barely present |
+| A required passenger is still waiting at a pier that will flood in one or two further actions | A restrained, slightly more present chord-compatible companion; the same tempo and calm pulse |
+| All required passengers are aboard or already delivered, with at least one still aboard | A warmer consonant answering phrase, giving the return a sense of relief |
+| Won | Existing visible-delivery resolution, then a quieter continuing home arrangement |
+| Lost | Fade the companion and soften the arrangement gently; preserve continuity and quick recovery through Undo |
 
-These are the slower comparison candidate, not proof of the best feel. Also inspect a more restrained candidate, such as clamp(800 + 140 * length, 1200, 2300), on one short and one long passage. Choose the shortest timing that lets departure, a visible cruise and arrival read clearly without feeling like a forced wait. The final range may be materially shorter than the table. Make that choice internally and ship one default; keep opposite directions equal in duration.
+Author the companion against all ten existing harmony cells and account for the long pad releases that overlap adjacent cells. Use the same small sound palette and shared reverb. Do not introduce a new score per cove. Compare the result with the accepted base at matched listening levels; the new voice should add emotional shape without masking the melody or turning warning states into alarm music.
 
-Give roughly the first and last 18–20% of the journey to gentle departure/arrival, with a steadier middle cruise. Preserve arc-length sampling, exact endpoints, continuous heading and the existing distance-based docking clearance. Change the time-to-distance mapping; do not alter the accepted course to obtain a smoother motion.
+### Derive pressure from the actual state
 
-Retain prompt transfers and Wait. Use a separate, bounded presentation phase for tide changes, initially about 550 ms and capped by the actual action duration, finishing with that action. Do not automatically stretch the water rise to the full longer crossing. Keep any coincident draft response coordinated with it, and keep passengers, shore/contact effects and masks attached to the actual rendered water height throughout.
+Create a small pure derivation from `State` and `Level`, with terminal outcome taking precedence. For each pier holding a required passenger, find the first future authored rise whose level reaches its elevation. The smallest `rise.afterTurn - state.turn` is the relevant occupied-pier deadline. Use the one/two-action window above only while those passengers remain there.
 
-Preserve the existing approximately 30 ms reduced-motion transitions. Under reduced motion, freeze animated normals, reflection distortion, caustics and decorative lapping and suppress the moving wake. Retain static sheen, visible depth, the exact tide state and the brief state transitions.
+The existing `statusCopy()` in `src/ui/presentation.ts` already expresses this logic. Share a small fact helper where appropriate; do not parse display strings or build a solver for music. Never use a witness length, validation search depth, elapsed seconds, total moves spent or a hypothetical optimal solution as the player's remaining budget.
 
-Retune the wake for the slower speed. The current 360 ms lifetime will create a much shorter trail when travel slows. Aim for a short, softly spreading disturbance that persists briefly behind the stern, fades naturally after arrival and remains distinct from the dotted course. Bound its length and lifetime; clear it on Undo, Restart and cancellation.
+Important boundaries:
 
-### Fix the timing integration
+- Boarding happens before the rise caused by that action. A safe boarding on action 4 or 8 must remove the corresponding threat immediately in the resulting state.
+- Holding Pier's temporary use of safe high ground must not trigger the homeward arrangement while a required passenger still waits there.
+- Bellwater's first rescue removes one deadline; passengers at the other vulnerable pier can still define the next one.
+- First Crossing's required passengers have their own pier deadline. The first tide rise does not automatically make every level musically urgent.
+- Aboard means safe from pier flooding. Delivered means home. Visiting Harbor does not replace unloading.
 
-src/main.ts currently has a hard **1,800 ms fallback**. Simply increasing the world animation duration would truncate the longer journeys.
+Set the desired arrangement on initialization, successful commit, Undo and Restart. Preview, Inspect, hover, invalid input and idle time leave it unchanged. State reconciliation must be idempotent and must not replay the arrival sound.
 
-Use one authoritative transition-duration policy for both the animation and its recovery timeout. Derive recovery from the planned duration plus a bounded margin, initially around 1,000 ms. Retain stalled-transition recovery. Completion, error, visibility reconciliation and cancellation must synchronize the committed state and release the lock exactly once.
+Store a terminal target when the action commits, but enter the won resting arrangement only after the existing visible-unloading delivery callback. Recovery or cancellation should settle into the committed terminal arrangement without replaying the delivery event. Apply the same distinction to a loss-specific musical change that would otherwise anticipate the visible tide consequence.
 
-Keep one commitment per input and no queued second move. Slower animation must not affect the action count, tide/event order, previews, rapid-confirm protection or complete Undo. Revise the older ferry-duration guidance in docs/ART_DIRECTION.md so it agrees with the chosen behavior.
+### Preserve the musical clock and resource bounds
 
-### Clear the ferry's silhouette
+Keep one AudioContext, one bounded scheduler and the accepted phrase phase. Apply small gain/timbre changes smoothly; introduce new notes on the next suitable beat within a short window, roughly one or two beats. The player should hear a response during the next crossing instead of waiting for the entire 75-second phrase to loop. Actions and animation must never wait for a musical boundary.
 
-Fix these existing presentation cases as part of making transit worth watching:
+Keep only the latest desired arrangement. Rapid commits, Undo or Restart must replace obsolete pending accompaniment changes and gently release obsolete notes. They must not queue a sequence of past moods, restart the base phrase or accumulate another scheduler. Musical phase does not rewind with game state.
 
-- During movement, the local destination passenger card can cover the ferry. Suppress the transfer card while sailing and use one compact, calm transit status such as “Sailing to Bell Pier.” Preserve keyboard status/focus behavior and restore the appropriate local controls on every completion/recovery path.
-- At rest, reviews/environment/after/holding-desktop-tide-2.png shows the Harbor card covering part of the loaded ferry cabin. Placement must exclude the projected full ferry/aboard-passenger bounds **after** viewport clamping, as well as the other UI regions. Use another fitting candidate or compact fallback.
+The current implementation lives in `src/audio/atmosphere.ts`; `sound.ts` re-exports it. Existing long harmony tails and delivery notes share a bounded source budget. Keep the addition to one or two overlapping companion voices and reserve room for the accepted base and delivery response. Verify that notes are not silently dropped at busy moments. Do not merely raise the source limit.
 
-Preserve the accepted contextual interaction model and touch targets. This is a bounded placement/transit fix.
+Keep adaptive accompaniment on a music-owned bus/category. `delivery()` currently clears action effects; it must not accidentally delete the continuing accompaniment. Use a safe gain-ramp/cancellation strategy, feature-detecting APIs where needed. Store the latest desired state even before audio creation or while muted/hidden, so resuming uses the right arrangement without replaying missed events.
 
-## 3. Compose one continuous original musical atmosphere
+Retain live mute, intentional resume, page-hide recovery, cancellation and teardown. Maintain audible event timing: travel follows visible motion, and the delivery resolution follows visible unloading. If actual listening is unavailable, retain an actual runtime mix capture and state that the new layer awaits listening. The user has already approved the existing composition.
 
-The current Sound class only plays short action-triggered notes. There is no continuous ambience or score to refine. Create one original, approximately **60–90-second instrumental cue** with a deliberate phrase and seamless return.
+## 5. Refine within a measured render budget
 
-The musical direction is airy, tender, spacious and gently hopeful. A slow internal pulse around 60–70 BPM can organize it without an audible drum beat. Use soft open harmony, a sparse small motif, long rests and a restrained shared reverb. Let the middle of the phrase become slightly fuller, then return naturally. Author pitches, voicings, durations and rests; random notes or an unchanging arpeggio do not supply a composed cue.
+The last report measured about 25% longer median/p95 frame intervals in Windows SwiftShader, with unchanged draw counts and triangles. This is useful evidence of a cost increase in that environment, not proof of a native-phone bottleneck. Its audio context was not created during the samples.
 
-Keep the arrangement small:
+Keep one water draw, the two existing 256×256 RGBA fields, no reflection target and no extra scene pass. Do not add a post-processing stack. Make visual improvements primarily by reshaping and replacing work already present.
 
-| Layer | Purpose |
-| --- | --- |
-| Soft sustained harmonic voices | Give the scene warmth and continuity |
-| Sparse plucked/bell-like motif | Give the score an identifiable, gentle musical presence |
-| Quiet air and water | Give the cove a natural sense of space |
-| Soft travel texture | Connect ferry movement to water; fade at the stop |
-| Restrained delivery response | Add relief when successful delivery becomes visible |
+Inspect plausible costs as you touch them. Static seabed-detail math can potentially be baked into the existing field; view/light invariants can potentially be supplied as uniforms. The GPU compiler may already optimize some expressions, so retain changes based on measured results and visual equivalence rather than counting source lines. Preserve orthographic geometry, color conversion and actual tide behavior.
 
-Use original local synthesis/buffers or appropriately sourced local assets with recorded provenance. The existing Web Audio stack is sufficient for a first musical arrangement: softly filtered voices, bounded polyphony, reusable noise buffers and one modest shared reverb. Keep any generated asset's authoring recipe. External services must not be required during play.
+Field construction is a separate CPU startup cost. Independent review found repeated full water construction exceeded 5-second unit budgets in this environment; all errors were timeouts. Inspect the bounded per-texel coast/segment and patch calculations, precompute reusable values, and avoid rebuilding fields during update/Undo. Keep any optimization local and preserve meaningful field samples and invariants. Do not weaken assertions to hide slow setup.
 
-This milestone needs an audible musical proposal, not an elaborate adaptive-score system. Avoid making cosmetic water brightness pulse on every beat or synchronizing action completion to the music.
+Compare the new result with `31ad851` using the same available browser, viewport, DPR, scene/state and measurement protocol. Measure idle render cost separately from an audio-enabled crossing, and note field construction time separately from steady rendering. Investigate a repeatable regression; use a second matched comparison if the first is noisy or contradictory. Do not introduce an arbitrary universal FPS gate or expand this into a general engine rewrite.
 
-### Audio behavior
+## 6. Verify the changed experience and hand it back
 
-- Start/resume from an intentional game activation or explicit Sound-on gesture, respecting the persisted Sound preference. Handle unavailable audio or a rejected resume gracefully.
-- Continue the base phrase through thought, inspection, moves, Undo and Restart without restarting or stacking another copy. Musical phase is cosmetic and need not rewind with Undo.
-- Schedule music against AudioContext time, with a bounded lookahead rather than animation-frame timing. Use owned source nodes, bounded buffers and one scheduler.
-- Route music, ambience and effects through controlled buses and a master gain. The current Boolean-only mute does not silence already-scheduled nodes. Mute the live mix promptly with a short ramp, including effect tails.
-- Keep a compact Sound control reachable during transit. Preserve accessible labeling, keyboard/touch use and the persisted preference. A mixer panel is unnecessary.
-- On page hide/interruption, reconcile action effects and suspend/stop scheduling deliberately. Resume enabled audio cleanly without a backlog of notes or duplicate loops. Clean up owned resources on teardown.
-- Start movement sound with visible movement and stop it when the ferry stops. Place the delivery resolution at visible successful unloading, not at the initial state commit. Undo/cancellation must clear stale action-specific accents.
-- Keep music independent of puzzle time. A player may listen indefinitely without a ticking warning or escalating danger.
+Run the normal build/typecheck and relevant existing tests. Add focused tests for the new state derivation and audio lifecycle risks. A test that repeats a tuning constant does not establish visual or musical quality.
 
-Current cove changes navigate to a new page. One clean audio startup per page is acceptable; this task does not require a navigation rewrite. Sound preference remains independent of reduced motion, and every puzzle cue remains understandable with sound off.
+Cover deadline removal by boarding at the exact boundary, safe temporary unloading, Bellwater's remaining second threat, homeward versus delivered, lost/won Undo, previews having no effect, and long idle leaving simulation and arrangement state unchanged. Exercise rapid state changes during scheduled accompaniment and a phrase boundary with bounded sources and no duplicate scheduler.
 
-Listen to the actual mix if the available environment supports it. An oscillator starting successfully is not musical acceptance. If the arrangement still resembles alert tones or a generic test drone, improve its timbre/phrase before labeling it finished. If actual listening is unavailable, provide a capture and state that sonic quality awaits listening; do not invent a listening result.
+Use the real interface for complete Holding Pier and Bellwater rescues, both tide rises and Undo, plus a First Crossing shared-presentation regression. Inspect Harbor from the initial state, while unavailable, while current, during a loaded arrival, at delivery and after Undo/Restart. Check 1440×900, 844×390 and 780×390, natural keyboard, emulated touch, and reduced motion. Retain the accepted modal safety, ferry/card clearance and one-action-per-input behavior.
 
-## 4. Validate the changed experience
+Choose a compact evidence set tied to the final source:
 
-Use the existing build/typecheck and unit coverage. Add or adapt focused checks for meaningful new timing/audio lifecycle risks; avoid tests that merely repeat implementation constants.
+- Matched before/after ordinary views of Holding and Bellwater, with a shallow region and Harbor visible.
+- A flooded low shore and its Undo-restored state.
+- Native phone views showing the Home marker, readable routes and the loaded ferry.
+- One uninterrupted original-speed sequence showing idle water, departure, tide/Undo and delivery.
+- An actual audio-enabled sample covering ordinary, near-deadline, homeward and delivery states, including an Undo and some idle listening. Include the loop boundary in this sample or one short separate capture if needed.
 
-Exercise the real interface for successful rescues in Holding Pier and Bellwater and a shared-renderer First Crossing regression. Cover both rises, tide Undo and terminal Undo, with loaded passengers. Check the longest crossing, reverse travel and a short passage. The longest crossing must finish normally rather than through fallback recovery.
+Listen to the actual runtime mix where tooling permits. Report listening separately from source/scheduler checks. Raw media may remain ignored/local; give precise paths and provenance. Do not relabel silent rescue videos as audio evidence or past captures as new results.
 
-Cover natural keyboard and emulated touch at 1440×900, 844×390 and 780×390, including a full transit and the reported docked Harbor-card case. Preserve the existing rapid Confirm protection and modal safety. Verify hide/show during a passage and reduced motion. A slower passage may justify a deliberate test-budget adjustment, but never weaken the state, input or visibility assertions to obtain a pass.
+Preserve original failures. If a bounded exhaustive test needs a larger budget or serial execution in a slow environment, report the original outcome, reason, exact settings and affected rerun. Keep fresh, reused and corrected results distinct. Stop optional testing once the concrete changed risks are covered.
 
-For continuous audio, check initial activation, muted reload, live mute during travel, repeated toggles, Undo/Restart, page hide/show and a full loop boundary. Check that prolonged idle listening leaves game state unchanged and that repeated actions do not accumulate graphs or schedulers. Record which checks establish behavior and which involve actual listening.
+Update `STATUS.md`, relevant art/environment/audio notes and any asset provenance. Put the implementation review and selected evidence in a new directory such as `reviews/refinement/`. Complete the established normal commit/push and draft-PR update. Return the final SHA, remote equality, main/draft status, concise change summary, actual verification, selected captures, recordings and remaining limits.
 
-Measure before/after renderer work and frame intervals under the same available environment. Investigate material regressions. Report render-target resolution/pass count and asset size if adding them. Keep software-renderer results distinct from physical-device performance; report untested devices honestly.
+Success means that the shallow water has recognizable form, the assets feel seated in the scene, Harbor quietly reads as home throughout play, and the accepted music gently follows rescue and relief. Finish this pass before adding levels or mechanics.
 
-### Visual and musical acceptance
+## Technical references
 
-At native phone size, the water must show identifiable shallow depth, a coherent area of reflected light and slow connected surface movement. Routes, passengers and warning text remain easy to read.
+- [Audiokinetic: music states](https://www.audiokinetic.com/library/2024.1.2_8726/?id=states_tab_music_objects&source=Help) describes state-dependent gain/filter changes at musical boundaries. It is a design reference; implementation stays in the existing Web Audio code.
+- [MDN: setTargetAtTime](https://developer.mozilla.org/en-US/docs/Web/API/AudioParam/setTargetAtTime) explains smooth parameter transitions on the audio clock. Its time constant is not the total fade duration.
+- [MDN: cancelAndHoldAtTime](https://developer.mozilla.org/en-US/docs/Web/API/AudioParam/cancelAndHoldAtTime) documents cancellation and limited browser availability. Use compatible behavior or a fallback.
+- [Three.js: color management](https://threejs.org/manual/pages/color-management.html) remains relevant when changing the cached field or shader output.
 
-During an unedited crossing, the ferry should visibly cruise through the scene, leave a gentle fading water disturbance and arrive without a snap or covering card. During 30–60 seconds of idle thought, the water and score should remain interesting and calm, without an obvious visual reset or intrusive musical repetition.
-
-Make this judgment from actual gameplay motion and actual audio where available. A successful build, a still image or a count of tests cannot establish the atmosphere.
-
-## 5. Evidence and handoff
-
-Retain a compact set of matching before/after gameplay captures tied to the actual source:
-
-- Holding and Bellwater in ordinary play, including a shallow region and open-water sheen.
-- A flooded low shore at tide 2 and the correct Undo-restored state.
-- Both phone widths, with route visibility and a clear loaded ferry.
-- Harbor's warm response at visible delivery.
-
-Capture a short idle-water segment and an uninterrupted short/long crossing segment at original speed. Include an audio-enabled sample long enough to hear the musical phrase and its loop boundary; this can be a separate actual runtime mix capture. A silent rescue video does not verify the soundtrack. Identify whether media is real-time capture or sampled/offline evidence and retain that distinction.
-
-Use available tools to inspect selected images at native size, motion and sound. Raw media may remain ignored/local if upload is unavailable; clearly report that limitation. Keep historical captures attributed to their original commits.
-
-Update STATUS, the relevant art/environment/technical notes and the asset ledger. Put a concise review report and selected evidence under a new review directory. State exact source, commands, fresh/reused results, original failures and remaining uncertainties. The prior 38-pass/3-timeout browser run plus three isolated passes remains historical evidence, not a clean new run.
-
-Complete the usual normal commit/push and update draft PR #1. Return final SHA, source/remote equality, main/draft status, changes, verification, selected captures and recording locations. Do not merge or mark the PR ready.
-
-Finish this atmosphere milestone before expanding levels or mechanics. The next playtest should let the user judge the combined water, travel rhythm and sound.
-
-## Research references and optional tools
-
-Use these as technical explanations, adapting them to the existing renderer. Unity Shader Graph examples and newer Three.js node-material examples are not drop-in GLSL code.
-
-1. [Aleksandar Gjoreski — Be Water, my friend!](https://aleksandargjoreski.dev/blog/stylized-water-shader/): a Three.js development account connecting normals, reflected/refracted light and absorption.
-2. [Alexander Ameye — Stylized Water Shader](https://ameye.dev/notes/stylized-water-shader/): useful organization of depth, color, refraction and shore effects; distinguish vertical depth from camera-ray thickness.
-3. [Catlike Coding — Texture Distortion](https://catlikecoding.com/unity/tutorials/flow/texture-distortion/): flowing texture coordinates and phase blending to hide resets.
-4. [Three.js — Color Management](https://threejs.org/manual/pages/color-management.html): linear working space, texture roles and custom-shader output conversion.
-5. [Three.js Reflector orthographic support](https://github.com/mrdoob/three.js/pull/33249) and [Reflector documentation](https://threejs.org/docs/pages/Reflector.html): consult only if adding a justified reflection capture; inspect installed helper code.
-6. [lil-gui](https://lil-gui.georgealways.com/): optional development-only parameter tuning.
-7. [Spector.js](https://github.com/BabylonJS/Spector.js): optional WebGL frame inspection if render-pass or shader behavior needs diagnosis.
-8. [Material Maker](https://www.materialmaker.org/): optional procedural texture authoring/export tool. A reproducible local script is also suitable; installing another editor must not block the task.
-9. [MDN — Creating and sequencing audio](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Advanced_techniques), [GainNode](https://developer.mozilla.org/en-US/docs/Web/API/GainNode) and [AudioContext.suspend](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/suspend): scheduling, live gain and audio lifecycle.
-10. [Chrome — Web Audio, Autoplay Policy and Games](https://developer.chrome.com/blog/web-audio-autoplay): activation/resume behavior.
-
-Read source licenses before incorporating third-party code or assets and retain required notices. The reference list is guidance, not a request to install every tool.
+Keep useful existing water research in `docs/ENVIRONMENT.md`; this milestone does not require installing another editor, engine or audio middleware.

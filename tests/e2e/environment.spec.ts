@@ -119,7 +119,7 @@ async function arrivalIsVisible(page: Page, reduced: boolean) {
   expect(view.arrival.active).toBe(true);
   expect(view.arrival.intensity).toBeGreaterThan(0);
   expect(view.arrival.lampIntensity).toBeGreaterThan(view.arrival.intensity);
-  expect(view.arrival.emissiveIntensity).toBeCloseTo(view.arrival.intensity, 6);
+  expect(view.arrival.emissiveIntensity).toBeCloseTo(0.42 + view.arrival.intensity, 6);
   expect(view.arrival.glowVisible).toBe(true);
   expect(view.arrival.glowOpacity).toBeGreaterThan(0);
   if (reduced) expect(view.arrival.intensity).toBe(0.45);
@@ -131,9 +131,9 @@ async function effectsAreClear(page: Page) {
   expect(view.arrival).toMatchObject({
     active: false,
     intensity: 0,
-    emissiveIntensity: 0,
-    glowVisible: false,
-    glowOpacity: 0,
+    emissiveIntensity: 0.42,
+    glowVisible: true,
+    glowOpacity: 0.08,
   });
   expect(view.forecast.visible).toBe(false);
   expect(view.forecast.groups.filter((group: any) => group.visible)).toEqual([]);

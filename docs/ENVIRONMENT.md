@@ -20,9 +20,19 @@ During travel the local passenger card is hidden and a compact “Sailing to …
 
 A softly feathered wake follows the actual stern, widens with age and is bounded to 720ms, 1.8 world units and 31 samples. It stops emitting at arrival and clears on reconciliation/Undo/Restart. Reduced motion keeps 30ms transitions, freezes normal/refraction/lapping time and suppresses wake; static depth and sheen remain.
 
+## Shallow detail, contact and home
+
+The shallow-detail refinement retains two 256² RGBA fields and one water draw. Coastal width now varies with island form and sheltered pockets; compact coast-connected sand tongues and angular stone forms replace repeated soft oval patches. Broad material variation is baked into the existing albedo field. Precomputed contour segments, squared-distance rejection and bounded patch tests reduce CPU field setup; fields remain immutable through rendering, preview and Undo. There is no reflection target or additional scene pass.
+
+The ferry's two lower hull surfaces and selected Harbor/vulnerable-pier piles clone their materials and use actual world height against the shared animated water uniform. The narrow contact treatment follows draft, bobbing, tide and Undo without affecting cabin/house materials. Existing island vertices carry broad sand, stone and grass regions; silhouettes and geometry counts remain intact.
+
+The lighthouse model exposes its lens, existing lamp and anchor explicitly. Glow and water reflection share that world anchor. Action reset restores the steady home light; delivery adds its transient response, while terminal Undo restores the playing baseline. The map Home role comes from the level delivery objective and retains current/adjacent/blocked/remote statuses.
+
 ## Sound and free thought
 
 “Between the lamps” is an original 75-second phrase at 64 BPM. Ten authored open harmonies, 21 sparse motif notes, long rests and a fuller middle return quietly. Reusable air/water and reverb buffers support small synthesized voices. Travel texture follows visible movement; delivery responds during visible unloading. There is no connection between music phase and puzzle turns.
+
+The refinement retains one sparse companion proposal that follows committed occupied-pier deadlines and homeward passenger safety. It preserves the accepted score, phrase and sound palette; terminal responses wait for visible consequences. [Audio notes](AUDIO.md) describe all five arrangements, shared harmony-tail pitches, latest-target scheduling and resource bounds. Listening is separate from lifecycle/signal checks and remains explicitly pending in the actual-runtime evidence report.
 
 Intentional activation respects persisted mute. One AudioContext-time scheduler and owned sources keep the graph bounded. Music, ambience and action effects pass through a live master mute, including scheduled tails. Undo/Restart preserve the base phrase and clear action effects. Hide/interruption suspends scheduling without backlog; teardown releases resources. A compact Sound control stays reachable in transit. Availability, actual-runtime audio evidence and any listening limitation are stated in the review.
 
@@ -34,4 +44,4 @@ Actual interface checks cover all three rescues, loaded travel in both direction
 
 Matched source-attributed images, original-speed crossings/idle water and an actual-runtime full-phrase audio sample support review. Native still/temporal inspection and live audio behavior are reported separately from listening judgment. Before/after draw calls, triangles and 120-frame intervals use the same software renderer and viewport. They establish no physical-device frame-rate guarantee.
 
-Implementation details, actual results, source identities, evidence and remaining limitations are recorded in `reviews/atmosphere/REVIEW.md`. Historical evidence remains under its original source; a changed shared renderer receives fresh browser coverage.
+Implementation details, actual results, source identities, evidence and remaining limitations are recorded in `reviews/refinement/REVIEW.md`. The final matched software-renderer measurements are mixed: field construction improves, while Holding's idle p95 remains higher; no overall smoothness improvement is claimed. Historical evidence remains under its original source; a changed shared renderer receives fresh browser coverage.

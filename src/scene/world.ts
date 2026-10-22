@@ -9,6 +9,7 @@ import { getLevelPaths, type CanonicalPath } from './paths';
 import { Shores, createReedBeds } from './shore';
 import { CoastalWater } from './water';
 import { CrossingEffects } from './effects';
+import { contactMaterial } from './contact';
 import {
   journeyTiming,
   settlingProgress,
@@ -40,6 +41,8 @@ export class World {
   shores: Shores;
   coastalWater: CoastalWater;
   effects: CrossingEffects;
+  home!: ReturnType<typeof lighthouse>;
+  contactMeshes: T.Mesh<T.BufferGeometry, T.MeshStandardMaterial>[] = [];
   journeyFrame: { progress: number; distance: number; tangent: T.Vector3 } | null = null;
   reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   timing: JourneyTiming = journeyTiming;
@@ -123,6 +126,12 @@ export class World {
     this.shadow.receiveShadow = true;
     this.scene.add(this.shadow);
     this.shores = new Shores(this.level, this.layout.islandStyles);
+    this.hull.traverse((object) => {
+      if (object instanceof T.Mesh && object.name === 'water-contact-hull') {
+        object.material = contactMaterial(object.material, this.shores.water, 'hull');
+        this.contactMeshes.push(object);
+      }
+    });
     this.scene.add(this.shores.group, this.shores.contacts);
     for (const island of this.level.world.islands) this.island(island);
     for (const p of this.level.piers) {
@@ -145,7 +154,19 @@ export class World {
         );
       for (const px of [x - p.width / 2, x + p.width / 2])
         for (const pz of [z + 0.02, end]) {
-          cylinder(this.scene, '#79644a', 0.065, 0.07, 0.83, [px, y - 0.27, pz], 9);
+          const pile = cylinder(this.scene, '#79644a', 0.065, 0.07, 0.83, [px, y - 0.27, pz], 9);
+          if (
+            p.id === this.level.objective.deliveryPierId ||
+            p.id === this.level.piers.find((pier) => pier.elevation < 3)?.id
+          ) {
+            pile.name = `water-contact-${p.id}`;
+            pile.material = contactMaterial(
+              pile.material as T.MeshStandardMaterial,
+              this.shores.water,
+              'pile',
+            );
+            this.contactMeshes.push(pile as T.Mesh<T.BufferGeometry, T.MeshStandardMaterial>);
+          }
           cylinder(this.scene, '#dbc799', 0.075, 0.075, 0.055, [px, y + 0.17, pz], 9);
         }
       box(this.scene, '#b68f5b', [0.35, 0.055, 0.49], [x, y - 0.015, z + 0.25], 0.015);
@@ -156,8 +177,13 @@ export class World {
       const island = this.level.world.islands.find((island) => island.id === landmark.islandId)!;
       const [x, z] = landmark.positionXZ;
       const y = island.elevation * 0.18;
-      if (landmark.kind === 'lighthouse') lighthouse(this.scene, x, y, z);
-      else if (landmark.kind === 'cottage') cottage(this.scene, [x, y, z]);
+      if (landmark.kind === 'lighthouse') {
+        const model = lighthouse(this.scene, x, y, z);
+        const delivery = this.level.piers.find(
+          (pier) => pier.id === this.level.objective.deliveryPierId,
+        )!;
+        if (island.id === delivery.islandId) this.home = model;
+      } else if (landmark.kind === 'cottage') cottage(this.scene, [x, y, z]);
       else bellLandmark(this.scene, [x, y, z]);
     }
     for (const e of this.level.edges) {
@@ -214,7 +240,7 @@ export class World {
         cylinder(g, '#eee2bc', 0.025, 0.025, 0.25, [0, 0.28, 0], 7);
       }
     }
-    this.effects = new CrossingEffects(this.scene.getObjectByName('lighthouse')!);
+    this.effects = new CrossingEffects(this.home);
     this.scene.add(this.effects.wake, this.effects.glow);
     this.forecast = this.shores.forecast;
     this.scene.add(this.forecast);
@@ -492,7 +518,7 @@ export class World {
     this.shores.update(this.water.position.y);
     this.setForecast(false, s.tideLevel);
     if (!preserveEffects) this.effects.reset();
-    if (s.status === 'won') this.effects.arrive(this.lastTime, this.reduced);
+    if (s.status === 'won' && !preserveEffects) this.effects.settle(this.reduced);
     this.coastalWater.setHarbor(this.effects.glow.position, this.effects.arrivalIntensity);
     this.shadow.position.y = this.water.position.y + 0.008;
     const n = this.level.nodes.find((n) => n.id === s.boatNodeId)!;
@@ -782,6 +808,17 @@ export class World {
       shallowSegments: this.coastalWater.mask.shallowSegments,
       reducedMotion: this.reduced,
       shores: this.shores.presentation(),
+      contacts: {
+        waterY: this.shores.water.value,
+        meshes: this.contactMeshes.map((mesh) => {
+          const position = mesh.getWorldPosition(new T.Vector3());
+          return {
+            name: mesh.name,
+            worldY: position.y,
+            localWaterY: this.shores.water.value - position.y,
+          };
+        }),
+      },
       forecast: {
         visible: this.forecast.visible,
         tideY: this.shores.forecastY,

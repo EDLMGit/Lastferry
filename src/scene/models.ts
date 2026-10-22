@@ -67,7 +67,6 @@ export function cylinder(
 export function ferry() {
   const g = new T.Group();
   g.name = 'ferry-hull-and-deck';
-  // Curved, tapered bow; bevels form a painted gunwale above the darker keel.
   const hull = new T.Shape();
   hull.moveTo(-0.43, -0.76);
   hull.quadraticCurveTo(-0.51, 0.25, -0.32, 0.72);
@@ -87,6 +86,7 @@ export function ferry() {
     geo.rotateX(Math.PI / 2);
     geo.translate(0, depth, 0);
     const m = mesh(geo, color, g, 0, y, 0);
+    if (y < 0) m.name = 'water-contact-hull';
     m.scale.set(scale, 1, scale);
   }
   layer(0.18, -0.19, '#824b35', 0.94);
@@ -199,7 +199,11 @@ export function lighthouse(parent: T.Object3D, x: number, y: number, z: number) 
   box(g, '#765d44', [0.25, 0.48, 0.08], [0, 0.38, 0.56], 0.1);
   box(g, '#f0be63', [0.16, 0.28, 0.035], [0.12, 1.48, 0.445], 0.06);
   cylinder(g, '#a69b7c', 0.64, 0.64, 0.12, [0, 2.26, 0]);
-  cylinder(g, '#f9cb70', 0.36, 0.36, 0.56, [0, 2.6, 0], 12);
+  const lens = cylinder(g, '#f9cb70', 0.36, 0.36, 0.56, [0, 2.6, 0], 12);
+  lens.name = 'home-lens';
+  lens.material = (lens.material as T.MeshStandardMaterial).clone();
+  lens.material.emissive.set('#ffbf70');
+  lens.material.emissiveIntensity = 0.42;
   for (let i = 0; i < 8; i++) {
     const a = (i * Math.PI) / 4;
     cylinder(g, '#705b43', 0.025, 0.025, 0.62, [Math.sin(a) * 0.4, 2.6, Math.cos(a) * 0.4], 6);
@@ -212,4 +216,5 @@ export function lighthouse(parent: T.Object3D, x: number, y: number, z: number) 
   const lamp = new T.PointLight('#ffbf62', 2.5, 6, 2);
   lamp.position.y = 2.6;
   g.add(lamp);
+  return { group: g, lens, lamp, anchor: lamp };
 }

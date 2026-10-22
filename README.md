@@ -1,6 +1,6 @@
 # Last Ferry — playable coves
 
-Start with **The Holding Pier**, then choose **Next cove** after bringing its neighbors home to continue into **Bellwater Cove**. Bellwater tests changing route depths and two pickup deadlines. First Crossing remains the explicit baseline at `/?cove=first-crossing` and in **Menu → Choose cove**. The atmosphere pass adds luminous water with visible shallow detail, deliberate crossings and an original continuous instrumental cue. See the current [atmosphere review](reviews/atmosphere/REVIEW.md) and developer notes for [Holding Pier](docs/HOLDING_PIER.md), [Bellwater](docs/BELLWATER.md) and the [environment](docs/ENVIRONMENT.md).
+Start with **The Holding Pier**, then choose **Next cove** after bringing its neighbors home to continue into **Bellwater Cove**. Bellwater tests changing route depths and two pickup deadlines. First Crossing remains the explicit baseline at `/?cove=first-crossing` and in **Menu → Choose cove**. The refinement adds more distinct shallow sand and stone, water-height contact, a steady Harbor home light and a sparse rescue-responsive accompaniment to the accepted score and sailing pace. See the current [refinement review](reviews/refinement/REVIEW.md) and developer notes for [Holding Pier](docs/HOLDING_PIER.md), [Bellwater](docs/BELLWATER.md) and the [environment](docs/ENVIRONMENT.md).
 
 Baseline M1 is a playable 3D tutorial cove: rescue Moss the sheep with Pip and Rue already aboard, manage how much depth the loaded ferry needs, and bring everyone to the lighthouse. Time advances only on accepted actions. The scene, sounds and rules run locally in the browser.
 
@@ -44,14 +44,14 @@ PowerShell:
 ```powershell
 $env:PLAYWRIGHT_BROWSERS_PATH = Join-Path $PWD '.cache/ms-playwright'
 npx playwright install chromium
-$env:LAST_FERRY_REVIEW_DIR = 'reviews/atmosphere'
+$env:LAST_FERRY_REVIEW_DIR = 'reviews/refinement'
 ```
 
 macOS/Linux:
 
 ```sh
 PLAYWRIGHT_BROWSERS_PATH=.cache/ms-playwright npx playwright install chromium
-export LAST_FERRY_REVIEW_DIR=reviews/atmosphere
+export LAST_FERRY_REVIEW_DIR=reviews/refinement
 ```
 
 Then run:
@@ -68,15 +68,15 @@ The browser suite defaults to ports 5173 and 4173, launches the development and 
 
 `LAST_FERRY_REVIEW_DIR` selects the capture/report folder so new evidence does not overwrite earlier records. `LAST_FERRY_DEV_PORT` and `LAST_FERRY_PRODUCTION_PORT` optionally select isolated servers.
 
-The atmosphere pass uses isolated development/production ports **5180/4180** and stores selected captures and its report under `reviews/atmosphere/`. To use those ports with the browser suite:
+The refinement uses a frozen development source on **5185** for checks and production port **4180**. Selected captures and its report live under `reviews/refinement/`. Ordinary live development can still use **5180**. To use those ports with the browser suite:
 
 ```powershell
 $env:LAST_FERRY_DEV_PORT = '5180'
 $env:LAST_FERRY_PRODUCTION_PORT = '4180'
-$env:LAST_FERRY_REVIEW_DIR = 'reviews/atmosphere'
+$env:LAST_FERRY_REVIEW_DIR = 'reviews/refinement'
 ```
 
-On macOS/Linux, set the same variables with `export`. If launching the servers separately, use `npm run dev -- --port 5180` and, after building, `npm run preview -- --port 4180`. This workspace reused its existing browser cache at `../.cache/ms-playwright`; a fresh clone can use the project-local cache above. The [atmosphere report](reviews/atmosphere/REVIEW.md) records actual commands, results and source identity.
+On macOS/Linux, set the same variables with `export`. If launching the servers separately, use `npm run dev -- --port 5180` and, after building, `npm run preview -- --port 4180`. This workspace reused its existing browser cache at `../.cache/ms-playwright`; a fresh clone can use the project-local cache above. The [refinement report](reviews/refinement/REVIEW.md) records actual commands, frozen-source ports, results and source identity.
 
 `test:unit` checks the independent application reducer, supplied replays, boundaries, history, locking, sampled ferry clearance in all three coves, both puzzle searches and active-level presentation derived from real preview results. Bellwater retains eight ten-action witnesses and its valid timing alternatives. The separate design verifier checks only the supplied reference model. Browser checks use actual mouse, natural keyboard and emulated touch controls for sailing, free inspection, subsets, both rises, complete Undo, input protection, default entry/Next/Menu and production play. Target viewports are 1440×900, 844×390, 780×390, plus 844×500 and 1024×600 with breakpoint resizes. The report distinguishes passed, failed, inconclusive and not-run checks.
 
@@ -84,7 +84,7 @@ Reproduce the First Crossing detour manually: Sheep Pier → Board Moss → East
 
 ## Evidence and source
 
-See the current [atmosphere review](reviews/atmosphere/REVIEW.md), [capture manifest](reviews/atmosphere/capture-manifest.json), [source identity](reviews/atmosphere/source-manifest.json) and [status](STATUS.md). The review records fresh gameplay captures, exact working-tree source/environment, native-size inspection, original-speed recordings and the actual-runtime full musical phrase. Matched captures in `reviews/atmosphere/before/` retain their original source identity. Raw videos/audio stay local under the review's `raw/` folders, ignored and unavailable in a fresh clone. Versioned screenshots/manifests provide remote evidence. The [environment review](reviews/environment/REVIEW.md), [Bellwater review](reviews/bellwater/REVIEW.md), [prerequisite responsive/input report](reviews/bellwater/phase-a/REVIEW.md) and [contextual interface review](reviews/contextual/REVIEW.md) remain historical evidence of preceding source.
+See the current [refinement review](reviews/refinement/REVIEW.md), [capture manifest](reviews/refinement/capture-manifest.json), [source identity](reviews/refinement/source-manifest.json) and [status](STATUS.md). The review records fresh gameplay captures, exact working-tree source/environment, native-size inspection, original-speed recordings and the actual-runtime full musical phrase. Matched captures in `reviews/refinement/before/` retain their original source identity. Raw videos/audio stay local under the review's `raw/` folders, ignored and unavailable in a fresh clone. Versioned screenshots/manifests provide remote evidence. The [atmosphere review](reviews/atmosphere/REVIEW.md), [environment review](reviews/environment/REVIEW.md), [Bellwater review](reviews/bellwater/REVIEW.md), [prerequisite responsive/input report](reviews/bellwater/phase-a/REVIEW.md) and [contextual interface review](reviews/contextual/REVIEW.md) remain historical evidence of preceding source.
 
 The [navigation review](reviews/navigation/REVIEW.md) preserves the accepted navigation, rule wording and phone-layout pass. The [original Holding Pier review](reviews/holding-pier/REVIEW.md) records its nine-action solution, losing alternatives and exhaustive temporary-holding check. The [M1.1 refinement review](reviews/m1-1/REVIEW.md) preserves earlier phone framing, passenger deck attachment and keyboard work. These are historical records, not captures of the contextual interface.
 
@@ -98,7 +98,7 @@ The preserved [first task](FIRST_TASK.md), [gameplay rules](docs/GAMEPLAY_RULES.
 
 Production meshes and tones are original procedural code, documented in [the asset ledger](docs/ASSET_LEDGER.md). Supplied images under `references/` are concept art only; they are never used as gameplay backgrounds. `PACKAGE_MANIFEST.json` is the historical starter-package manifest, not the current implementation manifest. The selected dependencies follow the official [Vite guide](https://vite.dev/guide/), [Three.js installation](https://threejs.org/manual/pages/installation.html), [Vitest guide](https://vitest.dev/guide/) and [Playwright installation](https://playwright.dev/docs/intro); exact installed versions are locked in `package-lock.json`.
 
-The current task in [NEXT_TASK.md](NEXT_TASK.md) refines water, journey timing and continuous audio across the accepted coves. Puzzle rules, canonical courses and stopping points are preserved. A campaign map, save system, new mechanics, publishing and a large asset catalog remain outside this update.
+The current task in [NEXT_TASK.md](NEXT_TASK.md) refines shallow detail, material contact, Harbor home identity and bounded accompaniment across the accepted coves. Sailing timing and the accepted base score stay unchanged. Puzzle rules, canonical courses and stopping points are preserved. A campaign map, save system, new mechanics, publishing and a large asset catalog remain outside this update.
 
 ## The Holding Pier
 

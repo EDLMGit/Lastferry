@@ -37,6 +37,7 @@ const level = cove === 'first-crossing' ? baseline : cove === 'bellwater' ? bell
 const experiment = level.id === 'holding-pier';
 const isBellwater = level.id === 'bellwater';
 const { nodeNames, passengerNames } = levelNames(level);
+const homeNodeId = level.piers.find((pier) => pier.id === level.objective.deliveryPierId)!.nodeId;
 const title = level.id === baseline.id ? 'The First Crossing' : level.title;
 const app = document.querySelector<HTMLDivElement>('#app')!;
 app.innerHTML = `<main class="game ${experiment ? 'holding' : isBellwater ? 'bellwater' : 'baseline'}"><section id="seascape" aria-label="${level.title}" aria-busy="false"><div id="world"></div><header class="hud"><div class="identity"><h1>${title}</h1><p id="objective"></p></div><div id="readout" aria-label="Crossing progress"></div><nav class="tools" aria-label="Crossing controls"><button id="undo">↶ Undo</button><button id="wait">Wait <span>· 1 action</span></button><button id="menu">Menu</button><button id="sound-toggle" aria-label="Mute sound" aria-pressed="false">♫</button></nav></header><nav id="map-labels" aria-label="Map stops"></nav><section id="local-context" aria-labelledby="local-heading"></section><button id="status-toggle" aria-haspopup="dialog" aria-label="Open tide and pier forecast"></button><p id="transition-status" role="status" tabindex="-1" hidden>Finishing this action…</p><p class="portrait-note">Turn sideways for a wider view.</p></section><div id="announcement" class="sr-only" role="status" aria-live="polite"></div></main><dialog id="dialog" aria-labelledby="dialog-title"><div id="dialog-content"></div></dialog>`;
@@ -44,6 +45,7 @@ const $ = (id: string) => document.getElementById(id)!;
 const session = new Session(level),
   sound = new Sound(),
   world = new World($('world'), session.state, level);
+sound.reconcileState(session.state, level);
 const dialog = $('dialog') as HTMLDialogElement;
 type DialogMode = 'action' | 'forecast' | 'menu' | 'terminal';
 let mode: DialogMode | null = null,
@@ -236,6 +238,7 @@ function finish(id: number, reason: CompletionReason) {
   clearTimeout(fallback);
   sound.stopTravel();
   if (reason !== 'complete') sound.resetActionEffects();
+  sound.settleArrangement();
   session.finish();
   render();
   $('announcement').textContent =
@@ -247,6 +250,7 @@ function execute(action: Action) {
   if (session.busy) return;
   const transaction = session.commit(copy(action));
   if (!transaction) return;
+  sound.reconcileState(transaction.after, level, true);
   const plan = world.plan(transaction.before, transaction.after, action);
   const id = ++transitionSerial;
   activeTransition = { id, action: copy(action), plan, startedAt: performance.now() };
@@ -337,13 +341,16 @@ function renderMap() {
         const loses =
           status === 'available' &&
           preview(s, { type: 'move', to: n.id }, level).state.status === 'lost';
-        const label = current
-          ? `You are at ${nodeNames[n.id]}`
-          : !edge
-            ? `${nodeNames[n.id]}: no direct passage`
-            : `Sail to ${nodeNames[n.id]}${loses ? '; flood warning' : ''}`;
+        const home = n.id === homeNodeId;
+        const label =
+          (current
+            ? `You are at ${nodeNames[n.id]}`
+            : !edge
+              ? `${nodeNames[n.id]}: no direct passage`
+              : `Sail to ${nodeNames[n.id]}${loses ? '; flood warning' : status === 'too-shallow' ? '; too shallow' : ''}`) +
+          (home ? '; Home, delivery destination' : '');
         const disabled = session.busy || s.status !== 'playing' ? 'disabled' : '';
-        return `<div id="stop-${n.id}" class="map-stop" data-adjacent="${!!edge}"><button id="map-${n.id}" class="map-target" data-status="${status}" data-risk="${loses ? 'loss' : 'safe'}" data-destination="${n.id}" ${current ? 'aria-current="location"' : ''} aria-label="${label}" title="${passageCopy(s, n.id, level)}" ${disabled}><span class="map-symbol" aria-hidden="true">${current ? '●' : !edge ? '◇' : status === 'too-shallow' ? '⊘' : loses ? '!' : '○'}</span><span><b>${current || !edge ? nodeNames[n.id] : `Sail to ${nodeNames[n.id]}`}</b><span class="map-state">${current ? 'You are here' : !edge ? 'No direct passage' : status === 'too-shallow' ? 'Too shallow' : loses ? 'Flood warning' : '1 action'}</span></span></button>${edge ? `<button id="inspect-${n.id}" class="inspect-route" data-destination="${n.id}" aria-label="Inspect passage to ${nodeNames[n.id]} for free" ${disabled}>Inspect</button>` : ''}</div>`;
+        return `<div id="stop-${n.id}" class="map-stop" data-adjacent="${!!edge}"><button id="map-${n.id}" class="map-target" data-status="${status}" data-risk="${loses ? 'loss' : 'safe'}" data-destination="${n.id}" ${current ? 'aria-current="location"' : ''} aria-label="${label}" title="${passageCopy(s, n.id, level)}" ${disabled}><span class="map-symbol" aria-hidden="true">${current ? '●' : !edge ? '◇' : status === 'too-shallow' ? '⊘' : loses ? '!' : '○'}</span><span><b>${current || !edge ? nodeNames[n.id] : `Sail to ${nodeNames[n.id]}`}${home ? ' · Home' : ''}</b><span class="map-state">${current ? 'You are here' : !edge ? 'No direct passage' : status === 'too-shallow' ? 'Too shallow' : loses ? 'Flood warning' : '1 action'}</span></span></button>${edge ? `<button id="inspect-${n.id}" class="inspect-route" data-destination="${n.id}" aria-label="Inspect passage to ${nodeNames[n.id]} for free" ${disabled}>Inspect</button>` : ''}</div>`;
       })
       .join('');
   for (const n of level.nodes) {
@@ -409,6 +416,7 @@ function undo() {
   if (dialog.open) closeDialog(false);
   if (session.undo()) {
     sound.resetActionEffects();
+    sound.reconcileState(session.state, level);
     world.sync(session.state);
     render();
     focusAvailable('undo');
@@ -420,6 +428,7 @@ function restart() {
   if (dialog.open) closeDialog(false);
   if (session.restart()) {
     sound.resetActionEffects();
+    sound.reconcileState(session.state, level);
     world.sync(session.state);
     render();
     focusAvailable('menu');
@@ -594,7 +603,10 @@ world.onPresentationStart = (action) => {
   if (action.type === 'move') sound.startTravel();
   else if (action.type !== 'unload' || session.state.status !== 'won') sound.play(action.type);
 };
-world.onArrival = () => sound.delivery();
+world.onArrival = () => {
+  sound.delivery();
+  sound.settleArrangement();
+};
 new ResizeObserver(positionMap).observe(world.host);
 dialog.addEventListener('cancel', (e) => {
   e.preventDefault();
@@ -706,6 +718,7 @@ if (import.meta.env.DEV)
       getMetrics: () => world.metrics(),
       getAudioStatus: () => sound.presentation(),
       captureAudioStream: () => sound.captureStream(),
+      setAccompanimentEnabled: (enabled: boolean) => sound.setAccompanimentEnabled(enabled),
       getTransitionStatus: () =>
         copy({ active: activeTransition, last: lastTransition, completionCounts }),
       setTimingCandidate: (candidate: 'slower' | 'restrained') => {

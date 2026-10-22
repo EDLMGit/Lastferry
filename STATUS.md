@@ -1,4 +1,18 @@
-# Current milestone — Luminous water, unhurried crossings and musical atmosphere
+# Current milestone — Shallow detail, contact and a light for home
+
+2026-10-22: Started clean on `m1-first-crossing` at reviewed `31ad851a97907c8e86aa6f215b78b38caed7c48b`. Read AGENTS and the new parent NEXT_TASK, retained the task in this checkout, and preserved the accepted rules, three coves, score and sailing pace. PR #1 remains draft; main is unchanged. Baseline runtime is copied to an ignored isolated directory for matched evidence while implementation proceeds.
+
+Implementation and native visual review complete: narrower coast-connected sand/stone shelves, quieter surface distortion and faster cached field construction; world-height wet contact on the lower ferry and selected piles; broad island material variation; explicit lighthouse lens/anchor with a persistent warm baseline and objective-derived Home marker. Visible delivery strengthens the light once; recovery settles without replaying its flash. All 15 selected final images were inspected at native size, including 844×390 and 780×390.
+
+The accepted score is unchanged. One bounded, sparse companion follows actual occupied-pier deadlines and homeward/terminal state using the existing musical clock. The actual 82.11-second runtime mix crosses the 75-second loop, includes a rescue, tide/terminal Undo and deliberate redelivery: one context/scheduler, peak 16 sources, zero dropped/deferred/skipped notes. This is a listening-pending proposal; no audible-quality claim. Original-speed Holding/Bellwater gameplay recordings are separate, silent evidence.
+
+**Complete for refinement playtest.** Production build/typecheck and **92/92 unit checks** pass. Browser runs retain their original outcomes: **6 pass/6 fail**, corrected **5 pass/1 fail**, an erroneous one-tap instrumentation attempt **0/1**, then the corrected narrow-navigation check **1/1 pass**. All 12 selected scenarios have passing coverage across identified runs; no clean full-suite claim. The final genuine repeat touch interval was 112.2ms with one action and a closed dialog; the original failed pair's timing remains unknown. Actual UI captures complete both rescues, tide Undo and production First Crossing. See the [refinement review](reviews/refinement/REVIEW.md).
+
+Final gameplay evidence is pinned to runtime SHA-256 `f48aa67712f913a50af4d527e3936e9b568cbfac86ccddf13e79ab44ba0979f2`; the final 85-file [source snapshot](reviews/refinement/source-manifest.json) is `1e5b542046859a129b77fbd1bc21237b6b3d91e1d85e614910975c60c3d18bd1`. The [preservation audit](reviews/refinement/preservation-audit.json) confirms 19 protected files—level data, rules/history, paths, motion, score and dependencies—match the reviewed baseline. Field construction improves in matched measurements; rendering is mixed, with Holding idle p95 about 25% higher in the strict repeat. No overall smoothness claim. Fresh-clone dependency installation, physical devices, native GPU and audible judgment remain unverified. Normal commit/push and draft-PR handoff report the final Git identity separately; main is unchanged, with no merge or ready-for-review action.
+
+## Historical atmosphere handoff
+
+# Luminous water, unhurried crossings and musical atmosphere
 
 2026-10-22: Started clean on `m1-first-crossing` at reviewed `7346b91c23331b7c1e8ad4b147c8fa4006767a89`. Read the new parent NEXT_TASK and retained it in the checkout. This explicitly authorizes the atmosphere milestone beyond the original M1. Preserve the three accepted coves, canonical courses, gameplay and complete Undo; keep PR #1 draft and main unchanged. No code comments added.
 

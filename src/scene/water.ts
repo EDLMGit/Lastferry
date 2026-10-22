@@ -2,7 +2,7 @@ import * as T from 'three';
 import type { Level } from '../levels/level';
 import type { CanonicalPath } from './paths';
 import { shoreContour } from './shore';
-import { createSeabedField } from './seabed';
+import { createSeabedField, prepareContour } from './seabed';
 import { sceneLayout } from './layout';
 import { waterVertexShader, waterFragmentShader } from './water-shader';
 
@@ -39,7 +39,7 @@ export const waterPresets: Record<'luminous' | 'restrained', WaterTuning> = {
     sheenStrength: 0.9,
     depthStrength: 1.05,
     shallowContrast: 1,
-    distortion: 0.75,
+    distortion: 0.48,
     warmStrength: 0.28,
     warmWidth: 0.24,
     warmTail: 4.5,
@@ -64,25 +64,6 @@ export const waterPresets: Record<'luminous' | 'restrained', WaterTuning> = {
   },
 };
 
-const distance = (x: number, z: number, a: T.Vector2, b: T.Vector2) => {
-  const dx = b.x - a.x,
-    dz = b.y - a.y;
-  const t = T.MathUtils.clamp(
-    ((x - a.x) * dx + (z - a.y) * dz) / Math.max(1e-9, dx * dx + dz * dz),
-    0,
-    1,
-  );
-  return Math.hypot(x - a.x - dx * t, z - a.y - dz * t);
-};
-function inside(x: number, z: number, points: T.Vector2[]) {
-  let odd = false;
-  for (let i = 0, j = points.length - 1; i < points.length; j = i++) {
-    const a = points[i],
-      b = points[j];
-    if (a.y > z !== b.y > z && x < ((b.x - a.x) * (z - a.y)) / (b.y - a.y) + a.x) odd = !odd;
-  }
-  return odd;
-}
 export function coastalMask(level: Level, paths: Map<string, CanonicalPath>) {
   const bounds = new T.Box2();
   for (const island of level.world.islands)
@@ -91,7 +72,7 @@ export function coastalMask(level: Level, paths: Map<string, CanonicalPath>) {
     for (const p of path.points) bounds.expandByPoint(new T.Vector2(p.x, p.z));
   bounds.expandByScalar(4);
   const coasts = level.world.islands.map((island) => ({
-    points: shoreContour(island, 0.98),
+    contour: prepareContour(shoreContour(island, 0.98)),
     height: island.elevation * 0.18,
   }));
   const shallow = level.edges
@@ -103,6 +84,9 @@ export function coastalMask(level: Level, paths: Map<string, CanonicalPath>) {
       return points.slice(1).map((b, i) => ({
         a: new T.Vector2(points[i].x, points[i].z),
         b: new T.Vector2(b.x, b.z),
+        dx: b.x - points[i].x,
+        dz: b.z - points[i].z,
+        inverseLength: 1 / Math.max(1e-9, (b.x - points[i].x) ** 2 + (b.z - points[i].z) ** 2),
         strength: edge.baseDepth === 1 ? 1 : 0.5,
       }));
     });
@@ -118,20 +102,21 @@ export function coastalMask(level: Level, paths: Map<string, CanonicalPath>) {
         landHeight = 0,
         land = 0,
         nearestCoast = Number.POSITIVE_INFINITY;
+      const width = 1.2 + 0.3 * Math.sin(x * 0.73 - z * 0.91);
       for (const segment of shallow) {
-        const d = distance(x, z, segment.a, segment.b);
-        const width = 1.2 + 0.3 * Math.sin(x * 0.73 - z * 0.91);
-        bank = Math.max(bank, Math.exp(-(d * d) / (width * width)) * segment.strength);
+        const px = x - segment.a.x,
+          pz = z - segment.a.y;
+        const t = Math.max(
+          0,
+          Math.min(1, (px * segment.dx + pz * segment.dz) * segment.inverseLength),
+        );
+        const dx = px - segment.dx * t,
+          dz = pz - segment.dz * t;
+        bank = Math.max(bank, Math.exp(-(dx * dx + dz * dz) / (width * width)) * segment.strength);
       }
       for (const coast of coasts) {
-        const isLand = inside(x, z, coast.points);
-        let d = 100;
-        for (let k = 0; k < coast.points.length; k++)
-          d = Math.min(
-            d,
-            distance(x, z, coast.points[k], coast.points[(k + 1) % coast.points.length]),
-          );
-        shore = Math.max(shore, Math.exp(-(d * d) / 1.1));
+        const { distance: d, land: isLand } = coast.contour.sample(x, z);
+        shore = Math.max(shore, Math.exp(-(d * d) / 0.2));
         if (d < nearestCoast) {
           nearestCoast = d;
           landHeight = coast.height;
@@ -165,10 +150,7 @@ export class CoastalWater {
   constructor(level: Level, paths: Map<string, CanonicalPath>) {
     this.mask = coastalMask(level, paths);
     this.seabed = createSeabedField(level, this.mask.bounds);
-    const layout = sceneLayout(level.id),
-      light = layout.light,
-      lighthouse = layout.landmarks.find((landmark) => landmark.kind === 'lighthouse')!,
-      island = level.world.islands.find((island) => island.id === lighthouse.islandId)!;
+    const light = sceneLayout(level.id).light;
     const material = new T.ShaderMaterial({
       uniforms: {
         time: { value: 0 },
@@ -181,13 +163,7 @@ export class CoastalWater {
         sunDirection: { value: new T.Vector3(...(light?.sunPosition ?? [-8, 16, 7])).normalize() },
         skyColor: { value: new T.Color(light?.sky ?? '#fff1dc') },
         sunColor: { value: new T.Color(light?.sun ?? '#ffe0af') },
-        lampPosition: {
-          value: new T.Vector3(
-            lighthouse.positionXZ[0],
-            island.elevation * 0.18 + 2.6,
-            lighthouse.positionXZ[1],
-          ),
-        },
+        lampPosition: { value: new T.Vector3() },
         arrival: { value: 0 },
         sheenCenter: {
           value: level.id === 'bellwater' ? new T.Vector2(0.3, 2.8) : new T.Vector2(0.9, 2.2),

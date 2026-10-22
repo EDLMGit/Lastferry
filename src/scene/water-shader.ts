@@ -50,10 +50,10 @@ void main(){
 vec2 p=world.xz;
 vec4 coastData=texture2D(coast,clamp((p-field.xy)/field.zw,0.,1.));
 vec3 n=waveNormal(p);
-vec3 v=normalize(viewDirection);
+vec3 v=viewDirection;
 vec4 firstBed=bedAt(p);
 float initialDepth=clamp(waterY-bedHeight(firstBed),0.,3.);
-vec2 rayOffset=-v.xz/max(v.y,.25)*initialDepth*.68;
+vec2 rayOffset=-v.xz/max(v.y,.25)*min(initialDepth,.55)*.68;
 float contactFade=smoothstep(.025,.24,initialDepth);
 vec2 bedPoint=p+rayOffset+n.xz*distortion*contactFade*min(initialDepth,.9);
 vec4 bed=bedAt(bedPoint);
@@ -62,11 +62,10 @@ float thickness=depth/max(v.y,.3);
 vec3 transmission=exp(-vec3(2.3,1.08,.72)*thickness*absorption);
 float shallow=exp(-thickness*1.5);
 vec3 waterBody=mix(deepColor,shallowColor,shallow*.62);
-vec3 bedLight=bed.rgb*(.86+.16*max(dot(n,normalize(sunDirection)),0.));
-float detail=(sin(bedPoint.x*4.1+sin(bedPoint.y*2.2))*.5+.5)*(sin(bedPoint.y*3.6-bedPoint.x*.7)*.5+.5);
-bedLight*=1.+(detail-.4)*shallowContrast*.22;
+vec3 bedLight=bed.rgb*(.86+.16*max(dot(n,sunDirection),0.));
+bedLight=mix(vec3(dot(bedLight,vec3(.2126,.7152,.0722))),bedLight,shallowContrast);
 float caustic=pow(max(0.,sin(dot(bedPoint,vec2(3.2,1.4))+time*.29)*sin(dot(bedPoint,vec2(-1.6,2.6))-time*.21)),7.);
-bedLight+=sunColor*caustic*.025*exp(-thickness*3.)*smoothstep(.05,.3,depth);
+bedLight+=sunColor*caustic*.018*exp(-thickness*3.)*smoothstep(.05,.3,depth);
 vec3 color=waterBody*(1.-transmission*.68)+bedLight*transmission*depthStrength*.66;
 
 vec3 reflected=reflect(-v,n);

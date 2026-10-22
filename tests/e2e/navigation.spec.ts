@@ -90,7 +90,9 @@ for (const [label, width, height, touch] of [
     await expect(page.locator('#progress')).toHaveText('Home 0/3');
     await expect(page.locator('#boat-summary')).toHaveText('Depth 2 · 2/4 spaces');
     await expect(page.locator('#status-headline')).toHaveText('Rabbit Pier floods in 4 actions.');
-    await expect(page.locator('#map-harbor')).toHaveAccessibleName('Sail to Harbor');
+    await expect(page.locator('#map-harbor')).toHaveAccessibleName(
+      'Sail to Harbor; Home, delivery destination',
+    );
     await expect(page.locator('#map-stone')).toHaveAccessibleName('You are at Stone Pier');
     await expect(page.locator('#map-shallows')).toHaveAccessibleName(/^Sail to Shallows/);
     await expect(page.locator('#map-rabbit-pier')).toHaveAccessibleName(
@@ -185,6 +187,20 @@ for (const [label, width, height, touch] of [
     await dialogCycle(page);
     const oldClose = await page.locator('#cancel').boundingBox();
     if (touch) {
+      await page.evaluate(() => {
+        const runtime = window as any;
+        runtime.__closeClicks = [];
+        runtime.__traceCloseClick = (event: MouseEvent) => {
+          runtime.__closeClicks.push({
+            at: performance.now(),
+            trusted: event.isTrusted,
+            target: (event.target as HTMLElement).id,
+            x: event.clientX,
+            y: event.clientY,
+          });
+        };
+        window.addEventListener('click', runtime.__traceCloseClick, true);
+      });
       await page.touchscreen.tap(
         oldClose!.x + oldClose!.width / 2,
         oldClose!.y + oldClose!.height / 2,
@@ -193,6 +209,21 @@ for (const [label, width, height, touch] of [
         oldClose!.x + oldClose!.width / 2,
         oldClose!.y + oldClose!.height / 2,
       );
+      const clicks = await page.evaluate(() => {
+        const runtime = window as any;
+        window.removeEventListener('click', runtime.__traceCloseClick, true);
+        return runtime.__closeClicks as { at: number; trusted: boolean; target: string }[];
+      });
+      writeFileSync(
+        `${reviewDir}/${label}-cancel-clicks.json`,
+        JSON.stringify({ clicks, gapMs: clicks[1]?.at - clicks[0]?.at }, null, 2),
+      );
+      expect(clicks).toHaveLength(2);
+      expect(clicks.every((click) => click.trusted)).toBe(true);
+      expect(
+        clicks[1].at - clicks[0].at,
+        'The double-tap must exercise the 180ms fence',
+      ).toBeLessThanOrEqual(180);
     } else {
       await page.mouse.click(
         oldClose!.x + oldClose!.width / 2,

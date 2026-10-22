@@ -1,3 +1,4 @@
+import { occupiedPierDeadline } from '../game/rescue-facts';
 import { draft, edgeTo, pierAt, preview, type Action, type State } from '../game/rules';
 import { level as baseline, nodeName, passengerName, type Level } from '../levels/level';
 
@@ -101,15 +102,7 @@ export function statusCopy(
       detail: `${s.delivered.length} passengers delivered in ${countActions(s.turn)}.`,
       urgent: false,
     };
-  const threatened = l.piers
-    .flatMap((p) => {
-      const ids = (s.waitingByPier[p.id] ?? []).filter((id) =>
-        l.objective.requiredPassengerIds.includes(id),
-      );
-      const rise = l.rules.tide.rises.find((r) => r.afterTurn > s.turn && r.level >= p.elevation);
-      return ids.length && rise ? [{ pier: p, rise }] : [];
-    })
-    .sort((a, b) => a.rise.afterTurn - b.rise.afterTurn)[0];
+  const threatened = occupiedPierDeadline(s, l);
   const aboard = s.aboard.length
       ? `${passengerList(s.aboard, l)} ${verb(s.aboard, 'is', 'are')} safe aboard.`
       : '',

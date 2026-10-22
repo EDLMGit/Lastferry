@@ -1,4 +1,5 @@
 import * as T from 'three';
+import type { lighthouse } from './models';
 
 export class CrossingEffects {
   wake: T.Mesh;
@@ -7,11 +8,12 @@ export class CrossingEffects {
   emitting = false;
   arrivalStarted: number | null = null;
   arrivalIntensity = 0;
+  resting = false;
   lamp?: T.PointLight;
   lens?: T.MeshStandardMaterial;
   lampBase = 0;
   reduced = false;
-  constructor(lighthouse: T.Object3D) {
+  constructor(home: ReturnType<typeof lighthouse>) {
     const geometry = new T.BufferGeometry();
     geometry.setAttribute(
       'position',
@@ -69,25 +71,13 @@ export class CrossingEffects {
       }),
     );
     this.glow.name = 'harbor-lantern-response';
-    this.glow.position.copy(lighthouse.localToWorld(new T.Vector3(0, 2.6, 0)));
+    this.glow.position.copy(home.anchor.getWorldPosition(new T.Vector3()));
     this.glow.scale.set(1.8, 1.8, 1);
     this.glow.userData.excludeFromFrame = true;
-    this.glow.visible = false;
-    lighthouse.traverse((object) => {
-      if (object instanceof T.PointLight) {
-        this.lamp = object;
-        this.lampBase = object.intensity;
-      }
-      if (
-        object instanceof T.Mesh &&
-        object.material instanceof T.MeshStandardMaterial &&
-        object.material.color.getHexString() === 'f9cb70'
-      ) {
-        object.material = object.material.clone();
-        this.lens = object.material;
-        this.lens!.emissive.set('#ffd795');
-      }
-    });
+    this.lamp = home.lamp;
+    this.lampBase = home.lamp.intensity;
+    this.lens = home.lens.material as T.MeshStandardMaterial;
+    this.reset();
   }
   reset() {
     this.points.length = 0;
@@ -96,14 +86,28 @@ export class CrossingEffects {
     this.wake.visible = false;
     this.arrivalStarted = null;
     this.arrivalIntensity = 0;
-    this.glow.visible = false;
-    this.glow.material.opacity = 0;
+    this.resting = false;
+    this.glow.visible = true;
+    this.glow.material.opacity = 0.08;
     if (this.lamp) this.lamp.intensity = this.lampBase;
-    if (this.lens) this.lens.emissiveIntensity = 0;
+    if (this.lens) this.lens.emissiveIntensity = 0.42;
   }
   arrive(time: number, reduced: boolean) {
     if (this.arrivalStarted === null) this.arrivalStarted = time;
     this.reduced = reduced;
+  }
+  settle(reduced: boolean) {
+    this.reset();
+    this.resting = true;
+    this.reduced = reduced;
+    this.arrivalIntensity = reduced ? 0.45 : 0.27;
+    this.applyLight();
+  }
+  private applyLight() {
+    if (this.lamp) this.lamp.intensity = this.lampBase + this.arrivalIntensity * 2;
+    if (this.lens) this.lens.emissiveIntensity = 0.42 + this.arrivalIntensity;
+    this.glow.visible = true;
+    this.glow.material.opacity = 0.08 + this.arrivalIntensity * 0.26;
   }
   update(
     time: number,
@@ -168,10 +172,7 @@ export class CrossingEffects {
     if (this.arrivalStarted !== null) {
       const elapsed = Math.max(0, time - this.arrivalStarted);
       this.arrivalIntensity = reduced ? 0.45 : 0.27 + 0.55 * Math.exp(-elapsed / 1100);
-      if (this.lamp) this.lamp.intensity = this.lampBase + this.arrivalIntensity * 2;
-      if (this.lens) this.lens.emissiveIntensity = this.arrivalIntensity;
-      this.glow.visible = true;
-      this.glow.material.opacity = this.arrivalIntensity * 0.26;
+      this.applyLight();
     }
   }
   presentation() {
@@ -197,6 +198,7 @@ export class CrossingEffects {
       },
       arrival: {
         active: this.arrivalStarted !== null,
+        resting: this.resting,
         intensity: this.arrivalIntensity,
         lampIntensity: this.lamp?.intensity ?? null,
         emissiveIntensity: this.lens?.emissiveIntensity ?? null,

@@ -4,11 +4,53 @@ import { islandCenter, shoreContour, shoreTop } from './shore';
 
 export const seabedHeightRange = new T.Vector2(-2.2, 0.72);
 
-const hash = (x: number, z: number) => {
-  const value = Math.sin(x * 127.1 + z * 311.7) * 43758.5453;
-  return value - Math.floor(value);
-};
+export function prepareContour(points: T.Vector2[]) {
+  const segments = points.map((a, i) => {
+    const b = points[(i + 1) % points.length],
+      dx = b.x - a.x,
+      dz = b.y - a.y;
+    return {
+      x: a.x,
+      z: a.y,
+      dx,
+      dz,
+      inverseLength: 1 / Math.max(1e-9, dx * dx + dz * dz),
+      minX: Math.min(a.x, b.x),
+      maxX: Math.max(a.x, b.x),
+      minZ: Math.min(a.y, b.y),
+      maxZ: Math.max(a.y, b.y),
+    };
+  });
+  const bounds = new T.Box2().setFromPoints(points);
+  return {
+    bounds,
+    sample(x: number, z: number) {
+      let squared = Infinity,
+        land = false;
+      for (const s of segments) {
+        const px = x - s.x,
+          pz = z - s.z;
+        if (z >= s.minZ && z < s.maxZ && x < s.x + (s.dx * pz) / s.dz) land = !land;
+        const bx = Math.max(s.minX - x, 0, x - s.maxX),
+          bz = Math.max(s.minZ - z, 0, z - s.maxZ);
+        if (bx * bx + bz * bz >= squared) continue;
+        const t = Math.max(0, Math.min(1, (px * s.dx + pz * s.dz) * s.inverseLength));
+        const qx = px - s.dx * t,
+          qz = pz - s.dz * t;
+        squared = Math.min(squared, qx * qx + qz * qz);
+      }
+      return { distance: Math.sqrt(squared), land };
+    },
+  };
+}
+
 const blend = (value: number) => value * value * (3 - 2 * value);
+const smooth = T.MathUtils.smoothstep;
+const hash = (x: number, z: number) => {
+  let value = Math.imul(x, 374761393) + Math.imul(z, 668265263);
+  value = Math.imul(value ^ (value >>> 13), 1274126177);
+  return ((value ^ (value >>> 16)) >>> 0) / 4294967295;
+};
 function noise(x: number, z: number) {
   const ix = Math.floor(x),
     iz = Math.floor(z),
@@ -20,46 +62,55 @@ function noise(x: number, z: number) {
     fz,
   );
 }
-function segmentDistance(x: number, z: number, a: T.Vector2, b: T.Vector2) {
-  const dx = b.x - a.x,
-    dz = b.y - a.y;
-  const f = T.MathUtils.clamp(
-    ((x - a.x) * dx + (z - a.y) * dz) / Math.max(1e-9, dx * dx + dz * dz),
-    0,
-    1,
-  );
-  return Math.hypot(x - a.x - dx * f, z - a.y - dz * f);
-}
-function inside(x: number, z: number, points: T.Vector2[]) {
-  let odd = false;
-  for (let i = 0, j = points.length - 1; i < points.length; j = i++) {
-    const a = points[i],
-      b = points[j];
-    if (a.y > z !== b.y > z && x < ((b.x - a.x) * (z - a.y)) / (b.y - a.y) + a.x) odd = !odd;
-  }
-  return odd;
-}
 
 export function createSeabedField(level: Level, bounds: T.Vector4, size = 256) {
-  const coasts = level.world.islands.map((island) => ({
-    points: shoreContour(island, 0.98),
-    top: shoreTop(island),
-    center: islandCenter(island),
-  }));
-  const patches = coasts.flatMap(({ center }, i) => [
-    {
-      x: center.x + 0.7,
-      z: center.y + 2.2,
-      rx: 1.35,
-      rz: 0.64,
-      turn: -0.28 + i * 0.27,
-      rock: false,
-    },
-    { x: center.x - 1.2, z: center.y + 1.65, rx: 0.6, rz: 0.46, turn: 0.6 + i * 0.41, rock: true },
-  ]);
-  const sand = new T.Color('#c2bb95'),
-    ground = new T.Color('#81978b'),
-    stone = new T.Color('#60786f');
+  const coasts = level.world.islands.map((island, i) => {
+    const points = shoreContour(island, 0.98);
+    return {
+      points,
+      contour: prepareContour(points),
+      top: shoreTop(island),
+      center: islandCenter(island),
+      sandy: island.elevation === 1,
+      phase: i * 1.7,
+    };
+  });
+  const patches = coasts.flatMap((coast, i) => {
+    const front = coast.points.reduce((a, b) => (a.y > b.y ? a : b));
+    const side = coast.points.reduce((a, b) => (a.x > b.x ? a : b));
+    const placements = coast.sandy
+      ? [
+          { x: front.x - 0.48, z: front.y + 0.4, rx: 1.15, rz: 0.38, turn: -0.52, rock: false },
+          { x: side.x - 0.32, z: side.y + 0.28, rx: 0.72, rz: 0.34, turn: 0.65, rock: true },
+          {
+            x: coast.center.x - 0.45,
+            z: coast.center.y + 0.15,
+            rx: 0.8,
+            rz: 0.3,
+            turn: -0.3,
+            rock: true,
+          },
+        ]
+      : [
+          {
+            x: front.x + (i % 2 ? 0.45 : -0.5),
+            z: front.y + 0.35,
+            rx: 0.8,
+            rz: 0.29,
+            turn: i % 2 ? 0.35 : -0.48,
+            rock: i % 2 === 1,
+          },
+          { x: side.x + 0.18, z: side.y + 0.25, rx: 0.6, rz: 0.27, turn: 0.85, rock: true },
+        ];
+    return placements.map((patch) => ({
+      ...patch,
+      cosine: Math.cos(patch.turn),
+      sine: Math.sin(patch.turn),
+    }));
+  });
+  const sand = new T.Color('#c7bb91'),
+    ground = new T.Color('#7b9284'),
+    stone = new T.Color('#536b67');
   const color = new T.Color(),
     data = new Uint8Array(size * size * 4);
   let minimumHeight = Infinity,
@@ -67,47 +118,60 @@ export function createSeabedField(level: Level, bounds: T.Vector4, size = 256) {
   const sampleAuthored = (x: number, z: number) => {
     let height = seabedHeightRange.x,
       shoreDistance = Infinity,
-      landColor = 0;
+      landColor = 0,
+      groundStone = 0;
+    const broad = noise(x * 1.15, z * 1.15);
     for (const coast of coasts) {
-      let distance = Infinity;
-      for (let k = 0; k < coast.points.length; k++)
-        distance = Math.min(
-          distance,
-          segmentDistance(x, z, coast.points[k], coast.points[(k + 1) % coast.points.length]),
-        );
-      const land = inside(x, z, coast.points);
-      if (land) landColor = Math.max(landColor, T.MathUtils.smoothstep(distance, 0.08, 0.4) * 0.8);
+      const box = coast.contour.bounds;
+      if (x < box.min.x - 2.5 || x > box.max.x + 2.5 || z < box.min.y - 2.5 || z > box.max.y + 2.5)
+        continue;
+      const { distance, land } = coast.contour.sample(x, z);
       shoreDistance = Math.min(shoreDistance, distance);
+      const dx = x - coast.center.x,
+        dz = z - coast.center.y;
+      const pocket = smooth(dz - dx * 0.45, -0.3, 1.1);
+      const width = 0.1 + pocket * (coast.sandy ? 0.28 : 0.17) + broad * 0.1;
+      const outside = Math.max(0, distance - width);
       const candidate = land
-        ? T.MathUtils.lerp(-0.025, coast.top, T.MathUtils.smoothstep(distance, 0, 0.3))
-        : -0.025 - distance * 0.24 - distance * distance * 0.07;
+        ? T.MathUtils.lerp(-0.025, coast.top, smooth(distance, 0, 0.3))
+        : -0.025 - distance * 0.8 - outside * outside * 2;
       height = Math.max(height, candidate);
+      if (land) {
+        const interior = smooth(distance, 0.04, 0.3);
+        const sweep = smooth(dz + dx * 0.42 + (broad - 0.5) * 0.6, -0.45, 0.55);
+        landColor = Math.max(
+          landColor,
+          interior * (coast.sandy ? 0.36 + sweep * 0.58 : 0.18 + sweep * 0.4),
+        );
+        groundStone = Math.max(groundStone, interior * (1 - sweep) * (coast.sandy ? 0.28 : 0.48));
+      }
     }
     let sandForm = 0,
-      rockForm = 0;
+      rockForm = 0,
+      facet = 0;
     for (const patch of patches) {
       const dx = x - patch.x,
         dz = z - patch.z;
-      const qx = (Math.cos(patch.turn) * dx + Math.sin(patch.turn) * dz) / patch.rx;
-      const qz = (-Math.sin(patch.turn) * dx + Math.cos(patch.turn) * dz) / patch.rz;
-      const form = Math.exp(-((qx + Math.sin(qz * 2.7) * 0.18) ** 2 + qz * qz) * 1.8);
-      if (patch.rock) rockForm = Math.max(rockForm, form);
-      else sandForm = Math.max(sandForm, form);
+      if (Math.abs(dx) > patch.rx + patch.rz || Math.abs(dz) > patch.rx + patch.rz) continue;
+      const qx = (patch.cosine * dx + patch.sine * dz) / patch.rx;
+      const qz = (-patch.sine * dx + patch.cosine * dz) / patch.rz;
+      const edge = patch.rock
+        ? Math.max(Math.abs(qx) * 0.88 + Math.abs(qz) * 0.35, Math.abs(qz) + qx * 0.16)
+        : Math.abs(qz + qx * qx * 0.24) / Math.max(0.25, 0.85 - qx * 0.32) +
+          Math.pow(Math.abs(qx), 4) * 0.48;
+      const form = 1 - smooth(edge + (broad - 0.5) * 0.12, 0.7, 1.02);
+      if (patch.rock) {
+        rockForm = Math.max(rockForm, form);
+        facet = Math.max(facet, form * smooth(qz + qx * 0.45, -0.1, 0.15));
+      } else sandForm = Math.max(sandForm, form);
     }
-    const grain = noise(x * 2.5, z * 2.5);
-    if (height < -0.025)
-      height = Math.min(
-        -0.04,
-        height + sandForm * 0.065 + rockForm * 0.14 + (noise(x * 0.8, z * 0.8) - 0.5) * 0.025,
-      );
+    if (height < -0.025) height = Math.min(-0.04, height + sandForm * 0.13 + rockForm * 0.12);
     height = T.MathUtils.clamp(height, seabedHeightRange.x, seabedHeightRange.y);
-    const rockEdge = T.MathUtils.smoothstep(rockForm, 0.18, 0.8);
     color
       .copy(ground)
-      .lerp(sand, Math.max(landColor, sandForm * 0.88))
-      .lerp(stone, rockEdge * 0.88);
-    const shade = 0.84 + grain * 0.12 + sandForm * 0.1 + rockForm * 0.03;
-    color.multiplyScalar(shade);
+      .lerp(sand, Math.max(landColor, sandForm * 0.72))
+      .lerp(stone, Math.max(groundStone, rockForm * 0.92));
+    color.multiplyScalar(0.86 + broad * 0.16 + noise(x * 3, z * 3) * 0.025 + facet * 0.16);
     return {
       height,
       color: color.toArray() as [number, number, number],

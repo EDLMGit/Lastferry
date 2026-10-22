@@ -1,9 +1,10 @@
 import { expect, test } from 'vitest';
-import { NoColorSpace, OrthographicCamera, Vector3 } from 'three';
+import { NoColorSpace, OrthographicCamera, Vector2, Vector3 } from 'three';
 import { bellwater, holdingPier, level } from '../../src/levels/level';
 import { getLevelPaths } from '../../src/scene/paths';
 import { CoastalWater } from '../../src/scene/water';
 import { islandCenter } from '../../src/scene/shore';
+import { prepareContour } from '../../src/scene/seabed';
 
 test.each([level, holdingPier, bellwater])(
   '$id decorative seabed represents coast, apron and genuinely deep open water without changing authored data',
@@ -39,6 +40,15 @@ test('actual water level controls the transition from low ground to submerged gr
     bellwater.world.islands.find((island) => island.id === 'lighthouse-island')!,
   );
   const lowHeight = water.seabed.sampleAuthored(low.x, low.y).height;
+  const fields = [water.mask.texture.image.data, water.seabed.texture.image.data];
+  const snapshots = fields.map((field) => Array.from(field!));
+  const stone = water.seabed.patches.find((patch) => patch.rock && Math.abs(patch.x - low.x) < 1)!;
+  const stoneSample = water.seabed.sampleAuthored(stone.x, stone.z);
+  const sand = water.seabed.patches.find((patch) => !patch.rock && Math.abs(patch.x - low.x) < 2)!;
+  const sandSample = water.seabed.sampleAuthored(sand.x, sand.z);
+  expect(stoneSample.rockForm).toBeGreaterThan(0.8);
+  expect(sandSample.sandForm).toBeGreaterThan(0.8);
+  expect(stoneSample.color[0]).toBeLessThan(sandSample.color[0] * 0.65);
   const harborHeight = water.seabed.sampleAuthored(harbor.x, harbor.y).height;
   water.update(0, 5);
   expect(water.presentation().waterY - lowHeight).toBeLessThan(0);
@@ -49,6 +59,9 @@ test('actual water level controls the transition from low ground to submerged gr
   water.update(0, 0);
   expect(water.presentation().waterY - lowHeight).toBeLessThan(0);
   expect(water.presentation().time).toBe(0);
+  expect(water.mask.texture.image.data).toBe(fields[0]);
+  expect(water.seabed.texture.image.data).toBe(fields[1]);
+  expect(fields.map((field) => Array.from(field!))).toEqual(snapshots);
   water.dispose();
 });
 
@@ -87,4 +100,18 @@ test('water teardown releases each owned material, geometry and texture exactly 
   water.dispose();
   water.dispose();
   expect(counts).toEqual([1, 1, 1, 1]);
+});
+
+test('prepared contour preserves signed coast classification and exact corner/edge distances', () => {
+  const contour = prepareContour([
+    new Vector2(-2, -1),
+    new Vector2(2, -1),
+    new Vector2(2, 1),
+    new Vector2(-2, 1),
+  ]);
+  expect(contour.sample(0, 0)).toEqual({ land: true, distance: 1 });
+  expect(contour.sample(0, 1.3).land).toBe(false);
+  expect(contour.sample(0, 1.3).distance).toBeCloseTo(0.3);
+  expect(contour.sample(3, 2)).toEqual({ land: false, distance: Math.SQRT2 });
+  expect(contour.sample(-2, 0).distance).toBe(0);
 });

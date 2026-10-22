@@ -76,6 +76,10 @@ Honor reduced motion: disable bobbing and decorative loops, minimize travel and 
 
 ## Interface and M1 visual acceptance
 
+The refinement gives Harbor a persistent, steady lens and soft glow, plus an objective-derived “Home” marker inside its existing map label. Passage status remains independent of the destination role. The visible delivery response strengthens that same light, then settles; Undo and Restart restore its ordinary baseline.
+
+Selected hull surfaces and Harbor/vulnerable-pier piles use scoped materials that compare world-space height with the actual animated water level. Broad sandy, stony and subdued grass regions vary existing island vertex colors without changing silhouettes. Refined coastal shelves and connected sand/stone forms are decorative field samples, separate from authored passage depths. Native gameplay comparisons and any remaining visual limits are recorded in `reviews/refinement/REVIEW.md`.
+
 Use restrained, keyboard-accessible DOM controls for actions, undo, restart, and state explanations. Provide visible focus, accessible names, and touch targets of at least **44 × 44 CSS pixels**. Canvas targets need equivalent keyboard-operable controls. Show passenger load and tide through the canonical state, not decorative counters.
 
 M1 is visually complete when:
