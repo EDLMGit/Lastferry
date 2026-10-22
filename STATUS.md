@@ -1,4 +1,16 @@
-# Current milestone — Shallow detail, contact and a light for home
+# Current milestone — Selectable places and an open cove
+
+2026-10-22: Started clean on `m1-first-crossing` at reviewed `dea5fdd1ed8b017d5112085d4964bab3122ea44f`. Read AGENTS and the new parent NEXT_TASK, retained the new task in this checkout and inspected the prior native desktop/phone evidence. Preserve all three puzzles, water/contact, score/accompaniment, sailing pace and complete Undo. Main remains `386de54d20fdd4a513a06115471d70bf94738cc0`; PR #1 stays draft.
+
+Presentation pass complete for review: compact named selectors and one translucent nonmodal card, free mapped island/pier/landmark/ferry selection, explicit Sail, existing passenger/loss confirmation, stable full-canvas framing, rocky Stone styling and a visible scoped lantern. Natural focus/modal/Undo lifecycle and input protection are preserved. Actual comparison selected nearby card placement, lateral camera fit, shorter connector accents and a readable .66 background; no camera movement occurs during selection, sailing or tide changes.
+
+Build/typecheck pass;101/101 unit checks pass with unchanged final unit dependencies. Source-separated browser runs retain all failures. Both reproduced spatial-fence defects are fixed and measured regressions pass at92.1ms (next intentional Sail) and152.7ms (arrived Board), with repeated old-point taps consumed. Final normal/reduced lifecycle, phone844/780 ray/overlap checks,780 full Holding rescue and production First Crossing pass. One legacy reduced rapid-Confirm test remains failed/inconclusive because its final244.6ms interval misses the≤180ms precondition; independent reduced lifecycle Confirm59.6ms/Sail33.9ms pairs pass.
+
+Fresh actual UI captures complete: desktop Holding/Bellwater and Bellwater844/780 touch sessions all won, zero capture errors, unchanged runtime60617c88dec76b6232459953785cdb27890138cbbb33a9333a2ec05eb076c4d9. Native review covers22 fresh main PNGs,4 audited baseline images and2 narrow critical states; two uninterrupted silent gameplay videos remain local/ignored.31 protected contract files match the reviewed base. Desktop SwiftShader tails remain worse with increased canvas coverage; phones unchanged and a matched-canvas diagnostic is mixed. No physical-device/listening/full-browser-suite claim. See `reviews/selection/REVIEW.md`, `BROWSER_QA.md`, `SCENE_QA.md`, `MEDIA_QA.md` and `RENDERER_QA.md` for exact sources, actual outcomes and limits. Ready for the user's presentation playtest; stop at this milestone.
+
+## Historical shallow-detail handoff
+
+# Shallow detail, contact and a light for home
 
 2026-10-22: Started clean on `m1-first-crossing` at reviewed `31ad851a97907c8e86aa6f215b78b38caed7c48b`. Read AGENTS and the new parent NEXT_TASK, retained the task in this checkout, and preserved the accepted rules, three coves, score and sailing pace. PR #1 remains draft; main is unchanged. Baseline runtime is copied to an ignored isolated directory for matched evidence while implementation proceeds.
 

@@ -1,12 +1,17 @@
 import { test, expect, type Page } from '@playwright/test';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { reviewDir } from './evidence';
-import { act, ready, state, idle, undo, restart } from './ui';
+import { act, ready as baseReady, state, idle, undo, restart } from './ui';
 
 const environment = (page: Page) =>
   page.evaluate(() => (window as any).__LAST_FERRY__.getEnvironmentStatus());
 const journey = (page: Page) =>
   page.evaluate(() => (window as any).__LAST_FERRY__.getJourneyStatus());
+const homeBaselines = new WeakMap<Page, any>();
+async function ready(page: Page, cove: string) {
+  await baseReady(page, cove);
+  homeBaselines.set(page, (await environment(page)).arrival);
+}
 const holding = [
   'unload',
   'map-shallows',
@@ -115,25 +120,28 @@ async function stopSamples(page: Page) {
   });
 }
 async function arrivalIsVisible(page: Page, reduced: boolean) {
-  const view = await environment(page);
+  const view = await environment(page), base = homeBaselines.get(page);
+  expect(base).toBeDefined();
   expect(view.arrival.active).toBe(true);
   expect(view.arrival.intensity).toBeGreaterThan(0);
-  expect(view.arrival.lampIntensity).toBeGreaterThan(view.arrival.intensity);
-  expect(view.arrival.emissiveIntensity).toBeCloseTo(0.42 + view.arrival.intensity, 6);
+  expect(view.arrival.lampIntensity).toBeGreaterThan(base.lampIntensity);
+  expect(view.arrival.emissiveIntensity).toBeCloseTo(base.emissiveIntensity + view.arrival.intensity, 6);
   expect(view.arrival.glowVisible).toBe(true);
-  expect(view.arrival.glowOpacity).toBeGreaterThan(0);
+  expect(view.arrival.glowOpacity).toBeGreaterThan(base.glowOpacity);
   if (reduced) expect(view.arrival.intensity).toBe(0.45);
   return view;
 }
 async function effectsAreClear(page: Page) {
-  const view = await environment(page);
+  const view = await environment(page), base = homeBaselines.get(page);
+  expect(base).toBeDefined();
   expect(view.wake).toMatchObject({ emitting: false, visible: false, vertices: 0, points: [] });
   expect(view.arrival).toMatchObject({
     active: false,
     intensity: 0,
-    emissiveIntensity: 0.42,
+    emissiveIntensity: base.emissiveIntensity,
+    lampIntensity: base.lampIntensity,
     glowVisible: true,
-    glowOpacity: 0.08,
+    glowOpacity: base.glowOpacity,
   });
   expect(view.forecast.visible).toBe(false);
   expect(view.forecast.groups.filter((group: any) => group.visible)).toEqual([]);
@@ -156,11 +164,11 @@ test('environment: visible curved courses carry the ferry, tangent and fading wa
     await act(page, bellwater[i]);
     expect((await state(page)).turn).toBe(i + 1);
     if (i === 3 || i === 8) {
-      await page.locator(i === 3 ? '#inspect-west-buoy' : '#inspect-bell-pier').click();
+      await page.locator(i === 3 ? '#map-west-buoy' : '#map-bell-pier').click();
       const highlighted = await journey(page);
       for (const route of highlighted.routeBuffers)
         expect(route.pointsXYZ).toEqual(buffers.get(route.id).pointsXYZ);
-      await page.locator('#cancel').click();
+      await page.locator('#close-location').click();
     }
     if (i === 3) {
       expect((await environment(page)).wake.emitting).toBe(false);
@@ -271,10 +279,10 @@ test('environment: shores, free forecast and complete Undo follow both tide boun
     shores = (await environment(page)).shores;
   coastIsAtWater(await environment(page), 0);
   const ordinary = (await journey(page)).routeBuffers;
-  await page.locator('#inspect-shallows').click();
+  await page.locator('#map-shallows').click();
   expect((await journey(page)).routeBuffers).toEqual(ordinary);
   expect(await state(page)).toEqual(initial);
-  await page.locator('#cancel').click();
+  await page.locator('#close-location').click();
   await page.locator('#status-toggle').click();
   const preview = await environment(page);
   expect(await state(page)).toEqual(initial);
@@ -320,6 +328,7 @@ test('environment: interrupted travel, restart and changing cove clear transient
 }) => {
   await ready(page, 'bellwater');
   await page.locator('#map-west-buoy').click();
+  await page.locator('#sail').click();
   await page.waitForFunction(
     () => (window as any).__LAST_FERRY__.getJourneyStatus().active !== null,
   );
@@ -346,6 +355,7 @@ test('environment: interrupted travel, restart and changing cove clear transient
   await page.waitForFunction(() => (window as any).__LAST_FERRY__?.getEnvironmentStatus);
   await idle(page);
   expect(await state(page)).toMatchObject({ turn: 0, boatNodeId: 'stone', aboard: ['sheep-1'] });
+  homeBaselines.set(page, (await environment(page)).arrival);
   await effectsAreClear(page);
   coastIsAtWater(await environment(page), 0);
 });

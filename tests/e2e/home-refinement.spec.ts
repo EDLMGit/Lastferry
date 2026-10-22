@@ -14,6 +14,7 @@ import {
   tabTo,
   keyAct,
   dialogCycle,
+  selectPlace,
 } from './ui';
 
 const audio = (page: Page) => page.evaluate(() => (window as any).__LAST_FERRY__.getAudioStatus());
@@ -59,6 +60,8 @@ async function home(page: Page) {
 }
 
 async function clearCard(page: Page) {
+  if (!(await page.locator('#unload').isVisible()))
+    await page.locator('.map-target[aria-current="location"]').click();
   await fullyVisible(page, page.locator('#unload'));
   await readable(page.locator('#unload'));
   const overlap = await page.evaluate(() => {
@@ -101,9 +104,9 @@ for (const width of [844, 780])
     const initial = await state(page);
     await page.locator('#map-harbor').tap();
     expect(await state(page)).toEqual(initial);
-    await page.locator('#inspect-bell-pier').tap();
-    await expect(page.locator('#dialog')).toContainText('Bell Pier');
-    await page.locator('#cancel').tap();
+    await selectPlace(page, 'bell-pier', true);
+    await expect(page.locator('#local-context')).toContainText('Bell Pier');
+    await page.locator('#close-location').tap();
     expect(await state(page)).toEqual(initial);
     for (const id of bell.slice(0, 9)) {
       const before = await state(page);
@@ -112,7 +115,7 @@ for (const width of [844, 780])
       await home(page);
       if ((await state(page)).turn === 2)
         await expect(page.locator('#map-harbor')).toHaveAccessibleName(
-          'Harbor: no direct passage; Home, delivery destination',
+          /Select Harbor.*no direct passage.*Home, delivery destination/i,
         );
       if ((await state(page)).turn === 8) {
         expect(await audio(page)).toMatchObject({ desiredArrangement: 'homeward' });
@@ -124,9 +127,9 @@ for (const width of [844, 780])
     expect(await state(page)).toMatchObject({ boatNodeId: 'harbor', status: 'playing', turn: 9 });
     expect((await view(page)).arrival.active).toBe(false);
     await clearCard(page);
-    await page.locator('#inspect-bell-pier').tap();
-    await fullyVisible(page, page.locator('#cancel'));
-    await page.locator('#cancel').tap();
+    await selectPlace(page, 'bell-pier', true);
+    await fullyVisible(page, page.locator('#close-location'));
+    await page.locator('#close-location').tap();
     await act(page, 'unload', true);
     expect((await state(page)).status).toBe('won');
     expect((await view(page)).arrival.active).toBe(true);
@@ -148,11 +151,11 @@ test('home refinement: natural keyboard inspection, subset cancellation, boundar
   await ready(page, 'holding-pier');
   await home(page);
   const original = await state(page);
-  await tabTo(page, 'inspect-harbor');
+  await tabTo(page, 'map-harbor');
   await page.keyboard.press('Enter');
-  await dialogCycle(page);
+  await expect(page.locator('#local-heading')).toBeFocused();
   await page.keyboard.press('Escape');
-  await expect(page.locator('#inspect-harbor')).toBeFocused();
+  await expect(page.locator('#map-harbor')).toBeFocused();
   expect(await state(page)).toEqual(original);
   await keyAct(page, 'unload');
   expect(await audio(page)).toMatchObject({ desiredArrangement: 'ordinary' });
@@ -232,8 +235,8 @@ test('home refinement: actual adaptive runtime mix follows rescue, Undo and a lo
 }) => {
   mkdirSync(`${reviewDir}/raw`, { recursive: true });
   await ready(page, 'holding-pier');
-  await page.locator('#inspect-shallows').click();
-  await page.locator('#cancel').click();
+  await selectPlace(page, 'shallows');
+  await page.locator('#close-location').click();
   await page.waitForFunction(
     () => (window as any).__LAST_FERRY__.getAudioStatus().contextState === 'running',
   );

@@ -14,7 +14,6 @@ import {
   tabTo,
   fullyVisible,
   readable,
-  dialogCycle,
 } from './ui';
 
 const residents = ['tansy', 'lark', 'bram'];
@@ -43,10 +42,13 @@ async function readableMap(page: Page) {
     const button = page.locator(`#map-${id}`);
     await fullyVisible(page, button);
     await readable(button.locator('b'));
-    await readable(button.locator('.map-state'));
+    await expect(button).toHaveAttribute('aria-controls', 'local-context');
+    await expect(button).toHaveAttribute('aria-expanded', /^(true|false)$/);
   }
   for (const button of await page
-    .locator('.inspect-route, #local-actions button, #undo, #wait, #menu, #status-toggle')
+    .locator(
+      '#local-actions button:visible, #close-location:visible, #undo, #wait, #menu, #status-toggle',
+    )
     .all()) {
     await fullyVisible(page, button);
     await readable(button);
@@ -70,6 +72,10 @@ async function readableMap(page: Page) {
       ).toBe(true);
     }
   const frame = await page.evaluate(() => (window as any).__LAST_FERRY__.getFrameStatus());
+  expect(frame.envelope.left).toBeGreaterThanOrEqual(8);
+  expect(frame.envelope.top).toBeGreaterThanOrEqual(8);
+  expect(frame.envelope.right).toBeLessThanOrEqual(frame.canvas.width - 8);
+  expect(frame.envelope.bottom).toBeLessThanOrEqual(frame.canvas.height - 8);
   expect(frame.lighthouse.top).toBeGreaterThanOrEqual(8);
   expect(frame.lighthouse.bottom).toBeLessThan(frame.canvas.height - 8);
   expect(frame.bell).not.toBeNull();
@@ -172,11 +178,11 @@ test('Bellwater mouse: uninterrupted shallow outward, blocked return, deep retur
   }
   const blocked = await state(page),
     history = (await rendered(page)).historyLength;
-  await activate(page, 'inspect-shallows');
-  await expect(page.locator('.requirement')).toHaveText(
+  await activate(page, 'map-shallows');
+  await expect(page.locator('#local-context')).toContainText(
     'Boat needs depth 2. Passage has depth 1: too shallow.',
   );
-  await expect(page.locator('#commit')).toBeDisabled();
+  await expect(page.locator('#sail')).toBeDisabled();
   expect(await state(page)).toEqual(blocked);
   expect((await rendered(page)).historyLength).toBe(history);
   const highlight = await navigation(page);
@@ -187,7 +193,7 @@ test('Bellwater mouse: uninterrupted shallow outward, blocked return, deep retur
     'shallows',
   ]);
   await capture(page, 'desktop', 'blocked-return');
-  await activate(page, 'cancel');
+  await activate(page, 'close-location');
   for (const id of ['map-east-buoy', 'map-west-buoy', 'map-harbor', 'map-bell-pier']) {
     await act(page, id);
     trace.push(await state(page));
@@ -243,12 +249,14 @@ test('Bellwater natural keyboard: deep outward, shallow return, both tide Undo a
 }) => {
   await bellReady(page);
   const original = await state(page);
-  await tabTo(page, 'inspect-shallows');
+  await tabTo(page, 'map-shallows');
   await page.keyboard.press('Enter');
-  await dialogCycle(page);
+  await expect(page.locator('#local-heading')).toBeFocused();
+  await tabTo(page, 'sail');
+  await expect(page.locator('#sail')).toBeFocused();
+  await tabTo(page, 'close-location', true);
+  await expect(page.locator('#close-location')).toBeFocused();
   await page.keyboard.press('Escape');
-  await expect(page.locator('#inspect-shallows')).toBeFocused();
-  await page.keyboard.press('Shift+Tab');
   await expect(page.locator('#map-shallows')).toBeFocused();
   expect(await state(page)).toEqual(original);
   for (const id of outerOutward) await keyAct(page, id);
@@ -308,14 +316,15 @@ for (const width of [844, 780]) {
       label = `phone-${width}`;
     await capture(page, label, 'start');
     const initial = await state(page);
-    await activate(page, 'inspect-west-buoy', true);
-    await dialogCycle(page);
+    await activate(page, 'map-west-buoy', true);
+    await expect(page.locator('#local-context')).toBeVisible();
+    await fullyVisible(page, page.locator('#sail'));
     expect(await state(page)).toEqual(initial);
     const inspected = await navigation(page);
     expect(inspected.selectedDestination).toBe('west-buoy');
     expect(inspected.routes.filter((route: any) => route.highlighted)).toHaveLength(1);
     await page.keyboard.press('Escape');
-    await expect(page.locator('#inspect-west-buoy')).toBeFocused();
+    await expect(page.locator('#map-west-buoy')).toBeFocused();
     for (const id of outerOutward) await act(page, id, true);
     await readableMap(page);
     const beforeFirst = await state(page),
@@ -473,6 +482,7 @@ for (const plan of ['Bell Pier first', 'deep route both ways', 'early rabbit del
       beforeRender = await rendered(page);
     const lossTarget = plan === 'Bell Pier first' ? 'map-west-buoy' : 'map-bell-pier';
     await activate(page, lossTarget);
+    await activate(page, 'sail');
     await expect(page.locator('.consequence')).toContainText('This ends the crossing.');
     await expect(page.locator('.consequence')).toContainText(
       plan === 'Bell Pier first' ? 'Tansy and Lark' : 'Bram',

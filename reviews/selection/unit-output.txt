@@ -1,0 +1,40 @@
+
+> last-ferry@1.0.0 test:unit
+> vitest run --reporter=default --reporter=json --outputFile=reviews/selection/unit-results.json
+
+
+ RUN  v5.0.5 C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry
+
+stdout | tests/unit/holding-pier.test.ts > The Holding Pier uses the actual application reducer > exhaustive reachable states: shortest win nine, no win bypasses sheep holding at Stone
+{"experiment":"holding-pier","canonicalStates":154,"winningStates":1,"bypassWins":0,"shortestActions":9}
+
+ ✓ tests/unit/rules.test.ts (15 tests) 24ms
+ ✓ tests/unit/holding-pier.test.ts (3 tests) 25ms
+ ✓ tests/unit/presentation.test.ts (10 tests) 11ms
+ ✓ tests/unit/arrangement.test.ts (5 tests) 16ms
+ ✓ tests/unit/selection-placement.test.ts (2 tests) 4ms
+ ✓ tests/unit/transitions.test.ts (5 tests) 12ms
+ ✓ tests/unit/location.test.ts (6 tests) 10ms
+stdout | tests/unit/bellwater.test.ts > Bellwater Cove uses the production reducer > complete canonical reachability retains the route and pickup constraints
+{"cove":"bellwater","canonicalStates":403,"winningStates":4,"shortestActions":10,"noShallowWins":0,"bellFirstWins":0,"earlyDeliveryWins":0,"noWaitWins":2,"waitedWins":2,"method":"Production reducer and legalActions, sorted passenger identities and pier keys, turn capped only after the final rise, monotonic path-history flags, no search horizon."}
+
+ ✓ tests/unit/bellwater.test.ts (15 tests) 87ms
+ ✓ tests/unit/contact.test.ts (3 tests) 64ms
+ ✓ tests/unit/audio.test.ts (11 tests) 126ms
+ ✓ tests/unit/paths.test.ts (13 tests) 481ms
+ ✓ tests/unit/water.test.ts (7 tests) 938ms
+ ✓ tests/unit/clearance.test.ts (6 tests) 1103ms
+   ✓ first-crossing: actual modeled ferry footprint clears all land and pier decks along both directions and yaw turns 438ms
+   ✓ bellwater: actual modeled ferry footprint clears all land and pier decks along both directions and yaw turns 434ms
+
+ Test Files  13 passed (13)
+      Tests  101 passed (101)
+   Start at  19:21:54
+   Duration  1.49s (tests 67%, transform 17%, import 14%, worker 2%)
+
+JSON report written to C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/reviews/selection/unit-results.json
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

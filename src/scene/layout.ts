@@ -36,10 +36,11 @@ const layouts: Record<string, SceneLayout> = {
       { kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-6.15, -3.25] },
       { kind: 'cottage', islandId: 'rabbit-island', positionXZ: [6.3, -3.25] },
     ],
-    islandStyles: {},
+    islandStyles: { 'stone-island': 'rocky' },
     stonePiers: ['stone-pier'],
     centeredWaitingPairs: true,
     cameraPosition: [0, 34, 24],
+    landscapeCameraPosition: [0, 30, 30],
   },
   bellwater: {
     landmarks: [

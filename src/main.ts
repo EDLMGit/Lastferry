@@ -30,7 +30,8 @@ import {
   type TransitionPlan,
 } from './scene/transitions';
 import { waterPresets, type WaterTuning } from './scene/water';
-import { placeLocalCard } from './ui/placement';
+import { placeLocalCard, overlaps, type Rectangle } from './ui/placement';
+import { locationFacts } from './ui/location';
 
 const cove = new URLSearchParams(location.search).get('cove');
 const level = cove === 'first-crossing' ? baseline : cove === 'bellwater' ? bellwater : holdingPier;
@@ -40,7 +41,7 @@ const { nodeNames, passengerNames } = levelNames(level);
 const homeNodeId = level.piers.find((pier) => pier.id === level.objective.deliveryPierId)!.nodeId;
 const title = level.id === baseline.id ? 'The First Crossing' : level.title;
 const app = document.querySelector<HTMLDivElement>('#app')!;
-app.innerHTML = `<main class="game ${experiment ? 'holding' : isBellwater ? 'bellwater' : 'baseline'}"><section id="seascape" aria-label="${level.title}" aria-busy="false"><div id="world"></div><header class="hud"><div class="identity"><h1>${title}</h1><p id="objective"></p></div><div id="readout" aria-label="Crossing progress"></div><nav class="tools" aria-label="Crossing controls"><button id="undo">↶ Undo</button><button id="wait">Wait <span>· 1 action</span></button><button id="menu">Menu</button><button id="sound-toggle" aria-label="Mute sound" aria-pressed="false">♫</button></nav></header><nav id="map-labels" aria-label="Map stops"></nav><section id="local-context" aria-labelledby="local-heading"></section><button id="status-toggle" aria-haspopup="dialog" aria-label="Open tide and pier forecast"></button><p id="transition-status" role="status" tabindex="-1" hidden>Finishing this action…</p><p class="portrait-note">Turn sideways for a wider view.</p></section><div id="announcement" class="sr-only" role="status" aria-live="polite"></div></main><dialog id="dialog" aria-labelledby="dialog-title"><div id="dialog-content"></div></dialog>`;
+app.innerHTML = `<main class="game ${experiment ? 'holding' : isBellwater ? 'bellwater' : 'baseline'}"><section id="seascape" aria-label="${level.title}" aria-busy="false"><div id="world"></div><header class="hud"><div class="identity"><h1>${title}</h1><p id="objective"></p></div><div id="readout" aria-label="Crossing progress"></div><nav class="tools" aria-label="Crossing controls"><button id="undo">↶ Undo</button><button id="wait">Wait <span>· 1 action</span></button><button id="menu">Menu</button><button id="sound-toggle" aria-label="Mute sound" aria-pressed="false">♫</button></nav></header><nav id="map-labels" aria-label="Map stops"></nav><section id="local-context" role="region" aria-labelledby="local-heading" hidden></section><p id="selection-hint">Select a place to see its options.</p><svg id="selection-leader" aria-hidden="true"></svg><button id="status-toggle" aria-haspopup="dialog" aria-label="Open tide and pier forecast"></button><p id="transition-status" role="status" tabindex="-1" hidden>Finishing this action…</p><p class="portrait-note">Turn sideways for a wider view.</p></section><div id="announcement" class="sr-only" role="status" aria-live="polite"></div></main><dialog id="dialog" aria-labelledby="dialog-title"><div id="dialog-content"></div></dialog>`;
 const $ = (id: string) => document.getElementById(id)!;
 const session = new Session(level),
   sound = new Sound(),
@@ -52,8 +53,21 @@ let mode: DialogMode | null = null,
   selected: Action | null = null,
   returnId = '',
   keyboardInput = false;
+let locationSelection: string | null = null;
+let emphasis: string | undefined;
+let selectionOrigin: { x: number; y: number } | null = null;
+let actionOrigin: { x: number; y: number } | null = null;
+let lastPointer: { x: number; y: number; control: Element | null } | null = null;
+let cardPlacement: Rectangle | null = null;
+let protectedBounds: Rectangle[] = [];
 let fallback: ReturnType<typeof setTimeout> | undefined;
-let closingFence: { rect: DOMRect; until: number; x: number; y: number } | null = null;
+let closingFence: {
+  rect: DOMRect;
+  until: number;
+  x: number;
+  y: number;
+  scope: 'commit' | 'dismiss';
+} | null = null;
 let transitionSerial = 0;
 let activeTransition: {
   id: number;
@@ -92,13 +106,16 @@ function toggleSound() {
 }
 
 function available(preferred?: string) {
-  const target = (preferred ? $(preferred) : null) as HTMLButtonElement | null;
-  if (target && !target.disabled && target.getClientRects().length) return target;
-  return (
-    document.querySelector<HTMLButtonElement>(
-      '#local-context button:not(:disabled), .map-stop[data-adjacent="true"] .map-target:not(:disabled)',
-    ) ?? $('menu')
-  );
+  const target = preferred ? $(preferred) : null;
+  if (
+    target &&
+    !(target as HTMLButtonElement).disabled &&
+    target.getClientRects().length &&
+    !target.closest('[inert]')
+  )
+    return target;
+  if (locationSelection && !$('local-context').hidden) return $('local-heading');
+  return $(`map-${session.state.boatNodeId}`) ?? $('menu');
 }
 function focusAvailable(preferred?: string) {
   available(preferred).focus({ preventScroll: true });
@@ -107,10 +124,10 @@ function blocked() {
   return session.busy || dialog.open;
 }
 function highlight(id?: string) {
-  const to = id && edgeTo(session.state, id, level) ? id : undefined;
-  world.indicate(session.state, to);
+  emphasis = id;
+  world.indicate(session.state, locationSelection ?? undefined, id);
   for (const target of document.querySelectorAll<HTMLElement>('[data-destination]'))
-    target.classList.toggle('highlighted', target.dataset.destination === to);
+    target.classList.toggle('highlighted', target.dataset.destination === id);
 }
 function restoreHighlight() {
   if (dialog.open) highlight(selected?.type === 'move' ? selected.to : undefined);
@@ -119,6 +136,7 @@ function restoreHighlight() {
 function closeDialog(restore = true, fence = false) {
   if (fence && !keyboardInput && $('cancel'))
     closingFence = {
+      scope: 'dismiss',
       rect: $('cancel').getBoundingClientRect(),
       until: performance.now() + 180,
       x: 0,
@@ -128,6 +146,8 @@ function closeDialog(restore = true, fence = false) {
   mode = null;
   selected = null;
   world.setForecast(false, session.state.tideLevel);
+  renderLocation();
+  positionMap();
   if (restore) focusAvailable(returnId);
   restoreHighlight();
 }
@@ -139,6 +159,7 @@ function openDialog(next: DialogMode, action?: Action, trigger?: string) {
   selected = action ?? null;
   renderDialog();
   dialog.showModal();
+  $('local-context').inert = true;
   (next === 'terminal' ? $('terminal-undo') : $('cancel')).focus();
   positionDialog();
   restoreHighlight();
@@ -178,6 +199,7 @@ function renderDialog() {
       if (mode === 'action' && selected && !session.busy) {
         if (e.isTrusted && e.detail > 0)
           closingFence = {
+            scope: 'commit',
             rect: $('commit').getBoundingClientRect(),
             until: performance.now() + 180,
             x: e.clientX,
@@ -197,7 +219,7 @@ function renderDialog() {
   } else if (mode === 'menu') {
     const sheep = level.passengers.find((p) => p.species === 'sheep')!;
     $('dialog-content').innerHTML =
-      `${header('Crossing menu')}<div class="dialog-body menu-body"><div class="menu-actions"><button id="restart">Restart crossing</button><button id="sound" aria-pressed="${sound.muted}" aria-label="${sound.muted ? 'Unmute sound' : 'Mute sound'}">Sound ${sound.muted ? 'off' : 'on'}</button></div><label class="cove-picker">Choose cove<select id="cove-picker">${[baseline, holdingPier, bellwater].map((l) => `<option value="${l.id}" ${l.id === level.id ? 'selected' : ''}>${l.title}${l.id === baseline.id ? ' · baseline' : ''}</option>`).join('')}</select></label><details id="help-details"><summary>How to play · actions and depth</summary><p>${actionCostCopy(level)}</p><p>Use a named destination to sail one passage. Its separate Inspect button is free. Board or let passengers ashore at the current pier; select their names in the card, then confirm.</p><p>Boat depth needed: empty = 1; 1–2 spaces = 2; 3–4 spaces = 3. Each rabbit uses 1 space; ${passengerList([sheep.id], level)} uses ${sheep.slots}. A passage must be at least as deep as the boat needs.</p><p>Boarding and unloading happen before the tide rises. Use the status button for the tide and pier forecast. Undo earlier actions or restart to recover from a losing plan.</p><p>Tab and Shift+Tab move between controls; Enter or Space activates them. Escape closes a card.</p></details></div>`;
+      `${header('Crossing menu')}<div class="dialog-body menu-body"><div class="menu-actions"><button id="restart">Restart crossing</button><button id="sound" aria-pressed="${sound.muted}" aria-label="${sound.muted ? 'Unmute sound' : 'Mute sound'}">Sound ${sound.muted ? 'off' : 'on'}</button></div><label class="cove-picker">Choose cove<select id="cove-picker">${[baseline, holdingPier, bellwater].map((l) => `<option value="${l.id}" ${l.id === level.id ? 'selected' : ''}>${l.title}${l.id === baseline.id ? ' · baseline' : ''}</option>`).join('')}</select></label><details id="help-details"><summary>How to play · actions and depth</summary><p>${actionCostCopy(level)}</p><p>Select a named place, island, pier or landmark to see its options for free. Choose Sail to travel one passage. Select the ferry for its current place. Passenger actions open a subset preview; choose names, then Confirm.</p><p>Boat depth needed: empty = 1; 1–2 spaces = 2; 3–4 spaces = 3. Each rabbit uses 1 space; ${passengerList([sheep.id], level)} uses ${sheep.slots}. A passage must be at least as deep as the boat needs.</p><p>Boarding and unloading happen before the tide rises. Use the status button for the tide and pier forecast. Undo earlier actions or restart to recover from a losing plan.</p><p>Tab and Shift+Tab move between controls; Enter or Space activates them. Escape closes a dialog first; press it again to close the location card. Selection never spends an action.</p></details></div>`;
     $('restart').onclick = restart;
     $('sound').onclick = toggleSound;
     ($('cove-picker') as HTMLSelectElement).onchange = (e) => {
@@ -250,7 +272,10 @@ function execute(action: Action) {
   if (session.busy) return;
   const transaction = session.commit(copy(action));
   if (!transaction) return;
+  actionOrigin = !keyboardInput && lastPointer ? { x: lastPointer.x, y: lastPointer.y } : null;
   sound.reconcileState(transaction.after, level, true);
+  if (action.type === 'move') locationSelection = action.to;
+  emphasis = undefined;
   const plan = world.plan(transaction.before, transaction.after, action);
   const id = ++transitionSerial;
   activeTransition = { id, action: copy(action), plan, startedAt: performance.now() };
@@ -283,43 +308,53 @@ function execute(action: Action) {
     }
   }
 }
-function localContext() {
-  if (blocked() || session.state.status !== 'playing') return;
-  const local = document.querySelector<HTMLButtonElement>('#local-context button');
-  if (local) {
-    local.focus();
-    $('local-context').classList.remove('attention');
-    requestAnimationFrame(() => $('local-context').classList.add('attention'));
-    $('announcement').textContent =
-      `You are at ${nodeNames[session.state.boatNodeId]}. Passenger actions are here.`;
-  } else {
-    focusAvailable();
-    $('announcement').textContent =
-      `You are at ${nodeNames[session.state.boatNodeId]}. Choose an adjacent passage.`;
-  }
+function clearLocation(restore = false) {
+  if (blocked()) return;
+  const previous = locationSelection;
+  locationSelection = null;
+  selectionOrigin = null;
+  actionOrigin = null;
+  renderMap();
+  renderLocation();
+  positionMap();
+  highlight();
+  if (restore || $('local-context').contains(document.activeElement))
+    focusAvailable(previous ? `map-${previous}` : undefined);
 }
-function activateMove(to: string) {
-  if (blocked() || session.state.status !== 'playing') return;
-  if (to === session.state.boatNodeId) {
-    localContext();
+function selectLocation(id: string) {
+  if (
+    blocked() ||
+    session.state.status !== 'playing' ||
+    !level.nodes.some((node) => node.id === id)
+  )
     return;
+  closingFence = null;
+  actionOrigin = null;
+  if (locationSelection !== id) {
+    locationSelection = id;
+    selectionOrigin = !keyboardInput && lastPointer ? { x: lastPointer.x, y: lastPointer.y } : null;
+    renderMap();
+    renderLocation();
+    positionMap();
   }
-  const a: Action = { type: 'move', to },
-    proposed = preview(session.state, a, level);
-  if (!proposed.error && proposed.state.status !== 'lost') {
-    returnId = `map-${to}`;
-    execute(a);
-  } else openDialog('action', a, `map-${to}`);
+  highlight();
+  $('local-heading').focus({ preventScroll: true });
+  $('announcement').textContent = `${nodeNames[id]} selected. Inspection is free.`;
 }
-function bindTarget(button: HTMLElement, id: string, inspect = false) {
-  button.onclick = () =>
-    inspect ? openDialog('action', { type: 'move', to: id }, button.id) : activateMove(id);
+function localContext() {
+  selectLocation(session.state.boatNodeId);
+}
+function bindTarget(button: HTMLElement, id: string) {
+  button.onclick = (event) => {
+    event.stopPropagation();
+    selectLocation(id);
+  };
   button.onpointerenter = () => {
-    if (!dialog.open) highlight(id);
+    if (!blocked()) highlight(id);
   };
   button.onpointerleave = restoreHighlight;
   button.onfocus = () => {
-    if (!dialog.open) highlight(id);
+    if (!blocked()) highlight(id);
   };
   button.onblur = restoreHighlight;
 }
@@ -329,34 +364,97 @@ function renderMap() {
     '<svg id="map-leaders" aria-hidden="true"></svg>' +
     level.nodes
       .map((n) => {
-        const edge = edgeTo(s, n.id, level),
-          current = n.id === s.boatNodeId;
-        const status = current
+        const facts = locationFacts(s, n.id, level);
+        const status = facts.current
           ? 'current'
-          : !edge
+          : facts.relation === 'remote'
             ? 'nonadjacent'
-            : edge.baseDepth + s.tideLevel < draft(s, level)
+            : facts.status === 'too-shallow'
               ? 'too-shallow'
               : 'available';
-        const loses =
-          status === 'available' &&
-          preview(s, { type: 'move', to: n.id }, level).state.status === 'lost';
-        const home = n.id === homeNodeId;
-        const label =
-          (current
-            ? `You are at ${nodeNames[n.id]}`
-            : !edge
-              ? `${nodeNames[n.id]}: no direct passage`
-              : `Sail to ${nodeNames[n.id]}${loses ? '; flood warning' : status === 'too-shallow' ? '; too shallow' : ''}`) +
-          (home ? '; Home, delivery destination' : '');
-        const disabled = session.busy || s.status !== 'playing' ? 'disabled' : '';
-        return `<div id="stop-${n.id}" class="map-stop" data-adjacent="${!!edge}"><button id="map-${n.id}" class="map-target" data-status="${status}" data-risk="${loses ? 'loss' : 'safe'}" data-destination="${n.id}" ${current ? 'aria-current="location"' : ''} aria-label="${label}" title="${passageCopy(s, n.id, level)}" ${disabled}><span class="map-symbol" aria-hidden="true">${current ? '●' : !edge ? '◇' : status === 'too-shallow' ? '⊘' : loses ? '!' : '○'}</span><span><b>${current || !edge ? nodeNames[n.id] : `Sail to ${nodeNames[n.id]}`}${home ? ' · Home' : ''}</b><span class="map-state">${current ? 'You are here' : !edge ? 'No direct passage' : status === 'too-shallow' ? 'Too shallow' : loses ? 'Flood warning' : '1 action'}</span></span></button>${edge ? `<button id="inspect-${n.id}" class="inspect-route" data-destination="${n.id}" aria-label="Inspect passage to ${nodeNames[n.id]} for free" ${disabled}>Inspect</button>` : ''}</div>`;
+        const description = facts.current
+          ? 'current location'
+          : facts.relation === 'remote'
+            ? 'no direct passage'
+            : facts.status === 'too-shallow'
+              ? 'adjacent, too shallow'
+              : facts.wouldLose
+                ? 'adjacent, flood warning'
+                : 'adjacent passage available';
+        return `<div id="stop-${n.id}" class="map-stop" data-adjacent="${facts.relation === 'adjacent'}"><button id="map-${n.id}" class="map-target" data-status="${status}" data-risk="${facts.wouldLose ? 'loss' : 'safe'}" data-destination="${n.id}" aria-expanded="${locationSelection === n.id}" aria-controls="local-context" ${facts.current ? 'aria-current="location"' : ''} aria-label="Select ${facts.name}; ${description}${facts.home ? '; Home, delivery destination' : ''}" title="${description}" ${session.busy || s.status !== 'playing' ? 'disabled' : ''}><span class="map-symbol" aria-hidden="true">${facts.current ? '◉' : facts.relation === 'remote' ? '◇' : facts.status === 'too-shallow' ? '⊘' : facts.wouldLose ? '!' : '○'}</span><b>${facts.name}${facts.home ? ' · Home' : ''}</b></button></div>`;
       })
       .join('');
-  for (const n of level.nodes) {
-    bindTarget($(`map-${n.id}`), n.id);
-    if ($(`inspect-${n.id}`)) bindTarget($(`inspect-${n.id}`), n.id, true);
+  for (const node of level.nodes) bindTarget($(`map-${node.id}`), node.id);
+}
+function renderLocation() {
+  const card = $('local-context');
+  const visible = !!locationSelection && !session.busy && session.state.status === 'playing';
+  card.hidden = !visible;
+  card.inert = dialog.open || session.busy;
+  $('selection-hint').hidden =
+    !!locationSelection || session.busy || session.state.status !== 'playing';
+  if (!visible) {
+    $('selection-leader').innerHTML = '';
+    return;
   }
+  const facts = locationFacts(session.state, locationSelection!, level);
+  card.dataset.location = facts.id;
+  card.dataset.status = facts.status;
+  const paragraph = (text: string, className = '') =>
+    text ? `<p class="${className}">${text}</p>` : '';
+  const details = facts.wouldLose
+    ? paragraph(facts.consequence, 'location-warning') + paragraph(facts.passage, 'requirement')
+    : facts.current
+      ? paragraph(facts.aboardCopy) +
+        paragraph(facts.waiting.length ? facts.waitingCopy : '') +
+        paragraph(facts.safety) +
+        paragraph(facts.transferNote)
+      : paragraph(facts.passage, 'requirement') +
+        paragraph(facts.limitation && !facts.passage ? facts.limitation : '') +
+        paragraph(facts.waiting.length ? facts.waitingCopy : '') +
+        paragraph(facts.safety) +
+        paragraph(facts.consequence, facts.wouldLose ? 'location-warning' : '');
+  const actions = facts.current
+    ? (facts.board ? `<button id="board">${facts.boardLabel}</button>` : '') +
+      (facts.unload ? `<button id="unload">${facts.unloadLabel}</button>` : '')
+    : facts.move
+      ? `<button id="sail" data-risk="${facts.wouldLose ? 'loss' : 'safe'}" ${facts.canSail ? '' : 'disabled'}>Sail · 1 action</button>`
+      : '';
+  card.innerHTML = `<header class="location-head"><div><p class="location-role">${facts.current ? 'You are here' : facts.home ? 'Home · delivery destination' : facts.relation === 'remote' ? 'Free inspection' : facts.wouldLose ? 'Flood warning' : 'Direct passage'}</p><h2 id="local-heading" tabindex="-1">${facts.name}${facts.home && facts.current ? ' · Home' : ''}</h2></div><button id="close-location" aria-label="Close location card">×</button></header><div id="location-facts">${details}</div>${actions ? `<footer id="local-actions">${actions}</footer>` : ''}`;
+  $('close-location').onclick = (event) => {
+    event.stopPropagation();
+    if (!keyboardInput)
+      closingFence = {
+        scope: 'dismiss',
+        rect: $('close-location').getBoundingClientRect(),
+        until: performance.now() + 180,
+        x: event.clientX,
+        y: event.clientY,
+      };
+    clearLocation(true);
+  };
+  if ($('board'))
+    $('board').onclick = () =>
+      openDialog('action', { type: 'board', passengerIds: [...facts.boardOptions] }, 'board');
+  if ($('unload')) $('unload').onclick = () => openDialog('action', facts.unload!, 'unload');
+  if ($('sail'))
+    $('sail').onclick = (event) => {
+      event.stopPropagation();
+      if (blocked() || !facts.move || !facts.canSail) return;
+      if (facts.wouldLose) openDialog('action', facts.move, 'sail');
+      else {
+        if (!keyboardInput)
+          closingFence = {
+            scope: 'commit',
+            rect: $('sail').getBoundingClientRect(),
+            until: performance.now() + 180,
+            x: event.clientX,
+            y: event.clientY,
+          };
+        returnId = 'local-heading';
+        execute(facts.move);
+      }
+    };
 }
 function render() {
   const s = session.state,
@@ -370,26 +468,7 @@ function render() {
     `<span class="status-symbol" aria-hidden="true">${facts.urgent ? '!' : '≈'}</span><span><strong id="status-headline">${facts.headline}</strong>${facts.detail ? `<span id="status-detail">${facts.detail}</span>` : '<span id="status-detail"></span>'}</span><span class="forecast-label">Forecast</span>`;
   $('status-toggle').classList.toggle('urgent', facts.urgent);
   $('status-toggle').onclick = () => openDialog('forecast', undefined, 'status-toggle');
-  const dry = p && s.tideLevel < p.elevation;
-  const boarding = dry && s.status === 'playing' ? s.waitingByPier[p.id] : [],
-    unloading = dry && s.status === 'playing' ? s.aboard : [];
-  const local = (type: 'board' | 'unload', ids: string[]) => {
-    const label =
-      type === 'unload' && p!.isDeliveryPier
-        ? 'Bring passengers home'
-        : actionLabel(s, { type, passengerIds: ids }, level);
-    return `<button id="${type}" ${session.busy ? 'disabled' : ''}>${label}</button>`;
-  };
-  $('local-context').innerHTML =
-    `<h2 id="local-heading">${nodeNames[s.boatNodeId]}</h2><div id="local-actions">${boarding.length ? local('board', boarding) : ''}${unloading.length ? local('unload', unloading) : ''}${!boarding.length && !unloading.length ? `<p>${p && !dry ? 'Pier flooded · ferry can leave' : p ? 'No passengers to transfer' : 'Choose the next passage'}</p>` : ''}</div>`;
-  $('local-context').classList.toggle('no-transfer', !boarding.length && !unloading.length);
-  $('local-context').hidden = session.busy && activeTransition?.action.type === 'move';
-  if ($('board'))
-    $('board').onclick = () =>
-      openDialog('action', { type: 'board', passengerIds: [...boarding] }, 'board');
-  if ($('unload'))
-    $('unload').onclick = () =>
-      openDialog('action', { type: 'unload', passengerIds: [...unloading] }, 'unload');
+  renderLocation();
   ($('undo') as HTMLButtonElement).disabled = session.busy || !session.history.length;
   ($('wait') as HTMLButtonElement).disabled = session.busy || s.status !== 'playing';
   ($('menu') as HTMLButtonElement).disabled = session.busy;
@@ -409,12 +488,15 @@ function render() {
   $('seascape').setAttribute('aria-busy', String(session.busy));
   renderMap();
   positionMap();
-  highlight();
+  restoreHighlight();
 }
 function undo() {
   if (session.busy) return;
   if (dialog.open) closeDialog(false);
   if (session.undo()) {
+    locationSelection = null;
+    selectionOrigin = null;
+    actionOrigin = null;
     sound.resetActionEffects();
     sound.reconcileState(session.state, level);
     world.sync(session.state);
@@ -427,6 +509,9 @@ function restart() {
   if (session.busy) return;
   if (dialog.open) closeDialog(false);
   if (session.restart()) {
+    locationSelection = null;
+    selectionOrigin = null;
+    actionOrigin = null;
     sound.resetActionEffects();
     sound.reconcileState(session.state, level);
     world.sync(session.state);
@@ -442,163 +527,142 @@ function positionDialog() {
 }
 function positionMap() {
   const host = world.host,
-    small = matchMedia('(max-height: 600px) and (min-width: 701px)').matches;
+    canvas = host.getBoundingClientRect();
+  const frame = world.frameStatus();
+  const atPage = (r: Rectangle): Rectangle => ({
+    left: r.left + canvas.left,
+    right: r.right + canvas.left,
+    top: r.top + canvas.top,
+    bottom: r.bottom + canvas.top,
+  });
+  const figures = [
+    frame.boat,
+    ...frame.passengers,
+    frame.lighthouse,
+    ...(frame.bell ? [frame.bell] : []),
+  ].map(atPage);
+  const chrome = [
+    document.querySelector<HTMLElement>('.hud')!,
+    $('status-toggle'),
+    ...(!$('selection-hint').hidden ? [$('selection-hint')] : []),
+  ].map((element) => element.getBoundingClientRect());
+  const bounds = { left: 8, top: 8, right: innerWidth - 8, bottom: innerHeight - 8 };
+  const placed: Rectangle[] = [];
+  const leaders: string[] = [];
   for (const n of level.nodes) {
     const group = $(`stop-${n.id}`);
     if (!group) continue;
-    const offset = experiment
-      ? n.id === 'stone' || n.id === 'rabbit-pier'
-        ? -3.6
-        : n.id === 'shallows'
-          ? 0.85
-          : 1.3
-      : n.id === 'cut'
-        ? -3.6
-        : n.id.startsWith('outer')
-          ? 0.7
-          : 1.4;
-    const point = world.project([n.positionXZ[0], n.positionXZ[1] + offset]);
-    if (!experiment && !isBellwater && small) {
-      if (n.id === 'harbor' || n.id === 'outer-west') point.x -= 145;
-      if (n.id === 'sheep-pier' || n.id === 'outer-east') point.x += 145;
-    }
-    if (experiment && small && session.state.boatNodeId === 'shallows') {
-      if (n.id === 'stone') point.x -= 28;
-      if (n.id === 'rabbit-pier') point.x += 36;
-    }
-    if (experiment && n.id === session.state.boatNodeId) {
-      if (n.id === 'shallows') point.x += small ? 100 : 170;
-      if (n.id === 'harbor') point.x -= small ? 95 : 170;
-    }
-    if (!experiment && n.id === 'outer-south' && n.id === session.state.boatNodeId) point.y -= 65;
-    if (
-      isBellwater &&
-      !small &&
-      n.id === 'low-pier' &&
-      session.state.boatNodeId === 'east-buoy' &&
-      session.state.aboard.length
-    ) {
-      const head = Math.min(
-        ...world
-          .frameStatus()
-          .passengers.filter((p) => session.state.aboard.includes(p.id))
-          .map((p) => p.top),
-      );
-      point.y = Math.min(point.y, head - group.offsetHeight / 2 - 8);
-    }
-    const half = group.offsetWidth / 2;
-    if (isBellwater && small) {
-      const row = {
-        harbor: 0.51,
-        shallows: 0.85,
-        'low-pier': 0.51,
-        'west-buoy': 0.85,
-        'east-buoy': 0.85,
-        'bell-pier': 0.11,
-      }[n.id];
-      point.x =
-        n.id === 'shallows'
-          ? host.clientWidth / 2
-          : n.id === 'harbor' || n.id === 'west-buoy'
-            ? half + 8
-            : host.clientWidth - half - 8;
-      point.y = host.clientHeight * (row ?? 0.5);
-    }
-    const x = Math.max(half + 8, Math.min(host.clientWidth - half - 8, point.x));
-    let bottom = host.offsetTop + host.clientHeight - group.offsetHeight / 2 - 4;
-    if (isBellwater) {
-      const forecast = $('status-toggle').getBoundingClientRect();
-      if (x + half > forecast.left && x - half < forecast.right)
-        bottom = Math.min(bottom, forecast.top - group.offsetHeight / 2 - 8);
-    }
-    group.style.left = `${x}px`;
-    group.style.top = `${Math.max(host.offsetTop + group.offsetHeight / 2 + 4, Math.min(bottom, point.y + host.offsetTop))}px`;
+    const point = world.project(n.positionXZ),
+      x = point.x + canvas.left,
+      y = point.y + canvas.top;
+    const w = group.offsetWidth,
+      h = group.offsetHeight;
+    const preferred: [number, number][] = [
+      [x - w / 2, y + 18],
+      [x - w / 2, y - h - 18],
+      [x + 22, y - h / 2],
+      [x - w - 22, y - h / 2],
+    ];
+    const choice = placeLocalCard(
+      w,
+      h,
+      bounds,
+      [...chrome, ...figures, ...placed],
+      preferred,
+      preferred[0],
+    ) ?? {
+      left: Math.max(8, Math.min(innerWidth - w - 8, x - w / 2)),
+      top: Math.max(8, Math.min(innerHeight - h - 8, y + 18)),
+      right: 0,
+      bottom: 0,
+    };
+    choice.right = choice.left + w;
+    choice.bottom = choice.top + h;
+    group.style.left = `${choice.left}px`;
+    group.style.top = `${choice.top}px`;
+    placed.push(choice);
+    const centerX = Math.max(choice.left, Math.min(choice.right, x)),
+      centerY = Math.max(choice.top, Math.min(choice.bottom, y));
+    if (Math.hypot(centerX - x, centerY - y) > 20)
+      leaders.push(`<line x1="${x}" y1="${y}" x2="${centerX}" y2="${centerY}" />`);
   }
-  if ($('map-leaders'))
-    $('map-leaders').innerHTML =
-      !experiment && small
-        ? level.nodes
-            .filter(
-              (n) =>
-                isBellwater || ['harbor', 'sheep-pier', 'outer-west', 'outer-east'].includes(n.id),
-            )
-            .map((n) => {
-              const point = world.project(n.positionXZ),
-                group = $(`stop-${n.id}`),
-                rect = group.getBoundingClientRect();
-              const targetX = isBellwater
-                ? n.id === 'shallows'
-                  ? rect.left + rect.width / 2
-                  : n.id === 'harbor' || n.id === 'west-buoy'
-                    ? rect.right
-                    : rect.left
-                : n.id === 'harbor' || n.id === 'outer-west'
-                  ? rect.right
-                  : rect.left;
-              return `<line x1="${point.x}" y1="${point.y + host.offsetTop}" x2="${targetX}" y2="${rect.top + rect.height / 2}" />`;
-            })
-            .join('')
-        : '';
-  if (!small && innerWidth > 700 && !$('local-context').hidden) {
-    const frame = world.frameStatus(),
-      boat = frame.boat;
+  if ($('map-leaders')) $('map-leaders').innerHTML = leaders.join('');
+  cardPlacement = null;
+  if (locationSelection && !$('local-context').hidden) {
     const local = $('local-context'),
-      canvas = host.getBoundingClientRect(),
-      obstacles = [
-        ...document.querySelectorAll<HTMLElement>('.map-stop, .hud, #status-toggle'),
-      ].map((e) => e.getBoundingClientRect()),
-      centerX = (boat.left + boat.right) / 2,
-      centerY = (boat.top + boat.bottom) / 2 + host.offsetTop;
-    const carried = frame.passengers.filter((passenger) =>
-      session.state.aboard.includes(passenger.id),
+      node = level.nodes.find((node) => node.id === locationSelection)!;
+    const point = world.project(node.positionXZ),
+      x = point.x + canvas.left,
+      y = point.y + canvas.top;
+    const places = frame.places.map((place) => atPage(place));
+    const origin = [selectionOrigin, actionOrigin].flatMap((point) =>
+      point
+        ? [{ left: point.x - 30, right: point.x + 30, top: point.y - 30, bottom: point.y + 30 }]
+        : [],
     );
-    const ferry = {
-      left: Math.min(boat.left, ...carried.map((p) => p.left)) + canvas.left,
-      right: Math.max(boat.right, ...carried.map((p) => p.right)) + canvas.left,
-      top: Math.min(boat.top, ...carried.map((p) => p.top)) + canvas.top,
-      bottom: Math.max(boat.bottom, ...carried.map((p) => p.bottom)) + canvas.top,
-    };
-    const bounds = {
-      left: 16,
-      right: innerWidth - 16,
-      top: canvas.top + 8,
-      bottom: canvas.bottom - 8,
-    };
-    local.classList.remove('compact-placement');
-    const choose = () => {
-      const width = local.offsetWidth,
-        height = local.offsetHeight;
-      return placeLocalCard(
+    protectedBounds = [...chrome, ...figures, ...places, ...placed, ...origin];
+    for (const width of [280, 248, 224]) {
+      local.style.width = `${width}px`;
+      const height = local.offsetHeight;
+      const choice = placeLocalCard(
         width,
         height,
         bounds,
-        [...obstacles, ferry],
+        protectedBounds,
         [
-          [centerX - width / 2, ferry.bottom + 10],
-          [ferry.left - width - 12, centerY - height / 2],
-          [ferry.right + 12, centerY - height / 2],
-          [centerX - width / 2, ferry.top - height - 12],
+          [x - width / 2, y + 70],
+          [x + 80, y - height / 2],
+          [x - width - 80, y - height / 2],
+          [x - width / 2, y - height - 80],
         ],
+        [x - width / 2, y + 70],
       );
-    };
-    let chosen = choose();
-    if (!chosen) {
-      local.classList.add('compact-placement');
-      bounds.bottom = innerHeight - 12;
-      chosen = choose();
+      if (choice) {
+        cardPlacement = choice;
+        break;
+      }
     }
-    if (chosen) {
-      local.style.left = `${chosen.left + local.offsetWidth / 2}px`;
-      local.style.top = `${chosen.top}px`;
+    if (!cardPlacement) {
+      const width = local.offsetWidth,
+        height = local.offsetHeight;
+      cardPlacement = placeLocalCard(
+        width,
+        height,
+        bounds,
+        [...chrome, ...figures, ...placed, ...origin],
+        [
+          [8, innerHeight - height - 8],
+          [innerWidth - width - 8, innerHeight - height - 8],
+        ],
+      ) ?? {
+        left: 8,
+        top: Math.max(chrome[0].bottom + 8, innerHeight - height - 8),
+        right: 8 + width,
+        bottom: innerHeight - 8,
+      };
+    }
+    local.style.left = `${cardPlacement.left}px`;
+    local.style.top = `${cardPlacement.top}px`;
+    const endX = Math.max(cardPlacement.left, Math.min(cardPlacement.right, x)),
+      endY = Math.max(cardPlacement.top, Math.min(cardPlacement.bottom, y));
+    const distance = Math.hypot(endX - x, endY - y);
+    if (distance <= 90) {
+      $('selection-leader').innerHTML = `<line x1="${x}" y1="${y}" x2="${endX}" y2="${endY}" />`;
+    } else {
+      const dx = ((endX - x) / distance) * 24,
+        dy = ((endY - y) / distance) * 24;
+      $('selection-leader').innerHTML =
+        `<line x1="${x}" y1="${y}" x2="${x + dx}" y2="${y + dy}" /><line x1="${endX - dx}" y1="${endY - dy}" x2="${endX}" y2="${endY}" />`;
     }
   } else {
-    $('local-context').style.removeProperty('left');
-    $('local-context').style.removeProperty('top');
+    protectedBounds = [];
+    $('selection-leader').innerHTML = '';
   }
   positionDialog();
 }
-world.onSelect = activateMove;
+world.onSelect = selectLocation;
 world.onCurrent = localContext;
+world.onClear = () => clearLocation();
 world.onPresentationStart = (action) => {
   if (action.type === 'move') sound.startTravel();
   else if (action.type !== 'unload' || session.state.status !== 'won') sound.play(action.type);
@@ -641,6 +705,17 @@ document.addEventListener(
   'keydown',
   (e) => {
     if (['Tab', 'Enter', ' ', 'Escape'].includes(e.key)) keyboardInput = true;
+    if (e.repeat && ['Enter', ' '].includes(e.key)) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      return;
+    }
+    if (e.key === 'Escape' && !dialog.open && locationSelection) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      clearLocation(true);
+      return;
+    }
     if (e.isTrusted && !e.repeat && ['Enter', ' '].includes(e.key)) void sound.activate();
   },
   true,
@@ -649,6 +724,7 @@ document.addEventListener(
   'pointerdown',
   (e) => {
     keyboardInput = false;
+    lastPointer = { x: e.clientX, y: e.clientY, control: (e.target as Element).closest('button') };
     if (e.isTrusted) void sound.activate();
   },
   true,
@@ -656,6 +732,12 @@ document.addEventListener(
 document.addEventListener(
   'click',
   (e) => {
+    const commit = (e.target as Element).closest('#sail, #commit, #board, #unload');
+    if (commit && e.isTrusted && e.detail > 0 && lastPointer?.control !== commit) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      return;
+    }
     if (
       closingFence &&
       performance.now() < closingFence.until &&
@@ -663,13 +745,10 @@ document.addEventListener(
       e.isTrusted &&
       e.detail > 0
     ) {
-      if (
-        (e.target as Element).closest('.inspect-route') &&
-        Math.hypot(e.clientX - closingFence.x, e.clientY - closingFence.y) > 3
-      )
-        return;
       const r = closingFence.rect;
       if (
+        (closingFence.scope === 'dismiss' ||
+          Math.hypot(e.clientX - closingFence.x, e.clientY - closingFence.y) <= 24) &&
         e.clientX >= r.left &&
         e.clientX <= r.right &&
         e.clientY >= r.top &&
@@ -712,6 +791,21 @@ if (import.meta.env.DEV)
         hullY: world.hull.position.y,
       }),
       getFrameStatus: () => world.frameStatus(),
+      getPickTargetAt: (x: number, y: number) => world.pickAt(x, y),
+      getPickDetailAt: (x: number, y: number) => world.pickDetailAt(x, y),
+      getSelectionStatus: () =>
+        copy({
+          selectedId: locationSelection,
+          cardOpen: !$('local-context').hidden,
+          emphasis,
+          origin: selectionOrigin,
+          actionOrigin,
+          cardPlacement,
+          protectedBounds,
+          protectedOverlaps: cardPlacement
+            ? protectedBounds.filter((bounds) => overlaps(cardPlacement!, bounds, 0))
+            : [],
+        }),
       getNavigationStatus: () => world.navigationPresentation(),
       getEnvironmentStatus: () => copy(world.environmentPresentation()),
       getJourneyStatus: () => copy(world.journeyPresentation()),

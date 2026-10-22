@@ -11,6 +11,7 @@ export class CrossingEffects {
   resting = false;
   lamp?: T.PointLight;
   lens?: T.MeshStandardMaterial;
+  lensBase = 0;
   lampBase = 0;
   reduced = false;
   constructor(home: ReturnType<typeof lighthouse>) {
@@ -72,11 +73,12 @@ export class CrossingEffects {
     );
     this.glow.name = 'harbor-lantern-response';
     this.glow.position.copy(home.anchor.getWorldPosition(new T.Vector3()));
-    this.glow.scale.set(1.8, 1.8, 1);
+    this.glow.scale.set(1.1, 1.1, 1);
     this.glow.userData.excludeFromFrame = true;
     this.lamp = home.lamp;
     this.lampBase = home.lamp.intensity;
     this.lens = home.lens.material as T.MeshStandardMaterial;
+    this.lensBase = this.lens.emissiveIntensity;
     this.reset();
   }
   reset() {
@@ -90,7 +92,7 @@ export class CrossingEffects {
     this.glow.visible = true;
     this.glow.material.opacity = 0.08;
     if (this.lamp) this.lamp.intensity = this.lampBase;
-    if (this.lens) this.lens.emissiveIntensity = 0.42;
+    if (this.lens) this.lens.emissiveIntensity = this.lensBase;
   }
   arrive(time: number, reduced: boolean) {
     if (this.arrivalStarted === null) this.arrivalStarted = time;
@@ -105,7 +107,7 @@ export class CrossingEffects {
   }
   private applyLight() {
     if (this.lamp) this.lamp.intensity = this.lampBase + this.arrivalIntensity * 2;
-    if (this.lens) this.lens.emissiveIntensity = 0.42 + this.arrivalIntensity;
+    if (this.lens) this.lens.emissiveIntensity = this.lensBase + this.arrivalIntensity;
     this.glow.visible = true;
     this.glow.material.opacity = 0.08 + this.arrivalIntensity * 0.26;
   }

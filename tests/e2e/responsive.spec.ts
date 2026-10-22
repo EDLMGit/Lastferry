@@ -33,6 +33,8 @@ async function noOverlap(first: Locator, second: Locator) {
 }
 
 async function localLayout(page: Page) {
+  if (!(await page.locator('#local-context').isVisible()))
+    await page.locator('.map-target[aria-current="location"]').click();
   const local = page.locator('#local-context');
   await fullyVisible(page, local, false);
   await fullyVisible(page, page.locator('#status-toggle'));
@@ -59,11 +61,7 @@ async function localLayout(page: Page) {
     };
   });
   expect(measurements.cardHeight).toBeLessThanOrEqual(measurements.naturalHeight + 1);
-  expect(measurements.cardHeight).toBeLessThanOrEqual(120);
-  if (measurements.width > 700 && measurements.height <= 600) {
-    expect(measurements.inlineTop).toBe('');
-    expect(measurements.inlineLeft).toBe('');
-  }
+  expect(measurements.cardHeight).toBeLessThanOrEqual(Math.min(260, measurements.height * 0.5));
   await noOverlap(local, page.locator('#status-toggle'));
   for (const route of await page.locator('#map-labels button').all()) {
     await fullyVisible(page, route);
@@ -210,6 +208,7 @@ for (const reduced of [false, true]) {
     const page = await context.newPage();
     mkdirSync(reviewDir, { recursive: true });
     await ready(page, 'first-crossing');
+    expect(await page.evaluate(() => (window as any).__LAST_FERRY__.getEnvironmentStatus().reducedMotion)).toBe(reduced);
     await act(page, 'map-sheep-pier', true);
     await activate(page, 'board', true);
     await fullyVisible(page, page.locator('#commit'));
@@ -242,7 +241,8 @@ for (const reduced of [false, true]) {
     const x = bounds!.x + bounds!.width / 2,
       y = bounds!.y + bounds!.height / 2;
     await page.touchscreen.tap(x, y);
-    if (reduced) await idle(page);
+    if (reduced)
+      await page.waitForFunction(() => document.querySelector('#seascape')?.getAttribute('aria-busy') === 'false');
     await page.touchscreen.tap(x, y);
     await idle(page);
     const events = await page.evaluate(() => (window as any).__phaseAInput);
@@ -250,7 +250,7 @@ for (const reduced of [false, true]) {
       up = events.filter((event: any) => event.type === 'pointerup');
     expect(down).toHaveLength(2);
     expect(up).toHaveLength(2);
-    const spacing = down[1].at - up[0].at;
+    const spacing = down[1].observedAt - up[0].observedAt;
     const after = await state(page),
       afterRender = await rendered(page);
     writeFileSync(
@@ -264,6 +264,8 @@ for (const reduced of [false, true]) {
           userAgent: await page.evaluate(() => navigator.userAgent),
           viewport: [844, 390],
           firstReleaseToSecondPressMs: spacing,
+          intervalClock: 'performance.now at capture-phase dispatch, matching the runtime fence clock',
+          inputTimestampReleaseToSecondPressMs: down[1].at - up[0].at,
           events,
           before,
           after,

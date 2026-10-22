@@ -37,9 +37,10 @@ test('desktop: real rescue, blocked preview, tide undo, terminal undo and restar
   await expect(page.locator('.forecast-detail')).toContainText('The tide rises in 4 actions.');
   expect(await state(page)).toEqual(original);
   await page.keyboard.press('Escape');
-  await page.locator('#inspect-sheep-pier').click();
+  await page.locator('#map-sheep-pier').click();
+  await expect(page.locator('#local-context')).toBeVisible();
   expect(await state(page)).toEqual(original);
-  await page.locator('#cancel').click();
+  await page.locator('#close-location').click();
   expect(await state(page)).toEqual(original);
   await act(page, 'map-sheep-pier');
   await page.locator('#board').click();
@@ -56,12 +57,12 @@ test('desktop: real rescue, blocked preview, tide undo, terminal undo and restar
   expect((await state(page)).turn).toBe(2);
   const full = await state(page);
   await page.locator('#map-cut').click();
-  await expect(page.locator('#commit')).toBeDisabled();
-  await expect(page.locator('#dialog')).toContainText(
+  await expect(page.locator('#sail')).toBeDisabled();
+  await expect(page.locator('#local-context')).toContainText(
     'Boat needs depth 3. Passage has depth 2: too shallow.',
   );
   expect(await state(page)).toEqual(full);
-  await page.locator('#cancel').click();
+  await page.locator('#close-location').click();
   await act(page, 'map-outer-east');
   const beforeRise = await state(page),
     beforeRender = await rendered(page);
@@ -175,7 +176,7 @@ test('keyboard-only tide-wait witness and subset selection', async ({ page }) =>
   await keyAct(page, 'wait');
   await tabTo(page, 'map-cut');
   await page.keyboard.press('Enter');
-  await expect(page.locator('#commit')).toBeDisabled();
+  await expect(page.locator('#sail')).toBeDisabled();
   expect((await state(page)).turn).toBe(3);
   await page.keyboard.press('Escape');
   for (const id of ['wait', 'map-cut', 'map-harbor', 'unload']) await keyAct(page, id);
@@ -206,6 +207,7 @@ test('visibility cancellation releases lock and reconciles to committed state', 
 }) => {
   await ready(page);
   await page.locator('#map-sheep-pier').click();
+  await page.locator('#sail').click();
   await page.evaluate(() => {
     Object.defineProperty(document, 'hidden', { configurable: true, value: true });
     document.dispatchEvent(new Event('visibilitychange'));

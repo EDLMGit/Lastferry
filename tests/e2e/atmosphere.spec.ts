@@ -1,7 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { reviewDir } from './evidence';
-import { act, ready, state, idle, undo, restart, fullyVisible, readable, tabTo } from './ui';
+import { act, ready, state, idle, undo, restart, fullyVisible, readable, tabTo, startMove, selectPlace } from './ui';
 
 const transition = (page: Page) =>
   page.evaluate(() => (window as any).__LAST_FERRY__.getTransitionStatus());
@@ -21,6 +21,8 @@ const holding = [
 ];
 
 async function checkCard(page: Page) {
+  if (!(await page.locator('#unload').isVisible()))
+    await page.locator('.map-target[aria-current="location"]').click();
   await fullyVisible(page, page.locator('#local-context'), false);
   await fullyVisible(page, page.locator('#unload'));
   await readable(page.locator('#unload'));
@@ -69,7 +71,7 @@ for (const width of [1440, 844, 780])
     for (const id of holding.slice(0, 7)) await act(page, id, touch);
     await checkCard(page);
     const before = await state(page);
-    await page.locator('#map-harbor')[touch ? 'tap' : 'click']();
+    await startMove(page, 'map-harbor', touch);
     await expect(page.locator('#seascape')).toHaveAttribute('aria-busy', 'true');
     await expect(page.locator('#local-context')).toBeHidden();
     await expect(page.locator('#transition-status')).toContainText('Sailing to Harbor');
@@ -105,7 +107,7 @@ test('atmosphere: longest crossings finish normally, tide rises in the final pha
   await ready(page, 'bellwater');
   await act(page, 'map-west-buoy');
   for (const id of ['map-east-buoy', 'map-west-buoy']) {
-    await page.locator(`#${id}`).click();
+    await startMove(page, id);
     const active = (await transition(page)).active;
     expect(active).not.toBeNull();
     expect(active.plan.duration).toBeGreaterThan(2000);
@@ -153,6 +155,7 @@ test('atmosphere: longest crossings finish normally, tide rises in the final pha
     requestAnimationFrame(sample);
   });
   await page.locator('#map-east-buoy').click();
+  await page.locator('#sail').click();
   await expect(page.locator('#dialog')).toContainText('Bram is still waiting at Bell Pier');
   expect((await state(page)).turn).toBe(7);
   await page.locator('#commit').click();
@@ -187,7 +190,7 @@ test('atmosphere: longest crossings finish normally, tide rises in the final pha
   expect(await state(page)).toMatchObject({ turn: 7, tideLevel: 1, boatNodeId: 'west-buoy' });
   await restart(page);
   const prior = await transition(page);
-  await page.locator('#map-west-buoy').click();
+  await startMove(page, 'map-west-buoy');
   await page.waitForFunction(
     () => (window as any).__LAST_FERRY__.getJourneyStatus().active !== null,
   );
@@ -246,8 +249,8 @@ test('atmosphere: audio persistence, live mute, Undo and Restart retain one musi
     contextCount: 0,
     schedulerCount: 0,
   });
-  await page.locator('#inspect-west-buoy').click();
-  await page.locator('#cancel').click();
+  await selectPlace(page, 'west-buoy');
+  await page.locator('#close-location').click();
   await expect.poll(async () => (await audio(page)).contextState).toBe('running');
   await expect.poll(async () => (await audio(page)).rms).toBeGreaterThan(0);
   expect(await audio(page)).toMatchObject({
@@ -255,7 +258,7 @@ test('atmosphere: audio persistence, live mute, Undo and Restart retain one musi
     schedulerCount: 1,
     ambienceSources: 2,
   });
-  await page.locator('#map-west-buoy').click();
+  await startMove(page, 'map-west-buoy');
   await expect.poll(async () => (await audio(page)).travelActive).toBe(true);
   await page.locator('#sound-toggle').click();
   await expect.poll(async () => (await audio(page)).contextState).toBe('suspended');
@@ -267,8 +270,8 @@ test('atmosphere: audio persistence, live mute, Undo and Restart retain one musi
   expect((await audio(page)).currentTime).toBe(mutedPhase);
   await page.reload();
   await page.waitForFunction(() => (window as any).__LAST_FERRY__?.getMetrics().frames > 4);
-  await page.locator('#inspect-west-buoy').click();
-  await page.locator('#cancel').click();
+  await selectPlace(page, 'west-buoy');
+  await page.locator('#close-location').click();
   expect(await audio(page)).toMatchObject({
     muted: true,
     contextState: 'not-created',
@@ -320,8 +323,8 @@ test('atmosphere: actual runtime mix crosses the full musical phrase while idle 
 }) => {
   mkdirSync(`${reviewDir}/raw`, { recursive: true });
   await ready(page, 'holding-pier');
-  await page.locator('#inspect-shallows').click();
-  await page.locator('#cancel').click();
+  await selectPlace(page, 'shallows');
+  await page.locator('#close-location').click();
   await expect.poll(async () => (await audio(page)).contextState).toBe('running');
   const initial = await state(page);
   const recording = await page.evaluate(async () => {

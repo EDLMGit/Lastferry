@@ -1,8 +1,33 @@
 import { expect, test } from 'vitest';
 import * as T from 'three';
-import { lighthouse, mat, ferry } from '../../src/scene/models';
+import { lighthouse, mat, ferry, palette } from '../../src/scene/models';
 import { contactMaterial } from '../../src/scene/contact';
 import { CrossingEffects } from '../../src/scene/effects';
+
+test('lantern warmth stays scoped to its visible source and receivers with normal occlusion', () => {
+  const shared = [mat('#eee3c6'), mat(palette.red), mat('#b7a580'), mat('#ffe8b6')];
+  const original = shared.map((material) => ({
+    color: material.color.clone(),
+    emissive: material.emissive.clone(),
+    intensity: material.emissiveIntensity,
+    compile: material.onBeforeCompile,
+  }));
+  const home = lighthouse(new T.Group(), 0, 0.54, 0);
+  const effects = new CrossingEffects(home);
+  for (const object of [home.lens, home.core, home.tower, home.gallery, home.roof]) {
+    expect(shared).not.toContain(object.material);
+    expect(object.material.depthTest).toBe(true);
+  }
+  expect(effects.glow.material.depthTest).toBe(true);
+  expect(home.core.material.emissiveIntensity).toBeGreaterThan(0);
+  expect(home.lamp.castShadow).toBe(false);
+  for (const [index, material] of shared.entries()) {
+    expect(material.color).toEqual(original[index].color);
+    expect(material.emissive).toEqual(original[index].emissive);
+    expect(material.emissiveIntensity).toBe(original[index].intensity);
+    expect(material.onBeforeCompile).toBe(original[index].compile);
+  }
+});
 
 test('home light uses the explicit lens and world anchor and restores its baseline after a delivery', () => {
   const scene = new T.Group();

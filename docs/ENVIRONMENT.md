@@ -38,10 +38,14 @@ Intentional activation respects persisted mute. One AudioContext-time scheduler 
 
 ## Verification boundary
 
+The selection pass extends the canvas behind the existing HUD/forecast and uses stable authored scene/passage framing. This intentionally increases rendered pixels; matched review measurements record viewport, CSS canvas and drawing-buffer resolution. Compare those fresh baseline/final pairs separately from the older per-frame diagnostic sampler. Local lantern/core/receiver changes add bounded geometry/material work while the accepted water shader, fields, reflection extent, musical clock and sailing timings stay unchanged. Free selection changes only presentation, and no additional scene pass or expensive panel backdrop filter is used.
+
+The selection comparison adds23.3% desktop pixels and51.2% phone pixels. Its no-video SwiftShader desktop p95 is worse, while both phone samples retain16.7ms median/33.4ms p95. A one-off baseline-sized canvas diagnostic has mixed desktop tails, so it does not isolate a lantern or coverage cause. No native-GPU performance claim follows; see `reviews/selection/RENDERER_QA.md` and its exact timestamp records.
+
 Unit checks cover canonical routes/clearance, timing progression and bounded recovery/tide phases, post-clamp placement, explicit seabed/depth/color resources and audio lifecycle. The existing reducer witnesses, losses, subsets, conservation and complete Undo remain required.
 
 Actual interface checks cover all three rescues, loaded travel in both directions, both rises/Undo, terminal Undo, named inspection, keyboard and emulated touch, reduced motion, visibility recovery, rapid Confirm and docked Harbor placement at 1440×900, 844×390 and 780×390. Production play must work without development controls or external assets.
 
 Matched source-attributed images, original-speed crossings/idle water and an actual-runtime full-phrase audio sample support review. Native still/temporal inspection and live audio behavior are reported separately from listening judgment. Before/after draw calls, triangles and 120-frame intervals use the same software renderer and viewport. They establish no physical-device frame-rate guarantee.
 
-Implementation details, actual results, source identities, evidence and remaining limitations are recorded in `reviews/refinement/REVIEW.md`. The final matched software-renderer measurements are mixed: field construction improves, while Holding's idle p95 remains higher; no overall smoothness improvement is claimed. Historical evidence remains under its original source; a changed shared renderer receives fresh browser coverage.
+Current selection results, source identities, captures and limitations are in `reviews/selection/REVIEW.md`. The prior shallow/contact/audio result stays in `reviews/refinement/REVIEW.md`: its field construction improved while Holding's idle p95 remained higher. No overall smoothness improvement is claimed; historical evidence retains its original source.

@@ -3,6 +3,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { reviewDir, productionURL } from './evidence';
 import {
   act,
+  activate,
   ready as baseReady,
   state,
   idle,
@@ -29,13 +30,13 @@ test('Holding Pier: uninterrupted nine-action actual UI rescue and gameplay evid
   const trace = [await state(page)];
   await page.waitForTimeout(700);
   await page.locator('#map-shallows').click();
-  await expect(page.locator('#dialog')).toContainText(
+  await expect(page.locator('#local-context')).toContainText(
     'Boat needs depth 2. Passage has depth 1: too shallow.',
   );
   expect(await state(page)).toEqual(trace[0]);
   await page.waitForTimeout(600);
-  await page.locator('#cancel').click();
-  await page.locator('#unload').click();
+  await page.locator('#close-location').click();
+  await activate(page, 'unload');
   await expect(page.locator('#dialog')).toContainText('After unloading: boat needs depth 1.');
   await expect(page.locator('#dialog')).toContainText('Moss will wait at Stone Pier.');
   await fullyVisible(page, page.locator('#commit'));
@@ -139,6 +140,7 @@ test('Holding Pier: unloading Undo, tide Undo, losing alternatives and baseline 
   await expect(page.locator('#map-harbor')).toHaveAttribute('aria-current', 'location');
   await act(page, 'map-stone');
   await page.locator('#map-shallows').click();
+  await page.locator('#sail').click();
   await expect(page.locator('#dialog')).toContainText(
     'still waiting at Rabbit Pier when it floods',
   );
@@ -152,9 +154,9 @@ test('Holding Pier: unloading Undo, tide Undo, losing alternatives and baseline 
   await restart(page);
   for (let count = 0; count < 3; count++) await act(page, 'wait');
   await page.locator('#map-shallows').click();
-  await expect(page.locator('#commit')).toBeDisabled();
+  await expect(page.locator('#sail')).toBeDisabled();
   expect((await state(page)).turn).toBe(3);
-  await page.locator('#cancel').click();
+  await page.locator('#close-location').click();
   await page.locator('#wait').click();
   await expect(page.locator('#dialog')).toContainText(
     'still waiting at Rabbit Pier when it floods',
@@ -196,15 +198,21 @@ test('Holding Pier: phone landscape touch, direct double-tap guard, preview and 
     expect(node.y).toBeLessThan(frame.canvas.height);
   }
   for (const passenger of frame.passengers) expect(passenger.height).toBeGreaterThan(22);
+  await page.locator('#map-stone').tap();
   await fullyVisible(page, page.locator('#unload'));
-  await page.locator('#inspect-harbor').tap();
+  await page.locator('#map-harbor').tap();
   const initial = await state(page);
-  await page.locator('#cancel').tap();
+  await page.locator('#close-location').tap();
   expect(await state(page)).toEqual(initial);
   await act(page, 'unload', true);
   const bounds = await page.locator('#map-shallows').boundingBox();
   await page.touchscreen.tap(bounds!.x + bounds!.width / 2, bounds!.y + bounds!.height / 2);
   await page.touchscreen.tap(bounds!.x + bounds!.width / 2, bounds!.y + bounds!.height / 2);
+  expect((await state(page)).turn).toBe(1);
+  const sail = await page.locator('#sail').boundingBox();
+  expect(sail).not.toBeNull();
+  await page.touchscreen.tap(sail!.x + sail!.width / 2, sail!.y + sail!.height / 2);
+  await page.touchscreen.tap(sail!.x + sail!.width / 2, sail!.y + sail!.height / 2);
   await idle(page);
   expect((await state(page)).turn).toBe(2);
   await act(page, 'map-rabbit-pier', true);
@@ -228,19 +236,19 @@ for (const [label, width, height] of [
   ['desktop', 1440, 900],
   ['phone', 844, 390],
 ] as const) {
-  test(`Holding Pier: natural ${label} keyboard, preview cancellation, direct sailing and terminal Undo`, async ({
+  test(`Holding Pier: natural ${label} keyboard, selection cancellation, explicit sailing and terminal Undo`, async ({
     page,
   }) => {
     await page.setViewportSize({ width, height });
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await ready(page);
-    await tabTo(page, 'inspect-harbor');
+    await tabTo(page, 'map-harbor');
     await page.keyboard.press('Enter');
-    await expect(page.locator('#cancel')).toBeFocused();
+    await expect(page.locator('#local-heading')).toBeFocused();
     await page.keyboard.press('Escape');
-    await expect(page.locator('#inspect-harbor')).toBeFocused();
-    await page.keyboard.press('Shift+Tab');
     await expect(page.locator('#map-harbor')).toBeFocused();
+    await page.keyboard.press('Shift+Tab');
+    await expect(page.locator('#sound-toggle')).toBeFocused();
     expect((await state(page)).turn).toBe(0);
     await keyAct(page, 'unload');
     await keyAct(page, 'map-shallows');

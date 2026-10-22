@@ -8,6 +8,7 @@ test('fallback completes a stalled presentation without another gameplay action'
     window.requestAnimationFrame = () => 0;
   });
   await page.locator('#map-sheep-pier').click();
+  await page.locator('#sail').click();
   await page.waitForFunction(
     () => !(window as any).__LAST_FERRY__.getRenderStatus().pendingAnimation,
   );

@@ -60,7 +60,7 @@ const paths = [
   ...(existsSync(new URL('tools/compare-atmosphere-timing.mjs', root))
     ? ['tools/compare-atmosphere-timing.mjs']
     : []),
-  ...walk('tools/').filter((path) => path.includes('refinement')),
+  ...walk('tools/').filter((path) => path.includes('refinement') || path.includes('selection')),
 ].sort();
 const files = Object.fromEntries(paths.map((p) => [p, digest(readFileSync(new URL(p, root)))]));
 const sourceHash = digest(JSON.stringify(files));

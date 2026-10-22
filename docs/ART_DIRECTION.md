@@ -40,6 +40,10 @@ Use matte or softly rough materials with subtle color variation. Keep metal acce
 
 ## Camera, framing, and readable scale
 
+The location-selection pass uses compact named selectors and one deep blue-green translucent card with warm opaque text, a fine warm edge and quiet inner highlight. Symbols and border shapes distinguish current, shallow, remote and selected places. The card belongs in clear water, away from defining structures, passengers, the full ferry and its opening point. Fine connectors are local cues, not persistent screen-edge rows. Detailed subset/loss dialogs keep their stronger backing.
+
+The stable full-canvas fit reclaims water behind the HUD while protecting the complete future-loaded route envelope. Use lateral space before shrinking the cove for a corner control; selection itself never pans or zooms. Holding's Stone island uses the existing sparse rocky vocabulary; Harbor stays sheltered and Rabbit Pier retains its cottage. The lantern has a compact pale warm core within an amber surface, darker supports and local warm gallery/tower spill. Depth testing remains enabled; the roof must occlude light normally. No new bloom, rotating beam or global light effect is introduced.
+
 Use a fixed orthographic camera at approximately **55 degrees above the water plane**. Choose the azimuth around the authored cove so every relevant pier and passage is visible. Do not add camera orbit as a required interaction.
 
 Fit the complete playable cove in mobile landscape and desktop views. Preserve space for controls and device safe areas. Resize through camera framing and UI layout, not by moving gameplay locations. If a narrow viewport needs a different framing, retain clear access to every valid action.

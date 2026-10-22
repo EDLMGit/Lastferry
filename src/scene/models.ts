@@ -186,7 +186,20 @@ export function lighthouse(parent: T.Object3D, x: number, y: number, z: number) 
   g.position.set(x, y, z);
   parent.add(g);
   cylinder(g, '#b3b09b', 0.68, 0.8, 0.15, [0, 0.075, 0]);
-  cylinder(g, '#eee3c6', 0.38, 0.62, 2.15, [0, 1.16, 0], 20);
+  const tower = cylinder(g, '#eee3c6', 0.38, 0.62, 2.15, [0, 1.16, 0], 20);
+  tower.material = (tower.material as T.MeshStandardMaterial).clone();
+  tower.material.onBeforeCompile = (shader) => {
+    shader.vertexShader = shader.vertexShader
+      .replace('#include <common>', '#include <common>\nvarying vec3 lanternSurface;')
+      .replace('#include <begin_vertex>', '#include <begin_vertex>\nlanternSurface=position;');
+    shader.fragmentShader = shader.fragmentShader
+      .replace('#include <common>', '#include <common>\nvarying vec3 lanternSurface;')
+      .replace(
+        '#include <color_fragment>',
+        '#include <color_fragment>\nfloat lanternSpill=smoothstep(.55,1.,lanternSurface.y)*smoothstep(-.05,.38,lanternSurface.z);diffuseColor.rgb*=mix(vec3(1.),vec3(1.1,.95,.72),lanternSpill*.5);',
+      );
+  };
+  tower.material.customProgramCacheKey = () => 'lantern-upper-spill-1';
   for (let i = 0; i < 5; i++) {
     const a = i * 1.3;
     box(
@@ -198,23 +211,48 @@ export function lighthouse(parent: T.Object3D, x: number, y: number, z: number) 
   }
   box(g, '#765d44', [0.25, 0.48, 0.08], [0, 0.38, 0.56], 0.1);
   box(g, '#f0be63', [0.16, 0.28, 0.035], [0.12, 1.48, 0.445], 0.06);
-  cylinder(g, '#a69b7c', 0.64, 0.64, 0.12, [0, 2.26, 0]);
-  const lens = cylinder(g, '#f9cb70', 0.36, 0.36, 0.56, [0, 2.6, 0], 12);
+  const gallery = cylinder(g, '#b7a580', 0.6, 0.6, 0.12, [0, 2.26, 0]);
+  gallery.material = (gallery.material as T.MeshStandardMaterial).clone();
+  gallery.material.emissive.set('#c68a3e');
+  gallery.material.emissiveIntensity = 0.1;
+  const lens = cylinder(g, '#e6a44f', 0.355, 0.355, 0.59, [0, 2.6, 0], 16);
   lens.name = 'home-lens';
   lens.material = (lens.material as T.MeshStandardMaterial).clone();
-  lens.material.emissive.set('#ffbf70');
-  lens.material.emissiveIntensity = 0.42;
+  lens.material.emissive.set('#ffd391');
+  lens.material.emissiveIntensity = 0.72;
+  lens.material.roughness = 0.55;
+  const core = cylinder(g, '#ffe8b6', 0.125, 0.125, 0.34, [0, 2.51, 0.32], 12);
+  core.name = 'lantern-core';
+  core.material = (core.material as T.MeshStandardMaterial).clone();
+  core.material.emissive.set('#ffe1a0');
+  core.material.emissiveIntensity = 1.1;
   for (let i = 0; i < 8; i++) {
     const a = (i * Math.PI) / 4;
-    cylinder(g, '#705b43', 0.025, 0.025, 0.62, [Math.sin(a) * 0.4, 2.6, Math.cos(a) * 0.4], 6);
+    cylinder(g, '#665441', 0.025, 0.025, 0.66, [Math.sin(a) * 0.4, 2.6, Math.cos(a) * 0.4], 6);
     cylinder(g, '#8b7050', 0.017, 0.017, 0.24, [Math.sin(a) * 0.58, 2.43, Math.cos(a) * 0.58], 6);
   }
   const ring = mesh(new T.TorusGeometry(0.59, 0.025, 6, 32), '#8b7050', g, 0, 2.55, 0);
   ring.rotation.x = Math.PI / 2;
-  mesh(new T.ConeGeometry(0.66, 0.45, 16), palette.red, g, 0, 3.1, 0);
+  const roof = mesh(new T.ConeGeometry(0.61, 0.4, 16), palette.red, g, 0, 3.18, 0);
+  roof.material = (roof.material as T.MeshStandardMaterial).clone();
+  roof.material.onBeforeCompile = (shader) => {
+    shader.vertexShader = shader.vertexShader
+      .replace('#include <common>', '#include <common>\nvarying float lanternUnderside;')
+      .replace(
+        '#include <begin_vertex>',
+        '#include <begin_vertex>\nlanternUnderside=step(.8,-normal.y);',
+      );
+    shader.fragmentShader = shader.fragmentShader
+      .replace('#include <common>', '#include <common>\nvarying float lanternUnderside;')
+      .replace(
+        '#include <color_fragment>',
+        '#include <color_fragment>\ndiffuseColor.rgb=mix(diffuseColor.rgb,vec3(.58,.34,.12),lanternUnderside*.7);',
+      );
+  };
+  roof.material.customProgramCacheKey = () => 'lantern-roof-spill-1';
   cylinder(g, palette.red, 0.065, 0.07, 0.23, [0, 3.4, 0]);
-  const lamp = new T.PointLight('#ffbf62', 2.5, 6, 2);
-  lamp.position.y = 2.6;
+  const lamp = new T.PointLight('#ffbf62', 2.5, 3.4, 2);
+  lamp.position.set(0, 2.54, 0.45);
   g.add(lamp);
-  return { group: g, lens, lamp, anchor: lamp };
+  return { group: g, lens, lamp, anchor: lamp, core, tower, gallery, roof };
 }

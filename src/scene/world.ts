@@ -32,6 +32,13 @@ export class World {
   routes = new Map<string, T.Line>();
   navigationCurrent = '';
   navigationSelected: string | null = null;
+  navigationEmphasis: string | null = null;
+  placeObjects = new Map<string, T.Object3D[]>();
+  pickTargets: { id: string; kind: string; object: T.Object3D }[] = [];
+  nonInteractivePlaces: T.Object3D[] = [];
+  framePoints: T.Vector3[] = [];
+  ferryEnvelope = { radius: 0, bottom: 0, top: 0 };
+  raycaster = new T.Raycaster();
   forecast = new T.Group();
   water: T.Mesh;
   shadow: T.Mesh;
@@ -71,6 +78,7 @@ export class World {
   lastTime = 0;
   onSelect: (id: string) => void = () => {};
   onCurrent: () => void = () => {};
+  onClear: () => void = () => {};
   constructor(
     public host: HTMLElement,
     state: State,
@@ -133,14 +141,24 @@ export class World {
       }
     });
     this.scene.add(this.shores.group, this.shores.contacts);
-    for (const island of this.level.world.islands) this.island(island);
+    for (const island of this.level.world.islands) {
+      const node = this.level.piers.find((pier) => pier.islandId === island.id)?.nodeId;
+      const decoration = this.island(island);
+      const shore = this.shores.entries.find((entry) => entry.island.id === island.id)!;
+      if (node) {
+        this.registerPlace(node, 'island', shore.mesh, shore.rocks, decoration);
+      } else this.nonInteractivePlaces.push(shore.mesh, shore.rocks, decoration);
+    }
     for (const p of this.level.piers) {
+      const group = new T.Group();
+      group.name = `pier-${p.id}`;
+      this.scene.add(group);
       const [x, z] = p.positionXZ,
         end = p.landAnchorXZ[1],
         y = p.elevation * 0.18 - 0.06;
       for (let i = 0; i < 9; i++)
         box(
-          this.scene,
+          group,
           this.layout.stonePiers.includes(p.id)
             ? i % 2
               ? '#a9b6ac'
@@ -154,7 +172,7 @@ export class World {
         );
       for (const px of [x - p.width / 2, x + p.width / 2])
         for (const pz of [z + 0.02, end]) {
-          const pile = cylinder(this.scene, '#79644a', 0.065, 0.07, 0.83, [px, y - 0.27, pz], 9);
+          const pile = cylinder(group, '#79644a', 0.065, 0.07, 0.83, [px, y - 0.27, pz], 9);
           if (
             p.id === this.level.objective.deliveryPierId ||
             p.id === this.level.piers.find((pier) => pier.elevation < 3)?.id
@@ -167,24 +185,32 @@ export class World {
             );
             this.contactMeshes.push(pile as T.Mesh<T.BufferGeometry, T.MeshStandardMaterial>);
           }
-          cylinder(this.scene, '#dbc799', 0.075, 0.075, 0.055, [px, y + 0.17, pz], 9);
+          cylinder(group, '#dbc799', 0.075, 0.075, 0.055, [px, y + 0.17, pz], 9);
         }
-      box(this.scene, '#b68f5b', [0.35, 0.055, 0.49], [x, y - 0.015, z + 0.25], 0.015);
-      cylinder(this.scene, '#655b43', 0.025, 0.025, 0.65, [x + 0.36, y + 0.33, z - 0.1], 7);
-      box(this.scene, '#f5cb77', [0.13, 0.19, 0.13], [x + 0.36, y + 0.68, z - 0.1]);
+      box(group, '#b68f5b', [0.35, 0.055, 0.49], [x, y - 0.015, z + 0.25], 0.015);
+      cylinder(group, '#655b43', 0.025, 0.025, 0.65, [x + 0.36, y + 0.33, z - 0.1], 7);
+      box(group, '#f5cb77', [0.13, 0.19, 0.13], [x + 0.36, y + 0.68, z - 0.1]);
+      this.registerPlace(p.nodeId, 'pier', group);
     }
     for (const landmark of this.layout.landmarks) {
       const island = this.level.world.islands.find((island) => island.id === landmark.islandId)!;
       const [x, z] = landmark.positionXZ;
       const y = island.elevation * 0.18;
+      const node = this.level.piers.find((pier) => pier.islandId === island.id)?.nodeId;
       if (landmark.kind === 'lighthouse') {
         const model = lighthouse(this.scene, x, y, z);
         const delivery = this.level.piers.find(
           (pier) => pier.id === this.level.objective.deliveryPierId,
         )!;
         if (island.id === delivery.islandId) this.home = model;
-      } else if (landmark.kind === 'cottage') cottage(this.scene, [x, y, z]);
-      else bellLandmark(this.scene, [x, y, z]);
+        if (node) this.registerPlace(node, 'landmark', model.group);
+      } else {
+        const model =
+          landmark.kind === 'cottage'
+            ? cottage(this.scene, [x, y, z])
+            : bellLandmark(this.scene, [x, y, z]);
+        if (node) this.registerPlace(node, 'landmark', model);
+      }
     }
     for (const e of this.level.edges) {
       const pts = this.paths.get(e.id)!.points.map((p) => p.clone().setY(0.035));
@@ -239,6 +265,7 @@ export class World {
         cylinder(g, '#e2bf70', 0.055, 0.13, 0.2, [0, 0.07, 0], 10);
         cylinder(g, '#eee2bc', 0.025, 0.025, 0.25, [0, 0.28, 0], 7);
       }
+      this.registerPlace(n.id, 'waypoint', g);
     }
     this.effects = new CrossingEffects(this.home);
     this.scene.add(this.effects.wake, this.effects.glow);
@@ -270,66 +297,18 @@ export class World {
       this.animals.set(p.id, g);
     }
     this.sync(state);
+    this.prepareFrame();
     this.resizeObserver = new ResizeObserver(() => this.resize());
     this.resizeObserver.observe(host);
     this.resize();
     this.renderer.domElement.addEventListener('click', (ev) => {
       if (this.transition || this.state.status !== 'playing') return;
+      ev.stopPropagation();
       const bounds = host.getBoundingClientRect();
-      const point = { x: ev.clientX - bounds.left, y: ev.clientY - bounds.top };
-      const boatBounds = new T.Box3().setFromObject(this.boatRoot);
-      const boatCorners: T.Vector3[] = [];
-      for (const x of [boatBounds.min.x, boatBounds.max.x])
-        for (const y of [boatBounds.min.y, boatBounds.max.y])
-          for (const z of [boatBounds.min.z, boatBounds.max.z])
-            boatCorners.push(new T.Vector3(x, y, z).project(this.camera));
-      const boatX = boatCorners.map((p) => ((p.x + 1) * host.clientWidth) / 2);
-      const boatY = boatCorners.map((p) => ((1 - p.y) * host.clientHeight) / 2);
-      if (
-        point.x >= Math.min(...boatX) - 6 &&
-        point.x <= Math.max(...boatX) + 6 &&
-        point.y >= Math.min(...boatY) - 6 &&
-        point.y <= Math.max(...boatY) + 6
-      ) {
-        this.onCurrent();
-        return;
-      }
-      const currentPier = this.level.piers.find((pier) => pier.nodeId === this.state.boatNodeId);
-      if (currentPier) {
-        const corners = [
-          V(
-            [currentPier.positionXZ[0] - currentPier.width / 2, currentPier.positionXZ[1] + 0.5],
-            currentPier.elevation * 0.18,
-          ),
-          V(
-            [currentPier.positionXZ[0] + currentPier.width / 2, currentPier.landAnchorXZ[1]],
-            currentPier.elevation * 0.18,
-          ),
-        ].map((p) => p.project(this.camera));
-        const xs = corners.map((p) => ((p.x + 1) * host.clientWidth) / 2);
-        const ys = corners.map((p) => ((1 - p.y) * host.clientHeight) / 2);
-        if (
-          point.x >= Math.min(...xs) - 6 &&
-          point.x <= Math.max(...xs) + 6 &&
-          point.y >= Math.min(...ys) - 6 &&
-          point.y <= Math.max(...ys) + 6
-        ) {
-          this.onCurrent();
-          return;
-        }
-      }
-      let closest: string | undefined,
-        dist = 32;
-      for (const n of this.level.nodes) {
-        const p = this.project(n.positionXZ);
-        const d = Math.hypot(p.x - point.x, p.y - point.y);
-        if (d < dist) {
-          closest = n.id;
-          dist = d;
-        }
-      }
-      if (closest === this.state.boatNodeId) this.onCurrent();
-      else if (closest) this.onSelect(closest);
+      const id = this.pickAt(ev.clientX - bounds.left, ev.clientY - bounds.top);
+      if (id === this.state.boatNodeId) this.onCurrent();
+      else if (id) this.onSelect(id);
+      else this.onClear();
     });
     this.renderer.domElement.addEventListener('webglcontextlost', (ev) => {
       ev.preventDefault();
@@ -341,6 +320,9 @@ export class World {
     this.frameRequest = requestAnimationFrame((t) => this.tick(t));
   }
   island(island: Level['world']['islands'][number]) {
+    const group = new T.Group();
+    group.name = `island-decoration-${island.id}`;
+    this.scene.add(group);
     const points = island.footprintXZ,
       cx = points.reduce((a, p) => a + p[0], 0) / points.length,
       cz = points.reduce((a, p) => a + p[1], 0) / points.length;
@@ -350,28 +332,28 @@ export class World {
       const rock = mesh(
         new T.DodecahedronGeometry(0.85, 0),
         '#87988d',
-        this.scene,
+        group,
         -0.45,
         height + 0.25,
         2.5,
       );
       rock.scale.set(1.1, 0.85, 0.9);
       rock.rotation.y = 0.4;
-      pine(this.scene, 0.7, height, 2.5, 1.05);
-      pine(this.scene, -1.1, height, 2.7, 0.55);
+      pine(group, 0.7, height, 2.5, 1.05);
+      pine(group, -1.1, height, 2.7, 0.55);
     } else if (style === 'reeds') {
-      this.scene.add(createReedBeds(island));
+      group.add(createReedBeds(island));
       for (const x of [-0.8, 0.9])
-        ball(this.scene, '#c3ba93', [cx + x, height - 0.07, cz], [0.6, 0.045, 0.34]);
+        ball(group, '#c3ba93', [cx + x, height - 0.07, cz], [0.6, 0.045, 0.34]);
     } else if (style === 'rocky') {
-      pine(this.scene, cx - 1.05, height, cz - 0.35, 0.68);
-      pine(this.scene, cx + 1.02, height, cz - 0.3, 0.43);
+      pine(group, cx - 1.05, height, cz - 0.35, 0.68);
+      pine(group, cx + 1.02, height, cz - 0.3, 0.43);
     } else {
-      pine(this.scene, cx - 1.05, height, cz - 0.28, 0.85);
-      pine(this.scene, cx + 0.92, height, cz - 0.55, 0.65);
+      pine(group, cx - 1.05, height, cz - 0.28, 0.85);
+      pine(group, cx + 0.92, height, cz - 0.55, 0.65);
       for (let i = 0; i < 7; i++)
         box(
-          this.scene,
+          group,
           '#d7c59d',
           [0.38, 0.035, 0.23],
           [cx + Math.sin(i * 0.7) * 0.12, height + 0.045, cz + 0.45 + i * 0.12],
@@ -384,29 +366,193 @@ export class World {
         x = cx + Math.cos(a) * r * 1.3,
         z = cz + Math.sin(a) * r * 0.7;
       if (style !== 'crag' && Math.abs(x - cx) < 0.68) continue;
-      ball(this.scene, i % 4 ? '#91a273' : '#f0e8c8', [x, height + 0.11, z], [0.045, 0.09, 0.045]);
+      ball(group, i % 4 ? '#91a273' : '#f0e8c8', [x, height + 0.11, z], [0.045, 0.09, 0.045]);
     }
     if (style === 'garden')
       for (const side of [-1, 1]) {
         const x = cx + side * 1.05,
           z = cz + 0.25;
-        ball(this.scene, '#6f8b59', [x, height + 0.18, z], [0.3, 0.2, 0.23]);
+        ball(group, '#6f8b59', [x, height + 0.18, z], [0.3, 0.2, 0.23]);
         for (let j = 0; j < 5; j++) {
           const a = j * 2.4;
           ball(
-            this.scene,
+            group,
             '#f5e9c5',
             [x + Math.sin(a) * 0.24, height + 0.3, z + Math.cos(a) * 0.17],
             [0.035, 0.035, 0.035],
           );
         }
-        box(this.scene, '#a37546', [0.24, 0.23, 0.24], [x, height + 0.11, cz + 0.65]);
-        box(this.scene, '#d1ae74', [0.25, 0.027, 0.027], [x, height + 0.2, cz + 0.78]);
+        box(group, '#a37546', [0.24, 0.23, 0.24], [x, height + 0.11, cz + 0.65]);
+        box(group, '#d1ae74', [0.25, 0.027, 0.027], [x, height + 0.2, cz + 0.78]);
       }
+    return group;
   }
   setForecast(visible: boolean, tide: number) {
     this.forecast.visible = visible;
     this.shores.preview(visible, tide);
+  }
+  registerPlace(id: string, kind: string, ...objects: T.Object3D[]) {
+    const existing = this.placeObjects.get(id) ?? [];
+    for (const object of objects) {
+      object.userData.locationId = id;
+      object.userData.locationKind = kind;
+      this.pickTargets.push({ id, kind, object });
+      existing.push(object);
+    }
+    this.placeObjects.set(id, existing);
+  }
+  rectangle(objects: T.Object3D[]) {
+    const bounds = new T.Box3();
+    for (const object of objects) bounds.expandByObject(object);
+    const points: T.Vector3[] = [];
+    for (const x of [bounds.min.x, bounds.max.x])
+      for (const y of [bounds.min.y, bounds.max.y])
+        for (const z of [bounds.min.z, bounds.max.z])
+          points.push(new T.Vector3(x, y, z).project(this.camera));
+    const xs = points.map((p) => ((p.x + 1) * this.host.clientWidth) / 2),
+      ys = points.map((p) => ((1 - p.y) * this.host.clientHeight) / 2);
+    return {
+      left: Math.min(...xs),
+      right: Math.max(...xs),
+      top: Math.min(...ys),
+      bottom: Math.max(...ys),
+      width: Math.max(...xs) - Math.min(...xs),
+      height: Math.max(...ys) - Math.min(...ys),
+    };
+  }
+  placeBounds(id: string) {
+    return this.rectangle(this.placeObjects.get(id) ?? [this.markers.get(id)!]);
+  }
+  pickAt(x: number, y: number) {
+    return this.pickDetailAt(x, y)?.id ?? null;
+  }
+  pickDetailAt(x: number, y: number): { id: string; kind: string } | null {
+    this.scene.updateMatrixWorld(true);
+    const boat = this.rectangle([this.boatRoot]);
+    if (x >= boat.left - 4 && x <= boat.right + 4 && y >= boat.top - 4 && y <= boat.bottom + 4)
+      return { id: this.state.boatNodeId, kind: 'ferry' };
+    this.raycaster.setFromCamera(
+      new T.Vector2((x / this.host.clientWidth) * 2 - 1, 1 - (y / this.host.clientHeight) * 2),
+      this.camera,
+    );
+    const intersections = this.raycaster.intersectObjects(
+      [...this.pickTargets.map((target) => target.object), ...this.nonInteractivePlaces],
+      true,
+    );
+    for (const hit of intersections) {
+      let object: T.Object3D | null = hit.object;
+      while (object && !object.userData.locationId) object = object.parent;
+      return object
+        ? { id: object.userData.locationId as string, kind: object.userData.locationKind as string }
+        : null;
+    }
+    let nearest: string | null = null,
+      distance = 22;
+    for (const node of this.level.nodes) {
+      const p = this.project(node.positionXZ),
+        d = Math.hypot(p.x - x, p.y - y);
+      if (d < distance) {
+        nearest = node.id;
+        distance = d;
+      }
+    }
+    return nearest ? { id: nearest, kind: 'waypoint' } : null;
+  }
+  prepareFrame() {
+    this.scene.updateMatrixWorld(true);
+    const inverseHull = this.hull.matrixWorld.clone().invert();
+    let radius = 0,
+      low = Infinity,
+      high = -Infinity;
+    const measure = (root: T.Object3D, origin?: T.Vector3, anchor?: T.Vector3) => {
+      root.traverse((object) => {
+        if (!(object instanceof T.Mesh)) return;
+        if (!object.geometry.boundingBox) object.geometry.computeBoundingBox();
+        const box = object.geometry.boundingBox!;
+        for (const x of [box.min.x, box.max.x])
+          for (const y of [box.min.y, box.max.y])
+            for (const z of [box.min.z, box.max.z]) {
+              const point = new T.Vector3(x, y, z).applyMatrix4(object.matrixWorld);
+              if (origin && anchor) point.sub(origin).add(anchor);
+              else point.applyMatrix4(inverseHull);
+              radius = Math.max(radius, Math.hypot(point.x, point.z));
+              low = Math.min(low, point.y);
+              high = Math.max(high, point.y);
+            }
+      });
+    };
+    measure(this.hull);
+    for (const [id, animal] of this.animals)
+      if (!this.state.aboard.includes(id))
+        measure(
+          animal,
+          animal.getWorldPosition(new T.Vector3()),
+          this.passengerAnchors.get(id)!.position,
+        );
+    const offsets = this.level.rules.draftBands.map((band) => 0.03 - (band.draft - 1) * 0.075);
+    const maximumWater =
+      Math.max(
+        this.level.rules.tide.initialLevel,
+        ...this.level.rules.tide.rises.map((rise) => rise.level),
+      ) * this.level.world.waterYPerTideLevel;
+    this.ferryEnvelope = {
+      radius: radius + 0.02,
+      bottom: low + Math.min(...offsets) - 0.012,
+      top: high + maximumWater + Math.max(...offsets) + 0.012,
+    };
+    const add = (bounds: T.Box3) => {
+      if (bounds.isEmpty()) return;
+      for (const x of [bounds.min.x, bounds.max.x])
+        for (const y of [bounds.min.y, bounds.max.y])
+          for (const z of [bounds.min.z, bounds.max.z])
+            this.framePoints.push(new T.Vector3(x, y, z));
+    };
+    for (const object of this.scene.children) {
+      if (
+        object === this.water ||
+        object === this.shadow ||
+        object === this.boatRoot ||
+        object === this.forecast ||
+        object.userData.excludeFromFrame ||
+        [...this.animals.values()].includes(object as T.Group) ||
+        [...this.markers.values()].includes(object as T.Group) ||
+        [...this.routes.values()].includes(object as T.Line)
+      )
+        continue;
+      add(new T.Box3().setFromObject(object));
+    }
+    for (const path of this.paths.values())
+      for (const point of path.points)
+        add(
+          new T.Box3(
+            new T.Vector3(
+              point.x - this.ferryEnvelope.radius,
+              this.ferryEnvelope.bottom,
+              point.z - this.ferryEnvelope.radius,
+            ),
+            new T.Vector3(
+              point.x + this.ferryEnvelope.radius,
+              this.ferryEnvelope.top,
+              point.z + this.ferryEnvelope.radius,
+            ),
+          ),
+        );
+    for (const pier of this.level.piers)
+      add(
+        new T.Box3(
+          V(
+            [pier.landAnchorXZ[0] - 0.75, Math.min(pier.positionXZ[1], pier.landAnchorXZ[1]) - 0.5],
+            pier.elevation * 0.18,
+          ),
+          V(
+            [
+              pier.landAnchorXZ[0] + 0.85,
+              Math.max(pier.positionXZ[1], pier.landAnchorXZ[1]) + 0.35,
+            ],
+            pier.elevation * 0.18 + 1.35,
+          ),
+        ),
+      );
   }
   project(p: number[]) {
     const v = V(p, 0.06).project(this.camera);
@@ -435,45 +581,45 @@ export class World {
         : this.layout.cameraPosition),
     );
     this.camera.lookAt(0, 0, 0.05);
-    {
-      this.scene.updateMatrixWorld(true);
-      this.camera.updateMatrixWorld(true);
-      const points: T.Vector3[] = [];
-      const corners = (b: T.Box3) => {
-        if (b.isEmpty()) return;
-        for (const x of [b.min.x, b.max.x])
-          for (const y of [b.min.y, b.max.y])
-            for (const z of [b.min.z, b.max.z])
-              points.push(new T.Vector3(x, y, z).applyMatrix4(this.camera.matrixWorldInverse));
-      };
-      for (const object of this.scene.children) {
-        if (
-          object === this.water ||
-          object === this.shadow ||
-          object === this.boatRoot ||
-          object === this.forecast ||
-          object.userData.excludeFromFrame ||
-          [...this.animals.values()].includes(object as T.Group)
-        )
-          continue;
-        corners(new T.Box3().setFromObject(object));
-      }
-      for (const node of this.level.nodes)
-        corners(
-          new T.Box3(
-            V([node.positionXZ[0] - 1.25, node.positionXZ[1] - 1.25], 0),
-            V([node.positionXZ[0] + 1.25, node.positionXZ[1] + 1.25], 2),
-          ),
+    this.camera.updateMatrixWorld(true);
+    const points = this.framePoints.map((point) =>
+      point.clone().applyMatrix4(this.camera.matrixWorldInverse),
+    );
+    const bounds = new T.Box3().setFromPoints(points),
+      center = bounds.getCenter(new T.Vector3()),
+      size = bounds.getSize(new T.Vector3());
+    const compact = h <= 600 && w > 700;
+    const top = compact ? 70 : w <= 700 ? 198 : 104;
+    const bottom = w <= 700 ? 150 : 16;
+    const availableHeight = Math.max(100, h - top - bottom);
+    const targetY = top + availableHeight / 2;
+    let scale = Math.min((w - 32) / size.x, availableHeight / size.y);
+    let targetX = w / 2;
+    const statusLeft = w - (compact ? Math.min(300, w * 0.4) : 510) - 16;
+    const statusTop = h - (compact ? 76 : 84);
+    if (w > 700)
+      for (let attempt = 0; attempt < 60; attempt++) {
+        const lowPoints = points.filter(
+          (point) => targetY - (point.y - center.y) * scale > statusTop,
         );
-      const bounds = new T.Box3().setFromPoints(points),
-        center = bounds.getCenter(new T.Vector3()),
-        size = bounds.getSize(new T.Vector3());
-      const scale = Math.min((w - 24) / size.x, (h - 20) / size.y);
-      this.camera.left = center.x - w / scale / 2;
-      this.camera.right = center.x + w / scale / 2;
-      this.camera.top = center.y + h / scale / 2;
-      this.camera.bottom = center.y - h / scale / 2;
-    }
+        const left = 16 - (bounds.min.x - center.x) * scale;
+        const right = w - 16 - (bounds.max.x - center.x) * scale;
+        const belowStatus = lowPoints.length
+          ? statusLeft - Math.max(...lowPoints.map((point) => (point.x - center.x) * scale)) - 8
+          : right;
+        const maximum = Math.min(right, belowStatus);
+        if (left <= maximum) {
+          targetX = Math.max(left, Math.min(maximum, w / 2));
+          break;
+        }
+        scale *= 0.985;
+      }
+    const centerX = center.x + (w / 2 - targetX) / scale;
+    const centerY = center.y + (targetY - h / 2) / scale;
+    this.camera.left = centerX - w / scale / 2;
+    this.camera.right = centerX + w / scale / 2;
+    this.camera.top = centerY + h / scale / 2;
+    this.camera.bottom = centerY - h / scale / 2;
     this.camera.updateProjectionMatrix();
     this.coastalWater.setView(this.camera);
   }
@@ -537,10 +683,12 @@ export class World {
     }
     this.indicate(s);
   }
-  indicate(s: State, selected?: string) {
-    const selectedEdge = selected ? edgeTo(s, selected, this.level) : undefined;
+  indicate(s: State, selected?: string, emphasis?: string) {
+    const focus = emphasis ?? selected;
+    const selectedEdge = focus ? edgeTo(s, focus, this.level) : undefined;
     this.navigationCurrent = s.boatNodeId;
-    this.navigationSelected = selectedEdge ? selected! : null;
+    this.navigationSelected = selected && this.markers.has(selected) ? selected : null;
+    this.navigationEmphasis = emphasis && this.markers.has(emphasis) ? emphasis : null;
     for (const [id, g] of this.markers) {
       const e = edgeTo(s, id, this.level);
       const status =
@@ -553,13 +701,14 @@ export class World {
               : 'available';
       const active = id === this.navigationSelected;
       g.visible = true;
-      const color = active
-        ? '#ffe09a'
-        : status === 'too-shallow'
-          ? '#d19272'
-          : status === 'current'
-            ? '#fff1d7'
-            : '#cce2d6';
+      const color =
+        active || id === emphasis
+          ? '#ffe09a'
+          : status === 'too-shallow'
+            ? '#d19272'
+            : status === 'current'
+              ? '#fff1d7'
+              : '#cce2d6';
       const ring = g.getObjectByName('stop-ring') as T.Mesh;
       ring.material = mat(color);
       ring.visible = status !== 'nonadjacent';
@@ -569,6 +718,7 @@ export class World {
       g.getObjectByName('nonadjacent-diamond')!.visible = status === 'nonadjacent';
       g.userData.navigationStatus = status;
       g.userData.selected = active;
+      g.userData.emphasized = id === emphasis;
       g.scale.setScalar(active ? 1.15 : 1);
       g.position.y = s.tideLevel * 0.18 + 0.04;
     }
@@ -880,6 +1030,7 @@ export class World {
     return {
       currentNode: this.navigationCurrent,
       selectedDestination: this.navigationSelected,
+      emphasizedDestination: this.navigationEmphasis,
       routes: [...this.routes].map(([id, route]) => {
         const material = route.material as T.LineDashedMaterial;
         return {
@@ -906,32 +1057,55 @@ export class World {
     };
   }
   frameStatus() {
-    const rectangle = (object: T.Object3D) => {
-      const b = new T.Box3().setFromObject(object),
-        points: T.Vector3[] = [];
-      for (const x of [b.min.x, b.max.x])
-        for (const y of [b.min.y, b.max.y])
-          for (const z of [b.min.z, b.max.z])
-            points.push(new T.Vector3(x, y, z).project(this.camera));
-      const xs = points.map((p) => ((p.x + 1) * this.host.clientWidth) / 2),
-        ys = points.map((p) => ((1 - p.y) * this.host.clientHeight) / 2);
-      return {
-        left: Math.min(...xs),
-        right: Math.max(...xs),
-        top: Math.min(...ys),
-        bottom: Math.max(...ys),
-        height: Math.max(...ys) - Math.min(...ys),
-      };
-    };
+    const rectangle = (object: T.Object3D) => this.rectangle([object]);
+    const envelope = this.framePoints.map((point) => point.clone().project(this.camera));
     return {
-      canvas: { width: this.host.clientWidth, height: this.host.clientHeight },
+      canvas: {
+        width: this.host.clientWidth,
+        height: this.host.clientHeight,
+        bufferWidth: this.renderer.domElement.width,
+        bufferHeight: this.renderer.domElement.height,
+      },
+      camera: {
+        left: this.camera.left,
+        right: this.camera.right,
+        top: this.camera.top,
+        bottom: this.camera.bottom,
+        position: this.camera.position.toArray(),
+        projection: this.camera.projectionMatrix.toArray(),
+      },
+      envelope: {
+        left: Math.min(...envelope.map((point) => ((point.x + 1) * this.host.clientWidth) / 2)),
+        right: Math.max(...envelope.map((point) => ((point.x + 1) * this.host.clientWidth) / 2)),
+        top: Math.min(...envelope.map((point) => ((1 - point.y) * this.host.clientHeight) / 2)),
+        bottom: Math.max(...envelope.map((point) => ((1 - point.y) * this.host.clientHeight) / 2)),
+        points: this.framePoints.length,
+        ferry: { ...this.ferryEnvelope },
+      },
       boat: rectangle(this.boatRoot),
       lighthouse: rectangle(this.scene.getObjectByName('lighthouse')!),
+      lantern: rectangle(this.home.lens),
+      lanternCore: rectangle(this.home.core),
       bell: this.scene.getObjectByName('bell-landmark')
         ? rectangle(this.scene.getObjectByName('bell-landmark')!)
         : null,
       passengers: [...this.animals].map(([id, g]) => ({ id, ...rectangle(g) })),
       nodes: this.level.nodes.map((n) => ({ id: n.id, ...this.project(n.positionXZ) })),
+      places: this.level.nodes.map((node) => ({ id: node.id, ...this.placeBounds(node.id) })),
+      pickTargets: [
+        ...this.pickTargets.map(({ id, kind, object }) => {
+          const bounds = rectangle(object);
+          return {
+            id,
+            kind,
+            ...bounds,
+            x: (bounds.left + bounds.right) / 2,
+            y: (bounds.top + bounds.bottom) / 2,
+          };
+        }),
+        { id: this.state.boatNodeId, kind: 'ferry', ...rectangle(this.boatRoot) },
+      ],
+      nonInteractivePlaces: this.nonInteractivePlaces.map((object) => rectangle(object)),
     };
   }
 }

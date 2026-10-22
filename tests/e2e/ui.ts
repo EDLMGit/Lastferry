@@ -15,12 +15,29 @@ export async function ready(page: Page, cove = 'first-crossing') {
   await idle(page);
 }
 export async function activate(page: Page, id: string, touch = false) {
+  if ((id === 'board' || id === 'unload') && !(await page.locator(`#${id}`).isVisible())) {
+    const current = await page.locator('.map-target[aria-current="location"]').getAttribute('id');
+    if (!current) throw Error('No current location selector is available');
+    if (touch) await page.locator(`#${current}`).tap();
+    else await page.locator(`#${current}`).click();
+  }
   if (touch) await page.locator(`#${id}`).tap();
   else await page.locator(`#${id}`).click();
 }
+export async function selectPlace(page: Page, id: string, touch = false) {
+  await activate(page, id.startsWith('map-') ? id : `map-${id}`, touch);
+  await expect(page.locator('#local-context')).toBeVisible();
+}
+export async function startMove(page: Page, id: string, touch = false) {
+  await selectPlace(page, id, touch);
+  await activate(page, 'sail', touch);
+}
 export async function act(page: Page, id: string, touch = false) {
-  await activate(page, id, touch);
-  if (!id.startsWith('map-')) await activate(page, 'commit', touch);
+  if (id.startsWith('map-')) await startMove(page, id, touch);
+  else {
+    await activate(page, id, touch);
+    await activate(page, 'commit', touch);
+  }
   await idle(page);
 }
 export async function undo(page: Page, touch = false) {
@@ -49,9 +66,20 @@ export async function tabTo(page: Page, id: string, backwards = false) {
   throw Error(`Natural Tab navigation did not reach ${id}; active=${await active(page)}`);
 }
 export async function keyAct(page: Page, id: string) {
+  if ((id === 'board' || id === 'unload') && !(await page.locator(`#${id}`).isVisible())) {
+    const current = await page.locator('.map-target[aria-current="location"]').getAttribute('id');
+    if (!current) throw Error('No current location selector is available');
+    await tabTo(page, current);
+    await page.keyboard.press('Enter');
+    await expect(page.locator('#local-heading')).toBeFocused();
+  }
   await tabTo(page, id);
   await page.keyboard.press('Enter');
-  if (!id.startsWith('map-')) {
+  if (id.startsWith('map-')) {
+    await expect(page.locator('#local-heading')).toBeFocused();
+    await tabTo(page, 'sail');
+    await page.keyboard.press('Enter');
+  } else {
     await expect(page.locator('#cancel')).toBeFocused();
     await tabTo(page, 'commit');
     await page.keyboard.press('Enter');
