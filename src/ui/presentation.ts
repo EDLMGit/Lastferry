@@ -1,23 +1,22 @@
 import { draft, edgeTo, pierAt, preview, type Action, type State } from '../game/rules';
-import { nodeNames, passengerNames, type Level } from '../levels/level';
+import { level as baseline, nodeName, passengerName, type Level } from '../levels/level';
 
-const stop = (id: string) => nodeNames[id] ?? id;
-const shortName = (id: string) => passengerNames[id]?.split(' ·')[0] ?? id;
+const stop = (id: string, l: Level) => nodeName(id, l);
 const verb = (ids: string[], singular: string, plural: string) =>
   ids.length === 1 ? singular : plural;
 const countActions = (n: number) => `${n} action${n === 1 ? '' : 's'}`;
 
-export function passengerList(ids: string[]): string {
-  const names = ids.map(shortName);
+export function passengerList(ids: string[], l: Level = baseline): string {
+  const names = ids.map((id) => passengerName(id, l));
   if (names.length < 2) return names[0] ?? '';
   if (names.length === 2) return names.join(' and ');
   return `${names.slice(0, -1).join(', ')} and ${names.at(-1)}`;
 }
 
 export function actionLabel(s: State, a: Action, l: Level): string {
-  if (a.type === 'move') return `Sail to ${stop(a.to)}`;
+  if (a.type === 'move') return `Sail to ${stop(a.to, l)}`;
   if (a.type === 'wait') return 'Wait';
-  const who = passengerList(a.passengerIds) || 'passengers';
+  const who = passengerList(a.passengerIds, l) || 'passengers';
   if (a.type === 'board') return `Board ${who}`;
   return pierAt(s, l)?.isDeliveryPier ? `Deliver ${who}` : `Let ${who} ashore`;
 }
@@ -29,16 +28,19 @@ export function objectiveCopy(s: State, l: Level): { headline: string; progress:
       ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'][
         total
       ] ?? total,
-    destination = stop(l.piers.find((p) => p.id === l.objective.deliveryPierId)!.nodeId),
+    destination = stop(l.piers.find((p) => p.id === l.objective.deliveryPierId)!.nodeId, l),
     home = required.filter((id) => s.delivered.includes(id)).length;
   return {
-    headline: `Bring ${total === 1 ? 'one passenger' : `all ${count} passengers`} to ${destination}`,
+    headline:
+      l.id === 'bellwater'
+        ? `Bring ${passengerList(required, l)} to ${destination}`
+        : `Bring ${total === 1 ? 'one passenger' : `all ${count} passengers`} to ${destination}`,
     progress: `Home ${home}/${total}`,
   };
 }
 
 export function passageCopy(s: State, to: string, l: Level): string {
-  if (to === s.boatNodeId) return `You are at ${stop(to)}.`;
+  if (to === s.boatNodeId) return `You are at ${stop(to, l)}.`;
   const edge = edgeTo(s, to, l);
   if (!edge) return 'No direct passage. Sail to an adjacent stop first.';
   const need = draft(s, l),
@@ -52,10 +54,10 @@ export function actionCostCopy(l: Level): string {
 
 export function pierSafetyCopy(s: State, pierId: string, l: Level): string {
   const pier = l.piers.find((p) => p.id === pierId)!;
-  if (s.tideLevel >= pier.elevation) return `${stop(pier.nodeId)} is flooded.`;
+  if (s.tideLevel >= pier.elevation) return `${stop(pier.nodeId, l)} is flooded.`;
   const flood = l.rules.tide.rises.find((r) => r.afterTurn > s.turn && r.level >= pier.elevation);
-  if (flood) return `${stop(pier.nodeId)} floods in ${countActions(flood.afterTurn - s.turn)}.`;
-  return `${stop(pier.nodeId)} stays safe through all tide rises.`;
+  if (flood) return `${stop(pier.nodeId, l)} floods in ${countActions(flood.afterTurn - s.turn)}.`;
+  return `${stop(pier.nodeId, l)} stays safe through all tide rises.`;
 }
 
 function tideCopy(s: State, l: Level): string {
@@ -75,7 +77,7 @@ function waitingFacts(s: State, l: Level): string[] {
     );
     const safe = s.tideLevel < p.elevation && !futureFlood;
     return [
-      `${passengerList(ids)} ${verb(ids, 'waits', 'wait')}${safe ? ' safely' : ''} at ${stop(p.nodeId)}.`,
+      `${passengerList(ids, l)} ${verb(ids, 'waits', 'wait')}${safe ? ' safely' : ''} at ${stop(p.nodeId, l)}.`,
     ];
   });
 }
@@ -88,7 +90,7 @@ export function statusCopy(
     const loss = s.lossReason!,
       pier = l.piers.find((p) => p.id === loss.pierId)!;
     return {
-      headline: `${stop(pier.nodeId)} flooded with ${passengerList(loss.passengerIds)} still waiting.`,
+      headline: `${stop(pier.nodeId, l)} flooded with ${passengerList(loss.passengerIds, l)} still waiting.`,
       detail: 'Undo earlier moves, or restart to try a different plan.',
       urgent: true,
     };
@@ -109,25 +111,25 @@ export function statusCopy(
     })
     .sort((a, b) => a.rise.afterTurn - b.rise.afterTurn)[0];
   const aboard = s.aboard.length
-      ? `${passengerList(s.aboard)} ${verb(s.aboard, 'is', 'are')} safe aboard.`
+      ? `${passengerList(s.aboard, l)} ${verb(s.aboard, 'is', 'are')} safe aboard.`
       : '',
     waiting = waitingFacts(s, l),
     nextRise = l.rules.tide.rises.find((r) => r.afterTurn > s.turn),
     immediateTide = nextRise?.afterTurn === s.turn + 1 ? tideCopy(s, l) : '';
   if (threatened)
     return {
-      headline: `${stop(threatened.pier.nodeId)} floods in ${countActions(threatened.rise.afterTurn - s.turn)}.`,
+      headline: `${stop(threatened.pier.nodeId, l)} floods in ${countActions(threatened.rise.afterTurn - s.turn)}.`,
       detail: [
         immediateTide,
         aboard,
-        ...waiting.filter((f) => !f.includes(stop(threatened.pier.nodeId))),
+        ...waiting.filter((f) => !f.includes(stop(threatened.pier.nodeId, l))),
       ]
         .filter(Boolean)
         .join(' '),
       urgent: true,
     };
   const delivered = s.delivered.length
-    ? `${passengerList(s.delivered)} ${verb(s.delivered, 'is', 'are')} safe at ${stop(l.piers.find((p) => p.id === l.objective.deliveryPierId)!.nodeId)}.`
+    ? `${passengerList(s.delivered, l)} ${verb(s.delivered, 'is', 'are')} safe at ${stop(l.piers.find((p) => p.id === l.objective.deliveryPierId)!.nodeId, l)}.`
     : '';
   return {
     headline: aboard || delivered || waiting.shift() || 'The boat is empty.',
@@ -146,11 +148,11 @@ export function forecastCopy(s: State, l: Level): { headline: string; detail: st
     detail: l.piers
       .map((p) => {
         const ids = s.waitingByPier[p.id] ?? [],
-          title = stop(p.nodeId);
+          title = stop(p.nodeId, l);
         if (s.tideLevel >= p.elevation)
-          return `${title} is flooded${ids.length ? `; ${passengerList(ids)} ${verb(ids, 'is', 'are')} waiting there` : ' and empty'}.`;
+          return `${title} is flooded${ids.length ? `; ${passengerList(ids, l)} ${verb(ids, 'is', 'are')} waiting there` : ' and empty'}.`;
         if (futureTide >= p.elevation)
-          return `${title} will flood at the next rise; ${ids.length ? `${passengerList(ids)} ${verb(ids, 'is', 'are')} waiting there` : 'nobody is waiting there'}.`;
+          return `${title} will flood at the next rise; ${ids.length ? `${passengerList(ids, l)} ${verb(ids, 'is', 'are')} waiting there` : 'nobody is waiting there'}.`;
         return `${title} ${next ? 'stays dry at the next rise' : 'is dry'}.`;
       })
       .join(' '),
@@ -192,15 +194,15 @@ export function previewCopy(
       flooded = l.piers.find((p) => p.id === loss.pierId)!;
     const order =
       a.type === 'board'
-        ? `${passengerList(a.passengerIds)} ${verb(a.passengerIds, 'boards', 'board')}${rise ? ', then the tide rises' : ''}. `
+        ? `${passengerList(a.passengerIds, l)} ${verb(a.passengerIds, 'boards', 'board')}${rise ? ', then the tide rises' : ''}. `
         : rise
           ? 'The tide rises after this action. '
           : '';
-    consequence = `${order}${passengerList(loss.passengerIds)} ${verb(loss.passengerIds, 'is', 'are')} still waiting at ${stop(flooded.nodeId)} when it floods. This ends the crossing.`;
+    consequence = `${order}${passengerList(loss.passengerIds, l)} ${verb(loss.passengerIds, 'is', 'are')} still waiting at ${stop(flooded.nodeId, l)} when it floods. This ends the crossing.`;
   } else if (n.status === 'won') {
-    consequence = `Everyone is safely home at ${stop(l.piers.find((p) => p.id === l.objective.deliveryPierId)!.nodeId)}.`;
+    consequence = `Everyone is safely home at ${stop(l.piers.find((p) => p.id === l.objective.deliveryPierId)!.nodeId, l)}.`;
   } else if (a.type === 'board') {
-    const who = passengerList(a.passengerIds),
+    const who = passengerList(a.passengerIds, l),
       safety =
         a.passengerIds.length === 2
           ? 'Both are'
@@ -212,14 +214,14 @@ export function previewCopy(
       : `${who} will be aboard.`;
   } else if (a.type === 'unload') {
     consequence = pier!.isDeliveryPier
-      ? `${passengerList(a.passengerIds)} will be safe at ${stop(pier!.nodeId)}.`
-      : `${passengerList(a.passengerIds)} will wait at ${stop(pier!.nodeId)}. ${pierSafetyCopy(n, pier!.id, l)}`;
+      ? `${passengerList(a.passengerIds, l)} will be safe at ${stop(pier!.nodeId, l)}.`
+      : `${passengerList(a.passengerIds, l)} will wait at ${stop(pier!.nodeId, l)}. ${pierSafetyCopy(n, pier!.id, l)}`;
     if (rise) consequence += ' The tide rises after this action.';
   } else {
     consequence =
       a.type === 'move'
-        ? `One passage to ${stop(a.to)}.`
-        : `The boat stays at ${stop(s.boatNodeId)}.`;
+        ? `One passage to ${stop(a.to, l)}.`
+        : `The boat stays at ${stop(s.boatNodeId, l)}.`;
     if (rise) consequence += ' The tide rises after this action.';
   }
   if ((a.type === 'board' || a.type === 'unload') && n.status === 'playing') {
@@ -229,7 +231,7 @@ export function previewCopy(
     });
     if (blocked) {
       const edge = edgeTo(n, blocked.id, l)!;
-      consequence += ` Passage to ${stop(blocked.id)} has depth ${edge.baseDepth + n.tideLevel}: too shallow.`;
+      consequence += ` Passage to ${stop(blocked.id, l)} has depth ${edge.baseDepth + n.tideLevel}: too shallow.`;
     }
   }
   return { summary, consequence, requirement, error: null };

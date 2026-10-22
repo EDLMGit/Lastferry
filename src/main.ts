@@ -1,5 +1,5 @@
 import './style.css';
-import { level as baseline, holdingPier, nodeNames, passengerNames } from './levels/level';
+import { level as baseline, holdingPier, bellwater, levelNames } from './levels/level';
 import {
   copy,
   draft,
@@ -18,15 +18,20 @@ import {
   statusCopy,
   forecastCopy,
   previewCopy,
+  passengerList,
 } from './ui/presentation';
 import { Session } from './game/session';
 import { World } from './scene/world';
 import { Sound } from './audio/sound';
 
-const experiment = new URLSearchParams(location.search).get('cove') === 'holding-pier';
-const level = experiment ? holdingPier : baseline;
+const cove = new URLSearchParams(location.search).get('cove');
+const level = cove === 'first-crossing' ? baseline : cove === 'bellwater' ? bellwater : holdingPier;
+const experiment = level.id === 'holding-pier';
+const isBellwater = level.id === 'bellwater';
+const { nodeNames, passengerNames } = levelNames(level);
+const title = level.id === baseline.id ? 'The First Crossing' : level.title;
 const app = document.querySelector<HTMLDivElement>('#app')!;
-app.innerHTML = `<main class="game ${experiment ? 'holding' : 'baseline'}"><section id="seascape" aria-label="${level.title}" aria-busy="false"><div id="world"></div><header class="hud"><div class="identity"><h1>${experiment ? 'The Holding Pier' : 'The First Crossing'}</h1><p id="objective"></p></div><div id="readout" aria-label="Crossing progress"></div><nav class="tools" aria-label="Crossing controls"><button id="undo">↶ Undo</button><button id="wait">Wait <span>· 1 action</span></button><button id="menu">Menu</button></nav></header><nav id="map-labels" aria-label="Map stops"></nav><section id="local-context" aria-labelledby="local-heading"></section><button id="status-toggle" aria-haspopup="dialog" aria-label="Open tide and pier forecast"></button><p id="transition-status" role="status" tabindex="-1" hidden>Finishing this action…</p><p class="portrait-note">Turn sideways for a wider view.</p></section><div id="announcement" class="sr-only" role="status" aria-live="polite"></div></main><dialog id="dialog" aria-labelledby="dialog-title"><div id="dialog-content"></div></dialog>`;
+app.innerHTML = `<main class="game ${experiment ? 'holding' : isBellwater ? 'bellwater' : 'baseline'}"><section id="seascape" aria-label="${level.title}" aria-busy="false"><div id="world"></div><header class="hud"><div class="identity"><h1>${title}</h1><p id="objective"></p></div><div id="readout" aria-label="Crossing progress"></div><nav class="tools" aria-label="Crossing controls"><button id="undo">↶ Undo</button><button id="wait">Wait <span>· 1 action</span></button><button id="menu">Menu</button></nav></header><nav id="map-labels" aria-label="Map stops"></nav><section id="local-context" aria-labelledby="local-heading"></section><button id="status-toggle" aria-haspopup="dialog" aria-label="Open tide and pier forecast"></button><p id="transition-status" role="status" tabindex="-1" hidden>Finishing this action…</p><p class="portrait-note">Turn sideways for a wider view.</p></section><div id="announcement" class="sr-only" role="status" aria-live="polite"></div></main><dialog id="dialog" aria-labelledby="dialog-title"><div id="dialog-content"></div></dialog>`;
 const $ = (id: string) => document.getElementById(id)!;
 const session = new Session(level),
   sound = new Sound(),
@@ -123,8 +128,17 @@ function renderDialog() {
           };
           renderDialog();
         };
-    $('commit').onclick = () => {
-      if (mode === 'action' && selected && !session.busy) execute(selected);
+    $('commit').onclick = (e) => {
+      if (mode === 'action' && selected && !session.busy) {
+        if (e.isTrusted && e.detail > 0)
+          closingFence = {
+            rect: $('commit').getBoundingClientRect(),
+            until: performance.now() + 180,
+            x: e.clientX,
+            y: e.clientY,
+          };
+        execute(selected);
+      }
     };
   } else if (mode === 'forecast') {
     const f = forecastCopy(s, level);
@@ -135,8 +149,9 @@ function renderDialog() {
       level.rules.tide.rises.find((r) => r.afterTurn > s.turn)?.level ?? s.tideLevel,
     );
   } else if (mode === 'menu') {
+    const sheep = level.passengers.find((p) => p.species === 'sheep')!;
     $('dialog-content').innerHTML =
-      `${header('Crossing menu')}<div class="dialog-body menu-body"><div class="menu-actions"><button id="restart">Restart crossing</button><button id="sound" aria-pressed="${sound.muted}" aria-label="${sound.muted ? 'Unmute sound' : 'Mute sound'}">Sound ${sound.muted ? 'off' : 'on'}</button></div><label class="cove-picker">Choose cove<select id="cove-picker"><option value="first-crossing" ${!experiment ? 'selected' : ''}>First Crossing · baseline</option><option value="holding-pier" ${experiment ? 'selected' : ''}>The Holding Pier</option></select></label><details id="help-details"><summary>How to play · actions and depth</summary><p>${actionCostCopy(level)}</p><p>Use a named destination to sail one passage. Its separate Inspect button is free. Board or let passengers ashore at the current pier; select their names in the card, then confirm.</p><p>Boat depth needed: empty = 1; 1–2 spaces = 2; 3–4 spaces = 3. Each rabbit uses 1 space; Moss uses 2. A passage must be at least as deep as the boat needs.</p><p>Boarding and unloading happen before the tide rises. Use the status button for the tide and pier forecast. Undo earlier actions or restart to recover from a losing plan.</p><p>Tab and Shift+Tab move between controls; Enter or Space activates them. Escape closes a card.</p></details></div>`;
+      `${header('Crossing menu')}<div class="dialog-body menu-body"><div class="menu-actions"><button id="restart">Restart crossing</button><button id="sound" aria-pressed="${sound.muted}" aria-label="${sound.muted ? 'Unmute sound' : 'Mute sound'}">Sound ${sound.muted ? 'off' : 'on'}</button></div><label class="cove-picker">Choose cove<select id="cove-picker">${[baseline, holdingPier, bellwater].map((l) => `<option value="${l.id}" ${l.id === level.id ? 'selected' : ''}>${l.title}${l.id === baseline.id ? ' · baseline' : ''}</option>`).join('')}</select></label><details id="help-details"><summary>How to play · actions and depth</summary><p>${actionCostCopy(level)}</p><p>Use a named destination to sail one passage. Its separate Inspect button is free. Board or let passengers ashore at the current pier; select their names in the card, then confirm.</p><p>Boat depth needed: empty = 1; 1–2 spaces = 2; 3–4 spaces = 3. Each rabbit uses 1 space; ${passengerList([sheep.id], level)} uses ${sheep.slots}. A passage must be at least as deep as the boat needs.</p><p>Boarding and unloading happen before the tide rises. Use the status button for the tide and pier forecast. Undo earlier actions or restart to recover from a losing plan.</p><p>Tab and Shift+Tab move between controls; Enter or Space activates them. Escape closes a card.</p></details></div>`;
     $('restart').onclick = restart;
     $('sound').onclick = () => {
       sound.toggle();
@@ -147,9 +162,14 @@ function renderDialog() {
     };
   } else {
     const f = statusCopy(s, level),
-      won = s.status === 'won';
+      won = s.status === 'won',
+      next = won && experiment;
     $('dialog-content').innerHTML =
-      `${header(won ? 'Everyone home.' : 'A turn too late.')}<div class="dialog-body ending ${won ? '' : 'loss'}"><p>${won ? `${level.objective.requiredPassengerIds.length} passengers delivered in ${s.turn} actions. All are safe at ${nodeNames[level.piers.find((p) => p.id === level.objective.deliveryPierId)!.nodeId]}.` : f.headline}</p><p>${won ? 'Undo to revisit the crossing, or restart.' : 'Undo earlier moves, or restart to try a different plan.'}</p></div><footer class="dialog-footer terminal-actions"><button id="terminal-undo">↶ Undo last action</button><button id="terminal-restart">Restart</button></footer>`;
+      `${header(won ? (isBellwater ? 'Bellwater is safe.' : 'Everyone home.') : 'A turn too late.')}<div class="dialog-body ending ${won ? '' : 'loss'}"><p>${won ? (isBellwater ? `${passengerList(s.delivered, level)} are safe at Harbor. ${s.turn} actions completed.` : `${level.objective.requiredPassengerIds.length} passengers delivered in ${s.turn} actions. All are safe at ${nodeNames[level.piers.find((p) => p.id === level.objective.deliveryPierId)!.nodeId]}.`) : f.headline}</p><p>${next ? 'Further along the coast, two piers still have their lights on.' : won ? 'Undo to revisit the crossing, or restart.' : 'Undo earlier moves, or restart to try a different plan.'}</p></div><footer class="dialog-footer terminal-actions">${next ? '<button id="next-cove">Next cove</button>' : ''}<button id="terminal-undo">↶ Undo last action</button><button id="terminal-restart">Restart</button></footer>`;
+    if (next)
+      $('next-cove').onclick = () => {
+        location.search = '?cove=bellwater';
+      };
     $('terminal-undo').onclick = undo;
     $('terminal-restart').onclick = restart;
   }
@@ -343,7 +363,7 @@ function positionDialog() {
 }
 function positionMap() {
   const host = world.host,
-    small = matchMedia('(max-height: 480px)').matches;
+    small = matchMedia('(max-height: 600px) and (min-width: 701px)').matches;
   for (const n of level.nodes) {
     const group = $(`stop-${n.id}`);
     if (!group) continue;
@@ -359,7 +379,7 @@ function positionMap() {
           ? 0.7
           : 1.4;
     const point = world.project([n.positionXZ[0], n.positionXZ[1] + offset]);
-    if (!experiment && small) {
+    if (!experiment && !isBellwater && small) {
       if (n.id === 'harbor' || n.id === 'outer-west') point.x -= 145;
       if (n.id === 'sheep-pier' || n.id === 'outer-east') point.x += 145;
     }
@@ -372,32 +392,105 @@ function positionMap() {
       if (n.id === 'harbor') point.x -= small ? 95 : 170;
     }
     if (!experiment && n.id === 'outer-south' && n.id === session.state.boatNodeId) point.y -= 65;
+    if (
+      isBellwater &&
+      !small &&
+      n.id === 'low-pier' &&
+      session.state.boatNodeId === 'east-buoy' &&
+      session.state.aboard.length
+    ) {
+      const head = Math.min(
+        ...world
+          .frameStatus()
+          .passengers.filter((p) => session.state.aboard.includes(p.id))
+          .map((p) => p.top),
+      );
+      point.y = Math.min(point.y, head - group.offsetHeight / 2 - 8);
+    }
     const half = group.offsetWidth / 2;
-    group.style.left = `${Math.max(half + 8, Math.min(host.clientWidth - half - 8, point.x))}px`;
-    group.style.top = `${Math.max(host.offsetTop + group.offsetHeight / 2 + 4, Math.min(host.offsetTop + host.clientHeight - group.offsetHeight / 2 - 4, point.y + host.offsetTop))}px`;
+    if (isBellwater && small) {
+      const row = {
+        harbor: 0.51,
+        shallows: 0.85,
+        'low-pier': 0.51,
+        'west-buoy': 0.85,
+        'east-buoy': 0.85,
+        'bell-pier': 0.11,
+      }[n.id];
+      point.x =
+        n.id === 'shallows'
+          ? host.clientWidth / 2
+          : n.id === 'harbor' || n.id === 'west-buoy'
+            ? half + 8
+            : host.clientWidth - half - 8;
+      point.y = host.clientHeight * (row ?? 0.5);
+    }
+    const x = Math.max(half + 8, Math.min(host.clientWidth - half - 8, point.x));
+    let bottom = host.offsetTop + host.clientHeight - group.offsetHeight / 2 - 4;
+    if (isBellwater) {
+      const forecast = $('status-toggle').getBoundingClientRect();
+      if (x + half > forecast.left && x - half < forecast.right)
+        bottom = Math.min(bottom, forecast.top - group.offsetHeight / 2 - 8);
+    }
+    group.style.left = `${x}px`;
+    group.style.top = `${Math.max(host.offsetTop + group.offsetHeight / 2 + 4, Math.min(bottom, point.y + host.offsetTop))}px`;
   }
   if ($('map-leaders'))
     $('map-leaders').innerHTML =
       !experiment && small
         ? level.nodes
-            .filter((n) => ['harbor', 'sheep-pier', 'outer-west', 'outer-east'].includes(n.id))
+            .filter(
+              (n) =>
+                isBellwater || ['harbor', 'sheep-pier', 'outer-west', 'outer-east'].includes(n.id),
+            )
             .map((n) => {
               const point = world.project(n.positionXZ),
                 group = $(`stop-${n.id}`),
                 rect = group.getBoundingClientRect();
-              const targetX = n.id === 'harbor' || n.id === 'outer-west' ? rect.right : rect.left;
+              const targetX = isBellwater
+                ? n.id === 'shallows'
+                  ? rect.left + rect.width / 2
+                  : n.id === 'harbor' || n.id === 'west-buoy'
+                    ? rect.right
+                    : rect.left
+                : n.id === 'harbor' || n.id === 'outer-west'
+                  ? rect.right
+                  : rect.left;
               return `<line x1="${point.x}" y1="${point.y + host.offsetTop}" x2="${targetX}" y2="${rect.top + rect.height / 2}" />`;
             })
             .join('')
         : '';
   if (!small && innerWidth > 700) {
-    const point = world.project(
-      level.nodes.find((n) => n.id === session.state.boatNodeId)!.positionXZ,
-    );
+    const boat = world.frameStatus().boat;
     const local = $('local-context'),
-      half = local.offsetWidth / 2;
-    local.style.left = `${Math.max(half + 16, Math.min(host.clientWidth - half - 16, point.x))}px`;
-    local.style.top = `${Math.min(host.offsetTop + host.clientHeight - local.offsetHeight - 10, point.y + host.offsetTop + 58)}px`;
+      width = local.offsetWidth,
+      height = local.offsetHeight,
+      obstacles = [
+        ...document.querySelectorAll<HTMLElement>('.map-stop, .hud, #status-toggle'),
+      ].map((e) => e.getBoundingClientRect()),
+      centerX = (boat.left + boat.right) / 2,
+      centerY = (boat.top + boat.bottom) / 2 + host.offsetTop;
+    const candidates = [
+      [centerX - width / 2, boat.bottom + host.offsetTop + 10],
+      [boat.left - width - 12, centerY - height / 2],
+      [boat.right + 12, centerY - height / 2],
+      [centerX - width / 2, boat.top + host.offsetTop - height - 12],
+    ].map(([x, y]) => ({
+      x: Math.max(16, Math.min(host.clientWidth - width - 16, x)),
+      y: Math.max(host.offsetTop + 8, Math.min(host.offsetTop + host.clientHeight - height - 8, y)),
+    }));
+    const chosen =
+      candidates.find((p) =>
+        obstacles.every(
+          (r) =>
+            p.x + width + 8 <= r.left ||
+            p.x - 8 >= r.right ||
+            p.y + height + 8 <= r.top ||
+            p.y - 8 >= r.bottom,
+        ),
+      ) ?? candidates[0];
+    local.style.left = `${chosen.x + width / 2}px`;
+    local.style.top = `${chosen.y}px`;
   } else {
     $('local-context').style.removeProperty('left');
     $('local-context').style.removeProperty('top');

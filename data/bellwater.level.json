@@ -1,0 +1,215 @@
+{
+  "id": "bellwater",
+  "title": "Bellwater Cove",
+  "rules": {
+    "capacity": 4,
+    "draftBands": [
+      { "maxLoad": 0, "draft": 1 },
+      { "maxLoad": 2, "draft": 2 },
+      { "maxLoad": 4, "draft": 3 }
+    ],
+    "tide": {
+      "initialLevel": 0,
+      "rises": [
+        { "afterTurn": 4, "level": 1 },
+        { "afterTurn": 8, "level": 2 }
+      ]
+    },
+    "actionCost": 1,
+    "depthFormula": "baseDepth + tideLevel",
+    "pierDryWhen": "tideLevel < elevation",
+    "failureRule": "required passenger waiting at a flooded pier"
+  },
+  "names": {
+    "nodes": {
+      "harbor": "Harbor",
+      "shallows": "Shallows",
+      "low-pier": "Low Pier",
+      "west-buoy": "West Buoy",
+      "east-buoy": "East Buoy",
+      "bell-pier": "Bell Pier"
+    },
+    "passengers": { "tansy": "Tansy", "lark": "Lark", "bram": "Bram" }
+  },
+  "world": {
+    "plane": "XZ",
+    "north": "negative Z",
+    "waterYPerTideLevel": 0.18,
+    "referenceBoatRadius": 0.3,
+    "requiredRouteClearance": 0.45,
+    "clearanceScope": "Actual ferry geometry is checked independently along both directions of each route.",
+    "presentationNote": "A triangular inlet: safe lighthouse harbor to the west, low reed shore to the east and the rocky bell shore behind the inner channel. The outer buoy route remains visibly separate from the shallow channel.",
+    "suggestedCamera": {
+      "projection": "orthographic",
+      "positionXYZ": [0, 34, 24],
+      "targetXYZ": [0, 0, -0.7],
+      "verticalSpan": 13
+    },
+    "islands": [
+      {
+        "id": "lighthouse-island",
+        "elevation": 3,
+        "footprintXZ": [
+          [-7.6, -4],
+          [-4.3, -4],
+          [-3.6, -2.7],
+          [-4.2, -1.4],
+          [-7, -1.4],
+          [-7.9, -2.7]
+        ]
+      },
+      {
+        "id": "low-island",
+        "elevation": 1,
+        "footprintXZ": [
+          [3.8, -3],
+          [6.8, -2.8],
+          [7.7, -1.5],
+          [7.2, -0.6],
+          [5.4, -0.5],
+          [3.9, -1],
+          [3.5, -2]
+        ]
+      },
+      {
+        "id": "bell-island",
+        "elevation": 2,
+        "footprintXZ": [
+          [-1.3, -6.1],
+          [1.8, -6],
+          [2.4, -4.8],
+          [1.6, -3.9],
+          [-0.9, -3.9],
+          [-1.8, -5]
+        ]
+      }
+    ]
+  },
+  "nodes": [
+    { "id": "harbor", "positionXZ": [-5.6, 0.5], "baseDepth": 3, "pierId": "harbor-pier" },
+    { "id": "shallows", "positionXZ": [0, 1.3], "baseDepth": 3 },
+    { "id": "low-pier", "positionXZ": [5.6, 1.3], "baseDepth": 3, "pierId": "low-pier" },
+    { "id": "west-buoy", "positionXZ": [-4.5, 3.9], "baseDepth": 3 },
+    { "id": "east-buoy", "positionXZ": [4.5, 4.2], "baseDepth": 3 },
+    { "id": "bell-pier", "positionXZ": [0.4, -2], "baseDepth": 3, "pierId": "bell-pier" }
+  ],
+  "edges": [
+    {
+      "id": "harbor-shallows",
+      "nodes": ["harbor", "shallows"],
+      "baseDepth": 1,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [-5.6, 0.5],
+        [-2.7, 1.2],
+        [0, 1.3]
+      ]
+    },
+    {
+      "id": "shallows-low",
+      "nodes": ["shallows", "low-pier"],
+      "baseDepth": 1,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [0, 1.3],
+        [3, 1.8],
+        [5.6, 1.3]
+      ]
+    },
+    {
+      "id": "harbor-west",
+      "nodes": ["harbor", "west-buoy"],
+      "baseDepth": 3,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [-5.6, 0.5],
+        [-6, 2],
+        [-4.5, 3.9]
+      ]
+    },
+    {
+      "id": "west-east",
+      "nodes": ["west-buoy", "east-buoy"],
+      "baseDepth": 3,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [-4.5, 3.9],
+        [0, 4.8],
+        [4.5, 4.2]
+      ]
+    },
+    {
+      "id": "east-low",
+      "nodes": ["east-buoy", "low-pier"],
+      "baseDepth": 3,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [4.5, 4.2],
+        [6.3, 3.1],
+        [5.6, 1.3]
+      ]
+    },
+    {
+      "id": "harbor-bell",
+      "nodes": ["harbor", "bell-pier"],
+      "baseDepth": 2,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [-5.6, 0.5],
+        [-3.3, 1.3],
+        [-2, -1.3],
+        [0.4, -2]
+      ]
+    }
+  ],
+  "piers": [
+    {
+      "id": "harbor-pier",
+      "nodeId": "harbor",
+      "islandId": "lighthouse-island",
+      "elevation": 3,
+      "positionXZ": [-5.6, -0.4],
+      "landAnchorXZ": [-5.6, -1.6],
+      "width": 0.7,
+      "isDeliveryPier": true
+    },
+    {
+      "id": "low-pier",
+      "nodeId": "low-pier",
+      "islandId": "low-island",
+      "elevation": 1,
+      "positionXZ": [5.6, 0.4],
+      "landAnchorXZ": [5.6, -0.8],
+      "width": 0.9,
+      "isDeliveryPier": false
+    },
+    {
+      "id": "bell-pier",
+      "nodeId": "bell-pier",
+      "islandId": "bell-island",
+      "elevation": 2,
+      "positionXZ": [0.4, -2.9],
+      "landAnchorXZ": [0.4, -4.1],
+      "width": 0.8,
+      "isDeliveryPier": false
+    }
+  ],
+  "passengers": [
+    { "id": "tansy", "species": "rabbit", "slots": 1 },
+    { "id": "lark", "species": "rabbit", "slots": 1 },
+    { "id": "bram", "species": "sheep", "slots": 2 }
+  ],
+  "start": {
+    "boatNodeId": "harbor",
+    "aboard": [],
+    "waitingByPier": { "harbor-pier": [], "low-pier": ["tansy", "lark"], "bell-pier": ["bram"] }
+  },
+  "objective": {
+    "deliveryPierId": "harbor-pier",
+    "requiredPassengerIds": ["tansy", "lark", "bram"]
+  },
+  "validation": {
+    "searchDepthLimit": 0,
+    "witnessReplays": ["data/bellwater/witnesses.json"]
+  }
+}

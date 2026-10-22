@@ -47,6 +47,7 @@ const paths = [
   'docs/TECHNICAL_PLAN.md',
   'docs/ASSET_LEDGER.md',
   ...(existsSync(new URL('docs/HOLDING_PIER.md', root)) ? ['docs/HOLDING_PIER.md'] : []),
+  ...(existsSync(new URL('docs/BELLWATER.md', root)) ? ['docs/BELLWATER.md'] : []),
   'tools/snapshot-evidence.mjs',
 ].sort();
 const files = Object.fromEntries(paths.map((p) => [p, digest(readFileSync(new URL(p, root)))]));
@@ -86,14 +87,14 @@ if (!process.argv.includes('--finalize')) {
         path,
         captureTime: statSync(p).mtime.toISOString(),
         sha256: digest(b),
-        sourceIdentity: name.startsWith('baseline-') ? option('--base') : stored.source,
+        sourceIdentity: stored.source,
         viewport: [b.readUInt32BE(16), b.readUInt32BE(20)],
         input:
           /^(desktop|phone)-(loading|loaded)\./.test(name) ||
           name.includes('keyboard-success') ||
           name.startsWith('baseline-')
             ? 'Keyboard: Tab, Shift+Tab, Enter and Escape'
-            : name.startsWith('phone-')
+            : name.startsWith('phone-') || name.startsWith('bellwater-phone-')
               ? 'Chromium emulated touch'
               : name === 'portrait.png'
                 ? 'Mouse, portrait and reduced motion'
@@ -127,6 +128,7 @@ if (!process.argv.includes('--finalize')) {
           'boarding-unloading',
           'boarding-unloading-closeup',
           'uninterrupted-rescue',
+          'bellwater-uninterrupted',
         ]
           .map((name) => `${reviewDir}/raw/${name}.webm`)
           .filter((path) => existsSync(new URL(path, root)))

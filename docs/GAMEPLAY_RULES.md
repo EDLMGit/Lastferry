@@ -1,6 +1,6 @@
 # Last Ferry: M1 gameplay rules
 
-**Status: implementation contract for the first playable cove.** This package contains an authored design and a reference validator. It does not contain a playable game. The eventual game must implement these rules independently and test its own behavior.
+**Status: gameplay contract.** The playable application implements these rules independently of the reference validator. First Crossing's exact values remain below; later coves own their layouts and starting arrangements in separate level JSON files.
 
 The first cove is a short, forgiving introduction to loading, route depth, and changing tides. Its three successful witness routes require seven, seven, and eight committed actions. These counts do not establish playtime, difficulty, or replay value.
 
@@ -18,11 +18,11 @@ There is no additional move limit, real-time countdown, fuel meter, score target
 
 The ferry has **four passenger slots**. A rabbit uses one slot; a sheep uses two. Occupied slots are the entire load calculation. There is no separate mass, cargo grid, animal mood, or inventory system.
 
-| Occupied slots | Boat draft | Example |
-| --- | ---: | --- |
-| 0 | 1 | Empty ferry |
-| 1–2 | 2 | One sheep, or two rabbits |
-| 3–4 | 3 | One sheep and one or two rabbits |
+| Occupied slots | Boat draft | Example                          |
+| -------------- | ---------: | -------------------------------- |
+| 0              |          1 | Empty ferry                      |
+| 1–2            |          2 | One sheep, or two rabbits        |
+| 3–4            |          3 | One sheep and one or two rabbits |
 
 A route is usable when its current depth is **greater than or equal to** the boat's draft. Equality is safe. A maximum-load boat has draft 3; it is afloat at every authored stopping node even at the initial tide.
 
@@ -32,12 +32,12 @@ The rules use integer depth units. A renderer may group depths of 3 or more into
 
 Every valid action below costs exactly **one turn**. A selection is a set of distinct passenger IDs, not a count or a species name.
 
-| Action | Payload | Preconditions | Immediate effect |
-| --- | --- | --- | --- |
-| Move | `{ "type": "move", "to": "node-id" }` | Destination is a different adjacent node; the connecting edge and destination basin support the current draft at the current tide. | Move to that node along the edge's authored waypoints. |
-| Board | `{ "type": "board", "passengerIds": ["id", "..."] }` | At a dry pier; selected nonempty subset waits at that exact pier; resulting load is at most 4; the berth supports the resulting draft. | Transfer the whole selection from the pier to the boat. |
-| Unload | `{ "type": "unload", "passengerIds": ["id", "..."] }` | At a dry pier; selected nonempty subset is aboard. | At the harbor, mark selected passengers delivered. At another pier, make them waiting passengers there. |
-| Wait | `{ "type": "wait" }` | Puzzle is playing. | Leave boat and passenger locations unchanged. |
+| Action | Payload                                               | Preconditions                                                                                                                          | Immediate effect                                                                                        |
+| ------ | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| Move   | `{ "type": "move", "to": "node-id" }`                 | Destination is a different adjacent node; the connecting edge and destination basin support the current draft at the current tide.     | Move to that node along the edge's authored waypoints.                                                  |
+| Board  | `{ "type": "board", "passengerIds": ["id", "..."] }`  | At a dry pier; selected nonempty subset waits at that exact pier; resulting load is at most 4; the berth supports the resulting draft. | Transfer the whole selection from the pier to the boat.                                                 |
+| Unload | `{ "type": "unload", "passengerIds": ["id", "..."] }` | At a dry pier; selected nonempty subset is aboard.                                                                                     | At the harbor, mark selected passengers delivered. At another pier, make them waiting passengers there. |
+| Wait   | `{ "type": "wait" }`                                  | Puzzle is playing.                                                                                                                     | Leave boat and passenger locations unchanged.                                                           |
 
 Boarding three selected passengers together costs one turn, just as boarding one passenger does. Unloading a selected subset also costs one turn. Boarding and unloading cannot be combined into one action.
 
@@ -54,10 +54,10 @@ pierIsDry = tideLevel < pier.elevation
 ```
 
 | Completed committed turns | Tide level | Shallow routes, base 2 | Deep routes/basins, base 3 | Sheep pier, elevation 2 | Harbor, elevation 3 |
-| --- | ---: | ---: | ---: | --- | --- |
-| 0–3 | 0 | 2 | 3 | Dry | Dry |
-| 4–7 | 1 | 3 | 4 | Dry | Dry |
-| 8 and later | 2 | 4 | 5 | Flooded | Dry |
+| ------------------------- | ---------: | ---------------------: | -------------------------: | ----------------------- | ------------------- |
+| 0–3                       |          0 |                      2 |                          3 | Dry                     | Dry                 |
+| 4–7                       |          1 |                      3 |                          4 | Dry                     | Dry                 |
+| 8 and later               |          2 |                      4 |                          5 | Flooded                 | Dry                 |
 
 The rises happen **after committed turns 4 and 8**. A pier is flooded at equality with its elevation. The low island and its pier both have elevation 2; the lighthouse refuge and harbor pier both have elevation 3. No independent flood timer or visual water-height measurement decides whether an animal is safe.
 
@@ -94,24 +94,24 @@ During the eventual game's short presentation transitions, lock **Commit, Undo, 
 
 Invalid attempts change no passenger locations, turn, tide, outcome, or Undo history. They are distinguishable from a valid action that subsequently produces a flood loss.
 
-| Rejection | Condition |
-| --- | --- |
-| `TERMINAL_STATE` | Attempting a gameplay action after win or loss. Undo and Restart are separate commands. |
-| `MALFORMED_ACTION` | Missing/wrong payload shape or unexpected payload fields. |
-| `UNKNOWN_ACTION` | Action type is absent or not Move, Board, Unload, or Wait. |
-| `UNKNOWN_NODE` | Move destination does not exist. |
-| `SAME_NODE` | Move destination is the current node. |
-| `NOT_ADJACENT` | No authored edge connects current and destination nodes. |
-| `INSUFFICIENT_DEPTH` | Edge depth at the current tide is below current draft. |
-| `UNSAFE_BERTH` | Destination basin is too shallow, or proposed boarding would exceed berth depth. Shipped basins prevent these cases, but retain the guard. |
-| `EMPTY_OR_MALFORMED_SELECTION` | Passenger selection is absent, empty, not an array, or contains non-string IDs. |
-| `DUPLICATE_PASSENGER` | A selection contains the same passenger more than once. |
-| `UNKNOWN_PASSENGER` | A selected passenger ID does not exist. |
-| `NO_PIER` | Boarding or unloading is attempted at a node without a pier. |
-| `PIER_FLOODED` | Boarding or unloading is attempted at an already-flooded pier. |
-| `NOT_WAITING_HERE` | A selected boarding passenger is aboard, delivered, or waiting elsewhere. |
-| `NOT_ABOARD` | A selected unloading passenger is not on the boat. |
-| `CAPACITY_EXCEEDED` | Proposed boarding would exceed four occupied slots. |
+| Rejection                      | Condition                                                                                                                                  |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `TERMINAL_STATE`               | Attempting a gameplay action after win or loss. Undo and Restart are separate commands.                                                    |
+| `MALFORMED_ACTION`             | Missing/wrong payload shape or unexpected payload fields.                                                                                  |
+| `UNKNOWN_ACTION`               | Action type is absent or not Move, Board, Unload, or Wait.                                                                                 |
+| `UNKNOWN_NODE`                 | Move destination does not exist.                                                                                                           |
+| `SAME_NODE`                    | Move destination is the current node.                                                                                                      |
+| `NOT_ADJACENT`                 | No authored edge connects current and destination nodes.                                                                                   |
+| `INSUFFICIENT_DEPTH`           | Edge depth at the current tide is below current draft.                                                                                     |
+| `UNSAFE_BERTH`                 | Destination basin is too shallow, or proposed boarding would exceed berth depth. Shipped basins prevent these cases, but retain the guard. |
+| `EMPTY_OR_MALFORMED_SELECTION` | Passenger selection is absent, empty, not an array, or contains non-string IDs.                                                            |
+| `DUPLICATE_PASSENGER`          | A selection contains the same passenger more than once.                                                                                    |
+| `UNKNOWN_PASSENGER`            | A selected passenger ID does not exist.                                                                                                    |
+| `NO_PIER`                      | Boarding or unloading is attempted at a node without a pier.                                                                               |
+| `PIER_FLOODED`                 | Boarding or unloading is attempted at an already-flooded pier.                                                                             |
+| `NOT_WAITING_HERE`             | A selected boarding passenger is aboard, delivered, or waiting elsewhere.                                                                  |
+| `NOT_ABOARD`                   | A selected unloading passenger is not on the boat.                                                                                         |
+| `CAPACITY_EXCEEDED`            | Proposed boarding would exceed four occupied slots.                                                                                        |
 
 The three shipped passengers occupy exactly four slots in total, so capacity overflow is unreachable in this cove. The reference guard test explicitly adds a synthetic extra rabbit; it is not shipped level content. The unsafe-berth guard likewise uses a deliberately altered synthetic berth.
 
@@ -119,16 +119,16 @@ The three shipped passengers occupy exactly four slots in total, so capacity ove
 
 Use stable IDs from the level data and preserve each passenger in exactly one location. Do not infer occupancy or success from meshes, animation callbacks, or array indexes used to display passengers.
 
-| State field | Meaning |
-| --- | --- |
-| `turn` | Number of successfully committed gameplay actions; starts at 0. |
-| `tideLevel` | Tide determined by the authored schedule and `turn`; starts at 0. |
-| `boatNodeId` | Current stopping node. A transition may animate between nodes, but the rule transaction is atomic. |
-| `aboard` | Distinct passenger IDs currently on the ferry. |
-| `waitingByPier` | Object mapping every pier ID to distinct waiting passenger IDs. |
-| `delivered` | Distinct IDs unloaded at the harbor; these passengers cannot return. |
-| `status` | `playing`, `won`, or `lost`. |
-| `lossReason` | `null`, or `PASSENGER_STRANDED` with the affected pier and passenger IDs. |
+| State field     | Meaning                                                                                            |
+| --------------- | -------------------------------------------------------------------------------------------------- |
+| `turn`          | Number of successfully committed gameplay actions; starts at 0.                                    |
+| `tideLevel`     | Tide determined by the authored schedule and `turn`; starts at 0.                                  |
+| `boatNodeId`    | Current stopping node. A transition may animate between nodes, but the rule transaction is atomic. |
+| `aboard`        | Distinct passenger IDs currently on the ferry.                                                     |
+| `waitingByPier` | Object mapping every pier ID to distinct waiting passenger IDs.                                    |
+| `delivered`     | Distinct IDs unloaded at the harbor; these passengers cannot return.                               |
+| `status`        | `playing`, `won`, or `lost`.                                                                       |
+| `lossReason`    | `null`, or `PASSENGER_STRANDED` with the affected pier and passenger IDs.                          |
 
 Load, draft, route depth, and pier dryness are derived values. If an implementation caches them, invalidate/recompute those caches from the restored state during Undo.
 
@@ -148,9 +148,18 @@ The script is **not** a production engine or a test of a playable implementation
 
 ## Holding Pier experiment
 
-The later user-requested experiment uses `data/holding-pier.level.json` and is documented in `HOLDING_PIER.md`. It retains the common action, load/draft, depth, tide-order and Undo rules above; its different layout, starting occupants and low pier elevation are intentional. Original First Crossing values and witness files remain unchanged. In the experiment, routine safe movement commits with one deliberate activation, while a separate free Preview remains available. Transfers, Wait, invalid moves and immediately losing moves retain the explicit preview flow. This interaction experiment supersedes the baseline's mandatory move confirmation only within Holding Pier.
-
+The accepted introduction uses `data/holding-pier.level.json` and is documented in `HOLDING_PIER.md`. It retains the common action, load/draft, depth, tide-order and Undo rules above; its different layout, starting occupants and low pier elevation are intentional. Original First Crossing values and witness files remain unchanged.
 
 ## Full-width contextual interface
 
-The later full-width interface task in `NEXT_TASK.md` unifies safe sailing in both coves: one deliberate activation commits one adjacent safe passage. Each adjacent map destination has a separate free Inspect control. Invalid or immediately losing passages open a consequence card; a losing action still requires explicit confirmation. Transfers and Wait retain preview and confirmation. This replaces the original baseline mandatory travel-confirmation policy above; it does not change validation, action cost, event order, readonly preview behavior or Undo. Both authored level files and their solutions are unchanged.
+The contextual interface unifies safe sailing across coves: one deliberate activation commits one adjacent safe passage. Each adjacent map destination has a separate free Inspect control. Invalid or immediately losing passages open a consequence card; a losing action still requires explicit confirmation. Transfers and Wait retain preview and confirmation. This replaces the original baseline mandatory travel-confirmation policy above; it does not change validation, action cost, event order, readonly preview behavior or Undo.
+
+## Bellwater Cove
+
+`data/bellwater.level.json` owns Bellwater's six-stop loop and branch, three islands, names and starting state. The ferry starts empty at Harbor; Tansy and Lark wait at elevation-1 Low Pier, Bram at elevation-2 Bell Pier. All basins have base depth 3. Harbor–Shallows–Low Pier uses two base-depth-1 edges. Harbor–West Buoy–East Buoy–Low Pier uses three base-depth-3 edges. Harbor–Bell Pier is one base-depth-2 edge. Every edge is bidirectional; no other connections exist.
+
+Capacity, passenger costs, draft bands, action costs, tide rises after actions 4 and 8, action-before-rise order and complete Undo are unchanged. Low Pier floods at the first rise; Bell Pier at the second. Boarding on actions 4 and 8 resolves before those rises. Current depth validates travel: a loaded boat at Low Pier on action 3 cannot sail into the depth-1 shallow channel, even though a future rise will deepen it. Arrival does not include boarding or unloading.
+
+Bellwater has no mandatory Wait, action cap or score requirement. Both asymmetric route families, shallow travel both ways with a well-timed Wait, and separate rabbit boarding remain valid. Once everyone is aboard, harmless longer play stays legal. Developer witnesses and unsuccessful alternatives are documented in `BELLWATER.md` and `data/bellwater/witnesses.json`; the player interface provides rules and consequences without prescribing a plan.
+
+The normal entry is Holding Pier. Its success offers Next cove into a fresh Bellwater state. Both coves and the explicit First Crossing baseline remain available in Menu and query routes. This small sequence adds no persistence, unlocks or new rules.

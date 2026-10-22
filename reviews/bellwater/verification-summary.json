@@ -1,0 +1,142 @@
+{
+  "recordedAt": "2026-10-22T08:35:07.114Z",
+  "sourceHash": "46db5c9503f1f276aa07e7d5e871fb6dc2717221adb5b2164d268487bc3b7e7f",
+  "sourceManifest": "source-manifest.json",
+  "baseHead": "e9c81d620df5fca0983965e80c348260fb3518e9",
+  "branch": "m1-first-crossing",
+  "build": {
+    "command": "npm run build",
+    "result": "pass",
+    "includesTypecheck": true,
+    "jsRawKB": 634.28,
+    "jsGzipKB": 166.25,
+    "advisory": "Existing Vite chunk larger than500kB warning; build exits0."
+  },
+  "typecheck": {
+    "command": "npm run typecheck",
+    "result": "pass"
+  },
+  "unit": {
+    "command": "npm run test:unit -- --reporter=default --reporter=json --outputFile=reviews/bellwater/unit-results.json",
+    "result": "pass",
+    "passed": 46,
+    "failed": 0,
+    "files": 5,
+    "report": "unit-results.json",
+    "sourceHash": "46db5c9503f1f276aa07e7d5e871fb6dc2717221adb5b2164d268487bc3b7e7f"
+  },
+  "referenceOnly": {
+    "command": "node tools/verify-design.mjs",
+    "result": "pass",
+    "passed": 32,
+    "scope": "Supplied First Crossing reference model, not the playable application or Bellwater UI."
+  },
+  "browserFull": {
+    "command": "npm run test:e2e",
+    "result": "pass",
+    "passed": 37,
+    "failed": 0,
+    "skipped": 0,
+    "flaky": 0,
+    "durationMs": 578272.3339999999,
+    "sourceHash": "157a57a50a953020592f063e468cedee181ddf471cd393be735040e538f74f00",
+    "results": "full-suite/automation-results.json"
+  },
+  "browserFinalAffected": {
+    "command": "npx playwright test tests/e2e/bellwater.spec.ts",
+    "result": "pass",
+    "passed": 9,
+    "failed": 0,
+    "skipped": 0,
+    "flaky": 0,
+    "durationMs": 164037.269,
+    "sourceHash": "46db5c9503f1f276aa07e7d5e871fb6dc2717221adb5b2164d268487bc3b7e7f",
+    "results": "automation-results.json",
+    "reuse": "28 unaffected full-suite scenarios retained with exact source/scope comparison in regression-reuse.json."
+  },
+  "input": {
+    "mode": "Trusted Chromium emulated touch",
+    "normalRepeatGapMs": 32.69999999552965,
+    "reducedRepeatGapMs": 129.39999999850988,
+    "result": "One commit; history1→2; no unintended dialog or background action. Reduced-motion repeat occurs after actual idle.",
+    "source": "full-suite/source-manifest.json"
+  },
+  "bellwaterReachability": {
+    "canonicalStates": 403,
+    "winningStates": 4,
+    "shortestActions": 10,
+    "noShallowWins": 0,
+    "bellFirstWins": 0,
+    "earlyDeliveryWins": 0,
+    "noWaitWins": 2,
+    "waitedWins": 2,
+    "method": "Production reducer and legalActions, sorted passenger identities and pier keys, turn capped only after the final rise, monotonic path-history flags, no search horizon."
+  },
+  "holdingPierReachability": {
+    "canonicalStates": 154,
+    "winningStates": 1,
+    "bypassWins": 0,
+    "shortestActions": 9,
+    "method": "Actual reducer and legalActions; turn canonicalized only after final rise, no search horizon."
+  },
+  "sceneryClearance": {
+    "result": "pass",
+    "coves": 3,
+    "bellwaterEdges": 6,
+    "directionsPerEdge": 2,
+    "samplesPerDirection": 1001,
+    "scope": "Actual modeled ferry convex footprint and production motion versus authored island footprints/pier decks."
+  },
+  "evidence": {
+    "selectedPNGs": 25,
+    "finalBellwaterPNGs": 18,
+    "reusedOlderAndResponsivePNGs": 7,
+    "prerequisitePNGs": 2,
+    "allSelectedInspectedAtNativeSize": true,
+    "viewports": [
+      [
+        1440,
+        900
+      ],
+      [
+        844,
+        390
+      ],
+      [
+        780,
+        390
+      ],
+      [
+        844,
+        500
+      ],
+      [
+        1024,
+        600
+      ]
+    ],
+    "captureManifest": "capture-manifest.json",
+    "video": "reviews/bellwater/raw/bellwater-uninterrupted.webm",
+    "durationSeconds": 29.08,
+    "recordingLocalIgnored": true
+  },
+  "environment": {
+    "os": "Windows 11 Pro",
+    "release": "10.0.26200",
+    "arch": "x64",
+    "node": "v24.15.0",
+    "npm": "11.12.1",
+    "browser": "Chromium156.0.8078.4",
+    "playwright": "1.64.1",
+    "dpr": 1,
+    "renderer": "SwiftShader"
+  },
+  "knownIssues": [],
+  "limitations": [
+    "Physical phones, Safari/Firefox, platform fonts, native GPU performance, screen-reader speech and speaker listening not verified.",
+    "Independent Linux/Chromium141 timeouts remain inconclusive; Windows passes establish neither their outcome nor cause.",
+    "Fresh npm ci not repeated; dependencies/lockfile unchanged.",
+    "Puzzle enjoyment awaits user playtest; shared environment pass intentionally deferred."
+  ],
+  "gitWorkflow": "Normal commit/push to m1-first-crossing; PR1 stays draft; main386de54d20fdd4a513a06115471d70bf94738cc0 unchanged. Final SHA/remote comparison supplied in PR/handoff."
+}

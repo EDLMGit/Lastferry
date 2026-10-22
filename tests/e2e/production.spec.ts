@@ -10,7 +10,7 @@ test('production bundle: real rescue without debug globals or external assets', 
   page.on('request', (r) => {
     if (!r.url().startsWith(productionURL)) external.push(r.url());
   });
-  await page.goto(productionURL);
+  await page.goto(`${productionURL}/?cove=first-crossing`);
   await expect(page.locator('canvas')).toBeVisible();
   expect(await page.evaluate(() => typeof (window as any).__LAST_FERRY__)).toBe('undefined');
   await act(page, 'map-sheep-pier');

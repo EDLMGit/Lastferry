@@ -1,6 +1,6 @@
 # Last Ferry — playable coves
 
-**Current puzzle: The Holding Pier.** Run the game, then open `/?cove=holding-pier`. First Crossing remains the baseline at `/` and in **Menu → Cove**. The current interface gives the cove the full play area, with named map targets and contextual dialogs. See the [contextual interface review](reviews/contextual/REVIEW.md) and [puzzle design notes](docs/HOLDING_PIER.md).
+Start with **The Holding Pier**, then choose **Next cove** after bringing its neighbors home to continue into **Bellwater Cove**. The new cove tests changing route depths and two pickup deadlines. First Crossing remains the explicit baseline at `/?cove=first-crossing` and in **Menu → Choose cove**. See the current [Bellwater review](reviews/bellwater/REVIEW.md) and developer notes for [Holding Pier](docs/HOLDING_PIER.md) and [Bellwater](docs/BELLWATER.md).
 
 Baseline M1 is a playable 3D tutorial cove: rescue Moss the sheep with Pip and Rue already aboard, manage how much depth the loaded ferry needs, and bring everyone to the lighthouse. Time advances only on accepted actions. The scene, sounds and rules run locally in the browser.
 
@@ -44,14 +44,14 @@ PowerShell:
 ```powershell
 $env:PLAYWRIGHT_BROWSERS_PATH = Join-Path $PWD '.cache/ms-playwright'
 npx playwright install chromium
-$env:LAST_FERRY_REVIEW_DIR = 'reviews/contextual'
+$env:LAST_FERRY_REVIEW_DIR = 'reviews/bellwater'
 ```
 
 macOS/Linux:
 
 ```sh
 PLAYWRIGHT_BROWSERS_PATH=.cache/ms-playwright npx playwright install chromium
-export LAST_FERRY_REVIEW_DIR=reviews/contextual
+export LAST_FERRY_REVIEW_DIR=reviews/bellwater
 ```
 
 Then run:
@@ -68,29 +68,29 @@ The browser suite defaults to ports 5173 and 4173, launches the development and 
 
 `LAST_FERRY_REVIEW_DIR` selects the capture/report folder so new evidence does not overwrite earlier records. `LAST_FERRY_DEV_PORT` and `LAST_FERRY_PRODUCTION_PORT` optionally select isolated servers.
 
-The contextual interface pass uses isolated development/production ports **5177/4177** and stores selected captures and its report under `reviews/contextual/`. To use those ports with the browser suite:
+The Bellwater pass uses isolated development/production ports **5178/4178** and stores selected captures and its report under `reviews/bellwater/`. To use those ports with the browser suite:
 
 ```powershell
-$env:LAST_FERRY_DEV_PORT = '5177'
-$env:LAST_FERRY_PRODUCTION_PORT = '4177'
-$env:LAST_FERRY_REVIEW_DIR = 'reviews/contextual'
+$env:LAST_FERRY_DEV_PORT = '5178'
+$env:LAST_FERRY_PRODUCTION_PORT = '4178'
+$env:LAST_FERRY_REVIEW_DIR = 'reviews/bellwater'
 ```
 
-On macOS/Linux, set the same variables with `export`. If launching the servers separately, use `npm run dev -- --port 5177` and, after building, `npm run preview -- --port 4177`. The [contextual interface report](reviews/contextual/REVIEW.md) records actual commands, results and source identity.
+On macOS/Linux, set the same variables with `export`. If launching the servers separately, use `npm run dev -- --port 5178` and, after building, `npm run preview -- --port 4178`. This workspace reused its existing browser cache at `../.cache/ms-playwright`; a fresh clone can use the project-local cache above. The [Bellwater report](reviews/bellwater/REVIEW.md) records actual commands, results and source identity.
 
-`test:unit` checks the independent application reducer, supplied replays, boundaries, history, locking, the modeled ferry's sampled clearance, the Holding Pier search and presentation derived from real preview results. The separate design verifier checks only the supplied reference model. Browser checks use the actual controls for map sailing and inspection, transfers, flood consequences, Undo, touch and keyboard input, modal focus, background-input blocking and production play. The target viewports are 1440×900 desktop, 844×390 phone landscape and a nearby 780×390 landscape viewport. The report distinguishes checks that passed, failed or were not run.
+`test:unit` checks the independent application reducer, supplied replays, boundaries, history, locking, sampled ferry clearance in all three coves, both puzzle searches and active-level presentation derived from real preview results. Bellwater retains eight ten-action witnesses and its valid timing alternatives. The separate design verifier checks only the supplied reference model. Browser checks use actual mouse, natural keyboard and emulated touch controls for sailing, free inspection, subsets, both rises, complete Undo, input protection, default entry/Next/Menu and production play. Target viewports are 1440×900, 844×390, 780×390, plus 844×500 and 1024×600 with breakpoint resizes. The report distinguishes passed, failed, inconclusive and not-run checks.
 
 Reproduce the First Crossing detour manually: Sheep Pier → Board Moss → East Buoy → South Buoy → West Buoy → Harbor → Deliver all passengers. This wins after action 7. Undo after reaching South Buoy restores action 3 and tide 0. Alternatively board Moss, Wait twice, then Shallow Cut → Harbor → Deliver all passengers; also seven actions.
 
 ## Evidence and source
 
-See the current [contextual interface review](reviews/contextual/REVIEW.md), [capture manifest](reviews/contextual/capture-manifest.json), [source identity](reviews/contextual/source-manifest.json) and [status](STATUS.md). The review records fresh gameplay captures, their exact working-tree source and environment, native-size inspection and recording availability. Raw videos stay local under `reviews/contextual/raw/`, are ignored and are unavailable in a fresh clone. Versioned screenshots and manifests provide remote review evidence.
+See the current [Bellwater review](reviews/bellwater/REVIEW.md), [capture manifest](reviews/bellwater/capture-manifest.json), [source identity](reviews/bellwater/source-manifest.json) and [status](STATUS.md). The review records fresh gameplay captures, their exact working-tree source and environment, native-size inspection and recording availability. Raw videos stay local under `reviews/bellwater/raw/`, are ignored and unavailable in a fresh clone. Versioned screenshots and manifests provide remote review evidence. The [prerequisite responsive/input report](reviews/bellwater/phase-a/REVIEW.md) pins the source verified before content work; the [contextual interface review](reviews/contextual/REVIEW.md) remains historical evidence of the preceding source.
 
 The [navigation review](reviews/navigation/REVIEW.md) preserves the accepted navigation, rule wording and phone-layout pass. The [original Holding Pier review](reviews/holding-pier/REVIEW.md) records its nine-action solution, losing alternatives and exhaustive temporary-holding check. The [M1.1 refinement review](reviews/m1-1/REVIEW.md) preserves earlier phone framing, passenger deck attachment and keyboard work. These are historical records, not captures of the contextual interface.
 
 The [M1 first-pass review](reviews/m1-first-pass/REVIEW.md), its [reuse audit](reviews/m1-first-pass/evidence-reuse.json), and the [original implementation report](reviews/m1/REVIEW.md) remain historical records of earlier source. Older recordings remain in their original local folders; they are not relabeled as current evidence.
 
-Touch coverage is Chromium emulation, not a physical phone test. Safari, Firefox, real device performance and listening to audio on speakers remain outside the verified environment. The reports retain actual build advisories and environment details; no frame-rate or device-performance guarantee is claimed.
+Touch coverage is Chromium emulation, not a physical phone test. Safari, Firefox, real device performance, screen-reader listening and audio on speakers remain outside the verified environment. The independent Linux/Chromium 141 broad-suite timeouts remain inconclusive; a Windows pass does not establish their cause. The reports retain actual build advisories; no frame-rate or device-performance guarantee is claimed. Puzzle satisfaction awaits the user's playtest.
 
 ## Project contract and assets
 
@@ -98,12 +98,20 @@ The preserved [first task](FIRST_TASK.md), [gameplay rules](docs/GAMEPLAY_RULES.
 
 Production meshes and tones are original procedural code, documented in [the asset ledger](docs/ASSET_LEDGER.md). Supplied images under `references/` are concept art only; they are never used as gameplay backgrounds. `PACKAGE_MANIFEST.json` is the historical starter-package manifest, not the current implementation manifest. The selected dependencies follow the official [Vite guide](https://vite.dev/guide/), [Three.js installation](https://threejs.org/manual/pages/installation.html), [Vitest guide](https://vitest.dev/guide/) and [Playwright installation](https://playwright.dev/docs/intro); exact installed versions are locked in `package-lock.json`.
 
-The current milestone keeps the small lighthouse arrival, the accepted Holding Pier puzzle and First Crossing as its baseline. Later chapters, progression, publishing and a large asset catalog remain outside this implementation.
+The current task in [NEXT_TASK.md](NEXT_TASK.md) explicitly adds Bellwater after the accepted Holding Pier introduction while retaining First Crossing. The next planned milestone is a shared environment pass across the two main coves. A campaign map, save system, new mechanics, publishing and a large asset catalog remain outside this update.
 
 ## The Holding Pier
 
-Open `http://127.0.0.1:5173/?cove=holding-pier` after `npm ci` and `npm run dev` (use the printed port if 5173 is occupied). **Menu → Cove** switches between Holding Pier and **First Crossing · baseline**. The original baseline's six-node layout and starting arrangement are preserved.
+Open `http://127.0.0.1:5173/` after `npm ci` and `npm run dev` (use the printed port if 5173 is occupied). Holding Pier is now the default; `/?cove=holding-pier` remains an explicit route. **Menu → Choose cove** selects Holding Pier, Bellwater or **First Crossing · baseline**. The original baseline's six-node layout and starting arrangement are preserved.
 
 The accepted puzzle starts at safe Stone Pier with Moss aboard; Pip and Rue wait at Rabbit Pier. Shallows is a meaningful intermediate stop on their route. Bring all three to Harbor. Each safe passage uses one activation, and its separate **Inspect** button is free. Blocked and immediately losing passages open their explanation. Named passenger actions and Wait retain selection/confirmation and passenger subsets. Undo works through unloading, tide changes and endings.
 
-The player review kept this puzzle after discovering its challenge over a few attempts. This pass gives the cove the full play area and migrates controls into contextual dialogs while retaining the required temporary holding and all existing mechanics. Developer rationale and solution remain in [docs/HOLDING_PIER.md](docs/HOLDING_PIER.md); the game does not display the holding plan. Current checks and gameplay evidence are in [reviews/contextual/REVIEW.md](reviews/contextual/REVIEW.md).
+The player review kept this puzzle after discovering its challenge over a few attempts. The full-width contextual interface and required temporary holding remain. Developer rationale and solution are in [docs/HOLDING_PIER.md](docs/HOLDING_PIER.md); the game does not display the holding plan. The successful ending offers Next cove alongside Undo and Restart, with a brief coast transition into a fresh Bellwater state. No unlock or save system is involved.
+
+## Bellwater Cove
+
+Open `/?cove=bellwater` directly, choose it in Menu, or continue from Holding Pier. The ferry starts empty at Harbor. Tansy and Lark wait at Low Pier; Bram waits at Bell Pier. A sandy reed shore, rocky bell landmark and lighthouse inlet distinguish the new composition. All six stops remain identifiable on desktop and phone landscape.
+
+The shallow channel and deeper outer loop connect Harbor and Low Pier; Bell Pier branches from Harbor. Low Pier floods after action 4 and Bell Pier after action 8. The shared capacity, depth bands, one-action transfers, action-before-rise order and complete Undo remain. Current-depth inspection and selected-passenger consequences explain decisions without recommending a route. Developer witnesses and failed alternatives remain in [docs/BELLWATER.md](docs/BELLWATER.md), outside player-facing Help.
+
+Bellwater's ending acknowledges that its neighbors are safe without declaring the whole game's story finished. The broader shared water/shore/lighting update is deferred. See [reviews/bellwater/REVIEW.md](reviews/bellwater/REVIEW.md) for the actual verification and handoff.

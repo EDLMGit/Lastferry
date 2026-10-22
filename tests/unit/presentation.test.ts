@@ -1,6 +1,15 @@
 import { describe, expect, test } from 'vitest';
 import { initial, reduce, type Action, type State } from '../../src/game/rules';
-import { holdingPier, level as baseline, type Level } from '../../src/levels/level';
+import {
+  bellwater,
+  holdingPier,
+  level as baseline,
+  levelNames,
+  nodeName,
+  passengerLabel,
+  passengerName,
+  type Level,
+} from '../../src/levels/level';
 import {
   actionCostCopy,
   actionLabel,
@@ -25,6 +34,82 @@ const atRabbits = () =>
   ]);
 
 describe('plain action and consequence presentation', () => {
+  test('uses level-owned names and keeps the original residents and fallbacks', () => {
+    expect(levelNames(bellwater)).toEqual({
+      nodeNames: {
+        harbor: 'Harbor',
+        shallows: 'Shallows',
+        'low-pier': 'Low Pier',
+        'west-buoy': 'West Buoy',
+        'east-buoy': 'East Buoy',
+        'bell-pier': 'Bell Pier',
+      },
+      passengerNames: { tansy: 'Tansy · rabbit', lark: 'Lark · rabbit', bram: 'Bram · sheep' },
+    });
+    expect(passengerList(['tansy', 'lark', 'bram'], bellwater)).toBe('Tansy, Lark and Bram');
+    expect(passengerLabel('sheep-1', holdingPier)).toBe('Moss · sheep');
+    expect(passengerName('rabbit-1', baseline)).toBe('Pip');
+    expect(passengerName('unknown', bellwater)).toBe('unknown');
+    expect(nodeName('unknown', bellwater)).toBe('unknown');
+    const renamed = structuredClone(holdingPier);
+    renamed.names = { nodes: { stone: 'Quiet Pier' }, passengers: { 'sheep-1': 'Fern' } };
+    expect(
+      actionLabel(initial(renamed), { type: 'unload', passengerIds: ['sheep-1'] }, renamed),
+    ).toBe('Let Fern ashore');
+    expect(passageCopy(initial(renamed), 'stone', renamed)).toBe('You are at Quiet Pier.');
+    expect(passengerName('sheep-1', holdingPier)).toBe('Moss');
+  });
+
+  test('Bellwater deadlines, forecasts and transfer previews use its residents and stops', () => {
+    const start = initial(bellwater);
+    expect(objectiveCopy(start, bellwater)).toEqual({
+      headline: 'Bring Tansy, Lark and Bram to Harbor',
+      progress: 'Home 0/3',
+    });
+    expect(statusCopy(start, bellwater).headline).toBe('Low Pier floods in 4 actions.');
+    expect(statusCopy(start, bellwater).detail).toContain('Bram waits at Bell Pier.');
+    const atLow = run(
+      [
+        { type: 'move', to: 'west-buoy' },
+        { type: 'move', to: 'east-buoy' },
+        { type: 'move', to: 'low-pier' },
+      ],
+      bellwater,
+    );
+    expect(actionLabel(atLow, { type: 'board', passengerIds: ['tansy', 'lark'] }, bellwater)).toBe(
+      'Board Tansy and Lark',
+    );
+    expect(
+      previewCopy(atLow, { type: 'board', passengerIds: ['tansy'] }, bellwater).consequence,
+    ).toBe(
+      'Tansy boards, then the tide rises. Lark is still waiting at Low Pier when it floods. This ends the crossing.',
+    );
+    const rescued = reduce(atLow, { type: 'board', passengerIds: ['tansy', 'lark'] }, bellwater);
+    expect(statusCopy(rescued, bellwater).headline).toBe('Bell Pier floods in 4 actions.');
+    expect(statusCopy(rescued, bellwater).detail).toContain('Tansy and Lark are safe aboard.');
+    expect(forecastCopy(rescued, bellwater).detail).toContain('Low Pier is flooded and empty.');
+    expect(forecastCopy(rescued, bellwater).detail).toContain(
+      'Bell Pier will flood at the next rise; Bram is waiting there.',
+    );
+    const home = run(
+      [
+        { type: 'move', to: 'west-buoy' },
+        { type: 'move', to: 'east-buoy' },
+        { type: 'move', to: 'low-pier' },
+        { type: 'board', passengerIds: ['tansy', 'lark'] },
+        { type: 'move', to: 'shallows' },
+        { type: 'move', to: 'harbor' },
+      ],
+      bellwater,
+    );
+    expect(actionLabel(home, { type: 'unload', passengerIds: ['tansy'] }, bellwater)).toBe(
+      'Deliver Tansy',
+    );
+    expect(
+      previewCopy(home, { type: 'unload', passengerIds: ['tansy'] }, bellwater).consequence,
+    ).toBe('Tansy will be safe at Harbor.');
+  });
+
   test('derives the objective and required-passenger progress from each cove', () => {
     for (const l of [holdingPier, baseline]) {
       const s = initial(l);

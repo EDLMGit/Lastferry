@@ -3,6 +3,8 @@ import { level as baseline, type Level } from '../levels/level';
 import { draft, edgeTo, type State, type Action } from '../game/rules';
 import { animal, ball, box, cylinder, ferry, lighthouse, mat, mesh, palette, pine } from './models';
 import { sampleJourney } from './motion';
+import { sceneLayout, type SceneLayout } from './layout';
+import { bellLandmark, cottage, reedClump } from './scenery';
 const V = (p: number[], y = 0) => new T.Vector3(p[0], y, p[1]);
 const smooth = (t: number) => t * t * (3 - 2 * t);
 export class World {
@@ -21,6 +23,7 @@ export class World {
   water: T.Mesh;
   shadow: T.Mesh;
   state: State;
+  layout: SceneLayout;
   reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   transition: null | {
     before: State;
@@ -44,6 +47,7 @@ export class World {
     public level: Level = baseline,
   ) {
     this.state = state;
+    this.layout = sceneLayout(this.level.id);
     this.renderer = new T.WebGLRenderer({ antialias: true, alpha: false });
     this.renderer.setPixelRatio(Math.min(devicePixelRatio, 1.7));
     this.renderer.shadowMap.enabled = true;
@@ -56,10 +60,11 @@ export class World {
       'aria-label',
       `${this.level.title}. Use the labeled waypoint controls to navigate.`,
     );
-    this.scene.background = new T.Color('#245f70');
-    this.scene.add(new T.HemisphereLight('#fff1dc', '#5f8c9a', 1.8));
-    const sun = new T.DirectionalLight('#ffe0af', 2.8);
-    sun.position.set(-8, 16, 7);
+    const light = this.layout.light;
+    this.scene.background = new T.Color(light?.background ?? '#245f70');
+    this.scene.add(new T.HemisphereLight(light?.sky ?? '#fff1dc', light?.ground ?? '#5f8c9a', 1.8));
+    const sun = new T.DirectionalLight(light?.sun ?? '#ffe0af', 2.8);
+    sun.position.set(...(light?.sunPosition ?? [-8, 16, 7]));
     sun.castShadow = true;
     sun.shadow.mapSize.set(2048, 2048);
     Object.assign(sun.shadow.camera, {
@@ -116,7 +121,13 @@ export class World {
       for (let i = 0; i < 9; i++)
         box(
           this.scene,
-          p.id === 'stone-pier' ? (i % 2 ? '#a9b6ac' : '#899d97') : i % 2 ? '#c09560' : '#b78b58',
+          this.layout.stonePiers.includes(p.id)
+            ? i % 2
+              ? '#a9b6ac'
+              : '#899d97'
+            : i % 2
+              ? '#c09560'
+              : '#b78b58',
           [p.width, 0.09, 0.14],
           [x, y, z + ((end - z) * i) / 8],
           0.015,
@@ -130,36 +141,14 @@ export class World {
       cylinder(this.scene, '#655b43', 0.025, 0.025, 0.65, [x + 0.36, y + 0.33, z - 0.1], 7);
       box(this.scene, '#f5cb77', [0.13, 0.19, 0.13], [x + 0.36, y + 0.68, z - 0.1]);
     }
-    lighthouse(this.scene, -6.15, 0.54, -3.25);
-    const house = new T.Group();
-    house.position.set(
-      6.3,
-      (this.level.piers.find((p) => p.id !== 'harbor-pier' && p.id !== 'stone-pier')?.elevation ??
-        2) * 0.18,
-      -3.25,
-    );
-    this.scene.add(house);
-    box(house, '#c78155', [1.35, 0.9, 1.05], [0, 0.45, 0], 0.08);
-    for (const x of [-0.42, 0.42]) box(house, '#f9d084', [0.24, 0.29, 0.03], [x, 0.52, 0.54]);
-    box(house, '#754f3b', [0.27, 0.56, 0.05], [0, 0.29, 0.55]);
-    const roof = new T.Shape();
-    roof.moveTo(-0.82, 0);
-    roof.lineTo(0, 0.58);
-    roof.lineTo(0.82, 0);
-    roof.closePath();
-    const roofGeo = new T.ExtrudeGeometry(roof, {
-      depth: 1.28,
-      bevelEnabled: true,
-      bevelSize: 0.03,
-      bevelThickness: 0.03,
-      bevelSegments: 2,
-      steps: 1,
-    });
-    mesh(roofGeo, palette.red, house, 0, 0.9, -0.64);
-    for (const x of [-0.42, 0.42])
-      for (const y of [0.42, 0.62]) box(house, '#edc28c', [0.27, 0.025, 0.045], [x, y, 0.56]);
-    box(house, '#ead5a6', [0.026, 0.32, 0.04], [-0.42, 0.52, 0.56]);
-    box(house, '#93816a', [0.19, 0.6, 0.2], [0.43, 1.35, -0.25]);
+    for (const landmark of this.layout.landmarks) {
+      const island = this.level.world.islands.find((island) => island.id === landmark.islandId)!;
+      const [x, z] = landmark.positionXZ;
+      const y = island.elevation * 0.18;
+      if (landmark.kind === 'lighthouse') lighthouse(this.scene, x, y, z);
+      else if (landmark.kind === 'cottage') cottage(this.scene, [x, y, z]);
+      else bellLandmark(this.scene, [x, y, z]);
+    }
     for (const e of this.level.edges) {
       const pts = e.waypointsXZ.map((p) => V(p, 0.035));
       const geom = new T.BufferGeometry().setFromPoints(pts);
@@ -244,16 +233,17 @@ export class World {
     for (const p of this.level.passengers) {
       const anchor = new T.Object3D();
       anchor.name = `deck-anchor-${p.id}`;
+      const index = this.speciesIndex(p.id);
       anchor.position.set(
-        ...((p.id === 'rabbit-1'
-          ? [-0.22, 0.26, -0.02]
-          : p.id === 'rabbit-2'
-            ? [0.22, 0.26, 0.3]
-            : [0, 0.26, 0.69]) as [number, number, number]),
+        ...((p.species === 'rabbit'
+          ? index === 0
+            ? [-0.22, 0.26, -0.02]
+            : [0.22, 0.26, 0.3]
+          : [0, 0.26, 0.69]) as [number, number, number]),
       );
       this.hull.add(anchor);
       this.passengerAnchors.set(p.id, anchor);
-      const g = animal(p.species, p.id === 'rabbit-2' ? 1 : 0);
+      const g = animal(p.species, index);
       g.name = p.id;
       g.scale.set(
         p.species === 'rabbit' ? 1.25 : 1.15,
@@ -338,11 +328,18 @@ export class World {
       cx = points.reduce((a, p) => a + p[0], 0) / points.length,
       cz = points.reduce((a, p) => a + p[1], 0) / points.length;
     const height = island.elevation * 0.18;
+    const style = this.layout.islandStyles[island.id] ?? 'garden';
+    const colors =
+      style === 'reeds'
+        ? ['#e5d6ad', '#b8b79b', '#e7d6ac', '#c5bd91']
+        : style === 'rocky'
+          ? ['#bdbaa3', '#788d88', '#abb3a1', '#909e86']
+          : ['#d9c79b', '#86958a', '#e0cfa7', palette.grass];
     for (const [scale, y, color] of [
-      [0.98, -0.15, '#d9c79b'],
-      [0.94, 0.02, '#86958a'],
-      [0.89, height - 0.18, '#e0cfa7'],
-      [0.83, height - 0.17, palette.grass],
+      [0.98, -0.15, colors[0]],
+      [0.94, 0.02, colors[1]],
+      [0.89, height - 0.18, colors[2]],
+      [0.83, height - 0.17, colors[3]],
     ] as [number, number, string][]) {
       const shape = new T.Shape();
       const ps = points.map(
@@ -369,6 +366,7 @@ export class World {
       mesh(geo, color, this.scene, 0, y, 0);
     }
     for (let i = 0; i < points.length; i++) {
+      if (style === 'reeds' && i % 2 === 1) continue;
       const a = points[i],
         b = points[(i + 1) % points.length];
       const x = cx + ((a[0] + b[0]) / 2 - cx) * 0.77,
@@ -382,9 +380,10 @@ export class World {
         z,
       );
       r.scale.set(0.85, 0.7 + (i % 3) * 0.23, 0.75);
+      if (style === 'reeds') r.scale.multiplyScalar(0.55);
       r.rotation.set(i * 0.8, i * 0.9, 0.2);
     }
-    if (island.id === 'central-rock') {
+    if (style === 'crag') {
       const rock = mesh(
         new T.DodecahedronGeometry(0.85, 0),
         '#87988d',
@@ -397,6 +396,39 @@ export class World {
       rock.rotation.y = 0.4;
       pine(this.scene, 0.7, height, 2.5, 1.05);
       pine(this.scene, -1.1, height, 2.7, 0.55);
+    } else if (style === 'reeds') {
+      for (let i = 0; i < points.length; i++) {
+        const a = points[i],
+          b = points[(i + 1) % points.length];
+        for (let j = 0; j < 3; j++) {
+          const t = (j + 0.5) / 3;
+          const x = cx + (a[0] + (b[0] - a[0]) * t - cx) * 0.84;
+          const z = cz + (a[1] + (b[1] - a[1]) * t - cz) * 0.84;
+          if (Math.abs(x - cx) < 0.5 && z > cz) continue;
+          reedClump(this.scene, x, height + 0.015, z, i + j * 0.7);
+        }
+      }
+      for (const x of [-0.8, 0.9])
+        ball(this.scene, '#d9ca9f', [cx + x, height + 0.02, cz], [0.6, 0.075, 0.34]);
+    } else if (style === 'rocky') {
+      pine(this.scene, cx - 1.05, height, cz - 0.35, 0.68);
+      pine(this.scene, cx + 1.02, height, cz - 0.3, 0.43);
+      for (const [x, z, scale] of [
+        [-1.04, 0.14, 0.56],
+        [1.12, 0.27, 0.43],
+        [-0.65, -0.55, 0.45],
+      ]) {
+        const rock = mesh(
+          new T.DodecahedronGeometry(scale, 0),
+          '#8b9c94',
+          this.scene,
+          cx + x,
+          height + scale * 0.27,
+          cz + z,
+        );
+        rock.scale.set(1, 0.72, 0.85);
+        rock.rotation.y = x;
+      }
     } else {
       pine(this.scene, cx - 1.05, height, cz - 0.28, 0.85);
       pine(this.scene, cx + 0.92, height, cz - 0.55, 0.65);
@@ -409,15 +441,15 @@ export class World {
           0.05,
         );
     }
-    for (let i = 0; i < 25; i++) {
+    for (let i = 0; i < (style === 'reeds' || style === 'rocky' ? 10 : 25); i++) {
       const a = i * 2.399,
         r = 0.48 + (i % 5) * 0.17,
         x = cx + Math.cos(a) * r * 1.3,
         z = cz + Math.sin(a) * r * 0.7;
-      if (island.id !== 'central-rock' && Math.abs(x - cx) < 0.68) continue;
+      if (style !== 'crag' && Math.abs(x - cx) < 0.68) continue;
       ball(this.scene, i % 4 ? '#91a273' : '#f0e8c8', [x, height + 0.11, z], [0.045, 0.09, 0.045]);
     }
-    if (island.id !== 'central-rock')
+    if (style === 'garden')
       for (const side of [-1, 1]) {
         const x = cx + side * 1.05,
           z = cz + 0.25;
@@ -472,10 +504,12 @@ export class World {
     this.camera.bottom = -span / 2;
     this.camera.near = 0.1;
     this.camera.far = 100;
-    const baselineLandscape =
-      this.level.id === 'first-crossing' &&
-      matchMedia('(max-height: 480px) and (min-width: 701px)').matches;
-    this.camera.position.set(0, baselineLandscape ? 30 : 34, baselineLandscape ? 30 : 24);
+    const smallLandscape = matchMedia('(max-height: 480px) and (min-width: 701px)').matches;
+    this.camera.position.set(
+      ...(smallLandscape && this.layout.landscapeCameraPosition
+        ? this.layout.landscapeCameraPosition
+        : this.layout.cameraPosition),
+    );
     this.camera.lookAt(0, 0, 0.05);
     {
       this.scene.updateMatrixWorld(true);
@@ -517,6 +551,12 @@ export class World {
     }
     this.camera.updateProjectionMatrix();
   }
+  speciesIndex(id: string) {
+    const passenger = this.level.passengers.find((passenger) => passenger.id === id)!;
+    return this.level.passengers
+      .filter((p) => p.species === passenger.species)
+      .findIndex((p) => p.id === id);
+  }
   passengerPos(id: string, s: State) {
     if (s.aboard.includes(id)) {
       return this.passengerAnchors.get(id)!.getWorldPosition(new T.Vector3());
@@ -534,7 +574,7 @@ export class World {
     const i = s.waitingByPier[p.id].indexOf(id);
     return new T.Vector3(
       p.positionXZ[0] +
-        (this.level.id === 'holding-pier' && s.waitingByPier[p.id].length > 1
+        (this.layout.centeredWaitingPairs && s.waitingByPier[p.id].length > 1
           ? i % 2
             ? 0.21
             : -0.21
@@ -694,7 +734,9 @@ export class World {
         if (tr.before.aboard.includes(id) && tr.after.aboard.includes(id)) continue;
         if (tr.before.aboard.includes(id) !== tr.after.aboard.includes(id)) {
           const pier = this.level.piers.find((p) => p.nodeId === tr.before.boatNodeId)!;
-          const offset = id === 'rabbit-1' ? -0.07 : id === 'rabbit-2' ? 0.07 : 0;
+          const passenger = this.level.passengers.find((passenger) => passenger.id === id)!;
+          const offset =
+            passenger.species === 'rabbit' ? (this.speciesIndex(id) ? 0.07 : -0.07) : 0;
           const bridge = new T.Vector3(
             pier.positionXZ[0] + offset,
             pier.elevation * 0.18 - 0.005,
@@ -805,6 +847,9 @@ export class World {
       canvas: { width: this.host.clientWidth, height: this.host.clientHeight },
       boat: rectangle(this.boatRoot),
       lighthouse: rectangle(this.scene.getObjectByName('lighthouse')!),
+      bell: this.scene.getObjectByName('bell-landmark')
+        ? rectangle(this.scene.getObjectByName('bell-landmark')!)
+        : null,
       passengers: [...this.animals].map(([id, g]) => ({ id, ...rectangle(g) })),
       nodes: this.level.nodes.map((n) => ({ id: n.id, ...this.project(n.positionXZ) })),
     };

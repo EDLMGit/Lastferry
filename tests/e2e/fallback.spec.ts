@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 test('fallback completes a stalled presentation without another gameplay action', async ({
   page,
 }) => {
-  await page.goto('/');
+  await page.goto('/?cove=first-crossing');
   await page.waitForFunction(() => (window as any).__LAST_FERRY__);
   await page.evaluate(() => {
     window.requestAnimationFrame = () => 0;

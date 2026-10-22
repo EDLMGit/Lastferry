@@ -2,7 +2,7 @@ import { test, expect } from 'vitest';
 import { Mesh, Vector3 } from 'three';
 import { ferry } from '../../src/scene/models';
 import { sampleJourney } from '../../src/scene/motion';
-import { level, holdingPier } from '../../src/levels/level';
+import { level, holdingPier, bellwater } from '../../src/levels/level';
 type P = [number, number];
 const cross = (a: P, b: P, c: P) => (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]);
 function convex(points: P[]) {
@@ -44,7 +44,7 @@ function overlaps(a: P[], b: P[]) {
     )
   );
 }
-test.each([level, holdingPier])(
+test.each([level, holdingPier, bellwater])(
   '$id: actual modeled ferry footprint clears all land and pier decks along both directions and yaw turns',
   (level) => {
     const model = ferry();
@@ -73,13 +73,14 @@ test.each([level, holdingPier])(
         })),
       ];
     const failures: string[] = [];
+    const samples = level.id === 'bellwater' ? 1000 : 100;
     for (const edge of level.edges)
       for (const reverse of [false, true]) {
         const path = (reverse ? [...edge.waypointsXZ].reverse() : edge.waypointsXZ).map(
           (p) => new Vector3(p[0], 0, p[1]),
         );
-        for (let frame = 0; frame <= 100; frame++) {
-          const pose = sampleJourney(path, frame / 100);
+        for (let frame = 0; frame <= samples; frame++) {
+          const pose = sampleJourney(path, frame / samples);
           const hull = footprint.map(([x, z]) => {
             const v = new Vector3(x, 0, z)
               .applyAxisAngle(new Vector3(0, 1, 0), pose.angle)
