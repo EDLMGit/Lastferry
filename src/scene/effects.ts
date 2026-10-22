@@ -21,6 +21,10 @@ export class CrossingEffects {
       'fade',
       new T.Float32BufferAttribute(new Float32Array(32 * 6), 1).setUsage(T.DynamicDrawUsage),
     );
+    geometry.setAttribute(
+      'lateral',
+      new T.Float32BufferAttribute(new Float32Array(32 * 6), 1).setUsage(T.DynamicDrawUsage),
+    );
     geometry.setDrawRange(0, 0);
     this.wake = new T.Mesh(
       geometry,
@@ -29,8 +33,14 @@ export class CrossingEffects {
         depthWrite: false,
         side: T.DoubleSide,
         vertexShader:
-          'attribute float fade;varying float alpha;void main(){alpha=fade;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
-        fragmentShader: 'varying float alpha;void main(){gl_FragColor=vec4(.70,.83,.77,alpha);}',
+          'attribute float fade;attribute float lateral;varying float alpha;varying float sideFade;void main(){alpha=fade;sideFade=lateral;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
+        fragmentShader: `varying float alpha;varying float sideFade;
+          void main(){
+            float feather=1.-smoothstep(.25,1.,abs(sideFade));
+            gl_FragColor=vec4(.36,.52,.48,alpha*feather);
+            #include <tonemapping_fragment>
+            #include <colorspace_fragment>
+          }`,
       }),
     );
     this.wake.name = 'ferry-wake';
@@ -113,12 +123,12 @@ export class CrossingEffects {
       if (!this.points.length || stern.distanceTo(this.points.at(-1)!.position) > 0.045)
         this.points.push({ position: stern, time });
     }
-    while (this.points.length && time - this.points[0].time > 360) this.points.shift();
+    while (this.points.length && time - this.points[0].time > 720) this.points.shift();
     while (this.points.length > 31) this.points.shift();
     let length = 0;
     for (let i = this.points.length - 2; i >= 0; i--) {
       length += this.points[i].position.distanceTo(this.points[i + 1].position);
-      if (length > 1.55) {
+      if (length > 1.8) {
         this.points.splice(0, i + 1);
         break;
       }
@@ -126,14 +136,15 @@ export class CrossingEffects {
     if (reduced) this.points.length = 0;
     const positions = this.wake.geometry.getAttribute('position') as T.BufferAttribute;
     const fade = this.wake.geometry.getAttribute('fade') as T.BufferAttribute;
+    const lateral = this.wake.geometry.getAttribute('lateral') as T.BufferAttribute;
     let count = 0;
     for (let i = 1; i < this.points.length; i++) {
       const a = this.points[i - 1],
         b = this.points[i];
       const direction = b.position.clone().sub(a.position).setY(0).normalize();
       const normal = new T.Vector3(-direction.z, 0, direction.x);
-      const widthA = 0.04 + (i / this.points.length) * 0.13,
-        widthB = 0.04 + ((i + 1) / this.points.length) * 0.13;
+      const widthA = 0.055 + Math.min(1, (time - a.time) / 720) * 0.2,
+        widthB = 0.055 + Math.min(1, (time - b.time) / 720) * 0.2;
       const vertices = [
         a.position.clone().addScaledVector(normal, widthA),
         a.position.clone().addScaledVector(normal, -widthA),
@@ -145,11 +156,13 @@ export class CrossingEffects {
       for (const [j, vertex] of vertices.entries()) {
         positions.setXYZ(count, vertex.x, waterY + 0.018, vertex.z);
         const age = time - (j < 2 || j === 3 ? a.time : b.time);
-        fade.setX(count++, Math.max(0, 1 - age / 360) * 0.18);
+        fade.setX(count, Math.max(0, 1 - age / 720) ** 1.4 * 0.16);
+        lateral.setX(count++, [1, -1, 1, -1, -1, 1][j]);
       }
     }
     positions.needsUpdate = true;
     fade.needsUpdate = true;
+    lateral.needsUpdate = true;
     this.wake.geometry.setDrawRange(0, count);
     this.wake.visible = count > 0;
     if (this.arrivalStarted !== null) {

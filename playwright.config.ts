@@ -6,7 +6,7 @@ const devPort = Number(process.env.LAST_FERRY_DEV_PORT ?? 5173),
 const reviewDir = process.env.LAST_FERRY_REVIEW_DIR ?? 'reviews/m1';
 export default defineConfig({
   testDir: 'tests/e2e',
-  timeout: 60000,
+  timeout: 180000,
   expect: { timeout: 10000 },
   workers: 1,
   reporter: [['list'], ['json', { outputFile: `${reviewDir}/automation-results.json` }]],

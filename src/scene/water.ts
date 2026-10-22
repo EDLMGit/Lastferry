@@ -2,6 +2,67 @@ import * as T from 'three';
 import type { Level } from '../levels/level';
 import type { CanonicalPath } from './paths';
 import { shoreContour } from './shore';
+import { createSeabedField } from './seabed';
+import { sceneLayout } from './layout';
+import { waterVertexShader, waterFragmentShader } from './water-shader';
+
+export type WaterTuning = {
+  deepColor: string;
+  shallowColor: string;
+  pearlColor: string;
+  amberColor: string;
+  absorption: number;
+  normalScale: number;
+  normalSpeed: number;
+  normalStrength: number;
+  sheenWidth: number;
+  sheenStrength: number;
+  depthStrength: number;
+  shallowContrast: number;
+  distortion: number;
+  warmStrength: number;
+  warmWidth: number;
+  warmTail: number;
+};
+
+export const waterPresets: Record<'luminous' | 'restrained', WaterTuning> = {
+  luminous: {
+    deepColor: '#123e55',
+    shallowColor: '#3e7e88',
+    pearlColor: '#bbd8e2',
+    amberColor: '#ffbf62',
+    absorption: 1.35,
+    normalScale: 1,
+    normalSpeed: 1,
+    normalStrength: 0.095,
+    sheenWidth: 4.7,
+    sheenStrength: 0.9,
+    depthStrength: 1.05,
+    shallowContrast: 1,
+    distortion: 0.75,
+    warmStrength: 0.28,
+    warmWidth: 0.24,
+    warmTail: 4.5,
+  },
+  restrained: {
+    deepColor: '#153f53',
+    shallowColor: '#4d8e91',
+    pearlColor: '#b6d2df',
+    amberColor: '#ffc673',
+    absorption: 1.4,
+    normalScale: 0.9,
+    normalSpeed: 0.85,
+    normalStrength: 0.075,
+    sheenWidth: 4.7,
+    sheenStrength: 0.72,
+    depthStrength: 1.05,
+    shallowContrast: 0.8,
+    distortion: 0.58,
+    warmStrength: 0.22,
+    warmWidth: 0.2,
+    warmTail: 3.2,
+  },
+};
 
 const distance = (x: number, z: number, a: T.Vector2, b: T.Vector2) => {
   const dx = b.x - a.x,
@@ -84,6 +145,7 @@ export function coastalMask(level: Level, paths: Map<string, CanonicalPath>) {
       data[index + 3] = Math.round(land * 255);
     }
   const texture = new T.DataTexture(data, size, size, T.RGBAFormat);
+  texture.colorSpace = T.NoColorSpace;
   texture.magFilter = T.LinearFilter;
   texture.minFilter = T.LinearFilter;
   texture.needsUpdate = true;
@@ -96,33 +158,49 @@ export function coastalMask(level: Level, paths: Map<string, CanonicalPath>) {
 export class CoastalWater {
   mesh: T.Mesh;
   mask: ReturnType<typeof coastalMask>;
+  seabed: ReturnType<typeof createSeabedField>;
+  tuning: WaterTuning = { ...waterPresets.luminous };
+  disposed = false;
+  view = new T.Vector3();
   constructor(level: Level, paths: Map<string, CanonicalPath>) {
     this.mask = coastalMask(level, paths);
+    this.seabed = createSeabedField(level, this.mask.bounds);
+    const layout = sceneLayout(level.id),
+      light = layout.light,
+      lighthouse = layout.landmarks.find((landmark) => landmark.kind === 'lighthouse')!,
+      island = level.world.islands.find((island) => island.id === lighthouse.islandId)!;
     const material = new T.ShaderMaterial({
       uniforms: {
         time: { value: 0 },
         waterY: { value: 0 },
         coast: { value: this.mask.texture },
+        substrate: { value: this.seabed.texture },
         field: { value: this.mask.bounds },
+        heightRange: { value: this.seabed.heightRange },
+        viewDirection: { value: new T.Vector3(0, 34, 24).normalize() },
+        sunDirection: { value: new T.Vector3(...(light?.sunPosition ?? [-8, 16, 7])).normalize() },
+        skyColor: { value: new T.Color(light?.sky ?? '#fff1dc') },
+        sunColor: { value: new T.Color(light?.sun ?? '#ffe0af') },
+        lampPosition: {
+          value: new T.Vector3(
+            lighthouse.positionXZ[0],
+            island.elevation * 0.18 + 2.6,
+            lighthouse.positionXZ[1],
+          ),
+        },
+        arrival: { value: 0 },
+        sheenCenter: {
+          value: level.id === 'bellwater' ? new T.Vector2(0.3, 2.8) : new T.Vector2(0.9, 2.2),
+        },
+        ...Object.fromEntries(
+          Object.entries(this.tuning).map(([name, value]) => [
+            name,
+            { value: typeof value === 'string' ? new T.Color(value) : value },
+          ]),
+        ),
       },
-      vertexShader: `varying vec3 world;void main(){world=(modelMatrix*vec4(position,1.)).xyz;gl_Position=projectionMatrix*viewMatrix*vec4(world,1.);}`,
-      fragmentShader: `varying vec3 world;uniform float time;uniform float waterY;uniform sampler2D coast;uniform vec4 field;
-float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
-float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1.,0.)),f.x),mix(hash(i+vec2(0.,1.)),hash(i+vec2(1.,1.)),f.x),f.y);}
-void main(){
-vec2 p=world.xz;vec2 uv=(p-field.xy)/field.zw;vec4 bed=texture2D(coast,clamp(uv,0.,1.));
-float broad=noise(p*.27+vec2(time*.002,0.));
-float banks=clamp(bed.r*.7+bed.g*.4,0.,.9)*(1.-waterY*.65);
-vec3 c=mix(vec3(.135,.315,.382),vec3(.19,.375,.415),broad);
-c=mix(c,vec3(.34,.47,.405),banks);
-float submerged=bed.a*smoothstep(bed.b*.72-.07,bed.b*.72-.005,waterY);
-float depth=max(0.,waterY-bed.b*.72);
-c=mix(c,vec3(.30,.435,.39)*(.92+noise(p*1.3)*.14),submerged*.56*exp(-depth*1.2));
-vec2 cell=floor(p*vec2(.78,.92));vec2 q=fract(p*vec2(.78,.92))-.5;float seed=hash(cell);
-q.x+=sin(q.y*5.+seed*9.)*.11;
-float glint=exp(-pow(q.x*4.,2.)-pow(q.y*30.,2.))*step(.79,seed);
-glint*=.45+.55*pow(sin(time*.24+seed*13.)*.5+.5,2.);
-c+=glint*.037;gl_FragColor=vec4(c,1.);}`,
+      vertexShader: waterVertexShader,
+      fragmentShader: waterFragmentShader,
     });
     this.mesh = new T.Mesh(new T.PlaneGeometry(200, 200), material);
     this.mesh.name = 'coastal-water';
@@ -134,5 +212,64 @@ c+=glint*.037;gl_FragColor=vec4(c,1.);}`,
     const material = this.mesh.material as T.ShaderMaterial;
     material.uniforms.waterY.value = waterY;
     material.uniforms.time.value = time;
+  }
+  setView(camera: T.Camera) {
+    camera.getWorldDirection(this.view).negate();
+    const material = this.mesh.material as T.ShaderMaterial;
+    material.uniforms.viewDirection.value.copy(this.view);
+  }
+  setHarbor(position: T.Vector3, arrivalIntensity: number) {
+    const material = this.mesh.material as T.ShaderMaterial;
+    material.uniforms.lampPosition.value.copy(position);
+    material.uniforms.arrival.value = arrivalIntensity;
+  }
+  setLighting(sunDirection: T.Vector3, skyColor?: T.Color, sunColor?: T.Color) {
+    const material = this.mesh.material as T.ShaderMaterial;
+    material.uniforms.sunDirection.value.copy(sunDirection).normalize();
+    if (skyColor) material.uniforms.skyColor.value.copy(skyColor);
+    if (sunColor) material.uniforms.sunColor.value.copy(sunColor);
+  }
+  configure(patch: Partial<WaterTuning>) {
+    const material = this.mesh.material as T.ShaderMaterial;
+    for (const key of Object.keys(this.tuning) as (keyof WaterTuning)[]) {
+      const value = patch[key];
+      if (value === undefined) continue;
+      if (typeof value === 'string') material.uniforms[key].value.set(value);
+      else if (Number.isFinite(value)) material.uniforms[key].value = value;
+      else continue;
+      Object.assign(this.tuning, { [key]: value });
+    }
+  }
+  presentation() {
+    const material = this.mesh.material as T.ShaderMaterial;
+    return {
+      time: material.uniforms.time.value as number,
+      waterY: material.uniforms.waterY.value as number,
+      viewDirection: (material.uniforms.viewDirection.value as T.Vector3).toArray(),
+      lampPosition: (material.uniforms.lampPosition.value as T.Vector3).toArray(),
+      arrival: material.uniforms.arrival.value as number,
+      tuning: { ...this.tuning },
+      substrate: {
+        size: [this.seabed.texture.image.width, this.seabed.texture.image.height],
+        heightRange: this.seabed.heightRange.toArray(),
+        minimumHeight: this.seabed.minimumHeight,
+        maximumHeight: this.seabed.maximumHeight,
+        bytes: this.seabed.bytes,
+        patchCount: this.seabed.patches.length,
+        colorSpace: this.seabed.texture.colorSpace,
+      },
+      renderPasses: 1,
+      reflectionTargets: 0,
+      dataBytes: this.seabed.bytes + (this.mask.texture.image.data?.byteLength ?? 0),
+      disposed: this.disposed,
+    };
+  }
+  dispose() {
+    if (this.disposed) return;
+    this.disposed = true;
+    this.mesh.geometry.dispose();
+    (this.mesh.material as T.ShaderMaterial).dispose();
+    this.mask.texture.dispose();
+    this.seabed.texture.dispose();
   }
 }

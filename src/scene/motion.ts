@@ -1,5 +1,6 @@
 import { MathUtils, Vector3 } from 'three';
 import { buildPath, samplePath, type CanonicalPath } from './paths';
+import { journeyProgress } from './transitions';
 
 const legacyPaths = new WeakMap<Vector3[], CanonicalPath>();
 
@@ -16,7 +17,7 @@ export function sampleJourney(
     if (!cached) legacyPaths.set(input, path);
   } else path = input;
   const t = Number.isFinite(progress) ? MathUtils.clamp(progress, 0, 1) : 0,
-    eased = t * t * (3 - 2 * t),
+    eased = journeyProgress(t),
     pose = samplePath(path, eased * path.length, reverse);
   if (!path.length) return { ...pose, angle: fromAngle };
   const initial = path.headings[reverse ? path.headings.length - 1 : 0] + (reverse ? Math.PI : 0),

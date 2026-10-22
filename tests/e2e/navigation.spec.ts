@@ -62,7 +62,7 @@ for (const [label, width, height, touch] of [
   test(`${label}: full-width cove, free inspection, modal safety and tide-boundary subsets`, async ({
     browser,
   }) => {
-    test.setTimeout(90000);
+    test.setTimeout(180000);
     const context = await browser.newContext({
       viewport: { width, height },
       deviceScaleFactor: 1,

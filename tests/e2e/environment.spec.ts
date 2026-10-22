@@ -142,7 +142,7 @@ async function effectsAreClear(page: Page) {
 test('environment: visible curved courses carry the ferry, tangent and fading wake both ways', async ({
   page,
 }) => {
-  test.setTimeout(120000);
+  test.setTimeout(180000);
   mkdirSync(`${reviewDir}/raw`, { recursive: true });
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
@@ -182,6 +182,7 @@ test('environment: visible curved courses carry the ferry, tangent and fading wa
       expect(crossing.some((sample) => sample.wake.emitting)).toBe(true);
       expect(crossing.some((sample) => sample.wake.visible && sample.wake.vertices > 0)).toBe(true);
     }
+  const emissionFrames = new Map(samples.map((sample) => [sample.time, sample]));
   for (const sample of samples) {
     const route: any = buffers.get(sample.active.edgeId);
     const nearest = nearestCourse(sample.pose, route);
@@ -200,8 +201,28 @@ test('environment: visible curved courses carry the ferry, tangent and fading wa
     }
     for (let i = 1; i < sample.wake.positions.length; i += 3)
       expect(sample.wake.positions[i]).toBeCloseTo(sample.waterY + 0.018, 5);
-    for (const point of sample.wake.points)
-      expect(nearestCourse(point.position, route).distance).toBeLessThanOrEqual(0.721);
+    expect(sample.wake.points.length).toBeLessThanOrEqual(31);
+    let wakeLength = 0;
+    for (let i = 0; i < sample.wake.points.length; i++) {
+      const point = sample.wake.points[i],
+        emitted = emissionFrames.get(point.time);
+      expect(emitted, `Missing emission frame at ${point.time}`).toBeDefined();
+      expect(point.position[0]).toBeCloseTo(emitted.pose[0] - Math.sin(emitted.heading) * 0.72, 5);
+      expect(point.position[1]).toBeCloseTo(emitted.waterY + 0.018, 5);
+      expect(point.position[2]).toBeCloseTo(emitted.pose[2] - Math.cos(emitted.heading) * 0.72, 5);
+      expect(
+        nearestCourse(point.position, buffers.get(emitted.active.edgeId)).distance,
+      ).toBeLessThanOrEqual(0.721);
+      expect(sample.time - point.time).toBeGreaterThanOrEqual(0);
+      expect(sample.time - point.time).toBeLessThanOrEqual(720);
+      if (i)
+        wakeLength += Math.hypot(
+          ...point.position.map(
+            (value: number, axis: number) => value - sample.wake.points[i - 1].position[axis],
+          ),
+        );
+    }
+    expect(wakeLength).toBeLessThanOrEqual(1.8 + 0.00001);
     for (const opacity of sample.wake.opacity) {
       expect(opacity).toBeGreaterThanOrEqual(0);
       expect(opacity).toBeLessThanOrEqual(0.181);

@@ -64,11 +64,11 @@ Motion should reward a decision without making the player wait:
 
 | Event | Suggested duration | Treatment |
 | --- | --- | --- |
-| Ferry journey | 400–850 ms | Gentle acceleration and a short, fading wake |
-| Boarding or arrival | 250–450 ms | Small rabbit hop or sheep step, then settle |
-| Draft adjustment | 200–350 ms | Smooth vertical settling without exaggerated rocking |
-| Tide transition | 350–650 ms | Waterline change and corresponding route feedback |
-| Completion accent | 500–900 ms | Warm refuge response and small passenger gestures |
+| Ferry journey | Path-length policy below | Gentle departure, steady cruise and calm arrival |
+| Boarding, unloading or Wait | 520 ms; successful unloading 900 ms | Prompt transfer and a small visible delivery response |
+| Draft adjustment | Final 550 ms, capped by action duration | Smooth vertical settling with attached occupants |
+| Tide transition | Final 550 ms, capped by action duration | Waterline and shore contact finish with the action |
+| Reduced-motion transition | 30 ms | Exact state feedback without decorative movement |
 
 Use occasional head turns, ear movement, or subtle breathing for personality. Avoid constant synchronized bouncing. Animate a logical turn once; animation callbacks must not trigger additional simulation steps. Follow the technical plan's brief input lock during transitions. After a transition finishes or is cancelled, Undo must restore a coherent scene without stale effects or stranded models.
 
@@ -98,3 +98,13 @@ Use one gentle course for navigation dots and ferry travel. Selected and blocked
 Across tides 0, 1 and 2, exposed shores give way to wet edges and visible submerged ground. Contact detail follows the rendered waterline and exposed rock, with no floating outline of a flooded island. Flooded boarding surfaces remain visibly submerged at the exact rule threshold. Keep the contact accents quiet and grouped, away from route-like dotted outlines.
 
 Refine coast and rock silhouettes inside the existing clearance envelope. Group reeds and small details instead of increasing density. Preserve the fixed camera and framing. A short fading wake follows travel; one warm Harbor light response acknowledges delivery. Both effects reset on Undo, Restart and cancellation, and remain calm under reduced motion. Assess the result at native phone size and in actual movement before declaring visual acceptance.
+
+## Luminous evening atmosphere
+
+Retain the accepted miniature and warm readable land. Give open water a deeper blue-green field, a composed region of pearl-blue sky light and separate sea-glass coastal depth. The surface uses three compatible analytic normal layers; their connected moving reflections should remain calm at native phone scale. Selective irregular sand and rock forms belong beneath the reflection, with absorption increasing as the real waterline rises. Avoid milky coast halos, all-over glitter, route-shaped banks and a dark night treatment.
+
+The existing Harbor lamp casts a small elongated broken amber reflection. Visible successful unloading briefly strengthens this existing warmth. Undo and cancellation restore the appropriate presentation. Reduced motion freezes normals, refraction and lapping while preserving static depth and sheen.
+
+Actual short/long comparison selected `clamp(800 + 140 × canonical length, 1200, 2300)` milliseconds: approximately 1.34 seconds on Holding's short passage and 2.08 seconds on Bellwater's longest outer passage. The slower candidate added time without a clear readability gain in the captured environment. `src/scene/transitions.ts` owns this shipped policy. Approximately 19% of each end provides departure/arrival; the middle holds a steady distance rate. The canonical courses, docking clearance and exact endpoints remain unchanged. A soft wake spreads behind the stern for at most 720 ms and 1.8 world units. Hide the local transfer card during sailing; at rest exclude the full loaded ferry after viewport clamping.
+
+The original instrumental cue “Between the lamps” is a continuous 75-second phrase at 64 BPM: open sustained harmony, a sparse motif, long rests, a slightly fuller middle and a quiet return. Air/water, a soft travel texture and a restrained visible-delivery response support it. Start from intentional activation, keep a live master mute available during transit, and never advance puzzle time through listening. Actual sonic judgment and capture availability belong in the atmosphere review.

@@ -53,6 +53,12 @@ const paths = [
   ...(existsSync(new URL('tools/capture-environment.mjs', root))
     ? ['tools/capture-environment.mjs']
     : []),
+  ...(existsSync(new URL('tools/capture-atmosphere.mjs', root))
+    ? ['tools/capture-atmosphere.mjs']
+    : []),
+  ...(existsSync(new URL('tools/compare-atmosphere-timing.mjs', root))
+    ? ['tools/compare-atmosphere-timing.mjs']
+    : []),
 ].sort();
 const files = Object.fromEntries(paths.map((p) => [p, digest(readFileSync(new URL(p, root)))]));
 const sourceHash = digest(JSON.stringify(files));

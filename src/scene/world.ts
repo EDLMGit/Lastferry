@@ -9,6 +9,14 @@ import { getLevelPaths, type CanonicalPath } from './paths';
 import { Shores, createReedBeds } from './shore';
 import { CoastalWater } from './water';
 import { CrossingEffects } from './effects';
+import {
+  journeyTiming,
+  settlingProgress,
+  transitionPlan,
+  type JourneyTiming,
+  type TransitionPlan,
+  type CompletionReason,
+} from './transitions';
 const V = (p: number[], y = 0) => new T.Vector3(p[0], y, p[1]);
 const smooth = (t: number) => t * t * (3 - 2 * t);
 export class World {
@@ -34,13 +42,21 @@ export class World {
   effects: CrossingEffects;
   journeyFrame: { progress: number; distance: number; tangent: T.Vector3 } | null = null;
   reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  timing: JourneyTiming = journeyTiming;
+  disposed = false;
+  frameRequest = 0;
+  resizeObserver: ResizeObserver;
+  onPresentationStart: (action: Action) => void = () => {};
+  onArrival: () => void = () => {};
   transition: null | {
     before: State;
     after: State;
     action: Action;
     start: number;
     duration: number;
-    done: () => void;
+    tideDuration: number;
+    started: boolean;
+    done: (reason: CompletionReason) => void;
     positions: Map<string, T.Vector3>;
     path: CanonicalPath | null;
     edgeId: string | null;
@@ -91,6 +107,11 @@ export class World {
     sun.shadow.bias = -0.0003;
     this.scene.add(sun);
     this.coastalWater = new CoastalWater(this.level, this.paths);
+    this.coastalWater.setLighting(
+      sun.position,
+      new T.Color(light?.sky ?? '#fff1dc'),
+      new T.Color(light?.sun ?? '#ffe0af'),
+    );
     this.water = this.coastalWater.mesh;
     this.scene.add(this.water);
     this.shadow = new T.Mesh(
@@ -223,7 +244,8 @@ export class World {
       this.animals.set(p.id, g);
     }
     this.sync(state);
-    new ResizeObserver(() => this.resize()).observe(host);
+    this.resizeObserver = new ResizeObserver(() => this.resize());
+    this.resizeObserver.observe(host);
     this.resize();
     this.renderer.domElement.addEventListener('click', (ev) => {
       if (this.transition || this.state.status !== 'playing') return;
@@ -290,7 +312,7 @@ export class World {
     matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', (e) => {
       this.reduced = e.matches;
     });
-    requestAnimationFrame((t) => this.tick(t));
+    this.frameRequest = requestAnimationFrame((t) => this.tick(t));
   }
   island(island: Level['world']['islands'][number]) {
     const points = island.footprintXZ,
@@ -427,6 +449,7 @@ export class World {
       this.camera.bottom = center.y - h / scale / 2;
     }
     this.camera.updateProjectionMatrix();
+    this.coastalWater.setView(this.camera);
   }
   speciesIndex(id: string) {
     const passenger = this.level.passengers.find((passenger) => passenger.id === id)!;
@@ -470,6 +493,7 @@ export class World {
     this.setForecast(false, s.tideLevel);
     if (!preserveEffects) this.effects.reset();
     if (s.status === 'won') this.effects.arrive(this.lastTime, this.reduced);
+    this.coastalWater.setHarbor(this.effects.glow.position, this.effects.arrivalIntensity);
     this.shadow.position.y = this.water.position.y + 0.008;
     const n = this.level.nodes.find((n) => n.id === s.boatNodeId)!;
     this.boatRoot.position.copy(V(n.positionXZ, s.tideLevel * 0.18));
@@ -546,7 +570,23 @@ export class World {
       );
     }
   }
-  animate(before: State, after: State, action: Action, done: () => void) {
+  plan(before: State, after: State, action: Action) {
+    const edge = action.type === 'move' ? edgeTo(before, action.to, this.level) : undefined;
+    return transitionPlan(
+      action,
+      after.status === 'won',
+      edge ? this.paths.get(edge.id)!.length : 0,
+      this.reduced,
+      this.timing,
+    );
+  }
+  animate(
+    before: State,
+    after: State,
+    action: Action,
+    done: (reason: CompletionReason) => void,
+    planned: TransitionPlan = this.plan(before, after, action),
+  ) {
     this.cancel();
     this.state = after;
     const positions = new Map(
@@ -575,13 +615,9 @@ export class World {
       after,
       action,
       start: performance.now(),
-      duration: this.reduced
-        ? 30
-        : action.type === 'move'
-          ? 780
-          : action.type === 'unload' && after.status === 'won'
-            ? 900
-            : 520,
+      duration: planned.duration,
+      tideDuration: planned.tideDuration,
+      started: false,
       done,
       positions,
       path,
@@ -591,27 +627,39 @@ export class World {
       fromHullY: this.hull.position.y,
     };
   }
-  cancel() {
+  cancel(reason: CompletionReason = 'cancelled') {
     if (this.transition) {
       const t = this.transition;
       this.transition = null;
       this.journeyFrame = null;
-      this.sync(t.after);
-      this.renderer.render(this.scene, this.camera);
-      t.done();
+      let completion = reason;
+      try {
+        this.sync(t.after);
+        this.renderer.render(this.scene, this.camera);
+      } catch {
+        completion = 'error';
+      } finally {
+        t.done(completion);
+      }
     }
   }
   tick(time: number) {
+    if (this.disposed) return;
     this.frame++;
     this.lastTime = time;
     if (this.transition) {
       const tr = this.transition;
+      if (!tr.started) {
+        tr.started = true;
+        this.onPresentationStart(tr.action);
+      }
       const t = Math.min(1, (time - tr.start) / tr.duration),
-        k = smooth(t);
+        k = smooth(t),
+        tideProgress = smooth(settlingProgress(time - tr.start, tr));
       this.water.position.y = T.MathUtils.lerp(
         tr.before.tideLevel * 0.18,
         tr.after.tideLevel * 0.18,
-        k,
+        tideProgress,
       );
       if (tr.path) {
         const pose = sampleJourney(tr.path, t, tr.fromAngle, tr.reverse);
@@ -620,7 +668,7 @@ export class World {
         this.journeyFrame = { progress: t, distance: pose.distance, tangent: pose.tangent };
       }
       this.boatRoot.position.y = this.water.position.y;
-      this.hull.position.y = T.MathUtils.lerp(tr.fromHullY, this.draftY(tr.after), k);
+      this.hull.position.y = T.MathUtils.lerp(tr.fromHullY, this.draftY(tr.after), tideProgress);
       for (const [id, g] of this.animals) {
         const dest = this.passengerPos(id, tr.after);
         if (tr.before.aboard.includes(id) && tr.after.aboard.includes(id)) continue;
@@ -656,18 +704,20 @@ export class World {
         }
       }
       this.shadow.position.y = this.water.position.y + 0.008;
-      if (tr.after.status === 'won' && t > 0.7) this.effects.arrive(time, this.reduced);
+      if (tr.after.status === 'won' && t > 0.72 && this.effects.arrivalStarted === null) {
+        this.effects.arrive(time, this.reduced);
+        this.onArrival();
+      }
       if (t === 1) {
         this.transition = null;
         this.journeyFrame = null;
         this.sync(tr.after, true);
-        tr.done();
+        tr.done('complete');
       }
     } else {
       this.hull.position.y =
         this.draftY(this.state) + (this.reduced ? 0 : Math.sin(time * 0.0018) * 0.012);
     }
-    this.coastalWater.update(this.water.position.y, this.reduced ? 0 : time * 0.001);
     this.shores.update(this.water.position.y);
     for (const route of this.routes.values()) route.position.y = this.water.position.y;
     for (const marker of this.markers.values()) marker.position.y = this.water.position.y + 0.04;
@@ -679,8 +729,36 @@ export class World {
       this.water.position.y,
       this.reduced,
     );
+    this.coastalWater.setHarbor(this.effects.glow.position, this.effects.arrivalIntensity);
+    this.coastalWater.update(this.water.position.y, this.reduced ? 0 : time * 0.001);
     this.renderer.render(this.scene, this.camera);
-    requestAnimationFrame((t) => this.tick(t));
+    this.frameRequest = requestAnimationFrame((t) => this.tick(t));
+  }
+  dispose() {
+    this.disposed = true;
+    cancelAnimationFrame(this.frameRequest);
+    this.resizeObserver.disconnect();
+    this.scene.remove(this.water);
+    this.coastalWater.dispose();
+    const geometries = new Set<T.BufferGeometry>(),
+      materials = new Set<T.Material>(),
+      textures = new Set<T.Texture>();
+    this.scene.traverse((object) => {
+      if (object instanceof T.Mesh || object instanceof T.Line || object instanceof T.Sprite) {
+        if ('geometry' in object) geometries.add(object.geometry);
+        for (const material of Array.isArray(object.material) ? object.material : [object.material])
+          materials.add(material);
+      }
+    });
+    for (const material of materials) {
+      for (const value of Object.values(material))
+        if (value instanceof T.Texture) textures.add(value);
+      material.dispose();
+    }
+    for (const geometry of geometries) geometry.dispose();
+    for (const texture of textures) texture.dispose();
+    this.renderer.dispose();
+    this.renderer.domElement.remove();
   }
   metrics() {
     return {
@@ -719,6 +797,7 @@ export class World {
         })),
       },
       ...this.effects.presentation(),
+      water: this.coastalWater.presentation(),
     };
   }
   journeyPresentation() {
@@ -734,6 +813,10 @@ export class World {
               progress: this.journeyFrame.progress,
               distance: this.journeyFrame.distance,
               pathLength: transition.path.length,
+              duration: transition.duration,
+              elapsed: Math.max(0, this.lastTime - transition.start),
+              tideDuration: transition.tideDuration,
+              tideProgress: settlingProgress(this.lastTime - transition.start, transition),
               tangent: this.journeyFrame.tangent.toArray(),
             }
           : null,
