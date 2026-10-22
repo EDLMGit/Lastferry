@@ -69,6 +69,20 @@ For browser evidence use desktop 1440×900 and a phone-like 844×390 CSS-pixel l
 
 Aim for smooth movement and responsive interaction. Record actual browser, viewport, hardware/runner, and sample method for any performance claim. A working target is 60 fps on the tested desktop and stable interaction on the tested phone configuration; these are goals, not guaranteed support claims. Lower pixel ratio, shadow resolution, or decorative detail where needed. Do not hide a rule/UI problem by labeling it a performance issue.
 
+## Shared curved routes and coastal presentation
+
+The environment milestone uses `src/scene/paths.ts` to cache one canonical course per edge at level load. Local quadratic corner fillets trim at most 0.75 world units and 25% of either neighboring span. They stay within each corner's convex envelope. A dense approximation is resampled at no more than 0.05 world-unit intervals with cumulative distances and unwrapped tangent angles. Distance lookup traverses the same geometry in reverse; it does not construct an independent return curve.
+
+`sampleJourney` retains the existing smoothstep acceleration/deceleration, approximately 780ms travel and broadside docking clearance blend. The route line, emphasis, motion, shallow-water field and full-ferry tests consume the canonical course. Interior control changes may separate paths, but graph nodes, pier coordinates, base depths and action costs remain authoritative and fixed. Unit checks independently probe the actual sampled network for crossings, coincident stretches and contacts with unrelated stops.
+
+`src/scene/water.ts` generates a bounded 256×256 RGBA coastal field once per level from the canonical courses and shore contours. This replaces the fixed 16 raw-segment shader array. The field combines broad bank/shore relationships and submerged-ground information; a small shader supplies quiet color variation and sparse highlights. No water color participates in rule validation.
+
+`src/scene/shore.ts` supplies continuous coast geometry, grouped instanced rocks, water-height wetness and cached forecast contours. Rendered water height drives contact detail during transitions, while sync restores exact state immediately for Undo and Restart. The actual new solid geometry is checked within the original validated footprint envelope; full rotated ferry clearance retains both footprint exclusions and the required centerline margin.
+
+`src/scene/effects.ts` holds a short dynamic wake ribbon sampled from the actual stern and a restrained existing-lighthouse response on delivery. Static geometry and materials are reused. Effects reset independently from authoritative state on Undo, Restart, cancellation and level changes. Reduced motion suppresses moving decorative wake detail and presents arrival calmly.
+
+Read-only development inspection may expose actual route buffers, boat transforms, shore uniforms and effect buffers for browser verification. Production excludes these globals. Numeric checks supplement actual-play recordings and native-size visual inspection; neither state snapshots nor software-renderer timings prove physical-device motion quality.
+
 ## Delivery hygiene
 
 Bundle the assets needed for ordinary play rather than relying on hotlinked reference images. Document production asset origins. Keep generated videos and large test outputs out of routine source history unless the user chooses an artifact destination. Keep small review reports and selected actual screenshots with their source revision. Add CI only after the real commands exist and run successfully.

@@ -1,162 +1,123 @@
-# Last Ferry — Bellwater Cove
+# Last Ferry — water, shores and smooth journeys
 
 ## Current task and working agreement
 
-Continue on `m1-first-crossing` from the reviewed contextual-interface commit `e9c81d620df5fca0983965e80c348260fb3518e9`, preserving any newer user work. Follow AGENTS.md and the existing authorized Git workflow. PR #1 remains draft; main remains unchanged.
+Continue on `m1-first-crossing` from the reviewed Bellwater commit `7efe98654fa3df01fcb8338c6c28e664e5712ca1`, preserving any newer user work. Follow AGENTS.md and the existing Git workflow. Keep PR #1 draft and main unchanged.
 
-This is the current task after the contextual-interface pass. It explicitly advances beyond the original M1 stopping point. Complete the bounded fixes, one new authored cove, its modest environmental identity, and the verification/handoff described here. Do not stop after the first fix to request another task.
+This is the authorized task after Bellwater. It advances beyond the original M1 stopping point. Complete the shared route/environment work and verification below, then perform the usual commit/push/draft-PR handoff. Do not stop after the route change to request another task.
 
-## Product decision
+The user likes the new map overall and notices that the dotted travel paths have sharp, straight-segment turns. Proceed with the planned visual milestone across **Holding Pier and Bellwater**, preserving **First Crossing** as a playable regression case. The intended result is a visibly more composed coastal miniature with smoother journeys and convincing water/shore contact through the existing tides.
 
-Keep Holding Pier as the introductory puzzle and preserve its solution. Build **Bellwater Cove**, a second main puzzle with a different planning problem, using the existing rules and controls.
+## Preserve the game we have
 
-The next larger milestone after Bellwater is a shared environment pass across the two main coves: water, shallows, shore contact, lighting and restrained arrival detail. Do not undertake that broader visual overhaul in this task. Bellwater still needs enough authored scenery to feel like a new place and explain its routes.
+Keep the existing puzzles, default Holding Pier entry, Next cove progression, Menu selection, named residents and complete Undo. Preserve capacity, load/draft bands, base depths, action costs, tide schedule, boarding/flood event order, previews, successful alternatives and failed-plan consequences. Keep the current contextual controls, compact dialogs, callouts and recent responsive/input protections.
 
-We are testing puzzle variety before adding another mechanic. Bellwater's difficulty and enjoyment are hypotheses for the user's playtest; neither its action count nor a solver proves them.
+Keep graph nodes and their coordinates, connections, pier locations and flood elevations fixed. Interior route-control geometry may be adjusted where necessary for smoothness, clearance and separation; this is presentation geometry, never a shortcut, new junction or changed action cost. Keep the current overall cove compositions. Decorative coastline refinements should stay inside the validated land/clearance envelope; include any protruding new rock or scenery in actual clearance checks.
 
-## A. Resolve the bounded responsive issue first
+No additional cove, mechanic, campaign system, new control scheme or asset-library expansion belongs in this milestone.
 
-An independent review reproduced a local-action-card defect at intermediate landscape heights.
+## A. Give the routes and ferry one coherent curved course
 
-**Reproduction at 844 × 500:** open `/?cove=holding-pier`, let Moss ashore, then try to use the map's Sail to Shallows button. The stretched `#local-context` section covers the button and intercepts its pointer input. At 1024 × 600, the same card stretches into the forecast area.
+### Review findings
 
-**Cause:** compact landscape CSS applies through 600 px height, setting local context to bottom anchoring with no centering transform. `positionMap()` in `src/main.ts` switches to compact positioning only through 480 px, so it supplies desktop inline top/left values between 481 and 600 px. These rules conflict.
+The current dotted routes are literal `edge.waypointsXZ` polylines in `src/scene/world.ts`. `src/scene/motion.ts` linearly interpolates the ferry's position along the same straight segments; only its heading softens near corners. Bellwater's Harbor–Bell passage is the clearest example, especially when highlighted after the second rise.
 
-Use a consistent layout condition and clear stale inline positioning when compact layout owns the card. Keep the card at its intended content height and prevent overlap with route targets or forecast. A review-browser-only change from the JavaScript 480 px condition to 600 px restored the nine-action Holding Pier rescue at both sizes; this is a candidate direction, not a committed fix or a complete regression result.
+There is also a strict interior intersection between `harbor-shallows` and `harbor-bell` near X = −3.190769, Z = 1.081538. It lies away from their shared Harbor endpoint and can imply an extra junction. The current hull-clearance test does not check edge/edge crossings; the independent design validator's crossing check is specific to First Crossing.
 
-Retain a focused regression that performs the real unloading and sailing actions at 844 × 500, checks local controls/forecast at 1024 × 600, and exercises a resize across the breakpoint. Preserve the existing 1440 × 900, 844 × 390 and 780 × 390 layouts and the baseline cove.
+### Required implementation
 
-Before content work, run the relevant current interaction checks. The independent Linux/Chromium 141 review also encountered input/capture timeouts in the broad suite, whereas the contributor reported a full pass in Chromium 156. In particular, recheck rapid Confirm taps on the baseline phone boarding card and loss → Undo → safe boarding under reduced motion. Investigate any reproducible failure; do not weaken state assertions, add arbitrary sleeps or silently relabel the independent full run as passed. A timeout alone is not proof of a gameplay defect.
+Create a small, cached canonical path representation per edge and use it for the visible route, selected/blocked emphasis, ferry position, motion tangent and clearance validation. A bounded local corner-rounding construction is suitable; choose the simplest implementation that satisfies the outcomes below. Inspect spline overshoot explicitly if using interpolating curves.
 
-Repeated Confirm input must commit exactly one action and must not activate a newly exposed background control or open an unintended dialog. Check normal animation and reduced motion, recording input spacing so delayed automation is not misclassified as a rapid double tap. The independent no-recording follow-up passed both production rescues but timed out in all three longer contextual scenarios; it does not establish that recording was the cause or that the full browser suite passed.
+- Preserve exact stopping endpoints. Round interior bends into gentle, deliberate courses. Straight two-point passages may remain straight. A move still ends at one selected stop; never smooth across separate actions into automatic travel through another node.
+- Resolve Bellwater's unmarked crossing through modest interior control-point changes. Check the resulting network for unintended intersections, coincident stretches or contacts with another stop. Shared-node departures must remain clear and separate beyond the actual junction.
+- Keep routes outside land and piers with the modeled ferry's full rotated footprint, including docking turns. Retain the established departure/arrival clearance behavior rather than aligning the hull to a tangent while still against a jetty.
+- Sample by traveled distance or an equivalent stable arc-length approximation. Dashes should have consistent spacing through bends; the ferry should not surge at control points. Preserve the existing brief acceleration/deceleration and responsive journey duration, approximately the current 780 ms for a move.
+- Traverse the same canonical curve in reverse, with the corresponding reversed tangent. Avoid constructing two different courses for opposite directions.
+- Keep heading continuous through interior bends, including angle wrap. Restore the expected stable docked pose at endpoints. Passengers remain attached to the deck throughout travel, draft changes and cancellation.
+- Keep path shape identical for ordinary, highlighted and blocked states. Retain text/shape cues for availability; use restrained emphasis with readable contrast at both phone widths.
+- Keep solid phone label leaders visually distinct from dotted navigable paths. Those leaders identify labels; they are not routes and do not need route-style curves.
 
-## B. Author Bellwater's exact puzzle
+This is a focused shared geometry change, not a general navigation engine or level editor. Cache geometry at level load; avoid rebuilding curves/materials each frame.
 
-Level ID: `bellwater`. Display title: **Bellwater Cove**.
+### Keep shallow-water presentation aligned
 
-The ferry starts empty at Harbor. Two rabbits, **Tansy** and **Lark**, wait at Low Pier. A sheep, **Bram**, waits at Bell Pier. Reuse the existing rabbit/sheep models. These are new neighbors, so the introductory passengers do not become inexplicably stranded again.
+The current shader separately builds shallow bands from raw waypoint segments and has a fixed `shallowSegments[16]` representation. Dense curve samples cannot simply be inserted into that unchanged array. Replace or adapt this with a deliberately bounded representation, such as a small generated mask or bounded approximation suitable for these coves.
 
-Use stable level-local passenger IDs. Add only the small amount of level-owned naming metadata needed for the new residents and locations; preserve Pip, Rue and Moss in the existing coves. Status, action labels, subset warnings, accessible names, forecasts and endings must use the active level's names.
+The shallow presentation should agree with the curved passages and neighboring banks. The reducer's authored depths remain authoritative. Visual water color must never determine legal travel, create a shortcut or suggest a connection absent from the graph.
 
-### Rules retained
+## B. Make the water calm and coastal
 
-- Capacity 4. Each rabbit uses 1 slot; the sheep uses 2.
-- Draft: empty = 1; load 1–2 = 2; load 3–4 = 3.
-- Every accepted move across one edge, Board selection, Unload selection or Wait costs one action.
-- Tide starts at 0, rises to 1 after action 4, then to 2 after action 8. It does not rise further.
-- Route/basin depth is base depth plus tide. Equality supports the boat.
-- A pier is dry when tide is strictly below its elevation.
-- Apply the complete action, then advance the turn/tide and evaluate flooding. Arrival does not include boarding.
-- Preserve free inspection, actual selected-subset previews, one-activation safe sailing, dangerous-action confirmation, passenger conservation and complete Undo.
-- Win only after all three required passengers are delivered at Harbor. No new move cap, timer, score requirement or mandatory Wait.
+Retain the art brief's inviting coastal-miniature style and established blue/teal palette. Keep the yellow ferry, red cabin and passenger silhouettes prominent.
 
-### Nodes and piers
+Replace the all-over repeated fine diagonal highlights with **broad color variation and sparse, irregular groups of quiet highlights**. Allow substantial open water to stay visually calm. On phones, the water texture should be clearly subordinate to route dots, focus/selection indicators and passenger silhouettes.
 
-Every stopping basin has base depth 3.
+Give the deeper outer water, shallow passages and shore-adjacent water a coherent relationship. Use a modest authored seabed/bank treatment so shallow regions feel like part of the inlet rather than luminous paint following a route centerline. Support the existing dry, shallow, navigable and flooded states without pretending that every visible patch is a playable path.
 
-| Stop | Pier elevation | Starting passengers / role |
-| --- | ---: | --- |
-| Harbor | 3 | Empty; safe delivery destination; ferry starts here |
-| Shallows | None | Short-route waypoint |
-| Low Pier | 1 | Tansy and Lark; boarding can complete on action 4 before the rise |
-| West Buoy | None | Outer-route waypoint |
-| East Buoy | None | Outer-route waypoint |
-| Bell Pier | 2 | Bram; boarding can complete on action 8 before the rise |
+Use a small, predictable rendering approach appropriate to the current Three.js app. Slow, low-amplitude surface motion and a few restrained highlights are enough. Favor simple geometry/materials or bounded shaders over fluid simulation, heavy reflections, new post-processing stacks or dependency changes. Evaluate the result at native phone scale, not only enlarged desktop captures.
 
-### Connections
+## C. Design water contact for all three tide states
 
-All six edges are bidirectional. These are the entire route graph; do not add a shortcut during geometry work.
+The current pale shore pieces sit at a fixed initial height and disappear under the first rise. After the second rise, Low Pier's shore becomes isolated reed tips and rocks, while the Bell shore loses its surface below the boulders. Preserve the flooding; improve how it looks.
 
-| Edge | Base depth |
-| --- | ---: |
-| Harbor ↔ Shallows | 1 |
-| Shallows ↔ Low Pier | 1 |
-| Harbor ↔ West Buoy | 3 |
-| West Buoy ↔ East Buoy | 3 |
-| East Buoy ↔ Low Pier | 3 |
-| Harbor ↔ Bell Pier | 2 |
+For tide 0, 1 and 2, provide coherent **exposed, wet and submerged** treatment:
 
-The two-edge shallow route and three-edge deep route form a loop between Harbor and Low Pier. Bell Pier branches directly from Harbor. There are six stopping nodes, six edges and three islands.
+- Exposed shore has a deliberate sand/rock edge and restrained contact detail where water actually meets it.
+- As water rises, wetness/contact follows the real coast and exposed rocks. Avoid a floating outline around the old dry footprint.
+- Flooded low ground reads as submerged terrain beneath the remaining reeds/rocks. A simple authored color or geometry treatment is sufficient; realistic refraction is unnecessary. Keep a grounded sense of the shore that used to be there.
+- Flooded piers remain unmistakably flooded at the exact rule threshold. Do not raise their elevations or preserve a dry-looking boarding surface to improve the picture.
+- Contact detail remains secondary to routes. Foam and wake must not create dotted outlines that resemble new paths.
 
-### Intended discovery
+Use the actual rendered water height during the existing transition, then settle to the exact state. Undo across either rise must immediately restore the correct shore, water, foam, submerged treatment and ferry state. Restart, level selection and animation cancellation must also clear stale effects.
 
-The return route can differ from the outward route because the water changes. The player must also consider both pickup deadlines and the cost of delivering passengers when passing through Harbor. Communicate the rules and consequences clearly, while leaving the plan for the player to discover.
+The forecast remains a free preview of the real next tide. Any updated shoreline preview must correspond to that tide without changing committed state or obscuring its compact explanation.
 
-Do not add a walkthrough, recommended move, forced highlight sequence or compulsory Wait step. Keep the legitimate alternatives below.
+## D. Refine a few shapes and add restrained travel/arrival detail
 
-## C. Implementation witnesses — keep these out of player-facing instructions
+Preserve each cove's identity. Holding Pier keeps its lighthouse, stone holding point and rabbit shore. Bellwater keeps its triangular inlet, low reed shore and rocky bell landmark.
 
-Two representative ten-action rescues:
+Refine selected shore contours, reed groupings and rock silhouettes. Break the regular ring of identical detail and repeated layered rims where it is most visible. Keep these changes within the existing footprint/clearance constraints and away from passengers, piers, route junctions and labels. Improve grouping and materials rather than increasing prop density.
 
-| Action | Shallow outward / deep return | Deep outward / shallow return |
-| ---: | --- | --- |
-| 1 | Harbor → Shallows | Harbor → West Buoy |
-| 2 | Shallows → Low Pier | West Buoy → East Buoy |
-| 3 | Board both rabbits | East Buoy → Low Pier |
-| 4 | Low Pier → East Buoy; tide rises | Board both rabbits; tide rises |
-| 5 | East Buoy → West Buoy | Low Pier → Shallows |
-| 6 | West Buoy → Harbor | Shallows → Harbor |
-| 7 | Harbor → Bell Pier | Harbor → Bell Pier |
-| 8 | Board Bram; tide rises after boarding | Board Bram; tide rises after boarding |
-| 9 | Bell Pier → Harbor | Bell Pier → Harbor |
-| 10 | Deliver everyone | Deliver everyone |
+Tune warm late-afternoon light, matte material response and gentle contact shadows. Keep cabin sides, animals and flooded pier states readable. Preserve the stable orthographic camera and existing framing; make only the small adjustments required by actual new render bounds.
 
-A third valid family takes the shallow route both ways. One Wait before the first shallow return step allows the tide to reach 1. Valid placements include Harbor before departure, Shallows, or Low Pier before or after boarding both rabbits. Boarding the two rabbits separately on actions 3 and 4 also works. Preserve both rabbit-selection orders and these valid alternatives. Longer harmless play after everyone is aboard remains legal.
+Add a **short fading wake** that follows the ferry's actual curved course and stops emitting when travel ends. Keep it visually separate from the navigation line and avoid long-lived trails. Add one restrained **warm Harbor light response on successful delivery**, using the existing lighthouse/refuge. It should make completion feel acknowledged without delaying the next action or creating a new screen.
 
-Meaningful unsuccessful or blocked plans:
+Both effects are presentation only. They must reset correctly on Undo, Restart, level change and cancelled transitions. Reduced motion disables decorative loops/wake movement and presents any arrival response calmly; the existing one-commit input protection must remain independent of animation duration.
 
-- Go to Bell Pier first: the rabbits cannot be boarded before the first rise.
-- Use the deep outer route in both directions: reach Harbor on action 7, then Bell Pier on action 8, too late to board Bram.
-- Deliver any rabbit before boarding Bram: the transfer consumes the remaining boarding window.
-- At Low Pier on action 3 after boarding both rabbits, attempt the shallow return: current depth 1 cannot support draft 2. Inspection must explain the blockage freely; a future rise cannot validate the current move.
+## E. Validate the actual changed renderer and paths
 
-The rules prototype was evaluated with the exact checked-out production reducer at the reviewed commit. Complete legal-action reachability found 121 canonical states, shortest rescue 10, and eight shortest action sequences grouped into the route/timing families above. There were zero wins without shallow-route use, zero wins when first sailing toward Bell Pier, and zero wins with delivery before sheep boarding. Wins exist without Wait.
+Keep verification focused on the risks this task creates. Build/typecheck and run the relevant unit/browser coverage against the implemented source. Existing successful contributor runs establish the starting baseline; they do not validate a changed shared renderer.
 
-These are design checks, not evidence of a playable Bellwater implementation. Counts depend on canonicalization and should not become brittle UI gates. Preserve the actual witness behavior and constraints. The prototype's coordinates and inherited scenery were provisional; author and validate coherent production geometry rather than copying them.
+### Geometry and rule preservation
 
-## D. Make Bellwater a distinct place
+1. Unit-check canonical paths: exact endpoints, finite/valid samples, stable distance progression, reverse traversal of the same geometry and continuous interior position/heading. Check degenerate segments safely; do not add invisible excursions to make a test pass.
+2. Update the existing full-ferry clearance checks to sample the **production curved path and heading**, in both directions for every edge in all three coves. Checking the obsolete polyline or only the boat center is insufficient. Retain required route margin and check newly refined geometry as well as pier decks.
+3. Check actual route geometry for unintended interior crossings/contacts, including the reported Harbor–Bell/Harbor–Shallows case. Compare enough of the real curves to catch overshoot; a check of endpoints alone is insufficient.
+4. Preserve the existing reducer witnesses, tide boundaries, conservation, safe/losing subset consequences and complete Undo. Verify that presentation changes have not altered graph topology, base depths, costs or winning alternatives.
 
-Create a new inlet composition instead of repeating the current straight row of islands:
+### Actual UI and motion
 
-- A low sandy/reed-edged shore for the rabbits.
-- A higher rocky pickup shore with a small recognizable bell landmark for Bram.
-- The safe Harbor/lighthouse destination.
-- A legible shallow channel and a visibly deeper outer route.
-- A modest change in coast shape, local planting and light/palette, within the existing miniature style.
+- Complete a real-interface rescue in Holding Pier and Bellwater, plus a baseline First Crossing regression using the shared renderer. Include Bellwater's Harbor–Bell journey and at least one outer-route turn in both directions.
+- Inspect actual motion to establish that the ferry follows its visible line and steers smoothly. Include departure/arrival near piers, loaded passengers and the fading wake. A state-only assertion or a still image does not establish smooth motion.
+- Check tide 0, 1 and 2 and Undo across both rises, including Bellwater's submerged low shore and Bell shore. Check terminal Undo and the arrival-effect reset.
+- Retain natural keyboard and emulated-touch access, free inspection, selected-subset dialogs, one accepted action per input and the measured normal/reduced-motion repeat-Confirm protection.
+- Review both main coves at 1440 × 900, 844 × 390 and 780 × 390. Preserve essential text, 44 px targets, passenger silhouettes, named stops, warning fit and label separation. Recheck the intermediate-height placement/resizing affected by scene bounds.
+- Confirm normal default → Next cove → Bellwater and Menu/Restart still reset to the intended scene. Verify one rescue in a production build without debug controls or external runtime assets.
 
-Use existing geometry/material techniques and reusable assets. The bell is a landmark, not a new gameplay system. Keep decorative routes, water highlights and scenery from implying connections or access that the level data does not provide.
+Reuse static geometry/materials where practical. Record before/after draw calls, triangle counts and any measured runtime change under the same environment. Investigate a material regression; do not infer physical-phone frame rates from software-rendered automation or turn this task into speculative performance infrastructure.
 
-Author island footprints, pier positions, camera framing and route waypoints together. Verify actual ferry clearance in both directions along every route. Do not change topology/depths or squeeze paths through land to fit existing decoration.
+## F. Evidence and final handoff
 
-The current renderer hardcodes some lighthouse/house positions and special-cases existing pier IDs. Move only the necessary scenery anchors, names and layout settings into level-owned data or a small explicit scene configuration. Make the six-stop framing and label placement work in Bellwater while preserving both older coves. No generic level editor or broad rendering-framework rewrite is needed.
+Capture matched before/after views using the same state, viewport and framing where practical. Select a compact useful set rather than a large near-duplicate gallery:
 
-Retain the shared water implementation for this milestone, adding the authored shallow/shore treatment the new puzzle needs. The following shared environment milestone will address repetitive ripples, shoreline/water contact across tides and overall atmosphere across the two main coves.
+- Bellwater's highlighted Harbor–Bell course and one outer bend.
+- Holding Pier and Bellwater at their relevant tide states, particularly the submerged shores.
+- Both main coves at phone scale, including the constrained 780 px layout.
+- A clear successful arrival and an Undo-restored state.
 
-## E. Provide a small playable sequence
+Inspect the selected images at native size and use a short uninterrupted actual-play recording to assess route motion, water and wake. Keep raw video local if external upload is unavailable; report that limit honestly. Do not substitute concept art or assert motion quality from screenshots alone.
 
-Make Holding Pier the normal default/new-game entry now that it is the accepted introduction. Keep First Crossing available explicitly through its existing query route and Menu as the baseline cove.
+Update the art/technical notes and asset ledger for the actual changes. Preserve historical captures under their original source identity. Update STATUS and provide a compact review report with exact source/commands/results, evidence paths, environment and remaining uncertainties. Clearly distinguish fresh checks, justified reused results and unverified devices/engines. A shared-renderer change does not inherit the previous label-only rationale for reusing 28 scenarios automatically.
 
-On Holding Pier success, add an accessible **Next cove** action that opens Bellwater. Preserve terminal Undo/Restart. Add Bellwater to Menu and make `/?cove=bellwater` open it directly.
+Complete the normal commit/push and draft PR update. Return the final SHA, source/remote equality, main/draft status, concise changes, verification, representative gameplay screenshots and recording location. Do not merge or mark the PR ready.
 
-A brief transition line is enough: “Further along the coast, two piers still have their lights on.” Show the new cove title and fresh residents. Do not build a campaign map, unlock tree, save system or dialogue framework. Bellwater's completion should acknowledge that its neighbors are safe without pretending the whole game's story is finished.
-
-Update baseline-specific tests to request `?cove=first-crossing` explicitly where necessary; keep their original gameplay assertions. Add a small test of default Holding Pier → success → Next cove → Bellwater initial state.
-
-## F. Verification and handoff
-
-Run build/typecheck and the relevant unit/browser checks against the actual implementation. At minimum establish:
-
-1. The responsive fix restores actual mouse/touch actions and keeps local controls clear at 844 × 500 and 1024 × 600, including resizing. Existing desktop and 390 px-high layouts still work.
-2. Holding Pier and First Crossing retain their rescues, input protection, free inspection, subset consequences and complete Undo. Resolve any reproduced baseline interaction failure before proceeding.
-3. Bellwater's representative route families win through the real reducer. Its failed alternatives fail for the intended reasons; Wait is not compulsory.
-4. An actual-UI Bellwater rescue works with mouse, natural keyboard and emulated touch. Check one valid route through production without debug controls.
-5. Boarding on actions 4 and 8 is safe before the respective rise. Invalid shallow inspection costs no time. Subset previews identify the actual passenger left behind. Undo restores passengers, tide, boat, delivered state and outcome through both rises and terminal state.
-6. All six destinations, passage highlights, local passenger actions and important warnings are legible at 1440 × 900, 844 × 390 and 780 × 390. Essential consequences and confirmation fit without clipping; retain 14 px essential text and 44 px targets.
-7. Scene and ferry clearance checks use the new authored geometry, and level-specific naming/scenery does not break the older coves.
-8. Default entry, Menu selection and the Next cove action load the intended level and reset state correctly.
-
-Capture representative actual gameplay: new cove start, blocked shallow return, critical boarding at a rise, changed water/passenger state and completion. Include both phone widths for initial framing and the most constrained preview. Inspect images at native size. Keep an uninterrupted recording locally if supported; no external hosting is required.
-
-Update the rule/level documentation, STATUS and a compact review report. Record exact source identity, actual commands/results, environment and remaining uncertainty. Do not treat reference-model results as actual UI evidence or claim fresh checks that were not rerun. Follow the existing normal push/draft-PR handoff workflow and report the final commit. Main stays unchanged.
-
-Finish Bellwater before adding further levels or mechanics. The user will playtest it; the next direction after that is the planned shared environment pass.
+The user will playtest the smoother journey and visual feel. Finish this environment milestone before proposing more content or mechanics.

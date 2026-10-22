@@ -1,0 +1,389 @@
+{
+  "sourceHash": "58c5c2deb30c8a8e0e3b7cce0ac8944d7906f224ae4e7a4cf552c76ea0420c1b",
+  "sourceManifest": "source-manifest.json",
+  "sourceFiles": 64,
+  "generatedAt": "2026-10-22T10:27:44.063Z",
+  "build": {
+    "command": "npm run build",
+    "result": "pass",
+    "exitCode": 0,
+    "jsRawKB": 662.1,
+    "jsGzipKB": 173.88,
+    "advisory": "Vite >500kB chunk advisory remains; prior634.28/166.25kB"
+  },
+  "typecheck": {
+    "command": "npm run typecheck",
+    "result": "pass",
+    "exitCode": 0
+  },
+  "unit": {
+    "command": "npm run test:unit",
+    "result": "pass",
+    "exitCode": 0,
+    "passed": 62,
+    "files": 6,
+    "defaultBudgetUnchanged": true,
+    "priorDevelopmentTimeouts": "initial-failure/unit-timeouts.txt"
+  },
+  "reference": {
+    "command": "node tools/verify-design.mjs",
+    "result": "pass",
+    "passed": 32,
+    "scope": "Authored reference model only; not an implemented-game check."
+  },
+  "browser": {
+    "initialCommand": "npx playwright test --output=.cache/environment-final/playwright",
+    "initialResult": "fail: three overall time-budget failures",
+    "initialStats": {
+      "startTime": "2026-10-22T09:50:04.254Z",
+      "duration": 1105925.189,
+      "expected": 38,
+      "skipped": 0,
+      "unexpected": 3,
+      "flaky": 0
+    },
+    "initialCases": [
+      {
+        "file": "bellwater.spec.ts",
+        "title": "Bellwater mouse: uninterrupted shallow outward, blocked return, deep return and ten-action rescue",
+        "status": "passed",
+        "durationMs": 50882,
+        "error": null
+      },
+      {
+        "file": "bellwater.spec.ts",
+        "title": "Bellwater natural keyboard: deep outward, shallow return, both tide Undo and terminal Undo",
+        "status": "passed",
+        "durationMs": 40357,
+        "error": null
+      },
+      {
+        "file": "bellwater.spec.ts",
+        "title": "Bellwater 844x390 touch: six stops, actual subset loss, safe boundaries, complete Undo and rescue",
+        "status": "timedOut",
+        "durationMs": 60012,
+        "error": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+      },
+      {
+        "file": "bellwater.spec.ts",
+        "title": "Bellwater 780x390 touch: six stops, actual subset loss, safe boundaries, complete Undo and rescue",
+        "status": "passed",
+        "durationMs": 32536,
+        "error": null
+      },
+      {
+        "file": "bellwater.spec.ts",
+        "title": "default Holding entry, accessible Next cove and Menu selection reset Bellwater and baseline",
+        "status": "passed",
+        "durationMs": 18115,
+        "error": null
+      },
+      {
+        "file": "bellwater.spec.ts",
+        "title": "Bellwater unsuccessful plan: Bell Pier first has its actual deadline consequence and Undo",
+        "status": "passed",
+        "durationMs": 4343,
+        "error": null
+      },
+      {
+        "file": "bellwater.spec.ts",
+        "title": "Bellwater unsuccessful plan: deep route both ways has its actual deadline consequence and Undo",
+        "status": "passed",
+        "durationMs": 5222,
+        "error": null
+      },
+      {
+        "file": "bellwater.spec.ts",
+        "title": "Bellwater unsuccessful plan: early rabbit delivery has its actual deadline consequence and Undo",
+        "status": "passed",
+        "durationMs": 5308,
+        "error": null
+      },
+      {
+        "file": "bellwater.spec.ts",
+        "title": "Bellwater production: real ten-action rescue without debug controls or external assets",
+        "status": "passed",
+        "durationMs": 14627,
+        "error": null
+      },
+      {
+        "file": "checkpoint.spec.ts",
+        "title": "A: first in-engine checkpoint",
+        "status": "passed",
+        "durationMs": 4470,
+        "error": null
+      },
+      {
+        "file": "environment.spec.ts",
+        "title": "environment: visible curved courses carry the ferry, tangent and fading wake both ways",
+        "status": "passed",
+        "durationMs": 67939,
+        "error": null
+      },
+      {
+        "file": "environment.spec.ts",
+        "title": "environment: shores, free forecast and complete Undo follow both tide boundaries",
+        "status": "passed",
+        "durationMs": 29892,
+        "error": null
+      },
+      {
+        "file": "environment.spec.ts",
+        "title": "environment: interrupted travel, restart and changing cove clear transient effects",
+        "status": "passed",
+        "durationMs": 7559,
+        "error": null
+      },
+      {
+        "file": "environment.spec.ts",
+        "title": "environment: reduced motion keeps calm water, no wake and stable warm arrival",
+        "status": "passed",
+        "durationMs": 10144,
+        "error": null
+      },
+      {
+        "file": "fallback.spec.ts",
+        "title": "fallback completes a stalled presentation without another gameplay action",
+        "status": "passed",
+        "durationMs": 4221,
+        "error": null
+      },
+      {
+        "file": "game.spec.ts",
+        "title": "desktop: real rescue, blocked preview, tide undo, terminal undo and restart",
+        "status": "passed",
+        "durationMs": 26743,
+        "error": null
+      },
+      {
+        "file": "game.spec.ts",
+        "title": "emulated phone landscape: touch preview, double tap guard, tide undo and complete rescue",
+        "status": "passed",
+        "durationMs": 17513,
+        "error": null
+      },
+      {
+        "file": "game.spec.ts",
+        "title": "keyboard-only tide-wait witness and subset selection",
+        "status": "passed",
+        "durationMs": 10873,
+        "error": null
+      },
+      {
+        "file": "game.spec.ts",
+        "title": "flood loss, undo and alternate safe boarding through real interface",
+        "status": "passed",
+        "durationMs": 16682,
+        "error": null
+      },
+      {
+        "file": "game.spec.ts",
+        "title": "visibility cancellation releases lock and reconciles to committed state",
+        "status": "passed",
+        "durationMs": 4099,
+        "error": null
+      },
+      {
+        "file": "game.spec.ts",
+        "title": "portrait: complete frame, usable controls, reduced motion and no horizontal clipping",
+        "status": "passed",
+        "durationMs": 9253,
+        "error": null
+      },
+      {
+        "file": "holding-pier.spec.ts",
+        "title": "Holding Pier: uninterrupted nine-action actual UI rescue and gameplay evidence",
+        "status": "passed",
+        "durationMs": 40704,
+        "error": null
+      },
+      {
+        "file": "holding-pier.spec.ts",
+        "title": "Holding Pier: unloading Undo, tide Undo, losing alternatives and baseline selector",
+        "status": "passed",
+        "durationMs": 20221,
+        "error": null
+      },
+      {
+        "file": "holding-pier.spec.ts",
+        "title": "Holding Pier: phone landscape touch, direct double-tap guard, preview and complete rescue",
+        "status": "passed",
+        "durationMs": 24805,
+        "error": null
+      },
+      {
+        "file": "holding-pier.spec.ts",
+        "title": "Holding Pier: natural desktop keyboard, preview cancellation, direct sailing and terminal Undo",
+        "status": "passed",
+        "durationMs": 9559,
+        "error": null
+      },
+      {
+        "file": "holding-pier.spec.ts",
+        "title": "Holding Pier: natural phone keyboard, preview cancellation, direct sailing and terminal Undo",
+        "status": "passed",
+        "durationMs": 13312,
+        "error": null
+      },
+      {
+        "file": "holding-pier.spec.ts",
+        "title": "Holding Pier: production rescue without debug controls or external requests",
+        "status": "passed",
+        "durationMs": 17537,
+        "error": null
+      },
+      {
+        "file": "navigation.spec.ts",
+        "title": "desktop-contextual: full-width cove, free inspection, modal safety and tide-boundary subsets",
+        "status": "passed",
+        "durationMs": 67173,
+        "error": null
+      },
+      {
+        "file": "navigation.spec.ts",
+        "title": "phone-contextual: full-width cove, free inspection, modal safety and tide-boundary subsets",
+        "status": "passed",
+        "durationMs": 62994,
+        "error": null
+      },
+      {
+        "file": "navigation.spec.ts",
+        "title": "phone-narrow-contextual: full-width cove, free inspection, modal safety and tide-boundary subsets",
+        "status": "timedOut",
+        "durationMs": 90000,
+        "error": "\u001b[31mTest timeout of 90000ms exceeded.\u001b[39m"
+      },
+      {
+        "file": "production.spec.ts",
+        "title": "production bundle: real rescue without debug globals or external assets",
+        "status": "passed",
+        "durationMs": 19792,
+        "error": null
+      },
+      {
+        "file": "refinement.spec.ts",
+        "title": "natural keyboard desktop: Tab, Shift+Tab, Enter, Escape, tide undo and terminal Undo",
+        "status": "passed",
+        "durationMs": 24106,
+        "error": null
+      },
+      {
+        "file": "refinement.spec.ts",
+        "title": "natural keyboard phone: Tab, Shift+Tab, Enter, Escape, tide undo and terminal Undo",
+        "status": "passed",
+        "durationMs": 27962,
+        "error": null
+      },
+      {
+        "file": "refinement.spec.ts",
+        "title": "deck attachment normal: boarding, Moss-only unload, bob, tide and Undo",
+        "status": "passed",
+        "durationMs": 16537,
+        "error": null
+      },
+      {
+        "file": "refinement.spec.ts",
+        "title": "deck attachment reduced motion: boarding, Moss-only unload, bob, tide and Undo",
+        "status": "passed",
+        "durationMs": 11773,
+        "error": null
+      },
+      {
+        "file": "responsive.spec.ts",
+        "title": "responsive 844x500 mouse: local card, forecast, breakpoint resize and nine-action rescue",
+        "status": "passed",
+        "durationMs": 43765,
+        "error": null
+      },
+      {
+        "file": "responsive.spec.ts",
+        "title": "responsive 844x500 touch: local card, forecast, breakpoint resize and nine-action rescue",
+        "status": "passed",
+        "durationMs": 38105,
+        "error": null
+      },
+      {
+        "file": "responsive.spec.ts",
+        "title": "responsive 1024x600 mouse: local card, forecast, breakpoint resize and nine-action rescue",
+        "status": "passed",
+        "durationMs": 48204,
+        "error": null
+      },
+      {
+        "file": "responsive.spec.ts",
+        "title": "responsive 1024x600 touch: local card, forecast, breakpoint resize and nine-action rescue",
+        "status": "timedOut",
+        "durationMs": 60056,
+        "error": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+      },
+      {
+        "file": "responsive.spec.ts",
+        "title": "rapid phone Confirm normal: trusted touch spacing, one commit and no background dialog",
+        "status": "passed",
+        "durationMs": 4879,
+        "error": null
+      },
+      {
+        "file": "responsive.spec.ts",
+        "title": "rapid phone Confirm reduced: trusted touch spacing, one commit and no background dialog",
+        "status": "passed",
+        "durationMs": 2686,
+        "error": null
+      }
+    ],
+    "rerunResult": "pass3/3",
+    "rerunStats": {
+      "startTime": "2026-10-22T10:09:55.029Z",
+      "duration": 105846.785,
+      "expected": 3,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "rerunCases": [
+      {
+        "file": "bellwater.spec.ts",
+        "title": "Bellwater 844x390 touch: six stops, actual subset loss, safe boundaries, complete Undo and rescue",
+        "status": "passed",
+        "durationMs": 34459,
+        "error": null
+      },
+      {
+        "file": "navigation.spec.ts",
+        "title": "phone-narrow-contextual: full-width cove, free inspection, modal safety and tide-boundary subsets",
+        "status": "passed",
+        "durationMs": 30821,
+        "error": null
+      },
+      {
+        "file": "responsive.spec.ts",
+        "title": "responsive 1024x600 touch: local card, forecast, breakpoint resize and nine-action rescue",
+        "status": "passed",
+        "durationMs": 38052,
+        "error": null
+      }
+    ],
+    "acceptedCoverage": "All41 distinct scenarios passed across the unchanged-source full run and isolated reruns; original failures retained and not relabeled.",
+    "sourceUnchanged": true,
+    "rerunCommand": "npx playwright test tests/e2e/bellwater.spec.ts tests/e2e/navigation.spec.ts tests/e2e/responsive.spec.ts --grep 'Bellwater 844x390 touch|phone-narrow-contextual|responsive 1024x600 touch' --timeout=120000 --output=.cache/environment-rechecks/playwright",
+    "rerunDebug": "pw:api"
+  },
+  "repeatConfirm": {
+    "normalReleaseToSecondPressMs": 107.60000000149012,
+    "reducedReleaseToSecondPressMs": 116.89999999850988,
+    "acceptedActionsEach": 1,
+    "historyEntriesEach": 1,
+    "input": "Trusted emulated-touch events; Chromium156,844x390"
+  },
+  "unverified": [
+    "Physical phones/tablets",
+    "Safari/Firefox",
+    "Native-GPU frame rates",
+    "Platform-font variation",
+    "Screen-reader speech",
+    "Audio on speakers",
+    "Fresh npm ci reinstall during this milestone",
+    "Cause of historical Linux/Chromium141 timeouts"
+  ],
+  "output": "verification-checks.txt, browser-checks.txt, original/recheck automation JSONs and separately attributed media manifests"
+}

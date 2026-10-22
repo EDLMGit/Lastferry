@@ -1,10 +1,14 @@
 import * as T from 'three';
 import { level as baseline, type Level } from '../levels/level';
 import { draft, edgeTo, type State, type Action } from '../game/rules';
-import { animal, ball, box, cylinder, ferry, lighthouse, mat, mesh, palette, pine } from './models';
+import { animal, ball, box, cylinder, ferry, lighthouse, mat, mesh, pine } from './models';
 import { sampleJourney } from './motion';
 import { sceneLayout, type SceneLayout } from './layout';
-import { bellLandmark, cottage, reedClump } from './scenery';
+import { bellLandmark, cottage } from './scenery';
+import { getLevelPaths, type CanonicalPath } from './paths';
+import { Shores, createReedBeds } from './shore';
+import { CoastalWater } from './water';
+import { CrossingEffects } from './effects';
 const V = (p: number[], y = 0) => new T.Vector3(p[0], y, p[1]);
 const smooth = (t: number) => t * t * (3 - 2 * t);
 export class World {
@@ -24,6 +28,11 @@ export class World {
   shadow: T.Mesh;
   state: State;
   layout: SceneLayout;
+  paths: Map<string, CanonicalPath>;
+  shores: Shores;
+  coastalWater: CoastalWater;
+  effects: CrossingEffects;
+  journeyFrame: { progress: number; distance: number; tangent: T.Vector3 } | null = null;
   reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   transition: null | {
     before: State;
@@ -33,7 +42,9 @@ export class World {
     duration: number;
     done: () => void;
     positions: Map<string, T.Vector3>;
-    path: T.Vector3[];
+    path: CanonicalPath | null;
+    edgeId: string | null;
+    reverse: boolean;
     fromAngle: number;
     fromHullY: number;
   } = null;
@@ -48,6 +59,7 @@ export class World {
   ) {
     this.state = state;
     this.layout = sceneLayout(this.level.id);
+    this.paths = getLevelPaths(this.level);
     this.renderer = new T.WebGLRenderer({ antialias: true, alpha: false });
     this.renderer.setPixelRatio(Math.min(devicePixelRatio, 1.7));
     this.renderer.shadowMap.enabled = true;
@@ -62,8 +74,8 @@ export class World {
     );
     const light = this.layout.light;
     this.scene.background = new T.Color(light?.background ?? '#245f70');
-    this.scene.add(new T.HemisphereLight(light?.sky ?? '#fff1dc', light?.ground ?? '#5f8c9a', 1.8));
-    const sun = new T.DirectionalLight(light?.sun ?? '#ffe0af', 2.8);
+    this.scene.add(new T.HemisphereLight(light?.sky ?? '#fff1dc', light?.ground ?? '#5f8c9a', 1.9));
+    const sun = new T.DirectionalLight(light?.sun ?? '#ffe0af', 2.4);
     sun.position.set(...(light?.sunPosition ?? [-8, 16, 7]));
     sun.castShadow = true;
     sun.shadow.mapSize.set(2048, 2048);
@@ -78,41 +90,19 @@ export class World {
     sun.shadow.normalBias = 0.035;
     sun.shadow.bias = -0.0003;
     this.scene.add(sun);
-    const shallowSegments = this.level.edges
-      .filter((e) => e.baseDepth < 3)
-      .flatMap((e) =>
-        e.waypointsXZ
-          .slice(1)
-          .map(
-            (b, i) =>
-              new T.Vector4(...([...e.waypointsXZ[i], ...b] as [number, number, number, number])),
-          ),
-      );
-    const shallowCount = shallowSegments.length;
-    while (shallowSegments.length < 16) shallowSegments.push(new T.Vector4());
-    const waterMat = new T.ShaderMaterial({
-      uniforms: {
-        time: { value: 0 },
-        shallowSegments: { value: shallowSegments },
-        shallowCount: { value: shallowCount },
-      },
-      vertexShader: `varying vec3 world; void main(){world=(modelMatrix*vec4(position,1.)).xyz;gl_Position=projectionMatrix*viewMatrix*vec4(world,1.);}`,
-      fragmentShader: `varying vec3 world;uniform float time;uniform vec4 shallowSegments[16];uniform int shallowCount;
-    float line(vec2 p,vec2 a,vec2 b){vec2 ab=b-a;return length(p-a-clamp(dot(p-a,ab)/dot(ab,ab),0.,1.)*ab);}
-    void main(){vec2 p=world.xz;float d=100.;for(int i=0;i<16;i++){if(i>=shallowCount)break;vec4 s=shallowSegments[i];d=min(d,line(p,s.xy,s.zw));}
-    float bank=exp(-d*d/.9)*.7;float n=sin(p.x*1.8+p.y*2.3)*sin(p.y*3.1-p.x*.7);vec3 c=mix(vec3(.12,.31,.38),vec3(.32,.65,.62),clamp(bank+n*.045,0.,1.));float ripple=smoothstep(.94,1.,sin(p.x*16.+p.y*24.+sin(p.x*2.)*2.+time*.7)*sin(p.y*11.-p.x*3.+time*.3));c+=ripple*.10;gl_FragColor=vec4(c,1.);}`,
-    });
-    this.water = new T.Mesh(new T.PlaneGeometry(200, 200), waterMat);
-    this.water.rotation.x = -Math.PI / 2;
+    this.coastalWater = new CoastalWater(this.level, this.paths);
+    this.water = this.coastalWater.mesh;
     this.scene.add(this.water);
     this.shadow = new T.Mesh(
       new T.PlaneGeometry(40, 40),
-      new T.ShadowMaterial({ color: '#123c41', opacity: 0.2 }),
+      new T.ShadowMaterial({ color: '#123c41', opacity: 0.16 }),
     );
     this.shadow.rotation.x = -Math.PI / 2;
     this.shadow.position.y = 0.008;
     this.shadow.receiveShadow = true;
     this.scene.add(this.shadow);
+    this.shores = new Shores(this.level, this.layout.islandStyles);
+    this.scene.add(this.shores.group, this.shores.contacts);
     for (const island of this.level.world.islands) this.island(island);
     for (const p of this.level.piers) {
       const [x, z] = p.positionXZ,
@@ -150,7 +140,7 @@ export class World {
       else bellLandmark(this.scene, [x, y, z]);
     }
     for (const e of this.level.edges) {
-      const pts = e.waypointsXZ.map((p) => V(p, 0.035));
+      const pts = this.paths.get(e.id)!.points.map((p) => p.clone().setY(0.035));
       const geom = new T.BufferGeometry().setFromPoints(pts);
       const line = new T.Line(
         geom,
@@ -203,31 +193,10 @@ export class World {
         cylinder(g, '#eee2bc', 0.025, 0.025, 0.25, [0, 0.28, 0], 7);
       }
     }
-    for (const island of this.level.world.islands) {
-      const points = island.footprintXZ;
-      const cx = points.reduce((n, p) => n + p[0], 0) / points.length,
-        cz = points.reduce((n, p) => n + p[1], 0) / points.length;
-      for (let i = 0; i < points.length; i++) {
-        const a = points[i],
-          b = points[(i + 1) % points.length];
-        for (let j = 0; j < 8; j++) {
-          const t = j / 8,
-            x = a[0] + (b[0] - a[0]) * t,
-            z = a[1] + (b[1] - a[1]) * t;
-          const v = new T.Vector2(x - cx, z - cz).normalize();
-          const foam = box(
-            this.scene,
-            '#a2cfca',
-            [0.09 + (j % 3) * 0.04, 0.009, 0.025],
-            [x + v.x * 0.035, 0.025, z + v.y * 0.035],
-            0.005,
-          );
-          foam.rotation.y = Math.atan2(b[0] - a[0], b[1] - a[1]) + Math.PI / 2;
-        }
-      }
-    }
+    this.effects = new CrossingEffects(this.scene.getObjectByName('lighthouse')!);
+    this.scene.add(this.effects.wake, this.effects.glow);
+    this.forecast = this.shores.forecast;
     this.scene.add(this.forecast);
-    this.makeForecast();
     this.boatRoot.add(this.hull);
     this.scene.add(this.boatRoot);
     for (const p of this.level.passengers) {
@@ -329,60 +298,6 @@ export class World {
       cz = points.reduce((a, p) => a + p[1], 0) / points.length;
     const height = island.elevation * 0.18;
     const style = this.layout.islandStyles[island.id] ?? 'garden';
-    const colors =
-      style === 'reeds'
-        ? ['#e5d6ad', '#b8b79b', '#e7d6ac', '#c5bd91']
-        : style === 'rocky'
-          ? ['#bdbaa3', '#788d88', '#abb3a1', '#909e86']
-          : ['#d9c79b', '#86958a', '#e0cfa7', palette.grass];
-    for (const [scale, y, color] of [
-      [0.98, -0.15, colors[0]],
-      [0.94, 0.02, colors[1]],
-      [0.89, height - 0.18, colors[2]],
-      [0.83, height - 0.17, colors[3]],
-    ] as [number, number, string][]) {
-      const shape = new T.Shape();
-      const ps = points.map(
-        (p) => new T.Vector2(cx + (p[0] - cx) * scale, -cz - (p[1] - cz) * scale),
-      );
-      const first = ps[0].clone().lerp(ps[1], 0.5);
-      shape.moveTo(first.x, first.y);
-      for (let i = 1; i <= ps.length; i++) {
-        const a = ps[i % ps.length],
-          b = ps[(i + 1) % ps.length];
-        const m = a.clone().lerp(b, 0.5);
-        shape.quadraticCurveTo(a.x, a.y, m.x, m.y);
-      }
-      shape.closePath();
-      const geo = new T.ExtrudeGeometry(shape, {
-        depth: 0.14,
-        bevelEnabled: true,
-        bevelSegments: 3,
-        bevelSize: 0.015,
-        bevelThickness: 0.025,
-        curveSegments: 8,
-      });
-      geo.rotateX(-Math.PI / 2);
-      mesh(geo, color, this.scene, 0, y, 0);
-    }
-    for (let i = 0; i < points.length; i++) {
-      if (style === 'reeds' && i % 2 === 1) continue;
-      const a = points[i],
-        b = points[(i + 1) % points.length];
-      const x = cx + ((a[0] + b[0]) / 2 - cx) * 0.77,
-        z = cz + ((a[1] + b[1]) / 2 - cz) * 0.77;
-      const r = mesh(
-        new T.DodecahedronGeometry(0.4, 0),
-        i % 2 ? '#748780' : '#929e8c',
-        this.scene,
-        x,
-        height + 0.04,
-        z,
-      );
-      r.scale.set(0.85, 0.7 + (i % 3) * 0.23, 0.75);
-      if (style === 'reeds') r.scale.multiplyScalar(0.55);
-      r.rotation.set(i * 0.8, i * 0.9, 0.2);
-    }
     if (style === 'crag') {
       const rock = mesh(
         new T.DodecahedronGeometry(0.85, 0),
@@ -397,38 +312,12 @@ export class World {
       pine(this.scene, 0.7, height, 2.5, 1.05);
       pine(this.scene, -1.1, height, 2.7, 0.55);
     } else if (style === 'reeds') {
-      for (let i = 0; i < points.length; i++) {
-        const a = points[i],
-          b = points[(i + 1) % points.length];
-        for (let j = 0; j < 3; j++) {
-          const t = (j + 0.5) / 3;
-          const x = cx + (a[0] + (b[0] - a[0]) * t - cx) * 0.84;
-          const z = cz + (a[1] + (b[1] - a[1]) * t - cz) * 0.84;
-          if (Math.abs(x - cx) < 0.5 && z > cz) continue;
-          reedClump(this.scene, x, height + 0.015, z, i + j * 0.7);
-        }
-      }
+      this.scene.add(createReedBeds(island));
       for (const x of [-0.8, 0.9])
-        ball(this.scene, '#d9ca9f', [cx + x, height + 0.02, cz], [0.6, 0.075, 0.34]);
+        ball(this.scene, '#c3ba93', [cx + x, height - 0.07, cz], [0.6, 0.045, 0.34]);
     } else if (style === 'rocky') {
       pine(this.scene, cx - 1.05, height, cz - 0.35, 0.68);
       pine(this.scene, cx + 1.02, height, cz - 0.3, 0.43);
-      for (const [x, z, scale] of [
-        [-1.04, 0.14, 0.56],
-        [1.12, 0.27, 0.43],
-        [-0.65, -0.55, 0.45],
-      ]) {
-        const rock = mesh(
-          new T.DodecahedronGeometry(scale, 0),
-          '#8b9c94',
-          this.scene,
-          cx + x,
-          height + scale * 0.27,
-          cz + z,
-        );
-        rock.scale.set(1, 0.72, 0.85);
-        rock.rotation.y = x;
-      }
     } else {
       pine(this.scene, cx - 1.05, height, cz - 0.28, 0.85);
       pine(this.scene, cx + 0.92, height, cz - 0.55, 0.65);
@@ -467,22 +356,9 @@ export class World {
         box(this.scene, '#d1ae74', [0.25, 0.027, 0.027], [x, height + 0.2, cz + 0.78]);
       }
   }
-  makeForecast() {
-    for (const island of this.level.world.islands) {
-      const pts = island.footprintXZ.map((p) => V(p, 0.195));
-      pts.push(pts[0].clone());
-      const line = new T.Line(
-        new T.BufferGeometry().setFromPoints(pts),
-        new T.LineDashedMaterial({ color: '#ffe3a2', dashSize: 0.13, gapSize: 0.09 }),
-      );
-      line.computeLineDistances();
-      this.forecast.add(line);
-    }
-    this.forecast.visible = false;
-  }
   setForecast(visible: boolean, tide: number) {
     this.forecast.visible = visible;
-    this.forecast.position.y = (tide - 1) * 0.18;
+    this.shores.preview(visible, tide);
   }
   project(p: number[]) {
     const v = V(p, 0.06).project(this.camera);
@@ -528,6 +404,7 @@ export class World {
           object === this.shadow ||
           object === this.boatRoot ||
           object === this.forecast ||
+          object.userData.excludeFromFrame ||
           [...this.animals.values()].includes(object as T.Group)
         )
           continue;
@@ -586,9 +463,13 @@ export class World {
   draftY(s: State) {
     return 0.03 - (draft(s, this.level) - 1) * 0.075;
   }
-  sync(s: State) {
+  sync(s: State, preserveEffects = false) {
     this.state = s;
-    this.water.position.y = s.tideLevel * 0.18;
+    this.coastalWater.update(s.tideLevel * 0.18, this.reduced ? 0 : this.lastTime * 0.001);
+    this.shores.update(this.water.position.y);
+    this.setForecast(false, s.tideLevel);
+    if (!preserveEffects) this.effects.reset();
+    if (s.status === 'won') this.effects.arrive(this.lastTime, this.reduced);
     this.shadow.position.y = this.water.position.y + 0.008;
     const n = this.level.nodes.find((n) => n.id === s.boatNodeId)!;
     this.boatRoot.position.copy(V(n.positionXZ, s.tideLevel * 0.18));
@@ -673,13 +554,22 @@ export class World {
     );
     for (const [id, g] of this.animals)
       if (before.aboard.includes(id) && !after.aboard.includes(id)) this.scene.attach(g);
-    let path: T.Vector3[] = [];
+    let path: CanonicalPath | null = null;
+    let edgeId: string | null = null;
+    let reverse = false;
     if (action.type === 'move') {
       const edge = edgeTo(before, action.to, this.level)!;
-      const points =
-        edge.nodes[0] === before.boatNodeId ? edge.waypointsXZ : [...edge.waypointsXZ].reverse();
-      path = points.map((p) => V(p, before.tideLevel * 0.18));
+      edgeId = edge.id;
+      reverse = edge.nodes[0] !== before.boatNodeId;
+      path = this.paths.get(edge.id)!;
     }
+    this.journeyFrame = path
+      ? {
+          progress: 0,
+          distance: 0,
+          tangent: sampleJourney(path, 0, this.boatRoot.rotation.y, reverse).tangent,
+        }
+      : null;
     this.transition = {
       before,
       after,
@@ -695,6 +585,8 @@ export class World {
       done,
       positions,
       path,
+      edgeId,
+      reverse,
       fromAngle: this.boatRoot.rotation.y,
       fromHullY: this.hull.position.y,
     };
@@ -703,6 +595,7 @@ export class World {
     if (this.transition) {
       const t = this.transition;
       this.transition = null;
+      this.journeyFrame = null;
       this.sync(t.after);
       this.renderer.render(this.scene, this.camera);
       t.done();
@@ -711,8 +604,6 @@ export class World {
   tick(time: number) {
     this.frame++;
     this.lastTime = time;
-    const waterMat = this.water.material as T.ShaderMaterial;
-    waterMat.uniforms.time.value = this.reduced ? 0 : time * 0.001;
     if (this.transition) {
       const tr = this.transition;
       const t = Math.min(1, (time - tr.start) / tr.duration),
@@ -722,10 +613,11 @@ export class World {
         tr.after.tideLevel * 0.18,
         k,
       );
-      if (tr.path.length) {
-        const pose = sampleJourney(tr.path, t, tr.fromAngle);
+      if (tr.path) {
+        const pose = sampleJourney(tr.path, t, tr.fromAngle, tr.reverse);
         this.boatRoot.position.copy(pose.position);
         this.boatRoot.rotation.y = pose.angle;
+        this.journeyFrame = { progress: t, distance: pose.distance, tangent: pose.tangent };
       }
       this.boatRoot.position.y = this.water.position.y;
       this.hull.position.y = T.MathUtils.lerp(tr.fromHullY, this.draftY(tr.after), k);
@@ -764,15 +656,29 @@ export class World {
         }
       }
       this.shadow.position.y = this.water.position.y + 0.008;
+      if (tr.after.status === 'won' && t > 0.7) this.effects.arrive(time, this.reduced);
       if (t === 1) {
         this.transition = null;
-        this.sync(tr.after);
+        this.journeyFrame = null;
+        this.sync(tr.after, true);
         tr.done();
       }
     } else {
       this.hull.position.y =
         this.draftY(this.state) + (this.reduced ? 0 : Math.sin(time * 0.0018) * 0.012);
     }
+    this.coastalWater.update(this.water.position.y, this.reduced ? 0 : time * 0.001);
+    this.shores.update(this.water.position.y);
+    for (const route of this.routes.values()) route.position.y = this.water.position.y;
+    for (const marker of this.markers.values()) marker.position.y = this.water.position.y + 0.04;
+    this.effects.update(
+      time,
+      this.boatRoot.position,
+      this.boatRoot.rotation.y,
+      !!this.transition?.path,
+      this.water.position.y,
+      this.reduced,
+    );
     this.renderer.render(this.scene, this.camera);
     requestAnimationFrame((t) => this.tick(t));
   }
@@ -783,6 +689,60 @@ export class World {
       triangles: this.renderer.info.render.triangles,
       webgl: this.renderer.getContext().getParameter(this.renderer.getContext().VERSION),
       pixelRatio: this.renderer.getPixelRatio(),
+    };
+  }
+  environmentPresentation() {
+    const material = this.water.material as T.ShaderMaterial;
+    return {
+      waterY: this.water.position.y,
+      waterUniformY: material.uniforms.waterY.value as number,
+      waterTime: material.uniforms.time.value as number,
+      maskSize: [
+        this.coastalWater.mask.texture.image.width,
+        this.coastalWater.mask.texture.image.height,
+      ],
+      shallowSegments: this.coastalWater.mask.shallowSegments,
+      reducedMotion: this.reduced,
+      shores: this.shores.presentation(),
+      forecast: {
+        visible: this.forecast.visible,
+        tideY: this.shores.forecastY,
+        groups: this.forecast.children.map((group) => ({
+          name: group.name,
+          visible: group.visible,
+          contours: group.children.map((object) => ({
+            name: object.name,
+            positions: Array.from(
+              ((object as T.Line).geometry.getAttribute('position') as T.BufferAttribute).array,
+            ),
+          })),
+        })),
+      },
+      ...this.effects.presentation(),
+    };
+  }
+  journeyPresentation() {
+    const transition = this.transition;
+    return {
+      boatWorldPosition: this.boatRoot.getWorldPosition(new T.Vector3()).toArray(),
+      boatHeading: this.boatRoot.rotation.y,
+      active:
+        transition?.path && this.journeyFrame
+          ? {
+              edgeId: transition.edgeId,
+              reverse: transition.reverse,
+              progress: this.journeyFrame.progress,
+              distance: this.journeyFrame.distance,
+              pathLength: transition.path.length,
+              tangent: this.journeyFrame.tangent.toArray(),
+            }
+          : null,
+      routeBuffers: [...this.routes].map(([id, route]) => ({
+        id,
+        pointsXYZ: Array.from((route.geometry.getAttribute('position') as T.BufferAttribute).array),
+        position: route.position.toArray(),
+        canonicalPoints: this.paths.get(id)!.points.map((point) => point.toArray()),
+      })),
     };
   }
   passengerPresentation() {

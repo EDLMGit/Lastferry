@@ -594,6 +594,8 @@ if (import.meta.env.DEV)
       }),
       getFrameStatus: () => world.frameStatus(),
       getNavigationStatus: () => world.navigationPresentation(),
+      getEnvironmentStatus: () => copy(world.environmentPresentation()),
+      getJourneyStatus: () => copy(world.journeyPresentation()),
       getMetrics: () => world.metrics(),
     },
   });

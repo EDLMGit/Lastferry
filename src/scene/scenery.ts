@@ -59,33 +59,3 @@ export function bellLandmark(parent: T.Object3D, position: [number, number, numb
   ball(g, '#d0ab62', [0, 0.63, 0], [0.075, 0.085, 0.075]);
   return g;
 }
-
-export function reedClump(parent: T.Object3D, x: number, y: number, z: number, phase: number) {
-  const g = new T.Group();
-  g.position.set(x, y, z);
-  parent.add(g);
-  for (let i = 0; i < 5; i++) {
-    const angle = phase + i * 2.4;
-    const height = 0.25 + (i % 3) * 0.08;
-    const stem = cylinder(
-      g,
-      i % 2 ? '#8d9660' : '#647f5e',
-      0.009,
-      0.018,
-      height,
-      [Math.cos(angle) * 0.065, height / 2, Math.sin(angle) * 0.045],
-      5,
-    );
-    stem.rotation.z = Math.sin(angle) * 0.15;
-    if (i % 2 === 0)
-      cylinder(
-        g,
-        '#927252',
-        0.027,
-        0.027,
-        0.09,
-        [Math.cos(angle) * 0.07, height, Math.sin(angle) * 0.045],
-        6,
-      );
-  }
-}

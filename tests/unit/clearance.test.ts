@@ -1,8 +1,11 @@
 import { test, expect } from 'vitest';
-import { Mesh, Vector3 } from 'three';
+import { InstancedMesh, Matrix4, Mesh, Vector3 } from 'three';
 import { ferry } from '../../src/scene/models';
 import { sampleJourney } from '../../src/scene/motion';
+import { getLevelPaths } from '../../src/scene/paths';
 import { level, holdingPier, bellwater } from '../../src/levels/level';
+import { sceneLayout } from '../../src/scene/layout';
+import { buildCoastGeometry, createReedBeds, createShoreRocks } from '../../src/scene/shore';
 type P = [number, number];
 const cross = (a: P, b: P, c: P) => (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]);
 function convex(points: P[]) {
@@ -44,6 +47,13 @@ function overlaps(a: P[], b: P[]) {
     )
   );
 }
+function segmentDistance(p: P, a: P, b: P) {
+  const x = b[0] - a[0],
+    z = b[1] - a[1],
+    span = x * x + z * z;
+  const t = span ? Math.max(0, Math.min(1, ((p[0] - a[0]) * x + (p[1] - a[1]) * z) / span)) : 0;
+  return Math.hypot(p[0] - a[0] - t * x, p[1] - a[1] - t * z);
+}
 test.each([level, holdingPier, bellwater])(
   '$id: actual modeled ferry footprint clears all land and pier decks along both directions and yaw turns',
   (level) => {
@@ -73,14 +83,14 @@ test.each([level, holdingPier, bellwater])(
         })),
       ];
     const failures: string[] = [];
-    const samples = level.id === 'bellwater' ? 1000 : 100;
+    const marginFailures: string[] = [];
+    const samples = 1000;
+    const paths = getLevelPaths(level);
     for (const edge of level.edges)
       for (const reverse of [false, true]) {
-        const path = (reverse ? [...edge.waypointsXZ].reverse() : edge.waypointsXZ).map(
-          (p) => new Vector3(p[0], 0, p[1]),
-        );
+        const path = paths.get(edge.id)!;
         for (let frame = 0; frame <= samples; frame++) {
-          const pose = sampleJourney(path, frame / samples);
+          const pose = sampleJourney(path, frame / samples, Math.PI / 2, reverse);
           const hull = footprint.map(([x, z]) => {
             const v = new Vector3(x, 0, z)
               .applyAxisAngle(new Vector3(0, 1, 0), pose.angle)
@@ -92,8 +102,96 @@ test.each([level, holdingPier, bellwater])(
               failures.push(
                 `${edge.id}/${reverse ? 'reverse' : 'forward'} frame ${frame}: ${exclusion.id}`,
               );
+          const center: P = [pose.position.x, pose.position.z];
+          for (const exclusion of exclusions) {
+            const margin = Math.min(
+              ...exclusion.polygon.map((p, i) =>
+                segmentDistance(center, p, exclusion.polygon[(i + 1) % exclusion.polygon.length]),
+              ),
+            );
+            if (
+              margin < level.world.requiredRouteClearance - 1e-6 ||
+              inside(center, exclusion.polygon)
+            )
+              marginFailures.push(
+                `${edge.id}/${reverse ? 'reverse' : 'forward'} frame ${frame}: ${exclusion.id} margin ${margin}`,
+              );
+          }
         }
       }
+    expect(failures).toEqual([]);
+    expect(marginFailures).toEqual([]);
+  },
+);
+
+test.each([level, holdingPier, bellwater])(
+  '$id: actual refined coasts, rocks and reeds stay inside the validated land envelope',
+  (level) => {
+    const failures: string[] = [];
+    for (const island of level.world.islands) {
+      const style = sceneLayout(level.id).islandStyles[island.id] ?? 'garden',
+        coast = buildCoastGeometry(island, style),
+        rocks = createShoreRocks(island, style),
+        polygon = island.footprintXZ as P[];
+      function check(v: Vector3, source: string) {
+        const p: P = [v.x, v.z];
+        if (
+          !inside(p, polygon) &&
+          Math.min(
+            ...polygon.map((a, i) => segmentDistance(p, a, polygon[(i + 1) % polygon.length])),
+          ) > 1e-6
+        )
+          failures.push(`${island.id}/${source}: ${p.join(',')}`);
+      }
+      const positions = coast.getAttribute('position');
+      for (let i = 0; i < positions.count; i++)
+        check(new Vector3().fromBufferAttribute(positions, i), 'coast vertex');
+      const indices = coast.getIndex()!;
+      for (let i = 0; i < indices.count; i += 3) {
+        const triangle = [0, 1, 2].map((j) =>
+          new Vector3().fromBufferAttribute(positions, indices.getX(i + j)),
+        );
+        for (let j = 0; j < 3; j++)
+          for (const t of [0.25, 0.5, 0.75])
+            check(
+              new Vector3().lerpVectors(triangle[j], triangle[(j + 1) % 3], t),
+              'coast triangle',
+            );
+      }
+      const rockPositions = rocks.geometry.getAttribute('position'),
+        matrix = new Matrix4();
+      for (let instance = 0; instance < rocks.count; instance++) {
+        rocks.getMatrixAt(instance, matrix);
+        for (let i = 0; i < rockPositions.count; i++)
+          check(
+            new Vector3().fromBufferAttribute(rockPositions, i).applyMatrix4(matrix),
+            `rock ${instance}`,
+          );
+      }
+      if (style === 'reeds') {
+        const reeds = createReedBeds(island);
+        reeds.updateMatrixWorld(true);
+        const vertex = new Vector3();
+        reeds.traverse((mesh) => {
+          if (!(mesh instanceof InstancedMesh)) return;
+          const positions = mesh.geometry.getAttribute('position');
+          for (let instance = 0; instance < mesh.count; instance++) {
+            mesh.getMatrixAt(instance, matrix);
+            for (let i = 0; i < positions.count; i++)
+              check(
+                vertex
+                  .fromBufferAttribute(positions, i)
+                  .applyMatrix4(matrix)
+                  .applyMatrix4(mesh.matrixWorld),
+                `${mesh.name} ${instance}`,
+              );
+          }
+          mesh.geometry.dispose();
+        });
+      }
+      coast.dispose();
+      rocks.geometry.dispose();
+    }
     expect(failures).toEqual([]);
   },
 );

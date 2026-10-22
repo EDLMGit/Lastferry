@@ -88,3 +88,13 @@ M1 is visually complete when:
 - Mobile landscape, desktop, keyboard use, and reduced motion remain legible and usable.
 
 Resolve these checks directly during implementation. Additional chapters, cinematic sequences, and large prop collections are outside this milestone.
+
+## Shared environment milestone
+
+The later task in `NEXT_TASK.md` refines the accepted Holding Pier and Bellwater compositions, with First Crossing retained as a playable regression case. Keep the ferry, residents, landmarks and named stops prominent. Calm open water, broad blue/teal fields and sparse irregular highlight groups replace the repeated fine diagonal pattern. Authored banks should feel connected to the coast rather than painted along a route centerline.
+
+Use one gentle course for navigation dots and ferry travel. Selected and blocked emphasis retain exactly that course. Solid phone label leaders remain visually distinct from navigable dotted lines. Curve smoothing cannot imply a new junction, create a shortcut or skip a stop.
+
+Across tides 0, 1 and 2, exposed shores give way to wet edges and visible submerged ground. Contact detail follows the rendered waterline and exposed rock, with no floating outline of a flooded island. Flooded boarding surfaces remain visibly submerged at the exact rule threshold. Keep the contact accents quiet and grouped, away from route-like dotted outlines.
+
+Refine coast and rock silhouettes inside the existing clearance envelope. Group reeds and small details instead of increasing density. Preserve the fixed camera and framing. A short fading wake follows travel; one warm Harbor light response acknowledges delivery. Both effects reset on Undo, Restart and cancellation, and remain calm under reduced motion. Assess the result at native phone size and in actual movement before declaring visual acceptance.

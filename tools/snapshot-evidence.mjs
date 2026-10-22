@@ -48,7 +48,11 @@ const paths = [
   'docs/ASSET_LEDGER.md',
   ...(existsSync(new URL('docs/HOLDING_PIER.md', root)) ? ['docs/HOLDING_PIER.md'] : []),
   ...(existsSync(new URL('docs/BELLWATER.md', root)) ? ['docs/BELLWATER.md'] : []),
+  ...(existsSync(new URL('docs/ENVIRONMENT.md', root)) ? ['docs/ENVIRONMENT.md'] : []),
   'tools/snapshot-evidence.mjs',
+  ...(existsSync(new URL('tools/capture-environment.mjs', root))
+    ? ['tools/capture-environment.mjs']
+    : []),
 ].sort();
 const files = Object.fromEntries(paths.map((p) => [p, digest(readFileSync(new URL(p, root)))]));
 const sourceHash = digest(JSON.stringify(files));
