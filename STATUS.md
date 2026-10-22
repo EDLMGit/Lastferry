@@ -1,4 +1,18 @@
-# Current milestone — Selectable places and an open cove
+# Current milestone — Wooden transfer contacts
+
+2026-10-22: Started clean on `m1-first-crossing` at reviewed `fa07368b803a992712a5126b85862c5b91dbcf3a`. Read AGENTS, the new parent NEXT_TASK, current AUDIO and selection review; retained this task in the checkout. Main remains `386de54d20fdd4a513a06115471d70bf94738cc0`; PR #1 remains draft. The existing private Sites playtest is a separate selection snapshot and is not deployed by this task.
+
+Implemented cached rounded wooden contacts from the actual selected-passenger transfer timeline. Boarding has a bridge contact and quieter deck settlement; unloading has one wooden departure contact. Review removed a proposed unloading settlement that would already be over Stone Pier's stone. Group gain is bounded, reduced motion uses one compact cue, stale/muted phases are consumed once, and transfer ownership is separate from arrival. Existing music/source priority, cleanup, Undo/replay, visibility and teardown are preserved. No code comments or dependencies added.
+
+At 780×320 the baseline's 360 px minimum game height left only 39.3% of the forecast visible. One rule in the existing landscape media query removes that minimum; the complete 56 px control now fits at y=258–314. Actual touch and natural keyboard checks pass at 780×320 and 844×390, including previews/subsets, tide Undo/replay, nine-action rescue and terminal Undo. Camera and card-placement behavior are unchanged; an open short-phone card can still cover part of Harbor. No physical Android claim.
+
+Final production build/typecheck and 111/111 unit checks pass. Initial integrated 4/4 browser checks pass. After the surface correction, production First Crossing and mute/hide/reduced checks pass; normal rescue's terminal redelivery originally failed an always-audible assertion during a 734.8 ms gap. The actual stale cue was correctly consumed without replay. That failure is retained; the corrected strict stale-event check passes 1/1 while requiring actual played boarding, holding-unload and final-delivery coverage. No clean full-browser-suite claim. A 36-file preservation audit confirms accepted puzzles/rules, water, scene foundations, music and sailing timing unchanged.
+
+Implementation and observable verification are complete for focused playtest. Four fresh final phone states were inspected at native size. An uninterrupted actual UI rescue with tide Undo/replay records eight played contacts, peak two transfer voices/13 total owned voices, zero dropped music tones, one context/scheduler and one delivery phrase. The runtime audio+canvas clip decodes through 40.059 s; the separate silent full-interface video is 44.36 s. Earlier export/coverage failures are preserved. Speaker listening remains unavailable; the captured mix is for the user's listening review. See `reviews/transfer-audio/REVIEW.md`, `PHONE_QA.md`, source manifests and original failures. Final 97-file source hash is `a73d6b70de4b0a7352c7f515aaf050a29b7e61a252eb18f184ae6b4f5fa9ed87`; final commit and remote equality are reported in the authorized draft-PR handoff. Stop after this pass; the private Site remains unchanged.
+
+## Historical selection handoff
+
+# Selectable places and an open cove
 
 2026-10-22: Started clean on `m1-first-crossing` at reviewed `dea5fdd1ed8b017d5112085d4964bab3122ea44f`. Read AGENTS and the new parent NEXT_TASK, retained the new task in this checkout and inspected the prior native desktop/phone evidence. Preserve all three puzzles, water/contact, score/accompaniment, sailing pace and complete Undo. Main remains `386de54d20fdd4a513a06115471d70bf94738cc0`; PR #1 stays draft.
 

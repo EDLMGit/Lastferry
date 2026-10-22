@@ -665,8 +665,18 @@ world.onCurrent = localContext;
 world.onClear = () => clearLocation();
 world.onPresentationStart = (action) => {
   if (action.type === 'move') sound.startTravel();
-  else if (action.type !== 'unload' || session.state.status !== 'won') sound.play(action.type);
 };
+world.onTransferContact = (contact) =>
+  sound.transferContact({
+    weight: contact.passengerIds.some(
+      (id) => level.passengers.find((p) => p.id === id)?.species === 'sheep',
+    )
+      ? 'full'
+      : 'light',
+    settle: contact.stage === 'settling',
+    compact: contact.reduced,
+    count: contact.passengerIds.length,
+  });
 world.onArrival = () => {
   sound.delivery();
   sound.settleArrangement();
@@ -791,6 +801,7 @@ if (import.meta.env.DEV)
         hullY: world.hull.position.y,
       }),
       getFrameStatus: () => world.frameStatus(),
+      getTransferStatus: () => world.transferPresentation(),
       getPickTargetAt: (x: number, y: number) => world.pickAt(x, y),
       getPickDetailAt: (x: number, y: number) => world.pickDetailAt(x, y),
       getSelectionStatus: () =>

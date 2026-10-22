@@ -1,0 +1,299 @@
+diff --git a/src/audio/atmosphere.ts b/src/audio/atmosphere.ts
+index ea11924..4854deb 100644
+--- a/src/audio/atmosphere.ts
++++ b/src/audio/atmosphere.ts
+@@ -8,11 +8,12 @@ import {
+   score,
+ } from './score';
+ import { arrangementForState, companionNote, type Arrangement } from './arrangement';
++import { makeWoodContact, type TransferContact } from './wood';
+ import type { State } from '../game/rules';
+ import type { Level } from '../levels/level';
+ 
+ type OwnedSource = {
+-  kind: 'music' | 'companion' | 'bed' | 'travel' | 'effect';
++  kind: 'music' | 'companion' | 'bed' | 'travel' | 'effect' | 'transfer';
+   nodes: AudioNode[];
+   endAt: number | null;
+   gain?: GainNode;
+@@ -35,6 +36,7 @@ export class Sound {
+   private analyser: AnalyserNode | null = null;
+   private meter = new Float32Array(1024);
+   private noise: AudioBuffer | null = null;
++  private wood = new Map<TransferContact['weight'], AudioBuffer>();
+   private padWave: PeriodicWave | null = null;
+   private pluckWave: PeriodicWave | null = null;
+   private capture: MediaStreamAudioDestinationNode | null = null;
+@@ -54,6 +56,11 @@ export class Sound {
+   private sourcesCreated = 0;
+   private peakOwned = 0;
+   private deliveryCount = 0;
++  private transferContacts = 0;
++  private transferPlayed = 0;
++  private transferSkipped = 0;
++  private peakTransferSources = 0;
++  private lastTransferContact: (TransferContact & { time: number; played: boolean }) | null = null;
+   private desiredArrangement: Arrangement = 'ordinary';
+   private arrangement: Arrangement = 'ordinary';
+   private pendingTerminal = false;
+@@ -235,7 +242,8 @@ export class Sound {
+   private clearActions(preserveTravel: boolean) {
+     if (!preserveTravel) this.travelling = false;
+     for (const [source, record] of this.owned)
+-      if (record.kind === 'travel' || record.kind === 'effect') this.stop(source);
++      if (record.kind === 'travel' || record.kind === 'effect' || record.kind === 'transfer')
++        this.stop(source);
+   }
+   private noiseVoice(
+     kind: 'bed' | 'travel',
+@@ -290,6 +298,11 @@ export class Sound {
+     voice: 'pad' | 'motif' | 'delivery' | 'companion',
+   ) {
+     const context = this.context!;
++    if (this.owned.size > 28)
++      for (const [source, record] of this.owned) {
++        if (record.kind === 'transfer') this.stop(source, true);
++        if (this.owned.size <= 28) break;
++      }
+     if (this.owned.size > 28) {
+       this.droppedTones++;
+       return;
+@@ -458,6 +471,56 @@ export class Sound {
+     this.travelling = false;
+     for (const [source, record] of this.owned) if (record.kind === 'travel') this.stop(source);
+   }
++  transferContact(contact: TransferContact) {
++    if (this.disposed || !Number.isFinite(contact.count) || contact.count < 1) return;
++    this.transferContacts++;
++    this.lastTransferContact = {
++      ...contact,
++      time: this.context?.currentTime ?? 0,
++      played: false,
++    };
++    const transfers = [...this.owned.values()].filter((record) => record.kind === 'transfer');
++    if (
++      !this.enabled() ||
++      this.context?.state !== 'running' ||
++      transfers.length >= 2 ||
++      this.owned.size > 27
++    ) {
++      this.transferSkipped++;
++      return;
++    }
++    const context = this.context,
++      now = context.currentTime;
++    let buffer = this.wood.get(contact.weight);
++    if (!buffer) {
++      buffer = makeWoodContact(context, contact.weight);
++      this.wood.set(contact.weight, buffer);
++    }
++    const source = context.createBufferSource(),
++      gain = context.createGain(),
++      end = now + buffer.length / buffer.sampleRate,
++      group = 1 + Math.min(contact.count - 1, 2) * 0.06;
++    source.buffer = buffer;
++    gain.gain.value =
++      (contact.weight === 'full' ? 0.24 : 0.2) *
++      group *
++      (contact.settle ? 0.48 : 1) *
++      (contact.compact ? 0.7 : 1);
++    source.connect(gain);
++    gain.connect(this.effects!);
++    this.own(source, {
++      kind: 'transfer',
++      nodes: [gain],
++      endAt: end,
++      gain,
++      stopping: false,
++    });
++    source.start(now);
++    source.stop(end);
++    this.transferPlayed++;
++    this.peakTransferSources = Math.max(this.peakTransferSources, transfers.length + 1);
++    this.lastTransferContact.played = true;
++  }
+   delivery() {
+     if (!this.enabled() || this.context?.state !== 'running') return;
+     for (const [source, record] of this.owned) if (record.kind === 'effect') this.stop(source);
+@@ -529,6 +592,13 @@ export class Sound {
+       travelActive: records.some((record) => record.kind === 'travel' && !record.stopping),
+       arrivalActive: records.some((record) => record.kind === 'effect' && !record.stopping),
+       deliveryCount: this.deliveryCount,
++      transferContacts: this.transferContacts,
++      transferPlayed: this.transferPlayed,
++      transferSkipped: this.transferSkipped,
++      transferSources: records.filter((record) => record.kind === 'transfer' && !record.stopping)
++        .length,
++      peakTransferSources: this.peakTransferSources,
++      lastTransferContact: this.lastTransferContact ? { ...this.lastTransferContact } : null,
+       desiredArrangement: this.desiredArrangement,
+       arrangement: this.arrangement,
+       pendingTerminal: this.pendingTerminal,
+@@ -565,6 +635,7 @@ export class Sound {
+     this.permanent.length = 0;
+     for (const track of this.capture?.stream.getTracks() ?? []) track.stop();
+     this.noise = null;
++    this.wood.clear();
+     this.padWave = null;
+     this.pluckWave = null;
+     if (this.context && this.context.state !== 'closed') void this.context.close().catch(() => {});
+diff --git a/src/audio/sound.ts b/src/audio/sound.ts
+index cacbd0a..70a6b93 100644
+--- a/src/audio/sound.ts
++++ b/src/audio/sound.ts
+@@ -1 +1,2 @@
+ export { Sound } from './atmosphere';
++export type { TransferContact } from './wood';
+diff --git a/src/main.ts b/src/main.ts
+index eb7f097..ad1c91a 100644
+--- a/src/main.ts
++++ b/src/main.ts
+@@ -665,8 +665,18 @@ world.onCurrent = localContext;
+ world.onClear = () => clearLocation();
+ world.onPresentationStart = (action) => {
+   if (action.type === 'move') sound.startTravel();
+-  else if (action.type !== 'unload' || session.state.status !== 'won') sound.play(action.type);
+ };
++world.onTransferContact = (contact) =>
++  sound.transferContact({
++    weight: contact.passengerIds.some(
++      (id) => level.passengers.find((p) => p.id === id)?.species === 'sheep',
++    )
++      ? 'full'
++      : 'light',
++    settle: contact.stage === 'settling',
++    compact: contact.reduced,
++    count: contact.passengerIds.length,
++  });
+ world.onArrival = () => {
+   sound.delivery();
+   sound.settleArrangement();
+@@ -791,6 +801,7 @@ if (import.meta.env.DEV)
+         hullY: world.hull.position.y,
+       }),
+       getFrameStatus: () => world.frameStatus(),
++      getTransferStatus: () => world.transferPresentation(),
+       getPickTargetAt: (x: number, y: number) => world.pickAt(x, y),
+       getPickDetailAt: (x: number, y: number) => world.pickDetailAt(x, y),
+       getSelectionStatus: () =>
+diff --git a/src/scene/world.ts b/src/scene/world.ts
+index 6ed7fde..596fe85 100644
+--- a/src/scene/world.ts
++++ b/src/scene/world.ts
+@@ -10,6 +10,7 @@ import { Shores, createReedBeds } from './shore';
+ import { CoastalWater } from './water';
+ import { CrossingEffects } from './effects';
+ import { contactMaterial } from './contact';
++import { TransferTimeline, type TransferCue } from './transfer';
+ import {
+   journeyTiming,
+   settlingProgress,
+@@ -20,6 +21,11 @@ import {
+ } from './transitions';
+ const V = (p: number[], y = 0) => new T.Vector3(p[0], y, p[1]);
+ const smooth = (t: number) => t * t * (3 - 2 * t);
++type TransferPresentation = {
++  id: number;
++  timeline: TransferTimeline;
++  completion: CompletionReason | null;
++};
+ export class World {
+   scene = new T.Scene();
+   camera = new T.OrthographicCamera();
+@@ -58,6 +64,9 @@ export class World {
+   resizeObserver: ResizeObserver;
+   onPresentationStart: (action: Action) => void = () => {};
+   onArrival: () => void = () => {};
++  onTransferContact: (contact: TransferCue) => void = () => {};
++  transferSequence = 0;
++  transferHistory: TransferPresentation[] = [];
+   transition: null | {
+     before: State;
+     after: State;
+@@ -73,6 +82,7 @@ export class World {
+     reverse: boolean;
+     fromAngle: number;
+     fromHullY: number;
++    transfer: TransferPresentation | null;
+   } = null;
+   frame = 0;
+   lastTime = 0;
+@@ -786,6 +796,12 @@ export class World {
+           tangent: sampleJourney(path, 0, this.boatRoot.rotation.y, reverse).tangent,
+         }
+       : null;
++    const timeline = TransferTimeline.create(before, after, action, this.reduced);
++    const transfer = timeline ? { id: ++this.transferSequence, timeline, completion: null } : null;
++    if (transfer) {
++      this.transferHistory.push(transfer);
++      if (this.transferHistory.length > 12) this.transferHistory.shift();
++    }
+     this.transition = {
+       before,
+       after,
+@@ -801,11 +817,13 @@ export class World {
+       reverse,
+       fromAngle: this.boatRoot.rotation.y,
+       fromHullY: this.hull.position.y,
++      transfer,
+     };
+   }
+   cancel(reason: CompletionReason = 'cancelled') {
+     if (this.transition) {
+       const t = this.transition;
++      t.transfer?.timeline.cancel();
+       this.transition = null;
+       this.journeyFrame = null;
+       let completion = reason;
+@@ -815,6 +833,7 @@ export class World {
+       } catch {
+         completion = 'error';
+       } finally {
++        if (t.transfer) t.transfer.completion = completion;
+         t.done(completion);
+       }
+     }
+@@ -880,11 +899,14 @@ export class World {
+         }
+       }
+       this.shadow.position.y = this.water.position.y + 0.008;
++      const contact = tr.transfer?.timeline.advance(t);
++      if (contact) this.onTransferContact(contact);
+       if (tr.after.status === 'won' && t > 0.72 && this.effects.arrivalStarted === null) {
+         this.effects.arrive(time, this.reduced);
+         this.onArrival();
+       }
+       if (t === 1) {
++        if (tr.transfer) tr.transfer.completion = 'complete';
+         this.transition = null;
+         this.journeyFrame = null;
+         this.sync(tr.after, true);
+@@ -910,6 +932,14 @@ export class World {
+     this.renderer.render(this.scene, this.camera);
+     this.frameRequest = requestAnimationFrame((t) => this.tick(t));
+   }
++  transferPresentation() {
++    const history = this.transferHistory.map(({ id, timeline, completion }) => ({
++      id,
++      ...timeline.presentation(),
++      completion,
++    }));
++    return { sequence: this.transferSequence, last: history.at(-1) ?? null, history };
++  }
+   dispose() {
+     this.disposed = true;
+     cancelAnimationFrame(this.frameRequest);
+diff --git a/src/style.css b/src/style.css
+index 78895d3..f7c1877 100644
+--- a/src/style.css
++++ b/src/style.css
+@@ -543,6 +543,9 @@ details p {
+   pointer-events: none;
+ }
+ @media (max-height: 600px) and (min-width: 701px) {
++  .game {
++    min-height: 0;
++  }
+   .hud {
+     inset: 4px 8px auto;
+     gap: 10px;

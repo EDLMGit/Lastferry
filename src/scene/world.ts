@@ -10,6 +10,7 @@ import { Shores, createReedBeds } from './shore';
 import { CoastalWater } from './water';
 import { CrossingEffects } from './effects';
 import { contactMaterial } from './contact';
+import { TransferTimeline, type TransferCue } from './transfer';
 import {
   journeyTiming,
   settlingProgress,
@@ -20,6 +21,11 @@ import {
 } from './transitions';
 const V = (p: number[], y = 0) => new T.Vector3(p[0], y, p[1]);
 const smooth = (t: number) => t * t * (3 - 2 * t);
+type TransferPresentation = {
+  id: number;
+  timeline: TransferTimeline;
+  completion: CompletionReason | null;
+};
 export class World {
   scene = new T.Scene();
   camera = new T.OrthographicCamera();
@@ -58,6 +64,9 @@ export class World {
   resizeObserver: ResizeObserver;
   onPresentationStart: (action: Action) => void = () => {};
   onArrival: () => void = () => {};
+  onTransferContact: (contact: TransferCue) => void = () => {};
+  transferSequence = 0;
+  transferHistory: TransferPresentation[] = [];
   transition: null | {
     before: State;
     after: State;
@@ -73,6 +82,7 @@ export class World {
     reverse: boolean;
     fromAngle: number;
     fromHullY: number;
+    transfer: TransferPresentation | null;
   } = null;
   frame = 0;
   lastTime = 0;
@@ -786,6 +796,12 @@ export class World {
           tangent: sampleJourney(path, 0, this.boatRoot.rotation.y, reverse).tangent,
         }
       : null;
+    const timeline = TransferTimeline.create(before, after, action, this.reduced);
+    const transfer = timeline ? { id: ++this.transferSequence, timeline, completion: null } : null;
+    if (transfer) {
+      this.transferHistory.push(transfer);
+      if (this.transferHistory.length > 12) this.transferHistory.shift();
+    }
     this.transition = {
       before,
       after,
@@ -801,11 +817,13 @@ export class World {
       reverse,
       fromAngle: this.boatRoot.rotation.y,
       fromHullY: this.hull.position.y,
+      transfer,
     };
   }
   cancel(reason: CompletionReason = 'cancelled') {
     if (this.transition) {
       const t = this.transition;
+      t.transfer?.timeline.cancel();
       this.transition = null;
       this.journeyFrame = null;
       let completion = reason;
@@ -815,6 +833,7 @@ export class World {
       } catch {
         completion = 'error';
       } finally {
+        if (t.transfer) t.transfer.completion = completion;
         t.done(completion);
       }
     }
@@ -880,11 +899,14 @@ export class World {
         }
       }
       this.shadow.position.y = this.water.position.y + 0.008;
+      const contact = tr.transfer?.timeline.advance(t);
+      if (contact) this.onTransferContact(contact);
       if (tr.after.status === 'won' && t > 0.72 && this.effects.arrivalStarted === null) {
         this.effects.arrive(time, this.reduced);
         this.onArrival();
       }
       if (t === 1) {
+        if (tr.transfer) tr.transfer.completion = 'complete';
         this.transition = null;
         this.journeyFrame = null;
         this.sync(tr.after, true);
@@ -909,6 +931,14 @@ export class World {
     this.coastalWater.update(this.water.position.y, this.reduced ? 0 : time * 0.001);
     this.renderer.render(this.scene, this.camera);
     this.frameRequest = requestAnimationFrame((t) => this.tick(t));
+  }
+  transferPresentation() {
+    const history = this.transferHistory.map(({ id, timeline, completion }) => ({
+      id,
+      ...timeline.presentation(),
+      completion,
+    }));
+    return { sequence: this.transferSequence, last: history.at(-1) ?? null, history };
   }
   dispose() {
     this.disposed = true;

@@ -1,6 +1,6 @@
 # Last Ferry — playable coves
 
-Start with **The Holding Pier**, then choose **Next cove** after bringing its neighbors home to continue into **Bellwater Cove**. Bellwater tests changing route depths and two pickup deadlines. First Crossing remains the explicit baseline at `/?cove=first-crossing` and in **Menu → Choose cove**. Compact named places now open one free inspection card; explicit Sail and passenger actions keep turns deliberate. The scene has stable wider framing, a rocky Stone island and a visible warm lantern. The accepted water, score/accompaniment and sailing pace remain. See the current [selection review](reviews/selection/REVIEW.md) and developer notes for [Holding Pier](docs/HOLDING_PIER.md), [Bellwater](docs/BELLWATER.md) and the [environment](docs/ENVIRONMENT.md).
+Start with **The Holding Pier**, then choose **Next cove** after bringing its neighbors home to continue into **Bellwater Cove**. Bellwater tests changing route depths and two pickup deadlines. First Crossing remains the explicit baseline at `/?cove=first-crossing` and in **Menu → Choose cove**. Compact named places open one free inspection card; explicit Sail and passenger actions keep turns deliberate. The scene has stable wider framing, a rocky Stone island and a visible warm lantern. Wooden transfer contacts now follow the visible animals; the accepted water, score/accompaniment and sailing pace remain. See the current [transfer sound review](reviews/transfer-audio/REVIEW.md), [selection review](reviews/selection/REVIEW.md) and developer notes for [Holding Pier](docs/HOLDING_PIER.md), [Bellwater](docs/BELLWATER.md) and the [environment](docs/ENVIRONMENT.md).
 
 Baseline M1 is a playable 3D tutorial cove: rescue Moss the sheep with Pip and Rue already aboard, manage how much depth the loaded ferry needs, and bring everyone to the lighthouse. Time advances only on accepted actions. The scene, sounds and rules run locally in the browser.
 
@@ -67,6 +67,8 @@ node tools/verify-design.mjs
 The browser suite defaults to ports 5173 and 4173, launches the development and production servers when necessary, and reuses already-running servers. Rebuild before testing if an existing production server is running.
 
 `LAST_FERRY_REVIEW_DIR` selects the capture/report folder so new evidence does not overwrite earlier records. `LAST_FERRY_DEV_PORT` and `LAST_FERRY_PRODUCTION_PORT` optionally select isolated servers.
+
+For the focused transfer-sound checks, use `npx playwright test tests/e2e/transfer-audio.spec.ts tests/e2e/transfer-phone.spec.ts tests/e2e/production.spec.ts`. The recorded pass uses development port **5193**, production port **4183**, and distinct output folders under `reviews/transfer-audio/`. The short-phone regression covers 780×320 beside 844×390 with touch emulation; physical Android and speaker listening remain unverified. The existing private playtest Site still contains its separately managed selection snapshot.
 
 The selection pass uses isolated development port **5186** and production port **4182**. Selected captures and its report live under `reviews/selection/`; source manifests identify the exact live or frozen server used. To use those ports with the browser suite:
 

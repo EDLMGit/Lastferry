@@ -8,11 +8,12 @@ import {
   score,
 } from './score';
 import { arrangementForState, companionNote, type Arrangement } from './arrangement';
+import { makeWoodContact, type TransferContact } from './wood';
 import type { State } from '../game/rules';
 import type { Level } from '../levels/level';
 
 type OwnedSource = {
-  kind: 'music' | 'companion' | 'bed' | 'travel' | 'effect';
+  kind: 'music' | 'companion' | 'bed' | 'travel' | 'effect' | 'transfer';
   nodes: AudioNode[];
   endAt: number | null;
   gain?: GainNode;
@@ -35,6 +36,7 @@ export class Sound {
   private analyser: AnalyserNode | null = null;
   private meter = new Float32Array(1024);
   private noise: AudioBuffer | null = null;
+  private wood = new Map<TransferContact['weight'], AudioBuffer>();
   private padWave: PeriodicWave | null = null;
   private pluckWave: PeriodicWave | null = null;
   private capture: MediaStreamAudioDestinationNode | null = null;
@@ -54,6 +56,11 @@ export class Sound {
   private sourcesCreated = 0;
   private peakOwned = 0;
   private deliveryCount = 0;
+  private transferContacts = 0;
+  private transferPlayed = 0;
+  private transferSkipped = 0;
+  private peakTransferSources = 0;
+  private lastTransferContact: (TransferContact & { time: number; played: boolean }) | null = null;
   private desiredArrangement: Arrangement = 'ordinary';
   private arrangement: Arrangement = 'ordinary';
   private pendingTerminal = false;
@@ -235,7 +242,8 @@ export class Sound {
   private clearActions(preserveTravel: boolean) {
     if (!preserveTravel) this.travelling = false;
     for (const [source, record] of this.owned)
-      if (record.kind === 'travel' || record.kind === 'effect') this.stop(source);
+      if (record.kind === 'travel' || record.kind === 'effect' || record.kind === 'transfer')
+        this.stop(source);
   }
   private noiseVoice(
     kind: 'bed' | 'travel',
@@ -290,6 +298,11 @@ export class Sound {
     voice: 'pad' | 'motif' | 'delivery' | 'companion',
   ) {
     const context = this.context!;
+    if (this.owned.size > 28)
+      for (const [source, record] of this.owned) {
+        if (record.kind === 'transfer') this.stop(source, true);
+        if (this.owned.size <= 28) break;
+      }
     if (this.owned.size > 28) {
       this.droppedTones++;
       return;
@@ -458,6 +471,56 @@ export class Sound {
     this.travelling = false;
     for (const [source, record] of this.owned) if (record.kind === 'travel') this.stop(source);
   }
+  transferContact(contact: TransferContact) {
+    if (this.disposed || !Number.isFinite(contact.count) || contact.count < 1) return;
+    this.transferContacts++;
+    this.lastTransferContact = {
+      ...contact,
+      time: this.context?.currentTime ?? 0,
+      played: false,
+    };
+    const transfers = [...this.owned.values()].filter((record) => record.kind === 'transfer');
+    if (
+      !this.enabled() ||
+      this.context?.state !== 'running' ||
+      transfers.length >= 2 ||
+      this.owned.size > 27
+    ) {
+      this.transferSkipped++;
+      return;
+    }
+    const context = this.context,
+      now = context.currentTime;
+    let buffer = this.wood.get(contact.weight);
+    if (!buffer) {
+      buffer = makeWoodContact(context, contact.weight);
+      this.wood.set(contact.weight, buffer);
+    }
+    const source = context.createBufferSource(),
+      gain = context.createGain(),
+      end = now + buffer.length / buffer.sampleRate,
+      group = 1 + Math.min(contact.count - 1, 2) * 0.06;
+    source.buffer = buffer;
+    gain.gain.value =
+      (contact.weight === 'full' ? 0.24 : 0.2) *
+      group *
+      (contact.settle ? 0.48 : 1) *
+      (contact.compact ? 0.7 : 1);
+    source.connect(gain);
+    gain.connect(this.effects!);
+    this.own(source, {
+      kind: 'transfer',
+      nodes: [gain],
+      endAt: end,
+      gain,
+      stopping: false,
+    });
+    source.start(now);
+    source.stop(end);
+    this.transferPlayed++;
+    this.peakTransferSources = Math.max(this.peakTransferSources, transfers.length + 1);
+    this.lastTransferContact.played = true;
+  }
   delivery() {
     if (!this.enabled() || this.context?.state !== 'running') return;
     for (const [source, record] of this.owned) if (record.kind === 'effect') this.stop(source);
@@ -529,6 +592,13 @@ export class Sound {
       travelActive: records.some((record) => record.kind === 'travel' && !record.stopping),
       arrivalActive: records.some((record) => record.kind === 'effect' && !record.stopping),
       deliveryCount: this.deliveryCount,
+      transferContacts: this.transferContacts,
+      transferPlayed: this.transferPlayed,
+      transferSkipped: this.transferSkipped,
+      transferSources: records.filter((record) => record.kind === 'transfer' && !record.stopping)
+        .length,
+      peakTransferSources: this.peakTransferSources,
+      lastTransferContact: this.lastTransferContact ? { ...this.lastTransferContact } : null,
       desiredArrangement: this.desiredArrangement,
       arrangement: this.arrangement,
       pendingTerminal: this.pendingTerminal,
@@ -565,6 +635,7 @@ export class Sound {
     this.permanent.length = 0;
     for (const track of this.capture?.stream.getTracks() ?? []) track.stop();
     this.noise = null;
+    this.wood.clear();
     this.padWave = null;
     this.pluckWave = null;
     if (this.context && this.context.state !== 'closed') void this.context.close().catch(() => {});

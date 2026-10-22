@@ -457,7 +457,7 @@ describe('continuous audio ownership and phase', () => {
     });
   });
 
-  test('companion plus travel and delivery remains bounded across the phrase with no dropped tones', async () => {
+  test('companion plus travel, transfer contacts and delivery stays bounded with no dropped tones', async () => {
     const value = sound();
     value.reconcileState(
       {
@@ -472,10 +472,18 @@ describe('continuous audio ownership and phase', () => {
     const context = Context.instances[0];
     for (let step = 0; step < 800; step++) {
       if (step % 75 === 0) value.delivery();
+      if (step % 10 === 0 || step % 10 === 2)
+        value.transferContact({
+          weight: 'light',
+          settle: step % 10 === 2,
+          compact: false,
+          count: 2,
+        });
       context.advance(0.1);
       await vi.advanceTimersByTimeAsync(100);
       expect(value.presentation().companionSources).toBeLessThanOrEqual(2);
       expect(value.presentation().sourceCount).toBeLessThanOrEqual(29);
+      expect(value.presentation().transferSources).toBeLessThanOrEqual(2);
     }
     expect(value.presentation()).toMatchObject({
       loopCount: 1,
@@ -485,6 +493,145 @@ describe('continuous audio ownership and phase', () => {
       contextCount: 1,
     });
     expect(value.presentation().companionNotes).toBeGreaterThan(20);
+    expect(value.presentation().transferPlayed).toBe(160);
+  });
+
+  test('wood contacts cache bounded dry buffers with lighter rabbits and quieter settlement', async () => {
+    const value = sound();
+    await value.activate();
+    const context = Context.instances[0];
+    value.transferContact({ weight: 'light', settle: false, compact: false, count: 2 });
+    const rabbits = context.sources.at(-1)!,
+      rabbitGain = [...rabbits.connections][0];
+    expect(rabbits.endAt - rabbits.startAt).toBeLessThanOrEqual(0.2);
+    expect(rabbits.loop).toBe(false);
+    expect(Math.abs(rabbits.buffer.getChannelData(0)[0])).toBe(0);
+    expect(
+      Math.max(...Array.from(rabbits.buffer.getChannelData(0) as Float32Array, Math.abs)),
+    ).toBeCloseTo(0.8);
+    context.advance(0.25);
+    value.transferContact({ weight: 'light', settle: true, compact: false, count: 2 });
+    const settling = context.sources.at(-1)!;
+    expect(settling.buffer).toBe(rabbits.buffer);
+    expect([...settling.connections][0].gain.value).toBeLessThan(rabbitGain.gain.value * 0.5);
+    context.advance(0.25);
+    value.transferContact({ weight: 'full', settle: false, compact: false, count: 1 });
+    const sheep = context.sources.at(-1)!,
+      sheepGain = [...sheep.connections][0];
+    expect(sheep.buffer).not.toBe(rabbits.buffer);
+    expect(sheepGain.gain.value).toBeGreaterThan(rabbitGain.gain.value);
+    context.advance(0.25);
+    value.transferContact({ weight: 'full', settle: false, compact: true, count: 100 });
+    const compact = context.sources.at(-1)!;
+    expect(compact.buffer).toBe(sheep.buffer);
+    expect([...compact.connections][0].gain.value).toBeLessThan(sheepGain.gain.value);
+    for (let i = 0; i < 20; i++)
+      value.transferContact({ weight: 'light', settle: false, compact: false, count: 2 });
+    expect(value.presentation()).toMatchObject({ transferSources: 2, peakTransferSources: 2 });
+    expect(value.presentation().transferSkipped).toBe(19);
+    context.advance(0.25);
+    expect(value.presentation().transferSources).toBe(0);
+    expect(compact.connections.size).toBe(0);
+  });
+
+  test('arrival leaves wooden contacts playing, while Undo clears both and preserves music', async () => {
+    const value = sound();
+    await value.activate();
+    const context = Context.instances[0],
+      before = value.presentation();
+    value.transferContact({ weight: 'full', settle: true, compact: false, count: 3 });
+    const contact = context.sources.at(-1)!,
+      endAt = contact.endAt;
+    expect(value.presentation()).toMatchObject({ transferSources: 1, arrivalActive: false });
+    value.delivery();
+    expect(contact.endAt).toBe(endAt);
+    expect(value.presentation()).toMatchObject({ transferSources: 1, arrivalActive: true });
+    value.resetActionEffects();
+    expect(value.presentation()).toMatchObject({
+      transferSources: 0,
+      arrivalActive: false,
+      musicSources: before.musicSources,
+      schedulerStarts: before.schedulerStarts,
+      scheduledEvents: before.scheduledEvents,
+      phaseSeconds: before.phaseSeconds,
+      transferPlayed: 1,
+    });
+    context.advance(0.1);
+    expect(contact.connections.size).toBe(0);
+    value.transferContact({ weight: 'full', settle: false, compact: true, count: 3 });
+    expect(value.presentation()).toMatchObject({ transferPlayed: 2, transferSources: 1 });
+    value.dispose();
+    expect(value.presentation()).toMatchObject({
+      transferSources: 0,
+      sourceCount: 0,
+      graphNodeCount: 0,
+    });
+  });
+
+  test('inactive, muted, hidden and interrupted contacts are consumed without any resume replay', async () => {
+    const value = sound(),
+      cue = { weight: 'light', settle: false, compact: false, count: 2 } as const;
+    value.transferContact(cue);
+    expect(value.presentation()).toMatchObject({
+      contextCount: 0,
+      transferContacts: 1,
+      transferSkipped: 1,
+    });
+    await value.activate();
+    const context = Context.instances[0];
+    value.transferContact(cue);
+    await value.toggle();
+    value.transferContact(cue);
+    expect(value.presentation()).toMatchObject({ transferSources: 0, transferPlayed: 1 });
+    context.advance(0.1);
+    await vi.advanceTimersByTimeAsync(100);
+    await value.toggle();
+    expect(value.presentation()).toMatchObject({ transferSources: 0, transferPlayed: 1 });
+    value.transferContact(cue);
+    await value.visibility(true);
+    value.transferContact(cue);
+    context.advance(0.1);
+    await vi.advanceTimersByTimeAsync(100);
+    await value.visibility(false);
+    expect(value.presentation()).toMatchObject({ transferSources: 0, transferPlayed: 2 });
+    value.transferContact(cue);
+    context.state = 'suspended';
+    context.notify();
+    value.transferContact(cue);
+    context.advance(10);
+    context.state = 'running';
+    context.notify();
+    expect(value.presentation()).toMatchObject({
+      transferSources: 0,
+      transferContacts: 7,
+      transferPlayed: 3,
+      transferSkipped: 4,
+      contextCount: 1,
+      schedulerCount: 1,
+      ambienceSources: 2,
+    });
+    expect(value.presentation().lastTransferContact).toMatchObject({ ...cue, played: false });
+  });
+
+  test('contacts yield crowded source slots instead of changing the existing musical budget', async () => {
+    const reference = sound(),
+      withContact = sound();
+    await reference.activate();
+    await withContact.activate();
+    withContact.transferContact({ weight: 'full', settle: false, compact: false, count: 3 });
+    withContact.transferContact({ weight: 'light', settle: true, compact: false, count: 2 });
+    for (let i = 0; i < 10; i++) {
+      reference.delivery();
+      withContact.delivery();
+      expect(withContact.presentation().droppedTones).toBe(reference.presentation().droppedTones);
+      expect(withContact.presentation().sourceCount).toBeLessThanOrEqual(29);
+    }
+    expect(withContact.presentation()).toMatchObject({
+      transferPlayed: 2,
+      transferSources: 0,
+      musicSources: reference.presentation().musicSources,
+      scheduledEvents: reference.presentation().scheduledEvents,
+    });
   });
 
   test('rapid changes during active companion notes release obsolete voices without a mood queue', async () => {
