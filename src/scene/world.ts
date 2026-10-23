@@ -564,8 +564,8 @@ export class World {
         ),
       );
   }
-  project(p: number[]) {
-    const v = V(p, 0.06).project(this.camera);
+  project(p: number[], height = 0.06) {
+    const v = V(p, height).project(this.camera);
     return {
       x: ((v.x + 1) * this.host.clientWidth) / 2,
       y: ((1 - v.y) * this.host.clientHeight) / 2,

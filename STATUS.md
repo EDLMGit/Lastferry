@@ -1,4 +1,18 @@
-# Current milestone — Fuller wood and a gentle arrival
+# Current milestone — Cove interface
+
+2026-10-23: Started clean on `m1-first-crossing` at reviewed `ab8ff33fb1471aacb0dd7a22acbf90be3a4b1db6`. The player prefers the new wooden contacts; preserve the complete accepted audio implementation. Read AGENTS, FOLLOWING_TASK_UI, selection/placement logic and latest short-phone feedback. Main remains `386de54d20fdd4a513a06115471d70bf94738cc0`; PR #1 stays draft. The private Site contains the starting audio commit and is deployed separately.
+
+Implemented freestanding names and separate light markers at actual endpoints, direct Board/Let ashore/Bring home dock launchers, and one dark teal/ivory/warm-border panel palette. Names and markers share one semantic keyboard stop; targets are 48px except Bellwater's close short-phone pair at 44px. Free inspection, explicit Sail, subset confirmation, three puzzles and complete Undo remain. The whole accepted audio implementation and its integration callbacks, authoritative rule/copy helpers, water and sailing behavior are preserved.
+
+Actual phone comparison corrected names displaced across the cove and a narrow route card covering the lighthouse. Repeated-touch checks then found dock movement during inspection and default pointer focus loss after double cancellation. Dock placement is now stable for an unchanged ferry state, and the existing dismissal guard also prevents pointer-down focus changes. Original failures remain in `reviews/cove-interface/development-results.json` and local raw evidence.
+
+Build/TypeScript and 128/128 unit tests in 17 files pass. Both phone Holding rescues pass including subsets, tide Undo/replay, flooded departure, repeated inputs, natural keyboard and terminal Undo. Contrast passes 237 computed/composited checks across 11 real-UI stages at each phone size (minimum text 5.80:1; checked cues/borders 4.20:1). Final combined regression checks pass8/8, including production rescue and accepted audio lifecycle. Three existing scene-picking checks pass after adapting only their waypoint fixture to the matching endpoint control; original failures are retained. The final108-file source snapshot is `70de9ba5c7591bb048876c595845060dc9f9ba1fb0ce3395b2bd39d5c93a27ec`; the eight-test run retains its prior full hash with an exact reuse audit. Review metadata remains outside this hash.
+
+Native-size inspection covers28 selected screenshots at1440×900,844×390 and780×320. The31.88s uninterrupted whole-interface recording and paired actual runtime audio/canvas capture complete a nine-action win with real unloading and tide Undo/replay; eight contacts play, one arrival responds, no score tones drop. The visible Shallows name clears the ferry; transparent padding shares only its own current-location context, documented in QA. Physical Android/browser chrome, other browser engines and platform fonts remain unverified. Implementation and focused verification are complete; see `reviews/cove-interface/REVIEW.md`. Commit/push this pass to the existing draft PR, with main and the private Site unchanged. Stop after this interface pass.
+
+## Historical audio-polish handoff
+
+# Fuller wood and a gentle arrival
 
 2026-10-23: Started clean on `m1-first-crossing` at reviewed `a4fc4658103b630a2ae527e8479ff66d7232dff3`. Read AGENTS, the new parent NEXT_TASK, AUDIO and the transfer review; retained the new task in the checkout. Main remains `386de54d20fdd4a513a06115471d70bf94738cc0`; PR #1 stays draft. The owner-private Site was separately updated to the starting build; this task does not deploy the audio polish.
 

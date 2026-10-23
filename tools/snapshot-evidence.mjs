@@ -41,6 +41,7 @@ const paths = [
   'AGENTS.md',
   'FIRST_TASK.md',
   ...(existsSync(new URL('NEXT_TASK.md', root)) ? ['NEXT_TASK.md'] : []),
+  ...(existsSync(new URL('FOLLOWING_TASK_UI.md', root)) ? ['FOLLOWING_TASK_UI.md'] : []),
   'docs/GAMEPLAY_RULES.md',
   'docs/FIRST_COVE.md',
   'docs/ART_DIRECTION.md',
@@ -65,7 +66,9 @@ const paths = [
       path.includes('refinement') ||
       path.includes('selection') ||
       path.includes('transfer') ||
-      path.includes('audio-polish'),
+      path.includes('audio-polish') ||
+      path.includes('cove-interface') ||
+      path.includes('cove-contrast'),
   ),
 ].sort();
 const files = Object.fromEntries(paths.map((p) => [p, digest(readFileSync(new URL(p, root)))]));

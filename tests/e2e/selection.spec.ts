@@ -16,7 +16,7 @@ import {
 } from './ui';
 
 type HitKind = 'island' | 'pier' | 'landmark' | 'waypoint' | 'ferry';
-type Point = { x: number; y: number; id: string; kind: HitKind };
+type Point = { x: number; y: number; id: string; kind: HitKind; overlayControl: string | null };
 const selection = (page: Page) =>
   page.evaluate(() => (window as any).__LAST_FERRY__.getSelectionStatus());
 const frame = (page: Page) => page.evaluate(() => (window as any).__LAST_FERRY__.getFrameStatus());
@@ -48,13 +48,21 @@ async function pointFor(page: Page, id: string, kind: HitKind): Promise<Point> {
           for (const fx of fractions) {
             const x = target.left + (target.right - target.left) * fx,
               y = target.top + (target.bottom - target.top) * fy;
-            const hit = api.getPickDetailAt(x, y);
+            const hit = api.getPickDetailAt(x, y),
+              top = document.elementFromPoint(rect.left + x, rect.top + y),
+              overlayControl = top?.closest('button')?.id ?? null;
             if (
               hit?.id === id &&
               hit.kind === kind &&
-              document.elementFromPoint(rect.left + x, rect.top + y) === canvas
+              (top === canvas || (kind === 'waypoint' && overlayControl === `map-${id}`))
             )
-              return { x: rect.left + x, y: rect.top + y, id, kind };
+              return {
+                x: rect.left + x,
+                y: rect.top + y,
+                id,
+                kind,
+                overlayControl: top === canvas ? null : overlayControl,
+              };
           }
       return null;
     },

@@ -32,6 +32,7 @@ import {
 import { waterPresets, type WaterTuning } from './scene/water';
 import { placeLocalCard, overlaps, type Rectangle } from './ui/placement';
 import { locationFacts } from './ui/location';
+import { endpointTargets } from './ui/cove-layout';
 
 const cove = new URLSearchParams(location.search).get('cove');
 const level = cove === 'first-crossing' ? baseline : cove === 'bellwater' ? bellwater : holdingPier;
@@ -41,7 +42,7 @@ const { nodeNames, passengerNames } = levelNames(level);
 const homeNodeId = level.piers.find((pier) => pier.id === level.objective.deliveryPierId)!.nodeId;
 const title = level.id === baseline.id ? 'The First Crossing' : level.title;
 const app = document.querySelector<HTMLDivElement>('#app')!;
-app.innerHTML = `<main class="game ${experiment ? 'holding' : isBellwater ? 'bellwater' : 'baseline'}"><section id="seascape" aria-label="${level.title}" aria-busy="false"><div id="world"></div><header class="hud"><div class="identity"><h1>${title}</h1><p id="objective"></p></div><div id="readout" aria-label="Crossing progress"></div><nav class="tools" aria-label="Crossing controls"><button id="undo">↶ Undo</button><button id="wait">Wait <span>· 1 action</span></button><button id="menu">Menu</button><button id="sound-toggle" aria-label="Mute sound" aria-pressed="false">♫</button></nav></header><nav id="map-labels" aria-label="Map stops"></nav><section id="local-context" role="region" aria-labelledby="local-heading" hidden></section><p id="selection-hint">Select a place to see its options.</p><svg id="selection-leader" aria-hidden="true"></svg><button id="status-toggle" aria-haspopup="dialog" aria-label="Open tide and pier forecast"></button><p id="transition-status" role="status" tabindex="-1" hidden>Finishing this action…</p><p class="portrait-note">Turn sideways for a wider view.</p></section><div id="announcement" class="sr-only" role="status" aria-live="polite"></div></main><dialog id="dialog" aria-labelledby="dialog-title"><div id="dialog-content"></div></dialog>`;
+app.innerHTML = `<main class="game ${experiment ? 'holding' : isBellwater ? 'bellwater' : 'baseline'}"><section id="seascape" aria-label="${level.title}" aria-busy="false"><div id="world"></div><header class="hud"><div class="identity"><h1>${title}</h1><p id="objective"></p></div><div id="readout" aria-label="Crossing progress"></div><nav class="tools" aria-label="Crossing controls"><button id="undo">↶ Undo</button><button id="wait">Wait <span>· 1 action</span></button><button id="menu">Menu</button><button id="sound-toggle" aria-label="Mute sound" aria-pressed="false">♫</button></nav></header><nav id="map-labels" aria-label="Map stops"></nav><nav id="dock-actions" aria-label="Passenger actions" hidden></nav><section id="local-context" role="region" aria-labelledby="local-heading" hidden></section><p id="selection-hint">Select a place to see its options.</p><svg id="selection-leader" aria-hidden="true"></svg><button id="status-toggle" aria-haspopup="dialog" aria-label="Open tide and pier forecast"></button><p id="transition-status" role="status" tabindex="-1" hidden>Finishing this action…</p><p class="portrait-note">Turn sideways for a wider view.</p></section><div id="announcement" class="sr-only" role="status" aria-live="polite"></div></main><dialog id="dialog" aria-labelledby="dialog-title"><div id="dialog-content"></div></dialog>`;
 const $ = (id: string) => document.getElementById(id)!;
 const session = new Session(level),
   sound = new Sound(),
@@ -60,6 +61,10 @@ let actionOrigin: { x: number; y: number } | null = null;
 let lastPointer: { x: number; y: number; control: Element | null } | null = null;
 let cardPlacement: Rectangle | null = null;
 let protectedBounds: Rectangle[] = [];
+let labelLayout = new Map<string, Rectangle>();
+let labelLayoutKey = '';
+let dockPlacement: Rectangle | null = null;
+let dockLayout: { key: string; bounds: Rectangle; layout: string } | null = null;
 let fallback: ReturnType<typeof setTimeout> | undefined;
 let closingFence: {
   rect: DOMRect;
@@ -147,6 +152,7 @@ function closeDialog(restore = true, fence = false) {
   selected = null;
   world.setForecast(false, session.state.tideLevel);
   renderLocation();
+  renderDock();
   positionMap();
   if (restore) focusAvailable(returnId);
   restoreHighlight();
@@ -159,7 +165,11 @@ function openDialog(next: DialogMode, action?: Action, trigger?: string) {
   selected = action ?? null;
   renderDialog();
   dialog.showModal();
+  $('local-context').hidden = true;
   $('local-context').inert = true;
+  $('dock-actions').hidden = true;
+  $('dock-actions').inert = true;
+  $('selection-leader').innerHTML = '';
   (next === 'terminal' ? $('terminal-undo') : $('cancel')).focus();
   positionDialog();
   restoreHighlight();
@@ -381,14 +391,15 @@ function renderMap() {
               : facts.wouldLose
                 ? 'adjacent, flood warning'
                 : 'adjacent passage available';
-        return `<div id="stop-${n.id}" class="map-stop" data-adjacent="${facts.relation === 'adjacent'}"><button id="map-${n.id}" class="map-target" data-status="${status}" data-risk="${facts.wouldLose ? 'loss' : 'safe'}" data-destination="${n.id}" aria-expanded="${locationSelection === n.id}" aria-controls="local-context" ${facts.current ? 'aria-current="location"' : ''} aria-label="Select ${facts.name}; ${description}${facts.home ? '; Home, delivery destination' : ''}" title="${description}" ${session.busy || s.status !== 'playing' ? 'disabled' : ''}><span class="map-symbol" aria-hidden="true">${facts.current ? '◉' : facts.relation === 'remote' ? '◇' : facts.status === 'too-shallow' ? '⊘' : facts.wouldLose ? '!' : '○'}</span><b>${facts.name}${facts.home ? ' · Home' : ''}</b></button></div>`;
+        return `<div id="stop-${n.id}" class="map-stop" data-adjacent="${facts.relation === 'adjacent'}"><button id="map-${n.id}" class="map-target" data-status="${status}" data-risk="${facts.wouldLose ? 'loss' : 'safe'}" data-destination="${n.id}" aria-expanded="${locationSelection === n.id}" aria-controls="local-context" ${facts.current ? 'aria-current="location"' : ''} aria-label="Select ${facts.name}; ${description}${facts.home ? '; Home, delivery destination' : ''}" title="${description}" ${session.busy || s.status !== 'playing' ? 'disabled' : ''}><span class="map-hit"><span class="map-symbol" aria-hidden="true">${facts.current ? '•' : facts.relation === 'remote' ? '◇' : facts.status === 'too-shallow' ? '╱' : facts.wouldLose ? '!' : ''}</span></span><span class="map-name"><b>${facts.name}${facts.home ? '<span class="map-home"> · Home</span>' : ''}</b></span></button></div>`;
       })
       .join('');
   for (const node of level.nodes) bindTarget($(`map-${node.id}`), node.id);
 }
 function renderLocation() {
   const card = $('local-context');
-  const visible = !!locationSelection && !session.busy && session.state.status === 'playing';
+  const visible =
+    !!locationSelection && !session.busy && !dialog.open && session.state.status === 'playing';
   card.hidden = !visible;
   card.inert = dialog.open || session.busy;
   $('selection-hint').hidden =
@@ -414,10 +425,8 @@ function renderLocation() {
         paragraph(facts.waiting.length ? facts.waitingCopy : '') +
         paragraph(facts.safety) +
         paragraph(facts.consequence, facts.wouldLose ? 'location-warning' : '');
-  const actions = facts.current
-    ? (facts.board ? `<button id="board">${facts.boardLabel}</button>` : '') +
-      (facts.unload ? `<button id="unload">${facts.unloadLabel}</button>` : '')
-    : facts.move
+  const actions =
+    !facts.current && facts.move
       ? `<button id="sail" data-risk="${facts.wouldLose ? 'loss' : 'safe'}" ${facts.canSail ? '' : 'disabled'}>Sail · 1 action</button>`
       : '';
   card.innerHTML = `<header class="location-head"><div><p class="location-role">${facts.current ? 'You are here' : facts.home ? 'Home · delivery destination' : facts.relation === 'remote' ? 'Free inspection' : facts.wouldLose ? 'Flood warning' : 'Direct passage'}</p><h2 id="local-heading" tabindex="-1">${facts.name}${facts.home && facts.current ? ' · Home' : ''}</h2></div><button id="close-location" aria-label="Close location card">×</button></header><div id="location-facts">${details}</div>${actions ? `<footer id="local-actions">${actions}</footer>` : ''}`;
@@ -433,10 +442,6 @@ function renderLocation() {
       };
     clearLocation(true);
   };
-  if ($('board'))
-    $('board').onclick = () =>
-      openDialog('action', { type: 'board', passengerIds: [...facts.boardOptions] }, 'board');
-  if ($('unload')) $('unload').onclick = () => openDialog('action', facts.unload!, 'unload');
   if ($('sail'))
     $('sail').onclick = (event) => {
       event.stopPropagation();
@@ -456,6 +461,40 @@ function renderLocation() {
       }
     };
 }
+function renderDock() {
+  const dock = $('dock-actions'),
+    facts = locationFacts(session.state, session.state.boatNodeId, level),
+    visible =
+      !session.busy &&
+      !dialog.open &&
+      session.state.status === 'playing' &&
+      !facts.flooded &&
+      !!facts.pierId &&
+      !!(facts.board || facts.unload);
+  dock.hidden = !visible;
+  dock.inert = !visible;
+  if (!visible) return;
+  dock.setAttribute('aria-label', `Passenger actions at ${facts.name}`);
+  const arrow = (direction: 'board' | 'unload') =>
+    `<svg class="dock-arrow" data-direction="${direction}" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  dock.innerHTML =
+    (facts.board
+      ? `<button id="board" aria-haspopup="dialog" aria-label="${facts.boardLabel}; choose passengers">${arrow('board')}<span>Board</span></button>`
+      : '') +
+    (facts.unload
+      ? `<button id="unload" aria-haspopup="dialog" aria-label="${facts.unloadLabel}; choose passengers">${arrow('unload')}<span>${facts.home ? 'Bring home' : 'Let ashore'}</span>${facts.home ? '<span class="dock-home" aria-hidden="true">⌂</span>' : ''}</button>`
+      : '');
+  if (facts.board)
+    $('board').onclick = (event) => {
+      event.stopPropagation();
+      openDialog('action', { type: 'board', passengerIds: [...facts.boardOptions] }, 'board');
+    };
+  if (facts.unload)
+    $('unload').onclick = (event) => {
+      event.stopPropagation();
+      openDialog('action', facts.unload!, 'unload');
+    };
+}
 function render() {
   const s = session.state,
     p = pierAt(s, level),
@@ -469,6 +508,7 @@ function render() {
   $('status-toggle').classList.toggle('urgent', facts.urgent);
   $('status-toggle').onclick = () => openDialog('forecast', undefined, 'status-toggle');
   renderLocation();
+  renderDock();
   ($('undo') as HTMLButtonElement).disabled = session.busy || !session.history.length;
   ($('wait') as HTMLButtonElement).disabled = session.busy || s.status !== 'playing';
   ($('menu') as HTMLButtonElement).disabled = session.busy;
@@ -547,46 +587,118 @@ function positionMap() {
     ...(!$('selection-hint').hidden ? [$('selection-hint')] : []),
   ].map((element) => element.getBoundingClientRect());
   const bounds = { left: 8, top: 8, right: innerWidth - 8, bottom: innerHeight - 8 };
-  const placed: Rectangle[] = [];
+  const markers = endpointTargets(
+    level.nodes.map((node) => {
+      const point = world.project(node.positionXZ);
+      return { id: node.id, x: point.x + canvas.left, y: point.y + canvas.top };
+    }),
+  );
+  const placed: Rectangle[] = markers.map((marker) => marker.bounds);
   const leaders: string[] = [];
+  const layoutKey = `${innerWidth}:${innerHeight}:${canvas.width}:${canvas.height}`;
+  if (labelLayoutKey !== layoutKey) {
+    labelLayoutKey = layoutKey;
+    labelLayout = new Map();
+  }
+  const staticFigures = frame.places.map(atPage);
   for (const n of level.nodes) {
     const group = $(`stop-${n.id}`);
     if (!group) continue;
-    const point = world.project(n.positionXZ),
-      x = point.x + canvas.left,
-      y = point.y + canvas.top;
-    const w = group.offsetWidth,
-      h = group.offsetHeight;
+    const marker = markers.find((marker) => marker.id === n.id)!,
+      { x, y } = marker,
+      name = group.querySelector<HTMLElement>('.map-name')!;
+    group.style.setProperty('--target-size', `${marker.size}px`);
+    group.style.left = `${marker.bounds.left}px`;
+    group.style.top = `${marker.bounds.top}px`;
+    const w = name.offsetWidth,
+      h = name.offsetHeight,
+      place = staticFigures[level.nodes.indexOf(n)];
     const preferred: [number, number][] = [
-      [x - w / 2, y + 18],
-      [x - w / 2, y - h - 18],
-      [x + 22, y - h / 2],
-      [x - w - 22, y - h / 2],
+      [x - w / 2, place.top - h - 8],
+      [x - w / 2, y + marker.size / 2 + 10],
+      [x + marker.size / 2 + 12, y - h / 2],
+      [x - w - marker.size / 2 - 12, y - h / 2],
     ];
-    const choice = placeLocalCard(
-      w,
-      h,
-      bounds,
-      [...chrome, ...figures, ...placed],
-      preferred,
-      preferred[0],
-    ) ?? {
-      left: Math.max(8, Math.min(innerWidth - w - 8, x - w / 2)),
-      top: Math.max(8, Math.min(innerHeight - h - 8, y + 18)),
-      right: 0,
-      bottom: 0,
-    };
+    const choice = labelLayout.get(n.id) ??
+      placeLocalCard(w, h, bounds, [...chrome, ...figures, ...placed], preferred, preferred[0]) ?? {
+        left: Math.max(8, Math.min(innerWidth - w - 8, x - w / 2)),
+        top: Math.max(8, Math.min(innerHeight - h - 8, y + 18)),
+        right: 0,
+        bottom: 0,
+      };
     choice.right = choice.left + w;
     choice.bottom = choice.top + h;
-    group.style.left = `${choice.left}px`;
-    group.style.top = `${choice.top}px`;
+    labelLayout.set(n.id, choice);
+    name.style.left = `${choice.left - marker.bounds.left}px`;
+    name.style.top = `${choice.top - marker.bounds.top}px`;
     placed.push(choice);
     const centerX = Math.max(choice.left, Math.min(choice.right, x)),
       centerY = Math.max(choice.top, Math.min(choice.bottom, y));
-    if (Math.hypot(centerX - x, centerY - y) > 20)
+    if (Math.hypot(centerX - x, centerY - y) > 20 && Math.hypot(centerX - x, centerY - y) < 110)
       leaders.push(`<line x1="${x}" y1="${y}" x2="${centerX}" y2="${centerY}" />`);
   }
   if ($('map-leaders')) $('map-leaders').innerHTML = leaders.join('');
+  dockPlacement = null;
+  const dock = $('dock-actions');
+  if (!dock.hidden) {
+    const boat = atPage(frame.boat),
+      pier = level.piers.find((pier) => pier.nodeId === session.state.boatNodeId)!,
+      shore = world.project(pier.positionXZ, pier.elevation * 0.18),
+      ferry = world.project(
+        level.nodes.find((node) => node.id === session.state.boatNodeId)!.positionXZ,
+      ),
+      angle = (Math.atan2(ferry.y - shore.y, ferry.x - shore.x) * 180) / Math.PI,
+      dockOrigin = [actionOrigin].flatMap((point) =>
+        point
+          ? [{ left: point.x - 26, right: point.x + 26, top: point.y - 26, bottom: point.y + 26 }]
+          : [],
+      );
+    for (const icon of dock.querySelectorAll<HTMLElement>('.dock-arrow'))
+      icon.style.transform = `rotate(${angle + (icon.dataset.direction === 'unload' ? 180 : 0)}deg)`;
+    const dockKey = `${layoutKey}:${session.state.turn}:${session.state.boatNodeId}:${session.state.aboard.join(',')}:${dock.textContent}`;
+    let distance = Infinity;
+    if (dockLayout?.key === dockKey) {
+      dockPlacement = dockLayout.bounds;
+      dock.dataset.chosenLayout = dockLayout.layout;
+    }
+    for (const layout of dockPlacement ? [] : ['row', 'column']) {
+      dock.dataset.layout = layout;
+      const width = dock.offsetWidth,
+        height = dock.offsetHeight,
+        anchor: [number, number] = [
+          shore.x + canvas.left - width / 2,
+          shore.y + canvas.top - height / 2,
+        ];
+      const candidate = placeLocalCard(
+        width,
+        height,
+        bounds,
+        [...chrome, ...figures, ...placed, ...dockOrigin],
+        [
+          [boat.right + 10, boat.top + (boat.bottom - boat.top - height) / 2],
+          [boat.left - width - 10, boat.top + (boat.bottom - boat.top - height) / 2],
+          [(boat.left + boat.right - width) / 2, boat.bottom + 10],
+          [(boat.left + boat.right - width) / 2, boat.top - height - 10],
+        ],
+        anchor,
+      );
+      if (candidate) {
+        const cost = Math.hypot(candidate.left - anchor[0], candidate.top - anchor[1]);
+        if (cost < distance) {
+          distance = cost;
+          dockPlacement = candidate;
+          dock.dataset.chosenLayout = layout;
+        }
+      }
+    }
+    dock.dataset.layout = dock.dataset.chosenLayout ?? 'row';
+    if (dockPlacement) {
+      dockLayout = { key: dockKey, bounds: dockPlacement, layout: dock.dataset.layout };
+      dock.style.left = `${dockPlacement.left}px`;
+      dock.style.top = `${dockPlacement.top}px`;
+      placed.push(dockPlacement);
+    }
+  }
   cardPlacement = null;
   if (locationSelection && !$('local-context').hidden) {
     const local = $('local-context'),
@@ -733,6 +845,19 @@ document.addEventListener(
 document.addEventListener(
   'pointerdown',
   (e) => {
+    if (
+      closingFence?.scope === 'dismiss' &&
+      performance.now() < closingFence.until &&
+      !dialog.open &&
+      e.clientX >= closingFence.rect.left &&
+      e.clientX <= closingFence.rect.right &&
+      e.clientY >= closingFence.rect.top &&
+      e.clientY <= closingFence.rect.bottom
+    ) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      return;
+    }
     keyboardInput = false;
     lastPointer = { x: e.clientX, y: e.clientY, control: (e.target as Element).closest('button') };
     if (e.isTrusted) void sound.activate();
@@ -812,6 +937,8 @@ if (import.meta.env.DEV)
           origin: selectionOrigin,
           actionOrigin,
           cardPlacement,
+          dockPlacement,
+          labels: [...labelLayout].map(([id, bounds]) => ({ id, ...bounds })),
           protectedBounds,
           protectedOverlaps: cardPlacement
             ? protectedBounds.filter((bounds) => overlaps(cardPlacement!, bounds, 0))
