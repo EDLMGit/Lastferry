@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { Sound } from '../../src/audio/sound';
 import { phraseSeconds } from '../../src/audio/score';
+import { arrivalPhrase } from '../../src/audio/arrival';
 import { initial } from '../../src/game/rules';
 import { holdingPier } from '../../src/levels/level';
 
@@ -503,24 +504,24 @@ describe('continuous audio ownership and phase', () => {
     value.transferContact({ weight: 'light', settle: false, compact: false, count: 2 });
     const rabbits = context.sources.at(-1)!,
       rabbitGain = [...rabbits.connections][0];
-    expect(rabbits.endAt - rabbits.startAt).toBeLessThanOrEqual(0.2);
+    expect(rabbits.endAt - rabbits.startAt).toBeLessThanOrEqual(0.28);
     expect(rabbits.loop).toBe(false);
     expect(Math.abs(rabbits.buffer.getChannelData(0)[0])).toBe(0);
     expect(
       Math.max(...Array.from(rabbits.buffer.getChannelData(0) as Float32Array, Math.abs)),
     ).toBeCloseTo(0.8);
-    context.advance(0.25);
+    context.advance(0.3);
     value.transferContact({ weight: 'light', settle: true, compact: false, count: 2 });
     const settling = context.sources.at(-1)!;
     expect(settling.buffer).toBe(rabbits.buffer);
     expect([...settling.connections][0].gain.value).toBeLessThan(rabbitGain.gain.value * 0.5);
-    context.advance(0.25);
+    context.advance(0.3);
     value.transferContact({ weight: 'full', settle: false, compact: false, count: 1 });
     const sheep = context.sources.at(-1)!,
       sheepGain = [...sheep.connections][0];
     expect(sheep.buffer).not.toBe(rabbits.buffer);
     expect(sheepGain.gain.value).toBeGreaterThan(rabbitGain.gain.value);
-    context.advance(0.25);
+    context.advance(0.3);
     value.transferContact({ weight: 'full', settle: false, compact: true, count: 100 });
     const compact = context.sources.at(-1)!;
     expect(compact.buffer).toBe(sheep.buffer);
@@ -529,7 +530,7 @@ describe('continuous audio ownership and phase', () => {
       value.transferContact({ weight: 'light', settle: false, compact: false, count: 2 });
     expect(value.presentation()).toMatchObject({ transferSources: 2, peakTransferSources: 2 });
     expect(value.presentation().transferSkipped).toBe(19);
-    context.advance(0.25);
+    context.advance(0.3);
     expect(value.presentation().transferSources).toBe(0);
     expect(compact.connections.size).toBe(0);
   });
@@ -613,7 +614,7 @@ describe('continuous audio ownership and phase', () => {
     expect(value.presentation().lastTransferContact).toMatchObject({ ...cue, played: false });
   });
 
-  test('contacts yield crowded source slots instead of changing the existing musical budget', async () => {
+  test('rapid arrival replacement cannot accumulate voices or evict contacts or music', async () => {
     const reference = sound(),
       withContact = sound();
     await reference.activate();
@@ -628,10 +629,117 @@ describe('continuous audio ownership and phase', () => {
     }
     expect(withContact.presentation()).toMatchObject({
       transferPlayed: 2,
-      transferSources: 0,
+      transferSources: 2,
+      arrivalSources: 3,
+      arrivalVoicesSkipped: 0,
       musicSources: reference.presentation().musicSources,
       scheduledEvents: reference.presentation().scheduledEvents,
     });
+  });
+
+  test('arrival uses the current clock immediately and owns its complete dry tail', async () => {
+    const value = sound();
+    await value.activate();
+    const context = Context.instances[0];
+    context.advance(74.94);
+    const before = value.presentation(),
+      firstSource = context.sources.length,
+      firstNode = context.nodes.length;
+    value.delivery();
+    const notes = arrivalPhrase(before.phaseSeconds),
+      sources = context.sources.slice(firstSource),
+      nodes = context.nodes.slice(firstNode);
+    expect(value.presentation().lastArrival).toEqual({
+      time: context.currentTime,
+      phase: before.phaseSeconds,
+      notes,
+    });
+    expect(sources).toHaveLength(3);
+    expect(sources[0].startAt).toBe(context.currentTime);
+    for (let i = 0; i < sources.length; i++) {
+      const [filter, gain, panner] = nodes.slice(i * 3, i * 3 + 3),
+        note = notes[i],
+        at = context.currentTime + note.offset;
+      expect(sources[i].startAt).toBe(at);
+      expect(sources[i].endAt).toBe(at + note.duration);
+      expect(gain.gain.events).toEqual([
+        { kind: 'set', value: 0, time: at },
+        { kind: 'linear', value: note.peak, time: at + note.attack },
+        { kind: 'exponential', value: 0.0001, time: at + note.duration - 0.08 },
+        { kind: 'linear', value: 0, time: at + note.duration },
+      ]);
+      expect(sources[i].connections.has(filter)).toBe(true);
+      expect(filter.connections.has(gain)).toBe(true);
+      expect(gain.connections.has(panner)).toBe(true);
+      expect([...panner.connections]).toEqual([context.nodes[3]]);
+      expect([...context.nodes[3].connections]).toEqual([context.nodes[0]]);
+    }
+    expect(value.presentation()).toMatchObject({
+      phaseSeconds: before.phaseSeconds,
+      schedulerStarts: before.schedulerStarts,
+      musicSources: before.musicSources,
+      arrivalVoicesPlayed: 3,
+    });
+    context.advance(3.36);
+    expect(value.presentation()).toMatchObject({ arrivalActive: false, arrivalSources: 0 });
+    expect(sources.every((source) => source.connections.size === 0)).toBe(true);
+  });
+
+  test.each([0.03, 0.7, 1.4, 2.9])(
+    'Undo cancels future notes and the complete owned tail at %ss',
+    async (delay) => {
+      const value = sound();
+      await value.activate();
+      const context = Context.instances[0],
+        first = context.sources.length;
+      value.delivery();
+      const sources = context.sources.slice(first);
+      context.advance(delay);
+      value.resetActionEffects();
+      expect(value.presentation().arrivalActive).toBe(false);
+      for (const source of sources.filter((item) => item.connections.size)) {
+        const filter = [...source.connections][0],
+          gain = [...filter.connections][0];
+        expect(source.endAt).toBeLessThanOrEqual(context.currentTime + 0.06);
+        expect(gain.gain.events.filter((event) => event.time > context.currentTime)).toEqual([
+          { kind: 'linear', value: 0, time: context.currentTime + 0.045 },
+        ]);
+      }
+      context.advance(0.1);
+      expect(value.presentation().arrivalSources).toBe(0);
+      expect(sources.every((source) => source.connections.size === 0)).toBe(true);
+      expect(value.presentation().musicSources).toBeGreaterThan(0);
+    },
+  );
+
+  test('arrival yields a full graph and score can reclaim its voices without dropping notes', async () => {
+    const value = sound();
+    await value.activate();
+    const internal = value as any,
+      context = Context.instances[0];
+    while (value.presentation().sourceCount < 27) internal.tone(62, 0, 10, 0.5, 'pad');
+    value.transferContact({ weight: 'full', settle: false, compact: false, count: 1 });
+    const transfer = context.sources.at(-1)!,
+      endAt = transfer.endAt;
+    value.delivery();
+    expect(value.presentation()).toMatchObject({
+      sourceCount: 29,
+      arrivalSources: 1,
+      arrivalVoicesSkipped: 2,
+      transferSources: 1,
+      droppedTones: 0,
+    });
+    expect(transfer.endAt).toBe(endAt);
+    internal.tone(66, 0, 10, 0.5, 'pad');
+    expect(value.presentation()).toMatchObject({
+      sourceCount: 29,
+      arrivalSources: 0,
+      arrivalVoicesReclaimed: 1,
+      transferSources: 1,
+      droppedTones: 0,
+    });
+    internal.tone(69, 0, 10, 0.5, 'pad');
+    expect(value.presentation()).toMatchObject({ transferSources: 0, droppedTones: 0 });
   });
 
   test('rapid changes during active companion notes release obsolete voices without a mood queue', async () => {

@@ -1,0 +1,157 @@
+{
+  "sourceHash": "383ccdd71958e7668bf936a94ee3398ed38ee83c6f045091f3c2246899824ade",
+  "sourceHead": "a4fc4658103b630a2ae527e8479ff66d7232dff3",
+  "runtime": {
+    "path": "reviews/audio-polish/before/raw/holding-runtime-audio.webm",
+    "sha256": "0ae83e712dca5baac1cabc305d8d7a0ce4c8a2205b260aca0b0ebe3d9978fd60",
+    "bytes": 2649070,
+    "wallSeconds": 28.4925,
+    "streams": [
+      {
+        "index": 0,
+        "codec": "vp9",
+        "type": "video",
+        "width": 844,
+        "height": 390,
+        "packetEndSeconds": 28.298000000000002
+      },
+      {
+        "index": 1,
+        "codec": "opus",
+        "type": "audio",
+        "sampleRate": "48000",
+        "channels": 2,
+        "packetEndSeconds": 28.415
+      }
+    ],
+    "decodePassed": true,
+    "meanDb": -36.6,
+    "peakDb": -22.4,
+    "processing": "No normalization, gain or replacement audio. MediaRecorder receives the existing runtime master stream directly."
+  },
+  "silentInterface": {
+    "path": "reviews/audio-polish/before/raw/holding-full-interface-silent.webm",
+    "sha256": "a8cf97a93fcd4e0e5e9cbe23f57890edd6f492a9bb30a8e27e9c2376a93f4bfc",
+    "audio": false,
+    "decodePassed": true
+  },
+  "observations": {
+    "actions": [
+      {
+        "id": "unload",
+        "location": "stone",
+        "turn": 1,
+        "transferPlayed": 1
+      },
+      {
+        "id": "map-shallows",
+        "location": "stone",
+        "turn": 2,
+        "transferPlayed": 0
+      },
+      {
+        "id": "map-rabbit-pier",
+        "location": "shallows",
+        "turn": 3,
+        "transferPlayed": 0
+      },
+      {
+        "id": "board",
+        "location": "rabbit-pier",
+        "turn": 4,
+        "transferPlayed": 2
+      },
+      {
+        "id": "undo-boundary",
+        "turn": 3
+      },
+      {
+        "id": "board",
+        "location": "rabbit-pier",
+        "turn": 4,
+        "transferPlayed": 2
+      },
+      {
+        "id": "map-shallows",
+        "location": "rabbit-pier",
+        "turn": 5,
+        "transferPlayed": 0
+      },
+      {
+        "id": "map-stone",
+        "location": "shallows",
+        "turn": 6,
+        "transferPlayed": 0
+      },
+      {
+        "id": "board",
+        "location": "stone",
+        "turn": 7,
+        "transferPlayed": 2
+      },
+      {
+        "id": "map-harbor",
+        "location": "stone",
+        "turn": 8,
+        "transferPlayed": 0
+      },
+      {
+        "id": "unload",
+        "location": "harbor",
+        "turn": 9,
+        "transferPlayed": 1
+      }
+    ],
+    "deliveryCount": 1,
+    "transferPlayed": 8,
+    "transferSkipped": 0,
+    "peakTransferSources": 2,
+    "peakOwnedSources": 15,
+    "droppedTones": 0,
+    "contexts": 1,
+    "schedulers": 1,
+    "masterStart": 0.6499999761581421,
+    "masterEnd": 0.6499999761581421,
+    "final": {
+      "turn": 9,
+      "tideLevel": 2,
+      "boatNodeId": "harbor",
+      "aboard": [],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "stone-pier": [],
+        "rabbit-pier": []
+      },
+      "delivered": [
+        "rabbit-1",
+        "rabbit-2",
+        "sheep-1"
+      ],
+      "status": "won",
+      "lossReason": null
+    },
+    "errors": []
+  },
+  "inspection": {
+    "images": [
+      "reviews/audio-polish/before/phone-start.png",
+      "reviews/audio-polish/before/phone-success.png"
+    ],
+    "nativeSize": "844x390",
+    "observation": "Start and success inspected at native size; unchanged accepted interface/framing visible. No new broad visual claim."
+  },
+  "listening": "No speaker/headphone acoustic listening capability established in this agent workflow. Runtime audio is captured for human listening; diagnostics and decoded sample levels do not establish perceived mix quality.",
+  "environment": {
+    "browser": "156.0.8078.4",
+    "node": "v24.15.0",
+    "platform": "win32",
+    "viewport": {
+      "width": 844,
+      "height": 390
+    },
+    "dpr": 1,
+    "input": "emulated touch",
+    "renderer": "SwiftShader",
+    "base": "http://127.0.0.1:5195"
+  }
+}

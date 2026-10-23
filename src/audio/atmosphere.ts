@@ -9,6 +9,7 @@ import {
 } from './score';
 import { arrangementForState, companionNote, type Arrangement } from './arrangement';
 import { makeWoodContact, type TransferContact } from './wood';
+import { arrivalPhrase, type ArrivalNote } from './arrival';
 import type { State } from '../game/rules';
 import type { Level } from '../levels/level';
 
@@ -56,6 +57,10 @@ export class Sound {
   private sourcesCreated = 0;
   private peakOwned = 0;
   private deliveryCount = 0;
+  private arrivalVoicesPlayed = 0;
+  private arrivalVoicesSkipped = 0;
+  private arrivalVoicesReclaimed = 0;
+  private lastArrival: { time: number; phase: number; notes: ArrivalNote[] } | null = null;
   private transferContacts = 0;
   private transferPlayed = 0;
   private transferSkipped = 0;
@@ -295,14 +300,18 @@ export class Sound {
     at: number,
     duration: number,
     strength: number,
-    voice: 'pad' | 'motif' | 'delivery' | 'companion',
+    voice: 'pad' | 'motif' | 'companion',
   ) {
     const context = this.context!;
-    if (this.owned.size > 28)
-      for (const [source, record] of this.owned) {
-        if (record.kind === 'transfer') this.stop(source, true);
-        if (this.owned.size <= 28) break;
-      }
+    for (const kind of ['effect', 'transfer'] as const)
+      if (this.owned.size > 28)
+        for (const [source, record] of this.owned) {
+          if (record.kind === kind) {
+            this.stop(source, true);
+            if (kind === 'effect') this.arrivalVoicesReclaimed++;
+          }
+          if (this.owned.size <= 28) break;
+        }
     if (this.owned.size > 28) {
       this.droppedTones++;
       return;
@@ -319,7 +328,7 @@ export class Sound {
     filter.type = 'lowpass';
     filter.Q.value = 0.45;
     filter.frequency.setValueAtTime(
-      voice === 'pad' ? 800 : voice === 'companion' ? 1100 : voice === 'delivery' ? 1300 : 2400,
+      voice === 'pad' ? 800 : voice === 'companion' ? 1100 : 2400,
       at,
     );
     filter.frequency.exponentialRampToValueAtTime(
@@ -327,7 +336,7 @@ export class Sound {
       at + Math.min(duration * 0.7, 2),
     );
     const attack = voice === 'pad' ? 1.6 : voice === 'companion' ? 0.12 : 0.018,
-      peak = strength * (voice === 'pad' ? 0.035 : voice === 'delivery' ? 0.14 : 0.105),
+      peak = strength * (voice === 'pad' ? 0.035 : 0.105),
       end = at + duration;
     gain.gain.setValueAtTime(0, at);
     gain.gain.linearRampToValueAtTime(peak, at + attack);
@@ -339,9 +348,9 @@ export class Sound {
     source.connect(filter);
     filter.connect(gain);
     gain.connect(panner);
-    panner.connect(voice === 'delivery' ? this.effects! : this.music!);
+    panner.connect(this.music!);
     this.own(source, {
-      kind: voice === 'delivery' ? 'effect' : voice === 'companion' ? 'companion' : 'music',
+      kind: voice === 'companion' ? 'companion' : 'music',
       nodes: [filter, gain, panner],
       endAt: end + 0.02,
       gain,
@@ -523,15 +532,52 @@ export class Sound {
   }
   delivery() {
     if (!this.enabled() || this.context?.state !== 'running') return;
-    for (const [source, record] of this.owned) if (record.kind === 'effect') this.stop(source);
-    const now = this.context.currentTime;
-    for (const [note, offset, strength] of [
-      [69, 0, 0.76],
-      [66, 0.32, 0.68],
-      [62, 0.78, 0.64],
-    ])
-      this.tone(note, now + offset, 3.4, strength, 'delivery');
+    for (const [source, record] of this.owned)
+      if (record.kind === 'effect') this.stop(source, true);
+    const now = this.context.currentTime,
+      elapsed = Math.max(0, now - this.epoch),
+      notes = arrivalPhrase(elapsed);
+    this.lastArrival = { time: now, phase: elapsed % phraseSeconds, notes };
+    for (const note of notes) this.arrivalVoice(note, now);
     this.deliveryCount++;
+  }
+  private arrivalVoice(note: ArrivalNote, now: number) {
+    if (this.owned.size >= 29) {
+      this.arrivalVoicesSkipped++;
+      return;
+    }
+    const context = this.context!,
+      source = context.createOscillator(),
+      filter = context.createBiquadFilter(),
+      gain = context.createGain(),
+      panner = context.createStereoPanner(),
+      at = now + note.offset,
+      end = at + note.duration;
+    source.setPeriodicWave(note.stage === 'answer' ? this.pluckWave! : this.padWave!);
+    source.frequency.value = frequency(note.note);
+    filter.type = 'lowpass';
+    filter.Q.value = 0.45;
+    filter.frequency.setValueAtTime(note.stage === 'answer' ? 1600 : 1050, at);
+    filter.frequency.exponentialRampToValueAtTime(650, end);
+    gain.gain.setValueAtTime(0, at);
+    gain.gain.linearRampToValueAtTime(note.peak, at + note.attack);
+    gain.gain.exponentialRampToValueAtTime(0.0001, end - 0.08);
+    gain.gain.linearRampToValueAtTime(0, end);
+    panner.pan.value = note.stage === 'answer' ? 0.1 : -0.05;
+    source.connect(filter);
+    filter.connect(gain);
+    gain.connect(panner);
+    panner.connect(this.effects!);
+    this.own(source, {
+      kind: 'effect',
+      nodes: [filter, gain, panner],
+      endAt: end,
+      gain,
+      stopping: false,
+    });
+    source.start(at);
+    source.stop(end);
+    this.arrivalVoicesPlayed++;
   }
   resetActionEffects() {
     this.clearActions(false);
@@ -592,6 +638,13 @@ export class Sound {
       travelActive: records.some((record) => record.kind === 'travel' && !record.stopping),
       arrivalActive: records.some((record) => record.kind === 'effect' && !record.stopping),
       deliveryCount: this.deliveryCount,
+      arrivalSources: records.filter((record) => record.kind === 'effect').length,
+      arrivalVoicesPlayed: this.arrivalVoicesPlayed,
+      arrivalVoicesSkipped: this.arrivalVoicesSkipped,
+      arrivalVoicesReclaimed: this.arrivalVoicesReclaimed,
+      lastArrival: this.lastArrival
+        ? { ...this.lastArrival, notes: this.lastArrival.notes.map((note) => ({ ...note })) }
+        : null,
       transferContacts: this.transferContacts,
       transferPlayed: this.transferPlayed,
       transferSkipped: this.transferSkipped,

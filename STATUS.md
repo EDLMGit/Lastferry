@@ -1,4 +1,16 @@
-# Current milestone — Wooden transfer contacts
+# Current milestone — Fuller wood and a gentle arrival
+
+2026-10-23: Started clean on `m1-first-crossing` at reviewed `a4fc4658103b630a2ae527e8479ff66d7232dff3`. Read AGENTS, the new parent NEXT_TASK, AUDIO and the transfer review; retained the new task in the checkout. Main remains `386de54d20fdd4a513a06115471d70bf94738cc0`; PR #1 stays draft. The owner-private Site was separately updated to the starting build; this task does not deploy the audio polish.
+
+Implemented fuller light/full wood buffers through slower body decay, useful damped middle resonances, softer grain/onset and a zero-ended tail. Fundamentals, peaks, all bus/contact gains, grouped scaling, two-source budget and accepted visual contact timing remain. Final visible unload now starts a three-stage, harmony-aware response immediately: warm opening, clear answer and gentle synthesized settlement, ending by 3.35 s. All victory tails are owned dry effects and cancel without cutting score reverb. New voices yield to score priority. The base composition/accompaniment, music clock, three puzzles, full Undo, interface, water and sailing pace are unchanged; the UI redesign remains a separate pass. No code comments or dependencies added.
+
+Production build/typecheck and 125/125 unit tests pass, including unchanged water tests and focused wood/envelope/harmony/ownership/priority checks. Three focused browser scenarios pass: actual normal rescue/subsets/partial Harbor delivery/tide Undo, mute/hide/reduced transfer lifecycle, and arrival at the 75-second return with tail Undo/redelivery/live mute. A clean-snapshot repeat of the new boundary check resolves a test-helper source-manifest change; exact provenance and final outcomes are in `reviews/audio-polish/REVIEW.md`. Original assertion failures and the independently reported baseline water timeout are retained; no unrelated timeout was loosened.
+
+Exact-baseline and final runtime captures each complete an uninterrupted UI rescue with tide Undo/replay, wooden boarding/temporary unloading and final arrival. Before/after run 28.49/28.87 seconds; no normalization or export gain. The after take plays seven contacts (one sheep settlement correctly stale), exactly one three-voice arrival, zero dropped score tones and no remaining action tails. Native 844×390 before/after start/success images inspected; unchanged earlier loading/tide/short-phone evidence reused. The after runtime hash is `d53af122f76cce2e0afdb8fc1177b2d77345fd1d0293bdf4d13958066b944d14`. Actual speaker/headphone listening and physical Android approval remain unavailable, with raw local recordings retained for the user's review. Stop after this audio milestone; usual push/draft-PR handoff supplies the final commit identity.
+
+## Historical wooden-transfer handoff
+
+# Wooden transfer contacts
 
 2026-10-22: Started clean on `m1-first-crossing` at reviewed `fa07368b803a992712a5126b85862c5b91dbcf3a`. Read AGENTS, the new parent NEXT_TASK, current AUDIO and selection review; retained this task in the checkout. Main remains `386de54d20fdd4a513a06115471d70bf94738cc0`; PR #1 remains draft. The existing private Sites playtest is a separate selection snapshot and is not deployed by this task.
 

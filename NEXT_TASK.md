@@ -1,79 +1,77 @@
-# Last Ferry — wooden transfer sounds and Android playtest
+# Last Ferry — fuller wooden contacts and a gentle arrival
 
-## Goal
+## Immediate task
 
-Give boarding and unloading a small, satisfying physical presence: quiet wooden taps as the animals cross onto or off the ferry. Preserve the accepted score, accompaniment, water, camera, location selection, sailing pace and all three puzzles.
+Refine the existing transfer sounds so they have more rounded body and weight, then give the final rescue a calm, rewarding musical response. This is the audio pass. The interface redesign is specified separately in `FOLLOWING_TASK_UI.md` and should wait for its own pass.
 
-The current game is already published for the user's private Android playtest:
+The owner-private Android playtest has already been updated to the reviewed starting build:
 
 https://last-ferry-playtest.abumech.chatgpt.site
 
-That deployment contains the current selection build, before this sound task. The user remains the playtester. Their first real-device observations should guide subsequent visual or performance work.
+Live game source: `a4fc4658103b630a2ae527e8479ff66d7232dff3`. It includes the first wooden contacts and the 780×320 viewport fix. It does not yet contain this new audio polish or the proposed visual interface.
 
-## Starting point and workflow
+## Workflow and scope
 
 - Repository: https://github.com/EDLMGit/Lastferry
-- Branch: `m1-first-crossing`; PR #1 remains draft.
-- Reviewed starting commit: `fa07368b803a992712a5126b85862c5b91dbcf3a`.
-- Use Node 24 and the existing architecture and dependencies.
-- Read `AGENTS.md`, the current `docs/AUDIO.md`, and the relevant selection review. Preserve any newer user work; do not reset a checkout to this SHA if it has advanced.
-- Implement, verify, commit and push normally to the existing branch, then update the existing draft PR with the review handoff. Do not merge or alter main.
+- Branch: `m1-first-crossing`; keep PR #1 draft and main unchanged.
+- Reviewed starting SHA: `a4fc4658103b630a2ae527e8479ff66d7232dff3`.
+- Use Node 24, the existing Web Audio graph and existing dependencies.
+- Read `AGENTS.md`, `docs/AUDIO.md`, `reviews/transfer-audio/REVIEW.md` and the current audio/transfer implementation.
+- Preserve newer user work if the branch has advanced. Do not reset to the starting SHA.
+- Complete this scoped implementation and verification, commit/push normally, update the existing draft PR and return a handoff. No merge or force push.
 
-Complete the scoped work autonomously. Make routine implementation and mix choices without requesting repeated approval.
+The user's new instruction explicitly authorizes changing the arrival sound. Older task language that preserved the original arrival phrase no longer freezes that effect. The accepted 75-second base composition, accompaniment, score clock, puzzles, water, scene, selection behavior and sailing pace remain preserved.
 
-## Creative direction
+## 1. Wooden contact: more body, with a restrained transient
 
-The boat should feel like a little wooden object carrying living passengers. Use a soft contact with a rounded body, followed where the motion supports it by a quieter settling tap. A rabbit may be lighter and a sheep slightly lower and fuller; use that distinction only if it improves the actual mix.
+Target a rounded wooden contact that feels connected to the weight of a passenger. The beginning should remain precise enough to match visible contact, with a fuller lower body that decays naturally. The quieter deck-settling answer should remain distinct. Rabbits can be lighter; the sheep slightly fuller.
 
-The sounds should be audible at a comfortable phone-speaker volume beneath the music. Keep them brief and dry, with just enough space to belong in the cove. Avoid sharp interface clicks, exaggerated creaks, cartoon animal voices, continuous footsteps, or another musical reward. The existing Harbor arrival phrase already provides the emotional resolution.
+Current source in `src/audio/wood.ts` uses 165/225 Hz bodies, 190/145 ms buffers and body decay constants of 31/41 per second. Start by shaping the body, decay and useful upper resonances. Then make a modest level adjustment if the actual mix still needs it. Do not achieve the request by only lowering pitch or raising the whole effects bus.
 
-Tune by listening to the actual runtime mix. An original procedural effect using the existing audio graph is a good fit. Use cached resources and bounded short-lived voices; no new dependency or large audio framework is needed.
+The intended weight should survive a phone speaker at comfortable volume. Reinforce the useful harmonics as needed instead of depending on very deep bass. This is an authoring choice, not a request for a virtual-bass processor. Keep the sound wooden and brief; avoid a kick-drum impression, abrasive click, rattling tail or exaggerated creak.
 
-## Source findings to act on
+Preserve the existing cached light/full buffers, grouped level handling and at-most-two transfer-source budget. The already accepted timeline positions, stale-event windows and reduced-motion policy should remain unchanged. Do not add animation delays or extra contact events solely to make the sound more noticeable.
 
-At the reviewed commit, `src/main.ts` calls `sound.play()` for ordinary boarding/unloading from `world.onPresentationStart`, but `src/audio/atmosphere.ts` only handles `move` and `arrival`. The transfer actions therefore produce no sound. Final unloading is deliberately excluded from that start callback, so handling only those existing calls would miss the final delivery.
+## 2. Arrival: a small musical moment of relief
 
-The committed state changes before the animation. The actual passenger transfer paths live in `src/scene/world.ts`, around the branch that animates passengers whose aboard membership changed. Use that visual timeline to emit a small contact cue at meaningful progress points. Do not bind the wooden sound to Confirm, the reducer, or a generic state change.
+The current `delivery()` uses three fixed A4–F#4–D4 plucks, at 0/0.32/0.78 seconds, independently of the current harmony. That is the implementation baseline, not a claim that an audible harmonic defect was heard.
 
-Normal transfers last 520 ms, final unloading 900 ms, and reduced-motion actions 30 ms in the reviewed timing definitions. Derive contact timing from the actual transition rather than duplicating wall-clock delays. Reduced motion should have one quiet compact cue, not a compressed burst of footsteps.
+Create a concise response with three perceptual stages: a soft warm opening, a clear melodic answer, then a gentle settling tail. It should feel rewarding and calm. Use the existing musical palette, a gentler envelope and a purposeful voicing. Keep its overall footprint to a few seconds and allow play/menu/Undo to remain responsive. No fanfare, heavy impact, voice, percussion or new music loop is needed.
 
-Passengers currently transfer concurrently. Combine near-simultaneous contacts or bound their total level so a group does not multiply the loudness. Do not change the animation or stagger passengers solely to serve the new sound.
+Keep the initial acknowledgment tied to the existing visible final-unloading event. Do not defer the whole response until a later beat or restart the base score. A small authored voicing choice derived from the current harmony is enough. Account for the preceding pad's release and the next cell near a boundary, including the phrase return. The companion's boundary-aware pitch logic in `src/audio/arrangement.ts` is a useful existing pattern; no general composition engine is needed.
 
-## Implementation requirements
+Arrival may change timbre, notes, envelope and its own mix. Preserve the accepted base score and accompaniment content, their clock and ordinary gains. Keep transfer tails independent from arrival ownership and maintain score priority.
 
-1. Cover boarding, temporary unloading at a holding pier, partial unloading, partial Harbor delivery and final Harbor delivery. Only the selected passengers actually transferring should contribute.
-2. Place wood contacts while the animal crosses or settles on the wooden surfaces. Do not continue wooden steps after the animal reaches land.
-3. Consume each visual contact once, including while muted. Unmuting must not replay missed contacts. A delayed frame or visibility recovery must not produce a catch-up burst.
-4. Use the existing `Sound` instance, effects routing, master mute and owned-source cleanup. Do not add another AudioContext, music clock or interval scheduler.
-5. Preserve the existing delivery timing and phrase. At present `delivery()` clears all sources tagged `effect`, and `arrivalActive` also treats that category as arrival. Refine ownership narrowly if necessary so arrival cannot accidentally truncate transfer sounds, transfer sounds do not masquerade as arrival, and cancellation can still stop both. Do not redesign the whole mixer.
-6. Keep the new voices bounded and promptly released. The existing score has an owned-source limit; transfer effects must not cause score notes to be dropped or accumulate after repeated actions.
-7. Integrate with Undo, Restart, interrupted/recovered transitions, live mute, tab hiding and teardown. Undo restores the scene silently. Repeating a real transfer after Undo plays its cues once again. Cancelling a preview produces no transfer cue.
-8. Free selection, hovering, passenger-subset changes, invalid actions and opening dialogs remain silent with respect to these contact sounds.
+Be careful with ambience: sending victory into the shared music reverb can leave a victory tail after Undo even when its source is stopped. Prefer a bounded synthesized tail, or a narrowly owned wet path that can be cancelled without cutting the score's reverb. Use AudioContext-time envelopes and the existing cancellation architecture; no new interval scheduler or AudioContext.
 
-## Android scope
+## Lifecycle and correctness
 
-Do not wait for physical-phone access to implement the sound task. Do not claim an Android pass without an actual device test.
+- Only final delivery plays victory; partial Harbor delivery does not. Final delivery plays once, and a real redelivery after Undo may play once again.
+- Transfer selection, contact timing, bounded concurrent voices and release behavior remain intact. No wood cue on selection, previews, passenger toggles, cancelled actions, invalid input or state restoration.
+- Preserve live mute, tab hiding, interrupted/recovered presentation, Undo, Restart and teardown. No queued catch-up contacts or leftover victory notes/tails after cancellation.
+- Reduced motion keeps the single compact transfer cue and exactly-once arrival behavior.
+- The base music remains continuous. New voices cannot evict score notes or accumulate across repeated rescues.
 
-There are two known verification gaps to keep explicit:
+## Verification and listening
 
-- Existing phone screenshots and timings use 780×390 or 844×390 at DPR 1. Real browser bars, display cutouts and display density differ.
-- `.game` currently has `min-height: 360px` with a non-scrolling body. Check one shorter landscape viewport, such as 780×320, alongside the established phone size. Confirm the lower forecast, location actions and modal controls stay reachable. There is no safe-area inset padding despite `viewport-fit=cover`.
+1. Run production build/typecheck and the unit suite. Extend the existing audio tests for actual new envelope/ownership/harmony-boundary failure modes. Current timbre assertions include a 0.2-second buffer cap and 0.8 normalized peak; change a design-specific assertion deliberately if the chosen sound requires it, while preserving boundedness, timing and cancellation checks.
+2. Exercise actual UI boarding, temporary unloading, selected subsets, partial Harbor delivery and final unloading. Keep tide Undo/replay, terminal Undo/redelivery, reduced motion and mute/hide coverage focused on the changed audio.
+3. Check the arrival response over early, middle and near-boundary positions of the existing phrase. Include the phrase return and cancellation during its tail. Deterministic pitch/envelope checks support this; they do not establish subjective quality.
+4. Listen to the actual runtime mix if available. Keep a short before/after capture covering wooden boarding, temporary unloading and final arrival. Preserve true playback level so an apparent improvement is not only an export-normalization difference. If speaker listening is unavailable, state that plainly and retain runtime audio for the user.
+5. The user is the physical Android playtester. Phone speaker balance is the main target; headphones provide a second check. Do not claim device or audible approval from mocks, signal levels or source counters.
+6. Reuse unrelated verified visual/layout coverage when its source is unchanged. Do not launch another broad visual/performance campaign without a concrete regression. Keep original failures and corrected results separately identified.
 
-If this focused check reproduces clipping, make the smallest layout correction and verify it against the existing phone size. If the user supplies an actual phone problem, reproduce and fix that concrete issue. Otherwise preserve the interface and record the remaining device gap. Do not introduce speculative graphics settings, new shader effects, a PWA, offline caching, service workers or a native wrapper in this task.
-
-## Verification proportional to this change
-
-- Run the production build/typecheck and the unit suite. Extend the relevant audio/transition tests only where they protect a real new failure mode.
-- Exercise actual UI boarding, temporary unloading and final Harbor unloading, including a passenger subset, one Undo/replay and reduced motion. Confirm contact events occur at most once and are tied to actual presentation rather than preview/commit.
-- Check live mute and a hidden/interrupted transition for stale sounds, then verify source counts settle back after tails. Preserve the musical clock and delivery behavior.
-- Complete one real-interface rescue and an Undo across a tide rise. Use the established phone landscape size plus the one short-viewport check if browser tooling permits.
-- Listen to the actual mix. If recording is available, retain a short gameplay clip with runtime audio that includes boarding, holding-pier unloading and Harbor delivery. A silent recording or a synthetic oscillator trace is not listening evidence. Report an unavailable capture/listening capability honestly.
-- Do not rerun unrelated broad visual or performance campaigns unless a concrete regression warrants them. Retain original failures and their actual status; do not label an incomplete suite as fully passing.
+The independent review of the current baseline compiled successfully. Its full unit run passed 110 tests and timed out once in the unchanged water suite; that complete seven-test file passed on an isolated rerun. Do not change water or loosen unrelated timeout assertions as part of this sound task.
 
 ## Handoff
 
-Update `docs/AUDIO.md` and `STATUS.md` as needed. Put a compact report under `reviews/transfer-audio/` identifying source SHA, changed behavior, exact checks, audio evidence and limits. Keep raw media out of Git, as before.
+Update `docs/AUDIO.md`, `STATUS.md` and a compact report under `reviews/audio-polish/`. State actual sound choices, source SHA, exact checks, listening result and limitations. Keep raw media local/ignored as before. Return the pushed SHA and draft PR URL.
 
-The handoff must include the pushed SHA, draft PR URL, current rules/music preservation, actual listening outcome, and any phone-specific issue observed. Include the actual phone model/browser only if a physical test occurred.
+GitHub remains the source of the game. The private Site is a separately deployed snapshot; do not create another Site or claim the new sounds are live merely because GitHub was pushed. After review, update the same URL through the existing Sites project.
 
-The existing Sites deployment is managed separately as a snapshot of reviewed GitHub commits. Do not create another Site or maintain a separate gameplay fork. After this handoff is reviewed, the same playtest URL can be updated to the new source. Do not describe the current live URL as containing these new sounds until that deployment has succeeded.
+## Technical references
+
+- [AES / Philips Research: Perceiving Low Pitch through Small Loudspeakers](https://aes.org/publications/elibrary-page/?id=9187): supports perceived-bass techniques for small speakers. It does not prescribe a frequency or mix for this game.
+- [W3C Web Audio API, AudioParam](https://www.w3.org/TR/webaudio-1.0/#AudioParam): scheduling and cancellation of envelopes on the audio timeline.
+
+Sound character, timing feel and musical shape are our design decisions and require listening.

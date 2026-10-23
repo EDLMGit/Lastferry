@@ -62,7 +62,10 @@ const paths = [
     : []),
   ...walk('tools/').filter(
     (path) =>
-      path.includes('refinement') || path.includes('selection') || path.includes('transfer'),
+      path.includes('refinement') ||
+      path.includes('selection') ||
+      path.includes('transfer') ||
+      path.includes('audio-polish'),
   ),
 ].sort();
 const files = Object.fromEntries(paths.map((p) => [p, digest(readFileSync(new URL(p, root)))]));

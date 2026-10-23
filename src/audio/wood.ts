@@ -6,12 +6,12 @@ export type TransferContact = {
 };
 
 export function makeWoodContact(context: BaseAudioContext, weight: TransferContact['weight']) {
-  const duration = weight === 'full' ? 0.19 : 0.145,
+  const duration = weight === 'full' ? 0.27 : 0.22,
     buffer = context.createBuffer(1, Math.ceil(duration * context.sampleRate), context.sampleRate),
     samples = buffer.getChannelData(0),
     fundamental = weight === 'full' ? 165 : 225,
-    decay = weight === 'full' ? 31 : 41,
-    smoothing = 1 - Math.exp((-2 * Math.PI * 1250) / context.sampleRate);
+    decay = weight === 'full' ? 20 : 28,
+    smoothing = 1 - Math.exp((-2 * Math.PI * 1050) / context.sampleRate);
   let seed = weight === 'full' ? 173 : 311,
     grain = 0,
     peak = 0;
@@ -19,13 +19,15 @@ export function makeWoodContact(context: BaseAudioContext, weight: TransferConta
     const t = i / context.sampleRate;
     seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
     grain += smoothing * ((seed / 0xffffffff) * 2 - 1 - grain);
-    const attack = 1 - Math.exp(-t / 0.0035),
-      tail = Math.min(1, (duration - t) / 0.024),
+    const attack = 1 - Math.exp(-t / 0.005),
+      remaining = (samples.length - 1 - i) / context.sampleRate,
+      tail = 0.5 - 0.5 * Math.cos(Math.PI * Math.min(1, remaining / 0.04)),
       body =
         Math.sin(2 * Math.PI * fundamental * t) * Math.exp(-decay * t) +
-        0.45 * Math.sin(2 * Math.PI * fundamental * 2.31 * t) * Math.exp(-decay * 1.55 * t) +
-        0.16 * Math.sin(2 * Math.PI * fundamental * 4.17 * t) * Math.exp(-decay * 2.7 * t);
-    samples[i] = attack * tail * (body * 0.72 + grain * 0.34 * Math.exp(-t * 74));
+        0.62 * Math.sin(2 * Math.PI * fundamental * 2.19 * t) * Math.exp(-decay * 1.12 * t) +
+        0.24 * Math.sin(2 * Math.PI * fundamental * 3.71 * t) * Math.exp(-decay * 1.7 * t) +
+        0.09 * Math.sin(2 * Math.PI * fundamental * 5.13 * t) * Math.exp(-decay * 2.4 * t);
+    samples[i] = attack * tail * (body * 0.72 + grain * 0.16 * Math.exp(-t * 90));
     peak = Math.max(peak, Math.abs(samples[i]));
   }
   if (peak > 0) for (let i = 0; i < samples.length; i++) samples[i] *= 0.8 / peak;
