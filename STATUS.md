@@ -1,3 +1,19 @@
+# Current milestone — Harbor homecoming
+
+2026-10-23: Started clean on `m1-first-crossing` at reviewed `c82ba896e690c82b731f63dc1fba0a6380ef61e1`, Node 24.15.0. Read AGENTS and the supplied parent PROJECT_STATE/homecoming task and retained them in the checkout. Preserved accepted audio, puzzles, water, sailing and interface. No newer or unrelated work was present. Main remains `386de54d20fdd4a513a06115471d70bf94738cc0`; PR #1 stays draft.
+
+Implemented one bounded slow amber lighthouse sweep from the existing visible-arrival hook; a one-off 1.3-second rabbit/sheep acknowledgment after canonical disembarkation; and a one-second fit-checked orthographic Harbor push. Actual comparison retains 9% at 1440×900, 844×390 and 780×390; 780×320 intentionally keeps ordinary framing. Reduced motion gives steady light, canonical poses and no camera movement. Undo restores normal projection and water view before input, then rebuilds map controls. Post-busy hide and simulated context recovery settle finite visuals without replay.
+
+The compact ending retains genuine Holding→Bellwater progression; other coves offer Choose a cove. Settings, Undo, Restart and Close remain available without an added busy lock. Menu→Return to arrival does not replay the celebration/audio. Shared Sound/Motion Settings uses the same native dialog: Follow device or persisted Reduced, one effective scene/CSS preference, sensible focus and Back/Escape origin recovery. Accepted sound, gameplay, assets and scene timing content are unchanged in a 26-file content comparison.
+
+Fresh production build/typecheck and **153/153 unit tests** pass. **14 distinct focused browser cases** pass: eight new homecoming cases plus six accepted audio/production regressions; two expanded homecoming cases and final rebuilt production were additionally rerun (3/3). Actual UI finishes all three coves, exercises subset/tide/terminal Undo, finite cancellation, redelivery, Settings persistence/OS preference, natural keyboard and touch emulation, short-phone fitting, picking restoration and loss without celebration. Stable repeat-win resource counts; one beam object/six textures. Original unit failures and interrupted/HMR browser evidence are preserved and explained.
+
+Evidence: [review](reviews/homecoming/REVIEW.md), 118-file source hash `96c878bfee197ea3b08675119a99da15cf34ebeba356683dad4c496e59fde4d4`, 25 primary native gameplay PNGs plus final-desktop/recording evidence. Uninterrupted actual UI rescue→Settings→Back→Undo→redelivery captured: 45.002s runtime audio/canvas and separate 46.92s silent full-interface video, local/ignored. Temporal samples/native frames show a roughly 20.39-second sweep revolution and settled canonical offsets. No acoustic listening or physical-phone performance claim.
+
+Implementation complete for the exercised coverage; final SHA and remote audit follow in the PR/handoff. The private Site **still contains c82ba89**; this new pass will be published separately after review. Physical Android, other engines, actual context loss, speaker listening and prior software-renderer/bundle limits remain. Stop after this pass; extra ideas stay queued.
+
+## Historical victory-mix handoff
+
 # Current milestone — Clear victory and quieter ending
 
 2026-10-23: Started clean on `m1-first-crossing` at reviewed `c5f4ae110973aa352d15028ba9d8c857a4270f6b`, using Node 24.15.0. Read AGENTS, the new parent `NEXT_TASK_VICTORY.md` (retained here), AUDIO, prior reports and actual final-unload callbacks. The accepted interface and wood are preserved. Main remains `386de54d20fdd4a513a06115471d70bf94738cc0`; PR #1 stays draft. The private Site still contains c5f4ae1; deployment is separate and pending review.

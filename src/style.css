@@ -291,7 +291,8 @@ dialog::backdrop {
 }
 #commit,
 #next-cove,
-#terminal-undo {
+#choose-cove,
+dialog[data-outcome='lost'] #terminal-undo {
   background: #32676b;
   color: var(--text);
   border-color: var(--foam);
@@ -303,6 +304,41 @@ dialog::backdrop {
 }
 .terminal-actions {
   flex-wrap: wrap;
+}
+dialog[data-mode='terminal'][data-outcome='won'] {
+  width: min(344px, calc(100vw - 16px));
+  bottom: 24px;
+}
+dialog[data-mode='terminal'][data-outcome='won'] .terminal-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+.terminal-actions button,
+.settings-body button,
+.settings-row select,
+#settings-back {
+  min-height: 48px;
+  white-space: normal;
+}
+.settings-row {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+.settings-row select {
+  min-width: 0;
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--text);
+  background: var(--surface);
+  font: inherit;
+}
+#motion-status {
+  color: var(--muted);
 }
 .ending {
   padding: 6px 0;
@@ -717,6 +753,9 @@ details p {
     inset: auto 8px 8px auto;
     max-height: calc(100svh - 16px);
   }
+  dialog[data-mode='terminal'][data-outcome='won'] {
+    bottom: 8px;
+  }
   dialog[data-side='left'] {
     left: 8px;
     right: auto;
@@ -797,11 +836,9 @@ details p {
     gap: 10px;
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation: none !important;
-    transition: none !important;
-  }
+html[data-motion='reduced'] *,
+html[data-motion='reduced'] *::before,
+html[data-motion='reduced'] *::after {
+  animation: none !important;
+  transition: none !important;
 }

@@ -4,6 +4,9 @@ import type { lighthouse } from './models';
 export class CrossingEffects {
   wake: T.Mesh;
   glow: T.Sprite;
+  sweep = new T.Group();
+  sweepPhase = 0;
+  sweepLastTime: number | null = null;
   points: { position: T.Vector3; time: number }[] = [];
   emitting = false;
   arrivalStarted: number | null = null;
@@ -75,6 +78,35 @@ export class CrossingEffects {
     this.glow.position.copy(home.anchor.getWorldPosition(new T.Vector3()));
     this.glow.scale.set(1.1, 1.1, 1);
     this.glow.userData.excludeFromFrame = true;
+    const beam = new T.Mesh(
+      new T.CylinderGeometry(0.82, 0.035, 4.8, 20, 8, true),
+      new T.ShaderMaterial({
+        transparent: true,
+        depthWrite: false,
+        side: T.DoubleSide,
+        forceSinglePass: true,
+        uniforms: { strength: { value: 0.14 } },
+        vertexShader:
+          'varying vec2 beamUv;void main(){beamUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
+        fragmentShader: `uniform float strength;varying vec2 beamUv;
+          void main(){
+            float reach=smoothstep(0.,.08,beamUv.y)*(1.-smoothstep(.3,1.,beamUv.y));
+            float feather=.45+.55*pow(abs(cos(beamUv.x*6.2831853)),3.);
+            gl_FragColor=vec4(1.,.67,.27,strength*reach*feather);
+            #include <tonemapping_fragment>
+            #include <colorspace_fragment>
+          }`,
+      }),
+    );
+    beam.rotation.z = -Math.PI / 2;
+    beam.position.x = 2.4;
+    beam.name = 'harbor-amber-sweep';
+    beam.raycast = () => {};
+    this.sweep.add(beam);
+    this.sweep.position.copy(home.lens.getWorldPosition(new T.Vector3()));
+    this.sweep.name = 'harbor-homecoming-beam';
+    this.sweep.userData.excludeFromFrame = true;
+    this.sweep.userData.decorative = true;
     this.lamp = home.lamp;
     this.lampBase = home.lamp.intensity;
     this.lens = home.lens.material as T.MeshStandardMaterial;
@@ -89,6 +121,11 @@ export class CrossingEffects {
     this.arrivalStarted = null;
     this.arrivalIntensity = 0;
     this.resting = false;
+    this.reduced = false;
+    this.sweep.visible = false;
+    this.sweepPhase = 0;
+    this.sweepLastTime = null;
+    this.sweep.rotation.y = 0;
     this.glow.visible = true;
     this.glow.material.opacity = 0.08;
     if (this.lamp) this.lamp.intensity = this.lampBase;
@@ -97,12 +134,14 @@ export class CrossingEffects {
   arrive(time: number, reduced: boolean) {
     if (this.arrivalStarted === null) this.arrivalStarted = time;
     this.reduced = reduced;
+    this.sweep.visible = true;
   }
   settle(reduced: boolean) {
     this.reset();
     this.resting = true;
     this.reduced = reduced;
     this.arrivalIntensity = reduced ? 0.45 : 0.27;
+    this.sweep.visible = true;
     this.applyLight();
   }
   private applyLight() {
@@ -176,6 +215,13 @@ export class CrossingEffects {
       this.arrivalIntensity = reduced ? 0.45 : 0.27 + 0.55 * Math.exp(-elapsed / 1100);
       this.applyLight();
     }
+    if (this.sweep.visible) {
+      if (!reduced && this.sweepLastTime !== null)
+        this.sweepPhase +=
+          (Math.min(100, Math.max(0, time - this.sweepLastTime)) / 20000) * Math.PI * 2;
+      this.sweepLastTime = time;
+      this.sweep.rotation.y = reduced ? 0.45 : this.sweepPhase;
+    }
   }
   presentation() {
     const count = this.wake.geometry.drawRange.count;
@@ -206,6 +252,13 @@ export class CrossingEffects {
         emissiveIntensity: this.lens?.emissiveIntensity ?? null,
         glowVisible: this.glow.visible,
         glowOpacity: this.glow.material.opacity,
+        sweep: {
+          visible: this.sweep.visible,
+          angle: this.sweep.rotation.y,
+          reduced: this.reduced,
+          startedAt: this.arrivalStarted,
+          drawObjects: this.sweep.children.length,
+        },
       },
     };
   }

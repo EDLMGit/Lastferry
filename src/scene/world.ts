@@ -12,6 +12,12 @@ import { CrossingEffects } from './effects';
 import { contactMaterial } from './contact';
 import { TransferTimeline, type TransferCue } from './transfer';
 import {
+  acknowledgmentPose,
+  HomecomingTimeline,
+  rectanglesOverlap,
+  type HomecomingRectangle,
+} from './homecoming';
+import {
   journeyTiming,
   settlingProgress,
   transitionPlan,
@@ -57,7 +63,16 @@ export class World {
   home!: ReturnType<typeof lighthouse>;
   contactMeshes: T.Mesh<T.BufferGeometry, T.MeshStandardMaterial>[] = [];
   journeyFrame: { progress: number; distance: number; tangent: T.Vector3 } | null = null;
-  reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  reduced = false;
+  homecoming = new HomecomingTimeline();
+  completionBounds: HomecomingRectangle | null = null;
+  canonicalFrame: HomecomingRectangle | null = null;
+  homecomingCameraFactor = 1;
+  homecomingCameraTarget = 1;
+  homecomingCameraFallback = 'ordinary';
+  homecomingCameraSuppressed = false;
+  cameraRevision = 0;
+  homecomingFocus = new T.Vector2();
   timing: JourneyTiming = journeyTiming;
   disposed = false;
   frameRequest = 0;
@@ -278,7 +293,7 @@ export class World {
       this.registerPlace(n.id, 'waypoint', g);
     }
     this.effects = new CrossingEffects(this.home);
-    this.scene.add(this.effects.wake, this.effects.glow);
+    this.scene.add(this.effects.wake, this.effects.glow, this.effects.sweep);
     this.forecast = this.shores.forecast;
     this.scene.add(this.forecast);
     this.boatRoot.add(this.hull);
@@ -323,9 +338,7 @@ export class World {
     this.renderer.domElement.addEventListener('webglcontextlost', (ev) => {
       ev.preventDefault();
       this.cancel();
-    });
-    matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', (e) => {
-      this.reduced = e.matches;
+      this.settleHomecoming('context-loss');
     });
     this.frameRequest = requestAnimationFrame((t) => this.tick(t));
   }
@@ -630,8 +643,192 @@ export class World {
     this.camera.right = centerX + w / scale / 2;
     this.camera.top = centerY + h / scale / 2;
     this.camera.bottom = centerY - h / scale / 2;
+    this.canonicalFrame = {
+      left: this.camera.left,
+      right: this.camera.right,
+      top: this.camera.top,
+      bottom: this.camera.bottom,
+    };
     this.camera.updateProjectionMatrix();
     this.coastalWater.setView(this.camera);
+    this.cameraRevision++;
+    if (this.homecoming.active) {
+      this.homecomingCameraFactor = 1;
+      this.fitHomecomingCamera();
+      this.applyHomecomingCamera(this.homecomingCameraTarget);
+    }
+  }
+  setReducedMotion(reduced: boolean) {
+    if (this.reduced === reduced) return;
+    this.reduced = reduced;
+    if (reduced) {
+      if (this.transition) this.cancel();
+      this.homecomingCameraSuppressed = true;
+      this.settleHomecoming('reduced-motion');
+      this.restoreCamera();
+    }
+    this.coastalWater.update(this.water.position.y, reduced ? 0 : this.lastTime * 0.001);
+  }
+  setCompletionBounds(bounds: HomecomingRectangle | null) {
+    const previous = this.completionBounds;
+    this.completionBounds = bounds ? { ...bounds } : null;
+    if (
+      this.homecoming.active &&
+      (previous?.left !== bounds?.left ||
+        previous?.right !== bounds?.right ||
+        previous?.top !== bounds?.top ||
+        previous?.bottom !== bounds?.bottom)
+    ) {
+      this.fitHomecomingCamera();
+      if (!this.homecoming.finite) this.applyHomecomingCamera(this.homecomingCameraTarget);
+    }
+  }
+  restoreCamera() {
+    if (!this.canonicalFrame) return;
+    const changed =
+      this.camera.left !== this.canonicalFrame.left ||
+      this.camera.right !== this.canonicalFrame.right ||
+      this.camera.top !== this.canonicalFrame.top ||
+      this.camera.bottom !== this.canonicalFrame.bottom;
+    Object.assign(this.camera, this.canonicalFrame);
+    this.homecomingCameraFactor = 1;
+    if (changed) {
+      this.camera.updateProjectionMatrix();
+      this.coastalWater.setView(this.camera);
+      this.cameraRevision++;
+    }
+  }
+  resetHomecoming() {
+    this.homecoming.reset();
+    this.homecomingCameraSuppressed = false;
+    this.homecomingCameraTarget = 1;
+    this.homecomingCameraFallback = 'ordinary';
+    this.completionBounds = null;
+    this.restoreCamera();
+  }
+  beginHomecoming(time: number) {
+    if (!this.homecoming.start(time, this.reduced)) return;
+    this.homecomingCameraSuppressed = this.reduced;
+    this.fitHomecomingCamera();
+  }
+  private fitHomecomingCamera() {
+    this.homecomingCameraTarget = 1;
+    if (!this.canonicalFrame || !this.homecoming.active) return;
+    if (this.reduced || this.homecomingCameraSuppressed) {
+      this.homecomingCameraFallback = this.reduced ? 'reduced-motion' : 'settled-without-replay';
+      return;
+    }
+    if (this.host.clientHeight <= 320) {
+      this.homecomingCameraFallback = 'short-phone';
+      return;
+    }
+    if (!this.completionBounds) {
+      this.homecomingCameraFallback = 'awaiting-card';
+      return;
+    }
+    this.scene.updateMatrixWorld(true);
+    const boxes = [this.home.group, this.boatRoot, ...this.animals.values()].map((object) =>
+      new T.Box3().setFromObject(object),
+    );
+    for (const box of boxes.slice(2)) box.max.y += 0.2;
+    const harbor = new T.Box3();
+    for (const box of boxes) harbor.union(box);
+    const focus = harbor.getCenter(new T.Vector3()).applyMatrix4(this.camera.matrixWorldInverse);
+    this.homecomingFocus.set(focus.x, focus.y);
+    const candidate = this.camera.clone();
+    const w = this.host.clientWidth,
+      h = this.host.clientHeight;
+    for (const factor of [1.09, 1.07, 1.05, 1.03, 1.015]) {
+      this.assignHomecomingFrame(candidate, factor);
+      candidate.updateProjectionMatrix();
+      const fits = boxes.every((box) => {
+        const points: T.Vector3[] = [];
+        for (const x of [box.min.x, box.max.x])
+          for (const y of [box.min.y, box.max.y])
+            for (const z of [box.min.z, box.max.z])
+              points.push(new T.Vector3(x, y, z).project(candidate));
+        const projected = {
+          left: Math.min(...points.map((point) => ((point.x + 1) * w) / 2)),
+          right: Math.max(...points.map((point) => ((point.x + 1) * w) / 2)),
+          top: Math.min(...points.map((point) => ((1 - point.y) * h) / 2)),
+          bottom: Math.max(...points.map((point) => ((1 - point.y) * h) / 2)),
+        };
+        return (
+          projected.left >= 16 &&
+          projected.right <= w - 16 &&
+          projected.top >= (h <= 600 ? 70 : 104) &&
+          projected.bottom <= h - 16 &&
+          !rectanglesOverlap(projected, this.completionBounds!, 10)
+        );
+      });
+      if (fits) {
+        this.homecomingCameraTarget = factor;
+        this.homecomingCameraFallback = factor === 1.09 ? 'none' : 'clamped-to-fit';
+        return;
+      }
+    }
+    this.homecomingCameraFallback = 'card-or-subject-fit';
+  }
+  private assignHomecomingFrame(camera: T.OrthographicCamera, factor: number) {
+    if (!this.canonicalFrame) return;
+    const base = this.canonicalFrame,
+      width = (base.right - base.left) / factor,
+      height = (base.top - base.bottom) / factor,
+      centerX =
+        this.homecomingFocus.x + ((base.left + base.right) / 2 - this.homecomingFocus.x) / factor,
+      centerY =
+        this.homecomingFocus.y + ((base.top + base.bottom) / 2 - this.homecomingFocus.y) / factor;
+    camera.left = centerX - width / 2;
+    camera.right = centerX + width / 2;
+    camera.top = centerY + height / 2;
+    camera.bottom = centerY - height / 2;
+  }
+  private applyHomecomingCamera(factor: number) {
+    if (factor === this.homecomingCameraFactor) return;
+    this.assignHomecomingFrame(this.camera, factor);
+    this.homecomingCameraFactor = factor;
+    this.camera.updateProjectionMatrix();
+    this.coastalWater.setView(this.camera);
+    this.cameraRevision++;
+  }
+  settleHomecoming(reason = 'recovery') {
+    if (this.homecoming.finite && this.homecomingCameraTarget === 1)
+      this.homecomingCameraSuppressed = true;
+    this.homecoming.settle(reason);
+    for (const [id, animal] of this.animals) {
+      if (!this.state.delivered.includes(id)) continue;
+      animal.position.copy(this.passengerPos(id, this.state));
+      animal.rotation.set(0, 0, 0);
+    }
+    if (this.homecoming.active) {
+      this.fitHomecomingCamera();
+      this.applyHomecomingCamera(this.reduced ? 1 : this.homecomingCameraTarget);
+    }
+  }
+  private updateHomecoming(time: number) {
+    if (!this.homecoming.active || this.state.status !== 'won') return;
+    this.homecoming.update(time);
+    const elapsed = this.homecoming.elapsed(time);
+    for (const [id, animal] of this.animals) {
+      if (!this.state.delivered.includes(id)) continue;
+      animal.position.copy(this.passengerPos(id, this.state));
+      animal.rotation.set(0, 0, 0);
+      if (this.homecoming.finite && !this.reduced) {
+        const passenger = this.level.passengers.find((passenger) => passenger.id === id)!;
+        const pose = acknowledgmentPose(
+          passenger.species,
+          this.level.passengers.indexOf(passenger),
+          elapsed,
+        );
+        animal.position.y += pose.height;
+        animal.rotation.x = pose.pitch;
+      }
+    }
+    if (this.homecomingCameraSuppressed || this.reduced) this.applyHomecomingCamera(1);
+    else {
+      const progress = this.homecoming.finite ? smooth(Math.min(1, elapsed / 1000)) : 1;
+      this.applyHomecomingCamera(1 + (this.homecomingCameraTarget - 1) * progress);
+    }
   }
   speciesIndex(id: string) {
     const passenger = this.level.passengers.find((passenger) => passenger.id === id)!;
@@ -670,11 +867,17 @@ export class World {
   }
   sync(s: State, preserveEffects = false) {
     this.state = s;
+    if (!preserveEffects) this.resetHomecoming();
     this.coastalWater.update(s.tideLevel * 0.18, this.reduced ? 0 : this.lastTime * 0.001);
     this.shores.update(this.water.position.y);
     this.setForecast(false, s.tideLevel);
     if (!preserveEffects) this.effects.reset();
-    if (s.status === 'won' && !preserveEffects) this.effects.settle(this.reduced);
+    if (s.status === 'won' && !preserveEffects) {
+      this.effects.settle(this.reduced);
+      this.homecoming.restore();
+      this.homecomingCameraSuppressed = true;
+      this.homecomingCameraFallback = 'restored';
+    }
     this.coastalWater.setHarbor(this.effects.glow.position, this.effects.arrivalIntensity);
     this.shadow.position.y = this.water.position.y + 0.008;
     const n = this.level.nodes.find((n) => n.id === s.boatNodeId)!;
@@ -891,7 +1094,7 @@ export class World {
           g.rotation.y = 0;
           if (!this.reduced) {
             g.position.y += Math.sin(t * Math.PI * 4) ** 2 * 0.055;
-            if (tr.after.delivered.includes(id) && t > 0.72)
+            if (tr.after.status !== 'won' && tr.after.delivered.includes(id) && t > 0.72)
               g.rotation.x = Math.sin(((t - 0.72) / 0.28) * Math.PI * 2) * 0.12;
           }
         } else {
@@ -910,12 +1113,14 @@ export class World {
         this.transition = null;
         this.journeyFrame = null;
         this.sync(tr.after, true);
+        if (tr.after.status === 'won') this.beginHomecoming(time);
         tr.done('complete');
       }
     } else {
       this.hull.position.y =
         this.draftY(this.state) + (this.reduced ? 0 : Math.sin(time * 0.0018) * 0.012);
     }
+    this.updateHomecoming(time);
     this.shores.update(this.water.position.y);
     for (const route of this.routes.values()) route.position.y = this.water.position.y;
     for (const marker of this.markers.values()) marker.position.y = this.water.position.y + 0.04;
@@ -973,6 +1178,46 @@ export class World {
       triangles: this.renderer.info.render.triangles,
       webgl: this.renderer.getContext().getParameter(this.renderer.getContext().VERSION),
       pixelRatio: this.renderer.getPixelRatio(),
+      resources: {
+        geometries: this.renderer.info.memory.geometries,
+        textures: this.renderer.info.memory.textures,
+        programs: this.renderer.info.programs?.length ?? 0,
+        sweepObjects: this.effects.sweep.children.length,
+      },
+    };
+  }
+  homecomingPresentation() {
+    return {
+      active: this.homecoming.active,
+      finite: this.homecoming.finite,
+      startedAt: this.homecoming.startedAt,
+      celebrations: this.homecoming.celebrations,
+      settled: this.homecoming.settled,
+      reason: this.homecoming.reason,
+      motionReduced: this.reduced,
+      animalOffsets: [...this.animals].map(([id, animal]) => ({
+        id,
+        position: this.state.delivered.includes(id)
+          ? animal.position.clone().sub(this.passengerPos(id, this.state)).toArray()
+          : [0, 0, 0],
+        rotation: [animal.rotation.x, animal.rotation.y, animal.rotation.z],
+      })),
+      camera: {
+        factor: this.homecomingCameraFactor,
+        targetFactor: this.homecomingCameraTarget,
+        fallback: this.homecomingCameraFallback,
+        revision: this.cameraRevision,
+        base: this.canonicalFrame ? { ...this.canonicalFrame } : null,
+        current: {
+          left: this.camera.left,
+          right: this.camera.right,
+          top: this.camera.top,
+          bottom: this.camera.bottom,
+        },
+        completionBounds: this.completionBounds ? { ...this.completionBounds } : null,
+      },
+      sweep: this.effects.presentation().arrival.sweep,
+      resources: this.metrics().resources,
     };
   }
   environmentPresentation() {

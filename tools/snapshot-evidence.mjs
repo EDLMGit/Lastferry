@@ -8,6 +8,7 @@ const option = (name) => {
   return i < 0 ? undefined : process.argv[i + 1];
 };
 const reviewDir = option('--review-dir') ?? 'reviews/m1';
+const captureDir = option('--captures-from') ?? reviewDir;
 const git = (...args) => execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim();
 const gitIdentity = () => {
   try {
@@ -43,6 +44,7 @@ const paths = [
   ...(existsSync(new URL('NEXT_TASK.md', root)) ? ['NEXT_TASK.md'] : []),
   ...(existsSync(new URL('FOLLOWING_TASK_UI.md', root)) ? ['FOLLOWING_TASK_UI.md'] : []),
   ...(existsSync(new URL('NEXT_TASK_VICTORY.md', root)) ? ['NEXT_TASK_VICTORY.md'] : []),
+  ...(existsSync(new URL('NEXT_TASK_HOMECOMING.md', root)) ? ['NEXT_TASK_HOMECOMING.md'] : []),
   'docs/GAMEPLAY_RULES.md',
   'docs/FIRST_COVE.md',
   'docs/ART_DIRECTION.md',
@@ -70,7 +72,8 @@ const paths = [
       path.includes('audio-polish') ||
       path.includes('cove-interface') ||
       path.includes('cove-contrast') ||
-      path.includes('victory-mix'),
+      path.includes('victory-mix') ||
+      path.includes('homecoming'),
   ),
 ].sort();
 const files = Object.fromEntries(paths.map((p) => [p, digest(readFileSync(new URL(p, root)))]));
@@ -87,7 +90,7 @@ if (!process.argv.includes('--finalize')) {
         sourceHash,
         files,
         scope:
-          'Runtime, tests, dependencies, level data and authoritative instructions. Review reports, README and STATUS are metadata outside this hash.',
+          'Runtime, tests, dependencies, level data and authoritative instructions. Review reports, README, STATUS and docs/PROJECT_STATE are continuity metadata outside this hash.',
       },
       null,
       2,
@@ -100,10 +103,10 @@ if (!process.argv.includes('--finalize')) {
     throw new Error(
       'Tested source changed after the snapshot. Repeat affected checks and captures.',
     );
-  const captures = readdirSync(new URL(`${reviewDir}/`, root))
+  const captures = readdirSync(new URL(`${captureDir}/`, root))
     .filter((n) => n.endsWith('.png') && !n.includes('prototype'))
     .map((name) => {
-      const path = `${reviewDir}/${name}`,
+      const path = `${captureDir}/${name}`,
         p = new URL(path, root),
         b = readFileSync(p);
       return {
