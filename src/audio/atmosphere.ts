@@ -32,6 +32,7 @@ export class Sound {
   lastError: string | null = null;
   private master: GainNode | null = null;
   private music: GainNode | null = null;
+  private musicOutput: GainNode | null = null;
   private ambience: GainNode | null = null;
   private effects: GainNode | null = null;
   private analyser: AnalyserNode | null = null;
@@ -57,6 +58,11 @@ export class Sound {
   private sourcesCreated = 0;
   private peakOwned = 0;
   private deliveryCount = 0;
+  private arrivalEventCount = 0;
+  private victorySettled = false;
+  private victoryTarget = 1;
+  private arrangementTarget = 0.72;
+  private lastVictoryMixChange: { time: number; target: number; duration: number } | null = null;
   private arrivalVoicesPlayed = 0;
   private arrivalVoicesSkipped = 0;
   private arrivalVoicesReclaimed = 0;
@@ -84,6 +90,7 @@ export class Sound {
       this.master?.gain.cancelScheduledValues(context.currentTime);
       this.master?.gain.setValueAtTime(0, context.currentTime);
     } else if (this.enabled()) {
+      this.restoreMusicOutput();
       this.master?.gain.setValueAtTime(0, context.currentTime);
       this.master?.gain.linearRampToValueAtTime(0.65, context.currentTime + 0.08);
       this.startScheduler();
@@ -106,22 +113,25 @@ export class Sound {
     this.master = context.createGain();
     this.master.gain.value = 0;
     this.music = context.createGain();
-    this.music.gain.value = 0.72;
+    this.music.gain.value = this.arrangementTarget;
     this.ambience = context.createGain();
     this.ambience.gain.value = 0.11;
     this.effects = context.createGain();
     this.effects.gain.value = 0.34;
+    this.musicOutput = context.createGain();
+    this.musicOutput.gain.value = this.victoryTarget;
     const reverb = context.createConvolver(),
       send = context.createGain(),
       wet = context.createGain();
     reverb.buffer = makeReverb(context);
     send.gain.value = 0.3;
     wet.gain.value = 0.34;
-    this.music.connect(this.master);
+    this.music.connect(this.musicOutput);
     this.music.connect(send);
     send.connect(reverb);
     reverb.connect(wet);
-    wet.connect(this.master);
+    wet.connect(this.musicOutput);
+    this.musicOutput.connect(this.master);
     this.ambience.connect(this.master);
     this.effects.connect(this.master);
     this.analyser = context.createAnalyser();
@@ -133,6 +143,7 @@ export class Sound {
       this.music,
       this.ambience,
       this.effects,
+      this.musicOutput,
       reverb,
       send,
       wet,
@@ -191,15 +202,45 @@ export class Sound {
   reconcileState(state: State, level: Level, deferTerminal = false) {
     const next = arrangementForState(state, level);
     const pending = deferTerminal && (next === 'won' || next === 'lost');
+    const wasWon = this.victorySettled;
+    if (next !== 'won' || !pending) this.setVictoryMix(next === 'won');
+    if (wasWon && next !== 'won') this.setArrangementGain(next === 'lost' ? 0.53 : 0.72, 0.7);
     if (this.desiredArrangement === next && this.pendingTerminal === pending) return;
     this.desiredArrangement = next;
     this.pendingTerminal = pending;
     if (!pending) this.requestArrangement();
   }
   settleArrangement() {
+    this.setVictoryMix(this.desiredArrangement === 'won');
     if (!this.pendingTerminal) return;
     this.pendingTerminal = false;
     this.requestArrangement();
+  }
+  private setVictoryMix(settled: boolean) {
+    if (this.victorySettled === settled) return;
+    this.victorySettled = settled;
+    this.victoryTarget = settled ? 0.5 : 1;
+    const time = this.context?.currentTime ?? 0,
+      duration = settled ? 0.2 : 0.7;
+    this.lastVictoryMixChange = { time, target: this.victoryTarget, duration };
+    if (this.musicOutput) {
+      this.hold(this.musicOutput.gain, time);
+      this.musicOutput.gain.linearRampToValueAtTime(this.victoryTarget, time + duration);
+    }
+  }
+  private restoreMusicOutput() {
+    if (!this.musicOutput || !this.context) return;
+    const now = this.context.currentTime;
+    this.hold(this.musicOutput.gain, now);
+    this.musicOutput.gain.setValueAtTime(this.victoryTarget, now);
+  }
+  private setArrangementGain(target: number, duration = 0.8) {
+    if (this.arrangementTarget === target) return;
+    this.arrangementTarget = target;
+    if (!this.music || !this.context) return;
+    const now = this.context.currentTime;
+    this.hold(this.music.gain, now);
+    this.music.gain.linearRampToValueAtTime(target, now + duration);
   }
   setAccompanimentEnabled(enabled: boolean) {
     if (!import.meta.env.DEV || this.accompanimentEnabled === enabled) return;
@@ -220,15 +261,10 @@ export class Sound {
     const at = this.epoch + this.companionBeat * beatSeconds;
     if (at > now + 0.15) return;
     if (!this.pendingTerminal && this.companionBeat >= this.arrangementBeat) {
-      if (this.arrangement !== this.desiredArrangement) {
-        this.arrangement = this.desiredArrangement;
-        const gain = this.music!.gain;
-        this.hold(gain, now);
-        gain.linearRampToValueAtTime(
-          this.arrangement === 'lost' ? 0.53 : this.arrangement === 'won' ? 0.62 : 0.72,
-          now + 0.8,
-        );
-      }
+      this.arrangement = this.desiredArrangement;
+      this.setArrangementGain(
+        this.arrangement === 'lost' ? 0.53 : this.arrangement === 'won' ? 0.62 : 0.72,
+      );
     }
     const note = this.accompanimentEnabled
       ? companionNote(this.companionBeat, this.arrangement)
@@ -437,6 +473,7 @@ export class Sound {
       if (generation !== this.generation || !this.enabled()) return;
       this.unavailable = false;
       this.lastError = null;
+      this.restoreMusicOutput();
       this.master!.gain.cancelScheduledValues(context.currentTime);
       this.master!.gain.setValueAtTime(this.master!.gain.value, context.currentTime);
       this.master!.gain.linearRampToValueAtTime(0.65, context.currentTime + 0.06);
@@ -531,6 +568,8 @@ export class Sound {
     this.lastTransferContact.played = true;
   }
   delivery() {
+    if (this.disposed) return;
+    this.arrivalEventCount++;
     if (!this.enabled() || this.context?.state !== 'running') return;
     for (const [source, record] of this.owned)
       if (record.kind === 'effect') this.stop(source, true);
@@ -557,8 +596,11 @@ export class Sound {
     source.frequency.value = frequency(note.note);
     filter.type = 'lowpass';
     filter.Q.value = 0.45;
-    filter.frequency.setValueAtTime(note.stage === 'answer' ? 1600 : 1050, at);
-    filter.frequency.exponentialRampToValueAtTime(650, end);
+    filter.frequency.setValueAtTime(
+      note.stage === 'answer' ? 2400 : note.stage === 'opening' ? 1600 : 1050,
+      at,
+    );
+    filter.frequency.exponentialRampToValueAtTime(note.stage === 'settle' ? 650 : 700, end);
     gain.gain.setValueAtTime(0, at);
     gain.gain.linearRampToValueAtTime(note.peak, at + note.attack);
     gain.gain.exponentialRampToValueAtTime(0.0001, end - 0.08);
@@ -638,6 +680,14 @@ export class Sound {
       travelActive: records.some((record) => record.kind === 'travel' && !record.stopping),
       arrivalActive: records.some((record) => record.kind === 'effect' && !record.stopping),
       deliveryCount: this.deliveryCount,
+      arrivalEventCount: this.arrivalEventCount,
+      victorySettled: this.victorySettled,
+      victoryTarget: this.victoryTarget,
+      victoryGain: this.musicOutput?.gain.value ?? null,
+      arrangementTarget: this.arrangementTarget,
+      arrangementGain: this.music?.gain.value ?? null,
+      effectiveMusicTarget: this.arrangementTarget * this.victoryTarget,
+      lastVictoryMixChange: this.lastVictoryMixChange ? { ...this.lastVictoryMixChange } : null,
       arrivalSources: records.filter((record) => record.kind === 'effect').length,
       arrivalVoicesPlayed: this.arrivalVoicesPlayed,
       arrivalVoicesSkipped: this.arrivalVoicesSkipped,

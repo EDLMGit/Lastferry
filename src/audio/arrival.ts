@@ -24,9 +24,9 @@ const voicings = [
 ] as const;
 
 const stages: Omit<ArrivalNote, 'note'>[] = [
-  { stage: 'opening', offset: 0, duration: 1.55, attack: 0.12, peak: 0.06, palette: 'pad' },
-  { stage: 'answer', offset: 0.48, duration: 1.9, attack: 0.065, peak: 0.078, palette: 'pluck' },
-  { stage: 'settle', offset: 1.1, duration: 2.25, attack: 0.2, peak: 0.044, palette: 'pad' },
+  { stage: 'opening', offset: 0, duration: 1.55, attack: 0.06, peak: 0.11, palette: 'pad' },
+  { stage: 'answer', offset: 0.48, duration: 1.9, attack: 0.035, peak: 0.15, palette: 'pluck' },
+  { stage: 'settle', offset: 1.1, duration: 2.25, attack: 0.14, peak: 0.072, palette: 'pad' },
 ];
 
 const cellSeconds = 8 * beatSeconds;

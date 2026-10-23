@@ -2,8 +2,8 @@ import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { Sound } from '../../src/audio/sound';
 import { phraseSeconds } from '../../src/audio/score';
 import { arrivalPhrase } from '../../src/audio/arrival';
-import { initial } from '../../src/game/rules';
-import { holdingPier } from '../../src/levels/level';
+import { initial, type State } from '../../src/game/rules';
+import { holdingPier, level as firstCrossing } from '../../src/levels/level';
 
 class Parameter {
   value = 1;
@@ -145,6 +145,20 @@ describe('continuous audio ownership and phase', () => {
     const value = new Sound();
     active.push(value);
     return value;
+  };
+  const finalStates = () => {
+    const homeward: State = {
+      ...initial(holdingPier),
+      aboard: [...holdingPier.objective.requiredPassengerIds],
+      waitingByPier: {},
+    };
+    const won: State = {
+      ...homeward,
+      status: 'won',
+      aboard: [],
+      delivered: homeward.aboard,
+    };
+    return { homeward, won };
   };
   beforeEach(() => {
     vi.useFakeTimers();
@@ -740,6 +754,374 @@ describe('continuous audio ownership and phase', () => {
     });
     internal.tone(69, 0, 10, 0.5, 'pad');
     expect(value.presentation()).toMatchObject({ transferSources: 0, droppedTones: 0 });
+  });
+
+  test('one music output attenuates the dry score and existing wet return while effects stay independent', async () => {
+    const value = sound();
+    await value.activate();
+    const context = Context.instances[0],
+      [master, music, ambience, effects, output] = context.nodes,
+      send = [...music.connections].find((node) => node !== output)!,
+      reverb = [...send.connections][0],
+      wet = [...reverb.connections][0];
+    expect([...music.connections]).toEqual([output, send]);
+    expect([...wet.connections]).toEqual([output]);
+    expect([...output.connections]).toEqual([master]);
+    expect([...effects.connections]).toEqual([master]);
+    expect([...ambience.connections]).toEqual([master]);
+    expect(effects.gain.value).toBe(0.34);
+    expect(ambience.gain.value).toBe(0.11);
+    expect(send.gain.value).toBe(0.3);
+    expect(wet.gain.value).toBe(0.34);
+    const { won } = finalStates();
+    value.reconcileState(won, holdingPier, true);
+    value.delivery();
+    value.settleArrangement();
+    expect(output.gain.events.at(-1)).toMatchObject({ kind: 'linear', value: 0.5 });
+    expect(effects.gain.events).toEqual([]);
+    expect(effects.gain.value).toBe(0.34);
+    expect(ambience.gain.value).toBe(0.11);
+  });
+
+  test('victory waits for visible settlement, fades immediately and survives the complete cue and action cleanup', async () => {
+    const value = sound(),
+      { homeward, won } = finalStates();
+    value.reconcileState(homeward, holdingPier);
+    await value.activate();
+    const context = Context.instances[0],
+      output = context.nodes[4];
+    value.reconcileState(won, holdingPier, true);
+    for (let step = 0; step < 12; step++) {
+      context.advance(0.1);
+      await vi.advanceTimersByTimeAsync(100);
+    }
+    expect(value.presentation()).toMatchObject({
+      desiredArrangement: 'won',
+      pendingTerminal: true,
+      victorySettled: false,
+      victoryTarget: 1,
+      victoryGain: 1,
+      arrangementTarget: 0.72,
+      arrivalEventCount: 0,
+    });
+    const at = context.currentTime;
+    value.delivery();
+    value.settleArrangement();
+    expect(value.presentation()).toMatchObject({
+      victorySettled: true,
+      victoryTarget: 0.5,
+      lastVictoryMixChange: { time: at, target: 0.5, duration: 0.2 },
+      arrivalEventCount: 1,
+      deliveryCount: 1,
+    });
+    expect(output.gain.events.at(-1)).toEqual({
+      kind: 'linear',
+      value: 0.5,
+      time: at + 0.2,
+    });
+    const eventCount = output.gain.events.length;
+    value.settleArrangement();
+    value.settleArrangement();
+    expect(output.gain.events).toHaveLength(eventCount);
+    for (let step = 0; step < 110; step++) {
+      context.advance(0.1);
+      await vi.advanceTimersByTimeAsync(100);
+    }
+    value.resetActionEffects();
+    expect(value.presentation()).toMatchObject({
+      victorySettled: true,
+      victoryTarget: 0.5,
+      victoryGain: 0.5,
+      arrangement: 'won',
+      arrangementTarget: 0.62,
+      effectiveMusicTarget: 0.31,
+      arrivalActive: false,
+      arrivalSources: 0,
+      arrivalEventCount: 1,
+      deliveryCount: 1,
+      contextCount: 1,
+      schedulerCount: 1,
+    });
+    expect(20 * Math.log10(value.presentation().effectiveMusicTarget / 0.72)).toBeCloseTo(
+      -7.319,
+      2,
+    );
+    expect(output.gain.events.at(-1)).toMatchObject({ kind: 'linear', value: 0.5 });
+  });
+
+  test.each(['native hold', 'fallback'])(
+    'rapid terminal Undo and redelivery cancel old music automation with %s',
+    async (method) => {
+      const value = sound(),
+        { homeward, won } = finalStates();
+      value.reconcileState(homeward, holdingPier);
+      await value.activate();
+      const context = Context.instances[0],
+        output = context.nodes[4],
+        gain = output.gain,
+        hold = vi.fn((time: number) => {
+          gain.cancelScheduledValues(time);
+          gain.events.push({ kind: 'hold', value: gain.value, time });
+        });
+      if (method === 'native hold') Object.assign(gain, { cancelAndHoldAtTime: hold });
+      const firstPhase = value.presentation().phaseSeconds;
+      for (let turn = 0; turn < 4; turn++) {
+        value.reconcileState(won, holdingPier, true);
+        value.delivery();
+        value.settleArrangement();
+        expect(value.presentation().victoryTarget).toBe(0.5);
+        context.advance(0.03);
+        value.resetActionEffects();
+        value.reconcileState(homeward, holdingPier);
+        expect(value.presentation()).toMatchObject({
+          victorySettled: false,
+          victoryTarget: 1,
+          arrangementTarget: 0.72,
+          lastVictoryMixChange: { time: context.currentTime, target: 1, duration: 0.7 },
+          arrivalActive: false,
+        });
+        expect(gain.events.filter((event) => event.time > context.currentTime)).toEqual([
+          { kind: 'linear', value: 1, time: context.currentTime + 0.7 },
+        ]);
+        context.advance(0.03);
+        value.reconcileState(won, holdingPier, true);
+        value.delivery();
+        value.settleArrangement();
+        expect(gain.events.filter((event) => event.time > context.currentTime)).toEqual([
+          { kind: 'linear', value: 0.5, time: context.currentTime + 0.2 },
+        ]);
+        expect(value.presentation().arrivalSources).toBeLessThanOrEqual(3);
+      }
+      expect(value.presentation()).toMatchObject({
+        victoryTarget: 0.5,
+        contextCount: 1,
+        schedulerStarts: 1,
+        arrivalEventCount: 8,
+        deliveryCount: 8,
+      });
+      expect(value.presentation().phaseSeconds).toBeGreaterThan(firstPhase);
+      if (method === 'native hold') expect(hold).toHaveBeenCalledTimes(9);
+      else expect(hold).not.toHaveBeenCalled();
+    },
+  );
+
+  test.each(['never activated', 'muted before activation'])(
+    'finishing while %s retains reduced intent for lazy creation and never queues a victory cue',
+    async (mode) => {
+      if (mode === 'muted before activation') stored.set('last-ferry-muted', 'true');
+      const value = sound(),
+        { won } = finalStates();
+      if (mode === 'muted before activation') await value.activate();
+      value.reconcileState(won, holdingPier, true);
+      expect(value.presentation().victorySettled).toBe(false);
+      value.delivery();
+      value.settleArrangement();
+      expect(value.presentation()).toMatchObject({
+        contextCount: 0,
+        victorySettled: true,
+        victoryTarget: 0.5,
+        victoryGain: null,
+        arrivalEventCount: 1,
+        deliveryCount: 0,
+        arrivalVoicesPlayed: 0,
+      });
+      if (mode === 'muted before activation') await value.toggle();
+      else await value.activate();
+      expect(value.presentation()).toMatchObject({
+        contextCount: 1,
+        schedulerCount: 1,
+        victorySettled: true,
+        victoryTarget: 0.5,
+        victoryGain: 0.5,
+        arrivalEventCount: 1,
+        deliveryCount: 0,
+        arrivalVoicesPlayed: 0,
+        arrivalSources: 0,
+      });
+      const context = Context.instances[0];
+      expect(context.nodes[4].gain.events.every((event) => event.value === 0.5)).toBe(true);
+    },
+  );
+
+  test('mute, hidden-page suspension and context recovery keep a settled won mix without replay', async () => {
+    const value = sound(),
+      { won } = finalStates();
+    await value.activate();
+    const context = Context.instances[0];
+    value.reconcileState(won, holdingPier, true);
+    value.delivery();
+    value.settleArrangement();
+    await value.toggle();
+    context.advance(0.1);
+    await vi.advanceTimersByTimeAsync(100);
+    expect(value.presentation()).toMatchObject({
+      contextState: 'suspended',
+      victorySettled: true,
+      victoryTarget: 0.5,
+      arrivalActive: false,
+    });
+    await value.toggle();
+    await value.visibility(true);
+    context.advance(0.1);
+    await vi.advanceTimersByTimeAsync(100);
+    await value.visibility(false);
+    context.state = 'suspended';
+    context.notify();
+    context.advance(10);
+    context.state = 'running';
+    context.notify();
+    expect(value.presentation()).toMatchObject({
+      victorySettled: true,
+      victoryTarget: 0.5,
+      victoryGain: 0.5,
+      contextCount: 1,
+      schedulerCount: 1,
+      arrivalEventCount: 1,
+      deliveryCount: 1,
+      arrivalSources: 0,
+    });
+  });
+
+  test('hidden final-transition recovery settles won music without inventing a delayed cue', async () => {
+    const value = sound(),
+      { won } = finalStates();
+    await value.activate();
+    const context = Context.instances[0];
+    value.reconcileState(won, holdingPier, true);
+    await value.visibility(true);
+    value.resetActionEffects();
+    value.settleArrangement();
+    context.advance(0.1);
+    await vi.advanceTimersByTimeAsync(100);
+    await value.visibility(false);
+    expect(value.presentation()).toMatchObject({
+      victorySettled: true,
+      victoryTarget: 0.5,
+      victoryGain: 0.5,
+      desiredArrangement: 'won',
+      pendingTerminal: false,
+      arrivalEventCount: 0,
+      deliveryCount: 0,
+      arrivalVoicesPlayed: 0,
+      arrivalSources: 0,
+    });
+  });
+
+  test('authoritative restoration, Restart and cove changes clear settled music without phase reset or stale ramps', async () => {
+    const value = sound(),
+      { homeward, won } = finalStates();
+    value.reconcileState(won, holdingPier);
+    await value.activate();
+    const context = Context.instances[0];
+    expect(value.presentation()).toMatchObject({
+      victorySettled: true,
+      victoryTarget: 0.5,
+      victoryGain: 0.5,
+      deliveryCount: 0,
+    });
+    for (const [state, level] of [
+      [homeward, holdingPier],
+      [initial(holdingPier), holdingPier],
+      [initial(firstCrossing), firstCrossing],
+    ] as const) {
+      context.advance(0.1);
+      value.resetActionEffects();
+      value.reconcileState(state, level);
+      expect(value.presentation()).toMatchObject({
+        victorySettled: false,
+        victoryTarget: 1,
+        arrangementTarget: 0.72,
+        effectiveMusicTarget: 0.72,
+        arrivalSources: 0,
+      });
+      const phase = value.presentation().phaseSeconds;
+      value.reconcileState(won, holdingPier);
+      expect(value.presentation().victoryTarget).toBe(0.5);
+      expect(value.presentation().phaseSeconds).toBe(phase);
+    }
+    value.reconcileState(initial(firstCrossing), firstCrossing);
+    const output = context.nodes[4];
+    expect(output.gain.events.filter((event) => event.time > context.currentTime)).toEqual([
+      { kind: 'linear', value: 1, time: context.currentTime + 0.7 },
+    ]);
+    expect(value.presentation()).toMatchObject({
+      contextCount: 1,
+      schedulerStarts: 1,
+      arrivalEventCount: 0,
+      deliveryCount: 0,
+    });
+  });
+
+  test('terminal Undo and redelivery before the next arrangement beat restore the authored won gain', async () => {
+    const value = sound(),
+      { homeward, won } = finalStates();
+    value.reconcileState(homeward, holdingPier);
+    await value.activate();
+    const context = Context.instances[0];
+    value.reconcileState(won, holdingPier, true);
+    value.delivery();
+    value.settleArrangement();
+    for (let step = 0; step < 12; step++) {
+      context.advance(0.1);
+      await vi.advanceTimersByTimeAsync(100);
+    }
+    expect(value.presentation()).toMatchObject({
+      arrangement: 'won',
+      arrangementTarget: 0.62,
+      effectiveMusicTarget: 0.31,
+    });
+    value.resetActionEffects();
+    value.reconcileState(homeward, holdingPier);
+    expect(value.presentation()).toMatchObject({
+      arrangement: 'won',
+      desiredArrangement: 'homeward',
+      arrangementTarget: 0.72,
+      victoryTarget: 1,
+    });
+    value.reconcileState(won, holdingPier, true);
+    value.delivery();
+    value.settleArrangement();
+    for (let step = 0; step < 12; step++) {
+      context.advance(0.1);
+      await vi.advanceTimersByTimeAsync(100);
+    }
+    expect(value.presentation()).toMatchObject({
+      arrangement: 'won',
+      desiredArrangement: 'won',
+      arrangementTarget: 0.62,
+      victoryTarget: 0.5,
+      effectiveMusicTarget: 0.31,
+      deliveryCount: 2,
+    });
+  });
+
+  test('partial delivery and loss never engage the victory modifier', async () => {
+    const value = sound(),
+      { homeward } = finalStates(),
+      partial: State = {
+        ...homeward,
+        aboard: homeward.aboard.slice(1),
+        delivered: homeward.aboard.slice(0, 1),
+      };
+    await value.activate();
+    value.reconcileState(partial, holdingPier, true);
+    value.settleArrangement();
+    expect(value.presentation()).toMatchObject({
+      desiredArrangement: 'homeward',
+      victorySettled: false,
+      victoryTarget: 1,
+      arrivalEventCount: 0,
+      deliveryCount: 0,
+    });
+    value.reconcileState({ ...partial, status: 'lost' }, holdingPier, true);
+    value.settleArrangement();
+    expect(value.presentation()).toMatchObject({
+      desiredArrangement: 'lost',
+      victorySettled: false,
+      victoryTarget: 1,
+      arrivalEventCount: 0,
+      deliveryCount: 0,
+    });
   });
 
   test('rapid changes during active companion notes release obsolete voices without a mood queue', async () => {

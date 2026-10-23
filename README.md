@@ -4,6 +4,8 @@ Start with **The Holding Pier**, then choose **Next cove** after bringing its ne
 
 Baseline M1 is a playable 3D tutorial cove: rescue Moss the sheep with Pip and Rue already aboard, manage how much depth the loaded ferry needs, and bring everyone to the lighthouse. Time advances only on accepted actions. The scene, sounds and rules run locally in the browser.
 
+The latest [victory mix review](reviews/victory-mix/REVIEW.md) verifies a clearer arrival cue and music that becomes quieter at visible final arrival, staying reduced while the cove is won. Undo, Restart and cove changes restore the gameplay mix. Accepted wooden contacts and interface remain. The private Site currently contains `c5f4ae1`; the new victory pass needs its separate reviewed deployment for Android listening.
+
 ## Run
 
 Use **Node 24** (`.nvmrc`). Verified locally with Node **24.15.0** and npm **11.12.1**.

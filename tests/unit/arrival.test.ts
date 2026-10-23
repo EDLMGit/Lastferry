@@ -16,10 +16,10 @@ describe('bounded arrival voicing follows the running harmony', () => {
     expect(phrase[2].peak).toBeLessThan(phrase[0].peak);
     expect(Math.max(...phrase.map(({ offset, duration }) => offset + duration))).toBeCloseTo(3.35);
     for (const note of phrase) {
-      expect(note.attack).toBeGreaterThanOrEqual(0.065);
+      expect(note.attack).toBeGreaterThanOrEqual(0.035);
       expect(note.attack).toBeLessThan(note.duration);
       expect(note.duration).toBeLessThan(2.5);
-      expect(note.peak).toBeLessThan(0.08);
+      expect(note.peak).toBeLessThanOrEqual(0.15);
     }
   });
 

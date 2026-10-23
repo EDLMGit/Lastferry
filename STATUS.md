@@ -1,3 +1,19 @@
+# Current milestone — Clear victory and quieter ending
+
+2026-10-23: Started clean on `m1-first-crossing` at reviewed `c5f4ae110973aa352d15028ba9d8c857a4270f6b`, using Node 24.15.0. Read AGENTS, the new parent `NEXT_TASK_VICTORY.md` (retained here), AUDIO, prior reports and actual final-unload callbacks. The accepted interface and wood are preserved. Main remains `386de54d20fdd4a513a06115471d70bf94738cc0`; PR #1 stays draft. The private Site still contains c5f4ae1; deployment is separate and pending review.
+
+Exact archived baseline UI capture confirms three visible arrivals at ordinary, dense and phrase-return positions: nine played voices, zero skips/reclaims and zero dropped score tones. First cue is at AudioContext 20.1227 s; old music automation begins 0.488 s later, then takes 0.8 s to move 0.72→0.62. The cue fires in these sessions. Masking is plausible, but no acoustic listening proves the reported Android cause.
+
+Arrival-only peaks are now 0.110/0.150/0.072 with 60/35/140 ms attacks and clearer opening/answer filtering. Offsets, 3.35 s footprint, harmony lifetimes, score/companion content, ordinary mix and wood are retained. One music output receives both dry music and reverb return. Visible settlement fades it to 0.5 over 200 ms and holds while won; combined with 0.62 won arrangement, effective music is 0.31 versus ordinary 0.72 (−7.32 dB). Authoritative nonwon state restores the modifier and gameplay target over 700 ms. Mute/hide/interruption retain settled intent; lazy muted wins recover quietly without queued cues.
+
+Build/typecheck and all 139 unit tests in 17 files pass. Six focused browser cases pass, exit 0: production rescue, existing transfer audio and the new arrival/persistent-mix/recovery scenarios. Initial 138-test pass and the subsequently reproduced rapid Undo/redelivery failure remain recorded; the upstream target edge is fixed and its new regression passes. No water code, unrelated timeout, UI, rules or sailing change.
+
+Before/after actual runtime recordings use unchanged master/export levels and each test three arrivals with 11+ seconds of won hold, terminal Undo/redelivery and Next cove. Both have 3 cues / 9 voices, zero skip/reclaim/drop, and 7 accepted wood contacts. After holds at 0.5×0.62; Undo/Next restore 1×0.72. Four media files decode; four fresh 844×390 screenshots were inspected. Accepted wider layout evidence is reused by exact unchanged source. Final 111-file snapshot: `663bfedd9f03d6063b0544cfb134e533e6b2ea0754200969755cde19e38aca9e`.
+
+Implementation and focused verification are complete for listening review. No speaker/headphone or physical Android listening was available; perceptual reward remains the user's test. See `reviews/victory-mix/REVIEW.md`, comparison and raw local recordings. Publish the reviewed final GitHub SHA to the same existing private Site for the next Android test; this branch push itself does not deploy. Stop after this pass.
+
+## Historical cove-interface handoff
+
 # Current milestone — Cove interface
 
 2026-10-23: Started clean on `m1-first-crossing` at reviewed `ab8ff33fb1471aacb0dd7a22acbf90be3a4b1db6`. The player prefers the new wooden contacts; preserve the complete accepted audio implementation. Read AGENTS, FOLLOWING_TASK_UI, selection/placement logic and latest short-phone feedback. Main remains `386de54d20fdd4a513a06115471d70bf94738cc0`; PR #1 stays draft. The private Site contains the starting audio commit and is deployed separately.
