@@ -19,6 +19,7 @@ Local Codex implements the current task. ChatGPT reviews the identifiable handof
 | Repository | https://github.com/EDLMGit/Lastferry |
 | Working branch | `m1-first-crossing` |
 | PR | https://github.com/EDLMGit/Lastferry/pull/1 — draft |
+| Homecoming implementation | `d3a7e3acfa2298bcaaa8e93622e81d62b367280e` — locally verified; final packaging SHA in PR handoff |
 | Reviewed game baseline | `c82ba896e690c82b731f63dc1fba0a6380ef61e1` |
 | Private phone build | Same game commit, `c82ba89` — publication succeeded |
 | Stable phone URL | https://last-ferry-playtest.abumech.chatgpt.site |
@@ -106,4 +107,3 @@ Carry these limits honestly:
 - The handoff states whether the live Site was updated. Deployment waits for review of that new build, not an assumed push-to-publish link.
 
 Before a wider release, revisit the remaining device, accessibility, performance and browser coverage against the intended audience. This playtest workflow does not by itself certify release readiness.
-

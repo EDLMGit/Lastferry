@@ -10,7 +10,7 @@ Fresh production build/typecheck and **153/153 unit tests** pass. **14 distinct 
 
 Evidence: [review](reviews/homecoming/REVIEW.md), 118-file source hash `96c878bfee197ea3b08675119a99da15cf34ebeba356683dad4c496e59fde4d4`, 25 primary native gameplay PNGs plus final-desktop/recording evidence. Uninterrupted actual UI rescue→Settings→Back→Undo→redelivery captured: 45.002s runtime audio/canvas and separate 46.92s silent full-interface video, local/ignored. Temporal samples/native frames show a roughly 20.39-second sweep revolution and settled canonical offsets. No acoustic listening or physical-phone performance claim.
 
-Implementation complete for the exercised coverage; final SHA and remote audit follow in the PR/handoff. The private Site **still contains c82ba89**; this new pass will be published separately after review. Physical Android, other engines, actual context loss, speaker listening and prior software-renderer/bundle limits remain. Stop after this pass; extra ideas stay queued.
+Implementation commit `d3a7e3acfa2298bcaaa8e93622e81d62b367280e` matches the tested source (Git line-ending normalization only); final metadata SHA and remote audit are supplied in the PR/handoff. Implementation is complete for the exercised coverage. The private Site **still contains c82ba89**; this new pass will be published separately after review. Physical Android, other engines, actual context loss, speaker listening and prior software-renderer/bundle limits remain. Stop after this pass; extra ideas stay queued.
 
 ## Historical victory-mix handoff
 
