@@ -4,7 +4,7 @@ Start with **The Holding Pier**, then choose **Next cove** after bringing its ne
 
 Baseline M1 is a playable 3D tutorial cove: rescue Moss the sheep with Pip and Rue already aboard, manage how much depth the loaded ferry needs, and bring everyone to the lighthouse. Time advances only on accepted actions. The scene, sounds and rules run locally in the browser.
 
-The latest [victory mix review](reviews/victory-mix/REVIEW.md) verifies a clearer arrival cue and music that becomes quieter at visible final arrival, staying reduced while the cove is won. Undo, Restart and cove changes restore the gameplay mix. Accepted wooden contacts and interface remain. The private Site currently contains the reviewed victory build `c82ba89`. The new [Harbor homecoming pass](reviews/homecoming/REVIEW.md) adds a slow lighthouse sweep, one settled animal acknowledgment, a modest fit-checked arrival camera move and compact ending/Settings. Its GitHub push does not update that Site; publication follows review.
+The latest [victory mix review](reviews/victory-mix/REVIEW.md) verifies a clearer arrival cue and music that becomes quieter at visible final arrival, staying reduced while the cove is won. Undo, Restart and cove changes restore the gameplay mix. Accepted wooden contacts and interface remain. The private Site currently contains the reviewed [Harbor homecoming](reviews/homecoming/REVIEW.md) build `dafb445`: slow lighthouse sweep, settled animal acknowledgment, fit-checked arrival camera and compact ending/Settings. The focused [lighthouse light refinement](reviews/lighthouse-light/REVIEW.md) softens the shaft and refines its source using the same timing and assets. Its GitHub push does not update that Site; publication follows review.
 
 ## Run
 

@@ -1059,6 +1059,9 @@ if (import.meta.env.DEV)
       }),
       getFrameStatus: () => world.frameStatus(),
       getHomecomingStatus: () => world.homecomingPresentation(),
+      setLighthouseComparisonPhase: (phase: number | null) => {
+        world.effects.comparisonPhase = phase !== null && Number.isFinite(phase) ? phase : null;
+      },
       getMotionStatus: () => ({ mode: motion.mode, reduced: motion.reduced }),
       getTransferStatus: () => world.transferPresentation(),
       getPickTargetAt: (x: number, y: number) => world.pickAt(x, y),

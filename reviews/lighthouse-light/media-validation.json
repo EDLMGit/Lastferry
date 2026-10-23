@@ -1,0 +1,221 @@
+{
+  "method": "ffprobe codec/dimension metadata and ffmpeg complete decode to null; no playback-level modification or acoustic listening.",
+  "commands": [
+    "ffprobe -v error -show_entries format=duration:stream=index,codec_name,codec_type,width,height,sample_rate,channels -of json <file>",
+    "ffmpeg -v error -threads 1 -i <file> -f null -"
+  ],
+  "media": [
+    {
+      "run": "baseline/1440x900",
+      "kind": "runtime audio",
+      "path": "reviews/lighthouse-light/baseline/1440x900/raw/holding-pier-lighthouse-runtime-audio.webm",
+      "sha256": "d73a88e3badf84e0032983aac9fe25148b0d7187b0a6bde41df652c2dde4da75",
+      "sourceHash": "ca00f2f217ca8060a49843eb5445cc1097aa57058d70681c9f36cee83b1f263c",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "opus",
+            "codec_type": "audio",
+            "sample_rate": "48000",
+            "channels": 2
+          },
+          {
+            "index": 1,
+            "codec_name": "vp9",
+            "codec_type": "video",
+            "width": 1440,
+            "height": 900
+          }
+        ],
+        "format": {}
+      },
+      "decoded": true
+    },
+    {
+      "run": "baseline/1440x900",
+      "kind": "whole interface silent",
+      "path": "reviews/lighthouse-light/baseline/1440x900/raw/holding-pier-lighthouse-full-interface-silent.webm",
+      "sha256": "a9400edaa8ced338e618fb0fef725f444894168dadaa3bd1e4d3fd568556fe19",
+      "sourceHash": "ca00f2f217ca8060a49843eb5445cc1097aa57058d70681c9f36cee83b1f263c",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "vp9",
+            "codec_type": "video",
+            "width": 1440,
+            "height": 900
+          }
+        ],
+        "format": {
+          "duration": "131.120000"
+        }
+      },
+      "decoded": true
+    },
+    {
+      "run": "baseline/844x390",
+      "kind": "runtime audio",
+      "path": "reviews/lighthouse-light/baseline/844x390/raw/holding-pier-lighthouse-runtime-audio.webm",
+      "sha256": "cb8ffc8f5c9f7e9f397551e2a725b7e86e93bff5734411f5e67491b59db599d6",
+      "sourceHash": "ca00f2f217ca8060a49843eb5445cc1097aa57058d70681c9f36cee83b1f263c",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "opus",
+            "codec_type": "audio",
+            "sample_rate": "48000",
+            "channels": 2
+          },
+          {
+            "index": 1,
+            "codec_name": "vp9",
+            "codec_type": "video",
+            "width": 844,
+            "height": 390
+          }
+        ],
+        "format": {}
+      },
+      "decoded": true
+    },
+    {
+      "run": "baseline/844x390",
+      "kind": "whole interface silent",
+      "path": "reviews/lighthouse-light/baseline/844x390/raw/holding-pier-lighthouse-full-interface-silent.webm",
+      "sha256": "538f050ca183312c7de75e6da8d2e2625b61344777dd68a78d19ac551a1c8550",
+      "sourceHash": "ca00f2f217ca8060a49843eb5445cc1097aa57058d70681c9f36cee83b1f263c",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "vp9",
+            "codec_type": "video",
+            "width": 844,
+            "height": 390
+          }
+        ],
+        "format": {
+          "duration": "74.080000"
+        }
+      },
+      "decoded": true
+    },
+    {
+      "run": "after/1440x900",
+      "kind": "runtime audio",
+      "path": "reviews/lighthouse-light/after/1440x900/raw/holding-pier-lighthouse-runtime-audio.webm",
+      "sha256": "d22232fd016774ee18dd901223dc4e3b13dc62d76771690dfc9d9cb357b39121",
+      "sourceHash": "d943620659412c6af9a5254cb69c7277da9cded6641eaebf4ed5a4031c717d5b",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "opus",
+            "codec_type": "audio",
+            "sample_rate": "48000",
+            "channels": 2
+          },
+          {
+            "index": 1,
+            "codec_name": "vp9",
+            "codec_type": "video",
+            "width": 1440,
+            "height": 900
+          }
+        ],
+        "format": {}
+      },
+      "decoded": true
+    },
+    {
+      "run": "after/1440x900",
+      "kind": "whole interface silent",
+      "path": "reviews/lighthouse-light/after/1440x900/raw/holding-pier-lighthouse-full-interface-silent.webm",
+      "sha256": "52ac61b53d93f36040434a7b31bd409513449e079363eec0a278edd4e966cf8a",
+      "sourceHash": "d943620659412c6af9a5254cb69c7277da9cded6641eaebf4ed5a4031c717d5b",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "vp9",
+            "codec_type": "video",
+            "width": 1440,
+            "height": 900
+          }
+        ],
+        "format": {
+          "duration": "146.880000"
+        }
+      },
+      "decoded": true
+    },
+    {
+      "run": "after/844x390",
+      "kind": "runtime audio",
+      "path": "reviews/lighthouse-light/after/844x390/raw/holding-pier-lighthouse-runtime-audio.webm",
+      "sha256": "6be56323eab690ea4c413766968029d1660e4781722c852d8854a6c903d5cef1",
+      "sourceHash": "d943620659412c6af9a5254cb69c7277da9cded6641eaebf4ed5a4031c717d5b",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "opus",
+            "codec_type": "audio",
+            "sample_rate": "48000",
+            "channels": 2
+          },
+          {
+            "index": 1,
+            "codec_name": "vp9",
+            "codec_type": "video",
+            "width": 844,
+            "height": 390
+          }
+        ],
+        "format": {}
+      },
+      "decoded": true
+    },
+    {
+      "run": "after/844x390",
+      "kind": "whole interface silent",
+      "path": "reviews/lighthouse-light/after/844x390/raw/holding-pier-lighthouse-full-interface-silent.webm",
+      "sha256": "00f65d7292192c94ac31447882c99941520dff04f31e440c8cb3380eba79c4ae",
+      "sourceHash": "d943620659412c6af9a5254cb69c7277da9cded6641eaebf4ed5a4031c717d5b",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "vp9",
+            "codec_type": "video",
+            "width": 844,
+            "height": 390
+          }
+        ],
+        "format": {
+          "duration": "88.400000"
+        }
+      },
+      "decoded": true
+    }
+  ]
+}

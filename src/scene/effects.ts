@@ -7,6 +7,7 @@ export class CrossingEffects {
   sweep = new T.Group();
   sweepPhase = 0;
   sweepLastTime: number | null = null;
+  comparisonPhase: number | null = null;
   points: { position: T.Vector3; time: number }[] = [];
   emitting = false;
   arrivalStarted: number | null = null;
@@ -82,17 +83,30 @@ export class CrossingEffects {
       new T.CylinderGeometry(0.82, 0.035, 4.8, 20, 8, true),
       new T.ShaderMaterial({
         transparent: true,
+        depthTest: true,
         depthWrite: false,
+        blending: T.AdditiveBlending,
+        premultipliedAlpha: false,
         side: T.DoubleSide,
         forceSinglePass: true,
-        uniforms: { strength: { value: 0.14 } },
-        vertexShader:
-          'varying vec2 beamUv;void main(){beamUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
-        fragmentShader: `uniform float strength;varying vec2 beamUv;
+        uniforms: {
+          strength: { value: 0.22 },
+          tint: { value: new T.Color('#ffdda3') },
+        },
+        vertexShader: `varying vec3 beamNormal;varying float beamDistance;
           void main(){
-            float reach=smoothstep(0.,.08,beamUv.y)*(1.-smoothstep(.3,1.,beamUv.y));
-            float feather=.45+.55*pow(abs(cos(beamUv.x*6.2831853)),3.);
-            gl_FragColor=vec4(1.,.67,.27,strength*reach*feather);
+            beamNormal=normalMatrix*normal;
+            beamDistance=uv.y;
+            gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);
+          }`,
+        fragmentShader: `uniform float strength;uniform vec3 tint;
+          varying vec3 beamNormal;varying float beamDistance;
+          void main(){
+            float facing=abs(normalize(beamNormal).z);
+            float silhouette=pow(facing,1.5)*smoothstep(0.,.2,facing);
+            float reach=smoothstep(0.,.025,beamDistance)*exp(-1.5*beamDistance);
+            reach*=1.-smoothstep(.42,.95,beamDistance);
+            gl_FragColor=vec4(tint,.5*strength*silhouette*reach);
             #include <tonemapping_fragment>
             #include <colorspace_fragment>
           }`,
@@ -125,9 +139,11 @@ export class CrossingEffects {
     this.sweep.visible = false;
     this.sweepPhase = 0;
     this.sweepLastTime = null;
+    this.comparisonPhase = null;
     this.sweep.rotation.y = 0;
     this.glow.visible = true;
     this.glow.material.opacity = 0.08;
+    this.glow.material.blending = T.NormalBlending;
     if (this.lamp) this.lamp.intensity = this.lampBase;
     if (this.lens) this.lens.emissiveIntensity = this.lensBase;
   }
@@ -148,6 +164,7 @@ export class CrossingEffects {
     if (this.lamp) this.lamp.intensity = this.lampBase + this.arrivalIntensity * 2;
     if (this.lens) this.lens.emissiveIntensity = this.lensBase + this.arrivalIntensity;
     this.glow.visible = true;
+    this.glow.material.blending = T.AdditiveBlending;
     this.glow.material.opacity = 0.08 + this.arrivalIntensity * 0.26;
   }
   update(
@@ -220,7 +237,7 @@ export class CrossingEffects {
         this.sweepPhase +=
           (Math.min(100, Math.max(0, time - this.sweepLastTime)) / 20000) * Math.PI * 2;
       this.sweepLastTime = time;
-      this.sweep.rotation.y = reduced ? 0.45 : this.sweepPhase;
+      this.sweep.rotation.y = this.comparisonPhase ?? (reduced ? 0.45 : this.sweepPhase);
     }
   }
   presentation() {
@@ -258,6 +275,7 @@ export class CrossingEffects {
           reduced: this.reduced,
           startedAt: this.arrivalStarted,
           drawObjects: this.sweep.children.length,
+          comparisonPhase: this.comparisonPhase,
         },
       },
     };

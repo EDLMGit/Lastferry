@@ -1,0 +1,51 @@
+diff --git a/src/main.ts b/src/main.ts
+index 66a44b9..043d582 100644
+--- a/src/main.ts
++++ b/src/main.ts
+@@ -1059,6 +1059,9 @@ if (import.meta.env.DEV)
+       }),
+       getFrameStatus: () => world.frameStatus(),
+       getHomecomingStatus: () => world.homecomingPresentation(),
++      setLighthouseComparisonPhase: (phase: number | null) => {
++        world.effects.comparisonPhase = phase !== null && Number.isFinite(phase) ? phase : null;
++      },
+       getMotionStatus: () => ({ mode: motion.mode, reduced: motion.reduced }),
+       getTransferStatus: () => world.transferPresentation(),
+       getPickTargetAt: (x: number, y: number) => world.pickAt(x, y),
+diff --git a/src/scene/effects.ts b/src/scene/effects.ts
+index c1e0cf5..a575748 100644
+--- a/src/scene/effects.ts
++++ b/src/scene/effects.ts
+@@ -7,6 +7,7 @@ export class CrossingEffects {
+   sweep = new T.Group();
+   sweepPhase = 0;
+   sweepLastTime: number | null = null;
++  comparisonPhase: number | null = null;
+   points: { position: T.Vector3; time: number }[] = [];
+   emitting = false;
+   arrivalStarted: number | null = null;
+@@ -125,6 +126,7 @@ export class CrossingEffects {
+     this.sweep.visible = false;
+     this.sweepPhase = 0;
+     this.sweepLastTime = null;
++    this.comparisonPhase = null;
+     this.sweep.rotation.y = 0;
+     this.glow.visible = true;
+     this.glow.material.opacity = 0.08;
+@@ -220,7 +222,7 @@ export class CrossingEffects {
+         this.sweepPhase +=
+           (Math.min(100, Math.max(0, time - this.sweepLastTime)) / 20000) * Math.PI * 2;
+       this.sweepLastTime = time;
+-      this.sweep.rotation.y = reduced ? 0.45 : this.sweepPhase;
++      this.sweep.rotation.y = this.comparisonPhase ?? (reduced ? 0.45 : this.sweepPhase);
+     }
+   }
+   presentation() {
+@@ -258,6 +260,7 @@ export class CrossingEffects {
+           reduced: this.reduced,
+           startedAt: this.arrivalStarted,
+           drawObjects: this.sweep.children.length,
++          comparisonPhase: this.comparisonPhase,
+         },
+       },
+     };
