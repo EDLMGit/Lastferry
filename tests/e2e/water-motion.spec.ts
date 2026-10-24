@@ -85,7 +85,7 @@ test('water motion: finite docking, immediate follow-up, tide Undo and mid-cross
     await movementClear(page);
     await startMove(page, 'map-shallows', true);
     await page.waitForFunction(
-      () => (window as any).__LAST_FERRY__.getEnvironmentStatus().wake.points.length > 5,
+      () => (window as any).__LAST_FERRY__.getEnvironmentStatus().wake.points.length > 2,
     );
     await idle(page);
     const docking = await save('natural-docking');
@@ -100,12 +100,12 @@ test('water motion: finite docking, immediate follow-up, tide Undo and mid-cross
     const follow = await save('immediate-follow-up');
     expect(follow.state.turn).toBe(3);
     expect(follow.transition.active.startedAt - nextStartedAt).toBeLessThan(1600);
-    expect(follow.wake.points.length).toBeLessThanOrEqual(96);
+    expect(follow.wake.points.length).toBeLessThanOrEqual(12);
     for (let i = 1; i < follow.wake.points.length; i++) {
       const a = follow.wake.points[i - 1],
         b = follow.wake.points[i];
       if (a.segment === b.segment)
-        expect(Math.hypot(b.center[0] - a.center[0], b.center[2] - a.center[2])).toBeLessThan(0.1);
+        expect(Math.hypot(b.center[0] - a.center[0], b.center[2] - a.center[2])).toBeLessThan(1.3);
     }
     await idle(page);
     const beforeTide = await state(page);

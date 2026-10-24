@@ -1,8 +1,8 @@
 import { test, expect } from 'vitest';
 import { InstancedMesh, Matrix4, Mesh, Vector3 } from 'three';
 import { ferry } from '../../src/scene/models';
-import { sampleJourney } from '../../src/scene/motion';
-import { getLevelPaths } from '../../src/scene/paths';
+import { berthHeading, initialHeading, planJourney, sampleJourney } from '../../src/scene/motion';
+import { getLevelPaths, samplePath } from '../../src/scene/paths';
 import { level, holdingPier, bellwater } from '../../src/levels/level';
 import { sceneLayout } from '../../src/scene/layout';
 import { buildCoastGeometry, createReedBeds, createShoreRocks } from '../../src/scene/shore';
@@ -55,7 +55,7 @@ function segmentDistance(p: P, a: P, b: P) {
   return Math.hypot(p[0] - a[0] - t * x, p[1] - a[1] - t * z);
 }
 test.each([level, holdingPier, bellwater])(
-  '$id: actual modeled ferry footprint clears all land and pier decks along both directions and yaw turns',
+  '$id: full modeled ferry clears land and piers from all reachable headings, both berth sides and reverse departures',
   (level) => {
     const model = ferry();
     model.updateMatrixWorld(true);
@@ -86,36 +86,60 @@ test.each([level, holdingPier, bellwater])(
     const marginFailures: string[] = [];
     const samples = 1000;
     const paths = getLevelPaths(level);
+    const reachable = new Map<string, number[]>();
+    for (const node of level.nodes) {
+      const headings: number[] = [];
+      if (node.id === level.start.boatNodeId) headings.push(initialHeading(level));
+      for (const edge of level.edges.filter((edge) => edge.nodes.includes(node.id))) {
+        const path = paths.get(edge.id)!,
+          incoming = samplePath(path, path.length, edge.nodes[0] === node.id).angle;
+        headings.push(berthHeading(level, node.id, incoming) ?? incoming);
+      }
+      const berth = berthHeading(level, node.id, Math.PI / 2);
+      if (berth !== null) headings.push(berth, berth - Math.PI);
+      reachable.set(node.id, [
+        ...new Set(headings.map((angle) => Math.atan2(Math.sin(angle), Math.cos(angle)))),
+      ]);
+    }
     for (const edge of level.edges)
       for (const reverse of [false, true]) {
-        const path = paths.get(edge.id)!;
-        for (let frame = 0; frame <= samples; frame++) {
-          const pose = sampleJourney(path, frame / samples, Math.PI / 2, reverse);
-          const hull = footprint.map(([x, z]) => {
-            const v = new Vector3(x, 0, z)
-              .applyAxisAngle(new Vector3(0, 1, 0), pose.angle)
-              .add(pose.position);
-            return [v.x, v.z] as P;
+        const path = paths.get(edge.id)!,
+          from = edge.nodes[reverse ? 1 : 0],
+          to = edge.nodes[reverse ? 0 : 1],
+          incoming = samplePath(path, path.length, reverse).angle;
+        for (const heading of reachable.get(from)!) {
+          const plan = planJourney(path, heading, reverse, {
+            fromBerth: berthHeading(level, from, heading) ?? undefined,
+            toBerth: berthHeading(level, to, incoming) ?? undefined,
           });
-          for (const exclusion of exclusions)
-            if (overlaps(hull, exclusion.polygon))
-              failures.push(
-                `${edge.id}/${reverse ? 'reverse' : 'forward'} frame ${frame}: ${exclusion.id}`,
-              );
-          const center: P = [pose.position.x, pose.position.z];
-          for (const exclusion of exclusions) {
-            const margin = Math.min(
-              ...exclusion.polygon.map((p, i) =>
-                segmentDistance(center, p, exclusion.polygon[(i + 1) % exclusion.polygon.length]),
-              ),
+          for (let frame = 0; frame <= samples; frame++) {
+            const pose = sampleJourney(plan, frame / samples);
+            const cos = Math.cos(pose.angle),
+              sin = Math.sin(pose.angle);
+            const hull = footprint.map(
+              ([x, z]) =>
+                [x * cos + z * sin + pose.position.x, z * cos - x * sin + pose.position.z] as P,
             );
-            if (
-              margin < level.world.requiredRouteClearance - 1e-6 ||
-              inside(center, exclusion.polygon)
-            )
-              marginFailures.push(
-                `${edge.id}/${reverse ? 'reverse' : 'forward'} frame ${frame}: ${exclusion.id} margin ${margin}`,
+            for (const exclusion of exclusions)
+              if (overlaps(hull, exclusion.polygon))
+                failures.push(
+                  `${edge.id}/${reverse ? 'reverse' : 'forward'} from ${heading} frame ${frame}: ${exclusion.id}`,
+                );
+            const center: P = [pose.position.x, pose.position.z];
+            for (const exclusion of exclusions) {
+              const margin = Math.min(
+                ...exclusion.polygon.map((p, i) =>
+                  segmentDistance(center, p, exclusion.polygon[(i + 1) % exclusion.polygon.length]),
+                ),
               );
+              if (
+                margin < level.world.requiredRouteClearance - 1e-6 ||
+                inside(center, exclusion.polygon)
+              )
+                marginFailures.push(
+                  `${edge.id}/${reverse ? 'reverse' : 'forward'} from ${heading} frame ${frame}: ${exclusion.id} margin ${margin}`,
+                );
+            }
           }
         }
       }

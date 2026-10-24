@@ -2,34 +2,47 @@ import * as T from 'three';
 
 export type WakeCoast = { texture: T.Texture; bounds: T.Vector4 };
 
-export const wakeLimits = { capacity: 96, lifetime: 1800, length: 3.6, spacing: 0.055 };
+export const wakeLimits = {
+  capacity: 12,
+  lifetime: 1800,
+  spacing: 0.72,
+  variation: 0.5,
+  sections: 12,
+};
 
-type WakePoint = {
+type ReleasedCrest = {
+  id: number;
   position: T.Vector3;
   center: T.Vector3;
+  direction: T.Vector3;
   time: number;
   angle: number;
   strength: number;
-  distance: number;
+  seed: number;
   segment: number;
 };
+
+const variation = (id: number) => (id * 0.61803398875 + 0.27) % 1;
 
 export class FerryWake {
   mesh: T.Mesh<T.BufferGeometry, T.ShaderMaterial>;
   interaction = { position: new T.Vector3(), direction: new T.Vector3(0, 0, 1), strength: 0 };
-  readonly pool: WakePoint[] = Array.from({ length: wakeLimits.capacity }, () => ({
+  readonly pool: ReleasedCrest[] = Array.from({ length: wakeLimits.capacity }, () => ({
+    id: 0,
     position: new T.Vector3(),
     center: new T.Vector3(),
+    direction: new T.Vector3(),
     time: 0,
     angle: 0,
     strength: 0,
-    distance: 0,
+    seed: 0,
     segment: 0,
   }));
-  readonly joins = new Float32Array(wakeLimits.capacity * 2);
+  private shape = { age: 0, width: 0, bend: 0, skew: 0, opacity: 0, x: 0, z: 0 };
   count = 0;
   first = 0;
   segment = 0;
+  serial = 0;
   emitting = false;
   active = false;
   previous = new T.Vector3();
@@ -37,23 +50,19 @@ export class FerryWake {
   previousTime: number | null = null;
   previousWater = 0;
   carried = 0;
-  travelled = 0;
+  nextSpacing = 0.2;
   speed = 0;
   strength = 0;
-  peakStrength = 0;
-  dockingStarted: number | null = null;
-  dockingStrength = 0;
-  contactStrength = 0;
   vertices = 0;
 
   constructor(coast?: WakeCoast) {
-    const capacity = (wakeLimits.capacity + 48) * 6,
+    const capacity = wakeLimits.capacity * wakeLimits.sections * 6,
       geometry = new T.BufferGeometry();
     geometry.setAttribute(
       'position',
       new T.Float32BufferAttribute(new Float32Array(capacity * 3), 3).setUsage(T.DynamicDrawUsage),
     );
-    for (const name of ['fade', 'lateral', 'distance', 'age', 'kind'])
+    for (const name of ['fade', 'lateral', 'distance', 'age'])
       geometry.setAttribute(
         name,
         new T.Float32BufferAttribute(new Float32Array(capacity), 1).setUsage(T.DynamicDrawUsage),
@@ -73,32 +82,27 @@ export class FerryWake {
         hasCoast: { value: coast ? 1 : 0 },
         waterY: { value: 0 },
       },
-      vertexShader: `attribute float fade;attribute float lateral;attribute float distance;attribute float age;attribute float kind;
-        varying float alpha;varying float side;varying float along;varying float old;varying float layer;varying vec2 worldXZ;
+      vertexShader: `attribute float fade;attribute float lateral;attribute float distance;attribute float age;
+        varying float alpha;varying float across;varying float along;varying float seed;varying vec2 worldXZ;
         void main(){
-          alpha=fade;side=lateral;along=distance;old=age;layer=kind;worldXZ=position.xz;
+          alpha=fade;across=lateral;along=distance;seed=age;worldXZ=position.xz;
           gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);
         }`,
       fragmentShader: `uniform vec3 pearl;uniform vec3 body;uniform sampler2D coast;uniform vec4 field;uniform float hasCoast;uniform float waterY;
-        varying float alpha;varying float side;varying float along;varying float old;varying float layer;varying vec2 worldXZ;
+        varying float alpha;varying float across;varying float along;varying float seed;varying vec2 worldXZ;
         void main(){
-          float feather=1.-smoothstep(.78,1.,abs(side));
-          float rhythm=.12+.88*smoothstep(-.3,.75,sin(along*7.1+side*1.2));
-          float crestCenter=.66+.045*sin(along*3.8+old*.7);
-          float crest=(1.-smoothstep(.065,.22,abs(abs(side)-crestCenter)))*rhythm;
-          float center=(1.-smoothstep(.05,.67,abs(side)))*.15;
-          float coverage=(center+crest*.85)*feather;
-          vec3 color=mix(body,pearl,crest);
-          if(layer>.5){
-            coverage=(1.-smoothstep(.1,1.,abs(side)))*(.72+.28*sin(along*2.4));
-            color=pearl;
-          }
+          float ends=1.-smoothstep(.55,1.,abs(along));
+          float softness=1.-smoothstep(.04,1.,abs(across));
+          float crest=1.-smoothstep(.04,.6,abs(across-.1));
+          float gap=1.-.64*exp(-pow((along-(seed-.5)*.9)*5.5,2.));
+          float bodyWeight=softness*.18;
+          float coverage=(bodyWeight+crest*.82)*ends*gap;
           float wet=1.;
           if(hasCoast>.5){
             vec4 land=texture2D(coast,clamp((worldXZ-field.xy)/field.zw,0.,1.));
             wet=1.-land.a*smoothstep(waterY+.004,waterY+.025,land.b*.72);
           }
-          gl_FragColor=vec4(color,alpha*coverage*wet);
+          gl_FragColor=vec4(mix(body,pearl,crest),alpha*coverage*wet);
           #include <tonemapping_fragment>
           #include <colorspace_fragment>
         }`,
@@ -119,17 +123,15 @@ export class FerryWake {
   clear() {
     this.count = 0;
     this.first = 0;
+    this.segment = 0;
+    this.serial = 0;
     this.emitting = false;
     this.active = false;
     this.previousTime = null;
     this.carried = 0;
-    this.travelled = 0;
+    this.nextSpacing = 0.2;
     this.speed = 0;
     this.strength = 0;
-    this.peakStrength = 0;
-    this.dockingStarted = null;
-    this.dockingStrength = 0;
-    this.contactStrength = 0;
     this.interaction.strength = 0;
     this.vertices = 0;
     this.mesh.geometry.setDrawRange(0, 0);
@@ -145,23 +147,18 @@ export class FerryWake {
     this.previousTime = time;
     this.previousWater = position.y;
     this.carried = 0;
+    this.nextSpacing = 0.2;
     this.speed = 0;
     this.strength = 0;
-    this.peakStrength = 0;
-    this.dockingStarted = null;
-    this.dockingStrength = 0;
     this.interaction.strength = 0;
   }
 
-  finish(time: number) {
-    if (this.active && this.peakStrength > 0.05) {
-      this.dockingStarted = time;
-      this.dockingStrength = Math.min(0.26, this.peakStrength * 0.32);
-    }
+  finish(_time: number) {
     this.active = false;
     this.emitting = false;
     this.speed = 0;
     this.strength = 0;
+    this.interaction.strength = 0;
   }
 
   private emit(
@@ -169,21 +166,29 @@ export class FerryWake {
     x: number,
     z: number,
     angle: number,
+    dx: number,
+    dz: number,
     waterY: number,
-    distance: number,
   ) {
+    if (this.strength < 0.025) return;
     if (this.count === wakeLimits.capacity) {
       this.first = (this.first + 1) % wakeLimits.capacity;
       this.count--;
     }
-    const point = this.point(this.count++);
+    const point = this.point(this.count++),
+      forward = dx * Math.sin(angle) + dz * Math.cos(angle),
+      sideways = dx * Math.cos(angle) - dz * Math.sin(angle),
+      reach = 1 / Math.hypot(forward / 0.76, sideways / 0.48);
+    point.id = ++this.serial;
     point.center.set(x, waterY, z);
-    point.position.set(x - Math.sin(angle) * 0.72, waterY + 0.018, z - Math.cos(angle) * 0.72);
+    point.position.set(x - dx * reach, waterY + 0.018, z - dz * reach);
+    point.direction.set(dx, 0, dz);
     point.time = time;
     point.angle = angle;
     point.strength = this.strength;
-    point.distance = distance;
+    point.seed = variation(point.id);
     point.segment = this.segment;
+    this.nextSpacing = wakeLimits.spacing + point.seed * wakeLimits.variation;
   }
 
   update(
@@ -210,13 +215,13 @@ export class FerryWake {
       if (moving) this.begin(time, position, angle);
     } else if (moving && elapsed > 0 && horizontal > 0.00001) {
       this.speed = horizontal / (elapsed * 0.001);
-      this.strength = T.MathUtils.smoothstep(this.speed, 0.08, 1.5) * 0.64;
-      this.peakStrength = Math.max(this.peakStrength, this.strength);
-      this.emitting = this.strength > 0.001;
+      this.strength = T.MathUtils.smoothstep(this.speed, 0.08, 1.5) * 0.58;
+      this.emitting = this.strength > 0.025;
+      this.interaction.direction.set(dx / horizontal, 0, dz / horizontal);
       let remaining = horizontal,
         used = 0;
-      while (this.carried + remaining >= wakeLimits.spacing) {
-        const step = wakeLimits.spacing - this.carried;
+      while (this.carried + remaining >= this.nextSpacing) {
+        const step = this.nextSpacing - this.carried;
         used += step;
         remaining -= step;
         const fraction = used / horizontal;
@@ -225,13 +230,13 @@ export class FerryWake {
           this.previous.x + dx * fraction,
           this.previous.z + dz * fraction,
           this.previousAngle + (angle - this.previousAngle) * fraction,
+          dx / horizontal,
+          dz / horizontal,
           this.previousWater + (waterY - this.previousWater) * fraction,
-          this.travelled + used,
         );
         this.carried = 0;
       }
       this.carried += remaining;
-      this.travelled += horizontal;
     } else {
       this.emitting = false;
       this.speed = 0;
@@ -241,58 +246,34 @@ export class FerryWake {
     this.previousAngle = angle;
     this.previousTime = time;
     this.previousWater = waterY;
-    while (this.count && time - this.point(0).time > wakeLimits.lifetime) {
+    while (this.count && time - this.point(0).time >= wakeLimits.lifetime) {
       this.first = (this.first + 1) % wakeLimits.capacity;
       this.count--;
     }
-    let length = 0;
-    for (let i = this.count - 2; i >= 0; i--) {
-      const a = this.point(i),
-        b = this.point(i + 1);
-      if (a.segment === b.segment)
-        length += Math.hypot(a.position.x - b.position.x, a.position.z - b.position.z);
-      if (length > wakeLimits.length) {
-        this.first = (this.first + i + 1) % wakeLimits.capacity;
-        this.count -= i + 1;
-        break;
-      }
-    }
-    let settling = 0;
-    if (this.dockingStarted !== null) {
-      settling = T.MathUtils.clamp((time - this.dockingStarted) / 650, 0, 1);
-      if (settling === 1) {
-        this.dockingStarted = null;
-        this.dockingStrength = 0;
-      }
-    }
-    this.contactStrength = this.strength * 0.5 + this.dockingStrength * (1 - settling) ** 2;
     this.interaction.position.set(position.x, waterY, position.z);
-    this.interaction.direction.set(Math.sin(angle), 0, Math.cos(angle));
-    this.interaction.strength = this.strength + this.dockingStrength * (1 - settling) ** 2;
+    this.interaction.strength = this.strength;
     this.mesh.material.uniforms.waterY.value = waterY;
     this.vertices = 0;
-    this.buildTrail(time, waterY);
-    if (this.contactStrength > 0.001) {
-      const swell = settling * 0.18,
-        width = 0.51 - Math.min(0.05, hullY * 0.15);
-      this.contact(position, angle, waterY, width, 0.9, -1.43, 1.43, this.contactStrength, 0, 0);
-      this.contact(
-        position,
-        angle,
-        waterY,
-        0.25 + swell,
-        0.19 + swell * 0.7,
-        -Math.PI,
-        Math.PI,
-        this.contactStrength * 0.58,
-        -0.76,
-        1,
-      );
-    }
+    for (let i = 0; i < this.count; i++) this.buildCrest(this.point(i), time, waterY);
     for (const attribute of Object.values(this.mesh.geometry.attributes))
       attribute.needsUpdate = true;
     this.mesh.geometry.setDrawRange(0, this.vertices);
     this.mesh.visible = this.vertices > 0;
+  }
+
+  private evolve(point: ReleasedCrest, time: number) {
+    const age = T.MathUtils.clamp((time - point.time) / wakeLimits.lifetime, 0, 1),
+      spread = 1 - (1 - age) ** 1.5,
+      drift = spread * 0.24,
+      skew = (point.seed - 0.5) * 0.3;
+    this.shape.age = age;
+    this.shape.width = 0.43 + point.seed * 0.1 + spread * (0.72 + point.seed * 0.22);
+    this.shape.bend = 0.12 + spread * 0.36;
+    this.shape.skew = skew;
+    this.shape.opacity = point.strength * T.MathUtils.smoothstep(age, 0, 0.07) * (1 - age) ** 1.1;
+    this.shape.x = point.position.x - point.direction.x * drift + point.direction.z * skew * spread;
+    this.shape.z = point.position.z - point.direction.z * drift - point.direction.x * skew * spread;
+    return this.shape;
   }
 
   private vertex(
@@ -301,99 +282,48 @@ export class FerryWake {
     z: number,
     alpha: number,
     side: number,
-    distance: number,
-    age: number,
-    kind: number,
+    along: number,
+    seed: number,
   ) {
     const geometry = this.mesh.geometry,
       index = this.vertices++;
     geometry.getAttribute('position').setXYZ(index, x, y, z);
     geometry.getAttribute('fade').setX(index, alpha);
     geometry.getAttribute('lateral').setX(index, side);
-    geometry.getAttribute('distance').setX(index, distance);
-    geometry.getAttribute('age').setX(index, age);
-    geometry.getAttribute('kind').setX(index, kind);
+    geometry.getAttribute('distance').setX(index, along);
+    geometry.getAttribute('age').setX(index, seed);
   }
 
-  private buildTrail(time: number, waterY: number) {
-    for (let i = 0; i < this.count; i++) {
-      const current = this.point(i),
-        previous = i && this.point(i - 1).segment === current.segment ? this.point(i - 1) : current,
-        next =
-          i + 1 < this.count && this.point(i + 1).segment === current.segment
-            ? this.point(i + 1)
-            : current,
-        dx = next.position.x - previous.position.x,
-        dz = next.position.z - previous.position.z,
-        length = Math.hypot(dx, dz) || 1;
-      this.joins[i * 2] = -dz / length;
-      this.joins[i * 2 + 1] = dx / length;
-    }
-    for (let i = 1; i < this.count; i++) {
-      const a = this.point(i - 1),
-        b = this.point(i);
-      if (a.segment !== b.segment) continue;
-      const ageA = T.MathUtils.clamp((time - a.time) / wakeLimits.lifetime, 0, 1),
-        ageB = T.MathUtils.clamp((time - b.time) / wakeLimits.lifetime, 0, 1),
-        widthA = 0.36 + ageA * 0.28,
-        widthB = 0.36 + ageB * 0.28,
-        ax = this.joins[(i - 1) * 2] * widthA,
-        az = this.joins[(i - 1) * 2 + 1] * widthA,
-        bx = this.joins[i * 2] * widthB,
-        bz = this.joins[i * 2 + 1] * widthB,
-        fadeA = a.strength * (1 - ageA) ** 0.9,
-        fadeB = b.strength * (1 - ageB) ** 0.9,
-        y = waterY + 0.018;
-      this.vertex(a.position.x + ax, y, a.position.z + az, fadeA, 1, a.distance, ageA, 0);
-      this.vertex(a.position.x - ax, y, a.position.z - az, fadeA, -1, a.distance, ageA, 0);
-      this.vertex(b.position.x + bx, y, b.position.z + bz, fadeB, 1, b.distance, ageB, 0);
-      this.vertex(a.position.x - ax, y, a.position.z - az, fadeA, -1, a.distance, ageA, 0);
-      this.vertex(b.position.x - bx, y, b.position.z - bz, fadeB, -1, b.distance, ageB, 0);
-      this.vertex(b.position.x + bx, y, b.position.z + bz, fadeB, 1, b.distance, ageB, 0);
-    }
-  }
-
-  private contact(
-    position: T.Vector3,
-    angle: number,
-    waterY: number,
-    width: number,
-    reach: number,
-    start: number,
-    end: number,
-    strength: number,
-    offset: number,
-    seed: number,
-  ) {
-    const sine = Math.sin(angle),
-      cosine = Math.cos(angle);
-    for (let i = 0; i < 24; i++) {
-      const a = start + ((end - start) * i) / 24,
-        b = start + ((end - start) * (i + 1)) / 24;
+  private buildCrest(point: ReleasedCrest, time: number, waterY: number) {
+    const shape = this.evolve(point, time);
+    if (shape.opacity < 0.001) return;
+    const thickness = 0.105 + shape.age * 0.075;
+    for (let i = 0; i < wakeLimits.sections; i++) {
       for (let j = 0; j < 6; j++) {
-        const front = j === 2 || j === 4 || j === 5,
-          outer = j === 0 || j === 2 || j === 5,
-          theta = front ? b : a,
-          side = outer ? 1 : -1,
-          x = Math.sin(theta) * (width + side * 0.065),
-          z = Math.cos(theta) * (reach + side * 0.065) + offset,
-          endFade = seed ? 1 : Math.sin(((theta - start) / (end - start)) * Math.PI) ** 0.6;
+        const end = j === 2 || j === 4 || j === 5,
+          side = j === 0 || j === 2 || j === 5 ? 1 : -1,
+          u = ((i + Number(end)) / wakeLimits.sections) * 2 - 1,
+          slope = 2 * shape.bend * u + shape.skew,
+          length = Math.hypot(shape.width, slope),
+          x = u * shape.width - (slope / length) * side * thickness,
+          z =
+            -shape.bend * (1 - u * u) + shape.skew * u + (shape.width / length) * side * thickness;
         this.vertex(
-          position.x + x * cosine + z * sine,
+          shape.x + x * point.direction.z + z * point.direction.x,
           waterY + 0.018,
-          position.z - x * sine + z * cosine,
-          strength * endFade,
+          shape.z - x * point.direction.x + z * point.direction.z,
+          shape.opacity,
           side,
-          theta + seed,
-          0,
-          1,
+          u,
+          point.seed,
         );
       }
     }
   }
 
   presentation() {
-    const geometry = this.mesh.geometry;
+    const geometry = this.mesh.geometry,
+      time = this.previousTime ?? 0;
     return {
       emitting: this.emitting,
       visible: this.mesh.visible,
@@ -405,20 +335,26 @@ export class FerryWake {
         (geometry.getAttribute('fade') as T.BufferAttribute).array.slice(0, this.vertices),
       ),
       points: Array.from({ length: this.count }, (_, index) => {
-        const point = this.point(index);
+        const point = this.point(index),
+          shape = this.evolve(point, time);
         return {
+          id: point.id,
           position: point.position.toArray(),
           center: point.center.toArray(),
+          direction: point.direction.toArray(),
           time: point.time,
           heading: point.angle,
+          strength: point.strength,
+          seed: point.seed,
           segment: point.segment,
+          evolution: { ...shape, waterY: this.previousWater + 0.018 },
         };
       }),
       limits: { ...wakeLimits },
       speed: this.speed,
       strength: this.strength,
-      contactStrength: this.contactStrength,
-      docking: this.dockingStarted !== null,
+      contactStrength: 0,
+      docking: false,
       interaction: {
         position: this.interaction.position.toArray(),
         direction: this.interaction.direction.toArray(),

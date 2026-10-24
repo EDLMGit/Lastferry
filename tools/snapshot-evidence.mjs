@@ -47,6 +47,7 @@ const paths = [
   ...(existsSync(new URL('NEXT_TASK_HOMECOMING.md', root)) ? ['NEXT_TASK_HOMECOMING.md'] : []),
   ...(existsSync(new URL('NEXT_TASK_LIGHTHOUSE.md', root)) ? ['NEXT_TASK_LIGHTHOUSE.md'] : []),
   ...(existsSync(new URL('NEXT_TASK_WATER_MOTION.md', root)) ? ['NEXT_TASK_WATER_MOTION.md'] : []),
+  ...(existsSync(new URL('NEXT_TASK_SAILING_DIRECTION_AND_WAKE.md', root)) ? ['NEXT_TASK_SAILING_DIRECTION_AND_WAKE.md'] : []),
   'docs/GAMEPLAY_RULES.md',
   'docs/FIRST_COVE.md',
   'docs/ART_DIRECTION.md',
@@ -77,7 +78,8 @@ const paths = [
       path.includes('victory-mix') ||
       path.includes('homecoming') ||
       path.includes('lighthouse-light') ||
-      path.includes('water-motion'),
+      path.includes('water-motion') ||
+      path.includes('sailing-direction'),
   ),
 ].sort();
 const files = Object.fromEntries(paths.map((p) => [p, digest(readFileSync(new URL(p, root)))]));

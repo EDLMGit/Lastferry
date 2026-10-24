@@ -349,6 +349,7 @@ function execute(action: Action) {
   if (session.busy) return;
   const transaction = session.commit(copy(action));
   if (!transaction) return;
+  world.poses.accept(transaction.before, action);
   actionOrigin = !keyboardInput && lastPointer ? { x: lastPointer.x, y: lastPointer.y } : null;
   sound.reconcileState(transaction.after, level, true);
   if (action.type === 'move') locationSelection = action.to;
@@ -378,10 +379,13 @@ function execute(action: Action) {
       plan,
     );
   } catch {
-    try {
-      world.sync(session.state);
-    } finally {
-      finish(id, 'error');
+    world.cancel('error');
+    if (session.busy) {
+      try {
+        world.sync(session.state);
+      } finally {
+        finish(id, 'error');
+      }
     }
   }
 }
@@ -605,6 +609,7 @@ function undo() {
   if (session.busy) return;
   if (dialog.open) closeDialog(false);
   if (session.undo()) {
+    world.poses.undo();
     locationSelection = null;
     selectionOrigin = null;
     actionOrigin = null;
@@ -620,6 +625,7 @@ function restart() {
   if (session.busy) return;
   if (dialog.open) closeDialog(false);
   if (session.restart()) {
+    world.poses.reset();
     locationSelection = null;
     selectionOrigin = null;
     actionOrigin = null;
@@ -1055,6 +1061,7 @@ if (import.meta.env.DEV)
       getRenderStatus: () => ({
         pendingAnimation: session.busy,
         historyLength: session.history.length,
+        poseHistoryLength: world.poses.history.length,
         passengers: world.passengerPresentation(),
         boatPosition: world.boatRoot.position.toArray(),
         waterY: world.water.position.y,

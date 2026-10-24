@@ -21,7 +21,7 @@ Local Codex implements the current task. ChatGPT reviews the identifiable handof
 | PR | https://github.com/EDLMGit/Lastferry/pull/1 — draft |
 | Homecoming implementation | `d3a7e3acfa2298bcaaa8e93622e81d62b367280e` — locally verified; final packaging SHA in PR handoff |
 | Lighthouse implementation | `040df0d6d2b8e094446b2bc3dc8ff3b78837fc78` — accepted; final reviewed packaging commit below |
-| Water-motion implementation | `13d3b441c82a9ac67053d416ff4d7461810179af` — verified; awaiting review/publication; final metadata SHA in PR handoff |
+| Previous water-motion pass | `8b874adccfc1d65af569b81fade548f0368645b0` — functionally verified, **not visually accepted**; corrected by the current task |
 | Reviewed game baseline | `0ee7d685071179b82ec2a599fac2f818251d0e54` |
 | Private phone build | `0ee7d685071179b82ec2a599fac2f818251d0e54` — publication confirmed 2026-10-23 |
 | Stable phone URL | https://last-ferry-playtest.abumech.chatgpt.site |
@@ -78,9 +78,9 @@ Evidence: `reviews/lighthouse-light/REVIEW.md`, comparison index and source/capt
 
 The water-motion task confirms independent production build/typecheck and **156/156 unit tests** passing for the published lighthouse build. Contributor browser results and committed images were audited; no physical Android/native-GPU approval is implied.
 
-## Active task: Boat wake and water response
+## Historical pass: Boat wake and water response — correction required
 
-`NEXT_TASK_WATER_MOTION.md` is the only active implementation scope. Improve the curved world-space wake, hull/water contact and finite docking fade; compare a modestly slower presentation through actual short Holding and long Bellwater trips at native phone size. Preserve rules, authored courses, transfers, UI, audio, lighthouse/homecoming and full Undo. No global water redesign or new player controls.
+`NEXT_TASK_WATER_MOTION.md` is completed historical context. The user did not accept its universal stopping heading or hull-following accents. The following verification record establishes functional coverage, not visual acceptance. Its calmer sailing timing and bounded allocation approach carry into the correction; the bow crescent, stern ellipse and paired crest bands do not.
 
 Started clean on `m1-first-crossing` at reviewed `0ee7d685071179b82ec2a599fac2f818251d0e54`; no newer or unrelated work. Baseline phone recordings precede renderer changes. Retain a single preallocated wake/contact mesh with broken pearl crests, teal disturbance, distance-resampled world history (96points/1800ms/3.6units), small hull-anchored bow/stern contact and a finite normal-dock fade without extending the busy lock. New moves separate segments; discontinuity/Undo/Restart/cove/hide/recovery/Reduced clear transients. Water height moves existing geometry without false emission.
 
@@ -90,10 +90,18 @@ Actual short/long phone comparison chose clamp(1000+200×canonical length,1600,3
 
 Final127-file hash `e84792307ccda2b3efea3b70f7846331a6c3cec9d6afce4cc0bccdca48d52804`; runtime `be1d42f21ba0b4f45687fda21c1db730254e5f68dfc7a0ccd7eba16956a8c62b`. See `reviews/water-motion/REVIEW.md`, source/capture/packaging audits and final handoff for committed Git identity. No confirmed blocker in exercised coverage. Physical Android/native GPU/other engines/listening remain unverified. PR#1 remains draft and main unchanged. The private Site still runs0ee7d685; this pass is not published. New ideas remain queued.
 
+## Completed correction, awaiting review: Sailing direction and released water crests
+
+`NEXT_TASK_SAILING_DIRECTION_AND_WAKE.md` is the only active implementation scope. Started clean on `m1-first-crossing` at `8b874adccfc1d65af569b81fade548f0368645b0`. Preserve the current sailing budget, accepted puzzles, UI, audio, water palette/shader and lighthouse/homecoming. The previous pass remains unpublished.
+
+The correction replaces universal endpoint alignment with an accepted-transaction presentation pose history. Free-water stops retain their incoming tangent; actual piers choose the closer safe broadside berth. A deterministic shortest-angle departure and required berth alignment stay within the existing movement budget. Undo restores the paired pre-action heading; all completion/recovery paths use the same precomputed target. Local mirrored deck entries support both berth headings without changing transfer/audio timing.
+
+The water treatment uses a fixed pool of independently released open crests. Release data, age and stable variation determine their later world-space evolution; later hull movement cannot drag them. Finite tails finish after controls unlock, with no live ellipse, bow outline or peak-strength docking restart. Fresh Node24 build/typecheck,173/173unit tests and23 distinct browser cases pass (20 together,3 through preserved affected reruns). Native phone comparisons retain fewer broader soft crests; four animated excerpts and selected native frames are accessible in Git. Six final full-interface recordings and15 validated originals remain local/ignored. Source/runtime identity, original failures and exact results are in `reviews/sailing-direction-wake/REVIEW.md`. The warmed comparison retains equal active p95/resource counts; two instrumented desktop Bellwater gaps clear transients, while final phone runs have no gap above300ms. Physical Android/native GPU and new listening remain unverified. Implementation is complete; visual acceptance remains the next review decision. Publication requires review of the new GitHub SHA; the private Site still contains `0ee7d685`.
+
 ## Queue and scope boundaries
 
 - Further playtest feedback will arrive incrementally. Add it here with a brief status and concrete intent; do not implement it automatically during the active task.
-- Homecoming and lighthouse light are accepted. Boat/water motion is the assigned refinement; additional ideas remain queued.
+- Homecoming and lighthouse light are accepted. Sailing direction and released crests are the assigned correction; additional ideas remain queued.
 - More authored coves and increasing difficulty remain a later product direction. The active pass adds no puzzle or mechanic.
 - Broader environment/art changes and further audio changes require a later active task or new user feedback.
 - Extra volume sliders, graphics presets, rewards, accounts and progression systems are not requested deliverables.

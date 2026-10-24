@@ -2,7 +2,13 @@ import { describe, expect, test } from 'vitest';
 import { Vector3 } from 'three';
 import { bellwater, holdingPier, level, type Level } from '../../src/levels/level';
 import { buildPath, getLevelPaths, samplePath } from '../../src/scene/paths';
-import { sampleJourney } from '../../src/scene/motion';
+import {
+  angularChange,
+  berthHeading,
+  initialHeading,
+  planJourney,
+  sampleJourney,
+} from '../../src/scene/motion';
 
 const point = (x: number, z: number) => new Vector3(x, 0, z);
 const cross = (a: Vector3, b: Vector3, c: Vector3) =>
@@ -149,15 +155,25 @@ describe('canonical curved courses', () => {
   });
 
   test.each([level, holdingPier, bellwater])(
-    '$id journeys keep eased distance, continuous steering and exact broadside docking in both directions',
+    '$id journeys retain their incoming tangent or nearest real berth with continuous steering',
     (l) => {
-      for (const path of getLevelPaths(l).values())
+      const paths = getLevelPaths(l);
+      for (const edge of l.edges)
         for (const reverse of [false, true]) {
-          const poses = Array.from({ length: 1001 }, (_, i) =>
-            sampleJourney(path, i / 1000, Math.PI / 2, reverse),
-          );
+          const path = paths.get(edge.id)!,
+            from = edge.nodes[reverse ? 1 : 0],
+            to = edge.nodes[reverse ? 0 : 1],
+            incoming = samplePath(path, path.length, reverse).angle,
+            destination = berthHeading(l, to, incoming),
+            plan = planJourney(path, Math.PI / 2, reverse, {
+              fromBerth: berthHeading(l, from, Math.PI / 2) ?? undefined,
+              toBerth: destination ?? undefined,
+            });
+          const poses = Array.from({ length: 1001 }, (_, i) => sampleJourney(plan, i / 1000));
           expect(poses[0].angle).toBe(Math.PI / 2);
-          expect(poses.at(-1)!.angle).toBe(Math.PI / 2);
+          expect(poses.at(-1)!.angle).toBe(plan.toAngle);
+          expect(angularChange(plan.toAngle, destination ?? incoming)).toBeCloseTo(0, 9);
+          expect(Math.abs(angularChange(incoming, plan.toAngle))).toBeLessThanOrEqual(Math.PI / 2);
           expect(
             poses[0].position.distanceTo(path.points[reverse ? path.points.length - 1 : 0]),
           ).toBeLessThan(1e-9);
@@ -168,13 +184,17 @@ describe('canonical curved courses', () => {
             const before = poses[i - 1],
               after = poses[i],
               expected = after.distance - before.distance;
-            expect(after.position.distanceTo(before.position) / expected).toBeGreaterThan(0.97);
-            expect(after.position.distanceTo(before.position) / expected).toBeLessThanOrEqual(
-              1.00001,
-            );
+            expect(expected).toBeGreaterThanOrEqual(0);
+            if (expected > 1e-9) {
+              expect(after.position.distanceTo(before.position) / expected).toBeGreaterThan(0.97);
+              expect(after.position.distanceTo(before.position) / expected).toBeLessThanOrEqual(
+                1.00001,
+              );
+            } else expect(after.position.distanceTo(before.position)).toBeLessThan(1e-9);
             expect(Math.abs(after.angle - before.angle)).toBeLessThan(0.16);
-            if (Math.min(after.distance, path.length - after.distance) <= 0.45)
-              expect(after.angle).toBe(Math.PI / 2);
+            if (plan.fromBerth && after.distance <= 0.45) expect(after.angle).toBe(plan.fromAngle);
+            if (plan.toBerth && path.length - after.distance <= 0.45)
+              expect(after.angle).toBeCloseTo(plan.toAngle, 12);
           }
         }
     },
@@ -192,9 +212,7 @@ describe('canonical curved courses', () => {
       ).toBeLessThan(0.05);
       for (let i = 0; i < poses.length; i++)
         expect(
-          poses[i].position.distanceTo(
-            sampleJourney(path, 1 - i / 1000, Math.PI / 2, !reverse).position,
-          ),
+          poses[i].position.distanceTo(samplePath(path, poses[i].distance, reverse).position),
         ).toBeLessThan(1e-8);
     }
     const pointPath = buildPath([point(3, 4), point(3, 4)]);
@@ -202,6 +220,43 @@ describe('canonical curved courses', () => {
     expect(sampleJourney(pointPath, 0.5).position.toArray()).toEqual([3, 0, 4]);
     expect(sampleJourney(path, -2).position.distanceTo(path.points[0])).toBe(0);
     expect(sampleJourney(path, 2).position.distanceTo(path.points.at(-1)!)).toBe(0);
+  });
+
+  test('free-water reversal turns from the retained pose without sideways travel or angle wrapping', () => {
+    const path = getLevelPaths(holdingPier).get('stone-shallows')!,
+      outward = planJourney(path, Math.PI / 2, false, { fromBerth: Math.PI / 2 }),
+      retained = sampleJourney(outward, 1).angle,
+      reversal = planJourney(path, retained, true, { toBerth: -Math.PI / 2 });
+    expect(reversal.departureTurn).toBeCloseTo(0.22, 12);
+    expect(reversal.initialCourseAngle - retained).toBeCloseTo(Math.PI, 12);
+    for (let frame = 0; frame <= 220; frame++) {
+      const pose = sampleJourney(reversal, frame / 1000);
+      expect(pose.distance).toBe(0);
+      expect(pose.angle).toBeGreaterThanOrEqual(retained);
+      expect(pose.angle).toBeLessThanOrEqual(retained + Math.PI);
+    }
+    expect(sampleJourney(reversal, 0).angle).toBe(retained);
+    expect(sampleJourney(reversal, 1).angle).toBe(reversal.toAngle);
+    expect(angularChange(0, Math.PI)).toBe(Math.PI);
+    expect(angularChange(0, -Math.PI)).toBe(Math.PI);
+    expect(angularChange(Math.PI - 0.01, -Math.PI + 0.01)).toBeCloseTo(0.02, 12);
+  });
+
+  test('stop classification follows actual pier relationships and shaft geometry', () => {
+    for (const l of [level, holdingPier, bellwater]) {
+      expect(initialHeading(l)).toBe(Math.PI / 2);
+      for (const node of l.nodes) {
+        const pier = l.piers.find((p) => p.nodeId === node.id && p.id === node.pierId);
+        if (!pier) expect(berthHeading(l, node.id, 0)).toBeNull();
+        else {
+          expect(berthHeading(l, node.id, Math.PI / 2)).toBe(Math.PI / 2);
+          expect(berthHeading(l, node.id, -Math.PI / 2)).toBe(-Math.PI / 2);
+        }
+      }
+    }
+    const turned = structuredClone(holdingPier);
+    turned.piers[1].landAnchorXZ = [-1.2, -1.9];
+    expect(berthHeading(turned, 'stone', 0)).toBe(0);
   });
 
   test.each([level, holdingPier, bellwater])(

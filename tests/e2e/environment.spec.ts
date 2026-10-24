@@ -182,7 +182,10 @@ test('environment: visible curved courses carry the ferry, tangent and fading wa
       );
       expect((await state(page)).turn).toBe(4);
     }
-    expect((await journey(page)).boatHeading).toBeCloseTo(Math.PI / 2, 6);
+    const settled = await journey(page);
+    expect(settled.boatHeading).toBeCloseTo(settled.pose.heading, 8);
+    if (['harbor', 'low-pier', 'bell-pier'].includes((await state(page)).boatNodeId))
+      expect(Math.abs(Math.sin(settled.boatHeading))).toBeCloseTo(1, 8);
   }
   const samples = await stopSamples(page);
   expect(samples.length).toBeGreaterThan(20);
@@ -219,10 +222,9 @@ test('environment: visible curved courses carry the ferry, tangent and fading wa
         Math.abs(sample.wake.positions[i] - sample.waterY - 0.018),
       );
     expect(maximumWaterHeightError).toBeLessThan(0.000005);
-    expect(sample.wake.limits).toMatchObject({ capacity: 96, lifetime: 1800, length: 3.6 });
+    expect(sample.wake.limits).toMatchObject({ capacity: 12, lifetime: 1800, sections: 12 });
     expect(sample.wake.points.length).toBeLessThanOrEqual(sample.wake.limits.capacity);
-    let wakeLength = 0,
-      maximumSternError = 0,
+    let maximumReleaseError = 0,
       maximumCourseDistance = 0,
       minimumAge = Infinity,
       maximumAge = 0,
@@ -234,11 +236,16 @@ test('environment: visible curved courses carry the ferry, tangent and fading wa
         point.position.every(Number.isFinite) &&
         point.center.every(Number.isFinite) &&
         Number.isFinite(point.heading);
-      maximumSternError = Math.max(
-        maximumSternError,
-        Math.abs(point.position[0] - point.center[0] + Math.sin(point.heading) * 0.72),
+      const forward =
+        point.direction[0] * Math.sin(point.heading) + point.direction[2] * Math.cos(point.heading);
+      const side =
+        point.direction[0] * Math.cos(point.heading) - point.direction[2] * Math.sin(point.heading);
+      const reach = 1 / Math.hypot(forward / 0.76, side / 0.48);
+      maximumReleaseError = Math.max(
+        maximumReleaseError,
+        Math.abs(point.position[0] - point.center[0] + point.direction[0] * reach),
         Math.abs(point.position[1] - point.center[1] - 0.018),
-        Math.abs(point.position[2] - point.center[2] + Math.cos(point.heading) * 0.72),
+        Math.abs(point.position[2] - point.center[2] + point.direction[2] * reach),
       );
       maximumCourseDistance = Math.max(
         maximumCourseDistance,
@@ -248,18 +255,17 @@ test('environment: visible curved courses carry the ferry, tangent and fading wa
       );
       minimumAge = Math.min(minimumAge, sample.time - point.time);
       maximumAge = Math.max(maximumAge, sample.time - point.time);
-      if (i && point.segment === sample.wake.points[i - 1].segment)
-        wakeLength += Math.hypot(
-          point.position[0] - sample.wake.points[i - 1].position[0],
-          point.position[2] - sample.wake.points[i - 1].position[2],
-        );
     }
     expect(finitePoints).toBe(true);
-    expect(maximumSternError).toBeLessThan(0.000005);
+    expect(maximumReleaseError).toBeLessThan(0.000005);
     expect(maximumCourseDistance).toBeLessThanOrEqual(0.08);
     expect(minimumAge).toBeGreaterThanOrEqual(0);
     expect(maximumAge).toBeLessThanOrEqual(sample.wake.limits.lifetime);
-    expect(wakeLength).toBeLessThanOrEqual(sample.wake.limits.length + 0.00001);
+    expect(sample.wake.vertices).toBeLessThanOrEqual(
+      sample.wake.points.length * sample.wake.limits.sections * 6,
+    );
+    expect(sample.wake.contactStrength).toBe(0);
+    expect(sample.wake.docking).toBe(false);
     expect(sample.wake.opacity.every(Number.isFinite)).toBe(true);
     expect(Math.min(0, ...sample.wake.opacity)).toBeGreaterThanOrEqual(0);
     expect(Math.max(0, ...sample.wake.opacity)).toBeLessThanOrEqual(0.641);

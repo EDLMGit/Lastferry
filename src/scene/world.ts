@@ -2,7 +2,15 @@ import * as T from 'three';
 import { level as baseline, type Level } from '../levels/level';
 import { draft, edgeTo, type State, type Action } from '../game/rules';
 import { animal, ball, box, cylinder, ferry, lighthouse, mat, mesh, pine } from './models';
-import { sampleJourney } from './motion';
+import { sampleJourney, type JourneyPlan } from './motion';
+import { PresentationPoses } from './poses';
+import {
+  bridgeBowOffset,
+  deckEntryZ,
+  firstRabbitDeckZ,
+  sampleDeckTransfer,
+  transferHeading,
+} from './deck-transfer';
 import { sceneLayout, type SceneLayout } from './layout';
 import { bellLandmark, cottage } from './scenery';
 import { getLevelPaths, type CanonicalPath } from './paths';
@@ -57,6 +65,7 @@ export class World {
   state: State;
   layout: SceneLayout;
   paths: Map<string, CanonicalPath>;
+  poses: PresentationPoses;
   shores: Shores;
   coastalWater: CoastalWater;
   effects: CrossingEffects;
@@ -95,7 +104,7 @@ export class World {
     path: CanonicalPath | null;
     edgeId: string | null;
     reverse: boolean;
-    fromAngle: number;
+    journey: JourneyPlan | null;
     fromHullY: number;
     transfer: TransferPresentation | null;
   } = null;
@@ -112,6 +121,7 @@ export class World {
     this.state = state;
     this.layout = sceneLayout(this.level.id);
     this.paths = getLevelPaths(this.level);
+    this.poses = new PresentationPoses(this.level);
     this.renderer = new T.WebGLRenderer({ antialias: true, alpha: false });
     this.renderer.setPixelRatio(Math.min(devicePixelRatio, 1.7));
     this.renderer.shadowMap.enabled = true;
@@ -305,7 +315,7 @@ export class World {
       anchor.position.set(
         ...((p.species === 'rabbit'
           ? index === 0
-            ? [-0.22, 0.26, -0.02]
+            ? [-0.22, 0.26, firstRabbitDeckZ]
             : [0.22, 0.26, 0.3]
           : [0, 0.26, 0.69]) as [number, number, number]),
       );
@@ -887,7 +897,7 @@ export class World {
     this.shadow.position.y = this.water.position.y + 0.008;
     const n = this.level.nodes.find((n) => n.id === s.boatNodeId)!;
     this.boatRoot.position.copy(V(n.positionXZ, s.tideLevel * 0.18));
-    this.boatRoot.rotation.y = Math.PI / 2;
+    this.boatRoot.rotation.y = this.poses.heading;
     this.hull.position.y = this.draftY(s);
     for (const [id, g] of this.animals) {
       if (s.aboard.includes(id)) {
@@ -1006,7 +1016,7 @@ export class World {
       ? {
           progress: 0,
           distance: 0,
-          tangent: sampleJourney(path, 0, this.boatRoot.rotation.y, reverse).tangent,
+          tangent: sampleJourney(this.poses.journey!, 0).tangent,
         }
       : null;
     const timeline = TransferTimeline.create(before, after, action, this.reduced);
@@ -1028,7 +1038,7 @@ export class World {
       path,
       edgeId,
       reverse,
-      fromAngle: this.boatRoot.rotation.y,
+      journey: this.poses.journey,
       fromHullY: this.hull.position.y,
       transfer,
     };
@@ -1070,7 +1080,7 @@ export class World {
         tideProgress,
       );
       if (tr.path) {
-        const pose = sampleJourney(tr.path, t, tr.fromAngle, tr.reverse);
+        const pose = sampleJourney(tr.journey!, t);
         this.boatRoot.position.copy(pose.position);
         this.boatRoot.rotation.y = pose.angle;
         this.journeyFrame = { progress: t, distance: pose.distance, tangent: pose.tangent };
@@ -1086,7 +1096,12 @@ export class World {
           const offset =
             passenger.species === 'rabbit' ? (this.speciesIndex(id) ? 0.07 : -0.07) : 0;
           const bridge = new T.Vector3(
-            pier.positionXZ[0] + offset,
+            pier.positionXZ[0] +
+              T.MathUtils.clamp(
+                Math.sin(this.boatRoot.rotation.y) * bridgeBowOffset + offset,
+                -pier.width / 2,
+                pier.width / 2,
+              ),
             pier.elevation * 0.18 - 0.005,
             pier.positionXZ[1] + 0.46,
           );
@@ -1095,13 +1110,14 @@ export class World {
             pier.elevation * 0.18 + 0.025,
             pier.landAnchorXZ[1] + 0.15,
           );
-          const way = tr.after.aboard.includes(id)
-            ? [tr.positions.get(id)!, bridge, dest]
-            : [tr.positions.get(id)!, bridge, land, dest];
-          const f = k * (way.length - 1),
-            i = Math.min(way.length - 2, Math.floor(f));
-          g.position.lerpVectors(way[i], way[i + 1], f - i);
-          g.rotation.y = 0;
+          const board = tr.after.aboard.includes(id);
+          const side = Math.sign(this.hull.worldToLocal(bridge.clone()).x) || 1;
+          const gate = this.hull.localToWorld(new T.Vector3(side * 0.51, 0.26, deckEntryZ));
+          const corridor = this.hull.localToWorld(new T.Vector3(0, 0.26, deckEntryZ));
+          g.position.copy(
+            sampleDeckTransfer(board, tr.positions.get(id)!, bridge, gate, corridor, land, dest, k),
+          );
+          g.rotation.y = transferHeading(board, this.boatRoot.rotation.y, k);
           if (!this.reduced) {
             g.position.y += Math.sin(t * Math.PI * 4) ** 2 * 0.055;
             if (tr.after.status !== 'won' && tr.after.delivered.includes(id) && t > 0.72)
@@ -1279,6 +1295,7 @@ export class World {
     return {
       boatWorldPosition: this.boatRoot.getWorldPosition(new T.Vector3()).toArray(),
       boatHeading: this.boatRoot.rotation.y,
+      pose: this.poses.presentation(),
       active:
         transition?.path && this.journeyFrame
           ? {
