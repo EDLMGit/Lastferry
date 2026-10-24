@@ -1,3 +1,7 @@
+# Phone playability publication — Sites version9
+
+2026-10-24: The user explicitly requested publication of game `e78819974a0487440e439ef87d24ba4bb1c2f454` for phone testing. Native private save/deploy succeeded on the existing Site, version9, hosting source `03720726f2d92cda0d5d66efb6749ccc755d22ee`, same URL and owner-private audience. Fresh hosting build/typecheck passes and all production files match the tested local build byte-for-byte. Existing188-unit/17-phone-case results are reused for unchanged game source; three separate timing failures remain documented. No fresh hosted-browser, Android/native-GPU or listening result is claimed. Successful helper opening/build/push/package required running outside the Windows sandbox after hanging attempts were interrupted. See [deployment confirmation](reviews/phone-playability/deployment-confirmation.json) and [source audit](reviews/phone-playability/deployment-source-audit.json). This follow-up changes continuity only; no new game implementation or GitHub main change.
+
 # Current task — Phone playability
 
 2026-10-24: Started clean on `m1-first-crossing` at `a93bed3897586fbfa66ed06e54ee2d9685c87be0`, preserving the newer publication documentation. Read AGENTS, PROJECT_STATE and the package-root phone task, then retained `NEXT_TASK_PHONE_PLAYABILITY.md` in the repository. Accepted game80545cb is already published privately as Sites version8/source382b2d3; the new phone implementation remains separate.

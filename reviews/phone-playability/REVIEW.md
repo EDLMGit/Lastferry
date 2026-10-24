@@ -2,7 +2,7 @@
 
 ## Disposition
 
-**Ready for review with three timing-check failures retained.** Implementation and focused phone verification are complete. This pass implements `NEXT_TASK_PHONE_PLAYABILITY.md`. The larger Play view, complete Whole cove view, bounded pan, nearby previews and optional fullscreen are one coherent camera/interface change. No new Site publication is included.
+**Ready for review with three timing-check failures retained.** Implementation and focused phone verification are complete. This pass implements `NEXT_TASK_PHONE_PLAYABILITY.md`. The larger Play view, complete Whole cove view, bounded pan, nearby previews and optional fullscreen are one coherent camera/interface change. The user subsequently requested publication for phone testing; see the confirmed version9 handoff below.
 
 ## Source and scope
 
@@ -11,7 +11,7 @@
 - Evidence was generated from that starting HEAD **plus recorded working-tree changes**, not from a future commit. Per-execution manifests and the final tested patch identify those changes. Final145-file source hash: `31764a1ee974c9eb59b0f21cd8d91e1e8632a89efca5321421dcffa1a23764e4`. Runtime/capture hash: `0d6bf4dc2707ef88b9b1402fa51e2a7aa23581dc0fce8f60b4aea4f278d91b89`. Final17+4 gates use the same runtime/tests/build inputs; only the capture helper later adds Play-mode success screenshots and optional native-recording flags. [Source reuse](source-reuse.json), [final manifest](source-manifest.json).
 - Baseline comparisons use an exact archive of starting HEAD, isolated at local5210; candidate dev5211 and fresh production4190. Nothing was reset to the older accepted SHA.
 - Main remains `386de54d20fdd4a513a06115471d70bf94738cc0`; no merge or force push. PR #1 remains draft.
-- Private Site remains **game `80545cb`**, Sites version8, hosting source `382b2d358ddf9fb1cac6cebb7905ae9f25f9fdc6`, [same private URL](https://last-ferry-playtest.abumech.chatgpt.site). This phone pass is a separate GitHub implementation awaiting ChatGPT review/publication.
+- The private Site now runs **game `e78819974a0487440e439ef87d24ba4bb1c2f454`**, Sites version9, hosting source `03720726f2d92cda0d5d66efb6749ccc755d22ee`, at the [same private URL](https://last-ferry-playtest.abumech.chatgpt.site). The user explicitly requested publication for phone testing; no new independent review or physical-device approval is implied.
 
 ## Selected behavior and visual decision
 
@@ -88,7 +88,7 @@ In narrow portrait, the deliberate bottom sheet covers part of the local ferry w
 
 Headless Chromium permits actual fullscreen entry and exit but refuses Playwright viewport resizing while fullscreen. The original combined recording also changes its fitted capture surface after fullscreen; it is retained and labeled. A separate ordinary-browser native844×390 sequence supplies the accessible moving excerpt. The capture therefore exits fullscreen before emulated rotation; a physical fullscreen-plus-orientation change remains unverified. Synthetic VisualViewport/cutout coverage is labeled separately. Background/mute/recovery checks verify state and routing, not a new listening judgment. The three final timing failures remain open verification limitations. The heading planner/stop timing is protected and agrees with recorded samples; this does not establish the delivered-frame smoothness threshold. The final input driver missed its required180ms window, so that window remains unverified on this runtime. No physical-device smoothness or responsiveness claim follows from the other passing cases.
 
-Further features and puzzles stay queued. Next action is ChatGPT review of the new GitHub SHA, then publication to the same private Site if accepted. A GitHub push does not deploy it.
+Further features and puzzles stay queued. The user subsequently requested publication, now confirmed as version9 below. Next action is the user’s phone playtest and review of any new feedback. A GitHub push alone does not deploy it.
 
 ## Packaging
 
@@ -97,3 +97,9 @@ The staged package matches all145 tested source entries:140 byte-exact and five 
 For reviewable diffs,74 large JSON evidence files remove formatting whitespace only; every token, numeric spelling, escaped string and data value is retained. Original pretty-printed files remain intact under ignored archives, with original/derived hashes in the [compaction record](json-compaction.json). Failure logs and source manifests are unchanged.
 
 Implementation commit **`0a9de631998ffb88b5608b17d80030b810db5b5c`** matches the complete tested source and selected media. The following commit updates continuity/audit metadata only; its final pushed SHA is supplied in PR #1 and the handoff. Evidence remains attributed to the recordeda93bed3 working tree, rather than retroactively recaptured from these commits.
+
+## Confirmed phone-test publication
+
+Game **`e78819974a0487440e439ef87d24ba4bb1c2f454`** was published on2026-10-24 at the user’s explicit request. Native private deployment succeeded as **Sites version9**, source **`03720726f2d92cda0d5d66efb6749ccc755d22ee`**, at the existing private URL. The same Site identity and audience are preserved. A fresh hosting build/typecheck passes; its HTML/JS/CSS match the tested local production output byte-for-byte.51of52 source inputs match after newline normalization; the sole difference is the retained preview-only Vite host entry and formatting.
+
+[Deployment confirmation](deployment-confirmation.json) · [Source/build/archive audit](deployment-source-audit.json). Prior unit/browser results are reused, including all three failed timing checks; no new hosted-browser, physical Android/native-GPU, other-engine or acoustic listening result is claimed. Sandbox helper openings hung and were interrupted; the native helper completed outside the sandbox without changing plugin or game code. This supersedes the pre-publication handoff.
