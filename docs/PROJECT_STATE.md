@@ -21,6 +21,7 @@ Local Codex implements the current task. ChatGPT reviews the identifiable handof
 | PR | https://github.com/EDLMGit/Lastferry/pull/1 — draft |
 | Homecoming implementation | `d3a7e3acfa2298bcaaa8e93622e81d62b367280e` — locally verified; final packaging SHA in PR handoff |
 | Lighthouse implementation | `040df0d6d2b8e094446b2bc3dc8ff3b78837fc78` — accepted; final reviewed packaging commit below |
+| Water-motion implementation | `13d3b441c82a9ac67053d416ff4d7461810179af` — verified; awaiting review/publication; final metadata SHA in PR handoff |
 | Reviewed game baseline | `0ee7d685071179b82ec2a599fac2f818251d0e54` |
 | Private phone build | `0ee7d685071179b82ec2a599fac2f818251d0e54` — publication confirmed 2026-10-23 |
 | Stable phone URL | https://last-ferry-playtest.abumech.chatgpt.site |

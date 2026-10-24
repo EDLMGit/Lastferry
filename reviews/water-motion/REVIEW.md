@@ -13,6 +13,7 @@
 - Baseline runtime hash **`d943620659412c6af9a5254cb69c7277da9cded6641eaebf4ed5a4031c717d5b`** matches the reviewed runtime exactly. Initial natural recordings preceded edits. Accurate midpoint stills were recaptured from an isolated baseline copy under `.cache`, without resetting the working branch.
 - Runtime changes: new `src/scene/wake.ts`, wake delegation in `effects.ts`, movement lifecycle in `world.ts`/visibility cleanup in `main.ts`, and selected `transitions.ts` timing. [Protected audit](protected-source-comparison.json): **44 protected files byte-exact unchanged**, including all audio, UI/CSS, levels/rules/paths, models and the accepted water shader/fields. Seven explicit lighthouse construction/lifecycle/telemetry blocks remain unchanged. No dependencies, production textures, new controls or code comments.
 - Tested source patch, source-to-Git equivalence and final implementation identity are retained in `tested-changes.patch` and `packaging-audit.json`; final metadata SHA is supplied in the PR/handoff.
+- Implementation commit: **`13d3b441c82a9ac67053d416ff4d7461810179af`**. All127 tested files match Git content exactly or by documented CRLF-to-LF normalization; all58 selected PNGs match exact captured/copied bytes. The following metadata-only commit records this identity without changing tested source. Final remote SHA is in the PR/handoff.
 
 ## Chosen treatment and actual comparison
 

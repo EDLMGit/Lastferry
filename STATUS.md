@@ -10,6 +10,8 @@ Fresh Node24 build/typecheck and163/163unit checks pass,21files. Two e2e-only ed
 
 The same-plan low-overhead repeat reports33.4ms median/50.1ms p95 for both baseline/final; the initial recorded long-tail shift did not repeat. Warm draw/resource counts match. This is SwiftShader, not native Android performance. Evidence: [review](reviews/water-motion/REVIEW.md), [comparison](reviews/water-motion/COMPARISON.md), final127-file source hash `e84792307ccda2b3efea3b70f7846331a6c3cec9d6afce4cc0bccdca48d52804`, runtime hash `be1d42f21ba0b4f45687fda21c1db730254e5f68dfc7a0ccd7eba16956a8c62b`.81native ordered frames cover six final recordings;15named full-interface originals decode. Media are local/ignored, silent and not uploaded. No confirmed blocker remains in exercised coverage. Physical Android, native GPU, other engines and acoustic listening remain unverified. Implementation and focused verification are complete; final Git identity is in the packaging audit/handoff. PR#1 stays draft and main unchanged. **The private Site remains0ee7d685; this pass awaits ChatGPT review and separate publication.** Stop after this milestone.
 
+Implementation commit `13d3b441c82a9ac67053d416ff4d7461810179af` matches all127 tested source entries with only documented Git line-ending normalization and all58 selected PNGs byte-for-byte. The following metadata-only commit records that identity; final pushed SHA is in the PR/handoff.
+
 ## Historical lighthouse light handoff
 
 # Current milestone — Lighthouse light refinement
