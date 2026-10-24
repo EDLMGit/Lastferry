@@ -12,6 +12,7 @@ import {
   keyAct,
   tabTo,
   fullyVisible,
+  wholeCove,
 } from './ui';
 
 const shot = (page: import('@playwright/test').Page, name: string) =>
@@ -219,12 +220,13 @@ test('visibility cancellation releases lock and reconciles to committed state', 
   expect((await state(page)).turn).toBe(0);
 });
 
-test('portrait: complete frame, usable controls, reduced motion and no horizontal clipping', async ({
+test('portrait: Whole cove frame, usable controls, reduced motion and no horizontal clipping', async ({
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await ready(page);
+  await wholeCove(page);
   await shot(page, 'portrait');
   await fullyVisible(page, page.locator('#map-sheep-pier'));
   await fullyVisible(page, page.locator('#undo'));

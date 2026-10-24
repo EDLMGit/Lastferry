@@ -3,7 +3,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { reviewDir } from './evidence';
 import {
   activate,
-  ready,
+  ready as baseReady,
   state,
   rendered,
   navigation,
@@ -13,7 +13,13 @@ import {
   tabTo,
   fullyVisible,
   readable,
+  wholeCove,
 } from './ui';
+
+async function ready(page: Page, cove = 'first-crossing') {
+  await baseReady(page, cove);
+  await wholeCove(page);
+}
 
 type HitKind = 'island' | 'pier' | 'landmark' | 'waypoint' | 'ferry';
 type Point = { x: number; y: number; id: string; kind: HitKind; overlayControl: string | null };
@@ -122,7 +128,7 @@ for (const [label, width, height, touch] of [
   ['phone-844', 844, 390, true],
   ['phone-780', 780, 390, true],
 ] as const) {
-  test(`selection ${label}: actual island, pier, landmark, ferry and buoy hits are free and keep the camera stable`, async ({
+  test(`selection ${label}: Whole cove island, pier, landmark, ferry and buoy hits are free and keep the camera stable`, async ({
     browser,
   }) => {
     const context = await browser.newContext({
@@ -269,15 +275,14 @@ test('selection regression: an explicit new place permits the next trusted Sail 
   expect(clicks.every((click: any) => click.trusted)).toBe(true);
   expect(clicks.map((click: any) => click.target)).toEqual(['sail', 'map-rabbit-pier', 'sail']);
   expect(result.gapMs, 'The new intentional Sail must exercise the still-live old fence').toBeLessThanOrEqual(180);
-  expect(x).toBeGreaterThanOrEqual(first!.x); expect(x).toBeLessThanOrEqual(first!.x + first!.width);
-  expect(y).toBeGreaterThanOrEqual(first!.y); expect(y).toBeLessThanOrEqual(first!.y + first!.height);
   expect(result.final.state).toMatchObject({ turn: 3, boatNodeId: 'rabbit-pier' });
   expect(result.final.history).toBe(3);
-  expect((await selection(page)).selectedId).toBe('rabbit-pier');
+  expect((await selection(page)).selectedId).toBeNull();
+  await expect(page.locator('#board')).toBeVisible();
   await context.close();
 });
 
-test('selection regression: the arrived card permits a deliberate local action inside the prior Sail fence', async ({ browser }) => {
+test('selection regression: the arrived dock permits a deliberate local action inside the prior Sail fence', async ({ browser }) => {
   mkdirSync(reviewDir, { recursive: true });
   const context = await browser.newContext({ viewport: { width: 844, height: 390 }, reducedMotion: 'reduce', hasTouch: true, isMobile: true });
   const page = await context.newPage();
@@ -287,24 +292,28 @@ test('selection regression: the arrived card permits a deliberate local action i
   const sail = await page.locator('#sail').boundingBox();
   await page.evaluate(() => {
     (window as any).__localIntentClicks = [];
-    window.addEventListener('click', (event) => (window as any).__localIntentClicks.push({ at: performance.now(), trusted: event.isTrusted, target: (event.target as HTMLElement).closest('button')?.id ?? null }), true);
+    window.addEventListener('click', (event) => {
+      const api=(window as any).__LAST_FERRY__,v=api.getViewStatus();
+      (window as any).__localIntentClicks.push({ at: performance.now(), trusted: event.isTrusted, target: (event.target as HTMLElement).closest('button')?.id ?? null,dialogOpen:!!document.querySelector('#dialog[open]'),selectedId:document.querySelector('.map-target[aria-expanded="true"]')?.id??null,snapshot:{state:api.getState(),history:api.getRenderStatus().historyLength,desiredMusic:api.getAudioStatus().desiredArrangement,view:{mode:v.mode,scale:v.scale,focus:v.focus}} });
+    }, true);
   });
   await page.touchscreen.tap(sail!.x + sail!.width / 2, sail!.y + sail!.height / 2);
-  await idle(page);
-  const arrived = await snapshot(page);
-  await page.touchscreen.tap(sail!.x + sail!.width / 2, sail!.y + sail!.height / 2);
-  expect(await snapshot(page)).toEqual(arrived);
-  expect((await selection(page)).selectedId).toBe('sheep-pier');
-  await expect(page.locator('#dialog')).toBeHidden();
+  await page.waitForFunction(() => document.querySelector('#seascape')?.getAttribute('aria-busy') === 'false');
   const board = await page.locator('#board').boundingBox();
+  await page.touchscreen.tap(sail!.x + sail!.width / 2, sail!.y + sail!.height / 2);
   const x = board!.x + board!.width / 2, y = board!.y + board!.height / 2;
   await page.touchscreen.tap(x, y);
   const clicks = await page.evaluate(() => (window as any).__localIntentClicks);
-  const result = { sail, board, gapMs: clicks[2]?.at - clicks[0]?.at, repeatGapMs: clicks[1]?.at - clicks[0]?.at, clicks, arrived, final: await snapshot(page), modalOpen: await page.locator('#dialog[open]').count() === 1 };
+  const arrived=clicks[1]?.snapshot;
+  const final=await page.evaluate(()=>{const api=(window as any).__LAST_FERRY__,v=api.getViewStatus();return{state:api.getState(),history:api.getRenderStatus().historyLength,desiredMusic:api.getAudioStatus().desiredArrangement,view:{mode:v.mode,scale:v.scale,focus:v.focus}};});
+  const result = { sail, board, gapMs: clicks[2]?.at - clicks[0]?.at, repeatGapMs: clicks[1]?.at - clicks[0]?.at, clicks, arrived, final, modalOpen: await page.locator('#dialog[open]').count() === 1 };
   writeFileSync(`${reviewDir}/arrived-local-action-regression.json`, JSON.stringify(result, null, 2));
   expect(clicks).toHaveLength(3);
   expect(clicks[0].target).toBe('sail');
   expect(clicks[2].target).toBe('board');
+  expect(clicks[2].dialogOpen).toBe(false);
+  expect(clicks[2].selectedId).toBeNull();
+  expect(clicks[2].snapshot).toEqual(arrived);
   expect(clicks.every((click: any) => click.trusted)).toBe(true);
   expect(result.gapMs).toBeLessThanOrEqual(180);
   await expect(page.locator('#commit')).toBeVisible();

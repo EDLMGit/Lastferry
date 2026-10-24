@@ -8,7 +8,7 @@ Read this before choosing scope. Detailed implementation history belongs in `STA
 
 Last Ferry is a finite, authored coastal puzzle story: a small ferry brings animals home before rising water closes their rescue window. Think slowly, see the consequences, and enjoy a beautiful miniature world. One worthwhile playthrough is a valid product.
 
-Android phone landscape is the primary playtest target, with desktop, touch and keyboard support. The user is the current human playtester. Do not require recruiting additional testers to continue these passes.
+Android phone play in both portrait and landscape is the current playtest target, with desktop, touch and keyboard support. The user is the current human playtester. Do not require recruiting additional testers to continue these passes.
 
 Local Codex implements the current task. ChatGPT reviews the identifiable handoff, sets the next contained task and publishes reviewed builds to the existing private Site. There is no automatic review or deployment triggered by a GitHub push.
 
@@ -93,16 +93,24 @@ Final127-file hash `e84792307ccda2b3efea3b70f7846331a6c3cec9d6afce4cc0bccdca48d5
 
 ## Published correction: Sailing direction and released water crests
 
-`NEXT_TASK_SAILING_DIRECTION_AND_WAKE.md` is the only active implementation scope. Started clean on `m1-first-crossing` at `8b874adccfc1d65af569b81fade548f0368645b0`. Preserve the current sailing budget, accepted puzzles, UI, audio, water palette/shader and lighthouse/homecoming. The previous pass remains unpublished.
+`NEXT_TASK_SAILING_DIRECTION_AND_WAKE.md` is completed and user-accepted as `80545cbabb0496b215cd56f25cfc0113b056da67`. It started clean on `m1-first-crossing` at `8b874adccfc1d65af569b81fade548f0368645b0`. Preserve its sailing budget, puzzles, headings, released crests, audio, water palette/shader and lighthouse/homecoming. The rejected previous pass was superseded by this accepted correction.
 
 The correction replaces universal endpoint alignment with an accepted-transaction presentation pose history. Free-water stops retain their incoming tangent; actual piers choose the closer safe broadside berth. A deterministic shortest-angle departure and required berth alignment stay within the existing movement budget. Undo restores the paired pre-action heading; all completion/recovery paths use the same precomputed target. Local mirrored deck entries support both berth headings without changing transfer/audio timing.
 
 The water treatment uses a fixed pool of independently released open crests. Release data, age and stable variation determine their later world-space evolution; later hull movement cannot drag them. Finite tails finish after controls unlock, with no live ellipse, bow outline or peak-strength docking restart. Fresh Node24 build/typecheck,173/173unit tests and23 distinct browser cases pass (20 together,3 through preserved affected reruns). Native phone comparisons retain fewer broader soft crests; four animated excerpts and selected native frames are accessible in Git. Six final full-interface recordings and15 validated originals remain local/ignored. Source/runtime identity, original failures and exact results are in `reviews/sailing-direction-wake/REVIEW.md`. The warmed comparison retains equal active p95/resource counts; two instrumented desktop Bellwater gaps clear transients, while final phone runs have no gap above300ms. Physical Android/native GPU and new listening remain unverified. Implementation is complete. The existing private Site publishes game `80545cbabb0496b215cd56f25cfc0113b056da67` as version8; its successful deployment and source identity were confirmed on2026-10-24. Phone playtesting can use the stable URL. Remaining physical-device limitations still apply.
 
+## Active task: Phone playability
+
+`NEXT_TASK_PHONE_PLAYABILITY.md` is the current implementation scope. Started clean at `a93bed3897586fbfa66ed06e54ee2d9685c87be0`; its newer continuity documentation is preserved and its game matches accepted/published80545cb. The package-root task was retained in this repository. The confirmed private publication is Sites version8, hosting source382b2d358ddf9fb1cac6cebb7905ae9f25f9fdc6, with the same URL and owner-private audience.
+
+Implemented a closer stable Play view in both phone orientations, deliberate Whole cove and Back to boat, bounded water dragging, measured visible-viewport/safe-area layout, nearby action previews and optional fullscreen on the common app root. The fixed isometric angle and horizontal sailing follow keep the ferry readable; Whole cove retains every stop. Transfer subsets keep a stable panel with internal scrolling and reachable confirmation. Portrait uses a bottom sheet; short landscape a nearby same-edge sheet. Camera/water revisions update picking, map names/targets, dock controls, anchors and water together. A real tide-height marker offset was corrected. Batched label measurements reduce repeated layout work. Accepted puzzle, heading, released-crest, timing, audio, water and lighthouse sources remain protected.
+
+Final Node24 build/typecheck and **188/188 unit tests** pass,27files with bounded workers. **17/17 final focused browser cases pass in one completed run**, covering five phone sizes, both actual Holding rescues, subsets/tide and terminal Undo, pan/picking, resize, fullscreen actual API and labeled fallbacks, safe viewport offsets, desktop and other coves. A separate final four-case timing run has one pass (victory mix) and three failures: delivered heading step1.425683rad versus0.85 over99.9ms and trusted-input sequences230.2/377.6ms versus180ms. Those checks remain failed verification limits; thresholds and original evidence are preserved in the [phone review](../reviews/phone-playability/REVIEW.md). Native comparisons, source/packaging identity and accessible moving evidence belong there. Physical Android, other engines, native-GPU performance and new listening remain unverified. This implementation is awaiting ChatGPT review; it will not update the Site until ChatGPT publishes the reviewed new SHA.
+
 ## Queue and scope boundaries
 
 - Further playtest feedback will arrive incrementally. Add it here with a brief status and concrete intent; do not implement it automatically during the active task.
-- Homecoming and lighthouse light are accepted. Sailing direction and released crests are the assigned correction; additional ideas remain queued.
+- Homecoming, lighthouse light, sailing direction and released crests are accepted and published. Phone playability is implemented for review; additional ideas remain queued.
 - More authored coves and increasing difficulty remain a later product direction. The active pass adds no puzzle or mechanic.
 - Broader environment/art changes and further audio changes require a later active task or new user feedback.
 - Extra volume sliders, graphics presets, rewards, accounts and progression systems are not requested deliverables.

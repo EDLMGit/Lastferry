@@ -5,6 +5,17 @@ import { animal, ball, box, cylinder, ferry, lighthouse, mat, mesh, pine } from 
 import { sampleJourney, type JourneyPlan } from './motion';
 import { PresentationPoses } from './poses';
 import {
+  clampViewFocus,
+  overviewScale,
+  panViewFocus,
+  phonePlayScale,
+  usableViewRectangle,
+  viewFrame,
+  type ViewBounds,
+  type ViewPoint,
+  type ViewRectangle,
+} from './view';
+import {
   bridgeBowOffset,
   deckEntryZ,
   firstRabbitDeckZ,
@@ -81,6 +92,20 @@ export class World {
   homecomingCameraFallback = 'ordinary';
   homecomingCameraSuppressed = false;
   cameraRevision = 0;
+  layoutRevision = 0;
+  layoutWaterY = Number.NaN;
+  onViewChange: () => void = () => {};
+  onFrame: () => void = () => {};
+  viewMode: 'play' | 'overview' = 'play';
+  viewPanned = false;
+  viewLocation: string | null = null;
+  measuredUsable: ViewRectangle | null = null;
+  viewBounds: ViewBounds | null = null;
+  viewFocus: ViewPoint | null = null;
+  viewScale = 1;
+  layoutStaticBounds = new Map<string, T.Box3>();
+  layoutAnimalBounds = new Map<string, T.Box3>();
+  layoutHullBounds = new T.Box3();
   homecomingFocus = new T.Vector2();
   timing: JourneyTiming = journeyTiming;
   disposed = false;
@@ -587,25 +612,270 @@ export class World {
           ),
         ),
       );
+    for (const node of this.level.nodes)
+      this.layoutStaticBounds.set(
+        node.id,
+        new T.Box3().setFromObject(
+          this.placeObjects.get(node.id)?.[0] ?? this.markers.get(node.id)!,
+        ),
+      );
+    for (const [id, objects] of this.placeObjects) {
+      const bounds = new T.Box3();
+      for (const object of objects) bounds.union(new T.Box3().setFromObject(object));
+      this.layoutStaticBounds.set(id, bounds);
+    }
+    this.layoutStaticBounds.set('lighthouse', new T.Box3().setFromObject(this.home.group));
+    const bell = this.scene.getObjectByName('bell-landmark');
+    if (bell) this.layoutStaticBounds.set('bell', new T.Box3().setFromObject(bell));
+    this.layoutHullBounds = this.localGeometryBounds(this.hull, new Set(this.animals.values()));
+    for (const [id, animal] of this.animals)
+      this.layoutAnimalBounds.set(id, this.localGeometryBounds(animal));
   }
-  project(p: number[], height = 0.06) {
+  project(p: number[], height = this.water.position.y + 0.04) {
     const v = V(p, height).project(this.camera);
     return {
       x: ((v.x + 1) * this.host.clientWidth) / 2,
       y: ((1 - v.y) * this.host.clientHeight) / 2,
     };
   }
+  private localGeometryBounds(root: T.Object3D, excluded = new Set<T.Object3D>()) {
+    const bounds = new T.Box3(),
+      inverse = root.matrixWorld.clone().invert();
+    root.traverse((object) => {
+      if (!(object instanceof T.Mesh)) return;
+      for (
+        let parent: T.Object3D | null = object;
+        parent && parent !== root;
+        parent = parent.parent
+      )
+        if (excluded.has(parent)) return;
+      if (!object.geometry.boundingBox) object.geometry.computeBoundingBox();
+      const source = object.geometry.boundingBox!;
+      for (const x of [source.min.x, source.max.x])
+        for (const y of [source.min.y, source.max.y])
+          for (const z of [source.min.z, source.max.z])
+            bounds.expandByPoint(
+              new T.Vector3(x, y, z).applyMatrix4(object.matrixWorld).applyMatrix4(inverse),
+            );
+    });
+    return bounds;
+  }
+  private projectBounds(bounds: T.Box3, transform?: T.Matrix4) {
+    const points: T.Vector3[] = [];
+    for (const x of [bounds.min.x, bounds.max.x])
+      for (const y of [bounds.min.y, bounds.max.y])
+        for (const z of [bounds.min.z, bounds.max.z]) {
+          const point = new T.Vector3(x, y, z);
+          if (transform) point.applyMatrix4(transform);
+          points.push(point.project(this.camera));
+        }
+    const xs = points.map((point) => ((point.x + 1) * this.host.clientWidth) / 2);
+    const ys = points.map((point) => ((1 - point.y) * this.host.clientHeight) / 2);
+    const left = Math.min(...xs),
+      right = Math.max(...xs),
+      top = Math.min(...ys),
+      bottom = Math.max(...ys);
+    return { left, right, top, bottom, width: right - left, height: bottom - top };
+  }
+  layoutFrameStatus() {
+    this.scene.updateMatrixWorld(true);
+    const passengers = [...this.animals].map(([id, animal]) => ({
+      id,
+      ...this.projectBounds(this.layoutAnimalBounds.get(id)!, animal.matrixWorld),
+    }));
+    const hull = this.projectBounds(this.layoutHullBounds, this.hull.matrixWorld);
+    const aboard = passengers.filter(({ id }) => this.state.aboard.includes(id));
+    const boat = {
+      left: Math.min(hull.left, ...aboard.map((animal) => animal.left)),
+      right: Math.max(hull.right, ...aboard.map((animal) => animal.right)),
+      top: Math.min(hull.top, ...aboard.map((animal) => animal.top)),
+      bottom: Math.max(hull.bottom, ...aboard.map((animal) => animal.bottom)),
+    };
+    return {
+      boat,
+      passengers,
+      lighthouse: this.projectBounds(this.layoutStaticBounds.get('lighthouse')!),
+      bell: this.layoutStaticBounds.has('bell')
+        ? this.projectBounds(this.layoutStaticBounds.get('bell')!)
+        : null,
+      places: this.level.nodes.map(({ id }) => ({
+        id,
+        ...this.projectBounds(this.layoutStaticBounds.get(id)!),
+      })),
+      nodes: this.level.nodes.map((node) => ({ id: node.id, ...this.project(node.positionXZ) })),
+    };
+  }
+  private usableRectangle() {
+    return usableViewRectangle(this.host.clientWidth, this.host.clientHeight, this.measuredUsable);
+  }
+  setUsableRectangle(rectangle: ViewRectangle) {
+    if (
+      this.measuredUsable &&
+      (Object.keys(rectangle) as (keyof ViewRectangle)[]).every(
+        (key) => Math.abs(rectangle[key] - this.measuredUsable![key]) < 0.5,
+      )
+    )
+      return;
+    this.measuredUsable = { ...rectangle };
+    this.reframeView();
+  }
+  setViewMode(mode: 'play' | 'overview') {
+    this.viewMode = mode;
+    this.viewPanned = false;
+    this.viewLocation = null;
+    this.viewFocus = null;
+    this.reframeView();
+    this.onViewChange();
+  }
+  backToBoat() {
+    this.setViewMode('play');
+  }
+  panByPixels(deltaX: number, deltaY: number) {
+    if (!this.viewBounds || !this.viewFocus || this.homecoming.active || this.transition) return;
+    this.viewFocus = panViewFocus(this.viewFocus, deltaX, deltaY, this.viewScale);
+    this.viewPanned = true;
+    this.viewLocation = null;
+    this.reframeView();
+    this.onViewChange();
+  }
+  frameLocation(id: string) {
+    if (this.viewMode === 'overview' || this.viewLocation === id || this.transition) return;
+    const node = this.level.nodes.find((node) => node.id === id);
+    if (!node) return;
+    const screen = this.project(node.positionXZ),
+      usable = this.usableRectangle();
+    if (
+      screen.x >= usable.left + 36 &&
+      screen.x <= usable.right - 36 &&
+      screen.y >= usable.top + 36 &&
+      screen.y <= usable.bottom - 36
+    )
+      return;
+    const focus = V(node.positionXZ).applyMatrix4(this.camera.matrixWorldInverse);
+    this.viewFocus = { x: focus.x, y: focus.y + 0.8 };
+    this.viewLocation = id;
+    this.viewPanned = false;
+    this.reframeView();
+  }
+  viewStatus() {
+    return {
+      mode: this.viewMode,
+      panned: this.viewPanned,
+      focused: this.viewLocation,
+      revision: this.cameraRevision,
+      scale: this.viewScale,
+      usable: this.usableRectangle(),
+      bounds: this.viewBounds ? { ...this.viewBounds } : null,
+      focus: this.viewFocus ? { ...this.viewFocus } : null,
+    };
+  }
+  private activeViewFocus() {
+    const point = this.boatRoot.position.clone();
+    point.y = 0;
+    point.applyMatrix4(this.camera.matrixWorldInverse);
+    return { x: point.x, y: point.y + 0.8 };
+  }
+  private viewChanged() {
+    this.camera.updateProjectionMatrix();
+    this.coastalWater.setView(this.camera);
+    this.cameraRevision++;
+    this.layoutRevision++;
+    this.onViewChange();
+  }
+  private reframeView() {
+    if (!this.viewBounds) return;
+    const width = this.host.clientWidth,
+      height = this.host.clientHeight;
+    let usable = this.usableRectangle();
+    const phone = width <= 1000 && height <= 1000;
+    const overview = overviewScale(this.viewBounds, usable);
+    this.viewScale =
+      this.viewMode === 'play' && phone ? phonePlayScale(this.viewBounds, usable) : overview;
+    let focus = this.viewFocus;
+    let harborFrame = false;
+    if (this.viewMode === 'overview' && !this.viewPanned)
+      focus = {
+        x: (this.viewBounds.minX + this.viewBounds.maxX) / 2,
+        y: (this.viewBounds.minY + this.viewBounds.maxY) / 2,
+      };
+    else if (!this.viewPanned && !this.viewLocation) focus = this.activeViewFocus();
+    if (!phone && this.viewMode === 'play' && !this.viewPanned && !this.viewLocation)
+      focus = {
+        x: (this.viewBounds.minX + this.viewBounds.maxX) / 2,
+        y: (this.viewBounds.minY + this.viewBounds.maxY) / 2,
+      };
+    if (
+      phone &&
+      this.viewMode === 'play' &&
+      this.state.status === 'won' &&
+      !this.transition &&
+      !this.viewPanned &&
+      !this.viewLocation
+    ) {
+      harborFrame = true;
+      if (this.completionBounds) {
+        const card = this.completionBounds;
+        const left = { ...usable, right: Math.min(usable.right, card.left - 12) };
+        const above = { ...usable, bottom: Math.min(usable.bottom, card.top - 12) };
+        const right = { ...usable, left: Math.max(usable.left, card.right + 12) };
+        const below = { ...usable, top: Math.max(usable.top, card.bottom + 12) };
+        const candidates = [left, right, above, below].filter(
+          (rect) => rect.right - rect.left >= 140 && rect.bottom - rect.top >= 140,
+        );
+        if (candidates.length)
+          usable = candidates.sort(
+            (a, b) =>
+              (b.right - b.left) * (b.bottom - b.top) - (a.right - a.left) * (a.bottom - a.top),
+          )[0];
+      }
+      this.scene.updateMatrixWorld(true);
+      const subjects = new T.Box3().setFromObject(this.home.group);
+      subjects.union(new T.Box3().setFromObject(this.boatRoot));
+      for (const animal of this.animals.values())
+        subjects.union(new T.Box3().setFromObject(animal));
+      const points: T.Vector3[] = [];
+      for (const x of [subjects.min.x, subjects.max.x])
+        for (const y of [subjects.min.y, subjects.max.y + 0.2])
+          for (const z of [subjects.min.z, subjects.max.z])
+            points.push(new T.Vector3(x, y, z).applyMatrix4(this.camera.matrixWorldInverse));
+      const local = new T.Box3().setFromPoints(points);
+      const bounds = { minX: local.min.x, maxX: local.max.x, minY: local.min.y, maxY: local.max.y };
+      this.viewScale = Math.min(this.viewScale, overviewScale(bounds, usable));
+      focus = { x: (bounds.minX + bounds.maxX) / 2, y: (bounds.minY + bounds.maxY) / 2 };
+    }
+    focus = harborFrame
+      ? focus!
+      : clampViewFocus(focus ?? this.activeViewFocus(), this.viewBounds, usable, this.viewScale);
+    this.viewFocus = focus;
+    const frame = viewFrame(width, height, usable, this.viewScale, focus);
+    const changed =
+      !this.canonicalFrame ||
+      (Object.keys(frame) as (keyof ViewRectangle)[]).some(
+        (key) => Math.abs(frame[key] - this.canonicalFrame![key]) > 1e-7,
+      );
+    if (!changed) return;
+    this.canonicalFrame = frame;
+    Object.assign(this.camera, frame);
+    this.homecomingCameraFactor = 1;
+    this.viewChanged();
+    if (this.homecoming.active) {
+      this.fitHomecomingCamera();
+      if (!this.homecoming.finite) this.applyHomecomingCamera(this.homecomingCameraTarget);
+    }
+  }
   resize() {
     const w = this.host.clientWidth,
       h = this.host.clientHeight;
     if (!w || !h) return;
     this.renderer.setSize(w, h);
-    const aspect = w / h;
-    const span = Math.max(13.2, 20.3 / aspect);
-    this.camera.left = (-span * aspect) / 2;
-    this.camera.right = (span * aspect) / 2;
-    this.camera.top = span / 2;
-    this.camera.bottom = -span / 2;
+    let anchor: T.Vector3 | null = null;
+    if (this.viewPanned && this.viewFocus) {
+      anchor = new T.Vector3(this.viewFocus.x, this.viewFocus.y, -1).applyMatrix4(
+        this.camera.matrixWorld,
+      );
+      const direction = this.camera.getWorldDirection(new T.Vector3());
+      if (Math.abs(direction.y) > 0.001) anchor.addScaledVector(direction, -anchor.y / direction.y);
+    }
     this.camera.near = 0.1;
     this.camera.far = 100;
     const smallLandscape = matchMedia('(max-height: 480px) and (min-width: 701px)').matches;
@@ -616,58 +886,25 @@ export class World {
     );
     this.camera.lookAt(0, 0, 0.05);
     this.camera.updateMatrixWorld(true);
+    if (this.viewLocation) {
+      const node = this.level.nodes.find((node) => node.id === this.viewLocation)!;
+      const point = V(node.positionXZ).applyMatrix4(this.camera.matrixWorldInverse);
+      this.viewFocus = { x: point.x, y: point.y + 0.8 };
+    } else if (anchor) {
+      anchor.applyMatrix4(this.camera.matrixWorldInverse);
+      this.viewFocus = { x: anchor.x, y: anchor.y };
+    }
     const points = this.framePoints.map((point) =>
       point.clone().applyMatrix4(this.camera.matrixWorldInverse),
     );
-    const bounds = new T.Box3().setFromPoints(points),
-      center = bounds.getCenter(new T.Vector3()),
-      size = bounds.getSize(new T.Vector3());
-    const compact = h <= 600 && w > 700;
-    const top = compact ? 70 : w <= 700 ? 198 : 104;
-    const bottom = w <= 700 ? 150 : 16;
-    const availableHeight = Math.max(100, h - top - bottom);
-    const targetY = top + availableHeight / 2;
-    let scale = Math.min((w - 32) / size.x, availableHeight / size.y);
-    let targetX = w / 2;
-    const statusLeft = w - (compact ? Math.min(300, w * 0.4) : 510) - 16;
-    const statusTop = h - (compact ? 76 : 84);
-    if (w > 700)
-      for (let attempt = 0; attempt < 60; attempt++) {
-        const lowPoints = points.filter(
-          (point) => targetY - (point.y - center.y) * scale > statusTop,
-        );
-        const left = 16 - (bounds.min.x - center.x) * scale;
-        const right = w - 16 - (bounds.max.x - center.x) * scale;
-        const belowStatus = lowPoints.length
-          ? statusLeft - Math.max(...lowPoints.map((point) => (point.x - center.x) * scale)) - 8
-          : right;
-        const maximum = Math.min(right, belowStatus);
-        if (left <= maximum) {
-          targetX = Math.max(left, Math.min(maximum, w / 2));
-          break;
-        }
-        scale *= 0.985;
-      }
-    const centerX = center.x + (w / 2 - targetX) / scale;
-    const centerY = center.y + (targetY - h / 2) / scale;
-    this.camera.left = centerX - w / scale / 2;
-    this.camera.right = centerX + w / scale / 2;
-    this.camera.top = centerY + h / scale / 2;
-    this.camera.bottom = centerY - h / scale / 2;
-    this.canonicalFrame = {
-      left: this.camera.left,
-      right: this.camera.right,
-      top: this.camera.top,
-      bottom: this.camera.bottom,
+    const bounds = new T.Box3().setFromPoints(points);
+    this.viewBounds = {
+      minX: bounds.min.x,
+      maxX: bounds.max.x,
+      minY: bounds.min.y,
+      maxY: bounds.max.y,
     };
-    this.camera.updateProjectionMatrix();
-    this.coastalWater.setView(this.camera);
-    this.cameraRevision++;
-    if (this.homecoming.active) {
-      this.homecomingCameraFactor = 1;
-      this.fitHomecomingCamera();
-      this.applyHomecomingCamera(this.homecomingCameraTarget);
-    }
+    this.reframeView();
   }
   setReducedMotion(reduced: boolean) {
     if (this.reduced === reduced) return;
@@ -691,6 +928,7 @@ export class World {
         previous?.top !== bounds?.top ||
         previous?.bottom !== bounds?.bottom)
     ) {
+      this.reframeView();
       this.fitHomecomingCamera();
       if (!this.homecoming.finite) this.applyHomecomingCamera(this.homecomingCameraTarget);
     }
@@ -705,9 +943,7 @@ export class World {
     Object.assign(this.camera, this.canonicalFrame);
     this.homecomingCameraFactor = 1;
     if (changed) {
-      this.camera.updateProjectionMatrix();
-      this.coastalWater.setView(this.camera);
-      this.cameraRevision++;
+      this.viewChanged();
     }
   }
   resetHomecoming() {
@@ -730,6 +966,10 @@ export class World {
       this.homecomingCameraFallback = this.reduced ? 'reduced-motion' : 'settled-without-replay';
       return;
     }
+    if (this.viewMode === 'overview') {
+      this.homecomingCameraFallback = 'whole-cove';
+      return;
+    }
     if (this.host.clientHeight <= 320) {
       this.homecomingCameraFallback = 'short-phone';
       return;
@@ -749,7 +989,8 @@ export class World {
     this.homecomingFocus.set(focus.x, focus.y);
     const candidate = this.camera.clone();
     const w = this.host.clientWidth,
-      h = this.host.clientHeight;
+      h = this.host.clientHeight,
+      usable = this.usableRectangle();
     for (const factor of [1.09, 1.07, 1.05, 1.03, 1.015]) {
       this.assignHomecomingFrame(candidate, factor);
       candidate.updateProjectionMatrix();
@@ -766,10 +1007,10 @@ export class World {
           bottom: Math.max(...points.map((point) => ((1 - point.y) * h) / 2)),
         };
         return (
-          projected.left >= 16 &&
-          projected.right <= w - 16 &&
-          projected.top >= (h <= 600 ? 70 : 104) &&
-          projected.bottom <= h - 16 &&
+          projected.left >= usable.left &&
+          projected.right <= usable.right &&
+          projected.top >= usable.top &&
+          projected.bottom <= usable.bottom &&
           !rectanglesOverlap(projected, this.completionBounds!, 10)
         );
       });
@@ -799,9 +1040,7 @@ export class World {
     if (factor === this.homecomingCameraFactor) return;
     this.assignHomecomingFrame(this.camera, factor);
     this.homecomingCameraFactor = factor;
-    this.camera.updateProjectionMatrix();
-    this.coastalWater.setView(this.camera);
-    this.cameraRevision++;
+    this.viewChanged();
   }
   settleHomecoming(reason = 'recovery') {
     if (this.homecoming.finite && this.homecomingCameraTarget === 1)
@@ -910,6 +1149,7 @@ export class World {
       g.rotation.set(0, 0, 0);
     }
     this.indicate(s);
+    this.reframeView();
   }
   indicate(s: State, selected?: string, emphasis?: string) {
     const focus = emphasis ?? selected;
@@ -993,6 +1233,9 @@ export class World {
   ) {
     this.cancel();
     this.state = after;
+    this.viewPanned = false;
+    this.viewLocation = null;
+    this.viewFocus = null;
     const positions = new Map(
       [...this.animals].map(([id, g]) => [id, g.getWorldPosition(new T.Vector3())]),
     );
@@ -1042,6 +1285,7 @@ export class World {
       fromHullY: this.hull.position.y,
       transfer,
     };
+    this.reframeView();
   }
   cancel(reason: CompletionReason = 'cancelled') {
     if (this.transition) {
@@ -1147,10 +1391,17 @@ export class World {
       this.hull.position.y =
         this.draftY(this.state) + (this.reduced ? 0 : Math.sin(time * 0.0018) * 0.012);
     }
+    if (this.transition?.path && this.viewMode === 'play') this.reframeView();
     this.updateHomecoming(time);
     this.shores.update(this.water.position.y);
     for (const route of this.routes.values()) route.position.y = this.water.position.y;
     for (const marker of this.markers.values()) marker.position.y = this.water.position.y + 0.04;
+    if (this.layoutWaterY !== this.water.position.y) {
+      this.layoutWaterY = this.water.position.y;
+      this.layoutRevision++;
+      this.onViewChange();
+    }
+    this.onFrame();
     this.effects.update(
       time,
       this.boatRoot.position,
@@ -1347,6 +1598,7 @@ export class World {
       }),
       markers: [...this.markers].map(([id, marker]) => ({
         id,
+        worldPosition: marker.getWorldPosition(new T.Vector3()).toArray(),
         status: marker.userData.navigationStatus as string,
         selected: marker.userData.selected === true,
         shape:
@@ -1364,6 +1616,7 @@ export class World {
     const rectangle = (object: T.Object3D) => this.rectangle([object]);
     const envelope = this.framePoints.map((point) => point.clone().project(this.camera));
     return {
+      view: this.viewStatus(),
       canvas: {
         width: this.host.clientWidth,
         height: this.host.clientHeight,
@@ -1377,6 +1630,7 @@ export class World {
         bottom: this.camera.bottom,
         position: this.camera.position.toArray(),
         projection: this.camera.projectionMatrix.toArray(),
+        inverse: this.camera.matrixWorldInverse.toArray(),
       },
       envelope: {
         left: Math.min(...envelope.map((point) => ((point.x + 1) * this.host.clientWidth) / 2)),

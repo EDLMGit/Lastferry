@@ -42,3 +42,60 @@ export function placeLocalCard(
   }
   return nearest;
 }
+
+export type ActionCardPlacement = Rectangle & { layout: 'floating' | 'sheet' };
+
+export function placeActionCard(
+  width: number,
+  height: number,
+  bounds: Rectangle,
+  anchor: Rectangle,
+  options: { portrait?: boolean; previous?: Rectangle | null; avoid?: Rectangle[] } = {},
+): ActionCardPlacement {
+  const availableWidth = Math.max(0, bounds.right - bounds.left),
+    availableHeight = Math.max(0, bounds.bottom - bounds.top),
+    fittedWidth = Math.min(width, availableWidth),
+    fittedHeight = Math.min(height, availableHeight),
+    centerX = (anchor.left + anchor.right) / 2,
+    centerY = (anchor.top + anchor.bottom) / 2,
+    gap = 10;
+  const clamp = (left: number, top: number, layout: 'floating' | 'sheet') => {
+    left = Math.max(bounds.left, Math.min(bounds.right - fittedWidth, left));
+    top = Math.max(bounds.top, Math.min(bounds.bottom - fittedHeight, top));
+    return { left, top, right: left + fittedWidth, bottom: top + fittedHeight, layout };
+  };
+  const previous = options.previous;
+  if (
+    previous &&
+    previous.left >= bounds.left &&
+    previous.left + fittedWidth <= bounds.right &&
+    previous.top >= bounds.top &&
+    previous.top + fittedHeight <= bounds.bottom
+  )
+    return clamp(previous.left, previous.top, 'floating');
+  const candidates = [
+    clamp(centerX - fittedWidth / 2, anchor.bottom + gap, 'floating'),
+    clamp(centerX - fittedWidth / 2, anchor.top - fittedHeight - gap, 'floating'),
+    clamp(anchor.right + gap, centerY - fittedHeight / 2, 'floating'),
+    clamp(anchor.left - fittedWidth - gap, centerY - fittedHeight / 2, 'floating'),
+  ];
+  const clear = candidates.filter((candidate) => !overlaps(candidate, anchor, 4));
+  if (clear.length && width <= availableWidth && height <= availableHeight) {
+    const distance = (candidate: Rectangle) =>
+      Math.hypot(
+        Math.max(candidate.left - centerX, 0, centerX - candidate.right),
+        Math.max(candidate.top - centerY, 0, centerY - candidate.bottom),
+      );
+    const score = (candidate: Rectangle) =>
+      distance(candidate) + (options.avoid?.some((item) => overlaps(candidate, item)) ? 160 : 0);
+    return clear.sort((a, b) => score(a) - score(b))[0];
+  }
+  if (options.portrait)
+    return clamp(centerX - fittedWidth / 2, bounds.bottom - fittedHeight, 'sheet');
+  const nearLeft = centerX < (bounds.left + bounds.right) / 2;
+  return clamp(
+    nearLeft ? bounds.left : bounds.right - fittedWidth,
+    centerY - fittedHeight / 2,
+    'sheet',
+  );
+}

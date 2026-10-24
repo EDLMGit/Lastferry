@@ -14,6 +14,7 @@ import {
   tabTo,
   fullyVisible,
   readable,
+  wholeCove,
 } from './ui';
 
 const residents = ['tansy', 'lark', 'bram'];
@@ -37,7 +38,13 @@ async function bellReady(page: Page) {
 async function capture(page: Page, label: string, scene: string) {
   await page.screenshot({ path: `${reviewDir}/bellwater-${label}-${scene}.png` });
 }
-async function readableMap(page: Page) {
+async function readableMap(page: Page, input: 'mouse' | 'touch' | 'keyboard' = 'mouse') {
+  if (input === 'keyboard') {
+    if ((await page.locator('#view-toggle').textContent())?.includes('Whole cove')) {
+      await tabTo(page, 'view-toggle');
+      await page.keyboard.press('Enter');
+    }
+  } else await wholeCove(page, input === 'touch');
   for (const id of stops) {
     const button = page.locator(`#map-${id}`);
     await fullyVisible(page, button);
@@ -260,7 +267,7 @@ test('Bellwater natural keyboard: deep outward, shallow return, both tide Undo a
   await expect(page.locator('#map-shallows')).toBeFocused();
   expect(await state(page)).toEqual(original);
   for (const id of outerOutward) await keyAct(page, id);
-  await readableMap(page);
+  await readableMap(page, 'keyboard');
   const beforeFirst = await state(page),
     firstView = await rendered(page);
   await keyAct(page, 'board');
@@ -275,9 +282,9 @@ test('Bellwater natural keyboard: deep outward, shallow return, both tide Undo a
   expect(await state(page)).toEqual(beforeFirst);
   expect((await rendered(page)).waterY).toBe(firstView.waterY);
   await keyAct(page, 'board');
-  await readableMap(page);
+  await readableMap(page, 'keyboard');
   for (const id of homeward) await keyAct(page, id);
-  await readableMap(page);
+  await readableMap(page, 'keyboard');
   const beforeSecond = await state(page),
     secondView = await rendered(page);
   await keyAct(page, 'board');
@@ -312,7 +319,7 @@ for (const width of [844, 780]) {
       errors: string[] = [];
     page.on('pageerror', (error) => errors.push(error.message));
     await bellReady(page);
-    const frame = await readableMap(page),
+    const frame = await readableMap(page, 'touch'),
       label = `phone-${width}`;
     await capture(page, label, 'start');
     const initial = await state(page);
@@ -326,7 +333,7 @@ for (const width of [844, 780]) {
     await page.keyboard.press('Escape');
     await expect(page.locator('#map-west-buoy')).toBeFocused();
     for (const id of outerOutward) await act(page, id, true);
-    await readableMap(page);
+    await readableMap(page, 'touch');
     const beforeFirst = await state(page),
       firstView = await rendered(page);
     await activate(page, 'board', true);
@@ -359,10 +366,10 @@ for (const width of [844, 780]) {
     });
     await restored(page, beforeFirst, firstView, true);
     await act(page, 'board', true);
-    await readableMap(page);
+    await readableMap(page, 'touch');
     await capture(page, label, 'after-rise');
     for (const id of homeward) await act(page, id, true);
-    await readableMap(page);
+    await readableMap(page, 'touch');
     const beforeSecond = await state(page),
       secondView = await rendered(page);
     await activate(page, 'board', true);

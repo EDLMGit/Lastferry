@@ -22,6 +22,10 @@ for (const [name, width, height] of [
   }) => {
     await page.setViewportSize({ width, height });
     await ready(page);
+    if (name === 'phone') {
+      await tabTo(page, 'view-toggle');
+      await page.keyboard.press('Enter');
+    }
     await tabTo(page, 'map-sheep-pier');
     await tabTo(page, 'map-harbor', true);
     await expect(page.locator('#map-harbor')).toBeFocused();

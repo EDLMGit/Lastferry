@@ -30,10 +30,12 @@ import {
   type TransitionPlan,
 } from './scene/transitions';
 import { waterPresets, type WaterTuning } from './scene/water';
-import { placeLocalCard, overlaps, type Rectangle } from './ui/placement';
+import { placeActionCard, overlaps, type Rectangle } from './ui/placement';
 import { locationFacts } from './ui/location';
 import { endpointTargets } from './ui/cove-layout';
 import { MotionPreference, type MotionMode } from './ui/motion-preference';
+import { PanGesture } from './ui/pan-gesture';
+import { visibleViewport, insetRectangle } from './ui/viewport';
 
 const cove = new URLSearchParams(location.search).get('cove');
 const level = cove === 'first-crossing' ? baseline : cove === 'bellwater' ? bellwater : holdingPier;
@@ -51,6 +53,18 @@ const session = new Session(level),
   motion = new MotionPreference(matchMedia('(prefers-reduced-motion: reduce)'));
 sound.reconcileState(session.state, level);
 const dialog = $('dialog') as HTMLDialogElement;
+const viewControls = document.createElement('nav');
+viewControls.className = 'view-controls';
+viewControls.setAttribute('aria-label', 'Cove view');
+viewControls.innerHTML =
+  '<button id="view-toggle" aria-pressed="false">Whole cove</button><button id="back-to-boat" hidden>Back to boat</button>';
+$('seascape').append(viewControls);
+$('seascape').querySelector('.portrait-note')?.remove();
+const viewNotice = document.createElement('p');
+viewNotice.id = 'view-notice';
+viewNotice.role = 'status';
+viewNotice.hidden = true;
+$('seascape').append(viewNotice);
 type DialogMode = 'action' | 'forecast' | 'menu' | 'terminal' | 'settings';
 let mode: DialogMode | null = null,
   selected: Action | null = null,
@@ -58,7 +72,6 @@ let mode: DialogMode | null = null,
   keyboardInput = false;
 let settingsParent: 'menu' | 'terminal' = 'menu';
 let viewFence: { x: number; y: number; until: number } | null = null;
-let completionSize: { width: number; height: number } | null = null;
 let locationSelection: string | null = null;
 let emphasis: string | undefined;
 let selectionOrigin: { x: number; y: number } | null = null;
@@ -68,9 +81,21 @@ let cardPlacement: Rectangle | null = null;
 let protectedBounds: Rectangle[] = [];
 let labelLayout = new Map<string, Rectangle>();
 let labelLayoutKey = '';
+const labelDimensions = new Map<string, { element: HTMLElement; width: number; height: number }>();
+let labelDimensionsKey = '';
 let dockPlacement: Rectangle | null = null;
-let dockLayout: { key: string; bounds: Rectangle; layout: string } | null = null;
 let fallback: ReturnType<typeof setTimeout> | undefined;
+let noticeTimer: ReturnType<typeof setTimeout> | undefined;
+let actionAnchor: Rectangle | null = null;
+let actionPlacement: (Rectangle & { layout: 'floating' | 'sheet' }) | null = null;
+let actionPlace: string | null = null;
+let actionAnchorOffset = { x: 0, y: 0 };
+let placementViewportKey = '';
+let layoutRequest = 0;
+let layoutFlushing = false;
+let viewport = visibleViewport(window.visualViewport, innerWidth, innerHeight);
+let safeBounds: Rectangle = viewport;
+let usableBounds: Rectangle = viewport;
 let closingFence: {
   rect: DOMRect;
   until: number;
@@ -118,6 +143,124 @@ function toggleSound() {
   const changed = sound.toggle();
   renderSound();
   void changed.then(renderSound).catch(renderSound);
+}
+
+function notifyView(message: string) {
+  clearTimeout(noticeTimer);
+  viewNotice.textContent = message;
+  viewNotice.hidden = false;
+  $('announcement').textContent = message;
+  const control = $('fullscreen');
+  if (control && dialog.open) {
+    let feedback = $('fullscreen-feedback');
+    if (!feedback) {
+      feedback = document.createElement('p');
+      feedback.id = 'fullscreen-feedback';
+      feedback.role = 'status';
+      control.after(feedback);
+    }
+    feedback.textContent = message;
+    positionDialog();
+  }
+  noticeTimer = setTimeout(() => {
+    viewNotice.hidden = true;
+  }, 4500);
+}
+function renderFullscreen() {
+  const button = $('fullscreen');
+  if (!button) return;
+  const active = document.fullscreenElement === app;
+  button.textContent = active ? 'Exit fullscreen' : 'Fullscreen';
+  button.setAttribute('aria-pressed', String(active));
+  button.onclick = toggleFullscreen;
+}
+function toggleFullscreen() {
+  try {
+    if (document.fullscreenElement) {
+      void document
+        .exitFullscreen()
+        .catch(() =>
+          notifyView('Could not exit fullscreen. You can use the browser’s fullscreen control.'),
+        );
+    } else if (!app.requestFullscreen || !document.fullscreenEnabled) {
+      notifyView('Fullscreen is unavailable here. You can continue playing in the browser.');
+    } else {
+      void app
+        .requestFullscreen()
+        .catch(() =>
+          notifyView('Fullscreen was not allowed. You can continue playing in the browser.'),
+        );
+    }
+  } catch {
+    notifyView('Fullscreen was not allowed. You can continue playing in the browser.');
+  }
+}
+function renderView() {
+  const view = world.viewStatus();
+  const toggle = $('view-toggle'),
+    label = view.mode === 'overview' ? 'Play view' : 'Whole cove',
+    pressed = String(view.mode === 'overview'),
+    back = $('back-to-boat'),
+    hideBack = view.mode !== 'overview' && !view.panned && !view.focused;
+  if (toggle.textContent !== label) toggle.textContent = label;
+  if (toggle.getAttribute('aria-pressed') !== pressed) toggle.setAttribute('aria-pressed', pressed);
+  if (back.hidden !== hideBack) back.hidden = hideBack;
+}
+function scheduleLayout() {
+  if (layoutRequest || layoutFlushing) return;
+  layoutRequest = requestAnimationFrame(flushLayout);
+}
+function flushLayout() {
+  if (layoutFlushing) return;
+  cancelAnimationFrame(layoutRequest);
+  layoutRequest = 0;
+  layoutFlushing = true;
+  try {
+    updateViewport();
+    positionMap();
+    renderView();
+  } finally {
+    layoutFlushing = false;
+  }
+}
+function updateViewport() {
+  viewport = visibleViewport(window.visualViewport, innerWidth, innerHeight);
+  const width = viewport.right - viewport.left,
+    height = viewport.bottom - viewport.top;
+  for (const [name, value] of [
+    ['--viewport-left', `${viewport.left}px`],
+    ['--viewport-top', `${viewport.top}px`],
+    ['--viewport-width', `${width}px`],
+    ['--viewport-height', `${height}px`],
+  ])
+    if (app.style.getPropertyValue(name) !== value) app.style.setProperty(name, value);
+  const style = getComputedStyle(app);
+  const inset = (side: string) => Number.parseFloat(style.getPropertyValue(`--safe-${side}`)) || 0;
+  safeBounds = insetRectangle(viewport, {
+    left: inset('left'),
+    top: inset('top'),
+    right: inset('right'),
+    bottom: inset('bottom'),
+  });
+  const hud = document.querySelector<HTMLElement>('.hud')!.getBoundingClientRect();
+  const controls = viewControls.getBoundingClientRect();
+  const forecast = $('status-toggle').getBoundingClientRect();
+  usableBounds = {
+    ...safeBounds,
+    top: Math.max(safeBounds.top, hud.bottom + 8),
+    bottom: Math.min(
+      safeBounds.bottom,
+      controls.top - 8,
+      $('status-toggle').hidden ? safeBounds.bottom : forecast.top - 8,
+    ),
+  };
+  const canvas = world.host.getBoundingClientRect();
+  world.setUsableRectangle({
+    left: usableBounds.left - canvas.left,
+    right: usableBounds.right - canvas.left,
+    top: usableBounds.top - canvas.top,
+    bottom: usableBounds.bottom - canvas.top,
+  });
 }
 
 function renderMotion() {
@@ -179,6 +322,13 @@ function closeDialog(restore = true, fence = false) {
   dialog.close();
   mode = null;
   selected = null;
+  actionAnchor = null;
+  actionPlacement = null;
+  actionPlace = null;
+  dialog.style.removeProperty('left');
+  dialog.style.removeProperty('top');
+  dialog.style.removeProperty('right');
+  dialog.style.removeProperty('bottom');
   if (session.state.status !== 'won') world.setCompletionBounds(null);
   world.setForecast(false, session.state.tideLevel);
   renderLocation();
@@ -193,6 +343,24 @@ function openDialog(next: DialogMode, action?: Action, trigger?: string) {
   returnId = trigger ?? (document.activeElement as HTMLElement)?.id ?? '';
   mode = next;
   selected = action ?? null;
+  actionPlacement = null;
+  placementViewportKey = '';
+  if (next === 'action') {
+    actionPlace = action?.type === 'move' ? action.to : session.state.boatNodeId;
+    const target = $(returnId);
+    const point = world.project(level.nodes.find((node) => node.id === actionPlace)!.positionXZ);
+    const canvas = world.host.getBoundingClientRect();
+    const x = point.x + canvas.left,
+      y = point.y + canvas.top;
+    const rect = target?.getClientRects().length ? target.getBoundingClientRect() : null;
+    actionAnchor = rect
+      ? { left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom }
+      : { left: x - 24, right: x + 24, top: y - 24, bottom: y + 24 };
+    actionAnchorOffset = {
+      x: (actionAnchor.left + actionAnchor.right) / 2 - x,
+      y: (actionAnchor.top + actionAnchor.bottom) / 2 - y,
+    };
+  }
   renderDialog();
   dialog.showModal();
   $('local-context').hidden = true;
@@ -212,6 +380,9 @@ function switchDialog(next: DialogMode, focusId: string) {
     viewFence = { x: lastPointer.x, y: lastPointer.y, until: performance.now() + 180 };
   mode = next;
   selected = null;
+  actionPlacement = null;
+  actionAnchor = null;
+  actionPlace = null;
   renderDialog();
   $(focusId).focus({ preventScroll: true });
 }
@@ -241,7 +412,7 @@ function renderDialog() {
         ? `<div class="passenger-options" role="group" aria-label="Passenger selection">${ids.map((id) => `<button id="passenger-${id}" aria-pressed="${a.passengerIds.includes(id)}"><b>${passengerNames[id].split(' ·')[0]}</b><span> · ${level.passengers.find((p) => p.id === id)!.slots} ${level.passengers.find((p) => p.id === id)!.slots === 1 ? 'space' : 'spaces'}</span></button>`).join('')}</div>`
         : '';
     $('dialog-content').innerHTML =
-      `${header(actionLabel(s, a, level), 'Inspection · no action spent')}<div id="preview" class="dialog-body ${proposed.error || proposed.state.status === 'lost' ? 'warning' : ''}" aria-live="polite" aria-atomic="true">${choices}<p class="requirement">${text.error ?? text.requirement}</p>${text.consequence ? `<p class="consequence">${text.consequence}</p>` : ''}${!proposed.error ? `<p class="preview-result">Boat ${load(proposed.state, level)}/${level.rules.capacity} spaces · tide ${s.tideLevel}${s.tideLevel !== proposed.state.tideLevel ? ` → ${proposed.state.tideLevel}` : ''}</p>` : ''}</div><footer class="dialog-footer"><button id="commit" ${proposed.error ? 'disabled' : ''}>${proposed.error ? 'Action unavailable' : 'Confirm · 1 action'}</button></footer>`;
+      `${header(actionLabel(s, a, level), `${nodeNames[a.type === 'move' ? a.to : s.boatNodeId]} · inspection is free`)}<div id="preview" class="dialog-body ${proposed.error || proposed.state.status === 'lost' ? 'warning' : ''}" aria-live="polite" aria-atomic="true">${choices}<p class="requirement">${text.error ?? text.requirement}</p>${text.consequence ? `<p class="consequence">${text.consequence}</p>` : ''}${!proposed.error ? `<p class="preview-result">Boat ${load(proposed.state, level)}/${level.rules.capacity} spaces · tide ${s.tideLevel}${s.tideLevel !== proposed.state.tideLevel ? ` → ${proposed.state.tideLevel}` : ''}</p>` : ''}</div><footer class="dialog-footer"><button id="commit" ${proposed.error ? 'disabled' : ''}>${proposed.error ? 'Action unavailable' : 'Confirm · 1 action'}</button></footer>`;
     if (a.type === 'board' || a.type === 'unload')
       for (const id of ids)
         $(`passenger-${id}`).onclick = () => {
@@ -279,6 +450,10 @@ function renderDialog() {
     $('dialog-content').innerHTML =
       `${header('Crossing menu')}<div class="dialog-body menu-body">${s.status === 'won' ? '<button id="return-arrival">Return to arrival</button>' : ''}<div class="menu-actions"><button id="restart">Restart crossing</button><button id="settings">Settings</button></div><label class="cove-picker">Choose cove<select id="cove-picker">${[baseline, holdingPier, bellwater].map((l) => `<option value="${l.id}" ${l.id === level.id ? 'selected' : ''}>${l.title}${l.id === baseline.id ? ' · baseline' : ''}</option>`).join('')}</select></label><details id="help-details"><summary>How to play · actions and depth</summary><p>${actionCostCopy(level)}</p><p>Select a named place, island, pier or landmark to see its options for free. Choose Sail to travel one passage. Select the ferry for its current place. Passenger actions open a subset preview; choose names, then Confirm.</p><p>Boat depth needed: empty = 1; 1–2 spaces = 2; 3–4 spaces = 3. Each rabbit uses 1 space; ${passengerList([sheep.id], level)} uses ${sheep.slots}. A passage must be at least as deep as the boat needs.</p><p>Boarding and unloading happen before the tide rises. Use the status button for the tide and pier forecast. Undo earlier actions or restart to recover from a losing plan.</p><p>Tab and Shift+Tab move between controls; Enter or Space activates them. Escape closes a dialog first; press it again to close the location card. Selection never spends an action.</p></details></div>`;
     $('restart').onclick = restart;
+    const fullscreen = document.createElement('button');
+    fullscreen.id = 'fullscreen';
+    $('settings').closest('.menu-actions')!.after(fullscreen);
+    renderFullscreen();
     $('settings').onclick = () => openSettings('menu');
     if (s.status === 'won')
       $('return-arrival').onclick = () =>
@@ -290,6 +465,10 @@ function renderDialog() {
     $('dialog-content').innerHTML =
       `${header('Settings', undefined, 'Back to ' + (settingsParent === 'terminal' ? 'arrival' : 'menu'))}<div class="dialog-body settings-body"><div class="settings-row"><span>Sound</span><button id="settings-sound"></button></div><label class="settings-row" for="motion-preference">Motion<select id="motion-preference"><option value="device">Follow device</option><option value="reduced">Reduced</option></select></label><p id="motion-status"></p></div><footer class="dialog-footer"><button id="settings-back">Back</button></footer>`;
     $('settings-sound').onclick = toggleSound;
+    const fullscreen = document.createElement('button');
+    fullscreen.id = 'fullscreen';
+    document.querySelector('.settings-body')!.append(fullscreen);
+    renderFullscreen();
     ($('motion-preference') as HTMLSelectElement).onchange = (event) =>
       motion.setMode((event.target as HTMLSelectElement).value as MotionMode);
     $('settings-back').onclick = backFromSettings;
@@ -339,6 +518,7 @@ function finish(id: number, reason: CompletionReason) {
   if (reason !== 'complete') sound.resetActionEffects();
   sound.settleArrangement();
   session.finish();
+  if (locationSelection === session.state.boatNodeId) locationSelection = null;
   render();
   $('announcement').textContent =
     `${session.state.turn} actions completed. ${statusCopy(session.state, level).headline}`;
@@ -414,6 +594,7 @@ function selectLocation(id: string) {
   if (locationSelection !== id) {
     locationSelection = id;
     selectionOrigin = !keyboardInput && lastPointer ? { x: lastPointer.x, y: lastPointer.y } : null;
+    world.frameLocation(id);
     renderMap();
     renderLocation();
     positionMap();
@@ -435,12 +616,16 @@ function bindTarget(button: HTMLElement, id: string) {
   };
   button.onpointerleave = restoreHighlight;
   button.onfocus = () => {
-    if (!blocked()) highlight(id);
+    if (!blocked()) {
+      if (keyboardInput) world.frameLocation(id);
+      highlight(id);
+    }
   };
   button.onblur = restoreHighlight;
 }
 function renderMap() {
   const s = session.state;
+  labelDimensions.clear();
   $('map-labels').hidden = s.status === 'won';
   $('map-labels').innerHTML =
     '<svg id="map-leaders" aria-hidden="true"></svg>' +
@@ -616,6 +801,7 @@ function undo() {
     sound.resetActionEffects();
     sound.reconcileState(session.state, level);
     world.sync(session.state);
+    world.backToBoat();
     render();
     focusAvailable('undo');
     $('announcement').textContent = `Undid action. ${session.state.turn} actions completed.`;
@@ -632,35 +818,125 @@ function restart() {
     sound.resetActionEffects();
     sound.reconcileState(session.state, level);
     world.sync(session.state);
+    world.backToBoat();
     render();
     focusAvailable('menu');
   }
 }
 function positionDialog() {
-  const destination = selected?.type === 'move' ? selected.to : session.state.boatNodeId;
-  const node = level.nodes.find((n) => n.id === destination)!;
-  const point = world.project(node.positionXZ);
-  dialog.dataset.side =
-    session.state.status === 'won'
-      ? 'right'
-      : point.x > world.host.clientWidth * 0.5
-        ? 'left'
-        : 'right';
+  if (!dialog.open) return;
+  const canvas = world.host.getBoundingClientRect();
+  dialog.style.maxWidth = safeBounds.right - safeBounds.left + 'px';
+  if (mode === 'action' && selected && actionAnchor) {
+    const key = [
+      viewport.left,
+      viewport.top,
+      viewport.right,
+      viewport.bottom,
+      world.cameraRevision,
+    ].join(':');
+    if (key !== placementViewportKey) {
+      if (placementViewportKey) {
+        const trigger = $(returnId);
+        if (trigger?.getClientRects().length && !trigger.closest('[hidden]')) {
+          const rect = trigger.getBoundingClientRect();
+          actionAnchor = { left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom };
+        } else if (actionPlace) {
+          const point = world.project(
+            level.nodes.find((node) => node.id === actionPlace)!.positionXZ,
+          );
+          const x = Math.max(
+            safeBounds.left + 24,
+            Math.min(safeBounds.right - 24, point.x + canvas.left + actionAnchorOffset.x),
+          );
+          const y = Math.max(
+            safeBounds.top + 24,
+            Math.min(safeBounds.bottom - 24, point.y + canvas.top + actionAnchorOffset.y),
+          );
+          actionAnchor = { left: x - 24, right: x + 24, top: y - 24, bottom: y + 24 };
+        }
+      }
+      actionPlacement = null;
+      placementViewportKey = key;
+    }
+    dialog.style.setProperty('--dialog-max-height', safeBounds.bottom - safeBounds.top + 'px');
+    const transfer = selected.type === 'board' || selected.type === 'unload';
+    if (transfer) dialog.style.height = Math.min(380, safeBounds.bottom - safeBounds.top) + 'px';
+    else dialog.style.removeProperty('height');
+    const rect = dialog.getBoundingClientRect();
+    actionPlacement = placeActionCard(rect.width, rect.height, safeBounds, actionAnchor, {
+      portrait: canvas.width < canvas.height,
+      previous: actionPlacement,
+    });
+    if (transfer && canvas.width < canvas.height) {
+      actionPlacement = {
+        ...actionPlacement,
+        top: safeBounds.bottom - rect.height,
+        bottom: safeBounds.bottom,
+        layout: 'sheet',
+      };
+    } else if (transfer && canvas.height <= 360) {
+      const nearLeft =
+        (actionAnchor.left + actionAnchor.right) / 2 < (safeBounds.left + safeBounds.right) / 2;
+      const left = nearLeft ? safeBounds.left : safeBounds.right - rect.width;
+      actionPlacement = {
+        left,
+        right: left + rect.width,
+        top: safeBounds.top,
+        bottom: safeBounds.top + rect.height,
+        layout: 'sheet',
+      };
+    }
+    dialog.dataset.layout = actionPlacement.layout;
+    dialog.style.left = actionPlacement.left + 'px';
+    dialog.style.top = actionPlacement.top + 'px';
+    dialog.style.right = 'auto';
+    dialog.style.bottom = 'auto';
+    if (actionPlace) {
+      const point = world.project(level.nodes.find((node) => node.id === actionPlace)!.positionXZ);
+      const stage = $('seascape').getBoundingClientRect();
+      const label = labelLayout.get(actionPlace);
+      const x = label ? (label.left + label.right) / 2 : point.x + canvas.left - stage.left,
+        y = label ? (label.top + label.bottom) / 2 : point.y + canvas.top - stage.top;
+      const endX =
+        Math.max(actionPlacement.left, Math.min(actionPlacement.right, x + stage.left)) -
+        stage.left;
+      const endY =
+        Math.max(actionPlacement.top, Math.min(actionPlacement.bottom, y + stage.top)) - stage.top;
+      $('selection-leader').innerHTML =
+        '<line x1="' + x + '" y1="' + y + '" x2="' + endX + '" y2="' + endY + '" />';
+    }
+    return;
+  }
+  dialog.dataset.layout = 'floating';
+  dialog.style.removeProperty('height');
+  dialog.style.removeProperty('left');
+  dialog.style.removeProperty('top');
+  dialog.style.removeProperty('right');
+  dialog.style.removeProperty('bottom');
+  dialog.style.setProperty('--dialog-max-height', safeBounds.bottom - safeBounds.top + 'px');
+  dialog.dataset.side = 'right';
+  const preferred = dialog.getBoundingClientRect();
+  const left = Math.max(
+    safeBounds.left,
+    Math.min(safeBounds.right - preferred.width, preferred.left),
+  );
+  const top = Math.max(
+    safeBounds.top,
+    Math.min(safeBounds.bottom - preferred.height, preferred.top),
+  );
+  dialog.style.left = left + 'px';
+  dialog.style.top = top + 'px';
+  dialog.style.right = 'auto';
+  dialog.style.bottom = 'auto';
   if (session.state.status === 'won') {
     if (mode === 'terminal' && dialog.open) {
       const rect = dialog.getBoundingClientRect();
-      completionSize = { width: rect.width, height: rect.height };
-    }
-    if (completionSize) {
-      const canvas = world.host.getBoundingClientRect(),
-        inset = innerHeight <= 600 || innerWidth <= 700 ? 8 : 24,
-        right = innerWidth - inset - canvas.left,
-        bottom = innerHeight - inset - canvas.top;
       world.setCompletionBounds({
-        left: right - Math.min(completionSize.width, innerWidth - 16),
-        right,
-        top: bottom - completionSize.height,
-        bottom,
+        left: rect.left - canvas.left,
+        right: rect.right - canvas.left,
+        top: rect.top - canvas.top,
+        bottom: rect.bottom - canvas.top,
       });
     }
   }
@@ -669,214 +945,175 @@ function positionMap() {
   if (session.state.status === 'won') {
     labelLayout.clear();
     labelLayoutKey = '';
-    dockLayout = null;
     cardPlacement = null;
     dockPlacement = null;
     protectedBounds = [];
     positionDialog();
     return;
   }
-  const host = world.host,
-    canvas = host.getBoundingClientRect();
-  const frame = world.frameStatus();
-  const atPage = (r: Rectangle): Rectangle => ({
-    left: r.left + canvas.left,
-    right: r.right + canvas.left,
-    top: r.top + canvas.top,
-    bottom: r.bottom + canvas.top,
+  const canvas = world.host.getBoundingClientRect(),
+    stage = $('seascape').getBoundingClientRect();
+  const frame = world.layoutFrameStatus();
+  const atLocal = (r: Rectangle): Rectangle => ({
+    left: r.left + canvas.left - stage.left,
+    right: r.right + canvas.left - stage.left,
+    top: r.top + canvas.top - stage.top,
+    bottom: r.bottom + canvas.top - stage.top,
   });
-  const figures = [
-    frame.boat,
-    ...frame.passengers,
-    frame.lighthouse,
-    ...(frame.bell ? [frame.bell] : []),
-  ].map(atPage);
+  const toLocal = (r: Rectangle): Rectangle => ({
+    left: r.left - stage.left,
+    right: r.right - stage.left,
+    top: r.top - stage.top,
+    bottom: r.bottom - stage.top,
+  });
+  const figures = [frame.boat, ...frame.passengers].map(atLocal);
   const chrome = [
     document.querySelector<HTMLElement>('.hud')!,
-    $('status-toggle'),
-    ...(!$('selection-hint').hidden ? [$('selection-hint')] : []),
-  ].map((element) => element.getBoundingClientRect());
-  const bounds = { left: 8, top: 8, right: innerWidth - 8, bottom: innerHeight - 8 };
+    viewControls,
+    ...(!$('status-toggle').hidden ? [$('status-toggle')] : []),
+  ].map((e) => toLocal(e.getBoundingClientRect()));
+  const bounds = toLocal(safeBounds);
+  bounds.top = Math.max(bounds.top, chrome[0].bottom + 6);
+  bounds.bottom = Math.max(
+    bounds.top + 80,
+    Math.min(bounds.bottom, ...chrome.slice(1).map((r) => r.top - 6)),
+  );
   const markers = endpointTargets(
     level.nodes.map((node) => {
       const point = world.project(node.positionXZ);
-      return { id: node.id, x: point.x + canvas.left, y: point.y + canvas.top };
+      return {
+        id: node.id,
+        x: point.x + canvas.left - stage.left,
+        y: point.y + canvas.top - stage.top,
+      };
     }),
   );
-  const placed: Rectangle[] = markers.map((marker) => marker.bounds);
+  const placed: Rectangle[] = [];
   const leaders: string[] = [];
-  const layoutKey = `${innerWidth}:${innerHeight}:${canvas.width}:${canvas.height}`;
+  const layoutKey = [canvas.width, canvas.height, world.layoutRevision, session.state.turn].join(
+    ':',
+  );
   if (labelLayoutKey !== layoutKey) {
     labelLayoutKey = layoutKey;
-    labelLayout = new Map();
+    labelLayout.clear();
   }
-  const staticFigures = frame.places.map(atPage);
-  for (const n of level.nodes) {
-    const group = $(`stop-${n.id}`);
-    if (!group) continue;
-    const marker = markers.find((marker) => marker.id === n.id)!,
-      { x, y } = marker,
-      name = group.querySelector<HTMLElement>('.map-name')!;
-    group.style.setProperty('--target-size', `${marker.size}px`);
-    group.style.left = `${marker.bounds.left}px`;
-    group.style.top = `${marker.bounds.top}px`;
-    const w = name.offsetWidth,
-      h = name.offsetHeight,
-      place = staticFigures[level.nodes.indexOf(n)];
+  const dimensionsKey = [
+    canvas.width,
+    canvas.height,
+    innerWidth,
+    innerHeight,
+    devicePixelRatio,
+  ].join(':');
+  if (labelDimensionsKey !== dimensionsKey) {
+    labelDimensions.clear();
+    labelDimensionsKey = dimensionsKey;
+  }
+  const labels = level.nodes.flatMap((node) => {
+    const group = $('stop-' + node.id);
+    if (!group) return [];
+    const name = group.querySelector<HTMLElement>('.map-name')!;
+    let dimensions = labelDimensions.get(node.id);
+    if (dimensions?.element !== name) {
+      dimensions = { element: name, width: name.offsetWidth, height: name.offsetHeight };
+      labelDimensions.set(node.id, dimensions);
+    }
+    return [{ id: node.id, group, name, width: dimensions.width, height: dimensions.height }];
+  });
+  const hint = $('selection-hint'),
+    hintBounds = hint.hidden ? null : toLocal(hint.getBoundingClientRect());
+  for (const { id, group, name, width: w, height: h } of labels) {
+    const marker = markers.find((m) => m.id === id)!;
+    const visible =
+      marker.x >= bounds.left &&
+      marker.x <= bounds.right &&
+      marker.y >= bounds.top &&
+      marker.y <= bounds.bottom;
+    group.style.opacity = visible ? '1' : '0';
+    group.style.pointerEvents = visible ? '' : 'none';
+    group.classList.toggle('offscreen', !visible);
+    group.style.setProperty('--target-size', marker.size + 'px');
+    group.style.left = marker.bounds.left + 'px';
+    group.style.top = marker.bounds.top + 'px';
+    if (!visible) continue;
+    const place = atLocal(frame.places.find((place) => place.id === id)!);
     const preferred: [number, number][] = [
-      [x - w / 2, place.top - h - 8],
-      [x - w / 2, y + marker.size / 2 + 10],
-      [x + marker.size / 2 + 12, y - h / 2],
-      [x - w - marker.size / 2 - 12, y - h / 2],
+      [marker.x - w / 2, place.top - h - 6],
+      [marker.x - w / 2, marker.bounds.bottom + 8],
+      [place.right + 8, place.top],
+      [place.left - w - 8, place.top],
     ];
-    const choice = labelLayout.get(n.id) ??
-      placeLocalCard(w, h, bounds, [...chrome, ...figures, ...placed], preferred, preferred[0]) ?? {
-        left: Math.max(8, Math.min(innerWidth - w - 8, x - w / 2)),
-        top: Math.max(8, Math.min(innerHeight - h - 8, y + 18)),
-        right: 0,
-        bottom: 0,
-      };
-    choice.right = choice.left + w;
-    choice.bottom = choice.top + h;
-    labelLayout.set(n.id, choice);
-    name.style.left = `${choice.left - marker.bounds.left}px`;
-    name.style.top = `${choice.top - marker.bounds.top}px`;
-    placed.push(choice);
-    const centerX = Math.max(choice.left, Math.min(choice.right, x)),
-      centerY = Math.max(choice.top, Math.min(choice.bottom, y));
-    if (Math.hypot(centerX - x, centerY - y) > 20 && Math.hypot(centerX - x, centerY - y) < 110)
-      leaders.push(`<line x1="${x}" y1="${y}" x2="${centerX}" y2="${centerY}" />`);
+    const candidates = preferred.map(([x, y]) => {
+      const left = Math.max(bounds.left, Math.min(bounds.right - w, x));
+      const top = Math.max(bounds.top, Math.min(bounds.bottom - h, y));
+      return { left, top, right: left + w, bottom: top + h };
+    });
+    const avoid = [...figures, ...placed, ...(hintBounds ? [hintBounds] : [])];
+    const score = (choice: Rectangle) =>
+      avoid.filter((r) => overlaps(choice, r, 2)).length * 200 +
+      Math.hypot(choice.left - preferred[0][0], choice.top - preferred[0][1]);
+    const choice = labelLayout.get(id) ?? candidates.sort((a, b) => score(a) - score(b))[0];
+    labelLayout.set(id, choice);
+    name.style.left = choice.left - marker.bounds.left + 'px';
+    name.style.top = choice.top - marker.bounds.top + 'px';
+    placed.push(choice, marker.bounds);
+    const x = Math.max(choice.left, Math.min(choice.right, marker.x)),
+      y = Math.max(choice.top, Math.min(choice.bottom, marker.y));
+    if (Math.hypot(x - marker.x, y - marker.y) > 20)
+      leaders.push(
+        '<line x1="' + marker.x + '" y1="' + marker.y + '" x2="' + x + '" y2="' + y + '" />',
+      );
   }
   if ($('map-leaders')) $('map-leaders').innerHTML = leaders.join('');
   dockPlacement = null;
   const dock = $('dock-actions');
   if (!dock.hidden) {
-    const boat = atPage(frame.boat),
-      pier = level.piers.find((pier) => pier.nodeId === session.state.boatNodeId)!,
-      shore = world.project(pier.positionXZ, pier.elevation * 0.18),
-      ferry = world.project(
-        level.nodes.find((node) => node.id === session.state.boatNodeId)!.positionXZ,
-      ),
-      angle = (Math.atan2(ferry.y - shore.y, ferry.x - shore.x) * 180) / Math.PI,
-      dockOrigin = [actionOrigin].flatMap((point) =>
-        point
-          ? [{ left: point.x - 26, right: point.x + 26, top: point.y - 26, bottom: point.y + 26 }]
-          : [],
-      );
+    const boat = atLocal(frame.boat),
+      visible =
+        boat.right > bounds.left &&
+        boat.left < bounds.right &&
+        boat.bottom > bounds.top &&
+        boat.top < bounds.bottom;
+    dock.style.visibility = visible ? 'visible' : 'hidden';
+    const pier = level.piers.find((p) => p.nodeId === session.state.boatNodeId)!;
+    const shore = world.project(pier.positionXZ, pier.elevation * 0.18),
+      ferry = world.project(level.nodes.find((n) => n.id === session.state.boatNodeId)!.positionXZ);
+    const angle = (Math.atan2(ferry.y - shore.y, ferry.x - shore.x) * 180) / Math.PI;
     for (const icon of dock.querySelectorAll<HTMLElement>('.dock-arrow'))
-      icon.style.transform = `rotate(${angle + (icon.dataset.direction === 'unload' ? 180 : 0)}deg)`;
-    const dockKey = `${layoutKey}:${session.state.turn}:${session.state.boatNodeId}:${session.state.aboard.join(',')}:${dock.textContent}`;
-    let distance = Infinity;
-    if (dockLayout?.key === dockKey) {
-      dockPlacement = dockLayout.bounds;
-      dock.dataset.chosenLayout = dockLayout.layout;
-    }
-    for (const layout of dockPlacement ? [] : ['row', 'column']) {
-      dock.dataset.layout = layout;
-      const width = dock.offsetWidth,
-        height = dock.offsetHeight,
-        anchor: [number, number] = [
-          shore.x + canvas.left - width / 2,
-          shore.y + canvas.top - height / 2,
-        ];
-      const candidate = placeLocalCard(
-        width,
-        height,
-        bounds,
-        [...chrome, ...figures, ...placed, ...dockOrigin],
-        [
-          [boat.right + 10, boat.top + (boat.bottom - boat.top - height) / 2],
-          [boat.left - width - 10, boat.top + (boat.bottom - boat.top - height) / 2],
-          [(boat.left + boat.right - width) / 2, boat.bottom + 10],
-          [(boat.left + boat.right - width) / 2, boat.top - height - 10],
-        ],
-        anchor,
-      );
-      if (candidate) {
-        const cost = Math.hypot(candidate.left - anchor[0], candidate.top - anchor[1]);
-        if (cost < distance) {
-          distance = cost;
-          dockPlacement = candidate;
-          dock.dataset.chosenLayout = layout;
-        }
-      }
-    }
-    dock.dataset.layout = dock.dataset.chosenLayout ?? 'row';
-    if (dockPlacement) {
-      dockLayout = { key: dockKey, bounds: dockPlacement, layout: dock.dataset.layout };
-      dock.style.left = `${dockPlacement.left}px`;
-      dock.style.top = `${dockPlacement.top}px`;
-      placed.push(dockPlacement);
-    }
+      icon.style.transform =
+        'rotate(' + (angle + (icon.dataset.direction === 'unload' ? 180 : 0)) + 'deg)';
+    dock.dataset.layout = 'row';
+    if (dock.offsetWidth > bounds.right - bounds.left) dock.dataset.layout = 'column';
+    const choice = placeActionCard(dock.offsetWidth, dock.offsetHeight, bounds, boat, {
+      avoid: [...figures, ...placed],
+    });
+    dockPlacement = choice;
+    dock.style.left = choice.left + 'px';
+    dock.style.top = choice.top + 'px';
+    placed.push(choice);
   }
   cardPlacement = null;
   if (locationSelection && !$('local-context').hidden) {
     const local = $('local-context'),
-      node = level.nodes.find((node) => node.id === locationSelection)!;
-    const point = world.project(node.positionXZ),
-      x = point.x + canvas.left,
-      y = point.y + canvas.top;
-    const places = frame.places.map((place) => atPage(place));
-    const origin = [selectionOrigin, actionOrigin].flatMap((point) =>
-      point
-        ? [{ left: point.x - 30, right: point.x + 30, top: point.y - 30, bottom: point.y + 30 }]
-        : [],
-    );
-    protectedBounds = [...chrome, ...figures, ...places, ...placed, ...origin];
-    for (const width of [280, 248, 224]) {
-      local.style.width = `${width}px`;
-      const height = local.offsetHeight;
-      const choice = placeLocalCard(
-        width,
-        height,
-        bounds,
-        protectedBounds,
-        [
-          [x - width / 2, y + 70],
-          [x + 80, y - height / 2],
-          [x - width - 80, y - height / 2],
-          [x - width / 2, y - height - 80],
-        ],
-        [x - width / 2, y + 70],
-      );
-      if (choice) {
-        cardPlacement = choice;
-        break;
-      }
-    }
-    if (!cardPlacement) {
-      const width = local.offsetWidth,
-        height = local.offsetHeight;
-      cardPlacement = placeLocalCard(
-        width,
-        height,
-        bounds,
-        [...chrome, ...figures, ...placed, ...origin],
-        [
-          [8, innerHeight - height - 8],
-          [innerWidth - width - 8, innerHeight - height - 8],
-        ],
-      ) ?? {
-        left: 8,
-        top: Math.max(chrome[0].bottom + 8, innerHeight - height - 8),
-        right: 8 + width,
-        bottom: innerHeight - 8,
-      };
-    }
-    local.style.left = `${cardPlacement.left}px`;
-    local.style.top = `${cardPlacement.top}px`;
-    const endX = Math.max(cardPlacement.left, Math.min(cardPlacement.right, x)),
-      endY = Math.max(cardPlacement.top, Math.min(cardPlacement.bottom, y));
-    const distance = Math.hypot(endX - x, endY - y);
-    if (distance <= 90) {
-      $('selection-leader').innerHTML = `<line x1="${x}" y1="${y}" x2="${endX}" y2="${endY}" />`;
-    } else {
-      const dx = ((endX - x) / distance) * 24,
-        dy = ((endY - y) / distance) * 24;
-      $('selection-leader').innerHTML =
-        `<line x1="${x}" y1="${y}" x2="${x + dx}" y2="${y + dy}" /><line x1="${endX - dx}" y1="${endY - dy}" x2="${endX}" y2="${endY}" />`;
-    }
-  } else {
+      marker = markers.find((m) => m.id === locationSelection)!;
+    local.style.width = Math.min(330, bounds.right - bounds.left) + 'px';
+    local.style.setProperty('--local-max-height', Math.max(80, bounds.bottom - bounds.top) + 'px');
+    protectedBounds = [...figures, ...chrome];
+    const choice = placeActionCard(local.offsetWidth, local.offsetHeight, bounds, marker.bounds, {
+      portrait: canvas.width < canvas.height,
+      avoid: [
+        ...figures,
+        ...markers.filter((m) => m.id !== locationSelection).map((m) => m.bounds),
+        ...(dockPlacement ? [dockPlacement] : []),
+      ],
+    });
+    cardPlacement = choice;
+    local.style.left = choice.left + 'px';
+    local.style.top = choice.top + 'px';
+    const x = Math.max(choice.left, Math.min(choice.right, marker.x)),
+      y = Math.max(choice.top, Math.min(choice.bottom, marker.y));
+    $('selection-leader').innerHTML =
+      '<line x1="' + marker.x + '" y1="' + marker.y + '" x2="' + x + '" y2="' + y + '" />';
+  } else if (!dialog.open) {
     protectedBounds = [];
     $('selection-leader').innerHTML = '';
   }
@@ -903,7 +1140,101 @@ world.onArrival = () => {
   sound.delivery();
   sound.settleArrangement();
 };
-new ResizeObserver(positionMap).observe(world.host);
+world.onViewChange = scheduleLayout;
+world.onFrame = () => {
+  if (layoutRequest) flushLayout();
+};
+$('view-toggle').onclick = () => {
+  if (dialog.open) return;
+  if (world.viewStatus().mode === 'overview') clearLocation();
+  world.setViewMode(world.viewStatus().mode === 'overview' ? 'play' : 'overview');
+  scheduleLayout();
+};
+$('back-to-boat').onclick = () => {
+  if (dialog.open) return;
+  clearLocation();
+  world.backToBoat();
+  $('view-toggle').focus({ preventScroll: true });
+  scheduleLayout();
+};
+const panGesture = new PanGesture();
+let panPointer: number | null = null;
+let suppressPanClick = false;
+const canvas = world.renderer.domElement;
+document.addEventListener(
+  'pointerdown',
+  (event) => {
+    suppressPanClick = false;
+    if (panPointer !== null && event.pointerId !== panPointer) {
+      panGesture.start(event.pointerId, event.clientX, event.clientY);
+      panGesture.end(panPointer, true);
+      panGesture.end(event.pointerId, true);
+      const owner = panPointer;
+      panPointer = null;
+      if (canvas.hasPointerCapture(owner)) canvas.releasePointerCapture(owner);
+      suppressPanClick = true;
+    }
+  },
+  true,
+);
+canvas.addEventListener('pointerdown', (event) => {
+  if (blocked() || session.state.status !== 'playing' || event.button !== 0 || !event.isPrimary)
+    return;
+  const rect = canvas.getBoundingClientRect();
+  if (world.pickAt(event.clientX - rect.left, event.clientY - rect.top)) return;
+  if (!panGesture.start(event.pointerId, event.clientX, event.clientY)) return;
+  panPointer = event.pointerId;
+  canvas.setPointerCapture(event.pointerId);
+});
+canvas.addEventListener('pointermove', (event) => {
+  if (panPointer !== event.pointerId) return;
+  const delta = panGesture.move(event.pointerId, event.clientX, event.clientY);
+  if (delta) {
+    world.panByPixels(delta.x, delta.y);
+    scheduleLayout();
+  }
+});
+const endPan = (event: PointerEvent) => {
+  if (panPointer !== event.pointerId) return;
+  suppressPanClick = panGesture.end(event.pointerId, event.type !== 'pointerup');
+  panPointer = null;
+  if (canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId);
+};
+canvas.addEventListener('pointerup', endPan);
+canvas.addEventListener('pointercancel', endPan);
+canvas.addEventListener('lostpointercapture', (event) => {
+  if (panPointer === event.pointerId) endPan(event);
+});
+canvas.addEventListener(
+  'click',
+  (event) => {
+    if (suppressPanClick) {
+      suppressPanClick = false;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }
+  },
+  true,
+);
+const layoutObserver = new ResizeObserver(scheduleLayout);
+layoutObserver.observe(world.host);
+layoutObserver.observe(document.querySelector('.hud')!);
+layoutObserver.observe(viewControls);
+layoutObserver.observe($('status-toggle'));
+const refreshLabelFonts = () => {
+  labelDimensions.clear();
+  labelLayoutKey = '';
+  scheduleLayout();
+};
+document.fonts.addEventListener('loadingdone', refreshLabelFonts);
+document.fonts.addEventListener('loadingerror', refreshLabelFonts);
+addEventListener('resize', scheduleLayout);
+visualViewport?.addEventListener('resize', scheduleLayout);
+visualViewport?.addEventListener('scroll', scheduleLayout);
+document.addEventListener('fullscreenchange', () => {
+  renderFullscreen();
+  scheduleLayout();
+});
 dialog.addEventListener('cancel', (e) => {
   e.preventDefault();
   if (mode === 'settings') backFromSettings();
@@ -991,6 +1322,12 @@ document.addEventListener(
 document.addEventListener(
   'click',
   (e) => {
+    if (suppressPanClick && e.isTrusted && e.detail > 0) {
+      suppressPanClick = false;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      return;
+    }
     if (
       viewFence &&
       e.isTrusted &&
@@ -1044,6 +1381,11 @@ document.addEventListener('visibilitychange', () => {
   }
 });
 addEventListener('pagehide', () => {
+  layoutObserver.disconnect();
+  document.fonts.removeEventListener('loadingdone', refreshLabelFonts);
+  document.fonts.removeEventListener('loadingerror', refreshLabelFonts);
+  cancelAnimationFrame(layoutRequest);
+  clearTimeout(noticeTimer);
   unsubscribeMotion();
   motion.dispose();
   sound.dispose();
@@ -1052,7 +1394,9 @@ addEventListener('pagehide', () => {
 addEventListener('pageshow', (event) => {
   if (event.persisted) location.reload();
 });
+updateViewport();
 render();
+scheduleLayout();
 if (import.meta.env.DEV)
   Object.assign(window, {
     __LAST_FERRY__: {
@@ -1068,6 +1412,25 @@ if (import.meta.env.DEV)
         hullY: world.hull.position.y,
       }),
       getFrameStatus: () => world.frameStatus(),
+      getViewStatus: () => copy(world.viewStatus()),
+      getViewportStatus: () =>
+        copy({
+          viewport,
+          safe: safeBounds,
+          usable: usableBounds,
+          canvas: world.host.getBoundingClientRect().toJSON(),
+          hud: document.querySelector('.hud')!.getBoundingClientRect().toJSON(),
+          fullscreen: document.fullscreenElement === app,
+        }),
+      getActionPlacement: () =>
+        copy({
+          anchor: actionAnchor,
+          panel: actionPlacement,
+          bounds: safeBounds,
+          layout: actionPlacement?.layout,
+          selected,
+          mode,
+        }),
       getHomecomingStatus: () => world.homecomingPresentation(),
       setLighthouseComparisonPhase: (phase: number | null) => {
         world.effects.comparisonPhase = phase !== null && Number.isFinite(phase) ? phase : null;

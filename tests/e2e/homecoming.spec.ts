@@ -8,12 +8,18 @@ import {
   fullyVisible,
   idle,
   readable,
-  ready,
+  ready as baseReady,
   restart,
   state,
   tabTo,
   undo,
+  wholeCove,
 } from './ui';
+
+async function ready(page: Page, cove = 'first-crossing') {
+  await baseReady(page, cove);
+  await wholeCove(page);
+}
 
 const holdingApproach = [
   'unload',
@@ -67,6 +73,7 @@ async function snap(page: Page, label: string, image = false) {
       motion: api.getMotionStatus(),
       audio: api.getAudioStatus(),
       frame: api.getFrameStatus(),
+      view: api.getViewStatus(),
       metrics: api.getMetrics(),
     };
   }, label);
@@ -211,7 +218,27 @@ async function framing(page: Page) {
 }
 
 async function restoredMap(page: Page, camera: any) {
-  expect((await scene(page)).camera).toEqual(camera);
+  const restored = await page.evaluate(() => {
+    const api = (window as any).__LAST_FERRY__;
+    return {
+      frame: api.getFrameStatus(),
+      view: api.getViewStatus(),
+      state: api.getState(),
+      homecoming: api.getHomecomingStatus(),
+    };
+  });
+  expect(restored.view.mode).toBe('play');
+  expect(restored.frame.camera.position).toEqual(camera.position);
+  expect(restored.homecoming.camera.factor).toBe(1);
+  for (const subject of [
+    restored.frame.boat,
+    ...restored.frame.passengers.filter((p: any) => restored.state.aboard.includes(p.id)),
+  ]) {
+    expect(subject.left).toBeGreaterThanOrEqual(restored.view.usable.left - 0.5);
+    expect(subject.top).toBeGreaterThanOrEqual(restored.view.usable.top - 0.5);
+    expect(subject.right).toBeLessThanOrEqual(restored.view.usable.right + 0.5);
+    expect(subject.bottom).toBeLessThanOrEqual(restored.view.usable.bottom + 0.5);
+  }
   const markers = await page.evaluate(() => {
     const frame = (window as any).__LAST_FERRY__.getFrameStatus(),
       canvas = document.querySelector('canvas')!.getBoundingClientRect();

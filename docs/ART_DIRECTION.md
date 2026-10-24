@@ -126,6 +126,12 @@ Actual short/long comparison selected `clamp(800 + 140 × canonical length, 1200
 The original instrumental cue “Between the lamps” is a continuous 75-second phrase at 64 BPM: open sustained harmony, a sparse motif, long rests, a slightly fuller middle and a quiet return. Air/water, a soft travel texture and a restrained visible-delivery response support it. Start from intentional activation, keep a live master mute available during transit, and never advance puzzle time through listening. Actual sonic judgment and capture availability belong in the atmosphere review.
 
 
+## Phone views and local actions
+
+Keep the accepted isometric angle and miniature geometry. Ordinary phone Play favors a visibly larger ferry, its passengers and current pier; distant scenery can leave this frame. Whole cove deliberately fits the complete navigable network and Harbor for planning. Bounded panning and Back to boat provide free inspection without changing puzzle state. Use the same measured usable rectangle for camera framing and overlays, with camera revisions keeping markers, names, dock actions and water aligned.
+
+Use16px primary action text, comfortable touch areas, and the existing dark teal, ivory and warm borders. Action previews stay near their initiating control, flipping locally or using a nearby edge sheet when necessary. Decorative scenery may be covered; shrinking text or sending a confirmation to a remote corner is not the fallback. Both phone orientations work in the ordinary browser, with optional fullscreen including the complete interface.
+
 ## Harbor homecoming
 
 After the visible final arrival, one restrained warm ivory/amber shaft sweeps from the lantern over the accepted 20-second authored turn. Keep a luminous glass source, softly dissolving silhouette and gradual distance falloff; the shaft must become transparent before its geometric far rim. Native phone comparison selected a clean cone proxy with no noise or extra shells. The weaker soft candidate was too faint in some phone orientations; the retained balance increases the body modestly without restoring the old triangular opacity floor.

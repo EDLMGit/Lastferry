@@ -171,8 +171,8 @@ test('direction: free-water heading, both berths, transfer/tide Undo and winning
     let maxStep = 0;
     for (let i = 1; i < activeFrames.length; i++)
       maxStep = Math.max(maxStep, Math.abs(activeFrames[i].heading - activeFrames[i - 1].heading));
+    observations.push({ label: 'reverse-samples', frames: reverseFrames,maxStep,adjacentSteps:activeFrames.slice(1).map((frame,index)=>({dt:frame.time-activeFrames[index].time,fromProgress:activeFrames[index].active.progress,toProgress:frame.active.progress,fromHeading:activeFrames[index].heading,toHeading:frame.heading,step:Math.abs(frame.heading-activeFrames[index].heading)})) });
     expect(maxStep).toBeLessThan(0.85);
-    observations.push({ label: 'reverse-samples', frames: reverseFrames });
     await act(page, 'map-stone', true);
     const stone = await save('opposite-berth', true);
     expect(angularDistance(stone.boatHeading, initial.boatHeading)).toBeCloseTo(Math.PI, 7);

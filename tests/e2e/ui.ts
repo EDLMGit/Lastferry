@@ -15,14 +15,42 @@ export async function ready(page: Page, cove = 'first-crossing') {
   await idle(page);
 }
 export async function activate(page: Page, id: string, touch = false) {
+  if (id.startsWith('map-')) {
+    const inFrame = await page.locator(`#${id}`).evaluate((element) => {
+      const r = element.getBoundingClientRect();
+      return (
+        !element.closest('.offscreen') &&
+        getComputedStyle(element).opacity !== '0' &&
+        r.width > 0 &&
+        r.height > 0 &&
+        r.left >= 0 &&
+        r.top >= 0 &&
+        r.right <= innerWidth &&
+        r.bottom <= innerHeight
+      );
+    });
+    if (!inFrame) await wholeCove(page, touch);
+  }
   if ((id === 'board' || id === 'unload') && !(await page.locator(`#${id}`).isVisible())) {
     const current = await page.locator('.map-target[aria-current="location"]').getAttribute('id');
     if (!current) throw Error('No current location selector is available');
-    if (touch) await page.locator(`#${current}`).tap();
-    else await page.locator(`#${current}`).click();
+    await activate(page, current, touch);
   }
   if (touch) await page.locator(`#${id}`).tap();
   else await page.locator(`#${id}`).click();
+}
+export async function wholeCove(page: Page, touch = false) {
+  const toggle = page.locator('#view-toggle');
+  if ((await toggle.count()) && (await toggle.textContent())?.includes('Whole cove')) {
+    if (touch) await toggle.tap();
+    else await toggle.click();
+    await page.evaluate(
+      () =>
+        new Promise<void>((resolve) =>
+          requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+        ),
+    );
+  }
 }
 export async function selectPlace(page: Page, id: string, touch = false) {
   await activate(page, id.startsWith('map-') ? id : `map-${id}`, touch);

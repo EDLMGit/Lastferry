@@ -1,0 +1,60 @@
+
+Running 15 tests using 1 worker
+
+(node:48324) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\e2e\phone-playability.spec.ts:183:3 › phone layout 844x390: readable Play and deliberate complete Whole cove (9.8s)
+  ok  2 tests\e2e\phone-playability.spec.ts:183:3 › phone layout 780x390: readable Play and deliberate complete Whole cove (10.0s)
+  ok  3 tests\e2e\phone-playability.spec.ts:183:3 › phone layout 780x320: readable Play and deliberate complete Whole cove (10.3s)
+  ok  4 tests\e2e\phone-playability.spec.ts:183:3 › phone layout 390x844: readable Play and deliberate complete Whole cove (11.7s)
+  ok  5 tests\e2e\phone-playability.spec.ts:183:3 › phone layout 360x740: readable Play and deliberate complete Whole cove (7.5s)
+  ok  6 tests\e2e\phone-playability.spec.ts:242:3 › phone rescue 844x390: actual subset/tide Undo, nearby previews and terminal redelivery (41.7s)
+  ok  7 tests\e2e\phone-playability.spec.ts:242:3 › phone rescue 390x844: actual subset/tide Undo, nearby previews and terminal redelivery (43.0s)
+  x   8 tests\e2e\phone-playability.spec.ts:316:1 › phone camera input: real touch pan, cancellation, mode recovery and marker picking conserve state (23.6s)
+(node:35984) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  9 tests\e2e\phone-playability.spec.ts:465:1 › phone rotation: selected place, open subset and confirmed journey retain state and anchors (17.8s)
+  ok 10 tests\e2e\phone-playability.spec.ts:532:1 › phone nearby decisions: Wait and losing Sail retain their actual control anchors (15.6s)
+  ok 11 tests\e2e\phone-playability.spec.ts:592:1 › phone fullscreen: real API result, root includes dialogs and external exit preserves subset (8.9s)
+  ok 12 tests\e2e\phone-playability.spec.ts:660:3 › phone fullscreen rejected: labeled mocked fallback leaves play usable (3.3s)
+  ok 13 tests\e2e\phone-playability.spec.ts:660:3 › phone fullscreen unavailable: labeled mocked fallback leaves play usable (3.1s)
+  ok 14 tests\e2e\phone-playability.spec.ts:710:1 › desktop and other coves: keyboard overview, Bellwater outer route, First Crossing and arrival remain coherent (49.1s)
+  ok 15 tests\e2e\phone-playability.spec.ts:747:1 › phone won Overview: closing arrival then Whole cove retains the complete network (28.8s)
+
+
+  1) tests\e2e\phone-playability.spec.ts:316:1 › phone camera input: real touch pan, cancellation, mode recovery and marker picking conserve state 
+
+    Error: expect(locator).toBeInViewport() failed
+
+    Locator:  locator('#back-to-boat')
+    Expected: in viewport
+    Received: viewport ratio 0
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeInViewport" locator('#back-to-boat') with timeout 10000ms
+      - waiting for locator('#back-to-boat')
+        20 × locator resolved to <button hidden="" id="back-to-boat">Back to boat</button>
+           - unexpected value "viewport ratio 0"
+
+
+       at ui.ts:118
+
+      116 | }
+      117 | export async function fullyVisible(page: Page, locator: Locator, touchTarget = true) {
+    > 118 |   await expect(locator).toBeInViewport({ ratio: 1 });
+          |                         ^
+      119 |   const bounds = await locator.boundingBox();
+      120 |   const size = page.viewportSize()!;
+      121 |   expect(bounds).not.toBeNull();
+        at fullyVisible (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\ui.ts:118:25)
+        at press (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-playability.spec.ts:50:9)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-playability.spec.ts:449:15
+        at observed (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-playability.spec.ts:151:5)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-playability.spec.ts:329:5
+
+    Error Context: test-results\phone-playability-phone-ca-d9856-rker-picking-conserve-state\error-context.md
+
+  1 failed
+    tests\e2e\phone-playability.spec.ts:316:1 › phone camera input: real touch pan, cancellation, mode recovery and marker picking conserve state 
+  14 passed (4.8m)

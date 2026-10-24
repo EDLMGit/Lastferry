@@ -12,6 +12,7 @@ import {
   keyAct,
   tabTo,
   fullyVisible,
+  wholeCove,
 } from './ui';
 
 async function ready(page: Page) {
@@ -188,7 +189,8 @@ test('Holding Pier: phone landscape touch, direct double-tap guard, preview and 
   });
   const page = await context.newPage();
   await ready(page);
-  await shot(page, 'phone-normal');
+  await wholeCove(page, true);
+  await shot(page, 'phone-overview');
   const frame = await page.evaluate(() => (window as any).__LAST_FERRY__.getFrameStatus());
   expect(frame.lighthouse.top).toBeGreaterThanOrEqual(8);
   for (const node of frame.nodes) {
