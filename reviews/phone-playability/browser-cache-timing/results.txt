@@ -1,0 +1,78 @@
+
+Running 4 tests using 1 worker
+
+(node:22924) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\e2e\sailing-direction-wake.spec.ts:71:1 › direction: free-water heading, both berths, transfer/tide Undo and winning pose remain paired (28.0s)
+(node:4968) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  2 tests\e2e\selection.spec.ts:241:1 › selection regression: an explicit new place permits the next trusted Sail inside the previous 180ms fence (2.1s)
+(node:52056) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  3 tests\e2e\selection.spec.ts:285:1 › selection regression: the arrived dock permits a deliberate local action inside the prior Sail fence (1.7s)
+(node:15788) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 4 tests\e2e\victory-mix.spec.ts:144:1 › victory mix: visible final arrival, persistent ending, Undo/redelivery and next cove (38.2s)
+
+
+  1) tests\e2e\sailing-direction-wake.spec.ts:71:1 › direction: free-water heading, both berths, transfer/tide Undo and winning pose remain paired 
+
+    Error: expect(received).toBeLessThan(expected)
+
+    Expected: < 0.85
+    Received:   1.4256833474051538
+
+      173 |       maxStep = Math.max(maxStep, Math.abs(activeFrames[i].heading - activeFrames[i - 1].heading));
+      174 |     observations.push({ label: 'reverse-samples', frames: reverseFrames,maxStep,adjacentSteps:activeFrames.slice(1).map((frame,index)=>({dt:frame.time-activeFrames[index].time,fromProgress:activeFrames[index].active.progress,toProgress:frame.active.progress,fromHeading:activeFrames[index].heading,toHeading:frame.heading,step:Math.abs(frame.heading-activeFrames[index].heading)})) });
+    > 175 |     expect(maxStep).toBeLessThan(0.85);
+          |                     ^
+      176 |     await act(page, 'map-stone', true);
+      177 |     const stone = await save('opposite-berth', true);
+      178 |     expect(angularDistance(stone.boatHeading, initial.boatHeading)).toBeCloseTo(Math.PI, 7);
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\sailing-direction-wake.spec.ts:175:21
+
+    Error Context: test-results\sailing-direction-wake-dir-992e9--winning-pose-remain-paired\error-context.md
+
+  2) tests\e2e\selection.spec.ts:241:1 › selection regression: an explicit new place permits the next trusted Sail inside the previous 180ms fence 
+
+    Error: The new intentional Sail must exercise the still-live old fence
+
+    expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 180
+    Received:    230.19999998807907
+
+      275 |   expect(clicks.every((click: any) => click.trusted)).toBe(true);
+      276 |   expect(clicks.map((click: any) => click.target)).toEqual(['sail', 'map-rabbit-pier', 'sail']);
+    > 277 |   expect(result.gapMs, 'The new intentional Sail must exercise the still-live old fence').toBeLessThanOrEqual(180);
+          |                                                                                           ^
+      278 |   expect(result.final.state).toMatchObject({ turn: 3, boatNodeId: 'rabbit-pier' });
+      279 |   expect(result.final.history).toBe(3);
+      280 |   expect((await selection(page)).selectedId).toBeNull();
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\selection.spec.ts:277:91
+
+    Error Context: test-results\selection-selection-regres-9c0df-de-the-previous-180ms-fence\error-context.md
+
+  3) tests\e2e\selection.spec.ts:285:1 › selection regression: the arrived dock permits a deliberate local action inside the prior Sail fence 
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 180
+    Received:    377.5999999642372
+
+      316 |   expect(clicks[2].snapshot).toEqual(arrived);
+      317 |   expect(clicks.every((click: any) => click.trusted)).toBe(true);
+    > 318 |   expect(result.gapMs).toBeLessThanOrEqual(180);
+          |                        ^
+      319 |   await expect(page.locator('#commit')).toBeVisible();
+      320 |   await expect(page.locator('#cancel')).toBeFocused();
+      321 |   expect(result.final).toEqual(arrived);
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\selection.spec.ts:318:24
+
+    Error Context: test-results\selection-selection-regres-fed88-inside-the-prior-Sail-fence\error-context.md
+
+  3 failed
+    tests\e2e\sailing-direction-wake.spec.ts:71:1 › direction: free-water heading, both berths, transfer/tide Undo and winning pose remain paired 
+    tests\e2e\selection.spec.ts:241:1 › selection regression: an explicit new place permits the next trusted Sail inside the previous 180ms fence 
+    tests\e2e\selection.spec.ts:285:1 › selection regression: the arrived dock permits a deliberate local action inside the prior Sail fence 
+  1 passed (1.3m)

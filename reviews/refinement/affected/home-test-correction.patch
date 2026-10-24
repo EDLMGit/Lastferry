@@ -1,0 +1,54 @@
+diff --git a/reviews/refinement/initial-browser/raw/original-tests/home-refinement.spec.ts b/tests/e2e/home-refinement.spec.ts
+index c7ba140..ae3ec2d 100644
+--- a/reviews/refinement/initial-browser/raw/original-tests/home-refinement.spec.ts
++++ b/tests/e2e/home-refinement.spec.ts
+@@ -111,7 +111,9 @@ for (const width of [844, 780])
+       expect((await state(page)).turn).toBe(before.turn + 1);
+       await home(page);
+       if ((await state(page)).turn === 2)
+-        await expect(page.locator('#map-harbor')).toHaveAccessibleName(/Not adjacent/);
++        await expect(page.locator('#map-harbor')).toHaveAccessibleName(
++          'Harbor: no direct passage; Home, delivery destination',
++        );
+       if ((await state(page)).turn === 8) {
+         expect(await audio(page)).toMatchObject({ desiredArrangement: 'homeward' });
+         await undo(page, true);
+@@ -207,7 +209,7 @@ test('home refinement: reduced motion restores wet contact, baseline home light
+   expect((await state(page)).status).toBe('won');
+   const won = await audio(page);
+   expect(won.desiredArrangement).toBe('won');
+-  expect(won.pendingTerminal).toBeNull();
++  expect(won.pendingTerminal).toBe(false);
+   await undo(page);
+   await home(page);
+   expect((await view(page)).arrival.active).toBe(false);
+@@ -293,7 +295,7 @@ test('home refinement: actual adaptive runtime mix follows rescue, Undo and a lo
+   expect((await state(page)).status).toBe('won');
+   const delivered = await audio(page);
+   expect(delivered.deliveryCount).toBe(1);
+-  expect(delivered.pendingTerminal).toBeNull();
++  expect(delivered.pendingTerminal).toBe(false);
+   await undo(page);
+   expect((await audio(page)).desiredArrangement).toBe('homeward');
+   expect((await audio(page)).deliveryCount).toBe(1);
+@@ -363,7 +365,10 @@ test('home refinement: actual adaptive runtime mix follows rescue, Undo and a lo
+   expect(recording.samples.some((sample: any) => sample.audio.companionNotes > 0)).toBe(true);
+   expect(
+     recording.samples.some(
+-      (sample: any) => sample.audio.pendingTerminal === 'won' && sample.arrival.active === false,
++      (sample: any) =>
++        sample.audio.pendingTerminal === true &&
++        sample.audio.desiredArrangement === 'won' &&
++        sample.arrival.active === false,
+     ),
+   ).toBe(true);
+   const initialContact = recording.samples
+@@ -395,7 +400,7 @@ test('home refinement: hidden winning unload reconciles without replaying an uns
+   expect((await state(page)).status).toBe('won');
+   expect(await audio(page)).toMatchObject({
+     desiredArrangement: 'won',
+-    pendingTerminal: null,
++    pendingTerminal: false,
+     deliveryCount: before.deliveryCount,
+   });
+   expect((await view(page)).arrival).toMatchObject({

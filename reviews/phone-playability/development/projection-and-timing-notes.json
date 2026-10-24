@@ -1,0 +1,117 @@
+{
+  "recordedAt": "2026-10-24T19:44:19.902Z",
+  "scope": "Original final-projection verification and the quiet diagnostic before any measured-layout optimization. Subsequent final checks are separate; no original failure is overwritten.",
+  "runs": [
+    {
+      "directory": "browser-projection-final",
+      "passed": 15,
+      "failed": 2,
+      "total": 17,
+      "classification": "The two immediate Back-to-boat alignment snapshots mixed future camera API state with pre-paint DOM. Sampling-only repair waits two rAFs and reads the rendered frame and DOM atomically; original tolerances unchanged."
+    },
+    {
+      "directory": "browser-anchor-rerun",
+      "passed": 2,
+      "failed": 0,
+      "total": 2,
+      "classification": "Affected360x740 layout and independent actual Object3D projection passed. Same runtime, sampling-only fixture fix. This establishes17 distinct passed phone cases across15+2, not a clean17-case invocation."
+    },
+    {
+      "directory": "browser-preservation-final",
+      "passed": 7,
+      "failed": 4,
+      "total": 11,
+      "classification": "Reverse heading per-sample maximum1.6367996rad exceeded unchanged0.85; trusted rapid new-Sail gap2752.9ms and local-action gap255.1ms exceeded unchanged180; victory duck event timing8ms exceeded unchanged5ms tolerance. Fullscreen UI exit/reentry, production, homecoming2, settlements, wave release and transfer audio passed."
+    },
+    {
+      "directory": "browser-timing-rerun",
+      "passed": 1,
+      "failed": 3,
+      "total": 4,
+      "classification": "Victory lifecycle passed unchanged. Reverse heading sampled0.8512340101rad exceeded0.85 over66.7ms; rapid trusted new-Sail194ms and local action437ms exceeded180. Correct committed actions and trusted event order were retained; timing coverage remained failed, not waived."
+    }
+  ],
+  "heading": {
+    "report": "heading-plan-audit.json",
+    "plannerSource": "paths.ts,transitions.ts,motion.ts are normalized byte-identical to accepted80545cb",
+    "maximumAngleError": 8.881784197001252e-16,
+    "meaning": "Observed headings agree with the exact production planner at retained progress. This does not turn a failed smoothness threshold into a pass or establish native-GPU smoothness."
+  },
+  "performance": {
+    "report": "performance/comparison.json",
+    "helper": "performance/helper-source.txt",
+    "initialFailedInvocation": "performance-initial/",
+    "profiles": [
+      {
+        "label": "baseline",
+        "idle": {
+          "count": 90,
+          "median": 33.400000000001455,
+          "p95": 66.79999999999927,
+          "maximum": 83.29999999999927
+        },
+        "active": {
+          "count": 91,
+          "median": 33.400000000001455,
+          "p95": 66.70000000000073,
+          "maximum": 83.40000000000146
+        },
+        "counters": {
+          "LayoutCount": 47,
+          "RecalcStyleCount": 71,
+          "LayoutDuration": 0.005056999999999992,
+          "RecalcStyleDuration": 0.004627000000000003,
+          "TaskDuration": 0.6761120000000003,
+          "ScriptDuration": 0.5381640000000001
+        }
+      },
+      {
+        "label": "candidate-play",
+        "idle": {
+          "count": 90,
+          "median": 50,
+          "p95": 83.29999999999927,
+          "maximum": 100
+        },
+        "active": {
+          "count": 72,
+          "median": 50,
+          "p95": 100,
+          "maximum": 166.59999999999854
+        },
+        "counters": {
+          "LayoutCount": 379,
+          "RecalcStyleCount": 409,
+          "LayoutDuration": 0.031604999999999994,
+          "RecalcStyleDuration": 0.022495,
+          "TaskDuration": 0.6947419999999997,
+          "ScriptDuration": 0.46750500000000006
+        }
+      },
+      {
+        "label": "candidate-overview",
+        "idle": {
+          "count": 90,
+          "median": 33.400000000001455,
+          "p95": 83.39999999999782,
+          "maximum": 83.40000000000146
+        },
+        "active": {
+          "count": 90,
+          "median": 33.400000000001455,
+          "p95": 83.39999999999782,
+          "maximum": 83.39999999999782
+        },
+        "counters": {
+          "LayoutCount": 49,
+          "RecalcStyleCount": 79,
+          "LayoutDuration": 0.005326999999999998,
+          "RecalcStyleDuration": 0.005367000000000004,
+          "TaskDuration": 0.6374340000000007,
+          "ScriptDuration": 0.5044359999999997
+        }
+      }
+    ],
+    "interpretation": "Quiet identical UI/state/course comparison finds dynamic Play layout379 layouts versus47 baseline/49Overview and31.605ms versus5.057/5.327ms layout cost over the sampled pair of crossings. CandidatePlay frame intervals also worsened. This supports a bounded repeated-layout optimization, not a physicalAndroid or all-browser performance claim."
+  }
+}

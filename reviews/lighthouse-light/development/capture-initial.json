@@ -1,0 +1,10 @@
+{
+  "kind": "capture harness development failure",
+  "outcome": "failed before browser launch",
+  "command": "node tools/capture-lighthouse-light.mjs --base=http://127.0.0.1:5201 --phase=baseline --width=1440 --height=900 --cycles=0 --output=reviews/lighthouse-light/baseline/1440x900",
+  "node": "v24.15.0",
+  "error": "ENOENT: no such file or directory, scandir 'C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\public'",
+  "fix": "Filter optional source directories through existsSync before hashing, matching the existing homecoming capture harness.",
+  "runtime_changed": false,
+  "rerun": "baseline/1440x900/capture.json"
+}

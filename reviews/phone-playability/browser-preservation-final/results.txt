@@ -1,0 +1,114 @@
+
+Running 11 tests using 1 worker
+
+(node:16508) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\e2e\homecoming.spec.ts:467:1 › homecoming settings: natural keyboard, device and persisted Reduced preference, loss has no arrival (15.1s)
+  ok  2 tests\e2e\homecoming.spec.ts:533:1 › homecoming recovery: simulated hide and context loss settle finite motion without replay or resource growth (36.6s)
+  ok  3 tests\e2e\phone-playability.spec.ts:656:1 › phone fullscreen: real API result, root includes dialogs and external exit preserves subset (11.0s)
+  ok  4 tests\e2e\production.spec.ts:4:1 › production bundle: real rescue without debug globals or external assets (16.2s)
+  x   5 tests\e2e\sailing-direction-wake.spec.ts:71:1 › direction: free-water heading, both berths, transfer/tide Undo and winning pose remain paired (27.1s)
+(node:39256) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  6 tests\e2e\sailing-direction-wake.spec.ts:221:1 › direction: normal, hidden, device Reduced, recovery and animation failures settle the same planned pose once (25.3s)
+  ok  7 tests\e2e\sailing-direction-wake.spec.ts:325:1 › direction: released crests retain their release data as the next journey turns and tide moves their height (13.0s)
+  x   8 tests\e2e\selection.spec.ts:241:1 › selection regression: an explicit new place permits the next trusted Sail inside the previous 180ms fence (5.1s)
+(node:27664) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   9 tests\e2e\selection.spec.ts:285:1 › selection regression: the arrived dock permits a deliberate local action inside the prior Sail fence (1.5s)
+(node:8420) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 10 tests\e2e\transfer-audio.spec.ts:177:1 › transfer audio: real UI normal rescue, subsets, tide Undo/replay and separate Harbor delivery (29.7s)
+  x  11 tests\e2e\victory-mix.spec.ts:144:1 › victory mix: visible final arrival, persistent ending, Undo/redelivery and next cove (21.2s)
+
+
+  1) tests\e2e\sailing-direction-wake.spec.ts:71:1 › direction: free-water heading, both berths, transfer/tide Undo and winning pose remain paired 
+
+    Error: expect(received).toBeLessThan(expected)
+
+    Expected: < 0.85
+    Received:   1.6367996166115562
+
+      172 |     for (let i = 1; i < activeFrames.length; i++)
+      173 |       maxStep = Math.max(maxStep, Math.abs(activeFrames[i].heading - activeFrames[i - 1].heading));
+    > 174 |     expect(maxStep).toBeLessThan(0.85);
+          |                     ^
+      175 |     observations.push({ label: 'reverse-samples', frames: reverseFrames });
+      176 |     await act(page, 'map-stone', true);
+      177 |     const stone = await save('opposite-berth', true);
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\sailing-direction-wake.spec.ts:174:21
+
+    Error Context: test-results\sailing-direction-wake-dir-992e9--winning-pose-remain-paired\error-context.md
+
+  2) tests\e2e\selection.spec.ts:241:1 › selection regression: an explicit new place permits the next trusted Sail inside the previous 180ms fence 
+
+    Error: The new intentional Sail must exercise the still-live old fence
+
+    expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 180
+    Received:    2752.900000035763
+
+      275 |   expect(clicks.every((click: any) => click.trusted)).toBe(true);
+      276 |   expect(clicks.map((click: any) => click.target)).toEqual(['sail', 'map-rabbit-pier', 'sail']);
+    > 277 |   expect(result.gapMs, 'The new intentional Sail must exercise the still-live old fence').toBeLessThanOrEqual(180);
+          |                                                                                           ^
+      278 |   expect(result.final.state).toMatchObject({ turn: 3, boatNodeId: 'rabbit-pier' });
+      279 |   expect(result.final.history).toBe(3);
+      280 |   expect((await selection(page)).selectedId).toBeNull();
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\selection.spec.ts:277:91
+
+    Error Context: test-results\selection-selection-regres-9c0df-de-the-previous-180ms-fence\error-context.md
+
+  3) tests\e2e\selection.spec.ts:285:1 › selection regression: the arrived dock permits a deliberate local action inside the prior Sail fence 
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 180
+    Received:    255.0999999642372
+
+      316 |   expect(clicks[2].snapshot).toEqual(arrived);
+      317 |   expect(clicks.every((click: any) => click.trusted)).toBe(true);
+    > 318 |   expect(result.gapMs).toBeLessThanOrEqual(180);
+          |                        ^
+      319 |   await expect(page.locator('#commit')).toBeVisible();
+      320 |   await expect(page.locator('#cancel')).toBeFocused();
+      321 |   expect(result.final).toEqual(arrived);
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\selection.spec.ts:318:24
+
+    Error Context: test-results\selection-selection-regres-fed88-inside-the-prior-Sail-fence\error-context.md
+
+  4) tests\e2e\victory-mix.spec.ts:144:1 › victory mix: visible final arrival, persistent ending, Undo/redelivery and next cove 
+
+    Error: expect(received).toBeCloseTo(expected, precision)
+
+    Expected: 18.421333333333333
+    Received: 18.429333333333332
+
+    Expected precision:    2
+    Expected difference: < 0.005
+    Received difference:   0.007999999999999119
+
+      196 |       victorySettled: true,
+      197 |     });
+    > 198 |     expect(arrival.audio.lastVictoryMixChange.time).toBeCloseTo(arrival.audio.lastArrival.time, 2);
+          |                                                     ^
+      199 |     await mix(page, 0.5, 0.62);
+      200 |     await page.waitForFunction(
+      201 |       () => {
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\victory-mix.spec.ts:198:53
+        at observed (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\victory-mix.spec.ts:106:5)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\victory-mix.spec.ts:151:3
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\victory-mix-victory-mix-vi-b0d40-do-redelivery-and-next-cove\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\victory-mix-victory-mix-vi-b0d40-do-redelivery-and-next-cove\error-context.md
+
+  4 failed
+    tests\e2e\sailing-direction-wake.spec.ts:71:1 › direction: free-water heading, both berths, transfer/tide Undo and winning pose remain paired 
+    tests\e2e\selection.spec.ts:241:1 › selection regression: an explicit new place permits the next trusted Sail inside the previous 180ms fence 
+    tests\e2e\selection.spec.ts:285:1 › selection regression: the arrived dock permits a deliberate local action inside the prior Sail fence 
+    tests\e2e\victory-mix.spec.ts:144:1 › victory mix: visible final arrival, persistent ending, Undo/redelivery and next cove 
+  7 passed (3.5m)

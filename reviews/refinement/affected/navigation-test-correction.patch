@@ -1,0 +1,15 @@
+diff --git a/reviews/refinement/initial-browser/raw/original-tests/navigation.spec.ts b/tests/e2e/navigation.spec.ts
+index 1ded0f6..24ce7f0 100644
+--- a/reviews/refinement/initial-browser/raw/original-tests/navigation.spec.ts
++++ b/tests/e2e/navigation.spec.ts
+@@ -90,7 +90,9 @@ for (const [label, width, height, touch] of [
+     await expect(page.locator('#progress')).toHaveText('Home 0/3');
+     await expect(page.locator('#boat-summary')).toHaveText('Depth 2 · 2/4 spaces');
+     await expect(page.locator('#status-headline')).toHaveText('Rabbit Pier floods in 4 actions.');
+-    await expect(page.locator('#map-harbor')).toHaveAccessibleName('Sail to Harbor');
++    await expect(page.locator('#map-harbor')).toHaveAccessibleName(
++      'Sail to Harbor; Home, delivery destination',
++    );
+     await expect(page.locator('#map-stone')).toHaveAccessibleName('You are at Stone Pier');
+     await expect(page.locator('#map-shallows')).toHaveAccessibleName(/^Sail to Shallows/);
+     await expect(page.locator('#map-rabbit-pier')).toHaveAccessibleName(

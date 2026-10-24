@@ -1,0 +1,2969 @@
+{
+  "phase": "before",
+  "source": {
+    "head": "7efe98654fa3df01fcb8338c6c28e664e5712ca1",
+    "branch": "m1-first-crossing",
+    "workingTree": "M NEXT_TASK.md\n M STATUS.md\n?? src/scene/paths.ts\n?? tests/unit/paths.test.ts\n?? tools/capture-environment.mjs",
+    "runtimeHashes": {
+      "data/bellwater.level.json": "0f321e71f9a26d5ce5de4c20c3e0527dfd113e1435243058a459e769f5d09d31",
+      "data/bellwater/witnesses.json": "bccaa47b7c87579a4e661d35046d37c3d41684bf477a63afa852c349625f86c4",
+      "data/experiments/holding-pier-solution.json": "88179ae2c38883dce2a4de89d800f9e5b276a7cbc8a09ae81535e38bac1b952a",
+      "data/first-crossing.level.json": "403a19ddd7840a52f5706490d6e2f5a35ddf1a38dd20715b602fcc572f6167ab",
+      "data/holding-pier.level.json": "80d98e6c3a675eabb81dff75ef2df76b9ac90979d0ac1cbcc06a5603dc8fc81a",
+      "data/replays/full-boat-detour.json": "b88cb6c0a2935d2700526e8194fd57b97d436c1922da05a10d209ac1f48674a5",
+      "data/replays/harbor-first.json": "27bf293ba908464fb32097a6c92ec632f3611521094160abecb107780ea9e038",
+      "data/replays/last-safe-boarding.json": "73386dc35b4b495bcbaddbf8de50e768230b34f7598f67f8c871b3e19535ad31",
+      "data/replays/missed-sheep-deadline.json": "372f48fd32380d31189d461ff23ce39606033b3369278b245b4f7fe4ec6603b5",
+      "data/replays/wait-for-tide.json": "3dacc1cc212a57ecda08decac203b322d222d5a113ba60f2e4cafc9e01b59a9f",
+      "index.html": "73fed8f2910cacf1125237fa619e8966e55dff8d5ae248a9a611acd1202c1d78",
+      "package-lock.json": "fa75e13e3b5a563e3d99e14d514a205bb521344250c7479861e3e1507731a7f1",
+      "package.json": "c8f57d8c320535e0a245aad65e96327c6ab6a952002fd5daf02318c95cce3929",
+      "src/audio/sound.ts": "0acd54e65af223e2813f0064493cb6e4377034e24de56a10b298e39f87df420b",
+      "src/game/rules.ts": "aa37c820e121955416e964476de296bfd6b755ac569dcdc958b459884530a44b",
+      "src/game/session.ts": "96a670a82ceada27f7a0f750b45589b55e621256b97b9b7b26916221e4f3fde9",
+      "src/levels/level.ts": "ad0f978d63a96157c043484081b83ec363a9c82f165c916ff726e678742bb9a9",
+      "src/main.ts": "c2fa530e06b82f85ee215e49f275c738b71e3ed7a17c34504a75d695363a3acf",
+      "src/scene/layout.ts": "0443fb8a1dc8bc96e8b7964686f2763ea3d44c54f400386c74e00eefa0ec7bb3",
+      "src/scene/models.ts": "b58807cb7b63dc2d10ce0625107b1033268f4f0582dfc4e7d3119dc8c4aff7da",
+      "src/scene/motion.ts": "378836414a75fbfa22ca370526e984bceaeb414badd57869dbe2c6d298ed6642",
+      "src/scene/scenery.ts": "17cb96e6cacbb62303c09676742f1194d80e0b44452c2105c0afb05b4b52a08e",
+      "src/scene/world.ts": "0688c784f615fd21a27bfc1ecb39af254a9281695d885586b0b37de7b14e5782",
+      "src/style.css": "33da1c6e8844845264f7aab6c421862253dc394b4d2a1a0d34fabba10dde80a1",
+      "src/ui/presentation.ts": "623f11c1648f7afb6434fb08d86670e88b0386e03ab75eca9a390d987ea9fca7",
+      "vite.config.ts": "42d95c3568be6430b7d1fcc9e5168d3df4736d998cc6f01d20d0d3c554365f26"
+    },
+    "runtimeHash": "349083599871ee79df97f9143a07216c88768f7919506776fdba4aa9fd6d75b2",
+    "referenceSourceHash": "46db5c9503f1f276aa07e7d5e871fb6dc2717221adb5b2164d268487bc3b7e7f",
+    "differencesFromBellwaterRuntime": []
+  },
+  "generatedAt": "2026-10-22T09:25:17.133Z",
+  "environment": {
+    "os": "win32",
+    "release": "10.0.26200",
+    "arch": "x64",
+    "node": "v24.15.0",
+    "browser": "156.0.8078.4",
+    "renderer": "Headless Chromium SwiftShader software WebGL; no physical-device frame-rate claim",
+    "baseURL": "http://127.0.0.1:5178"
+  },
+  "measurementProtocol": "Idle turn0 at1440x900, DPR1, no-preference motion.120 consecutive requestAnimationFrame intervals after metrics.frames>4; median/p95 and render calls/triangles. Repeat same protocol after renderer changes.",
+  "measurements": [
+    {
+      "cove": "holding-pier",
+      "state": {
+        "turn": 0,
+        "tideLevel": 0,
+        "boatNodeId": "stone",
+        "aboard": [
+          "sheep-1"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [],
+          "rabbit-pier": [
+            "rabbit-1",
+            "rabbit-2"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "preference": "normal",
+      "dpr": 1,
+      "sampleFrames": 120,
+      "intervalsMs": [
+        16.700000000000045,
+        16.59999999999991,
+        16.700000000000045,
+        16.700000000000045,
+        16.59999999999991,
+        16.700000000000045,
+        16.700000000000045,
+        16.59999999999991,
+        16.700000000000045,
+        16.600000000000023,
+        16.699999999999932,
+        16.700000000000045,
+        16.600000000000023,
+        16.699999999999932,
+        16.700000000000045,
+        16.600000000000023,
+        16.699999999999932,
+        16.700000000000045,
+        16.700000000000045,
+        16.59999999999991,
+        16.700000000000045,
+        250,
+        116.59999999999991,
+        250,
+        116.70000000000005,
+        116.70000000000005,
+        133.30000000000018,
+        149.89999999999964,
+        133.4000000000001,
+        133.30000000000018,
+        133.4000000000001,
+        133.29999999999973,
+        133.30000000000018,
+        133.4000000000001,
+        249.89999999999964,
+        133.30000000000018,
+        133.4000000000001,
+        133.29999999999973,
+        133.4000000000001,
+        133.20000000000027,
+        133.39999999999964,
+        133.30000000000018,
+        133.39999999999964,
+        116.70000000000073,
+        133.19999999999982,
+        16.699999999999818,
+        100,
+        133.30000000000018,
+        16.699999999999818,
+        116.69999999999982,
+        133.30000000000018,
+        133.39999999999964,
+        133.20000000000073,
+        150,
+        133.39999999999964,
+        133.30000000000018,
+        133.30000000000018,
+        133.29999999999927,
+        133.40000000000055,
+        116.59999999999945,
+        16.700000000000728,
+        133.39999999999964,
+        133.19999999999982,
+        133.30000000000018,
+        133.39999999999964,
+        133.40000000000055,
+        133.30000000000018,
+        133.29999999999927,
+        150,
+        133.30000000000018,
+        133.40000000000055,
+        133.29999999999927,
+        133.30000000000018,
+        133.40000000000055,
+        116.59999999999945,
+        133.40000000000055,
+        133.29999999999927,
+        133.3000000000011,
+        133.29999999999927,
+        133.29999999999927,
+        133.3000000000011,
+        133.39999999999964,
+        133.39999999999964,
+        133.20000000000073,
+        133.29999999999927,
+        133.39999999999964,
+        116.70000000000073,
+        133.29999999999927,
+        133.40000000000146,
+        133.1999999999989,
+        133.3000000000011,
+        133.5,
+        133.1999999999989,
+        133.39999999999964,
+        133.3000000000011,
+        133.29999999999927,
+        116.70000000000073,
+        133.29999999999927,
+        116.70000000000073,
+        133.29999999999927,
+        133.3000000000011,
+        133.39999999999964,
+        133.1999999999989,
+        150.10000000000036,
+        133.3000000000011,
+        116.69999999999891,
+        133.3000000000011,
+        133.29999999999927,
+        133.39999999999964,
+        116.60000000000036,
+        133.39999999999964,
+        133.3000000000011,
+        133.29999999999927,
+        116.60000000000036,
+        133.39999999999964,
+        150,
+        116.60000000000036,
+        133.29999999999927,
+        133.39999999999964,
+        116.70000000000073
+      ],
+      "medianIntervalMs": 133.29999999999927,
+      "p95IntervalMs": 150,
+      "drawCalls": [
+        1020
+      ],
+      "triangles": [
+        230892
+      ],
+      "renderer": {
+        "frames": 127,
+        "drawCalls": 1020,
+        "triangles": 230892,
+        "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "pixelRatio": 1
+      },
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36"
+    },
+    {
+      "cove": "bellwater",
+      "state": {
+        "turn": 0,
+        "tideLevel": 0,
+        "boatNodeId": "harbor",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [
+            "tansy",
+            "lark"
+          ],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "preference": "normal",
+      "dpr": 1,
+      "sampleFrames": 120,
+      "intervalsMs": [
+        16.699999999999932,
+        16.600000000000023,
+        16.700000000000045,
+        16.699999999999932,
+        149.89999999999998,
+        116.70000000000005,
+        66.70000000000005,
+        50,
+        116.59999999999991,
+        1050.0000000000002,
+        16.699999999999818,
+        16.59999999999991,
+        16.700000000000273,
+        16.59999999999991,
+        16.699999999999818,
+        16.700000000000273,
+        16.699999999999818,
+        16.59999999999991,
+        66.70000000000027,
+        133.29999999999973,
+        150,
+        66.59999999999991,
+        100.10000000000036,
+        100,
+        83.29999999999973,
+        116.70000000000027,
+        99.89999999999964,
+        83.40000000000009,
+        100,
+        116.59999999999991,
+        116.70000000000027,
+        133.29999999999973,
+        116.70000000000027,
+        116.59999999999991,
+        116.69999999999982,
+        116.60000000000036,
+        100,
+        116.69999999999982,
+        116.69999999999982,
+        116.69999999999982,
+        99.90000000000055,
+        116.80000000000018,
+        116.5,
+        116.69999999999982,
+        116.59999999999945,
+        116.80000000000018,
+        116.60000000000036,
+        116.69999999999982,
+        116.60000000000036,
+        116.69999999999982,
+        116.69999999999982,
+        116.60000000000036,
+        116.69999999999982,
+        116.69999999999982,
+        99.89999999999964,
+        116.70000000000073,
+        116.69999999999982,
+        116.59999999999945,
+        116.70000000000073,
+        100,
+        116.59999999999945,
+        116.69999999999982,
+        116.60000000000036,
+        116.80000000000018,
+        116.59999999999945,
+        116.70000000000073,
+        116.59999999999945,
+        116.69999999999982,
+        116.60000000000036,
+        166.70000000000073,
+        100,
+        116.69999999999891,
+        49.899999999999636,
+        116.70000000000073,
+        116.70000000000073,
+        100,
+        133.29999999999927,
+        100,
+        133.39999999999964,
+        116.60000000000036,
+        116.70000000000073,
+        116.69999999999891,
+        116.60000000000036,
+        116.70000000000073,
+        116.59999999999854,
+        100,
+        116.70000000000073,
+        116.60000000000036,
+        116.60000000000036,
+        116.79999999999927,
+        116.60000000000036,
+        116.60000000000036,
+        100,
+        116.69999999999891,
+        100,
+        116.70000000000073,
+        116.69999999999891,
+        116.60000000000036,
+        116.70000000000073,
+        116.69999999999891,
+        116.60000000000036,
+        116.70000000000073,
+        116.60000000000036,
+        100,
+        116.69999999999891,
+        100,
+        116.60000000000036,
+        116.70000000000073,
+        116.69999999999891,
+        116.60000000000036,
+        116.70000000000073,
+        116.69999999999891,
+        116.60000000000036,
+        116.60000000000036,
+        133.39999999999964,
+        116.70000000000073,
+        100,
+        116.59999999999854,
+        116.70000000000073,
+        183.29999999999927
+      ],
+      "medianIntervalMs": 116.60000000000036,
+      "p95IntervalMs": 133.39999999999964,
+      "drawCalls": [
+        1214
+      ],
+      "triangles": [
+        215012
+      ],
+      "renderer": {
+        "frames": 126,
+        "drawCalls": 1214,
+        "triangles": 215012,
+        "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "pixelRatio": 1
+      },
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36"
+    }
+  ],
+  "captures": [
+    {
+      "name": "holding-desktop-tide-0",
+      "path": "reviews/environment/before/holding-desktop-tide-0.png",
+      "capturedAt": "2026-10-22T09:24:03.376Z",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "state": {
+        "turn": 0,
+        "tideLevel": 0,
+        "boatNodeId": "stone",
+        "aboard": [
+          "sheep-1"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [],
+          "rabbit-pier": [
+            "rabbit-1",
+            "rabbit-2"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "metrics": {
+        "frames": 150,
+        "drawCalls": 1020,
+        "triangles": 230892,
+        "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "pixelRatio": 1
+      },
+      "frame": {
+        "canvas": {
+          "width": 1440,
+          "height": 730
+        },
+        "boat": {
+          "left": 645.6477411972133,
+          "right": 823.8967042614461,
+          "top": 324.25899079333925,
+          "bottom": 472.5932149622787,
+          "height": 148.33422416893944
+        },
+        "lighthouse": {
+          "left": 129.30485854803467,
+          "right": 266.1197013488297,
+          "top": 10,
+          "bottom": 294.9403498723788,
+          "height": 284.9403498723788
+        },
+        "bell": null,
+        "passengers": [
+          {
+            "id": "rabbit-1",
+            "left": 1201.7244014758194,
+            "right": 1235.6616567953138,
+            "top": 331.26127265830695,
+            "bottom": 428.6097281055689,
+            "height": 97.34845544726193
+          },
+          {
+            "id": "rabbit-2",
+            "left": 1235.2273386018435,
+            "right": 1273.9865110693897,
+            "top": 331.1269801319219,
+            "bottom": 428.6097281055689,
+            "height": 97.48274797364695
+          },
+          {
+            "id": "sheep-1",
+            "left": 749.2483433170898,
+            "right": 823.8967042614461,
+            "top": 347.043627734691,
+            "bottom": 435.023654355427,
+            "height": 87.98002662073606
+          }
+        ],
+        "nodes": [
+          {
+            "id": "harbor",
+            "x": 210.53867126987862,
+            "y": 489.8485381335055
+          },
+          {
+            "id": "stone",
+            "x": 723.5943241277351,
+            "y": 419.9418075309271
+          },
+          {
+            "id": "shallows",
+            "x": 980.1221505566633,
+            "y": 629.6619993386622
+          },
+          {
+            "id": "rabbit-pier",
+            "x": 1236.6499769855916,
+            "y": 489.8485381335055
+          }
+        ]
+      },
+      "navigation": {
+        "currentNode": "stone",
+        "selectedDestination": null,
+        "routes": [
+          {
+            "id": "harbor-stone",
+            "nodes": [
+              "harbor",
+              "stone"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          },
+          {
+            "id": "stone-shallows",
+            "nodes": [
+              "stone",
+              "shallows"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          },
+          {
+            "id": "shallows-rabbit",
+            "nodes": [
+              "shallows",
+              "rabbit-pier"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          }
+        ],
+        "markers": [
+          {
+            "id": "harbor",
+            "status": "available",
+            "selected": false,
+            "shape": "open ring"
+          },
+          {
+            "id": "stone",
+            "status": "current",
+            "selected": false,
+            "shape": "double ring"
+          },
+          {
+            "id": "shallows",
+            "status": "too-shallow",
+            "selected": false,
+            "shape": "crossed ring"
+          },
+          {
+            "id": "rabbit-pier",
+            "status": "nonadjacent",
+            "selected": false,
+            "shape": "diamond"
+          }
+        ]
+      },
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+        "dpr": 1,
+        "reducedMotion": false
+      },
+      "reuse": null
+    },
+    {
+      "name": "holding-desktop-tide-1",
+      "path": "reviews/environment/before/holding-desktop-tide-1.png",
+      "capturedAt": "2026-10-22T09:24:12.314Z",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "state": {
+        "turn": 4,
+        "tideLevel": 1,
+        "boatNodeId": "rabbit-pier",
+        "aboard": [
+          "rabbit-1",
+          "rabbit-2"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [
+            "sheep-1"
+          ],
+          "rabbit-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "metrics": {
+        "frames": 217,
+        "drawCalls": 1017,
+        "triangles": 229692,
+        "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "pixelRatio": 1
+      },
+      "frame": {
+        "canvas": {
+          "width": 1440,
+          "height": 730
+        },
+        "boat": {
+          "left": 1158.7033940550698,
+          "right": 1319.4466613546,
+          "top": 372.20242148374194,
+          "bottom": 534.7764121304255,
+          "height": 162.5739906466835
+        },
+        "lighthouse": {
+          "left": 129.30485854803467,
+          "right": 266.1197013488297,
+          "top": 10,
+          "bottom": 294.9403498723788,
+          "height": 284.9403498723788
+        },
+        "bell": null,
+        "passengers": [
+          {
+            "id": "rabbit-1",
+            "left": 1214.096905578715,
+            "right": 1254.179378458235,
+            "top": 410.8323203507514,
+            "bottom": 503.1568521818912,
+            "height": 92.32453183113984
+          },
+          {
+            "id": "rabbit-2",
+            "left": 1241.459873731134,
+            "right": 1281.542346610654,
+            "top": 377.96802601782366,
+            "bottom": 474.3689310581649,
+            "height": 96.40090504034123
+          },
+          {
+            "id": "sheep-1",
+            "left": 695.0916422558778,
+            "right": 752.1116674990842,
+            "top": 256.61962093874683,
+            "bottom": 359.01140941768625,
+            "height": 102.39178847893942
+          }
+        ],
+        "nodes": [
+          {
+            "id": "harbor",
+            "x": 210.53867126987862,
+            "y": 489.8485381335055
+          },
+          {
+            "id": "stone",
+            "x": 723.5943241277351,
+            "y": 419.9418075309271
+          },
+          {
+            "id": "shallows",
+            "x": 980.1221505566633,
+            "y": 629.6619993386622
+          },
+          {
+            "id": "rabbit-pier",
+            "x": 1236.6499769855916,
+            "y": 489.8485381335055
+          }
+        ]
+      },
+      "navigation": {
+        "currentNode": "rabbit-pier",
+        "selectedDestination": "shallows",
+        "routes": [
+          {
+            "id": "harbor-stone",
+            "nodes": [
+              "harbor",
+              "stone"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          },
+          {
+            "id": "stone-shallows",
+            "nodes": [
+              "stone",
+              "shallows"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          },
+          {
+            "id": "shallows-rabbit",
+            "nodes": [
+              "shallows",
+              "rabbit-pier"
+            ],
+            "highlighted": true,
+            "dashSize": 0.35,
+            "gapSize": 0.055
+          }
+        ],
+        "markers": [
+          {
+            "id": "harbor",
+            "status": "nonadjacent",
+            "selected": false,
+            "shape": "diamond"
+          },
+          {
+            "id": "stone",
+            "status": "nonadjacent",
+            "selected": false,
+            "shape": "diamond"
+          },
+          {
+            "id": "shallows",
+            "status": "available",
+            "selected": true,
+            "shape": "open ring"
+          },
+          {
+            "id": "rabbit-pier",
+            "status": "current",
+            "selected": false,
+            "shape": "double ring"
+          }
+        ]
+      },
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+        "dpr": 1,
+        "reducedMotion": false
+      },
+      "reuse": null
+    },
+    {
+      "name": "holding-desktop-tide-2",
+      "path": "reviews/environment/before/holding-desktop-tide-2.png",
+      "capturedAt": "2026-10-22T09:24:20.014Z",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "state": {
+        "turn": 8,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "aboard": [
+          "rabbit-1",
+          "rabbit-2",
+          "sheep-1"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [],
+          "rabbit-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "metrics": {
+        "frames": 277,
+        "drawCalls": 1015,
+        "triangles": 228828,
+        "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "pixelRatio": 1
+      },
+      "frame": {
+        "canvas": {
+          "width": 1440,
+          "height": 730
+        },
+        "boat": {
+          "left": 132.59208833935693,
+          "right": 310.84105140358946,
+          "top": 366.37721365719483,
+          "bottom": 528.9512043038783,
+          "height": 162.57399064668346
+        },
+        "lighthouse": {
+          "left": 129.30485854803467,
+          "right": 266.1197013488297,
+          "top": 10,
+          "bottom": 294.9403498723788,
+          "height": 284.9403498723788
+        },
+        "bell": null,
+        "passengers": [
+          {
+            "id": "rabbit-1",
+            "left": 187.98559986300202,
+            "right": 228.06807274252205,
+            "top": 405.0071125242043,
+            "bottom": 497.3316443553441,
+            "height": 92.32453183113984
+          },
+          {
+            "id": "rabbit-2",
+            "left": 215.3485680154211,
+            "right": 255.4310408949411,
+            "top": 372.14281819127655,
+            "bottom": 468.5437232316178,
+            "height": 96.40090504034123
+          },
+          {
+            "id": "sheep-1",
+            "left": 236.1926904592334,
+            "right": 310.84105140358946,
+            "top": 403.40161707629073,
+            "bottom": 491.3816436970268,
+            "height": 87.98002662073606
+          }
+        ],
+        "nodes": [
+          {
+            "id": "harbor",
+            "x": 210.53867126987862,
+            "y": 489.8485381335055
+          },
+          {
+            "id": "stone",
+            "x": 723.5943241277351,
+            "y": 419.9418075309271
+          },
+          {
+            "id": "shallows",
+            "x": 980.1221505566633,
+            "y": 629.6619993386622
+          },
+          {
+            "id": "rabbit-pier",
+            "x": 1236.6499769855916,
+            "y": 489.8485381335055
+          }
+        ]
+      },
+      "navigation": {
+        "currentNode": "harbor",
+        "selectedDestination": null,
+        "routes": [
+          {
+            "id": "harbor-stone",
+            "nodes": [
+              "harbor",
+              "stone"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          },
+          {
+            "id": "stone-shallows",
+            "nodes": [
+              "stone",
+              "shallows"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          },
+          {
+            "id": "shallows-rabbit",
+            "nodes": [
+              "shallows",
+              "rabbit-pier"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          }
+        ],
+        "markers": [
+          {
+            "id": "harbor",
+            "status": "current",
+            "selected": false,
+            "shape": "double ring"
+          },
+          {
+            "id": "stone",
+            "status": "available",
+            "selected": false,
+            "shape": "open ring"
+          },
+          {
+            "id": "shallows",
+            "status": "nonadjacent",
+            "selected": false,
+            "shape": "diamond"
+          },
+          {
+            "id": "rabbit-pier",
+            "status": "nonadjacent",
+            "selected": false,
+            "shape": "diamond"
+          }
+        ]
+      },
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+        "dpr": 1,
+        "reducedMotion": false
+      },
+      "reuse": null
+    },
+    {
+      "name": "bellwater-desktop-outer-highlight-tide-1",
+      "path": "reviews/environment/before/bellwater-desktop-outer-highlight-tide-1.png",
+      "capturedAt": "2026-10-22T09:24:43.581Z",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "state": {
+        "turn": 4,
+        "tideLevel": 1,
+        "boatNodeId": "east-buoy",
+        "aboard": [
+          "tansy",
+          "lark"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "metrics": {
+        "frames": 187,
+        "drawCalls": 1215,
+        "triangles": 215012,
+        "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "pixelRatio": 1
+      },
+      "frame": {
+        "canvas": {
+          "width": 1440,
+          "height": 730
+        },
+        "boat": {
+          "left": 968.0917668402517,
+          "right": 1094.7119621898614,
+          "top": 555.4556709411139,
+          "bottom": 683.51795809178,
+          "height": 128.06228715066607
+        },
+        "lighthouse": {
+          "left": 285.19559775574174,
+          "right": 392.96696767496843,
+          "top": 64.35421608762327,
+          "bottom": 288.80655782456506,
+          "height": 224.45234173694178
+        },
+        "bell": {
+          "left": 697.3976471446606,
+          "right": 815.9930227141884,
+          "top": 10,
+          "bottom": 181.8197493851153,
+          "height": 171.8197493851153
+        },
+        "passengers": [
+          {
+            "id": "tansy",
+            "left": 1011.726174477089,
+            "right": 1043.2998175376285,
+            "top": 585.8850968390078,
+            "bottom": 658.6106949459361,
+            "height": 72.72559810692826
+          },
+          {
+            "id": "lark",
+            "left": 1033.2804481397507,
+            "right": 1064.8540912002902,
+            "top": 559.9973353273034,
+            "bottom": 635.9339616828065,
+            "height": 75.93662635550311
+          },
+          {
+            "id": "bram",
+            "left": 730.8754341984085,
+            "right": 775.7910742524389,
+            "top": 185.7560674936752,
+            "bottom": 266.4118142456707,
+            "height": 80.65574675199551
+          }
+        ],
+        "nodes": [
+          {
+            "id": "harbor",
+            "x": 349.1848484947277,
+            "y": 445.09237613076886
+          },
+          {
+            "id": "shallows",
+            "x": 726.3846375913066,
+            "y": 489.1457491092184
+          },
+          {
+            "id": "low-pier",
+            "x": 1103.5844266878853,
+            "y": 489.1457491092184
+          },
+          {
+            "id": "west-buoy",
+            "x": 423.2776642101271,
+            "y": 632.3192112891793
+          },
+          {
+            "id": "east-buoy",
+            "x": 1029.4916109724861,
+            "y": 648.8392261560978
+          },
+          {
+            "id": "bell-pier",
+            "x": 753.3274796696336,
+            "y": 307.4255855731142
+          }
+        ]
+      },
+      "navigation": {
+        "currentNode": "east-buoy",
+        "selectedDestination": "west-buoy",
+        "routes": [
+          {
+            "id": "harbor-shallows",
+            "nodes": [
+              "harbor",
+              "shallows"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          },
+          {
+            "id": "shallows-low",
+            "nodes": [
+              "shallows",
+              "low-pier"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          },
+          {
+            "id": "harbor-west",
+            "nodes": [
+              "harbor",
+              "west-buoy"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          },
+          {
+            "id": "west-east",
+            "nodes": [
+              "west-buoy",
+              "east-buoy"
+            ],
+            "highlighted": true,
+            "dashSize": 0.35,
+            "gapSize": 0.055
+          },
+          {
+            "id": "east-low",
+            "nodes": [
+              "east-buoy",
+              "low-pier"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          },
+          {
+            "id": "harbor-bell",
+            "nodes": [
+              "harbor",
+              "bell-pier"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          }
+        ],
+        "markers": [
+          {
+            "id": "harbor",
+            "status": "nonadjacent",
+            "selected": false,
+            "shape": "diamond"
+          },
+          {
+            "id": "shallows",
+            "status": "nonadjacent",
+            "selected": false,
+            "shape": "diamond"
+          },
+          {
+            "id": "low-pier",
+            "status": "available",
+            "selected": false,
+            "shape": "open ring"
+          },
+          {
+            "id": "west-buoy",
+            "status": "available",
+            "selected": true,
+            "shape": "open ring"
+          },
+          {
+            "id": "east-buoy",
+            "status": "current",
+            "selected": false,
+            "shape": "double ring"
+          },
+          {
+            "id": "bell-pier",
+            "status": "nonadjacent",
+            "selected": false,
+            "shape": "diamond"
+          }
+        ]
+      },
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+        "dpr": 1,
+        "reducedMotion": false
+      },
+      "reuse": null
+    },
+    {
+      "name": "bellwater-desktop-harbor-bell-highlight-tide-2",
+      "path": "reviews/environment/before/bellwater-desktop-harbor-bell-highlight-tide-2.png",
+      "capturedAt": "2026-10-22T09:24:51.958Z",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "state": {
+        "turn": 9,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "aboard": [
+          "tansy",
+          "lark",
+          "bram"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "metrics": {
+        "frames": 253,
+        "drawCalls": 1216,
+        "triangles": 215876,
+        "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "pixelRatio": 1
+      },
+      "frame": {
+        "canvas": {
+          "width": 1440,
+          "height": 730
+        },
+        "boat": {
+          "left": 287.7850043624935,
+          "right": 428.1947328894218,
+          "top": 347.86412845215403,
+          "bottom": 475.92641560281993,
+          "height": 128.0622871506659
+        },
+        "lighthouse": {
+          "left": 285.19559775574174,
+          "right": 392.96696767496843,
+          "top": 64.35421608762327,
+          "bottom": 288.80655782456506,
+          "height": 224.45234173694178
+        },
+        "bell": {
+          "left": 697.3976471446606,
+          "right": 815.9930227141884,
+          "top": 10,
+          "bottom": 181.8197493851153,
+          "height": 171.8197493851153
+        },
+        "passengers": [
+          {
+            "id": "tansy",
+            "left": 331.41941199933086,
+            "right": 362.9930550598703,
+            "top": 378.2935543500479,
+            "bottom": 451.01915245697614,
+            "height": 72.72559810692826
+          },
+          {
+            "id": "lark",
+            "left": 352.97368566199253,
+            "right": 384.547328722532,
+            "top": 352.40579283834353,
+            "bottom": 428.3424191938466,
+            "height": 75.93662635550305
+          },
+          {
+            "id": "bram",
+            "left": 369.39295410207365,
+            "right": 428.1947328894218,
+            "top": 377.02887838157375,
+            "bottom": 446.3322361192451,
+            "height": 69.30335773767138
+          }
+        ],
+        "nodes": [
+          {
+            "id": "harbor",
+            "x": 349.1848484947277,
+            "y": 445.09237613076886
+          },
+          {
+            "id": "shallows",
+            "x": 726.3846375913066,
+            "y": 489.1457491092184
+          },
+          {
+            "id": "low-pier",
+            "x": 1103.5844266878853,
+            "y": 489.1457491092184
+          },
+          {
+            "id": "west-buoy",
+            "x": 423.2776642101271,
+            "y": 632.3192112891793
+          },
+          {
+            "id": "east-buoy",
+            "x": 1029.4916109724861,
+            "y": 648.8392261560978
+          },
+          {
+            "id": "bell-pier",
+            "x": 753.3274796696336,
+            "y": 307.4255855731142
+          }
+        ]
+      },
+      "navigation": {
+        "currentNode": "harbor",
+        "selectedDestination": "bell-pier",
+        "routes": [
+          {
+            "id": "harbor-shallows",
+            "nodes": [
+              "harbor",
+              "shallows"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          },
+          {
+            "id": "shallows-low",
+            "nodes": [
+              "shallows",
+              "low-pier"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          },
+          {
+            "id": "harbor-west",
+            "nodes": [
+              "harbor",
+              "west-buoy"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          },
+          {
+            "id": "west-east",
+            "nodes": [
+              "west-buoy",
+              "east-buoy"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          },
+          {
+            "id": "east-low",
+            "nodes": [
+              "east-buoy",
+              "low-pier"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          },
+          {
+            "id": "harbor-bell",
+            "nodes": [
+              "harbor",
+              "bell-pier"
+            ],
+            "highlighted": true,
+            "dashSize": 0.35,
+            "gapSize": 0.055
+          }
+        ],
+        "markers": [
+          {
+            "id": "harbor",
+            "status": "current",
+            "selected": false,
+            "shape": "double ring"
+          },
+          {
+            "id": "shallows",
+            "status": "available",
+            "selected": false,
+            "shape": "open ring"
+          },
+          {
+            "id": "low-pier",
+            "status": "nonadjacent",
+            "selected": false,
+            "shape": "diamond"
+          },
+          {
+            "id": "west-buoy",
+            "status": "available",
+            "selected": false,
+            "shape": "open ring"
+          },
+          {
+            "id": "east-buoy",
+            "status": "nonadjacent",
+            "selected": false,
+            "shape": "diamond"
+          },
+          {
+            "id": "bell-pier",
+            "status": "available",
+            "selected": true,
+            "shape": "open ring"
+          }
+        ]
+      },
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+        "dpr": 1,
+        "reducedMotion": false
+      },
+      "reuse": null
+    },
+    {
+      "name": "holding-phone-844-initial",
+      "path": "reviews/environment/before/holding-phone-844-initial.png",
+      "capturedAt": "2026-10-22T09:25:02.454Z",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "state": {
+        "turn": 0,
+        "tideLevel": 0,
+        "boatNodeId": "stone",
+        "aboard": [
+          "sheep-1"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [],
+          "rabbit-pier": [
+            "rabbit-1",
+            "rabbit-2"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "metrics": {
+        "frames": 31,
+        "drawCalls": 1020,
+        "triangles": 230892,
+        "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "pixelRatio": 1
+      },
+      "frame": {
+        "canvas": {
+          "width": 844,
+          "height": 258
+        },
+        "boat": {
+          "left": 397.07628507737576,
+          "right": 456.82734593552703,
+          "top": 115.6374448100597,
+          "bottom": 165.36074812302815,
+          "height": 49.72330331296844
+        },
+        "lighthouse": {
+          "left": 223.9923328653975,
+          "right": 269.85420974791754,
+          "top": 9.99999999999999,
+          "bottom": 105.5152158727129,
+          "height": 95.51521587271291
+        },
+        "bell": null,
+        "passengers": [
+          {
+            "id": "rabbit-1",
+            "left": 583.4794472552746,
+            "right": 594.8555976299784,
+            "top": 117.69039844039023,
+            "bottom": 150.3226975903175,
+            "height": 32.63229914992726
+          },
+          {
+            "id": "rabbit-2",
+            "left": 594.7100092778011,
+            "right": 607.7025206119927,
+            "top": 117.64538207239072,
+            "bottom": 150.3226975903175,
+            "height": 32.67731551792677
+          },
+          {
+            "id": "sheep-1",
+            "left": 431.8043742386865,
+            "right": 456.82734593552703,
+            "top": 123.27511184110436,
+            "bottom": 152.7670080886187,
+            "height": 29.491896247514333
+          }
+        ],
+        "nodes": [
+          {
+            "id": "harbor",
+            "x": 251.22282220032548,
+            "y": 170.8506367264427
+          },
+          {
+            "id": "stone",
+            "x": 423.20485794704365,
+            "y": 147.41711294698683
+          },
+          {
+            "id": "shallows",
+            "x": 509.19587582040265,
+            "y": 217.71768428535438
+          },
+          {
+            "id": "rabbit-pier",
+            "x": 595.1868936937616,
+            "y": 170.8506367264427
+          }
+        ]
+      },
+      "navigation": {
+        "currentNode": "stone",
+        "selectedDestination": null,
+        "routes": [
+          {
+            "id": "harbor-stone",
+            "nodes": [
+              "harbor",
+              "stone"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          },
+          {
+            "id": "stone-shallows",
+            "nodes": [
+              "stone",
+              "shallows"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          },
+          {
+            "id": "shallows-rabbit",
+            "nodes": [
+              "shallows",
+              "rabbit-pier"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          }
+        ],
+        "markers": [
+          {
+            "id": "harbor",
+            "status": "available",
+            "selected": false,
+            "shape": "open ring"
+          },
+          {
+            "id": "stone",
+            "status": "current",
+            "selected": false,
+            "shape": "double ring"
+          },
+          {
+            "id": "shallows",
+            "status": "too-shallow",
+            "selected": false,
+            "shape": "crossed ring"
+          },
+          {
+            "id": "rabbit-pier",
+            "status": "nonadjacent",
+            "selected": false,
+            "shape": "diamond"
+          }
+        ]
+      },
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+        "dpr": 1,
+        "reducedMotion": false
+      },
+      "reuse": null
+    },
+    {
+      "name": "bellwater-phone-844-initial",
+      "path": "reviews/environment/before/bellwater-phone-844-initial.png",
+      "capturedAt": "2026-10-22T09:25:04.517Z",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "state": {
+        "turn": 0,
+        "tideLevel": 0,
+        "boatNodeId": "harbor",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [
+            "tansy",
+            "lark"
+          ],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "metrics": {
+        "frames": 28,
+        "drawCalls": 1214,
+        "triangles": 215012,
+        "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "pixelRatio": 1
+      },
+      "frame": {
+        "canvas": {
+          "width": 844,
+          "height": 258
+        },
+        "boat": {
+          "left": 262.9338976556472,
+          "right": 309.5333473638543,
+          "top": 129.01475258591483,
+          "bottom": 174.02543132831642,
+          "height": 45.01067874240158
+        },
+        "lighthouse": {
+          "left": 261.9809302193527,
+          "right": 301.64353316092263,
+          "top": 18.21528491474111,
+          "bottom": 107.84583972260455,
+          "height": 89.63055480786345
+        },
+        "bell": {
+          "left": 413.68175975197795,
+          "right": 457.32787184506896,
+          "top": 10.000000000000004,
+          "bottom": 74.6900839885609,
+          "height": 64.6900839885609
+        },
+        "passengers": [
+          {
+            "id": "tansy",
+            "left": 553.0438978761247,
+            "right": 562.8823032355758,
+            "top": 126.99213971471222,
+            "bottom": 158.18407284156757,
+            "height": 31.191933126855346
+          },
+          {
+            "id": "lark",
+            "left": 562.7563944547354,
+            "right": 573.9926728910045,
+            "top": 126.94437689463332,
+            "bottom": 158.18407284156757,
+            "height": 31.239695946934248
+          },
+          {
+            "id": "bram",
+            "left": 426.0024361641867,
+            "right": 442.5325331525118,
+            "top": 71.63859294751713,
+            "bottom": 101.66523350010273,
+            "height": 30.026640552585604
+          }
+        ],
+        "nodes": [
+          {
+            "id": "harbor",
+            "x": 285.5306006605018,
+            "y": 160.11045939055174
+          },
+          {
+            "id": "shallows",
+            "x": 424.34970888743095,
+            "y": 174.14499750260163
+          },
+          {
+            "id": "low-pier",
+            "x": 563.1688171143601,
+            "y": 174.14499750260163
+          },
+          {
+            "id": "west-buoy",
+            "x": 312.79863977650575,
+            "y": 219.75724636676364
+          },
+          {
+            "id": "east-buoy",
+            "x": 535.9007779983561,
+            "y": 225.02019815878234
+          },
+          {
+            "id": "bell-pier",
+            "x": 434.2653594750688,
+            "y": 116.25252779039592
+          }
+        ]
+      },
+      "navigation": {
+        "currentNode": "harbor",
+        "selectedDestination": null,
+        "routes": [
+          {
+            "id": "harbor-shallows",
+            "nodes": [
+              "harbor",
+              "shallows"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          },
+          {
+            "id": "shallows-low",
+            "nodes": [
+              "shallows",
+              "low-pier"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          },
+          {
+            "id": "harbor-west",
+            "nodes": [
+              "harbor",
+              "west-buoy"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          },
+          {
+            "id": "west-east",
+            "nodes": [
+              "west-buoy",
+              "east-buoy"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          },
+          {
+            "id": "east-low",
+            "nodes": [
+              "east-buoy",
+              "low-pier"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          },
+          {
+            "id": "harbor-bell",
+            "nodes": [
+              "harbor",
+              "bell-pier"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          }
+        ],
+        "markers": [
+          {
+            "id": "harbor",
+            "status": "current",
+            "selected": false,
+            "shape": "double ring"
+          },
+          {
+            "id": "shallows",
+            "status": "available",
+            "selected": false,
+            "shape": "open ring"
+          },
+          {
+            "id": "low-pier",
+            "status": "nonadjacent",
+            "selected": false,
+            "shape": "diamond"
+          },
+          {
+            "id": "west-buoy",
+            "status": "available",
+            "selected": false,
+            "shape": "open ring"
+          },
+          {
+            "id": "east-buoy",
+            "status": "nonadjacent",
+            "selected": false,
+            "shape": "diamond"
+          },
+          {
+            "id": "bell-pier",
+            "status": "available",
+            "selected": false,
+            "shape": "open ring"
+          }
+        ]
+      },
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+        "dpr": 1,
+        "reducedMotion": false
+      },
+      "reuse": null
+    },
+    {
+      "name": "holding-phone-780-initial",
+      "path": "reviews/environment/before/holding-phone-780-initial.png",
+      "capturedAt": "2026-10-22T09:25:08.125Z",
+      "viewport": {
+        "width": 780,
+        "height": 390
+      },
+      "state": {
+        "turn": 0,
+        "tideLevel": 0,
+        "boatNodeId": "stone",
+        "aboard": [
+          "sheep-1"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [],
+          "rabbit-pier": [
+            "rabbit-1",
+            "rabbit-2"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "metrics": {
+        "frames": 27,
+        "drawCalls": 1020,
+        "triangles": 230892,
+        "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "pixelRatio": 1
+      },
+      "frame": {
+        "canvas": {
+          "width": 780,
+          "height": 258
+        },
+        "boat": {
+          "left": 365.0762850773757,
+          "right": 424.82734593552703,
+          "top": 115.66079343065753,
+          "bottom": 165.38409674362595,
+          "height": 49.72330331296841
+        },
+        "lighthouse": {
+          "left": 191.9923328653975,
+          "right": 237.85420974791754,
+          "top": 9.99999999999999,
+          "bottom": 105.5152158727129,
+          "height": 95.51521587271291
+        },
+        "bell": null,
+        "passengers": [
+          {
+            "id": "rabbit-1",
+            "left": 551.4794472552746,
+            "right": 562.8555976299785,
+            "top": 117.69039844039023,
+            "bottom": 150.3226975903175,
+            "height": 32.63229914992726
+          },
+          {
+            "id": "rabbit-2",
+            "left": 562.7100092778011,
+            "right": 575.7025206119927,
+            "top": 117.64538207239072,
+            "bottom": 150.3226975903175,
+            "height": 32.67731551792677
+          },
+          {
+            "id": "sheep-1",
+            "left": 399.8043742386864,
+            "right": 424.82734593552703,
+            "top": 123.2984604617022,
+            "bottom": 152.79035670921655,
+            "height": 29.491896247514347
+          }
+        ],
+        "nodes": [
+          {
+            "id": "harbor",
+            "x": 219.22282220032548,
+            "y": 170.8506367264427
+          },
+          {
+            "id": "stone",
+            "x": 391.20485794704354,
+            "y": 147.41711294698683
+          },
+          {
+            "id": "shallows",
+            "x": 477.1958758204027,
+            "y": 217.71768428535438
+          },
+          {
+            "id": "rabbit-pier",
+            "x": 563.1868936937617,
+            "y": 170.8506367264427
+          }
+        ]
+      },
+      "navigation": {
+        "currentNode": "stone",
+        "selectedDestination": null,
+        "routes": [
+          {
+            "id": "harbor-stone",
+            "nodes": [
+              "harbor",
+              "stone"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          },
+          {
+            "id": "stone-shallows",
+            "nodes": [
+              "stone",
+              "shallows"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          },
+          {
+            "id": "shallows-rabbit",
+            "nodes": [
+              "shallows",
+              "rabbit-pier"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          }
+        ],
+        "markers": [
+          {
+            "id": "harbor",
+            "status": "available",
+            "selected": false,
+            "shape": "open ring"
+          },
+          {
+            "id": "stone",
+            "status": "current",
+            "selected": false,
+            "shape": "double ring"
+          },
+          {
+            "id": "shallows",
+            "status": "too-shallow",
+            "selected": false,
+            "shape": "crossed ring"
+          },
+          {
+            "id": "rabbit-pier",
+            "status": "nonadjacent",
+            "selected": false,
+            "shape": "diamond"
+          }
+        ]
+      },
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+        "dpr": 1,
+        "reducedMotion": false
+      },
+      "reuse": null
+    },
+    {
+      "name": "bellwater-phone-780-initial",
+      "path": "reviews/environment/before/bellwater-phone-780-initial.png",
+      "capturedAt": "2026-10-22T09:25:10.043Z",
+      "viewport": {
+        "width": 780,
+        "height": 390
+      },
+      "state": {
+        "turn": 0,
+        "tideLevel": 0,
+        "boatNodeId": "harbor",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [
+            "tansy",
+            "lark"
+          ],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "metrics": {
+        "frames": 27,
+        "drawCalls": 1214,
+        "triangles": 215012,
+        "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "pixelRatio": 1
+      },
+      "frame": {
+        "canvas": {
+          "width": 780,
+          "height": 258
+        },
+        "boat": {
+          "left": 230.9338976556471,
+          "right": 277.53334736385426,
+          "top": 128.9429163072641,
+          "bottom": 173.9535950496657,
+          "height": 45.01067874240158
+        },
+        "lighthouse": {
+          "left": 229.98093021935256,
+          "right": 269.6435331609226,
+          "top": 18.21528491474111,
+          "bottom": 107.84583972260455,
+          "height": 89.63055480786345
+        },
+        "bell": {
+          "left": 381.68175975197795,
+          "right": 425.327871845069,
+          "top": 10.000000000000004,
+          "bottom": 74.6900839885609,
+          "height": 64.6900839885609
+        },
+        "passengers": [
+          {
+            "id": "tansy",
+            "left": 521.0438978761247,
+            "right": 530.8823032355758,
+            "top": 126.99213971471222,
+            "bottom": 158.18407284156757,
+            "height": 31.191933126855346
+          },
+          {
+            "id": "lark",
+            "left": 530.7563944547354,
+            "right": 541.9926728910045,
+            "top": 126.94437689463332,
+            "bottom": 158.18407284156757,
+            "height": 31.239695946934248
+          },
+          {
+            "id": "bram",
+            "left": 394.0024361641866,
+            "right": 410.5325331525118,
+            "top": 71.63859294751713,
+            "bottom": 101.66523350010273,
+            "height": 30.026640552585604
+          }
+        ],
+        "nodes": [
+          {
+            "id": "harbor",
+            "x": 253.53060066050173,
+            "y": 160.11045939055174
+          },
+          {
+            "id": "shallows",
+            "x": 392.34970888743095,
+            "y": 174.14499750260163
+          },
+          {
+            "id": "low-pier",
+            "x": 531.1688171143601,
+            "y": 174.14499750260163
+          },
+          {
+            "id": "west-buoy",
+            "x": 280.7986397765057,
+            "y": 219.75724636676364
+          },
+          {
+            "id": "east-buoy",
+            "x": 503.90077799835615,
+            "y": 225.02019815878234
+          },
+          {
+            "id": "bell-pier",
+            "x": 402.2653594750687,
+            "y": 116.25252779039592
+          }
+        ]
+      },
+      "navigation": {
+        "currentNode": "harbor",
+        "selectedDestination": null,
+        "routes": [
+          {
+            "id": "harbor-shallows",
+            "nodes": [
+              "harbor",
+              "shallows"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          },
+          {
+            "id": "shallows-low",
+            "nodes": [
+              "shallows",
+              "low-pier"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          },
+          {
+            "id": "harbor-west",
+            "nodes": [
+              "harbor",
+              "west-buoy"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          },
+          {
+            "id": "west-east",
+            "nodes": [
+              "west-buoy",
+              "east-buoy"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          },
+          {
+            "id": "east-low",
+            "nodes": [
+              "east-buoy",
+              "low-pier"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          },
+          {
+            "id": "harbor-bell",
+            "nodes": [
+              "harbor",
+              "bell-pier"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          }
+        ],
+        "markers": [
+          {
+            "id": "harbor",
+            "status": "current",
+            "selected": false,
+            "shape": "double ring"
+          },
+          {
+            "id": "shallows",
+            "status": "available",
+            "selected": false,
+            "shape": "open ring"
+          },
+          {
+            "id": "low-pier",
+            "status": "nonadjacent",
+            "selected": false,
+            "shape": "diamond"
+          },
+          {
+            "id": "west-buoy",
+            "status": "available",
+            "selected": false,
+            "shape": "open ring"
+          },
+          {
+            "id": "east-buoy",
+            "status": "nonadjacent",
+            "selected": false,
+            "shape": "diamond"
+          },
+          {
+            "id": "bell-pier",
+            "status": "available",
+            "selected": false,
+            "shape": "open ring"
+          }
+        ]
+      },
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+        "dpr": 1,
+        "reducedMotion": false
+      },
+      "reuse": null
+    },
+    {
+      "name": "bellwater-phone-780-constrained",
+      "path": "reviews/environment/before/bellwater-phone-780-constrained.png",
+      "capturedAt": "2026-10-22T09:25:15.564Z",
+      "viewport": {
+        "width": 780,
+        "height": 390
+      },
+      "state": {
+        "turn": 3,
+        "tideLevel": 0,
+        "boatNodeId": "low-pier",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [
+            "tansy",
+            "lark"
+          ],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "metrics": {
+        "frames": 120,
+        "drawCalls": 1213,
+        "triangles": 214148,
+        "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "pixelRatio": 1
+      },
+      "frame": {
+        "canvas": {
+          "width": 780,
+          "height": 258
+        },
+        "boat": {
+          "left": 508.57211410950543,
+          "right": 555.1715638177127,
+          "top": 142.74689478438182,
+          "bottom": 187.75757352678337,
+          "height": 45.01067874240155
+        },
+        "lighthouse": {
+          "left": 229.98093021935256,
+          "right": 269.6435331609226,
+          "top": 18.21528491474111,
+          "bottom": 107.84583972260455,
+          "height": 89.63055480786345
+        },
+        "bell": {
+          "left": 381.68175975197795,
+          "right": 425.327871845069,
+          "top": 10.000000000000004,
+          "bottom": 74.6900839885609,
+          "height": 64.6900839885609
+        },
+        "passengers": [
+          {
+            "id": "tansy",
+            "left": 521.0438978761247,
+            "right": 530.8823032355758,
+            "top": 126.99213971471222,
+            "bottom": 158.18407284156757,
+            "height": 31.191933126855346
+          },
+          {
+            "id": "lark",
+            "left": 530.7563944547354,
+            "right": 541.9926728910045,
+            "top": 126.94437689463332,
+            "bottom": 158.18407284156757,
+            "height": 31.239695946934248
+          },
+          {
+            "id": "bram",
+            "left": 394.0024361641866,
+            "right": 410.5325331525118,
+            "top": 71.63859294751713,
+            "bottom": 101.66523350010273,
+            "height": 30.026640552585604
+          }
+        ],
+        "nodes": [
+          {
+            "id": "harbor",
+            "x": 253.53060066050173,
+            "y": 160.11045939055174
+          },
+          {
+            "id": "shallows",
+            "x": 392.34970888743095,
+            "y": 174.14499750260163
+          },
+          {
+            "id": "low-pier",
+            "x": 531.1688171143601,
+            "y": 174.14499750260163
+          },
+          {
+            "id": "west-buoy",
+            "x": 280.7986397765057,
+            "y": 219.75724636676364
+          },
+          {
+            "id": "east-buoy",
+            "x": 503.90077799835615,
+            "y": 225.02019815878234
+          },
+          {
+            "id": "bell-pier",
+            "x": 402.2653594750687,
+            "y": 116.25252779039592
+          }
+        ]
+      },
+      "navigation": {
+        "currentNode": "low-pier",
+        "selectedDestination": null,
+        "routes": [
+          {
+            "id": "harbor-shallows",
+            "nodes": [
+              "harbor",
+              "shallows"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          },
+          {
+            "id": "shallows-low",
+            "nodes": [
+              "shallows",
+              "low-pier"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          },
+          {
+            "id": "harbor-west",
+            "nodes": [
+              "harbor",
+              "west-buoy"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          },
+          {
+            "id": "west-east",
+            "nodes": [
+              "west-buoy",
+              "east-buoy"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          },
+          {
+            "id": "east-low",
+            "nodes": [
+              "east-buoy",
+              "low-pier"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          },
+          {
+            "id": "harbor-bell",
+            "nodes": [
+              "harbor",
+              "bell-pier"
+            ],
+            "highlighted": false,
+            "dashSize": 0.09,
+            "gapSize": 0.16
+          }
+        ],
+        "markers": [
+          {
+            "id": "harbor",
+            "status": "nonadjacent",
+            "selected": false,
+            "shape": "diamond"
+          },
+          {
+            "id": "shallows",
+            "status": "available",
+            "selected": false,
+            "shape": "open ring"
+          },
+          {
+            "id": "low-pier",
+            "status": "current",
+            "selected": false,
+            "shape": "double ring"
+          },
+          {
+            "id": "west-buoy",
+            "status": "nonadjacent",
+            "selected": false,
+            "shape": "diamond"
+          },
+          {
+            "id": "east-buoy",
+            "status": "available",
+            "selected": false,
+            "shape": "open ring"
+          },
+          {
+            "id": "bell-pier",
+            "status": "nonadjacent",
+            "selected": false,
+            "shape": "diamond"
+          }
+        ]
+      },
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+        "dpr": 1,
+        "reducedMotion": false
+      },
+      "reuse": {
+        "path": "reviews/bellwater/bellwater-phone-780-subset-warning.png",
+        "sourceHash": "46db5c9503f1f276aa07e7d5e871fb6dc2717221adb5b2164d268487bc3b7e7f",
+        "capture": {
+          "path": "reviews/bellwater/bellwater-phone-780-subset-warning.png",
+          "captureTime": "2026-10-22T08:28:33.221Z",
+          "sha256": "12912391cabc9058884856e45496b058cac1962eadba89125ccc15b593d1808e",
+          "sourceIdentity": {
+            "head": "e9c81d620df5fca0983965e80c348260fb3518e9",
+            "branch": "m1-first-crossing",
+            "comparisonBase": "e9c81d620df5fca0983965e80c348260fb3518e9",
+            "workingTree": "M NEXT_TASK.md\n M README.md\n M STATUS.md\n M docs/ASSET_LEDGER.md\n M docs/GAMEPLAY_RULES.md\n M src/levels/level.ts\n M src/main.ts\n M src/scene/world.ts\n M src/style.css\n M src/ui/presentation.ts\n M tests/e2e/checkpoint.spec.ts\n M tests/e2e/fallback.spec.ts\n M tests/e2e/production.spec.ts\n M tests/unit/clearance.test.ts\n M tests/unit/presentation.test.ts\n M tools/snapshot-evidence.mjs\n?? data/bellwater.level.json\n?? data/bellwater/\n?? docs/BELLWATER.md\n?? reviews/bellwater/\n?? src/scene/layout.ts\n?? src/scene/scenery.ts\n?? tests/e2e/bellwater.spec.ts\n?? tests/e2e/responsive.spec.ts\n?? tests/unit/bellwater.test.ts"
+          },
+          "viewport": [
+            780,
+            390
+          ],
+          "input": "Chromium emulated touch; keyboard used for modal focus checks",
+          "method": "Playwright screenshot of the actual WebGL application",
+          "sourceHash": "46db5c9503f1f276aa07e7d5e871fb6dc2717221adb5b2164d268487bc3b7e7f",
+          "sourceManifest": "source-manifest.json",
+          "reused": false,
+          "cove": "bellwater"
+        },
+        "validation": "All current src/data/package/index/vite runtime hashes exactly match historical captured runtime."
+      }
+    }
+  ],
+  "trace": [
+    {
+      "id": "unload",
+      "state": {
+        "turn": 1,
+        "tideLevel": 0,
+        "boatNodeId": "stone",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [
+            "sheep-1"
+          ],
+          "rabbit-pier": [
+            "rabbit-1",
+            "rabbit-2"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-shallows",
+      "state": {
+        "turn": 2,
+        "tideLevel": 0,
+        "boatNodeId": "shallows",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [
+            "sheep-1"
+          ],
+          "rabbit-pier": [
+            "rabbit-1",
+            "rabbit-2"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-rabbit-pier",
+      "state": {
+        "turn": 3,
+        "tideLevel": 0,
+        "boatNodeId": "rabbit-pier",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [
+            "sheep-1"
+          ],
+          "rabbit-pier": [
+            "rabbit-1",
+            "rabbit-2"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "board",
+      "state": {
+        "turn": 4,
+        "tideLevel": 1,
+        "boatNodeId": "rabbit-pier",
+        "aboard": [
+          "rabbit-1",
+          "rabbit-2"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [
+            "sheep-1"
+          ],
+          "rabbit-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-shallows",
+      "state": {
+        "turn": 5,
+        "tideLevel": 1,
+        "boatNodeId": "shallows",
+        "aboard": [
+          "rabbit-1",
+          "rabbit-2"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [
+            "sheep-1"
+          ],
+          "rabbit-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-stone",
+      "state": {
+        "turn": 6,
+        "tideLevel": 1,
+        "boatNodeId": "stone",
+        "aboard": [
+          "rabbit-1",
+          "rabbit-2"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [
+            "sheep-1"
+          ],
+          "rabbit-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "board",
+      "state": {
+        "turn": 7,
+        "tideLevel": 1,
+        "boatNodeId": "stone",
+        "aboard": [
+          "rabbit-1",
+          "rabbit-2",
+          "sheep-1"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [],
+          "rabbit-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-harbor",
+      "state": {
+        "turn": 8,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "aboard": [
+          "rabbit-1",
+          "rabbit-2",
+          "sheep-1"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [],
+          "rabbit-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-shallows",
+      "state": {
+        "turn": 1,
+        "tideLevel": 0,
+        "boatNodeId": "shallows",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [
+            "tansy",
+            "lark"
+          ],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-low-pier",
+      "state": {
+        "turn": 2,
+        "tideLevel": 0,
+        "boatNodeId": "low-pier",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [
+            "tansy",
+            "lark"
+          ],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "board",
+      "state": {
+        "turn": 3,
+        "tideLevel": 0,
+        "boatNodeId": "low-pier",
+        "aboard": [
+          "tansy",
+          "lark"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-east-buoy",
+      "state": {
+        "turn": 4,
+        "tideLevel": 1,
+        "boatNodeId": "east-buoy",
+        "aboard": [
+          "tansy",
+          "lark"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-west-buoy",
+      "state": {
+        "turn": 5,
+        "tideLevel": 1,
+        "boatNodeId": "west-buoy",
+        "aboard": [
+          "tansy",
+          "lark"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-harbor",
+      "state": {
+        "turn": 6,
+        "tideLevel": 1,
+        "boatNodeId": "harbor",
+        "aboard": [
+          "tansy",
+          "lark"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-bell-pier",
+      "state": {
+        "turn": 7,
+        "tideLevel": 1,
+        "boatNodeId": "bell-pier",
+        "aboard": [
+          "tansy",
+          "lark"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "board",
+      "state": {
+        "turn": 8,
+        "tideLevel": 2,
+        "boatNodeId": "bell-pier",
+        "aboard": [
+          "tansy",
+          "lark",
+          "bram"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-harbor",
+      "state": {
+        "turn": 9,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "aboard": [
+          "tansy",
+          "lark",
+          "bram"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-west-buoy",
+      "state": {
+        "turn": 10,
+        "tideLevel": 2,
+        "boatNodeId": "west-buoy",
+        "aboard": [
+          "tansy",
+          "lark",
+          "bram"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-east-buoy",
+      "state": {
+        "turn": 11,
+        "tideLevel": 2,
+        "boatNodeId": "east-buoy",
+        "aboard": [
+          "tansy",
+          "lark",
+          "bram"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-west-buoy",
+      "state": {
+        "turn": 12,
+        "tideLevel": 2,
+        "boatNodeId": "west-buoy",
+        "aboard": [
+          "tansy",
+          "lark",
+          "bram"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-harbor",
+      "state": {
+        "turn": 13,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "aboard": [
+          "tansy",
+          "lark",
+          "bram"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "unload",
+      "state": {
+        "turn": 14,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": []
+        },
+        "delivered": [
+          "tansy",
+          "lark",
+          "bram"
+        ],
+        "status": "won",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-west-buoy",
+      "state": {
+        "turn": 1,
+        "tideLevel": 0,
+        "boatNodeId": "west-buoy",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [
+            "tansy",
+            "lark"
+          ],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-east-buoy",
+      "state": {
+        "turn": 2,
+        "tideLevel": 0,
+        "boatNodeId": "east-buoy",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [
+            "tansy",
+            "lark"
+          ],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-low-pier",
+      "state": {
+        "turn": 3,
+        "tideLevel": 0,
+        "boatNodeId": "low-pier",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [
+            "tansy",
+            "lark"
+          ],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    }
+  ],
+  "errors": [],
+  "recording": {
+    "path": "reviews/environment/before/raw/bellwater-journeys.webm",
+    "actions": "14-action actual-UI Bellwater rescue, with both Harbor–Bell directions and both outer-bend directions; inspection/cancellation free; no state injection or temporal edits."
+  }
+}

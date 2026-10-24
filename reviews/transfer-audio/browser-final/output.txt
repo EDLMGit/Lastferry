@@ -1,0 +1,39 @@
+
+Running 3 tests using 1 worker
+
+(node:46828) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\e2e\production.spec.ts:4:1 › production bundle: real rescue without debug globals or external assets (16.0s)
+  x  2 tests\e2e\transfer-audio.spec.ts:159:1 › transfer audio: real UI normal rescue, subsets, tide Undo/replay and separate Harbor delivery (45.7s)
+(node:29472) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 3 tests\e2e\transfer-audio.spec.ts:263:1 › transfer audio: muted contacts are consumed, hidden interruption is silent on recovery and reduced motion is compact (15.0s)
+
+
+  1) tests\e2e\transfer-audio.spec.ts:159:1 › transfer audio: real UI normal rescue, subsets, tide Undo/replay and separate Harbor delivery 
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 0
+    Received:   0
+
+      111 |   expect(commit.audio.transferContacts).toBe(before.transferContacts);
+      112 |   expect(commit.transition.active).not.toBeNull();
+    > 113 |   expect(after.transferContacts - before.transferContacts).toBeGreaterThan(0);
+          |                                                            ^
+      114 |   expect(after.transferContacts - before.transferContacts).toBeLessThanOrEqual(2);
+      115 |   expect(after.transferContacts - before.transferContacts).toBe(
+      116 |     visual.records.filter((record: any) => record.outcome === 'emitted').length,
+        at transfer (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\transfer-audio.spec.ts:113:60)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\transfer-audio.spec.ts:236:5
+
+    Error Context: reviews\transfer-audio\browser-final\raw\test-results\transfer-audio-transfer-au-5daa0-nd-separate-Harbor-delivery\error-context.md
+
+  1 failed
+    tests\e2e\transfer-audio.spec.ts:159:1 › transfer audio: real UI normal rescue, subsets, tide Undo/replay and separate Harbor delivery 
+  2 passed (1.3m)
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

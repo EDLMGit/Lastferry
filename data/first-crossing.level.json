@@ -1,0 +1,159 @@
+{
+  "$schemaDescription": "Authored level contract documented in docs/FIRST_COVE.md; this is data, not a JSON Schema URL.",
+  "schemaVersion": 1,
+  "kind": "last-ferry-authored-level",
+  "id": "first-crossing",
+  "title": "First Crossing",
+  "provenance": {
+    "status": "authored-reference-design",
+    "sources": ["docs/GAMEPLAY_RULES.md", "docs/FIRST_COVE.md"],
+    "notEvidenceOfImplementedGameplay": true
+  },
+  "rules": {
+    "capacity": 4,
+    "draftBands": [
+      { "maxLoad": 0, "draft": 1 },
+      { "maxLoad": 2, "draft": 2 },
+      { "maxLoad": 4, "draft": 3 }
+    ],
+    "tide": {
+      "initialLevel": 0,
+      "rises": [
+        { "afterTurn": 4, "level": 1 },
+        { "afterTurn": 8, "level": 2 }
+      ]
+    },
+    "actionCost": 1,
+    "depthFormula": "baseDepth + tideLevel",
+    "pierDryWhen": "tideLevel < elevation",
+    "failureRule": "required passenger waiting at a flooded pier"
+  },
+  "world": {
+    "plane": "XZ",
+    "north": "negative Z",
+    "waterYPerTideLevel": 0.18,
+    "referenceBoatRadius": 0.3,
+    "requiredRouteClearance": 0.45,
+    "clearanceScope": "Reference centerline and point-radius proxy only. This does not bound the visible ferry size or validate its actual oriented hull, docking reach, or animated movement.",
+    "presentationNote": "Camera and span are adjustable hints. Size and frame the visible ferry so all three aboard animals remain readable at 844x390; independently review actual hull clearance and pier boarding reach.",
+    "suggestedCamera": {
+      "projection": "orthographic",
+      "positionXYZ": [12, 32, 20],
+      "targetXYZ": [0, 0, 1.2],
+      "verticalSpan": 18
+    },
+    "islands": [
+      {
+        "id": "lighthouse-island",
+        "elevation": 3,
+        "footprintXZ": [[-8, -4.6], [-4.2, -4.6], [-3.8, -3.2], [-4.5, -1.9], [-7.5, -1.9], [-8.2, -3.2]]
+      },
+      {
+        "id": "sheep-island",
+        "elevation": 2,
+        "footprintXZ": [[4.3, -4.4], [7.7, -4.4], [8.1, -3], [7.4, -1.9], [4.6, -1.9], [3.9, -3]]
+      },
+      {
+        "id": "central-rock",
+        "elevation": 3,
+        "footprintXZ": [[-2, 1], [2, 1], [2.6, 2.4], [1.7, 4], [-1.7, 4], [-2.6, 2.4]]
+      }
+    ]
+  },
+  "nodes": [
+    { "id": "harbor", "positionXZ": [-6, 0], "baseDepth": 3, "pierId": "harbor-pier" },
+    { "id": "cut", "positionXZ": [0, -1], "baseDepth": 3 },
+    { "id": "sheep-pier", "positionXZ": [6, 0], "baseDepth": 3, "pierId": "sheep-pier" },
+    { "id": "outer-east", "positionXZ": [6, 5], "baseDepth": 3 },
+    { "id": "outer-south", "positionXZ": [0, 7], "baseDepth": 3 },
+    { "id": "outer-west", "positionXZ": [-6, 5], "baseDepth": 3 }
+  ],
+  "edges": [
+    {
+      "id": "harbor-cut",
+      "nodes": ["harbor", "cut"],
+      "baseDepth": 2,
+      "bidirectional": true,
+      "waypointsXZ": [[-6, 0], [-3, 0.2], [0, -1]]
+    },
+    {
+      "id": "cut-sheep",
+      "nodes": ["cut", "sheep-pier"],
+      "baseDepth": 2,
+      "bidirectional": true,
+      "waypointsXZ": [[0, -1], [3, 0.2], [6, 0]]
+    },
+    {
+      "id": "sheep-outer-east",
+      "nodes": ["sheep-pier", "outer-east"],
+      "baseDepth": 3,
+      "bidirectional": true,
+      "waypointsXZ": [[6, 0], [7, 2], [6, 5]]
+    },
+    {
+      "id": "outer-east-south",
+      "nodes": ["outer-east", "outer-south"],
+      "baseDepth": 3,
+      "bidirectional": true,
+      "waypointsXZ": [[6, 5], [3, 6.6], [0, 7]]
+    },
+    {
+      "id": "outer-south-west",
+      "nodes": ["outer-south", "outer-west"],
+      "baseDepth": 3,
+      "bidirectional": true,
+      "waypointsXZ": [[0, 7], [-3, 6.6], [-6, 5]]
+    },
+    {
+      "id": "outer-west-harbor",
+      "nodes": ["outer-west", "harbor"],
+      "baseDepth": 3,
+      "bidirectional": true,
+      "waypointsXZ": [[-6, 5], [-7, 2], [-6, 0]]
+    }
+  ],
+  "piers": [
+    {
+      "id": "harbor-pier",
+      "nodeId": "harbor",
+      "islandId": "lighthouse-island",
+      "elevation": 3,
+      "positionXZ": [-6, -0.9],
+      "landAnchorXZ": [-6, -2.1],
+      "width": 0.6,
+      "isDeliveryPier": true
+    },
+    {
+      "id": "sheep-pier",
+      "nodeId": "sheep-pier",
+      "islandId": "sheep-island",
+      "elevation": 2,
+      "positionXZ": [6, -0.9],
+      "landAnchorXZ": [6, -2.1],
+      "width": 0.6,
+      "isDeliveryPier": false
+    }
+  ],
+  "passengers": [
+    { "id": "rabbit-1", "species": "rabbit", "slots": 1 },
+    { "id": "rabbit-2", "species": "rabbit", "slots": 1 },
+    { "id": "sheep-1", "species": "sheep", "slots": 2 }
+  ],
+  "start": {
+    "boatNodeId": "cut",
+    "aboard": ["rabbit-1", "rabbit-2"],
+    "waitingByPier": { "harbor-pier": [], "sheep-pier": ["sheep-1"] }
+  },
+  "objective": {
+    "deliveryPierId": "harbor-pier",
+    "requiredPassengerIds": ["rabbit-1", "rabbit-2", "sheep-1"]
+  },
+  "validation": {
+    "searchDepthLimit": 12,
+    "witnessReplays": [
+      "data/replays/full-boat-detour.json",
+      "data/replays/wait-for-tide.json",
+      "data/replays/harbor-first.json"
+    ]
+  }
+}

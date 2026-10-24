@@ -1,0 +1,563 @@
+{
+  "tool": "ffmpeg version 7.1-essentials_build-www.gyan.dev Copyright (c) 2000-2024 the FFmpeg developers\r",
+  "method": "Original full-stream decode and accurate seek PNG extraction, no image editing/rescaling. Each PNG is one actual gameplay video frame, not a staged screenshot.",
+  "videos": [
+    {
+      "path": "reviews/refinement/after/raw/holding-pier-uninterrupted.webm",
+      "sha256": "06b62effbc26ab54f8553b71d1a5f33d2842bf90e4e995b6fd45da734a1c23f7",
+      "metadata": {
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "vp9",
+            "codec_long_name": "Google VP9",
+            "profile": "Profile 0",
+            "codec_type": "video",
+            "codec_tag_string": "[0][0][0][0]",
+            "codec_tag": "0x0000",
+            "width": 1440,
+            "height": 900,
+            "coded_width": 1440,
+            "coded_height": 900,
+            "closed_captions": 0,
+            "film_grain": 0,
+            "has_b_frames": 0,
+            "sample_aspect_ratio": "1:1",
+            "display_aspect_ratio": "8:5",
+            "pix_fmt": "yuv420p",
+            "level": -99,
+            "color_range": "tv",
+            "chroma_location": "center",
+            "field_order": "progressive",
+            "refs": 1,
+            "r_frame_rate": "25/1",
+            "avg_frame_rate": "25/1",
+            "time_base": "1/1000",
+            "start_pts": 0,
+            "start_time": "0.000000",
+            "disposition": {
+              "default": 1,
+              "dub": 0,
+              "original": 0,
+              "comment": 0,
+              "lyrics": 0,
+              "karaoke": 0,
+              "forced": 0,
+              "hearing_impaired": 0,
+              "visual_impaired": 0,
+              "clean_effects": 0,
+              "attached_pic": 0,
+              "timed_thumbnails": 0,
+              "non_diegetic": 0,
+              "captions": 0,
+              "descriptions": 0,
+              "metadata": 0,
+              "dependent": 0,
+              "still_image": 0,
+              "multilayer": 0
+            },
+            "tags": {
+              "language": "eng",
+              "ENCODER": "Lavc61.3.100 libvpx-vp9",
+              "DURATION": "00:00:54.480000000"
+            }
+          }
+        ],
+        "format": {
+          "filename": "reviews/refinement/after/raw/holding-pier-uninterrupted.webm",
+          "nb_streams": 1,
+          "nb_programs": 0,
+          "nb_stream_groups": 0,
+          "format_name": "matroska,webm",
+          "format_long_name": "Matroska / WebM",
+          "start_time": "0.000000",
+          "duration": "54.480000",
+          "size": "17622726",
+          "bit_rate": "2587771",
+          "probe_score": 100,
+          "tags": {
+            "creation_time": "2026-10-22T15:51:00.572000Z",
+            "ENCODER": "Lavf61.1.100"
+          }
+        }
+      },
+      "decode": "Full stream decoded without reported ffmpeg errors",
+      "frames": [
+        {
+          "seconds": 1,
+          "path": "reviews/refinement/after/raw/decoded/holding-pier-1s.png",
+          "sha256": "53154fa4bc75bad28d246fba8f9f7691d1713a36d28d2407a779c52d0e0d0b4c",
+          "command": [
+            "ffmpeg",
+            "-v",
+            "error",
+            "-y",
+            "-ss",
+            "1",
+            "-i",
+            "reviews/refinement/after/raw/holding-pier-uninterrupted.webm",
+            "-frames:v",
+            "1",
+            "reviews/refinement/after/raw/decoded/holding-pier-1s.png"
+          ]
+        },
+        {
+          "seconds": 20,
+          "path": "reviews/refinement/after/raw/decoded/holding-pier-20s.png",
+          "sha256": "b03ca029f7a103cdfb6832761ef59be0c7be2a0d7dbe4d55c18004d9da5d9243",
+          "command": [
+            "ffmpeg",
+            "-v",
+            "error",
+            "-y",
+            "-ss",
+            "20",
+            "-i",
+            "reviews/refinement/after/raw/holding-pier-uninterrupted.webm",
+            "-frames:v",
+            "1",
+            "reviews/refinement/after/raw/decoded/holding-pier-20s.png"
+          ]
+        },
+        {
+          "seconds": 31,
+          "path": "reviews/refinement/after/raw/decoded/holding-pier-31s.png",
+          "sha256": "cf46cfa4f58bf485bc3f3bd566ba38d71285e9918a9ebdab2f840b5cc6c8cde9",
+          "command": [
+            "ffmpeg",
+            "-v",
+            "error",
+            "-y",
+            "-ss",
+            "31",
+            "-i",
+            "reviews/refinement/after/raw/holding-pier-uninterrupted.webm",
+            "-frames:v",
+            "1",
+            "reviews/refinement/after/raw/decoded/holding-pier-31s.png"
+          ]
+        },
+        {
+          "seconds": 43,
+          "path": "reviews/refinement/after/raw/decoded/holding-pier-43s.png",
+          "sha256": "de0656e4ffec2297433f212d1ad16c72efd5fa702b34dc63d152aa0d581aa7ef",
+          "command": [
+            "ffmpeg",
+            "-v",
+            "error",
+            "-y",
+            "-ss",
+            "43",
+            "-i",
+            "reviews/refinement/after/raw/holding-pier-uninterrupted.webm",
+            "-frames:v",
+            "1",
+            "reviews/refinement/after/raw/decoded/holding-pier-43s.png"
+          ]
+        },
+        {
+          "seconds": 53.5,
+          "path": "reviews/refinement/after/raw/decoded/holding-pier-53.5s.png",
+          "sha256": "9428b427f2a16fe989e225e1953c3ed1bdc583a30c507370e8654620effce321",
+          "command": [
+            "ffmpeg",
+            "-v",
+            "error",
+            "-y",
+            "-ss",
+            "53.5",
+            "-i",
+            "reviews/refinement/after/raw/holding-pier-uninterrupted.webm",
+            "-frames:v",
+            "1",
+            "reviews/refinement/after/raw/decoded/holding-pier-53.5s.png"
+          ]
+        },
+        {
+          "seconds": 29,
+          "path": "reviews/refinement/after/raw/decoded/holding-pier-29s.png",
+          "sha256": "f25a4d65509d32ff907416aba446aea27b88c015f25d2a052de7a5fac095dbb8",
+          "command": [
+            "ffmpeg",
+            "-v",
+            "error",
+            "-y",
+            "-ss",
+            "29",
+            "-i",
+            "reviews/refinement/after/raw/holding-pier-uninterrupted.webm",
+            "-frames:v",
+            "1",
+            "reviews/refinement/after/raw/decoded/holding-pier-29s.png"
+          ]
+        },
+        {
+          "seconds": 41.5,
+          "path": "reviews/refinement/after/raw/decoded/holding-pier-41.5s.png",
+          "sha256": "edb2f033e5eebce8cdc2806b13b1a337d50ea99b26e487b0680164deb8b12367",
+          "command": [
+            "ffmpeg",
+            "-v",
+            "error",
+            "-y",
+            "-ss",
+            "41.5",
+            "-i",
+            "reviews/refinement/after/raw/holding-pier-uninterrupted.webm",
+            "-frames:v",
+            "1",
+            "reviews/refinement/after/raw/decoded/holding-pier-41.5s.png"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "reviews/refinement/after/raw/bellwater-uninterrupted.webm",
+      "sha256": "22be6ce8beb5a9156ac0d8c587fd69acdd83c4628bd394f60009696b34fdca7c",
+      "metadata": {
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "vp9",
+            "codec_long_name": "Google VP9",
+            "profile": "Profile 0",
+            "codec_type": "video",
+            "codec_tag_string": "[0][0][0][0]",
+            "codec_tag": "0x0000",
+            "width": 1440,
+            "height": 900,
+            "coded_width": 1440,
+            "coded_height": 900,
+            "closed_captions": 0,
+            "film_grain": 0,
+            "has_b_frames": 0,
+            "sample_aspect_ratio": "1:1",
+            "display_aspect_ratio": "8:5",
+            "pix_fmt": "yuv420p",
+            "level": -99,
+            "color_range": "tv",
+            "chroma_location": "center",
+            "field_order": "progressive",
+            "refs": 1,
+            "r_frame_rate": "25/1",
+            "avg_frame_rate": "25/1",
+            "time_base": "1/1000",
+            "start_pts": 0,
+            "start_time": "0.000000",
+            "disposition": {
+              "default": 1,
+              "dub": 0,
+              "original": 0,
+              "comment": 0,
+              "lyrics": 0,
+              "karaoke": 0,
+              "forced": 0,
+              "hearing_impaired": 0,
+              "visual_impaired": 0,
+              "clean_effects": 0,
+              "attached_pic": 0,
+              "timed_thumbnails": 0,
+              "non_diegetic": 0,
+              "captions": 0,
+              "descriptions": 0,
+              "metadata": 0,
+              "dependent": 0,
+              "still_image": 0,
+              "multilayer": 0
+            },
+            "tags": {
+              "language": "eng",
+              "ENCODER": "Lavc61.3.100 libvpx-vp9",
+              "DURATION": "00:00:53.160000000"
+            }
+          }
+        ],
+        "format": {
+          "filename": "reviews/refinement/after/raw/bellwater-uninterrupted.webm",
+          "nb_streams": 1,
+          "nb_programs": 0,
+          "nb_stream_groups": 0,
+          "format_name": "matroska,webm",
+          "format_long_name": "Matroska / WebM",
+          "start_time": "0.000000",
+          "duration": "53.160000",
+          "size": "17360905",
+          "bit_rate": "2612626",
+          "probe_score": 100,
+          "tags": {
+            "creation_time": "2026-10-22T15:51:57.726000Z",
+            "ENCODER": "Lavf61.1.100"
+          }
+        }
+      },
+      "decode": "Full stream decoded without reported ffmpeg errors",
+      "frames": [
+        {
+          "seconds": 1,
+          "path": "reviews/refinement/after/raw/decoded/bellwater-1s.png",
+          "sha256": "e9a80037e7e17413da41507a059b25c8c88d96e363ac90e858e63a042590c433",
+          "command": [
+            "ffmpeg",
+            "-v",
+            "error",
+            "-y",
+            "-ss",
+            "1",
+            "-i",
+            "reviews/refinement/after/raw/bellwater-uninterrupted.webm",
+            "-frames:v",
+            "1",
+            "reviews/refinement/after/raw/decoded/bellwater-1s.png"
+          ]
+        },
+        {
+          "seconds": 20,
+          "path": "reviews/refinement/after/raw/decoded/bellwater-20s.png",
+          "sha256": "52ce599b34f423bbe75a80ebe3b455a9c887534d49bceed9e0afbb0d3c14c1db",
+          "command": [
+            "ffmpeg",
+            "-v",
+            "error",
+            "-y",
+            "-ss",
+            "20",
+            "-i",
+            "reviews/refinement/after/raw/bellwater-uninterrupted.webm",
+            "-frames:v",
+            "1",
+            "reviews/refinement/after/raw/decoded/bellwater-20s.png"
+          ]
+        },
+        {
+          "seconds": 31,
+          "path": "reviews/refinement/after/raw/decoded/bellwater-31s.png",
+          "sha256": "1e0d9a0afa8bda70b3848c6bd56dcc73fe532a774fe1a7f84a6830e9ca5459f2",
+          "command": [
+            "ffmpeg",
+            "-v",
+            "error",
+            "-y",
+            "-ss",
+            "31",
+            "-i",
+            "reviews/refinement/after/raw/bellwater-uninterrupted.webm",
+            "-frames:v",
+            "1",
+            "reviews/refinement/after/raw/decoded/bellwater-31s.png"
+          ]
+        },
+        {
+          "seconds": 43,
+          "path": "reviews/refinement/after/raw/decoded/bellwater-43s.png",
+          "sha256": "17d4be52973ae75b24a05d647607888a24d29e68b7530072fe0193fe39cbdf7e",
+          "command": [
+            "ffmpeg",
+            "-v",
+            "error",
+            "-y",
+            "-ss",
+            "43",
+            "-i",
+            "reviews/refinement/after/raw/bellwater-uninterrupted.webm",
+            "-frames:v",
+            "1",
+            "reviews/refinement/after/raw/decoded/bellwater-43s.png"
+          ]
+        },
+        {
+          "seconds": 52.3,
+          "path": "reviews/refinement/after/raw/decoded/bellwater-52.3s.png",
+          "sha256": "fa5a28981f3ddd2425a40ccd5fd898860f2b2238a12e0499e7b8170681574d36",
+          "command": [
+            "ffmpeg",
+            "-v",
+            "error",
+            "-y",
+            "-ss",
+            "52.3",
+            "-i",
+            "reviews/refinement/after/raw/bellwater-uninterrupted.webm",
+            "-frames:v",
+            "1",
+            "reviews/refinement/after/raw/decoded/bellwater-52.3s.png"
+          ]
+        },
+        {
+          "seconds": 39.5,
+          "path": "reviews/refinement/after/raw/decoded/bellwater-39.5s.png",
+          "sha256": "7daceb3ede58c410e9e2734cd12a24b1d7ed6f6a7573ed10f47c5612b377f60d",
+          "command": [
+            "ffmpeg",
+            "-v",
+            "error",
+            "-y",
+            "-ss",
+            "39.5",
+            "-i",
+            "reviews/refinement/after/raw/bellwater-uninterrupted.webm",
+            "-frames:v",
+            "1",
+            "reviews/refinement/after/raw/decoded/bellwater-39.5s.png"
+          ]
+        }
+      ]
+    }
+  ],
+  "audio": [
+    {
+      "source": "reviews/refinement/affected/raw/adaptive-rescue-loop.webm",
+      "sourceSha256": "96fa5b885dc8cb1c85570f0b4146206b92a403d135abf85136d45abc98a45c13",
+      "sourceMetadata": {
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "opus",
+            "codec_long_name": "Opus (Opus Interactive Audio Codec)",
+            "codec_type": "audio",
+            "codec_tag_string": "[0][0][0][0]",
+            "codec_tag": "0x0000",
+            "sample_fmt": "fltp",
+            "sample_rate": "48000",
+            "channels": 2,
+            "channel_layout": "stereo",
+            "bits_per_sample": 0,
+            "initial_padding": 0,
+            "r_frame_rate": "0/0",
+            "avg_frame_rate": "0/0",
+            "time_base": "1/1000",
+            "start_pts": 0,
+            "start_time": "0.000000",
+            "extradata_size": 19,
+            "disposition": {
+              "default": 1,
+              "dub": 0,
+              "original": 0,
+              "comment": 0,
+              "lyrics": 0,
+              "karaoke": 0,
+              "forced": 0,
+              "hearing_impaired": 0,
+              "visual_impaired": 0,
+              "clean_effects": 0,
+              "attached_pic": 0,
+              "timed_thumbnails": 0,
+              "non_diegetic": 0,
+              "captions": 0,
+              "descriptions": 0,
+              "metadata": 0,
+              "dependent": 0,
+              "still_image": 0,
+              "multilayer": 0
+            },
+            "tags": {
+              "language": "eng"
+            }
+          }
+        ],
+        "format": {
+          "filename": "reviews/refinement/affected/raw/adaptive-rescue-loop.webm",
+          "nb_streams": 1,
+          "nb_programs": 0,
+          "nb_stream_groups": 0,
+          "format_name": "matroska,webm",
+          "format_long_name": "Matroska / WebM",
+          "start_time": "0.000000",
+          "size": "1321979",
+          "probe_score": 100,
+          "tags": {
+            "encoder": "Chrome"
+          }
+        }
+      },
+      "path": "reviews/refinement/affected/raw/adaptive-rescue-loop.mp3",
+      "sha256": "3b36d05c9a4066f0d687492d287f369b743400de593a522da42a823cfe37410e",
+      "metadata": {
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "mp3",
+            "codec_long_name": "MP3 (MPEG audio layer 3)",
+            "codec_type": "audio",
+            "codec_tag_string": "[0][0][0][0]",
+            "codec_tag": "0x0000",
+            "sample_fmt": "fltp",
+            "sample_rate": "48000",
+            "channels": 2,
+            "channel_layout": "stereo",
+            "bits_per_sample": 0,
+            "initial_padding": 0,
+            "r_frame_rate": "0/0",
+            "avg_frame_rate": "0/0",
+            "time_base": "1/14112000",
+            "start_pts": 324870,
+            "start_time": "0.023021",
+            "duration_ts": 1157974272,
+            "duration": "82.056000",
+            "bit_rate": "94095",
+            "disposition": {
+              "default": 0,
+              "dub": 0,
+              "original": 0,
+              "comment": 0,
+              "lyrics": 0,
+              "karaoke": 0,
+              "forced": 0,
+              "hearing_impaired": 0,
+              "visual_impaired": 0,
+              "clean_effects": 0,
+              "attached_pic": 0,
+              "timed_thumbnails": 0,
+              "non_diegetic": 0,
+              "captions": 0,
+              "descriptions": 0,
+              "metadata": 0,
+              "dependent": 0,
+              "still_image": 0,
+              "multilayer": 0
+            },
+            "tags": {
+              "encoder": "Lavc61.19"
+            }
+          }
+        ],
+        "format": {
+          "filename": "reviews/refinement/affected/raw/adaptive-rescue-loop.mp3",
+          "nb_streams": 1,
+          "nb_programs": 0,
+          "nb_stream_groups": 0,
+          "format_name": "mp3",
+          "format_long_name": "MP2/3 (MPEG audio layer 2/3)",
+          "start_time": "0.023021",
+          "duration": "82.056000",
+          "size": "965180",
+          "bit_rate": "94099",
+          "probe_score": 51,
+          "tags": {
+            "encoder": "Lavf61.7.100"
+          }
+        }
+      },
+      "command": [
+        "ffmpeg",
+        "-v",
+        "error",
+        "-y",
+        "-i",
+        "reviews/refinement/affected/raw/adaptive-rescue-loop.webm",
+        "-vn",
+        "-c:a",
+        "libmp3lame",
+        "-q:a",
+        "2",
+        "reviews/refinement/affected/raw/adaptive-rescue-loop.mp3"
+      ],
+      "method": "Full-duration codec derivative of actual master capture; no trims, time changes, normalization or volume edits; MP3 may add encoder padding."
+    }
+  ],
+  "inspection": {
+    "nativeSize": true,
+    "inspectedFrames": 13,
+    "method": "Individually viewed original-size extracted PNGs in chronological groups, including Undo and final tails; no realtime playback claim",
+    "observations": "Holding turn3/tide0 andturn7/tide1 Undo visible; Bell turn7/tide1 Undo visible; tails show all3delivered success cards clear of ferry; no decoded corruption observed"
+  }
+}

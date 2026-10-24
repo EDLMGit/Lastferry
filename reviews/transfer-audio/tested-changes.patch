@@ -1,0 +1,1780 @@
+diff --git a/NEXT_TASK.md b/NEXT_TASK.md
+index 0b269b6..56b9c6b 100644
+--- a/NEXT_TASK.md
++++ b/NEXT_TASK.md
+@@ -1,173 +1,79 @@
+-# Last Ferry — reveal location controls and give the cove more room
++# Last Ferry — wooden transfer sounds and Android playtest
+ 
+-## Working agreement
++## Goal
+ 
+-Continue on `m1-first-crossing` from reviewed commit **dea5fdd1ed8b017d5112085d4964bab3122ea44f**, preserving any newer user work. Use Node 24. Read `AGENTS.md`, this task, relevant art/UI/environment notes, and `reviews/refinement/REVIEW.md`. Inspect the actual desktop and phone captures before changing presentation.
++Give boarding and unloading a small, satisfying physical presence: quiet wooden taps as the animals cross onto or off the ferry. Preserve the accepted score, accompaniment, water, camera, location selection, sailing pace and all three puzzles.
+ 
+-This is the authorized next milestone beyond the original M1 stopping point. Complete implementation and affected verification, commit normally, push the existing branch, and update draft PR #1. Keep `main` unchanged and the PR draft. Make routine decisions independently; the user remains the playtester.
++The current game is already published for the user's private Android playtest:
+ 
+-The user likes the improvement and wants location options to appear after selection, clear selectable indicators, mostly transparent panels with attractive borders, and a better lighthouse light. The chosen direction is a more visible cove with compact location selectors and one contextual card. Give the lighthouse a convincing visible lantern, and use the space recovered from the interface to present the existing islands better.
++https://last-ferry-playtest.abumech.chatgpt.site
+ 
+-## Preserve the accepted foundations
++That deployment contains the current selection build, before this sound task. The user remains the playtester. Their first real-device observations should guide subsequent visual or performance work.
+ 
+-Keep all three coves, default Holding Pier, progression, rules/history, full Undo, authored depths, passenger identities, capacity/draft, action costs, tide/flood order and available/losing solutions. Keep island footprints, pier positions/elevations and route topology/control geometry. Preserve the rounded sailing courses, travel pace, ferry/passenger attachment, wake, current water and contact materials.
++## Starting point and workflow
+ 
+-Keep the accepted base score and current accompaniment, including activation, mute, state derivation, terminal timing and lifecycle. Free selection, inspection and camera/layout work must not change the musical arrangement or simulation. This milestone does not add music, mechanics, levels, an engine or an asset pipeline.
++- Repository: https://github.com/EDLMGit/Lastferry
++- Branch: `m1-first-crossing`; PR #1 remains draft.
++- Reviewed starting commit: `fa07368b803a992712a5126b85862c5b91dbcf3a`.
++- Use Node 24 and the existing architecture and dependencies.
++- Read `AGENTS.md`, the current `docs/AUDIO.md`, and the relevant selection review. Preserve any newer user work; do not reset a checkout to this SHA if it has advanced.
++- Implement, verify, commit and push normally to the existing branch, then update the existing draft PR with the review handoff. Do not merge or alter main.
+ 
+-The deliberate interaction change is that a location activation selects a place for inspection. Only an explicit action button commits a turn.
++Complete the scoped work autonomously. Make routine implementation and mix choices without requesting repeated approval.
+ 
+-## 1. Replace persistent action tiles with selectable places
++## Creative direction
+ 
+-### Persistent map affordances
++The boat should feel like a little wooden object carrying living passengers. Use a soft contact with a rounded body, followed where the motion supports it by a quieter settling tap. A rabbit may be lighter and a sheep slightly lower and fuller; use that distinction only if it improves the actual mix.
+ 
+-Keep every location discoverable through a compact name and a small clear marker. Names stay visible on touch screens. Show Harbor's Home identity, the actual current location, selection and blocked-route information with distinguishable symbols/borders; do not make color alone carry those differences.
++The sounds should be audible at a comfortable phone-speaker volume beneath the music. Keep them brief and dry, with just enough space to belong in the cove. Avoid sharp interface clicks, exaggerated creaks, cartoon animal voices, continuous footsteps, or another musical reward. The existing Harbor arrival phrase already provides the emotional resolution.
+ 
+-Remove the persistent repeated `Sail to… / 1 action / Inspect` groups and the always-open current-pier transfer card. A small visible marker/name may have a larger transparent hit area. Retain at least the existing 44-pixel touch target dimension and readable phone text, avoiding overlapping hit areas. Position chips near their place with a short connector only when necessary; retire the large screen-edge rows and long leaders when compact placement makes them unnecessary.
++Tune by listening to the actual runtime mix. An original procedural effect using the existing audio graph is a good fit. Use cached resources and bounded short-lived voices; no new dependency or large audio framework is needed.
+ 
+-Selection should visibly connect the marker, its place and its card. Use a restrained selected border/halo at the dock or waypoint and a modest emphasis of the selected place. Hover or keyboard focus can preview emphasis, but must not open a card or spend an action. Preserve the underlying route network and useful availability cues.
++## Source findings to act on
+ 
+-### One explicit interaction contract
++At the reviewed commit, `src/main.ts` calls `sound.play()` for ordinary boarding/unloading from `world.onPresentationStart`, but `src/audio/atmosphere.ts` only handles `move` and `arrival`. The transfer actions therefore produce no sound. Final unloading is deliberately excluded from that start callback, so handling only those existing calls would miss the final delivery.
+ 
+-| Player input | Result |
+-| --- | --- |
+-| Select a location's name/marker, its island, pier or mapped landmark | Open that location's card for free |
+-| Select the ferry | Open the card for its current location |
+-| Select another place | Replace the single open card |
+-| Select the already selected place again | Keep its card open; never sail or unexpectedly toggle it away |
+-| Select empty water, use Close, or press Escape when no modal is open | Close the card and clear selection |
+-| Choose **Sail · 1 action** for a legal safe adjacent move | Commit exactly one move through the existing execution path |
+-| Choose a move that produces a loss | Present the existing explicit consequence/confirmation dialog before commitment |
+-| Select a shallow or nonadjacent destination | Show its facts and the travel limitation for free |
+-| Choose Board / Let ashore / Bring home at the current pier | Open the existing passenger-subset preview and use its existing Confirm action |
++The committed state changes before the animation. The actual passenger transfer paths live in `src/scene/world.ts`, around the branch that animates passengers whose aboard membership changed. Use that visual timeline to emit a small contact cue at meaningful progress points. Do not bind the wooden sound to Confirm, the reducer, or a generic state change.
+ 
+-Make the selected card itself the normal inspection surface. A safe move should require selection followed by Sail, without another generic confirmation dialog. Keep the existing confirmation for a losing consequence and the detailed passenger preview where the chosen subset matters. No double-click shortcut or automatic multi-hop travel.
++Normal transfers last 520 ms, final unloading 900 ms, and reduced-motion actions 30 ms in the reviewed timing definitions. Derive contact timing from the actual transition rather than duplicating wall-clock delays. Reduced motion should have one quiet compact cue, not a compressed burst of footsteps.
+ 
+-### Card contents
++Passengers currently transfer concurrently. Combine near-simultaneous contacts or bound their total level so a group does not multiply the loudness. Do not change the animation or stagger passengers solely to serve the new sound.
+ 
+-For an adjacent destination, show the name, a concise actual channel-depth versus boat-depth comparison, cost, relevant tide/flood consequence, and Sail. A clearly explained unavailable Sail state is appropriate for a shallow passage. A legal but losing move must clearly expose the consequence rather than looking like an ordinary safe action.
++## Implementation requirements
+ 
+-For the current location, show waiting/aboard facts and the available passenger actions. Harbor uses the existing Bring home language. A flooded current pier must still explain that the ferry can leave, without offering invalid transfers. A buoy does not need an empty passenger form.
++1. Cover boarding, temporary unloading at a holding pier, partial unloading, partial Harbor delivery and final Harbor delivery. Only the selected passengers actually transferring should contribute.
++2. Place wood contacts while the animal crosses or settles on the wooden surfaces. Do not continue wooden steps after the animal reaches land.
++3. Consume each visual contact once, including while muted. Unmuting must not replay missed contacts. A delayed frame or visibility recovery must not produce a catch-up burst.
++4. Use the existing `Sound` instance, effects routing, master mute and owned-source cleanup. Do not add another AudioContext, music clock or interval scheduler.
++5. Preserve the existing delivery timing and phrase. At present `delivery()` clears all sources tagged `effect`, and `arrivalActive` also treats that category as arrival. Refine ownership narrowly if necessary so arrival cannot accidentally truncate transfer sounds, transfer sounds do not masquerade as arrival, and cancellation can still stop both. Do not redesign the whole mixer.
++6. Keep the new voices bounded and promptly released. The existing score has an owned-source limit; transfer effects must not cause score notes to be dropped or accumulate after repeated actions.
++7. Integrate with Undo, Restart, interrupted/recovered transitions, live mute, tab hiding and teardown. Undo restores the scene silently. Repeating a real transfer after Undo plays its cues once again. Cancelling a preview produces no transfer cue.
++8. Free selection, hovering, passenger-subset changes, invalid actions and opening dialogs remain silent with respect to these contact sounds.
+ 
+-For a nonadjacent location, show its identity, waiting passengers and relevant safety information, plus “No direct passage from [current place].” It remains inspectable. Selecting it must not draw a fictional direct route or invoke a path finder.
++## Android scope
+ 
+-Keep the global objective, load/depth, turn/tide, Undo, Wait, Menu, Sound and the important flood status available. Avoid replacing urgent information with a generic selection hint. If first-use guidance is needed, use one brief instruction within existing UI: “Select a place to see its options.”
++Do not wait for physical-phone access to implement the sound task. Do not claim an Android pass without an actual device test.
+ 
+-## 2. Make the card feel light while remaining readable
++There are two known verification gaps to keep explicit:
+ 
+-Use a translucent deep blue-green surface, warm pale text, a definite fine outer edge, a quiet inner highlight and a restrained shadow. Let the moving water remain perceptible through the background. Give the selected-location border a clear visual relation to the card. Keep decoration compatible with the small coastal world.
++- Existing phone screenshots and timings use 780×390 or 844×390 at DPR 1. Real browser bars, display cutouts and display density differ.
++- `.game` currently has `min-height: 360px` with a non-scrolling body. Check one shorter landscape viewport, such as 780×320, alongside the established phone size. Confirm the lower forecast, location actions and modal controls stay reachable. There is no safe-area inset padding despite `viewport-fit=cover`.
+ 
+-Apply alpha to background layers, not the entire component. Text, icons and focus indicators stay opaque. Allow stronger localized tint behind dense text or buttons when bright sand or reflected light reduces contrast. Judge the result at native 780×390 and 844×390, including bright water behind the card. Thin decorative outlines alone are insufficient as the only indication of a control or focus state.
++If this focused check reproduces clipping, make the smallest layout correction and verify it against the existing phone size. If the user supplies an actual phone problem, reproduce and fix that concrete issue. Otherwise preserve the interface and record the remaining device gap. Do not introduce speculative graphics settings, new shader effects, a PWA, offline caching, service workers or a native wrapper in this task.
+ 
+-Use ordinary semantic buttons and a labeled nonmodal region. Reflect expanded state and its controlled region where appropriate; do not assign an ARIA menu role just because this is colloquially an options menu. Keep natural Tab/Shift+Tab, Enter/Space, Escape and focus recovery. Selection should be equally usable through its DOM button and the scene.
++## Verification proportional to this change
+ 
+-On keyboard activation, focus a stable card heading or equivalent non-committing target, with actions next in the Tab sequence. A held/repeated Enter must not land on a newly created Sail button and spend a turn. Hover/focus emphasis must not overwrite persistent selection when the pointer leaves.
+-
+-Place the card in nearby open water, avoiding the selected island's defining feature, relevant passengers, the full loaded ferry, HUD, flood status and other selectors. Reuse the existing post-clamp overlap checks and extend the protected bounds. Keep the card away from the point that opened it, especially its Sail control, so repeated tapping cannot hit a newly appeared action underneath the finger.
+-
+-If an anchored position does not fit on a narrow screen, use one compact edge placement with a short connector to the selected place. Fit the screen without relying on a full-height sidebar or a sheet covering most of the cove. The existing detailed modal dialogs may retain their stronger readable backing. A wholesale HUD/dialog reskin is outside this task.
+-
+-Avoid full-screen blur and costly backdrop filters. A good translucent fill, boundary and placement should carry the design without them. Use restrained fades; reduced motion gets immediate or simple opacity changes.
+-
+-## 3. Implement selection as presentation state
+-
+-### Source changes that must be deliberate
+-
+-`src/main.ts` currently routes `bindTarget()` and `world.onSelect` to `activateMove()`, which commits valid safe moves immediately. Both entry points must become selection-only. `localContext()` currently focuses a card that is always rendered; it must instead select the current place and reveal its card.
+-
+-The existing `selected: Action | null` belongs to modal action previews. Introduce a separate nullable location-selection identity. Keep committed boat location, selected location, hover/focus emphasis and modal action distinct. Derive card contents from current committed state and the existing preview/rule helpers; do not create a second set of gameplay calculations.
+-
+-`World.indicate()` currently retains a selected destination only when `edgeTo()` succeeds. Separate selected-place emphasis from direct-route emphasis. Current and remote places can be selected even when no direct edge exists. Only an actual adjacent edge may receive the corresponding passage highlight.
+-
+-The canvas currently picks the ferry/current pier, then a 32-pixel area around navigation nodes. It does not select most visible island surfaces. Add bounded scene picking with explicit authored `pier.islandId` / `pier.nodeId` mappings. Include noncurrent piers and their associated landmarks; retain sea-node/buoy picking. Exclude decorative water, glows, shadows and unrelated background surfaces. Handle any noninteractive scenery explicitly instead of assigning it an arbitrary nearest destination.
+-
+-Use a small mapped set of pickable meshes/groups or equivalent precise projected bounds. Avoid scanning the entire decorative scene every animation frame. DOM and canvas events must resolve to one selection; they must not both process a single gesture.
+-
+-### Selection lifecycle
+-
+-- **Initial load / Restart:** no selected location, compact selectors visible.
+-- **Select / switch:** one card opens or updates, with no simulation or music-state change.
+-- **Open a passenger, loss, Wait or other modal:** retain selection but keep the underlying card and scene unavailable to that modal's input.
+-- **Cancel modal:** retain any location selection and restore focus to the actual trigger: the relevant card control for a location action, or Wait/Menu/Forecast for a global dialog. If that trigger no longer exists, use the selected card's stable heading or location selector, then an appropriate global fallback. Do not invent a selection when a global modal was opened from the clean overview.
+-- **Commit:** hide or disable contextual actions during the transition. Do not queue another selection or move. Keep Sound accessible as currently accepted.
+-- **Move completes:** retain the chosen destination as selection; its card now presents current-location actions, making boarding available without another discovery step.
+-- **Transfer / Wait completes:** retain any valid selection and recompute all facts from the resulting state.
+-- **Undo:** clear selection and stale preview state, restore the complete game, and recover focus to Undo or an appropriate current-location fallback. Selection itself need not become part of the game history.
+-- **Terminal state:** the existing ending dialog takes precedence; suppress the location card.
+-- **Escape:** close an active modal first. A separate later Escape can close the location card. One key event must not close both layers or activate anything underneath.
+-
+-### Input safety
+-
+-Preserve the current one-action protection and modal safeguards. The handoff records an earlier repeat-Cancel failure without an event interval; the final instrumented pair passed at 112.2 ms within the existing 180 ms fence. That does not justify relying on a timer alone for the new layout.
+-
+-Consume the gesture that opens or dismisses a card/dialog, prevent click-through to newly exposed controls, and avoid placing a new commit button under the activating pointer. Repeated selection should remain selection. Repeated Sail/Confirm must commit at most once. Preserve coordinate transforms after changing the canvas bounds.
+-
+-Revisit the existing `.inspect-route` special case in the closing fence when removing those controls. Do not simply enlarge delays or weaken state/focus assertions. Update help text and accessible names so they describe “select, then choose an action” consistently. Stabilize selector/card IDs and focus restoration across rerenders.
+-
+-## 4. Let the islands occupy useful screen space
+-
+-The phone canvas currently reserves 62 pixels above and 70 below, and `World.resize()` fits scene bounds plus generous boxes around each navigation node into the remaining height. Removing cards alone will not enlarge the islands.
+-
+-Once the compact controls are in place, rework one stable camera fit and its UI safe areas. A canvas extending behind the interface can reclaim water/background space, but landmarks and useful play areas must remain visible outside opaque controls. Adjust scene-fit margins against actual projected bounds and routes rather than retaining all old card allowances.
+-
+-Preserve the whole cove overview: every useful node, route, departure/arrival berth, full lighthouse/bell, waiting passenger group and loaded ferry must remain visible. Account for all tide levels and the full path envelope, not just the initial ferry position. Validate both selected and unselected layouts. Do not crop route endpoints to make a screenshot look larger.
+-
+-Keep the camera stable through selection, hover, sailing and tide changes. Resize/orientation can recompute framing; ordinary selection must not trigger zoom, panning or a jump. Preserve the current orthographic character and scene proportions. Do not move islands or routes, inflate geometry into passages, or add manual camera controls.
+-
+-Give Holding's **Stone island** a restrained rocky character through the existing island-style system. Its layout currently assigns the same garden treatment to all three islands. Use the existing rocky vocabulary to reduce repeated paired shrubs/crates/path decoration while keeping the stone pier, elevation and footprint. Harbor keeps its sheltered garden; Rabbit Pier keeps its cottage identity. Preserve Bellwater's already distinct bell and reed islands, including the low island's exposed simplicity.
+-
+-Inspect the result after the UI and framing changes. This should be a small existing-asset substitution with a clear compositional purpose, not a new prop collection or terrain rebuild.
+-
+-## 5. Make the lighthouse read as an illuminated lantern
+-
+-### Observed issue and hypothesis
+-
+-In the ordinary and success captures, the lighthouse reads primarily as a red roof and cream tower. The lantern is a pale horizontal band; its water reflection can be more apparent than the source.
+-
+-The model uses an opaque cylinder for the lens. The glow sprite is centered at the lamp anchor inside it and uses normal depth testing. Its brightest center may therefore be hidden by the lens or roof. This is a source-based hypothesis to inspect in the actual render, not a confirmed isolated rendering defect.
+-
+-### Chosen treatment
+-
+-- Make the visible lantern itself a compact luminous focal point: a pale warm core, a warmer amber surrounding surface, and slightly darker supporting structure. Preserve some tonal detail so it reads as a lantern rather than an overexposed white block.
+-- Check the glow's depth and placement against the actual camera. Fix an occluded center through deliberate geometry/material/placement choices. Do not globally disable depth testing and allow light to paint through the opaque roof or tower.
+-- Add restrained warm spill to the immediate gallery rim/underside and a small upper-tower area. Tune the existing light and intended material receivers. A small scoped material treatment is acceptable; avoid shared-material changes that warm unrelated buildings.
+-- Keep the nearby water reflection connected to the same explicit anchor and subordinate to the now-visible source. Preserve the accepted water shader and reflection extent unless a local adjustment is required for coherence.
+-
+-Judge the source at native phone size in an ordinary, unselected, muted still. Selection highlights must not be required to see that Harbor is lit. Slightly adjusting the lantern opening or roof overhang is acceptable if necessary, while keeping the lighthouse's recognizable silhouette and scene fit.
+-
+-Preserve the permanent Home marker, baseline/resting/arrival states, visible-unloading timing, exactly-once celebration, cancellation/recovery settling and Undo/Restart behavior. Reduced motion keeps the steady light readable. Add no rotating beam, large pulsing aura, global bloom or new shadow-casting light.
+-
+-## 6. Verify the new interaction and visual result
+-
+-Run the normal build/typecheck and relevant unit checks. Update shared browser interaction helpers from direct destination activation to explicit selection followed by Sail. Keep outcome, preview, visibility, subset, deadline and Undo assertions intact; the required input sequence has changed, not the puzzle.
+-
+-Exercise the real UI for complete rescues in all three coves, plus the affected keyboard/touch and modal scenarios. Required changed risks:
+-
+-1. Marker, island, noncurrent pier, landmark and ferry selection each open the correct card for free. Selection/switch/close/hover/Inspect do not change turn, tide, passengers, boat, history, outcome or desired musical arrangement.
+-2. Current, adjacent-safe, adjacent-shallow, nonadjacent and losing-after-move locations present the correct facts and distinct states. Only real direct routes highlight.
+-3. A safe Sail commits once. Losing actions retain explicit confirmation. Passenger subsets, temporary holding, depth comparisons, both rises and complete Undo remain correct.
+-4. Reselecting, rapid taps, held/repeated Enter, Close/Escape, modal cancellation and a later intentional new selection behave coherently. Record genuine event intervals for timing-sensitive checks. No input falls through into a new action.
+-5. Transit hides/disables contextual actions, releases normally, and exposes the arrived-at pier's options. Undo/Restart, terminal Undo/redelivery, visibility recovery and reduced motion leave no stale card or emphasis.
+-6. At 1440×900, 844×390 and 780×390, selectors and controls remain usable, text/edges readable, the selected card avoids important scene objects, and the full cove/path envelope stays framed. Preserve natural keyboard and emulated-touch coverage; label physical-device limitations honestly.
+-7. The lantern is visibly lit before selection, strengthens once at visible delivery, and restores correctly after Undo and recovery. Verify the visible source and local spill, not just diagnostic intensity values.
+-
+-Keep a compact matching evidence set: baseline and final ordinary views, selected safe/blocked/remote/current cases, a passenger subset preview, both phone widths with the card open and closed, and Harbor ordinary/delivery/Undo. Record one uninterrupted original-speed sequence showing island selection, a free inspection, explicit Sail, boarding, tide Undo and delivery. Inspect selected images at native size and the actual motion where tools permit.
+-
+-The current Holding idle p95 was worse in both software comparisons. Keep lighthouse work local, avoid expensive panel blur and extra scene passes, and measure the final presentation under matched conditions. Record the actual canvas resolution as well as viewport/DPR: extending the canvas can increase rendered pixels. Distinguish this intentional coverage change from shader/light costs. A matched-canvas diagnostic comparison is useful only if needed to investigate a regression.
+-
+-Do not change audio to address a renderer result; idle audio was uncreated in the prior samples. Report mixed/noisy results honestly. Preserve original failures and distinct source identities. Stop optional testing when the changed risks and required core flows are covered.
++- Run the production build/typecheck and the unit suite. Extend the relevant audio/transition tests only where they protect a real new failure mode.
++- Exercise actual UI boarding, temporary unloading and final Harbor unloading, including a passenger subset, one Undo/replay and reduced motion. Confirm contact events occur at most once and are tied to actual presentation rather than preview/commit.
++- Check live mute and a hidden/interrupted transition for stale sounds, then verify source counts settle back after tails. Preserve the musical clock and delivery behavior.
++- Complete one real-interface rescue and an Undo across a tide rise. Use the established phone landscape size plus the one short-viewport check if browser tooling permits.
++- Listen to the actual mix. If recording is available, retain a short gameplay clip with runtime audio that includes boarding, holding-pier unloading and Harbor delivery. A silent recording or a synthetic oscillator trace is not listening evidence. Report an unavailable capture/listening capability honestly.
++- Do not rerun unrelated broad visual or performance campaigns unless a concrete regression warrants them. Retain original failures and their actual status; do not label an incomplete suite as fully passing.
+ 
+ ## Handoff
+ 
+-Update `STATUS.md`, relevant UI/art/environment notes and Help. Put the implementation report, selected captures and exact source/verification records in a new directory such as `reviews/selection/`. Keep raw recordings ignored/local when upload is unavailable. Do not relabel old browser/audio checks as newly executed.
+-
+-Complete the established normal commit/push and draft PR #1 update. Return final SHA, remote equality, main/draft status, change summary, fresh/reused/corrected results, representative images and media locations. No merge or ready-for-review change.
+-
+-The intended result is a cove the player can look at comfortably: named places invite selection, one light card appears where useful, actions remain deliberate, the islands have room and distinct character, and Harbor's lantern visibly welcomes the ferry home.
+-
+-## Implementation references
++Update `docs/AUDIO.md` and `STATUS.md` as needed. Put a compact report under `reviews/transfer-audio/` identifying source SHA, changed behavior, exact checks, audio evidence and limits. Keep raw media out of Git, as before.
+ 
+-- [W3C APG: disclosure controls](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/) for expanded-state semantics and keyboard activation.
+-- [W3C APG: disclosure navigation example](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/) explains why an everyday options surface does not automatically need the specialized ARIA menu role. Adapt semantic principles to the game's explicit selection lifecycle; do not copy example behavior blindly.
+-- [W3C: non-text contrast](https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html) for meaningful control boundaries, selected states and focus visibility over changing backgrounds.
++The handoff must include the pushed SHA, draft PR URL, current rules/music preservation, actual listening outcome, and any phone-specific issue observed. Include the actual phone model/browser only if a physical test occurred.
+ 
+-The existing Three.js renderer, semantic DOM controls and `placeLocalCard()` helper are sufficient foundations. Installing another UI framework or graphics tool is unnecessary for this milestone.
++The existing Sites deployment is managed separately as a snapshot of reviewed GitHub commits. Do not create another Site or maintain a separate gameplay fork. After this handoff is reviewed, the same playtest URL can be updated to the new source. Do not describe the current live URL as containing these new sounds until that deployment has succeeded.
+diff --git a/docs/AUDIO.md b/docs/AUDIO.md
+index a520a46..b204dfb 100644
+--- a/docs/AUDIO.md
++++ b/docs/AUDIO.md
+@@ -26,6 +26,28 @@ Mute, hidden-page suspension and intentional resume retain the latest desired st
+ 
+ ## Evidence and listening boundary
+ 
++### Wooden boarding and unloading contacts
++
++`World` owns one `TransferTimeline` for each actual board/unload presentation. It includes only selected passengers whose aboard membership really changes. After positioning those passengers on the current frame, it emits a grouped contact to the existing `Sound` instance. Previews, location selection, passenger choices, reducer commits, invalid actions and Undo synchronization emit no contact.
++
++The existing concurrent paths, hop and transition plan are unchanged. Normal transfers take 520 ms, final unloading 900 ms, and reduced motion 30 ms. Contacts use normalized visual progress, so no duplicated wall-clock delays or audio timers are needed:
++
++| Motion | Crossing | Quieter settlement | Delayed-frame policy |
++| --- | --- | --- | --- |
++| Boarding | 0.50, at the wooden bridge | 0.75, towards the deck | Valid through 0.62 / 0.87 respectively |
++| Unloading | 0.25, between deck and bridge | None | Valid through 0.37, before reaching the pier surface |
++| Reduced motion | One compact, quieter contact on the first presented frame | None | Consumed once even if the 30 ms transition has already completed |
++
++These normal points coincide with the existing hop's grounded phases. Unloading uses only the departure contact: a proposed second tap at 0.50 was removed after review showed it would already be over Stone Pier's stone surface. A stale phase is consumed silently; a late frame emits at most one still-current contact. This avoids catch-up bursts and wooden steps after reaching stone or land. Cancel/recovery consumes pending phases. Muted contacts are consumed by the same visual timeline and are never queued for unmute. A real replay after Undo creates a new timeline.
++
++`src/audio/wood.ts` generates and caches two original mono buffers per context on demand: a 145 ms lighter rabbit contact and a 190 ms fuller sheep contact. They use a rounded onset, damped inharmonic body and filtered grain with a quiet dry tail. A mixed group uses the fuller contact; group gain increases only 6% per extra passenger, capped at 12%, rather than summing individual voices. Settlement uses 48% of the crossing gain, and compact reduced motion uses 70%. These are restrained implementation choices pending speaker listening, not a claim of final perceived mix quality.
++
++Contacts use the existing effects bus and master mute with their own `transfer` ownership. At most two transfer sources coexist, including releasing sources. Full allocation skips a new contact; the score has priority and can reclaim a transfer voice at its existing source guard. Arrival still owns `effect`, so its existing three-note phrase neither clears transfer tails nor mistakes them for arrival. Undo, Restart, hidden-page interruption, recovery and teardown clear both action categories. Accepted score, accompaniment, music gains, phrase clock, water and sailing timing are unchanged.
++
++DEV diagnostics expose contact calls, played/skipped counts, current/peak transfer sources, and the bounded World history of selected IDs and emitted/stale/cancelled phases. They are observation tools, not gameplay controls. The focused evidence, original failed attempts and final results are under `reviews/transfer-audio/`. Actual runtime audio plus canvas gameplay is captured separately from a silent full-interface video when available. No speaker-listening capability is exposed in this environment, so phone-speaker balance and perceived wooden character remain for the user's playtest. No physical Android result is claimed.
++
++The private Sites deployment still contains the previous selection build until it is updated separately from a reviewed commit; this task does not publish or fork gameplay.
++
+ Focused pure-state tests cover exact boarding boundaries, safe temporary unloading, Bellwater's remaining threat, homeward versus delivered, terminal Undo, previews and idle. Mock Web Audio tests cover phase, terminal gating, rapid replacement, mute/hide/resume, bounded sources, phrase return and cleanup. These establish scheduling and ownership behavior, not sound quality. Original development failures and corrected runs are recorded in `reviews/refinement/development-audio-results.json`.
+ 
+ Actual runtime progression and matched base/companion captures are handled by the refinement capture workflow. No speaker-listening capability is available in this agent workflow. The single restrained proposal is retained as an explicitly listening-pending experiment; its emotional improvement, perceived balance, cancellation smoothness and audible seams await listening to the actual recordings. The accepted base composition remains the foundation.
+diff --git a/src/audio/atmosphere.ts b/src/audio/atmosphere.ts
+index ea11924..4854deb 100644
+--- a/src/audio/atmosphere.ts
++++ b/src/audio/atmosphere.ts
+@@ -8,11 +8,12 @@ import {
+   score,
+ } from './score';
+ import { arrangementForState, companionNote, type Arrangement } from './arrangement';
++import { makeWoodContact, type TransferContact } from './wood';
+ import type { State } from '../game/rules';
+ import type { Level } from '../levels/level';
+ 
+ type OwnedSource = {
+-  kind: 'music' | 'companion' | 'bed' | 'travel' | 'effect';
++  kind: 'music' | 'companion' | 'bed' | 'travel' | 'effect' | 'transfer';
+   nodes: AudioNode[];
+   endAt: number | null;
+   gain?: GainNode;
+@@ -35,6 +36,7 @@ export class Sound {
+   private analyser: AnalyserNode | null = null;
+   private meter = new Float32Array(1024);
+   private noise: AudioBuffer | null = null;
++  private wood = new Map<TransferContact['weight'], AudioBuffer>();
+   private padWave: PeriodicWave | null = null;
+   private pluckWave: PeriodicWave | null = null;
+   private capture: MediaStreamAudioDestinationNode | null = null;
+@@ -54,6 +56,11 @@ export class Sound {
+   private sourcesCreated = 0;
+   private peakOwned = 0;
+   private deliveryCount = 0;
++  private transferContacts = 0;
++  private transferPlayed = 0;
++  private transferSkipped = 0;
++  private peakTransferSources = 0;
++  private lastTransferContact: (TransferContact & { time: number; played: boolean }) | null = null;
+   private desiredArrangement: Arrangement = 'ordinary';
+   private arrangement: Arrangement = 'ordinary';
+   private pendingTerminal = false;
+@@ -235,7 +242,8 @@ export class Sound {
+   private clearActions(preserveTravel: boolean) {
+     if (!preserveTravel) this.travelling = false;
+     for (const [source, record] of this.owned)
+-      if (record.kind === 'travel' || record.kind === 'effect') this.stop(source);
++      if (record.kind === 'travel' || record.kind === 'effect' || record.kind === 'transfer')
++        this.stop(source);
+   }
+   private noiseVoice(
+     kind: 'bed' | 'travel',
+@@ -290,6 +298,11 @@ export class Sound {
+     voice: 'pad' | 'motif' | 'delivery' | 'companion',
+   ) {
+     const context = this.context!;
++    if (this.owned.size > 28)
++      for (const [source, record] of this.owned) {
++        if (record.kind === 'transfer') this.stop(source, true);
++        if (this.owned.size <= 28) break;
++      }
+     if (this.owned.size > 28) {
+       this.droppedTones++;
+       return;
+@@ -458,6 +471,56 @@ export class Sound {
+     this.travelling = false;
+     for (const [source, record] of this.owned) if (record.kind === 'travel') this.stop(source);
+   }
++  transferContact(contact: TransferContact) {
++    if (this.disposed || !Number.isFinite(contact.count) || contact.count < 1) return;
++    this.transferContacts++;
++    this.lastTransferContact = {
++      ...contact,
++      time: this.context?.currentTime ?? 0,
++      played: false,
++    };
++    const transfers = [...this.owned.values()].filter((record) => record.kind === 'transfer');
++    if (
++      !this.enabled() ||
++      this.context?.state !== 'running' ||
++      transfers.length >= 2 ||
++      this.owned.size > 27
++    ) {
++      this.transferSkipped++;
++      return;
++    }
++    const context = this.context,
++      now = context.currentTime;
++    let buffer = this.wood.get(contact.weight);
++    if (!buffer) {
++      buffer = makeWoodContact(context, contact.weight);
++      this.wood.set(contact.weight, buffer);
++    }
++    const source = context.createBufferSource(),
++      gain = context.createGain(),
++      end = now + buffer.length / buffer.sampleRate,
++      group = 1 + Math.min(contact.count - 1, 2) * 0.06;
++    source.buffer = buffer;
++    gain.gain.value =
++      (contact.weight === 'full' ? 0.24 : 0.2) *
++      group *
++      (contact.settle ? 0.48 : 1) *
++      (contact.compact ? 0.7 : 1);
++    source.connect(gain);
++    gain.connect(this.effects!);
++    this.own(source, {
++      kind: 'transfer',
++      nodes: [gain],
++      endAt: end,
++      gain,
++      stopping: false,
++    });
++    source.start(now);
++    source.stop(end);
++    this.transferPlayed++;
++    this.peakTransferSources = Math.max(this.peakTransferSources, transfers.length + 1);
++    this.lastTransferContact.played = true;
++  }
+   delivery() {
+     if (!this.enabled() || this.context?.state !== 'running') return;
+     for (const [source, record] of this.owned) if (record.kind === 'effect') this.stop(source);
+@@ -529,6 +592,13 @@ export class Sound {
+       travelActive: records.some((record) => record.kind === 'travel' && !record.stopping),
+       arrivalActive: records.some((record) => record.kind === 'effect' && !record.stopping),
+       deliveryCount: this.deliveryCount,
++      transferContacts: this.transferContacts,
++      transferPlayed: this.transferPlayed,
++      transferSkipped: this.transferSkipped,
++      transferSources: records.filter((record) => record.kind === 'transfer' && !record.stopping)
++        .length,
++      peakTransferSources: this.peakTransferSources,
++      lastTransferContact: this.lastTransferContact ? { ...this.lastTransferContact } : null,
+       desiredArrangement: this.desiredArrangement,
+       arrangement: this.arrangement,
+       pendingTerminal: this.pendingTerminal,
+@@ -565,6 +635,7 @@ export class Sound {
+     this.permanent.length = 0;
+     for (const track of this.capture?.stream.getTracks() ?? []) track.stop();
+     this.noise = null;
++    this.wood.clear();
+     this.padWave = null;
+     this.pluckWave = null;
+     if (this.context && this.context.state !== 'closed') void this.context.close().catch(() => {});
+diff --git a/src/audio/sound.ts b/src/audio/sound.ts
+index cacbd0a..70a6b93 100644
+--- a/src/audio/sound.ts
++++ b/src/audio/sound.ts
+@@ -1 +1,2 @@
+ export { Sound } from './atmosphere';
++export type { TransferContact } from './wood';
+diff --git a/src/audio/wood.ts b/src/audio/wood.ts
+new file mode 100644
+index 0000000..8305e07
+--- /dev/null
++++ b/src/audio/wood.ts
+@@ -0,0 +1,33 @@
++export type TransferContact = {
++  weight: 'light' | 'full';
++  settle: boolean;
++  compact: boolean;
++  count: number;
++};
++
++export function makeWoodContact(context: BaseAudioContext, weight: TransferContact['weight']) {
++  const duration = weight === 'full' ? 0.19 : 0.145,
++    buffer = context.createBuffer(1, Math.ceil(duration * context.sampleRate), context.sampleRate),
++    samples = buffer.getChannelData(0),
++    fundamental = weight === 'full' ? 165 : 225,
++    decay = weight === 'full' ? 31 : 41,
++    smoothing = 1 - Math.exp((-2 * Math.PI * 1250) / context.sampleRate);
++  let seed = weight === 'full' ? 173 : 311,
++    grain = 0,
++    peak = 0;
++  for (let i = 0; i < samples.length; i++) {
++    const t = i / context.sampleRate;
++    seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
++    grain += smoothing * ((seed / 0xffffffff) * 2 - 1 - grain);
++    const attack = 1 - Math.exp(-t / 0.0035),
++      tail = Math.min(1, (duration - t) / 0.024),
++      body =
++        Math.sin(2 * Math.PI * fundamental * t) * Math.exp(-decay * t) +
++        0.45 * Math.sin(2 * Math.PI * fundamental * 2.31 * t) * Math.exp(-decay * 1.55 * t) +
++        0.16 * Math.sin(2 * Math.PI * fundamental * 4.17 * t) * Math.exp(-decay * 2.7 * t);
++    samples[i] = attack * tail * (body * 0.72 + grain * 0.34 * Math.exp(-t * 74));
++    peak = Math.max(peak, Math.abs(samples[i]));
++  }
++  if (peak > 0) for (let i = 0; i < samples.length; i++) samples[i] *= 0.8 / peak;
++  return buffer;
++}
+diff --git a/src/main.ts b/src/main.ts
+index eb7f097..ad1c91a 100644
+--- a/src/main.ts
++++ b/src/main.ts
+@@ -665,8 +665,18 @@ world.onCurrent = localContext;
+ world.onClear = () => clearLocation();
+ world.onPresentationStart = (action) => {
+   if (action.type === 'move') sound.startTravel();
+-  else if (action.type !== 'unload' || session.state.status !== 'won') sound.play(action.type);
+ };
++world.onTransferContact = (contact) =>
++  sound.transferContact({
++    weight: contact.passengerIds.some(
++      (id) => level.passengers.find((p) => p.id === id)?.species === 'sheep',
++    )
++      ? 'full'
++      : 'light',
++    settle: contact.stage === 'settling',
++    compact: contact.reduced,
++    count: contact.passengerIds.length,
++  });
+ world.onArrival = () => {
+   sound.delivery();
+   sound.settleArrangement();
+@@ -791,6 +801,7 @@ if (import.meta.env.DEV)
+         hullY: world.hull.position.y,
+       }),
+       getFrameStatus: () => world.frameStatus(),
++      getTransferStatus: () => world.transferPresentation(),
+       getPickTargetAt: (x: number, y: number) => world.pickAt(x, y),
+       getPickDetailAt: (x: number, y: number) => world.pickDetailAt(x, y),
+       getSelectionStatus: () =>
+diff --git a/src/scene/transfer.ts b/src/scene/transfer.ts
+new file mode 100644
+index 0000000..561da5d
+--- /dev/null
++++ b/src/scene/transfer.ts
+@@ -0,0 +1,86 @@
++import type { Action, State } from '../game/rules';
++
++export type TransferStage = 'crossing' | 'settling' | 'compact';
++export type TransferCue = {
++  passengerIds: string[];
++  stage: TransferStage;
++  progress: number;
++  reduced: boolean;
++};
++type ContactRecord = {
++  stage: TransferStage;
++  progress: number | null;
++  outcome: 'emitted' | 'stale' | 'cancelled';
++};
++
++export class TransferTimeline {
++  readonly passengerIds: string[];
++  readonly action: 'board' | 'unload';
++  private cursor = 0;
++  private records: ContactRecord[] = [];
++  private marks: { stage: TransferStage; at: number; until: number }[];
++
++  private constructor(
++    action: 'board' | 'unload',
++    passengerIds: string[],
++    readonly reduced: boolean,
++  ) {
++    this.action = action;
++    this.passengerIds = passengerIds;
++    this.marks = reduced
++      ? [{ stage: 'compact', at: 0, until: 1 }]
++      : action === 'board'
++        ? [
++            { stage: 'crossing', at: 0.5, until: 0.62 },
++            { stage: 'settling', at: 0.75, until: 0.87 },
++          ]
++        : [{ stage: 'crossing', at: 0.25, until: 0.37 }];
++  }
++
++  static create(before: State, after: State, action: Action, reduced: boolean) {
++    if (action.type !== 'board' && action.type !== 'unload') return null;
++    const passengerIds = [...new Set(action.passengerIds)].filter((id) =>
++      action.type === 'board'
++        ? !before.aboard.includes(id) && after.aboard.includes(id)
++        : before.aboard.includes(id) && !after.aboard.includes(id),
++    );
++    return passengerIds.length ? new TransferTimeline(action.type, passengerIds, reduced) : null;
++  }
++
++  advance(progress: number): TransferCue | null {
++    const t = Math.max(0, Math.min(1, progress));
++    let cue: TransferCue | null = null;
++    while (this.cursor < this.marks.length && t >= this.marks[this.cursor].at) {
++      const mark = this.marks[this.cursor++];
++      const stale = t > mark.until;
++      this.records.push({ stage: mark.stage, progress: t, outcome: stale ? 'stale' : 'emitted' });
++      if (!stale)
++        cue = {
++          passengerIds: [...this.passengerIds],
++          stage: mark.stage,
++          progress: t,
++          reduced: this.reduced,
++        };
++    }
++    return cue;
++  }
++
++  cancel() {
++    while (this.cursor < this.marks.length)
++      this.records.push({
++        stage: this.marks[this.cursor++].stage,
++        progress: null,
++        outcome: 'cancelled',
++      });
++  }
++
++  presentation() {
++    return {
++      action: this.action,
++      passengerIds: [...this.passengerIds],
++      reduced: this.reduced,
++      pending: this.marks.length - this.cursor,
++      records: this.records.map((record) => ({ ...record })),
++    };
++  }
++}
+diff --git a/src/scene/world.ts b/src/scene/world.ts
+index 6ed7fde..596fe85 100644
+--- a/src/scene/world.ts
++++ b/src/scene/world.ts
+@@ -10,6 +10,7 @@ import { Shores, createReedBeds } from './shore';
+ import { CoastalWater } from './water';
+ import { CrossingEffects } from './effects';
+ import { contactMaterial } from './contact';
++import { TransferTimeline, type TransferCue } from './transfer';
+ import {
+   journeyTiming,
+   settlingProgress,
+@@ -20,6 +21,11 @@ import {
+ } from './transitions';
+ const V = (p: number[], y = 0) => new T.Vector3(p[0], y, p[1]);
+ const smooth = (t: number) => t * t * (3 - 2 * t);
++type TransferPresentation = {
++  id: number;
++  timeline: TransferTimeline;
++  completion: CompletionReason | null;
++};
+ export class World {
+   scene = new T.Scene();
+   camera = new T.OrthographicCamera();
+@@ -58,6 +64,9 @@ export class World {
+   resizeObserver: ResizeObserver;
+   onPresentationStart: (action: Action) => void = () => {};
+   onArrival: () => void = () => {};
++  onTransferContact: (contact: TransferCue) => void = () => {};
++  transferSequence = 0;
++  transferHistory: TransferPresentation[] = [];
+   transition: null | {
+     before: State;
+     after: State;
+@@ -73,6 +82,7 @@ export class World {
+     reverse: boolean;
+     fromAngle: number;
+     fromHullY: number;
++    transfer: TransferPresentation | null;
+   } = null;
+   frame = 0;
+   lastTime = 0;
+@@ -786,6 +796,12 @@ export class World {
+           tangent: sampleJourney(path, 0, this.boatRoot.rotation.y, reverse).tangent,
+         }
+       : null;
++    const timeline = TransferTimeline.create(before, after, action, this.reduced);
++    const transfer = timeline ? { id: ++this.transferSequence, timeline, completion: null } : null;
++    if (transfer) {
++      this.transferHistory.push(transfer);
++      if (this.transferHistory.length > 12) this.transferHistory.shift();
++    }
+     this.transition = {
+       before,
+       after,
+@@ -801,11 +817,13 @@ export class World {
+       reverse,
+       fromAngle: this.boatRoot.rotation.y,
+       fromHullY: this.hull.position.y,
++      transfer,
+     };
+   }
+   cancel(reason: CompletionReason = 'cancelled') {
+     if (this.transition) {
+       const t = this.transition;
++      t.transfer?.timeline.cancel();
+       this.transition = null;
+       this.journeyFrame = null;
+       let completion = reason;
+@@ -815,6 +833,7 @@ export class World {
+       } catch {
+         completion = 'error';
+       } finally {
++        if (t.transfer) t.transfer.completion = completion;
+         t.done(completion);
+       }
+     }
+@@ -880,11 +899,14 @@ export class World {
+         }
+       }
+       this.shadow.position.y = this.water.position.y + 0.008;
++      const contact = tr.transfer?.timeline.advance(t);
++      if (contact) this.onTransferContact(contact);
+       if (tr.after.status === 'won' && t > 0.72 && this.effects.arrivalStarted === null) {
+         this.effects.arrive(time, this.reduced);
+         this.onArrival();
+       }
+       if (t === 1) {
++        if (tr.transfer) tr.transfer.completion = 'complete';
+         this.transition = null;
+         this.journeyFrame = null;
+         this.sync(tr.after, true);
+@@ -910,6 +932,14 @@ export class World {
+     this.renderer.render(this.scene, this.camera);
+     this.frameRequest = requestAnimationFrame((t) => this.tick(t));
+   }
++  transferPresentation() {
++    const history = this.transferHistory.map(({ id, timeline, completion }) => ({
++      id,
++      ...timeline.presentation(),
++      completion,
++    }));
++    return { sequence: this.transferSequence, last: history.at(-1) ?? null, history };
++  }
+   dispose() {
+     this.disposed = true;
+     cancelAnimationFrame(this.frameRequest);
+diff --git a/src/style.css b/src/style.css
+index 78895d3..f7c1877 100644
+--- a/src/style.css
++++ b/src/style.css
+@@ -543,6 +543,9 @@ details p {
+   pointer-events: none;
+ }
+ @media (max-height: 600px) and (min-width: 701px) {
++  .game {
++    min-height: 0;
++  }
+   .hud {
+     inset: 4px 8px auto;
+     gap: 10px;
+diff --git a/tests/e2e/transfer-audio.spec.ts b/tests/e2e/transfer-audio.spec.ts
+new file mode 100644
+index 0000000..8ecf6b2
+--- /dev/null
++++ b/tests/e2e/transfer-audio.spec.ts
+@@ -0,0 +1,362 @@
++import { expect, test, type Page } from '@playwright/test';
++import { mkdirSync, writeFileSync } from 'node:fs';
++import { createHash } from 'node:crypto';
++import { reviewDir } from './evidence';
++import { act, activate, ready, state, idle, undo, restart, selectPlace } from './ui';
++
++const audio = (page: Page) => page.evaluate(() => (window as any).__LAST_FERRY__.getAudioStatus());
++const contacts = (page: Page) =>
++  page.evaluate(() => (window as any).__LAST_FERRY__.getTransferStatus());
++const settled = (page: Page) =>
++  page.waitForFunction(
++    () => document.querySelector('#seascape')?.getAttribute('aria-busy') === 'false',
++  );
++const route = [
++  'unload',
++  'map-shallows',
++  'map-rabbit-pier',
++  'board',
++  'map-shallows',
++  'map-stone',
++  'board',
++  'map-harbor',
++  'unload',
++];
++
++async function observe(page: Page) {
++  await page.evaluate(() => {
++    const api = (window as any).__LAST_FERRY__;
++    const log = { commits: [] as any[], samples: [] as any[], running: true };
++    document.querySelector('#dialog')!.addEventListener('click', (event) => {
++      if ((event.target as Element)?.closest('#commit'))
++        log.commits.push({
++          state: api.getState(),
++          audio: api.getAudioStatus(),
++          transition: api.getTransitionStatus(),
++        });
++    });
++    let previousKey = '',
++      previousTime = 0;
++    const sample = () => {
++      if (!log.running) return;
++      const time = performance.now(),
++        state = api.getState(),
++        audio = api.getAudioStatus(),
++        contacts = api.getTransferStatus().last;
++      const key = JSON.stringify([
++        state.turn,
++        audio.transferContacts,
++        audio.transferSources,
++        audio.deliveryCount,
++        audio.arrangement,
++        contacts,
++      ]);
++      if (key !== previousKey || time - previousTime >= 250) {
++        log.samples.push({ time, state, audio, contacts });
++        previousKey = key;
++        previousTime = time;
++      }
++      requestAnimationFrame(sample);
++    };
++    requestAnimationFrame(sample);
++    (window as any).__transferTest = log;
++  });
++}
++
++async function save(page: Page, name: string) {
++  mkdirSync(`${reviewDir}/raw`, { recursive: true });
++  const log = await page.evaluate(() => {
++    const log = (window as any).__transferTest;
++    log.running = false;
++    return {
++      ...log,
++      state: (window as any).__LAST_FERRY__.getState(),
++      audio: (window as any).__LAST_FERRY__.getAudioStatus(),
++      contacts: (window as any).__LAST_FERRY__.getTransferStatus(),
++    };
++  });
++  const path = `${reviewDir}/raw/${name}-trace.json`,
++    trace = JSON.stringify(log, null, 2);
++  writeFileSync(path, trace);
++  writeFileSync(
++    `${reviewDir}/${name}.json`,
++    JSON.stringify(
++      {
++        trace: { path, sha256: createHash('sha256').update(trace).digest('hex') },
++        samples: log.samples.length,
++        commits: log.commits,
++        state: log.state,
++        audio: log.audio,
++        contacts: log.contacts,
++      },
++      null,
++      2,
++    ),
++  );
++  return log;
++}
++
++async function stableClock(page: Page) {
++  const samples = await page.evaluate(() => (window as any).__transferTest.samples);
++  let lastTime = 0;
++  for (const sample of samples) {
++    expect(sample.audio.currentTime).toBeGreaterThanOrEqual(lastTime);
++    expect(sample.audio.contextCount).toBeLessThanOrEqual(1);
++    expect(sample.audio.schedulerCount).toBeLessThanOrEqual(1);
++    expect(sample.audio.droppedTones).toBe(0);
++    expect(sample.audio.peakTransferSources).toBeLessThanOrEqual(2);
++    lastTime = sample.audio.currentTime;
++  }
++}
++
++async function transfer(page: Page, kind: 'board' | 'unload', ids?: string[], touch = false) {
++  await activate(page, kind, touch);
++  if (ids) {
++    for (const button of await page.locator('#dialog [id^="passenger-"]').all()) {
++      const id = (await button.getAttribute('id'))!.replace(/^passenger-/, '');
++      if ((await button.getAttribute('aria-pressed')) === 'true' && !ids.includes(id)) {
++        if (touch) await button.tap();
++        else await button.click();
++      }
++    }
++  }
++  const before = await audio(page);
++  await activate(page, 'commit', touch);
++  await settled(page);
++  const after = await audio(page);
++  const visual = (await contacts(page)).last;
++  const commit = await page.evaluate(() => (window as any).__transferTest.commits.at(-1));
++  expect(commit.audio.transferContacts).toBe(before.transferContacts);
++  expect(commit.transition.active).not.toBeNull();
++  const played = after.transferPlayed - before.transferPlayed;
++  expect(after.transferContacts - before.transferContacts).toBeLessThanOrEqual(2);
++  expect(after.transferContacts - before.transferContacts).toBe(
++    visual.records.filter((record: any) => record.outcome === 'emitted').length,
++  );
++  expect(visual).toMatchObject({ action: kind, pending: 0, completion: 'complete' });
++  expect(visual.records.map((record: any) => record.stage)).toEqual(
++    kind === 'unload' ? ['crossing'] : ['crossing', 'settling'],
++  );
++  if (ids) expect(visual.passengerIds).toEqual(ids);
++  expect(new Set(visual.records.map((record: any) => record.stage)).size).toBe(
++    visual.records.length,
++  );
++  for (const record of visual.records) {
++    const upper = kind === 'board' ? (record.stage === 'crossing' ? 0.62 : 0.87) : 0.37;
++    if (record.outcome === 'stale') {
++      expect(record.progress).toBeGreaterThan(upper);
++      continue;
++    }
++    expect(record.outcome).toBe('emitted');
++    expect(record.progress).toBeGreaterThanOrEqual(
++      kind === 'board'
++        ? record.stage === 'crossing'
++          ? 0.5
++          : 0.75
++        : record.stage === 'crossing'
++          ? 0.25
++          : 0.5,
++    );
++    expect(record.progress).toBeLessThanOrEqual(upper);
++  }
++  expect(after.transferPlayed - before.transferPlayed).toBe(
++    after.transferContacts - before.transferContacts,
++  );
++  if (played)
++    expect(after.lastTransferContact.count).toBe(
++      ids?.length ??
++        (kind === 'board'
++          ? (await state(page)).aboard.length
++          : commit.transition.active.action.passengerIds.length),
++    );
++  else expect(after.lastTransferContact).toEqual(before.lastTransferContact);
++  expect(after.peakTransferSources).toBeLessThanOrEqual(2);
++  return { before, after, visual, played };
++}
++
++test('transfer audio: real UI normal rescue, subsets, tide Undo/replay and separate Harbor delivery', async ({
++  browser,
++}) => {
++  const context = await browser.newContext({
++    viewport: { width: 844, height: 390 },
++    deviceScaleFactor: 1,
++    hasTouch: true,
++    isMobile: true,
++  });
++  const page = await context.newPage();
++  const errors: string[] = [];
++  page.on('pageerror', (error) => errors.push(error.message));
++  await ready(page, 'holding-pier');
++  await observe(page);
++  try {
++    const initial = await state(page);
++    await selectPlace(page, 'shallows', true);
++    await expect(page.locator('#local-context')).toContainText('too shallow');
++    await expect(page.locator('#sail')).toBeDisabled();
++    await page.locator('#close-location').tap();
++    await activate(page, 'unload', true);
++    await page.locator('#cancel').tap();
++    expect(await state(page)).toEqual(initial);
++    expect((await audio(page)).transferContacts).toBe(0);
++    const sheep = await transfer(page, 'unload', ['sheep-1'], true);
++    expect(sheep.after.arrivalActive).toBe(false);
++    if (sheep.played) expect(sheep.after.lastTransferContact.weight).toBe('full');
++    await act(page, 'map-shallows', true);
++    await act(page, 'map-rabbit-pier', true);
++    const boundary = await state(page),
++      beforePreview = await audio(page);
++    await activate(page, 'board', true);
++    await page.locator('#passenger-rabbit-2').tap();
++    await expect(page.locator('#dialog')).toContainText(/lost|waiting|flood/);
++    await page.locator('#passenger-rabbit-1').tap();
++    await expect(page.locator('#commit')).toBeDisabled();
++    await page.locator('#cancel').tap();
++    expect(await state(page)).toEqual(boundary);
++    expect((await audio(page)).transferContacts).toBe(beforePreview.transferContacts);
++    const rabbits = await transfer(page, 'board', ['rabbit-1', 'rabbit-2'], true);
++    if (rabbits.played) expect(rabbits.after.lastTransferContact.weight).toBe('light');
++    expect(await state(page)).toMatchObject({
++      turn: 4,
++      tideLevel: 1,
++      aboard: ['rabbit-1', 'rabbit-2'],
++    });
++    const beforeUndo = await audio(page);
++    await undo(page, true);
++    expect(await state(page)).toEqual(boundary);
++    expect((await audio(page)).transferContacts).toBe(beforeUndo.transferContacts);
++    const rabbitReplay = await transfer(page, 'board', ['rabbit-1', 'rabbit-2'], true);
++    expect(rabbits.played + rabbitReplay.played).toBeGreaterThan(0);
++    await act(page, 'map-shallows', true);
++    await act(page, 'map-stone', true);
++    await transfer(page, 'board', ['sheep-1'], true);
++    const allAboard = await state(page);
++    const subset = await transfer(page, 'unload', ['rabbit-1'], true);
++    if (subset.played) expect(subset.after.lastTransferContact.count).toBe(1);
++    expect(sheep.played + subset.played).toBeGreaterThan(0);
++    expect((await state(page)).aboard).toEqual(['rabbit-2', 'sheep-1']);
++    expect((await state(page)).waitingByPier['stone-pier']).toEqual(['rabbit-1']);
++    await undo(page, true);
++    expect(await state(page)).toEqual(allAboard);
++    await act(page, 'map-harbor', true);
++    const atHome = await state(page);
++    const partial = await transfer(page, 'unload', ['sheep-1'], true);
++    expect(partial.after.deliveryCount).toBe(0);
++    expect(partial.after.arrivalActive).toBe(false);
++    expect(await state(page)).toMatchObject({ status: 'playing', delivered: ['sheep-1'] });
++    await undo(page, true);
++    expect(await state(page)).toEqual(atHome);
++    const final = await transfer(page, 'unload', ['rabbit-1', 'rabbit-2', 'sheep-1'], true);
++    expect(await state(page)).toMatchObject({ status: 'won', turn: 9, tideLevel: 2 });
++    expect(final.after.deliveryCount).toBe(1);
++    expect(final.after.pendingTerminal).toBe(false);
++    expect(final.after.desiredArrangement).toBe('won');
++    await undo(page, true);
++    expect(await state(page)).toEqual(atHome);
++    expect((await audio(page)).deliveryCount).toBe(1);
++    const finalReplay = await transfer(page, 'unload', ['rabbit-1', 'rabbit-2', 'sheep-1'], true);
++    expect(final.played + finalReplay.played).toBeGreaterThan(0);
++    expect((await audio(page)).deliveryCount).toBe(2);
++    await page.waitForFunction(
++      () => {
++        const sound = (window as any).__LAST_FERRY__.getAudioStatus();
++        return sound.transferSources === 0 && sound.arrivalActive === false;
++      },
++      undefined,
++      { timeout: 8000 },
++    );
++    const end = await audio(page);
++    expect(end.transferContacts).toBe(finalReplay.after.transferContacts);
++    expect(end).toMatchObject({
++      contextCount: 1,
++      schedulerCount: 1,
++      droppedTones: 0,
++      transferSources: 0,
++    });
++    expect(end.currentTime).toBeGreaterThan(sheep.before.currentTime);
++    expect(end.sourceCount).toBeLessThanOrEqual(29);
++    expect(errors).toEqual([]);
++    await stableClock(page);
++  } finally {
++    await save(page, 'normal-transfers');
++    await context.close();
++  }
++});
++
++test('transfer audio: muted contacts are consumed, hidden interruption is silent on recovery and reduced motion is compact', async ({
++  page,
++}) => {
++  await page.setViewportSize({ width: 844, height: 390 });
++  await ready(page, 'holding-pier');
++  await observe(page);
++  try {
++    await selectPlace(page, 'stone');
++    await page.waitForFunction(
++      () => (window as any).__LAST_FERRY__.getAudioStatus().contextState === 'running',
++    );
++    await page.locator('#sound-toggle').click();
++    await page.waitForFunction(
++      () => (window as any).__LAST_FERRY__.getAudioStatus().contextState === 'suspended',
++    );
++    const muted = await audio(page);
++    await act(page, 'unload');
++    const consumed = await audio(page);
++    expect(consumed.transferContacts).toBeGreaterThan(muted.transferContacts);
++    expect(consumed.transferPlayed).toBe(muted.transferPlayed);
++    expect(consumed.transferSources).toBe(0);
++    await page.locator('#sound-toggle').click();
++    await page.waitForFunction(
++      () => (window as any).__LAST_FERRY__.getAudioStatus().contextState === 'running',
++    );
++    await page.waitForTimeout(650);
++    const resumed = await audio(page);
++    expect(resumed.transferContacts).toBe(consumed.transferContacts);
++    expect(resumed.transferPlayed).toBe(consumed.transferPlayed);
++    expect(resumed.currentTime).toBeGreaterThanOrEqual(muted.currentTime);
++    await undo(page);
++    await transfer(page, 'unload', ['sheep-1']);
++    await undo(page);
++    await activate(page, 'unload');
++    await page.locator('#commit').click();
++    const interrupted = await page.evaluate(() => {
++      const before = (window as any).__LAST_FERRY__.getAudioStatus();
++      Object.defineProperty(document, 'hidden', { configurable: true, value: true });
++      document.dispatchEvent(new Event('visibilitychange'));
++      return before;
++    });
++    await idle(page);
++    expect((await state(page)).turn).toBe(1);
++    await page.evaluate(() => {
++      Object.defineProperty(document, 'hidden', { configurable: true, value: false });
++      document.dispatchEvent(new Event('visibilitychange'));
++    });
++    await page.waitForTimeout(650);
++    const recovered = await audio(page);
++    expect(recovered.transferContacts).toBe(interrupted.transferContacts);
++    expect(recovered.transferSources).toBe(0);
++    expect(
++      (await page.evaluate(() => (window as any).__LAST_FERRY__.getTransitionStatus())).last.reason,
++    ).toBe('visibility');
++    await restart(page);
++    expect((await audio(page)).transferContacts).toBe(recovered.transferContacts);
++    await page.emulateMedia({ reducedMotion: 'reduce' });
++    for (const id of route) {
++      const before = await audio(page);
++      await act(page, id);
++      const after = await audio(page);
++      if (id === 'unload' || id === 'board') {
++        expect(after.transferContacts - before.transferContacts).toBe(1);
++        expect(after.lastTransferContact.compact).toBe(true);
++      } else expect(after.transferContacts).toBe(before.transferContacts);
++    }
++    expect((await state(page)).status).toBe('won');
++    expect(await audio(page)).toMatchObject({ deliveryCount: 1, contextCount: 1, droppedTones: 0 });
++    await undo(page);
++    expect((await audio(page)).deliveryCount).toBe(1);
++    await page.waitForFunction(
++      () => (window as any).__LAST_FERRY__.getAudioStatus().transferSources === 0,
++    );
++    await stableClock(page);
++  } finally {
++    await save(page, 'lifecycle-transfers');
++  }
++});
+diff --git a/tests/e2e/transfer-phone.spec.ts b/tests/e2e/transfer-phone.spec.ts
+new file mode 100644
+index 0000000..dc4fe1b
+--- /dev/null
++++ b/tests/e2e/transfer-phone.spec.ts
+@@ -0,0 +1,96 @@
++import { test, expect } from '@playwright/test';
++import { mkdirSync, writeFileSync } from 'node:fs';
++import { reviewDir } from './evidence';
++import { act, active, dialogCycle, fullyVisible, idle, readable, ready, state, tabTo, undo } from './ui';
++
++for (const [width, height] of [[780, 320], [844, 390]]) {
++  test(`transfer controls remain reachable at ${width}x${height}`, async ({ browser, baseURL }) => {
++    const context = await browser.newContext({ baseURL, viewport: { width, height }, hasTouch: true, isMobile: true, deviceScaleFactor: 1 });
++    await context.addInitScript(() => localStorage.setItem('last-ferry-muted', 'true'));
++    const page = await context.newPage(), errors: string[] = [], evidence = `${reviewDir}/${width}x${height}`;
++    page.on('pageerror', error => errors.push(error.message));
++    mkdirSync(reviewDir, { recursive: true });
++    await ready(page, 'holding-pier');
++    const initial = await state(page);
++    expect(await page.locator('.game').evaluate(element => element.getBoundingClientRect().height)).toBe(height);
++    for (const id of ['status-toggle', 'map-harbor', 'map-stone', 'map-shallows', 'map-rabbit-pier', 'undo']) {
++      await fullyVisible(page, page.locator(`#${id}`));
++      await readable(page.locator(`#${id}`));
++    }
++    await page.screenshot({ path: `${evidence}-start.png` });
++    await page.locator('#status-toggle').tap();
++    await fullyVisible(page, page.locator('#cancel'));
++    await expect(page.locator('.forecast-detail')).toContainText('Rabbit Pier will flood');
++    await page.keyboard.press('Escape');
++    await expect(page.locator('#status-toggle')).toBeFocused();
++    await tabTo(page, 'map-stone', true);
++    await page.keyboard.press('Enter');
++    await expect(page.locator('#local-heading')).toBeFocused();
++    await fullyVisible(page, page.locator('#unload'));
++    await readable(page.locator('#unload'));
++    await page.screenshot({ path: `${evidence}-current.png` });
++    await tabTo(page, 'unload');
++    await page.keyboard.press('Enter');
++    await dialogCycle(page);
++    for (const id of ['cancel', 'commit']) await fullyVisible(page, page.locator(`#${id}`));
++    await readable(page.locator('#commit'));
++    await page.screenshot({ path: `${evidence}-unload-preview.png` });
++    await page.keyboard.press('Escape');
++    await expect(page.locator('#unload')).toBeFocused();
++    expect(await state(page)).toEqual(initial);
++    await act(page, 'unload', true);
++    expect(await state(page)).toMatchObject({ turn: 1, aboard: [], waitingByPier: { 'stone-pier': ['sheep-1'] } });
++    await tabTo(page, 'undo', true);
++    await page.keyboard.press('Enter');
++    await idle(page);
++    expect(await state(page)).toEqual(initial);
++    await act(page, 'unload', true);
++    await act(page, 'map-shallows', true);
++    await act(page, 'map-rabbit-pier', true);
++    const dry = await state(page);
++    await page.locator('#map-rabbit-pier').tap();
++    await fullyVisible(page, page.locator('#board'));
++    await page.locator('#board').tap();
++    await expect(page.locator('.consequence')).toContainText('Both are safe aboard.');
++    for (const id of ['passenger-rabbit-1', 'passenger-rabbit-2']) {
++      await page.locator(`#${id}`).scrollIntoViewIfNeeded();
++      await fullyVisible(page, page.locator(`#${id}`));
++      await readable(page.locator(`#${id}`));
++    }
++    await page.locator('#passenger-rabbit-2').tap();
++    await expect(page.locator('.consequence')).toContainText('Rue is still waiting at Rabbit Pier when it floods. This ends the crossing.');
++    await page.locator('#passenger-rabbit-2').tap();
++    await page.locator('.consequence').scrollIntoViewIfNeeded();
++    await fullyVisible(page, page.locator('.consequence'), false);
++    for (const id of ['cancel', 'commit']) await fullyVisible(page, page.locator(`#${id}`));
++    await page.screenshot({ path: `${evidence}-critical-boarding.png` });
++    await page.locator('#commit').tap();
++    await idle(page);
++    const afterRise = await state(page);
++    expect(afterRise).toMatchObject({ turn: 4, tideLevel: 1, status: 'playing', aboard: ['rabbit-1', 'rabbit-2'] });
++    await fullyVisible(page, page.locator('#status-toggle'));
++    await page.screenshot({ path: `${evidence}-after-rise.png` });
++    await undo(page, true);
++    expect(await state(page)).toEqual(dry);
++    await act(page, 'board', true);
++    expect(await state(page)).toEqual(afterRise);
++    await act(page, 'map-shallows', true);
++    await act(page, 'map-stone', true);
++    await act(page, 'board', true);
++    await act(page, 'map-harbor', true);
++    await act(page, 'unload', true);
++    expect(await state(page)).toMatchObject({ turn: 9, tideLevel: 2, status: 'won', delivered: ['rabbit-1', 'rabbit-2', 'sheep-1'] });
++    for (const id of ['terminal-undo', 'terminal-restart']) await fullyVisible(page, page.locator(`#${id}`));
++    await dialogCycle(page, 'terminal-undo');
++    await page.screenshot({ path: `${evidence}-success.png` });
++    await tabTo(page, 'terminal-undo');
++    await page.keyboard.press('Enter');
++    await idle(page);
++    expect(await state(page)).toMatchObject({ turn: 8, status: 'playing', aboard: ['rabbit-1', 'rabbit-2', 'sheep-1'] });
++    expect(await active(page)).toBe('undo');
++    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
++    expect(errors).toEqual([]);
++    writeFileSync(`${evidence}-verification.json`, JSON.stringify({ viewport: [width, height], touchEmulation: true, initial, beforeTide: dry, afterTide: afterRise, afterTerminalUndo: await state(page), errors }, null, 2));
++    await context.close();
++  });
++}
+diff --git a/tests/unit/audio.test.ts b/tests/unit/audio.test.ts
+index 5c383ac..c0f2876 100644
+--- a/tests/unit/audio.test.ts
++++ b/tests/unit/audio.test.ts
+@@ -457,7 +457,7 @@ describe('continuous audio ownership and phase', () => {
+     });
+   });
+ 
+-  test('companion plus travel and delivery remains bounded across the phrase with no dropped tones', async () => {
++  test('companion plus travel, transfer contacts and delivery stays bounded with no dropped tones', async () => {
+     const value = sound();
+     value.reconcileState(
+       {
+@@ -472,10 +472,18 @@ describe('continuous audio ownership and phase', () => {
+     const context = Context.instances[0];
+     for (let step = 0; step < 800; step++) {
+       if (step % 75 === 0) value.delivery();
++      if (step % 10 === 0 || step % 10 === 2)
++        value.transferContact({
++          weight: 'light',
++          settle: step % 10 === 2,
++          compact: false,
++          count: 2,
++        });
+       context.advance(0.1);
+       await vi.advanceTimersByTimeAsync(100);
+       expect(value.presentation().companionSources).toBeLessThanOrEqual(2);
+       expect(value.presentation().sourceCount).toBeLessThanOrEqual(29);
++      expect(value.presentation().transferSources).toBeLessThanOrEqual(2);
+     }
+     expect(value.presentation()).toMatchObject({
+       loopCount: 1,
+@@ -485,6 +493,145 @@ describe('continuous audio ownership and phase', () => {
+       contextCount: 1,
+     });
+     expect(value.presentation().companionNotes).toBeGreaterThan(20);
++    expect(value.presentation().transferPlayed).toBe(160);
++  });
++
++  test('wood contacts cache bounded dry buffers with lighter rabbits and quieter settlement', async () => {
++    const value = sound();
++    await value.activate();
++    const context = Context.instances[0];
++    value.transferContact({ weight: 'light', settle: false, compact: false, count: 2 });
++    const rabbits = context.sources.at(-1)!,
++      rabbitGain = [...rabbits.connections][0];
++    expect(rabbits.endAt - rabbits.startAt).toBeLessThanOrEqual(0.2);
++    expect(rabbits.loop).toBe(false);
++    expect(Math.abs(rabbits.buffer.getChannelData(0)[0])).toBe(0);
++    expect(
++      Math.max(...Array.from(rabbits.buffer.getChannelData(0) as Float32Array, Math.abs)),
++    ).toBeCloseTo(0.8);
++    context.advance(0.25);
++    value.transferContact({ weight: 'light', settle: true, compact: false, count: 2 });
++    const settling = context.sources.at(-1)!;
++    expect(settling.buffer).toBe(rabbits.buffer);
++    expect([...settling.connections][0].gain.value).toBeLessThan(rabbitGain.gain.value * 0.5);
++    context.advance(0.25);
++    value.transferContact({ weight: 'full', settle: false, compact: false, count: 1 });
++    const sheep = context.sources.at(-1)!,
++      sheepGain = [...sheep.connections][0];
++    expect(sheep.buffer).not.toBe(rabbits.buffer);
++    expect(sheepGain.gain.value).toBeGreaterThan(rabbitGain.gain.value);
++    context.advance(0.25);
++    value.transferContact({ weight: 'full', settle: false, compact: true, count: 100 });
++    const compact = context.sources.at(-1)!;
++    expect(compact.buffer).toBe(sheep.buffer);
++    expect([...compact.connections][0].gain.value).toBeLessThan(sheepGain.gain.value);
++    for (let i = 0; i < 20; i++)
++      value.transferContact({ weight: 'light', settle: false, compact: false, count: 2 });
++    expect(value.presentation()).toMatchObject({ transferSources: 2, peakTransferSources: 2 });
++    expect(value.presentation().transferSkipped).toBe(19);
++    context.advance(0.25);
++    expect(value.presentation().transferSources).toBe(0);
++    expect(compact.connections.size).toBe(0);
++  });
++
++  test('arrival leaves wooden contacts playing, while Undo clears both and preserves music', async () => {
++    const value = sound();
++    await value.activate();
++    const context = Context.instances[0],
++      before = value.presentation();
++    value.transferContact({ weight: 'full', settle: true, compact: false, count: 3 });
++    const contact = context.sources.at(-1)!,
++      endAt = contact.endAt;
++    expect(value.presentation()).toMatchObject({ transferSources: 1, arrivalActive: false });
++    value.delivery();
++    expect(contact.endAt).toBe(endAt);
++    expect(value.presentation()).toMatchObject({ transferSources: 1, arrivalActive: true });
++    value.resetActionEffects();
++    expect(value.presentation()).toMatchObject({
++      transferSources: 0,
++      arrivalActive: false,
++      musicSources: before.musicSources,
++      schedulerStarts: before.schedulerStarts,
++      scheduledEvents: before.scheduledEvents,
++      phaseSeconds: before.phaseSeconds,
++      transferPlayed: 1,
++    });
++    context.advance(0.1);
++    expect(contact.connections.size).toBe(0);
++    value.transferContact({ weight: 'full', settle: false, compact: true, count: 3 });
++    expect(value.presentation()).toMatchObject({ transferPlayed: 2, transferSources: 1 });
++    value.dispose();
++    expect(value.presentation()).toMatchObject({
++      transferSources: 0,
++      sourceCount: 0,
++      graphNodeCount: 0,
++    });
++  });
++
++  test('inactive, muted, hidden and interrupted contacts are consumed without any resume replay', async () => {
++    const value = sound(),
++      cue = { weight: 'light', settle: false, compact: false, count: 2 } as const;
++    value.transferContact(cue);
++    expect(value.presentation()).toMatchObject({
++      contextCount: 0,
++      transferContacts: 1,
++      transferSkipped: 1,
++    });
++    await value.activate();
++    const context = Context.instances[0];
++    value.transferContact(cue);
++    await value.toggle();
++    value.transferContact(cue);
++    expect(value.presentation()).toMatchObject({ transferSources: 0, transferPlayed: 1 });
++    context.advance(0.1);
++    await vi.advanceTimersByTimeAsync(100);
++    await value.toggle();
++    expect(value.presentation()).toMatchObject({ transferSources: 0, transferPlayed: 1 });
++    value.transferContact(cue);
++    await value.visibility(true);
++    value.transferContact(cue);
++    context.advance(0.1);
++    await vi.advanceTimersByTimeAsync(100);
++    await value.visibility(false);
++    expect(value.presentation()).toMatchObject({ transferSources: 0, transferPlayed: 2 });
++    value.transferContact(cue);
++    context.state = 'suspended';
++    context.notify();
++    value.transferContact(cue);
++    context.advance(10);
++    context.state = 'running';
++    context.notify();
++    expect(value.presentation()).toMatchObject({
++      transferSources: 0,
++      transferContacts: 7,
++      transferPlayed: 3,
++      transferSkipped: 4,
++      contextCount: 1,
++      schedulerCount: 1,
++      ambienceSources: 2,
++    });
++    expect(value.presentation().lastTransferContact).toMatchObject({ ...cue, played: false });
++  });
++
++  test('contacts yield crowded source slots instead of changing the existing musical budget', async () => {
++    const reference = sound(),
++      withContact = sound();
++    await reference.activate();
++    await withContact.activate();
++    withContact.transferContact({ weight: 'full', settle: false, compact: false, count: 3 });
++    withContact.transferContact({ weight: 'light', settle: true, compact: false, count: 2 });
++    for (let i = 0; i < 10; i++) {
++      reference.delivery();
++      withContact.delivery();
++      expect(withContact.presentation().droppedTones).toBe(reference.presentation().droppedTones);
++      expect(withContact.presentation().sourceCount).toBeLessThanOrEqual(29);
++    }
++    expect(withContact.presentation()).toMatchObject({
++      transferPlayed: 2,
++      transferSources: 0,
++      musicSources: reference.presentation().musicSources,
++      scheduledEvents: reference.presentation().scheduledEvents,
++    });
+   });
+ 
+   test('rapid changes during active companion notes release obsolete voices without a mood queue', async () => {
+diff --git a/tests/unit/transfer.test.ts b/tests/unit/transfer.test.ts
+new file mode 100644
+index 0000000..0afe0b3
+--- /dev/null
++++ b/tests/unit/transfer.test.ts
+@@ -0,0 +1,99 @@
++import { describe, expect, test } from 'vitest';
++import { initial, reduce, type Action, type State } from '../../src/game/rules';
++import { holdingPier } from '../../src/levels/level';
++import { TransferTimeline } from '../../src/scene/transfer';
++
++const transfer = (before: State, action: Action, reduced = false) =>
++  TransferTimeline.create(before, reduce(before, action, holdingPier), action, reduced);
++const unload = { type: 'unload', passengerIds: ['sheep-1'] } as const;
++const unloading = () => transfer(initial(holdingPier), { ...unload, passengerIds: ['sheep-1'] })!;
++
++describe('passenger contacts on the visual transfer timeline', () => {
++  test('creating a transfer and presenting its opening do not play contacts; each wood phase is consumed once', () => {
++    const timeline = unloading();
++    expect(timeline.presentation().records).toEqual([]);
++    expect(timeline.advance(0.1)).toBeNull();
++    expect(timeline.advance(0.26)?.passengerIds).toEqual(['sheep-1']);
++    expect(timeline.advance(0.26)).toBeNull();
++    expect(timeline.advance(0.51)).toBeNull();
++    expect(timeline.advance(0.8)).toBeNull();
++    expect(timeline.advance(1)).toBeNull();
++    expect(timeline.presentation().records.map((record) => record.outcome)).toEqual(['emitted']);
++  });
++
++  test('an unloading frame that reaches land drops missed wooden contacts instead of playing a burst', () => {
++    const timeline = unloading();
++    expect(timeline.advance(0.65)).toBeNull();
++    expect(timeline.advance(1)).toBeNull();
++    expect(timeline.presentation().records.map((record) => record.outcome)).toEqual(['stale']);
++    const delayed = unloading();
++    expect(delayed.advance(0.52)).toBeNull();
++    expect(delayed.presentation().records.map((record) => record.outcome)).toEqual(['stale']);
++  });
++
++  test('boarding contacts depend on actual selected membership changes, and reach the wooden bridge before sounding', () => {
++    const before = {
++      ...initial(holdingPier),
++      aboard: [],
++      waitingByPier: { ...initial(holdingPier).waitingByPier, 'stone-pier': ['sheep-1'] },
++    };
++    const after = { ...before, aboard: ['rabbit-1', 'rabbit-2'] };
++    const timeline = TransferTimeline.create(
++      before,
++      after,
++      { type: 'board', passengerIds: ['rabbit-1', 'rabbit-2', 'sheep-1'] },
++      false,
++    )!;
++    expect(timeline.advance(0.3)).toBeNull();
++    expect(timeline.advance(0.51)?.passengerIds).toEqual(['rabbit-1', 'rabbit-2']);
++    expect(timeline.advance(0.76)?.stage).toBe('settling');
++    expect(timeline.advance(1)).toBeNull();
++    expect(
++      TransferTimeline.create(before, before, { type: 'board', passengerIds: ['sheep-1'] }, false),
++    ).toBeNull();
++    expect(transfer(initial(holdingPier), { type: 'wait' })).toBeNull();
++    const delayed = TransferTimeline.create(
++      before,
++      after,
++      { type: 'board', passengerIds: ['rabbit-1'] },
++      false,
++    )!;
++    expect(delayed.advance(0.78)?.stage).toBe('settling');
++    expect(delayed.presentation().records.map((record) => record.outcome)).toEqual([
++      'stale',
++      'emitted',
++    ]);
++  });
++
++  test('partial unloading excludes passengers still aboard and behaves the same at Harbor', () => {
++    const before = { ...initial(holdingPier), aboard: ['rabbit-1', 'rabbit-2', 'sheep-1'] };
++    const after = { ...before, aboard: ['rabbit-2', 'sheep-1'], delivered: ['rabbit-1'] };
++    const timeline = TransferTimeline.create(
++      before,
++      after,
++      { type: 'unload', passengerIds: ['rabbit-1'] },
++      false,
++    )!;
++    expect(timeline.advance(0.27)?.passengerIds).toEqual(['rabbit-1']);
++    expect(timeline.advance(0.52)).toBeNull();
++  });
++
++  test('reduced motion emits one quiet compact event even when its first frame completes the transfer', () => {
++    const timeline = transfer(
++      initial(holdingPier),
++      { ...unload, passengerIds: ['sheep-1'] },
++      true,
++    )!;
++    expect(timeline.advance(1)).toMatchObject({ stage: 'compact', reduced: true });
++    expect(timeline.advance(1)).toBeNull();
++    expect(timeline.presentation().records).toHaveLength(1);
++  });
++
++  test('cancel or recovery consumes pending phases; a real replay gets a fresh timeline', () => {
++    const timeline = unloading();
++    timeline.cancel();
++    expect(timeline.advance(0.51)).toBeNull();
++    expect(timeline.presentation().records.map((record) => record.outcome)).toEqual(['cancelled']);
++    expect(unloading().advance(0.26)?.stage).toBe('crossing');
++  });
++});
+diff --git a/tools/capture-transfer-audio.mjs b/tools/capture-transfer-audio.mjs
+new file mode 100644
+index 0000000..f64faff
+--- /dev/null
++++ b/tools/capture-transfer-audio.mjs
+@@ -0,0 +1,316 @@
++import { chromium } from '@playwright/test';
++import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
++import { createHash } from 'node:crypto';
++import { execFileSync } from 'node:child_process';
++import { resolve, relative } from 'node:path';
++
++const args = Object.fromEntries(
++  process.argv.slice(2).map((arg) => arg.replace(/^--/, '').split('=')),
++);
++const base = args.base ?? 'http://127.0.0.1:5193';
++const out = args.output ?? 'reviews/transfer-audio/capture';
++const root = resolve(args.root ?? '.');
++const width = Number(args.width ?? 844),
++  height = Number(args.height ?? 390);
++mkdirSync(`${out}/raw`, { recursive: true });
++const hash = (bytes) => createHash('sha256').update(bytes).digest('hex');
++const filesIn = (folder) =>
++  readdirSync(folder, { withFileTypes: true }).flatMap((entry) => {
++    const path = resolve(folder, entry.name);
++    return entry.isDirectory() ? filesIn(path) : [path];
++  });
++const paths = ['src', 'data', 'public']
++  .filter((path) => existsSync(resolve(root, path)))
++  .flatMap((path) => filesIn(resolve(root, path)))
++  .concat(
++    ['index.html', 'package.json', 'package-lock.json', 'vite.config.ts'].map((path) =>
++      resolve(root, path),
++    ),
++  )
++  .sort();
++const snapshot = () =>
++  Object.fromEntries(
++    paths.map((path) => [relative(root, path).replaceAll('\\', '/'), hash(readFileSync(path))]),
++  );
++const files = snapshot();
++const source = {
++  head: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
++  status: execFileSync('git', ['status', '--short'], { encoding: 'utf8' }).trim(),
++  files,
++  hash: hash(JSON.stringify(files)),
++  root,
++  capturedAt: new Date().toISOString(),
++};
++writeFileSync(`${out}/source.json`, JSON.stringify(source, null, 2));
++const browser = await chromium.launch({
++  headless: true,
++  args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'],
++});
++const context = await browser.newContext({
++  viewport: { width, height },
++  deviceScaleFactor: 1,
++  hasTouch: true,
++  isMobile: true,
++  recordVideo: { dir: `${out}/raw`, size: { width, height } },
++});
++const page = await context.newPage();
++const errors = [];
++page.on('pageerror', (error) => errors.push(error.message));
++const results = {
++  sourceHash: source.hash,
++  sourceHead: source.head,
++  startedAt: new Date().toISOString(),
++  actions: [],
++  captures: [],
++  errors,
++};
++const idle = () =>
++  page.waitForFunction(
++    () => document.querySelector('#seascape').getAttribute('aria-busy') === 'false',
++  );
++const apiState = () => page.evaluate(() => window.__LAST_FERRY__.getState());
++const tap = (id) => page.locator(`#${id}`).tap();
++const select = async (id) => {
++  await tap(`map-${id}`);
++  await page.locator('#local-context').waitFor({ state: 'visible' });
++};
++const capture = async (label) => {
++  const path = `${out}/${label}.png`;
++  await page.screenshot({ path });
++  results.captures.push({
++    label,
++    path,
++    sha256: hash(readFileSync(path)),
++    state: await apiState(),
++    audio: await page.evaluate(() => window.__LAST_FERRY__.getAudioStatus()),
++  });
++};
++const action = async (id) => {
++  const before = await apiState();
++  const beforeAudio = await page.evaluate(() => window.__LAST_FERRY__.getAudioStatus());
++  if (id.startsWith('map-')) {
++    await select(id.slice(4));
++    await tap('sail');
++  } else {
++    if ((id === 'board' || id === 'unload') && !(await page.locator(`#${id}`).isVisible()))
++      await page.locator('.map-target[aria-current="location"]').tap();
++    await tap(id);
++    if (id === 'board' && before.turn === 3) {
++      if (!results.captures.some((capture) => capture.label === 'phone-critical-boarding'))
++        await capture('phone-critical-boarding');
++      await page.waitForTimeout(750);
++    }
++    await tap('commit');
++  }
++  await idle();
++  const after = await apiState();
++  if (after.turn !== before.turn + 1) throw Error(`Action ${id} did not advance exactly once`);
++  const afterAudio = await page.evaluate(() => window.__LAST_FERRY__.getAudioStatus());
++  results.actions.push({
++    id,
++    before,
++    after,
++    audio: afterAudio,
++    transferPlayed: afterAudio.transferPlayed - beforeAudio.transferPlayed,
++  });
++  await page.waitForTimeout(450);
++};
++let fullInterfaceVideo = page.video();
++try {
++  await page.goto(`${base}/?cove=holding-pier`);
++  await page.waitForFunction(() => window.__LAST_FERRY__?.getMetrics().frames > 4);
++  await idle();
++  await select('stone');
++  await page.waitForFunction(
++    () => window.__LAST_FERRY__.getAudioStatus().contextState === 'running',
++  );
++  await page.evaluate(() => {
++    const api = window.__LAST_FERRY__;
++    const scene = document.querySelector('#world canvas').captureStream(25);
++    const master = api.captureAudioStream();
++    const stream = new MediaStream([...scene.getVideoTracks(), ...master.getAudioTracks()]);
++    const mimeType = [
++      'video/webm;codecs=vp9,opus',
++      'video/webm;codecs=vp8,opus',
++      'video/webm',
++    ].find((type) => MediaRecorder.isTypeSupported(type));
++    if (!mimeType) throw Error('No audio/video MediaRecorder WebM codec');
++    const recorder = new MediaRecorder(stream, {
++      mimeType,
++      videoBitsPerSecond: 1800000,
++      audioBitsPerSecond: 128000,
++    });
++    const record = {
++      recorder,
++      scene,
++      chunks: [],
++      samples: [],
++      start: api.getAudioStatus(),
++      startedAt: performance.now(),
++      timer: 0,
++    };
++    recorder.ondataavailable = (event) => {
++      if (event.data.size) record.chunks.push(event.data);
++    };
++    record.timer = setInterval(
++      () =>
++        record.samples.push({
++          wallMs: performance.now() - record.startedAt,
++          state: api.getState(),
++          audio: api.getAudioStatus(),
++          transition: api.getTransitionStatus(),
++          contacts: api.getTransferStatus?.().last ?? null,
++        }),
++      100,
++    );
++    recorder.start(500);
++    window.__transferRecording = record;
++  });
++  await capture('phone-start');
++  await page.waitForTimeout(1000);
++  for (const id of [
++    'unload',
++    'map-shallows',
++    'map-rabbit-pier',
++    'board',
++    'map-shallows',
++    'map-stone',
++    'board',
++    'map-harbor',
++    'unload',
++  ]) {
++    await action(id);
++    const place = results.actions.at(-1).before?.boatNodeId;
++    if (
++      (id === 'unload' && (place === 'stone' || place === 'harbor')) ||
++      (id === 'board' && place === 'rabbit-pier')
++    ) {
++      for (let retry = 0; retry < 2 && results.actions.at(-1).transferPlayed === 0; retry++) {
++        const before = await apiState();
++        await tap(before.status === 'won' ? 'terminal-undo' : 'undo');
++        await idle();
++        results.actions.push({
++          id: 'undo-for-contact-replay',
++          before,
++          after: await apiState(),
++          audio: await page.evaluate(() => window.__LAST_FERRY__.getAudioStatus()),
++        });
++        await action(id);
++      }
++    }
++    if ((await apiState()).turn === 4) {
++      await capture('phone-after-rise');
++      const boundary = await apiState();
++      await tap('undo');
++      await idle();
++      results.actions.push({
++        id: 'undo-boundary',
++        after: await apiState(),
++        audio: await page.evaluate(() => window.__LAST_FERRY__.getAudioStatus()),
++      });
++      if ((await apiState()).turn !== 3) throw Error('Tide Undo did not restore action 3');
++      await action('board');
++      if (JSON.stringify(await apiState()) !== JSON.stringify(boundary))
++        throw Error('Tide Undo/replay state differs');
++    }
++  }
++  const won = await apiState();
++  if (won.status !== 'won' || won.turn !== 9) throw Error('Nine-action rescue did not finish');
++  await capture('phone-success');
++  await page.waitForTimeout(4500);
++  const recorded = await page.evaluate(async () => {
++    const record = window.__transferRecording;
++    clearInterval(record.timer);
++    const stopped = new Promise((resolve) => (record.recorder.onstop = resolve));
++    record.recorder.stop();
++    await stopped;
++    record.scene.getTracks().forEach((track) => track.stop());
++    const blob = new Blob(record.chunks, { type: record.recorder.mimeType });
++    const data = await new Promise((resolve) => {
++      const reader = new FileReader();
++      reader.onload = () => resolve(String(reader.result).split(';base64,')[1]);
++      reader.readAsDataURL(blob);
++    });
++    return {
++      data,
++      samples: record.samples,
++      start: record.start,
++      end: window.__LAST_FERRY__.getAudioStatus(),
++      wallMs: performance.now() - record.startedAt,
++      bytes: blob.size,
++      mimeType: record.recorder.mimeType,
++    };
++  });
++  const bytes = Buffer.from(recorded.data, 'base64');
++  if (bytes.length !== recorded.bytes)
++    throw Error('Exported media byte length differs from the runtime Blob');
++  const path = `${out}/raw/holding-transfer-runtime-audio.webm`;
++  writeFileSync(path, bytes);
++  const { data, samples, ...metadata } = recorded;
++  const tracePath = `${out}/raw/runtime-samples.json`,
++    trace = JSON.stringify(samples, null, 2);
++  writeFileSync(tracePath, trace);
++  results.recording = {
++    path,
++    sha256: hash(bytes),
++    ...metadata,
++    samples: samples.length,
++    trace: { path: tracePath, sha256: hash(trace) },
++    transferHistory: await page.evaluate(() => window.__LAST_FERRY__.getTransferStatus()),
++  };
++  results.method =
++    'One uninterrupted actual canvas.captureStream video + actual Web Audio master stream recorded together by MediaRecorder: runtime procedural music/effects, no offline/replacement audio, time edits or game-state injection. Canvas recording excludes DOM controls. Separate full-interface Playwright video is silent and covers the same UI session. Actual UI Undo/replay is bounded to two attempts when a required contact is stale; every attempt is listed.';
++  results.listening =
++    'No speaker/headphone acoustic listening capability established in this agent workflow. Runtime audio is captured for human listening; diagnostics and decoded sample levels do not establish perceived mix quality.';
++  results.finalState = won;
++  results.sourceUnchanged = JSON.stringify(files) === JSON.stringify(snapshot());
++  if (!results.sourceUnchanged) throw Error('Runtime source changed during capture');
++  if (errors.length) throw Error(`Browser errors: ${errors.join('; ')}`);
++  if (recorded.end.contextCount !== 1 || recorded.end.droppedTones !== 0)
++    throw Error('Audio context/music source anomaly');
++  for (const [kind, place] of [
++    ['unload', 'stone'],
++    ['board', 'rabbit-pier'],
++    ['unload', 'harbor'],
++  ]) {
++    if (
++      !results.actions.some(
++        (action) =>
++          action.id === kind && action.before?.boatNodeId === place && action.transferPlayed > 0,
++      )
++    )
++      throw Error(`No played runtime contact captured for ${kind} at ${place}`);
++  }
++  fullInterfaceVideo = page.video();
++} catch (error) {
++  results.failure = String(error.stack ?? error);
++  process.exitCode = 1;
++} finally {
++  results.environment = {
++    browser: browser.version(),
++    node: process.version,
++    platform: process.platform,
++    viewport: { width, height },
++    dpr: 1,
++    input: 'emulated touch',
++    renderer: 'SwiftShader',
++    base,
++  };
++  await context.close();
++  if (fullInterfaceVideo) {
++    const path = `${out}/raw/holding-full-interface-silent.webm`;
++    await fullInterfaceVideo.saveAs(path);
++    results.fullInterfaceVideo = { path, sha256: hash(readFileSync(path)), audio: false };
++  }
++  await browser.close();
++  results.finishedAt = new Date().toISOString();
++  writeFileSync(`${out}/capture.json`, JSON.stringify(results, null, 2));
++  console.log(
++    JSON.stringify({
++      captures: results.captures.map(({ path }) => path),
++      recording: results.recording?.path,
++      fullInterfaceVideo: results.fullInterfaceVideo?.path,
++      failure: results.failure,
++    }),
++  );
++}
+diff --git a/tools/snapshot-evidence.mjs b/tools/snapshot-evidence.mjs
+index 4b2ef67..00d3c12 100644
+--- a/tools/snapshot-evidence.mjs
++++ b/tools/snapshot-evidence.mjs
+@@ -60,7 +60,10 @@ const paths = [
+   ...(existsSync(new URL('tools/compare-atmosphere-timing.mjs', root))
+     ? ['tools/compare-atmosphere-timing.mjs']
+     : []),
+-  ...walk('tools/').filter((path) => path.includes('refinement') || path.includes('selection')),
++  ...walk('tools/').filter(
++    (path) =>
++      path.includes('refinement') || path.includes('selection') || path.includes('transfer'),
++  ),
+ ].sort();
+ const files = Object.fromEntries(paths.map((p) => [p, digest(readFileSync(new URL(p, root)))]));
+ const sourceHash = digest(JSON.stringify(files));

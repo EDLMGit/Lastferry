@@ -1,0 +1,24 @@
+{
+  "run": "browser-initial",
+  "sourceManifest": "../browser-initial/source-manifest.json",
+  "executed": "node node_modules/@playwright/test/cli.js test tests/e2e/phone-playability.spec.ts --grep 'phone layout 844|phone fullscreen: real'",
+  "result": "2 failed development cases; no complete pass claimed",
+  "runtimeFrozen": false,
+  "productionPort": "4189 existed only to satisfy shared Playwright server configuration; neither selected case used it and no new production verification is claimed",
+  "observations": [
+    {
+      "case": "layout844",
+      "result": "Normal active-subject/scale checks, Whole cove and marker alignment completed before Back to boat became hidden between its viewport assertion and bounding-box read. The run overlapped active main/world implementation. Classified inconclusive pending frozen rerun; no proven runtime root cause attributed."
+    },
+    {
+      "case": "actual fullscreen",
+      "result": "Real browser Fullscreen API entry succeeded on app and included the dialog. The subsequent test fixture incorrectly called isChecked on the accepted passenger toggle button. Fixed the test to inspect aria-pressed, preserving runtime and selection semantics. No full-case pass claimed from this initial run."
+    }
+  ],
+  "originals": [
+    "../browser-initial/results.txt",
+    "../browser-initial/automation-results.json",
+    "../browser-initial/failures/layout-error-context.md",
+    "../browser-initial/failures/fullscreen-fixture-error-context.md"
+  ]
+}

@@ -1,0 +1,809 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--grep",
+      "home refinement:|production bundle:|Holding Pier: unloading Undo|phone-narrow-contextual|atmosphere: longest crossings|atmosphere: audio persistence|environment: reduced motion"
+    ],
+    "configFile": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\playwright.config.ts",
+    "rootDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "snapshotDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5185",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "deviceScaleFactor": 1,
+          "headless": true,
+          "launchOptions": {
+            "args": [
+              "--use-angle=swiftshader",
+              "--enable-unsafe-swiftshader"
+            ]
+          },
+          "video": {
+            "mode": "on",
+            "size": {
+              "width": 1440,
+              "height": 900
+            }
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "reviews/refinement/initial-browser/automation-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "atmosphere.spec.ts",
+      "file": "atmosphere.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "atmosphere: longest crossings finish normally, tide rises in the final phase and visibility interrupts once",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 44818,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T15:54:15.272Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\atmosphere-atmosphere-long-068d2--visibility-interrupts-once\\video.webm"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d2e4a1f3f23ed683d1ce-cd73a48e261b9c0fdb29",
+          "file": "atmosphere.spec.ts",
+          "line": 102,
+          "column": 1
+        },
+        {
+          "title": "atmosphere: audio persistence, live mute, Undo and Restart retain one musical clock",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 22010,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T15:55:00.351Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\atmosphere-atmosphere-audi-8f0bd-rt-retain-one-musical-clock\\video.webm"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d2e4a1f3f23ed683d1ce-7b8bb8886c8730273582",
+          "file": "atmosphere.spec.ts",
+          "line": 240,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "environment.spec.ts",
+      "file": "environment.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "environment: reduced motion keeps calm water, no wake and stable warm arrival",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 18254,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T15:55:22.654Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\environment-environment-re-3d875-ake-and-stable-warm-arrival\\video.webm"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2a84b67ca6571daf27b7-cd4e5e590a3741746d08",
+          "file": "environment.spec.ts",
+          "line": 353,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "holding-pier.spec.ts",
+      "file": "holding-pier.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Holding Pier: unloading Undo, tide Undo, losing alternatives and baseline selector",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 24983,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T15:55:41.104Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\holding-pier-Holding-Pier--c0b78-tives-and-baseline-selector\\video.webm"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ee66ed31473feca4a4ca-9cee24f0ee12e444b734",
+          "file": "holding-pier.spec.ts",
+          "line": 107,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "home-refinement.spec.ts",
+      "file": "home-refinement.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "home refinement: 844px touch Home stays meaningful at unavailable, loaded, delivered and Undo states",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 20821,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAccessibleName\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#map-harbor')\nExpected pattern: \u001b[32m/Not adjacent/\u001b[39m\nReceived string:  \u001b[31m\"Harbor: no direct passage; Home, delivery destination\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAccessibleName\" locator('#map-harbor') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('#map-harbor')\u001b[22m\n\u001b[2m    20 × locator resolved to <button id=\"map-harbor\" data-risk=\"safe\" class=\"map-target\" data-status=\"nonadjacent\" data-destination=\"harbor\" title=\"No direct passage. Sail to an adjacent stop first.\" aria-label=\"Harbor: no direct passage; Home, delivery destination\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"Harbor: no direct passage; Home, delivery destination\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAccessibleName\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#map-harbor')\nExpected pattern: \u001b[32m/Not adjacent/\u001b[39m\nReceived string:  \u001b[31m\"Harbor: no direct passage; Home, delivery destination\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAccessibleName\" locator('#map-harbor') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('#map-harbor')\u001b[22m\n\u001b[2m    20 × locator resolved to <button id=\"map-harbor\" data-risk=\"safe\" class=\"map-target\" data-status=\"nonadjacent\" data-destination=\"harbor\" title=\"No direct passage. Sail to an adjacent stop first.\" aria-label=\"Harbor: no direct passage; Home, delivery destination\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"Harbor: no direct passage; Home, delivery destination\"\u001b[22m\n\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\home-refinement.spec.ts:114:51",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\home-refinement.spec.ts",
+                      "column": 51,
+                      "line": 114
+                    },
+                    "snippet": "  112 |       await home(page);\n  113 |       if ((await state(page)).turn === 2)\n> 114 |         await expect(page.locator('#map-harbor')).toHaveAccessibleName(/Not adjacent/);\n      |                                                   ^\n  115 |       if ((await state(page)).turn === 8) {\n  116 |         expect(await audio(page)).toMatchObject({ desiredArrangement: 'homeward' });\n  117 |         await undo(page, true);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\home-refinement.spec.ts",
+                        "column": 51,
+                        "line": 114
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAccessibleName\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#map-harbor')\nExpected pattern: \u001b[32m/Not adjacent/\u001b[39m\nReceived string:  \u001b[31m\"Harbor: no direct passage; Home, delivery destination\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAccessibleName\" locator('#map-harbor') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('#map-harbor')\u001b[22m\n\u001b[2m    20 × locator resolved to <button id=\"map-harbor\" data-risk=\"safe\" class=\"map-target\" data-status=\"nonadjacent\" data-destination=\"harbor\" title=\"No direct passage. Sail to an adjacent stop first.\" aria-label=\"Harbor: no direct passage; Home, delivery destination\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"Harbor: no direct passage; Home, delivery destination\"\u001b[22m\n\n\n  112 |       await home(page);\n  113 |       if ((await state(page)).turn === 2)\n> 114 |         await expect(page.locator('#map-harbor')).toHaveAccessibleName(/Not adjacent/);\n      |                                                   ^\n  115 |       if ((await state(page)).turn === 8) {\n  116 |         expect(await audio(page)).toMatchObject({ desiredArrangement: 'homeward' });\n  117 |         await undo(page, true);\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\home-refinement.spec.ts:114:51"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T15:56:06.201Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\home-refinement-home-refin-c572a-d-delivered-and-Undo-states\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\home-refinement.spec.ts",
+                    "column": 51,
+                    "line": 114
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "43b914ca5d22c4753737-349197c480aca6bc6fa6",
+          "file": "home-refinement.spec.ts",
+          "line": 87,
+          "column": 3
+        },
+        {
+          "title": "home refinement: 780px touch Home stays meaningful at unavailable, loaded, delivered and Undo states",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 17464,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAccessibleName\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#map-harbor')\nExpected pattern: \u001b[32m/Not adjacent/\u001b[39m\nReceived string:  \u001b[31m\"Harbor: no direct passage; Home, delivery destination\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAccessibleName\" locator('#map-harbor') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('#map-harbor')\u001b[22m\n\u001b[2m    21 × locator resolved to <button id=\"map-harbor\" data-risk=\"safe\" class=\"map-target\" data-status=\"nonadjacent\" data-destination=\"harbor\" title=\"No direct passage. Sail to an adjacent stop first.\" aria-label=\"Harbor: no direct passage; Home, delivery destination\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"Harbor: no direct passage; Home, delivery destination\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAccessibleName\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#map-harbor')\nExpected pattern: \u001b[32m/Not adjacent/\u001b[39m\nReceived string:  \u001b[31m\"Harbor: no direct passage; Home, delivery destination\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAccessibleName\" locator('#map-harbor') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('#map-harbor')\u001b[22m\n\u001b[2m    21 × locator resolved to <button id=\"map-harbor\" data-risk=\"safe\" class=\"map-target\" data-status=\"nonadjacent\" data-destination=\"harbor\" title=\"No direct passage. Sail to an adjacent stop first.\" aria-label=\"Harbor: no direct passage; Home, delivery destination\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"Harbor: no direct passage; Home, delivery destination\"\u001b[22m\n\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\home-refinement.spec.ts:114:51",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\home-refinement.spec.ts",
+                      "column": 51,
+                      "line": 114
+                    },
+                    "snippet": "  112 |       await home(page);\n  113 |       if ((await state(page)).turn === 2)\n> 114 |         await expect(page.locator('#map-harbor')).toHaveAccessibleName(/Not adjacent/);\n      |                                                   ^\n  115 |       if ((await state(page)).turn === 8) {\n  116 |         expect(await audio(page)).toMatchObject({ desiredArrangement: 'homeward' });\n  117 |         await undo(page, true);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\home-refinement.spec.ts",
+                        "column": 51,
+                        "line": 114
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAccessibleName\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#map-harbor')\nExpected pattern: \u001b[32m/Not adjacent/\u001b[39m\nReceived string:  \u001b[31m\"Harbor: no direct passage; Home, delivery destination\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAccessibleName\" locator('#map-harbor') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('#map-harbor')\u001b[22m\n\u001b[2m    21 × locator resolved to <button id=\"map-harbor\" data-risk=\"safe\" class=\"map-target\" data-status=\"nonadjacent\" data-destination=\"harbor\" title=\"No direct passage. Sail to an adjacent stop first.\" aria-label=\"Harbor: no direct passage; Home, delivery destination\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"Harbor: no direct passage; Home, delivery destination\"\u001b[22m\n\n\n  112 |       await home(page);\n  113 |       if ((await state(page)).turn === 2)\n> 114 |         await expect(page.locator('#map-harbor')).toHaveAccessibleName(/Not adjacent/);\n      |                                                   ^\n  115 |       if ((await state(page)).turn === 8) {\n  116 |         expect(await audio(page)).toMatchObject({ desiredArrangement: 'homeward' });\n  117 |         await undo(page, true);\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\home-refinement.spec.ts:114:51"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T15:56:29.789Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\home-refinement-home-refin-812a7-d-delivered-and-Undo-states\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\home-refinement.spec.ts",
+                    "column": 51,
+                    "line": 114
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "43b914ca5d22c4753737-243d512230b6ed5e7222",
+          "file": "home-refinement.spec.ts",
+          "line": 87,
+          "column": 3
+        },
+        {
+          "title": "home refinement: natural keyboard inspection, subset cancellation, boundary boarding, tide Undo and terminal recovery",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 26812,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T15:56:50.953Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\home-refinement-home-refin-ff027--Undo-and-terminal-recovery\\video.webm"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "43b914ca5d22c4753737-2f3b71a6d1cefa191bd7",
+          "file": "home-refinement.spec.ts",
+          "line": 143,
+          "column": 1
+        },
+        {
+          "title": "home refinement: reduced motion restores wet contact, baseline home light and terminal arrangements without replaying delivery",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 16748,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\home-refinement.spec.ts:210:31",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\home-refinement.spec.ts",
+                      "column": 31,
+                      "line": 210
+                    },
+                    "snippet": "  208 |   const won = await audio(page);\n  209 |   expect(won.desiredArrangement).toBe('won');\n> 210 |   expect(won.pendingTerminal).toBeNull();\n      |                               ^\n  211 |   await undo(page);\n  212 |   await home(page);\n  213 |   expect((await view(page)).arrival.active).toBe(false);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\home-refinement.spec.ts",
+                        "column": 31,
+                        "line": 210
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  208 |   const won = await audio(page);\n  209 |   expect(won.desiredArrangement).toBe('won');\n> 210 |   expect(won.pendingTerminal).toBeNull();\n      |                               ^\n  211 |   await undo(page);\n  212 |   await home(page);\n  213 |   expect((await view(page)).arrival.active).toBe(false);\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\home-refinement.spec.ts:210:31"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T15:57:18.231Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\home-refinement-home-refin-a931b--without-replaying-delivery\\video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\home-refinement-home-refin-a931b--without-replaying-delivery\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\home-refinement.spec.ts",
+                    "column": 31,
+                    "line": 210
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "43b914ca5d22c4753737-8fc4a54437d695894bf0",
+          "file": "home-refinement.spec.ts",
+          "line": 190,
+          "column": 1
+        },
+        {
+          "title": "home refinement: actual adaptive runtime mix follows rescue, Undo and a loop without a second clock",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 57449,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\home-refinement.spec.ts:296:37",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\home-refinement.spec.ts",
+                      "column": 37,
+                      "line": 296
+                    },
+                    "snippet": "  294 |   const delivered = await audio(page);\n  295 |   expect(delivered.deliveryCount).toBe(1);\n> 296 |   expect(delivered.pendingTerminal).toBeNull();\n      |                                     ^\n  297 |   await undo(page);\n  298 |   expect((await audio(page)).desiredArrangement).toBe('homeward');\n  299 |   expect((await audio(page)).deliveryCount).toBe(1);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\home-refinement.spec.ts",
+                        "column": 37,
+                        "line": 296
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  294 |   const delivered = await audio(page);\n  295 |   expect(delivered.deliveryCount).toBe(1);\n> 296 |   expect(delivered.pendingTerminal).toBeNull();\n      |                                     ^\n  297 |   await undo(page);\n  298 |   expect((await audio(page)).desiredArrangement).toBe('homeward');\n  299 |   expect((await audio(page)).deliveryCount).toBe(1);\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\home-refinement.spec.ts:296:37"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T15:57:37.495Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\home-refinement-home-refin-52ea3-loop-without-a-second-clock\\video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\home-refinement-home-refin-52ea3-loop-without-a-second-clock\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\home-refinement.spec.ts",
+                    "column": 37,
+                    "line": 296
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "43b914ca5d22c4753737-968beb1459e3a4582d36",
+          "file": "home-refinement.spec.ts",
+          "line": 228,
+          "column": 1
+        },
+        {
+          "title": "home refinement: hidden winning unload reconciles without replaying an unseen delivery",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 25103,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoMatchObject\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\n\u001b[32m- Expected  - 1\u001b[39m\n\u001b[31m+ Received  + 1\u001b[39m\n\n\u001b[2m  Object {\u001b[22m\n\u001b[2m    \"deliveryCount\": 0,\u001b[22m\n\u001b[2m    \"desiredArrangement\": \"won\",\u001b[22m\n\u001b[32m-   \"pendingTerminal\": null,\u001b[39m\n\u001b[31m+   \"pendingTerminal\": false,\u001b[39m\n\u001b[2m  }\u001b[22m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoMatchObject\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\n\u001b[32m- Expected  - 1\u001b[39m\n\u001b[31m+ Received  + 1\u001b[39m\n\n\u001b[2m  Object {\u001b[22m\n\u001b[2m    \"deliveryCount\": 0,\u001b[22m\n\u001b[2m    \"desiredArrangement\": \"won\",\u001b[22m\n\u001b[32m-   \"pendingTerminal\": null,\u001b[39m\n\u001b[31m+   \"pendingTerminal\": false,\u001b[39m\n\u001b[2m  }\u001b[22m\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\home-refinement.spec.ts:396:29",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\home-refinement.spec.ts",
+                      "column": 29,
+                      "line": 396
+                    },
+                    "snippet": "  394 |   await idle(page);\n  395 |   expect((await state(page)).status).toBe('won');\n> 396 |   expect(await audio(page)).toMatchObject({\n      |                             ^\n  397 |     desiredArrangement: 'won',\n  398 |     pendingTerminal: null,\n  399 |     deliveryCount: before.deliveryCount,"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\home-refinement.spec.ts",
+                        "column": 29,
+                        "line": 396
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoMatchObject\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\n\u001b[32m- Expected  - 1\u001b[39m\n\u001b[31m+ Received  + 1\u001b[39m\n\n\u001b[2m  Object {\u001b[22m\n\u001b[2m    \"deliveryCount\": 0,\u001b[22m\n\u001b[2m    \"desiredArrangement\": \"won\",\u001b[22m\n\u001b[32m-   \"pendingTerminal\": null,\u001b[39m\n\u001b[31m+   \"pendingTerminal\": false,\u001b[39m\n\u001b[2m  }\u001b[22m\n\n  394 |   await idle(page);\n  395 |   expect((await state(page)).status).toBe('won');\n> 396 |   expect(await audio(page)).toMatchObject({\n      |                             ^\n  397 |     desiredArrangement: 'won',\n  398 |     pendingTerminal: null,\n  399 |     deliveryCount: before.deliveryCount,\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\home-refinement.spec.ts:396:29"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T15:58:37.447Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\home-refinement-home-refin-c99bd-eplaying-an-unseen-delivery\\video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\home-refinement-home-refin-c99bd-eplaying-an-unseen-delivery\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\home-refinement.spec.ts",
+                    "column": 29,
+                    "line": 396
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "43b914ca5d22c4753737-358539ee0f5b57b038bc",
+          "file": "home-refinement.spec.ts",
+          "line": 382,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "navigation.spec.ts",
+      "file": "navigation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "phone-narrow-contextual: full-width cove, free inspection, modal safety and tide-boundary subsets",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11314,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAccessibleName\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#map-harbor')\nExpected: \u001b[32m\"Sail to Harbor\"\u001b[39m\nReceived: \u001b[31m\"Sail to Harbor\u001b[7m; Home, delivery destination\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAccessibleName\" locator('#map-harbor') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('#map-harbor')\u001b[22m\n\u001b[2m    22 × locator resolved to <button id=\"map-harbor\" data-risk=\"safe\" class=\"map-target\" data-status=\"available\" data-destination=\"harbor\" aria-label=\"Sail to Harbor; Home, delivery destination\" title=\"Boat needs depth 2. Passage has depth 3: enough depth.\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"Sail to Harbor; Home, delivery destination\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAccessibleName\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#map-harbor')\nExpected: \u001b[32m\"Sail to Harbor\"\u001b[39m\nReceived: \u001b[31m\"Sail to Harbor\u001b[7m; Home, delivery destination\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAccessibleName\" locator('#map-harbor') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('#map-harbor')\u001b[22m\n\u001b[2m    22 × locator resolved to <button id=\"map-harbor\" data-risk=\"safe\" class=\"map-target\" data-status=\"available\" data-destination=\"harbor\" aria-label=\"Sail to Harbor; Home, delivery destination\" title=\"Boat needs depth 2. Passage has depth 3: enough depth.\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"Sail to Harbor; Home, delivery destination\"\u001b[22m\n\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\navigation.spec.ts:93:47",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\navigation.spec.ts",
+                      "column": 47,
+                      "line": 93
+                    },
+                    "snippet": "  91 |     await expect(page.locator('#boat-summary')).toHaveText('Depth 2 · 2/4 spaces');\n  92 |     await expect(page.locator('#status-headline')).toHaveText('Rabbit Pier floods in 4 actions.');\n> 93 |     await expect(page.locator('#map-harbor')).toHaveAccessibleName('Sail to Harbor');\n     |                                               ^\n  94 |     await expect(page.locator('#map-stone')).toHaveAccessibleName('You are at Stone Pier');\n  95 |     await expect(page.locator('#map-shallows')).toHaveAccessibleName(/^Sail to Shallows/);\n  96 |     await expect(page.locator('#map-rabbit-pier')).toHaveAccessibleName("
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\navigation.spec.ts",
+                        "column": 47,
+                        "line": 93
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAccessibleName\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#map-harbor')\nExpected: \u001b[32m\"Sail to Harbor\"\u001b[39m\nReceived: \u001b[31m\"Sail to Harbor\u001b[7m; Home, delivery destination\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAccessibleName\" locator('#map-harbor') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('#map-harbor')\u001b[22m\n\u001b[2m    22 × locator resolved to <button id=\"map-harbor\" data-risk=\"safe\" class=\"map-target\" data-status=\"available\" data-destination=\"harbor\" aria-label=\"Sail to Harbor; Home, delivery destination\" title=\"Boat needs depth 2. Passage has depth 3: enough depth.\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"Sail to Harbor; Home, delivery destination\"\u001b[22m\n\n\n  91 |     await expect(page.locator('#boat-summary')).toHaveText('Depth 2 · 2/4 spaces');\n  92 |     await expect(page.locator('#status-headline')).toHaveText('Rabbit Pier floods in 4 actions.');\n> 93 |     await expect(page.locator('#map-harbor')).toHaveAccessibleName('Sail to Harbor');\n     |                                               ^\n  94 |     await expect(page.locator('#map-stone')).toHaveAccessibleName('You are at Stone Pier');\n  95 |     await expect(page.locator('#map-shallows')).toHaveAccessibleName(/^Sail to Shallows/);\n  96 |     await expect(page.locator('#map-rabbit-pier')).toHaveAccessibleName(\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\navigation.spec.ts:93:47"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T15:59:04.727Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\navigation-phone-narrow-co-860d0-y-and-tide-boundary-subsets\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\navigation.spec.ts",
+                    "column": 47,
+                    "line": 93
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "5d2868f7d23420c27cca-396f6d2e06cd67fb883a",
+          "file": "navigation.spec.ts",
+          "line": 62,
+          "column": 3
+        }
+      ]
+    },
+    {
+      "title": "production.spec.ts",
+      "file": "production.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "production bundle: real rescue without debug globals or external assets",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 22562,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T15:59:18.242Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\production-production-bund-2b345--globals-or-external-assets\\video.webm"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ed69554c53210704c98c-9803c16ade72c886155b",
+          "file": "production.spec.ts",
+          "line": 4,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-22T15:54:14.105Z",
+    "duration": 328199.88,
+    "expected": 6,
+    "skipped": 0,
+    "unexpected": 6,
+    "flaky": 0
+  }
+}
