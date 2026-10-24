@@ -36,6 +36,7 @@ import { endpointTargets } from './ui/cove-layout';
 import { MotionPreference, type MotionMode } from './ui/motion-preference';
 import { PanGesture } from './ui/pan-gesture';
 import { visibleViewport, insetRectangle } from './ui/viewport';
+import { FullscreenSupport } from './ui/fullscreen';
 
 const cove = new URLSearchParams(location.search).get('cove');
 const level = cove === 'first-crossing' ? baseline : cove === 'bellwater' ? bellwater : holdingPier;
@@ -53,6 +54,10 @@ const session = new Session(level),
   motion = new MotionPreference(matchMedia('(prefers-reduced-motion: reduce)'));
 sound.reconcileState(session.state, level);
 const dialog = $('dialog') as HTMLDialogElement;
+const fullscreenSupport = new FullscreenSupport(app, dialog, {
+  artifact: new URL(import.meta.url).pathname.split('/').at(-1) ?? 'unknown',
+  mode: import.meta.env.DEV ? 'development' : 'production',
+});
 const viewControls = document.createElement('nav');
 viewControls.className = 'view-controls';
 viewControls.setAttribute('aria-label', 'Cove view');
@@ -71,6 +76,8 @@ let mode: DialogMode | null = null,
   returnId = '',
   keyboardInput = false;
 let settingsParent: 'menu' | 'terminal' = 'menu';
+type SoundIntent = 'enable' | 'retry' | 'mute';
+let soundIntent: { control: HTMLElement; intent: SoundIntent } | null = null;
 let viewFence: { x: number; y: number; until: number } | null = null;
 let locationSelection: string | null = null;
 let emphasis: string | undefined;
@@ -93,6 +100,7 @@ let actionAnchorOffset = { x: 0, y: 0 };
 let placementViewportKey = '';
 let layoutRequest = 0;
 let layoutFlushing = false;
+let pageDisposed = false;
 let viewport = visibleViewport(window.visualViewport, innerWidth, innerHeight);
 let safeBounds: Rectangle = viewport;
 let usableBounds: Rectangle = viewport;
@@ -127,23 +135,73 @@ const completionCounts: Record<CompletionReason, number> = {
 };
 
 function renderSound() {
+  if (pageDisposed) return;
+  const playback = sound.playback();
+  const intent: SoundIntent = playback.running ? 'mute' : playback.requested ? 'retry' : 'enable';
+  const label =
+    intent === 'mute' ? 'Mute sound' : intent === 'retry' ? 'Retry sound' : 'Enable sound';
   const control = $('sound-toggle');
-  control.setAttribute('aria-label', sound.muted ? 'Unmute sound' : 'Mute sound');
+  control.dataset.playback = playback.state;
+  control.dataset.soundIntent = intent;
+  control.setAttribute('aria-label', label);
   control.setAttribute('aria-pressed', String(sound.muted));
-  control.title = `Sound ${sound.muted ? 'off' : 'on'}`;
-  control.textContent = sound.muted ? '♩' : '♫';
+  control.title = label;
+  control.textContent = sound.muted
+    ? '♩'
+    : playback.running
+      ? '♫'
+      : playback.requested
+        ? 'Retry'
+        : 'Sound';
   const settings = $('settings-sound');
   if (settings) {
-    settings.textContent = `Sound ${sound.muted ? 'off' : 'on'}`;
-    settings.setAttribute('aria-pressed', String(!sound.muted));
-    settings.setAttribute('aria-label', sound.muted ? 'Turn sound on' : 'Turn sound off');
+    settings.textContent = label;
+    settings.dataset.playback = playback.state;
+    settings.dataset.soundIntent = intent;
+    settings.setAttribute('aria-pressed', String(playback.running));
+    settings.setAttribute('aria-label', label);
   }
+  const mute = $('settings-mute');
+  if (mute) mute.hidden = playback.state !== 'requested' || !playback.requested;
+  const status = $('audio-status');
+  if (status)
+    status.textContent = sound.muted
+      ? 'Sound is muted.'
+      : playback.running
+        ? 'Sound is playing.'
+        : playback.requested
+          ? 'Sound is waiting. Tap Retry sound, or keep it muted.'
+          : 'Sound starts when you play. You can also enable it here.';
 }
-function toggleSound() {
-  const changed = sound.toggle();
+function explicitSound(control: HTMLElement, intent?: SoundIntent) {
+  const chosen =
+    intent ??
+    (soundIntent?.control === control
+      ? soundIntent.intent
+      : (control.dataset.soundIntent as SoundIntent));
+  soundIntent = null;
+  const changed = chosen === 'retry' ? sound.activate() : sound.setMuted(chosen === 'mute');
   renderSound();
   void changed.then(renderSound).catch(renderSound);
 }
+function toggleSound(event: MouseEvent) {
+  explicitSound(event.currentTarget as HTMLElement);
+}
+function audioControl(target: EventTarget | null) {
+  return target instanceof Element
+    ? target.closest<HTMLElement>('#sound-toggle, #settings-sound, #settings-mute')
+    : null;
+}
+function captureSoundIntent(target: EventTarget | null) {
+  const control = audioControl(target);
+  soundIntent = control ? { control, intent: control.dataset.soundIntent as SoundIntent } : null;
+}
+function activateSound() {
+  const activated = sound.activate();
+  renderSound();
+  void activated.then(renderSound).catch(renderSound);
+}
+sound.onChange = renderSound;
 
 function notifyView(message: string) {
   clearTimeout(noticeTimer);
@@ -162,9 +220,55 @@ function notifyView(message: string) {
     feedback.textContent = message;
     positionDialog();
   }
-  noticeTimer = setTimeout(() => {
-    viewNotice.hidden = true;
-  }, 4500);
+  if (fullscreenSupport.failed) {
+    $('fullscreen-support')?.remove();
+    const support = document.createElement('button');
+    support.id = 'fullscreen-support';
+    support.textContent = 'Copy support details';
+    support.onclick = () => {
+      const details = JSON.stringify(
+        {
+          ...fullscreenSupport.details(),
+          audio: sound.playback(),
+        },
+        null,
+        2,
+      );
+      const manual = () => {
+        let text = $('fullscreen-details') as HTMLTextAreaElement | null;
+        if (!text) {
+          text = document.createElement('textarea');
+          text.id = 'fullscreen-details';
+          text.readOnly = true;
+          text.setAttribute('aria-label', 'Fullscreen support details');
+          support.after(text);
+        }
+        text.value = details;
+        text.focus();
+        text.select();
+        support.textContent = 'Select and copy these details';
+        positionDialog();
+      };
+      let copied: Promise<void> | undefined;
+      try {
+        copied = navigator.clipboard?.writeText(details);
+      } catch {
+        manual();
+        return;
+      }
+      if (copied)
+        void copied.then(() => {
+          support.textContent = 'Support details copied';
+        }, manual);
+      else manual();
+    };
+    (control && dialog.open ? $('fullscreen-feedback') : viewNotice).append(support);
+    positionDialog();
+  } else {
+    noticeTimer = setTimeout(() => {
+      viewNotice.hidden = true;
+    }, 4500);
+  }
 }
 function renderFullscreen() {
   const button = $('fullscreen');
@@ -173,27 +277,22 @@ function renderFullscreen() {
   button.textContent = active ? 'Exit fullscreen' : 'Fullscreen';
   button.setAttribute('aria-pressed', String(active));
   button.onclick = toggleFullscreen;
-}
-function toggleFullscreen() {
-  try {
-    if (document.fullscreenElement) {
-      void document
-        .exitFullscreen()
-        .catch(() =>
-          notifyView('Could not exit fullscreen. You can use the browser’s fullscreen control.'),
-        );
-    } else if (!app.requestFullscreen || !document.fullscreenEnabled) {
-      notifyView('Fullscreen is unavailable here. You can continue playing in the browser.');
-    } else {
-      void app
-        .requestFullscreen()
-        .catch(() =>
-          notifyView('Fullscreen was not allowed. You can continue playing in the browser.'),
-        );
-    }
-  } catch {
-    notifyView('Fullscreen was not allowed. You can continue playing in the browser.');
+  if (!fullscreenSupport.failed) {
+    $('fullscreen-feedback')?.remove();
+    $('fullscreen-support')?.remove();
+    $('fullscreen-details')?.remove();
   }
+}
+function toggleFullscreen(event: MouseEvent) {
+  const requested = fullscreenSupport.toggle(event.isTrusted);
+  const attempt = fullscreenSupport.currentId;
+  void requested.then((message) => {
+    if (pageDisposed || attempt !== fullscreenSupport.currentId) return;
+    if (message) notifyView(message);
+    else viewNotice.hidden = true;
+    renderFullscreen();
+    scheduleLayout();
+  });
 }
 function renderView() {
   const view = world.viewStatus();
@@ -298,7 +397,7 @@ function focusAvailable(preferred?: string) {
   available(preferred).focus({ preventScroll: true });
 }
 function blocked() {
-  return session.busy || dialog.open;
+  return session.busy || dialog.open || fullscreenSupport.promoting;
 }
 function highlight(id?: string) {
   emphasis = id;
@@ -463,8 +562,10 @@ function renderDialog() {
     };
   } else if (mode === 'settings') {
     $('dialog-content').innerHTML =
-      `${header('Settings', undefined, 'Back to ' + (settingsParent === 'terminal' ? 'arrival' : 'menu'))}<div class="dialog-body settings-body"><div class="settings-row"><span>Sound</span><button id="settings-sound"></button></div><label class="settings-row" for="motion-preference">Motion<select id="motion-preference"><option value="device">Follow device</option><option value="reduced">Reduced</option></select></label><p id="motion-status"></p></div><footer class="dialog-footer"><button id="settings-back">Back</button></footer>`;
+      `${header('Settings', undefined, 'Back to ' + (settingsParent === 'terminal' ? 'arrival' : 'menu'))}<div class="dialog-body settings-body"><div class="settings-row"><span>Sound</span><div class="settings-sound-controls"><button id="settings-sound"></button><button id="settings-mute" data-sound-intent="mute" hidden>Mute sound</button></div></div><p id="audio-status" role="status"></p><label class="settings-row" for="motion-preference">Motion<select id="motion-preference"><option value="device">Follow device</option><option value="reduced">Reduced</option></select></label><p id="motion-status"></p></div><footer class="dialog-footer"><button id="settings-back">Back</button></footer>`;
     $('settings-sound').onclick = toggleSound;
+    $('settings-mute').onclick = (event) =>
+      explicitSound(event.currentTarget as HTMLElement, 'mute');
     const fullscreen = document.createElement('button');
     fullscreen.id = 'fullscreen';
     document.querySelector('.settings-body')!.append(fullscreen);
@@ -1228,13 +1329,24 @@ const refreshLabelFonts = () => {
 };
 document.fonts.addEventListener('loadingdone', refreshLabelFonts);
 document.fonts.addEventListener('loadingerror', refreshLabelFonts);
-addEventListener('resize', scheduleLayout);
-visualViewport?.addEventListener('resize', scheduleLayout);
+const viewportChanged = () => {
+  scheduleLayout();
+  fullscreenSupport.observe('resize');
+};
+addEventListener('resize', viewportChanged);
+visualViewport?.addEventListener('resize', viewportChanged);
 visualViewport?.addEventListener('scroll', scheduleLayout);
 document.addEventListener('fullscreenchange', () => {
+  fullscreenSupport.changed();
   renderFullscreen();
-  scheduleLayout();
+  flushLayout();
+  restoreHighlight();
+  requestAnimationFrame(() => {
+    flushLayout();
+    fullscreenSupport.observe('fullscreen-frame');
+  });
 });
+document.addEventListener('fullscreenerror', () => fullscreenSupport.observe('fullscreenerror'));
 dialog.addEventListener('cancel', (e) => {
   e.preventDefault();
   if (mode === 'settings') backFromSettings();
@@ -1270,7 +1382,11 @@ document.addEventListener(
   (e) => {
     if (['Tab', 'Enter', ' ', 'Escape'].includes(e.key)) {
       keyboardInput = true;
-      if (!e.repeat) viewFence = null;
+      if (!e.repeat) {
+        viewFence = null;
+        if (e.key === 'Enter' || e.key === ' ') captureSoundIntent(e.target);
+        else soundIntent = null;
+      }
     }
     if (e.repeat && ['Enter', ' '].includes(e.key)) {
       e.preventDefault();
@@ -1283,7 +1399,6 @@ document.addEventListener(
       clearLocation(true);
       return;
     }
-    if (e.isTrusted && !e.repeat && ['Enter', ' '].includes(e.key)) void sound.activate();
   },
   true,
 );
@@ -1315,7 +1430,7 @@ document.addEventListener(
     }
     keyboardInput = false;
     lastPointer = { x: e.clientX, y: e.clientY, control: (e.target as Element).closest('button') };
-    if (e.isTrusted) void sound.activate();
+    captureSoundIntent(e.target);
   },
   true,
 );
@@ -1363,11 +1478,23 @@ document.addEventListener(
       ) {
         e.preventDefault();
         e.stopImmediatePropagation();
+        return;
       }
+    }
+    if (e.isTrusted && !audioControl(e.target)) {
+      soundIntent = null;
+      activateSound();
     }
   },
   true,
 );
+document.addEventListener('pointerup', (event) => {
+  if (event.isTrusted && suppressPanClick && event.target === canvas && event.isPrimary)
+    activateSound();
+});
+document.addEventListener('pointercancel', () => {
+  soundIntent = null;
+});
 document.addEventListener('visibilitychange', () => {
   sound.visibility(document.hidden);
   if (document.hidden) {
@@ -1381,6 +1508,8 @@ document.addEventListener('visibilitychange', () => {
   }
 });
 addEventListener('pagehide', () => {
+  pageDisposed = true;
+  sound.onChange = null;
   layoutObserver.disconnect();
   document.fonts.removeEventListener('loadingdone', refreshLabelFonts);
   document.fonts.removeEventListener('loadingerror', refreshLabelFonts);
@@ -1459,6 +1588,7 @@ if (import.meta.env.DEV)
       getJourneyStatus: () => copy(world.journeyPresentation()),
       getMetrics: () => world.metrics(),
       getAudioStatus: () => sound.presentation(),
+      getFullscreenStatus: () => fullscreenSupport.details(),
       captureAudioStream: () => sound.captureStream(),
       setAccompanimentEnabled: (enabled: boolean) => sound.setAccompanimentEnabled(enabled),
       getTransitionStatus: () =>

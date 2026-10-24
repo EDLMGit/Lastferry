@@ -1,6 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { reviewDir } from './evidence';
+import { trustedRapid } from './trusted-rapid';
 import {
   activate,
   ready as baseReady,
@@ -247,31 +248,12 @@ test('selection regression: an explicit new place permits the next trusted Sail 
   await activate(page, 'unload'); await activate(page, 'commit'); await idle(page);
   await activate(page, 'map-shallows');
   const first = await page.locator('#sail').boundingBox();
-  await page.evaluate(() => {
-    const runtime = window as any;
-    runtime.__consecutiveSailClicks = [];
-    runtime.__consecutiveSailTrace = (event: MouseEvent) => runtime.__consecutiveSailClicks.push({
-      at: performance.now(), trusted: event.isTrusted, target: (event.target as HTMLElement).closest('button')?.id,
-      x: event.clientX, y: event.clientY,
-    });
-    window.addEventListener('click', runtime.__consecutiveSailTrace, true);
-  });
-  await page.mouse.click(first!.x + first!.width / 2, first!.y + first!.height / 2);
-  await page.waitForFunction(() => document.querySelector('#seascape')?.getAttribute('aria-busy') === 'false');
-  const rabbit = await page.locator('#map-rabbit-pier').boundingBox();
-  await page.mouse.click(rabbit!.x + rabbit!.width / 2, rabbit!.y + rabbit!.height / 2);
-  const second = await page.locator('#sail').boundingBox();
-  const x = second!.x + second!.width / 2, y = second!.y + second!.height / 2;
-  await page.mouse.click(x, y);
-  await page.waitForFunction(() => document.querySelector('#seascape')?.getAttribute('aria-busy') === 'false');
-  const clicks = await page.evaluate(() => {
-    const runtime = window as any;
-    window.removeEventListener('click', runtime.__consecutiveSailTrace, true);
-    return runtime.__consecutiveSailClicks;
-  });
-  const result = { clicks, gapMs: clicks[2]?.at - clicks[0]?.at, first, second, final: await snapshot(page) };
+  const trace = await trustedRapid(page, first!, 'consecutive-sail');
+  const clicks = trace.clicks;
+  const result = { clicks, trace, gapMs: clicks[2]?.at - clicks[0]?.at, first, second: trace.points.second, final: await snapshot(page) };
   writeFileSync(`${reviewDir}/consecutive-sail-regression.json`, JSON.stringify(result, null, 2));
   expect(clicks).toHaveLength(3);
+  expect(trace.error).toBeNull();
   expect(clicks.every((click: any) => click.trusted)).toBe(true);
   expect(clicks.map((click: any) => click.target)).toEqual(['sail', 'map-rabbit-pier', 'sail']);
   expect(result.gapMs, 'The new intentional Sail must exercise the still-live old fence').toBeLessThanOrEqual(180);
@@ -290,25 +272,14 @@ test('selection regression: the arrived dock permits a deliberate local action i
   expect(await page.evaluate(() => (window as any).__LAST_FERRY__.getEnvironmentStatus().reducedMotion)).toBe(true);
   await activate(page, 'map-sheep-pier', true);
   const sail = await page.locator('#sail').boundingBox();
-  await page.evaluate(() => {
-    (window as any).__localIntentClicks = [];
-    window.addEventListener('click', (event) => {
-      const api=(window as any).__LAST_FERRY__,v=api.getViewStatus();
-      (window as any).__localIntentClicks.push({ at: performance.now(), trusted: event.isTrusted, target: (event.target as HTMLElement).closest('button')?.id ?? null,dialogOpen:!!document.querySelector('#dialog[open]'),selectedId:document.querySelector('.map-target[aria-expanded="true"]')?.id??null,snapshot:{state:api.getState(),history:api.getRenderStatus().historyLength,desiredMusic:api.getAudioStatus().desiredArrangement,view:{mode:v.mode,scale:v.scale,focus:v.focus}} });
-    }, true);
-  });
-  await page.touchscreen.tap(sail!.x + sail!.width / 2, sail!.y + sail!.height / 2);
-  await page.waitForFunction(() => document.querySelector('#seascape')?.getAttribute('aria-busy') === 'false');
-  const board = await page.locator('#board').boundingBox();
-  await page.touchscreen.tap(sail!.x + sail!.width / 2, sail!.y + sail!.height / 2);
-  const x = board!.x + board!.width / 2, y = board!.y + board!.height / 2;
-  await page.touchscreen.tap(x, y);
-  const clicks = await page.evaluate(() => (window as any).__localIntentClicks);
+  const trace = await trustedRapid(page, sail!, 'arrived-local');
+  const clicks = trace.clicks, board = trace.points.board;
   const arrived=clicks[1]?.snapshot;
   const final=await page.evaluate(()=>{const api=(window as any).__LAST_FERRY__,v=api.getViewStatus();return{state:api.getState(),history:api.getRenderStatus().historyLength,desiredMusic:api.getAudioStatus().desiredArrangement,view:{mode:v.mode,scale:v.scale,focus:v.focus}};});
-  const result = { sail, board, gapMs: clicks[2]?.at - clicks[0]?.at, repeatGapMs: clicks[1]?.at - clicks[0]?.at, clicks, arrived, final, modalOpen: await page.locator('#dialog[open]').count() === 1 };
+  const result = { sail, board, trace, gapMs: clicks[2]?.at - clicks[0]?.at, repeatGapMs: clicks[1]?.at - clicks[0]?.at, clicks, arrived, final, modalOpen: await page.locator('#dialog[open]').count() === 1 };
   writeFileSync(`${reviewDir}/arrived-local-action-regression.json`, JSON.stringify(result, null, 2));
   expect(clicks).toHaveLength(3);
+  expect(trace.error).toBeNull();
   expect(clicks[0].target).toBe('sail');
   expect(clicks[2].target).toBe('board');
   expect(clicks[2].dialogOpen).toBe(false);

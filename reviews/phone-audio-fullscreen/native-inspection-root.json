@@ -1,0 +1,36 @@
+{
+  "recordedAt": "2026-10-24T22:59:34.491Z",
+  "method": "Root inspected original/native image pixels using view_image(detail original). Actual hosted and final production IAB UI screenshots separately inspected through cua_repl.",
+  "files": [
+    {
+      "path": "reviews/phone-audio-fullscreen/before-fullscreen-modal-covered.png",
+      "width": 844,
+      "height": 390,
+      "sha256": "d8c5959ea14b8be7b3baabf46cf026dee4d693e298ae0e88250ed7a331ce77b4"
+    },
+    {
+      "path": "reviews/phone-audio-fullscreen/browser-remaining/fullscreen-pending-entered.png",
+      "width": 844,
+      "height": 390,
+      "sha256": "317ccc6055dea402fcd9e00bf35151075d15b82b732ca2e5c7c634413244dbcc"
+    },
+    {
+      "path": "reviews/phone-audio-fullscreen/browser-remaining/fullscreen-mocked-rejected-short-manual-copy.png",
+      "width": 780,
+      "height": 320,
+      "sha256": "32cf0bff51edcd29c6bd5eb931a0d15393e93d01a99eb2e02d05550c1f4e1b64"
+    },
+    {
+      "path": "reviews/phone-audio-fullscreen/browser-remaining/audio-rescue-390x844-won.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "c1390253d27f9f08c887d7a5921fdfb67569cd03a9a0c8e87f518028afefcbe7"
+    }
+  ],
+  "findings": [
+    "Reused actualbaseline fullscreen screenshot shows scene but not the already-open modal.",
+    "Corrective844x390 actualentry screenshot visibly retains MenuandExit control, including whileaudio isrequested.",
+    "780x320manualcopy textarea and close remain onscreen; secondarydialogcontent scrolls. This does not claim all menucontent is simultaneouslyvisible.",
+    "Portraitsuccess is an actual9-action rescue in deliberately retainedWholecove/Overview mode, not a change to defaultPlay scale."
+  ]
+}

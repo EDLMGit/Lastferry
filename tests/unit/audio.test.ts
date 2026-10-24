@@ -64,6 +64,7 @@ class Source extends Node {
 class Context {
   static instances: Context[] = [];
   static reject = false;
+  static pending = false;
   sampleRate = 1000;
   currentTime = 0;
   state: 'suspended' | 'running' | 'closed' = 'suspended';
@@ -72,6 +73,8 @@ class Context {
   sources: Source[] = [];
   track = { stop: vi.fn() };
   listeners = new Set<() => void>();
+  resumeCalls = 0;
+  resumeRequests: { succeed: () => void; reject: () => void }[] = [];
   constructor() {
     Context.instances.push(this);
   }
@@ -119,10 +122,25 @@ class Context {
   createBufferSource() {
     return this.createOscillator();
   }
-  async resume() {
-    if (Context.reject) throw new Error('NotAllowedError');
+  resume() {
+    this.resumeCalls++;
+    if (Context.pending)
+      return new Promise<void>((resolve, reject) => {
+        this.resumeRequests.push({
+          succeed: () => {
+            if (this.state !== 'running' && this.state !== 'closed') {
+              this.state = 'running';
+              this.notify();
+            }
+            resolve();
+          },
+          reject: () => reject(new Error('NotAllowedError')),
+        });
+      });
+    if (Context.reject) return Promise.reject(new Error('NotAllowedError'));
     this.state = 'running';
     this.notify();
+    return Promise.resolve();
   }
   async suspend() {
     this.state = 'suspended';
@@ -164,6 +182,7 @@ describe('continuous audio ownership and phase', () => {
     vi.useFakeTimers();
     Context.instances = [];
     Context.reject = false;
+    Context.pending = false;
     stored = new Map();
     vi.stubGlobal('AudioContext', Context);
     vi.stubGlobal('localStorage', {
@@ -335,6 +354,229 @@ describe('continuous audio ownership and phase', () => {
       sourceCount: 0,
       graphNodeCount: 0,
       schedulerCount: 0,
+    });
+  });
+
+  test('a fresh activation retries a blocked pending resume without another graph or scheduler', async () => {
+    Context.pending = true;
+    const value = sound();
+    expect(value.playback()).toEqual({
+      state: 'requested',
+      requested: false,
+      running: false,
+      retryPending: false,
+    });
+    const first = value.activate(),
+      context = Context.instances[0];
+    expect(value.playback()).toMatchObject({ requested: true, retryPending: true });
+    expect(value.presentation()).toMatchObject({ contextState: 'suspended', schedulerStarts: 0 });
+    const retry = value.activate();
+    expect(context.resumeCalls).toBe(2);
+    expect(Context.instances).toHaveLength(1);
+    context.resumeRequests[1].succeed();
+    await retry;
+    expect(value.playback()).toEqual({
+      state: 'running',
+      requested: true,
+      running: true,
+      retryPending: false,
+    });
+    const started = value.presentation();
+    context.resumeRequests[0].succeed();
+    await first;
+    for (let index = 0; index < 8; index++) await value.activate();
+    expect(context.resumeCalls).toBe(2);
+    expect(value.presentation()).toMatchObject({
+      contextCount: 1,
+      schedulerCount: 1,
+      schedulerStarts: 1,
+      ambienceSources: 2,
+      sourceNodesCreated: started.sourceNodesCreated,
+      graphNodeCount: started.graphNodeCount,
+      unavailable: false,
+      error: null,
+    });
+  });
+
+  test('an older rejection cannot clear a newer pending request or stop its eventual playback', async () => {
+    Context.pending = true;
+    const value = sound(),
+      first = value.activate(),
+      context = Context.instances[0],
+      retry = value.activate();
+    context.resumeRequests[0].reject();
+    await first;
+    expect(value.playback()).toMatchObject({ retryPending: true, running: false });
+    expect(value.presentation()).toMatchObject({ unavailable: false, error: null });
+    context.resumeRequests[1].succeed();
+    await retry;
+    expect(value.presentation()).toMatchObject({
+      contextCount: 1,
+      schedulerCount: 1,
+      schedulerStarts: 1,
+      unavailable: false,
+      error: null,
+    });
+  });
+
+  test('lifecycle notifications reflect native playback changes without waiting for a pending request or pumping updates', async () => {
+    Context.pending = true;
+    const value = sound(),
+      states: ReturnType<Sound['playback']>[] = [];
+    value.onChange = () => states.push(value.playback());
+    const pending = value.activate(),
+      context = Context.instances[0];
+    expect(states.at(-1)).toMatchObject({ state: 'requested', retryPending: true });
+    context.state = 'running';
+    context.notify();
+    expect(states.at(-1)).toMatchObject({ state: 'running', retryPending: true });
+    const changes = states.length;
+    context.advance(0.1);
+    await vi.advanceTimersByTimeAsync(100);
+    expect(states).toHaveLength(changes);
+    await value.setMuted(true);
+    expect(states.at(-1)).toMatchObject({ state: 'muted', requested: false, retryPending: false });
+    const mutedChanges = states.length;
+    context.resumeRequests[0].reject();
+    await pending;
+    expect(states).toHaveLength(mutedChanges);
+    value.dispose();
+    expect(states.at(-1)).toMatchObject({ requested: false, running: false, retryPending: false });
+  });
+
+  test('a stale rejection after a successful retry leaves the live mix and request status intact', async () => {
+    Context.pending = true;
+    const value = sound(),
+      first = value.activate(),
+      context = Context.instances[0],
+      retry = value.activate();
+    context.resumeRequests[1].succeed();
+    await retry;
+    const running = value.presentation();
+    context.resumeRequests[0].reject();
+    await first;
+    expect(value.presentation()).toMatchObject({
+      state: 'running',
+      retryPending: false,
+      schedulerCount: 1,
+      schedulerStarts: running.schedulerStarts,
+      masterGain: running.masterGain,
+      graphNodeCount: running.graphNodeCount,
+      unavailable: false,
+      error: null,
+    });
+  });
+
+  test.each([
+    ['muted', 'success'],
+    ['muted', 'rejection'],
+    ['hidden', 'success'],
+    ['hidden', 'rejection'],
+    ['disposed', 'success'],
+    ['disposed', 'rejection'],
+  ] as const)(
+    'late resume %s/%s cannot restore audio or stale action effects',
+    async (mode, result) => {
+      Context.pending = true;
+      const value = sound(),
+        attempt = value.activate(),
+        context = Context.instances[0];
+      value.startTravel();
+      value.delivery();
+      value.transferContact({ weight: 'full', settle: false, compact: false, count: 1 });
+      if (mode === 'muted') await value.setMuted(true);
+      else if (mode === 'hidden') await value.visibility(true);
+      else value.dispose();
+      await vi.advanceTimersByTimeAsync(100);
+      if (result === 'success') context.resumeRequests[0].succeed();
+      else context.resumeRequests[0].reject();
+      await attempt;
+      expect(value.playback()).toMatchObject({
+        running: false,
+        retryPending: false,
+        requested: mode === 'hidden',
+      });
+      expect(value.presentation()).toMatchObject({
+        contextState: mode === 'disposed' ? 'closed' : 'suspended',
+        contextCount: 1,
+        schedulerCount: 0,
+        schedulerStarts: 0,
+        masterGain: 0,
+        travelActive: false,
+        arrivalActive: false,
+        transferSources: 0,
+        deliveryCount: 0,
+        transferPlayed: 0,
+        unavailable: false,
+        error: null,
+      });
+      if (mode === 'disposed')
+        expect(value.presentation()).toMatchObject({ sourceCount: 0, graphNodeCount: 0 });
+    },
+  );
+
+  test('saved mute stays authoritative through pending work and one explicit enable retries', async () => {
+    Context.pending = true;
+    const value = sound(),
+      first = value.activate(),
+      context = Context.instances[0];
+    await value.setMuted(true);
+    await value.activate();
+    expect(context.resumeCalls).toBe(1);
+    expect(stored.get('last-ferry-muted')).toBe('true');
+    expect(value.playback()).toMatchObject({
+      state: 'muted',
+      requested: false,
+      retryPending: false,
+    });
+    const enable = value.setMuted(false);
+    expect(context.resumeCalls).toBe(2);
+    expect(stored.get('last-ferry-muted')).toBe('false');
+    context.resumeRequests[1].succeed();
+    await enable;
+    context.resumeRequests[0].reject();
+    await first;
+    expect(value.presentation()).toMatchObject({
+      muted: false,
+      state: 'running',
+      retryPending: false,
+      contextCount: 1,
+      schedulerStarts: 1,
+      unavailable: false,
+    });
+  });
+
+  test('hide/show and a fresh retry replace pending ownership without replaying old actions', async () => {
+    Context.pending = true;
+    const value = sound(),
+      first = value.activate(),
+      context = Context.instances[0];
+    value.startTravel();
+    await value.visibility(true);
+    const foreground = value.visibility(false),
+      retry = value.activate();
+    expect(context.resumeCalls).toBe(3);
+    context.resumeRequests[0].reject();
+    await first;
+    expect(value.playback().retryPending).toBe(true);
+    context.resumeRequests[2].succeed();
+    await retry;
+    context.resumeRequests[1].succeed();
+    await foreground;
+    expect(value.presentation()).toMatchObject({
+      state: 'running',
+      retryPending: false,
+      contextCount: 1,
+      schedulerCount: 1,
+      schedulerStarts: 1,
+      ambienceSources: 2,
+      travelRequested: false,
+      travelActive: false,
+      arrivalSources: 0,
+      transferSources: 0,
+      deliveryCount: 0,
+      unavailable: false,
+      error: null,
     });
   });
 

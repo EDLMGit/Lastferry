@@ -678,7 +678,11 @@ test('phone fullscreen: real API result, root includes dialogs and external exit
           document.fullscreenEnabled &&
           typeof document.querySelector('#app')!.requestFullscreen === 'function',
       );
+      expect(enabled, 'Controlled supported Chromium must expose fullscreen capability').toBe(true);
       await press(page, 'fullscreen');
+      await expect
+        .poll(() => page.evaluate(() => document.fullscreenElement?.id ?? null))
+        .toBe('app');
       await page.waitForTimeout(300);
       const actual = await page.evaluate(() => ({
         element: document.fullscreenElement?.id ?? null,
@@ -723,10 +727,7 @@ test('phone fullscreen: real API result, root includes dialogs and external exit
         await page.waitForTimeout(200);
         await save('external-exit-preview', true);
       } else {
-        await expect(page.locator('#view-notice')).toContainText(
-          /fullscreen|screen|available|supported/i,
-        );
-        expect(enabled).toBeDefined();
+        throw new Error('Supported fullscreen request did not enter the app root');
       }
       expect(await stable(page)).toEqual(original);
       expect(

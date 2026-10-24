@@ -24,6 +24,14 @@ One AudioContext and the existing 100ms bounded scheduler own the complete mix. 
 
 Mute, hidden-page suspension and intentional resume retain the latest desired state. Base sources and clock preserve continuity; missed events are not replayed. Gain cancellation uses `cancelAndHoldAtTime` when available and a current-value fallback otherwise. Teardown releases all owned sources and the one graph.
 
+## Activation and recovery
+
+With saved sound enabled, the first deliberate completed click or touch starts audio. A consumed water drag uses its completed pointer-up; touch pointer-down does not start the graph. Keyboard activation uses the resulting trusted click. Explicit sound controls are excluded from generic activation, and their Enable/Retry/Mute intent is captured at the start of the gesture, including nonrepeated keyboard input.
+
+A native `AudioContext.resume()` blocked by browser policy can remain pending. Each fresh deliberate activation can call native resume again, while reusing one context, graph and scheduler. Request identity and lifecycle generation prevent an older completion from clearing a newer request or restoring playback after mute, hide or disposal. Missed transfer and arrival effects remain consumed rather than replayed. No retry timer or autoplay bypass is used. This follows the [native resume algorithm](https://webaudio.github.io/web-audio-api/#dom-audiocontext-resume) and [completed-touch activation rules](https://developer.mozilla.org/en-US/docs/Web/Security/Defenses/User_activation).
+
+The controls distinguish muted, requested and running states. Requested playback offers Retry; Settings also offers explicit Mute while a request is pending. A late context transition cannot reverse the action the user began. Composition, gains, phrase timing, source ownership and persistent victory reduction are unchanged. Controlled pending-context tests establish the retry/cancellation behavior; fresh native browser-policy checks establish completed-touch startup and sustained output. Neither establishes physical phone-speaker quality. See [the corrective review](../reviews/phone-audio-fullscreen/REVIEW.md).
+
 ## Evidence and listening boundary
 
 ### Wooden boarding and unloading contacts
@@ -68,7 +76,7 @@ Focused runtime comparisons and lifecycle results live under `reviews/victory-mi
 
 DEV diagnostics expose contact calls, played/skipped counts, current/peak transfer sources, and the bounded World history of selected IDs and emitted/stale/cancelled phases. They are observation tools, not gameplay controls. The focused evidence, original failed attempts and final results are under `reviews/transfer-audio/`. Actual runtime audio plus canvas gameplay is captured separately from a silent full-interface video when available. No speaker-listening capability is exposed in this environment, so phone-speaker balance and perceived wooden character remain for the user's playtest. No physical Android result is claimed.
 
-The private Site at https://last-ferry-playtest.abumech.chatgpt.site currently contains the reviewed interface commit `c5f4ae110973aa352d15028ba9d8c857a4270f6b`. The victory-mix pass is a separate GitHub update, pending review and deployment to that same Site. A branch push does not deploy it.
+The private Site at https://last-ferry-playtest.abumech.chatgpt.site contains game `e78819974a0487440e439ef87d24ba4bb1c2f454`, Sites version9, including the accepted audio foundation. The phone audio/fullscreen correction is a separate GitHub update awaiting review and publication. A branch push does not deploy it.
 
 Focused pure-state tests cover exact boarding boundaries, safe temporary unloading, Bellwater's remaining threat, homeward versus delivered, terminal Undo, previews and idle. Mock Web Audio tests cover phase, terminal gating, rapid replacement, mute/hide/resume, bounded sources, phrase return and cleanup. These establish scheduling and ownership behavior, not sound quality. Original development failures and corrected runs are recorded in `reviews/refinement/development-audio-results.json`.
 

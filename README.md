@@ -37,6 +37,8 @@ Phones start in a closer **Play** view in portrait or landscape. **Whole cove** 
 
 After final disembarkation, normal Play permits a small Harbor push where the ferry, delivered passengers and completion card fit. Short-phone and Reduced settings keep ordinary framing; Whole cove continues to show the network. Undo returns to a useful view of the restored ferry. Holding's ending continues to Bellwater; other endings offer Choose a cove.
 
+With Sound enabled, a completed interaction starts playback. If the browser is still waiting, use **Retry sound**; Settings also offers **Mute sound** while a request is pending. Muted sound stays muted during ordinary play. Fullscreen keeps an open dialog visible above the scene. If a browser blocks fullscreen, **Copy support details** provides local diagnostic text without sending telemetry. See the [phone audio/fullscreen review](reviews/phone-audio-fullscreen/REVIEW.md); this correction is not yet on the private Site.
+
 First Crossing's full boat needs depth 3 and cannot use the depth-2 Shallow Cut at tide 0. The outer buoys remain deep enough, or the first rise after action 4 opens the cut. Sheep Pier floods after action 8. These are the original baseline's values; Holding Pier keeps its accepted layout and low-pier deadline.
 
 ## Verify

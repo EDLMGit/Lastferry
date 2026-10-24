@@ -1,0 +1,2546 @@
+diff --git a/NEXT_TASK_PHONE_AUDIO_FULLSCREEN.md b/NEXT_TASK_PHONE_AUDIO_FULLSCREEN.md
+new file mode 100644
+index 0000000..bd30744
+--- /dev/null
++++ b/NEXT_TASK_PHONE_AUDIO_FULLSCREEN.md
+@@ -0,0 +1,162 @@
++# Next task — Phone audio startup and fullscreen reliability
++
++## Active scope and exact baseline
++
++Implement **NEXT_TASK_PHONE_AUDIO_FULLSCREEN.md** as the current task. Read `AGENTS.md` and `docs/PROJECT_STATE.md` first. The prior phone-playability task is implemented; this is its focused functional correction, not another camera or visual redesign.
++
++Repository: https://github.com/EDLMGit/Lastferry  
++Branch: `m1-first-crossing`  
++PR: https://github.com/EDLMGit/Lastferry/pull/1 — keep draft  
++Current reviewed branch HEAD: **`291fb4fa24d02dbab84dfe6eca2abc5c29b6d411`**  
++Published game/runtime: **`e78819974a0487440e439ef87d24ba4bb1c2f454`**
++
++The newer HEAD only adds deployment/continuity documentation. Preserve it and any newer/unrelated work; do not reset to the older implementation.
++
++The user reports silence in the first cove and fullscreen not working on Android Chrome. They like the motion and panning. Preserve that direction and the accepted sizing, nearby previews, both orientations, boat headings, wake, puzzles, audio composition/mix and lighthouse.
++
++### Publication is already confirmed
++
++The pasted handoff's “Not deployed” line is stale. The current Site is:
++
++- URL: https://last-ferry-playtest.abumech.chatgpt.site
++- Live game: `e78819974a0487440e439ef87d24ba4bb1c2f454`.
++- Sites version: **9**.
++- Site source: `03720726f2d92cda0d5d66efb6749ccc755d22ee`.
++- Audience: unchanged owner-private.
++- Deployment record: `reviews/phone-playability/deployment-confirmation.json` at `291fb4f`.
++
++ChatGPT independently retrieved the authenticated game response and production JS. Live `index-BCc7XMds.js` is 749,990 bytes with SHA-256 `4121e54f3b5340e0675b9ab7aa04c5fcd2542607bb56ae47d469671187237636`, matching a fresh local build. No additional publication of identical bytes is needed.
++
++## 1. Fix cold-entry audio activation
++
++### Confirmed source defect
++
++All coves use the same procedural Sound/score. No first-cove-specific missing track was found. Because “first cove” may mean default Holding Pier or optional First Crossing, verify both direct entries without asking the user to resolve that ambiguity.
++
++The current failure chain is:
++
++1. `src/main.ts` around 1290–1318 calls `sound.activate()` on trusted `pointerdown`, including touch. Touch/pen activation belongs to completed `pointerup`/`touchend`; mouse `pointerdown` is different. There is no matching completed-touch audio activation path.
++2. `src/audio/atmosphere.ts` around 468–471 memoizes `context.resume()` with `this.resumePromise ??= ...`.
++3. A browser-disallowed resume can stay pending, rather than reject. A later valid gesture only awaits the old promise and never calls native `resume()` again.
++4. Music scheduling waits for running audio, so this can leave the first document silent indefinitely.
++5. The UI only reflects the mute preference. “Sound on” can coexist with blocked playback, and tapping the existing sound toggle in that state first mutes instead of retrying.
++
++A controlled harness using the actual current `Sound.activate()/reconcile()` with a simulated pending context demonstrated: first blocked call plus later permitted activation still produce **one resume call, suspended state, zero scheduler starts**. An explicit second native resume produces running state and one scheduler. This establishes the retry defect in application logic; it is not a physical Android reproduction. Current committed headless phone captures sometimes show running/nonzero output, so do not claim those runs reproduced the policy case.
++
++### Required behavior
++
++- Use a valid completed touch/click or keyboard activation for first audio startup. Preserve mouse and keyboard support and the existing gameplay input fences.
++- With saved sound enabled, an ordinary first deliberate game interaction should start audio without requiring a cove change, reload or two sound-toggle presses.
++- A fresh trusted user activation must be able to retry native `AudioContext.resume()` while an earlier attempt is pending.
++- Keep one audio graph/context and one scheduler. No unbounded retry timer, repeated context creation, autoplay bypass flag or silent-source workaround that avoids the actual retry problem.
++- Protect promise identity and generation. Completion of an old request must not clear a newer request, duplicate scheduling, restore sound after mute/hide/disposal, or replay stale movement/arrival/transfer effects.
++- Keep saved mute authoritative. Ordinary selection/pan/keyboard interactions must not unmute it.
++- Exclude explicit audio controls from generic activation where needed. Their own valid-gesture handler must honor intent: an intended Mute must not first start playback, and an intended Enable/Retry must not first turn the preference off.
++- Distinguish user-muted, requested-but-not-yet-running and running states. Use concise, calm recovery copy such as **Enable sound** or **Retry sound** when needed; do not leave the player with a misleading enabled icon and no recovery.
++- Preserve the score, gains, victory ducking, wooden contacts, sound ownership and cancellation. This task does not remix or replace music.
++
++A browser legitimately requiring interaction is expected. Permanent silence after the player has interacted is the defect to correct.
++
++## 2. Diagnose and correct fullscreen on the actual surface
++
++### What is established
++
++`main.ts` around 169–196 already calls `app.requestFullscreen()` synchronously from the fullscreen button's click handler. The selected root includes the scene and dialog. `fullscreenchange` reflects actual state. Do not replace these correct properties speculatively.
++
++The committed `browser-cache-final/fullscreen-actual.json` records real localhost Chromium entry, exit and re-entry using touchscreen taps, including `element: app` and dialog containment. It is not a physical Android or hosted-Site result.
++
++ChatGPT's authenticated request to the live game returned the actual 484-byte game HTML, no iframe element, and no `Permissions-Policy` or CSP response header. This rules out an obvious denial in that specific response; it does not establish the policy of an outer embedding page, the user's browser context, or successful fullscreen on their phone.
++
++Interactive hosted verification in ChatGPT remained unavailable because its review browser had no signed-in Site session. No Android reproduction or successful hosted fullscreen test is claimed.
++
++### Required diagnostic path
++
++Determine which failure is happening before choosing a fix:
++
++- Did the button handler run after the trusted user activation?
++- Does the API exist, and is `document.fullscreenEnabled` true?
++- Is the game a top-level document or embedded?
++- Where supported, does the effective document policy allow fullscreen?
++- What are `navigator.userActivation.isActive/hasBeenActive` at the request?
++- Did the promise reject? Retain the actual error name/message.
++- Did `fullscreenElement` become `#app` but the visible layout/browser bars fail to change as expected?
++- What were the actual viewport and app bounds before/after and after `fullscreenchange`?
++
++Store a bounded diagnostic result appropriate for development/tests. If the phone-only failure cannot be reproduced, make a small **Copy support details** action available alongside the failure message so the user can provide the relevant facts without developer tools. Keep technical diagnostics out of normal gameplay. Include an honest build identifier and capability/error fields; do not collect credentials or send telemetry.
++
++### Correct behavior and failure handling
++
++- Preserve the synchronous real-user request, full-root containment and actual-state listener.
++- Give specific, nonblocking feedback where the cause is known. For an embedded restriction, explain that the game should be opened directly; for an unknown rejection, do not invent a Chrome/platform diagnosis.
++- If the API enters fullscreen but layout stays stale, fix the actual viewport/root/reprojection issue. Do not report success only because the button changed text.
++- Recompute safe layout on entry, exit and orientation change. Keep action/subset state, dialogs, touch targets, panning and audio coherent.
++- Preserve ordinary browser play and the existing exit control, browser Back/Escape behavior and external exits.
++- If a supported hosting configuration defect is actually identified, document the exact fix for publication. Do not change access/audience, weaken policy, switch hosts or use a fabricated fullscreen simulation.
++- If an external restriction prevents fullscreen and cannot be fixed within the available platform, state that limitation explicitly. Improved messaging alone must not be labeled “fullscreen fixed.”
++
++The current actual-entry browser test has a weak fallback at `tests/e2e/phone-playability.spec.ts` around 725–729: any failure can pass if generic feedback appears, even when capability was enabled. Tighten the controlled supported-local case to require actual entry. Keep unsupported/policy-denied cases separate and clearly identified. The existing committed successful result remains valid; improve the test's ability to catch future failures.
++
++## 3. Keep the three timing checks accurately classified
++
++These are separate from the sound/fullscreen reports:
++
++- **Delivered heading:** a 1.425683-radian change over 99.9ms exceeded the 0.85 threshold. This is an observed frame-delivery/smoothness failure, not merely a timeout. Planner agreement does not erase it. The trace alone does not prove a new planner defect or Android regression.
++- **Two rapid-input cases:** sequences took 230.2ms and 377.6ms, missing the intended ≤180ms window. Expected later action state is present, but the active-fence condition was not tested successfully.
++
++Retain the original evidence and these open limits. Because this task changes activation/input handling, re-exercise the affected rapid-input paths with a driver that actually reaches the required trusted-input timing. Do not weaken thresholds, replace trusted events with synthetic DOM clicks, or relabel a missed precondition as a pass.
++
++Keep the heading issue separate. Recheck proportionately if affected or if a concrete performance change is made; do not reopen accepted steering/camera design just to hide software-renderer stalls. Do not claim the whole historical suite is green.
++
++## 4. Focused verification
++
++Run Node 24 build/typecheck and the complete unit suite with the documented bounded worker setting. ChatGPT freshly passed **188/188 units across 27 files** and build/typecheck on the published runtime; this does not cover the newly identified blocked-resume case.
++
++### Audio
++
++1. A first resume that remains pending, followed by a valid retry, reaches running state with one graph/context and one scheduler.
++2. Late success/rejection while muted, hidden or disposed cannot restore unwanted sound or stale effects; newer attempt identity remains correct.
++3. Cold direct entry to Holding Pier and explicit First Crossing with saved sound enabled. Use trusted touch under a browser configuration that requires user interaction; no preceding mouse activation, pre-unlocked profile or permissive autoplay flag.
++4. Verify running context, advancing audio time, scheduler/source bounds and sustained nonzero output over a suitable interval. A single `muted === false` check is insufficient.
++5. Saved mute remains silent; one explicit Enable works; requested-but-blocked Retry works without toggling off first.
++6. Cove changes, background/foreground, Restart, normal transfer sound, victory ducking and Undo remain correct.
++
++Record whether checks use real browser policy, a controlled context stub or hardware listening. Do not equate graph measurements with speaker approval.
++
++### Fullscreen and phone integration
++
++1. Controlled supported Chromium context actually enters/exits fullscreen on a trusted activation; root and dialog are visible.
++2. Separate unavailable, rejected and policy-denied coverage, with a real policy-restricted fixture if available. Label mocked cases.
++3. Direct hosted build verification when a permitted signed-in browser is available. Record actual result and environment; local success is not a hosted result.
++4. Test first fullscreen activation on a cold page and after audio activation, to catch ordering/input-fence interactions.
++5. Rotation and external exit while a subset preview is open preserve choices and reachable Confirm/Cancel.
++6. Actual UI Holding rescue, a tide Undo and terminal Undo/redelivery; phone landscape and portrait remain usable. Preserve accepted panning and nearby action behavior.
++7. Re-exercise affected rapid-input fences within their stated window and retain unresolved timing evidence honestly.
++
++Commit a compact, readable review under `reviews/phone-audio-fullscreen/`, with actual source/build identity, executed commands, original failures and the exact observed fullscreen outcome. Retain a short actual runtime-audio sample if available; do not manufacture listening approval.
++
++## 5. Completion and workflow
++
++Update `docs/PROJECT_STATE.md` and `STATUS.md` to record:
++
++- The user's positive panning/motion feedback.
++- The correct live e788199/version9 publication.
++- The audio startup defect and implemented correction.
++- The confirmed fullscreen cause/fix, or the exact remaining reproduction/platform limit.
++- The separate timing-check status.
++
++Make routine implementation decisions without repeated permission. Finish the audio correction and all supported fullscreen investigation/fixes before handing back. Do not declare full resolution if the phone fullscreen cause remains unknown.
++
++Commit and push on `m1-first-crossing`. Update PR #1, keep it draft, leave `main` unchanged, and do not force-push. Return the exact final SHA, remote equality/working-tree status, evidence links and honest results.
++
++The existing private Site already serves e788199. This new corrective SHA is separate: ChatGPT reviews it and publishes the reviewed correction to the same Site. Do not claim a GitHub push deployed it.
++
++## Primary references
++
++- [MDN user activation](https://developer.mozilla.org/en-US/docs/Web/Security/Defenses/User_activation) — mouse versus completed touch activation.
++- [Chrome autoplay policy](https://developer.chrome.com/blog/autoplay) — Web Audio startup after interaction.
++- [Web Audio resume algorithm](https://webaudio.github.io/web-audio-api/#dom-audiocontext-resume) — a disallowed resume may stay pending.
++- [MDN requestFullscreen](https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullscreen) — user activation and request results.
++- [MDN fullscreen Permissions Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Permissions-Policy/fullscreen) — effective server/frame restrictions.
++
++The source findings establish the retry defect. The link between that defect and this particular physical phone report is a strong diagnosis to verify, not a claimed hardware reproduction.
++
+diff --git a/docs/AUDIO.md b/docs/AUDIO.md
+index 3c0909e..77edb7c 100644
+--- a/docs/AUDIO.md
++++ b/docs/AUDIO.md
+@@ -24,6 +24,14 @@ One AudioContext and the existing 100ms bounded scheduler own the complete mix.
+ 
+ Mute, hidden-page suspension and intentional resume retain the latest desired state. Base sources and clock preserve continuity; missed events are not replayed. Gain cancellation uses `cancelAndHoldAtTime` when available and a current-value fallback otherwise. Teardown releases all owned sources and the one graph.
+ 
++## Activation and recovery
++
++With saved sound enabled, the first deliberate completed click or touch starts audio. A consumed water drag uses its completed pointer-up; touch pointer-down does not start the graph. Keyboard activation uses the resulting trusted click. Explicit sound controls are excluded from generic activation, and their Enable/Retry/Mute intent is captured at the start of the gesture, including nonrepeated keyboard input.
++
++A native `AudioContext.resume()` blocked by browser policy can remain pending. Each fresh deliberate activation can call native resume again, while reusing one context, graph and scheduler. Request identity and lifecycle generation prevent an older completion from clearing a newer request or restoring playback after mute, hide or disposal. Missed transfer and arrival effects remain consumed rather than replayed. No retry timer or autoplay bypass is used. This follows the [native resume algorithm](https://webaudio.github.io/web-audio-api/#dom-audiocontext-resume) and [completed-touch activation rules](https://developer.mozilla.org/en-US/docs/Web/Security/Defenses/User_activation).
++
++The controls distinguish muted, requested and running states. Requested playback offers Retry; Settings also offers explicit Mute while a request is pending. A late context transition cannot reverse the action the user began. Composition, gains, phrase timing, source ownership and persistent victory reduction are unchanged. Controlled pending-context tests establish the retry/cancellation behavior; fresh native browser-policy checks establish completed-touch startup and sustained output. Neither establishes physical phone-speaker quality. See [the corrective review](../reviews/phone-audio-fullscreen/REVIEW.md).
++
+ ## Evidence and listening boundary
+ 
+ ### Wooden boarding and unloading contacts
+@@ -68,7 +76,7 @@ Focused runtime comparisons and lifecycle results live under `reviews/victory-mi
+ 
+ DEV diagnostics expose contact calls, played/skipped counts, current/peak transfer sources, and the bounded World history of selected IDs and emitted/stale/cancelled phases. They are observation tools, not gameplay controls. The focused evidence, original failed attempts and final results are under `reviews/transfer-audio/`. Actual runtime audio plus canvas gameplay is captured separately from a silent full-interface video when available. No speaker-listening capability is exposed in this environment, so phone-speaker balance and perceived wooden character remain for the user's playtest. No physical Android result is claimed.
+ 
+-The private Site at https://last-ferry-playtest.abumech.chatgpt.site currently contains the reviewed interface commit `c5f4ae110973aa352d15028ba9d8c857a4270f6b`. The victory-mix pass is a separate GitHub update, pending review and deployment to that same Site. A branch push does not deploy it.
++The private Site at https://last-ferry-playtest.abumech.chatgpt.site contains game `e78819974a0487440e439ef87d24ba4bb1c2f454`, Sites version9, including the accepted audio foundation. The phone audio/fullscreen correction is a separate GitHub update awaiting review and publication. A branch push does not deploy it.
+ 
+ Focused pure-state tests cover exact boarding boundaries, safe temporary unloading, Bellwater's remaining threat, homeward versus delivered, terminal Undo, previews and idle. Mock Web Audio tests cover phase, terminal gating, rapid replacement, mute/hide/resume, bounded sources, phrase return and cleanup. These establish scheduling and ownership behavior, not sound quality. Original development failures and corrected runs are recorded in `reviews/refinement/development-audio-results.json`.
+ 
+diff --git a/src/audio/atmosphere.ts b/src/audio/atmosphere.ts
+index eca2853..03b39ea 100644
+--- a/src/audio/atmosphere.ts
++++ b/src/audio/atmosphere.ts
+@@ -30,6 +30,7 @@ export class Sound {
+   travelling = false;
+   unavailable = false;
+   lastError: string | null = null;
++  onChange: (() => void) | null = null;
+   private master: GainNode | null = null;
+   private music: GainNode | null = null;
+   private musicOutput: GainNode | null = null;
+@@ -90,12 +91,21 @@ export class Sound {
+       this.master?.gain.cancelScheduledValues(context.currentTime);
+       this.master?.gain.setValueAtTime(0, context.currentTime);
+     } else if (this.enabled()) {
++      this.unavailable = false;
++      this.lastError = null;
+       this.restoreMusicOutput();
+       this.master?.gain.setValueAtTime(0, context.currentTime);
+       this.master?.gain.linearRampToValueAtTime(0.65, context.currentTime + 0.08);
+       this.startScheduler();
+       this.ensureTravel();
++    } else {
++      this.stopScheduler();
++      this.clearActions(this.muted && !this.hidden);
++      this.master?.gain.cancelScheduledValues(context.currentTime);
++      this.master?.gain.setValueAtTime(0, context.currentTime);
++      void context.suspend().catch(() => {});
+     }
++    this.notify();
+   };
+   constructor() {
+     try {
+@@ -105,6 +115,11 @@ export class Sound {
+   private enabled() {
+     return this.activated && !this.muted && !this.hidden && !this.disposed;
+   }
++  private notify() {
++    try {
++      this.onChange?.();
++    } catch {}
++  }
+   private graph() {
+     if (this.context || this.disposed) return;
+     const context = new AudioContext({ latencyHint: 'interactive' });
+@@ -441,11 +456,12 @@ export class Sound {
+     this.scheduler = setInterval(() => this.pump(), 100);
+     this.schedulerStarts++;
+   }
+-  private async reconcile() {
++  private async reconcile(retryResume = false) {
+     const generation = ++this.generation;
+     if (this.suspendTimer !== null) clearTimeout(this.suspendTimer);
+     this.suspendTimer = null;
+     if (!this.enabled()) {
++      this.resumePromise = null;
+       this.stopScheduler();
+       this.clearActions(true);
+       const context = this.context;
+@@ -459,18 +475,28 @@ export class Sound {
+           if (!this.enabled() && !this.disposed) void context.suspend().catch(() => {});
+         }, 90);
+       }
++      this.notify();
+       return;
+     }
+     try {
+       this.graph();
+       const context = this.context!;
++      this.unavailable = false;
++      this.lastError = null;
+       if (context.state !== 'running') {
+-        this.resumePromise ??= context.resume().finally(() => {
+-          this.resumePromise = null;
+-        });
++        if (retryResume || !this.resumePromise) {
++          const pending: Promise<void> = context.resume().finally(() => {
++            if (this.resumePromise === pending) {
++              this.resumePromise = null;
++              this.notify();
++            }
++          });
++          this.resumePromise = pending;
++        }
++        this.notify();
+         await this.resumePromise;
+       }
+-      if (generation !== this.generation || !this.enabled()) return;
++      if (generation !== this.generation || !this.enabled() || context.state !== 'running') return;
+       this.unavailable = false;
+       this.lastError = null;
+       this.restoreMusicOutput();
+@@ -479,26 +505,48 @@ export class Sound {
+       this.master!.gain.linearRampToValueAtTime(0.65, context.currentTime + 0.06);
+       this.startScheduler();
+       this.ensureTravel();
++      this.notify();
+     } catch (error) {
++      if (generation !== this.generation || !this.enabled() || this.context?.state === 'running')
++        return;
+       this.unavailable = true;
+       this.lastError = error instanceof Error ? error.name : 'Audio unavailable';
+       this.stopScheduler();
++      this.notify();
+     }
+   }
+   async activate() {
+     if (this.disposed) return;
++    const first = !this.activated;
+     this.activated = true;
++    if (first) this.notify();
+     if (this.context?.state === 'running' && this.enabled()) return;
+-    await this.reconcile();
++    await this.reconcile(true);
+   }
+   async toggle() {
++    await this.setMuted(!this.muted);
++  }
++  async setMuted(muted: boolean) {
+     if (this.disposed) return;
+-    this.muted = !this.muted;
++    this.muted = muted;
+     this.activated = true;
+     try {
+       localStorage.setItem('last-ferry-muted', String(this.muted));
+     } catch {}
+-    await this.reconcile();
++    await this.reconcile(!muted);
++  }
++  playback() {
++    const running = this.enabled() && this.context?.state === 'running';
++    return {
++      state: this.muted
++        ? ('muted' as const)
++        : running
++          ? ('running' as const)
++          : ('requested' as const),
++      requested: this.activated && !this.muted && !this.disposed,
++      running,
++      retryPending: this.resumePromise !== null,
++    };
+   }
+   private ensureTravel() {
+     if (!this.enabled() || this.context?.state !== 'running' || !this.travelling) return;
+@@ -657,6 +705,7 @@ export class Sound {
+     }
+     const records = [...this.owned.values()];
+     return {
++      ...this.playback(),
+       muted: this.muted,
+       activated: this.activated,
+       hidden: this.hidden,
+@@ -728,6 +777,7 @@ export class Sound {
+     if (this.disposed) return;
+     this.disposed = true;
+     this.generation++;
++    this.resumePromise = null;
+     this.stopScheduler();
+     if (this.suspendTimer !== null) clearTimeout(this.suspendTimer);
+     this.suspendTimer = null;
+@@ -742,5 +792,6 @@ export class Sound {
+     this.padWave = null;
+     this.pluckWave = null;
+     if (this.context && this.context.state !== 'closed') void this.context.close().catch(() => {});
++    this.notify();
+   }
+ }
+diff --git a/src/main.ts b/src/main.ts
+index 25c17dd..cf1bbf4 100644
+--- a/src/main.ts
++++ b/src/main.ts
+@@ -36,6 +36,7 @@ import { endpointTargets } from './ui/cove-layout';
+ import { MotionPreference, type MotionMode } from './ui/motion-preference';
+ import { PanGesture } from './ui/pan-gesture';
+ import { visibleViewport, insetRectangle } from './ui/viewport';
++import { FullscreenSupport } from './ui/fullscreen';
+ 
+ const cove = new URLSearchParams(location.search).get('cove');
+ const level = cove === 'first-crossing' ? baseline : cove === 'bellwater' ? bellwater : holdingPier;
+@@ -53,6 +54,10 @@ const session = new Session(level),
+   motion = new MotionPreference(matchMedia('(prefers-reduced-motion: reduce)'));
+ sound.reconcileState(session.state, level);
+ const dialog = $('dialog') as HTMLDialogElement;
++const fullscreenSupport = new FullscreenSupport(app, dialog, {
++  artifact: new URL(import.meta.url).pathname.split('/').at(-1) ?? 'unknown',
++  mode: import.meta.env.DEV ? 'development' : 'production',
++});
+ const viewControls = document.createElement('nav');
+ viewControls.className = 'view-controls';
+ viewControls.setAttribute('aria-label', 'Cove view');
+@@ -71,6 +76,8 @@ let mode: DialogMode | null = null,
+   returnId = '',
+   keyboardInput = false;
+ let settingsParent: 'menu' | 'terminal' = 'menu';
++type SoundIntent = 'enable' | 'retry' | 'mute';
++let soundIntent: { control: HTMLElement; intent: SoundIntent } | null = null;
+ let viewFence: { x: number; y: number; until: number } | null = null;
+ let locationSelection: string | null = null;
+ let emphasis: string | undefined;
+@@ -93,6 +100,7 @@ let actionAnchorOffset = { x: 0, y: 0 };
+ let placementViewportKey = '';
+ let layoutRequest = 0;
+ let layoutFlushing = false;
++let pageDisposed = false;
+ let viewport = visibleViewport(window.visualViewport, innerWidth, innerHeight);
+ let safeBounds: Rectangle = viewport;
+ let usableBounds: Rectangle = viewport;
+@@ -127,23 +135,73 @@ const completionCounts: Record<CompletionReason, number> = {
+ };
+ 
+ function renderSound() {
++  if (pageDisposed) return;
++  const playback = sound.playback();
++  const intent: SoundIntent = playback.running ? 'mute' : playback.requested ? 'retry' : 'enable';
++  const label =
++    intent === 'mute' ? 'Mute sound' : intent === 'retry' ? 'Retry sound' : 'Enable sound';
+   const control = $('sound-toggle');
+-  control.setAttribute('aria-label', sound.muted ? 'Unmute sound' : 'Mute sound');
++  control.dataset.playback = playback.state;
++  control.dataset.soundIntent = intent;
++  control.setAttribute('aria-label', label);
+   control.setAttribute('aria-pressed', String(sound.muted));
+-  control.title = `Sound ${sound.muted ? 'off' : 'on'}`;
+-  control.textContent = sound.muted ? '♩' : '♫';
++  control.title = label;
++  control.textContent = sound.muted
++    ? '♩'
++    : playback.running
++      ? '♫'
++      : playback.requested
++        ? 'Retry'
++        : 'Sound';
+   const settings = $('settings-sound');
+   if (settings) {
+-    settings.textContent = `Sound ${sound.muted ? 'off' : 'on'}`;
+-    settings.setAttribute('aria-pressed', String(!sound.muted));
+-    settings.setAttribute('aria-label', sound.muted ? 'Turn sound on' : 'Turn sound off');
++    settings.textContent = label;
++    settings.dataset.playback = playback.state;
++    settings.dataset.soundIntent = intent;
++    settings.setAttribute('aria-pressed', String(playback.running));
++    settings.setAttribute('aria-label', label);
+   }
++  const mute = $('settings-mute');
++  if (mute) mute.hidden = playback.state !== 'requested' || !playback.requested;
++  const status = $('audio-status');
++  if (status)
++    status.textContent = sound.muted
++      ? 'Sound is muted.'
++      : playback.running
++        ? 'Sound is playing.'
++        : playback.requested
++          ? 'Sound is waiting. Tap Retry sound, or keep it muted.'
++          : 'Sound starts when you play. You can also enable it here.';
+ }
+-function toggleSound() {
+-  const changed = sound.toggle();
++function explicitSound(control: HTMLElement, intent?: SoundIntent) {
++  const chosen =
++    intent ??
++    (soundIntent?.control === control
++      ? soundIntent.intent
++      : (control.dataset.soundIntent as SoundIntent));
++  soundIntent = null;
++  const changed = chosen === 'retry' ? sound.activate() : sound.setMuted(chosen === 'mute');
+   renderSound();
+   void changed.then(renderSound).catch(renderSound);
+ }
++function toggleSound(event: MouseEvent) {
++  explicitSound(event.currentTarget as HTMLElement);
++}
++function audioControl(target: EventTarget | null) {
++  return target instanceof Element
++    ? target.closest<HTMLElement>('#sound-toggle, #settings-sound, #settings-mute')
++    : null;
++}
++function captureSoundIntent(target: EventTarget | null) {
++  const control = audioControl(target);
++  soundIntent = control ? { control, intent: control.dataset.soundIntent as SoundIntent } : null;
++}
++function activateSound() {
++  const activated = sound.activate();
++  renderSound();
++  void activated.then(renderSound).catch(renderSound);
++}
++sound.onChange = renderSound;
+ 
+ function notifyView(message: string) {
+   clearTimeout(noticeTimer);
+@@ -162,9 +220,55 @@ function notifyView(message: string) {
+     feedback.textContent = message;
+     positionDialog();
+   }
+-  noticeTimer = setTimeout(() => {
+-    viewNotice.hidden = true;
+-  }, 4500);
++  if (fullscreenSupport.failed) {
++    $('fullscreen-support')?.remove();
++    const support = document.createElement('button');
++    support.id = 'fullscreen-support';
++    support.textContent = 'Copy support details';
++    support.onclick = () => {
++      const details = JSON.stringify(
++        {
++          ...fullscreenSupport.details(),
++          audio: sound.playback(),
++        },
++        null,
++        2,
++      );
++      const manual = () => {
++        let text = $('fullscreen-details') as HTMLTextAreaElement | null;
++        if (!text) {
++          text = document.createElement('textarea');
++          text.id = 'fullscreen-details';
++          text.readOnly = true;
++          text.setAttribute('aria-label', 'Fullscreen support details');
++          support.after(text);
++        }
++        text.value = details;
++        text.focus();
++        text.select();
++        support.textContent = 'Select and copy these details';
++        positionDialog();
++      };
++      let copied: Promise<void> | undefined;
++      try {
++        copied = navigator.clipboard?.writeText(details);
++      } catch {
++        manual();
++        return;
++      }
++      if (copied)
++        void copied.then(() => {
++          support.textContent = 'Support details copied';
++        }, manual);
++      else manual();
++    };
++    (control && dialog.open ? $('fullscreen-feedback') : viewNotice).append(support);
++    positionDialog();
++  } else {
++    noticeTimer = setTimeout(() => {
++      viewNotice.hidden = true;
++    }, 4500);
++  }
+ }
+ function renderFullscreen() {
+   const button = $('fullscreen');
+@@ -173,28 +277,23 @@ function renderFullscreen() {
+   button.textContent = active ? 'Exit fullscreen' : 'Fullscreen';
+   button.setAttribute('aria-pressed', String(active));
+   button.onclick = toggleFullscreen;
+-}
+-function toggleFullscreen() {
+-  try {
+-    if (document.fullscreenElement) {
+-      void document
+-        .exitFullscreen()
+-        .catch(() =>
+-          notifyView('Could not exit fullscreen. You can use the browser’s fullscreen control.'),
+-        );
+-    } else if (!app.requestFullscreen || !document.fullscreenEnabled) {
+-      notifyView('Fullscreen is unavailable here. You can continue playing in the browser.');
+-    } else {
+-      void app
+-        .requestFullscreen()
+-        .catch(() =>
+-          notifyView('Fullscreen was not allowed. You can continue playing in the browser.'),
+-        );
+-    }
+-  } catch {
+-    notifyView('Fullscreen was not allowed. You can continue playing in the browser.');
++  if (!fullscreenSupport.failed) {
++    $('fullscreen-feedback')?.remove();
++    $('fullscreen-support')?.remove();
++    $('fullscreen-details')?.remove();
+   }
+ }
++function toggleFullscreen(event: MouseEvent) {
++  const requested = fullscreenSupport.toggle(event.isTrusted);
++  const attempt = fullscreenSupport.currentId;
++  void requested.then((message) => {
++    if (pageDisposed || attempt !== fullscreenSupport.currentId) return;
++    if (message) notifyView(message);
++    else viewNotice.hidden = true;
++    renderFullscreen();
++    scheduleLayout();
++  });
++}
+ function renderView() {
+   const view = world.viewStatus();
+   const toggle = $('view-toggle'),
+@@ -298,7 +397,7 @@ function focusAvailable(preferred?: string) {
+   available(preferred).focus({ preventScroll: true });
+ }
+ function blocked() {
+-  return session.busy || dialog.open;
++  return session.busy || dialog.open || fullscreenSupport.promoting;
+ }
+ function highlight(id?: string) {
+   emphasis = id;
+@@ -463,8 +562,10 @@ function renderDialog() {
+     };
+   } else if (mode === 'settings') {
+     $('dialog-content').innerHTML =
+-      `${header('Settings', undefined, 'Back to ' + (settingsParent === 'terminal' ? 'arrival' : 'menu'))}<div class="dialog-body settings-body"><div class="settings-row"><span>Sound</span><button id="settings-sound"></button></div><label class="settings-row" for="motion-preference">Motion<select id="motion-preference"><option value="device">Follow device</option><option value="reduced">Reduced</option></select></label><p id="motion-status"></p></div><footer class="dialog-footer"><button id="settings-back">Back</button></footer>`;
++      `${header('Settings', undefined, 'Back to ' + (settingsParent === 'terminal' ? 'arrival' : 'menu'))}<div class="dialog-body settings-body"><div class="settings-row"><span>Sound</span><div class="settings-sound-controls"><button id="settings-sound"></button><button id="settings-mute" data-sound-intent="mute" hidden>Mute sound</button></div></div><p id="audio-status" role="status"></p><label class="settings-row" for="motion-preference">Motion<select id="motion-preference"><option value="device">Follow device</option><option value="reduced">Reduced</option></select></label><p id="motion-status"></p></div><footer class="dialog-footer"><button id="settings-back">Back</button></footer>`;
+     $('settings-sound').onclick = toggleSound;
++    $('settings-mute').onclick = (event) =>
++      explicitSound(event.currentTarget as HTMLElement, 'mute');
+     const fullscreen = document.createElement('button');
+     fullscreen.id = 'fullscreen';
+     document.querySelector('.settings-body')!.append(fullscreen);
+@@ -1228,13 +1329,24 @@ const refreshLabelFonts = () => {
+ };
+ document.fonts.addEventListener('loadingdone', refreshLabelFonts);
+ document.fonts.addEventListener('loadingerror', refreshLabelFonts);
+-addEventListener('resize', scheduleLayout);
+-visualViewport?.addEventListener('resize', scheduleLayout);
++const viewportChanged = () => {
++  scheduleLayout();
++  fullscreenSupport.observe('resize');
++};
++addEventListener('resize', viewportChanged);
++visualViewport?.addEventListener('resize', viewportChanged);
+ visualViewport?.addEventListener('scroll', scheduleLayout);
+ document.addEventListener('fullscreenchange', () => {
++  fullscreenSupport.changed();
+   renderFullscreen();
+-  scheduleLayout();
++  flushLayout();
++  restoreHighlight();
++  requestAnimationFrame(() => {
++    flushLayout();
++    fullscreenSupport.observe('fullscreen-frame');
++  });
+ });
++document.addEventListener('fullscreenerror', () => fullscreenSupport.observe('fullscreenerror'));
+ dialog.addEventListener('cancel', (e) => {
+   e.preventDefault();
+   if (mode === 'settings') backFromSettings();
+@@ -1270,7 +1382,11 @@ document.addEventListener(
+   (e) => {
+     if (['Tab', 'Enter', ' ', 'Escape'].includes(e.key)) {
+       keyboardInput = true;
+-      if (!e.repeat) viewFence = null;
++      if (!e.repeat) {
++        viewFence = null;
++        if (e.key === 'Enter' || e.key === ' ') captureSoundIntent(e.target);
++        else soundIntent = null;
++      }
+     }
+     if (e.repeat && ['Enter', ' '].includes(e.key)) {
+       e.preventDefault();
+@@ -1283,7 +1399,6 @@ document.addEventListener(
+       clearLocation(true);
+       return;
+     }
+-    if (e.isTrusted && !e.repeat && ['Enter', ' '].includes(e.key)) void sound.activate();
+   },
+   true,
+ );
+@@ -1315,7 +1430,7 @@ document.addEventListener(
+     }
+     keyboardInput = false;
+     lastPointer = { x: e.clientX, y: e.clientY, control: (e.target as Element).closest('button') };
+-    if (e.isTrusted) void sound.activate();
++    captureSoundIntent(e.target);
+   },
+   true,
+ );
+@@ -1363,11 +1478,23 @@ document.addEventListener(
+       ) {
+         e.preventDefault();
+         e.stopImmediatePropagation();
++        return;
+       }
+     }
++    if (e.isTrusted && !audioControl(e.target)) {
++      soundIntent = null;
++      activateSound();
++    }
+   },
+   true,
+ );
++document.addEventListener('pointerup', (event) => {
++  if (event.isTrusted && suppressPanClick && event.target === canvas && event.isPrimary)
++    activateSound();
++});
++document.addEventListener('pointercancel', () => {
++  soundIntent = null;
++});
+ document.addEventListener('visibilitychange', () => {
+   sound.visibility(document.hidden);
+   if (document.hidden) {
+@@ -1381,6 +1508,8 @@ document.addEventListener('visibilitychange', () => {
+   }
+ });
+ addEventListener('pagehide', () => {
++  pageDisposed = true;
++  sound.onChange = null;
+   layoutObserver.disconnect();
+   document.fonts.removeEventListener('loadingdone', refreshLabelFonts);
+   document.fonts.removeEventListener('loadingerror', refreshLabelFonts);
+@@ -1459,6 +1588,7 @@ if (import.meta.env.DEV)
+       getJourneyStatus: () => copy(world.journeyPresentation()),
+       getMetrics: () => world.metrics(),
+       getAudioStatus: () => sound.presentation(),
++      getFullscreenStatus: () => fullscreenSupport.details(),
+       captureAudioStream: () => sound.captureStream(),
+       setAccompanimentEnabled: (enabled: boolean) => sound.setAccompanimentEnabled(enabled),
+       getTransitionStatus: () =>
+diff --git a/src/style.css b/src/style.css
+index 248cb88..b187813 100644
+--- a/src/style.css
++++ b/src/style.css
+@@ -149,6 +149,32 @@ h1 {
+   font-size: 21px;
+   font-weight: 400;
+ }
++#sound-toggle[data-playback='requested'] {
++  font-size: 14px;
++  font-weight: 600;
++  padding-inline: 2px;
++}
++.settings-sound-controls {
++  display: flex;
++  flex-wrap: wrap;
++  justify-content: flex-end;
++  gap: 6px;
++}
++#fullscreen-support {
++  display: block;
++  margin-top: 8px;
++  min-height: 44px;
++}
++#fullscreen-details {
++  display: block;
++  width: 100%;
++  height: 120px;
++  margin-top: 8px;
++  color: var(--text);
++  background: var(--surface);
++  border: 1px solid var(--border);
++  font: 12px/1.4 monospace;
++}
+ #status-toggle {
+   position: absolute;
+   bottom: 12px;
+diff --git a/src/ui/fullscreen.ts b/src/ui/fullscreen.ts
+new file mode 100644
+index 0000000..8fa804e
+--- /dev/null
++++ b/src/ui/fullscreen.ts
+@@ -0,0 +1,194 @@
++type PolicyDocument = Document & {
++  permissionsPolicy?: { allowsFeature(feature: string): boolean };
++  featurePolicy?: { allowsFeature(feature: string): boolean };
++};
++
++type BuildIdentity = { artifact: string; mode: string };
++
++type FullscreenAttempt = {
++  id: number;
++  intent: 'enter' | 'exit';
++  trusted: boolean;
++  outcome: 'pending' | 'entered' | 'exited' | 'unavailable' | 'rejected';
++  before: ReturnType<FullscreenSupport['snapshot']>;
++  after?: ReturnType<FullscreenSupport['snapshot']>;
++  error?: { name: string; message: string };
++  modal?: { frontBefore: boolean; frontAfter: boolean; focusRestored: boolean };
++};
++
++export class FullscreenSupport {
++  promoting = false;
++  private serial = 0;
++  private attempts: FullscreenAttempt[] = [];
++  private observations: { event: string; surface: ReturnType<FullscreenSupport['snapshot']> }[] =
++    [];
++
++  constructor(
++    private root: HTMLElement,
++    private dialog: HTMLDialogElement,
++    private build: BuildIdentity,
++  ) {}
++
++  snapshot() {
++    const policy = document as PolicyDocument;
++    let allowed: boolean | null = null;
++    try {
++      allowed =
++        (policy.permissionsPolicy ?? policy.featurePolicy)?.allowsFeature('fullscreen') ?? null;
++    } catch {}
++    const control = this.dialog.querySelector<HTMLElement>('#fullscreen, #cancel');
++    const rect = control?.getBoundingClientRect();
++    const hit = rect
++      ? document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2)
++      : null;
++    return {
++      time: performance.now(),
++      api: typeof this.root.requestFullscreen === 'function',
++      enabled: document.fullscreenEnabled,
++      topLevel: window.self === window.top,
++      policyAllows: allowed,
++      secure: window.isSecureContext,
++      activation: navigator.userActivation
++        ? {
++            active: navigator.userActivation.isActive,
++            hasBeenActive: navigator.userActivation.hasBeenActive,
++          }
++        : null,
++      element: document.fullscreenElement?.id ?? document.fullscreenElement?.tagName ?? null,
++      viewport: {
++        width: innerWidth,
++        height: innerHeight,
++        visualWidth: visualViewport?.width ?? null,
++        visualHeight: visualViewport?.height ?? null,
++        offsetLeft: visualViewport?.offsetLeft ?? null,
++        offsetTop: visualViewport?.offsetTop ?? null,
++      },
++      app: this.root.getBoundingClientRect().toJSON(),
++      dialog: {
++        open: this.dialog.open,
++        bounds: this.dialog.getBoundingClientRect().toJSON(),
++        control: control?.id ?? null,
++        front: !!control && !!hit && control.contains(hit),
++      },
++    };
++  }
++
++  observe(event: string) {
++    const surface = this.snapshot();
++    this.observations.push({ event, surface });
++    this.observations = this.observations.slice(-8);
++    const latest = this.attempts.at(-1);
++    if (latest) latest.after = surface;
++  }
++
++  changed() {
++    if (document.fullscreenElement === this.root && this.dialog.open) {
++      const before = this.snapshot().dialog.front;
++      const focused =
++        document.activeElement instanceof HTMLElement &&
++        this.dialog.contains(document.activeElement)
++          ? document.activeElement
++          : null;
++      const scrollers = [this.dialog, ...this.dialog.querySelectorAll<HTMLElement>('*')].map(
++        (element) => ({ element, top: element.scrollTop, left: element.scrollLeft }),
++      );
++      const returnValue = this.dialog.returnValue;
++      this.promoting = true;
++      try {
++        this.dialog.close();
++        this.dialog.showModal();
++        this.dialog.returnValue = returnValue;
++        focused?.focus({ preventScroll: true });
++        for (const saved of scrollers) {
++          saved.element.scrollTop = saved.top;
++          saved.element.scrollLeft = saved.left;
++        }
++      } finally {
++        this.promoting = false;
++      }
++      const latest = this.attempts.at(-1);
++      if (latest)
++        latest.modal = {
++          frontBefore: before,
++          frontAfter: this.snapshot().dialog.front,
++          focusRestored: !focused || focused === document.activeElement,
++        };
++    }
++    const latest = this.attempts.at(-1);
++    if (latest && document.fullscreenElement === this.root) latest.outcome = 'entered';
++    else if (latest && !document.fullscreenElement) latest.outcome = 'exited';
++    this.observe('fullscreenchange');
++  }
++
++  toggle(trusted: boolean) {
++    const before = this.snapshot();
++    const attempt: FullscreenAttempt = {
++      id: ++this.serial,
++      intent: document.fullscreenElement ? 'exit' : 'enter',
++      trusted,
++      outcome: 'pending',
++      before,
++    };
++    this.attempts.push(attempt);
++    this.attempts = this.attempts.slice(-6);
++    const reject = (error: unknown) => {
++      attempt.outcome = 'rejected';
++      attempt.error = {
++        name: error instanceof Error ? error.name : 'Error',
++        message: (error instanceof Error ? error.message : String(error)).slice(0, 512),
++      };
++      attempt.after = this.snapshot();
++      return this.failureMessage(attempt);
++    };
++    try {
++      if (attempt.intent === 'enter' && (!before.api || !before.enabled)) {
++        attempt.outcome = 'unavailable';
++        attempt.after = this.snapshot();
++        return Promise.resolve(this.failureMessage(attempt));
++      }
++      const request =
++        attempt.intent === 'exit' ? document.exitFullscreen() : this.root.requestFullscreen();
++      return request.then(() => {
++        attempt.after = this.snapshot();
++        attempt.outcome = document.fullscreenElement === this.root ? 'entered' : 'exited';
++        return null;
++      }, reject);
++    } catch (error) {
++      return Promise.resolve(reject(error));
++    }
++  }
++
++  private failureMessage(attempt: FullscreenAttempt) {
++    if (attempt.intent === 'exit')
++      return 'Could not exit fullscreen. You can use the browser’s fullscreen control.';
++    if (!attempt.before.topLevel && attempt.before.policyAllows === false)
++      return 'This embedded view blocks fullscreen. Open the game directly in your browser.';
++    if (attempt.before.policyAllows === false)
++      return 'This page blocks fullscreen. You can keep playing in the browser.';
++    if (!attempt.before.api || !attempt.before.enabled)
++      return 'Fullscreen is unavailable here. You can keep playing in the browser.';
++    if (attempt.before.activation?.active === false)
++      return 'Fullscreen needs a new tap. Try Fullscreen again.';
++    return 'Fullscreen could not start. You can keep playing here or copy support details.';
++  }
++
++  get failed() {
++    return ['unavailable', 'rejected'].includes(this.attempts.at(-1)?.outcome ?? '');
++  }
++
++  get currentId() {
++    return this.serial;
++  }
++
++  details() {
++    return structuredClone({
++      schema: 1,
++      build: this.build,
++      userAgent: navigator.userAgent.slice(0, 320),
++      latest: this.attempts.at(-1) ?? null,
++      attempts: this.attempts,
++      samples: this.observations,
++      surface: this.snapshot(),
++    });
++  }
++}
+diff --git a/tests/e2e/phone-audio-fullscreen.spec.ts b/tests/e2e/phone-audio-fullscreen.spec.ts
+new file mode 100644
+index 0000000..d3ee1ae
+--- /dev/null
++++ b/tests/e2e/phone-audio-fullscreen.spec.ts
+@@ -0,0 +1,995 @@
++import {
++  expect,
++  test,
++  type Browser,
++  type BrowserContext,
++  type CDPSession,
++  type Page,
++} from '@playwright/test';
++import { mkdirSync, writeFileSync } from 'node:fs';
++import { reviewDir } from './evidence';
++import { act, activate as appActivate, fullyVisible, idle, restart, tabTo, undo } from './ui';
++
++test.use({
++  launchOptions: {
++    ignoreDefaultArgs: ['--autoplay-policy=no-user-gesture-required'],
++    args: [
++      '--use-angle=swiftshader',
++      '--enable-unsafe-swiftshader',
++      '--autoplay-policy=document-user-activation-required',
++      '--enable-automation',
++    ],
++  },
++});
++
++const passiveSessions = new WeakMap<Page, CDPSession>();
++async function passive<T, A = undefined>(
++  page: Page,
++  fn: (argument: A) => T | Promise<T>,
++  argument?: A,
++): Promise<T> {
++  let session = passiveSessions.get(page);
++  if (!session) {
++    session = await page.context().newCDPSession(page);
++    passiveSessions.set(page, session);
++  }
++  const result = await session.send('Runtime.evaluate', {
++    expression: `(${fn.toString()})(${JSON.stringify(argument) ?? 'undefined'})`,
++    returnByValue: true,
++    awaitPromise: true,
++    userGesture: false,
++  });
++  if (result.exceptionDetails)
++    throw Error(result.exceptionDetails.exception?.description ?? result.exceptionDetails.text);
++  return result.result.value as T;
++}
++async function nativeTouch(page: Page, id: string) {
++  const point = await passive(
++    page,
++    (id) => {
++      const r = document.getElementById(id)!.getBoundingClientRect();
++      return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
++    },
++    id,
++  );
++  const session = passiveSessions.get(page)!;
++  await session.send('Input.dispatchTouchEvent', {
++    type: 'touchStart',
++    touchPoints: [{ ...point, id: 1 }],
++  });
++  await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
++}
++async function activate(page: Page, id: string, touch = false) {
++  if (touch && !(await passive(page, () => navigator.userActivation.hasBeenActive)))
++    await nativeTouch(page, id);
++  else await appActivate(page, id, touch);
++}
++const puzzleState = (page: Page) => passive(page, () => (window as any).__LAST_FERRY__.getState());
++
++const audio = (page: Page) => passive(page, () => (window as any).__LAST_FERRY__.getAudioStatus());
++const flush = (page: Page) =>
++  passive(
++    page,
++    () =>
++      new Promise<void>((done) => requestAnimationFrame(() => requestAnimationFrame(() => done()))),
++  );
++const playing = async (page: Page) => {
++  await expect.poll(async () => (await audio(page)).running).toBe(true);
++  expect(await audio(page)).toMatchObject({
++    contextCount: 1,
++    schedulerCount: 1,
++    contextState: 'running',
++  });
++};
++
++async function heldResume(context: BrowserContext, count: number) {
++  await context.addInitScript((holdCount) => {
++    const Native = window.AudioContext;
++    const context = new Native({ latencyHint: 'interactive' });
++    const nativeResume = context.resume.bind(context);
++    const stateGetter = Object.getOwnPropertyDescriptor(BaseAudioContext.prototype, 'state')!.get!;
++    let blocked = true;
++    Object.defineProperty(context, 'state', {
++      configurable: true,
++      get: () => (blocked ? 'suspended' : stateGetter.call(context)),
++    });
++    const pending: Array<{ resolve: () => void; reject: (error: Error) => void }> = [];
++    const requests: unknown[] = [];
++    let constructions = 0;
++    context.resume = () => {
++      requests.push({
++        at: performance.now(),
++        active: navigator.userActivation.isActive,
++        state: context.state,
++      });
++      if (requests.length <= holdCount)
++        return new Promise<void>((resolve, reject) => pending.push({ resolve, reject }));
++      blocked = false;
++      return nativeResume();
++    };
++    const Controlled = function () {
++      constructions++;
++      return context;
++    };
++    Controlled.prototype = Native.prototype;
++    Object.setPrototypeOf(Controlled, Native);
++    Object.defineProperty(window, 'AudioContext', { configurable: true, value: Controlled });
++    (window as any).__resumeGate = {
++      status: () => ({
++        requests: [...requests],
++        constructions,
++        nativeState: stateGetter.call(context),
++        reportedState: context.state,
++        blocked,
++      }),
++      suspend: () => context.suspend(),
++      settle: async (index: number, result: string, resumeNative = false) => {
++        if (resumeNative && stateGetter.call(context) !== 'closed') {
++          blocked = false;
++          await nativeResume();
++        }
++        if (result === 'resolve') pending[index].resolve();
++        else
++          pending[index].reject(new DOMException('Controlled stale rejection', 'NotAllowedError'));
++      },
++    };
++  }, count);
++}
++
++async function scenario(
++  browser: Browser,
++  name: string,
++  options: {
++    cove?: string;
++    viewport?: { width: number; height: number };
++    muted?: boolean;
++    held?: number;
++    policyDenied?: boolean;
++    fullscreenMock?: 'rejected' | 'unavailable';
++  },
++  run: (
++    page: Page,
++    save: (label: string, screenshot?: boolean) => Promise<any>,
++    context: BrowserContext,
++  ) => Promise<void>,
++) {
++  const context = await browser.newContext({
++    baseURL: `http://127.0.0.1:${process.env.LAST_FERRY_DEV_PORT ?? 5173}`,
++    viewport: options.viewport ?? { width: 844, height: 390 },
++    deviceScaleFactor: 1,
++    hasTouch: true,
++    isMobile: true,
++  });
++  await context.addInitScript((muted) => {
++    if (localStorage.getItem('last-ferry-muted') === null)
++      localStorage.setItem('last-ferry-muted', String(muted));
++  }, options.muted ?? false);
++  if (options.held) await heldResume(context, options.held);
++  if (options.fullscreenMock)
++    await context.addInitScript((scenario) => {
++      Object.defineProperty(Element.prototype, 'requestFullscreen', {
++        configurable: true,
++        value:
++          scenario === 'unavailable'
++            ? undefined
++            : () =>
++                Promise.reject(
++                  new DOMException('Controlled fullscreen rejection', 'NotAllowedError'),
++                ),
++      });
++      if (scenario === 'unavailable')
++        Object.defineProperty(document, 'fullscreenEnabled', {
++          configurable: true,
++          get: () => false,
++        });
++    }, options.fullscreenMock);
++  if (options.policyDenied)
++    await context.route('**/*', async (route) => {
++      if (route.request().isNavigationRequest()) {
++        const response = await route.fetch();
++        await route.fulfill({
++          response,
++          headers: { ...response.headers(), 'Permissions-Policy': 'fullscreen=()' },
++        });
++      } else await route.continue();
++    });
++  const page = await context.newPage(),
++    observations: unknown[] = [],
++    errors: string[] = [];
++  let failure: string | null = null;
++  const cdp = await browser.newBrowserCDPSession();
++  const command = await cdp.send('Browser.getBrowserCommandLine');
++  await cdp.detach();
++  const autoplayFlags = command.arguments.filter((argument: string) =>
++    argument.includes('autoplay-policy'),
++  );
++  expect(autoplayFlags).toContain('--autoplay-policy=document-user-activation-required');
++  expect(autoplayFlags).not.toContain('--autoplay-policy=no-user-gesture-required');
++  page.on('pageerror', (error) => errors.push(error.message));
++  const save = async (label: string, screenshot = false) => {
++    const value = await passive(
++      page,
++      (label) => {
++        const api = (window as any).__LAST_FERRY__;
++        return {
++          label,
++          at: performance.now(),
++          state: api.getState(),
++          history: api.getRenderStatus().historyLength,
++          audio: api.getAudioStatus(),
++          view: api.getViewStatus(),
++          viewport: api.getViewportStatus(),
++          action: api.getActionPlacement(),
++          homecoming: api.getHomecomingStatus(),
++          fullscreen: {
++            element: document.fullscreenElement?.id ?? null,
++            enabled: document.fullscreenEnabled,
++            topLevel: window.top === window,
++            policyAllows:
++              (document as any).permissionsPolicy?.allowsFeature('fullscreen') ??
++              (document as any).featurePolicy?.allowsFeature('fullscreen') ??
++              null,
++            diagnostic: api.getFullscreenStatus?.() ?? null,
++          },
++          userActivation: {
++            active: navigator.userActivation.isActive,
++            hasBeenActive: navigator.userActivation.hasBeenActive,
++          },
++          copiedSupport: (window as any).__copiedFullscreenSupport ?? null,
++          gate: (window as any).__resumeGate?.status() ?? null,
++          input: (window as any).__coldInput ?? [],
++        };
++      },
++      label,
++    );
++    observations.push(value);
++    if (screenshot) await page.screenshot({ path: `${reviewDir}/${name}-${label}.png` });
++    return value;
++  };
++  mkdirSync(`${reviewDir}/raw`, { recursive: true });
++  try {
++    await page.goto('/?cove=' + (options.cove ?? 'holding-pier'));
++    for (let attempt = 0; attempt < 200; attempt++) {
++      if (await passive(page, () => ((window as any).__LAST_FERRY__?.getMetrics().frames ?? 0) > 4))
++        break;
++      await new Promise((resolve) => setTimeout(resolve, 50));
++    }
++    expect(await passive(page, () => !!(window as any).__LAST_FERRY__)).toBe(true);
++    await passive(page, () => {
++      (window as any).__coldInput = [];
++      for (const name of ['pointerdown', 'pointerup', 'touchend', 'click', 'keydown', 'keyup'])
++        window.addEventListener(
++          name,
++          (event) => {
++            (window as any).__coldInput.push({
++              type: event.type,
++              at: performance.now(),
++              trusted: event.isTrusted,
++              repeat: (event as KeyboardEvent).repeat ?? false,
++              pointerType: (event as PointerEvent).pointerType ?? null,
++              target: (event.target as Element).closest('button')?.id ?? null,
++              active: navigator.userActivation.isActive,
++              hasBeenActive: navigator.userActivation.hasBeenActive,
++            });
++          },
++          true,
++        );
++    });
++    await run(page, save, context);
++    expect(errors).toEqual([]);
++  } catch (error) {
++    failure = String(error);
++    throw error;
++  } finally {
++    writeFileSync(
++      `${reviewDir}/${name}.json`,
++      JSON.stringify(
++        {
++          recordedAt: new Date().toISOString(),
++          environment: {
++            autoplayFlags,
++            browser: browser.version(),
++            viewport: options.viewport ?? [844, 390],
++            input:
++              'Trusted touchscreen input, fresh context, no prior mouse/keyboard activation or permissive autoplay flag',
++            renderer: 'SwiftShader, DPR1',
++          },
++          method: options.held
++            ? 'Controlled delayed resume/state gate around one native AudioContext; graph and UI are real. The simulated state gate prevents native source-start auto-unlock from bypassing the held request. Not a browser policy or Android reproduction.'
++            : options.fullscreenMock
++              ? 'Explicitly mocked fullscreen API rejection/unavailability; short-phone copy fallback uses a separately mocked rejected clipboard write. Native audio remains unmodified.'
++              : options.policyDenied
++                ? 'Real Chromium Permissions-Policy enforcement using an intercepted HTML response header; not a hosted restriction.'
++                : 'Unmodified native browser audio/fullscreen APIs under interaction-required autoplay policy',
++          failure,
++          errors,
++          observations,
++        },
++        null,
++        2,
++      ),
++    );
++    await context.close();
++  }
++}
++
++async function sustained(page: Page) {
++  const samples = await passive(page, async () => {
++    const values = [];
++    for (let i = 0; i < 20; i++) {
++      const s = (window as any).__LAST_FERRY__.getAudioStatus();
++      values.push({
++        at: performance.now(),
++        time: s.currentTime,
++        rms: s.rms,
++        peak: s.peak,
++        running: s.running,
++        sources: s.sourceCount,
++        contextCount: s.contextCount,
++        schedulerCount: s.schedulerCount,
++      });
++      await new Promise((resolve) => setTimeout(resolve, 100));
++    }
++    return values;
++  });
++  expect(samples.at(-1)!.time - samples[0].time).toBeGreaterThan(1.5);
++  expect(samples.filter((s) => s.rms > 0.0005).length).toBeGreaterThanOrEqual(12);
++  expect(Math.max(...samples.map((s) => s.peak))).toBeGreaterThan(0.005);
++  expect(samples.every((s) => s.running && s.contextCount === 1 && s.schedulerCount === 1)).toBe(
++    true,
++  );
++  expect(Math.max(...samples.map((s) => s.sources))).toBeLessThanOrEqual(32);
++  return samples;
++}
++
++async function runtimeSample(page: Page, name: string) {
++  const bytes = await passive(page, async () => {
++    const stream = (window as any).__LAST_FERRY__.captureAudioStream();
++    if (!stream || !MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) return null;
++    return new Promise<number[]>((resolve, reject) => {
++      const recorder = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' }),
++        chunks: Blob[] = [];
++      recorder.ondataavailable = (event) => chunks.push(event.data);
++      recorder.onerror = (event) => reject(String(event));
++      recorder.onstop = async () =>
++        resolve(Array.from(new Uint8Array(await new Blob(chunks).arrayBuffer())));
++      recorder.start();
++      setTimeout(() => recorder.stop(), 2400);
++    });
++  });
++  if (bytes) writeFileSync(`${reviewDir}/raw/${name}.webm`, new Uint8Array(bytes));
++  return {
++    available: !!bytes,
++    bytes: bytes?.length ?? 0,
++    path: bytes ? `${reviewDir}/raw/${name}.webm` : null,
++    listening: 'Runtime capture only; speaker/hardware listening not performed.',
++  };
++}
++
++test('phone native autoplay policy calibration: untrusted resume stays pending until trusted touch', async ({
++  browser,
++}) => {
++  const context = await browser.newContext({
++    viewport: { width: 844, height: 390 },
++    hasTouch: true,
++    isMobile: true,
++  });
++  const page = await context.newPage();
++  await page.route('**/__audio-policy-calibration', (route) =>
++    route.fulfill({
++      contentType: 'text/html',
++      body: '<button id="activate" style="width:180px;height:60px">Activate audio</button><script>const context=new AudioContext();let settled=false;context.resume().then(()=>settled=true);window.policyStatus=()=>({state:context.state,time:context.currentTime,settled,active:navigator.userActivation.isActive,hasBeenActive:navigator.userActivation.hasBeenActive});document.querySelector("button").onclick=()=>context.resume();</script>',
++    }),
++  );
++  let before: unknown, after: unknown;
++  try {
++    await page.goto(
++      `http://127.0.0.1:${process.env.LAST_FERRY_DEV_PORT ?? 5173}/__audio-policy-calibration`,
++    );
++    await page.waitForTimeout(250);
++    before = await passive(page, () => (window as any).policyStatus());
++    expect(before).toMatchObject({ state: 'suspended', settled: false, hasBeenActive: false });
++    await nativeTouch(page, 'activate');
++    await expect
++      .poll(() => passive(page, () => (window as any).policyStatus().state))
++      .toBe('running');
++    await page.waitForTimeout(150);
++    after = await passive(page, () => (window as any).policyStatus());
++    expect(after).toMatchObject({ state: 'running', settled: true, hasBeenActive: true });
++  } finally {
++    mkdirSync(reviewDir, { recursive: true });
++    writeFileSync(
++      `${reviewDir}/audio-policy-calibration.json`,
++      JSON.stringify(
++        {
++          method:
++            'Unmodified native Web Audio in a minimal response fixture, separate fresh context from every game check; no fake AudioContext or playback bypass. Confirms the launch policy actually requires interaction.',
++          before,
++          after,
++        },
++        null,
++        2,
++      ),
++    );
++    await context.close();
++  }
++});
++
++for (const cove of ['holding-pier', 'first-crossing'])
++  test(`phone audio cold ${cove}: first completed touch starts sustained real output`, async ({
++    browser,
++  }) => {
++    await scenario(browser, `cold-${cove}`, { cove }, async (page, save) => {
++      const cold = await save('cold');
++      expect(cold.audio).toMatchObject({
++        muted: false,
++        contextCount: 0,
++        schedulerCount: 0,
++        requested: false,
++      });
++      expect(cold.userActivation.hasBeenActive).toBe(false);
++      await activate(page, 'view-toggle', true);
++      await playing(page);
++      await expect(page.locator('#sound-toggle')).toHaveAccessibleName('Mute sound');
++      const [samples, recording] = await Promise.all([
++        sustained(page),
++        cove === 'holding-pier'
++          ? runtimeSample(page, 'cold-holding-runtime')
++          : Promise.resolve(null),
++      ]);
++      writeFileSync(
++        `${reviewDir}/cold-${cove}-output.json`,
++        JSON.stringify({ samples, recording }, null, 2),
++      );
++      const running = await save('running', true);
++      expect(running.input[0]).toMatchObject({
++        type: 'pointerdown',
++        pointerType: 'touch',
++        trusted: true,
++      });
++      expect(running.input.some((e: any) => e.type === 'pointerup' && e.active && e.trusted)).toBe(
++        true,
++      );
++      expect(running.state).toEqual(cold.state);
++      expect(running.audio.schedulerStarts).toBe(1);
++    });
++  });
++
++test('phone audio cold pan: consumed touch drag starts audio without a click or puzzle action', async ({
++  browser,
++}) => {
++  await scenario(browser, 'cold-pan-audio', {}, async (page, save, context) => {
++    const before = await save('cold');
++    expect(before.userActivation.hasBeenActive).toBe(false);
++    expect(before.audio).toMatchObject({ contextCount: 0, schedulerCount: 0 });
++    const water = await passive(page, () => {
++      const canvas = document.querySelector('canvas')!,
++        r = canvas.getBoundingClientRect(),
++        api = (window as any).__LAST_FERRY__;
++      for (let y = 100; y < innerHeight - 100; y += 20)
++        for (let x = 40; x < innerWidth - 160; x += 20)
++          if (
++            document.elementFromPoint(x, y) === canvas &&
++            !api.getPickDetailAt(x - r.left, y - r.top)
++          )
++            return { x, y };
++      return null;
++    });
++    expect(water).not.toBeNull();
++    const cdp = await context.newCDPSession(page);
++    await cdp.send('Input.dispatchTouchEvent', {
++      type: 'touchStart',
++      touchPoints: [{ ...water!, id: 1 }],
++    });
++    for (let step = 1; step <= 6; step++)
++      await cdp.send('Input.dispatchTouchEvent', {
++        type: 'touchMove',
++        touchPoints: [{ x: water!.x + step * 12, y: water!.y + step * 6, id: 1 }],
++      });
++    await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
++    await playing(page);
++    const samples = await sustained(page);
++    const after = await save('panned-running', true);
++    expect(after.view.panned).toBe(true);
++    expect(after.state).toEqual(before.state);
++    expect(after.history).toBe(before.history);
++    expect(after.audio).toMatchObject({ contextCount: 1, schedulerCount: 1, schedulerStarts: 1 });
++    expect(after.input.find((event: any) => event.type === 'pointerdown')).toMatchObject({
++      trusted: true,
++      pointerType: 'touch',
++      active: false,
++    });
++    expect(
++      after.input.some((event: any) => event.type === 'pointerup' && event.trusted && event.active),
++    ).toBe(true);
++    expect(after.input.filter((event: any) => event.type === 'click')).toHaveLength(0);
++    writeFileSync(`${reviewDir}/cold-pan-output.json`, JSON.stringify({ samples }, null, 2));
++    await cdp.detach();
++  });
++});
++
++test('phone saved mute: ordinary touch stays silent and one explicit Enable starts audio', async ({
++  browser,
++}) => {
++  await scenario(browser, 'saved-mute-enable', { muted: true }, async (page, save) => {
++    await activate(page, 'view-toggle', true);
++    expect(await audio(page)).toMatchObject({ muted: true, contextCount: 0, schedulerCount: 0 });
++    await expect(page.locator('#sound-toggle')).toHaveAccessibleName('Enable sound');
++    await activate(page, 'sound-toggle', true);
++    await playing(page);
++    const enabled = await save('enabled', true);
++    expect(enabled.audio.muted).toBe(false);
++    expect(await passive(page, () => localStorage.getItem('last-ferry-muted'))).toBe('false');
++    await activate(page, 'sound-toggle', true);
++    await expect.poll(async () => (await audio(page)).schedulerCount).toBe(0);
++    expect(await audio(page)).toMatchObject({ muted: true, state: 'muted' });
++    await activate(page, 'view-toggle', true);
++    expect(await audio(page)).toMatchObject({ muted: true, schedulerCount: 0, contextCount: 1 });
++    await save('muted-after-inspection');
++    await activate(page, 'menu', true);
++    await page.locator('#cove-picker').selectOption('first-crossing');
++    await page.waitForURL(/cove=first-crossing/);
++    await idle(page);
++    await activate(page, 'view-toggle', true);
++    expect(await audio(page)).toMatchObject({ muted: true, contextCount: 0, schedulerCount: 0 });
++    await tabTo(page, 'sound-toggle');
++    await page.keyboard.press('Enter');
++    await playing(page);
++    await save('new-cove-keyboard-enable');
++  });
++});
++
++for (const stale of ['resolve', 'reject'])
++  test(`phone controlled resume ${stale}: Retry owns newer pending request and Mute wins late completion`, async ({
++    browser,
++  }) => {
++    await scenario(browser, `controlled-resume-${stale}`, { held: 2 }, async (page, save) => {
++      await activate(page, 'view-toggle', true);
++      await expect.poll(async () => (await audio(page)).retryPending).toBe(true);
++      await expect(page.locator('#sound-toggle')).toHaveAccessibleName('Retry sound');
++      await activate(page, 'sound-toggle', true);
++      let value = await save('two-pending', true);
++      expect(value.gate.requests).toHaveLength(2);
++      expect(value.audio).toMatchObject({
++        muted: false,
++        requested: true,
++        running: false,
++        contextCount: 1,
++        schedulerCount: 0,
++        retryPending: true,
++      });
++      await passive(page, async (result) => (window as any).__resumeGate.settle(0, result), stale);
++      value = await save('old-settled-new-pending');
++      expect(value.audio).toMatchObject({
++        muted: false,
++        running: false,
++        retryPending: true,
++        schedulerCount: 0,
++      });
++      await activate(page, 'sound-toggle', true);
++      await playing(page);
++      value = await save('retry-running');
++      expect(value.gate.requests).toHaveLength(3);
++      expect(value.audio.schedulerStarts).toBe(1);
++      await activate(page, 'sound-toggle', true);
++      await page.waitForTimeout(200);
++      await passive(
++        page,
++        async (result) => (window as any).__resumeGate.settle(1, result, result === 'resolve'),
++        stale,
++      );
++      await page.waitForTimeout(200);
++      value = await save('late-after-mute');
++      expect(value.audio).toMatchObject({
++        muted: true,
++        state: 'muted',
++        running: false,
++        schedulerCount: 0,
++        schedulerStarts: 1,
++        contextCount: 1,
++      });
++      expect(value.gate.requests).toHaveLength(3);
++      expect(value.audio.rms).toBeLessThan(0.00001);
++    });
++  });
++
++test('phone controlled pending mute: explicit Settings mute never activates playback first', async ({
++  browser,
++}) => {
++  await scenario(browser, 'controlled-pending-mute', { held: 20 }, async (page, save) => {
++    await activate(page, 'menu', true);
++    await activate(page, 'settings', true);
++    const before = await save('before-explicit-mute');
++    expect(before.audio).toMatchObject({
++      muted: false,
++      running: false,
++      retryPending: true,
++      schedulerCount: 0,
++    });
++    await expect(page.locator('#settings-mute')).toBeVisible();
++    await activate(page, 'settings-mute', true);
++    const muted = await save('explicit-mute', true);
++    expect(muted.audio).toMatchObject({
++      muted: true,
++      requested: false,
++      running: false,
++      schedulerCount: 0,
++    });
++    expect(muted.gate.requests).toHaveLength(before.gate.requests.length);
++    await passive(page, () => (window as any).__resumeGate.settle(0, 'resolve', true));
++    await page.waitForTimeout(200);
++    expect(await audio(page)).toMatchObject({
++      muted: true,
++      running: false,
++      schedulerCount: 0,
++      schedulerStarts: 0,
++      contextCount: 1,
++    });
++  });
++});
++
++test('phone controlled explicit touch intent: late running or suspension cannot invert Retry or Mute', async ({
++  browser,
++}) => {
++  await scenario(browser, 'controlled-touch-intent', { held: 1 }, async (page, save, context) => {
++    await activate(page, 'view-toggle', true);
++    await expect(page.locator('#sound-toggle')).toHaveAccessibleName('Retry sound');
++    const cdp = await context.newCDPSession(page);
++    const down = async () => {
++      const r = await page.locator('#sound-toggle').boundingBox();
++      await cdp.send('Input.dispatchTouchEvent', {
++        type: 'touchStart',
++        touchPoints: [{ x: r!.x + r!.width / 2, y: r!.y + r!.height / 2, id: 1 }],
++      });
++    };
++    await down();
++    await passive(page, () => (window as any).__resumeGate.settle(0, 'resolve', true));
++    await playing(page);
++    await expect(page.locator('#sound-toggle')).toHaveAccessibleName('Mute sound');
++    await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
++    expect(await audio(page)).toMatchObject({ muted: false, running: true, schedulerStarts: 1 });
++    await save('retry-intent-preserved');
++    await down();
++    await passive(page, () => (window as any).__resumeGate.suspend());
++    await expect(page.locator('#sound-toggle')).toHaveAccessibleName('Retry sound');
++    await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
++    await page.waitForTimeout(150);
++    const muted = await save('mute-intent-preserved', true);
++    expect(muted.audio).toMatchObject({
++      muted: true,
++      running: false,
++      schedulerCount: 0,
++      schedulerStarts: 1,
++    });
++    expect(muted.gate.requests).toHaveLength(1);
++    await cdp.detach();
++  });
++});
++
++test('phone controlled held Space: auto-repeat cannot replace the original Retry intent after late running', async ({
++  browser,
++}) => {
++  await scenario(browser, 'controlled-space-intent', { held: 1 }, async (page, save, context) => {
++    await activate(page, 'view-toggle', true);
++    await expect(page.locator('#sound-toggle')).toHaveAccessibleName('Retry sound');
++    await tabTo(page, 'sound-toggle');
++    const before = await save('before-space');
++    const cdp = await context.newCDPSession(page);
++    const key = { key: ' ', code: 'Space', windowsVirtualKeyCode: 32, nativeVirtualKeyCode: 32 };
++    await cdp.send('Input.dispatchKeyEvent', { type: 'keyDown', ...key, text: ' ' });
++    await passive(page, () => (window as any).__resumeGate.settle(0, 'resolve', true));
++    await playing(page);
++    await expect(page.locator('#sound-toggle')).toHaveAccessibleName('Mute sound');
++    await cdp.send('Input.dispatchKeyEvent', {
++      type: 'keyDown',
++      ...key,
++      text: ' ',
++      autoRepeat: true,
++    });
++    await cdp.send('Input.dispatchKeyEvent', { type: 'keyUp', ...key });
++    const after = await save('held-space-released', true);
++    const clicks = (value: any) =>
++      value.input.filter((event: any) => event.type === 'click' && event.target === 'sound-toggle');
++    expect(clicks(after).length).toBe(clicks(before).length + 1);
++    expect(
++      after.input.some((event: any) => event.type === 'keydown' && event.repeat && event.trusted),
++    ).toBe(true);
++    expect(after.audio).toMatchObject({
++      muted: false,
++      running: true,
++      schedulerStarts: 1,
++      contextCount: 1,
++    });
++    expect(after.state).toEqual(before.state);
++    await cdp.detach();
++  });
++});
++
++async function dialogHit(page: Page, id: string) {
++  await fullyVisible(page, page.locator(`#${id}`));
++  const hit = await page.locator(`#${id}`).evaluate((element) => {
++    const r = element.getBoundingClientRect();
++    return (
++      document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2)?.closest('button') ===
++      element
++    );
++  });
++  expect(hit, `Actual top-layer hit must reach ${id}`).toBe(true);
++}
++
++for (const audioState of ['cold-muted', 'pending', 'running'])
++  test(`phone supported fullscreen ${audioState}: real entry, visible dialog hit and external exit retain subset`, async ({
++    browser,
++  }) => {
++    await scenario(
++      browser,
++      `fullscreen-${audioState}`,
++      { muted: audioState === 'cold-muted', held: audioState === 'pending' ? 20 : undefined },
++      async (page, save) => {
++        if (audioState === 'running') {
++          await activate(page, 'view-toggle', true);
++          await playing(page);
++        }
++        const original = await puzzleState(page);
++        await activate(page, 'menu', true);
++        expect(
++          await passive(
++            page,
++            () =>
++              document.fullscreenEnabled &&
++              typeof document.querySelector('#app')!.requestFullscreen === 'function',
++          ),
++        ).toBe(true);
++        await dialogHit(page, 'fullscreen');
++        await activate(page, 'fullscreen', true);
++        await expect
++          .poll(() => passive(page, () => document.fullscreenElement?.id ?? null))
++          .toBe('app');
++        await flush(page);
++        await dialogHit(page, 'fullscreen');
++        await dialogHit(page, 'cancel');
++        await expect(page.locator('#fullscreen')).toHaveText('Exit fullscreen');
++        const entered = await save('entered', true);
++        expect(entered.fullscreen.diagnostic.latest).toMatchObject({
++          intent: 'enter',
++          trusted: true,
++          outcome: 'entered',
++          before: {
++            api: true,
++            enabled: true,
++            topLevel: true,
++            policyAllows: true,
++            activation: { active: true },
++          },
++          modal: { frontAfter: true, focusRestored: true },
++        });
++        expect(entered.fullscreen.diagnostic.samples.length).toBeLessThanOrEqual(8);
++        expect(entered.fullscreen.diagnostic.attempts.length).toBeLessThanOrEqual(6);
++        if (audioState === 'cold-muted')
++          expect(entered.audio).toMatchObject({ muted: true, contextCount: 0 });
++        if (audioState === 'pending')
++          expect(entered.audio).toMatchObject({ muted: false, running: false, retryPending: true });
++        await activate(page, 'fullscreen', true);
++        await expect
++          .poll(() => passive(page, () => document.fullscreenElement?.id ?? null))
++          .toBeNull();
++        await dialogHit(page, 'fullscreen');
++        await activate(page, 'fullscreen', true);
++        await expect
++          .poll(() => passive(page, () => document.fullscreenElement?.id ?? null))
++          .toBe('app');
++        await activate(page, 'cancel', true);
++        await activate(page, 'unload', true);
++        await activate(page, 'passenger-sheep-1', true);
++        expect(await page.locator('#passenger-sheep-1').getAttribute('aria-pressed')).toBe('false');
++        await dialogHit(page, 'cancel');
++        await passive(page, () => document.exitFullscreen());
++        await expect
++          .poll(() => passive(page, () => document.fullscreenElement?.id ?? null))
++          .toBeNull();
++        await page.setViewportSize({ width: 390, height: 844 });
++        await flush(page);
++        await fullyVisible(page, page.locator('#commit'));
++        await dialogHit(page, 'cancel');
++        expect(await page.locator('#passenger-sheep-1').getAttribute('aria-pressed')).toBe('false');
++        expect(await puzzleState(page)).toEqual(original);
++        await save('external-exit-portrait-subset', true);
++      },
++    );
++  });
++
++test('phone fullscreen real header policy denial: effective restriction is separate from unsupported API', async ({
++  browser,
++}) => {
++  await scenario(
++    browser,
++    'fullscreen-header-policy',
++    { policyDenied: true },
++    async (page, save) => {
++      await activate(page, 'menu', true);
++      const policy = await passive(page, () => ({
++        exists: typeof document.querySelector('#app')!.requestFullscreen === 'function',
++        enabled: document.fullscreenEnabled,
++        allows:
++          (document as any).permissionsPolicy?.allowsFeature('fullscreen') ??
++          (document as any).featurePolicy?.allowsFeature('fullscreen'),
++      }));
++      expect(policy).toEqual({ exists: true, enabled: false, allows: false });
++      await dialogHit(page, 'fullscreen');
++      await activate(page, 'fullscreen', true);
++      expect(await passive(page, () => document.fullscreenElement)).toBeNull();
++      await expect(page.locator('#fullscreen-feedback')).toContainText(/blocks fullscreen/i);
++      const denied = await save('denied', true);
++      expect(denied.fullscreen.diagnostic.latest.before).toMatchObject({
++        api: true,
++        enabled: false,
++        policyAllows: false,
++        activation: { active: true },
++      });
++      await passive(page, () => {
++        Object.defineProperty(navigator, 'clipboard', {
++          configurable: true,
++          value: {
++            writeText: async (text: string) => {
++              (window as any).__copiedFullscreenSupport = JSON.parse(text);
++            },
++          },
++        });
++      });
++      await dialogHit(page, 'fullscreen-support');
++      await activate(page, 'fullscreen-support', true);
++      await expect(page.locator('#fullscreen-support')).toHaveText('Support details copied');
++      const copied = await save('controlled-clipboard-copy');
++      expect(copied.copiedSupport).toMatchObject({
++        schema: 1,
++        build: { mode: 'development' },
++        latest: { trusted: true, before: { policyAllows: false } },
++      });
++      expect(copied.copiedSupport.build.artifact).toContain('main.ts');
++      await activate(page, 'cancel', true);
++      await activate(page, 'unload', true);
++      await dialogHit(page, 'cancel');
++      expect((await puzzleState(page)).turn).toBe(0);
++    },
++  );
++});
++
++for (const result of ['rejected', 'unavailable'] as const)
++  test(`phone fullscreen mocked ${result}: short landscape feedback and manual support copy remain reachable`, async ({
++    browser,
++  }) => {
++    await scenario(
++      browser,
++      `fullscreen-mocked-${result}-short`,
++      { fullscreenMock: result, viewport: { width: 780, height: 320 } },
++      async (page, save) => {
++        const before = await puzzleState(page);
++        await activate(page, 'menu', true);
++        await activate(page, 'fullscreen', true);
++        await fullyVisible(page, page.locator('#fullscreen-support'));
++        const failed = await save('feedback', true);
++        expect(failed.fullscreen.diagnostic.latest).toMatchObject({
++          trusted: true,
++          outcome: result === 'rejected' ? 'rejected' : 'unavailable',
++        });
++        if (result === 'rejected')
++          expect(failed.fullscreen.diagnostic.latest.error).toMatchObject({
++            name: 'NotAllowedError',
++            message: 'Controlled fullscreen rejection',
++          });
++        await passive(page, () => {
++          Object.defineProperty(navigator, 'clipboard', {
++            configurable: true,
++            value: {
++              writeText: () =>
++                Promise.reject(
++                  new DOMException('Controlled clipboard rejection', 'NotAllowedError'),
++                ),
++            },
++          });
++        });
++        await activate(page, 'fullscreen-support', true);
++        await expect(page.locator('#fullscreen-details')).toBeFocused();
++        await fullyVisible(page, page.locator('#fullscreen-details'), false);
++        await dialogHit(page, 'cancel');
++        const support = JSON.parse(await page.locator('#fullscreen-details').inputValue());
++        expect(support).toMatchObject({
++          schema: 1,
++          build: { mode: 'development' },
++          latest: { trusted: true },
++        });
++        const dimensions = await passive(page, () => ({
++          width: innerWidth,
++          scroll: document.documentElement.scrollWidth,
++        }));
++        expect(dimensions.scroll).toBeLessThanOrEqual(dimensions.width);
++        await save('manual-copy', true);
++        await activate(page, 'cancel', true);
++        expect(await puzzleState(page)).toEqual(before);
++        await activate(page, 'unload', true);
++        await dialogHit(page, 'cancel');
++      },
++    );
++  });
++
++for (const [width, height] of [
++  [844, 390],
++  [390, 844],
++])
++  test(`phone audio rescue ${width}x${height}: UI subsets, tide and terminal Undo, restart and visibility preserve ownership`, async ({
++    browser,
++  }) => {
++    await scenario(
++      browser,
++      `audio-rescue-${width}x${height}`,
++      { viewport: { width, height } },
++      async (page, save) => {
++        await act(page, 'unload', true);
++        await playing(page);
++        await act(page, 'map-shallows', true);
++        await act(page, 'map-rabbit-pier', true);
++        const before = await puzzleState(page);
++        await activate(page, 'board', true);
++        await activate(page, 'passenger-rabbit-2', true);
++        await expect(page.locator('#preview')).toContainText(
++          /Rue.*still waiting|ends the crossing/,
++        );
++        await activate(page, 'passenger-rabbit-2', true);
++        await save('critical-boarding', true);
++        await activate(page, 'commit', true);
++        await idle(page);
++        expect(await puzzleState(page)).toMatchObject({ turn: 4, tideLevel: 1 });
++        await undo(page, true);
++        expect(await puzzleState(page)).toEqual(before);
++        await act(page, 'board', true);
++        await act(page, 'map-shallows', true);
++        await act(page, 'map-stone', true);
++        await act(page, 'board', true);
++        await act(page, 'map-harbor', true);
++        const atHarbor = await puzzleState(page);
++        await act(page, 'unload', true);
++        await expect.poll(async () => (await audio(page)).victorySettled).toBe(true);
++        expect(await audio(page)).toMatchObject({
++          contextCount: 1,
++          schedulerCount: 1,
++          victoryTarget: 0.5,
++          deliveryCount: 1,
++        });
++        await save('won', true);
++        await undo(page, true);
++        expect(await puzzleState(page)).toEqual(atHarbor);
++        await act(page, 'unload', true);
++        await expect.poll(async () => (await audio(page)).victorySettled).toBe(true);
++        expect((await audio(page)).deliveryCount).toBe(2);
++        await restart(page, true);
++        expect(await puzzleState(page)).toMatchObject({ turn: 0, status: 'playing' });
++        expect(await audio(page)).toMatchObject({
++          victoryTarget: 1,
++          contextCount: 1,
++          schedulerCount: 1,
++        });
++        await passive(page, () => {
++          Object.defineProperty(document, 'hidden', { configurable: true, value: true });
++          document.dispatchEvent(new Event('visibilitychange'));
++        });
++        await expect.poll(async () => (await audio(page)).schedulerCount).toBe(0);
++        const hidden = await save('simulated-hidden');
++        await passive(page, () => {
++          Object.defineProperty(document, 'hidden', { configurable: true, value: false });
++          document.dispatchEvent(new Event('visibilitychange'));
++        });
++        await playing(page);
++        const recovered = await save('simulated-visible');
++        expect(recovered.audio.deliveryCount).toBe(hidden.audio.deliveryCount);
++        expect(recovered.audio.arrivalActive).toBe(false);
++        await activate(page, 'menu', true);
++        await page.locator('#cove-picker').selectOption('bellwater');
++        await page.waitForURL(/cove=bellwater/);
++        await idle(page);
++        expect(await puzzleState(page)).toMatchObject({ turn: 0, status: 'playing' });
++        await activate(page, 'view-toggle', true);
++        await playing(page);
++        await save('bellwater-new-document');
++      },
++    );
++  });
+diff --git a/tests/e2e/phone-playability.spec.ts b/tests/e2e/phone-playability.spec.ts
+index 6dfdc37..ff4c539 100644
+--- a/tests/e2e/phone-playability.spec.ts
++++ b/tests/e2e/phone-playability.spec.ts
+@@ -678,7 +678,11 @@ test('phone fullscreen: real API result, root includes dialogs and external exit
+           document.fullscreenEnabled &&
+           typeof document.querySelector('#app')!.requestFullscreen === 'function',
+       );
++      expect(enabled, 'Controlled supported Chromium must expose fullscreen capability').toBe(true);
+       await press(page, 'fullscreen');
++      await expect
++        .poll(() => page.evaluate(() => document.fullscreenElement?.id ?? null))
++        .toBe('app');
+       await page.waitForTimeout(300);
+       const actual = await page.evaluate(() => ({
+         element: document.fullscreenElement?.id ?? null,
+@@ -723,10 +727,7 @@ test('phone fullscreen: real API result, root includes dialogs and external exit
+         await page.waitForTimeout(200);
+         await save('external-exit-preview', true);
+       } else {
+-        await expect(page.locator('#view-notice')).toContainText(
+-          /fullscreen|screen|available|supported/i,
+-        );
+-        expect(enabled).toBeDefined();
++        throw new Error('Supported fullscreen request did not enter the app root');
+       }
+       expect(await stable(page)).toEqual(original);
+       expect(
+diff --git a/tests/e2e/selection.spec.ts b/tests/e2e/selection.spec.ts
+index f114640..7bfbbf1 100644
+--- a/tests/e2e/selection.spec.ts
++++ b/tests/e2e/selection.spec.ts
+@@ -1,6 +1,7 @@
+ import { test, expect, type Page } from '@playwright/test';
+ import { mkdirSync, writeFileSync } from 'node:fs';
+ import { reviewDir } from './evidence';
++import { trustedRapid } from './trusted-rapid';
+ import {
+   activate,
+   ready as baseReady,
+@@ -247,31 +248,12 @@ test('selection regression: an explicit new place permits the next trusted Sail
+   await activate(page, 'unload'); await activate(page, 'commit'); await idle(page);
+   await activate(page, 'map-shallows');
+   const first = await page.locator('#sail').boundingBox();
+-  await page.evaluate(() => {
+-    const runtime = window as any;
+-    runtime.__consecutiveSailClicks = [];
+-    runtime.__consecutiveSailTrace = (event: MouseEvent) => runtime.__consecutiveSailClicks.push({
+-      at: performance.now(), trusted: event.isTrusted, target: (event.target as HTMLElement).closest('button')?.id,
+-      x: event.clientX, y: event.clientY,
+-    });
+-    window.addEventListener('click', runtime.__consecutiveSailTrace, true);
+-  });
+-  await page.mouse.click(first!.x + first!.width / 2, first!.y + first!.height / 2);
+-  await page.waitForFunction(() => document.querySelector('#seascape')?.getAttribute('aria-busy') === 'false');
+-  const rabbit = await page.locator('#map-rabbit-pier').boundingBox();
+-  await page.mouse.click(rabbit!.x + rabbit!.width / 2, rabbit!.y + rabbit!.height / 2);
+-  const second = await page.locator('#sail').boundingBox();
+-  const x = second!.x + second!.width / 2, y = second!.y + second!.height / 2;
+-  await page.mouse.click(x, y);
+-  await page.waitForFunction(() => document.querySelector('#seascape')?.getAttribute('aria-busy') === 'false');
+-  const clicks = await page.evaluate(() => {
+-    const runtime = window as any;
+-    window.removeEventListener('click', runtime.__consecutiveSailTrace, true);
+-    return runtime.__consecutiveSailClicks;
+-  });
+-  const result = { clicks, gapMs: clicks[2]?.at - clicks[0]?.at, first, second, final: await snapshot(page) };
++  const trace = await trustedRapid(page, first!, 'consecutive-sail');
++  const clicks = trace.clicks;
++  const result = { clicks, trace, gapMs: clicks[2]?.at - clicks[0]?.at, first, second: trace.points.second, final: await snapshot(page) };
+   writeFileSync(`${reviewDir}/consecutive-sail-regression.json`, JSON.stringify(result, null, 2));
+   expect(clicks).toHaveLength(3);
++  expect(trace.error).toBeNull();
+   expect(clicks.every((click: any) => click.trusted)).toBe(true);
+   expect(clicks.map((click: any) => click.target)).toEqual(['sail', 'map-rabbit-pier', 'sail']);
+   expect(result.gapMs, 'The new intentional Sail must exercise the still-live old fence').toBeLessThanOrEqual(180);
+@@ -290,25 +272,14 @@ test('selection regression: the arrived dock permits a deliberate local action i
+   expect(await page.evaluate(() => (window as any).__LAST_FERRY__.getEnvironmentStatus().reducedMotion)).toBe(true);
+   await activate(page, 'map-sheep-pier', true);
+   const sail = await page.locator('#sail').boundingBox();
+-  await page.evaluate(() => {
+-    (window as any).__localIntentClicks = [];
+-    window.addEventListener('click', (event) => {
+-      const api=(window as any).__LAST_FERRY__,v=api.getViewStatus();
+-      (window as any).__localIntentClicks.push({ at: performance.now(), trusted: event.isTrusted, target: (event.target as HTMLElement).closest('button')?.id ?? null,dialogOpen:!!document.querySelector('#dialog[open]'),selectedId:document.querySelector('.map-target[aria-expanded="true"]')?.id??null,snapshot:{state:api.getState(),history:api.getRenderStatus().historyLength,desiredMusic:api.getAudioStatus().desiredArrangement,view:{mode:v.mode,scale:v.scale,focus:v.focus}} });
+-    }, true);
+-  });
+-  await page.touchscreen.tap(sail!.x + sail!.width / 2, sail!.y + sail!.height / 2);
+-  await page.waitForFunction(() => document.querySelector('#seascape')?.getAttribute('aria-busy') === 'false');
+-  const board = await page.locator('#board').boundingBox();
+-  await page.touchscreen.tap(sail!.x + sail!.width / 2, sail!.y + sail!.height / 2);
+-  const x = board!.x + board!.width / 2, y = board!.y + board!.height / 2;
+-  await page.touchscreen.tap(x, y);
+-  const clicks = await page.evaluate(() => (window as any).__localIntentClicks);
++  const trace = await trustedRapid(page, sail!, 'arrived-local');
++  const clicks = trace.clicks, board = trace.points.board;
+   const arrived=clicks[1]?.snapshot;
+   const final=await page.evaluate(()=>{const api=(window as any).__LAST_FERRY__,v=api.getViewStatus();return{state:api.getState(),history:api.getRenderStatus().historyLength,desiredMusic:api.getAudioStatus().desiredArrangement,view:{mode:v.mode,scale:v.scale,focus:v.focus}};});
+-  const result = { sail, board, gapMs: clicks[2]?.at - clicks[0]?.at, repeatGapMs: clicks[1]?.at - clicks[0]?.at, clicks, arrived, final, modalOpen: await page.locator('#dialog[open]').count() === 1 };
++  const result = { sail, board, trace, gapMs: clicks[2]?.at - clicks[0]?.at, repeatGapMs: clicks[1]?.at - clicks[0]?.at, clicks, arrived, final, modalOpen: await page.locator('#dialog[open]').count() === 1 };
+   writeFileSync(`${reviewDir}/arrived-local-action-regression.json`, JSON.stringify(result, null, 2));
+   expect(clicks).toHaveLength(3);
++  expect(trace.error).toBeNull();
+   expect(clicks[0].target).toBe('sail');
+   expect(clicks[2].target).toBe('board');
+   expect(clicks[2].dialogOpen).toBe(false);
+diff --git a/tests/e2e/trusted-rapid.ts b/tests/e2e/trusted-rapid.ts
+new file mode 100644
+index 0000000..27a1faa
+--- /dev/null
++++ b/tests/e2e/trusted-rapid.ts
+@@ -0,0 +1,186 @@
++import type { Page } from '@playwright/test';
++
++export async function trustedRapid(
++  page: Page,
++  first: { x: number; y: number; width: number; height: number },
++  mode: 'consecutive-sail' | 'arrived-local',
++) {
++  const cdp = await page.context().newCDPSession(page);
++  const nativeDispatches: {
++    point: { x: number; y: number };
++    method: string;
++    sentAt: number;
++    downAck?: number;
++    completedAt?: number;
++  }[] = [];
++  await page.exposeBinding(
++    '__dispatchRapidTouch',
++    async (_source, point: { x: number; y: number }) => {
++      const record = {
++        point,
++        method:
++          mode === 'consecutive-sail' ? 'ordered CDP mouse messages' : 'native CDP touch events',
++        sentAt: Date.now(),
++      } as (typeof nativeDispatches)[number];
++      nativeDispatches.push(record);
++      if (mode === 'consecutive-sail') {
++        const down = cdp.send('Input.dispatchMouseEvent', {
++          type: 'mousePressed',
++          ...point,
++          button: 'left',
++          clickCount: 1,
++        });
++        const up = cdp.send('Input.dispatchMouseEvent', {
++          type: 'mouseReleased',
++          ...point,
++          button: 'left',
++          clickCount: 1,
++        });
++        await down;
++        record.downAck = Date.now();
++        await up;
++      } else {
++        await cdp.send('Input.dispatchTouchEvent', {
++          type: 'touchStart',
++          touchPoints: [{ ...point, id: 1 }],
++        });
++        record.downAck = Date.now();
++        await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
++      }
++      record.completedAt = Date.now();
++    },
++  );
++  await page.evaluate(
++    ({ first, mode }) => {
++      const runtime = window as any;
++      runtime.__rapidTrace = { clicks: [], points: { first }, error: null, done: false };
++      let step = 0;
++      const trace = runtime.__rapidTrace;
++      const point = (id: string) => {
++        const element = document.getElementById(id)!;
++        const r = element.getBoundingClientRect();
++        if (!r.width || !r.height) throw Error(`Rapid target ${id} has no live rectangle`);
++        return {
++          x: r.left + r.width / 2,
++          y: r.top + r.height / 2,
++          width: r.width,
++          height: r.height,
++        };
++      };
++      const send = (p: { x: number; y: number }) => {
++        void runtime.__dispatchRapidTouch({ x: p.x, y: p.y }).catch((error: unknown) => {
++          trace.error = String(error);
++        });
++      };
++      const afterIdle = (fn: () => void) => {
++        const minimumTurn = runtime.__LAST_FERRY__.getState().turn + 1;
++        setTimeout(() => {
++          const scene = document.getElementById('seascape')!;
++          const settled = () =>
++            scene.getAttribute('aria-busy') === 'false' &&
++            runtime.__LAST_FERRY__.getState().turn >= minimumTurn;
++          if (settled()) fn();
++          else {
++            const observer = new MutationObserver(() => {
++              if (!settled()) return;
++              observer.disconnect();
++              fn();
++            });
++            observer.observe(scene, { attributes: true, attributeFilter: ['aria-busy'] });
++          }
++        }, 0);
++      };
++      const listener = (event: MouseEvent) => {
++        const api = runtime.__LAST_FERRY__,
++          v = api.getViewStatus();
++        const target = (event.target as HTMLElement).closest('button')?.id ?? null;
++        trace.clicks.push({
++          at: performance.now(),
++          trusted: event.isTrusted,
++          target,
++          x: event.clientX,
++          y: event.clientY,
++          dialogOpen: !!document.querySelector('#dialog[open]'),
++          selectedId: document.querySelector('.map-target[aria-expanded="true"]')?.id ?? null,
++          snapshot: {
++            state: api.getState(),
++            history: api.getRenderStatus().historyLength,
++            desiredMusic: api.getAudioStatus().desiredArrangement,
++            view: { mode: v.mode, scale: v.scale, focus: v.focus },
++          },
++        });
++        try {
++          if (step === 0) {
++            if (target !== 'sail') throw Error(`Initial rapid click reached ${target}`);
++            step = 1;
++            afterIdle(() => {
++              if (mode === 'consecutive-sail') {
++                trace.points.destination = point('map-rabbit-pier');
++                send(trace.points.destination);
++              } else {
++                trace.points.board = point('board');
++                send({ x: first.x + first.width / 2, y: first.y + first.height / 2 });
++              }
++            });
++          } else if (step === 1) {
++            if (mode === 'consecutive-sail' && target !== 'map-rabbit-pier')
++              throw Error(`Deliberate place selection reached ${target}`);
++            step = 2;
++            setTimeout(() => {
++              if (mode === 'consecutive-sail') {
++                trace.points.second = point('sail');
++                send(trace.points.second);
++              } else send(trace.points.board);
++            });
++          } else if (step === 2) {
++            step = 3;
++            if (target !== (mode === 'consecutive-sail' ? 'sail' : 'board'))
++              throw Error(`Deliberate final control reached ${target}`);
++            if (mode === 'consecutive-sail')
++              afterIdle(() => {
++                trace.done = true;
++              });
++            else
++              setTimeout(() => {
++                trace.done = true;
++              });
++          }
++        } catch (error) {
++          trace.error = String(error);
++        }
++      };
++      runtime.__rapidListener = listener;
++      window.addEventListener('click', listener, true);
++    },
++    { first, mode },
++  );
++  try {
++    await page.evaluate(
++      (first) =>
++        (window as any).__dispatchRapidTouch({
++          x: first.x + first.width / 2,
++          y: first.y + first.height / 2,
++        }),
++      first,
++    );
++    try {
++      await page.waitForFunction(
++        () => (window as any).__rapidTrace.done || (window as any).__rapidTrace.error,
++        undefined,
++        { polling: 10, timeout: 5000 },
++      );
++    } catch (error) {
++      await page.evaluate((error) => {
++        (window as any).__rapidTrace.error = error;
++      }, String(error));
++    }
++    const trace = await page.evaluate(() => {
++      const runtime = window as any;
++      window.removeEventListener('click', runtime.__rapidListener, true);
++      return runtime.__rapidTrace;
++    });
++    return { ...trace, nativeDispatches };
++  } finally {
++    await cdp.detach();
++  }
++}
+diff --git a/tests/unit/audio.test.ts b/tests/unit/audio.test.ts
+index c7c318a..9ffd475 100644
+--- a/tests/unit/audio.test.ts
++++ b/tests/unit/audio.test.ts
+@@ -64,6 +64,7 @@ class Source extends Node {
+ class Context {
+   static instances: Context[] = [];
+   static reject = false;
++  static pending = false;
+   sampleRate = 1000;
+   currentTime = 0;
+   state: 'suspended' | 'running' | 'closed' = 'suspended';
+@@ -72,6 +73,8 @@ class Context {
+   sources: Source[] = [];
+   track = { stop: vi.fn() };
+   listeners = new Set<() => void>();
++  resumeCalls = 0;
++  resumeRequests: { succeed: () => void; reject: () => void }[] = [];
+   constructor() {
+     Context.instances.push(this);
+   }
+@@ -119,10 +122,25 @@ class Context {
+   createBufferSource() {
+     return this.createOscillator();
+   }
+-  async resume() {
+-    if (Context.reject) throw new Error('NotAllowedError');
++  resume() {
++    this.resumeCalls++;
++    if (Context.pending)
++      return new Promise<void>((resolve, reject) => {
++        this.resumeRequests.push({
++          succeed: () => {
++            if (this.state !== 'running' && this.state !== 'closed') {
++              this.state = 'running';
++              this.notify();
++            }
++            resolve();
++          },
++          reject: () => reject(new Error('NotAllowedError')),
++        });
++      });
++    if (Context.reject) return Promise.reject(new Error('NotAllowedError'));
+     this.state = 'running';
+     this.notify();
++    return Promise.resolve();
+   }
+   async suspend() {
+     this.state = 'suspended';
+@@ -164,6 +182,7 @@ describe('continuous audio ownership and phase', () => {
+     vi.useFakeTimers();
+     Context.instances = [];
+     Context.reject = false;
++    Context.pending = false;
+     stored = new Map();
+     vi.stubGlobal('AudioContext', Context);
+     vi.stubGlobal('localStorage', {
+@@ -338,6 +357,229 @@ describe('continuous audio ownership and phase', () => {
+     });
+   });
+ 
++  test('a fresh activation retries a blocked pending resume without another graph or scheduler', async () => {
++    Context.pending = true;
++    const value = sound();
++    expect(value.playback()).toEqual({
++      state: 'requested',
++      requested: false,
++      running: false,
++      retryPending: false,
++    });
++    const first = value.activate(),
++      context = Context.instances[0];
++    expect(value.playback()).toMatchObject({ requested: true, retryPending: true });
++    expect(value.presentation()).toMatchObject({ contextState: 'suspended', schedulerStarts: 0 });
++    const retry = value.activate();
++    expect(context.resumeCalls).toBe(2);
++    expect(Context.instances).toHaveLength(1);
++    context.resumeRequests[1].succeed();
++    await retry;
++    expect(value.playback()).toEqual({
++      state: 'running',
++      requested: true,
++      running: true,
++      retryPending: false,
++    });
++    const started = value.presentation();
++    context.resumeRequests[0].succeed();
++    await first;
++    for (let index = 0; index < 8; index++) await value.activate();
++    expect(context.resumeCalls).toBe(2);
++    expect(value.presentation()).toMatchObject({
++      contextCount: 1,
++      schedulerCount: 1,
++      schedulerStarts: 1,
++      ambienceSources: 2,
++      sourceNodesCreated: started.sourceNodesCreated,
++      graphNodeCount: started.graphNodeCount,
++      unavailable: false,
++      error: null,
++    });
++  });
++
++  test('an older rejection cannot clear a newer pending request or stop its eventual playback', async () => {
++    Context.pending = true;
++    const value = sound(),
++      first = value.activate(),
++      context = Context.instances[0],
++      retry = value.activate();
++    context.resumeRequests[0].reject();
++    await first;
++    expect(value.playback()).toMatchObject({ retryPending: true, running: false });
++    expect(value.presentation()).toMatchObject({ unavailable: false, error: null });
++    context.resumeRequests[1].succeed();
++    await retry;
++    expect(value.presentation()).toMatchObject({
++      contextCount: 1,
++      schedulerCount: 1,
++      schedulerStarts: 1,
++      unavailable: false,
++      error: null,
++    });
++  });
++
++  test('lifecycle notifications reflect native playback changes without waiting for a pending request or pumping updates', async () => {
++    Context.pending = true;
++    const value = sound(),
++      states: ReturnType<Sound['playback']>[] = [];
++    value.onChange = () => states.push(value.playback());
++    const pending = value.activate(),
++      context = Context.instances[0];
++    expect(states.at(-1)).toMatchObject({ state: 'requested', retryPending: true });
++    context.state = 'running';
++    context.notify();
++    expect(states.at(-1)).toMatchObject({ state: 'running', retryPending: true });
++    const changes = states.length;
++    context.advance(0.1);
++    await vi.advanceTimersByTimeAsync(100);
++    expect(states).toHaveLength(changes);
++    await value.setMuted(true);
++    expect(states.at(-1)).toMatchObject({ state: 'muted', requested: false, retryPending: false });
++    const mutedChanges = states.length;
++    context.resumeRequests[0].reject();
++    await pending;
++    expect(states).toHaveLength(mutedChanges);
++    value.dispose();
++    expect(states.at(-1)).toMatchObject({ requested: false, running: false, retryPending: false });
++  });
++
++  test('a stale rejection after a successful retry leaves the live mix and request status intact', async () => {
++    Context.pending = true;
++    const value = sound(),
++      first = value.activate(),
++      context = Context.instances[0],
++      retry = value.activate();
++    context.resumeRequests[1].succeed();
++    await retry;
++    const running = value.presentation();
++    context.resumeRequests[0].reject();
++    await first;
++    expect(value.presentation()).toMatchObject({
++      state: 'running',
++      retryPending: false,
++      schedulerCount: 1,
++      schedulerStarts: running.schedulerStarts,
++      masterGain: running.masterGain,
++      graphNodeCount: running.graphNodeCount,
++      unavailable: false,
++      error: null,
++    });
++  });
++
++  test.each([
++    ['muted', 'success'],
++    ['muted', 'rejection'],
++    ['hidden', 'success'],
++    ['hidden', 'rejection'],
++    ['disposed', 'success'],
++    ['disposed', 'rejection'],
++  ] as const)(
++    'late resume %s/%s cannot restore audio or stale action effects',
++    async (mode, result) => {
++      Context.pending = true;
++      const value = sound(),
++        attempt = value.activate(),
++        context = Context.instances[0];
++      value.startTravel();
++      value.delivery();
++      value.transferContact({ weight: 'full', settle: false, compact: false, count: 1 });
++      if (mode === 'muted') await value.setMuted(true);
++      else if (mode === 'hidden') await value.visibility(true);
++      else value.dispose();
++      await vi.advanceTimersByTimeAsync(100);
++      if (result === 'success') context.resumeRequests[0].succeed();
++      else context.resumeRequests[0].reject();
++      await attempt;
++      expect(value.playback()).toMatchObject({
++        running: false,
++        retryPending: false,
++        requested: mode === 'hidden',
++      });
++      expect(value.presentation()).toMatchObject({
++        contextState: mode === 'disposed' ? 'closed' : 'suspended',
++        contextCount: 1,
++        schedulerCount: 0,
++        schedulerStarts: 0,
++        masterGain: 0,
++        travelActive: false,
++        arrivalActive: false,
++        transferSources: 0,
++        deliveryCount: 0,
++        transferPlayed: 0,
++        unavailable: false,
++        error: null,
++      });
++      if (mode === 'disposed')
++        expect(value.presentation()).toMatchObject({ sourceCount: 0, graphNodeCount: 0 });
++    },
++  );
++
++  test('saved mute stays authoritative through pending work and one explicit enable retries', async () => {
++    Context.pending = true;
++    const value = sound(),
++      first = value.activate(),
++      context = Context.instances[0];
++    await value.setMuted(true);
++    await value.activate();
++    expect(context.resumeCalls).toBe(1);
++    expect(stored.get('last-ferry-muted')).toBe('true');
++    expect(value.playback()).toMatchObject({
++      state: 'muted',
++      requested: false,
++      retryPending: false,
++    });
++    const enable = value.setMuted(false);
++    expect(context.resumeCalls).toBe(2);
++    expect(stored.get('last-ferry-muted')).toBe('false');
++    context.resumeRequests[1].succeed();
++    await enable;
++    context.resumeRequests[0].reject();
++    await first;
++    expect(value.presentation()).toMatchObject({
++      muted: false,
++      state: 'running',
++      retryPending: false,
++      contextCount: 1,
++      schedulerStarts: 1,
++      unavailable: false,
++    });
++  });
++
++  test('hide/show and a fresh retry replace pending ownership without replaying old actions', async () => {
++    Context.pending = true;
++    const value = sound(),
++      first = value.activate(),
++      context = Context.instances[0];
++    value.startTravel();
++    await value.visibility(true);
++    const foreground = value.visibility(false),
++      retry = value.activate();
++    expect(context.resumeCalls).toBe(3);
++    context.resumeRequests[0].reject();
++    await first;
++    expect(value.playback().retryPending).toBe(true);
++    context.resumeRequests[2].succeed();
++    await retry;
++    context.resumeRequests[1].succeed();
++    await foreground;
++    expect(value.presentation()).toMatchObject({
++      state: 'running',
++      retryPending: false,
++      contextCount: 1,
++      schedulerCount: 1,
++      schedulerStarts: 1,
++      ambienceSources: 2,
++      travelRequested: false,
++      travelActive: false,
++      arrivalSources: 0,
++      transferSources: 0,
++      deliveryCount: 0,
++      unavailable: false,
++      error: null,
++    });
++  });
++
+   test('an interrupted context stops action effects and catches up without a backlog or duplicate bed', async () => {
+     const value = sound();
+     await value.activate();
+diff --git a/tools/snapshot-evidence.mjs b/tools/snapshot-evidence.mjs
+index 582bfc5..e7ec6c5 100644
+--- a/tools/snapshot-evidence.mjs
++++ b/tools/snapshot-evidence.mjs
+@@ -53,6 +53,9 @@ const paths = [
+   ...(existsSync(new URL('NEXT_TASK_PHONE_PLAYABILITY.md', root))
+     ? ['NEXT_TASK_PHONE_PLAYABILITY.md']
+     : []),
++  ...(existsSync(new URL('NEXT_TASK_PHONE_AUDIO_FULLSCREEN.md', root))
++    ? ['NEXT_TASK_PHONE_AUDIO_FULLSCREEN.md']
++    : []),
+   'docs/GAMEPLAY_RULES.md',
+   'docs/FIRST_COVE.md',
+   'docs/ART_DIRECTION.md',

@@ -30,6 +30,7 @@ export class Sound {
   travelling = false;
   unavailable = false;
   lastError: string | null = null;
+  onChange: (() => void) | null = null;
   private master: GainNode | null = null;
   private music: GainNode | null = null;
   private musicOutput: GainNode | null = null;
@@ -90,12 +91,21 @@ export class Sound {
       this.master?.gain.cancelScheduledValues(context.currentTime);
       this.master?.gain.setValueAtTime(0, context.currentTime);
     } else if (this.enabled()) {
+      this.unavailable = false;
+      this.lastError = null;
       this.restoreMusicOutput();
       this.master?.gain.setValueAtTime(0, context.currentTime);
       this.master?.gain.linearRampToValueAtTime(0.65, context.currentTime + 0.08);
       this.startScheduler();
       this.ensureTravel();
+    } else {
+      this.stopScheduler();
+      this.clearActions(this.muted && !this.hidden);
+      this.master?.gain.cancelScheduledValues(context.currentTime);
+      this.master?.gain.setValueAtTime(0, context.currentTime);
+      void context.suspend().catch(() => {});
     }
+    this.notify();
   };
   constructor() {
     try {
@@ -104,6 +114,11 @@ export class Sound {
   }
   private enabled() {
     return this.activated && !this.muted && !this.hidden && !this.disposed;
+  }
+  private notify() {
+    try {
+      this.onChange?.();
+    } catch {}
   }
   private graph() {
     if (this.context || this.disposed) return;
@@ -441,11 +456,12 @@ export class Sound {
     this.scheduler = setInterval(() => this.pump(), 100);
     this.schedulerStarts++;
   }
-  private async reconcile() {
+  private async reconcile(retryResume = false) {
     const generation = ++this.generation;
     if (this.suspendTimer !== null) clearTimeout(this.suspendTimer);
     this.suspendTimer = null;
     if (!this.enabled()) {
+      this.resumePromise = null;
       this.stopScheduler();
       this.clearActions(true);
       const context = this.context;
@@ -459,18 +475,28 @@ export class Sound {
           if (!this.enabled() && !this.disposed) void context.suspend().catch(() => {});
         }, 90);
       }
+      this.notify();
       return;
     }
     try {
       this.graph();
       const context = this.context!;
+      this.unavailable = false;
+      this.lastError = null;
       if (context.state !== 'running') {
-        this.resumePromise ??= context.resume().finally(() => {
-          this.resumePromise = null;
-        });
+        if (retryResume || !this.resumePromise) {
+          const pending: Promise<void> = context.resume().finally(() => {
+            if (this.resumePromise === pending) {
+              this.resumePromise = null;
+              this.notify();
+            }
+          });
+          this.resumePromise = pending;
+        }
+        this.notify();
         await this.resumePromise;
       }
-      if (generation !== this.generation || !this.enabled()) return;
+      if (generation !== this.generation || !this.enabled() || context.state !== 'running') return;
       this.unavailable = false;
       this.lastError = null;
       this.restoreMusicOutput();
@@ -479,26 +505,48 @@ export class Sound {
       this.master!.gain.linearRampToValueAtTime(0.65, context.currentTime + 0.06);
       this.startScheduler();
       this.ensureTravel();
+      this.notify();
     } catch (error) {
+      if (generation !== this.generation || !this.enabled() || this.context?.state === 'running')
+        return;
       this.unavailable = true;
       this.lastError = error instanceof Error ? error.name : 'Audio unavailable';
       this.stopScheduler();
+      this.notify();
     }
   }
   async activate() {
     if (this.disposed) return;
+    const first = !this.activated;
     this.activated = true;
+    if (first) this.notify();
     if (this.context?.state === 'running' && this.enabled()) return;
-    await this.reconcile();
+    await this.reconcile(true);
   }
   async toggle() {
+    await this.setMuted(!this.muted);
+  }
+  async setMuted(muted: boolean) {
     if (this.disposed) return;
-    this.muted = !this.muted;
+    this.muted = muted;
     this.activated = true;
     try {
       localStorage.setItem('last-ferry-muted', String(this.muted));
     } catch {}
-    await this.reconcile();
+    await this.reconcile(!muted);
+  }
+  playback() {
+    const running = this.enabled() && this.context?.state === 'running';
+    return {
+      state: this.muted
+        ? ('muted' as const)
+        : running
+          ? ('running' as const)
+          : ('requested' as const),
+      requested: this.activated && !this.muted && !this.disposed,
+      running,
+      retryPending: this.resumePromise !== null,
+    };
   }
   private ensureTravel() {
     if (!this.enabled() || this.context?.state !== 'running' || !this.travelling) return;
@@ -657,6 +705,7 @@ export class Sound {
     }
     const records = [...this.owned.values()];
     return {
+      ...this.playback(),
       muted: this.muted,
       activated: this.activated,
       hidden: this.hidden,
@@ -728,6 +777,7 @@ export class Sound {
     if (this.disposed) return;
     this.disposed = true;
     this.generation++;
+    this.resumePromise = null;
     this.stopScheduler();
     if (this.suspendTimer !== null) clearTimeout(this.suspendTimer);
     this.suspendTimer = null;
@@ -742,5 +792,6 @@ export class Sound {
     this.padWave = null;
     this.pluckWave = null;
     if (this.context && this.context.state !== 'closed') void this.context.close().catch(() => {});
+    this.notify();
   }
 }

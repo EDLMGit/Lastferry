@@ -53,6 +53,9 @@ const paths = [
   ...(existsSync(new URL('NEXT_TASK_PHONE_PLAYABILITY.md', root))
     ? ['NEXT_TASK_PHONE_PLAYABILITY.md']
     : []),
+  ...(existsSync(new URL('NEXT_TASK_PHONE_AUDIO_FULLSCREEN.md', root))
+    ? ['NEXT_TASK_PHONE_AUDIO_FULLSCREEN.md']
+    : []),
   'docs/GAMEPLAY_RULES.md',
   'docs/FIRST_COVE.md',
   'docs/ART_DIRECTION.md',
