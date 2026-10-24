@@ -292,7 +292,7 @@ export class World {
       }
       this.registerPlace(n.id, 'waypoint', g);
     }
-    this.effects = new CrossingEffects(this.home);
+    this.effects = new CrossingEffects(this.home, this.coastalWater.mask);
     this.scene.add(this.effects.wake, this.effects.glow, this.effects.sweep);
     this.forecast = this.shores.forecast;
     this.scene.add(this.forecast);
@@ -338,6 +338,7 @@ export class World {
     this.renderer.domElement.addEventListener('webglcontextlost', (ev) => {
       ev.preventDefault();
       this.cancel();
+      this.clearMovement();
       this.settleHomecoming('context-loss');
     });
     this.frameRequest = requestAnimationFrame((t) => this.tick(t));
@@ -663,6 +664,7 @@ export class World {
     this.reduced = reduced;
     if (reduced) {
       if (this.transition) this.cancel();
+      this.clearMovement();
       this.homecomingCameraSuppressed = true;
       this.settleHomecoming('reduced-motion');
       this.restoreCamera();
@@ -865,6 +867,9 @@ export class World {
   draftY(s: State) {
     return 0.03 - (draft(s, this.level) - 1) * 0.075;
   }
+  clearMovement() {
+    this.effects.clearMovement();
+  }
   sync(s: State, preserveEffects = false) {
     this.state = s;
     if (!preserveEffects) this.resetHomecoming();
@@ -991,6 +996,11 @@ export class World {
       edgeId = edge.id;
       reverse = edge.nodes[0] !== before.boatNodeId;
       path = this.paths.get(edge.id)!;
+      this.effects.beginMovement(
+        performance.now(),
+        this.boatRoot.position,
+        this.boatRoot.rotation.y,
+      );
     }
     this.journeyFrame = path
       ? {
@@ -1109,6 +1119,7 @@ export class World {
         this.onArrival();
       }
       if (t === 1) {
+        if (tr.path) this.effects.finishMovement(time);
         if (tr.transfer) tr.transfer.completion = 'complete';
         this.transition = null;
         this.journeyFrame = null;
@@ -1131,6 +1142,7 @@ export class World {
       !!this.transition?.path,
       this.water.position.y,
       this.reduced,
+      this.hull.position.y,
     );
     this.coastalWater.setHarbor(this.effects.glow.position, this.effects.arrivalIntensity);
     this.coastalWater.update(this.water.position.y, this.reduced ? 0 : time * 0.001);

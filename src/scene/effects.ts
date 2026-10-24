@@ -1,5 +1,6 @@
 import * as T from 'three';
 import type { lighthouse } from './models';
+import { FerryWake, type WakeCoast } from './wake';
 
 export class CrossingEffects {
   wake: T.Mesh;
@@ -8,8 +9,8 @@ export class CrossingEffects {
   sweepPhase = 0;
   sweepLastTime: number | null = null;
   comparisonPhase: number | null = null;
-  points: { position: T.Vector3; time: number }[] = [];
-  emitting = false;
+  movement: FerryWake;
+  interaction: FerryWake['interaction'];
   arrivalStarted: number | null = null;
   arrivalIntensity = 0;
   resting = false;
@@ -18,42 +19,10 @@ export class CrossingEffects {
   lensBase = 0;
   lampBase = 0;
   reduced = false;
-  constructor(home: ReturnType<typeof lighthouse>) {
-    const geometry = new T.BufferGeometry();
-    geometry.setAttribute(
-      'position',
-      new T.Float32BufferAttribute(new Float32Array(32 * 6 * 3), 3).setUsage(T.DynamicDrawUsage),
-    );
-    geometry.setAttribute(
-      'fade',
-      new T.Float32BufferAttribute(new Float32Array(32 * 6), 1).setUsage(T.DynamicDrawUsage),
-    );
-    geometry.setAttribute(
-      'lateral',
-      new T.Float32BufferAttribute(new Float32Array(32 * 6), 1).setUsage(T.DynamicDrawUsage),
-    );
-    geometry.setDrawRange(0, 0);
-    this.wake = new T.Mesh(
-      geometry,
-      new T.ShaderMaterial({
-        transparent: true,
-        depthWrite: false,
-        side: T.DoubleSide,
-        vertexShader:
-          'attribute float fade;attribute float lateral;varying float alpha;varying float sideFade;void main(){alpha=fade;sideFade=lateral;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
-        fragmentShader: `varying float alpha;varying float sideFade;
-          void main(){
-            float feather=1.-smoothstep(.25,1.,abs(sideFade));
-            gl_FragColor=vec4(.36,.52,.48,alpha*feather);
-            #include <tonemapping_fragment>
-            #include <colorspace_fragment>
-          }`,
-      }),
-    );
-    this.wake.name = 'ferry-wake';
-    this.wake.userData.excludeFromFrame = true;
-    this.wake.frustumCulled = false;
-    this.wake.visible = false;
+  constructor(home: ReturnType<typeof lighthouse>, coast?: WakeCoast) {
+    this.movement = new FerryWake(coast);
+    this.wake = this.movement.mesh;
+    this.interaction = this.movement.interaction;
     const pixels = new Uint8Array(32 * 32 * 4);
     for (let y = 0; y < 32; y++)
       for (let x = 0; x < 32; x++) {
@@ -128,10 +97,7 @@ export class CrossingEffects {
     this.reset();
   }
   reset() {
-    this.points.length = 0;
-    this.emitting = false;
-    this.wake.geometry.setDrawRange(0, 0);
-    this.wake.visible = false;
+    this.clearMovement();
     this.arrivalStarted = null;
     this.arrivalIntensity = 0;
     this.resting = false;
@@ -167,6 +133,15 @@ export class CrossingEffects {
     this.glow.material.blending = T.AdditiveBlending;
     this.glow.material.opacity = 0.08 + this.arrivalIntensity * 0.26;
   }
+  beginMovement(time: number, position: T.Vector3, angle?: number) {
+    this.movement.begin(time, position, angle);
+  }
+  finishMovement(time: number) {
+    this.movement.finish(time);
+  }
+  clearMovement() {
+    this.movement.clear();
+  }
   update(
     time: number,
     position: T.Vector3,
@@ -174,59 +149,10 @@ export class CrossingEffects {
     moving: boolean,
     waterY: number,
     reduced: boolean,
+    hullY = 0,
   ) {
     this.reduced = reduced;
-    this.emitting = moving && !reduced;
-    if (this.emitting) {
-      const stern = position
-        .clone()
-        .add(new T.Vector3(-Math.sin(angle) * 0.72, 0, -Math.cos(angle) * 0.72));
-      stern.y = waterY + 0.018;
-      if (!this.points.length || stern.distanceTo(this.points.at(-1)!.position) > 0.045)
-        this.points.push({ position: stern, time });
-    }
-    while (this.points.length && time - this.points[0].time > 720) this.points.shift();
-    while (this.points.length > 31) this.points.shift();
-    let length = 0;
-    for (let i = this.points.length - 2; i >= 0; i--) {
-      length += this.points[i].position.distanceTo(this.points[i + 1].position);
-      if (length > 1.8) {
-        this.points.splice(0, i + 1);
-        break;
-      }
-    }
-    if (reduced) this.points.length = 0;
-    const positions = this.wake.geometry.getAttribute('position') as T.BufferAttribute;
-    const fade = this.wake.geometry.getAttribute('fade') as T.BufferAttribute;
-    const lateral = this.wake.geometry.getAttribute('lateral') as T.BufferAttribute;
-    let count = 0;
-    for (let i = 1; i < this.points.length; i++) {
-      const a = this.points[i - 1],
-        b = this.points[i];
-      const direction = b.position.clone().sub(a.position).setY(0).normalize();
-      const normal = new T.Vector3(-direction.z, 0, direction.x);
-      const widthA = 0.055 + Math.min(1, (time - a.time) / 720) * 0.2,
-        widthB = 0.055 + Math.min(1, (time - b.time) / 720) * 0.2;
-      const vertices = [
-        a.position.clone().addScaledVector(normal, widthA),
-        a.position.clone().addScaledVector(normal, -widthA),
-        b.position.clone().addScaledVector(normal, widthB),
-        a.position.clone().addScaledVector(normal, -widthA),
-        b.position.clone().addScaledVector(normal, -widthB),
-        b.position.clone().addScaledVector(normal, widthB),
-      ];
-      for (const [j, vertex] of vertices.entries()) {
-        positions.setXYZ(count, vertex.x, waterY + 0.018, vertex.z);
-        const age = time - (j < 2 || j === 3 ? a.time : b.time);
-        fade.setX(count, Math.max(0, 1 - age / 720) ** 1.4 * 0.16);
-        lateral.setX(count++, [1, -1, 1, -1, -1, 1][j]);
-      }
-    }
-    positions.needsUpdate = true;
-    fade.needsUpdate = true;
-    lateral.needsUpdate = true;
-    this.wake.geometry.setDrawRange(0, count);
-    this.wake.visible = count > 0;
+    this.movement.update(time, position, angle, moving, waterY, reduced, hullY);
     if (this.arrivalStarted !== null) {
       const elapsed = Math.max(0, time - this.arrivalStarted);
       this.arrivalIntensity = reduced ? 0.45 : 0.27 + 0.55 * Math.exp(-elapsed / 1100);
@@ -241,26 +167,8 @@ export class CrossingEffects {
     }
   }
   presentation() {
-    const count = this.wake.geometry.drawRange.count;
     return {
-      wake: {
-        emitting: this.emitting,
-        visible: this.wake.visible,
-        vertices: count,
-        positions: Array.from(
-          (this.wake.geometry.getAttribute('position') as T.BufferAttribute).array.slice(
-            0,
-            count * 3,
-          ),
-        ),
-        opacity: Array.from(
-          (this.wake.geometry.getAttribute('fade') as T.BufferAttribute).array.slice(0, count),
-        ),
-        points: this.points.map((point) => ({
-          position: point.position.toArray(),
-          time: point.time,
-        })),
-      },
+      wake: this.movement.presentation(),
       arrival: {
         active: this.arrivalStarted !== null,
         resting: this.resting,

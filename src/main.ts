@@ -1027,7 +1027,10 @@ document.addEventListener(
 );
 document.addEventListener('visibilitychange', () => {
   sound.visibility(document.hidden);
-  if (document.hidden) world.settleHomecoming();
+  if (document.hidden) {
+    world.settleHomecoming();
+    world.clearMovement();
+  }
   if (document.hidden && session.busy) {
     const id = activeTransition?.id;
     world.cancel('visibility');

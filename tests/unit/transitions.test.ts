@@ -1,7 +1,14 @@
 import { describe, expect, test } from 'vitest';
 import { bellwater, holdingPier } from '../../src/levels/level';
+import type { Action } from '../../src/game/rules';
 import { getLevelPaths } from '../../src/scene/paths';
-import { journeyProgress, settlingProgress, transitionPlan } from '../../src/scene/transitions';
+import {
+  journeyProgress,
+  restrainedTiming,
+  settlingProgress,
+  slowerTiming,
+  transitionPlan,
+} from '../../src/scene/transitions';
 import { overlaps, placeLocalCard } from '../../src/ui/placement';
 
 describe('journey presentation policy', () => {
@@ -12,8 +19,10 @@ describe('journey presentation policy', () => {
     const plans = lengths.map((length) =>
       transitionPlan({ type: 'move', to: 'destination' }, false, length, false),
     );
-    expect(Math.max(...plans.map((plan) => plan.duration))).toBeGreaterThan(1800);
-    expect(Math.min(...plans.map((plan) => plan.duration))).toBeLessThan(1500);
+    expect(Math.max(...plans.map((plan) => plan.duration))).toBeGreaterThan(2700);
+    expect(Math.max(...plans.map((plan) => plan.duration))).toBeLessThanOrEqual(3000);
+    expect(Math.min(...plans.map((plan) => plan.duration))).toBeGreaterThanOrEqual(1600);
+    expect(Math.min(...plans.map((plan) => plan.duration))).toBeLessThan(1950);
     for (const plan of plans) {
       expect(plan.tideDuration).toBeLessThan(plan.duration / 2);
       expect(plan.recoveryDelay - plan.duration).toBeGreaterThanOrEqual(900);
@@ -25,6 +34,24 @@ describe('journey presentation policy', () => {
     expect(
       transitionPlan({ type: 'unload', passengerIds: ['moss'] }, true, 0, false).duration,
     ).toBeLessThan(plans[0].duration);
+  });
+
+  test('calmer sailing leaves Reduced, transfers and visible delivery timing unchanged', () => {
+    const actions: Action[] = [
+      { type: 'move', to: 'destination' },
+      { type: 'wait' },
+      { type: 'board', passengerIds: ['pip'] },
+      { type: 'unload', passengerIds: ['pip'] },
+    ];
+    for (const action of actions) {
+      expect(transitionPlan(action, true, 9, true, slowerTiming)).toEqual(
+        transitionPlan(action, true, 9, true, restrainedTiming),
+      );
+      if (action.type !== 'move')
+        expect(transitionPlan(action, true, 9, false, slowerTiming)).toEqual(
+          transitionPlan(action, true, 9, false, restrainedTiming),
+        );
+    }
   });
 
   test('distance progresses monotonically with a steady middle and symmetric gentle ends', () => {

@@ -2,10 +2,10 @@ import type { Action } from '../game/rules';
 
 export type JourneyTiming = { base: number; perUnit: number; minimum: number; maximum: number };
 export const slowerTiming: JourneyTiming = {
-  base: 900,
-  perUnit: 150,
-  minimum: 1400,
-  maximum: 2400,
+  base: 1000,
+  perUnit: 200,
+  minimum: 1600,
+  maximum: 3000,
 };
 export const restrainedTiming: JourneyTiming = {
   base: 800,
@@ -13,7 +13,7 @@ export const restrainedTiming: JourneyTiming = {
   minimum: 1200,
   maximum: 2300,
 };
-export const journeyTiming = restrainedTiming;
+export const journeyTiming = slowerTiming;
 export type CompletionReason = 'complete' | 'recovery' | 'visibility' | 'cancelled' | 'error';
 export type TransitionPlan = { duration: number; tideDuration: number; recoveryDelay: number };
 

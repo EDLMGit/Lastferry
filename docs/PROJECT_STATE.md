@@ -1,6 +1,6 @@
 # Last Ferry — Project state
 
-Updated: 2026-10-23. This is the compact continuity record for the current project, not a claim that every device or future release requirement has been verified.
+Updated: 2026-10-24. This is the compact continuity record for the current project, not a claim that every device or future release requirement has been verified.
 
 Read this before choosing scope. Detailed implementation history belongs in `STATUS.md`; evidence belongs under `reviews/`. Update this record after each handoff and after a confirmed deployment. User feedback can revise an accepted decision.
 
@@ -20,14 +20,14 @@ Local Codex implements the current task. ChatGPT reviews the identifiable handof
 | Working branch | `m1-first-crossing` |
 | PR | https://github.com/EDLMGit/Lastferry/pull/1 — draft |
 | Homecoming implementation | `d3a7e3acfa2298bcaaa8e93622e81d62b367280e` — locally verified; final packaging SHA in PR handoff |
-| Lighthouse implementation | `040df0d6d2b8e094446b2bc3dc8ff3b78837fc78` — verified; awaiting review/publication; final metadata SHA in PR handoff |
-| Reviewed game baseline | `dafb445b8d769ff92b4390d06bf3ca92bbbe8b8b` |
-| Private phone build | `dafb445b8d769ff92b4390d06bf3ca92bbbe8b8b` — publication confirmed 2026-10-23 |
+| Lighthouse implementation | `040df0d6d2b8e094446b2bc3dc8ff3b78837fc78` — accepted; final reviewed packaging commit below |
+| Reviewed game baseline | `0ee7d685071179b82ec2a599fac2f818251d0e54` |
+| Private phone build | `0ee7d685071179b82ec2a599fac2f818251d0e54` — publication confirmed 2026-10-23 |
 | Stable phone URL | https://last-ferry-playtest.abumech.chatgpt.site |
-| Site source commit | `049c7998a8bd8afbd2e42c414c80ea0bad7d7e8d` |
+| Site source commit | `273aa4a9900ca8a302b8708f356a2dc83dac7acd` |
 | Main | Unchanged by this workflow; no merge authorized |
 
-The Site source SHA differs because it includes hosting metadata. The lighthouse task carries the confirmed publication handoff for the reviewed homecoming build. The existing Site identity, stable URL and owner-private audience are unchanged. A new implementation SHA below is separate from that live game.
+The Site source SHA differs because it includes hosting metadata. The water-motion task carries the confirmed publication handoff for the accepted lighthouse refinement. The existing Site identity, stable URL and owner-private audience are unchanged. A new implementation SHA below is separate from that live game.
 
 After the next implementation, record the new GitHub SHA separately from the live Site's game SHA. Do not update the live field until deployment is confirmed.
 
@@ -65,20 +65,34 @@ Observed behavior: one 20-second sweep; one finite post-disembarkation gesture; 
 
 Fresh gates: build/typecheck, **153/153 unit tests**, **14 distinct focused browser cases** pass, with three affected cases rerun after strengthening checks/final rebuilding. All three actual UI rescues, three phone sizes, normal/reduced preferences, subsets, tide/terminal Undo, camera/picking restore, Settings, simulated hide/context recovery and accepted audio regressions are covered. Native images and uninterrupted local actual-audio capture retained; original failures/inconclusive source-reload run are preserved. No confirmed blocker within this coverage. The reviewer independently reran build/typecheck and 153/153 unit tests and inspected committed captures; contributor browser results remain contributor results. No new independent WebGL or physical-phone result is claimed.
 
-## Active task: Lighthouse light refinement
+## Accepted baseline: Lighthouse light refinement
 
-`NEXT_TASK_LIGHTHOUSE.md` is the only active implementation task. Refine the won-state cone proxy using soft view-facing silhouette attenuation appropriate to the orthographic camera, smooth distance falloff, restrained light blending and the existing lantern glow. Compare matched actual-game angles and a full natural rotation at native phone size. Preserve all accepted homecoming timing, audio, camera, Settings, water, puzzles and Undo. No new lighting framework, water pass, bloom or gameplay belongs here.
+`NEXT_TASK_LIGHTHOUSE.md` is completed and accepted. The won-state cone proxy uses soft view-facing silhouette attenuation appropriate to the orthographic camera, smooth distance falloff, restrained light blending and the existing lantern glow. Its matched actual-game angles and full natural rotation remain documented. Preserve this result alongside homecoming, audio, camera, Settings, puzzles and Undo.
 
-**Implementation and focused verification complete; awaiting visual review and publication.** Started clean at reviewed `dafb445b8d769ff92b4390d06bf3ca92bbbe8b8b`. Retained the clean `.22` cone treatment after native-phone comparison rejected the too-faint `.16` trial. Continuous view-space normals supply orthographic silhouette fading; smooth distance falloff dissolves before the rim; restrained additive front/back contributions and the existing additive won-state source glow replace the flat wedge appearance. Ordinary glow blending resets unchanged. No extra shell, texture, noise, water pass or global exposure change. Accepted timing and all protected behavior remain.
+**Accepted and published as `0ee7d685071179b82ec2a599fac2f818251d0e54` on 2026-10-23.** Started clean at reviewed `dafb445b8d769ff92b4390d06bf3ca92bbbe8b8b`. Retained the clean `.22` cone treatment after native-phone comparison rejected the too-faint `.16` trial. Continuous view-space normals supply orthographic silhouette fading; smooth distance falloff dissolves before the rim; restrained additive front/back contributions and the existing additive won-state source glow replace the flat wedge appearance. Ordinary glow blending resets unchanged. No extra shell, texture, noise, water pass or global exposure change. Accepted timing and all protected behavior remain.
 
 Fresh Node24 build/typecheck, **156/156 unit tests** and **12/12 focused browser cases** pass. Actual Holding UI rescue includes subset/tide Undo, visible arrival, Settings/Back, menu return, Reduced/Follow device, terminal Undo/redelivery and bounded warm resources. First Crossing and Bellwater UI rescues pass. Four native viewports inspected:1440×900,844×390,780×390,780×320. Sixteen matched before/after pairs share exact state/camera/angle. Full natural phone rotation takes20.169s; desktop dual recording takes39.859s under SwiftShader and its unchanged delta clamp. No native-GPU performance claim. Raw uninterrupted whole-interface video and paired canvas/runtime audio remain local/ignored.
 
 Evidence: `reviews/lighthouse-light/REVIEW.md`, comparison index and source/capture/packaging manifests. Tested121-file source hash `a858591704abb3adb2a78f4dae6d8f9facffef459d35caa00528306e840f81d9`; final runtime capture hash `d943620659412c6af9a5254cb69c7277da9cded6641eaebf4ed5a4031c717d5b`. Captures identify baseline HEAD plus working changes, not a future commit. Final implementation/Git identity is recorded in the packaging audit and handoff. PR#1 remains draft; main and the private Site remain unchanged. Physical Android, other engines, native GPU and acoustic listening are still unverified. Further ideas stay queued.
 
+The water-motion task confirms independent production build/typecheck and **156/156 unit tests** passing for the published lighthouse build. Contributor browser results and committed images were audited; no physical Android/native-GPU approval is implied.
+
+## Active task: Boat wake and water response
+
+`NEXT_TASK_WATER_MOTION.md` is the only active implementation scope. Improve the curved world-space wake, hull/water contact and finite docking fade; compare a modestly slower presentation through actual short Holding and long Bellwater trips at native phone size. Preserve rules, authored courses, transfers, UI, audio, lighthouse/homecoming and full Undo. No global water redesign or new player controls.
+
+Started clean on `m1-first-crossing` at reviewed `0ee7d685071179b82ec2a599fac2f818251d0e54`; no newer or unrelated work. Baseline phone recordings precede renderer changes. Retain a single preallocated wake/contact mesh with broken pearl crests, teal disturbance, distance-resampled world history (96points/1800ms/3.6units), small hull-anchored bow/stern contact and a finite normal-dock fade without extending the busy lock. New moves separate segments; discontinuity/Undo/Restart/cove/hide/recovery/Reduced clear transients. Water height moves existing geometry without false emission.
+
+Actual short/long phone comparison chose clamp(1000+200×canonical length,1600,3000)ms:1874/2823ms representative plans, compared with1412/2076ms. Easing, rules/routes,30ms Reduced, transfers/final unloading, tide phase and recovery policy remain. The local water-normal experiment was rejected after native on/off comparison found no consistent benefit; the accepted water shader/fields/Harbor reflection remain byte-exact. Lighthouse and all accepted audio behavior remain.
+
+**Implementation and focused verification complete; awaiting ChatGPT review/publication.** Build/typecheck and163/163unit checks pass.18 distinct focused browser cases pass via17passes in the full run and1/1affected rerun after correcting the new First Crossing test fixture; the original failure and earlier inconclusive assertion-heavy run are preserved. Test-only edits retain full-value coverage and identical runtime/build/unit inputs, with fresh TypeScript checks. All final natural844/780/1440crossing captures pass and preserve source;81native ordered frames and780×320ending/Settings confirm exercised presentation.15named originals decode and remain local/ignored. The matched low-overhead performance repeat shows equal33.4ms median/50.1ms p95 with unchanged draw/resources; no Android performance claim.
+
+Final127-file hash `e84792307ccda2b3efea3b70f7846331a6c3cec9d6afce4cc0bccdca48d52804`; runtime `be1d42f21ba0b4f45687fda21c1db730254e5f68dfc7a0ccd7eba16956a8c62b`. See `reviews/water-motion/REVIEW.md`, source/capture/packaging audits and final handoff for committed Git identity. No confirmed blocker in exercised coverage. Physical Android/native GPU/other engines/listening remain unverified. PR#1 remains draft and main unchanged. The private Site still runs0ee7d685; this pass is not published. New ideas remain queued.
+
 ## Queue and scope boundaries
 
 - Further playtest feedback will arrive incrementally. Add it here with a brief status and concrete intent; do not implement it automatically during the active task.
-- Homecoming is accepted overall. The light appearance is assigned to the active refinement only; additional ideas remain queued.
+- Homecoming and lighthouse light are accepted. Boat/water motion is the assigned refinement; additional ideas remain queued.
 - More authored coves and increasing difficulty remain a later product direction. The active pass adds no puzzle or mechanic.
 - Broader environment/art changes and further audio changes require a later active task or new user feedback.
 - Extra volume sliders, graphics presets, rewards, accounts and progression systems are not requested deliverables.

@@ -1,0 +1,922 @@
+diff --git a/src/main.ts b/src/main.ts
+index 043d582..ca588bc 100644
+--- a/src/main.ts
++++ b/src/main.ts
+@@ -1027,7 +1027,10 @@ document.addEventListener(
+ );
+ document.addEventListener('visibilitychange', () => {
+   sound.visibility(document.hidden);
+-  if (document.hidden) world.settleHomecoming();
++  if (document.hidden) {
++    world.settleHomecoming();
++    world.clearMovement();
++  }
+   if (document.hidden && session.busy) {
+     const id = activeTransition?.id;
+     world.cancel('visibility');
+@@ -1096,5 +1099,6 @@ if (import.meta.env.DEV)
+       setWaterCandidate: (candidate: 'luminous' | 'restrained') =>
+         world.coastalWater.configure(waterPresets[candidate]),
+       setWaterTuning: (tuning: Partial<WaterTuning>) => world.coastalWater.configure(tuning),
++      setBoatResponseCandidate: (strength: number) => world.coastalWater.configureBoatResponse(strength),
+     },
+   });
+diff --git a/src/scene/effects.ts b/src/scene/effects.ts
+index a650119..4312add 100644
+--- a/src/scene/effects.ts
++++ b/src/scene/effects.ts
+@@ -1,5 +1,6 @@
+ import * as T from 'three';
+ import type { lighthouse } from './models';
++import { FerryWake, type WakeCoast } from './wake';
+ 
+ export class CrossingEffects {
+   wake: T.Mesh;
+@@ -8,8 +9,8 @@ export class CrossingEffects {
+   sweepPhase = 0;
+   sweepLastTime: number | null = null;
+   comparisonPhase: number | null = null;
+-  points: { position: T.Vector3; time: number }[] = [];
+-  emitting = false;
++  movement: FerryWake;
++  interaction: FerryWake['interaction'];
+   arrivalStarted: number | null = null;
+   arrivalIntensity = 0;
+   resting = false;
+@@ -18,42 +19,10 @@ export class CrossingEffects {
+   lensBase = 0;
+   lampBase = 0;
+   reduced = false;
+-  constructor(home: ReturnType<typeof lighthouse>) {
+-    const geometry = new T.BufferGeometry();
+-    geometry.setAttribute(
+-      'position',
+-      new T.Float32BufferAttribute(new Float32Array(32 * 6 * 3), 3).setUsage(T.DynamicDrawUsage),
+-    );
+-    geometry.setAttribute(
+-      'fade',
+-      new T.Float32BufferAttribute(new Float32Array(32 * 6), 1).setUsage(T.DynamicDrawUsage),
+-    );
+-    geometry.setAttribute(
+-      'lateral',
+-      new T.Float32BufferAttribute(new Float32Array(32 * 6), 1).setUsage(T.DynamicDrawUsage),
+-    );
+-    geometry.setDrawRange(0, 0);
+-    this.wake = new T.Mesh(
+-      geometry,
+-      new T.ShaderMaterial({
+-        transparent: true,
+-        depthWrite: false,
+-        side: T.DoubleSide,
+-        vertexShader:
+-          'attribute float fade;attribute float lateral;varying float alpha;varying float sideFade;void main(){alpha=fade;sideFade=lateral;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
+-        fragmentShader: `varying float alpha;varying float sideFade;
+-          void main(){
+-            float feather=1.-smoothstep(.25,1.,abs(sideFade));
+-            gl_FragColor=vec4(.36,.52,.48,alpha*feather);
+-            #include <tonemapping_fragment>
+-            #include <colorspace_fragment>
+-          }`,
+-      }),
+-    );
+-    this.wake.name = 'ferry-wake';
+-    this.wake.userData.excludeFromFrame = true;
+-    this.wake.frustumCulled = false;
+-    this.wake.visible = false;
++  constructor(home: ReturnType<typeof lighthouse>, coast?: WakeCoast) {
++    this.movement = new FerryWake(coast);
++    this.wake = this.movement.mesh;
++    this.interaction = this.movement.interaction;
+     const pixels = new Uint8Array(32 * 32 * 4);
+     for (let y = 0; y < 32; y++)
+       for (let x = 0; x < 32; x++) {
+@@ -128,10 +97,7 @@ export class CrossingEffects {
+     this.reset();
+   }
+   reset() {
+-    this.points.length = 0;
+-    this.emitting = false;
+-    this.wake.geometry.setDrawRange(0, 0);
+-    this.wake.visible = false;
++    this.clearMovement();
+     this.arrivalStarted = null;
+     this.arrivalIntensity = 0;
+     this.resting = false;
+@@ -167,6 +133,15 @@ export class CrossingEffects {
+     this.glow.material.blending = T.AdditiveBlending;
+     this.glow.material.opacity = 0.08 + this.arrivalIntensity * 0.26;
+   }
++  beginMovement(time: number, position: T.Vector3, angle?: number) {
++    this.movement.begin(time, position, angle);
++  }
++  finishMovement(time: number) {
++    this.movement.finish(time);
++  }
++  clearMovement() {
++    this.movement.clear();
++  }
+   update(
+     time: number,
+     position: T.Vector3,
+@@ -174,59 +149,10 @@ export class CrossingEffects {
+     moving: boolean,
+     waterY: number,
+     reduced: boolean,
++    hullY = 0,
+   ) {
+     this.reduced = reduced;
+-    this.emitting = moving && !reduced;
+-    if (this.emitting) {
+-      const stern = position
+-        .clone()
+-        .add(new T.Vector3(-Math.sin(angle) * 0.72, 0, -Math.cos(angle) * 0.72));
+-      stern.y = waterY + 0.018;
+-      if (!this.points.length || stern.distanceTo(this.points.at(-1)!.position) > 0.045)
+-        this.points.push({ position: stern, time });
+-    }
+-    while (this.points.length && time - this.points[0].time > 720) this.points.shift();
+-    while (this.points.length > 31) this.points.shift();
+-    let length = 0;
+-    for (let i = this.points.length - 2; i >= 0; i--) {
+-      length += this.points[i].position.distanceTo(this.points[i + 1].position);
+-      if (length > 1.8) {
+-        this.points.splice(0, i + 1);
+-        break;
+-      }
+-    }
+-    if (reduced) this.points.length = 0;
+-    const positions = this.wake.geometry.getAttribute('position') as T.BufferAttribute;
+-    const fade = this.wake.geometry.getAttribute('fade') as T.BufferAttribute;
+-    const lateral = this.wake.geometry.getAttribute('lateral') as T.BufferAttribute;
+-    let count = 0;
+-    for (let i = 1; i < this.points.length; i++) {
+-      const a = this.points[i - 1],
+-        b = this.points[i];
+-      const direction = b.position.clone().sub(a.position).setY(0).normalize();
+-      const normal = new T.Vector3(-direction.z, 0, direction.x);
+-      const widthA = 0.055 + Math.min(1, (time - a.time) / 720) * 0.2,
+-        widthB = 0.055 + Math.min(1, (time - b.time) / 720) * 0.2;
+-      const vertices = [
+-        a.position.clone().addScaledVector(normal, widthA),
+-        a.position.clone().addScaledVector(normal, -widthA),
+-        b.position.clone().addScaledVector(normal, widthB),
+-        a.position.clone().addScaledVector(normal, -widthA),
+-        b.position.clone().addScaledVector(normal, -widthB),
+-        b.position.clone().addScaledVector(normal, widthB),
+-      ];
+-      for (const [j, vertex] of vertices.entries()) {
+-        positions.setXYZ(count, vertex.x, waterY + 0.018, vertex.z);
+-        const age = time - (j < 2 || j === 3 ? a.time : b.time);
+-        fade.setX(count, Math.max(0, 1 - age / 720) ** 1.4 * 0.16);
+-        lateral.setX(count++, [1, -1, 1, -1, -1, 1][j]);
+-      }
+-    }
+-    positions.needsUpdate = true;
+-    fade.needsUpdate = true;
+-    lateral.needsUpdate = true;
+-    this.wake.geometry.setDrawRange(0, count);
+-    this.wake.visible = count > 0;
++    this.movement.update(time, position, angle, moving, waterY, reduced, hullY);
+     if (this.arrivalStarted !== null) {
+       const elapsed = Math.max(0, time - this.arrivalStarted);
+       this.arrivalIntensity = reduced ? 0.45 : 0.27 + 0.55 * Math.exp(-elapsed / 1100);
+@@ -241,26 +167,8 @@ export class CrossingEffects {
+     }
+   }
+   presentation() {
+-    const count = this.wake.geometry.drawRange.count;
+     return {
+-      wake: {
+-        emitting: this.emitting,
+-        visible: this.wake.visible,
+-        vertices: count,
+-        positions: Array.from(
+-          (this.wake.geometry.getAttribute('position') as T.BufferAttribute).array.slice(
+-            0,
+-            count * 3,
+-          ),
+-        ),
+-        opacity: Array.from(
+-          (this.wake.geometry.getAttribute('fade') as T.BufferAttribute).array.slice(0, count),
+-        ),
+-        points: this.points.map((point) => ({
+-          position: point.position.toArray(),
+-          time: point.time,
+-        })),
+-      },
++      wake: this.movement.presentation(),
+       arrival: {
+         active: this.arrivalStarted !== null,
+         resting: this.resting,
+diff --git a/src/scene/transitions.ts b/src/scene/transitions.ts
+index 703ec12..e1213b9 100644
+--- a/src/scene/transitions.ts
++++ b/src/scene/transitions.ts
+@@ -2,10 +2,10 @@ import type { Action } from '../game/rules';
+ 
+ export type JourneyTiming = { base: number; perUnit: number; minimum: number; maximum: number };
+ export const slowerTiming: JourneyTiming = {
+-  base: 900,
+-  perUnit: 150,
+-  minimum: 1400,
+-  maximum: 2400,
++  base: 1000,
++  perUnit: 200,
++  minimum: 1600,
++  maximum: 3000,
+ };
+ export const restrainedTiming: JourneyTiming = {
+   base: 800,
+diff --git a/src/scene/water-shader.ts b/src/scene/water-shader.ts
+index e73b44b..113e3c8 100644
+--- a/src/scene/water-shader.ts
++++ b/src/scene/water-shader.ts
+@@ -21,6 +21,10 @@ uniform vec3 pearlColor;
+ uniform vec3 amberColor;
+ uniform vec3 lampPosition;
+ uniform float arrival;
++uniform vec2 boatPosition;
++uniform vec2 boatDirection;
++uniform float boatStrength;
++uniform float boatResponse;
+ uniform float normalScale;
+ uniform float normalSpeed;
+ uniform float normalStrength;
+@@ -46,6 +50,22 @@ float c=dot(p,vec2(.95,5.2))-t*.23;
+ vec2 slope=cos(a)*vec2(1.23,.48)*.58+cos(b)*vec2(-.66,2.18)*.23+cos(c)*vec2(.95,5.2)*.045;
+ return normalize(vec3(-slope.x*normalStrength,1.,-slope.y*normalStrength));
+ }
++vec3 boatNormal(vec2 p,vec3 normal,float depth){
++float strength=boatStrength*boatResponse;
++if(strength<.001)return normal;
++vec2 side=vec2(boatDirection.y,-boatDirection.x);
++vec2 offset=p-boatPosition;
++float along=dot(offset,boatDirection);
++float across=dot(offset,side);
++float sideDistance=(abs(across)-.54)/.24;
++float sideAlong=(along-.08)/1.1;
++float hullSide=exp(-sideDistance*sideDistance-sideAlong*sideAlong);
++float bowAlong=(along-.9)/.27;
++float bow=exp(-across*across/.32-bowAlong*bowAlong);
++vec2 slope=side*(across/sqrt(across*across+.02))*hullSide*.18+boatDirection*bow*.12;
++float submerged=smoothstep(.025,.16,depth);
++return normalize(normal-vec3(slope.x,0.,slope.y)*strength*submerged);
++}
+ void main(){
+ vec2 p=world.xz;
+ vec4 coastData=texture2D(coast,clamp((p-field.xy)/field.zw,0.,1.));
+@@ -53,6 +73,7 @@ vec3 n=waveNormal(p);
+ vec3 v=viewDirection;
+ vec4 firstBed=bedAt(p);
+ float initialDepth=clamp(waterY-bedHeight(firstBed),0.,3.);
++n=boatNormal(p,n,initialDepth);
+ vec2 rayOffset=-v.xz/max(v.y,.25)*min(initialDepth,.55)*.68;
+ float contactFade=smoothstep(.025,.24,initialDepth);
+ vec2 bedPoint=p+rayOffset+n.xz*distortion*contactFade*min(initialDepth,.9);
+diff --git a/src/scene/water.ts b/src/scene/water.ts
+index df33573..ad00ee7 100644
+--- a/src/scene/water.ts
++++ b/src/scene/water.ts
+@@ -165,6 +165,10 @@ export class CoastalWater {
+         sunColor: { value: new T.Color(light?.sun ?? '#ffe0af') },
+         lampPosition: { value: new T.Vector3() },
+         arrival: { value: 0 },
++        boatPosition: { value: new T.Vector2() },
++        boatDirection: { value: new T.Vector2(0, 1) },
++        boatStrength: { value: 0 },
++        boatResponse: { value: 1 },
+         sheenCenter: {
+           value: level.id === 'bellwater' ? new T.Vector2(0.3, 2.8) : new T.Vector2(0.9, 2.2),
+         },
+@@ -199,6 +203,28 @@ export class CoastalWater {
+     material.uniforms.lampPosition.value.copy(position);
+     material.uniforms.arrival.value = arrivalIntensity;
+   }
++  setBoatInteraction(position: T.Vector3, direction: T.Vector3, strength: number) {
++    const material = this.mesh.material as T.ShaderMaterial;
++    const length = Math.hypot(direction.x, direction.z);
++    if (!Number.isFinite(position.x + position.z + length + strength) || length < 1e-6) {
++      this.clearBoatInteraction();
++      return;
++    }
++    material.uniforms.boatPosition.value.set(position.x, position.z);
++    material.uniforms.boatDirection.value.set(direction.x / length, direction.z / length);
++    material.uniforms.boatStrength.value = T.MathUtils.clamp(strength, 0, 1);
++  }
++  clearBoatInteraction() {
++    const material = this.mesh.material as T.ShaderMaterial;
++    material.uniforms.boatPosition.value.set(0, 0);
++    material.uniforms.boatDirection.value.set(0, 1);
++    material.uniforms.boatStrength.value = 0;
++  }
++  configureBoatResponse(strength: number) {
++    if (!Number.isFinite(strength)) return;
++    const material = this.mesh.material as T.ShaderMaterial;
++    material.uniforms.boatResponse.value = T.MathUtils.clamp(strength, 0, 1);
++  }
+   setLighting(sunDirection: T.Vector3, skyColor?: T.Color, sunColor?: T.Color) {
+     const material = this.mesh.material as T.ShaderMaterial;
+     material.uniforms.sunDirection.value.copy(sunDirection).normalize();
+@@ -224,6 +250,12 @@ export class CoastalWater {
+       viewDirection: (material.uniforms.viewDirection.value as T.Vector3).toArray(),
+       lampPosition: (material.uniforms.lampPosition.value as T.Vector3).toArray(),
+       arrival: material.uniforms.arrival.value as number,
++      boat: {
++        position: (material.uniforms.boatPosition.value as T.Vector2).toArray(),
++        direction: (material.uniforms.boatDirection.value as T.Vector2).toArray(),
++        strength: material.uniforms.boatStrength.value as number,
++        response: material.uniforms.boatResponse.value as number,
++      },
+       tuning: { ...this.tuning },
+       substrate: {
+         size: [this.seabed.texture.image.width, this.seabed.texture.image.height],
+diff --git a/src/scene/world.ts b/src/scene/world.ts
+index 2dcb1cc..c237025 100644
+--- a/src/scene/world.ts
++++ b/src/scene/world.ts
+@@ -292,7 +292,7 @@ export class World {
+       }
+       this.registerPlace(n.id, 'waypoint', g);
+     }
+-    this.effects = new CrossingEffects(this.home);
++    this.effects = new CrossingEffects(this.home, this.coastalWater.mask);
+     this.scene.add(this.effects.wake, this.effects.glow, this.effects.sweep);
+     this.forecast = this.shores.forecast;
+     this.scene.add(this.forecast);
+@@ -338,6 +338,7 @@ export class World {
+     this.renderer.domElement.addEventListener('webglcontextlost', (ev) => {
+       ev.preventDefault();
+       this.cancel();
++      this.clearMovement();
+       this.settleHomecoming('context-loss');
+     });
+     this.frameRequest = requestAnimationFrame((t) => this.tick(t));
+@@ -663,6 +664,7 @@ export class World {
+     this.reduced = reduced;
+     if (reduced) {
+       if (this.transition) this.cancel();
++      this.clearMovement();
+       this.homecomingCameraSuppressed = true;
+       this.settleHomecoming('reduced-motion');
+       this.restoreCamera();
+@@ -865,13 +867,20 @@ export class World {
+   draftY(s: State) {
+     return 0.03 - (draft(s, this.level) - 1) * 0.075;
+   }
++  clearMovement() {
++    this.effects.clearMovement();
++    this.coastalWater.clearBoatInteraction();
++  }
+   sync(s: State, preserveEffects = false) {
+     this.state = s;
+     if (!preserveEffects) this.resetHomecoming();
+     this.coastalWater.update(s.tideLevel * 0.18, this.reduced ? 0 : this.lastTime * 0.001);
+     this.shores.update(this.water.position.y);
+     this.setForecast(false, s.tideLevel);
+-    if (!preserveEffects) this.effects.reset();
++    if (!preserveEffects) {
++      this.effects.reset();
++      this.coastalWater.clearBoatInteraction();
++    }
+     if (s.status === 'won' && !preserveEffects) {
+       this.effects.settle(this.reduced);
+       this.homecoming.restore();
+@@ -991,6 +1000,7 @@ export class World {
+       edgeId = edge.id;
+       reverse = edge.nodes[0] !== before.boatNodeId;
+       path = this.paths.get(edge.id)!;
++      this.effects.beginMovement(performance.now(), this.boatRoot.position, this.boatRoot.rotation.y);
+     }
+     this.journeyFrame = path
+       ? {
+@@ -1109,6 +1119,7 @@ export class World {
+         this.onArrival();
+       }
+       if (t === 1) {
++        if (tr.path) this.effects.finishMovement(time);
+         if (tr.transfer) tr.transfer.completion = 'complete';
+         this.transition = null;
+         this.journeyFrame = null;
+@@ -1131,6 +1142,12 @@ export class World {
+       !!this.transition?.path,
+       this.water.position.y,
+       this.reduced,
++      this.hull.position.y,
++    );
++    this.coastalWater.setBoatInteraction(
++      this.effects.interaction.position,
++      this.effects.interaction.direction,
++      this.effects.interaction.strength,
+     );
+     this.coastalWater.setHarbor(this.effects.glow.position, this.effects.arrivalIntensity);
+     this.coastalWater.update(this.water.position.y, this.reduced ? 0 : time * 0.001);
+diff --git a/src/scene/wake.ts b/src/scene/wake.ts
+new file mode 100644
+--- /dev/null
++++ b/src/scene/wake.ts
+@@ -0,0 +1,429 @@
++import * as T from 'three';
++
++export type WakeCoast = { texture: T.Texture; bounds: T.Vector4 };
++
++export const wakeLimits = { capacity: 96, lifetime: 1800, length: 3.6, spacing: 0.055 };
++
++type WakePoint = {
++  position: T.Vector3;
++  center: T.Vector3;
++  time: number;
++  angle: number;
++  strength: number;
++  distance: number;
++  segment: number;
++};
++
++export class FerryWake {
++  mesh: T.Mesh<T.BufferGeometry, T.ShaderMaterial>;
++  interaction = { position: new T.Vector3(), direction: new T.Vector3(0, 0, 1), strength: 0 };
++  readonly pool: WakePoint[] = Array.from({ length: wakeLimits.capacity }, () => ({
++    position: new T.Vector3(),
++    center: new T.Vector3(),
++    time: 0,
++    angle: 0,
++    strength: 0,
++    distance: 0,
++    segment: 0,
++  }));
++  readonly joins = new Float32Array(wakeLimits.capacity * 2);
++  count = 0;
++  first = 0;
++  segment = 0;
++  emitting = false;
++  active = false;
++  previous = new T.Vector3();
++  previousAngle = 0;
++  previousTime: number | null = null;
++  previousWater = 0;
++  carried = 0;
++  travelled = 0;
++  speed = 0;
++  strength = 0;
++  peakStrength = 0;
++  dockingStarted: number | null = null;
++  dockingStrength = 0;
++  contactStrength = 0;
++  vertices = 0;
++
++  constructor(coast?: WakeCoast) {
++    const capacity = (wakeLimits.capacity + 48) * 6,
++      geometry = new T.BufferGeometry();
++    geometry.setAttribute(
++      'position',
++      new T.Float32BufferAttribute(new Float32Array(capacity * 3), 3).setUsage(T.DynamicDrawUsage),
++    );
++    for (const name of ['fade', 'lateral', 'distance', 'age', 'kind'])
++      geometry.setAttribute(
++        name,
++        new T.Float32BufferAttribute(new Float32Array(capacity), 1).setUsage(T.DynamicDrawUsage),
++      );
++    geometry.setDrawRange(0, 0);
++    const material = new T.ShaderMaterial({
++      transparent: true,
++      depthTest: true,
++      depthWrite: false,
++      side: T.DoubleSide,
++      forceSinglePass: true,
++      uniforms: {
++        pearl: { value: new T.Color('#d3e7df') },
++        body: { value: new T.Color('#3b8889') },
++        coast: { value: coast?.texture ?? null },
++        field: { value: coast?.bounds ?? new T.Vector4(0, 0, 1, 1) },
++        hasCoast: { value: coast ? 1 : 0 },
++        waterY: { value: 0 },
++      },
++      vertexShader: `attribute float fade;attribute float lateral;attribute float distance;attribute float age;attribute float kind;
++        varying float alpha;varying float side;varying float along;varying float old;varying float layer;varying vec2 worldXZ;
++        void main(){
++          alpha=fade;side=lateral;along=distance;old=age;layer=kind;worldXZ=position.xz;
++          gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);
++        }`,
++      fragmentShader: `uniform vec3 pearl;uniform vec3 body;uniform sampler2D coast;uniform vec4 field;uniform float hasCoast;uniform float waterY;
++        varying float alpha;varying float side;varying float along;varying float old;varying float layer;varying vec2 worldXZ;
++        void main(){
++          float feather=1.-smoothstep(.78,1.,abs(side));
++          float rhythm=.48+.52*smoothstep(-.65,.7,sin(along*7.1+side*1.2));
++          float crestCenter=.66+.045*sin(along*3.8+old*.7);
++          float crest=(1.-smoothstep(.065,.22,abs(abs(side)-crestCenter)))*rhythm;
++          float center=(1.-smoothstep(.05,.67,abs(side)))*.15;
++          float coverage=(center+crest*.85)*feather;
++          vec3 color=mix(body,pearl,crest);
++          if(layer>.5){
++            coverage=(1.-smoothstep(.1,1.,abs(side)))*(.72+.28*sin(along*2.4));
++            color=pearl;
++          }
++          float wet=1.;
++          if(hasCoast>.5){
++            vec4 land=texture2D(coast,clamp((worldXZ-field.xy)/field.zw,0.,1.));
++            wet=1.-land.a*smoothstep(waterY+.004,waterY+.025,land.b*.72);
++          }
++          gl_FragColor=vec4(color,alpha*coverage*wet);
++          #include <tonemapping_fragment>
++          #include <colorspace_fragment>
++        }`,
++    });
++    this.mesh = new T.Mesh(geometry, material);
++    this.mesh.name = 'ferry-wake';
++    this.mesh.userData.excludeFromFrame = true;
++    this.mesh.userData.decorative = true;
++    this.mesh.frustumCulled = false;
++    this.mesh.raycast = () => {};
++    this.mesh.visible = false;
++  }
++
++  private point(index: number) {
++    return this.pool[(this.first + index) % wakeLimits.capacity];
++  }
++
++  clear() {
++    this.count = 0;
++    this.first = 0;
++    this.emitting = false;
++    this.active = false;
++    this.previousTime = null;
++    this.carried = 0;
++    this.travelled = 0;
++    this.speed = 0;
++    this.strength = 0;
++    this.peakStrength = 0;
++    this.dockingStarted = null;
++    this.dockingStrength = 0;
++    this.contactStrength = 0;
++    this.interaction.strength = 0;
++    this.vertices = 0;
++    this.mesh.geometry.setDrawRange(0, 0);
++    this.mesh.visible = false;
++  }
++
++  begin(time: number, position: T.Vector3, angle = this.previousAngle) {
++    this.segment++;
++    this.active = true;
++    this.emitting = false;
++    this.previous.copy(position);
++    this.previousAngle = angle;
++    this.previousTime = time;
++    this.previousWater = position.y;
++    this.carried = 0;
++    this.speed = 0;
++    this.strength = 0;
++    this.peakStrength = 0;
++    this.dockingStarted = null;
++    this.dockingStrength = 0;
++    this.interaction.strength = 0;
++  }
++
++  finish(time: number) {
++    if (this.active && this.peakStrength > 0.05) {
++      this.dockingStarted = time;
++      this.dockingStrength = Math.min(0.26, this.peakStrength * 0.32);
++    }
++    this.active = false;
++    this.emitting = false;
++    this.speed = 0;
++    this.strength = 0;
++  }
++
++  private emit(
++    time: number,
++    x: number,
++    z: number,
++    angle: number,
++    waterY: number,
++    distance: number,
++  ) {
++    if (this.count === wakeLimits.capacity) {
++      this.first = (this.first + 1) % wakeLimits.capacity;
++      this.count--;
++    }
++    const point = this.point(this.count++);
++    point.center.set(x, waterY, z);
++    point.position.set(x - Math.sin(angle) * 0.72, waterY + 0.018, z - Math.cos(angle) * 0.72);
++    point.time = time;
++    point.angle = angle;
++    point.strength = this.strength;
++    point.distance = distance;
++    point.segment = this.segment;
++  }
++
++  update(
++    time: number,
++    position: T.Vector3,
++    angle: number,
++    moving: boolean,
++    waterY: number,
++    reduced: boolean,
++    hullY = 0,
++  ) {
++    if (reduced || !Number.isFinite(time + position.x + position.z + angle + waterY + hullY)) {
++      this.clear();
++      return;
++    }
++    if (moving && !this.active) this.begin(time, position, angle);
++    if (!moving && this.active) this.finish(time);
++    const elapsed = this.previousTime === null ? 0 : time - this.previousTime,
++      dx = position.x - this.previous.x,
++      dz = position.z - this.previous.z,
++      horizontal = Math.hypot(dx, dz);
++    if (elapsed < 0 || elapsed > 300 || horizontal > 2.5) {
++      this.clear();
++      if (moving) this.begin(time, position, angle);
++    } else if (moving && elapsed > 0 && horizontal > 0.00001) {
++      this.speed = horizontal / (elapsed * 0.001);
++      this.strength = T.MathUtils.smoothstep(this.speed, 0.08, 1.5) * 0.64;
++      this.peakStrength = Math.max(this.peakStrength, this.strength);
++      this.emitting = this.strength > 0.001;
++      let remaining = horizontal,
++        used = 0;
++      while (this.carried + remaining >= wakeLimits.spacing) {
++        const step = wakeLimits.spacing - this.carried;
++        used += step;
++        remaining -= step;
++        const fraction = used / horizontal;
++        this.emit(
++          time - elapsed * (1 - fraction),
++          this.previous.x + dx * fraction,
++          this.previous.z + dz * fraction,
++          this.previousAngle + (angle - this.previousAngle) * fraction,
++          this.previousWater + (waterY - this.previousWater) * fraction,
++          this.travelled + used,
++        );
++        this.carried = 0;
++      }
++      this.carried += remaining;
++      this.travelled += horizontal;
++    } else {
++      this.emitting = false;
++      this.speed = 0;
++      this.strength = 0;
++    }
++    this.previous.copy(position);
++    this.previousAngle = angle;
++    this.previousTime = time;
++    this.previousWater = waterY;
++    while (this.count && time - this.point(0).time > wakeLimits.lifetime) {
++      this.first = (this.first + 1) % wakeLimits.capacity;
++      this.count--;
++    }
++    let length = 0;
++    for (let i = this.count - 2; i >= 0; i--) {
++      const a = this.point(i),
++        b = this.point(i + 1);
++      if (a.segment === b.segment)
++        length += Math.hypot(a.position.x - b.position.x, a.position.z - b.position.z);
++      if (length > wakeLimits.length) {
++        this.first = (this.first + i + 1) % wakeLimits.capacity;
++        this.count -= i + 1;
++        break;
++      }
++    }
++    let settling = 0;
++    if (this.dockingStarted !== null) {
++      settling = T.MathUtils.clamp((time - this.dockingStarted) / 650, 0, 1);
++      if (settling === 1) {
++        this.dockingStarted = null;
++        this.dockingStrength = 0;
++      }
++    }
++    this.contactStrength = this.strength * 0.5 + this.dockingStrength * (1 - settling) ** 2;
++    this.interaction.position.set(position.x, waterY, position.z);
++    this.interaction.direction.set(Math.sin(angle), 0, Math.cos(angle));
++    this.interaction.strength = this.strength + this.dockingStrength * (1 - settling) ** 2;
++    this.mesh.material.uniforms.waterY.value = waterY;
++    this.vertices = 0;
++    this.buildTrail(time, waterY);
++    if (this.contactStrength > 0.001) {
++      const swell = settling * 0.18,
++        width = 0.51 - Math.min(0.05, hullY * 0.15);
++      this.contact(position, angle, waterY, width, 0.9, -1.43, 1.43, this.contactStrength, 0, 0);
++      this.contact(
++        position,
++        angle,
++        waterY,
++        0.25 + swell,
++        0.19 + swell * 0.7,
++        -Math.PI,
++        Math.PI,
++        this.contactStrength * 0.58,
++        -0.76,
++        1,
++      );
++    }
++    for (const attribute of Object.values(this.mesh.geometry.attributes))
++      attribute.needsUpdate = true;
++    this.mesh.geometry.setDrawRange(0, this.vertices);
++    this.mesh.visible = this.vertices > 0;
++  }
++
++  private vertex(
++    x: number,
++    y: number,
++    z: number,
++    alpha: number,
++    side: number,
++    distance: number,
++    age: number,
++    kind: number,
++  ) {
++    const geometry = this.mesh.geometry,
++      index = this.vertices++;
++    geometry.getAttribute('position').setXYZ(index, x, y, z);
++    geometry.getAttribute('fade').setX(index, alpha);
++    geometry.getAttribute('lateral').setX(index, side);
++    geometry.getAttribute('distance').setX(index, distance);
++    geometry.getAttribute('age').setX(index, age);
++    geometry.getAttribute('kind').setX(index, kind);
++  }
++
++  private buildTrail(time: number, waterY: number) {
++    for (let i = 0; i < this.count; i++) {
++      const current = this.point(i),
++        previous = i && this.point(i - 1).segment === current.segment ? this.point(i - 1) : current,
++        next =
++          i + 1 < this.count && this.point(i + 1).segment === current.segment
++            ? this.point(i + 1)
++            : current,
++        dx = next.position.x - previous.position.x,
++        dz = next.position.z - previous.position.z,
++        length = Math.hypot(dx, dz) || 1;
++      this.joins[i * 2] = -dz / length;
++      this.joins[i * 2 + 1] = dx / length;
++    }
++    for (let i = 1; i < this.count; i++) {
++      const a = this.point(i - 1),
++        b = this.point(i);
++      if (a.segment !== b.segment) continue;
++      const ageA = T.MathUtils.clamp((time - a.time) / wakeLimits.lifetime, 0, 1),
++        ageB = T.MathUtils.clamp((time - b.time) / wakeLimits.lifetime, 0, 1),
++        widthA = 0.36 + ageA * 0.28,
++        widthB = 0.36 + ageB * 0.28,
++        ax = this.joins[(i - 1) * 2] * widthA,
++        az = this.joins[(i - 1) * 2 + 1] * widthA,
++        bx = this.joins[i * 2] * widthB,
++        bz = this.joins[i * 2 + 1] * widthB,
++        fadeA = a.strength * (1 - ageA) ** 0.9,
++        fadeB = b.strength * (1 - ageB) ** 0.9,
++        y = waterY + 0.018;
++      this.vertex(a.position.x + ax, y, a.position.z + az, fadeA, 1, a.distance, ageA, 0);
++      this.vertex(a.position.x - ax, y, a.position.z - az, fadeA, -1, a.distance, ageA, 0);
++      this.vertex(b.position.x + bx, y, b.position.z + bz, fadeB, 1, b.distance, ageB, 0);
++      this.vertex(a.position.x - ax, y, a.position.z - az, fadeA, -1, a.distance, ageA, 0);
++      this.vertex(b.position.x - bx, y, b.position.z - bz, fadeB, -1, b.distance, ageB, 0);
++      this.vertex(b.position.x + bx, y, b.position.z + bz, fadeB, 1, b.distance, ageB, 0);
++    }
++  }
++
++  private contact(
++    position: T.Vector3,
++    angle: number,
++    waterY: number,
++    width: number,
++    reach: number,
++    start: number,
++    end: number,
++    strength: number,
++    offset: number,
++    seed: number,
++  ) {
++    const sine = Math.sin(angle),
++      cosine = Math.cos(angle);
++    for (let i = 0; i < 24; i++) {
++      const a = start + ((end - start) * i) / 24,
++        b = start + ((end - start) * (i + 1)) / 24;
++      for (let j = 0; j < 6; j++) {
++        const front = j === 2 || j === 4 || j === 5,
++          outer = j === 0 || j === 2 || j === 5,
++          theta = front ? b : a,
++          side = outer ? 1 : -1,
++          x = Math.sin(theta) * (width + side * 0.065),
++          z = Math.cos(theta) * (reach + side * 0.065) + offset,
++          endFade = seed ? 1 : Math.sin(((theta - start) / (end - start)) * Math.PI) ** 0.6;
++        this.vertex(
++          position.x + x * cosine + z * sine,
++          waterY + 0.018,
++          position.z - x * sine + z * cosine,
++          strength * endFade,
++          side,
++          theta + seed,
++          0,
++          1,
++        );
++      }
++    }
++  }
++
++  presentation() {
++    const geometry = this.mesh.geometry;
++    return {
++      emitting: this.emitting,
++      visible: this.mesh.visible,
++      vertices: this.vertices,
++      positions: Array.from(
++        (geometry.getAttribute('position') as T.BufferAttribute).array.slice(0, this.vertices * 3),
++      ),
++      opacity: Array.from(
++        (geometry.getAttribute('fade') as T.BufferAttribute).array.slice(0, this.vertices),
++      ),
++      points: Array.from({ length: this.count }, (_, index) => {
++        const point = this.point(index);
++        return {
++          position: point.position.toArray(),
++          center: point.center.toArray(),
++          time: point.time,
++          heading: point.angle,
++          segment: point.segment,
++        };
++      }),
++      limits: { ...wakeLimits },
++      speed: this.speed,
++      strength: this.strength,
++      contactStrength: this.contactStrength,
++      docking: this.dockingStarted !== null,
++      interaction: {
++        position: this.interaction.position.toArray(),
++        direction: this.interaction.direction.toArray(),
++        strength: this.interaction.strength,
++      },
++    };
++  }
++}
+diff --git a/tests/unit/water-motion-surface.test.ts b/tests/unit/water-motion-surface.test.ts
+new file mode 100644
+--- /dev/null
++++ b/tests/unit/water-motion-surface.test.ts
+@@ -0,0 +1,71 @@
++import { expect, test } from 'vitest';
++import { ShaderMaterial, Vector3 } from 'three';
++import { holdingPier } from '../../src/levels/level';
++import { getLevelPaths } from '../../src/scene/paths';
++import { CoastalWater } from '../../src/scene/water';
++
++test('localized water interaction accepts horizontal travel only and clears invalid or cancelled input', () => {
++  const water = new CoastalWater(holdingPier, getLevelPaths(holdingPier));
++  const ordinary = water.presentation();
++  water.update(0.36, 12);
++  water.setHarbor(new Vector3(-5, 3, -4), 0.6);
++  expect(water.presentation().boat.strength).toBe(0);
++  water.setBoatInteraction(new Vector3(3, 20, -4), new Vector3(3, 50, 4), 1.5);
++  expect(water.presentation().boat).toEqual({
++    position: [3, -4],
++    direction: [0.6, 0.8],
++    strength: 1,
++    response: 1,
++  });
++  water.setBoatInteraction(new Vector3(3, -20, -4), new Vector3(0, 5, 0), 1);
++  expect(water.presentation().boat).toEqual({
++    position: [0, 0],
++    direction: [0, 1],
++    strength: 0,
++    response: 1,
++  });
++  water.setBoatInteraction(new Vector3(3, 0, -4), new Vector3(-3, 0, -4), -1);
++  expect(water.presentation().boat.strength).toBe(0);
++  water.setBoatInteraction(new Vector3(Infinity, 0, 0), new Vector3(1, 0, 0), 1);
++  expect(water.presentation().boat.position).toEqual([0, 0]);
++  water.setBoatInteraction(new Vector3(3, 0, -4), new Vector3(1, 0, 0), Number.NaN);
++  expect(water.presentation().boat.strength).toBe(0);
++  expect(water.presentation().tuning).toEqual(ordinary.tuning);
++  expect(water.presentation().arrival).toBe(0.6);
++  water.dispose();
++});
++
++test('water interaction reuses uniforms and resources across direction, tide, comparison and reset changes', () => {
++  const water = new CoastalWater(holdingPier, getLevelPaths(holdingPier));
++  const material = water.mesh.material as ShaderMaterial;
++  const resources = [water.mesh.geometry, material, water.mask.texture, water.seabed.texture];
++  const position = material.uniforms.boatPosition.value,
++    direction = material.uniforms.boatDirection.value,
++    uniformCount = Object.keys(material.uniforms).length,
++    version = material.version;
++  water.configureBoatResponse(0.5);
++  for (let cycle = 0; cycle < 12; cycle++) {
++    water.setBoatInteraction(new Vector3(cycle, cycle * 0.18, 2), new Vector3(-1, 0, 1), 0.7);
++    water.update((cycle % 3) * 0.18, cycle);
++    expect(water.presentation().boat.direction[0]).toBeCloseTo(-Math.SQRT1_2);
++    water.clearBoatInteraction();
++    expect(water.presentation().boat.strength).toBe(0);
++    expect(water.presentation().boat.response).toBe(0.5);
++    expect(material.uniforms.boatPosition.value).toBe(position);
++    expect(material.uniforms.boatDirection.value).toBe(direction);
++    expect([water.mesh.geometry, material, water.mask.texture, water.seabed.texture]).toEqual(
++      resources,
++    );
++    expect(Object.keys(material.uniforms)).toHaveLength(uniformCount);
++    expect(material.version).toBe(version);
++  }
++  water.configureBoatResponse(-1);
++  expect(water.presentation().boat.response).toBe(0);
++  water.configureBoatResponse(Number.NaN);
++  expect(water.presentation().boat.response).toBe(0);
++  water.configureBoatResponse(2);
++  expect(water.presentation().boat.response).toBe(1);
++  expect(water.presentation().renderPasses).toBe(1);
++  expect(water.presentation().reflectionTargets).toBe(0);
++  water.dispose();
++});

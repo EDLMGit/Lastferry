@@ -1,6 +1,6 @@
 # Luminous evening cove
 
-`NEXT_TASK.md` owns the current atmosphere scope. Holding Pier, Bellwater and First Crossing retain their accepted compositions, canonical courses, stops, elevations, rules and complete Undo. The earlier course/shore implementation remains attributed to `reviews/environment/REVIEW.md`; fresh atmosphere evidence belongs to `reviews/atmosphere/REVIEW.md`.
+`NEXT_TASK.md` records the historical atmosphere scope; `NEXT_TASK_WATER_MOTION.md` owns the current boat/water refinement. Holding Pier, Bellwater and First Crossing retain their accepted compositions, canonical courses, stops, elevations, rules and complete Undo. Earlier course/shore and atmosphere results remain attributed to their original review folders; current evidence belongs to `reviews/water-motion/REVIEW.md`.
 
 ## Water and light
 
@@ -18,7 +18,9 @@ One plan supplies animation and duration-plus-1,000ms recovery. Tide and coincid
 
 During travel the local passenger card is hidden and a compact “Sailing to …” status remains. At rest card placement checks the projected full ferry and aboard passengers after viewport clamping, plus map/HUD/forecast obstacles, then tries alternate positions or a compact card. Controls retain accessible focus and touch areas.
 
-A softly feathered wake follows the actual stern, widens with age and is bounded to 720ms, 1.8 world units and 31 samples. It stops emitting at arrival and clears on reconciliation/Undo/Restart. Reduced motion keeps 30ms transitions, freezes normal/refraction/lapping time and suppresses wake; static depth and sheen remain.
+A single preallocated wake mesh combines broken pearl crests, a subtle teal center and small bow/stern contacts. Distance-resampled stern history stays in world space, with smoothed bounded joins and separate segments between journeys. Its fixed96-point budget retains1800ms/3.6world units. Horizontal motion supplies strength; water elevation, draft and idle bob do not emit samples. The existing coast field masks exposed land. Normal completion preserves a finite spreading/fading tail and650ms contact settlement without extending the input lock. Undo, Restart, cove changes, discontinuity, hide/recovery and Reduced clear transients. Reduced keeps30ms transitions and accepted frozen water. The local normal-response trial was rejected after native phone comparison; the water shader/fields and Harbor reflection retain baseline content.
+
+The chosen normal sailing policy is clamp(1000+200×canonical length,1600,3000)ms. Natural short/long trials selected it over clamp(800+140×length,1200,2300). Easing, exact route/endpoints, transfer/final delivery timing, the capped550ms tide phase and duration+1000ms recovery remain. Actual observed durations and software-renderer limits belong to the water-motion review.
 
 ## Shallow detail, contact and home
 
