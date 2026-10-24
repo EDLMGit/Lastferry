@@ -22,6 +22,7 @@ Local Codex implements the current task. ChatGPT reviews the identifiable handof
 | Homecoming implementation | `d3a7e3acfa2298bcaaa8e93622e81d62b367280e` — locally verified; final packaging SHA in PR handoff |
 | Lighthouse implementation | `040df0d6d2b8e094446b2bc3dc8ff3b78837fc78` — accepted; final reviewed packaging commit below |
 | Previous water-motion pass | `8b874adccfc1d65af569b81fade548f0368645b0` — functionally verified, **not visually accepted**; corrected by the current task |
+| Sailing direction/released-crests implementation | `7877c9d094e3ce66f8197df6c203b0c748603488` — implemented and locally verified; awaiting ChatGPT review. Final metadata-only Git SHA is supplied in PR#1 and the handoff. |
 | Reviewed game baseline | `0ee7d685071179b82ec2a599fac2f818251d0e54` |
 | Private phone build | `0ee7d685071179b82ec2a599fac2f818251d0e54` — publication confirmed 2026-10-23 |
 | Stable phone URL | https://last-ferry-playtest.abumech.chatgpt.site |
