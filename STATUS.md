@@ -1,3 +1,7 @@
+# Publication confirmed — Sites version8
+
+2026-10-24: The user requested publication of game `80545cbabb0496b215cd56f25cfc0113b056da67`. The existing private Site already had this exact version deployed successfully as Sites version8, source `382b2d358ddf9fb1cac6cebb7905ae9f25f9fdc6`. Confirmed through native Sites status and a read-only source comparison:49of50 runtime/data/build entries match after line-ending normalization; the sole difference is the existing preview-only terminal.local allowed-host configuration and formatting. No duplicate release or access change was made. Source opening was stopped after the checkout materialized; no Site source was edited. Local tested runtime and bundle identity remain unchanged. See [deployment confirmation](reviews/sailing-direction-wake/deployment-confirmation.json).
+
 # Current correction — Sailing direction and released crests
 
 2026-10-24: Started clean on `m1-first-crossing` at `8b874adccfc1d65af569b81fade548f0368645b0`. Read AGENTS, PROJECT_STATE and the new active `NEXT_TASK_SAILING_DIRECTION_AND_WAKE.md`; preserved an exact isolated baseline for comparison. The prior water-motion pass is functionally verified but **not visually accepted**. Its live hull contacts, repeated crest bands and universal stopping orientation are superseded; its calmer sailing budget remains.

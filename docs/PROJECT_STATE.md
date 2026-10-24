@@ -22,14 +22,14 @@ Local Codex implements the current task. ChatGPT reviews the identifiable handof
 | Homecoming implementation | `d3a7e3acfa2298bcaaa8e93622e81d62b367280e` — locally verified; final packaging SHA in PR handoff |
 | Lighthouse implementation | `040df0d6d2b8e094446b2bc3dc8ff3b78837fc78` — accepted; final reviewed packaging commit below |
 | Previous water-motion pass | `8b874adccfc1d65af569b81fade548f0368645b0` — functionally verified, **not visually accepted**; corrected by the current task |
-| Sailing direction/released-crests implementation | `7877c9d094e3ce66f8197df6c203b0c748603488` — implemented and locally verified; awaiting ChatGPT review. Final metadata-only Git SHA is supplied in PR#1 and the handoff. |
-| Reviewed game baseline | `0ee7d685071179b82ec2a599fac2f818251d0e54` |
-| Private phone build | `0ee7d685071179b82ec2a599fac2f818251d0e54` — publication confirmed 2026-10-23 |
+| Sailing direction/released-crests implementation | `7877c9d094e3ce66f8197df6c203b0c748603488` — published as game `80545cbabb0496b215cd56f25cfc0113b056da67`; GitHub continuity commits are separate. |
+| Reviewed game baseline | `80545cbabb0496b215cd56f25cfc0113b056da67` |
+| Private phone build | `80545cbabb0496b215cd56f25cfc0113b056da67` — Sites version8, publication confirmed 2026-10-24 |
 | Stable phone URL | https://last-ferry-playtest.abumech.chatgpt.site |
-| Site source commit | `273aa4a9900ca8a302b8708f356a2dc83dac7acd` |
+| Site source commit | `382b2d358ddf9fb1cac6cebb7905ae9f25f9fdc6` |
 | Main | Unchanged by this workflow; no merge authorized |
 
-The Site source SHA differs because it includes hosting metadata. The water-motion task carries the confirmed publication handoff for the accepted lighthouse refinement. The existing Site identity, stable URL and owner-private audience are unchanged. A new implementation SHA below is separate from that live game.
+The Site source SHA differs because it includes hosting metadata and the existing preview-only terminal.local allowed-host setting. Native Sites status confirms version8 succeeded; its source identifies game80545cb. Runtime, data, dependencies and build inputs match, apart from that preview-only Vite entry and formatting. The existing Site identity, stable URL and owner-private audience are unchanged. See reviews/sailing-direction-wake/deployment-confirmation.json. This confirmation reused the already successful deployment and did not create a duplicate release.
 
 After the next implementation, record the new GitHub SHA separately from the live Site's game SHA. Do not update the live field until deployment is confirmed.
 
@@ -91,13 +91,13 @@ Actual short/long phone comparison chose clamp(1000+200×canonical length,1600,3
 
 Final127-file hash `e84792307ccda2b3efea3b70f7846331a6c3cec9d6afce4cc0bccdca48d52804`; runtime `be1d42f21ba0b4f45687fda21c1db730254e5f68dfc7a0ccd7eba16956a8c62b`. See `reviews/water-motion/REVIEW.md`, source/capture/packaging audits and final handoff for committed Git identity. No confirmed blocker in exercised coverage. Physical Android/native GPU/other engines/listening remain unverified. PR#1 remains draft and main unchanged. The private Site still runs0ee7d685; this pass is not published. New ideas remain queued.
 
-## Completed correction, awaiting review: Sailing direction and released water crests
+## Published correction: Sailing direction and released water crests
 
 `NEXT_TASK_SAILING_DIRECTION_AND_WAKE.md` is the only active implementation scope. Started clean on `m1-first-crossing` at `8b874adccfc1d65af569b81fade548f0368645b0`. Preserve the current sailing budget, accepted puzzles, UI, audio, water palette/shader and lighthouse/homecoming. The previous pass remains unpublished.
 
 The correction replaces universal endpoint alignment with an accepted-transaction presentation pose history. Free-water stops retain their incoming tangent; actual piers choose the closer safe broadside berth. A deterministic shortest-angle departure and required berth alignment stay within the existing movement budget. Undo restores the paired pre-action heading; all completion/recovery paths use the same precomputed target. Local mirrored deck entries support both berth headings without changing transfer/audio timing.
 
-The water treatment uses a fixed pool of independently released open crests. Release data, age and stable variation determine their later world-space evolution; later hull movement cannot drag them. Finite tails finish after controls unlock, with no live ellipse, bow outline or peak-strength docking restart. Fresh Node24 build/typecheck,173/173unit tests and23 distinct browser cases pass (20 together,3 through preserved affected reruns). Native phone comparisons retain fewer broader soft crests; four animated excerpts and selected native frames are accessible in Git. Six final full-interface recordings and15 validated originals remain local/ignored. Source/runtime identity, original failures and exact results are in `reviews/sailing-direction-wake/REVIEW.md`. The warmed comparison retains equal active p95/resource counts; two instrumented desktop Bellwater gaps clear transients, while final phone runs have no gap above300ms. Physical Android/native GPU and new listening remain unverified. Implementation is complete; visual acceptance remains the next review decision. Publication requires review of the new GitHub SHA; the private Site still contains `0ee7d685`.
+The water treatment uses a fixed pool of independently released open crests. Release data, age and stable variation determine their later world-space evolution; later hull movement cannot drag them. Finite tails finish after controls unlock, with no live ellipse, bow outline or peak-strength docking restart. Fresh Node24 build/typecheck,173/173unit tests and23 distinct browser cases pass (20 together,3 through preserved affected reruns). Native phone comparisons retain fewer broader soft crests; four animated excerpts and selected native frames are accessible in Git. Six final full-interface recordings and15 validated originals remain local/ignored. Source/runtime identity, original failures and exact results are in `reviews/sailing-direction-wake/REVIEW.md`. The warmed comparison retains equal active p95/resource counts; two instrumented desktop Bellwater gaps clear transients, while final phone runs have no gap above300ms. Physical Android/native GPU and new listening remain unverified. Implementation is complete. The existing private Site publishes game `80545cbabb0496b215cd56f25cfc0113b056da67` as version8; its successful deployment and source identity were confirmed on2026-10-24. Phone playtesting can use the stable URL. Remaining physical-device limitations still apply.
 
 ## Queue and scope boundaries
 
