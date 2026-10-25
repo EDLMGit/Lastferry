@@ -10,6 +10,8 @@ Original failures remain: the baseline clipping/overflow and an inconclusive exp
 
 **Implementation complete; ready for ChatGPT review.** [Review, source and evidence](reviews/cove-panel-refinement/REVIEW.md). PR #1 remains draft; main is unchanged. No deployment is authorized or performed; the private Site stays version 10/game8052cfc/sourcef9ada70.
 
+Panel implementation commit `28f6d30a5199c3450cc5ff826bf8b5f9bd476182` matches all 219 tested source entries (211 exact, eight Git newline normalization only), 78 selected PNGs and one animated WebP. All 78 capture-runtime entries and both helpers remain exact. Twenty supplied originals are preserved; the candidate material CSS is intentionally edited. The following metadata-only commit records the packaging/reuse audit and continuity. Final pushed SHA/remote equality are in PR #1 and the handoff.
+
 # Previous task — Cove interface and asset inventory
 
 2026-10-25: Inspected clean `m1-first-crossing` at accepted `8052cfcd67f2e56cf3258243618c4ce125d51c4b`. Read the package-root `NEXT_TASK_COVE_UI_ASSETS.md` and retained it in this repository. Reconciled `docs/PROJECT_STATE.md` to the user-confirmed Sites version 10, game `8052cfcd67f2e56cf3258243618c4ce125d51c4b`, hosting source `f9ada70cbd093bf52c105f2287558381b3b7c83c`. This is a publication continuity correction, not a new deployment audit.

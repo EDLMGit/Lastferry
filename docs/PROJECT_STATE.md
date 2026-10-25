@@ -26,6 +26,7 @@ Local Codex implements the current task. ChatGPT reviews the identifiable handof
 | Phone playability implementation | `0a9de631998ffb88b5608b17d80030b810db5b5c` — published for user phone testing as game `e78819974a0487440e439ef87d24ba4bb1c2f454`; three timing-check limitations remain. |
 | Audio/fullscreen corrective implementation | `d45d47332e2b02643f77d0ecd18b8d7149fa0dd8` — published and user-accepted in game `8052cfcd67f2e56cf3258243618c4ce125d51c4b`; measured timing/device limits remain recorded. |
 | Cove interface implementation | `f468a3272ed0a6d0a485860aea11320950425218`, reviewed packaging `a4325353cf11cd4edba8d5384b58fe138e4772e3` — the user likes the button/icon direction; panel and three-passenger preview refinement requested. Not deployed. |
+| Panel refinement implementation | `28f6d30a5199c3450cc5ff826bf8b5f9bd476182` — verified readable passenger previews and shared painted material. Final handoff adds audit/continuity metadata only; ready for ChatGPT review, not deployed or human accepted. |
 | Reviewed game baseline | `8052cfcd67f2e56cf3258243618c4ce125d51c4b` |
 | Private phone build | `8052cfcd67f2e56cf3258243618c4ce125d51c4b` — Sites version 10, publication confirmed by the current user task on 2026-10-25 |
 | Stable phone URL | https://last-ferry-playtest.abumech.chatgpt.site |
