@@ -6,6 +6,8 @@
 
 ## Source and scope
 
+Implementation commit: **`1aa73c59c37082f43990235a9efffd6f793cf642`**. [Packaging audit](packaging-audit.json) matches all 280 source entries, 43 selected review-media files and the supplied task against committed blobs: 311 byte-exact entries and 12 text entries differing only by Git newline normalization. Media includes the final recordings/frames plus explicitly retained rejected development observations. The following handoff commit adds verification/continuity metadata only; its exact SHA is reported in PR #1 and the final handoff.
+
 - Repository / PR / branch: https://github.com/EDLMGit/Lastferry / https://github.com/EDLMGit/Lastferry/pull/1 — draft / `m1-first-crossing`.
 - Comparison base: reviewed `8cc43c794274fe64d5fb634961fbf79aaff251f8`, explicitly supplied by the user; checkout was clean at task start.
 - Active task: [`NEXT_TASK_STORY_SCENES.md`](../../NEXT_TASK_STORY_SCENES.md), retained byte-for-byte in [supplied-inputs.json](supplied-inputs.json).
@@ -33,9 +35,10 @@ Actual renderer observations after normal watched/skipped settlement retain `red
 | Check | Result | Evidence |
 | --- | --- | --- |
 | `npm run build` / TypeScript | pass | Fresh Node 24 gate; [build output](gates/build.txt). Production source uses 77 modules and the existing three portrait PNGs. |
+| `npm run typecheck` on the final tree | pass | [Final standalone output](gates/typecheck-final.txt), including the final browser fixtures. |
 | `npm run test:unit -- --maxWorkers=1` | pass | 276/276 tests across 33 files, 12.99 seconds; [final output](gates/unit.txt). Timeline/cancellation, state boundaries and story shot/pose math have focused coverage. |
 | Original unit run | fail, retained | 275 passed / one failed: the old foundation test required 6–10 seconds for both scenes, conflicting with the new 3–5-second Harbor contract. [Original output](gates/unit-original.txt). Specific opening 6–9-second and Harbor 3–5-second assertions replace that obsolete shared range. |
-| `npm run check:assets` | pass | 73 unique families, all prior IDs retained and only `ui.story-presentation` updated; [validator output](gates/assets.txt), [inventory comparison](catalog-change.json). |
+| `npm run check:assets` | pass | 73 unique families, all prior IDs retained and only `ui.story-presentation` updated; [final validator output](gates/assets-final.txt), [inventory comparison](catalog-change.json). |
 | Final watched opening capture | pass | Uninterrupted native 320×740 and 780×320 watched openings with real camera/actor samples, complete copy and clean Holding handoff; [opening observations](browser/opening-recordings.json). Media/frame extraction and independent native inspection are recorded separately. |
 | Final Harbor connection | pass | Actual rescue boundary followed by four native 844×390 scene frames; [beginning](browser/frames/844x390-connection-begin.png), [acknowledgment](browser/frames/844x390-connection-acknowledgment.png), [reveal](browser/frames/844x390-connection-reveal.png), [endpoint](browser/frames/844x390-connection-end.png). |
 | Immediate Continue, Skip, Reduced/restored equivalence | pass | Original Holding/Bellwater start and checkpoint equivalence, no paid action or stale pose/job; [opening entries](browser/equivalent-entries.json), [actual Harbor variants](follow-up/harbor-entry-variants.json). Harbor immediate/Skip/Reduced variants each follow a real rescue. |
