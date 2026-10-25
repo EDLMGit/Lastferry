@@ -10,6 +10,8 @@ Twenty matched native-size after captures were inspected against the accepted ba
 
 **Implementation complete; ready for ChatGPT review.** [Review, source and evidence](reviews/cove-ui-assets/REVIEW.md). PR #1 stays draft and main unchanged. The private Site remains accepted game `8052cfcd67f2e56cf3258243618c4ce125d51c4b`, Sites version 10/source `f9ada70cbd093bf52c105f2287558381b3b7c83c`; this style pass is not deployed.
 
+Cove interface implementation commit `f468a3272ed0a6d0a485860aea11320950425218` matches the 193-file tested source (186 exact, 7 Git newline normalization only), 57 selected PNGs/one animated WebP and all 32 supplied originals. The following metadata-only commit records this audit and continuity; the final pushed SHA is in PR #1 and the handoff.
+
 # Previous task — Phone audio activation and fullscreen reliability
 
 2026-10-25: Started clean on `m1-first-crossing` at `291fb4fa24d02dbab84dfe6eca2abc5c29b6d411`, preserving the newer version9 deployment documentation. Read AGENTS/PROJECT_STATE and retained the supplied active task. The user likes motion/panning; accepted phone framing, nearby previews and all game/audio presentation are preserved. Published game remains e788199, Sites version9/source03720726. This corrective pass is not deployed.
