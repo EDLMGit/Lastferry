@@ -20,14 +20,16 @@
       ]
     },
     "original-package-vector-and-css": {
-      "author": "Original SVG paths and component CSS authored for this Last Ferry package",
+      "author": "Original SVG paths and CSS authored for the Last Ferry cove interface and painted panel packages; retained and adapted locally for runtime integration",
       "rights": "Retain with project sources; no new project license is asserted",
-      "evidence": "cove-ui-package/ui/icons/manifest.json; cove-ui-package/STYLE_GUIDE.md",
+      "evidence": "cove-ui-package/ui/icons/manifest.json; cove-ui-package/STYLE_GUIDE.md; cove-panel-package/README.md; cove-panel-package/material/MATERIAL_SPEC.md",
       "imports": "No external icon set, raster texture or font file",
       "evidencePaths": [
         "cove-ui-package/ui/icons/manifest.json",
         "cove-ui-package/README.md",
-        "cove-ui-package/STYLE_GUIDE.md"
+        "cove-ui-package/STYLE_GUIDE.md",
+        "cove-panel-package/README.md",
+        "cove-panel-package/material/MATERIAL_SPEC.md"
       ]
     },
     "supplied-concept-reference": {
@@ -1946,6 +1948,10 @@
         {
           "path": "src/ui/cove-ui.css",
           "symbol": "shared cove interface surfaces"
+        },
+        {
+          "path": "cove-panel-package/material/cove-panel-material.css",
+          "symbol": ".cove-surface / .cove-surface--compact / .cove-surface--arrival / focus state"
         }
       ],
       "variants": [
@@ -1956,13 +1962,15 @@
         "warning",
         "terminal"
       ],
-      "visualSignature": "Matte dark sea-green quiet surfaces, cream lettering, compact seafoam action faces and warm objective emphasis; exact tokens owned by material.cove-ui-tokens.",
-      "reuseAndOwnership": "Existing layout family retained; shared cove components now own appearance while native controls and measured layout own interaction.",
+      "visualSignature": "Shared opaque painted reading faces; current seafoam actions, quiet utilities and warm objective/progression faces are retained.",
+      "reuseAndOwnership": "Existing layout family retained; one imported canonical material owns reading appearance, while cove-ui.css owns the existing component geometry/controls and native input remains authoritative.",
       "behaviorToPreserve": "Keep 16px primary text, 48px main actions/44px minima, measured placement and readable text opacity.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "accepted-baseline-behavior; updated-appearance-awaiting-human-playtest",
-        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+        "state": "accepted-button-direction; panel-and-three-choice-refinement-awaiting-human-playtest",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b",
+        "basis": "User likes the new button/icon direction at a432535; the supplied review requests panel and three-passenger correction. Integration, independent baseline code checks and human visual acceptance are separate.",
+        "reviewedSourceCommit": "a4325353cf11cd4edba8d5384b58fe138e4772e3"
       },
       "evidence": [
         {
@@ -1972,6 +1980,26 @@
         {
           "path": "reviews/cove-ui-assets/REVIEW.md",
           "role": "Changed presentation and preserved native interaction"
+        },
+        {
+          "path": "cove-panel-package/REVIEW_A432535.md",
+          "role": "Independent baseline code/source verification and reported Harbor clipping/copy finding; not new browser or Android approval"
+        },
+        {
+          "path": "reviews/cove-panel-refinement/gallery/measurements.json",
+          "role": "Actual shared-source gallery design stress: every text-node line and nested scroll dimension at1440/320viewports, including320px/20pxlongnames. Not gameplay evidence."
+        },
+        {
+          "path": "reviews/cove-panel-refinement/REVIEW.md",
+          "role": "Current source-tied actual Harbor pre-confirmation correction, matched phone captures, input/lifecycle results and unresolved limits"
+        },
+        {
+          "path": "reviews/cove-panel-refinement/after/capture-manifest.json",
+          "role": "Actual UI rescue captures at five sizes including the three-passenger Harbor preview before Confirm; per-line text, nested scroll and stable subset targets"
+        },
+        {
+          "path": "reviews/cove-panel-refinement/contrast.json",
+          "role": "272 passing integrated comparisons across13actualUIstages; every parsed gradient and source-matched browser-decoded motif included; not complete accessibility certification"
         }
       ],
       "meaning": "Current teal surfaces and controls. Keep 16px primary text, 48px main actions/44px minima, measured placement and readable text opacity.",
@@ -1980,16 +2008,16 @@
       ],
       "gallery": {
         "section": "interface",
-        "preview": "Source links and attributed existing evidence; no isolated rendering claimed"
+        "preview": "Actual shared material and passengerChoiceContent; ordinary/compact/arrival, long warning, native selected/unselected/focus states and constrained three-passenger specimens. Gallery is design evidence only."
       },
       "typeSpecific": {
-        "component/selector sources": "src/style.css: :root / button / .hud / #local-context / dialog / .dialog-footer; src/ui/cove-ui.ts: shared icon and control rendering helpers; src/ui/cove-ui.css: shared cove interface surfaces",
-        "token and elevation roles": "material.cove-ui-tokens owns dark sea-green, cream, compact foam/warm faces and shallow inset lips. Existing source layout remains authoritative.",
+        "component/selector sources": "src/style.css: :root / button / .hud / #local-context / dialog / .dialog-footer; src/ui/cove-ui.ts: shared icon and control rendering helpers; src/ui/cove-ui.css: shared cove interface surfaces; cove-panel-package/material/cove-panel-material.css: .cove-surface / .cove-surface--compact / .cove-surface--arrival / focus state",
+        "token and elevation roles": "material.cove-ui-tokens owns semantic control roles; cove-panel material owns opaque wash, sage rim and lowerlip. Compact surfaces remove motif without enlarging layout.",
         "interaction states": "ordinary; hover/pressed as implemented; disabled; focus-visible; warning; terminal",
         "size/hit target/layout behavior": "Existing measured phone placement; 48px main target and constrained 44px floor. Outer hit bounds remain stable under press.",
         "text/icon contract": "Native button owns label and accessible name; inline decorative SVG has no focus or pointer target.",
         "focus and disabled/warning semantics": "Focus keyline; selected/disabled/warning have shape and text as well as color.",
-        "mobile and reduced-motion evidence": "See source-attributed review evidence. Reduced Motion makes decorative transitions immediate."
+        "mobile and reduced-motion evidence": "Current cove-panel-refinement review and capture-manifest identify actual Harbor pre-confirmation UI at844x390,780x320,390x844,360x740and1440x900. Integrated contrast passes272checks/13stages; all13SettingsReduced measured button transitions are0s. Gallery18choices/39Rangefragments fit at1440/320viewports, including20pxlongnames; not physical-device certification."
       }
     },
     {
@@ -2268,6 +2296,14 @@
         {
           "path": "src/ui/cove-ui.css",
           "symbol": "shared cove interface surfaces"
+        },
+        {
+          "path": "cove-panel-package/material/cove-panel-material.css",
+          "symbol": ".cove-surface / .cove-surface--compact / .cove-surface--arrival / focus state"
+        },
+        {
+          "path": "src/ui/presentation.ts",
+          "symbol": "previewCopy future winning consequence"
         }
       ],
       "variants": [
@@ -2279,13 +2315,15 @@
         "lost",
         "support-details fallback"
       ],
-      "visualSignature": "Compact dark teal translucent card with stable nearby placement.",
+      "visualSignature": "Compact opaque painted card with preserved nearby placement and fixed transfer-sheet height; three-passenger names and full costs adapt to the panel width.",
       "reuseAndOwnership": "Same native dialog preserves focus/subset/scroll during fullscreen promotion.",
-      "behaviorToPreserve": "Keep mobile anchors, cancellation/focus, 780x320 reachability, modal input safety and explicit cost/consequence labels.",
+      "behaviorToPreserve": "Preview uses future delivery language and qualified projected load/tide; opening/toggling/cancelling keeps committed state/history and victory effects unchanged. Same native dialog/choices/focus/scroll survive fullscreen; portrait recovery and stable footer remain.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "accepted-baseline-behavior; updated-appearance-awaiting-human-playtest",
-        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+        "state": "accepted-button-direction; panel-and-three-choice-refinement-awaiting-human-playtest",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b",
+        "basis": "User likes the new button/icon direction at a432535; the supplied review requests panel and three-passenger correction. Integration, independent baseline code checks and human visual acceptance are separate.",
+        "reviewedSourceCommit": "a4325353cf11cd4edba8d5384b58fe138e4772e3"
       },
       "evidence": [
         {
@@ -2295,22 +2333,42 @@
         {
           "path": "reviews/cove-ui-assets/REVIEW.md",
           "role": "Changed presentation and preserved native interaction"
+        },
+        {
+          "path": "cove-panel-package/REVIEW_A432535.md",
+          "role": "Independent baseline code/source verification and reported Harbor clipping/copy finding; not new browser or Android approval"
+        },
+        {
+          "path": "reviews/cove-panel-refinement/gallery/measurements.json",
+          "role": "Actual shared-source gallery design stress: every text-node line and nested scroll dimension at1440/320viewports, including320px/20pxlongnames. Not gameplay evidence."
+        },
+        {
+          "path": "reviews/cove-panel-refinement/REVIEW.md",
+          "role": "Current source-tied actual Harbor pre-confirmation correction, matched phone captures, input/lifecycle results and unresolved limits"
+        },
+        {
+          "path": "reviews/cove-panel-refinement/after/capture-manifest.json",
+          "role": "Actual UI rescue captures at five sizes including the three-passenger Harbor preview before Confirm; per-line text, nested scroll and stable subset targets"
+        },
+        {
+          "path": "reviews/cove-panel-refinement/contrast.json",
+          "role": "272 passing integrated comparisons across13actualUIstages; every parsed gradient and source-matched browser-decoded motif included; not complete accessibility certification"
         }
       ],
-      "meaning": "Local preview, forecast, Menu, Settings and completion. Keep mobile anchors, cancellation/focus, 780x320 reachability, modal input safety and explicit cost/consequence labels.",
+      "meaning": "Local preview, forecast, Menu, Settings and completion retain native semantics; projected future action is explicit and every full passenger label/cost remains readable.",
       "consumers": [
         "src/main.ts"
       ],
       "gallery": {
         "section": "interface",
-        "preview": "Source links and attributed existing evidence; no isolated rendering claimed"
+        "preview": "Actual shared material and passengerChoiceContent; ordinary/compact/arrival, long warning, native selected/unselected/focus states and constrained three-passenger specimens. Gallery is design evidence only."
       },
       "typeSpecific": {
-        "render/placement sources": "src/main.ts: renderDialog / renderLocation; src/ui/placement.ts: placeLocalCard / placeActionCard; src/ui/cove-layout.ts: endpointTargets; src/ui/fullscreen.ts: FullscreenSupport.changed; src/style.css: dialog / .dialog-body / .dialog-footer / .terminal-actions",
-        "semantic role/accessible name": "Local preview, forecast, Menu, Settings and completion. Keep mobile anchors, cancellation/focus, 780x320 reachability, modal input safety and explicit cost/consequence labels.",
+        "render/placement sources": "src/main.ts: renderDialog / renderLocation; src/ui/placement.ts: placeLocalCard / placeActionCard; src/ui/cove-layout.ts: endpointTargets; src/ui/fullscreen.ts: FullscreenSupport.changed; src/style.css: dialog / .dialog-body / .dialog-footer / .terminal-actions; src/ui/cove-ui.ts: shared icon and control rendering helpers; src/ui/cove-ui.css: shared cove interface surfaces; cove-panel-package/material/cove-panel-material.css: .cove-surface / .cove-surface--compact / .cove-surface--arrival / focus state; src/ui/presentation.ts: previewCopy future winning consequence",
+        "semantic role/accessible name": "Local preview, forecast, Menu, Settings and completion retain native semantics; projected future action is explicit and every full passenger label/cost remains readable.",
         "icon and label mappings": "Native visible words remain authoritative; SVG adds redundant semantic visual cue.",
         "interaction states": "passenger subset; tide forecast; crossing menu; settings; won; lost; support-details fallback",
-        "nearby placement and viewport contract": "main.ts positionMap/positionCard with measured safe viewport; nearby confirmation and stable subset sheet.",
+        "nearby placement and viewport contract": "Existing measured safe viewport/anchor and fixed subset-sheet height stay; native reading order and stable footer across toggles; nested overflow and per-line text fit checked separately from outer control visibility.",
         "focus/cancel/fullscreen preservation": "Native buttons/aria-pressed; Escape cancels; same dialog promoted on fullscreen with DOM, focus, subset and scroll retained."
       }
     },
@@ -3658,7 +3716,7 @@
     },
     {
       "id": "ui.component.panel",
-      "name": "Quiet cove panel",
+      "name": "Painted cove reading panel",
       "kind": "css-component-family",
       "status": "integrated",
       "sources": [
@@ -3669,21 +3727,28 @@
         {
           "path": "src/ui/cove-ui.ts",
           "symbol": "shared icon and control rendering helpers"
+        },
+        {
+          "path": "cove-panel-package/material/cove-panel-material.css",
+          "symbol": ".cove-surface / .cove-surface--compact / .cove-surface--arrival / focus state"
+        },
+        {
+          "path": "cove-panel-package/material/shoreline-corner.svg",
+          "symbol": "three original lower-corner contour paths, one 5.5%-opacity stroke group"
         }
       ],
-      "integrationTarget": "src/ui/cove-ui.css",
-      "meaning": "One rounded frame and a substantial dark text backing. Existing native dialog and measured positioning own behavior.",
+      "integrationTarget": "cove-panel-package/material/cove-panel-material.css",
+      "meaning": "One opaque painted reading face with subdued sage rim and a quiet lower-corner decoration; component geometry and native dialog behavior remain separately owned.",
       "variants": [
-        "location",
-        "subset",
-        "forecast",
-        "menu",
-        "settings",
-        "arrival"
+        "regular with corner motif",
+        "compact without motif",
+        "arrival upper highlight",
+        "keyboard focus",
+        "warning text and edge"
       ],
-      "visualSignature": "Rounded matte surface, shallow lower edge and restrained top highlight; tokens in the same shared CSS",
-      "reuseAndOwnership": "Shared component appearance; existing game layout and native controls retain interaction ownership",
-      "behaviorToPreserve": "Stable measured bounds, no new continuous animation, no tap-through, no changed confirmation semantics; Reduced Motion removes decorative transitions",
+      "visualSignature": "Opaque three-stop blue-green wash (#2b5356 / #1b434b / #123741), sage #9eb5a5 rim, dark #0b2d36 lip, optional sparse 5.5%-opacity shoreline contours and a warm arrival catchlight.",
+      "reuseAndOwnership": "cove-panel-package/material/cove-panel-material.css is the only editable runtime material, imported by shared cove-ui.css; its sibling SVG is the only decoration path source. Existing panel components own dimensions, radius, padding, placement and scroll.",
+      "behaviorToPreserve": "No world silhouettes under reading text, no new target/z-order/frame loop, no enlarged HUD or smaller scene; native focus/warning keylines and stable nearby confirmation retain ownership.",
       "accessibility": {
         "essentialText": "about 16px on phones",
         "contrast": "Verify actual composited normal text >=4.5:1 and meaningful icons/states >=3:1",
@@ -3691,8 +3756,9 @@
       },
       "provenance": "original-package-vector-and-css",
       "acceptance": {
-        "state": "awaiting-human-playtest",
-        "basis": "Integrated and contributor-verified in actual game; not yet human-accepted"
+        "state": "accepted-button-direction; panel-and-three-choice-refinement-awaiting-human-playtest",
+        "basis": "User likes the new button/icon direction at a432535; the supplied review requests panel and three-passenger correction. Integration, independent baseline code checks and human visual acceptance are separate.",
+        "reviewedSourceCommit": "a4325353cf11cd4edba8d5384b58fe138e4772e3"
       },
       "evidence": [
         {
@@ -3706,6 +3772,26 @@
         {
           "path": "reviews/cove-ui-assets/REVIEW.md",
           "role": "Actual native gameplay, interaction checks and exact source identity; contributor verification"
+        },
+        {
+          "path": "cove-panel-package/REVIEW_A432535.md",
+          "role": "Independent baseline code/source verification and reported Harbor clipping/copy finding; not new browser or Android approval"
+        },
+        {
+          "path": "reviews/cove-panel-refinement/gallery/measurements.json",
+          "role": "Actual shared-source gallery design stress: every text-node line and nested scroll dimension at1440/320viewports, including320px/20pxlongnames. Not gameplay evidence."
+        },
+        {
+          "path": "reviews/cove-panel-refinement/REVIEW.md",
+          "role": "Current source-tied actual Harbor pre-confirmation correction, matched phone captures, input/lifecycle results and unresolved limits"
+        },
+        {
+          "path": "reviews/cove-panel-refinement/after/capture-manifest.json",
+          "role": "Actual UI rescue captures at five sizes including the three-passenger Harbor preview before Confirm; per-line text, nested scroll and stable subset targets"
+        },
+        {
+          "path": "reviews/cove-panel-refinement/contrast.json",
+          "role": "272 passing integrated comparisons across13actualUIstages; every parsed gradient and source-matched browser-decoded motif included; not complete accessibility certification"
         }
       ],
       "consumers": [
@@ -3713,16 +3799,16 @@
       ],
       "gallery": {
         "section": "interface",
-        "preview": "Actual shared CSS/component states; design evidence separate from gameplay"
+        "preview": "Actual shared material and passengerChoiceContent; ordinary/compact/arrival, long warning, native selected/unselected/focus states and constrained three-passenger specimens. Gallery is design evidence only."
       },
       "typeSpecific": {
-        "component/selector sources": "src/ui/cove-ui.css: .cove-panel; src/ui/cove-ui.ts: shared icon and control rendering helpers",
-        "token and elevation roles": "Rounded matte surface, shallow lower edge and restrained top highlight; tokens in the same shared CSS",
-        "interaction states": "location; subset; forecast; menu; settings; arrival",
-        "size/hit target/layout behavior": "Existing measured phone placement; 48px main target and constrained 44px floor. Outer hit bounds remain stable under press.",
-        "text/icon contract": "Native button owns label and accessible name; inline decorative SVG has no focus or pointer target.",
+        "component/selector sources": "src/ui/cove-ui.css: .cove-panel; src/ui/cove-ui.ts: shared icon and control rendering helpers; cove-panel-package/material/cove-panel-material.css: .cove-surface / .cove-surface--compact / .cove-surface--arrival / focus state; cove-panel-package/material/shoreline-corner.svg: three original lower-corner contour paths, one 5.5%-opacity stroke group",
+        "token and elevation roles": "Opaque three-stop blue-green wash (#2b5356 / #1b434b / #123741), sage #9eb5a5 rim, dark #0b2d36 lip, optional sparse 5.5%-opacity shoreline contours and a warm arrival catchlight.",
+        "interaction states": "regular with corner motif; compact without motif; arrival upper highlight; keyboard focus; warning text and edge",
+        "size/hit target/layout behavior": "Material declares no dimensions, positioning, overflow, opacity, transforms, pointer handling or transitions. Existing component layout retains safe viewport and nearby placement; the focused forecast remains a native control.",
+        "text/icon contract": "Opaque reading gradient/fallback; optional decorative SVG stays outside the accessibility tree as CSS background. All words remain live DOM text.",
         "focus and disabled/warning semantics": "Focus keyline; selected/disabled/warning have shape and text as well as color.",
-        "mobile and reduced-motion evidence": "reviews/cove-ui-assets/REVIEW.md native phone gameplay. contrast.json records169checks/9actualstages and13SettingsReduced control transition durations0s; no physical-device certification."
+        "mobile and reduced-motion evidence": "Current cove-panel-refinement review and capture-manifest identify actual Harbor pre-confirmation UI at844x390,780x320,390x844,360x740and1440x900. Integrated contrast passes272checks/13stages; all13SettingsReduced measured button transitions are0s. Gallery18choices/39Rangefragments fit at1440/320viewports, including20pxlongnames; not physical-device certification."
       }
     },
     {
@@ -3733,24 +3819,24 @@
       "sources": [
         {
           "path": "src/ui/cove-ui.css",
-          "symbol": ".cove-choice"
+          "symbol": ".passenger-options / .cove-choice / .cove-choice-check / .cove-choice-name / .cove-choice-capacity"
         },
         {
           "path": "src/ui/cove-ui.ts",
-          "symbol": "shared icon and control rendering helpers"
+          "symbol": "passengerChoiceContent(name, spaces)"
         }
       ],
       "integrationTarget": "src/ui/cove-ui.css",
-      "meaning": "Preserve existing choice button and aria-pressed state; show a check, name and space cost. Checkbox in the specimen demonstrates appearance only; a DOM conversion requires focus-trap changes.",
+      "meaning": "Native aria-pressed passenger choice: check plus full name on the first row, full space cost on a separate row across the tile. The DOM reading order and subset action semantics are retained.",
       "variants": [
         "selected",
         "unselected",
         "focus",
         "unavailable"
       ],
-      "visualSignature": "Rounded matte surface, shallow lower edge and restrained top highlight; tokens in the same shared CSS",
-      "reuseAndOwnership": "Shared component appearance; existing game layout and native controls retain interaction ownership",
-      "behaviorToPreserve": "Stable measured bounds, no new continuous animation, no tap-through, no changed confirmation semantics; Reduced Motion removes decorative transitions",
+      "visualSignature": "Quiet inset selected/unselected tile with a visible check, approximately16px decision text and content-aware columns based on actual panel width, not orientation.",
+      "reuseAndOwnership": "Same shared choice helper and CSS in game and gallery; level data owns names and space costs. No native-checkbox conversion, visual reordering, fixed columns by orientation, text truncation or overflow masking.",
+      "behaviorToPreserve": "Every name and full capacity remains legible, main target at least48px, focused choice remains reachable; subset0/1/2/3 and fixed-height confirmation sheet preserve preview/commit separation and footer stability.",
       "accessibility": {
         "essentialText": "about 16px on phones",
         "contrast": "Verify actual composited normal text >=4.5:1 and meaningful icons/states >=3:1",
@@ -3758,8 +3844,9 @@
       },
       "provenance": "original-package-vector-and-css",
       "acceptance": {
-        "state": "awaiting-human-playtest",
-        "basis": "Integrated and contributor-verified in actual game; not yet human-accepted"
+        "state": "accepted-button-direction; panel-and-three-choice-refinement-awaiting-human-playtest",
+        "basis": "User likes the new button/icon direction at a432535; the supplied review requests panel and three-passenger correction. Integration, independent baseline code checks and human visual acceptance are separate.",
+        "reviewedSourceCommit": "a4325353cf11cd4edba8d5384b58fe138e4772e3"
       },
       "evidence": [
         {
@@ -3773,6 +3860,26 @@
         {
           "path": "reviews/cove-ui-assets/REVIEW.md",
           "role": "Actual native gameplay, interaction checks and exact source identity; contributor verification"
+        },
+        {
+          "path": "cove-panel-package/REVIEW_A432535.md",
+          "role": "Independent baseline code/source verification and reported Harbor clipping/copy finding; not new browser or Android approval"
+        },
+        {
+          "path": "reviews/cove-panel-refinement/gallery/measurements.json",
+          "role": "Actual shared-source gallery design stress: every text-node line and nested scroll dimension at1440/320viewports, including320px/20pxlongnames. Not gameplay evidence."
+        },
+        {
+          "path": "reviews/cove-panel-refinement/REVIEW.md",
+          "role": "Current source-tied actual Harbor pre-confirmation correction, matched phone captures, input/lifecycle results and unresolved limits"
+        },
+        {
+          "path": "reviews/cove-panel-refinement/after/capture-manifest.json",
+          "role": "Actual UI rescue captures at five sizes including the three-passenger Harbor preview before Confirm; per-line text, nested scroll and stable subset targets"
+        },
+        {
+          "path": "reviews/cove-panel-refinement/contrast.json",
+          "role": "272 passing integrated comparisons across13actualUIstages; every parsed gradient and source-matched browser-decoded motif included; not complete accessibility certification"
         }
       ],
       "consumers": [
@@ -3780,16 +3887,16 @@
       ],
       "gallery": {
         "section": "interface",
-        "preview": "Actual shared CSS/component states; design evidence separate from gameplay"
+        "preview": "Actual shared material and passengerChoiceContent; ordinary/compact/arrival, long warning, native selected/unselected/focus states and constrained three-passenger specimens. Gallery is design evidence only."
       },
       "typeSpecific": {
-        "component/selector sources": "src/ui/cove-ui.css: .cove-choice; src/ui/cove-ui.ts: shared icon and control rendering helpers",
-        "token and elevation roles": "Rounded matte surface, shallow lower edge and restrained top highlight; tokens in the same shared CSS",
+        "component/selector sources": "src/ui/cove-ui.css: .passenger-options / .cove-choice / .cove-choice-check / .cove-choice-name / .cove-choice-capacity; src/ui/cove-ui.ts: passengerChoiceContent(name, spaces)",
+        "token and elevation roles": "Existing inset #204952 / selected #315e5e faces, checked warm-top square and ivory full labels; accepted button colors remain unchanged.",
         "interaction states": "selected; unselected; focus; unavailable",
-        "size/hit target/layout behavior": "Existing measured phone placement; 48px main target and constrained 44px floor. Outer hit bounds remain stable under press.",
-        "text/icon contract": "Native button owns label and accessible name; inline decorative SVG has no focus or pointer target.",
+        "size/hit target/layout behavior": "Shared grid uses repeat(auto-fit,minmax(min(100%,6.5rem),1fr)) with7pxgap; each tile has22px check/name columns and a full-width capacity row, min-width0 where needed, min-height48px and normal wrapping. Vertical scrolling may be needed on short phones.",
+        "text/icon contract": "passengerChoiceContent emits decorative check, b.cove-choice-name and span.cove-choice-capacity. Full1space/2spaces text is never ellipsized; Range line rectangles and nested scroll widths establish fit.",
         "focus and disabled/warning semantics": "Focus keyline; selected/disabled/warning have shape and text as well as color.",
-        "mobile and reduced-motion evidence": "reviews/cove-ui-assets/REVIEW.md native phone gameplay. contrast.json records169checks/9actualstages and13SettingsReduced control transition durations0s; no physical-device certification."
+        "mobile and reduced-motion evidence": "Current cove-panel-refinement review and capture-manifest identify actual Harbor pre-confirmation UI at844x390,780x320,390x844,360x740and1440x900. Integrated contrast passes272checks/13stages; all13SettingsReduced measured button transitions are0s. Gallery18choices/39Rangefragments fit at1440/320viewports, including20pxlongnames; not physical-device certification."
       }
     },
     {
@@ -3938,23 +4045,30 @@
         {
           "path": "src/ui/cove-ui.ts",
           "symbol": "shared icon and control rendering helpers"
+        },
+        {
+          "path": "cove-panel-package/material/cove-panel-material.css",
+          "symbol": ".cove-surface / .cove-surface--compact / .cove-surface--arrival / focus state"
         }
       ],
       "integrationTarget": "src/ui/cove-ui.css",
       "variants": [
-        "dark quiet surfaces",
-        "seafoam action",
-        "warm objective",
+        "opaque regular reading surface",
+        "compact motif-free reading surface",
+        "arrival highlight",
+        "retained seafoam action",
+        "retained warm objective",
         "warning",
         "focus"
       ],
-      "visualSignature": "Deep teal and cream retained from current UI; softened foam and lantern action faces derived from the miniature palette",
+      "visualSignature": "Opaque painted panel wash and subdued sage rim alongside the accepted seafoam/lantern button faces; the world palette remains unchanged.",
       "reuseAndOwnership": "One semantic token set shared across components; world materials keep existing source",
       "behaviorToPreserve": "Do not recolor the accepted world or use opacity-only states; validate actual composites",
       "provenance": "original-package-vector-and-css",
       "acceptance": {
-        "state": "awaiting-human-playtest",
-        "basis": "Integrated and contributor-verified in actual game; not yet human-accepted"
+        "state": "accepted-button-direction; panel-and-three-choice-refinement-awaiting-human-playtest",
+        "basis": "User likes the new button/icon direction at a432535; the supplied review requests panel and three-passenger correction. Integration, independent baseline code checks and human visual acceptance are separate.",
+        "reviewedSourceCommit": "a4325353cf11cd4edba8d5384b58fe138e4772e3"
       },
       "evidence": [
         {
@@ -3972,6 +4086,26 @@
         {
           "path": "reviews/cove-ui-assets/contrast.json",
           "role": "Actual computed gradient/alpha composites, source identity and method limitations"
+        },
+        {
+          "path": "cove-panel-package/REVIEW_A432535.md",
+          "role": "Independent baseline code/source verification and reported Harbor clipping/copy finding; not new browser or Android approval"
+        },
+        {
+          "path": "reviews/cove-panel-refinement/gallery/measurements.json",
+          "role": "Actual shared-source gallery design stress: every text-node line and nested scroll dimension at1440/320viewports, including320px/20pxlongnames. Not gameplay evidence."
+        },
+        {
+          "path": "reviews/cove-panel-refinement/REVIEW.md",
+          "role": "Current source-tied actual Harbor pre-confirmation correction, matched phone captures, input/lifecycle results and unresolved limits"
+        },
+        {
+          "path": "reviews/cove-panel-refinement/after/capture-manifest.json",
+          "role": "Actual UI rescue captures at five sizes including the three-passenger Harbor preview before Confirm; per-line text, nested scroll and stable subset targets"
+        },
+        {
+          "path": "reviews/cove-panel-refinement/contrast.json",
+          "role": "272 passing integrated comparisons across13actualUIstages; every parsed gradient and source-matched browser-decoded motif included; not complete accessibility certification"
         }
       ],
       "meaning": "Cove interface material tokens. Do not recolor the accepted world or use opacity-only states; validate actual composites",
@@ -3980,14 +4114,14 @@
       ],
       "gallery": {
         "section": "interface",
-        "preview": "Actual shared CSS/component states; design evidence separate from gameplay"
+        "preview": "Actual shared material and passengerChoiceContent; ordinary/compact/arrival, long warning, native selected/unselected/focus states and constrained three-passenger specimens. Gallery is design evidence only."
       },
       "typeSpecific": {
-        "exact tokens/semantic roles": "src/ui/cove-ui.css .cove-kit --cove-* tokens; docs/UI_STYLE_GUIDE.md records exact integrated values.",
+        "exact tokens/semantic roles": "Reading surface top#2b5356 / face#1b434b / bottom#123741, rim#9eb5a5, edge#0b2d36; ivory#fff3d9, secondary#d6e5d8, warning#f2b7a0, focus#f6cf8a. Upper catchlight ivory18%, arrival warmivory38%; motif#648e86 at5.5%. Accepted action/utility tokens remain in src/ui/cove-ui.css and docs/UI_STYLE_GUIDE.md.",
         "color space and material type if applicable": "CSS sRGB colors; matte DOM surface gradients. No Three.js material or texture.",
-        "roughness/alpha/blending behavior": "Substantial dark text backing, opaque light action faces, shallow inset lower lip/highlight; alpha only around quiet panel/perimeter.",
-        "shared versus scoped ownership": "One CSS semantic token set used by game and developer gallery; world palette unchanged.",
-        "allowed component roles; measured UI contrast when used for text": "Dark panel/quiet utility, foam action, warm objective/progression, warning and focus. contrast.json:169checks in9actualUIstages at844x390; minimum text/icon6.279777:1 under recorded composite method, no failed sampled comparisons. Not full accessibility certification."
+        "roughness/alpha/blending behavior": "All three reading gradient stops and solid fallback are opaque. Alpha is limited to the exterior shadow, inset highlight and sparse SVG motif; no component opacity or backdrop blur. Button faces unchanged.",
+        "shared versus scoped ownership": "Single panel CSS/SVG source imported by game and development gallery; shared cove-ui.css continues owning buttons and layout refinements. No new runtime asset manager or world material.",
+        "allowed component roles; measured UI contrast when used for text": "Regular dialog reading, compact HUD/name/forecast/local options, warm arrival upperedge; glyph/control palette unchanged. Current contrast.json:272checks/13actualUIstages at844x390, minimumtext4.633123840823063:1 andmeaningfulicon/state6.036691451508263:1. Every opaque monotone-gradient endpoint and every actual decoded SVG RGBApixel is bounded; unknown layersfail. Earlier169checks and suppliedcandidate4.64bound remain historical/candidate evidence, not this newmeasurement."
       }
     },
     {
@@ -4275,5 +4409,6 @@
       "ui.dialogs"
     ],
     "unchangedWorldAudio": "Existing world/audio families remain accepted-baseline assets; this inventory change adds no runtime model/texture/recording/font file."
-  }
+  },
+  "refinementSourceCommit": "a4325353cf11cd4edba8d5384b58fe138e4772e3"
 }

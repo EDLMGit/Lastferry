@@ -5,7 +5,15 @@ h1, h2, h3 { font-family: Georgia, serif; }
 p, li { line-height: 1.5; }
 a { color: #f3d6a0; }
 .gallery-panel { padding: 20px; margin: 20px 0; }
-.specimens, .passenger-options { display: flex; flex-wrap: wrap; gap: 16px; margin: 20px 0; }
+.specimens { display: flex; flex-wrap: wrap; gap: 16px; margin: 20px 0; }
+.passenger-options { margin: 20px 0; }
+.panel-specimens { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 20px; }
+.panel-specimen { width: 400px; max-width: 100%; min-width: 0; }
+.panel-specimen--narrow { width: 320px; }
+.panel-specimen h3 { overflow-wrap: anywhere; }
+.gallery-text-stress { font-size: 20px; }
+.gallery-text-stress .cove-choice { font-size: inherit; }
+.gallery-forecast { padding: 12px; min-height: 48px; font: inherit; text-align: left; }
 .gallery-warning { color: var(--cove-warning); }
 .icon-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 20px; }
 .icon-grid > div { display: flex; align-items: center; gap: 10px; }

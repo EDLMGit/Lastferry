@@ -1,8 +1,8 @@
 # Last Ferry — interface materials and icon style
 
-This is the integrated interface contract derived from the supplied [`STYLE_GUIDE.md`](../cove-ui-package/STYLE_GUIDE.md). Existing cove art remains the reference. The original package specimen is design evidence, not a gameplay screenshot or a new level layout. Runtime use and verification are recorded in [`assets/catalog.json`](../assets/catalog.json); human acceptance of the new appearance remains pending the next playtest.
+This is the integrated interface contract derived from the supplied [`STYLE_GUIDE.md`](../cove-ui-package/STYLE_GUIDE.md) and the later [`painted panel material`](../cove-panel-package/material/MATERIAL_SPEC.md). Existing cove art remains the reference. Both package specimens are design evidence, not gameplay screenshots or new level layouts. The user likes the button/icon direction; the clipped three-passenger preview and panel material require the current correction. That feedback does not blanket-approve every UI family. Integration, source verification and human visual acceptance remain separate in [`assets/catalog.json`](../assets/catalog.json).
 
-The shared implementation is [`src/ui/cove-ui.css`](../src/ui/cove-ui.css) and [`src/ui/cove-ui.ts`](../src/ui/cove-ui.ts). Editable icon paths remain only in `cove-ui-package/ui/icons/*.svg`; Vite imports the individual originals, excluding the supplied snapshot sprite. The development gallery reads the canonical catalog and these same helpers/components. No runtime asset manager, font loader or separate copy of SVG paths is introduced.
+The shared implementation is [`src/ui/cove-ui.css`](../src/ui/cove-ui.css) and [`src/ui/cove-ui.ts`](../src/ui/cove-ui.ts). The CSS imports the single editable [`cove-panel-material.css`](../cove-panel-package/material/cove-panel-material.css), with its sibling [`shoreline-corner.svg`](../cove-panel-package/material/shoreline-corner.svg). Editable icon paths remain only in `cove-ui-package/ui/icons/*.svg`; Vite imports the individual originals, excluding the supplied snapshot sprite. The development gallery reads the canonical catalog and these same helpers/components. No runtime asset manager, font loader or separate copy of SVG paths is introduced.
 
 ## Character
 
@@ -14,7 +14,7 @@ Current source anchors are `src/scene/models.ts` (rounded ferry, cream wool, pai
 
 | Token | Integrated value | Role |
 | --- | --- | --- |
-| `--cove-panel` | `#143d46` | Text-bearing dark surface |
+| `--cove-panel` | `#143d46` | Retained base token; painted reading faces use the surface tokens below |
 | `--cove-panel-soft` | `#234e55` | Quiet inset/utility face |
 | `--cove-ink` | `#173d43` | Text and icons on light action faces |
 | `--cove-ivory` | `#fff3d9` | Text and icons on dark surfaces |
@@ -28,10 +28,18 @@ Current source anchors are `src/scene/models.ts` (rounded ferry, cream wool, pai
 | `--cove-warning` | `#f2b7a0` | Warning symbol/text on dark backing |
 | `--cove-focus` | `#f6cf8a` | Focus outline, with a dark keyline |
 | `--cove-edge` | `#092f3c` | Lower silhouette and focus isolation |
+| `--cove-surface-top` | `#2b5356` | Opaque upper painted wash |
+| `--cove-surface-face` | `#1b434b` | Opaque main reading face and missing-SVG fallback |
+| `--cove-surface-bottom` | `#123741` | Opaque lower reading face |
+| `--cove-surface-rim` | `#9eb5a5` | Desaturated sage panel rim |
+| `--cove-surface-edge` | `#0b2d36` | Shallow lower painted lip |
+| `--cove-surface-highlight` | `rgb(255 243 217 / 18%)` | Restrained upper catchlight; arrival uses warm ivory at 38% |
 
-The supplied token values are retained in `.cove-kit`, with `--panel: rgb(20 61 70 / 97%)`, quiet button upper face `#345f64`, lower face `#234e55`, disabled face `#345158` and disabled text `#d5e0d7`. Panel borders use warm-neutral `#b5bca1`; quiet control borders use `#a4b7a9`. These are CSS material choices, not sampled physical materials or a changed world palette.
+Button values stay in `.cove-kit`: quiet upper face `#345f64`, lower face `#234e55`, disabled face `#345158`, disabled text `#d5e0d7`, and quiet control border `#a4b7a9`. The canonical `.cove-surface` owns all reading-face gradients, the sage rim, lower lip and corner image. The older 97%-opaque `--panel` fallback is no longer the visible reading surface of integrated panels. These are CSS material choices, not sampled physical materials or a changed world palette.
 
-The [actual composite check](../reviews/cove-ui-assets/contrast.json) covers 169 comparisons across nine runtime UI stages at 844×390 in Chromium/SwiftShader. It uses computed foreground/background colors with source-over ancestor compositing against local and darkest/brightest current WebGL samples, bounding the two-color gradients by their endpoints. The lowest sampled text/icon ratio is 6.279777:1, with no failed sampled comparisons. This excludes antialiased glyph fringes and decorative borders and is not full accessibility certification. Native screenshots and the [gameplay review](../reviews/cove-ui-assets/REVIEW.md) establish actual fit separately.
+The [previous composite check](../reviews/cove-ui-assets/contrast.json) recorded 169 comparisons across nine runtime UI stages at 844×390 in Chromium/SwiftShader, with lowest sampled text/icon contrast 6.279777:1. It describes the earlier two-stop/alpha treatment, not the new opaque three-stop material and motif. The current pass must parse the complete surface and conservatively composite the actual SVG decoration; unparsed backgrounds cannot count as passing. New source-tied contrast and actual-game captures are recorded under `reviews/cove-panel-refinement/`. Neither check is full accessibility certification.
+
+The [current integrated check](../reviews/cove-panel-refinement/contrast.json) passes 272 comparisons across 13 actual UI stages at 844×390, with minimum text 4.633124:1 and meaningful icon/state 6.036691:1. Its source-checked, browser-decoded 192×128 SVG contributes every distinct nontransparent RGBA pixel over every opaque gradient endpoint, independent of its normal corner position. Unknown or unsupported layers fail instead of being skipped. The method also composites actual foreground/ancestor layers, tests focus and selected cues, and preserves original exploratory failures. All 13 measured buttons have `0s` transitions under Settings Reduced. Actual phone fit and visual inspection remain separate evidence in the [panel review](../reviews/cove-panel-refinement/REVIEW.md).
 
 ## Shape and relief
 
@@ -39,12 +47,16 @@ The [actual composite check](../reviews/cove-ui-assets/contrast.json) covers 169
 - Familiar utilities: rounded 48px controls; constrained existing targets may remain 44px. A 24px visible icon is not a 24px hit target.
 - Panels: 20px outer corner radius, with compact 14px HUD and 15px forecast variants; one restrained frame. Preserve current placement and scrolling behavior rather than applying specimen padding wholesale.
 - Relief: about 2–3px lower lip, one thin top highlight and a short soft shadow. Press feedback changes the inner face/shadow, not the measured hit region or map anchor.
-- Passenger choice: quiet inset surface; a checked shape, name and capacity usage carry selection. Avoid a bright outline around every line of explanation.
+- Passenger choice: quiet inset surface; check and full name share the first row, and the full `1 space` / `2 spaces` occupies the complete second row. The shared grid uses available panel width, not orientation, to choose columns. Normal phone text stays 16px and the minimum target stays 48px; wrapping is allowed without ellipsis or hidden information.
 - Name plates: short, subtle dark backings. Do not turn island names back into large button-shaped signs.
 
 ## Hierarchy and transparency
 
-Keep all ordinary water/animal inspection visible around compact controls. The top HUD should not become taller in order to add icons. Prefer one outer surface to multiple nested cards. A small transparent perimeter can soften a panel, while its text area remains approximately 94–98% opaque. Test the composite result over luminous water; do not make all content faint to achieve transparency.
+Keep all ordinary water/animal inspection visible around compact controls. The top HUD must not become taller to add decoration. Prefer one outer surface to multiple nested cards. Reading faces are opaque: no recognizable animals, map labels or underlying controls show beneath the text. Only the exterior shadow, upper catchlight and sparse motif use alpha; the panel itself does not. Do not shrink the scene or hide overflowing text to create apparent fit.
+
+Regular panels use a 155-degree three-stop painted face and a 192×128px lower-right SVG corner. Its three curves use muted teal `#648e86` at 5.5% opacity. The center remains quiet; the gradient and solid fallback remain complete if the SVG is unavailable. `.cove-surface--compact` removes the motif and uses a smaller lip/shadow for HUD, names, forecast and local options. `.cove-surface--arrival` changes only the upper highlight to warm ivory at 38%. Geometry, radius, padding, placement and native scrolling remain component-owned; the material owns no layout, pointer target or animation.
+
+Transfer previews reserve their existing sheet height so subset toggles keep the footer and confirmation target stable. The shared `passengerChoiceContent()` keeps native buttons and full names/costs in DOM reading order. Dialog/body/group overflow and individual text-line `Range` rectangles are checked separately: a visible button rectangle or hidden scrollbar is not evidence that its labels fit. Short heights may scroll vertically, retaining Close/Confirm and a reachable full consequence. Proposed delivery uses future wording and an explicit `After this action` line; only Confirm commits state and triggers arrival.
 
 Warm Harbor identity is a lighthouse plus “Home.” Warning identity is a warning shape plus its consequence. They may share a warm family but cannot be distinguished only by hue. The current amber selection language remains coherent with both.
 
@@ -58,7 +70,9 @@ Inline the individual SVGs through the shared bundler helper. Standalone `<img>`
 
 Dock transfer pictograms stay upright at either berth orientation; only the game geometry determines boarding. Harbor/Home uses the lighthouse identity, Bring home uses the unload-family action with warm emphasis, and Back to boat uses the framed ferry. Board, Let ashore, Bring home, Sail, Wait and confirmation retain visible wording. Playing/muted/requested sound states select their own icons; Retry retains a visible word, and explicit captured sound intent continues to own the click.
 
-Passenger choices remain native buttons with `aria-pressed`, a square checked shape, passenger name and capacity use. Their style borrows the specimen's inset treatment without converting them to inputs or changing dialog Tab traversal. Map name and marker remain one semantic selection button. State shapes/text and free inspection are retained.
+Passenger choices remain native buttons with `aria-pressed`, a square checked shape, passenger name and capacity use. Their style borrows the specimen's inset treatment without converting them to inputs or changing dialog Tab traversal. The gallery uses the same `passengerChoiceContent()` and shared grid, including 400px and 320px three-choice specimens, selected/unselected states, a long warning, keyboard focus and a gallery-only 125% text/long-name stress case. Map name and marker remain one semantic selection button. State shapes/text and free inspection are retained.
+
+The bounded [gallery fit check](../reviews/cove-panel-refinement/gallery/measurements.json) passed at 1440px and 320px viewports: 18 choices, all 39 individual text-node line fragments inside their content boxes, no nested horizontal overflow and targets at least 48px high. Six native specimen images were inspected; longer 20px labels wrap without clipping. These are design checks, not gameplay screenshots or Android certification. The actual Harbor state is captured separately before Confirm at the required phone sizes.
 
 ## States and movement
 

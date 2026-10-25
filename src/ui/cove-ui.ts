@@ -27,6 +27,10 @@ export function controlContent(name: CoveIcon | null, label: string) {
   return `${name ? iconMarkup(name) : ''}<span class="cove-label">${escapeLabel(label)}</span>`;
 }
 
+export function passengerChoiceContent(name: string, spaces: number) {
+  return `<span class="cove-choice-check" aria-hidden="true">${iconMarkup('confirm')}</span><b class="cove-choice-name">${escapeLabel(name)}</b><span class="cove-choice-capacity">${spaces} ${spaces === 1 ? 'space' : 'spaces'}</span>`;
+}
+
 export function setControl(
   button: HTMLElement,
   name: CoveIcon | null,

@@ -1,6 +1,6 @@
 import './style.css';
 import './ui/cove-ui.css';
-import { controlContent, iconMarkup, setControl, type CoveIcon, type CoveFace } from './ui/cove-ui';
+import { controlContent, iconMarkup, passengerChoiceContent, setControl, type CoveIcon, type CoveFace } from './ui/cove-ui';
 import { level as baseline, holdingPier, bellwater, levelNames } from './levels/level';
 import {
   copy,
@@ -58,16 +58,16 @@ for (const [id, icon, label] of [
 ] as const) setControl($(id), icon, label);
 setControl($('menu'), 'menu', 'Menu', 'quiet', true);
 $('menu').title = 'Menu';
-document.querySelector('.hud')!.classList.add('cove-panel');
-$('local-context').classList.add('cove-panel');
-$('status-toggle').classList.add('cove-panel');
+document.querySelector('.hud')!.classList.add('cove-panel', 'cove-surface', 'cove-surface--compact');
+$('local-context').classList.add('cove-panel', 'cove-surface', 'cove-surface--compact');
+$('status-toggle').classList.add('cove-panel', 'cove-surface', 'cove-surface--compact');
 const session = new Session(level),
   sound = new Sound(),
   world = new World($('world'), session.state, level),
   motion = new MotionPreference(matchMedia('(prefers-reduced-motion: reduce)'));
 sound.reconcileState(session.state, level);
 const dialog = $('dialog') as HTMLDialogElement;
-dialog.classList.add('cove-panel');
+dialog.classList.add('cove-panel', 'cove-surface');
 const fullscreenSupport = new FullscreenSupport(app, dialog, {
   artifact: new URL(import.meta.url).pathname.split('/').at(-1) ?? 'unknown',
   mode: import.meta.env.DEV ? 'development' : 'production',
@@ -523,6 +523,7 @@ function header(title: string, eyebrow?: string, closeLabel = 'Close dialog') {
 }
 function renderDialog() {
   if (!mode) return;
+  dialog.classList.toggle('cove-surface--arrival', mode === 'terminal' && session.state.status === 'won');
   const oldFocus = (document.activeElement as HTMLElement)?.id;
   const s = session.state,
     p = pierAt(s, level);
@@ -534,10 +535,10 @@ function renderDialog() {
     const ids = a.type === 'board' ? s.waitingByPier[p!.id] : a.type === 'unload' ? s.aboard : [];
     const choices =
       a.type === 'board' || a.type === 'unload'
-        ? `<div class="passenger-options" role="group" aria-label="Passenger selection">${ids.map((id) => `<button id="passenger-${id}" class="cove-choice" aria-pressed="${a.passengerIds.includes(id)}"><span class="cove-choice-check" aria-hidden="true">${iconMarkup('confirm')}</span><span class="cove-choice-copy"><b>${passengerNames[id].split(' ·')[0]}</b><span> · ${level.passengers.find((p) => p.id === id)!.slots} ${level.passengers.find((p) => p.id === id)!.slots === 1 ? 'space' : 'spaces'}</span></span></button>`).join('')}</div>`
+        ? `<div class="passenger-options" role="group" aria-label="Passenger selection">${ids.map((id) => `<button id="passenger-${id}" class="cove-choice" aria-pressed="${a.passengerIds.includes(id)}">${passengerChoiceContent(passengerNames[id].split(' ·')[0], level.passengers.find((p) => p.id === id)!.slots)}</button>`).join('')}</div>`
         : '';
     $('dialog-content').innerHTML =
-      `${header(actionLabel(s, a, level), `${nodeNames[a.type === 'move' ? a.to : s.boatNodeId]} · inspection is free`)}<div id="preview" class="dialog-body ${proposed.error || proposed.state.status === 'lost' ? 'warning' : ''}" aria-live="polite" aria-atomic="true">${choices}<p class="requirement">${text.error ?? text.requirement}</p>${text.consequence ? `<p class="consequence">${text.consequence}</p>` : ''}${!proposed.error ? `<p class="preview-result">Boat ${load(proposed.state, level)}/${level.rules.capacity} spaces · tide ${s.tideLevel}${s.tideLevel !== proposed.state.tideLevel ? ` → ${proposed.state.tideLevel}` : ''}</p>` : ''}</div><footer class="dialog-footer"><button id="commit" ${proposed.error ? 'disabled' : ''}>${proposed.error ? 'Action unavailable' : 'Confirm · 1 action'}</button></footer>`;
+      `${header(actionLabel(s, a, level), `${nodeNames[a.type === 'move' ? a.to : s.boatNodeId]} · inspection is free`)}<div id="preview" class="dialog-body ${proposed.error || proposed.state.status === 'lost' ? 'warning' : ''}" aria-live="polite" aria-atomic="true">${choices}<p class="requirement">${text.error ?? text.requirement}</p>${text.consequence ? `<p class="consequence">${text.consequence}</p>` : ''}${!proposed.error ? `<p class="preview-result">After this action: Boat ${load(proposed.state, level)}/${level.rules.capacity} spaces · tide ${proposed.state.tideLevel}${s.tideLevel !== proposed.state.tideLevel ? ` (now ${s.tideLevel})` : ''}</p>` : ''}</div><footer class="dialog-footer"><button id="commit" ${proposed.error ? 'disabled' : ''}>${proposed.error ? 'Action unavailable' : 'Confirm · 1 action'}</button></footer>`;
     if (a.type === 'board' || a.type === 'unload')
       for (const id of ids)
         $(`passenger-${id}`).onclick = () => {
@@ -792,7 +793,7 @@ function renderMap() {
               : facts.wouldLose
                 ? 'adjacent, flood warning'
                 : 'adjacent passage available';
-        return `<div id="stop-${n.id}" class="map-stop" data-adjacent="${facts.relation === 'adjacent'}"><button id="map-${n.id}" class="map-target" data-status="${status}" data-risk="${facts.wouldLose ? 'loss' : 'safe'}" data-destination="${n.id}" aria-expanded="${locationSelection === n.id}" aria-controls="local-context" ${facts.current ? 'aria-current="location"' : ''} aria-label="Select ${facts.name}; ${description}${facts.home ? '; Home, delivery destination' : ''}" title="${description}" ${session.busy || s.status !== 'playing' ? 'disabled' : ''}><span class="map-hit"><span class="map-symbol" aria-hidden="true">${facts.current ? '•' : facts.relation === 'remote' ? '◇' : facts.status === 'too-shallow' ? '╱' : facts.wouldLose ? '!' : ''}</span></span><span class="map-name"><b class="cove-name">${facts.home ? iconMarkup('harbor-home') : ''}${facts.name}${facts.home ? '<span class="map-home cove-objective"> · Home</span>' : ''}</b></span></button></div>`;
+        return `<div id="stop-${n.id}" class="map-stop" data-adjacent="${facts.relation === 'adjacent'}"><button id="map-${n.id}" class="map-target" data-status="${status}" data-risk="${facts.wouldLose ? 'loss' : 'safe'}" data-destination="${n.id}" aria-expanded="${locationSelection === n.id}" aria-controls="local-context" ${facts.current ? 'aria-current="location"' : ''} aria-label="Select ${facts.name}; ${description}${facts.home ? '; Home, delivery destination' : ''}" title="${description}" ${session.busy || s.status !== 'playing' ? 'disabled' : ''}><span class="map-hit"><span class="map-symbol" aria-hidden="true">${facts.current ? '•' : facts.relation === 'remote' ? '◇' : facts.status === 'too-shallow' ? '╱' : facts.wouldLose ? '!' : ''}</span></span><span class="map-name"><b class="cove-name cove-surface cove-surface--compact">${facts.home ? iconMarkup('harbor-home') : ''}${facts.name}${facts.home ? '<span class="map-home cove-objective"> · Home</span>' : ''}</b></span></button></div>`;
       })
       .join('');
   for (const node of level.nodes) bindTarget($(`map-${node.id}`), node.id);

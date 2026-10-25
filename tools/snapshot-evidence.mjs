@@ -34,6 +34,7 @@ const paths = [
   ...walk('data/'),
   ...(existsSync(new URL('assets/', root)) ? walk('assets/') : []),
   ...(existsSync(new URL('cove-ui-package/', root)) ? walk('cove-ui-package/') : []),
+  ...(existsSync(new URL('cove-panel-package/', root)) ? walk('cove-panel-package/') : []),
   ...(existsSync(new URL('asset-gallery.html', root)) ? ['asset-gallery.html'] : []),
   'index.html',
   'package.json',
@@ -61,6 +62,9 @@ const paths = [
     : []),
   ...(existsSync(new URL('NEXT_TASK_COVE_UI_ASSETS.md', root))
     ? ['NEXT_TASK_COVE_UI_ASSETS.md', 'docs/UI_STYLE_GUIDE.md', 'tools/check-assets.ts']
+    : []),
+  ...(existsSync(new URL('NEXT_TASK_COVE_PANEL_REFINEMENT.md', root))
+    ? ['NEXT_TASK_COVE_PANEL_REFINEMENT.md']
     : []),
   'docs/GAMEPLAY_RULES.md',
   'docs/FIRST_COVE.md',
@@ -90,6 +94,7 @@ const paths = [
       path.includes('cove-interface') ||
       path.includes('cove-contrast') ||
       path.includes('cove-ui') ||
+      path.includes('cove-panel') ||
       path.includes('victory-mix') ||
       path.includes('homecoming') ||
       path.includes('lighthouse-light') ||

@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { initial, reduce, type Action, type State } from '../../src/game/rules';
+import { Session } from '../../src/game/session';
 import {
   bellwater,
   holdingPier,
@@ -34,6 +35,42 @@ const atRabbits = () =>
   ]);
 
 describe('plain action and consequence presentation', () => {
+  test('Harbor previews describe future delivery without committing passengers or history', () => {
+    const session = new Session(holdingPier);
+    const journey: Action[] = [
+      { type: 'unload', passengerIds: ['sheep-1'] },
+      { type: 'move', to: 'shallows' },
+      { type: 'move', to: 'rabbit-pier' },
+      { type: 'board', passengerIds: ['rabbit-1', 'rabbit-2'] },
+      { type: 'move', to: 'shallows' },
+      { type: 'move', to: 'stone' },
+      { type: 'board', passengerIds: ['sheep-1'] },
+      { type: 'move', to: 'harbor' },
+    ];
+    for (const action of journey) {
+      expect(session.commit(action)).not.toBeNull();
+      session.finish();
+    }
+    const before = structuredClone({ state: session.state, history: session.history });
+    const everyone: Action = { type: 'unload', passengerIds: [...session.state.aboard] };
+    expect(previewCopy(session.state, everyone, holdingPier).consequence).toBe(
+      'Everyone will be safely home at Harbor.',
+    );
+    expect(previewCopy(session.state, { type: 'unload', passengerIds: ['sheep-1'] }, holdingPier).consequence).toBe(
+      'Moss will be safe at Harbor.',
+    );
+    expect(previewCopy(session.state, { type: 'unload', passengerIds: [] }, holdingPier).error).toBe(
+      'Select at least one passenger.',
+    );
+    expect({ state: session.state, history: session.history }).toEqual(before);
+    expect(statusCopy(session.state, holdingPier).headline).toBe('Pip, Rue and Moss are safe aboard.');
+    expect(session.commit(everyone)?.after).toMatchObject({ status: 'won', turn: 9, aboard: [] });
+    session.finish();
+    expect(statusCopy(session.state, holdingPier).headline).toBe('Everyone is safely home.');
+    expect(session.undo()).toBe(true);
+    expect({ state: session.state, history: session.history }).toEqual(before);
+  });
+
   test('uses level-owned names and keeps the original residents and fallbacks', () => {
     expect(levelNames(bellwater)).toEqual({
       nodeNames: {

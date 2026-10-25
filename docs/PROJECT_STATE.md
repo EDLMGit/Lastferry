@@ -25,7 +25,7 @@ Local Codex implements the current task. ChatGPT reviews the identifiable handof
 | Sailing direction/released-crests implementation | `7877c9d094e3ce66f8197df6c203b0c748603488` — published as game `80545cbabb0496b215cd56f25cfc0113b056da67`; GitHub continuity commits are separate. |
 | Phone playability implementation | `0a9de631998ffb88b5608b17d80030b810db5b5c` — published for user phone testing as game `e78819974a0487440e439ef87d24ba4bb1c2f454`; three timing-check limitations remain. |
 | Audio/fullscreen corrective implementation | `d45d47332e2b02643f77d0ecd18b8d7149fa0dd8` — published and user-accepted in game `8052cfcd67f2e56cf3258243618c4ce125d51c4b`; measured timing/device limits remain recorded. |
-| Cove interface implementation | `f468a3272ed0a6d0a485860aea11320950425218` — ready for ChatGPT review; source/media packaging audit in `reviews/cove-ui-assets/`; not deployed or human accepted. |
+| Cove interface implementation | `f468a3272ed0a6d0a485860aea11320950425218`, reviewed packaging `a4325353cf11cd4edba8d5384b58fe138e4772e3` — the user likes the button/icon direction; panel and three-passenger preview refinement requested. Not deployed. |
 | Reviewed game baseline | `8052cfcd67f2e56cf3258243618c4ce125d51c4b` |
 | Private phone build | `8052cfcd67f2e56cf3258243618c4ce125d51c4b` — Sites version 10, publication confirmed by the current user task on 2026-10-25 |
 | Stable phone URL | https://last-ferry-playtest.abumech.chatgpt.site |
@@ -38,7 +38,19 @@ The preceding version 9 publication remains historical evidence: hosting source 
 
 After the next implementation, record the new GitHub SHA separately from the live Site's game SHA. Do not update the live field until deployment is confirmed.
 
-## Current handoff: Cove interface and asset inventory
+## Current task: Readable passenger previews and painted panels
+
+`NEXT_TASK_COVE_PANEL_REFINEMENT.md` starts clean at reviewed `a4325353cf11cd4edba8d5384b58fe138e4772e3`. The supplied `cove-panel-package/` and its independent review are retained. ChatGPT freshly verified that baseline's production/typecheck, 202 units, 71-family catalog, production assets, packaged source/media and 52 protected sources. Those are independent code/source checks, not new Android, browser or listening approval.
+
+The user likes the buttons/icons and overall world. The requested correction concerns the actual three-passenger Harbor preview before Confirm: clipped full capacity text, horizontal overflow, present-tense success wording and scene silhouettes through the reading panel. Both stages are required: readable native choice tiles and unambiguous future-state text, then the original opaque painted material integrated across shared reading surfaces. Keep stable nearby sheets, focus recovery, controls, phone camera, all puzzles and accepted audio/world behavior. Update the existing five catalog families rather than adding per-menu assets.
+
+Implementation and focused verification are complete in `reviews/cove-panel-refinement/`. Native responsive two-line passenger choices retain full 16px names/costs and 62px targets. Future preview wording and projected load/tide remain separate from committed state/effects. Shared ordinary/compact/arrival surfaces use the supplied opaque painted CSS and sparse original SVG with unchanged button relief. Exactly five existing families are updated; all 71 IDs and retirements remain. Human approval of the button direction does not blanket-approve this panel refinement.
+
+Final Node 24 build/typecheck, 203/203 units, catalog validation, 272 contrast checks and five focused browser cases pass. Six actual Holding UI rescues at all required sizes plus 320×740 pass, including tide/terminal Undo and redelivery. All five exact baseline Harbor states reproduced clipping/overflow; final individual text-line and nested overflow checks pass. Native inspection covers 48 final images and five matched originals; ferry size and HUD height are unchanged. Full uninterrupted 38.8-second silent gameplay is retained. Original baseline failures and the inconclusive development reset remain recorded; frozen reruns pass. Existing card/dock overlap, delivered-heading and ≤180ms rapid-touch limits remain open. Physical Android, other engines, native GPU, different fonts and new acoustic approval remain unverified.
+
+**Ready for ChatGPT review.** Source identities, exact commands, original failures and evidence are in `reviews/cove-panel-refinement/REVIEW.md`. No deployment: the private Site remains version 10/game8052cfc/sourcef9ada70 until confirmed publication after review. Main is unchanged and PR #1 remains draft.
+
+## Previous handoff: Cove interface and asset inventory
 
 `NEXT_TASK_COVE_UI_ASSETS.md` is implemented from clean accepted `8052cfcd67f2e56cf3258243618c4ce125d51c4b`. The supplied original package is retained. Shared matte seafoam actions, dark teal panels, inset passenger checks and warm Harbor/progression accents now cover the actual game. Clear Board / Let ashore / Bring home text and native controls remain; Harbor's lighthouse is distinct from the framed-ferry camera control. Dock glyphs stay upright. Sound/fullscreen/view renderers preserve their button nodes and update shared icon/label children.
 

@@ -193,7 +193,7 @@ export function previewCopy(
           : '';
     consequence = `${order}${passengerList(loss.passengerIds, l)} ${verb(loss.passengerIds, 'is', 'are')} still waiting at ${stop(flooded.nodeId, l)} when it floods. This ends the crossing.`;
   } else if (n.status === 'won') {
-    consequence = `Everyone is safely home at ${stop(l.piers.find((p) => p.id === l.objective.deliveryPierId)!.nodeId, l)}.`;
+    consequence = `Everyone will be safely home at ${stop(l.piers.find((p) => p.id === l.objective.deliveryPierId)!.nodeId, l)}.`;
   } else if (a.type === 'board') {
     const who = passengerList(a.passengerIds, l),
       safety =

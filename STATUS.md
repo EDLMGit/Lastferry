@@ -1,4 +1,16 @@
-# Current task — Cove interface and asset inventory
+# Current task — Readable passenger previews and painted panels
+
+2026-10-25: Started clean on `m1-first-crossing` at reviewed `a4325353cf11cd4edba8d5384b58fe138e4772e3`. Read AGENTS, PROJECT_STATE, the new task and supplied panel package from the parent workspace; retained those inputs in the repository. The user likes the button/icon direction; the three-passenger Harbor preview and shared reading material need refinement. Preserving the current branch and all accepted gameplay/audio/world behavior. The prior independent code/build audit is recorded as independent source verification, not physical-phone acceptance.
+
+Both internal stages are complete: full-width capacity rows in content-aware native passenger tiles, future-state delivery/projection wording, and one opaque painted surface with a sparse SVG corner. The fixed nearby transfer sheet and recent keyboard return guard are preserved. Exactly five existing catalog families were updated; all 71 IDs and retired records remain. The actual runtime and developer gallery share the original editable CSS/SVG material. The supplied colors were retained after native gameplay/contrast inspection; human material approval remains pending.
+
+Fresh Node 24 production build, standalone TypeScript, **203/203 units across 28 files**, catalog validation and **272 composite contrast checks across 13 actual UI stages** pass. **Five focused browser cases pass in one run**, covering final Harbor selection/partial delivery, portrait focus, touch pan, cold audio and native fullscreen. Six actual Holding rescue captures pass at 844×390, 780×320, 390×844, 360×740, 1440×900 and extra 320×740, including tide Undo and terminal Undo/redelivery. Full text-line and nested overflow checks reproduce the defect at all five matched baseline sizes and pass at every final size. All 48 final images and five matched Harbor originals were inspected at native size. Initial ferry size and HUD height are unchanged. The full 38.8-second silent gameplay capture is retained as a native animated WebP with recorded frame sampling.
+
+Original failures remain: the baseline clipping/overflow and an inconclusive exploratory reset coinciding with a catalog write, followed by a frozen traced pass and all six final passes. Existing constrained card/dock overlap, delivered-heading and ≤180ms rapid-touch limits stay open. Physical Android, other engines, native GPU, different system fonts and new listening remain unverified. Protected rules/data/audio/fullscreen/world/camera sources remain unchanged; no full new browser rescue in the other two coves is claimed.
+
+**Implementation complete; ready for ChatGPT review.** [Review, source and evidence](reviews/cove-panel-refinement/REVIEW.md). PR #1 remains draft; main is unchanged. No deployment is authorized or performed; the private Site stays version 10/game8052cfc/sourcef9ada70.
+
+# Previous task — Cove interface and asset inventory
 
 2026-10-25: Inspected clean `m1-first-crossing` at accepted `8052cfcd67f2e56cf3258243618c4ce125d51c4b`. Read the package-root `NEXT_TASK_COVE_UI_ASSETS.md` and retained it in this repository. Reconciled `docs/PROJECT_STATE.md` to the user-confirmed Sites version 10, game `8052cfcd67f2e56cf3258243618c4ce125d51c4b`, hosting source `f9ada70cbd093bf52c105f2287558381b3b7c83c`. This is a publication continuity correction, not a new deployment audit.
 
