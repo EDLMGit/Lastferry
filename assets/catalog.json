@@ -4652,7 +4652,7 @@
     },
     {
       "id": "ui.story-presentation",
-      "name": "Journey entrance and brief story presentation",
+      "name": "Journey entrance and authored miniature story scenes",
       "kind": "dom-component-family",
       "status": "integrated",
       "sources": [
@@ -4662,7 +4662,7 @@
         },
         {
           "path": "src/campaign/presentation.ts",
-          "symbol": "StoryPresentation bounded optional scene motion/settling lifecycle"
+          "symbol": "StoryPresentation authored finite timeline, immediate continuation, settling and cancellation"
         },
         {
           "path": "src/main.ts",
@@ -4670,7 +4670,7 @@
         },
         {
           "path": "src/campaign/story.css",
-          "symbol": "responsive title/story reading surfaces within the existing app root"
+          "symbol": "Quiet responsive caption treatment with complete readable copy and native immediate Continue"
         },
         {
           "path": "campaign/STORY_SCENES.md",
@@ -4682,7 +4682,11 @@
         },
         {
           "path": "src/scene/world.ts",
-          "symbol": "World.setStoryFraming: bounded story-only fit of existing lighthouse/ferry/aboard silhouettes above or beside the caption card"
+          "symbol": "World.presentStory/clearStory: bounded shot composition and presentation-only acknowledgment over the existing world"
+        },
+        {
+          "path": "src/scene/story-staging.ts",
+          "symbol": "Editable opening/connection shot and character-pose recipe; no gameplay or audio owner"
         }
       ],
       "meaning": "Introduce the first evening, connect the two existing rescues and explain cove-boundary checkpoints without changing puzzle state.",
@@ -4694,14 +4698,14 @@
         "checkpoint replacement/return",
         "available-content endpoint"
       ],
-      "visualSignature": "Compact established painted teal surface with warm native controls and complete readable captions over the existing miniature world; no letterbox, prerendered video or second renderer.",
+      "visualSignature": "Quiet painted teal caption treatment beneath recognizable miniature subjects. Authored ferry/Moss acknowledgment, lighthouse reveal and safe-Harbor acknowledgment use the existing models and warm light. No letterbox, prerequisite wait or implementation-status label.",
       "reuseAndOwnership": "Reuses ui.dialogs, original painted surfaces, cove controls/icons, ferry, passengers, water, lighthouse and the existing sound owner. Captions/staging are editable registry/presentation sources; root owns one active world and native dialog lifecycle.",
-      "behaviorToPreserve": "Explicit continuation alone acknowledges a scene or completed rescue. Skip settles all copy without spending an action. Reduced Motion/restored scenes are still readable; background/cancellation never double-navigate. Practice does not touch campaign progress; native focus/fullscreen ownership stays shared.",
+      "behaviorToPreserve": "Continue is available from the first frame and alone acknowledges a scene. Skip settles motion without acknowledgement and disappears at settlement. All caption copy remains complete. Reduced/restored states are composed stills; ambient movement follows the actual preference. Finite poses/camera jobs cancel on navigation/background/recovery without changing puzzle state, Undo, checkpoint or audio intent.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "integrated-awaiting-final-browser-verification-and-human-review",
-        "reviewedBaseline": "1a85874883af5caa59f6294a75495eccf2afebbc",
-        "basis": "Current user supplied authored campaign direction; future scenes/assets remain proposals. Implementation and visual verification are distinct from human acceptance and publication."
+        "state": "implemented-awaiting-human-scene-review",
+        "reviewedBaseline": "8cc43c794274fe64d5fb634961fbf79aaff251f8",
+        "basis": "Foundation progression is preserved; this pass replaces idle-only staging with an authored 7.2-second ferry/Moss and lighthouse sequence plus a four-second safe-Harbor/Pip acknowledgment. Final build, 276 units, 73-family validation and seven distinct affected browser cases pass across retained runs. Native frame/recording inspection, original failures and human pacing acceptance remain distinct in reviews/story-scenes/REVIEW.md. Not deployed."
       },
       "evidence": [
         {
@@ -4719,6 +4723,22 @@
         {
           "path": "reviews/story-foundation/ASSETS.md",
           "role": "Implemented family/reuse contract and preserved supplied source/publication provenance"
+        },
+        {
+          "path": "NEXT_TASK_STORY_SCENES.md",
+          "role": "Current scene correction contract, superseding old idle-timer and gated-Continue presentation"
+        },
+        {
+          "path": "reviews/story-scenes/supplied-inputs.json",
+          "role": "Byte-identical active task provenance"
+        },
+        {
+          "path": "reviews/story-scenes/ASSETS.md",
+          "role": "Updated existing-family source/reuse and scene evidence contract"
+        },
+        {
+          "path": "reviews/story-scenes/REVIEW.md",
+          "role": "Actual native scene beginning/intermediate/endpoint captures, recordings and executed verification; human acceptance is separate"
         }
       ],
       "consumers": [
@@ -4727,14 +4747,14 @@
       ],
       "gallery": {
         "section": "interface",
-        "preview": "Shared exact opening/connective copy, checkpoint policy, established title/Continue controls and painted material. Static gallery specimens are not gameplay captures."
+        "preview": "Shared exact caption copy, immediate Continue, active-only Skip and authored scene duration/beat descriptions using existing painted material. Static specimens remain design guidance, not gameplay evidence."
       },
       "typeSpecific": {
-        "render/placement sources": "src/main.ts existing native dialog; src/campaign/story.css responsive story reading space; src/campaign/registry.ts captions; src/campaign/presentation.ts bounded 8000ms scene lifecycle. src/scene/world.ts: World.setStoryFraming opts into the caption-safe view and exits on playable recovery; ordinary Play/Whole cove framing is preserved.",
+        "render/placement sources": "src/main.ts existing native dialog; src/campaign/story.css quiet caption treatment; src/campaign/registry.ts exact copy and scene associations; src/campaign/presentation.ts finite timeline/cancellation; src/scene/story-staging.ts and World.presentStory/clearStory author camera/animal presentation while preserving normal gameplay framing.",
         "semantic role/accessible name": "Native dialog with scene/title heading and complete live text; visible New journey, Continue journey, Skip animation, Continue, Practice and Settings actions.",
         "icon and label mappings": "Reuse existing next-cove progression, Settings, close and fullscreen icons beside explicit text. No new glyph or ambiguous lighthouse/camera meaning.",
-        "interaction states": "Title with valid/empty/invalid/unavailable checkpoint; replacement confirmation; pending/settled/skipped/reduced scene; explicit cove completion; honest endpoint; independent practice.",
-        "nearby placement and viewport contract": "Story/title content remains within existing app/dialog root with wrapped live text and reachable native controls at 320px portrait and 780x320 landscape. Puzzle nearby confirmations and accepted camera controls remain separate. Story-only fit protects lighthouse/ferry/aboard silhouettes in the free area above portrait or beside landscape captions, without changing authoritative puzzle coordinates.",
+        "interaction states": "Existing journey/checkpoint/practice states retained; active authored opening/connection, immediate Continue, active-only Skip, watched/settled/skipped/reduced/restored endpoint, cancellation/background/orientation recovery.",
+        "nearby placement and viewport contract": "Native caption text and 44px controls fit 320x740, 390x844, 780x320 and 844x390. Portrait and landscape shots protect ferry/Moss, safe Harbor trio and lighthouse above a quiet caption treatment; short landscape uses composed cuts. Actual phone evidence is required, and static specimens do not establish gameplay quality.",
         "focus/cancel/fullscreen preservation": "One existing native dialog owner; foreground scenes fence map input, retain visible focus and explicit continuation, settle/cancel pending motion safely, and preserve shared fullscreen promotion and audio intent."
       }
     }

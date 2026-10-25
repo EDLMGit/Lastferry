@@ -74,6 +74,9 @@ const paths = [
   ...(existsSync(new URL('NEXT_TASK_STORY_FOUNDATION.md', root))
     ? ['NEXT_TASK_STORY_FOUNDATION.md']
     : []),
+  ...(existsSync(new URL('NEXT_TASK_STORY_SCENES.md', root))
+    ? ['NEXT_TASK_STORY_SCENES.md']
+    : []),
   'docs/GAMEPLAY_RULES.md',
   'docs/FIRST_COVE.md',
   'docs/ART_DIRECTION.md',

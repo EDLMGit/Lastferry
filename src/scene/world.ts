@@ -29,6 +29,7 @@ import { getLevelPaths, type CanonicalPath } from './paths';
 import { Shores, createReedBeds } from './shore';
 import { CoastalWater } from './water';
 import { CrossingEffects } from './effects';
+import { storyCameraFrame, storyStage, type StorySceneId, type StoryStage } from './story-staging';
 import { contactMaterial } from './contact';
 import { TransferTimeline, type TransferCue } from './transfer';
 import {
@@ -105,6 +106,14 @@ export class World {
   viewFocus: ViewPoint | null = null;
   viewScale = 1;
   private storyFraming = false;
+  private storyJob: StoryStage | null = null;
+  private storyRestore: {
+    animals: Map<T.Object3D, { position: T.Vector3; rotation: T.Euler }>;
+    head: Map<T.Object3D, { position: T.Vector3; quaternion: T.Quaternion }>;
+    visibility: Map<T.Object3D, boolean>;
+    close: T.Box3;
+    wide: T.Box3;
+  } | null = null;
   layoutStaticBounds = new Map<string, T.Box3>();
   layoutAnimalBounds = new Map<string, T.Box3>();
   layoutHullBounds = new T.Box3();
@@ -726,6 +735,160 @@ export class World {
     this.storyFraming = active;
     this.reframeView();
   }
+  presentStory(id: StorySceneId, elapsedMs: number, settled: boolean) {
+    if (this.storyJob && this.storyJob.id !== id) this.clearStory();
+    if (!this.storyRestore) {
+      if (this.homecoming.active) this.settleHomecoming('story-boundary');
+      this.scene.updateMatrixWorld(true);
+      const boat = new T.Box3().setFromObject(this.boatRoot);
+      const wide = new T.Box3().setFromObject(this.home.group).union(boat);
+      const neighbors = new T.Box3();
+      const animals = new Map<T.Object3D, { position: T.Vector3; rotation: T.Euler }>();
+      const head = new Map<T.Object3D, { position: T.Vector3; quaternion: T.Quaternion }>();
+      for (const [passengerId, animal] of this.animals) {
+        animals.set(animal, {
+          position: animal.position.clone(),
+          rotation: animal.rotation.clone(),
+        });
+        if (this.state.delivered.includes(passengerId))
+          neighbors.union(new T.Box3().setFromObject(animal));
+        const species = this.level.passengers.find(
+          (passenger) => passenger.id === passengerId,
+        )?.species;
+        if (id === 'opening' && this.state.aboard.includes(passengerId) && species === 'sheep')
+          for (const part of animal.children)
+            if (part.position.z > 0.2 && part.position.y >= 0.26)
+              head.set(part, {
+                position: part.position.clone(),
+                quaternion: part.quaternion.clone(),
+              });
+      }
+      if (!neighbors.isEmpty()) wide.union(neighbors);
+      const close = id === 'opening' || neighbors.isEmpty() ? boat : neighbors.union(boat);
+      close.expandByVector(
+        id === 'opening' ? new T.Vector3(0.22, 0.14, 0.22) : new T.Vector3(0.35, 0.13, 0.35),
+      );
+      wide.expandByScalar(0.08);
+      const visibility = new Map<T.Object3D, boolean>();
+      for (const object of [...this.routes.values(), ...this.markers.values()]) {
+        visibility.set(object, object.visible);
+        object.visible = false;
+      }
+      this.storyRestore = { animals, head, visibility, close, wide };
+    }
+    const cut = this.host.clientWidth > this.host.clientHeight && this.host.clientHeight <= 420;
+    this.storyJob = storyStage(id, elapsedMs, settled || this.reduced, cut);
+    this.restoreStoryAnimals();
+    const stage = this.storyJob;
+    if (id === 'opening') {
+      const moss = this.level.passengers.find(
+        (passenger) => passenger.species === 'sheep' && this.state.aboard.includes(passenger.id),
+      );
+      if (moss) {
+        const animal = this.animals.get(moss.id)!;
+        const towardViewer = this.camera.getWorldDirection(new T.Vector3()).negate();
+        towardViewer.applyQuaternion(
+          animal.parent!.getWorldQuaternion(new T.Quaternion()).invert(),
+        );
+        const turn = T.MathUtils.clamp(Math.atan2(towardViewer.x, towardViewer.z), -0.6, 0.6);
+        animal.rotation.y += (turn * stage.turn) / 0.24;
+      }
+      const pivot = new T.Vector3(0, 0.36, 0.2);
+      const nod = new T.Quaternion().setFromAxisAngle(new T.Vector3(1, 0, 0), stage.nod);
+      for (const [part, base] of this.storyRestore.head) {
+        part.position.copy(base.position).sub(pivot).applyQuaternion(nod).add(pivot);
+        part.quaternion.copy(nod).multiply(base.quaternion);
+      }
+    } else {
+      const pip = this.level.passengers.find(
+        (passenger) =>
+          passenger.species === 'rabbit' && this.state.delivered.includes(passenger.id),
+      );
+      if (pip) {
+        const animal = this.animals.get(pip.id)!;
+        const toward = Math.atan2(
+          this.boatRoot.position.x - animal.position.x,
+          this.boatRoot.position.z - animal.position.z,
+        );
+        const turn = Math.sign(toward || 1) * T.MathUtils.clamp(Math.abs(toward), 0.28, 0.8);
+        animal.position.y += stage.hop;
+        animal.rotation.y += turn * stage.turn;
+      }
+    }
+    for (const object of this.storyRestore.visibility.keys()) object.visible = false;
+    this.reframeView();
+  }
+  private restoreStoryAnimals() {
+    if (!this.storyRestore) return;
+    for (const [animal, base] of this.storyRestore.animals) {
+      animal.position.copy(base.position);
+      animal.rotation.copy(base.rotation);
+    }
+    for (const [part, base] of this.storyRestore.head) {
+      part.position.copy(base.position);
+      part.quaternion.copy(base.quaternion);
+    }
+  }
+  clearStory() {
+    if (!this.storyRestore && !this.storyJob) return;
+    this.restoreStoryAnimals();
+    for (const [object, visible] of this.storyRestore?.visibility ?? []) object.visible = visible;
+    this.storyRestore = null;
+    this.storyJob = null;
+    if (!this.disposed) this.reframeView();
+  }
+  private projectedStoryBounds(box: T.Box3) {
+    const points: T.Vector3[] = [];
+    for (const x of [box.min.x, box.max.x])
+      for (const y of [box.min.y, box.max.y])
+        for (const z of [box.min.z, box.max.z])
+          points.push(new T.Vector3(x, y, z).applyMatrix4(this.camera.matrixWorldInverse));
+    const local = new T.Box3().setFromPoints(points);
+    return { minX: local.min.x, maxX: local.max.x, minY: local.min.y, maxY: local.max.y };
+  }
+  storyPresentation() {
+    return {
+      active: !!this.storyJob,
+      stage: this.storyJob ? { ...this.storyJob } : null,
+      camera: {
+        left: this.camera.left,
+        right: this.camera.right,
+        top: this.camera.top,
+        bottom: this.camera.bottom,
+      },
+      usable: this.usableRectangle(),
+      routesVisible: [...this.routes].map(([id, route]) => ({ id, visible: route.visible })),
+      markersVisible: [...this.markers].map(([id, marker]) => ({ id, visible: marker.visible })),
+      animals: [...this.animals].map(([id, animal]) => ({
+        id,
+        position: animal.position.toArray(),
+        worldPosition: animal.getWorldPosition(new T.Vector3()).toArray(),
+        rotation: animal.rotation.toArray(),
+      })),
+      subjects: [
+        { id: 'ferry', object: this.boatRoot },
+        { id: 'lighthouse', object: this.home.group },
+        ...[...this.animals]
+          .filter(([id]) => this.state.aboard.includes(id) || this.state.delivered.includes(id))
+          .map(([id, object]) => ({ id, object })),
+      ].map(({ id, object }) => {
+        const bounds = new T.Box3().setFromObject(object);
+        const points: T.Vector3[] = [];
+        for (const x of [bounds.min.x, bounds.max.x])
+          for (const y of [bounds.min.y, bounds.max.y])
+            for (const z of [bounds.min.z, bounds.max.z])
+              points.push(new T.Vector3(x, y, z).project(this.camera));
+        const projected = new T.Box3().setFromPoints(points);
+        return {
+          id,
+          left: ((projected.min.x + 1) * this.host.clientWidth) / 2,
+          right: ((projected.max.x + 1) * this.host.clientWidth) / 2,
+          top: ((1 - projected.max.y) * this.host.clientHeight) / 2,
+          bottom: ((1 - projected.min.y) * this.host.clientHeight) / 2,
+        };
+      }),
+    };
+  }
   setViewMode(mode: 'play' | 'overview') {
     this.viewMode = mode;
     this.viewPanned = false;
@@ -874,6 +1037,18 @@ export class World {
       };
       this.viewScale = overviewScale(bounds, padded);
       focus = { x: (bounds.minX + bounds.maxX) / 2, y: (bounds.minY + bounds.maxY) / 2 };
+      if (this.storyJob && this.storyRestore) {
+        const authored = storyCameraFrame(
+          this.projectedStoryBounds(this.storyRestore.close),
+          this.projectedStoryBounds(this.storyRestore.wide),
+          this.storyJob,
+          usable,
+          width,
+          height,
+        );
+        this.viewScale = authored.scale;
+        focus = authored.focus;
+      }
     }
     focus =
       harborFrame || this.storyFraming
@@ -1459,6 +1634,7 @@ export class World {
   }
   dispose() {
     this.disposed = true;
+    this.clearStory();
     cancelAnimationFrame(this.frameRequest);
     this.resizeObserver.disconnect();
     this.scene.remove(this.water);

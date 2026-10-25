@@ -1,5 +1,6 @@
 import { initial, type State } from '../game/rules';
 import type { Level } from '../levels/level';
+import { storyScenes, type SceneId } from './registry';
 
 export function restoredHarbor(level: Level): State {
   return {
@@ -13,21 +14,40 @@ export function restoredHarbor(level: Level): State {
 }
 
 export class StoryPresentation {
-  private timer: ReturnType<typeof setTimeout> | undefined;
+  private scene: SceneId | null = null;
+  private startedAt = 0;
+  private elapsed = 0;
   settled = true;
   constructor(private readonly changed: () => void) {}
-  start(still: boolean) {
+  start(scene: SceneId, still: boolean, now = performance.now()) {
     this.cancel();
+    this.scene = scene;
+    this.startedAt = now;
     this.settled = still;
-    if (!still) this.timer = setTimeout(() => this.settle(), 8000);
+    this.elapsed = still ? storyScenes[scene].duration : 0;
+  }
+  update(now = performance.now()) {
+    if (!this.scene || this.settled) return;
+    this.elapsed = Math.max(this.elapsed, Math.max(0, now - this.startedAt));
+    if (this.elapsed >= storyScenes[this.scene].duration) this.settle();
+  }
+  get frame() {
+    return {
+      scene: this.scene,
+      elapsed: this.elapsed,
+      duration: this.scene ? storyScenes[this.scene].duration : 0,
+      settled: this.settled,
+    };
   }
   settle() {
-    this.cancel();
+    if (!this.scene || this.settled) return;
+    this.elapsed = storyScenes[this.scene].duration;
     this.settled = true;
     this.changed();
   }
   cancel() {
-    clearTimeout(this.timer);
-    this.timer = undefined;
+    this.scene = null;
+    this.elapsed = 0;
+    this.settled = true;
   }
 }

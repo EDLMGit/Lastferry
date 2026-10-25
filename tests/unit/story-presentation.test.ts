@@ -1,11 +1,9 @@
-import { afterEach, describe, expect, test, vi } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import { StoryPresentation, restoredHarbor } from '../../src/campaign/presentation';
 import { storyScenes } from '../../src/campaign/registry';
 import { initial } from '../../src/game/rules';
 import { Session } from '../../src/game/session';
 import { holdingPier } from '../../src/levels/level';
-
-afterEach(() => vi.useRealTimers());
 
 describe('bounded optional story motion', () => {
   test('restored connective scenery depicts the safe Harbor without altering a puzzle or inventing Undo history', () => {
@@ -34,72 +32,79 @@ describe('bounded optional story motion', () => {
     );
   });
 
-  test('watching settles at eight seconds and retains the readable endpoint indefinitely', () => {
-    vi.useFakeTimers();
+  test('the render clock drives authored opening progress and holds its endpoint without acknowledging a checkpoint', () => {
     const changed = vi.fn();
     const presentation = new StoryPresentation(changed);
-    presentation.start(false);
+    presentation.start('opening', false, 100);
     expect(presentation.settled).toBe(false);
-    vi.advanceTimersByTime(storyScenes.opening.duration - 1);
+    presentation.update(100 + 1600);
+    expect(presentation.frame.elapsed).toBe(1600);
+    presentation.update(100 + storyScenes.opening.duration - 1);
     expect(changed).not.toHaveBeenCalled();
     expect(presentation.settled).toBe(false);
-    vi.advanceTimersByTime(1);
+    presentation.update(100 + storyScenes.opening.duration);
     expect(presentation.settled).toBe(true);
     expect(changed).toHaveBeenCalledTimes(1);
-    vi.advanceTimersByTime(120000);
+    presentation.update(120000);
     expect(presentation.settled).toBe(true);
+    expect(presentation.frame.elapsed).toBe(storyScenes.opening.duration);
     expect(changed).toHaveBeenCalledTimes(1);
-    expect(vi.getTimerCount()).toBe(0);
   });
 
-  test('Skip or background settling cancels the pending motion completion callback', () => {
-    vi.useFakeTimers();
+  test('Skip and background settling reach the same endpoint once with no delayed render work', () => {
     const changed = vi.fn();
     const presentation = new StoryPresentation(changed);
-    presentation.start(false);
-    vi.advanceTimersByTime(500);
+    presentation.start('opening', false, 0);
+    presentation.update(500);
     presentation.settle();
     expect(presentation.settled).toBe(true);
     expect(changed).toHaveBeenCalledTimes(1);
-    expect(vi.getTimerCount()).toBe(0);
-    vi.advanceTimersByTime(120000);
+    expect(presentation.frame.elapsed).toBe(storyScenes.opening.duration);
+    presentation.settle();
+    presentation.update(120000);
     expect(changed).toHaveBeenCalledTimes(1);
   });
 
-  test('Reduced Motion or a restored pending scene starts settled without scheduling a timeout', () => {
-    vi.useFakeTimers();
+  test('Reduced Motion and restored pending scenes begin at their authored endpoints', () => {
     const presentation = new StoryPresentation(vi.fn());
-    presentation.start(true);
+    presentation.start('opening', true, 0);
     expect(presentation.settled).toBe(true);
-    expect(vi.getTimerCount()).toBe(0);
+    expect(presentation.frame.elapsed).toBe(storyScenes.opening.duration);
+    presentation.start('another-bell', true, 200);
+    expect(presentation.frame).toMatchObject({ elapsed: 4000, settled: true });
   });
 
-  test('a new scene owns its own complete interval without inheriting an old callback', () => {
-    vi.useFakeTimers();
+  test('the shorter Harbor scene owns its own interval without inheriting opening time', () => {
     const changed = vi.fn();
     const presentation = new StoryPresentation(changed);
-    presentation.start(false);
-    vi.advanceTimersByTime(7000);
-    presentation.start(false);
-    vi.advanceTimersByTime(1000);
+    presentation.start('opening', false, 0);
+    presentation.update(7000);
+    presentation.start('another-bell', false, 7000);
+    presentation.update(8000);
     expect(presentation.settled).toBe(false);
     expect(changed).not.toHaveBeenCalled();
-    expect(vi.getTimerCount()).toBe(1);
-    vi.advanceTimersByTime(7000);
+    expect(presentation.frame.elapsed).toBe(1000);
+    presentation.update(11000);
     expect(presentation.settled).toBe(true);
     expect(changed).toHaveBeenCalledTimes(1);
   });
 
-  test('navigation and disposal cancellation cannot perform a late presentation update', () => {
-    vi.useFakeTimers();
+  test('immediate navigation and disposal cancel finite jobs before any late frame can change presentation', () => {
     const changed = vi.fn();
     const presentation = new StoryPresentation(changed);
-    presentation.start(false);
-    vi.advanceTimersByTime(7999);
+    presentation.start('opening', false, 0);
     presentation.cancel();
     presentation.cancel();
-    vi.advanceTimersByTime(120000);
+    presentation.update(120000);
     expect(changed).not.toHaveBeenCalled();
-    expect(vi.getTimerCount()).toBe(0);
+    expect(presentation.frame).toMatchObject({ scene: null, elapsed: 0, settled: true });
+  });
+
+  test('out of order timestamps cannot reverse an in-progress acknowledgment', () => {
+    const presentation = new StoryPresentation(vi.fn());
+    presentation.start('opening', false, 100);
+    presentation.update(1600);
+    presentation.update(1200);
+    expect(presentation.frame.elapsed).toBe(1500);
   });
 });

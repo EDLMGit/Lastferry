@@ -221,8 +221,8 @@ function resumeJourney(restored = true) {
       mountCove(holdingPier);
       if (storyId === 'another-bell') world.sync(restoredHarbor(holdingPier));
     }
-    storyPresentation.start(restored || motion.reduced || document.hidden);
-    showJourney('story', storyPresentation.settled ? 'story-continue' : 'story-skip');
+    storyPresentation.start(storyId, restored || motion.reduced || document.hidden);
+    showJourney('story', 'story-continue');
     renderStoryStatus();
     return;
   }
@@ -230,6 +230,7 @@ function resumeJourney(restored = true) {
 }
 function startPlayable(next: typeof level, story: boolean) {
   storyPresentation.cancel();
+  world.clearStory();
   storyId = null;
   campaignPlay = story;
   if (dialog.open) closeDialog(false);
@@ -242,7 +243,7 @@ function startPlayable(next: typeof level, story: boolean) {
   focusAvailable('menu');
 }
 function continueStory() {
-  if (mode !== 'story' || !storyId || !storyPresentation.settled) return;
+  if (mode !== 'story' || !storyId) return;
   const id = storyId;
   if (!journey?.acknowledge(id)) return;
   resumeJourney();
@@ -258,17 +259,17 @@ function renderStoryStatus() {
   const skip = $('story-skip') as HTMLButtonElement | null;
   const next = $('story-continue') as HTMLButtonElement | null;
   if (skip) {
-    skip.disabled = storyPresentation.settled;
-    skip.textContent = storyPresentation.settled ? 'Animation settled' : 'Skip animation';
+    if (storyPresentation.settled && document.activeElement === skip)
+      next?.focus({ preventScroll: true });
+    skip.hidden = storyPresentation.settled;
   }
-  if (next) next.disabled = !storyPresentation.settled;
-  if (storyPresentation.settled) {
-    world.setReducedMotion(true);
-    if (document.activeElement === skip) next?.focus({ preventScroll: true });
-  }
+  if (next) next.disabled = false;
+  const frame = storyPresentation.frame;
+  if (frame.scene) world.presentStory(frame.scene, frame.elapsed, frame.settled);
 }
 function mountCove(next: typeof level) {
   storyPresentation.cancel();
+  world.clearStory();
   clearTimeout(fallback);
   activeTransition = null;
   lastTransition = null;
@@ -359,9 +360,15 @@ function renderJourneyDialog() {
       '<button id="journey-title">Return to title</button><button id="journey-practice">Practice</button><button id="journey-settings">Settings</button>';
   }
   $('dialog-content').innerHTML =
-    `<header class="dialog-head"><h2 id="dialog-title">${heading}</h2></header><div class="dialog-body journey-copy">${body}</div><footer class="dialog-footer journey-actions">${actions}</footer>`;
+    `<header class="dialog-head${mode === 'story' ? ' sr-only' : ''}"><h2 id="dialog-title">${heading}</h2></header><div class="dialog-body journey-copy">${body}</div><footer class="dialog-footer journey-actions">${actions}</footer>`;
+  dialog.classList.toggle('story-caption', mode === 'story');
   for (const button of dialog.querySelectorAll<HTMLButtonElement>('button'))
-    setControl(button, null, button.textContent ?? '');
+    setControl(
+      button,
+      null,
+      button.textContent ?? '',
+      button.id === 'story-continue' ? 'warm' : button.id === 'story-skip' ? 'quiet' : 'action',
+    );
   const on = (id: string, fn: () => void) => {
     const element = $(id);
     if (element) element.onclick = fn;
@@ -621,7 +628,7 @@ function updateViewport() {
     positionDialog();
     const panel = dialog.getBoundingClientRect();
     usableBounds =
-      width > height
+      mode !== 'story' && width > height
         ? {
             left: panel.right + 12,
             right: safeBounds.right - 8,
@@ -799,6 +806,7 @@ function header(title: string, eyebrow?: string, closeLabel = 'Close dialog') {
 }
 function renderDialog() {
   if (!mode) return;
+  dialog.classList.toggle('story-caption', mode === 'story');
   dialog.classList.toggle(
     'cove-surface--arrival',
     mode === 'terminal' && session.state.status === 'won',
@@ -1622,6 +1630,11 @@ function bindWorld() {
   world.onViewChange = scheduleLayout;
   world.onFrame = () => {
     if (layoutRequest) flushLayout();
+    if (mode === 'story' && storyId) {
+      storyPresentation.update();
+      const frame = storyPresentation.frame;
+      world.presentStory(storyId, frame.elapsed, frame.settled);
+    }
   };
 }
 bindWorld();
@@ -1931,6 +1944,8 @@ if (import.meta.env.DEV)
           settled: storyPresentation.settled,
           progress: journey?.snapshot ?? null,
         }),
+      getStoryStatus: () =>
+        copy({ timeline: storyPresentation.frame, world: world.storyPresentation() }),
       getLegalActions: () => copy(legalActions(session.state, level)),
       getRenderStatus: () => ({
         pendingAnimation: session.busy,

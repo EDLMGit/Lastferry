@@ -80,11 +80,10 @@ describe('authored story registry', () => {
     expect(storyScenes['another-bell'].captions).toEqual([
       'Pip, Rue and Moss are safe. Across the water, Bellwater is still waiting.',
     ]);
-    expect(
-      Object.values(storyScenes).every(
-        (scene) => scene.duration >= 6000 && scene.duration <= 10000,
-      ),
-    ).toBe(true);
+    expect(storyScenes.opening.duration).toBeGreaterThanOrEqual(6000);
+    expect(storyScenes.opening.duration).toBeLessThanOrEqual(9000);
+    expect(storyScenes['another-bell'].duration).toBeGreaterThanOrEqual(3000);
+    expect(storyScenes['another-bell'].duration).toBeLessThanOrEqual(5000);
   });
 });
 
