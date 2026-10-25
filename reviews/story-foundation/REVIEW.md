@@ -6,6 +6,8 @@
 
 ## Source and scope
 
+Implementation commit: **`ca59e78fb877024296c1484eb6b5fee8b8e66717`**. The following handoff commit adds audit/continuity metadata only; its exact identity is reported in PR #1 and the final handoff. [Packaging audit](packaging-audit.json) verifies all 275 source entries, 40 selected PNGs plus the uninterrupted WebP, and five supplied originals against committed blobs: 305 entries byte-exact and 12 text entries differing only by Git newline normalization. The final runtime hash is `d6f92b376088544ebe1dbf3671181d2b8e2dc34fae405a16eb0c563a57e8054a`. Code/tests/source whitespace checks pass; preserved raw build-output and patch context contain their original trailing spaces.
+
 - Repository: https://github.com/EDLMGit/Lastferry
 - Existing PR: https://github.com/EDLMGit/Lastferry/pull/1 — draft; branch `m1-first-crossing`.
 - Reviewed comparison base: `1a85874883af5caa59f6294a75495eccf2afebbc`, explicitly supplied by the user; checkout was clean at task start.
@@ -132,4 +134,4 @@ All 33 final-run PNGs have been opened at original/native dimensions. [native-in
 - The ≤180 ms rapid-touch timing window remains unverified; earlier misses are retained.
 - Physical Android, other engines, native GPU/performance, alternate platform fonts, screen-reader/audio listening and a new acoustic approval remain unverified. Chromium touch emulation does not establish those results.
 - Human pacing/enjoyment and story visual acceptance await review. The supplied larger campaign has not been implemented or solver-validated by this pass.
-- Next action: perform the authorized commit/push/draft-PR handoff from the verified source. No GitHub mutation for this pass is recorded here yet; main stays unchanged and deployment is separate. ChatGPT review precedes any new publication to the existing private Site.
+- Next action: review the pushed handoff in draft PR #1 before any new publication to the existing private Site. The final handoff records the branch/remote equality and metadata commit separately from this audited implementation. Main remains unchanged; this pass does not deploy.

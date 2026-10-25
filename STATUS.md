@@ -1,5 +1,7 @@
 # Current task — Story foundation
 
+Implementation committed as `ca59e78fb877024296c1484eb6b5fee8b8e66717`. The packaging audit matches 275 source entries, 41 selected media files and all five supplied originals to committed content (only Git newline normalization differs for 12 text files). The following handoff commit records metadata only; its final SHA and verified remote equality are in the PR/final handoff. No new deployment.
+
 2026-10-25: Began clean on `m1-first-crossing` at reviewed `1a85874883af5caa59f6294a75495eccf2afebbc`. Read the repository guidance, continuity record, authored campaign direction/scenes and active `NEXT_TASK_STORY_FOUNDATION.md`. The explicit current task extends the historical M1-only scope around the two existing story coves. The original task, three campaign documents and publication receipt are retained byte-for-byte with `reviews/story-foundation/supplied-inputs.json`.
 
 Reconciled the confirmed publication: the same owner-private Site is version 12, game `1a85874883af5caa59f6294a75495eccf2afebbc`, hosting source `e87c5c5baa53a39001c5a89b07b59aab2ad150fc`, published 2026-10-25 at 17:28 Madrid. Earlier version 11/10/9 history remains. This is supplied receipt evidence, not a new deployment audit or physical-device test. Story work is not published.

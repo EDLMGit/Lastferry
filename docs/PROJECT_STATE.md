@@ -46,6 +46,8 @@ After the next implementation, record the new GitHub SHA separately from the liv
 
 ## Current task: Story foundation
 
+Implementation commit: `ca59e78fb877024296c1484eb6b5fee8b8e66717`. The follow-up handoff commit adds packaging/continuity metadata only. `reviews/story-foundation/packaging-audit.json` matches 275 source entries, 41 selected media files and all supplied originals; final GitHub SHA is reported separately in PR #1. This identity is not the live Site's game or hosting source.
+
 `NEXT_TASK_STORY_FOUNDATION.md` explicitly supersedes the old M1-only implementation scope. Work begins from clean reviewed `1a85874883af5caa59f6294a75495eccf2afebbc` on `m1-first-crossing`. The original task, three campaign direction documents and version 12 publication receipt are retained with hashes in `reviews/story-foundation/supplied-inputs.json`.
 
 The contained scope is a journey entrance, opening and Holding → Bellwater connection, a two-cove registry and local cove-boundary checkpoints. First Crossing stays independent practice. Direct `?cove=` entrances neither read nor write campaign progress. The larger twelve-cove arc, new animals, six-space ferry, currents and supper ending remain authored direction in `campaign/`, not implemented content.
