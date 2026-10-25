@@ -19,15 +19,17 @@ It is the captain's first evening running the ferry alone. An unusually high tid
 
 Early crossings introduce the boat and its neighbors. Later, the player recognizes submerged paths in a familiar cove and finds that rising water has turned them into useful channels. Small personal objects brought aboard reappear at the sanctuary. After the final crossing, the passengers have made a place for the captain at a supper table.
 
-This is a proposed creative arc, not extra implementation scope for M1. Keep dialogue sparse. Reused characters, gestures, props, changing light, and shorelines can tell most of the story. The player/captain may remain unseen during M1.
+The selected campaign direction is now [The Long Tide](../campaign/CAMPAIGN_DIRECTION.md), with [authored scene copy](../campaign/STORY_SCENES.md) and [puzzle progression](../campaign/PUZZLE_PROGRESSION.md). It develops this first-evening/lighthouse/supper premise into four phases of three coves. The current [story foundation task](../NEXT_TASK_STORY_FOUNDATION.md) explicitly extends the historical M1 scope only around the existing Holding Pier → Bellwater puzzles. First Crossing remains practice. Dialogue stays sparse and the captain unseen.
+
+The implemented prototype scope is a compact journey entrance, the opening, one Holding → Bellwater connective scene and honest cove-boundary checkpoints. Both completed coves lead to an explicit end-of-available-content message. The twelve-cove arc, future cast, larger ferry, currents and supper finale remain authored direction, not completed story content. Technical verification and actual phone evidence are tracked in [the story review](../reviews/story-foundation/REVIEW.md); human acceptance and publication are separate.
 
 ## Full-game planning envelope
 
-The initial hypothesis is about 12 authored puzzles and roughly 1–2 hours. Establish the real length and pacing through playtesting. A mix of introductory, demanding, and quiet crossings should give the journey room to breathe. Replay scores, generated campaigns, upgrades, multiple hull classes, and a wider simulation are not needed to prove this experience.
+The initial hypothesis is about 12 authored puzzles and roughly 1–2 hours. Establish the real length and pacing through playtesting. A mix of introductory, demanding, and quiet crossings should give the journey room to breathe. The selected direction proposes one fixed story-earned six-space ferry and one later current-rule family, each requiring its own scoped implementation and puzzle proof. Replay scores, generated campaigns, an upgrade shop and a wider simulation remain unnecessary.
 
-Later chapters may introduce one additional interaction if it improves the authored puzzles. No additional mechanic is part of this package's implementation task.
+No additional mechanic or new cove is part of the story foundation. Local progress is saved between coves: an unfinished cove starts again, with fresh in-session Undo history. Complete mid-puzzle resume and coherent Undo/presentation recovery are a phone-usability requirement before shipping the longer campaign.
 
-## M1 scope
+## Historical M1 scope
 
 One small tutorial cove, one ferry, two rabbits, one sheep, two depth categories of route, two tide rises, one safe lighthouse harbor, and the complete rescue loop. Exact route/depth/timing values are in the rules and level data.
 

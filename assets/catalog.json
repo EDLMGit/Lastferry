@@ -2367,23 +2367,32 @@
         "settings",
         "won",
         "lost",
-        "support-details fallback"
+        "support-details fallback",
+        "journey and practice entrance",
+        "brief story captions",
+        "checkpoint confirmation",
+        "prototype endpoint"
       ],
       "visualSignature": "Compact opaque painted card with preserved nearby placement and fixed transfer-sheet height; three-passenger names and full costs adapt to the panel width. Static44px original model-derived portraits now sit beside full name/capacity in native choices.",
       "reuseAndOwnership": "Same native dialog preserves focus/subset/scroll during fullscreen promotion.",
-      "behaviorToPreserve": "Preview uses future delivery language and qualified projected load/tide; opening/toggling/cancelling keeps committed state/history and victory effects unchanged. Same native dialog/choices/focus/scroll survive fullscreen; portrait recovery and stable footer remain. Image decode/failure and rerendering reserve the same geometry; portrait children remain decoration within each existing native button. No portrait-specific overlay or replacement dialog.",
+      "behaviorToPreserve": "Preview uses future delivery language and qualified projected load/tide; opening/toggling/cancelling keeps committed state/history and victory effects unchanged. Same native dialog/choices/focus/scroll survive fullscreen; portrait recovery and stable footer remain. Image decode/failure and rerendering reserve the same geometry; portrait children remain decoration within each existing native button. No portrait-specific overlay or replacement dialog. Story uses this same native owner; cove-boundary progression requires explicit departure and never follows previews, victory display or Undo.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "accepted-painted-panel-direction; portrait-integration-awaiting-human-playtest",
-        "gameCommit": "23a644aba24e6479b9d82a106a745d15c3f8c7dc",
-        "basis": "Current user reports the published painted panels look good. Sites version11 publication is confirmed in cove-portrait-package/verification/deployment-confirmation.json. New portraits are a separate unaccepted integration, not in that live build; no blanket device/engine approval.",
-        "reviewedSourceCommit": "23a644aba24e6479b9d82a106a745d15c3f8c7dc",
+        "state": "accepted-painted-panel-direction; published-portrait-integration; story-awaiting-review",
+        "gameCommit": "1a85874883af5caa59f6294a75495eccf2afebbc",
+        "basis": "Supplied version12 receipt confirms the independently reviewed portrait build was published to the unchanged owner-private Site; publication is not new physical-device or blanket human visual approval.",
         "history": [
           {
             "state": "accepted-button-direction; panel-and-three-choice-refinement-awaiting-human-playtest",
             "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b",
             "basis": "User likes the new button/icon direction at a432535; the supplied review requests panel and three-passenger correction. Integration, independent baseline code checks and human visual acceptance are separate.",
             "reviewedSourceCommit": "a4325353cf11cd4edba8d5384b58fe138e4772e3"
+          },
+          {
+            "state": "accepted-painted-panel-direction; portrait-integration-awaiting-human-playtest",
+            "gameCommit": "23a644aba24e6479b9d82a106a745d15c3f8c7dc",
+            "basis": "Current user reports the published painted panels look good. Sites version11 publication is confirmed in cove-portrait-package/verification/deployment-confirmation.json. New portraits are a separate unaccepted integration, not in that live build; no blanket device/engine approval.",
+            "reviewedSourceCommit": "23a644aba24e6479b9d82a106a745d15c3f8c7dc"
           }
         ]
       },
@@ -2431,11 +2440,16 @@
         {
           "path": "reviews/passenger-portraits/browser/automation-results.json",
           "role": "Fresh identity, delayed/failure, native input, cold audio and actual fullscreen cases"
+        },
+        {
+          "path": "review/deployment-confirmation.json",
+          "role": "Supplied version12 publication receipt for the reviewed portrait baseline; this story pass is not deployed"
         }
       ],
       "meaning": "Local preview, forecast, Menu, Settings and completion retain native semantics; projected future action is explicit and every full passenger label/cost remains readable.",
       "consumers": [
-        "src/main.ts"
+        "src/main.ts",
+        "src/campaign/presentation.ts"
       ],
       "gallery": {
         "section": "interface",
@@ -4572,9 +4586,16 @@
       "behaviorToPreserve": "Full species ordinal remains intact for world deck/pose; Rue/Lark staytan when offeredalone. Preserve modelproportions/geometry/colors, live names/costs, stable44pxslot/footer, focus/subsets/Undo, allacceptedgameplay/world/audio. Unknownappearance uses text-preserving reservedslot.",
       "provenance": "original-model-derived-ui-image",
       "acceptance": {
-        "state": "integrated-candidate-awaiting-human-playtest",
-        "reviewedBaseline": "23a644aba24e6479b9d82a106a745d15c3f8c7dc",
-        "basis": "Static model-derived candidates supplied for this task. Source/alpha checks and runtime integration are not human visual acceptance or pixel-identical WebGL rendering."
+        "state": "reviewed-and-published-version12; no-new-device-acceptance-claim",
+        "gameCommit": "1a85874883af5caa59f6294a75495eccf2afebbc",
+        "basis": "Supplied version12 receipt confirms the independently reviewed portrait build was published to the unchanged owner-private Site; publication is not new physical-device or blanket human visual approval.",
+        "history": [
+          {
+            "state": "integrated-candidate-awaiting-human-playtest",
+            "reviewedBaseline": "23a644aba24e6479b9d82a106a745d15c3f8c7dc",
+            "basis": "Static model-derived candidates supplied for this task. Source/alpha checks and runtime integration are not human visual acceptance or pixel-identical WebGL rendering."
+          }
+        ]
       },
       "evidence": [
         {
@@ -4604,6 +4625,10 @@
         {
           "path": "reviews/passenger-portraits/browser/automation-results.json",
           "role": "Fresh identity, delayed/failure, native input, cold audio and actual fullscreen cases"
+        },
+        {
+          "path": "review/deployment-confirmation.json",
+          "role": "Supplied version12 publication receipt for the reviewed portrait baseline; this story pass is not deployed"
         }
       ],
       "typeSpecific": {
@@ -4623,6 +4648,94 @@
       "gallery": {
         "section": "interface",
         "preview": "Actualshared44px portraitchoices plus256px originals; threeappearances, bothnamingschemes, selected/unselected/focus/failure and constrainedlonglabelstress. Gallery isdesign evidenceonly."
+      }
+    },
+    {
+      "id": "ui.story-presentation",
+      "name": "Journey entrance and brief story presentation",
+      "kind": "dom-component-family",
+      "status": "integrated",
+      "sources": [
+        {
+          "path": "src/campaign/registry.ts",
+          "symbol": "storyScenes exact captions/duration/staging; storyCoves two existing level references"
+        },
+        {
+          "path": "src/campaign/presentation.ts",
+          "symbol": "StoryPresentation bounded optional scene motion/settling lifecycle"
+        },
+        {
+          "path": "src/main.ts",
+          "symbol": "shared native dialog journey/story/practice/replacement/return modes"
+        },
+        {
+          "path": "src/campaign/story.css",
+          "symbol": "responsive title/story reading surfaces within the existing app root"
+        },
+        {
+          "path": "campaign/STORY_SCENES.md",
+          "symbol": "supplied authored opening and Holding to Bellwater direction"
+        },
+        {
+          "path": "src/dev/asset-gallery.ts",
+          "symbol": "shared authored caption data and material specimens"
+        },
+        {
+          "path": "src/scene/world.ts",
+          "symbol": "World.setStoryFraming: bounded story-only fit of existing lighthouse/ferry/aboard silhouettes above or beside the caption card"
+        }
+      ],
+      "meaning": "Introduce the first evening, connect the two existing rescues and explain cove-boundary checkpoints without changing puzzle state.",
+      "variants": [
+        "journey entrance",
+        "opening",
+        "Holding to Bellwater",
+        "practice chooser",
+        "checkpoint replacement/return",
+        "available-content endpoint"
+      ],
+      "visualSignature": "Compact established painted teal surface with warm native controls and complete readable captions over the existing miniature world; no letterbox, prerendered video or second renderer.",
+      "reuseAndOwnership": "Reuses ui.dialogs, original painted surfaces, cove controls/icons, ferry, passengers, water, lighthouse and the existing sound owner. Captions/staging are editable registry/presentation sources; root owns one active world and native dialog lifecycle.",
+      "behaviorToPreserve": "Explicit continuation alone acknowledges a scene or completed rescue. Skip settles all copy without spending an action. Reduced Motion/restored scenes are still readable; background/cancellation never double-navigate. Practice does not touch campaign progress; native focus/fullscreen ownership stays shared.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "integrated-awaiting-final-browser-verification-and-human-review",
+        "reviewedBaseline": "1a85874883af5caa59f6294a75495eccf2afebbc",
+        "basis": "Current user supplied authored campaign direction; future scenes/assets remain proposals. Implementation and visual verification are distinct from human acceptance and publication."
+      },
+      "evidence": [
+        {
+          "path": "reviews/story-foundation/supplied-inputs.json",
+          "role": "Byte-level provenance for original authored task/campaign direction and publication receipt"
+        },
+        {
+          "path": "NEXT_TASK_STORY_FOUNDATION.md",
+          "role": "Current bounded implementation contract; not gameplay evidence"
+        },
+        {
+          "path": "src/dev/asset-gallery.ts",
+          "role": "Static shared-source caption/material specimens; design evidence only"
+        },
+        {
+          "path": "reviews/story-foundation/ASSETS.md",
+          "role": "Implemented family/reuse contract and preserved supplied source/publication provenance"
+        }
+      ],
+      "consumers": [
+        "src/main.ts",
+        "src/dev/asset-gallery.ts"
+      ],
+      "gallery": {
+        "section": "interface",
+        "preview": "Shared exact opening/connective copy, checkpoint policy, established title/Continue controls and painted material. Static gallery specimens are not gameplay captures."
+      },
+      "typeSpecific": {
+        "render/placement sources": "src/main.ts existing native dialog; src/campaign/story.css responsive story reading space; src/campaign/registry.ts captions; src/campaign/presentation.ts bounded 8000ms scene lifecycle. src/scene/world.ts: World.setStoryFraming opts into the caption-safe view and exits on playable recovery; ordinary Play/Whole cove framing is preserved.",
+        "semantic role/accessible name": "Native dialog with scene/title heading and complete live text; visible New journey, Continue journey, Skip animation, Continue, Practice and Settings actions.",
+        "icon and label mappings": "Reuse existing next-cove progression, Settings, close and fullscreen icons beside explicit text. No new glyph or ambiguous lighthouse/camera meaning.",
+        "interaction states": "Title with valid/empty/invalid/unavailable checkpoint; replacement confirmation; pending/settled/skipped/reduced scene; explicit cove completion; honest endpoint; independent practice.",
+        "nearby placement and viewport contract": "Story/title content remains within existing app/dialog root with wrapped live text and reachable native controls at 320px portrait and 780x320 landscape. Puzzle nearby confirmations and accepted camera controls remain separate. Story-only fit protects lighthouse/ferry/aboard silhouettes in the free area above portrait or beside landscape captions, without changing authoritative puzzle coordinates.",
+        "focus/cancel/fullscreen preservation": "One existing native dialog owner; foreground scenes fence map input, retain visible focus and explicit continuation, settle/cancel pending motion safely, and preserve shared fullscreen promotion and audio intent."
       }
     }
   ],

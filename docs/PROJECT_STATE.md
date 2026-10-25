@@ -27,14 +27,16 @@ Local Codex implements the current task. ChatGPT reviews the identifiable handof
 | Audio/fullscreen corrective implementation | `d45d47332e2b02643f77d0ecd18b8d7149fa0dd8` — published and user-accepted in game `8052cfcd67f2e56cf3258243618c4ce125d51c4b`; measured timing/device limits remain recorded. |
 | Cove interface implementation | `f468a3272ed0a6d0a485860aea11320950425218`, reviewed packaging `a4325353cf11cd4edba8d5384b58fe138e4772e3` — the user likes the button/icon direction; subsequent panel correction is published below. |
 | Panel refinement implementation | `28f6d30a5199c3450cc5ff826bf8b5f9bd476182`, reviewed packaging `23a644aba24e6479b9d82a106a745d15c3f8c7dc` — published as version 11; the user likes the painted panels. |
-| Passenger portrait implementation | `3324400e662c397010b1a920e44244d83f180506` — verified shared static portraits, full-level identity and load/failure-safe native choices; ready for ChatGPT review, not deployed or human accepted. Final handoff adds audit/continuity metadata only. |
-| Reviewed game baseline | `23a644aba24e6479b9d82a106a745d15c3f8c7dc` |
-| Private phone build | `23a644aba24e6479b9d82a106a745d15c3f8c7dc` — Sites version 11, publication confirmed 2026-10-25 |
+| Passenger portrait implementation | `3324400e662c397010b1a920e44244d83f180506`, reviewed packaging `1a85874883af5caa59f6294a75495eccf2afebbc` — reviewed and published as version 12. |
+| Reviewed game baseline | `1a85874883af5caa59f6294a75495eccf2afebbc` |
+| Private phone build | `1a85874883af5caa59f6294a75495eccf2afebbc` — Sites version 12, publication confirmed 2026-10-25 17:28 Madrid |
 | Stable phone URL | https://last-ferry-playtest.abumech.chatgpt.site |
-| Site source commit | `d1fc7158d7b00717af18b7bc61ee4a33fe85bf2f` |
+| Site source commit | `e87c5c5baa53a39001c5a89b07b59aab2ad150fc` |
 | Main | Unchanged by this workflow; no merge authorized |
 
-The portrait task confirms successful publication on 2026-10-25 of game `23a644aba24e6479b9d82a106a745d15c3f8c7dc` to the same owner-private Site as version 11, hosting source `d1fc7158d7b00717af18b7bc61ee4a33fe85bf2f`. The supplied receipt is `cove-portrait-package/verification/deployment-confirmation.json`; its accompanying audits report byte-identical reviewed/hosting production files. This is supplied publication evidence, not a fresh deployment or physical-device audit by this pass. The user likes the painted panels. Portrait candidates are not in version 11; the current portrait implementation awaits review before any publication.
+The story task confirms successful publication at `2026-10-25T16:28:58.501209Z` (17:28 Madrid) of game `1a85874883af5caa59f6294a75495eccf2afebbc` to the same owner-private Site as version 12, hosting source `e87c5c5baa53a39001c5a89b07b59aab2ad150fc`. The supplied receipt is `review/deployment-confirmation.json`; it reports all six production assets byte-identical to the independently reviewed portrait handoff. Audience is unchanged. This is supplied publication evidence, not a fresh deployment or physical-device audit by this pass. The new story foundation is not deployed.
+
+Version 11 remains historical: game `23a644aba24e6479b9d82a106a745d15c3f8c7dc`, hosting source `d1fc7158d7b00717af18b7bc61ee4a33fe85bf2f`, confirmed 2026-10-25. Its receipt remains `cove-portrait-package/verification/deployment-confirmation.json`; its audits reported byte-identical reviewed/hosting production files. The user liked the painted panels. The later portrait pass is included in version 12.
 
 Version 10 is historical: game `8052cfcd67f2e56cf3258243618c4ce125d51c4b`, hosting source `f9ada70cbd093bf52c105f2287558381b3b7c83c`. The user reported that build worked well, accepting its audio/fullscreen improvement. That feedback did not establish a full device/browser matrix or close the measured timing limits. Historical pass records retain their original deployment status; the table above identifies the current live build.
 
@@ -42,7 +44,21 @@ The preceding version 9 publication remains historical evidence: hosting source 
 
 After the next implementation, record the new GitHub SHA separately from the live Site's game SHA. Do not update the live field until deployment is confirmed.
 
-## Current task: Recognizable passenger portraits
+## Current task: Story foundation
+
+`NEXT_TASK_STORY_FOUNDATION.md` explicitly supersedes the old M1-only implementation scope. Work begins from clean reviewed `1a85874883af5caa59f6294a75495eccf2afebbc` on `m1-first-crossing`. The original task, three campaign direction documents and version 12 publication receipt are retained with hashes in `reviews/story-foundation/supplied-inputs.json`.
+
+The contained scope is a journey entrance, opening and Holding → Bellwater connection, a two-cove registry and local cove-boundary checkpoints. First Crossing stays independent practice. Direct `?cove=` entrances neither read nor write campaign progress. The larger twelve-cove arc, new animals, six-space ferry, currents and supper ending remain authored direction in `campaign/`, not implemented content.
+
+Progress is accepted only through explicit continuation after a completed rescue. Winning, the arrival presentation, a preview and Undo do not acknowledge scenes or advance the journey. An unfinished cove resumes from its original start; full in-session Undo remains available until departure. Full mid-puzzle resume with complete Undo and coherent presentation recovery is deferred and required before shipping the longer phone campaign.
+
+The opening keeps Moss aboard in the actual Holding start. Captions remain complete from the beginning; optional eight-second existing lighthouse/water/boat motion settles on Skip, Reduced or backgrounding. Story-only framing fits lighthouse/ferry/aboard silhouettes above/beside the card without changing ordinary Play framing. Pending restored connections/endpoints use presentation-only safe Harbor context and no replayed rescue or arrival sound. The same native dialog and sound owner remain, with world resources disposed at boundaries. Native source-tied verification and human pacing/appearance acceptance are separate.
+
+Implementation and focused verification are complete. Final production build/TypeScript, **261/261 units**, 73-family validation and **ten distinct browser checks** pass across the retained eight-pass/one-fixture-failure batch and three-pass focused follow-up. Actual two-cove rescue/Undo/explicit acceptance, reload checkpoints, invalid/unavailable storage, practice isolation, keyboard/touch, strict cold audio/background and native fullscreen are covered. All 33 final native images were inspected; the complete 84.08-second silent sequence is retained with source/encoding provenance. The narrow final return-confirmation camera guard has fresh verification and an exact reuse audit separating it from the earlier sequence source. Full results and original failures are in `reviews/story-foundation/REVIEW.md`.
+
+The current direct Bellwater 780×320 overview reproduces East Buoy/dock-control occlusion; an existing Play-view/pan workaround passes. Unchanged protected layout sources support an inference that it predates campaign integration, but no older build was freshly run and no underlying layout fix is claimed. Existing card/dock overlap, delivered-heading, rapid-touch and physical-device limits remain open. **Ready for ChatGPT review**, with human story/pacing acceptance pending and publication separate. PR #1 remains draft; main is unchanged. The currently published game remains version 12/game `1a85874883af5caa59f6294a75495eccf2afebbc`, hosting `e87c5c5baa53a39001c5a89b07b59aab2ad150fc`; the new story implementation is not deployed.
+
+## Previous handoff: Recognizable passenger portraits
 
 `NEXT_TASK_PASSENGER_PORTRAITS.md` starts from clean reviewed `23a644aba24e6479b9d82a106a745d15c3f8c7dc` on `m1-first-crossing`. The supplied task, original generator, model-derived SVG/PNG candidates, manifest and publication receipt are retained in `cove-portrait-package/`. Static 44px portraits belong beside full names/capacities in the current native choices; a pure full-level/passenger-ID resolver also supplies the world's unchanged full species ordinal. Three shared variants cover nine level/passenger combinations. Source-derived SVG shading is an offline interpretation, not a pixel-identical WebGL screenshot.
 
@@ -50,7 +66,7 @@ Implementation and focused verification are complete under `reviews/passenger-po
 
 Fresh build/typecheck, 221/221 units, catalog validation and six focused browser cases pass. Six actual Holding capture rescues, an actual Bellwater rescue, real First Crossing passenger interactions, subset/partial delivery, tide/terminal Undo, natural keyboard/touch, delayed/failed image geometry, cold audio and actual fullscreen are covered. All 48 final gameplay images were inspected at native size across the required phones plus desktop. Full uninterrupted 38.48-second silent gameplay is retained. Matched camera/framing, HUD height and initial ferry size are unchanged. Original fixture/integration failures and two unchanged-limit geometry timeouts followed by a final all-unit pass are retained.
 
-**Ready for ChatGPT review; portrait human acceptance remains pending.** The private Site remains version 11/game23a644a/source d1fc715; this new portrait source is not deployed. Main is unchanged and PR #1 remains draft. Existing card/dock overlap, delivered-heading and ≤180ms rapid-touch limits remain open. Physical Android, other engines, native GPU, alternate fonts and new acoustic approval remain unverified. Final source/packaging SHA is in the handoff, separately from the published game.
+**Subsequently reviewed and published as version 12/game1a85874/source e87c5c5.** The original portrait handoff retains its pre-publication evidence and status. Main is unchanged and PR #1 remains draft. Existing card/dock overlap, delivered-heading and ≤180ms rapid-touch limits remain open. Physical Android, other engines, native GPU, alternate fonts and new acoustic approval remain unverified. Publication is not a blanket visual or device-matrix acceptance claim.
 
 ## Previous handoff: Readable passenger previews and painted panels
 

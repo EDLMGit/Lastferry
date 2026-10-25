@@ -1,0 +1,81 @@
+.journey-screen .hud,
+.journey-screen #map-labels,
+.journey-screen #dock-actions,
+.journey-screen #local-context,
+.journey-screen #selection-hint,
+.journey-screen #selection-leader,
+.journey-screen #status-toggle,
+.journey-screen .view-controls,
+.journey-screen #view-notice {
+  visibility: hidden !important;
+  pointer-events: none;
+}
+.journey-screen #dialog {
+  width: min(440px, calc(var(--viewport-width, 100vw) - 16px));
+  margin: 0;
+}
+.journey-screen #dialog::backdrop {
+  background: rgb(7 31 34 / 8%);
+}
+.journey-screen #dialog-content {
+  gap: 12px;
+  padding: 18px;
+}
+.journey-screen .dialog-head h2 {
+  font-size: 25px;
+  line-height: 1.15;
+}
+.journey-copy {
+  font-size: 16px;
+  line-height: 1.4;
+}
+.journey-copy p {
+  margin: 0 0 10px;
+}
+.journey-copy p:last-child {
+  margin-bottom: 0;
+}
+.journey-subtitle {
+  color: #e5c991;
+}
+.journey-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.journey-actions button {
+  min-width: 0;
+  min-height: 46px;
+  white-space: normal;
+  font-size: 16px;
+  line-height: 1.2;
+}
+#journey-continue,
+#practice-first-crossing,
+#practice-holding-pier,
+#practice-bellwater {
+  grid-column: 1 / -1;
+}
+.checkpoint-policy {
+  font-size: 14px;
+  line-height: 1.4;
+}
+@media (max-height: 420px) and (min-width: 600px) {
+  .journey-screen #dialog {
+    width: min(420px, calc(var(--viewport-width, 100vw) - 16px));
+  }
+  .journey-screen #dialog-content {
+    padding: 12px 14px;
+    gap: 8px;
+  }
+  .journey-screen .dialog-head h2 {
+    font-size: 22px;
+  }
+  .journey-copy {
+    font-size: 16px;
+    line-height: 1.3;
+  }
+  .journey-copy p {
+    margin-bottom: 8px;
+  }
+}

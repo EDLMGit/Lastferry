@@ -104,6 +104,7 @@ export class World {
   viewBounds: ViewBounds | null = null;
   viewFocus: ViewPoint | null = null;
   viewScale = 1;
+  private storyFraming = false;
   layoutStaticBounds = new Map<string, T.Box3>();
   layoutAnimalBounds = new Map<string, T.Box3>();
   layoutHullBounds = new T.Box3();
@@ -720,6 +721,11 @@ export class World {
     this.measuredUsable = { ...rectangle };
     this.reframeView();
   }
+  setStoryFraming(active: boolean) {
+    if (this.storyFraming === active) return;
+    this.storyFraming = active;
+    this.reframeView();
+  }
   setViewMode(mode: 'play' | 'overview') {
     this.viewMode = mode;
     this.viewPanned = false;
@@ -806,6 +812,7 @@ export class World {
         y: (this.viewBounds.minY + this.viewBounds.maxY) / 2,
       };
     if (
+      !this.storyFraming &&
       phone &&
       this.viewMode === 'play' &&
       this.state.status === 'won' &&
@@ -844,9 +851,34 @@ export class World {
       this.viewScale = Math.min(this.viewScale, overviewScale(bounds, usable));
       focus = { x: (bounds.minX + bounds.maxX) / 2, y: (bounds.minY + bounds.maxY) / 2 };
     }
-    focus = harborFrame
-      ? focus!
-      : clampViewFocus(focus ?? this.activeViewFocus(), this.viewBounds, usable, this.viewScale);
+    if (this.storyFraming) {
+      this.scene.updateMatrixWorld(true);
+      const subjects = new T.Box3().setFromObject(this.home.group);
+      subjects.union(new T.Box3().setFromObject(this.boatRoot));
+      for (const id of this.state.aboard) {
+        const animal = this.animals.get(id);
+        if (animal) subjects.union(new T.Box3().setFromObject(animal));
+      }
+      const points: T.Vector3[] = [];
+      for (const x of [subjects.min.x, subjects.max.x])
+        for (const y of [subjects.min.y - 0.08, subjects.max.y + 0.18])
+          for (const z of [subjects.min.z, subjects.max.z])
+            points.push(new T.Vector3(x, y, z).applyMatrix4(this.camera.matrixWorldInverse));
+      const local = new T.Box3().setFromPoints(points);
+      const bounds = { minX: local.min.x, maxX: local.max.x, minY: local.min.y, maxY: local.max.y };
+      const padded = {
+        left: usable.left + 12,
+        right: usable.right - 12,
+        top: usable.top + 12,
+        bottom: usable.bottom - 12,
+      };
+      this.viewScale = overviewScale(bounds, padded);
+      focus = { x: (bounds.minX + bounds.maxX) / 2, y: (bounds.minY + bounds.maxY) / 2 };
+    }
+    focus =
+      harborFrame || this.storyFraming
+        ? focus!
+        : clampViewFocus(focus ?? this.activeViewFocus(), this.viewBounds, usable, this.viewScale);
     this.viewFocus = focus;
     const frame = viewFrame(width, height, usable, this.viewScale, focus);
     const changed =
@@ -859,7 +891,7 @@ export class World {
     Object.assign(this.camera, frame);
     this.homecomingCameraFactor = 1;
     this.viewChanged();
-    if (this.homecoming.active) {
+    if (this.homecoming.active && !this.storyFraming) {
       this.fitHomecomingCamera();
       if (!this.homecoming.finite) this.applyHomecomingCamera(this.homecomingCameraTarget);
     }
@@ -1038,6 +1070,7 @@ export class World {
     camera.bottom = centerY - height / 2;
   }
   private applyHomecomingCamera(factor: number) {
+    if (this.storyFraming) factor = 1;
     if (factor === this.homecomingCameraFactor) return;
     this.assignHomecomingFrame(this.camera, factor);
     this.homecomingCameraFactor = factor;
