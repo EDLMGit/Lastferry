@@ -1,0 +1,214 @@
+{
+  "source": {
+    "head": "8052cfcd67f2e56cf3258243618c4ce125d51c4b",
+    "runtimeHash": "ea0fb018bb39362f6b0157363eca4a093194c4e8cbef03e789463fd3cc2ba264",
+    "sourceManifest": "after/source.json",
+    "scope": "Captured before the later keyboard-only focus-return guard. This touch sequence does not exercise that branch; final source reuse is recorded separately."
+  },
+  "original": {
+    "path": "after/raw/page@bfc94144b2b30a59c760339da3ce8c6e.webm",
+    "available": "Local ignored file",
+    "sha256": "c8e6888ea1f1cc667799e2ab62a246c21dbccd36a88bba555523dbb90c5ab7c9",
+    "bytes": 4096478,
+    "codec": "VP9",
+    "width": 844,
+    "height": 390,
+    "fps": 25,
+    "durationSeconds": 27.8,
+    "audio": "No audio track; Playwright full-interface recording."
+  },
+  "derivative": {
+    "path": "gameplay-844.webp",
+    "sha256": "7adb55a06c14cde58c6cade0ae03c2766787e6b92bf7ac0b687f42bdd880e9f9",
+    "bytes": 2627352,
+    "width": 844,
+    "height": 390,
+    "format": "Animated WebP",
+    "sampleFps": 8,
+    "decodedFrames": 218,
+    "durationSeconds": 27.75,
+    "frameDurationMs": {
+      "min": 125,
+      "max": 375
+    },
+    "method": "Entire uninterrupted source, same native dimensions, no cuts, no speed change. Frame sampling/identical-frame coalescing retains timing; terminal frame-grid rounding removes50ms.",
+    "command": "ffmpeg -nostdin -y -loglevel error -i <original> -vf fps=8 -c:v libwebp_anim -quality65 -compression_level4 -loop0 -threads1 gameplay-844.webp",
+    "validation": "Original VP9 decoded by ffmpeg without errors; all218 WebP frames decoded by Pillow at844x390."
+  },
+  "coverage": "Actual touch UI: local inspection, unload Moss, two sails, mixed rabbit subset warning, full rabbit boarding/tide rise, tide Undo and reboarding, return toStone, boardMoss, sailHarbor, Bringhome, terminalUndo/redelivery. Natural accepted motion; no injected game state.",
+  "actions": [
+    {
+      "seconds": 2.64,
+      "id": "map-stone",
+      "turn": 0,
+      "tide": 0
+    },
+    {
+      "seconds": 3.825,
+      "id": "close-location",
+      "turn": 0,
+      "tide": 0
+    },
+    {
+      "seconds": 4.014,
+      "id": "unload",
+      "turn": 0,
+      "tide": 0
+    },
+    {
+      "seconds": 4.163,
+      "id": "commit",
+      "turn": 1,
+      "tide": 0
+    },
+    {
+      "seconds": 5.17,
+      "id": "map-shallows",
+      "turn": 1,
+      "tide": 0
+    },
+    {
+      "seconds": 5.386,
+      "id": "sail",
+      "turn": 2,
+      "tide": 0
+    },
+    {
+      "seconds": 7.577,
+      "id": "map-rabbit-pier",
+      "turn": 2,
+      "tide": 0
+    },
+    {
+      "seconds": 7.708,
+      "id": "sail",
+      "turn": 3,
+      "tide": 0
+    },
+    {
+      "seconds": 9.762,
+      "id": "board",
+      "turn": 3,
+      "tide": 0
+    },
+    {
+      "seconds": 9.922,
+      "id": "passenger-rabbit-2",
+      "turn": 3,
+      "tide": 0
+    },
+    {
+      "seconds": 10.971,
+      "id": "passenger-rabbit-2",
+      "turn": 3,
+      "tide": 0
+    },
+    {
+      "seconds": 11.18,
+      "id": "commit",
+      "turn": 4,
+      "tide": 1
+    },
+    {
+      "seconds": 12.158,
+      "id": "undo",
+      "turn": 3,
+      "tide": 0
+    },
+    {
+      "seconds": 12.297,
+      "id": "board",
+      "turn": 3,
+      "tide": 0
+    },
+    {
+      "seconds": 12.474,
+      "id": "commit",
+      "turn": 4,
+      "tide": 1
+    },
+    {
+      "seconds": 13.435,
+      "id": "map-shallows",
+      "turn": 4,
+      "tide": 1
+    },
+    {
+      "seconds": 13.569,
+      "id": "sail",
+      "turn": 5,
+      "tide": 1
+    },
+    {
+      "seconds": 15.614,
+      "id": "map-stone",
+      "turn": 5,
+      "tide": 1
+    },
+    {
+      "seconds": 15.78,
+      "id": "sail",
+      "turn": 6,
+      "tide": 1
+    },
+    {
+      "seconds": 18.292,
+      "id": "board",
+      "turn": 6,
+      "tide": 1
+    },
+    {
+      "seconds": 18.475,
+      "id": "commit",
+      "turn": 7,
+      "tide": 1
+    },
+    {
+      "seconds": 19.413,
+      "id": "map-harbor",
+      "turn": 7,
+      "tide": 1
+    },
+    {
+      "seconds": 19.628,
+      "id": "sail",
+      "turn": 8,
+      "tide": 2
+    },
+    {
+      "seconds": 22.125,
+      "id": "unload",
+      "turn": 8,
+      "tide": 2
+    },
+    {
+      "seconds": 22.307,
+      "id": "commit",
+      "turn": 9,
+      "tide": 2
+    },
+    {
+      "seconds": 26.325,
+      "id": "terminal-undo",
+      "turn": 8,
+      "tide": 2
+    },
+    {
+      "seconds": 26.498,
+      "id": "unload",
+      "turn": 8,
+      "tide": 2
+    },
+    {
+      "seconds": 26.747,
+      "id": "commit",
+      "turn": 9,
+      "tide": 2
+    }
+  ],
+  "limitations": [
+    "Chromium156.0.8078.4 SwiftShader/DPR1 Windows; emulated phone touch, not physicalAndroid.",
+    "Silent visualcapture, no new acoustic listening claim.",
+    "First attempted Python one-line validation hit a shell-quoting SyntaxError; saved Python script subsequently decoded allframes successfully."
+  ]
+}

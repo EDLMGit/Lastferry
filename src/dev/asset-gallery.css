@@ -1,0 +1,17 @@
+* { box-sizing: border-box; }
+body { margin: 0; background: #194650; }
+main { max-width: 1120px; padding: 24px; margin: auto; }
+h1, h2, h3 { font-family: Georgia, serif; }
+p, li { line-height: 1.5; }
+a { color: #f3d6a0; }
+.gallery-panel { padding: 20px; margin: 20px 0; }
+.specimens, .passenger-options { display: flex; flex-wrap: wrap; gap: 16px; margin: 20px 0; }
+.gallery-warning { color: var(--cove-warning); }
+.icon-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 20px; }
+.icon-grid > div { display: flex; align-items: center; gap: 10px; }
+summary { min-height: 48px; cursor: pointer; line-height: 1.5; }
+summary span { display: block; color: var(--cove-secondary); }
+input { display: block; font: inherit; width: 100%; min-height: 48px; margin: 10px 0; border-radius: 8px; padding: 8px; }
+pre { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.5; }
+li { overflow-wrap: anywhere; }
+@media (max-width: 500px) { main { padding: 12px; } .gallery-panel { padding: 14px; } }

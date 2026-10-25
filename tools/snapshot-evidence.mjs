@@ -32,6 +32,9 @@ const paths = [
   ...walk('src/'),
   ...walk('tests/'),
   ...walk('data/'),
+  ...(existsSync(new URL('assets/', root)) ? walk('assets/') : []),
+  ...(existsSync(new URL('cove-ui-package/', root)) ? walk('cove-ui-package/') : []),
+  ...(existsSync(new URL('asset-gallery.html', root)) ? ['asset-gallery.html'] : []),
   'index.html',
   'package.json',
   'package-lock.json',
@@ -55,6 +58,9 @@ const paths = [
     : []),
   ...(existsSync(new URL('NEXT_TASK_PHONE_AUDIO_FULLSCREEN.md', root))
     ? ['NEXT_TASK_PHONE_AUDIO_FULLSCREEN.md']
+    : []),
+  ...(existsSync(new URL('NEXT_TASK_COVE_UI_ASSETS.md', root))
+    ? ['NEXT_TASK_COVE_UI_ASSETS.md', 'docs/UI_STYLE_GUIDE.md', 'tools/check-assets.ts']
     : []),
   'docs/GAMEPLAY_RULES.md',
   'docs/FIRST_COVE.md',
@@ -83,6 +89,7 @@ const paths = [
       path.includes('audio-polish') ||
       path.includes('cove-interface') ||
       path.includes('cove-contrast') ||
+      path.includes('cove-ui') ||
       path.includes('victory-mix') ||
       path.includes('homecoming') ||
       path.includes('lighthouse-light') ||

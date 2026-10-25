@@ -431,6 +431,7 @@ for (const cove of ['holding-pier', 'first-crossing'])
       await activate(page, 'view-toggle', true);
       await playing(page);
       await expect(page.locator('#sound-toggle')).toHaveAccessibleName('Mute sound');
+      await expect(page.locator('#sound-toggle .cove-glyph')).toHaveAttribute('data-icon', 'sound-on');
       const [samples, recording] = await Promise.all([
         sustained(page),
         cove === 'holding-pier'
@@ -515,6 +516,7 @@ test('phone saved mute: ordinary touch stays silent and one explicit Enable star
     await activate(page, 'view-toggle', true);
     expect(await audio(page)).toMatchObject({ muted: true, contextCount: 0, schedulerCount: 0 });
     await expect(page.locator('#sound-toggle')).toHaveAccessibleName('Enable sound');
+    await expect(page.locator('#sound-toggle .cove-glyph')).toHaveAttribute('data-icon', 'sound-off');
     await activate(page, 'sound-toggle', true);
     await playing(page);
     const enabled = await save('enabled', true);
@@ -547,6 +549,8 @@ for (const stale of ['resolve', 'reject'])
       await activate(page, 'view-toggle', true);
       await expect.poll(async () => (await audio(page)).retryPending).toBe(true);
       await expect(page.locator('#sound-toggle')).toHaveAccessibleName('Retry sound');
+      await expect(page.locator('#sound-toggle .cove-glyph')).toHaveAttribute('data-icon', 'sound-retry');
+      await expect(page.locator('#sound-toggle .cove-label')).toHaveText('Retry');
       await activate(page, 'sound-toggle', true);
       let value = await save('two-pending', true);
       expect(value.gate.requests).toHaveLength(2);
@@ -569,6 +573,7 @@ for (const stale of ['resolve', 'reject'])
       await activate(page, 'sound-toggle', true);
       await playing(page);
       value = await save('retry-running');
+      await expect(page.locator('#sound-toggle .cove-glyph')).toHaveAttribute('data-icon', 'sound-on');
       expect(value.gate.requests).toHaveLength(3);
       expect(value.audio.schedulerStarts).toBe(1);
       await activate(page, 'sound-toggle', true);
@@ -590,6 +595,7 @@ for (const stale of ['resolve', 'reject'])
       });
       expect(value.gate.requests).toHaveLength(3);
       expect(value.audio.rms).toBeLessThan(0.00001);
+      await expect(page.locator('#sound-toggle .cove-glyph')).toHaveAttribute('data-icon', 'sound-off');
     });
   });
 
@@ -607,6 +613,8 @@ test('phone controlled pending mute: explicit Settings mute never activates play
       schedulerCount: 0,
     });
     await expect(page.locator('#settings-mute')).toBeVisible();
+    await expect(page.locator('#settings-sound .cove-glyph')).toHaveAttribute('data-icon', 'sound-retry');
+    await expect(page.locator('#settings-mute .cove-glyph')).toHaveAttribute('data-icon', 'sound-off');
     await activate(page, 'settings-mute', true);
     const muted = await save('explicit-mute', true);
     expect(muted.audio).toMatchObject({
@@ -749,6 +757,7 @@ for (const audioState of ['cold-muted', 'pending', 'running'])
         await dialogHit(page, 'fullscreen');
         await dialogHit(page, 'cancel');
         await expect(page.locator('#fullscreen')).toHaveText('Exit fullscreen');
+        await expect(page.locator('#fullscreen .cove-glyph')).toHaveAttribute('data-icon', 'fullscreen-exit');
         const entered = await save('entered', true);
         expect(entered.fullscreen.diagnostic.latest).toMatchObject({
           intent: 'enter',
@@ -774,6 +783,7 @@ for (const audioState of ['cold-muted', 'pending', 'running'])
           .poll(() => passive(page, () => document.fullscreenElement?.id ?? null))
           .toBeNull();
         await dialogHit(page, 'fullscreen');
+        await expect(page.locator('#fullscreen .cove-glyph')).toHaveAttribute('data-icon', 'fullscreen-enter');
         await activate(page, 'fullscreen', true);
         await expect
           .poll(() => passive(page, () => document.fullscreenElement?.id ?? null))

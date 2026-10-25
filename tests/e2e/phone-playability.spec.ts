@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import * as T from 'three';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { reviewDir } from './evidence';
-import { activate, dialogCycle, fullyVisible, idle, ready, state, tabTo, undo } from './ui';
+import { activate, dialogCycle, fullyVisible, idle, keyAct, ready, state, tabTo, undo } from './ui';
 
 const viewport = (page: Page) =>
   page.evaluate(() => (window as any).__LAST_FERRY__.getViewportStatus());
@@ -819,6 +819,12 @@ test('desktop and other coves: keyboard overview, Bellwater outer route, First C
     await whole(page, false);
     await markerAlignment(page, true);
     await save('first-crossing-smoke', true);
+    for (const id of ['map-sheep-pier', 'board', 'wait', 'wait', 'map-cut', 'map-harbor', 'unload'])
+      await keyAct(page, id);
+    expect(await state(page)).toMatchObject({ turn: 7, status: 'won' });
+    await save('first-crossing-keyboard-won', true);
+    await undo(page);
+    expect(await state(page)).toMatchObject({ turn: 6, status: 'playing', delivered: [] });
     await page.goto('/?cove=holding-pier');
     await page.waitForFunction(() => (window as any).__LAST_FERRY__?.getMetrics().frames > 4);
     await idle(page);
