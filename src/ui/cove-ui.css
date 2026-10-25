@@ -147,11 +147,11 @@
 .cove-kit .cove-choice,
 #app .cove-choice {
   display: grid;
-  grid-template-columns: 22px minmax(0, 1fr);
+  grid-template-columns: 44px minmax(0, 1fr);
   align-items: center;
   gap: 4px 7px;
   min-width: 0;
-  min-height: 48px;
+  min-height: 62px;
   padding: 7px;
   border: 1px solid #91aaa1;
   border-radius: 12px;
@@ -169,6 +169,31 @@
 #app .cove-choice[aria-pressed='true'] {
   background: #315e5e;
   border-color: var(--cove-focus);
+}
+.cove-kit .cove-choice-portrait {
+  display: block;
+  width: 44px;
+  height: 44px;
+  align-self: center;
+  pointer-events: none;
+}
+.cove-kit .cove-portrait-image {
+  display: block;
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  opacity: 0;
+  pointer-events: none;
+}
+.cove-kit .cove-portrait-image[data-portrait-state='loaded'] {
+  opacity: 1;
+}
+.cove-kit .cove-choice-copy {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  align-items: center;
+  gap: 4px 7px;
+  min-width: 0;
 }
 .cove-kit .cove-choice-check {
   display: flex;
@@ -198,7 +223,7 @@
 .cove-kit .passenger-options,
 #app .passenger-options {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 6.5rem), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
   gap: 7px;
   min-width: 0;
 }

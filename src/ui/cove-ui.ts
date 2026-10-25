@@ -1,3 +1,14 @@
+import type { PortraitKey } from '../game/passenger-appearance';
+import creamPortrait from '../../cove-portrait-package/portraits/rabbit-cream.png';
+import tanPortrait from '../../cove-portrait-package/portraits/rabbit-tan.png';
+import woolPortrait from '../../cove-portrait-package/portraits/sheep-wool.png';
+
+export const portraitSources: Record<PortraitKey, string> = {
+  'rabbit-cream': creamPortrait,
+  'rabbit-tan': tanPortrait,
+  'sheep-wool': woolPortrait,
+};
+
 const originals = import.meta.glob<string>(
   ['../../cove-ui-package/ui/icons/*.svg', '!../../cove-ui-package/ui/icons/cove-icons.svg'],
   { eager: true, query: '?raw', import: 'default' },
@@ -27,8 +38,19 @@ export function controlContent(name: CoveIcon | null, label: string) {
   return `${name ? iconMarkup(name) : ''}<span class="cove-label">${escapeLabel(label)}</span>`;
 }
 
-export function passengerChoiceContent(name: string, spaces: number) {
-  return `<span class="cove-choice-check" aria-hidden="true">${iconMarkup('confirm')}</span><b class="cove-choice-name">${escapeLabel(name)}</b><span class="cove-choice-capacity">${spaces} ${spaces === 1 ? 'space' : 'spaces'}</span>`;
+export function passengerChoiceContent(name: string, spaces: number, portrait: PortraitKey | null) {
+  const image = portrait ? portraitSources[portrait] : null;
+  return `<span class="cove-choice-portrait" data-appearance="${portrait ?? 'unavailable'}" aria-hidden="true">${image ? `<img class="cove-portrait-image" src="${escapeLabel(image)}" alt="" aria-hidden="true" width="256" height="256" draggable="false" decoding="async" data-portrait-state="pending">` : ''}</span><span class="cove-choice-copy"><span class="cove-choice-check" aria-hidden="true">${iconMarkup('confirm')}</span><b class="cove-choice-name">${escapeLabel(name)}</b><span class="cove-choice-capacity">${spaces} ${spaces === 1 ? 'space' : 'spaces'}</span></span>`;
+}
+
+export function observePassengerPortraits(root: HTMLElement) {
+  const settle = (event: Event) => {
+    const image = event.target;
+    if (image instanceof HTMLImageElement && image.classList.contains('cove-portrait-image'))
+      image.dataset.portraitState = event.type === 'load' && image.naturalWidth > 0 ? 'loaded' : 'failed';
+  };
+  root.addEventListener('load', settle, true);
+  root.addEventListener('error', settle, true);
 }
 
 export function setControl(

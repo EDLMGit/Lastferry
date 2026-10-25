@@ -25,21 +25,33 @@ Local Codex implements the current task. ChatGPT reviews the identifiable handof
 | Sailing direction/released-crests implementation | `7877c9d094e3ce66f8197df6c203b0c748603488` — published as game `80545cbabb0496b215cd56f25cfc0113b056da67`; GitHub continuity commits are separate. |
 | Phone playability implementation | `0a9de631998ffb88b5608b17d80030b810db5b5c` — published for user phone testing as game `e78819974a0487440e439ef87d24ba4bb1c2f454`; three timing-check limitations remain. |
 | Audio/fullscreen corrective implementation | `d45d47332e2b02643f77d0ecd18b8d7149fa0dd8` — published and user-accepted in game `8052cfcd67f2e56cf3258243618c4ce125d51c4b`; measured timing/device limits remain recorded. |
-| Cove interface implementation | `f468a3272ed0a6d0a485860aea11320950425218`, reviewed packaging `a4325353cf11cd4edba8d5384b58fe138e4772e3` — the user likes the button/icon direction; panel and three-passenger preview refinement requested. Not deployed. |
-| Panel refinement implementation | `28f6d30a5199c3450cc5ff826bf8b5f9bd476182` — verified readable passenger previews and shared painted material. Final handoff adds audit/continuity metadata only; ready for ChatGPT review, not deployed or human accepted. |
-| Reviewed game baseline | `8052cfcd67f2e56cf3258243618c4ce125d51c4b` |
-| Private phone build | `8052cfcd67f2e56cf3258243618c4ce125d51c4b` — Sites version 10, publication confirmed by the current user task on 2026-10-25 |
+| Cove interface implementation | `f468a3272ed0a6d0a485860aea11320950425218`, reviewed packaging `a4325353cf11cd4edba8d5384b58fe138e4772e3` — the user likes the button/icon direction; subsequent panel correction is published below. |
+| Panel refinement implementation | `28f6d30a5199c3450cc5ff826bf8b5f9bd476182`, reviewed packaging `23a644aba24e6479b9d82a106a745d15c3f8c7dc` — published as version 11; the user likes the painted panels. |
+| Reviewed game baseline | `23a644aba24e6479b9d82a106a745d15c3f8c7dc` |
+| Private phone build | `23a644aba24e6479b9d82a106a745d15c3f8c7dc` — Sites version 11, publication confirmed 2026-10-25 |
 | Stable phone URL | https://last-ferry-playtest.abumech.chatgpt.site |
-| Site source commit | `f9ada70cbd093bf52c105f2287558381b3b7c83c` |
+| Site source commit | `d1fc7158d7b00717af18b7bc61ee4a33fe85bf2f` |
 | Main | Unchanged by this workflow; no merge authorized |
 
-The current task confirms that ChatGPT published game `8052cfcd67f2e56cf3258243618c4ce125d51c4b` to the existing private Site as version 10, with hosting source `f9ada70cbd093bf52c105f2287558381b3b7c83c`. These are separate game and hosting identities. The user reports that everything works well, accepting the current playtest build and its audio/fullscreen improvement. This report does not establish a complete device/browser matrix or replace the original measured timing limitations. No deployment is performed by the cove interface pass; its new GitHub source awaits ChatGPT review and subsequent publication.
+The portrait task confirms successful publication on 2026-10-25 of game `23a644aba24e6479b9d82a106a745d15c3f8c7dc` to the same owner-private Site as version 11, hosting source `d1fc7158d7b00717af18b7bc61ee4a33fe85bf2f`. The supplied receipt is `cove-portrait-package/verification/deployment-confirmation.json`; its accompanying audits report byte-identical reviewed/hosting production files. This is supplied publication evidence, not a fresh deployment or physical-device audit by this pass. The user likes the painted panels. Portrait candidates are not in version 11; the current portrait implementation awaits review before any publication.
+
+Version 10 is historical: game `8052cfcd67f2e56cf3258243618c4ce125d51c4b`, hosting source `f9ada70cbd093bf52c105f2287558381b3b7c83c`. The user reported that build worked well, accepting its audio/fullscreen improvement. That feedback did not establish a full device/browser matrix or close the measured timing limits. Historical pass records retain their original deployment status; the table above identifies the current live build.
 
 The preceding version 9 publication remains historical evidence: hosting source `03720726f2d92cda0d5d66efb6749ccc755d22ee` contained game `e78819974a0487440e439ef87d24ba4bb1c2f454`. Its three production files matched the tested local build byte-for-byte; 51 of 52 runtime/data/build source entries matched after newline normalization, with only the preview Vite entry/formatting different. See `reviews/phone-playability/deployment-confirmation.json` and its source audit. Those measurements describe version 9, not a new source audit of version 10. Publication statements within the historical pass records below describe their handoff date; this table identifies the current live build.
 
 After the next implementation, record the new GitHub SHA separately from the live Site's game SHA. Do not update the live field until deployment is confirmed.
 
-## Current task: Readable passenger previews and painted panels
+## Current task: Recognizable passenger portraits
+
+`NEXT_TASK_PASSENGER_PORTRAITS.md` starts from clean reviewed `23a644aba24e6479b9d82a106a745d15c3f8c7dc` on `m1-first-crossing`. The supplied task, original generator, model-derived SVG/PNG candidates, manifest and publication receipt are retained in `cove-portrait-package/`. Static 44px portraits belong beside full names/capacities in the current native choices; a pure full-level/passenger-ID resolver also supplies the world's unchanged full species ordinal. Three shared variants cover nine level/passenger combinations. Source-derived SVG shading is an offline interpretation, not a pixel-identical WebGL screenshot.
+
+Implementation and focused verification are complete under `reviews/passenger-portraits/`. Three original PNGs display beside full live text in 62px native tiles, with a 144px width-aware grid minimum and fixed image slots that survive delayed/failed loading. The shared resolver preserves all nine mappings, tan singletons and full ordinals. One generated-ui-image family gives 72 total, preserving all 71 prior IDs/retirements. The original model/generator/PNG outputs remain unchanged; isolated SVG export reproduces all three intermediates exactly. The developer gallery uses the same sources/helper and explicit longer-name fixtures.
+
+Fresh build/typecheck, 221/221 units, catalog validation and six focused browser cases pass. Six actual Holding capture rescues, an actual Bellwater rescue, real First Crossing passenger interactions, subset/partial delivery, tide/terminal Undo, natural keyboard/touch, delayed/failed image geometry, cold audio and actual fullscreen are covered. All 48 final gameplay images were inspected at native size across the required phones plus desktop. Full uninterrupted 38.48-second silent gameplay is retained. Matched camera/framing, HUD height and initial ferry size are unchanged. Original fixture/integration failures and two unchanged-limit geometry timeouts followed by a final all-unit pass are retained.
+
+**Ready for ChatGPT review; portrait human acceptance remains pending.** The private Site remains version 11/game23a644a/source d1fc715; this new portrait source is not deployed. Main is unchanged and PR #1 remains draft. Existing card/dock overlap, delivered-heading and ≤180ms rapid-touch limits remain open. Physical Android, other engines, native GPU, alternate fonts and new acoustic approval remain unverified. Final source/packaging SHA is in the handoff, separately from the published game.
+
+## Previous handoff: Readable passenger previews and painted panels
 
 `NEXT_TASK_COVE_PANEL_REFINEMENT.md` starts clean at reviewed `a4325353cf11cd4edba8d5384b58fe138e4772e3`. The supplied `cove-panel-package/` and its independent review are retained. ChatGPT freshly verified that baseline's production/typecheck, 202 units, 71-family catalog, production assets, packaged source/media and 52 protected sources. Those are independent code/source checks, not new Android, browser or listening approval.
 
@@ -49,7 +61,7 @@ Implementation and focused verification are complete in `reviews/cove-panel-refi
 
 Final Node 24 build/typecheck, 203/203 units, catalog validation, 272 contrast checks and five focused browser cases pass. Six actual Holding UI rescues at all required sizes plus 320×740 pass, including tide/terminal Undo and redelivery. All five exact baseline Harbor states reproduced clipping/overflow; final individual text-line and nested overflow checks pass. Native inspection covers 48 final images and five matched originals; ferry size and HUD height are unchanged. Full uninterrupted 38.8-second silent gameplay is retained. Original baseline failures and the inconclusive development reset remain recorded; frozen reruns pass. Existing card/dock overlap, delivered-heading and ≤180ms rapid-touch limits remain open. Physical Android, other engines, native GPU, different fonts and new acoustic approval remain unverified.
 
-**Ready for ChatGPT review.** Source identities, exact commands, original failures and evidence are in `reviews/cove-panel-refinement/REVIEW.md`. No deployment: the private Site remains version 10/game8052cfc/sourcef9ada70 until confirmed publication after review. Main is unchanged and PR #1 remains draft.
+**Subsequently reviewed and published as version 11/game23a644a, with user praise for the panels.** Source identities, exact commands, original failures and evidence are in `reviews/cove-panel-refinement/REVIEW.md`; its version 10 statements describe that handoff before publication. Main is unchanged and PR #1 remains draft.
 
 ## Previous handoff: Cove interface and asset inventory
 
@@ -69,7 +81,7 @@ See `reviews/cove-ui-assets/REVIEW.md` for source identities, build, commands, o
 | --- | --- |
 | Puzzles | Holding Pier is the default training cove. Holding Pier → Bellwater is implemented progression. First Crossing remains an optional baseline. All three remain playable. |
 | Rules | Deterministic action-based time, load/draft and passage-depth consequences, tide deadlines, subset transfers, passenger conservation and complete Undo. Inspection is free; explicit confirmation spends an action. |
-| Interface | Full-width cove, freestanding place names and selectable markers, local dock controls, compact dark teal translucent surfaces, ivory text and warm borders. The permanent right sidebar and white panels were rejected. |
+| Interface | Full-width cove, freestanding place names and selectable markers, local dock controls, compact opaque painted dark teal surfaces, ivory text and warm borders. The user likes the published panel direction. The permanent right sidebar and white panels were rejected. |
 | Environment | Rounded shared sailing courses, calmer crossing pace, luminous water, visible shallow ground, tide-aware contact, readable landmarks and Harbor identity. |
 | Music | Original continuous 75-second score with restrained adaptive accompaniment. The user accepts the current sound for now. Do not reopen composition or mixing in the active visual pass. |
 | Transfers | Fuller wooden contacts follow the visual transfer timeline, with bounded voices and cancellation. Preserve accepted timing. |

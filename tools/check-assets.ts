@@ -1,13 +1,14 @@
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { dirname, isAbsolute, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createHash } from 'node:crypto';
 
 const kinds = new Set([
   'procedural-model', 'procedural-geometry', 'material-palette', 'shader-material',
   'generated-data-texture', 'effect', 'motion-recipe', 'procedural-audio',
   'generated-audio-buffer', 'lighting-recipe', 'gameplay-indicator',
   'css-component-family', 'dom-component-family', 'svg-icon', 'system-font-family',
-  'reference', 'inline-svg-and-glyph', 'reference-image',
+  'reference', 'inline-svg-and-glyph', 'reference-image', 'generated-ui-image',
 ]);
 const statuses = new Set(['existing-runtime', 'candidate', 'integrated', 'retired', 'reference-only']);
 const text = (value: unknown): value is string => typeof value === 'string' && value.trim().length > 0;
@@ -68,6 +69,47 @@ export function validateCatalog(catalog: unknown, root: string): string[] {
     else for (const requirement of requirements)
       if (!text(requirement) || !object(entry.typeSpecific) || !text(entry.typeSpecific[requirement]))
         fail(id, `missing type-specific field ${requirement}`);
+    if (entry.kind === 'generated-ui-image') {
+      for (const key of ['originalModelSource', 'identitySource', 'generatorSource', 'generationRecord'])
+        localFile(id, entry[key]);
+      const outputs = entry.generatedOutputs;
+      if (!Array.isArray(outputs) || outputs.length < 1 || outputs.length > 16)
+        fail(id, 'generated UI images require 1–16 bounded outputs');
+      else {
+        const outputKeys = new Set<string>();
+        for (const output of outputs) {
+          if (!object(output) || !text(output.variant) || outputKeys.has(output.variant)) {
+            fail(id, 'generated output requires a unique variant');
+            continue;
+          }
+          outputKeys.add(output.variant);
+          localFile(id, output.path);
+          if (output.format !== 'PNG' || output.colorSpace !== 'sRGB' || output.alpha !== 'straight')
+            fail(id, 'generated output requires PNG, sRGB and straight alpha semantics');
+          if (![output.width, output.height].every((n) => Number.isInteger(n) && n > 0 && n <= 1024))
+            fail(id, 'generated output dimensions must be integers within 1–1024');
+          if (!text(output.path) || isAbsolute(output.path) || output.path.includes('\\')) continue;
+          const target = resolve(root, output.path);
+          const fromRoot = relative(root, target);
+          if (fromRoot.startsWith('..') || isAbsolute(fromRoot) || !existsSync(target) || !statSync(target).isFile()) continue;
+          if (!output.path.endsWith('.png') || statSync(target).size > 1024 * 1024) {
+            fail(id, 'generated output must be a local PNG no larger than 1MiB');
+            continue;
+          }
+          const bytes = readFileSync(target);
+          if (output.bytes !== bytes.length) fail(id, 'generated output byte count differs from its provenance');
+          if (bytes.length < 33 || !bytes.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10])) ||
+              bytes.toString('ascii', 12, 16) !== 'IHDR' || bytes[24] !== 8 || bytes[25] !== 6)
+            fail(id, 'generated output requires an 8-bit RGBA PNG header');
+          else if (bytes.readUInt32BE(16) !== output.width || bytes.readUInt32BE(20) !== output.height)
+            fail(id, 'generated output dimensions differ from its PNG header');
+          if (!text(output.sha256) || !/^[a-f0-9]{64}$/.test(output.sha256) || createHash('sha256').update(bytes).digest('hex') !== output.sha256)
+            fail(id, 'generated output hash differs from its provenance');
+        }
+        if (!Array.isArray(entry.variants) || entry.variants.length !== outputKeys.size || entry.variants.some((key: string) => !outputKeys.has(key)))
+          fail(id, 'generated output variants must match the family variants');
+      }
+    }
     if (entry.status === 'retired' && (!Array.isArray(entry.replacedBy) || !entry.replacedBy.length))
       fail(id, 'retired entry requires replacement IDs');
   }

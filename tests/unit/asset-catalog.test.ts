@@ -27,4 +27,40 @@ describe('canonical asset catalog', () => {
     expect(errors).toContain('missing provenance');
     expect(errors).toContain('invalid replacement');
   });
+
+  it('checks generated image dimensions, alpha semantics and derived-output provenance', () => {
+    const broken = catalog();
+    const portrait = broken.entries.find((entry: { id: string }) => entry.id === 'ui.passenger-portraits');
+    portrait.generatedOutputs[0].width = 44;
+    portrait.generatedOutputs[1].alpha = 'opaque';
+    portrait.generatedOutputs[2].sha256 = '0'.repeat(64);
+    portrait.generatedOutputs[2].bytes = 1;
+    const errors = validateCatalog(broken, root).join('\n');
+    expect(errors).toContain('dimensions differ from its PNG header');
+    expect(errors).toContain('straight alpha semantics');
+    expect(errors).toContain('hash differs from its provenance');
+    expect(errors).toContain('byte count differs from its provenance');
+  });
+
+  it('rejects missing or duplicated generated variants and unsafe output sources', () => {
+    const broken = catalog();
+    const portrait = broken.entries.find((entry: { id: string }) => entry.id === 'ui.passenger-portraits');
+    portrait.identitySource = '../outside.ts';
+    portrait.generatedOutputs[0].path = '../outside.png';
+    portrait.generatedOutputs[1].variant = portrait.generatedOutputs[0].variant;
+    const errors = validateCatalog(broken, root).join('\n');
+    expect(errors).toContain('outside repository');
+    expect(errors).toContain('unique variant');
+    expect(errors).toContain('variants must match');
+  });
+
+  it('requires bounded generated image outputs instead of reference-only labels', () => {
+    const broken = catalog();
+    const portrait = broken.entries.find((entry: { id: string }) => entry.id === 'ui.passenger-portraits');
+    portrait.generatedOutputs = [];
+    portrait.typeSpecific = {};
+    const errors = validateCatalog(broken, root).join('\n');
+    expect(errors).toContain('1–16 bounded outputs');
+    expect(errors).toContain('missing type-specific field');
+  });
 });

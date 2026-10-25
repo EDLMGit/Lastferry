@@ -12,9 +12,13 @@ a { color: #f3d6a0; }
 .panel-specimen--narrow { width: 320px; }
 .panel-specimen h3 { overflow-wrap: anywhere; }
 .gallery-text-stress { font-size: 20px; }
-.gallery-text-stress .cove-choice { font-size: inherit; }
+.gallery-text-stress .cove-choice { font-size: inherit; line-height: 1.4; }
 .gallery-forecast { padding: 12px; min-height: 48px; font: inherit; text-align: left; }
 .gallery-warning { color: var(--cove-warning); }
+.portrait-sources { display: flex; flex-wrap: wrap; gap: 20px; }
+.portrait-sources figure { margin: 0; max-width: 100%; min-width: 0; padding: 10px; }
+.portrait-source { display: block; width: 256px; height: 256px; max-width: 100%; object-fit: contain; }
+.portrait-sources figcaption { margin: 10px 0 0; overflow-wrap: anywhere; }
 .icon-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 20px; }
 .icon-grid > div { display: flex; align-items: center; gap: 10px; }
 summary { min-height: 48px; cursor: pointer; line-height: 1.5; }

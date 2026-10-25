@@ -6,7 +6,7 @@
       "author": "Original project code authored through Codex; exact individual attribution not independently expanded here",
       "rights": "Follow project rights; do not invent a new distribution license",
       "evidence": "docs/ASSET_LEDGER.md; source Git history",
-      "runtimeDownloads": "No third-party models, images, fonts, recorded audio or generated bitmap assets loaded by current game",
+      "runtimeDownloads": "No third-party runtime asset downloads. Original assets are local; the three model-derived PNG portraits have separate generation/source/output provenance in this catalog.",
       "evidencePaths": [
         "docs/ASSET_LEDGER.md"
       ]
@@ -39,6 +39,17 @@
       "evidencePaths": [
         "references/README.md",
         "docs/ASSET_LEDGER.md"
+      ]
+    },
+    "original-model-derived-ui-image": {
+      "author": "Original project animal models with supplied original offline geometric SVG exporter and PNG derivatives",
+      "rights": "Retain with project sources; no new project license is asserted; Three.js SVGRenderer remains MIT library code",
+      "evidence": "cove-portrait-package/README.md; portraits/generation-manifest.json; reviews/passenger-portraits/generation-audit.json",
+      "derivation": "Original editable models and isolated generator -> geometric SVG intermediates -> transparent PNG derivatives. Simplified offline diffuse shading is not pixel-identical WebGL rendering.",
+      "evidencePaths": [
+        "cove-portrait-package/README.md",
+        "cove-portrait-package/portraits/generation-manifest.json",
+        "reviews/passenger-portraits/generation-audit.json"
       ]
     }
   },
@@ -177,6 +188,15 @@
       "exact path and provenance",
       "reference-only status",
       "purpose and prohibited runtime/evidence substitution"
+    ],
+    "generated-ui-image": [
+      "original model and shared identity sources",
+      "camera/crop, world proportions and shading recipe",
+      "derived output format/dimensions/variants and alpha/color semantics",
+      "generation command/environment and source/output provenance",
+      "actual consumers, displayed size and semantic purpose",
+      "native-control ownership and text-preserving load/failure behavior",
+      "small-screen evidence and human acceptance boundary"
     ]
   },
   "catalogVersion": "1.0.0",
@@ -262,6 +282,14 @@
         {
           "path": "src/scene/world.ts",
           "symbol": "World.speciesIndex / passengerAnchors"
+        },
+        {
+          "path": "src/game/passenger-appearance.ts",
+          "symbol": "resolvePassengerAppearance(fullLevel, passengerId)"
+        },
+        {
+          "path": "cove-portrait-package/tools/render-portraits.mjs",
+          "symbol": "isolated animal(species, variant) SVG derivation with unchanged world proportions"
         }
       ],
       "variants": [
@@ -280,11 +308,16 @@
         {
           "path": "reviews/phone-audio-fullscreen/REVIEW.md",
           "role": "Current build identity and preservation; not an isolated visual test of every family"
+        },
+        {
+          "path": "reviews/passenger-portraits/generation-audit.json",
+          "role": "Fresh isolated model-derived SVG reproduction; unchanged original PNG/model hashes, not a live WebGL capture"
         }
       ],
       "meaning": "Rabbit passenger family. Coat and pose variation imply no abilities. Keep feet/contact, aboard attachment and canonical settled pose.",
       "consumers": [
-        "src/scene/world.ts"
+        "src/scene/world.ts",
+        "cove-portrait-package/tools/render-portraits.mjs"
       ],
       "gallery": {
         "section": "inventory",
@@ -296,7 +329,7 @@
         "named attachment points when relevant": "animal() returns one Group with local geometry, no separate rig or head attachment API. World passengerAnchors and canonical passenger IDs attach each instance beneath the hull.",
         "material references": "src/scene/models.ts palette/mat and local authored colors; scoped contact/lighthouse materials where used.",
         "actual variant parameters": "cream coat; tan coat; changed ear splay",
-        "consumers and scale/placement owner": "Shared factory; names and gameplay identities come from level passengers. World scales rabbits 1.25 / 1.65 / 1.25.",
+        "consumers and scale/placement owner": "Shared factory; names and gameplay identities come from level passengers. World scales rabbits 1.25 / 1.65 / 1.25. Offline portrait generation reuses these exact proportions; src/game/passenger-appearance.ts preserves the full species ordinal for World and independently resolves the static image key.",
         "pick/framing role": "World uses geometry for framing and scene selection; gameplay identities remain canonical nodes/passengers.",
         "disposal owner": "World.dispose traverses shared geometry/material/texture sets and disposes each once; CoastalWater owns its separate resources."
       }
@@ -310,6 +343,14 @@
         {
           "path": "src/scene/models.ts",
           "symbol": "animal(species, variant)"
+        },
+        {
+          "path": "src/game/passenger-appearance.ts",
+          "symbol": "resolvePassengerAppearance(fullLevel, passengerId)"
+        },
+        {
+          "path": "cove-portrait-package/tools/render-portraits.mjs",
+          "symbol": "isolated animal(species, variant) SVG derivation with unchanged world proportions"
         }
       ],
       "variants": [
@@ -327,11 +368,16 @@
         {
           "path": "reviews/phone-audio-fullscreen/REVIEW.md",
           "role": "Current build identity and preservation; not an isolated visual test of every family"
+        },
+        {
+          "path": "reviews/passenger-portraits/generation-audit.json",
+          "role": "Fresh isolated model-derived SVG reproduction; unchanged original PNG/model hashes, not a live WebGL capture"
         }
       ],
       "meaning": "Sheep passenger family. Keep larger passenger silhouette and true capacity semantics; presentation never determines passenger weight.",
       "consumers": [
-        "src/scene/world.ts"
+        "src/scene/world.ts",
+        "cove-portrait-package/tools/render-portraits.mjs"
       ],
       "gallery": {
         "section": "inventory",
@@ -343,7 +389,7 @@
         "named attachment points when relevant": "animal() returns one Group with local geometry, no separate rig or head attachment API. World passengerAnchors and canonical passenger IDs attach each instance beneath the hull.",
         "material references": "src/scene/models.ts palette/mat and local authored colors; scoped contact/lighthouse materials where used.",
         "actual variant parameters": "one cream wool family; instantiated with each level identity",
-        "consumers and scale/placement owner": "Same factory per sheep identity. World scale 1.15 / 1.5 / 1.15.",
+        "consumers and scale/placement owner": "Same factory per sheep identity. World scale 1.15 / 1.5 / 1.15. Offline portrait generation reuses these exact proportions; src/game/passenger-appearance.ts preserves the full species ordinal for World and independently resolves the static image key.",
         "pick/framing role": "World uses geometry for framing and scene selection; gameplay identities remain canonical nodes/passengers.",
         "disposal owner": "World.dispose traverses shared geometry/material/texture sets and disposes each once; CoastalWater owns its separate resources."
       }
@@ -1967,10 +2013,18 @@
       "behaviorToPreserve": "Keep 16px primary text, 48px main actions/44px minima, measured placement and readable text opacity.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "accepted-button-direction; panel-and-three-choice-refinement-awaiting-human-playtest",
-        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b",
-        "basis": "User likes the new button/icon direction at a432535; the supplied review requests panel and three-passenger correction. Integration, independent baseline code checks and human visual acceptance are separate.",
-        "reviewedSourceCommit": "a4325353cf11cd4edba8d5384b58fe138e4772e3"
+        "state": "accepted-painted-panel-direction",
+        "gameCommit": "23a644aba24e6479b9d82a106a745d15c3f8c7dc",
+        "basis": "Current user reports the published painted panels look good. Sites version11 publication is confirmed in cove-portrait-package/verification/deployment-confirmation.json. New portraits are a separate unaccepted integration, not in that live build; no blanket device/engine approval.",
+        "reviewedSourceCommit": "23a644aba24e6479b9d82a106a745d15c3f8c7dc",
+        "history": [
+          {
+            "state": "accepted-button-direction; panel-and-three-choice-refinement-awaiting-human-playtest",
+            "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b",
+            "basis": "User likes the new button/icon direction at a432535; the supplied review requests panel and three-passenger correction. Integration, independent baseline code checks and human visual acceptance are separate.",
+            "reviewedSourceCommit": "a4325353cf11cd4edba8d5384b58fe138e4772e3"
+          }
+        ]
       },
       "evidence": [
         {
@@ -2315,15 +2369,23 @@
         "lost",
         "support-details fallback"
       ],
-      "visualSignature": "Compact opaque painted card with preserved nearby placement and fixed transfer-sheet height; three-passenger names and full costs adapt to the panel width.",
+      "visualSignature": "Compact opaque painted card with preserved nearby placement and fixed transfer-sheet height; three-passenger names and full costs adapt to the panel width. Static44px original model-derived portraits now sit beside full name/capacity in native choices.",
       "reuseAndOwnership": "Same native dialog preserves focus/subset/scroll during fullscreen promotion.",
-      "behaviorToPreserve": "Preview uses future delivery language and qualified projected load/tide; opening/toggling/cancelling keeps committed state/history and victory effects unchanged. Same native dialog/choices/focus/scroll survive fullscreen; portrait recovery and stable footer remain.",
+      "behaviorToPreserve": "Preview uses future delivery language and qualified projected load/tide; opening/toggling/cancelling keeps committed state/history and victory effects unchanged. Same native dialog/choices/focus/scroll survive fullscreen; portrait recovery and stable footer remain. Image decode/failure and rerendering reserve the same geometry; portrait children remain decoration within each existing native button. No portrait-specific overlay or replacement dialog.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "accepted-button-direction; panel-and-three-choice-refinement-awaiting-human-playtest",
-        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b",
-        "basis": "User likes the new button/icon direction at a432535; the supplied review requests panel and three-passenger correction. Integration, independent baseline code checks and human visual acceptance are separate.",
-        "reviewedSourceCommit": "a4325353cf11cd4edba8d5384b58fe138e4772e3"
+        "state": "accepted-painted-panel-direction; portrait-integration-awaiting-human-playtest",
+        "gameCommit": "23a644aba24e6479b9d82a106a745d15c3f8c7dc",
+        "basis": "Current user reports the published painted panels look good. Sites version11 publication is confirmed in cove-portrait-package/verification/deployment-confirmation.json. New portraits are a separate unaccepted integration, not in that live build; no blanket device/engine approval.",
+        "reviewedSourceCommit": "23a644aba24e6479b9d82a106a745d15c3f8c7dc",
+        "history": [
+          {
+            "state": "accepted-button-direction; panel-and-three-choice-refinement-awaiting-human-playtest",
+            "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b",
+            "basis": "User likes the new button/icon direction at a432535; the supplied review requests panel and three-passenger correction. Integration, independent baseline code checks and human visual acceptance are separate.",
+            "reviewedSourceCommit": "a4325353cf11cd4edba8d5384b58fe138e4772e3"
+          }
+        ]
       },
       "evidence": [
         {
@@ -2353,6 +2415,22 @@
         {
           "path": "reviews/cove-panel-refinement/contrast.json",
           "role": "272 passing integrated comparisons across13actualUIstages; every parsed gradient and source-matched browser-decoded motif included; not complete accessibility certification"
+        },
+        {
+          "path": "reviews/passenger-portraits/generation-audit.json",
+          "role": "Portrait original-source/derived-output provenance; actual dialog evidence is recorded in the portrait review"
+        },
+        {
+          "path": "reviews/passenger-portraits/REVIEW.md",
+          "role": "Actual portrait integration, source/output provenance and focused verification handoff"
+        },
+        {
+          "path": "reviews/passenger-portraits/after/capture-manifest.json",
+          "role": "Six actual UI rescues with native portrait/full-label fit, stable subset/footer and complete Undo"
+        },
+        {
+          "path": "reviews/passenger-portraits/browser/automation-results.json",
+          "role": "Fresh identity, delayed/failure, native input, cold audio and actual fullscreen cases"
         }
       ],
       "meaning": "Local preview, forecast, Menu, Settings and completion retain native semantics; projected future action is explicit and every full passenger label/cost remains readable.",
@@ -3756,9 +3834,17 @@
       },
       "provenance": "original-package-vector-and-css",
       "acceptance": {
-        "state": "accepted-button-direction; panel-and-three-choice-refinement-awaiting-human-playtest",
-        "basis": "User likes the new button/icon direction at a432535; the supplied review requests panel and three-passenger correction. Integration, independent baseline code checks and human visual acceptance are separate.",
-        "reviewedSourceCommit": "a4325353cf11cd4edba8d5384b58fe138e4772e3"
+        "state": "accepted-painted-panel-direction",
+        "basis": "Current user reports the published painted panels look good. Sites version11 publication is confirmed in cove-portrait-package/verification/deployment-confirmation.json. New portraits are a separate unaccepted integration, not in that live build; no blanket device/engine approval.",
+        "reviewedSourceCommit": "23a644aba24e6479b9d82a106a745d15c3f8c7dc",
+        "history": [
+          {
+            "state": "accepted-button-direction; panel-and-three-choice-refinement-awaiting-human-playtest",
+            "basis": "User likes the new button/icon direction at a432535; the supplied review requests panel and three-passenger correction. Integration, independent baseline code checks and human visual acceptance are separate.",
+            "reviewedSourceCommit": "a4325353cf11cd4edba8d5384b58fe138e4772e3"
+          }
+        ],
+        "gameCommit": "23a644aba24e6479b9d82a106a745d15c3f8c7dc"
       },
       "evidence": [
         {
@@ -3823,20 +3909,24 @@
         },
         {
           "path": "src/ui/cove-ui.ts",
-          "symbol": "passengerChoiceContent(name, spaces)"
+          "symbol": "passengerChoiceContent(name, spaces, portraitKey) / observePassengerPortraits"
+        },
+        {
+          "path": "src/game/passenger-appearance.ts",
+          "symbol": "pure full-level/passenger-ID appearance resolver"
         }
       ],
       "integrationTarget": "src/ui/cove-ui.css",
-      "meaning": "Native aria-pressed passenger choice: check plus full name on the first row, full space cost on a separate row across the tile. The DOM reading order and subset action semantics are retained.",
+      "meaning": "Native aria-pressed passenger choice with static44px model-derived portrait beside full name/capacity; the check is distinct, labels remain level-owned, and full-level identity survives subsets.",
       "variants": [
         "selected",
         "unselected",
         "focus",
         "unavailable"
       ],
-      "visualSignature": "Quiet inset selected/unselected tile with a visible check, approximately16px decision text and content-aware columns based on actual panel width, not orientation.",
-      "reuseAndOwnership": "Same shared choice helper and CSS in game and gallery; level data owns names and space costs. No native-checkbox conversion, visual reordering, fixed columns by orientation, text truncation or overflow masking.",
-      "behaviorToPreserve": "Every name and full capacity remains legible, main target at least48px, focused choice remains reachable; subset0/1/2/3 and fixed-height confirmation sheet preserve preview/commit separation and footer stability.",
+      "visualSignature": "Quiet selected/unselected inset tile,44px transparent animal beside16px live copy and distinct check. Width-aware columns and reserved image geometry retain compact height where the text fits.",
+      "reuseAndOwnership": "Same actual helper and original PNG URLs in game and gallery. Full-level/passenger-ID resolver owns appearance; level helpers own names and costs. Native button owns one action/Tab stop; decoration cannot intercept input.",
+      "behaviorToPreserve": "Complete name/cost, native ID/aria-pressed/order/focus, nearby fixed sheet/footer and complete subset semantics. Delayed or failed decode leaves a reserved slot with all decision text and selected state usable; no live viewport or image animation.",
       "accessibility": {
         "essentialText": "about 16px on phones",
         "contrast": "Verify actual composited normal text >=4.5:1 and meaningful icons/states >=3:1",
@@ -3844,9 +3934,17 @@
       },
       "provenance": "original-package-vector-and-css",
       "acceptance": {
-        "state": "accepted-button-direction; panel-and-three-choice-refinement-awaiting-human-playtest",
-        "basis": "User likes the new button/icon direction at a432535; the supplied review requests panel and three-passenger correction. Integration, independent baseline code checks and human visual acceptance are separate.",
-        "reviewedSourceCommit": "a4325353cf11cd4edba8d5384b58fe138e4772e3"
+        "state": "accepted-painted-panel-direction; portrait-integration-awaiting-human-playtest",
+        "basis": "Current user reports the published painted panels look good. Sites version11 publication is confirmed in cove-portrait-package/verification/deployment-confirmation.json. New portraits are a separate unaccepted integration, not in that live build; no blanket device/engine approval.",
+        "reviewedSourceCommit": "23a644aba24e6479b9d82a106a745d15c3f8c7dc",
+        "history": [
+          {
+            "state": "accepted-button-direction; panel-and-three-choice-refinement-awaiting-human-playtest",
+            "basis": "User likes the new button/icon direction at a432535; the supplied review requests panel and three-passenger correction. Integration, independent baseline code checks and human visual acceptance are separate.",
+            "reviewedSourceCommit": "a4325353cf11cd4edba8d5384b58fe138e4772e3"
+          }
+        ],
+        "gameCommit": "23a644aba24e6479b9d82a106a745d15c3f8c7dc"
       },
       "evidence": [
         {
@@ -3880,23 +3978,40 @@
         {
           "path": "reviews/cove-panel-refinement/contrast.json",
           "role": "272 passing integrated comparisons across13actualUIstages; every parsed gradient and source-matched browser-decoded motif included; not complete accessibility certification"
+        },
+        {
+          "path": "reviews/passenger-portraits/png-audit.json",
+          "role": "Fresh source PNG format/dimensions/alpha validation; phone visual acceptance remains separate"
+        },
+        {
+          "path": "reviews/passenger-portraits/REVIEW.md",
+          "role": "Actual portrait integration, source/output provenance and focused verification handoff"
+        },
+        {
+          "path": "reviews/passenger-portraits/after/capture-manifest.json",
+          "role": "Six actual UI rescues with native portrait/full-label fit, stable subset/footer and complete Undo"
+        },
+        {
+          "path": "reviews/passenger-portraits/browser/automation-results.json",
+          "role": "Fresh identity, delayed/failure, native input, cold audio and actual fullscreen cases"
         }
       ],
       "consumers": [
-        "src/main.ts"
+        "src/main.ts",
+        "src/dev/asset-gallery.ts"
       ],
       "gallery": {
         "section": "interface",
-        "preview": "Actual shared material and passengerChoiceContent; ordinary/compact/arrival, long warning, native selected/unselected/focus states and constrained three-passenger specimens. Gallery is design evidence only."
+        "preview": "Actual shared portraits/helper at44px, selected/unselected/focus/failure states, both naming schemes,400/320px constrained panels and20px longer-label stress; source-size256px derivatives shown separately as design evidence."
       },
       "typeSpecific": {
-        "component/selector sources": "src/ui/cove-ui.css: .passenger-options / .cove-choice / .cove-choice-check / .cove-choice-name / .cove-choice-capacity; src/ui/cove-ui.ts: passengerChoiceContent(name, spaces)",
+        "component/selector sources": "src/ui/cove-ui.ts: passengerChoiceContent / observePassengerPortraits; src/ui/cove-ui.css: .passenger-options / .cove-choice / .cove-choice-portrait / .cove-choice-copy; src/game/passenger-appearance.ts: full-level identity",
         "token and elevation roles": "Existing inset #204952 / selected #315e5e faces, checked warm-top square and ivory full labels; accepted button colors remain unchanged.",
         "interaction states": "selected; unselected; focus; unavailable",
-        "size/hit target/layout behavior": "Shared grid uses repeat(auto-fit,minmax(min(100%,6.5rem),1fr)) with7pxgap; each tile has22px check/name columns and a full-width capacity row, min-width0 where needed, min-height48px and normal wrapping. Vertical scrolling may be needed on short phones.",
-        "text/icon contract": "passengerChoiceContent emits decorative check, b.cove-choice-name and span.cove-choice-capacity. Full1space/2spaces text is never ellipsized; Range line rectangles and nested scroll widths establish fit.",
+        "size/hit target/layout behavior": "44px portrait beside flexible copy, about62px tile height where content fits,16px essential text, width-aware grid minimum accounting for portrait/check/name. Wrapping may grow only the needed tile; body vertical scroll preserves the fixed sheet/footer.",
+        "text/icon contract": "Decorative non-draggable empty-alt image and check; live complete name and1space/2spaces text own the accessible decision. Image width/height reserved before decode; failed image is hidden without broken-image text, and its quiet slot remains.",
         "focus and disabled/warning semantics": "Focus keyline; selected/disabled/warning have shape and text as well as color.",
-        "mobile and reduced-motion evidence": "Current cove-panel-refinement review and capture-manifest identify actual Harbor pre-confirmation UI at844x390,780x320,390x844,360x740and1440x900. Integrated contrast passes272checks/13stages; all13SettingsReduced measured button transitions are0s. Gallery18choices/39Rangefragments fit at1440/320viewports, including20pxlongnames; not physical-device certification."
+        "mobile and reduced-motion evidence": "Actual portrait phone measurements, load/failure stability and input checks belong under reviews/passenger-portraits. Prior panel272contrast/13stages and all13Reduced transitions remain historical unaffected material evidence, not new portrait approval. Static images add no motion."
       }
     },
     {
@@ -4066,9 +4181,17 @@
       "behaviorToPreserve": "Do not recolor the accepted world or use opacity-only states; validate actual composites",
       "provenance": "original-package-vector-and-css",
       "acceptance": {
-        "state": "accepted-button-direction; panel-and-three-choice-refinement-awaiting-human-playtest",
-        "basis": "User likes the new button/icon direction at a432535; the supplied review requests panel and three-passenger correction. Integration, independent baseline code checks and human visual acceptance are separate.",
-        "reviewedSourceCommit": "a4325353cf11cd4edba8d5384b58fe138e4772e3"
+        "state": "accepted-painted-panel-direction",
+        "basis": "Current user reports the published painted panels look good. Sites version11 publication is confirmed in cove-portrait-package/verification/deployment-confirmation.json. New portraits are a separate unaccepted integration, not in that live build; no blanket device/engine approval.",
+        "reviewedSourceCommit": "23a644aba24e6479b9d82a106a745d15c3f8c7dc",
+        "history": [
+          {
+            "state": "accepted-button-direction; panel-and-three-choice-refinement-awaiting-human-playtest",
+            "basis": "User likes the new button/icon direction at a432535; the supplied review requests panel and three-passenger correction. Integration, independent baseline code checks and human visual acceptance are separate.",
+            "reviewedSourceCommit": "a4325353cf11cd4edba8d5384b58fe138e4772e3"
+          }
+        ],
+        "gameCommit": "23a644aba24e6479b9d82a106a745d15c3f8c7dc"
       },
       "evidence": [
         {
@@ -4362,6 +4485,144 @@
         "exact path and provenance": "references/first-cove-layout.png: reference file; provenance in references/README.md.",
         "reference-only status": "Reference-only; never loaded by ordinary game.",
         "purpose and prohibited runtime/evidence substitution": "Raster schematic companion, not gameplay capture Never substitute this image for playable geometry or evidence of actual gameplay"
+      }
+    },
+    {
+      "id": "ui.passenger-portraits",
+      "name": "Model-derived static passenger portraits",
+      "kind": "generated-ui-image",
+      "status": "integrated",
+      "sources": [
+        {
+          "path": "src/scene/models.ts",
+          "symbol": "animal(species, variant): original editable animal geometry/materials"
+        },
+        {
+          "path": "src/game/passenger-appearance.ts",
+          "symbol": "resolvePassengerAppearance: complete level identity and full species ordinal"
+        },
+        {
+          "path": "cove-portrait-package/tools/render-portraits.mjs",
+          "symbol": "isolated SVGRenderer geometric export; optional offline Sharp PNG rasterization"
+        },
+        {
+          "path": "cove-portrait-package/portraits/generation-manifest.json",
+          "symbol": "original camera, crop, scale, shading, versions and output hashes"
+        },
+        {
+          "path": "cove-portrait-package/portraits/rabbit-cream.svg",
+          "symbol": "generated geometric intermediate forrabbit-cream"
+        },
+        {
+          "path": "cove-portrait-package/portraits/rabbit-tan.svg",
+          "symbol": "generated geometric intermediate forrabbit-tan"
+        },
+        {
+          "path": "cove-portrait-package/portraits/sheep-wool.svg",
+          "symbol": "generated geometric intermediate forsheep-wool"
+        }
+      ],
+      "originalModelSource": "src/scene/models.ts",
+      "identitySource": "src/game/passenger-appearance.ts",
+      "generatorSource": "cove-portrait-package/tools/render-portraits.mjs",
+      "generationRecord": "cove-portrait-package/portraits/generation-manifest.json",
+      "generatedOutputs": [
+        {
+          "variant": "rabbit-cream",
+          "path": "cove-portrait-package/portraits/rabbit-cream.png",
+          "width": 256,
+          "height": 256,
+          "format": "PNG",
+          "colorSpace": "sRGB",
+          "alpha": "straight",
+          "sha256": "2f42b09b3e9965f4dc37ea698e9c0380f435e74bc0f7204399d502f176f0a223",
+          "bytes": 27139
+        },
+        {
+          "variant": "rabbit-tan",
+          "path": "cove-portrait-package/portraits/rabbit-tan.png",
+          "width": 256,
+          "height": 256,
+          "format": "PNG",
+          "colorSpace": "sRGB",
+          "alpha": "straight",
+          "sha256": "32254cc48c2203cc219635d4a5e0accf9ae8a9d61e00ac9b98440ee8a3232ed3",
+          "bytes": 28653
+        },
+        {
+          "variant": "sheep-wool",
+          "path": "cove-portrait-package/portraits/sheep-wool.png",
+          "width": 256,
+          "height": 256,
+          "format": "PNG",
+          "colorSpace": "sRGB",
+          "alpha": "straight",
+          "sha256": "34ed63cc740937734402f79fbe681a597de26e07c6e7e4583d87c21e9e22ee96",
+          "bytes": 43602
+        }
+      ],
+      "meaning": "Recognize the existing miniature animal beside its live passenger name and full capacity cost; appearance derives from full-level species ordinal, not current subset or displayname.",
+      "variants": [
+        "rabbit-cream",
+        "rabbit-tan",
+        "sheep-wool"
+      ],
+      "visualSignature": "Original cream/tan upright-ear rabbit heads/upperchests and dark-faced cream-wool sheep, transparent256px sources displayed44px beside copy; no badge, accessories, recoloring or new silhouette.",
+      "reuseAndOwnership": "Exactly three canonical runtime PNGs reused across nine level/passenger combinations. Editable model/generator and sourceSVG recipe own derivatives; shared helper owns static URL/loading decoration; nativebutton owns input.",
+      "behaviorToPreserve": "Full species ordinal remains intact for world deck/pose; Rue/Lark staytan when offeredalone. Preserve modelproportions/geometry/colors, live names/costs, stable44pxslot/footer, focus/subsets/Undo, allacceptedgameplay/world/audio. Unknownappearance uses text-preserving reservedslot.",
+      "provenance": "original-model-derived-ui-image",
+      "acceptance": {
+        "state": "integrated-candidate-awaiting-human-playtest",
+        "reviewedBaseline": "23a644aba24e6479b9d82a106a745d15c3f8c7dc",
+        "basis": "Static model-derived candidates supplied for this task. Source/alpha checks and runtime integration are not human visual acceptance or pixel-identical WebGL rendering."
+      },
+      "evidence": [
+        {
+          "path": "reviews/passenger-portraits/generation-audit.json",
+          "role": "Fresh isolated SVG reproduction and original output/source hashes"
+        },
+        {
+          "path": "reviews/passenger-portraits/png-audit.json",
+          "role": "Fresh completePNG decode,256pxRGBA dimensions and alpha inspection"
+        },
+        {
+          "path": "cove-portrait-package/preview/PORTRAIT_STYLEBOARD.png",
+          "role": "Supplied design specimen only, not gameplay evidence"
+        },
+        {
+          "path": "docs/UI_STYLE_GUIDE.md",
+          "role": "Shared native-control portrait/load/failure contract"
+        },
+        {
+          "path": "reviews/passenger-portraits/REVIEW.md",
+          "role": "Actual portrait integration, source/output provenance and focused verification handoff"
+        },
+        {
+          "path": "reviews/passenger-portraits/after/capture-manifest.json",
+          "role": "Six actual UI rescues with native portrait/full-label fit, stable subset/footer and complete Undo"
+        },
+        {
+          "path": "reviews/passenger-portraits/browser/automation-results.json",
+          "role": "Fresh identity, delayed/failure, native input, cold audio and actual fullscreen cases"
+        }
+      ],
+      "typeSpecific": {
+        "original model and shared identity sources": "src/scene/models.ts animal(species,variant), unchanged; src/game/passenger-appearance.ts resolves full level plus passenger ID and retains full speciesOrdinal for World placement/pose.",
+        "camera/crop, world proportions and shading recipe": "Original generation-manifest.json: orthographic offset[1.8,1,5], projected head/upper-chest square with8%totalpadding, rabbit floor.23/sheep.15; rabbit scale[1.25,1.65,1.25],sheep[1.15,1.5,1.15]. Ambient linearRGB[.43,.45,.44], warmkey#fff1dc.75 at[-3,5,4],tealfill#aed5d1.26 at[4,1,2]. Offline diffuse SVG shading differs from liveWebGL/ACES/shadows.",
+        "derived output format/dimensions/variants and alpha/color semantics": "Three canonical256x256 straight-alpha RGBA8PNG sRGB derivatives. Original geometric SVG intermediates remain editable reproducible outputs. Keys rabbit-cream/rabbit-tan/sheep-wool; no baked text/check/frame or backgrounddisk.",
+        "generation command/environment and source/output provenance": "Node24.15.0 with existingThree0.186.1 freshly reproduces every suppliedSVG byte; no PNG regeneration because all suppliedmodel/generator/SVG/PNG hashes remain exact. Supplied PNGrasterization Node24.22.1/Sharp0.35.5/Lanczos3 768->256 and completeversions retained. Exact command/source/output audit reviews/passenger-portraits/generation-audit.json; no production rasterizer dependency.",
+        "actual consumers, displayed size and semantic purpose": "Board/Letashore/Bringhome in src/main.ts use passengerChoiceContent with explicit resolved appearance; src/dev/asset-gallery.ts shares the original URLs/helper at44CSSpx plus source-size256px specimens. Identity recognition supports live name and capacity; it creates no gameplay difference.",
+        "native-control ownership and text-preserving load/failure behavior": "One nativebutton perpassenger, stableID/aria-pressed/order/focus. Emptyalt/non-draggable decorative PNG has reserved44px slot and no independentpointer/focus behavior. Pending/error leaves quietreservedslot; full labels, costs, selection, Close/Confirm remain live. Same dialog survives fullscreen; no newcanvas/context/loop.",
+        "small-screen evidence and human acceptance boundary": "Actual game phone/source evidence under reviews/passenger-portraits; suppliedboard/gallery remain design evidence. User accepts the panel direction at published23a644a/version11, but new portrait appearance is integrated pending ChatGPT review/userplaytest. PhysicalAndroid/platformfonts/otherengines remain unverified unless explicitlyrecorded."
+      },
+      "consumers": [
+        "src/main.ts",
+        "src/ui/cove-ui.ts",
+        "src/dev/asset-gallery.ts"
+      ],
+      "gallery": {
+        "section": "interface",
+        "preview": "Actualshared44px portraitchoices plus256px originals; threeappearances, bothnamingschemes, selected/unselected/focus/failure and constrainedlonglabelstress. Gallery isdesign evidenceonly."
       }
     }
   ],

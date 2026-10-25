@@ -1,6 +1,7 @@
 import * as T from 'three';
 import { level as baseline, type Level } from '../levels/level';
 import { draft, edgeTo, type State, type Action } from '../game/rules';
+import { resolvePassengerAppearance } from '../game/passenger-appearance';
 import { animal, ball, box, cylinder, ferry, lighthouse, mat, mesh, pine } from './models';
 import { sampleJourney, type JourneyPlan } from './motion';
 import { PresentationPoses } from './poses';
@@ -1082,10 +1083,9 @@ export class World {
     }
   }
   speciesIndex(id: string) {
-    const passenger = this.level.passengers.find((passenger) => passenger.id === id)!;
-    return this.level.passengers
-      .filter((p) => p.species === passenger.species)
-      .findIndex((p) => p.id === id);
+    const appearance = resolvePassengerAppearance(this.level, id);
+    if (!appearance) throw new Error(`Unknown passenger: ${id}`);
+    return appearance.speciesOrdinal;
   }
   passengerPos(id: string, s: State) {
     if (s.aboard.includes(id)) {
