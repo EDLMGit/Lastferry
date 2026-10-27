@@ -10,11 +10,12 @@ import {
 import { arrangementForState, companionNote, type Arrangement } from './arrangement';
 import { makeWoodContact, type TransferContact } from './wood';
 import { arrivalPhrase, type ArrivalNote } from './arrival';
+import { storyEffects, type StoryCueKind } from './story-effects';
 import type { State } from '../game/rules';
 import type { Level } from '../levels/level';
 
 type OwnedSource = {
-  kind: 'music' | 'companion' | 'bed' | 'travel' | 'effect' | 'transfer';
+  kind: 'music' | 'companion' | 'bed' | 'travel' | 'effect' | 'transfer' | 'story';
   nodes: AudioNode[];
   endAt: number | null;
   gain?: GainNode;
@@ -73,6 +74,24 @@ export class Sound {
   private transferSkipped = 0;
   private peakTransferSources = 0;
   private lastTransferContact: (TransferContact & { time: number; played: boolean }) | null = null;
+  private storyToken: number | null = null;
+  private latestStoryToken = -1;
+  private storyConsumed = new Set<string>();
+  private storyCueCount = 0;
+  private storyPlayed = 0;
+  private storySkipped = 0;
+  private storyRejected = 0;
+  private storyReclaimed = 0;
+  private peakStorySources = 0;
+  private lastStoryCue: {
+    token: number;
+    id: string;
+    kind: StoryCueKind;
+    time: number;
+    duration: number;
+    strength: number;
+    played: boolean;
+  } | null = null;
   private desiredArrangement: Arrangement = 'ordinary';
   private arrangement: Arrangement = 'ordinary';
   private pendingTerminal = false;
@@ -297,6 +316,7 @@ export class Sound {
   }
   private clearActions(preserveTravel: boolean) {
     if (!preserveTravel) this.travelling = false;
+    this.cancelStoryRun(true);
     for (const [source, record] of this.owned)
       if (record.kind === 'travel' || record.kind === 'effect' || record.kind === 'transfer')
         this.stop(source);
@@ -354,11 +374,12 @@ export class Sound {
     voice: 'pad' | 'motif' | 'companion',
   ) {
     const context = this.context!;
-    for (const kind of ['effect', 'transfer'] as const)
+    for (const kind of ['story', 'effect', 'transfer'] as const)
       if (this.owned.size > 28)
         for (const [source, record] of this.owned) {
           if (record.kind === kind) {
             this.stop(source, true);
+            if (kind === 'story') this.storyReclaimed++;
             if (kind === 'effect') this.arrivalVoicesReclaimed++;
           }
           if (this.owned.size <= 28) break;
@@ -565,6 +586,102 @@ export class Sound {
     this.travelling = false;
     for (const [source, record] of this.owned) if (record.kind === 'travel') this.stop(source);
   }
+  beginStoryRun(token: number) {
+    if (this.disposed || !Number.isSafeInteger(token) || token < 0) return;
+    if (this.storyToken === token) return;
+    if (token <= this.latestStoryToken) return;
+    this.cancelStoryRun(true);
+    this.latestStoryToken = token;
+    this.storyToken = token;
+    this.storyConsumed.clear();
+  }
+  cancelStoryRun(immediate = false) {
+    this.storyToken = null;
+    for (const [source, record] of this.owned)
+      if (record.kind === 'story') this.stop(source, immediate);
+  }
+  storyCue(token: number, kind: StoryCueKind, strength = 1, id: string = kind) {
+    if (
+      this.disposed ||
+      token !== this.storyToken ||
+      this.storyConsumed.has(id) ||
+      this.storyConsumed.size >= 8 ||
+      !Number.isFinite(strength)
+    ) {
+      this.storyRejected++;
+      return false;
+    }
+    this.storyConsumed.add(id);
+    this.storyCueCount++;
+    const definition = storyEffects[kind],
+      level = Math.max(0, Math.min(1, strength)),
+      stories = [...this.owned.values()].filter((record) => record.kind === 'story');
+    this.lastStoryCue = {
+      token,
+      id,
+      kind,
+      time: this.context?.currentTime ?? 0,
+      duration: definition.duration,
+      strength: level,
+      played: false,
+    };
+    if (
+      !this.enabled() ||
+      this.context?.state !== 'running' ||
+      stories.length >= 2 ||
+      this.owned.size >= 29 ||
+      level === 0
+    ) {
+      this.storySkipped++;
+      return false;
+    }
+    const context = this.context,
+      now = context.currentTime,
+      end = now + definition.duration,
+      source = context.createBufferSource(),
+      filter = context.createBiquadFilter(),
+      highpass = context.createBiquadFilter(),
+      gain = context.createGain(),
+      panner = context.createStereoPanner();
+    if (kind === 'lantern-contact') {
+      let buffer = this.wood.get('light');
+      if (!buffer) {
+        buffer = makeWoodContact(context, 'light');
+        this.wood.set('light', buffer);
+      }
+      source.buffer = buffer;
+    } else source.buffer = this.noise;
+    source.playbackRate.value = definition.rate;
+    source.loop = false;
+    filter.type = 'lowpass';
+    filter.frequency.value = definition.cutoff;
+    filter.Q.value = 0.45;
+    highpass.type = 'highpass';
+    highpass.frequency.value = kind === 'lantern-contact' ? 60 : 90;
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(definition.peak * level, now + definition.attack);
+    gain.gain.exponentialRampToValueAtTime(0.0001, end - 0.05);
+    gain.gain.linearRampToValueAtTime(0, end);
+    panner.pan.value = definition.pan;
+    source.connect(filter);
+    filter.connect(highpass);
+    highpass.connect(gain);
+    gain.connect(panner);
+    panner.connect(this.effects!);
+    this.own(source, {
+      kind: 'story',
+      nodes: [filter, highpass, gain, panner],
+      endAt: end,
+      gain,
+      stopping: false,
+    });
+    source.start(now);
+    source.stop(end);
+    this.storyPlayed++;
+    this.peakStorySources = Math.max(this.peakStorySources, stories.length + 1);
+    this.lastStoryCue.played = true;
+    return true;
+  }
   transferContact(contact: TransferContact) {
     if (this.disposed || !Number.isFinite(contact.count) || contact.count < 1) return;
     this.transferContacts++;
@@ -751,6 +868,17 @@ export class Sound {
         .length,
       peakTransferSources: this.peakTransferSources,
       lastTransferContact: this.lastTransferContact ? { ...this.lastTransferContact } : null,
+      storyToken: this.storyToken,
+      storyConsumedIds: [...this.storyConsumed],
+      storyCueCount: this.storyCueCount,
+      storyPlayed: this.storyPlayed,
+      storySkipped: this.storySkipped,
+      storyRejected: this.storyRejected,
+      storyReclaimed: this.storyReclaimed,
+      storySources: records.filter((record) => record.kind === 'story' && !record.stopping).length,
+      storyOwnedSources: records.filter((record) => record.kind === 'story').length,
+      peakStorySources: this.peakStorySources,
+      lastStoryCue: this.lastStoryCue ? { ...this.lastStoryCue } : null,
       desiredArrangement: this.desiredArrangement,
       arrangement: this.arrangement,
       pendingTerminal: this.pendingTerminal,
@@ -776,6 +904,7 @@ export class Sound {
   dispose() {
     if (this.disposed) return;
     this.disposed = true;
+    this.cancelStoryRun(true);
     this.generation++;
     this.resumePromise = null;
     this.stopScheduler();

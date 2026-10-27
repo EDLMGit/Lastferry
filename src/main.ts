@@ -51,6 +51,7 @@ import { FullscreenSupport } from './ui/fullscreen';
 import { storyCoves, practiceCoves, storyScenes, type SceneId } from './campaign/registry';
 import { JourneyProgress } from './campaign/progress';
 import { StoryPresentation, restoredHarbor } from './campaign/presentation';
+import { StoryView } from './campaign/story-view';
 import './campaign/story.css';
 
 const cove = new URLSearchParams(location.search).get('cove');
@@ -104,7 +105,8 @@ viewNotice.id = 'view-notice';
 viewNotice.role = 'status';
 viewNotice.hidden = true;
 $('seascape').append(viewNotice);
-type JourneyMode = 'journey' | 'story' | 'practice' | 'replace' | 'return-title' | 'journey-end';
+type JourneyMode =
+  'journey' | 'story' | 'transcript' | 'practice' | 'replace' | 'return-title' | 'journey-end';
 type DialogMode = 'action' | 'forecast' | 'menu' | 'terminal' | 'settings' | JourneyMode;
 let mode: DialogMode | null = null,
   selected: Action | null = null,
@@ -112,7 +114,18 @@ let mode: DialogMode | null = null,
   keyboardInput = false;
 let settingsParent: 'menu' | 'terminal' | JourneyMode = 'menu';
 let storyId: SceneId | null = null;
-const storyPresentation = new StoryPresentation(() => renderStoryStatus());
+let storyView: StoryView | null = null;
+let storyUiKey = '';
+let storyFrameRequest = 0;
+const storyPresentation = new StoryPresentation(
+  () => renderStoryStatus(),
+  (token) => {
+    stopStoryClock();
+    if (token === null) sound.cancelStoryRun();
+    else sound.beginStoryRun(token);
+  },
+  (token, cue) => sound.storyCue(token, cue.kind, cue.strength, cue.id),
+);
 type SoundIntent = 'enable' | 'retry' | 'mute';
 let soundIntent: { control: HTMLElement; intent: SoundIntent } | null = null;
 let viewFence: { x: number; y: number; until: number } | null = null;
@@ -180,6 +193,7 @@ function showJourney(next: JourneyMode, focusId: string) {
     app.classList.add('journey-screen');
     world.setStoryFraming(true);
   }
+  world.setStoryCovered(next === 'story');
   if (dialog.open) switchDialog(next, focusId);
   else {
     mode = next;
@@ -216,12 +230,16 @@ function resumeJourney(restored = true) {
   }
   if (checkpoint.kind === 'scene') {
     storyId = checkpoint.id;
-    const scene = storyScenes[storyId];
     if (storyId === 'opening' || restored) {
       mountCove(holdingPier);
       if (storyId === 'another-bell') world.sync(restoredHarbor(holdingPier));
     }
-    storyPresentation.start(storyId, restored || motion.reduced || document.hidden);
+    storyPresentation.start(
+      storyId,
+      motion.reduced || document.hidden,
+      performance.now(),
+      restored,
+    );
     showJourney('story', 'story-continue');
     renderStoryStatus();
     return;
@@ -230,6 +248,7 @@ function resumeJourney(restored = true) {
 }
 function startPlayable(next: typeof level, story: boolean) {
   storyPresentation.cancel();
+  storyView = null;
   world.clearStory();
   storyId = null;
   campaignPlay = story;
@@ -244,6 +263,11 @@ function startPlayable(next: typeof level, story: boolean) {
 }
 function continueStory() {
   if (mode !== 'story' || !storyId) return;
+  if (!storyPresentation.frame.final) {
+    storyPresentation.next(motion.reduced || document.hidden);
+    $('story-continue').focus({ preventScroll: true });
+    return;
+  }
   const id = storyId;
   if (!journey?.acknowledge(id)) return;
   resumeJourney();
@@ -255,20 +279,69 @@ function acceptStoryCove() {
   resumeJourney(false);
 }
 function renderStoryStatus() {
-  if (mode !== 'story') return;
+  if (mode !== 'story' || !storyId) return;
+  const frame = storyPresentation.frame;
+  const scene = storyScenes[storyId];
+  const shot = scene.shots[frame.shotIndex];
+  const key = `${frame.runToken}:${frame.shotIndex}:${frame.captionOpacity}:${frame.recap}:${frame.settled}`;
+  if (key === storyUiKey) {
+    storyView?.render(frame);
+    scheduleStoryClock();
+    return;
+  }
+  storyUiKey = key;
   const skip = $('story-skip') as HTMLButtonElement | null;
   const next = $('story-continue') as HTMLButtonElement | null;
   if (skip) {
-    if (storyPresentation.settled && document.activeElement === skip)
+    if (frame.final && frame.settled && document.activeElement === skip)
       next?.focus({ preventScroll: true });
-    skip.hidden = storyPresentation.settled;
+    skip.hidden = frame.final && frame.settled;
   }
-  if (next) next.disabled = false;
-  const frame = storyPresentation.frame;
-  if (frame.scene) world.presentStory(frame.scene, frame.elapsed, frame.settled);
+  if (next && next.textContent !== (frame.final ? scene.continueLabel : 'Next'))
+    setControl(next, null, frame.final ? scene.continueLabel : 'Next', 'warm');
+  const caption = $('story-caption');
+  const copy = frame.recap ? scene.shots.map((item) => item.caption).join('\n\n') : shot.caption;
+  if (caption && caption.textContent !== copy) caption.textContent = copy;
+  if (caption) {
+    caption.style.opacity = String(frame.captionOpacity);
+    caption.setAttribute('aria-hidden', String(!frame.captionVisible));
+    caption.classList.toggle('story-recap', frame.recap);
+  }
+  const art = $('story-canvas');
+  if (art?.getAttribute('aria-label') !== shot.description)
+    art?.setAttribute('aria-label', shot.description);
+  const position = $('story-position');
+  if (position) position.textContent = `${frame.shotIndex + 1} of ${scene.shots.length}`;
+  const replayScene = $('story-replay-scene');
+  if (replayScene) replayScene.hidden = !frame.recap;
+  if ($('story-replay')) $('story-replay').hidden = frame.recap;
+  storyView?.render(frame);
+  scheduleStoryClock();
+}
+function stopStoryClock() {
+  cancelAnimationFrame(storyFrameRequest);
+  storyFrameRequest = 0;
+}
+function scheduleStoryClock() {
+  if (
+    storyFrameRequest ||
+    pageDisposed ||
+    mode !== 'story' ||
+    !storyId ||
+    storyPresentation.settled ||
+    document.hidden
+  )
+    return;
+  storyFrameRequest = requestAnimationFrame((time) => {
+    storyFrameRequest = 0;
+    if (mode !== 'story' || pageDisposed) return;
+    storyPresentation.update(time);
+    renderStoryStatus();
+  });
 }
 function mountCove(next: typeof level) {
   storyPresentation.cancel();
+  storyView = null;
   world.clearStory();
   clearTimeout(fallback);
   activeTransition = null;
@@ -310,6 +383,7 @@ function mountCove(next: typeof level) {
 }
 
 function renderJourneyDialog() {
+  storyView = null;
   const snapshot = journey?.snapshot;
   const checkpointNotice = 'Progress is saved between coves. An unfinished cove starts again.';
   const notice =
@@ -327,12 +401,9 @@ function renderJourneyDialog() {
         : null;
     body = `<p class="journey-subtitle">The Long Tide · two playable coves</p><p>${checkpointNotice}</p>${destination ? `<p>Continue at ${destination}, from its beginning.</p>` : ''}${snapshot?.kind === 'invalid' ? `<p role="alert">${snapshot.issue} Start a new journey to replace it, or play Practice without changing it.</p>` : ''}${notice}`;
     actions = `${snapshot?.record ? `<button id="journey-continue">Continue journey${checkpoint?.kind === 'cove' ? ' · from cove start' : ''}</button>` : ''}<button id="journey-new">New journey</button><button id="journey-practice">Practice</button><button id="journey-settings">Settings</button>`;
-  } else if (mode === 'story' && storyId) {
-    const scene = storyScenes[storyId];
-    heading = scene.title;
-    body = `<div id="story-captions">${scene.captions.map((caption) => `<p>${caption}</p>`).join('')}</div>${notice}`;
-    actions =
-      '<button id="story-skip">Skip animation</button><button id="story-continue">Continue</button>';
+  } else if ((mode === 'story' || mode === 'transcript') && storyId) {
+    renderIllustratedStory(mode === 'transcript');
+    return;
   } else if (mode === 'practice') {
     heading = 'Practice coves';
     body = '<p>Independent crossings. Practice does not change your journey.</p>';
@@ -389,14 +460,61 @@ function renderJourneyDialog() {
     switchDialog('menu', 'journey-return');
     flushLayout();
   });
-  on('story-skip', () => storyPresentation.settle());
-  on('story-continue', continueStory);
   for (const button of dialog.querySelectorAll<HTMLButtonElement>('[data-practice]'))
     button.onclick = () =>
       startPlayable(
         practiceCoves.find((entry) => entry.id === button.dataset.practice)!,
         false,
       );
+  renderStoryStatus();
+}
+
+function renderIllustratedStory(transcript: boolean) {
+  if (!storyId) return;
+  const scene = storyScenes[storyId];
+  if (transcript) {
+    $('dialog-content').innerHTML =
+      `${header('Read story', undefined, 'Back to story')}<div class="dialog-body story-transcript"><h3>${scene.title}</h3>${scene.shots.map((shot) => `<section><p>${shot.caption}</p><p class="story-description">${shot.description}</p></section>`).join('')}</div><footer class="dialog-footer"><button id="story-read-back">Back to story</button></footer>`;
+    const back = () => switchDialog('story', 'story-read');
+    $('cancel').onclick = back;
+    $('story-read-back').onclick = back;
+    setControl($('story-read-back'), null, 'Back to story');
+    return;
+  }
+  $('dialog-content').innerHTML =
+    `<h2 id="dialog-title" class="sr-only">${scene.title}</h2><div class="story-picture"><canvas id="story-canvas" role="img"></canvas><p class="story-chapter" aria-hidden="true">Last Ferry <span>The Long Tide</span></p><div id="story-captions"><p id="story-caption" aria-live="polite" aria-atomic="true"></p></div></div><nav class="story-controls" aria-label="Story controls"><span id="story-position" aria-label="Shot"></span><button id="story-replay">Replay</button><button id="story-replay-scene" hidden>Replay scene</button><button id="story-skip">Skip animation</button><button id="story-read">Read story</button><button id="story-settings">Settings</button><button id="story-continue">Next</button></nav>`;
+  for (const button of dialog.querySelectorAll<HTMLButtonElement>('button'))
+    setControl(
+      button,
+      null,
+      button.textContent ?? '',
+      button.id === 'story-continue' ? 'warm' : 'quiet',
+    );
+  storyView = new StoryView($('story-canvas') as HTMLCanvasElement);
+  storyUiKey = '';
+  $('story-continue').onclick = (event) => {
+    if (event.detail < 2) continueStory();
+  };
+  $('story-continue').onkeydown = (event) => {
+    if (event.repeat && (event.key === 'Enter' || event.key === ' ')) event.preventDefault();
+  };
+  $('story-skip').onclick = () => {
+    storyPresentation.skip();
+    $('story-continue').focus({ preventScroll: true });
+  };
+  $('story-replay').onclick = () => storyPresentation.replay(motion.reduced || document.hidden);
+  $('story-replay-scene').onclick = () => {
+    storyPresentation.replay(motion.reduced || document.hidden, true);
+    $('story-replay').focus({ preventScroll: true });
+  };
+  $('story-read').onclick = () => {
+    storyPresentation.settle();
+    switchDialog('transcript', 'story-read-back');
+  };
+  $('story-settings').onclick = () => {
+    storyPresentation.settle();
+    openSettings('story');
+  };
   renderStoryStatus();
 }
 
@@ -730,6 +848,8 @@ function closeDialog(restore = true, fence = false) {
   dialog.style.removeProperty('top');
   dialog.style.removeProperty('right');
   dialog.style.removeProperty('bottom');
+  dialog.style.removeProperty('width');
+  dialog.style.removeProperty('height');
   if (session.state.status !== 'won') world.setCompletionBounds(null);
   world.setForecast(false, session.state.tideLevel);
   renderLocation();
@@ -788,6 +908,7 @@ function switchDialog(next: DialogMode, focusId: string) {
   $(focusId).focus({ preventScroll: true });
 }
 function openSettings(parent: 'menu' | 'terminal' | JourneyMode) {
+  if (parent === 'story') storyPresentation.settle();
   settingsParent = parent;
   switchDialog('settings', 'settings-sound');
 }
@@ -798,7 +919,9 @@ function backFromSettings() {
       ? 'terminal-settings'
       : settingsParent === 'menu'
         ? 'settings'
-        : 'journey-settings',
+        : settingsParent === 'story'
+          ? 'story-settings'
+          : 'journey-settings',
   );
 }
 function header(title: string, eyebrow?: string, closeLabel = 'Close dialog') {
@@ -806,6 +929,7 @@ function header(title: string, eyebrow?: string, closeLabel = 'Close dialog') {
 }
 function renderDialog() {
   if (!mode) return;
+  if (mode !== 'story') storyView = null;
   dialog.classList.toggle('story-caption', mode === 'story');
   dialog.classList.toggle(
     'cove-surface--arrival',
@@ -815,7 +939,17 @@ function renderDialog() {
   const s = session.state,
     p = pierAt(s, level);
   dialog.dataset.mode = mode;
-  if (['journey', 'story', 'practice', 'replace', 'return-title', 'journey-end'].includes(mode)) {
+  if (
+    [
+      'journey',
+      'story',
+      'transcript',
+      'practice',
+      'replace',
+      'return-title',
+      'journey-end',
+    ].includes(mode)
+  ) {
     renderJourneyDialog();
     positionDialog();
     return;
@@ -1311,13 +1445,20 @@ function positionDialog() {
   dialog.style.maxWidth = safeBounds.right - safeBounds.left + 'px';
   if (journeySurface()) {
     dialog.dataset.layout = 'journey';
-    dialog.style.removeProperty('height');
+    if (mode === 'story') {
+      dialog.style.width = safeBounds.right - safeBounds.left + 'px';
+      dialog.style.height = safeBounds.bottom - safeBounds.top + 'px';
+    } else {
+      dialog.style.removeProperty('height');
+      dialog.style.removeProperty('width');
+    }
     dialog.style.setProperty('--dialog-max-height', safeBounds.bottom - safeBounds.top + 'px');
     dialog.style.left = safeBounds.left + 'px';
     dialog.style.right = 'auto';
     dialog.style.bottom = 'auto';
     const rect = dialog.getBoundingClientRect();
     dialog.style.top = Math.max(safeBounds.top, safeBounds.bottom - rect.height) + 'px';
+    if (mode === 'story') storyView?.render(storyPresentation.frame);
     return;
   }
   if (mode === 'action' && selected && actionAnchor) {
@@ -1630,11 +1771,6 @@ function bindWorld() {
   world.onViewChange = scheduleLayout;
   world.onFrame = () => {
     if (layoutRequest) flushLayout();
-    if (mode === 'story' && storyId) {
-      storyPresentation.update();
-      const frame = storyPresentation.frame;
-      world.presentStory(storyId, frame.elapsed, frame.settled);
-    }
   };
 }
 bindWorld();
@@ -1743,18 +1879,36 @@ document.addEventListener('fullscreenchange', () => {
   });
 });
 document.addEventListener('fullscreenerror', () => fullscreenSupport.observe('fullscreenerror'));
-dialog.addEventListener('cancel', (e) => {
-  e.preventDefault();
+function dismissDialogLayer() {
   if (mode === 'settings') backFromSettings();
   else if (journeySurface()) {
     if (mode === 'replace') showJourney('journey', 'journey-new');
     else if (mode === 'practice') returnToJourneyTitle();
     else if (mode === 'return-title') $('journey-return-cancel').click();
-    else if (mode === 'story') storyPresentation.settle();
+    else if (mode === 'transcript') switchDialog('story', 'story-read');
+    else if (mode === 'story') {
+      storyPresentation.skip();
+      $('story-continue').focus({ preventScroll: true });
+    }
   } else closeDialog(true);
+}
+dialog.addEventListener('cancel', (e) => {
+  e.preventDefault();
+  dismissDialogLayer();
 });
 dialog.addEventListener('click', (e) => e.stopPropagation());
 dialog.addEventListener('keydown', (e) => {
+  if (
+    e.key === 'Escape' &&
+    (mode === 'story' ||
+      mode === 'transcript' ||
+      (mode === 'settings' && settingsParent === 'story'))
+  ) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!e.repeat) dismissDialogLayer();
+    return;
+  }
   if (e.key !== 'Tab') return;
   const controls = [
     ...dialog.querySelectorAll<HTMLElement>(
@@ -1912,6 +2066,7 @@ document.addEventListener('visibilitychange', () => {
 addEventListener('pagehide', () => {
   pageDisposed = true;
   storyPresentation.cancel();
+  storyView = null;
   sound.onChange = null;
   layoutObserver.disconnect();
   document.fonts.removeEventListener('loadingdone', refreshLabelFonts);
@@ -1945,7 +2100,14 @@ if (import.meta.env.DEV)
           progress: journey?.snapshot ?? null,
         }),
       getStoryStatus: () =>
-        copy({ timeline: storyPresentation.frame, world: world.storyPresentation() }),
+        copy({
+          timeline: storyPresentation.frame,
+          view: storyView?.status() ?? null,
+          clockPending: !!storyFrameRequest,
+          coveredWorld: world.storyCovered,
+          worldFramePending: !!world.frameRequest,
+          world: world.storyPresentation(),
+        }),
       getLegalActions: () => copy(legalActions(session.state, level)),
       getRenderStatus: () => ({
         pendingAnimation: session.busy,

@@ -1,6 +1,6 @@
 # Last Ferry — Project state
 
-Updated: 2026-10-25. This is the compact continuity record for the current project, not a claim that every device or future release requirement has been verified.
+Updated: 2026-10-27. This is the compact continuity record for the current project, not a claim that every device or future release requirement has been verified.
 
 Read this before choosing scope. Detailed implementation history belongs in `STATUS.md`; evidence belongs under `reviews/`. Update this record after each handoff and after a confirmed deployment. User feedback can revise an accepted decision.
 
@@ -29,13 +29,14 @@ Local Codex implements the current task. ChatGPT reviews the identifiable handof
 | Panel refinement implementation | `28f6d30a5199c3450cc5ff826bf8b5f9bd476182`, reviewed packaging `23a644aba24e6479b9d82a106a745d15c3f8c7dc` — published as version 11; the user likes the painted panels. |
 | Passenger portrait implementation | `3324400e662c397010b1a920e44244d83f180506`, reviewed packaging `1a85874883af5caa59f6294a75495eccf2afebbc` — reviewed and published as version 12. |
 | Story foundation implementation | `ca59e78fb877024296c1484eb6b5fee8b8e66717`, reviewed handoff `8cc43c794274fe64d5fb634961fbf79aaff251f8` — working journey/checkpoints retained; scene presentation requires the correction below; not published |
-| Reviewed implementation baseline | `8cc43c794274fe64d5fb634961fbf79aaff251f8` — current source comparison, distinct from the published game |
+| Authored-scenes implementation | `1aa73c59c37082f43990235a9efffd6f793cf642`, reviewed handoff `6fc5a09dd4ef876ad96ad12d623532f0d13deb10` — working journey retained; illustrated presentation supersedes its distant-model scenes; not published |
+| Reviewed implementation baseline | `6fc5a09dd4ef876ad96ad12d623532f0d13deb10` — current source comparison, distinct from the published game |
 | Published private phone game | `1a85874883af5caa59f6294a75495eccf2afebbc` — Sites version 12, publication confirmed 2026-10-25 17:28 Madrid |
 | Stable phone URL | https://last-ferry-playtest.abumech.chatgpt.site |
 | Published hosting source | `e87c5c5baa53a39001c5a89b07b59aab2ad150fc` |
 | Main | Unchanged by this workflow; no merge authorized |
 
-The supplied receipt confirms successful publication at `2026-10-25T16:28:58.501209Z` (17:28 Madrid) of game `1a85874883af5caa59f6294a75495eccf2afebbc` to the same owner-private Site as version 12, hosting source `e87c5c5baa53a39001c5a89b07b59aab2ad150fc`. It is retained at `review/deployment-confirmation.json` and reports all six production assets byte-identical to the independently reviewed portrait handoff. Audience is unchanged. This is supplied publication evidence, not a fresh deployment or physical-device audit by this pass. Neither the story foundation nor the authored-scene correction is deployed.
+The supplied receipt confirms successful publication at `2026-10-25T16:28:58.501209Z` (17:28 Madrid) of game `1a85874883af5caa59f6294a75495eccf2afebbc` to the same owner-private Site as version 12, hosting source `e87c5c5baa53a39001c5a89b07b59aab2ad150fc`. It is retained at `review/deployment-confirmation.json` and reports all six production assets byte-identical to the independently reviewed portrait handoff. Audience is unchanged. This is supplied publication evidence, not a fresh deployment or physical-device audit by this pass. The story foundation, authored-scene correction and current illustrated production pass are not deployed.
 
 Version 11 remains historical: game `23a644aba24e6479b9d82a106a745d15c3f8c7dc`, hosting source `d1fc7158d7b00717af18b7bc61ee4a33fe85bf2f`, confirmed 2026-10-25. Its receipt remains `cove-portrait-package/verification/deployment-confirmation.json`; its audits reported byte-identical reviewed/hosting production files. The user liked the painted panels. The later portrait pass is included in version 12.
 
@@ -45,7 +46,25 @@ The preceding version 9 publication remains historical evidence: hosting source 
 
 After the next implementation, record the new GitHub SHA separately from the live Site's game SHA. Do not update the live field until deployment is confirmed.
 
-## Current task: Authored story scenes
+## Current task: Illustrated story production
+
+Task `STORY_PRODUCTION_01` is the exact supplied `LAST_FERRY_STORY_PRODUCTION_PACKAGE/NEXT_TASK_STORY_PRODUCTION.md`, alongside `reference/approved-opening.html`. Work started on `m1-first-crossing` at reviewed `6fc5a09dd4ef876ad96ad12d623532f0d13deb10`, with only the supplied package untracked and no tracked local edits. Package files and publication receipt are preserved; `reviews/story-production/supplied-inputs.json` records their identities. Local root journey entrance: http://127.0.0.1:5270/ without `?cove=`.
+
+The opening now uses the supplied Words and Light painter: Tide, Lantern and Ferry are separate close illustrated shots with optional finite 6 / 6 / 7-second actions, player-paced endpoints and exact authored copy. Normal captions reveal as complete phrases after 1,050ms; Read story exposes the full text immediately. Next only changes presentation. Take the helm alone acknowledges the opening and enters unchanged Holding. The new five-second Harbor composition puts the rescued trio ashore, Rue placing her lantern, Pip looking toward the empty ferry and a distant light beyond. Continue to Bellwater alone acknowledges the connection. The same variable-length player, existing native dialog/fullscreen surface, one gameplay world across shots and persistent Sound owner serve both scenes.
+
+Finite tide wash, lantern contact and ferry-water effects are implemented separately from gameplay travel, transfer and victory. Cues have cancellable run ownership and no delayed backlog. The accepted music, ordinary sound intent, wood contacts and sustained won-state reduction remain protected. Narration script and optional asset IDs are prepared, but voice files are absent, with no generated substitute, live TTS, voice-service dependency or unavailable narration toggle. Human review of the production illustration port, new Harbor art and actual mix remains separate from technical checks.
+
+Skip and Escape on the main scene show the final endpoint and recap without acknowledgment. Replay is explicit. Read story/Settings settle only the current shot; closing returns to it and its trigger. Reduced Motion and background settlement suppress skipped action cues; a restored pending scene shows the final static endpoint. Scene time never spends an action or changes passengers, local tide, capacity or Undo. Existing scene/cove IDs, strict checkpoints, practice isolation and all three puzzles remain. Full mid-puzzle resume is still deferred. Adding another campaign cove later requires explicit migration of completed two-cove records.
+
+**Implementation and focused verification complete; ready for review.** Node 24 build/TypeScript, 297/297 units across 33 files and 75-family validation pass. The actual root journey completes Holding with tide/terminal Undo and redelivery, then the Harbor connection and Bellwater rescue. Native checks cover 320×740, 390×844, 780×320, 844×390 and 1440×900; detailed phone motion, captions, native controls, focus, sound cancellation, checkpoint isolation and actual Chromium fullscreen entry/exit are exercised. Exact browser batches, original failures and affected reruns are in `reviews/story-production/BROWSER_CHECKS.md`; this is not a claim of a fresh full historical matrix.
+
+All 27 approved-opening pixel comparisons match. The new Harbor picture is inspected in the actual app; a narrow-width Moss anchor correction keeps his face inside the 320px phone canvas while 20 unaffected Harbor comparisons remain identical. Native review also corrected recap contrast, a noncancelable Settings Escape, and repeated-click/held-key progression across the final Next boundary. Covered WebGL drawing is suspended without rebuilding the world; one finite illustration clock continues and stops at held endpoints. The 89.863s uninterrupted actual two-cove sequence includes unmodified runtime audio, with separate native portrait/short-landscape motion clips. One software-capture Lantern interval reaches 679.9ms; no uniformly smooth native-device claim is made.
+
+Evidence remains tied to its captured working-tree identity, with explicit comparisons for the bounded later fixes. Human approval of Harbor art/pacing/mix and narration recordings remain pending. Existing constrained card/dock overlap, delivered-heading, precise ≤180ms rapid-touch, physical Android/native GPU/other-engine and hardware-listening limitations stay open. See `reviews/story-production/REVIEW.md` for checks, original failures and source/evidence provenance.
+
+This task supersedes the old story-only model gestures, single-duration scenes and all-opening-copy-from-first-frame requirements. Historical reports below remain unchanged in meaning. The Site remains version **12**, game `1a85874883af5caa59f6294a75495eccf2afebbc`, hosting `e87c5c5baa53a39001c5a89b07b59aab2ad150fc`; no deployment is part of this pass. The implementation/packaging audit and final GitHub SHA are recorded separately at handoff. PR #1 stays draft and main unchanged.
+
+## Previous handoff: Authored story scenes
 
 Implementation commit: `1aa73c59c37082f43990235a9efffd6f793cf642`. The following handoff commit adds verification/packaging metadata only. `reviews/story-scenes/packaging-audit.json` matches all 280 source entries and 43 selected review-media files to committed content; all 144 production/runtime entries match the tested capture snapshots. Final GitHub SHA and verified remote equality are in PR #1/the handoff, separately from the unchanged version 12 Site. Local journey entrance: http://127.0.0.1:5270/.
 
@@ -192,7 +211,7 @@ Build/typecheck and **200/200 units** pass. **20 distinct browser passes across 
 ## Queue and scope boundaries
 
 - Further playtest feedback will arrive incrementally. Add it here with a brief status and concrete intent; do not implement it automatically during the active task.
-- Homecoming, lighthouse light, sailing direction, released crests and phone playability with the audio/fullscreen correction are accepted and published. The cove interface and asset inventory is the current implementation task; additional ideas remain queued.
+- Homecoming, lighthouse light, sailing direction, released crests and phone playability with the audio/fullscreen correction are accepted and published. The illustrated opening/Harbor production task is current; additional ideas remain queued.
 - More authored coves and increasing difficulty remain a later product direction. The active pass adds no puzzle or mechanic.
 - Broader environment/art changes and further audio changes require a later active task or new user feedback.
 - Extra volume sliders, graphics presets, rewards, accounts and progression systems are not requested deliverables.

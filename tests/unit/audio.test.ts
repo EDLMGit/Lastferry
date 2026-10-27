@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { Sound } from '../../src/audio/sound';
 import { phraseSeconds } from '../../src/audio/score';
 import { arrivalPhrase } from '../../src/audio/arrival';
+import { storyEffects, type StoryCueKind } from '../../src/audio/story-effects';
 import { initial, type State } from '../../src/game/rules';
 import { holdingPier, level as firstCrossing } from '../../src/levels/level';
 
@@ -1395,5 +1396,230 @@ describe('continuous audio ownership and phase', () => {
       companionDeferrals: 0,
       deliveryCount: 0,
     });
+  });
+
+  test.each(['tide-wash', 'lantern-contact', 'ferry-water'] as StoryCueKind[])(
+    'story %s is finite, dry, singly consumed and independent of gameplay audio',
+    async (kind) => {
+      const value = sound();
+      await value.activate();
+      const context = Context.instances[0],
+        before = value.presentation(),
+        firstSource = context.sources.length,
+        firstNode = context.nodes.length,
+        spec = storyEffects[kind];
+      value.beginStoryRun(1);
+      expect(value.storyCue(1, kind, 0.8, `scene.shot.${kind}`)).toBe(true);
+      expect(value.storyCue(1, kind, 0.8, `scene.shot.${kind}`)).toBe(false);
+      const sources = context.sources.slice(firstSource),
+        [filter, highpass, gain, panner] = context.nodes.slice(firstNode);
+      expect(sources).toHaveLength(1);
+      expect(sources[0].loop).toBe(false);
+      expect(sources[0].startAt).toBe(context.currentTime);
+      expect(sources[0].endAt).toBeCloseTo(context.currentTime + spec.duration);
+      expect(sources[0].connections.has(filter)).toBe(true);
+      expect(filter.connections.has(highpass)).toBe(true);
+      expect(highpass.connections.has(gain)).toBe(true);
+      expect(gain.connections.has(panner)).toBe(true);
+      expect([...panner.connections]).toEqual([context.nodes[3]]);
+      expect(gain.gain.events[0]).toMatchObject({ kind: 'set', value: 0 });
+      expect(gain.gain.events.at(-1)).toMatchObject({ kind: 'linear', value: 0 });
+      expect(value.presentation()).toMatchObject({
+        storyCueCount: 1,
+        storyPlayed: 1,
+        storySources: 1,
+        storyRejected: 1,
+        lastStoryCue: { token: 1, kind, played: true, time: context.currentTime },
+        transferContacts: before.transferContacts,
+        arrivalEventCount: before.arrivalEventCount,
+        deliveryCount: before.deliveryCount,
+        travelRequested: false,
+        musicSources: before.musicSources,
+        schedulerStarts: before.schedulerStarts,
+        phaseSeconds: before.phaseSeconds,
+      });
+      context.advance(spec.duration + 0.01);
+      expect(value.presentation()).toMatchObject({ storySources: 0, storyOwnedSources: 0 });
+      expect(sources[0].connections.size).toBe(0);
+      expect([filter, highpass, gain, panner].every((node) => !node.connections.size)).toBe(true);
+    },
+  );
+
+  test('cold, muted and suspended story events are consumed with no activation backlog', async () => {
+    const value = sound();
+    value.beginStoryRun(1);
+    expect(value.storyCue(1, 'tide-wash')).toBe(false);
+    expect(value.presentation()).toMatchObject({
+      contextCount: 0,
+      storyCueCount: 1,
+      storySkipped: 1,
+    });
+    await value.activate();
+    expect(value.storyCue(1, 'tide-wash')).toBe(false);
+    expect(value.presentation()).toMatchObject({ storyPlayed: 0, storySources: 0 });
+    await value.setMuted(true);
+    value.beginStoryRun(2);
+    expect(value.storyCue(2, 'lantern-contact')).toBe(false);
+    await value.setMuted(false);
+    expect(value.storyCue(2, 'lantern-contact')).toBe(false);
+    const context = Context.instances[0];
+    context.state = 'suspended';
+    context.notify();
+    value.beginStoryRun(3);
+    expect(value.storyCue(3, 'ferry-water')).toBe(false);
+    context.state = 'running';
+    context.notify();
+    expect(value.storyCue(3, 'ferry-water')).toBe(false);
+    expect(value.presentation()).toMatchObject({
+      storyPlayed: 0,
+      storyCueCount: 3,
+      storySkipped: 3,
+      storySources: 0,
+      contextCount: 1,
+    });
+    value.beginStoryRun(4);
+    expect(value.storyCue(4, 'ferry-water')).toBe(true);
+  });
+
+  test.each(['mute', 'hide', 'context loss', 'action reset', 'dispose'])(
+    '%s invalidates story ownership and releases its complete tail',
+    async (operation) => {
+      const value = sound();
+      await value.activate();
+      const context = Context.instances[0];
+      value.beginStoryRun(1);
+      value.storyCue(1, 'ferry-water');
+      const source = context.sources.at(-1)!;
+      if (operation === 'mute') await value.setMuted(true);
+      else if (operation === 'hide') await value.visibility(true);
+      else if (operation === 'context loss') {
+        context.state = 'suspended';
+        context.notify();
+      } else if (operation === 'action reset') value.resetActionEffects();
+      else value.dispose();
+      expect(value.presentation()).toMatchObject({
+        storyToken: null,
+        storySources: 0,
+        storyOwnedSources: 0,
+      });
+      expect(source.connections.size).toBe(0);
+      expect(source.endAt).toBeLessThanOrEqual(context.currentTime);
+      value.beginStoryRun(1);
+      expect(value.storyCue(1, 'tide-wash')).toBe(false);
+      if (operation === 'mute') await value.setMuted(false);
+      if (operation === 'hide') await value.visibility(false);
+      if (operation === 'context loss') {
+        context.state = 'running';
+        context.notify();
+      }
+      expect(value.presentation()).toMatchObject({
+        storyPlayed: 1,
+        storySources: 0,
+        travelRequested: false,
+      });
+    },
+  );
+
+  test('Next, Replay and cancellation invalidate stale tokens without accumulating owned sources', async () => {
+    const value = sound();
+    await value.activate();
+    const context = Context.instances[0],
+      before = value.presentation();
+    for (let token = 1; token <= 50; token++) {
+      value.beginStoryRun(token);
+      expect(value.storyCue(token, 'ferry-water')).toBe(true);
+      expect(value.storyCue(token - 1, 'lantern-contact')).toBe(false);
+      expect(value.presentation().storyOwnedSources).toBe(1);
+      value.cancelStoryRun();
+      expect(value.presentation()).toMatchObject({ storyToken: null, storySources: 0 });
+      expect(context.sources.at(-1)!.endAt).toBeLessThanOrEqual(context.currentTime + 0.06);
+      value.beginStoryRun(token);
+      expect(value.storyCue(token, 'ferry-water')).toBe(false);
+    }
+    context.advance(0.1);
+    expect(value.presentation()).toMatchObject({
+      storySources: 0,
+      storyOwnedSources: 0,
+      peakStorySources: 1,
+      storyPlayed: 50,
+      contextCount: 1,
+      schedulerStarts: before.schedulerStarts,
+      musicSources: before.musicSources,
+      transferContacts: 0,
+      arrivalEventCount: 0,
+    });
+  });
+
+  test.each(['skip', 'mute', 'hide', 'dispose'])(
+    'a pending resume resolving after %s never restores consumed story work',
+    async (operation) => {
+      Context.pending = true;
+      const value = sound();
+      value.beginStoryRun(1);
+      const activation = value.activate(),
+        context = Context.instances[0];
+      expect(value.storyCue(1, 'tide-wash')).toBe(false);
+      if (operation === 'skip') value.cancelStoryRun();
+      else if (operation === 'mute') await value.setMuted(true);
+      else if (operation === 'hide') await value.visibility(true);
+      else value.dispose();
+      context.resumeRequests[0].succeed();
+      await activation;
+      expect(value.storyCue(1, 'tide-wash')).toBe(false);
+      expect(value.presentation()).toMatchObject({
+        storyPlayed: 0,
+        storySources: 0,
+        storyToken: null,
+      });
+      if (operation !== 'skip') expect(value.presentation().schedulerCount).toBe(0);
+    },
+  );
+
+  test('story sources yield to score budget and retain won music reduction', async () => {
+    const value = sound();
+    await value.activate();
+    const internal = value as any,
+      { won } = finalStates();
+    value.reconcileState(won, holdingPier);
+    const before = value.presentation();
+    while (value.presentation().sourceCount < 28) internal.tone(62, 0, 10, 0.5, 'pad');
+    value.beginStoryRun(1);
+    expect(value.storyCue(1, 'lantern-contact')).toBe(true);
+    expect(value.presentation().sourceCount).toBe(29);
+    expect(value.storyCue(1, 'tide-wash')).toBe(false);
+    internal.tone(66, 0, 10, 0.5, 'pad');
+    expect(value.presentation()).toMatchObject({
+      sourceCount: 29,
+      storyOwnedSources: 0,
+      storyReclaimed: 1,
+      droppedTones: 0,
+      victoryTarget: 0.5,
+      victorySettled: true,
+      arrivalEventCount: before.arrivalEventCount,
+      deliveryCount: before.deliveryCount,
+      transferContacts: before.transferContacts,
+      travelRequested: false,
+      schedulerStarts: before.schedulerStarts,
+    });
+  });
+
+  test('story ownership and consumed IDs stay bounded even under invalid or redundant events', async () => {
+    const value = sound();
+    await value.activate();
+    for (const token of [NaN, Infinity, -1, 1.5]) value.beginStoryRun(token);
+    expect(value.presentation().storyToken).toBe(null);
+    value.beginStoryRun(1);
+    expect(value.storyCue(1, 'tide-wash', NaN)).toBe(false);
+    for (let i = 0; i < 100; i++) value.storyCue(1, 'tide-wash', 1, `cue-${i}`);
+    expect(value.presentation()).toMatchObject({
+      storyCueCount: 8,
+      storyPlayed: 2,
+      storySkipped: 6,
+      storySources: 2,
+      peakStorySources: 2,
+    });
+    expect(value.presentation().storyConsumedIds).toHaveLength(8);
+    value.beginStoryRun(2);
+    expect(value.presentation()).toMatchObject({ storyConsumedIds: [], storyOwnedSources: 0 });
   });
 });

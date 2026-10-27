@@ -121,6 +121,7 @@ export class World {
   timing: JourneyTiming = journeyTiming;
   disposed = false;
   frameRequest = 0;
+  storyCovered = false;
   resizeObserver: ResizeObserver;
   onPresentationStart: (action: Action) => void = () => {};
   onArrival: () => void = () => {};
@@ -1513,8 +1514,15 @@ export class World {
       }
     }
   }
+  setStoryCovered(covered: boolean) {
+    if (this.disposed || this.storyCovered === covered) return;
+    this.storyCovered = covered;
+    cancelAnimationFrame(this.frameRequest);
+    this.frameRequest = covered ? 0 : requestAnimationFrame((time) => this.tick(time));
+  }
   tick(time: number) {
-    if (this.disposed) return;
+    this.frameRequest = 0;
+    if (this.disposed || this.storyCovered) return;
     this.frame++;
     this.lastTime = time;
     if (this.transition) {
@@ -1621,8 +1629,9 @@ export class World {
     );
     this.coastalWater.setHarbor(this.effects.glow.position, this.effects.arrivalIntensity);
     this.coastalWater.update(this.water.position.y, this.reduced ? 0 : time * 0.001);
-    this.renderer.render(this.scene, this.camera);
-    this.frameRequest = requestAnimationFrame((t) => this.tick(t));
+    if (!this.storyCovered) this.renderer.render(this.scene, this.camera);
+    if (!this.storyCovered && !this.disposed)
+      this.frameRequest = requestAnimationFrame((t) => this.tick(t));
   }
   transferPresentation() {
     const history = this.transferHistory.map(({ id, timeline, completion }) => ({

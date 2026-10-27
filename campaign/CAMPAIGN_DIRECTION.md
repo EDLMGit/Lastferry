@@ -2,9 +2,9 @@
 
 **Campaign direction v1 · 25 October 2026**
 
-Design baseline: `1a85874883af5caa59f6294a75495eccf2afebbc`, `EDLMGit/Lastferry`, branch `m1-first-crossing`. This document selects a coherent direction for the next prototype. Only Holding Pier, Bellwater Cove and the separate First Crossing practice puzzle currently exist. The ten further coves, new species, larger boat, story scenes and current rule below are proposals, not implemented or solver-validated content.
+Design baseline: `1a85874883af5caa59f6294a75495eccf2afebbc`, `EDLMGit/Lastferry`, branch `m1-first-crossing`. This document selects a coherent direction for the next prototype. Only Holding Pier, Bellwater Cove and the separate First Crossing practice puzzle currently exist. The ten further coves, new species, larger boat, later story scenes and current rule below are proposals, not implemented or solver-validated content.
 
-The next executable task is `NEXT_TASK_STORY_FOUNDATION.md`. It implements a small story thread around the two existing campaign coves. The rest of this document provides direction for later contained tasks.
+The current executable task is `LAST_FERRY_STORY_PRODUCTION_PACKAGE/NEXT_TASK_STORY_PRODUCTION.md`, task `STORY_PRODUCTION_01`. It integrates the approved illustrated opening and a compact Harbor connection into the existing two-cove journey. The foundation, checkpoints and puzzles remain; the rest of this document provides direction for later contained tasks.
 
 ## 1. The story we are making
 
@@ -160,7 +160,7 @@ Use six short major story scenes, plus a brief connection between the existing f
 | After cove 9 | The last lights | Show the gathering and the remaining occupied landings |
 | After cove 12 | A place for the captain | Supper, welcome and a complete ending |
 
-Each scene has approximately 6–12 seconds of restrained settling motion. This is not a timed reading limit. Captions remain until the player continues, Skip is visible, and Reduced Motion uses static compositions with the same information. Use actual game models and a few cuts, slow camera moves or small gestures. The game remains understandable when muted.
+The current opening uses three approved illustrated Canvas2D shots with finite 6 / 6 / 7-second actions; the Harbor connection uses one approximately five-second shot in the same language. The player advances each shot explicitly and may linger at its held endpoint. Next is available immediately, while only the final handoff acknowledges a scene. Normal captions follow a brief visual lead-in; Read story exposes the full scene immediately, and Reduced Motion shows each still endpoint with its caption. This supersedes the earlier model-only story presentation, while the playable world remains fully 3D. Later chapter composition and timing need their own authored review. The game remains understandable when muted.
 
 Let the current score continue through its existing audio owner. Scene transitions may change arrangement or level gently; they must honor mute, touch-start, background suspension and cancellation. A repeated scene must not create overlapping music or duplicate arrival cues. New music, if later needed, should be original and consistent with the accepted score.
 
@@ -192,7 +192,7 @@ The actual authoring and mechanical acceptance details are in `PUZZLE_PROGRESSIO
 
 | Slice | Concrete result | Stop before |
 | --- | --- | --- |
-| Story foundation — next task | Opening, Holding→Bellwater connection, small journey/practice flow, honest cove-boundary checkpoints | New levels, species, hull or currents |
+| Story foundation — retained; illustrated production current | Approved three-shot opening and compact Harbor connection inside the working journey/practice flow and honest cove-boundary checkpoints | New levels, species, hull or currents |
 | Complete Phase I | Driftwood Yard and Nell, using the existing four-space rules | Six-space gameplay |
 | Launch the larger ferry | Launch scene, actual six-space hull/seating and forgiving Wide Berth | Deer or currents |
 | Meet Orin | Deer world model/portrait and Orchard Landing | New water rules |

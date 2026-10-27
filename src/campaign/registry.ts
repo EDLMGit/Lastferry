@@ -2,36 +2,99 @@ import { bellwater, holdingPier, level as firstCrossing, type Level } from '../l
 
 export type CoveId = 'holding-pier' | 'bellwater';
 export type SceneId = 'opening' | 'another-bell';
+export type IllustrationId = 'tide' | 'lantern' | 'ferry' | 'harbor';
+export type StoryCue = {
+  id: string;
+  atMs: number;
+  kind: 'tide-wash' | 'lantern-contact' | 'ferry-water';
+  strength?: number;
+};
+export type StoryShot = {
+  id: IllustrationId;
+  illustration: IllustrationId;
+  durationMs: number;
+  caption: string;
+  captionCueMs: number;
+  description: string;
+  cues: readonly StoryCue[];
+  narrationAssetId?: string;
+};
 
 export type StoryScene = {
   id: SceneId;
   title: string;
-  captions: readonly string[];
-  duration: number;
-  staging: 'holding-start' | 'holding-harbor';
+  shots: readonly StoryShot[];
   destination: CoveId;
+  continueLabel: string;
 };
 
 export const storyScenes: Record<SceneId, StoryScene> = {
   opening: {
     id: 'opening',
     title: 'The first evening',
-    captions: [
-      'Your first evening alone at the helm.',
-      'The tide will be high tonight.',
-      'Bring everyone to the lighthouse.',
+    shots: [
+      {
+        id: 'tide',
+        illustration: 'tide',
+        durationMs: 6000,
+        captionCueMs: 1050,
+        caption: 'Your first evening at the helm.\nA high tide ahead.',
+        description:
+          'Water covers the lower stone steps and a marked post. Tan Rue and cream Pip wait safely on the higher landing.',
+        cues: [{ id: 'opening.tide.wash', atMs: 1900, kind: 'tide-wash' }],
+        narrationAssetId: 'narration.opening.tide',
+      },
+      {
+        id: 'lantern',
+        illustration: 'lantern',
+        durationMs: 6000,
+        captionCueMs: 1050,
+        caption: 'Pip and Rue have kept a light for you.',
+        description:
+          'Rue, the tan rabbit on the left, raises a warm lantern. Cream Pip waits close beside her on the right.',
+        cues: [{ id: 'opening.lantern.contact', atMs: 1450, kind: 'lantern-contact' }],
+        narrationAssetId: 'narration.opening.lantern',
+      },
+      {
+        id: 'ferry',
+        illustration: 'ferry',
+        durationMs: 7000,
+        captionCueMs: 1050,
+        caption: 'Moss is aboard.\nBring everyone to the lighthouse.',
+        description:
+          'The yellow ferry with its red cabin and Moss the sheep approaches through open water toward the warm lighthouse.',
+        cues: [{ id: 'opening.ferry.water', atMs: 650, kind: 'ferry-water' }],
+        narrationAssetId: 'narration.opening.ferry',
+      },
     ],
-    duration: 7200,
-    staging: 'holding-start',
     destination: 'holding-pier',
+    continueLabel: 'Take the helm',
   },
   'another-bell': {
     id: 'another-bell',
     title: 'Another bell',
-    captions: ['Pip, Rue and Moss are safe. Across the water, Bellwater is still waiting.'],
-    duration: 4000,
-    staging: 'holding-harbor',
+    shots: [
+      {
+        id: 'harbor',
+        illustration: 'harbor',
+        durationMs: 5000,
+        captionCueMs: 1050,
+        caption: 'Pip, Rue and Moss are safe.\nBellwater is still waiting.',
+        description:
+          'Rue sets her lantern on the high Harbor landing beside safe Pip and Moss. Pip looks toward the empty waiting ferry and a distant light.',
+        cues: [
+          {
+            id: 'another-bell.harbor.contact',
+            atMs: 3200,
+            kind: 'lantern-contact',
+            strength: 0.75,
+          },
+        ],
+        narrationAssetId: 'narration.another-bell.harbor',
+      },
+    ],
     destination: 'bellwater',
+    continueLabel: 'Continue to Bellwater',
   },
 };
 

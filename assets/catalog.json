@@ -51,6 +51,19 @@
         "cove-portrait-package/portraits/generation-manifest.json",
         "reviews/passenger-portraits/generation-audit.json"
       ]
+    },
+    "original-package-canvas-art": {
+      "author": "Original code-native Canvas2D artwork supplied in the Last Ferry story production package; production TypeScript adaptation and a new Harbor composition authored locally.",
+      "rights": "Retain with project sources; no new distribution license or third-party stock-art claim is asserted.",
+      "evidence": "LAST_FERRY_STORY_PRODUCTION_PACKAGE/reference/README.md; LAST_FERRY_STORY_PRODUCTION_PACKAGE/reference/scene-painter.js; docs/ASSET_LEDGER.md",
+      "approvedFragmentSha256": "ff437f9e70675c8b532f2f774e9b9c766eb30e2cf9da73072d5b7e872fd22ce1",
+      "derivation": "Supplied original painter -> typed local story-painter.ts, with preserved opening paths/palette/finite actions and an additional Harbor composition. No raster export, model replacement, iframe or runtime reference wrapper.",
+      "evidencePaths": [
+        "LAST_FERRY_STORY_PRODUCTION_PACKAGE/reference/README.md",
+        "LAST_FERRY_STORY_PRODUCTION_PACKAGE/reference/scene-painter.js",
+        "LAST_FERRY_STORY_PRODUCTION_PACKAGE/reference/approved-opening.fragment.html",
+        "docs/ASSET_LEDGER.md"
+      ]
     }
   },
   "boundedExtensionRule": "Update the canonical inventory in the same change that adds, replaces or retires an asset family. Instance placement belongs in level data. Do not duplicate every passenger/rock instance as an asset entry; do not invent a runtime content manager or editor.",
@@ -4652,93 +4665,78 @@
     },
     {
       "id": "ui.story-presentation",
-      "name": "Journey entrance and authored miniature story scenes",
+      "name": "Journey entrance and player-paced illustrated story",
       "kind": "dom-component-family",
       "status": "integrated",
       "sources": [
         {
           "path": "src/campaign/registry.ts",
-          "symbol": "storyScenes exact captions/duration/staging; storyCoves two existing level references"
+          "symbol": "storyScenes variable-length shots, exact captions, descriptions, durations, cues, optional narration IDs and final handoff labels; unchanged cove registry"
         },
         {
           "path": "src/campaign/presentation.ts",
-          "symbol": "StoryPresentation authored finite timeline, immediate continuation, settling and cancellation"
+          "symbol": "StoryPresentation finite current-shot clock, run token, Next/Replay/Skip/settle/cancel operations"
+        },
+        {
+          "path": "src/campaign/story-view.ts",
+          "symbol": "Story view: one Canvas2D surface plus native captions, primary/secondary controls and transcript"
         },
         {
           "path": "src/main.ts",
-          "symbol": "shared native dialog journey/story/practice/replacement/return modes"
+          "symbol": "Existing app/dialog/fullscreen owner and explicit final campaign acknowledgment"
         },
         {
           "path": "src/campaign/story.css",
-          "symbol": "Quiet responsive caption treatment with complete readable copy and native immediate Continue"
+          "symbol": "Responsive illustrated presentation, real serif captions and cove controls within the visible viewport"
         },
         {
           "path": "campaign/STORY_SCENES.md",
-          "symbol": "supplied authored opening and Holding to Bellwater direction"
+          "symbol": "Canonical implemented copy and presentation, separating future scenes"
         },
         {
           "path": "src/dev/asset-gallery.ts",
-          "symbol": "shared authored caption data and material specimens"
-        },
-        {
-          "path": "src/scene/world.ts",
-          "symbol": "World.presentStory/clearStory: bounded shot composition and presentation-only acknowledgment over the existing world"
-        },
-        {
-          "path": "src/scene/story-staging.ts",
-          "symbol": "Editable opening/connection shot and character-pose recipe; no gameplay or audio owner"
+          "symbol": "Shared production painter endpoints and registry captions; design specimens only"
         }
       ],
-      "meaning": "Introduce the first evening, connect the two existing rescues and explain cove-boundary checkpoints without changing puzzle state.",
+      "meaning": "Introduce the first evening through three illustrated pictures, connect the two existing rescues and retain honest cove-boundary checkpoints without spending puzzle actions.",
       "variants": [
         "journey entrance",
-        "opening",
-        "Holding to Bellwater",
+        "opening: tide/lantern/ferry",
+        "another-bell: Harbor",
+        "transcript",
         "practice chooser",
         "checkpoint replacement/return",
         "available-content endpoint"
       ],
-      "visualSignature": "Quiet painted teal caption treatment beneath recognizable miniature subjects. Authored ferry/Moss acknowledgment, lighthouse reveal and safe-Harbor acknowledgment use the existing models and warm light. No letterbox, prerequisite wait or implementation-status label.",
-      "reuseAndOwnership": "Reuses ui.dialogs, original painted surfaces, cove controls/icons, ferry, passengers, water, lighthouse and the existing sound owner. Captions/staging are editable registry/presentation sources; root owns one active world and native dialog lifecycle.",
-      "behaviorToPreserve": "Continue is available from the first frame and alone acknowledges a scene. Skip settles motion without acknowledgement and disappears at settlement. All caption copy remains complete. Reduced/restored states are composed stills; ambient movement follows the actual preference. Finite poses/camera jobs cancel on navigation/background/recovery without changing puzzle state, Undo, checkpoint or audio intent.",
+      "visualSignature": "Close supplied teal/dusk/peach illustrations with complete Georgia captions and stable native cove controls. Portrait reads below the art; landscape reserves quiet space beside the action.",
+      "reuseAndOwnership": "One small finite shot controller, one Canvas2D story view and the existing app, gameplay World, dialog/fullscreen and Sound owners. Registry data is the sole runtime copy/cue source. No iframe or second campaign system.",
+      "behaviorToPreserve": "Next changes only a shot. Only Take the helm or Continue to Bellwater acknowledges a scene, once. Skip goes to the final held endpoint without acknowledgment. Read story/Settings settle the current shot and preserve return focus. Reduced/hide/restored/cancel paths suppress stale motion/cues; no puzzle/checkpoint mutation or per-shot save.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "implemented-awaiting-human-scene-review",
-        "reviewedBaseline": "8cc43c794274fe64d5fb634961fbf79aaff251f8",
-        "basis": "Foundation progression is preserved; this pass replaces idle-only staging with an authored 7.2-second ferry/Moss and lighthouse sequence plus a four-second safe-Harbor/Pip acknowledgment. Final build, 276 units, 73-family validation and seven distinct affected browser cases pass across retained runs. Native frame/recording inspection, original failures and human pacing acceptance remain distinct in reviews/story-scenes/REVIEW.md. Not deployed."
+        "state": "integrated-awaiting-production-visual-and-listening-review",
+        "reviewedBaseline": "6fc5a09dd4ef876ad96ad12d623532f0d13deb10",
+        "basis": "The supplied illustrated opening reference is user-approved. Production integration, new Harbor composition and runtime sound mix remain subject to the current review. Executed checks and original failures are reported separately; no new Site publication or physical-device acceptance is claimed."
       },
       "evidence": [
         {
-          "path": "reviews/story-foundation/supplied-inputs.json",
-          "role": "Byte-level provenance for original authored task/campaign direction and publication receipt"
+          "path": "LAST_FERRY_STORY_PRODUCTION_PACKAGE/NEXT_TASK_STORY_PRODUCTION.md",
+          "role": "Active illustrated-production contract superseding older distant-model and all-copy-first-frame presentation requirements"
         },
         {
-          "path": "NEXT_TASK_STORY_FOUNDATION.md",
-          "role": "Current bounded implementation contract; not gameplay evidence"
+          "path": "LAST_FERRY_STORY_PRODUCTION_PACKAGE/reference/approved-opening.fragment.html",
+          "role": "Exact approved original reference, not gameplay evidence"
         },
         {
           "path": "src/dev/asset-gallery.ts",
-          "role": "Static shared-source caption/material specimens; design evidence only"
+          "role": "Actual painter endpoints and shared captions; static design evidence only"
         },
         {
-          "path": "reviews/story-foundation/ASSETS.md",
-          "role": "Implemented family/reuse contract and preserved supplied source/publication provenance"
-        },
-        {
-          "path": "NEXT_TASK_STORY_SCENES.md",
-          "role": "Current scene correction contract, superseding old idle-timer and gated-Continue presentation"
-        },
-        {
-          "path": "reviews/story-scenes/supplied-inputs.json",
-          "role": "Byte-identical active task provenance"
-        },
-        {
-          "path": "reviews/story-scenes/ASSETS.md",
-          "role": "Updated existing-family source/reuse and scene evidence contract"
+          "path": "reviews/story-production/REVIEW.md",
+          "role": "Actual root-journey phone frames, temporal/runtime-audio evidence, verification and remaining limitations"
         },
         {
           "path": "reviews/story-scenes/REVIEW.md",
-          "role": "Actual native scene beginning/intermediate/endpoint captures, recordings and executed verification; human acceptance is separate"
+          "role": "Prior authored-miniature implementation history, superseded in current story presentation only"
         }
       ],
       "consumers": [
@@ -4746,16 +4744,160 @@
         "src/dev/asset-gallery.ts"
       ],
       "gallery": {
-        "section": "interface",
-        "preview": "Shared exact caption copy, immediate Continue, active-only Skip and authored scene duration/beat descriptions using existing painted material. Static specimens remain design guidance, not gameplay evidence."
+        "section": "story",
+        "preview": "Four static actual-painter endpoints with shared captions/descriptions and immediate primary labels. Gallery does not simulate progression, autoplay audio or substitute for gameplay evidence."
       },
       "typeSpecific": {
-        "render/placement sources": "src/main.ts existing native dialog; src/campaign/story.css quiet caption treatment; src/campaign/registry.ts exact copy and scene associations; src/campaign/presentation.ts finite timeline/cancellation; src/scene/story-staging.ts and World.presentStory/clearStory author camera/animal presentation while preserving normal gameplay framing.",
-        "semantic role/accessible name": "Native dialog with scene/title heading and complete live text; visible New journey, Continue journey, Skip animation, Continue, Practice and Settings actions.",
-        "icon and label mappings": "Reuse existing next-cove progression, Settings, close and fullscreen icons beside explicit text. No new glyph or ambiguous lighthouse/camera meaning.",
-        "interaction states": "Existing journey/checkpoint/practice states retained; active authored opening/connection, immediate Continue, active-only Skip, watched/settled/skipped/reduced/restored endpoint, cancellation/background/orientation recovery.",
-        "nearby placement and viewport contract": "Native caption text and 44px controls fit 320x740, 390x844, 780x320 and 844x390. Portrait and landscape shots protect ferry/Moss, safe Harbor trio and lighthouse above a quiet caption treatment; short landscape uses composed cuts. Actual phone evidence is required, and static specimens do not establish gameplay quality.",
-        "focus/cancel/fullscreen preservation": "One existing native dialog owner; foreground scenes fence map input, retain visible focus and explicit continuation, settle/cancel pending motion safely, and preserve shared fullscreen promotion and audio intent."
+        "render/placement sources": "src/campaign/story-view.ts and story.css own one Canvas2D view with real HTML copy; registry and presentation own content and current-shot time; main alone owns checkpoint acknowledgment.",
+        "semantic role/accessible name": "Existing native dialog, stable scene heading, concise per-shot canvas description and complete real caption. Read story exposes all text immediately without frame-by-frame announcements.",
+        "icon and label mappings": "Existing next-cove/Settings/close/fullscreen control family with explicit Next, Take the helm, Continue to Bellwater, Replay, Skip animation and Read story wording.",
+        "interaction states": "Fresh first shot, immediate Next/final action, held endpoint, Replay shot/scene, Skip final endpoint, transcript/Settings current-shot hold, Reduced endpoints, pending-scene final restore, hide and disposal cancellation.",
+        "nearby placement and viewport contract": "Art, complete current copy and primary controls must fit the actual visible 320x740, 390x844, 780x320 and 844x390 viewport; transcript can scroll. No copied 330px minimum on 320px landscape. Native evidence and remaining limitations are in the review.",
+        "focus/cancel/fullscreen preservation": "One app/dialog/fullscreen owner; story fences gameplay input. Escape closes transcript/Settings before settling main story. Closing returns trigger focus. Scene changes cancel owned story work without altering accepted audio intent."
+      }
+    },
+    {
+      "id": "story.illustrations",
+      "name": "Words and Light illustrated coast and neighbors",
+      "kind": "procedural-geometry",
+      "status": "integrated",
+      "sources": [
+        {
+          "path": "src/campaign/story-painter.ts",
+          "symbol": "createCoveStoryPainter: typed Canvas2D tide, lantern, ferry and Harbor compositions"
+        },
+        {
+          "path": "LAST_FERRY_STORY_PRODUCTION_PACKAGE/reference/scene-painter.js",
+          "symbol": "Supplied original opening art paths, palette, identity and finite poses"
+        },
+        {
+          "path": "src/campaign/registry.ts",
+          "symbol": "Illustration IDs, semantic shot descriptions and finite millisecond durations"
+        }
+      ],
+      "meaning": "Presentation-only narrative pictures of changing shoreline, neighbors keeping a light, the answering ferry and safe Harbor. Illustration geometry is never route or passenger-state data.",
+      "variants": [
+        "tide",
+        "lantern",
+        "ferry",
+        "harbor"
+      ],
+      "visualSignature": "Soft teal water, dusk lavender/peach, tan Rue left and cream Pip right, woolly Moss, yellow ferry/red cabin and restrained warm lantern/lighthouse light. Three approved opening compositions plus one new protected-Harbor picture.",
+      "reuseAndOwnership": "One current Canvas2D surface in the story view; painter receives illustration/time and bounded DPR1–2. Shared paths/characters/shore/light helpers are reused across four variants. It owns no frame loop, puzzle state, audio or progress.",
+      "behaviorToPreserve": "Opening finite actions retain supplied art and 6/6/7-second endpoints. Harbor is five seconds. Milliseconds convert explicitly to painter seconds. Resize recomposes portrait/landscape; settled endpoints redraw only when needed. No rabbits board during the prelude and the Harbor ferry remains empty.",
+      "provenance": "original-package-canvas-art",
+      "acceptance": {
+        "state": "approved-opening-reference-production-port-and-harbor-await-review",
+        "reviewedBaseline": "6fc5a09dd4ef876ad96ad12d623532f0d13deb10",
+        "basis": "Reference approval applies to the supplied opening; it does not automatically approve the TypeScript port, new Harbor illustration, device performance or actual runtime presentation."
+      },
+      "evidence": [
+        {
+          "path": "LAST_FERRY_STORY_PRODUCTION_PACKAGE/reference/approved-opening.fragment.html",
+          "role": "Exact original approved art/reference source; SHA-256 ff437f9e70675c8b532f2f774e9b9c766eb30e2cf9da73072d5b7e872fd22ce1"
+        },
+        {
+          "path": "LAST_FERRY_STORY_PRODUCTION_PACKAGE/direction/SCENE_SCRIPT.md",
+          "role": "Authored required actions, exact copy and safe-Harbor continuity"
+        },
+        {
+          "path": "src/dev/asset-gallery.ts",
+          "role": "Static actual-painter endpoints; design evidence rather than gameplay capture"
+        },
+        {
+          "path": "reviews/story-production/REVIEW.md",
+          "role": "Production native phone movement/endpoints and source-tied review"
+        }
+      ],
+      "consumers": [
+        "src/campaign/story-view.ts",
+        "src/dev/asset-gallery.ts"
+      ],
+      "gallery": {
+        "section": "story",
+        "preview": "Four semantic canvas endpoints rendered from the production painter; captions from the single runtime registry. No independent story application."
+      },
+      "typeSpecific": {
+        "authoritative geometry inputs": "Original code-native Canvas paths and coordinate recipes in scene-painter.js, adapted to story-painter.ts. Width/height/DPR and explicit illustration/time are the only drawing inputs; gameplay geometry is separate.",
+        "style/elevation parameters": "Canvas CSS-pixel compositions recompose under480px width and short height; shared dusk/teal/cream/tan/gold palette and finite per-shot pose interpolation retain supplied identity.",
+        "mechanical versus decorative boundary": "Entirely narrative decorative art. It does not execute move/board/unload, tide changes, rescue completion or checkpoint writes. Existing game models/data remain authoritative.",
+        "material/texture dependencies": "Canvas2D gradients, vector paths and deterministic560-point grain; no fetched image, font, WebGL model or raster texture. Georgia captions are HTML and owned by the UI family.",
+        "generation and disposal owner": "createCoveStoryPainter draws into one view-owned canvas at DPR<=2. The view handles resize/draw lifetime; the controller clamps finite time. No painter timer, second WebGL context or per-shot gameplay rebuild."
+      }
+    },
+    {
+      "id": "audio.story-effects",
+      "name": "Finite illustrated-story contacts and water",
+      "kind": "procedural-audio",
+      "status": "integrated",
+      "sources": [
+        {
+          "path": "src/audio/story-effects.ts",
+          "symbol": "storyEffects bounded tide-wash/lantern-contact/ferry-water envelopes"
+        },
+        {
+          "path": "src/audio/atmosphere.ts",
+          "symbol": "Sound.beginStoryRun/storyCue/cancelStoryRun and separately owned story sources"
+        },
+        {
+          "path": "src/audio/score.ts",
+          "symbol": "Reused deterministic makeNoise texture only; accepted score unchanged"
+        },
+        {
+          "path": "src/audio/wood.ts",
+          "symbol": "Reused light makeWoodContact buffer; gameplay contact API and texture unchanged"
+        },
+        {
+          "path": "src/campaign/registry.ts",
+          "symbol": "Stable story cue IDs, visible-event offsets and Harbor contact strength"
+        }
+      ],
+      "meaning": "Restrained finite sound tied to illustrated water, lantern handling and ferry approach, independently cancellable from accepted gameplay effects.",
+      "variants": [
+        "tide-wash",
+        "lantern-contact",
+        "ferry-water",
+        "quieter Harbor lantern placement"
+      ],
+      "visualSignature": "One soft broad wash, one rounded handle/wood touch, one finite hull-water approach; no voice, urgency pulse, new composition or continuous layer.",
+      "reuseAndOwnership": "Existing persistent Sound/context/master; cached noise and light wood buffers. A strictly increasing scene-run token consumes each cue ID once, bounds up to2 story sources and yields to the existing global music source budget.",
+      "behaviorToPreserve": "No gameplay travel/transfer/arrival calls. Unavailable/muted events are consumed with no backlog; Next/Replay/Skip/hide/reset/context-loss/disposal invalidate obsolete work. Accepted score phase, dry/wet music routing, victory reduction and audio intent stay intact.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "integrated-awaiting-runtime-listening-approval",
+        "reviewedBaseline": "6fc5a09dd4ef876ad96ad12d623532f0d13deb10",
+        "basis": "Source/envelope/cancellation checks are separate from actual runtime recording and human acoustic approval. No narration recording is supplied or generated."
+      },
+      "evidence": [
+        {
+          "path": "LAST_FERRY_STORY_PRODUCTION_PACKAGE/direction/AUDIO_PLAN.md",
+          "role": "Supplied finite sound, intent/cancellation and later narration contract"
+        },
+        {
+          "path": "tests/unit/audio.test.ts",
+          "role": "Finite source/routing/budget, consumed IDs, pending resume, cancellation and accepted-audio preservation checks"
+        },
+        {
+          "path": "reviews/story-production/REVIEW.md",
+          "role": "Runtime unchanged-level audio capture, cue observations, decoding and explicit listening limitations"
+        }
+      ],
+      "consumers": [
+        "src/audio/atmosphere.ts",
+        "src/main.ts"
+      ],
+      "gallery": {
+        "section": "story",
+        "preview": "Explicit effect/source ownership description and source links, no autoplay. Narration script linked as pending text/slots, not a delivered voice asset."
+      },
+      "typeSpecific": {
+        "score/generator and seed": "Reuses makeNoise seed0x52f34321 and light makeWoodContact seed311. The accepted score/wood generators remain unchanged; story-specific envelope/filter/strength definitions are local.",
+        "voices/buffers/envelope owner": "Sound owns story sources separately, at most2; finite gain envelopes and dry owned nodes release at end/cancel. Event consumption is bounded to8 IDs per run, with diagnostics.",
+        "event/timeline trigger": "Existing finite story controller crosses explicit registry cue offsets once. Run token guards Next/Replay/Skip/background; missed stalled intervals are consumed rather than replayed. No gameplay event API is invoked.",
+        "routing and relative mix owner": "Story sources -> filter/highpass/gain/panner -> existing effects -> master. Lantern gain.14 is70% of ordinary light wood. Water peaks.125/.14 stay below travel.2; no reverb or victory-mix override.",
+        "looping or finite duration": "No loops: tide2.8s with.45s attack; contact.24s with.014s attack; ferry4.2s with.65s attack. Existing8s noise buffer is read finitely. Harbor reuses contact at.75 strength.",
+        "mute/hide/Undo/disposal behavior": "All clearActions/context/mute/hide/reset/dispose paths invalidate story tokens and release nodes. Pending resume never schedules old cues. Cancel uses a bounded<=60ms tail; a new run reclaims it before new sources.",
+        "listening evidence separate from generated-output evidence": "Focused ownership unit checks and runtime recorded output are separate from human listening. See reviews/story-production/REVIEW.md; no approved narration/voice or physical-speaker claim."
       }
     }
   ],

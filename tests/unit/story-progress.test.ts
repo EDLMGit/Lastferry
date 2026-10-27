@@ -21,6 +21,7 @@ import {
 import { Session } from '../../src/game/session';
 import type { Action } from '../../src/game/rules';
 import { bellwater, holdingPier, level as firstCrossing } from '../../src/levels/level';
+import narration from '../../LAST_FERRY_STORY_PRODUCTION_PACKAGE/audio/narration-script.json';
 
 function checkpoints() {
   const opening = newJourney();
@@ -53,6 +54,19 @@ function memory(raw: string | null = null) {
 }
 
 describe('authored story registry', () => {
+  test('optional narration slots match the supplied exact script without claiming recordings', () => {
+    const shots = Object.values(storyScenes).flatMap((scene) => scene.shots);
+    expect(shots).toHaveLength(narration.clips.length);
+    for (const shot of shots) {
+      const clip = narration.clips.find((item) => item.id === shot.narrationAssetId);
+      expect(clip).toMatchObject({
+        text: shot.caption,
+        asset: null,
+        recorded: false,
+        implementationStatus: 'pending',
+      });
+    }
+  });
   test('only the two existing story puzzles are registered, with practice separate', () => {
     expect(storyCoves.map(({ id, order }) => [id, order])).toEqual([
       ['holding-pier', 0],
@@ -72,18 +86,18 @@ describe('authored story registry', () => {
 
   test('all opening copy and the connective beat remain available without sound or motion', () => {
     expect(Object.keys(storyScenes)).toEqual(['opening', 'another-bell']);
-    expect(storyScenes.opening.captions).toEqual([
-      'Your first evening alone at the helm.',
-      'The tide will be high tonight.',
-      'Bring everyone to the lighthouse.',
+    expect(storyScenes.opening.shots.map((shot) => shot.caption)).toEqual([
+      'Your first evening at the helm.\nA high tide ahead.',
+      'Pip and Rue have kept a light for you.',
+      'Moss is aboard.\nBring everyone to the lighthouse.',
     ]);
-    expect(storyScenes['another-bell'].captions).toEqual([
-      'Pip, Rue and Moss are safe. Across the water, Bellwater is still waiting.',
+    expect(storyScenes['another-bell'].shots.map((shot) => shot.caption)).toEqual([
+      'Pip, Rue and Moss are safe.\nBellwater is still waiting.',
     ]);
-    expect(storyScenes.opening.duration).toBeGreaterThanOrEqual(6000);
-    expect(storyScenes.opening.duration).toBeLessThanOrEqual(9000);
-    expect(storyScenes['another-bell'].duration).toBeGreaterThanOrEqual(3000);
-    expect(storyScenes['another-bell'].duration).toBeLessThanOrEqual(5000);
+    expect(storyScenes.opening.shots.map((shot) => shot.durationMs)).toEqual([6000, 6000, 7000]);
+    expect(storyScenes['another-bell'].shots.map((shot) => shot.durationMs)).toEqual([5000]);
+    expect(storyScenes.opening.continueLabel).toBe('Take the helm');
+    expect(storyScenes['another-bell'].continueLabel).toBe('Continue to Bellwater');
   });
 });
 

@@ -1,50 +1,83 @@
 # Last Ferry — story scenes for The Long Tide
 
-**Status:** the opening and Holding → Bellwater connection are the current implementation assignment in `NEXT_TASK_STORY_SCENES.md`. Their authored visual beats, verification and human acceptance are recorded separately in `reviews/story-scenes/`. The foundation's working journey/checkpoints are retained. The five later major scenes remain future authored direction, not implemented content or supplied footage.
+**Current implementation:** illustrated story production, task `STORY_PRODUCTION_01` in `LAST_FERRY_STORY_PRODUCTION_PACKAGE/NEXT_TASK_STORY_PRODUCTION.md`, from reviewed `6fc5a09dd4ef876ad96ad12d623532f0d13deb10`. The working journey, checkpoints, practice isolation and puzzles remain. The supplied Words and Light opening reference is user-approved; the production port, new Harbor drawing, runtime mix and physical-device experience have separate verification and human-approval status in `reviews/story-production/`. Implementation and focused verification are complete for the documented coverage; human review remains pending.
 
-The campaign has four phases of three coves. Nell joins in Cove 3; a prepared larger ferry launches afterward. Cove 4 teaches its six spaces before Cove 5 introduces Orin. Cove 11 is the hardest puzzle. Cove 12 is a gentle, short final rescue, followed by supper.
+The campaign has four phases of three coves. Nell joins in Cove 3; a prepared larger ferry launches afterward. Cove 4 teaches its six spaces before Cove 5 introduces Orin. Cove 11 is the hardest puzzle. Cove 12 is a gentle, short final rescue, followed by supper. Those later coves, species, hull and current mechanics are still future work.
 
 ## Shared presentation contract
 
-Use small in-engine dioramas and the established miniature world. The opening targets roughly 6–9 seconds of optional authored motion; the connection targets 3–5 seconds. These are not reading deadlines or minimum waits. Captions remain until the player advances. Continue is available immediately. Skip animation is visible only while finite scene motion is active, then disappears; the settled frame can remain as long as the player wishes.
+The opening and first connection use a close illustrated Canvas2D layer inside the actual application's dialog/fullscreen surface. A small variable-length scene definition supplies artwork, complete caption groups, duration, cue positions and optional narration IDs; the finite controller owns shot position and its cancellable run. The existing application alone acknowledges scenes and writes checkpoints. Gameplay remains the accepted interactive 3D world. The standalone reference wrapper and prototype navigation are not shipped as a replacement game or iframe.
 
-All three opening captions are readable together from the first frame; there is no required Next action for individual lines. **Skip animation** settles the finite visual sequence without acknowledging the scene. Continue alone leaves the readable frame for the intended gameplay boundary, cancelling any remaining finite motion and acknowledging once. Settled, skipped, Reduced Motion and restored opening states retain the same complete text. Cancel pending story motion and callbacks on navigation, restart or scene disposal. Settling finite motion does not change the player's actual Motion preference or suppress permitted ambient water/lighthouse movement.
+The reference's lavender/peach dusk, teal water, cream/tan animals, yellow ferry/red cabin and warm lights are retained. Rue is tan on the left and Pip cream on the right in the opening. Portrait uses an attached deep teal reading area under recomposed artwork; landscape uses the quiet space beside the focal action. Narrative captions use Georgia with a serif fallback and remain readable HTML. Controls use the accepted cove interface language and native semantics.
 
-Story presentation spends no turns and changes no tide, passenger, capacity or delivery state. During a scene, suspend puzzle input and animation-driven action commitments. Decorative scene arrangements must remain separate from canonical puzzle state; never create a scene by moving real delivered passengers back onto a low pier. Load the next authored puzzle only through the campaign transition.
+Normal motion reveals the entire current caption after about 1,050ms with a brief 240ms opacity fade. The finite image and caption then hold until the player acts. Read story exposes all current-scene copy immediately. Reduced Motion presents each shot's endpoint and caption immediately, preserving ordinary Next navigation. There is no typewriter, automatic advance, mandatory sound or timed reading limit.
 
-Respect existing Sound/Motion settings and audio activation intent. Use the established score and audio context; never create an independently unmuted story context. Do not make an essential cue depend on sound. Captions convey the complete story when muted. Reduced motion uses the composed endpoint or static cuts, preserves all copy and controls, and never forces a camera sweep. No pre-rendered video, voice acting or lip-sync is required.
+Next is available immediately and changes only the shot. Only the final Take the helm or Continue to Bellwater action explicitly acknowledges the scene once and enters its destination. Replay restarts the current shot; Replay scene restarts the sequence. Skip animation and Escape from the main scene settle the final shot and expose the complete recap without advancing campaign progress. A pending scene restored from its existing checkpoint starts at that final static endpoint and remains pending until its final action.
 
-At phone sizes, protect the ferry, relevant character silhouette and caption/control safe areas. Let portrait and landscape use different authored framing. Avoid letterbox bars, tiny cinematic subtitles, distant characters and covered buttons. The caption may wrap and grow; the composition must accommodate it. At very short heights, a stable view is preferable to a zoom. Touch, natural keyboard focus and visible Skip/Continue remain usable.
+Read story and Settings settle only the current shot and cancel its pending/active cues. Closing either returns to that held shot and trigger focus; Escape closes the subordinate reading/settings view before it can skip the scene. Hide/recovery and enabling Reduced Motion settle the current shot without Next or acknowledgment. Turning motion back on does not replay consumed work. Navigation, replacement and disposal cancel owned presentation and sound work. One story clock advances the existing controller; held illustrations do not draw repeatedly. The gameplay world is retained across shots.
 
-All Home harbors are protected piers around the same lighthouse island, seen through different coastal vignettes. Delivered characters stay safe. Returning appearances are at the refuge. Cosmetic dusk advances through chapter milestones; neither music nor scene duration changes the local puzzle forecast.
+Story presentation spends no turns and changes no tide, passenger, capacity, delivery or Undo state. The opening is a narrative prelude, not simulated travel. Terminal Undo remains available after a rescue until the player accepts Continue story. Explicit `?cove=` entrances stay independent practice/review flows. The existing strict checkpoint format stores scene/cove boundaries, not shot position or a mid-puzzle action history.
 
-## 1. The first evening
+Use the established Sound owner, accepted score and activation intent. Finite tide wash, lantern contact and ferry-water effects have separate cancellable story ownership; they do not invoke gameplay travel, transfer or victory events. Muted, skipped, hidden, superseded or unavailable cues are consumed rather than caught up later. The Harbor connection does not replay victory or unloading contacts. No new score or continuous ambience layer is added.
 
-**Trigger:** starting the story, before Holding Pier. **First-task scope.**
+Optional narration IDs and the exact four-clip script are prepared in `LAST_FERRY_STORY_PRODUCTION_PACKAGE/audio/narration-script.json`. Every asset is null and every recording remains pending. There is no generated voice, live TTS, unavailable narration toggle or voice-service dependency. Finished local voice recordings and human listening approval belong to a later contained pass.
 
-**Composition:** begin with the recognizable yellow hull, red cabin and Moss aboard at the real Stone Pier start. Give Moss a small presentation-only body/head acknowledgment. Deliberately reveal the warm lighthouse and the luminous water connecting it to the ferry, then settle into a composition that hands cleanly to the existing Holding play view. Use bounded camera travel in suitable views and a composed cut on short landscape. Keep the captain unseen and the starting passenger arrangement intact; no invented boarding or departure occurs.
+All Home harbors are protected piers around the same lighthouse island, seen through different coastal vignettes. Delivered characters stay safe. Cosmetic story time never changes the local puzzle forecast. Adding a third campaign cove later requires a deliberate save-compatibility migration: the current completed-record validator checks the full ordered two-cove registry. This pass does not change that schema speculatively.
 
-**Caption sequence, exact:**
+This task explicitly supersedes the older story-only requirements for distant gameplay-model gestures, one shared scene duration, and every opening caption visible on the first frame. It preserves the working campaign mechanics and all unrelated accepted results. The prior authored-scenes and foundation reports remain historical evidence.
 
-1. “Your first evening alone at the helm.”
-2. “The tide will be high tonight.”
-3. “Bring everyone to the lighthouse.”
+## 1. The first evening — `opening`
 
-All lines remain readable while the visual beats run and on every settled/restored/Reduced Motion frame. Continue is available from the first frame and reveals the untouched initial puzzle. The opening should feel like an invitation to care for this place. No ticking clock, flashing threat or approaching storm wall is needed.
+**Trigger:** Begin journey enters the first picture directly, before Holding Pier. **Implemented scope, pending production review.**
 
-**Assets:** existing ferry, water, coastline, lighthouse, painted reading material, controls and music. Add the smallest reusable story-presentation family needed; register actual new assets when implemented. No new character, boat or environment asset is required for this scene.
+### Shot 1 — Tide · six seconds
 
-## Connective beat — Holding to Bellwater
+The water reaches the lower steps and covers part of the marked post. Pip and Rue remain safely on the upper landing. Preserve the supplied wide composition and its portrait recomposition. One finite tide wash supports the visible water movement; it is not a gameplay tide event.
 
-**Trigger:** the player chooses Continue from Holding's completed rescue. **First-task scope.** This is a short connective beat, not a seventh major cinematic.
+**Caption, exact:**
 
-**Composition:** compose the safe Harbor around Pip, Rue and Moss already ashore. Give Pip one restrained turn/hop acknowledgment toward the ferry, then settle; a subtle widening or composed cut toward the water suggests the next crossing. Reuse the existing warm lamp, calm water and models. A restored pending connection starts on the readable settled composition without replaying the finite acknowledgment.
+> Your first evening at the helm.<br>
+> A high tide ahead.
 
-**Caption, exact:** “Pip, Rue and Moss are safe. Across the water, Bellwater is still waiting.”
+The waterline reaches a composed endpoint and holds. Next never waits for that endpoint.
 
-Continue is available immediately and enters Bellwater through the existing explicit campaign transaction. Skip animation only settles the readable frame. The beat must not re-board the rescued trio, advance either puzzle's tide or imply they are Bellwater's passengers. Tansy, Lark and Bram remain Bellwater's own residents.
+### Shot 2 — Lantern · six seconds
 
-**Assets:** the completed Holding scene and shared story presentation. Use existing music behavior; do not replay victory audio solely because this beat opens.
+Rue, tan on the left, deliberately raises the lantern beside cream Pip. Warm light catches both faces. The supplied close artwork and gesture remain the source of the production port. A restrained handle contact supports the lift, separate from passenger boarding audio. The raised lantern and attentive pair hold without perpetual bouncing.
+
+**Caption, exact:**
+
+> Pip and Rue have kept a light for you.
+
+### Shot 3 — Ferry · seven seconds
+
+The yellow ferry with its red cabin approaches through open water with Moss aboard. The lighthouse is a clear warm destination. A finite hull/water effect supports the approach without a persistent gameplay travel flag or arrival phrase. The ferry, Moss and lighthouse hold together at the endpoint.
+
+**Caption, exact:**
+
+> Moss is aboard.<br>
+> Bring everyone to the lighthouse.
+
+**Take the helm** is available immediately on this shot. Its explicit application-owned continuation acknowledges `opening` once and starts unchanged Holding: ferry at Stone, Moss aboard, Pip and Rue at Rabbit Pier, tide 0, turn 0, four-space capacity with Moss occupying two, and empty Undo history. The illustration does not invent a rabbit transfer, route or continuous camera move into different gameplay geography.
+
+**Assets:** the supplied original code-native painter, adapted into the typed shared story renderer; existing controls and Sound owner. The approved fragment hash is `ff437f9e70675c8b532f2f774e9b9c766eb30e2cf9da73072d5b7e872fd22ce1`. Reference approval does not automatically approve the production port or mix.
+
+## Connective beat — Holding to Bellwater — `another-bell`
+
+**Trigger:** the player explicitly accepts Holding's completed rescue with Continue story. **Implemented scope, new artwork awaiting human review.**
+
+### Shot — Harbor · five seconds
+
+Pip, Rue and Moss are safe on the protected high landing. Rue lowers her lantern onto the landing, completing its contact at about 3.2 seconds, then releases it. Pip turns toward the empty waiting ferry and open water; Moss settles nearby. The warm lighthouse welcome and a small distant cottage light suggest the next community. The image rests as a quiet gathering; nobody boards again.
+
+**Caption, exact:**
+
+> Pip, Rue and Moss are safe.<br>
+> Bellwater is still waiting.
+
+One quieter lantern contact supports placement. Opening the scene does not replay victory or the preceding rescue's unloading sounds. **Continue to Bellwater** is available immediately and alone acknowledges `another-bell` once before entering the unchanged Bellwater start. Pip, Rue and Moss stay rescued; Tansy, Lark and Bram remain Bellwater's own neighbors. Restoring the pending connection shows its final static composition and complete text, without replaying its finite effects.
+
+**Assets:** the same illustrated characters/coast/props and scene player as the opening, with a newly authored Harbor composition and the existing persistent audio owner. The drawing is not footage of a new playable cove.
 
 ## 2. A wider deck
 
