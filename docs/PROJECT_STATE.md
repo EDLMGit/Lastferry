@@ -30,6 +30,7 @@ Local Codex implements the current task. ChatGPT reviews the identifiable handof
 | Passenger portrait implementation | `3324400e662c397010b1a920e44244d83f180506`, reviewed packaging `1a85874883af5caa59f6294a75495eccf2afebbc` — reviewed and published as version 12. |
 | Story foundation implementation | `ca59e78fb877024296c1484eb6b5fee8b8e66717`, reviewed handoff `8cc43c794274fe64d5fb634961fbf79aaff251f8` — working journey/checkpoints retained; scene presentation requires the correction below; not published |
 | Authored-scenes implementation | `1aa73c59c37082f43990235a9efffd6f793cf642`, reviewed handoff `6fc5a09dd4ef876ad96ad12d623532f0d13deb10` — working journey retained; illustrated presentation supersedes its distant-model scenes; not published |
+| Illustrated story production | `bdd7e86f1e2953144b11108eb828ab85c88eb542` — implemented and focused checks complete; following handoff commit records packaging/continuity only; not published |
 | Reviewed implementation baseline | `6fc5a09dd4ef876ad96ad12d623532f0d13deb10` — current source comparison, distinct from the published game |
 | Published private phone game | `1a85874883af5caa59f6294a75495eccf2afebbc` — Sites version 12, publication confirmed 2026-10-25 17:28 Madrid |
 | Stable phone URL | https://last-ferry-playtest.abumech.chatgpt.site |
@@ -47,6 +48,8 @@ The preceding version 9 publication remains historical evidence: hosting source 
 After the next implementation, record the new GitHub SHA separately from the live Site's game SHA. Do not update the live field until deployment is confirmed.
 
 ## Current task: Illustrated story production
+
+Implementation commit: `bdd7e86f1e2953144b11108eb828ab85c88eb542`. Packaging audit matches 217 source entries and 80 selected media files to committed content (283 exact, 14 text newline normalizations); all 66 tested runtime/data/dependency entries are byte-exact. Final branch SHA/remote equality are recorded in PR #1 and the handoff. Captured working-tree identities and scoped later corrections remain distinct in the evidence reuse audit.
 
 Task `STORY_PRODUCTION_01` is the exact supplied `LAST_FERRY_STORY_PRODUCTION_PACKAGE/NEXT_TASK_STORY_PRODUCTION.md`, alongside `reference/approved-opening.html`. Work started on `m1-first-crossing` at reviewed `6fc5a09dd4ef876ad96ad12d623532f0d13deb10`, with only the supplied package untracked and no tracked local edits. Package files and publication receipt are preserved; `reviews/story-production/supplied-inputs.json` records their identities. Local root journey entrance: http://127.0.0.1:5270/ without `?cove=`.
 
