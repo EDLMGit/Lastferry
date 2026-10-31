@@ -1,3 +1,7 @@
+# Phone publication — version 13
+
+2026-11-01 Madrid: at the user's explicit request, published game `7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695` to the existing owner-private Site. Hosting source `c24aa6528675bc278de848e111ee73f9e22810ac`; native deployment succeeded at 2026-10-31T23:02:36.877836Z. Fresh build/typecheck passed and all seven production files match the tested local build. Existing388-unit and browser5+2+4+1 results are reused, with their original failures and limitations retained. Receipt/source/build audits: `reviews/wide-berth-visual-repair/deployment-confirmation.json` and neighboring site audit files. Prior publication receipts remain unchanged; GitHub continuity commits are separate from the deployed game.
+
 # Current task — Wide Berth visual repair
 
 Implementation committed as `9aab76f180b6bf5bd859414001ea4fd5b3a87639`. Packaging verifies all73 tested runtime files (65 byte-exact,8 newline-only),101 exact selected media files and12 unchanged supplied package inputs. The following metadata-only commit records this audit; the exact final pushed SHA and remote equality are in PR1 and the handoff. No runtime changes follow verification.

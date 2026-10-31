@@ -1,18 +1,18 @@
 # Last Ferry — Project state
 
-Updated: 2026-10-31. This is the compact continuity record for the current project, not a claim that every device or future release requirement has been verified.
+Updated: 2026-11-01. This is the compact continuity record for the current project, not a claim that every device or future release requirement has been verified.
 
 Read this before choosing scope. Detailed implementation history belongs in `STATUS.md`; evidence belongs under `reviews/`. Update this record after each handoff and after a confirmed deployment. User feedback can revise an accepted decision.
 
 ## Current scoped pass — Wide Berth visual repair
 
-Implementation: `9aab76f180b6bf5bd859414001ea4fd5b3a87639`. The review packaging audit matches73 tested runtime files (65 exact,8 newline-only),101 selected media and12 supplied package inputs to that commit. A following metadata-only handoff commit records the audit; PR1 and the handoff report its exact final SHA. Neither commit deploys the private Site.
+Implementation: `9aab76f180b6bf5bd859414001ea4fd5b3a87639`. The review packaging audit matches73 tested runtime files (65 exact,8 newline-only),101 selected media and12 supplied package inputs to that commit. A following metadata-only handoff commit records the audit; PR1 and the handoff report its exact final SHA. Neither implementation handoff commit deployed the private Site. The later user-requested publication of the final game is recorded below.
 
 WIDE_BERTH_VISUAL_REPAIR_01 corrects the presentation rejected by the user at reviewed `45ab9768792ddd3a8dffb67da6c332f8fe2234ff`. Functional verification did not establish visual acceptance. Campaign expansion is paused. The exact supplied task resolved in the package one directory above the Git root and is retained beside package.json.
 
 The completed correction reauthors the six-space ferry/cabin/deck, supported staggered shore groups, fitted compact landings/gangways, four distinct coastlines and grounded launch. Native inspection drove a Wide-only local phone frame that fits boat and shore neighbors; dock controls avoid landmarks and current markers avoid both faces and other endpoints. Original regressions/corrections remain in reviews/wide-berth-visual-repair. The supplied non-spatial lock, original four-space coves, all79 IDs, accepted audio/water/sailing and strict save boundaries remain. The generated board is direction only.
 
-Final build/TypeScript,388/388units,79-family validation and browser batches5+2+4+1pass. Actual13-/14-action rescues, five bodies/six spaces, six ashore, both tide boundaries, complete Undo, old coves, historical saves, keyboard/touch, fullscreen/rotation and built-game choice fit are covered. Native matched frames and uninterrupted93.961s/63.835s runtime-audio sequences are source-indexed in the review. User visual/listening acceptance and physical-device behavior remain pending; long Overview label leaders/small silhouettes and inherited limits remain explicit. No deployment: existing private Site version12 and its receipt/history are unchanged. The exact implementation/final handoff SHA is recorded in the review packaging audit and PR1.
+Final build/TypeScript,388/388units,79-family validation and browser batches5+2+4+1pass. Actual13-/14-action rescues, five bodies/six spaces, six ashore, both tide boundaries, complete Undo, old coves, historical saves, keyboard/touch, fullscreen/rotation and built-game choice fit are covered. Native matched frames and uninterrupted93.961s/63.835s runtime-audio sequences are source-indexed in the review. User visual/listening acceptance and physical-device behavior remain pending; long Overview label leaders/small silhouettes and inherited limits remain explicit. At implementation handoff, Site version12 was unchanged. The user subsequently requested publication; version13 now contains this pass, without implying human visual acceptance. The exact implementation/final handoff SHA is recorded in the review packaging audit and PR1.
 
 ## Previous scoped pass — Wide Berth implementation (presentation rejected)
 
@@ -68,19 +68,22 @@ Local Codex implements the current task. ChatGPT reviews the identifiable handof
 | Cove interface implementation | `f468a3272ed0a6d0a485860aea11320950425218`, reviewed packaging `a4325353cf11cd4edba8d5384b58fe138e4772e3` — the user likes the button/icon direction; subsequent panel correction is published below. |
 | Panel refinement implementation | `28f6d30a5199c3450cc5ff826bf8b5f9bd476182`, reviewed packaging `23a644aba24e6479b9d82a106a745d15c3f8c7dc` — published as version 11; the user likes the painted panels. |
 | Passenger portrait implementation | `3324400e662c397010b1a920e44244d83f180506`, reviewed packaging `1a85874883af5caa59f6294a75495eccf2afebbc` — reviewed and published as version 12. |
-| Story foundation implementation | `ca59e78fb877024296c1484eb6b5fee8b8e66717`, reviewed handoff `8cc43c794274fe64d5fb634961fbf79aaff251f8` — working journey/checkpoints retained; scene presentation requires the correction below; not published |
-| Authored-scenes implementation | `1aa73c59c37082f43990235a9efffd6f793cf642`, reviewed handoff `6fc5a09dd4ef876ad96ad12d623532f0d13deb10` — working journey retained; illustrated presentation supersedes its distant-model scenes; not published |
-| Illustrated story production | `bdd7e86f1e2953144b11108eb828ab85c88eb542` — implemented and focused checks complete; following handoff commit records packaging/continuity only; not published |
-| Home/play implementation | `682ee816537d9a9955f49ed35a3cfdcb3d67f752` — complete combined HOME_PLAY_FLOW_01; review and exact source/media audit in reviews/home-play-flow, not deployed |
-| Driftwood implementation | `16742dbc6007c322db4abc5ebe67f1d1a7acd37b`, reviewed handoff `7e324e88827857469bf348fca311548344d03da6` — gameplay accepted; not deployed |
-| Wide Berth implementation | `d298db84c0e979680bf7b5a20522265d105d1fc1` — six-space physical ferry, launch and fourth cove; functional foundation retained, presentation rejected and under correction; not deployed |
+| Story foundation implementation | `ca59e78fb877024296c1484eb6b5fee8b8e66717`, reviewed handoff `8cc43c794274fe64d5fb634961fbf79aaff251f8` — working journey/checkpoints retained; scene presentation requires the correction below; included in version13 |
+| Authored-scenes implementation | `1aa73c59c37082f43990235a9efffd6f793cf642`, reviewed handoff `6fc5a09dd4ef876ad96ad12d623532f0d13deb10` — working journey retained; illustrated presentation supersedes its distant-model scenes; included in version13 |
+| Illustrated story production | `bdd7e86f1e2953144b11108eb828ab85c88eb542` — implemented and focused checks complete; following handoff commit records packaging/continuity only; included in version13 |
+| Home/play implementation | `682ee816537d9a9955f49ed35a3cfdcb3d67f752` — complete combined HOME_PLAY_FLOW_01; review and exact source/media audit in reviews/home-play-flow; included in version13 |
+| Driftwood implementation | `16742dbc6007c322db4abc5ebe67f1d1a7acd37b`, reviewed handoff `7e324e88827857469bf348fca311548344d03da6` — gameplay accepted; included in version13 |
+| Wide Berth implementation | `d298db84c0e979680bf7b5a20522265d105d1fc1` — six-space physical ferry, launch and fourth cove; functional foundation retained, presentation rejected and corrected by the visual repair; included in version13 |
+| Wide Berth visual repair | Implementation `9aab76f180b6bf5bd859414001ea4fd5b3a87639`; published handoff game `7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695` |
 | Reviewed implementation baseline | `45ab9768792ddd3a8dffb67da6c332f8fe2234ff` — visual-repair comparison |
-| Published private phone game | `1a85874883af5caa59f6294a75495eccf2afebbc` — Sites version 12, publication confirmed 2026-10-25 17:28 Madrid |
+| Published private phone game | `7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695` — Sites version 13, confirmed 2026-10-31 23:02 UTC / 2026-11-01 00:02 Madrid |
 | Stable phone URL | https://last-ferry-playtest.abumech.chatgpt.site |
-| Published hosting source | `e87c5c5baa53a39001c5a89b07b59aab2ad150fc` |
+| Published hosting source | `c24aa6528675bc278de848e111ee73f9e22810ac` |
 | Main | Unchanged by this workflow; no merge authorized |
 
-The supplied receipt confirms successful publication at `2026-10-25T16:28:58.501209Z` (17:28 Madrid) of game `1a85874883af5caa59f6294a75495eccf2afebbc` to the same owner-private Site as version 12, hosting source `e87c5c5baa53a39001c5a89b07b59aab2ad150fc`. It is retained at `review/deployment-confirmation.json` and reports all six production assets byte-identical to the independently reviewed portrait handoff. Audience is unchanged. This is supplied publication evidence, not a fresh deployment or physical-device audit by this pass. The story foundation, authored-scene correction and current illustrated production pass are not deployed.
+At the user's explicit request, native Sites publication succeeded at `2026-10-31T23:02:36.877836Z` for game `7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695`, version13, hosting `c24aa6528675bc278de848e111ee73f9e22810ac`. The same owner-private Site and URL are preserved. Receipt: `reviews/wide-berth-visual-repair/deployment-confirmation.json`. A fresh Node24 build/typecheck passed and all seven production files match the tested local build byte-for-byte. Existing game/unit/browser evidence is reused; this deployment does not claim physical-phone or human visual/listening acceptance. Historical no-deployment statements describe the original handoff dates.
+
+Version12 remains historical: game `1a85874883af5caa59f6294a75495eccf2afebbc`, hosting `e87c5c5baa53a39001c5a89b07b59aab2ad150fc`, published `2026-10-25T16:28:58.501209Z`. Its supplied receipt remains unchanged at `review/deployment-confirmation.json`, with the original six-file identity audit.
 
 Version 11 remains historical: game `23a644aba24e6479b9d82a106a745d15c3f8c7dc`, hosting source `d1fc7158d7b00717af18b7bc61ee4a33fe85bf2f`, confirmed 2026-10-25. Its receipt remains `cove-portrait-package/verification/deployment-confirmation.json`; its audits reported byte-identical reviewed/hosting production files. The user liked the painted panels. The later portrait pass is included in version 12.
 

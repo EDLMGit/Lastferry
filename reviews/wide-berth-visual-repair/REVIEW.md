@@ -92,3 +92,8 @@ Physical Android/other engines/fonts/screen readers, native-GPU performance and 
 Local Journey: http://127.0.0.1:5270/ . Independent Wide Berth: http://127.0.0.1:5270/?cove=wide-berth . Install/run: `npm ci`, then `npm run dev -- --port 5270 --strictPort`.
 
 PR#1 stays draft, main unchanged, no force push and **no deployment**. Last confirmed private Site remains version12, game `1a85874883af5caa59f6294a75495eccf2afebbc`, hosting `e87c5c5baa53a39001c5a89b07b59aab2ad150fc`. Publication receipt/history retained; this repair awaits review.
+
+
+## Subsequent phone publication
+
+The user explicitly requested publication after this implementation handoff. Native Sites deployment succeeded as version13 at 2026-10-31T23:02:36.877836Z: game `7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695`, hosting source `c24aa6528675bc278de848e111ee73f9e22810ac`. All seven production files match the tested local build; a fresh Node24 build/typecheck passed. [Receipt](deployment-confirmation.json), [source audit](site-source-audit.json), [build audit](site-build-audit.json). The existing private URL and audience are unchanged. Earlier no-deploy statements describe the handoff; no prior failure, timing limit or human acceptance claim is changed.
