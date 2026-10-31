@@ -12,6 +12,8 @@ Driftwood gameplay is accepted by the user. Its acceptance does not close earlie
 
 The implemented journey is Holding → Bellwater → Driftwood → Wide Berth, with explicit scene/rescue acceptance and cove-boundary checkpoints. Newcomers are Alder/Clover (sheep) and Poppy/Wren/Sorrel/Finch (rabbits). No Orin, currents, fleet system or real-time deadline. After four rescues, available content ends honestly. Orchard Landing/Orin, mixed-load synthesis and later currents remain future work.
 
+Implementation: `d298db84c0e979680bf7b5a20522265d105d1fc1`. `reviews/wide-berth/packaging-audit.json` matches154tested source entries,73runtime entries,36selected media and16original package inputs to Git blobs; only recorded CRLF/LF normalization is allowed. Following handoff metadata does not change the game. The final pushed SHA/remote equality are in PR#1 and the handoff, separately from the unchanged private Site.
+
 **Implementation and focused verification complete.** Node24 production build/TypeScript, 381/381 units in41files and79-family validation pass, retaining all78 prior IDs. Both actual UI strategies, five-body/six-neighbor staging, exact old-save continuation, tide/terminal Undo and final production rescue/5size chooser fit pass across the recorded batches. Native launch beats and two uninterrupted runtime-audio sequences are retained. The current marker partially obscures a sheep face at rest; prior image-loading, overlap, precise timing, device and acoustic limits remain open. Full details, original failures and exact source/evidence comparisons are in `reviews/wide-berth/REVIEW.md`. Implementation/packaging commits and final pushed identity are recorded separately at handoff. No publication is authorized: the last confirmed private Site remains version 12/game `1a85874883af5caa59f6294a75495eccf2afebbc`, hosting `e87c5c5baa53a39001c5a89b07b59aab2ad150fc`. Earlier receipts/history below remain intact.
 
 ## Previous scoped pass: Driftwood Yard
@@ -61,6 +63,7 @@ Local Codex implements the current task. ChatGPT reviews the identifiable handof
 | Illustrated story production | `bdd7e86f1e2953144b11108eb828ab85c88eb542` — implemented and focused checks complete; following handoff commit records packaging/continuity only; not published |
 | Home/play implementation | `682ee816537d9a9955f49ed35a3cfdcb3d67f752` — complete combined HOME_PLAY_FLOW_01; review and exact source/media audit in reviews/home-play-flow, not deployed |
 | Driftwood implementation | `16742dbc6007c322db4abc5ebe67f1d1a7acd37b`, reviewed handoff `7e324e88827857469bf348fca311548344d03da6` — gameplay accepted; not deployed |
+| Wide Berth implementation | `d298db84c0e979680bf7b5a20522265d105d1fc1` — six-space physical ferry, launch and fourth cove; focused checks complete, awaiting review; not deployed |
 | Reviewed implementation baseline | `7e324e88827857469bf348fca311548344d03da6` — Wide Berth comparison |
 | Published private phone game | `1a85874883af5caa59f6294a75495eccf2afebbc` — Sites version 12, publication confirmed 2026-10-25 17:28 Madrid |
 | Stable phone URL | https://last-ferry-playtest.abumech.chatgpt.site |

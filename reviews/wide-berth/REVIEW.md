@@ -8,6 +8,7 @@
 
 - Repository: https://github.com/EDLMGit/Lastferry; draft PR https://github.com/EDLMGit/Lastferry/pull/1; branch `m1-first-crossing`.
 - Comparison/reviewed baseline: `7e324e88827857469bf348fca311548344d03da6`. Initial checkout and fetched remote matched, with no tracked/unrelated local edits. No reset.
+- Implementation commit: `d298db84c0e979680bf7b5a20522265d105d1fc1`. Packaging audit matches154tested source entries (146exact/8newline-only), all73captured runtime entries (69exact/4newline-only),36selected media files and16supplied inputs byte-exact. All299 implementation-changed files match their committed blobs (220exact/79newline-only). The following commit adds only packaging/continuity metadata; its final SHA and remote equality are reported in PR#1 and the handoff.
 - Actual Git root: `C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry`.
 - Exact supplied task initially resolved at `C:\Users\ernes\Documents\last-ferry-codex-starter\LAST_FERRY_WIDE_BERTH_PACKAGE\NEXT_TASK_WIDE_BERTH.md`; the full package is retained unchanged beside package.json. This does not substitute an older NEXT_TASK.
 - Captures/checks belong to that baseline plus the recorded uncommitted implementation. Per-run `source-before.json`/`source-after.json`, `source-audit.json`, supplied-input hashes and the retained implementation diff identify that state. Commit/packaging identity is recorded separately in `packaging-audit.json`; captures are not relabeled as having been taken after a commit.

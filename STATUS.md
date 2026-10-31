@@ -430,6 +430,8 @@ Implementation commit: `16742dbc6007c322db4abc5ebe67f1d1a7acd37b`. Committed-blo
 
 ## WIDE_BERTH_01 — launch, six-space ferry and fourth cove
 
+Implementation commit `d298db84c0e979680bf7b5a20522265d105d1fc1`. Packaging matches154tested source entries (146byte-exact/8newline-only),73captured runtime entries (69exact/4newline-only),36exact selected media files and16exact supplied package files. All299 changed implementation files match committed blobs. The next commit records audit/continuity metadata only; final pushed identity is reported separately in PR#1 and the handoff. No game code changed after verification.
+
 2026-10-31: exact supplied package read and retained beside package.json. Started clean at reviewed `7e324e88827857469bf348fca311548344d03da6`; fetched remote matches. Driftwood gameplay is user accepted. This pass deliberately strengthens C4 with both full deep delivery and useful staging/light shortcut, while retaining all earlier four-space levels. No deployment.
 
 Implementation and focused verification complete. The active-level six-space physical boat, stable automatic seats, gangway/transfer paths and hull-matched released wake serve the authored Wide Berth; the original four profiles/data remain. A wider deck uses the shared illustrated player and explicit handoff. Exact two-/three-cove completions stay read-only until deliberate continuation, with correct predecessor world, fresh first scene and later recap. Shared capacity/Help copy is data-derived; optional High Quay route/deadline inspection remains free and dock buttons compact.
