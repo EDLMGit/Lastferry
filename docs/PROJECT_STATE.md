@@ -12,7 +12,7 @@ Reviewed game baseline: `da1f2686ce6aff8d754e13111447dabb6e1313f0`. Local checko
 
 Holding → Bellwater → Driftwood is the implemented journey, with First Crossing practice. Driftwood uses the original four-space ferry, Nell (two-space beaver), Fern (cream rabbit), Oat (tan rabbit), raised High Mooring and two low landings. The scene `driftwood-light` introduces Nell lifting a lantern; only Continue to Driftwood acknowledges it. Exact historical two-cove completions stay read-only until deliberate Continue, then first play the new scene fresh; later pending reloads retain recap. Three-cove completion is an available-content boundary. Six-space ferry, A wider deck, Wide Berth, deer and currents remain future work.
 
-Verification and source-tied evidence are recorded in `reviews/driftwood-yard/REVIEW.md`. Existing music/portrait/capture/device and timing limits remain explicit. This pass is not deployed: owner-private Site version 12/game `1a85874883af5caa59f6294a75495eccf2afebbc`, hosting `e87c5c5baa53a39001c5a89b07b59aab2ad150fc`; receipt/history below remain unchanged.
+Implementation: `16742dbc6007c322db4abc5ebe67f1d1a7acd37b`. Verification and source-tied evidence are recorded in `reviews/driftwood-yard/REVIEW.md`. Existing music/portrait/capture/device and timing limits remain explicit. This pass is not deployed: owner-private Site version 12/game `1a85874883af5caa59f6294a75495eccf2afebbc`, hosting `e87c5c5baa53a39001c5a89b07b59aab2ad150fc`; receipt/history below remain unchanged.
 
 ## Previous scoped pass: Home and direct transfers
 
