@@ -6,6 +6,8 @@ Read this before choosing scope. Detailed implementation history belongs in `STA
 
 ## Current scoped pass — Wide Berth visual repair
 
+Implementation: `9aab76f180b6bf5bd859414001ea4fd5b3a87639`. The review packaging audit matches73 tested runtime files (65 exact,8 newline-only),101 selected media and12 supplied package inputs to that commit. A following metadata-only handoff commit records the audit; PR1 and the handoff report its exact final SHA. Neither commit deploys the private Site.
+
 WIDE_BERTH_VISUAL_REPAIR_01 corrects the presentation rejected by the user at reviewed `45ab9768792ddd3a8dffb67da6c332f8fe2234ff`. Functional verification did not establish visual acceptance. Campaign expansion is paused. The exact supplied task resolved in the package one directory above the Git root and is retained beside package.json.
 
 The completed correction reauthors the six-space ferry/cabin/deck, supported staggered shore groups, fitted compact landings/gangways, four distinct coastlines and grounded launch. Native inspection drove a Wide-only local phone frame that fits boat and shore neighbors; dock controls avoid landmarks and current markers avoid both faces and other endpoints. Original regressions/corrections remain in reviews/wide-berth-visual-repair. The supplied non-spatial lock, original four-space coves, all79 IDs, accepted audio/water/sailing and strict save boundaries remain. The generated board is direction only.

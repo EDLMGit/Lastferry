@@ -1,5 +1,7 @@
 # Current task — Wide Berth visual repair
 
+Implementation committed as `9aab76f180b6bf5bd859414001ea4fd5b3a87639`. Packaging verifies all73 tested runtime files (65 byte-exact,8 newline-only),101 exact selected media files and12 unchanged supplied package inputs. The following metadata-only commit records this audit; the exact final pushed SHA and remote equality are in PR1 and the handoff. No runtime changes follow verification.
+
 Started on clean m1-first-crossing at reviewed45ab9768792ddd3a8dffb67da6c332f8fe2234ff. Exact package resolved at parent LAST_FERRY_WIDE_BERTH_VISUAL_REPAIR_PACKAGE and copied unchanged beside package.json. Read required guidance and visually inspected the supplied original direction board. Earlier functional passes are retained; the user rejected the resulting presentation. Campaign expansion is paused for this correction.
 
 Completed: compact substantial-cabin ferry, full-size stable deck/shore groups, fitted T piers and short supported gangways, four distinct compact shores, current marker clear of animals and other targets, and grounded eight-second launch. Native inspection corrected a six-ashore short-landscape crop and a dock control covering the lighthouse. An actual original-cove rescue then exposed a Reeds current cue intercepting Shallow Bend; its exact failure and correction remain. Wide-only local framing protects the actual bodies without changing their scale, rules or sailing plan.

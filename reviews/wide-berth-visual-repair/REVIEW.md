@@ -2,6 +2,8 @@
 
 ## Disposition and source
 
+Implementation commit: **`9aab76f180b6bf5bd859414001ea4fd5b3a87639`**. [Packaging audit](packaging-audit.json): all73 tested runtime files match committed content (65 exact,8 newline-only),101 selected media are byte-exact, and12 supplied package inputs are unchanged. The following handoff commit changes audit/continuity metadata only. Its full final pushed SHA is recorded in PR1 and the handoff; no runtime changes follow verification.
+
 Implementation and focused verification are complete. This is WIDE_BERTH_VISUAL_REPAIR_01, correcting the user-rejected presentation at `45ab9768792ddd3a8dffb67da6c332f8fe2234ff`. The existing puzzle/campaign foundation remains. Prior functional passes did not establish visual acceptance. Human acceptance awaits the user's playtest.
 
 Started clean on `m1-first-crossing` in `C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry`. The exact supplied task originally resolved at `C:\Users\ernes\Documents\last-ferry-codex-starter\LAST_FERRY_WIDE_BERTH_VISUAL_REPAIR_PACKAGE\NEXT_TASK_WIDE_BERTH_VISUAL_REPAIR.md`; the unchanged package is retained beside package.json. The direction PNG was opened and inspected as concept art. It is neither a shipped background nor runtime evidence.
