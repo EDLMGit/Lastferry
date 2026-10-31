@@ -44,12 +44,13 @@ import { waterPresets, type WaterTuning } from './scene/water';
 import { placeActionCard, placeLocalCard, overlaps, type Rectangle } from './ui/placement';
 import { locationFacts } from './ui/location';
 import { endpointTargets } from './ui/cove-layout';
+import { placeDriftwoodLabels } from './ui/driftwood-labels';
 import { MotionPreference, type MotionMode } from './ui/motion-preference';
 import { PanGesture } from './ui/pan-gesture';
 import { visibleViewport, insetRectangle } from './ui/viewport';
 import { FullscreenSupport } from './ui/fullscreen';
 import { storyCoves, practiceCoves, storyScenes, type SceneId } from './campaign/registry';
-import { JourneyProgress } from './campaign/progress';
+import { JourneyProgress, isLegacyCompletion } from './campaign/progress';
 import { StoryPresentation, restoredHarbor } from './campaign/presentation';
 import { StoryView } from './campaign/story-view';
 import './campaign/story.css';
@@ -61,7 +62,7 @@ import { transferFacts, transferReceipt } from './ui/transfer';
 const cove = new URLSearchParams(location.search).get('cove');
 const journey = cove === null ? new JourneyProgress() : null;
 let campaignPlay = false;
-let level = cove === 'first-crossing' ? baseline : cove === 'bellwater' ? bellwater : holdingPier;
+let level = practiceCoves.find((entry) => entry.id === cove) ?? holdingPier;
 let experiment = level.id === 'holding-pier';
 let isBellwater = level.id === 'bellwater';
 let { nodeNames, passengerNames } = levelNames(level);
@@ -263,7 +264,8 @@ function showHome(focusId?: string) {
 
   const checkpoint = snapshot?.record?.checkpoint;
 
-  const complete = checkpoint?.kind === 'complete';
+  const legacy = !!snapshot?.record && isLegacyCompletion(snapshot.record);
+  const complete = checkpoint?.kind === 'complete' && !legacy;
 
   const invalid = snapshot?.kind === 'invalid';
 
@@ -275,13 +277,14 @@ function showHome(focusId?: string) {
         ? 'New journey'
         : 'Play';
 
-  const notice =
-    checkpoint?.kind === 'cove'
+  const notice = legacy
+    ? 'A light at Driftwood Yard is waiting.'
+    : checkpoint?.kind === 'cove'
       ? `${storyCoves.find((entry) => entry.id === checkpoint.id)!.level.title} · from cove start.`
       : checkpoint?.kind === 'scene'
         ? `${storyScenes[checkpoint.id].title} · saved story.`
         : complete
-          ? 'Both available coves are safe.'
+          ? 'Three coves are safe.'
           : '';
 
   homeSurface.innerHTML = `<header id="home-title"><h1>Last Ferry</h1><p>The Long Tide</p></header><nav id="home-menu" aria-label="Home"><p class="home-notice">${notice}${snapshot && !snapshot.persistent ? ' Progress lasts only for this visit.' : ''}${invalid ? ` ${snapshot.issue}` : ''}</p><button id="home-play">${label}</button><div class="home-secondary"><button id="home-options">Options</button><button id="home-practice">Practice</button></div><div class="home-secondary"><button id="home-sound"></button>${checkpoint ? '<button id="home-new">New journey</button>' : ''}</div></nav>`;
@@ -300,7 +303,9 @@ function showHome(focusId?: string) {
   $('home-play').onclick = (event) => {
     if (event.detail > 1) return;
 
-    if (complete) showJourney('practice', 'practice-first-crossing');
+    if (legacy) {
+      if (journey?.continueAvailableContent()) resumeJourney(false);
+    } else if (complete) showJourney('practice', 'practice-first-crossing');
     else if (checkpoint) resumeJourney();
     else fresh();
   };
@@ -378,9 +383,10 @@ function resumeJourney(restored = true) {
   }
   if (checkpoint.kind === 'scene') {
     storyId = checkpoint.id;
-    if (storyId === 'opening' || restored) {
-      mountCove(holdingPier);
-      if (storyId === 'another-bell') world.sync(restoredHarbor(holdingPier));
+    const previous = storyId === 'driftwood-light' ? bellwater : holdingPier;
+    if (storyId === 'opening' || restored || level.id !== previous.id) {
+      mountCove(previous);
+      if (storyId !== 'opening') world.sync(restoredHarbor(previous));
     }
     storyPresentation.start(
       storyId,
@@ -566,8 +572,8 @@ function renderJourneyDialog() {
       checkpoint?.kind === 'cove'
         ? storyCoves.find((entry) => entry.id === checkpoint.id)!.level.title
         : null;
-    body = `<p class="journey-subtitle">The Long Tide · two playable coves</p><p>${checkpointNotice}</p>${destination ? `<p>Continue at ${destination}, from its beginning.</p>` : ''}${snapshot?.kind === 'invalid' ? `<p role="alert">${snapshot.issue} Start a new journey to replace it, or play Practice without changing it.</p>` : ''}${notice}`;
-    actions = `${snapshot?.record ? `<button id="journey-continue">Continue journey${checkpoint?.kind === 'cove' ? ' · from cove start' : ''}</button>` : ''}<button id="journey-new">New journey</button><button id="journey-practice">Practice</button><button id="journey-settings">Settings</button>`;
+    body = `<p class="journey-subtitle">The Long Tide</p><p>${checkpointNotice}</p>${destination ? `<p>Continue at ${destination}, from its beginning.</p>` : ''}${snapshot?.kind === 'invalid' ? `<p role="alert">${snapshot.issue} Start a new journey to replace it, or play Practice without changing it.</p>` : ''}${notice}`;
+    actions = `${snapshot?.record ? `<button id="journey-continue">Continue journey${checkpoint?.kind === 'cove' ? ' · from cove start' : ''}</button>` : ''}<button id="journey-new">New journey</button><button id="journey-practice">Practice</button><button id="journey-settings">Options</button>`;
   } else if ((mode === 'story' || mode === 'transcript') && storyId) {
     renderIllustratedStory(mode === 'transcript');
     return;
@@ -593,10 +599,10 @@ function renderJourneyDialog() {
     actions =
       '<button id="journey-return-cancel">Keep playing</button><button id="journey-return-confirm">Return home</button>';
   } else {
-    heading = 'Both coves are safe.';
+    heading = 'Three coves are safe.';
     body = '<p>The next part of the journey is still being made.</p>' + notice;
     actions =
-      '<button id="journey-title">Return to title</button><button id="journey-practice">Practice</button><button id="journey-settings">Settings</button>';
+      '<button id="journey-title">Return Home</button><button id="journey-practice">Practice</button><button id="journey-settings">Options</button>';
   }
   $('dialog-content').innerHTML =
     `<header class="dialog-head${mode === 'story' ? ' sr-only' : ''}"><h2 id="dialog-title">${heading}</h2></header><div class="dialog-body journey-copy">${body}</div><footer class="dialog-footer journey-actions">${actions}</footer>`;
@@ -1205,7 +1211,7 @@ function renderDialog() {
         ? `<div class="passenger-options" role="group" aria-label="Passenger selection">${ids.map((id) => `<button id="passenger-${id}" class="cove-choice" aria-pressed="${a.passengerIds.includes(id)}">${passengerChoiceContent(passengerNames[id].split(' ·')[0], level.passengers.find((p) => p.id === id)!.slots, resolvePassengerAppearance(level, id)?.portraitKey ?? null)}</button>`).join('')}</div>`
         : '';
     $('dialog-content').innerHTML =
-      `${header(transfer ? (a.type === 'board' ? 'Board passengers' : p?.isDeliveryPier ? 'Bring passengers home' : 'Let passengers ashore') : actionLabel(s, a, level), `${nodeNames[a.type === 'move' ? a.to : s.boatNodeId]} · inspection is free`)}<div id="preview" class="dialog-body ${proposed.error || proposed.state.status === 'lost' ? 'warning' : ''}" aria-live="polite" aria-atomic="true">${choices}<p class="requirement">${text.error ?? (transfer ? transfer.depth : text.requirement)}</p>${text.consequence ? `<p class="consequence">${text.consequence}</p>` : ''}${!proposed.error && !transfer ? `<p class="preview-result">After this action: Boat ${load(proposed.state, level)}/${level.rules.capacity} spaces · tide ${proposed.state.tideLevel}${s.tideLevel !== proposed.state.tideLevel ? ` (now ${s.tideLevel})` : ''}</p>` : ''}</div><footer class="dialog-footer"><button id="commit" ${proposed.error ? 'disabled' : ''}>${proposed.error ? 'Action unavailable' : transfer ? `${transfer.label} · 1 action` : 'Confirm · 1 action'}</button></footer>`;
+      `${header(transfer ? (a.type === 'board' ? 'Board passengers' : p?.isDeliveryPier ? 'Bring passengers home' : 'Let passengers ashore') : actionLabel(s, a, level), `${nodeNames[a.type === 'move' ? a.to : s.boatNodeId]} · inspection is free`)}<div id="preview" class="dialog-body ${proposed.error || proposed.state.status === 'lost' ? 'warning' : ''}" aria-live="polite" aria-atomic="true">${choices}<p class="requirement">${text.error ?? (transfer ? transfer.depth : text.requirement)}</p>${(transfer ? transfer.detail : text.consequence) ? `<p class="consequence">${transfer ? transfer.detail : text.consequence}</p>` : ''}${!proposed.error && !transfer ? `<p class="preview-result">After this action: Boat ${load(proposed.state, level)}/${level.rules.capacity} spaces · tide ${proposed.state.tideLevel}${s.tideLevel !== proposed.state.tideLevel ? ` (now ${s.tideLevel})` : ''}</p>` : ''}</div><footer class="dialog-footer"><button id="commit" ${proposed.error ? 'disabled' : ''}>${proposed.error ? 'Action unavailable' : transfer ? `${transfer.label} · 1 action` : 'Confirm · 1 action'}</button></footer>`;
 
     if (a.type === 'board' || a.type === 'unload')
       for (const id of ids)
@@ -1240,9 +1246,14 @@ function renderDialog() {
       level.rules.tide.rises.find((r) => r.afterTurn > s.turn)?.level ?? s.tideLevel,
     );
   } else if (mode === 'menu') {
-    const sheep = level.passengers.find((p) => p.species === 'sheep')!;
+    const passengerCosts = level.passengers
+      .map(
+        (p) =>
+          `${passengerList([p.id], level)} uses ${p.slots} ${p.slots === 1 ? 'space' : 'spaces'}`,
+      )
+      .join('; ');
     $('dialog-content').innerHTML =
-      `${header('Crossing menu')}<div class="dialog-body menu-body">${s.status === 'won' ? '<button id="return-arrival">Return to arrival</button>' : ''}<div class="menu-actions"><button id="restart">Restart crossing</button><button id="settings">Settings</button></div><label class="cove-picker">Choose cove<select id="cove-picker">${[baseline, holdingPier, bellwater].map((l) => `<option value="${l.id}" ${l.id === level.id ? 'selected' : ''}>${l.title}${l.id === baseline.id ? ' · baseline' : ''}</option>`).join('')}</select></label><details id="help-details"><summary>How to play · actions and depth</summary><p>${actionCostCopy(level)}</p><p>Select a named place, island, pier or landmark to see its options for free. Choose Sail to travel one passage. Select the ferry for its current place. A named single-passenger action acts directly. For several passengers, choose names in the nearby chooser, then use its named action. Cost, depth and tide consequences appear before you act.</p><p>Boat depth needed: empty = 1; 1–2 spaces = 2; 3–4 spaces = 3. Each rabbit uses 1 space; ${passengerList([sheep.id], level)} uses ${sheep.slots}. A passage must be at least as deep as the boat needs.</p><p>Boarding and unloading happen before the tide rises. Use the status button for the tide and pier forecast. Undo earlier actions or restart to recover from a losing plan.</p><p>Tab and Shift+Tab move between controls; Enter or Space activates them. Escape closes a dialog first; press it again to close the location card. Selection never spends an action.</p></details></div>`;
+      `${header('Crossing menu')}<div class="dialog-body menu-body">${s.status === 'won' ? '<button id="return-arrival">Return to arrival</button>' : ''}<div class="menu-actions"><button id="restart">Restart crossing</button><button id="settings">Settings</button></div><label class="cove-picker">Choose cove<select id="cove-picker">${practiceCoves.map((l) => `<option value="${l.id}" ${l.id === level.id ? 'selected' : ''}>${l.title}${l.id === baseline.id ? ' · baseline' : ''}</option>`).join('')}</select></label><details id="help-details"><summary>How to play · actions and depth</summary><p>${actionCostCopy(level)}</p><p>Select a named place, island, pier or landmark to see its options for free. Choose Sail to travel one passage. Select the ferry for its current place. A named single-passenger action acts directly. For several passengers, choose names in the nearby chooser, then use its named action. Select your current place for free transfer details. The chooser shows selected depth and meaningful consequences; a losing action warns before you commit.</p><p>Boat depth needed: empty = 1; 1–2 spaces = 2; 3–4 spaces = 3. ${passengerCosts}. A passage must be at least as deep as the boat needs.</p><p>Boarding and unloading happen before the tide rises. Use the status button for the tide and pier forecast. Undo earlier actions or restart to recover from a losing plan.</p><p>Tab and Shift+Tab move between controls; Enter or Space activates them. Escape closes a dialog first; press it again to close the location card. Selection never spends an action.</p></details></div>`;
 
     $('restart').onclick = restart;
 
@@ -1555,7 +1566,14 @@ function renderLocation() {
       ? paragraph(facts.aboardCopy) +
         paragraph(facts.waiting.length ? facts.waitingCopy : '') +
         paragraph(facts.safety) +
-        paragraph(facts.transferNote)
+        paragraph(facts.transferNote) +
+        [facts.board, facts.unload]
+          .filter((action) => action !== null)
+          .map((action) => {
+            const info = transferFacts(session.state, action!, level);
+            return paragraph(`${info.label} · 1 action. ${info.depth}. ${info.detail}`);
+          })
+          .join('')
       : paragraph(facts.passage, 'requirement') +
         paragraph(facts.limitation && !facts.passage ? facts.limitation : '') +
         paragraph(facts.waiting.length ? facts.waitingCopy : '') +
@@ -1646,25 +1664,10 @@ function renderDock() {
 
     if (!direct) button.setAttribute('aria-haspopup', 'dialog');
 
-    const note = document.createElement('span');
-
-    note.className = 'dock-facts';
-
-    note.textContent = direct ? `1 action · ${info.depth}` : 'Choose passengers · 1 action';
-
-    button.append(note);
-
-    if (direct && info.detail) {
-      const detail = document.createElement('span');
-
-      detail.className = 'dock-consequence';
-
-      detail.textContent = info.detail;
-
-      button.append(detail);
-    }
-
     dock.append(button);
+    button.onfocus = () => {
+      if (keyboardInput && !blocked()) world.frameLocation(session.state.boatNodeId);
+    };
 
     button.onclick = (event) => {
       event.stopPropagation();
@@ -2036,6 +2039,24 @@ function positionMap() {
   });
   const hint = $('selection-hint'),
     hintBounds = hint.hidden ? null : toLocal(hint.getBoundingClientRect());
+  const driftwoodNames =
+    level.id === 'driftwood-yard'
+      ? placeDriftwoodLabels(
+          labels.filter(({ id }) => {
+            const marker = markers.find((m) => m.id === id)!;
+            return (
+              marker.x >= bounds.left &&
+              marker.x <= bounds.right &&
+              marker.y >= bounds.top &&
+              marker.y <= bounds.bottom
+            );
+          }),
+          markers,
+          bounds,
+          [...figures, ...(hintBounds ? [hintBounds] : [])],
+          labelLayout,
+        )
+      : null;
   for (const { id, group, name, width: w, height: h } of labels) {
     const marker = markers.find((m) => m.id === id)!;
     const visible =
@@ -2066,7 +2087,10 @@ function positionMap() {
     const score = (choice: Rectangle) =>
       avoid.filter((r) => overlaps(choice, r, 2)).length * 200 +
       Math.hypot(choice.left - preferred[0][0], choice.top - preferred[0][1]);
-    const choice = labelLayout.get(id) ?? candidates.sort((a, b) => score(a) - score(b))[0];
+    const choice =
+      driftwoodNames?.get(id) ??
+      labelLayout.get(id) ??
+      candidates.sort((a, b) => score(a) - score(b))[0];
     labelLayout.set(id, choice);
     name.style.left = choice.left - marker.bounds.left + 'px';
     name.style.top = choice.top - marker.bounds.top + 'px';
@@ -2088,7 +2112,7 @@ function positionMap() {
         boat.left < bounds.right &&
         boat.bottom > bounds.top &&
         boat.top < bounds.bottom;
-    dock.style.visibility = visible ? 'visible' : 'hidden';
+    dock.style.visibility = visible || keyboardInput ? 'visible' : 'hidden';
     dock.dataset.layout = 'row';
     if (dock.offsetWidth > bounds.right - bounds.left) dock.dataset.layout = 'column';
     const nearby = placeActionCard(dock.offsetWidth, dock.offsetHeight, bounds, boat, {
@@ -2146,7 +2170,7 @@ function bindWorld() {
   world.onTransferContact = (contact) =>
     sound.transferContact({
       weight: contact.passengerIds.some(
-        (id) => level.passengers.find((p) => p.id === id)?.species === 'sheep',
+        (id) => (level.passengers.find((p) => p.id === id)?.slots ?? 0) >= 2,
       )
         ? 'full'
         : 'light',
@@ -2333,6 +2357,8 @@ document.addEventListener(
   (e) => {
     if (['Tab', 'Enter', ' ', 'Escape'].includes(e.key)) {
       keyboardInput = true;
+      if (e.key === 'Tab' && !$('dock-actions').hidden)
+        $('dock-actions').style.visibility = 'visible';
       if (!e.repeat) {
         viewFence = null;
 

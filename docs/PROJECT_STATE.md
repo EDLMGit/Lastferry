@@ -6,7 +6,17 @@ Read this before choosing scope. Detailed implementation history belongs in `STA
 
 ## Current scoped pass
 
-`HOME_PLAY_FLOW_01` is the current implementation task: `LAST_FERRY_HOME_PLAY_PACKAGE/NEXT_TASK_HOME_PLAY_FLOW.md`, supplied one directory above the repository and retained here unchanged. It replaces both unstarted flow/feedback tasks. `STORY_PRODUCTION_01` is complete and retained, not rerun. Baseline: `d532c62f0f25854387869466572a1ed0cf35a0ac`; implementation and focused verification are complete, with source identity, original failures and remaining limitations recorded in `reviews/home-play-flow/REVIEW.md` at handoff.
+`DRIFTWOOD_YARD_01` implements `LAST_FERRY_DRIFTWOOD_YARD_PACKAGE/NEXT_TASK_DRIFTWOOD_YARD.md`. The supplied package resolved one directory above this Git root and is retained here unchanged. HOME_PLAY_FLOW_01 is complete and its dock-paragraph requirement is superseded: ordinary actions use icon/short label, free current-place inspection holds predicted facts, and real loss warnings remain deliberate.
+
+Reviewed game baseline: `da1f2686ce6aff8d754e13111447dabb6e1313f0`. Local checkout was there; fetched/fast-forwarded to newer remote `879c9d1cfb6745ce8a294e4dbba4aa3d984ef4b3`, preserving its six additional commits with identical tree `4aa851646f66cb0eda3ee9960ca9c5125170b0e0`. No reset or unrelated changes.
+
+Holding → Bellwater → Driftwood is the implemented journey, with First Crossing practice. Driftwood uses the original four-space ferry, Nell (two-space beaver), Fern (cream rabbit), Oat (tan rabbit), raised High Mooring and two low landings. The scene `driftwood-light` introduces Nell lifting a lantern; only Continue to Driftwood acknowledges it. Exact historical two-cove completions stay read-only until deliberate Continue, then first play the new scene fresh; later pending reloads retain recap. Three-cove completion is an available-content boundary. Six-space ferry, A wider deck, Wide Berth, deer and currents remain future work.
+
+Verification and source-tied evidence are recorded in `reviews/driftwood-yard/REVIEW.md`. Existing music/portrait/capture/device and timing limits remain explicit. This pass is not deployed: owner-private Site version 12/game `1a85874883af5caa59f6294a75495eccf2afebbc`, hosting `e87c5c5baa53a39001c5a89b07b59aab2ad150fc`; receipt/history below remain unchanged.
+
+## Previous scoped pass: Home and direct transfers
+
+`HOME_PLAY_FLOW_01` was the completed implementation task: `LAST_FERRY_HOME_PLAY_PACKAGE/NEXT_TASK_HOME_PLAY_FLOW.md`, supplied one directory above the repository and retained here unchanged. It replaces both unstarted flow/feedback tasks. `STORY_PRODUCTION_01` is complete and retained, not rerun. Baseline: `d532c62f0f25854387869466572a1ed0cf35a0ac`; implementation and focused verification are complete, with source identity, original failures and remaining limitations recorded in `reviews/home-play-flow/REVIEW.md` at handoff.
 
 Live Home reuses the cove and honest checkpoints; normal stories autoplay with Pause/Resume and an explicit final handoff; single safe passenger actions act directly and groups retain deliberate selection. The score composition/gains, puzzles, Undo, water, sailing, headings and lighthouse remain accepted foundations. Missing music did not reproduce in cold touch/pointer/keyboard checks: score-specific dry/wet output and an unchanged-level actual journey recording are retained. This does not establish physical phone playback. Build/typecheck, 303 unit checks, 76-family validation and nine distinct browser cases passed across documented runs; capture stalls and the unchanged timing/device limitations remain explicit.
 
@@ -40,7 +50,7 @@ Local Codex implements the current task. ChatGPT reviews the identifiable handof
 | Authored-scenes implementation | `1aa73c59c37082f43990235a9efffd6f793cf642`, reviewed handoff `6fc5a09dd4ef876ad96ad12d623532f0d13deb10` — working journey retained; illustrated presentation supersedes its distant-model scenes; not published |
 | Illustrated story production | `bdd7e86f1e2953144b11108eb828ab85c88eb542` — implemented and focused checks complete; following handoff commit records packaging/continuity only; not published |
 | Home/play implementation | `682ee816537d9a9955f49ed35a3cfdcb3d67f752` — complete combined HOME_PLAY_FLOW_01; review and exact source/media audit in reviews/home-play-flow, not deployed |
-| Reviewed implementation baseline | `d532c62f0f25854387869466572a1ed0cf35a0ac` — Home/play comparison; prior illustrated production is complete and retained |
+| Reviewed implementation baseline | `da1f2686ce6aff8d754e13111447dabb6e1313f0` — Driftwood comparison; newer identical-tree history preserved through `879c9d1` |
 | Published private phone game | `1a85874883af5caa59f6294a75495eccf2afebbc` — Sites version 12, publication confirmed 2026-10-25 17:28 Madrid |
 | Stable phone URL | https://last-ferry-playtest.abumech.chatgpt.site |
 | Published hosting source | `e87c5c5baa53a39001c5a89b07b59aab2ad150fc` |
@@ -56,7 +66,7 @@ The preceding version 9 publication remains historical evidence: hosting source 
 
 After the next implementation, record the new GitHub SHA separately from the live Site's game SHA. Do not update the live field until deployment is confirmed.
 
-## Current task: Illustrated story production
+## Historical task: Illustrated story production
 
 Implementation commit: `bdd7e86f1e2953144b11108eb828ab85c88eb542`. Packaging audit matches 217 source entries and 80 selected media files to committed content (283 exact, 14 text newline normalizations); all 66 tested runtime/data/dependency entries are byte-exact. Final branch SHA/remote equality are recorded in PR #1 and the handoff. Captured working-tree identities and scoped later corrections remain distinct in the evidence reuse audit.
 
@@ -140,7 +150,7 @@ See `reviews/cove-ui-assets/REVIEW.md` for source identities, build, commands, o
 
 | Area | Decision to carry forward |
 | --- | --- |
-| Puzzles | Holding Pier is the default training cove. Holding Pier → Bellwater is implemented progression. First Crossing remains an optional baseline. All three remain playable. |
+| Puzzles | Holding Pier is the default training cove. Holding Pier → Bellwater → Driftwood Yard is implemented progression. First Crossing remains an optional baseline. All four remain playable. |
 | Rules | Deterministic action-based time, load/draft and passage-depth consequences, tide deadlines, subset transfers, passenger conservation and complete Undo. Inspection is free; explicit confirmation spends an action. |
 | Interface | Full-width cove, freestanding place names and selectable markers, local dock controls, compact opaque painted dark teal surfaces, ivory text and warm borders. The user likes the published panel direction. The permanent right sidebar and white panels were rejected. |
 | Environment | Rounded shared sailing courses, calmer crossing pace, luminous water, visible shallow ground, tide-aware contact, readable landmarks and Harbor identity. |

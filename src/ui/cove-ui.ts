@@ -1,12 +1,14 @@
 import type { PortraitKey } from '../game/passenger-appearance';
 import creamPortrait from '../../cove-portrait-package/portraits/rabbit-cream.png';
 import tanPortrait from '../../cove-portrait-package/portraits/rabbit-tan.png';
+import beaverPortrait from '../../assets/portraits/beaver-brown.png';
 import woolPortrait from '../../cove-portrait-package/portraits/sheep-wool.png';
 
 export const portraitSources: Record<PortraitKey, string> = {
   'rabbit-cream': creamPortrait,
   'rabbit-tan': tanPortrait,
   'sheep-wool': woolPortrait,
+  'beaver-brown': beaverPortrait,
 };
 
 const originals = import.meta.glob<string>(

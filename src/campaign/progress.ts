@@ -55,6 +55,17 @@ function sameItems(value: unknown, expected: readonly string[]): boolean {
   );
 }
 
+export function isLegacyCompletion(value: unknown): value is JourneyRecord {
+  return (
+    keys(value, ['version', 'checkpoint', 'completed', 'acknowledgedScenes']) &&
+    value.version === 1 &&
+    keys(value.checkpoint, ['kind']) &&
+    value.checkpoint.kind === 'complete' &&
+    sameItems(value.completed, ['holding-pier', 'bellwater']) &&
+    sameItems(value.acknowledgedScenes, ['opening', 'another-bell'])
+  );
+}
+
 export function newJourney(): JourneyRecord {
   return {
     version: 1,
@@ -65,6 +76,7 @@ export function newJourney(): JourneyRecord {
 }
 
 export function validateJourney(value: unknown): JourneyValidation {
+  if (isLegacyCompletion(value)) return { valid: true, record: copy(value) };
   if (value !== null && typeof value === 'object' && 'version' in value && value.version !== 1) {
     return {
       valid: false,
@@ -173,7 +185,8 @@ export function acceptCove(record: JourneyRecord, id: CoveId, status: string): J
 
 export function checkpointCove(record: JourneyRecord): CoveId {
   const checkpoint = record.checkpoint;
-  if (checkpoint.kind === 'complete') return storyCoves.at(-1)!.id;
+  if (checkpoint.kind === 'complete')
+    return isLegacyCompletion(record) ? 'bellwater' : storyCoves.at(-1)!.id;
   return checkpoint.kind === 'scene' ? storyScenes[checkpoint.id].destination : checkpoint.id;
 }
 
@@ -210,6 +223,13 @@ export class JourneyProgress {
   replace(): JourneyRecord {
     this.save(newJourney());
     return copy(this.current.record!);
+  }
+
+  continueAvailableContent(): boolean {
+    const record = this.current.record;
+    if (!isLegacyCompletion(record)) return false;
+    this.save({ ...copy(record), checkpoint: { kind: 'scene', id: 'driftwood-light' } });
+    return true;
   }
 
   acknowledge(id: SceneId): boolean {

@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { Vector3 } from 'three';
-import { bellwater, holdingPier, level, type Level } from '../../src/levels/level';
+import { bellwater, driftwoodYard, holdingPier, level, type Level } from '../../src/levels/level';
 import { buildPath, getLevelPaths, samplePath } from '../../src/scene/paths';
 import {
   angularChange,
@@ -80,7 +80,7 @@ function networkProblems(l: Level) {
 }
 
 describe('canonical curved courses', () => {
-  test.each([level, holdingPier, bellwater])(
+  test.each([level, holdingPier, bellwater, driftwoodYard])(
     '$id caches finite paths with exact endpoints and uniform distance samples',
     (l) => {
       const paths = getLevelPaths(l);
@@ -154,7 +154,7 @@ describe('canonical curved courses', () => {
     expect(() => buildPath([point(NaN, 0)])).toThrow('finite');
   });
 
-  test.each([level, holdingPier, bellwater])(
+  test.each([level, holdingPier, bellwater, driftwoodYard])(
     '$id journeys retain their incoming tangent or nearest real berth with continuous steering',
     (l) => {
       const paths = getLevelPaths(l);
@@ -243,7 +243,7 @@ describe('canonical curved courses', () => {
   });
 
   test('stop classification follows actual pier relationships and shaft geometry', () => {
-    for (const l of [level, holdingPier, bellwater]) {
+    for (const l of [level, holdingPier, bellwater, driftwoodYard]) {
       expect(initialHeading(l)).toBe(Math.PI / 2);
       for (const node of l.nodes) {
         const pier = l.piers.find((p) => p.nodeId === node.id && p.id === node.pierId);
@@ -259,7 +259,7 @@ describe('canonical curved courses', () => {
     expect(berthHeading(turned, 'stone', 0)).toBe(0);
   });
 
-  test.each([level, holdingPier, bellwater])(
+  test.each([level, holdingPier, bellwater, driftwoodYard])(
     '$id actual curved network has no extra junction or unrelated-stop contact',
     (l) => {
       expect(networkProblems(l)).toEqual([]);

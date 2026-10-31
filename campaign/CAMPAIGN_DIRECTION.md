@@ -2,9 +2,9 @@
 
 **Campaign direction v1 · 25 October 2026**
 
-Design baseline: `1a85874883af5caa59f6294a75495eccf2afebbc`, `EDLMGit/Lastferry`, branch `m1-first-crossing`. This document selects a coherent direction for the next prototype. Only Holding Pier, Bellwater Cove and the separate First Crossing practice puzzle currently exist. The ten further coves, new species, larger boat, later story scenes and current rule below are proposals, not implemented or solver-validated content.
+Original direction baseline: `1a85874883af5caa59f6294a75495eccf2afebbc`, `EDLMGit/Lastferry`, branch `m1-first-crossing`. The current contained implementation is `DRIFTWOOD_YARD_01`, starting from the reviewed Home/play game `da1f2686ce6aff8d754e13111447dabb6e1313f0` and preserving newer work. Holding Pier → Bellwater Cove → Driftwood Yard is now the implemented journey; First Crossing is separate practice. Nell, Fern and Oat, the authored yard puzzle, short illustrated entry and narrow two-cove completion compatibility are implemented in this slice. The remaining nine coves, six-space ferry, deer, launch scene and current rule are future direction, not shipped content. Actual checks and human-acceptance limits are recorded separately in `reviews/driftwood-yard/`.
 
-The current executable task is `LAST_FERRY_STORY_PRODUCTION_PACKAGE/NEXT_TASK_STORY_PRODUCTION.md`, task `STORY_PRODUCTION_01`. It integrates the approved illustrated opening and a compact Harbor connection into the existing two-cove journey. The foundation, checkpoints and puzzles remain; the rest of this document provides direction for later contained tasks.
+The illustrated opening/Harbor production and accepted live Home/story autoplay/direct-transfer pass are complete foundations. Their historical assignments are not active prerequisites. This slice retains the four-space ferry, unchanged ordinary rules and cove-boundary checkpoint contract.
 
 ## 1. The story we are making
 
@@ -84,7 +84,7 @@ Future titles are working names. Each row is a design intention, not a proven pu
 | --- | --- | --- | --- | --- |
 | 1 | Holding Pier | Bring Pip, Rue and Moss home | Accepted introduction: load, depth, temporary landing and deadlines | Existing |
 | 2 | Bellwater Cove | Meet Tansy, Lark and Bram | Accepted route and rescue-order puzzle with staged tide consequences | Existing |
-| 3 | Driftwood Yard | Rescue Nell, the boatwright | New four-space layout using the existing rules; a meaningful staging or return-route decision | Proposed |
+| 3 | Driftwood Yard | Rescue Nell, Fern and Oat | Four-space staging at High Mooring, shallow rescue and deepened return | Implemented; human puzzle acceptance pending |
 | 4 | Wide Berth | Enjoy the larger ferry | Six spaces and the new full-load draft band, with forgiving timing | Proposed |
 | 5 | Orchard Landing | Meet Orin | A three-space passenger introduced separately from the boat lesson | Proposed |
 | 6 | Two Landings | Bring a larger group together | Combine capacity, mixed costs, partial delivery and temporary staging | Proposed |
@@ -154,13 +154,14 @@ Use six short major story scenes, plus a brief connection between the existing f
 | Trigger | Scene | What it establishes |
 | --- | --- | --- |
 | Begin the journey | First evening at the helm | Captain, tide, lighthouse goal |
-| After cove 3 | A wider deck | Safe neighbors launch Nell's prepared ferry |
+| Before cove 3 | A light at the yard — implemented | Introduce Nell before the Driftwood rescue |
+| After cove 3 — future | A wider deck | Safe neighbors launch Nell's prepared ferry |
 | Before cove 5 | The orchard neighbor | Introduce Orin before his first selection |
 | After cove 6 | The water turns | Prepare the player to learn the channel rule |
 | After cove 9 | The last lights | Show the gathering and the remaining occupied landings |
 | After cove 12 | A place for the captain | Supper, welcome and a complete ending |
 
-The current opening uses three approved illustrated Canvas2D shots with finite 6 / 6 / 7-second actions; the Harbor connection uses one approximately five-second shot in the same language. The player advances each shot explicitly and may linger at its held endpoint. Next is available immediately, while only the final handoff acknowledges a scene. Normal captions follow a brief visual lead-in; Read story exposes the full scene immediately, and Reduced Motion shows each still endpoint with its caption. This supersedes the earlier model-only story presentation, while the playable world remains fully 3D. Later chapter composition and timing need their own authored review. The game remains understandable when muted.
+The current opening uses three approved illustrated Canvas2D shots with finite 6 / 6 / 7-second actions; the Harbor connection uses one approximately five-second shot in the same language. Normal-motion opening shots advance automatically, with Pause/Resume and immediate Next. The final picture holds for explicit acknowledgment. Driftwood adds one seven-second lantern greeting; Harbor keeps its five-second gathering. Reduced Motion and restored pending scenes retain still endpoints. Next is available immediately, while only the final handoff acknowledges a scene. Normal captions follow a brief visual lead-in; Read story exposes the full scene immediately, and Reduced Motion shows each still endpoint with its caption. This supersedes the earlier model-only story presentation, while the playable world remains fully 3D. Later chapter composition and timing need their own authored review. The game remains understandable when muted.
 
 Let the current score continue through its existing audio owner. Scene transitions may change arrangement or level gently; they must honor mute, touch-start, background suspension and cancellation. A repeated scene must not create overlapping music or duplicate arrival cues. New music, if later needed, should be original and consistent with the accepted score.
 
@@ -192,8 +193,8 @@ The actual authoring and mechanical acceptance details are in `PUZZLE_PROGRESSIO
 
 | Slice | Concrete result | Stop before |
 | --- | --- | --- |
-| Story foundation — retained; illustrated production current | Approved three-shot opening and compact Harbor connection inside the working journey/practice flow and honest cove-boundary checkpoints | New levels, species, hull or currents |
-| Complete Phase I | Driftwood Yard and Nell, using the existing four-space rules | Six-space gameplay |
+| Story foundation and illustrated production — complete, retained | Approved three-shot opening and compact Harbor connection inside the working journey/practice flow and honest cove-boundary checkpoints | New levels, species, hull or currents |
+| Complete Phase I — implemented in DRIFTWOOD_YARD_01 | Driftwood Yard and Nell, using the existing four-space rules | Six-space gameplay |
 | Launch the larger ferry | Launch scene, actual six-space hull/seating and forgiving Wide Berth | Deer or currents |
 | Meet Orin | Deer world model/portrait and Orchard Landing | New water rules |
 | Complete Phase II | Two Landings; demonstrate that the known choices combine well | Broad content multiplication |

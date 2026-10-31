@@ -5,6 +5,7 @@ import {
   acceptCove,
   acknowledgeScene,
   checkpointCove,
+  isLegacyCompletion,
   newJourney,
   parseJourney,
   validateJourney,
@@ -20,7 +21,12 @@ import {
 } from '../../src/campaign/registry';
 import { Session } from '../../src/game/session';
 import type { Action } from '../../src/game/rules';
-import { bellwater, holdingPier, level as firstCrossing } from '../../src/levels/level';
+import {
+  bellwater,
+  driftwoodYard,
+  holdingPier,
+  level as firstCrossing,
+} from '../../src/levels/level';
 import narration from '../../LAST_FERRY_STORY_PRODUCTION_PACKAGE/audio/narration-script.json';
 
 function checkpoints() {
@@ -28,8 +34,10 @@ function checkpoints() {
   const holding = acknowledgeScene(opening, 'opening');
   const transition = acceptCove(holding, 'holding-pier', 'won');
   const second = acknowledgeScene(transition, 'another-bell');
-  const complete = acceptCove(second, 'bellwater', 'won');
-  return { opening, holding, transition, second, complete };
+  const yardEntry = acceptCove(second, 'bellwater', 'won');
+  const third = acknowledgeScene(yardEntry, 'driftwood-light');
+  const complete = acceptCove(third, 'driftwood-yard', 'won');
+  return { opening, holding, transition, second, yardEntry, third, complete };
 }
 
 function memory(raw: string | null = null) {
@@ -55,7 +63,9 @@ function memory(raw: string | null = null) {
 
 describe('authored story registry', () => {
   test('optional narration slots match the supplied exact script without claiming recordings', () => {
-    const shots = Object.values(storyScenes).flatMap((scene) => scene.shots);
+    const shots = Object.values(storyScenes)
+      .flatMap((scene) => scene.shots)
+      .filter((shot) => shot.narrationAssetId);
     expect(shots).toHaveLength(narration.clips.length);
     for (const shot of shots) {
       const clip = narration.clips.find((item) => item.id === shot.narrationAssetId);
@@ -67,15 +77,17 @@ describe('authored story registry', () => {
       });
     }
   });
-  test('only the two existing story puzzles are registered, with practice separate', () => {
+  test('three authored story puzzles are registered, with First Crossing practice separate', () => {
     expect(storyCoves.map(({ id, order }) => [id, order])).toEqual([
       ['holding-pier', 0],
       ['bellwater', 1],
+      ['driftwood-yard', 2],
     ]);
     expect(storyCove('holding-pier')?.level).toBe(holdingPier);
     expect(storyCove('bellwater')?.level).toBe(bellwater);
+    expect(storyCove('driftwood-yard')?.level).toBe(driftwoodYard);
     expect(storyCove('first-crossing')).toBeUndefined();
-    expect(practiceCoves).toEqual([firstCrossing, holdingPier, bellwater]);
+    expect(practiceCoves).toEqual([firstCrossing, holdingPier, bellwater, driftwoodYard]);
     expect(practiceCove('first-crossing')).toBe(firstCrossing);
     expect(practiceCove('future-cove')).toBeUndefined();
     expect(storyCove('future-cove')).toBeUndefined();
@@ -85,7 +97,7 @@ describe('authored story registry', () => {
   });
 
   test('all opening copy and the connective beat remain available without sound or motion', () => {
-    expect(Object.keys(storyScenes)).toEqual(['opening', 'another-bell']);
+    expect(Object.keys(storyScenes)).toEqual(['opening', 'another-bell', 'driftwood-light']);
     expect(storyScenes.opening.shots.map((shot) => shot.caption)).toEqual([
       'Your first evening at the helm.\nA high tide ahead.',
       'Pip and Rue have kept a light for you.',
@@ -102,14 +114,16 @@ describe('authored story registry', () => {
 });
 
 describe('journey checkpoint transactions', () => {
-  test('all five checkpoints round-trip with coherent accepted completions and scene acknowledgments', () => {
+  test('all seven checkpoints round-trip with coherent accepted completions and scene acknowledgments', () => {
     const records = Object.values(checkpoints());
     expect(records.map(checkpointCove)).toEqual([
       'holding-pier',
       'holding-pier',
       'bellwater',
       'bellwater',
-      'bellwater',
+      'driftwood-yard',
+      'driftwood-yard',
+      'driftwood-yard',
     ]);
     for (const record of records) {
       expect(validateJourney(record)).toEqual({ valid: true, record });
@@ -129,9 +143,15 @@ describe('journey checkpoint transactions', () => {
     });
     expect(records[4]).toEqual({
       version: 1,
-      checkpoint: { kind: 'complete' },
+      checkpoint: { kind: 'scene', id: 'driftwood-light' },
       completed: ['holding-pier', 'bellwater'],
       acknowledgedScenes: ['opening', 'another-bell'],
+    });
+    expect(records[6]).toEqual({
+      version: 1,
+      checkpoint: { kind: 'complete' },
+      completed: ['holding-pier', 'bellwater', 'driftwood-yard'],
+      acknowledgedScenes: ['opening', 'another-bell', 'driftwood-light'],
     });
   });
 
@@ -296,9 +316,13 @@ describe('validated local journey storage', () => {
     expect(backing.writes.length).toBe(2);
     expect(restored.accept('bellwater', 'won')).toBe(true);
     const endpoint = new JourneyProgress(() => backing.storage);
-    expect(endpoint.snapshot.record).toEqual(checkpoints().complete);
+    expect(endpoint.snapshot.record).toEqual(checkpoints().yardEntry);
     expect(endpoint.accept('bellwater', 'won')).toBe(false);
     expect(backing.writes.length).toBe(3);
+    expect(endpoint.acknowledge('driftwood-light')).toBe(true);
+    expect(endpoint.accept('driftwood-yard', 'won')).toBe(true);
+    expect(endpoint.snapshot.record).toEqual(checkpoints().complete);
+    expect(backing.writes.length).toBe(5);
   });
 
   test('snapshots cannot mutate stored progress behind validation', () => {
@@ -337,6 +361,8 @@ describe('validated local journey storage', () => {
       expect(progress.accept('holding-pier', 'won')).toBe(true);
       expect(progress.acknowledge('another-bell')).toBe(true);
       expect(progress.accept('bellwater', 'won')).toBe(true);
+      expect(progress.acknowledge('driftwood-light')).toBe(true);
+      expect(progress.accept('driftwood-yard', 'won')).toBe(true);
       expect(progress.snapshot.record).toEqual(checkpoints().complete);
       expect(backing.values.get(JOURNEY_STORAGE_KEY)).toBeUndefined();
       expect(backing.values.get('last-ferry.sound')).toBe('muted');
@@ -364,5 +390,79 @@ describe('validated local journey storage', () => {
     const forged = { ...newJourney(), completed: ['bellwater'] } as JourneyRecord;
     expect(acknowledgeScene(forged, 'opening')).toBe(forged);
     expect(acceptCove(forged, 'holding-pier', 'won')).toBe(forged);
+  });
+});
+
+describe('narrow two-cove completion compatibility', () => {
+  const legacy: JourneyRecord = {
+    version: 1,
+    checkpoint: { kind: 'complete' },
+    completed: ['holding-pier', 'bellwater'],
+    acknowledgedScenes: ['opening', 'another-bell'],
+  };
+  test('reading exact historical completion is byte-preserving until deliberate continuation', () => {
+    const raw = JSON.stringify(legacy, null, 2);
+    const backing = memory(raw);
+    const progress = new JourneyProgress(() => backing.storage);
+    expect(isLegacyCompletion(progress.snapshot.record)).toBe(true);
+    expect(progress.snapshot.record).toEqual(legacy);
+    expect(progress.snapshot.raw).toBe(raw);
+    expect(backing.writes).toEqual([]);
+    expect(checkpointCove(legacy)).toBe('bellwater');
+    expect(progress.acknowledge('driftwood-light')).toBe(false);
+    expect(progress.accept('driftwood-yard', 'won')).toBe(false);
+    expect(progress.continueAvailableContent()).toBe(true);
+    expect(progress.continueAvailableContent()).toBe(false);
+    expect(progress.snapshot.record).toEqual(checkpoints().yardEntry);
+    expect(backing.writes).toEqual([
+      [JOURNEY_STORAGE_KEY, JSON.stringify(checkpoints().yardEntry)],
+    ]);
+    const restored = new JourneyProgress(() => backing.storage);
+    expect(restored.snapshot.record).toEqual(checkpoints().yardEntry);
+    expect(restored.continueAvailableContent()).toBe(false);
+    expect(restored.acknowledge('driftwood-light')).toBe(true);
+    expect(restored.snapshot.record).toEqual(checkpoints().third);
+    expect(restored.accept('driftwood-yard', 'won')).toBe(true);
+    expect(restored.snapshot.record).toEqual(checkpoints().complete);
+    expect(restored.accept('driftwood-yard', 'won')).toBe(false);
+    expect(restored.continueAvailableContent()).toBe(false);
+  });
+  test.each([
+    { ...legacy, extra: true },
+    { ...legacy, version: 2 },
+    { ...legacy, checkpoint: { kind: 'complete', id: 'bellwater' } },
+    { ...legacy, completed: ['holding-pier'], acknowledgedScenes: ['opening'] },
+    { ...legacy, completed: ['bellwater', 'holding-pier'] },
+    { ...legacy, acknowledgedScenes: ['another-bell', 'opening'] },
+    { ...legacy, acknowledgedScenes: ['opening'] },
+    { ...legacy, completed: ['holding-pier', 'unknown'] },
+  ])('rejects altered historical records without permissive prefix migration: %j', (record) => {
+    const raw = JSON.stringify(record);
+    const backing = memory(raw);
+    const progress = new JourneyProgress(() => backing.storage);
+    expect(isLegacyCompletion(record)).toBe(false);
+    expect(progress.snapshot.kind).toBe('invalid');
+    expect(progress.continueAvailableContent()).toBe(false);
+    expect(backing.values.get(JOURNEY_STORAGE_KEY)).toBe(raw);
+    expect(backing.writes).toEqual([]);
+  });
+  test('failed compatibility write preserves old bytes but continues honestly in memory', () => {
+    const raw = JSON.stringify(legacy);
+    const backing = memory(raw);
+    const progress = new JourneyProgress(() => ({
+      getItem: backing.storage.getItem,
+      setItem() {
+        throw new Error('Full');
+      },
+    }));
+    expect(progress.continueAvailableContent()).toBe(true);
+    expect(progress.snapshot.record).toEqual(checkpoints().yardEntry);
+    expect(progress.snapshot.persistent).toBe(false);
+    expect(progress.snapshot.issue).toContain('will not survive closing');
+    expect(backing.values.get(JOURNEY_STORAGE_KEY)).toBe(raw);
+    expect(progress.acknowledge('driftwood-light')).toBe(true);
+    expect(progress.continueAvailableContent()).toBe(false);
+    expect(backing.values.get('last-ferry.sound')).toBe('muted');
+    expect(backing.values.get('last-ferry.motion')).toBe('reduced');
   });
 });

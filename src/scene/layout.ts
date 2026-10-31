@@ -1,6 +1,6 @@
 export type IslandStyle = 'garden' | 'crag' | 'reeds' | 'rocky';
 type Landmark = {
-  kind: 'lighthouse' | 'cottage' | 'bell';
+  kind: 'lighthouse' | 'cottage' | 'bell' | 'yard';
   islandId: string;
   positionXZ: [number, number];
 };
@@ -20,6 +20,17 @@ export type SceneLayout = {
   };
 };
 const layouts: Record<string, SceneLayout> = {
+  'driftwood-yard': {
+    landmarks: [
+      { kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-6.15, -3.25] },
+      { kind: 'yard', islandId: 'yard-island', positionXZ: [0, -4.9] },
+    ],
+    islandStyles: { 'yard-island': 'rocky', 'mooring-island': 'rocky', 'reed-island': 'reeds' },
+    stonePiers: ['mooring-pier'],
+    centeredWaitingPairs: true,
+    cameraPosition: [0, 34, 24],
+    landscapeCameraPosition: [0, 30, 30],
+  },
   'first-crossing': {
     landmarks: [
       { kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-6.15, -3.25] },

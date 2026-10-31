@@ -5,6 +5,7 @@ import { settlingProgress } from '../../src/scene/transitions';
 import {
   bridgeBowOffset,
   deckEntryZ,
+  deckTransferEntry,
   firstRabbitDeckZ,
   sampleDeckTransfer,
   transferHeading,
@@ -33,32 +34,39 @@ const obstacles = boat.children
     }
     return { at: object.position.toArray(), box: new Box3().setFromObject(object), planes };
   });
-const figures = [0, 1, 2].map((id) => {
-  const species = id === 2 ? 'sheep' : 'rabbit',
-    figure = animal(species, id === 1 ? 1 : 0),
-    vertices: Vector3[] = [];
-  figure.scale.set(
-    species === 'rabbit' ? 1.25 : 1.15,
-    species === 'rabbit' ? 1.65 : 1.5,
-    species === 'rabbit' ? 1.25 : 1.15,
-  );
-  figure.updateMatrixWorld(true);
-  figure.traverse((object) => {
-    if (!(object instanceof Mesh)) return;
-    const position = object.geometry.getAttribute('position');
-    for (let i = 0; i < position.count; i++)
-      vertices.push(
-        new Vector3().fromBufferAttribute(position, i).applyMatrix4(object.matrixWorld),
-      );
+const figuresFor = (nonRabbit: string) =>
+  [0, 1, 2].map((id) => {
+    const species = id === 2 ? nonRabbit : 'rabbit',
+      figure = animal(species, id === 1 ? 1 : 0),
+      vertices: Vector3[] = [];
+    figure.scale.set(
+      species === 'rabbit' ? 1.25 : 1.15,
+      species === 'rabbit' ? 1.65 : 1.5,
+      species === 'rabbit' ? 1.25 : 1.15,
+    );
+    figure.updateMatrixWorld(true);
+    figure.traverse((object) => {
+      if (!(object instanceof Mesh)) return;
+      const position = object.geometry.getAttribute('position');
+      for (let i = 0; i < position.count; i++)
+        vertices.push(
+          new Vector3().fromBufferAttribute(position, i).applyMatrix4(object.matrixWorld),
+        );
+    });
+    return vertices;
   });
-  return vertices;
-});
 const axis = new Vector3(0, 1, 0),
   smooth = (t: number) => t * t * (3 - 2 * t);
 
-test.each([Math.PI / 2, -Math.PI / 2])(
-  'modeled passengers avoid cabin and rails through each transfer phase at berth %s',
-  (heading) => {
+test.each([
+  [Math.PI / 2, 'sheep'],
+  [-Math.PI / 2, 'sheep'],
+  [Math.PI / 2, 'beaver'],
+  [-Math.PI / 2, 'beaver'],
+] as const)(
+  'modeled passengers avoid cabin and rails through each transfer phase at berth %s with %s',
+  (heading, nonRabbit) => {
+    const figures = figuresFor(nonRabbit);
     const failures: string[] = [];
     expect(obstacles.length).toBeGreaterThan(8);
     for (const scenario of [
@@ -67,6 +75,7 @@ test.each([Math.PI / 2, -Math.PI / 2])(
         board: false,
         ids: [2],
         pierY: 0.54,
+        gap: 0.9,
         width: 0.8,
         before: -0.045,
         after: 0.03,
@@ -78,6 +87,7 @@ test.each([Math.PI / 2, -Math.PI / 2])(
         board: true,
         ids: [2],
         pierY: 0.54,
+        gap: 0.9,
         width: 0.8,
         before: -0.045,
         after: -0.12,
@@ -89,6 +99,7 @@ test.each([Math.PI / 2, -Math.PI / 2])(
         board: true,
         ids: [0, 1],
         pierY: 0.18,
+        gap: 0.9,
         width: 0.9,
         before: 0.03,
         after: -0.045,
@@ -100,14 +111,40 @@ test.each([Math.PI / 2, -Math.PI / 2])(
         board: false,
         ids: [0, 1, 2],
         pierY: 0.54,
+        gap: 0.9,
         width: 0.6,
         before: -0.12,
         after: 0.03,
         water: 0.36,
         tide: 0,
       },
+      {
+        name: 'mooring-unload',
+        board: false,
+        ids: [2],
+        pierY: 0.54,
+        gap: 1.3,
+        width: 0.9,
+        before: -0.045,
+        after: 0.03,
+        water: 0,
+        tide: 0,
+      },
+      {
+        name: 'mooring-reboard',
+        board: true,
+        ids: [2],
+        pierY: 0.54,
+        gap: 1.3,
+        width: 0.9,
+        before: -0.045,
+        after: -0.12,
+        water: 0.18,
+        tide: 0,
+      },
     ]) {
       for (const id of scenario.ids) {
+        const entry = deckTransferEntry(id === 2 ? nonRabbit : 'rabbit');
         const anchor = new Vector3(
             ...([
               [-0.22, 0.26, firstRabbitDeckZ],
@@ -123,13 +160,13 @@ test.each([Math.PI / 2, -Math.PI / 2])(
               scenario.width / 2,
             ),
             scenario.pierY - 0.005,
-            -0.44,
+            -scenario.gap + entry.bridgeAdvance,
           ),
-          land = new Vector3(offset, scenario.pierY + 0.025, -1.95),
+          land = new Vector3(offset, scenario.pierY + 0.025, -scenario.gap - 1.05),
           waiting = new Vector3(
             id === 2 ? 0 : id === 0 ? -0.21 : 0.21,
             scenario.pierY - 0.005,
-            -1.02,
+            -scenario.gap - 0.12,
           ),
           initial = anchor
             .clone()
@@ -153,8 +190,8 @@ test.each([Math.PI / 2, -Math.PI / 2])(
                 .clone()
                 .applyAxisAngle(axis, heading)
                 .add(new Vector3(0, hullY, 0)),
-            gate = world(new Vector3(Math.sign(heading) * 0.51, 0.26, deckEntryZ)),
-            corridor = world(new Vector3(0, 0.26, deckEntryZ)),
+            gate = world(new Vector3(Math.sign(heading) * entry.side, 0.26, entry.z)),
+            corridor = world(new Vector3(0, 0.26, entry.z)),
             position = sampleDeckTransfer(
               scenario.board,
               scenario.board ? waiting : initial,

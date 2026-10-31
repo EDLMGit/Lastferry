@@ -1,8 +1,14 @@
-import { bellwater, holdingPier, level as firstCrossing, type Level } from '../levels/level';
+import {
+  bellwater,
+  driftwoodYard,
+  holdingPier,
+  level as firstCrossing,
+  type Level,
+} from '../levels/level';
 
-export type CoveId = 'holding-pier' | 'bellwater';
-export type SceneId = 'opening' | 'another-bell';
-export type IllustrationId = 'tide' | 'lantern' | 'ferry' | 'harbor';
+export type CoveId = 'holding-pier' | 'bellwater' | 'driftwood-yard';
+export type SceneId = 'opening' | 'another-bell' | 'driftwood-light';
+export type IllustrationId = 'tide' | 'lantern' | 'ferry' | 'harbor' | 'driftwood';
 export type StoryCue = {
   id: string;
   atMs: number;
@@ -96,6 +102,26 @@ export const storyScenes: Record<SceneId, StoryScene> = {
     destination: 'bellwater',
     continueLabel: 'Continue to Bellwater',
   },
+  'driftwood-light': {
+    id: 'driftwood-light',
+    title: 'A light at the yard',
+    shots: [
+      {
+        id: 'driftwood',
+        illustration: 'driftwood',
+        durationMs: 7000,
+        captionCueMs: 1050,
+        caption: 'Nell, the boatwright, is still at the yard.',
+        description:
+          'Nell, a warm brown beaver with small round ears and a broad flat dark tail, works at a timber rail. She lifts her lantern in a clear arc, then turns toward the approaching ferry light and holds it in greeting.',
+        cues: [
+          { id: 'driftwood-light.channel.water', atMs: 3500, kind: 'ferry-water', strength: 0.65 },
+        ],
+      },
+    ],
+    destination: 'driftwood-yard',
+    continueLabel: 'Continue to Driftwood',
+  },
 };
 
 export type StoryCove = {
@@ -108,9 +134,10 @@ export type StoryCove = {
 export const storyCoves: readonly StoryCove[] = [
   { id: 'holding-pier', level: holdingPier, order: 0, entryScene: 'opening' },
   { id: 'bellwater', level: bellwater, order: 1, entryScene: 'another-bell' },
+  { id: 'driftwood-yard', level: driftwoodYard, order: 2, entryScene: 'driftwood-light' },
 ];
 
-export const practiceCoves = [firstCrossing, holdingPier, bellwater] as const;
+export const practiceCoves = [firstCrossing, holdingPier, bellwater, driftwoodYard] as const;
 
 export function storyCove(id: string): StoryCove | undefined {
   return storyCoves.find((cove) => cove.id === id);

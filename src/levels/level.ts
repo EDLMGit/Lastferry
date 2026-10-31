@@ -1,25 +1,19 @@
 import data from '../../data/first-crossing.level.json';
 import holdingData from '../../data/holding-pier.level.json';
 import bellwaterData from '../../data/bellwater.level.json';
+import driftwoodData from '../../data/driftwood-yard.level.json';
 export type Level = Pick<
   typeof data,
-  | 'id'
-  | 'title'
-  | 'rules'
-  | 'world'
-  | 'nodes'
-  | 'edges'
-  | 'piers'
-  | 'passengers'
-  | 'objective'
-  | 'validation'
+  'id' | 'title' | 'rules' | 'world' | 'nodes' | 'edges' | 'piers' | 'objective' | 'validation'
 > & {
+  passengers: ((typeof data.passengers)[number] & { appearance?: string })[];
   start: { boatNodeId: string; aboard: string[]; waitingByPier: Record<string, string[]> };
   names?: { nodes?: Record<string, string>; passengers?: Record<string, string> };
 };
 export const level: Level = data;
 export const holdingPier: Level = holdingData;
 export const bellwater: Level = bellwaterData;
+export const driftwoodYard: Level = driftwoodData;
 export const nodeNames: Record<string, string> = {
   harbor: 'Harbor',
   cut: 'Shallow Cut',

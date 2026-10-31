@@ -1,6 +1,6 @@
 # Last Ferry — story scenes for The Long Tide
 
-**Current flow:** `HOME_PLAY_FLOW_01` in `LAST_FERRY_HOME_PLAY_PACKAGE/NEXT_TASK_HOME_PLAY_FLOW.md` adds live Home and automatic normal-motion progression while preserving the illustrated production below. It replaces both unstarted tasks in `LAST_FERRY_FLOW_AND_FEEDBACK_PACKAGE`; no old Task 01 prerequisite applies. Current evidence: `reviews/home-play-flow/REVIEW.md`.
+**Current task:** `DRIFTWOOD_YARD_01` adds the third playable rescue and the one-shot `driftwood-light` entry. Holding → Bellwater → Driftwood is the implemented journey; First Crossing remains independent practice. The accepted `HOME_PLAY_FLOW_01` live Home, normal-motion autoplay, Pause/Resume and direct/group transfer ownership are retained. Evidence and human-acceptance limits belong in `reviews/driftwood-yard/`; earlier Home evidence remains historical in `reviews/home-play-flow/`.
 
 **Illustrated art implementation:** task `STORY_PRODUCTION_01` in `LAST_FERRY_STORY_PRODUCTION_PACKAGE/NEXT_TASK_STORY_PRODUCTION.md`, from reviewed `6fc5a09dd4ef876ad96ad12d623532f0d13deb10`. The working journey, checkpoints, practice isolation and puzzles remain. The supplied Words and Light opening reference is user-approved; the production port, new Harbor drawing, runtime mix and physical-device experience have separate verification and human-approval status in `reviews/story-production/`. Implementation and focused verification are complete for the documented coverage; human review remains pending.
 
@@ -8,13 +8,13 @@ The campaign has four phases of three coves. Nell joins in Cove 3; a prepared la
 
 ## Shared presentation contract
 
-The opening and first connection use a close illustrated Canvas2D layer inside the actual application's dialog/fullscreen surface. A small variable-length scene definition supplies artwork, complete caption groups, duration, cue positions and optional narration IDs; the finite controller owns shot position and its cancellable run. The existing application alone acknowledges scenes and writes checkpoints. Gameplay remains the accepted interactive 3D world. The standalone reference wrapper and prototype navigation are not shipped as a replacement game or iframe.
+The opening, Harbor connection and Driftwood entry use a close illustrated Canvas2D layer inside the actual application's dialog/fullscreen surface. A small variable-length scene definition supplies artwork, complete caption groups, duration, cue positions and optional narration IDs; the finite controller owns shot position and its cancellable run. The existing application alone acknowledges scenes and writes checkpoints. Gameplay remains the accepted interactive 3D world. The standalone reference wrapper and prototype navigation are not shipped as a replacement game or iframe.
 
 The reference's lavender/peach dusk, teal water, cream/tan animals, yellow ferry/red cabin and warm lights are retained. Rue is tan on the left and Pip cream on the right in the opening. Portrait uses an attached deep teal reading area under recomposed artwork; landscape uses the quiet space beside the focal action. Narrative captions use Georgia with a serif fallback and remain readable HTML. Controls use the accepted cove interface language and native semantics.
 
 Normal motion reveals the entire current caption after about 1,050ms with a brief 240ms opacity fade. Normal opening playback advances Tide → Lantern → Ferry at the existing 6 / 6 / 7-second endpoints; the final picture holds indefinitely. Harbor remains one five-second action with an explicit final handoff. Read story exposes all current-scene copy immediately. Reduced Motion presents each shot's endpoint and caption immediately, preserving ordinary Next navigation. Pause reveals the full caption and preserves elapsed art time; Resume retains consumed cues. Next remains immediate. There is no typewriter or mandatory sound. Reduced Motion remains manual stills.
 
-Next is available immediately and changes only the shot. Only the final Take the helm or Continue to Bellwater action explicitly acknowledges the scene once and enters its destination. Replay restarts the current shot; Replay scene restarts the sequence. Skip animation and Escape from the main scene settle the final shot and expose the complete recap without advancing campaign progress. A pending scene restored from its existing checkpoint starts at that final static endpoint and remains pending until its final action.
+Next is available immediately and changes only the shot. Only the final Take the helm, Continue to Bellwater or Continue to Driftwood action explicitly acknowledges the scene once and enters its destination. Replay restarts the current shot; Replay scene restarts the sequence. Skip animation and Escape from the main scene settle the final shot and expose the complete recap without advancing campaign progress. A pending scene restored from its existing checkpoint starts at that final static endpoint and remains pending until its final action.
 
 Read story and Options settle only the current shot, pause progression and cancel pending/active cues. Returning opens the secondary disclosure before restoring its trigger focus. Closing either returns to that held shot and trigger focus; Escape closes the subordinate reading/settings view before it can skip the scene. Hide/recovery and enabling Reduced Motion settle the current shot without Next or acknowledgment. Turning motion back on does not replay consumed work. Navigation, replacement and disposal cancel owned presentation and sound work. One story clock advances the existing controller; held illustrations do not draw repeatedly. The gameplay world is retained across shots.
 
@@ -24,7 +24,7 @@ Home Play uses the existing trusted click capture to request Sound synchronously
 
 Optional narration IDs and the exact four-clip script are prepared in `LAST_FERRY_STORY_PRODUCTION_PACKAGE/audio/narration-script.json`. Every asset is null and every recording remains pending. There is no generated voice, live TTS, unavailable narration toggle or voice-service dependency. Finished local voice recordings and human listening approval belong to a later contained pass.
 
-All Home harbors are protected piers around the same lighthouse island, seen through different coastal vignettes. Delivered characters stay safe. Cosmetic story time never changes the local puzzle forecast. Adding a third campaign cove later requires a deliberate save-compatibility migration: the current completed-record validator checks the full ordered two-cove registry. This pass does not change that schema speculatively.
+All Home harbors are protected piers around the same lighthouse island, seen through different coastal vignettes. Delivered characters stay safe. Cosmetic story time never changes the local puzzle forecast. The third-cove extension recognizes only the exact historical version-1 two-cove-complete record. Viewing Home, Options or Practice leaves its original bytes untouched. The first deliberate Continue saves pending `driftwood-light` and plays it freshly; later restored pending scenes use the final static recap. Other invalid or future records are not coerced into a supported prefix. The storage key and version remain unchanged.
 
 This task explicitly supersedes the older story-only requirements for distant gameplay-model gestures, one shared scene duration, and every opening caption visible on the first frame. It preserves the working campaign mechanics and all unrelated accepted results. The prior authored-scenes and foundation reports remain historical evidence.
 
@@ -80,6 +80,24 @@ Pip, Rue and Moss are safe on the protected high landing. Rue lowers her lantern
 One quieter lantern contact supports placement. Opening the scene does not replay victory or the preceding rescue's unloading sounds. **Continue to Bellwater** is available immediately and alone acknowledges `another-bell` once before entering the unchanged Bellwater start. Pip, Rue and Moss stay rescued; Tansy, Lark and Bram remain Bellwater's own neighbors. Restoring the pending connection shows its final static composition and complete text, without replaying its finite effects.
 
 **Assets:** the same illustrated characters/coast/props and scene player as the opening, with a newly authored Harbor composition and the existing persistent audio owner. The drawing is not footage of a new playable cove.
+
+## Cove 3 entry — Bellwater to Driftwood — `driftwood-light`
+
+**Trigger:** explicit acceptance of Bellwater's completed rescue. **Implemented scope; human visual/pacing acceptance remains separate.** The exact legacy two-cove completion offers the same fresh entry only after deliberate Continue; ordinary pending-scene restoration uses the established recap.
+
+### Shot — A light at the yard · seven seconds
+
+Nell works beside a timber rail with her lantern resting close to a rope coil. Her warm brown body, lighter muzzle, small round ears and broad dark flattened tail share the new 3D beaver's colors and identity. From 1.1–3.4 seconds her paw and lantern rise in a large visible arc. From 3.4–5.2 seconds her face turns toward the channel and the approaching ferry light. The composed greeting holds after 5.2 seconds and remains at the endpoint. Portrait and short landscape use separate placement/scale constraints to keep the face, lifted light and tail visible.
+
+**Caption, exact:**
+
+> Nell, the boatwright, is still at the yard.
+
+The existing brief caption lead-in, readable HTML, complete description/transcript, Pause/Resume, Replay, Skip and Reduced Motion apply. A restrained finite existing ferry-water cue supports the approaching light; it does not restart the score, arrival or transfer contacts. No narration recording or new narration slot is claimed.
+
+**Continue to Driftwood** is immediately available and alone acknowledges the scene before entering the authored original Driftwood start. Presentation spends no actions and grants no larger ferry. After the third actual rescue, terminal Undo remains until explicit acceptance. The available-content endpoint says **Three coves are safe**, with Home/Practice/Options. The prepared six-space ferry and Wide Berth remain the next contained task.
+
+**Assets:** `src/campaign/story-painter.ts` is the editable original beaver/yard illustration; `registry.ts` supplies its caption, timing, description and cue. Existing painter functions for opening and Harbor remain unchanged. The actual world, portrait and illustration are distinct renderings of the same stable character identity.
 
 ## 2. A wider deck
 

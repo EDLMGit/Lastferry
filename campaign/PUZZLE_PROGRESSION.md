@@ -1,6 +1,6 @@
 # Puzzle progression — selected campaign direction
 
-Design baseline: `1a85874883af5caa59f6294a75495eccf2afebbc`, reviewed 2026-10-25. This document specifies intended progression. **Only Holding Pier, Bellwater and the optional First Crossing practice currently exist. Every future encounter below remains unproven until authored and tested.**
+Original design baseline: `1a85874883af5caa59f6294a75495eccf2afebbc`, reviewed 2026-10-25. Current implementation slice: `DRIFTWOOD_YARD_01`, built forward from the reviewed Home/play game `da1f2686ce6aff8d754e13111447dabb6e1313f0`. **Holding Pier, Bellwater and Driftwood Yard are now authored playable campaign coves; First Crossing remains optional practice. Later encounters remain proposals.** Production witness/geometry checks and actual UI evidence are recorded in `reviews/driftwood-yard/`, separately from supplied design proof and human puzzle acceptance.
 
 ## Campaign sequence
 
@@ -10,7 +10,7 @@ The campaign targets twelve coves in four phases. Milestones follow C3, C6 and C
 | --- | --- | --- |
 | I · C1 | **Holding Pier** | Accepted introduction: trust a safe temporary landing, lighten the boat, rescue Pip/Rue and collect Moss. Preserve its puzzle. |
 | I · C2 | **Bellwater** | Accepted route/deadline composition: consider the loaded return and two shore heights. Preserve its puzzle. |
-| I · C3 | **Driftwood Yard** | Rescue **Nell, a beaver who uses 2 spaces**, using existing load, staging and tide rules. Her introduction adds character, not a special ability. The threshold scene reveals the prepared larger spare boat. |
+| I · C3 | **Driftwood Yard** | Rescue **Nell, a beaver who uses 2 spaces**, using existing load, staging and tide rules. Her introduction adds character, not a special ability. Stage Nell at High Mooring to reach Fern and Oat before Reed Landing floods, then collect her through the newly deepened return. The larger spare boat is deferred to the next milestone. |
 | II · C4 | **Wide Berth** | Enjoy the 6-space boat on forgiving deep water. Use familiar species with new named neighbors. Introduce only the boat and its load table. |
 | II · C5 | **Orchard Landing** | Meet **Orin, a deer who uses 3 spaces** in a clear, generous encounter. Teach his space cost separately from current changes or a tight full-load bottleneck. |
 | II · C6 | **Two Landings** | Combine known load choices, safe staging and the larger boat. A thoughtful subset or delivery order matters. No new rule. |
@@ -100,7 +100,7 @@ The first task creates the campaign opening, connective story scene and explicit
 
 Campaign completion becomes durable on explicit **Continue** after a win; terminal Undo remains available before that boundary. Replaying/Undoing/redelivering must not duplicate milestones. Initial checkpoints may resume at the current cove's beginning, with that behavior stated clearly.
 
-Before releasing the longer phone campaign, add full mid-puzzle restoration including gameplay state, complete Undo history and the corresponding presentation/boat-pose history. A restored position without heading history is not complete recovery. Test tab/background/reload and storage failure, and retain settings independently. Neither checkpoint nor mid-puzzle persistence is claimed implemented by this document.
+Before releasing the longer phone campaign, add full mid-puzzle restoration including gameplay state, complete Undo history and the corresponding presentation/boat-pose history. A restored position without heading history is not complete recovery. Test tab/background/reload and storage failure, and retain settings independently. Current cove-boundary checkpoints are implemented, including the narrowly recognized historical two-cove completion. Full mid-puzzle persistence remains deferred; this document does not claim it.
 
 ## Source grounding
 

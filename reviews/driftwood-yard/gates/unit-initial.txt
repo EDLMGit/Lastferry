@@ -1,0 +1,78 @@
+
+> last-ferry@1.0.0 test:unit
+> vitest run
+
+
+ RUN  v5.0.5 C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry
+
+ ❯ tests/unit/direct-transfer.test.ts (3 tests | 1 failed) 14ms
+   × last safe group is deliberate; a single rabbit still requires the real loss warning 7ms
+ ❯ tests/unit/clearance.test.ts (8 tests | 1 failed) 6922ms
+   × driftwood-yard: full modeled ferry clears land and piers from all reachable headings, both berth sides and reverse departures 1813ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/clearance.test.ts > driftwood-yard: full modeled ferry clears land and piers from all reachable headings, both berth sides and reverse departures
+AssertionError: expected [ …(14) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "yard-mooring/reverse from 1.5707963267948966 frame 188: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948966 frame 189: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948966 frame 190: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948966 frame 191: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948966 frame 192: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948966 frame 193: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948966 frame 194: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948961 frame 188: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948961 frame 189: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948961 frame 190: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948961 frame 191: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948961 frame 192: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948961 frame 193: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948961 frame 194: mooring-pier",
++ ]
+
+ ❯ tests/unit/clearance.test.ts:146:22
+    144|         }
+    145|       }
+    146|     expect(failures).toEqual([]);
+       |                      ^
+    147|     expect(marginFailures).toEqual([]);
+    148|   },
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/unit/direct-transfer.test.ts > last safe group is deliberate; a single rabbit still requires the real loss warning
+AssertionError: expected 'The tide rises after this action.' to contain 'Both are safe aboard'
+
+Expected: "Both are safe aboard"
+Received: "The tide rises after this action."
+
+ ❯ tests/unit/direct-transfer.test.ts:32:54
+     30|   const group = { type: 'board' as const, passengerIds: ['rabbit-1', '…
+     31|   expect(transferFacts(before, group, level)).toMatchObject({ direct: …
+     32|   expect(transferFacts(before, group, level).detail).toContain('Both a…
+       |                                                      ^
+     33|   const subset = { type: 'board' as const, passengerIds: ['rabbit-1'] …
+     34|   const facts = transferFacts(before, subset, level);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  2 failed | 33 passed (35)
+      Tests  2 failed | 325 passed (327)
+   Start at  17:28:40
+   Duration  7.74s (tests 72%, transform 13%, import 13%, worker 1%)
+
+    Isolate  35 workers spawned · ~717ms startup each (spawn + environment, per file)
+             at least ~956ms faster with isolate: false — reuses workers across files instead of one per file
+
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

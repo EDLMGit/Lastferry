@@ -1,4 +1,4 @@
-export type StoryIllustration = 'tide' | 'lantern' | 'ferry' | 'harbor';
+export type StoryIllustration = 'tide' | 'lantern' | 'ferry' | 'harbor' | 'driftwood';
 type Paint = string | CanvasGradient;
 type RabbitPose = {
   lift?: number;
@@ -34,7 +34,13 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
     return x * x * (3 - 2 * x);
   };
   const mix = (a: number, b: number, t: number) => a + (b - a) * t;
-  const durations: Record<StoryIllustration, number> = { tide: 6, lantern: 6, ferry: 7, harbor: 5 };
+  const durations: Record<StoryIllustration, number> = {
+    tide: 6,
+    lantern: 6,
+    ferry: 7,
+    harbor: 5,
+    driftwood: 7,
+  };
   const grains = Array.from({ length: 560 }, (_, i) => ({
     x: ((i * 173 + 43) % 997) / 997,
     y: ((i * 353 + 53) % 991) / 991,
@@ -793,6 +799,185 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
     glow(lampX, lampY, 58 * scale, 0.22);
     finish(t);
   }
+  function driftwoodShot(t: number) {
+    const portrait = W < 480,
+      short = H < 300,
+      lift = ease((t - 1.1) / 2.3),
+      turn = ease((t - 3.4) / 1.8),
+      working = Math.sin(Math.min(1, t / 1.1) * Math.PI * 4) * (1 - lift),
+      s = Math.min(portrait ? 2.3 : short ? 1.4 : 2.5, (H * 0.63) / 130),
+      x = W * (portrait ? 0.48 : 0.735),
+      ground = H * 0.845;
+    backdrop(t, 1);
+    foregroundWater(H * 0.58, t, { x: W * (portrait ? 0.17 : 0.46), strength: 0.34 });
+    const lightX = W * (portrait ? 0.11 : 0.46),
+      lightY = H * 0.62;
+    glow(lightX, lightY, 15, 0.5 + turn * 0.3);
+    ellipse(lightX, lightY, 2.1, 2.1, '#ffe9b2');
+    path(
+      `M ${x - 100 * s} ${ground + 8 * s} Q ${x - 103 * s} ${ground - 1 * s} ${x - 80 * s} ${ground - 3 * s} L ${W + 20} ${ground - 3 * s} L ${W + 20} ${H + 20} L ${x - 85 * s} ${H + 20} Z`,
+      '#496d65',
+    );
+    path(
+      `M ${x - 97 * s} ${ground + 2 * s} L ${W + 20} ${ground - 3 * s} L ${W + 20} ${ground + 12 * s} L ${x - 90 * s} ${ground + 18 * s} Z`,
+      '#a2916c',
+      '#c8b38a',
+      1.5,
+    );
+    for (let i = 0; i < 5; i++) {
+      const y = ground + (22 + 12 * i) * s;
+      line(
+        [
+          [x - 81 * s, y],
+          [W, y - 6 * s],
+        ],
+        '#57766a',
+        1.3,
+      );
+    }
+    ctx.save();
+    ctx.translate(x, ground);
+    ctx.scale(s, s);
+    ellipse(0, 3, 56, 8, 'rgba(21,58,59,.23)');
+    ellipse(43, -8, 36, 13, '#5b4438', -0.24);
+    line(
+      [
+        [24, -10],
+        [48, -20],
+        [62, -18],
+      ],
+      '#80634b',
+      1.3,
+    );
+    line(
+      [
+        [32, -2],
+        [53, -13],
+        [69, -11],
+      ],
+      '#80634b',
+      1.3,
+    );
+    line(
+      [
+        [41, -23],
+        [50, -1],
+      ],
+      '#423c33',
+      1,
+    );
+    line(
+      [
+        [52, -23],
+        [62, -5],
+      ],
+      '#423c33',
+      1,
+    );
+    ellipse(8, -33, 30, 36, '#8e6848', -0.1);
+    ellipse(-3, -34, 20, 29, '#c3a47a', 0.15);
+    ellipse(25, -36, 14, 29, '#76573f', -0.16);
+    ellipse(-9, -1, 18, 6, '#8e6848');
+    ellipse(20, -1, 19, 6, '#8e6848');
+    line(
+      [
+        [-18, -1],
+        [-10, -1],
+      ],
+      '#c3a47a',
+      1.5,
+    );
+    ctx.save();
+    ctx.translate(-4, -71);
+    ctx.rotate(mix(0.08, -0.13, turn));
+    ellipse(-17, -15, 9, 10, '#8e6848', -0.18);
+    ellipse(17, -14, 9, 10, '#8e6848', 0.15);
+    ellipse(-17, -15, 4, 5, '#b38a65');
+    ellipse(17, -14, 4, 5, '#b38a65');
+    ellipse(0, -2, 27, 25, '#8e6848');
+    ellipse(12, 3, 16, 20, '#76573f');
+    ellipse(-13, 12, 20, 13, '#c3a47a');
+    ellipse(0, 12, 13, 12, '#c3a47a');
+    ellipse(-23, 7, 8, 6, '#3f352d');
+    ellipse(-11, -5, 2.6, 3, '#223b36');
+    ellipse(9, -4, 2.2, 2.8, '#223b36');
+    ellipse(-11.8, -6, 0.8, 0.9, '#fff0cd');
+    ctx.fillStyle = '#f3e4bf';
+    ctx.fillRect(-16, 21, 6, 7);
+    ctx.fillRect(-9, 21, 6, 7);
+    line(
+      [
+        [-18, 18],
+        [-9, 20],
+        [-1, 17],
+      ],
+      '#795b43',
+      1.2,
+    );
+    line(
+      [
+        [-21, -15],
+        [-9, -22],
+        [7, -21],
+      ],
+      '#bf956a',
+      1.5,
+    );
+    ctx.restore();
+    const handX = mix(-46, -43, lift),
+      handY = mix(-40 + working * 2, -109, lift);
+    line(
+      [
+        [-16, -47],
+        [-30, mix(-40, -73, lift)],
+        [handX, handY],
+      ],
+      '#8e6848',
+      12,
+    );
+    ellipse(handX, handY, 6.5, 6.5, '#b28b64');
+    line(
+      [
+        [19, -44],
+        [9 - turn * 4, -31],
+      ],
+      '#8e6848',
+      11,
+    );
+    ellipse(9 - turn * 4, -31, 6.5, 6, '#b28b64');
+    ctx.restore();
+    const railX = x - 91 * s,
+      railY = ground - 25 * s;
+    path(
+      `M ${railX} ${railY} L ${railX + 55 * s} ${railY - 2 * s} L ${railX + 55 * s} ${railY + 8 * s} L ${railX} ${railY + 10 * s} Z`,
+      '#8d7754',
+      '#d1bd92',
+      1.2,
+    );
+    line(
+      [
+        [railX + 7 * s, railY + 8 * s],
+        [railX + 10 * s, ground + 5 * s],
+      ],
+      '#6b624b',
+      6 * s,
+    );
+    line(
+      [
+        [railX + 45 * s, railY + 7 * s],
+        [railX + 42 * s, ground + 3 * s],
+      ],
+      '#6b624b',
+      6 * s,
+    );
+    ellipse(railX + 15 * s, railY - 3 * s, 10 * s, 3.5 * s, '#b5a072');
+    ellipse(railX + 15 * s, railY - 3 * s, 6 * s, 2 * s, '#706449');
+    const lampX = x + (mix(-46, -43, lift) - 7) * s,
+      lampY = ground + (mix(-40 + working * 2, -109, lift) + 14) * s;
+    glow(lampX, lampY, 60 * s, 0.32);
+    lantern(lampX, lampY, s, 1, Math.sin(lift * Math.PI) * -0.1);
+    finish(t);
+  }
   return {
     durations,
     resize(width: number, height: number, dpr = 1) {
@@ -809,9 +994,13 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
         0,
         Math.min(durations[illustration], Number.isFinite(elapsedSeconds) ? elapsedSeconds : 0),
       );
-      ({ tide: tideShot, lantern: lanternShot, ferry: answerShot, harbor: harborShot })[
-        illustration
-      ](t);
+      ({
+        tide: tideShot,
+        lantern: lanternShot,
+        ferry: answerShot,
+        harbor: harborShot,
+        driftwood: driftwoodShot,
+      })[illustration](t);
     },
   };
 }

@@ -59,3 +59,48 @@ export function bellLandmark(parent: T.Object3D, position: [number, number, numb
   ball(g, '#d0ab62', [0, 0.63, 0], [0.075, 0.085, 0.075]);
   return g;
 }
+export function driftwoodYard(parent: T.Object3D, position: [number, number, number]) {
+  const group = new T.Group();
+  group.name = 'driftwood-working-yard';
+  group.position.set(...position);
+  parent.add(group);
+  for (const x of [-0.62, 0.62]) {
+    for (const z of [-0.2, 0.2]) {
+      const leg = box(group, '#72563e', [0.12, 0.53, 0.12], [x, 0.26, z], 0.025);
+      leg.rotation.z = x > 0 ? -0.13 : 0.13;
+    }
+    box(group, '#b18b59', [0.19, 0.12, 0.68], [x, 0.48, 0], 0.025);
+  }
+  for (const z of [-0.19, 0, 0.19]) box(group, '#ccab74', [1.65, 0.095, 0.17], [0, 0.57, z], 0.025);
+  box(group, '#977043', [1.32, 0.065, 0.13], [-0.07, 0.65, 0.05], 0.025).rotation.y = -0.12;
+  for (let i = 0; i < 4; i++) {
+    const beam = box(
+      group,
+      i % 2 ? '#b08a58' : '#c6a573',
+      [0.2, 0.14, 1.02],
+      [0.98 + (i % 2) * 0.19, 0.1 + Math.floor(i / 2) * 0.14, -0.12],
+      0.035,
+    );
+    beam.rotation.y = 0.12;
+  }
+  for (const x of [-0.8, 0.8]) {
+    box(group, '#766147', [0.12, 1.15, 0.13], [x, 0.57, -0.56], 0.03);
+    box(group, '#cfb37f', [0.17, 0.06, 0.18], [x, 1.13, -0.56], 0.02);
+  }
+  box(group, '#aa8456', [1.86, 0.14, 0.18], [0, 1.06, -0.56], 0.035);
+  for (let loop = 0; loop < 3; loop++) {
+    const rope = mesh(
+      new T.TorusGeometry(0.13 + loop * 0.027, 0.018, 6, 28),
+      '#d8c395',
+      group,
+      -0.43,
+      0.64 + loop * 0.014,
+      -0.07,
+    );
+    rope.rotation.x = Math.PI / 2;
+  }
+  box(group, '#786346', [0.16, 0.065, 0.16], [0.6, 0.66, -0.14], 0.02);
+  box(group, '#f4ce80', [0.11, 0.18, 0.11], [0.6, 0.78, -0.14], 0.02);
+  cylinder(group, '#716048', 0.1, 0.08, 0.07, [0.6, 0.9, -0.14], 8);
+  return group;
+}

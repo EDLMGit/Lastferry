@@ -1,0 +1,18 @@
+# Actual runs and original failures
+
+The final source batch passed five cases (gates/browser-handoff.txt), with a strengthened real failed-image/delay rerun1/1 and actual production1/1. Final source/media audit records exact implementation identities. This does not relabel all earlier runs green.
+
+1. Initial Vite build rejected root-edited main.ts as non-UTF-8. Encoding normalized; build passed. Earlier Python file-writing failures were tool/authoring failures, not game defects. CRCRLF normalization removed accidental broad whitespace churn.
+2. Initial unit run325passed2failed: new Mooring turn collision and obsolete safe-aboard wording expectation. Geometry fixed, copy expectation updated for the explicit new brief. Original logs retained. Subsequent moving-pair tests found two Nell reboarding collisions; new foredeck approach fixed them. Tail authoring observations retained under assets/ORIGINAL_OBSERVATIONS.md, with actual collision checks kept distinct from an arbitrary silhouette-width bound.
+3. Initial browser capture was interrupted while source changed via HMR, wiping its recorder. Aborted batch, no successful rescue claim; recorder-error.md retained.
+4. Release batch3passed2failed: dense landscape capture failed10s portrait predicate; natural Tab could not reach Board after map panning/rotation. Scene/art and actual portrait rescue, compact Bram/loss/Cancel and opening/reduced checks passed. Label overlap was also visually reproduced. Original screenshots/metadata and logs remain selected where relevant.
+5. A Back to boat fixture step alone did not resolve the keyboard loop. Actual cause: each focused distant map target could pan the current ferry outside the viewport and hide its dock action from Tab. Runtime correction retains dock accessibility in keyboard mode and frames its current boat on focus. Pointer behavior is unchanged. Original keyboard failure retained.
+6. Corrected keyboard run reached/used Board and Undo, then failed an immediate fullscreenElement assertion. Request is asynchronous; final exact-element polling passed with actual app entry/exit, not error-message-only evidence.
+7. Newcove-only bounded name placement corrected the actual overview overlap; original coves' name-placement branch is unchanged. Native final no-overlap checks pass at390/780.
+8. Final five-case batch passed. Dense capture timing was reduced to everythirdframe; actualtimestamps/gain preserved. Successful image loading does not explain or close the earlier failure.
+9. Strengthened image test uses a resource-type-aware route matching query strings, a real1.5s delayed valid PNG and an aborted unique query URL. Observed Nell failed/naturalWidth0 with readable2spaces/fullname; delivery still succeeds. An initial rerun grep used an incorrect start anchor and selected no tests; corrected grep ran1/1. Test-glob mistake is retained in gates/browser-fallback.txt.
+10. Separate production cove rescue passed from exact authored start, all bundled PNGs loaded256px, native choices/Confirm/normal text lines/nested overflow passed all required sizes before actual final delivery. No DEV state bridge.
+
+State tests cover legacy strictness, bytes, first fresh continuation, restored recap, failed writes and repeated continuation. UI exercises representative legacy Home/Options/Practice read-only, explicit continuation/reload, real old/new rescue boundaries and direct practice. Full state-schema matrix is not claimed as separate physical UI tests.
+
+Inherited limitations remain in REVIEW.md. Raw video/frame outtakes are local ignored files, not falsely presented as final successful evidence.

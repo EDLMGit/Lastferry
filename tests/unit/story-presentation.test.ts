@@ -228,3 +228,55 @@ describe('bounded optional story motion', () => {
     expect(presentation.frame.elapsed).toBe(700);
   });
 });
+
+test('Driftwood entry holds an explicit handoff and preserves pause, still and recap policies', () => {
+  const cue = vi.fn(),
+    run = vi.fn();
+  const presentation = new StoryPresentation(vi.fn(), run, cue);
+  presentation.start('driftwood-light', false, 0);
+  for (let t = 100; t <= 2800; t += 100) presentation.update(t);
+  presentation.pause();
+  const elapsed = presentation.frame.elapsed;
+  presentation.update(9000);
+  expect(presentation.frame.elapsed).toBe(elapsed);
+  presentation.resume(false, 10000);
+  for (let t = 10100; t <= 15000; t += 100) presentation.update(t);
+  expect(presentation.frame).toMatchObject({
+    shot: 'driftwood',
+    elapsed: 7000,
+    final: true,
+    settled: true,
+    recap: false,
+  });
+  expect(cue).toHaveBeenCalledTimes(1);
+  expect(presentation.next(false, 16000)).toBe(false);
+  presentation.start('driftwood-light', false, 20000, true);
+  expect(presentation.frame).toMatchObject({
+    shot: 'driftwood',
+    elapsed: 7000,
+    final: true,
+    settled: true,
+    recap: true,
+  });
+  expect(cue).toHaveBeenCalledTimes(1);
+  presentation.replay(false, true, 21000);
+  expect(presentation.frame).toMatchObject({ elapsed: 0, paused: false, recap: false });
+  presentation.skip();
+  expect(presentation.frame).toMatchObject({
+    elapsed: 7000,
+    recap: true,
+    final: true,
+    settled: true,
+  });
+  presentation.start('driftwood-light', true, 22000);
+  expect(presentation.frame).toMatchObject({
+    elapsed: 7000,
+    final: true,
+    settled: true,
+    recap: false,
+  });
+  expect(storyScenes['driftwood-light'].continueLabel).toBe('Continue to Driftwood');
+  expect(storyScenes['driftwood-light'].shots[0].caption).toBe(
+    'Nell, the boatwright, is still at the yard.',
+  );
+});

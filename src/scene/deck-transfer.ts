@@ -4,6 +4,12 @@ export const deckEntryZ = 0.28;
 export const bridgeBowOffset = 0.3;
 export const firstRabbitDeckZ = 0.1;
 
+export function deckTransferEntry(species: string) {
+  return species === 'beaver'
+    ? { z: 0.9, side: 0.82, bridgeAdvance: 0.1 }
+    : { z: deckEntryZ, side: 0.51, bridgeAdvance: 0.46 };
+}
+
 export function sampleDeckTransfer(
   board: boolean,
   from: Vector3,

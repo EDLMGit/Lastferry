@@ -311,7 +311,7 @@
       ],
       "visualSignature": "Separated tall ears, compact body, tiny dark face and pink inner ears.",
       "reuseAndOwnership": "Shared factory; names and gameplay identities come from level passengers. World scales rabbits 1.25 / 1.65 / 1.25.",
-      "behaviorToPreserve": "Coat and pose variation imply no abilities. Keep feet/contact, aboard attachment and canonical settled pose.",
+      "behaviorToPreserve": "Coat and pose variation imply no abilities. Keep feet/contact, aboard attachment and canonical settled pose. Fern/Oat explicit cream/tan identities survive full passenger-array reorder; speciesOrdinal remains the full placement index.",
       "provenance": "original-project-code",
       "acceptance": {
         "state": "part-of-accepted-baseline",
@@ -4559,12 +4559,24 @@
         {
           "path": "cove-portrait-package/portraits/sheep-wool.svg",
           "symbol": "generated geometric intermediate forsheep-wool"
+        },
+        {
+          "path": "tools/render-nell-portrait.mjs",
+          "symbol": "isolated original beaver factory to SVGRenderer and transparent Chromium PNG"
+        },
+        {
+          "path": "assets/portraits/beaver-brown.svg",
+          "symbol": "full completed beaver projection including broad tail"
+        },
+        {
+          "path": "assets/portraits/generation-manifest.json",
+          "symbol": "exact Nell model/generator/camera/shading and output provenance"
         }
       ],
       "originalModelSource": "src/scene/models.ts",
       "identitySource": "src/game/passenger-appearance.ts",
       "generatorSource": "cove-portrait-package/tools/render-portraits.mjs",
-      "generationRecord": "cove-portrait-package/portraits/generation-manifest.json",
+      "generationRecord": "assets/portraits/family-manifest.json",
       "generatedOutputs": [
         {
           "variant": "rabbit-cream",
@@ -4598,27 +4610,44 @@
           "alpha": "straight",
           "sha256": "34ed63cc740937734402f79fbe681a597de26e07c6e7e4583d87c21e9e22ee96",
           "bytes": 43602
+        },
+        {
+          "variant": "beaver-brown",
+          "path": "assets/portraits/beaver-brown.png",
+          "width": 256,
+          "height": 256,
+          "format": "PNG",
+          "colorSpace": "sRGB",
+          "alpha": "straight",
+          "sha256": "248a3568b1483c8745c12431a41b57fc2cdb969ac0ad9e1c0accc2505a7ffdc5",
+          "bytes": 35678
         }
       ],
-      "meaning": "Recognize the existing miniature animal beside its live passenger name and full capacity cost; appearance derives from full-level species ordinal, not current subset or displayname.",
+      "meaning": "Recognize the miniature animal beside live names and capacity; explicit appearance identities remain stable independently of offered order and full species placement ordinals.",
       "variants": [
         "rabbit-cream",
         "rabbit-tan",
-        "sheep-wool"
+        "sheep-wool",
+        "beaver-brown"
       ],
-      "visualSignature": "Original cream/tan upright-ear rabbit heads/upperchests and dark-faced cream-wool sheep, transparent256px sources displayed44px beside copy; no badge, accessories, recoloring or new silhouette.",
-      "reuseAndOwnership": "Exactly three canonical runtime PNGs reused across nine level/passenger combinations. Editable model/generator and sourceSVG recipe own derivatives; shared helper owns static URL/loading decoration; nativebutton owns input.",
+      "visualSignature": "Cream/tan upright-ear rabbits, dark-faced wool sheep, and warm brown beaver with lighter muzzle/chest, round ears and broad flat darker tail; transparent256px originals displayed44px beside live text.",
+      "reuseAndOwnership": "Four canonical PNGs; existing three outputs remain byte-exact. Nell extends the existing family through the same original-model SVG derivation, rasterized offline by installedChromium; no production dependency. Names/costs/input remain native.",
       "behaviorToPreserve": "Full species ordinal remains intact for world deck/pose; Rue/Lark staytan when offeredalone. Preserve modelproportions/geometry/colors, live names/costs, stable44pxslot/footer, focus/subsets/Undo, allacceptedgameplay/world/audio. Unknownappearance uses text-preserving reservedslot.",
       "provenance": "original-model-derived-ui-image",
       "acceptance": {
-        "state": "reviewed-and-published-version12; no-new-device-acceptance-claim",
+        "state": "prior-three-portraits-published-version12; new-beaver-integrated-human-review-pending",
         "gameCommit": "1a85874883af5caa59f6294a75495eccf2afebbc",
-        "basis": "Supplied version12 receipt confirms the independently reviewed portrait build was published to the unchanged owner-private Site; publication is not new physical-device or blanket human visual approval.",
+        "basis": "Nell is an original model-derived extension; prior images and publication history unchanged. Native phone art and physical-device approval remain separate.",
         "history": [
           {
             "state": "integrated-candidate-awaiting-human-playtest",
             "reviewedBaseline": "23a644aba24e6479b9d82a106a745d15c3f8c7dc",
             "basis": "Static model-derived candidates supplied for this task. Source/alpha checks and runtime integration are not human visual acceptance or pixel-identical WebGL rendering."
+          },
+          {
+            "state": "reviewed-and-published-version12; no-new-device-acceptance-claim",
+            "gameCommit": "1a85874883af5caa59f6294a75495eccf2afebbc",
+            "basis": "Supplied version12 receipt confirms the independently reviewed portrait build was published to the unchanged owner-private Site; publication is not new physical-device or blanket human visual approval."
           }
         ]
       },
@@ -4654,16 +4683,20 @@
         {
           "path": "review/deployment-confirmation.json",
           "role": "Supplied version12 publication receipt for the reviewed portrait baseline; this story pass is not deployed"
+        },
+        {
+          "path": "assets/portraits/generation-manifest.json",
+          "role": "Nell source/output/environment provenance; model-derived diffuse shading differs from runtime WebGL"
         }
       ],
       "typeSpecific": {
-        "original model and shared identity sources": "src/scene/models.ts animal(species,variant), unchanged; src/game/passenger-appearance.ts resolves full level plus passenger ID and retains full speciesOrdinal for World placement/pose.",
-        "camera/crop, world proportions and shading recipe": "Original generation-manifest.json: orthographic offset[1.8,1,5], projected head/upper-chest square with8%totalpadding, rabbit floor.23/sheep.15; rabbit scale[1.25,1.65,1.25],sheep[1.15,1.5,1.15]. Ambient linearRGB[.43,.45,.44], warmkey#fff1dc.75 at[-3,5,4],tealfill#aed5d1.26 at[4,1,2]. Offline diffuse SVG shading differs from liveWebGL/ACES/shadows.",
-        "derived output format/dimensions/variants and alpha/color semantics": "Three canonical256x256 straight-alpha RGBA8PNG sRGB derivatives. Original geometric SVG intermediates remain editable reproducible outputs. Keys rabbit-cream/rabbit-tan/sheep-wool; no baked text/check/frame or backgrounddisk.",
-        "generation command/environment and source/output provenance": "Node24.15.0 with existingThree0.186.1 freshly reproduces every suppliedSVG byte; no PNG regeneration because all suppliedmodel/generator/SVG/PNG hashes remain exact. Supplied PNGrasterization Node24.22.1/Sharp0.35.5/Lanczos3 768->256 and completeversions retained. Exact command/source/output audit reviews/passenger-portraits/generation-audit.json; no production rasterizer dependency.",
+        "original model and shared identity sources": "src/scene/models.ts original animal geometry; resolvePassengerAppearance/full speciesOrdinal and passengerModelVariant separate explicit coat identity from placement.",
+        "camera/crop, world proportions and shading recipe": "Original generation-manifest.json: orthographic offset[1.8,1,5], projected head/upper-chest square with8%totalpadding, rabbit floor.23/sheep.15; rabbit scale[1.25,1.65,1.25],sheep[1.15,1.5,1.15]. Ambient linearRGB[.43,.45,.44], warmkey#fff1dc.75 at[-3,5,4],tealfill#aed5d1.26 at[4,1,2]. Offline diffuse SVG shading differs from liveWebGL/ACES/shadows. Nell uses full-model/tail framing, scale[1.15,1.5,1.15], cameraoffset[2.7,1.8,5], same original diffuse ambient/key/fill colors.",
+        "derived output format/dimensions/variants and alpha/color semantics": "Four256x256 straight-alpha sRGB PNGs. Three unchanged supplied images plus original full-body beaver-brown; editable SVG intermediates retained; no baked labels or background.",
+        "generation command/environment and source/output provenance": "Node24.15.0 with existingThree0.186.1 freshly reproduces every suppliedSVG byte; no PNG regeneration because all suppliedmodel/generator/SVG/PNG hashes remain exact. Supplied PNGrasterization Node24.22.1/Sharp0.35.5/Lanczos3 768->256 and completeversions retained. Exact command/source/output audit reviews/passenger-portraits/generation-audit.json; no production rasterizer dependency. Nell: node tools/render-nell-portrait.mjs; Node24, installedThreeSVGRenderer and installedChromium transparent rasterization; exact versions/hashes in assets/portraits/generation-manifest.json. Family record lists both generation paths.",
         "actual consumers, displayed size and semantic purpose": "Board/Letashore/Bringhome in src/main.ts use passengerChoiceContent with explicit resolved appearance; src/dev/asset-gallery.ts shares the original URLs/helper at44CSSpx plus source-size256px specimens. Identity recognition supports live name and capacity; it creates no gameplay difference.",
         "native-control ownership and text-preserving load/failure behavior": "One nativebutton perpassenger, stableID/aria-pressed/order/focus. Emptyalt/non-draggable decorative PNG has reserved44px slot and no independentpointer/focus behavior. Pending/error leaves quietreservedslot; full labels, costs, selection, Close/Confirm remain live. Same dialog survives fullscreen; no newcanvas/context/loop.",
-        "small-screen evidence and human acceptance boundary": "Actual game phone/source evidence under reviews/passenger-portraits; suppliedboard/gallery remain design evidence. User accepts the panel direction at published23a644a/version11, but new portrait appearance is integrated pending ChatGPT review/userplaytest. PhysicalAndroid/platformfonts/otherengines remain unverified unless explicitlyrecorded."
+        "small-screen evidence and human acceptance boundary": "Actual source-tied Driftwood phone evidence is retained with the task review; developer gallery and fullsize PNG inspection are design evidence. New beaver art/hardware listening/physicalAndroid approval remains pending."
       },
       "consumers": [
         "src/main.ts",
@@ -4672,7 +4705,7 @@
       ],
       "gallery": {
         "section": "interface",
-        "preview": "Actualshared44px portraitchoices plus256px originals; threeappearances, bothnamingschemes, selected/unselected/focus/failure and constrainedlonglabelstress. Gallery isdesign evidenceonly."
+        "preview": "Four shared44px choices and source-size images; real static beaver model; named Driftwood companions with stable cream/tan mapping and text-preserving fallback."
       }
     },
     {
@@ -4789,6 +4822,10 @@
         {
           "path": "src/campaign/registry.ts",
           "symbol": "Illustration IDs, semantic shot descriptions and finite millisecond durations"
+        },
+        {
+          "path": "LAST_FERRY_DRIFTWOOD_YARD_PACKAGE/direction/NELL_AND_YARD.md",
+          "symbol": "New original Nell seven-second lantern lift and greeting direction"
         }
       ],
       "meaning": "Presentation-only narrative pictures of changing shoreline, neighbors keeping a light, the answering ferry and safe Harbor. Illustration geometry is never route or passenger-state data.",
@@ -4796,10 +4833,11 @@
         "tide",
         "lantern",
         "ferry",
-        "harbor"
+        "harbor",
+        "driftwood"
       ],
-      "visualSignature": "Soft teal water, dusk lavender/peach, tan Rue left and cream Pip right, woolly Moss, yellow ferry/red cabin and restrained warm lantern/lighthouse light. Three approved opening compositions plus one new protected-Harbor picture.",
-      "reuseAndOwnership": "One current Canvas2D surface in the story view; painter receives illustration/time and bounded DPR1–2. Shared paths/characters/shore/light helpers are reused across four variants. It owns no frame loop, puzzle state, audio or progress.",
+      "visualSignature": "Soft teal water, dusk lavender/peach, tan Rue left and cream Pip right, woolly Moss, yellow ferry/red cabin and restrained warm lantern/lighthouse light. Three approved opening compositions plus one new protected-Harbor picture. Driftwood adds warm brown Nell, broad flat tail, timber rail and a visibly lifted lantern.",
+      "reuseAndOwnership": "One current Canvas2D surface in the story view; painter receives illustration/time and bounded DPR1â€“2. Shared paths/characters/shore/light helpers are reused across four variants. It owns no frame loop, puzzle state, audio or progress. Driftwood uses the same painter and player; accepted original opening/Harbor paths remain unchanged.",
       "behaviorToPreserve": "Opening finite actions retain supplied art and 6/6/7-second endpoints. Harbor is five seconds. Milliseconds convert explicitly to painter seconds. Resize recomposes portrait/landscape; settled endpoints redraw only when needed. No rabbits board during the prelude and the Harbor ferry remains empty.",
       "provenance": "original-package-canvas-art",
       "acceptance": {
@@ -4998,6 +5036,124 @@
         "ui.icon.sound-off",
         "ui.icon.sound-retry"
       ]
+    },
+    {
+      "id": "model.beaver",
+      "name": "Beaver boatwright passenger",
+      "kind": "procedural-model",
+      "status": "integrated",
+      "sources": [
+        {
+          "path": "src/scene/models.ts",
+          "symbol": "animal('beaver'): compact original Nell geometry, beaver-flat-tail"
+        },
+        {
+          "path": "src/game/passenger-appearance.ts",
+          "symbol": "explicit beaver-brown identity; full speciesOrdinal preserved"
+        },
+        {
+          "path": "tools/render-nell-portrait.mjs",
+          "symbol": "matching model-derived static portrait"
+        }
+      ],
+      "variants": [
+        "warm-brown Nell; fixed lighter muzzle and broad resting tail"
+      ],
+      "visualSignature": "Compact warm brown body, lighter muzzle/chest, small rounded ears, broad nose, paired teeth and flattened darker tail.",
+      "reuseAndOwnership": "Original code-native model shares existing matte material palette/factory; World owns canonical deck/pier transforms.",
+      "behaviorToPreserve": "Two-space capacity is level data, not a species ability. Tail remains visible and attached with clearance through deck transfer, tide, berth headings and Undo.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "integrated-awaiting-human-visual-review"
+      },
+      "evidence": [
+        {
+          "path": "assets/portraits/generation-manifest.json",
+          "role": "Original completed model and derivative provenance, not gameplay evidence"
+        },
+        {
+          "path": "src/dev/asset-gallery.ts",
+          "role": "Actual factory static 3D specimen; developer design view"
+        }
+      ],
+      "meaning": "Nell the two-space beaver boatwright; a new neighbor without a gameplay ability.",
+      "consumers": [
+        "src/scene/world.ts",
+        "src/dev/asset-gallery.ts",
+        "tools/render-nell-portrait.mjs"
+      ],
+      "gallery": {
+        "section": "beaver-heading",
+        "preview": "Static real3D model, original256px portrait and shared44px Nell/Fern/Oat choices; links actual Driftwood."
+      },
+      "typeSpecific": {
+        "factory/source symbol": "src/scene/models.ts: animal(species, variant)",
+        "semantic unit/axis/pivot convention or authoritative source": "animal(species,variant) local feet-contact origin, Y up; World applies species scale and canonical deck/shore positions.",
+        "named attachment points when relevant": "animal() returns one Group with local geometry, no separate rig or head attachment API. World passengerAnchors and canonical passenger IDs attach each instance beneath the hull.",
+        "material references": "Shared mat cache; warm fur#8e6848, muzzle#c3a47a, tail#5b4438, nose#3f352d and teeth#f3e4bf.",
+        "actual variant parameters": "animal(beaver,0): brown fur/muzzle/tail; local feet-contact origin; named beaver-flat-tail group; no costume.",
+        "consumers and scale/placement owner": "World applies1.15/1.5/1.15 scale and canonical deck/shore transforms; same scale used by portrait exporter.",
+        "pick/framing role": "World uses geometry for framing and scene selection; gameplay identities remain canonical nodes/passengers.",
+        "disposal owner": "World.dispose traverses shared geometry/material/texture sets and disposes each once; CoastalWater owns its separate resources."
+      }
+    },
+    {
+      "id": "environment.driftwood-yard",
+      "name": "Driftwood timber yard and raised mooring",
+      "kind": "procedural-geometry",
+      "status": "integrated",
+      "sources": [
+        {
+          "path": "src/scene/scenery.ts",
+          "symbol": "driftwoodYard: timber stacks, workbench, beam and rope"
+        },
+        {
+          "path": "src/scene/layout.ts",
+          "symbol": "Driftwood landmarks, stone mooring and reed styling"
+        },
+        {
+          "path": "data/driftwood-yard.level.json",
+          "symbol": "Authored islands, piers and clear passage network"
+        }
+      ],
+      "variants": [
+        "Low working yard",
+        "High stone mooring",
+        "Low reed landing"
+      ],
+      "visualSignature": "Sparse timber stacks, low trestle/rail and rope reuse wood; elevated stone contrasts with low reeds.",
+      "reuseAndOwnership": "Existing wood, stone, reed, coast and water families reused; level owns instances, scenery owns decorative original shapes.",
+      "behaviorToPreserve": "No props change passage depth or create collision-free rule exceptions; real berth and course clearance must remain valid.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "integrated-awaiting-human-visual-review"
+      },
+      "evidence": [
+        {
+          "path": "LAST_FERRY_DRIFTWOOD_YARD_PACKAGE/direction/NELL_AND_YARD.md",
+          "role": "Supplied direction; not gameplay evidence"
+        }
+      ],
+      "meaning": "Working coast with readable low rescue landings and a raised safe holding platform.",
+      "consumers": [
+        "src/scene/world.ts"
+      ],
+      "gallery": {
+        "section": "driftwood-yard",
+        "preview": "Actual authored cove through independent Driftwood practice link."
+      },
+      "typeSpecific": {
+        "factory/source symbol": "src/scene/scenery.ts: driftwoodYard",
+        "semantic unit/axis/pivot convention or authoritative source": "World XZ units, Y up; instances authored in level/layout; decorative props never define rules",
+        "named attachment points when relevant": "Landmark Group at yard-island, pier transfer anchors from level",
+        "material references": "Shared existing wood and stone matte materials",
+        "actual variant parameters": "Original restrained yard group, rocky mooring and reed shoreline styles",
+        "authoritative geometry inputs": "data/driftwood-yard.level.json world/islands/piers, src/scene/layout.ts landmarks",
+        "style/elevation parameters": "Yard low elevation1; raised stone mooring3; low reeds1, scenery Y placement from authored level",
+        "mechanical versus decorative boundary": "Rules read JSON only; decorative timber props do not define paths or costs",
+        "material/texture dependencies": "Shared original wood, stone, reeds and coast palette; no new texture",
+        "generation and disposal owner": "World creates scenery Group and disposes geometry/material ownership with cove"
+      }
     }
   ],
   "seedSource": "cove-ui-package/asset-catalog.seed.json",

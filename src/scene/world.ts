@@ -1,7 +1,7 @@
 import * as T from 'three';
 import { level as baseline, type Level } from '../levels/level';
 import { draft, edgeTo, type State, type Action } from '../game/rules';
-import { resolvePassengerAppearance } from '../game/passenger-appearance';
+import { passengerModelVariant, resolvePassengerAppearance } from '../game/passenger-appearance';
 import { animal, ball, box, cylinder, ferry, lighthouse, mat, mesh, pine } from './models';
 import { sampleJourney, type JourneyPlan } from './motion';
 import { PresentationPoses } from './poses';
@@ -19,12 +19,13 @@ import {
 import {
   bridgeBowOffset,
   deckEntryZ,
+  deckTransferEntry,
   firstRabbitDeckZ,
   sampleDeckTransfer,
   transferHeading,
 } from './deck-transfer';
 import { sceneLayout, type SceneLayout } from './layout';
-import { bellLandmark, cottage } from './scenery';
+import { bellLandmark, cottage, driftwoodYard } from './scenery';
 import { getLevelPaths, type CanonicalPath } from './paths';
 import { Shores, createReedBeds } from './shore';
 import { CoastalWater } from './water';
@@ -281,7 +282,9 @@ export class World {
         const model =
           landmark.kind === 'cottage'
             ? cottage(this.scene, [x, y, z])
-            : bellLandmark(this.scene, [x, y, z]);
+            : landmark.kind === 'yard'
+              ? driftwoodYard(this.scene, [x, y, z])
+              : bellLandmark(this.scene, [x, y, z]);
         if (node) this.registerPlace(node, 'landmark', model);
       }
     }
@@ -359,7 +362,7 @@ export class World {
       );
       this.hull.add(anchor);
       this.passengerAnchors.set(p.id, anchor);
-      const g = animal(p.species, index);
+      const g = animal(p.species, passengerModelVariant(this.level, p.id));
       g.name = p.id;
       g.scale.set(
         p.species === 'rabbit' ? 1.25 : 1.15,
@@ -1561,6 +1564,7 @@ export class World {
         if (tr.before.aboard.includes(id) !== tr.after.aboard.includes(id)) {
           const pier = this.level.piers.find((p) => p.nodeId === tr.before.boatNodeId)!;
           const passenger = this.level.passengers.find((passenger) => passenger.id === id)!;
+          const entry = deckTransferEntry(passenger.species);
           const offset =
             passenger.species === 'rabbit' ? (this.speciesIndex(id) ? 0.07 : -0.07) : 0;
           const bridge = new T.Vector3(
@@ -1571,7 +1575,7 @@ export class World {
                 pier.width / 2,
               ),
             pier.elevation * 0.18 - 0.005,
-            pier.positionXZ[1] + 0.46,
+            pier.positionXZ[1] + entry.bridgeAdvance,
           );
           const land = new T.Vector3(
             pier.positionXZ[0] + offset,
@@ -1580,8 +1584,8 @@ export class World {
           );
           const board = tr.after.aboard.includes(id);
           const side = Math.sign(this.hull.worldToLocal(bridge.clone()).x) || 1;
-          const gate = this.hull.localToWorld(new T.Vector3(side * 0.51, 0.26, deckEntryZ));
-          const corridor = this.hull.localToWorld(new T.Vector3(0, 0.26, deckEntryZ));
+          const gate = this.hull.localToWorld(new T.Vector3(side * entry.side, 0.26, entry.z));
+          const corridor = this.hull.localToWorld(new T.Vector3(0, 0.26, entry.z));
           g.position.copy(
             sampleDeckTransfer(board, tr.positions.get(id)!, bridge, gate, corridor, land, dest, k),
           );

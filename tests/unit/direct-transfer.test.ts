@@ -29,7 +29,7 @@ test('last safe group is deliberate; a single rabbit still requires the real los
     before = reduce(before, action, level);
   const group = { type: 'board' as const, passengerIds: ['rabbit-1', 'rabbit-2'] };
   expect(transferFacts(before, group, level)).toMatchObject({ direct: false, error: null });
-  expect(transferFacts(before, group, level).detail).toContain('Both are safe aboard');
+  expect(transferFacts(before, group, level).detail).toBe('The tide rises after this action.');
   const subset = { type: 'board' as const, passengerIds: ['rabbit-1'] };
   const facts = transferFacts(before, subset, level);
   expect(facts.direct).toBe(false);

@@ -140,6 +140,36 @@ export function animal(species: string, variant = 0) {
     }
     ball(g, '#ba7b6b', [0, 0.38, 0.16], [0.025, 0.018, 0.02]);
     ball(g, wool, [0, 0.18, -0.13], [0.065, 0.065, 0.065]);
+  } else if (species === 'beaver') {
+    const fur = '#8e6848', muzzle = '#c3a47a', tailColor = '#5b4438';
+    const tail = new T.Group();
+    tail.name = 'beaver-flat-tail';
+    tail.position.set(0.1, 0.18, 0.02);
+    tail.rotation.x = -0.6;
+    tail.rotation.y = 0.35;
+    g.add(tail);
+    ball(tail, tailColor, [0, 0.01, -0.065], [0.16, 0.035, 0.12]);
+    for (const x of [-0.06, 0.06]) {
+      const seam = box(tail, '#765747', [0.008, 0.008, 0.12], [x, 0.044, -0.065], 0.003);
+      seam.rotation.y = x > 0 ? -0.24 : 0.24;
+    }
+    for (const x of [-0.115, 0.115])
+      ball(g, '#684b37', [x, 0.045, 0.045], [0.075, 0.045, 0.1]);
+    ball(g, fur, [0, 0.245, 0], [0.19, 0.23, 0.17]);
+    ball(g, muzzle, [0, 0.235, 0.13], [0.125, 0.145, 0.055]);
+    ball(g, fur, [0, 0.45, 0.045], [0.185, 0.155, 0.15]);
+    for (const x of [-0.145, 0.145]) {
+      ball(g, fur, [x, 0.565, 0.025], [0.06, 0.065, 0.045]);
+      ball(g, '#b18a64', [x, 0.57, 0.062], [0.035, 0.038, 0.012]);
+      const paw = ball(g, fur, [x, 0.26, 0.14], [0.06, 0.1, 0.065]);
+      paw.rotation.z = x > 0 ? 0.35 : -0.35;
+      ball(g, '#263d43', [x * 0.56, 0.475, 0.177], [0.019, 0.022, 0.013]);
+    }
+    for (const x of [-0.058, 0.058])
+      ball(g, muzzle, [x, 0.407, 0.178], [0.075, 0.055, 0.045]);
+    ball(g, '#3f352d', [0, 0.44, 0.212], [0.057, 0.035, 0.024]);
+    for (const x of [-0.018, 0.018])
+      box(g, '#f3e4bf', [0.03, 0.033, 0.014], [x, 0.366, 0.202], 0.005);
   } else {
     for (const x of [-0.12, 0.12])
       for (const z of [-0.15, 0.15]) cylinder(g, '#5d6258', 0.037, 0.03, 0.16, [x, 0.08, z], 8);
