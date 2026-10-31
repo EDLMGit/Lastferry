@@ -1646,23 +1646,14 @@ function renderDock() {
 
     if (!direct) button.setAttribute('aria-haspopup', 'dialog');
 
-    const note = document.createElement('span');
-
-    note.className = 'dock-facts';
-
-    note.textContent = direct ? `1 action · ${info.depth}` : 'Choose passengers · 1 action';
-
-    button.append(note);
-
-    if (direct && info.detail) {
-      const detail = document.createElement('span');
-
-      detail.className = 'dock-consequence';
-
-      detail.textContent = info.detail;
-
-      button.append(detail);
-    }
+    // Keep action/depth context available to assistive technology without letting
+    // explanatory paragraphs obscure the boat and passengers on small screens.
+    button.setAttribute(
+      'aria-description',
+      direct
+        ? `1 action. ${info.depth}${info.detail ? `. ${info.detail}` : ''}`
+        : 'Choose passengers. 1 action.',
+    );
 
     dock.append(button);
 
