@@ -134,3 +134,8 @@ The developer gallery renders the actual Nell factory in one static disposable 3
 Editable sources remain local project code and JSON, authored for this project. Supplied direction/proof remains in LAST_FERRY_WIDE_BERTH_PACKAGE unchanged. Current verification, source identity, native game frames and human-acceptance limitations belong in reviews/wide-berth; integration is not visual, difficulty, physical-device or acoustic approval.
 
 The final inventory retains all 78 baseline IDs and contains 79 families. Existing ferry, pier, wake, transfer, passenger-choice and story families extend in place; only `environment.wide-berth` is added. Existing acceptance applies to original variants; the new wide-profile geometry, launch and waterfront await human visual/pacing approval. Six-space automatic seats use full-level species peers sorted by stable passenger ID; the original four-space species ordinals and appearances are preserved.
+
+
+## Wide Berth visual repair
+
+The user rejected the45ab976 Wide Berth presentation despite functional checks. This correction reauthors existing families in local editable TypeScript/JSON: compact hull/cabin/deck, stable shore banks, fitted supported timber and stone landings, four distinct compatible coasts and common grounded Canvas launch anchors. Original animal geometry/scales, four-space variants and all79 catalog IDs remain. No new family, external model, shader or audio is added. The supplied generated WIDE_BERTH_VISUAL_TARGET.png is direction with provenance in its package; it is not used as a game background or gameplay evidence. Actual native Play/Whole-cove/launch observations, failures and source identities are recorded in reviews/wide-berth-visual-repair. Human acceptance awaits the next playtest.

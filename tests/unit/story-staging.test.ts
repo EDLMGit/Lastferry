@@ -7,6 +7,7 @@ import { initial } from '../../src/game/rules';
 import { holdingPier } from '../../src/levels/level';
 import { restoredHarbor } from '../../src/campaign/presentation';
 import { PresentationPoses } from '../../src/scene/poses';
+import { ferryProfile } from '../../src/scene/ferry-profile';
 
 const frame = (world: World) => ({
   left: world.camera.left,
@@ -69,6 +70,7 @@ function fixture(home = false) {
     ]),
     state: home ? restoredHarbor(holdingPier) : initial(holdingPier),
     level: holdingPier,
+    profile: ferryProfile(holdingPier),
     poses: new PresentationPoses(holdingPier),
     routes: new Map([
       ['visible', route],

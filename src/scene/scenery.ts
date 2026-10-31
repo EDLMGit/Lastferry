@@ -1,5 +1,42 @@
 import * as T from 'three';
-import { ball, box, cylinder, mesh, palette } from './models';
+import { ball, box, cylinder, mesh, palette, pine } from './models';
+import type { Level } from '../levels/level';
+import type { IslandStyle } from './layout';
+import { createReedBeds, islandCenter } from './shore';
+
+export function decorateWideIsland(
+  group: T.Group,
+  island: Level['world']['islands'][number],
+  style: IslandStyle,
+) {
+  const center = islandCenter(island),
+    cx = center.x,
+    cz = center.y,
+    height = island.elevation * 0.18;
+  if (style === 'spit') {
+    group.add(createReedBeds(island));
+    for (const side of [-1, 1])
+      for (let i = 0; i < 3; i++)
+        ball(
+          group,
+          '#e5d5b0',
+          [cx + side * (1.1 + i * 0.2), height + 0.025, cz + 0.8 - i * 0.13],
+          [0.07, 0.025, 0.05],
+        );
+  } else {
+    const treeX = style === 'refuge' ? cx + 2 : cx - 2;
+    pine(group, treeX, height, cz - 0.65, style === 'quay' ? 0.58 : 0.52);
+    for (const side of [-1, 1])
+      for (let i = 0; i < 4; i++)
+        ball(
+          group,
+          '#91a273',
+          [cx + side * (1.9 + i * 0.07), height + 0.07, cz + 0.6 + i * 0.09],
+          [0.035, 0.06, 0.035],
+        );
+  }
+  return group;
+}
 
 export function cottage(parent: T.Object3D, position: [number, number, number]) {
   const house = new T.Group();
@@ -108,44 +145,39 @@ export function driftwoodYard(parent: T.Object3D, position: [number, number, num
 export function wideWaterfront(parent: T.Object3D, position: [number, number, number]) {
   const group = new T.Group();
   group.name = 'wide-berth-waterfront';
+  group.scale.x = 0.8;
   group.position.set(...position);
   parent.add(group);
-  for (const x of [-1.18, 1.18]) {
-    for (const z of [-0.5, 0.5]) {
-      box(group, '#776248', [0.15, 1.7, 0.15], [x, 0.85, z], 0.03);
-      box(group, '#c4a777', [0.21, 0.08, 0.22], [x, 1.68, z], 0.025);
+  for (const x of [-0.52, 0.52])
+    for (const z of [-0.3, 0.3]) {
+      box(group, '#776248', [0.09, 1.04, 0.09], [x, 0.52, z], 0.02);
+      box(group, '#c4a777', [0.14, 0.06, 0.14], [x, 1.02, z], 0.018);
     }
-  }
-  for (const z of [-0.52, 0.52]) box(group, '#a47d51', [2.58, 0.16, 0.2], [0, 1.56, z], 0.03);
-  for (let index = 0; index < 7; index++) {
+  for (const z of [-0.3, 0.3]) box(group, '#a47d51', [1.2, 0.09, 0.12], [0, 0.96, z], 0.02);
+  for (let index = 0; index < 6; index++) {
     const board = box(
       group,
       index % 2 ? '#b8694a' : '#a96045',
-      [0.43, 0.1, 1.44],
-      [-1.29 + index * 0.43, 1.82, 0],
-      0.025,
+      [0.22, 0.07, 0.94],
+      [-0.55 + index * 0.22, 1.12, 0],
+      0.015,
     );
-    board.rotation.z = -0.08;
+    board.rotation.x = -0.1;
   }
-  for (const x of [-0.82, 0.82]) box(group, '#8c6c49', [0.15, 0.66, 0.58], [x, 0.33, 0], 0.03);
-  for (const z of [-0.2, 0, 0.2]) box(group, '#c9a776', [2.05, 0.1, 0.17], [0, 0.72, z], 0.025);
-  for (let i = 0; i < 3; i++) {
-    box(group, '#ac8859', [0.15, 0.14, 1.35], [1.65 + i * 0.19, 0.1, -0.1], 0.035).rotation.y =
-      0.12;
-  }
+  for (const x of [-0.4, 0.4]) box(group, '#8c6c49', [0.09, 0.4, 0.36], [x, 0.2, 0], 0.02);
+  box(group, '#c9a776', [1.0, 0.07, 0.4], [0, 0.43, 0], 0.025);
   for (let loop = 0; loop < 3; loop++) {
     const rope = mesh(
-      new T.TorusGeometry(0.15 + loop * 0.03, 0.018, 6, 28),
+      new T.TorusGeometry(0.09 + loop * 0.018, 0.012, 6, 24),
       '#d9c395',
       group,
-      -0.65,
-      0.8 + loop * 0.015,
-      0.05,
+      -0.2,
+      0.48 + loop * 0.011,
+      0.03,
     );
     rope.rotation.x = Math.PI / 2;
   }
-  box(group, '#796246', [0.18, 0.07, 0.18], [0.72, 0.82, -0.03], 0.02);
-  box(group, '#f1cc82', [0.13, 0.19, 0.13], [0.72, 0.95, -0.03], 0.02);
-  cylinder(group, '#726046', 0.11, 0.09, 0.08, [0.72, 1.08, -0.03], 8);
+  box(group, '#796246', [0.12, 0.05, 0.12], [0.3, 0.5, -0.02], 0.015);
+  box(group, '#f1cc82', [0.09, 0.13, 0.09], [0.3, 0.59, -0.02], 0.015);
   return group;
 }

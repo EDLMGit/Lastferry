@@ -35,11 +35,11 @@ export const smallFerryProfile: FerryProfile = {
 };
 export function wideHullOutline() {
   const outline = new Shape();
-  outline.moveTo(-1.3, -1.65);
-  outline.quadraticCurveTo(-1.45, 0.8, -1.3, 2.65);
-  outline.quadraticCurveTo(0, 3.15, 1.3, 2.65);
-  outline.quadraticCurveTo(1.45, 0.8, 1.3, -1.65);
-  outline.quadraticCurveTo(0, -1.84, -1.3, -1.65);
+  outline.moveTo(-0.98, -1.58);
+  outline.quadraticCurveTo(-1.13, 0.45, -0.96, 2.05);
+  outline.quadraticCurveTo(0, 2.45, 0.96, 2.05);
+  outline.quadraticCurveTo(1.13, 0.45, 0.98, -1.58);
+  outline.quadraticCurveTo(0, -1.75, -0.98, -1.58);
   return outline;
 }
 const wakeOutline = wideHullOutline()
@@ -52,11 +52,11 @@ export const wideFerryProfile: FerryProfile = {
   id: 'six-space',
   capacity: 6,
   deckY: 0.26,
-  beam: 2.92,
-  bow: 3.08,
-  stern: 1.82,
-  gateX: 1.12,
-  gateZ: 2.6,
+  beam: 2.4,
+  bow: 2.43,
+  stern: 1.78,
+  gateX: 0.88,
+  gateZ: 1.72,
   wake: {
     fore: Math.max(...wakeOutline.map((p) => p[1])) + 0.18,
     aft: -Math.min(...wakeOutline.map((p) => p[1])) + 0.18,
@@ -87,9 +87,9 @@ export function deckSeat(level: Level, id: string): Vector3 {
     );
   const stable = [...peers].sort((a, b) => a.id.localeCompare(b.id)).findIndex((p) => p.id === id);
   return new Vector3(
-    stable % 2 ? 0.82 : -0.82,
+    stable % 2 ? 0.7 : -0.7,
     wideFerryProfile.deckY,
-    passenger.species === 'sheep' ? 0.1 : 1.05 + Math.floor(stable / 2) * 0.75,
+    passenger.species === 'sheep' ? -0.15 : 0.6 + Math.floor(stable / 2) * 0.5,
   );
 }
 export function shoreSeat(
@@ -98,13 +98,14 @@ export function shoreSeat(
   pier: Level['piers'][number],
   delivered = false,
 ): Vector3 {
-  const index = [...level.passengers]
-    .sort((a, b) => a.id.localeCompare(b.id))
-    .findIndex((p) => p.id === id);
+  const passenger = level.passengers.find((p) => p.id === id)!;
+  const peers = level.passengers.filter((p) => p.species === passenger.species).sort((a, b) => a.id.localeCompare(b.id));
+  const index = peers.findIndex((p) => p.id === id);
+  const bank = passenger.species === 'sheep' ? 0.75 : index < 2 ? 0.62 : 1.05;
   return new Vector3(
-    pier.positionXZ[0] + (index - (level.passengers.length - 1) / 2) * 1.1,
+    pier.positionXZ[0] + (index % 2 ? bank : -bank),
     pier.elevation * 0.18 + (delivered ? 0.03 : -0.005),
-    delivered ? pier.landAnchorXZ[1] + 0.7 : pier.positionXZ[1] - 1.65,
+    pier.positionXZ[1] - (passenger.species === 'sheep' ? 3.3 : 1.85 + Math.floor(index / 2) * 0.6),
   );
 }
 export function wideTransferWindow(won: boolean) {
@@ -150,27 +151,33 @@ export function wideTransferPath(
   const gate = new Vector3(side * profile.gateX, profile.deckY, profile.gateZ).applyMatrix4(
     hullMatrix,
   );
-  const bridge = new Vector3(gate.x, pierY, pier.positionXZ[1] - 0.45);
-  const shore = new Vector3(board ? from.x : destination.x, pierY, pier.positionXZ[1] - 0.45);
+  const bridge = new Vector3(gate.x, pierY, pier.positionXZ[1] - 0.225);
+  const shore = new Vector3(pier.positionXZ[0], pierY, pier.positionXZ[1] - 0.225);
+  const shoreAisle = new Vector3(pier.positionXZ[0], pierY, board ? from.z : destination.z);
   const fore = new Vector3(0, profile.deckY, profile.gateZ).applyMatrix4(hullMatrix);
   const aisle = new Vector3(0, profile.deckY, seat.z).applyMatrix4(hullMatrix);
   const points = board
-    ? [from, shore, bridge, gate, fore, aisle, destination]
-    : [from, aisle, fore, gate, bridge, shore, destination];
+    ? [from, shoreAisle, shore, bridge, gate, fore, aisle, destination]
+    : [from, aisle, fore, gate, bridge, shore, shoreAisle, destination];
   const distances = points.slice(1).map((point, index) => point.distanceTo(points[index]));
   const total = distances.reduce((a, b) => a + b, 0);
-  const turnAt = distances.slice(0, board ? 3 : 4).reduce((a, b) => a + b, 0) / total;
-  return { points, turnAt, gate, bridge };
+  const at = (index: number) => distances.slice(0, index).reduce((a, b) => a + b, 0) / total;
+  const bridgeStart = at(3), bridgeEnd = at(4);
+  const turnAt = board ? bridgeStart + (bridgeEnd - bridgeStart) * 0.35 : bridgeStart + (bridgeEnd - bridgeStart) * 0.65;
+  return { points, turnAt, turnStart: board ? bridgeStart : 0, turnEnd: board ? 1 : bridgeEnd, gate, bridge };
 }
+
 export function wideTransferAngle(
   board: boolean,
   heading: number,
   progress: number,
   turnAt: number,
+  turnStart = 0,
+  turnEnd = 1,
 ) {
   const value = board
-    ? Math.max(0, Math.min(1, progress / turnAt))
-    : 1 - Math.max(0, Math.min(1, (progress - turnAt) / (1 - turnAt)));
+    ? Math.max(0, Math.min(1, (progress - turnStart) / (turnAt - turnStart)))
+    : 1 - Math.max(0, Math.min(1, (progress - turnAt) / (turnEnd - turnAt)));
   const turn = value * value * (3 - 2 * value);
   return Math.atan2(Math.sin(heading), Math.cos(heading)) * turn;
 }

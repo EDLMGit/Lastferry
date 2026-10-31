@@ -44,7 +44,7 @@ import {
 import { waterPresets, type WaterTuning } from './scene/water';
 import { placeActionCard, placeLocalCard, overlaps, type Rectangle } from './ui/placement';
 import { locationFacts } from './ui/location';
-import { endpointTargets } from './ui/cove-layout';
+import { endpointTargets, clearCurrentEndpoint } from './ui/cove-layout';
 import { placeDriftwoodLabels } from './ui/driftwood-labels';
 import { MotionPreference, type MotionMode } from './ui/motion-preference';
 import { PanGesture } from './ui/pan-gesture';
@@ -193,6 +193,7 @@ let cardPlacement: Rectangle | null = null;
 let protectedBounds: Rectangle[] = [];
 let labelLayout = new Map<string, Rectangle>();
 let labelLayoutKey = '';
+let currentMarkerOffset: { key: string; x: number; y: number } | null = null;
 const labelDimensions = new Map<string, { element: HTMLElement; width: number; height: number }>();
 let labelDimensionsKey = '';
 let dockPlacement: Rectangle | null = null;
@@ -2033,18 +2034,54 @@ function positionMap() {
     bounds.top + 80,
     Math.min(bounds.bottom, ...chrome.slice(1).map((r) => r.top - 6)),
   );
+  const markerKey = [
+    level.id,
+    canvas.width,
+    canvas.height,
+    world.layoutRevision,
+    session.state.turn,
+    session.state.boatNodeId,
+    session.busy,
+  ].join(':');
+  const currentBoat = atLocal(frame.boat);
+  const endpoints = level.nodes.map((node) => {
+    const point = world.project(node.positionXZ);
+    return {
+      id: node.id,
+      x: point.x + canvas.left - stage.left,
+      y: point.y + canvas.top - stage.top,
+    };
+  });
+  const otherTargets = endpointTargets(
+    endpoints.filter((endpoint) => endpoint.id !== session.state.boatNodeId),
+  );
   const markers = endpointTargets(
-    level.nodes.map((node) => {
-      const point = world.project(node.positionXZ);
+    endpoints.map((endpoint) => {
+      if (endpoint.id !== session.state.boatNodeId || session.busy) return endpoint;
+      if (currentMarkerOffset?.key !== markerKey) {
+        const clear = clearCurrentEndpoint(
+          endpoint,
+          currentBoat,
+          bounds,
+          otherTargets.map((target) => target.bounds),
+        );
+        currentMarkerOffset = { key: markerKey, x: clear.x - endpoint.x, y: clear.y - endpoint.y };
+      }
       return {
-        id: node.id,
-        x: point.x + canvas.left - stage.left,
-        y: point.y + canvas.top - stage.top,
+        ...endpoint,
+        x: endpoint.x + currentMarkerOffset.x,
+        y: endpoint.y + currentMarkerOffset.y,
       };
     }),
   );
   const placed: Rectangle[] = [];
   const leaders: string[] = [];
+  if (!session.busy) {
+    const current = markers.find((marker) => marker.id === session.state.boatNodeId)!;
+    const contactX = Math.max(currentBoat.left, Math.min(currentBoat.right, current.x));
+    const contactY = Math.max(currentBoat.top, Math.min(currentBoat.bottom, current.y));
+    leaders.push(`<line x1="${current.x}" y1="${current.y}" x2="${contactX}" y2="${contactY}" />`);
+  }
   const layoutKey = [canvas.width, canvas.height, world.layoutRevision, session.state.turn].join(
     ':',
   );
@@ -2076,6 +2113,59 @@ function positionMap() {
   });
   const hint = $('selection-hint'),
     hintBounds = hint.hidden ? null : toLocal(hint.getBoundingClientRect());
+  dockPlacement = null;
+  const dock = $('dock-actions');
+  const placeDock = (avoid: Rectangle[]) => {
+    if (dock.hidden) return null;
+    const boat = atLocal(frame.boat),
+      visible =
+        boat.right > bounds.left &&
+        boat.left < bounds.right &&
+        boat.bottom > bounds.top &&
+        boat.top < bounds.bottom;
+    dock.style.visibility = visible || keyboardInput ? 'visible' : 'hidden';
+    const avoidSets =
+      level.id === 'wide-berth' ? [[...avoid, ...frame.places.map(atLocal)], avoid] : [avoid];
+    const layouts = level.id === 'wide-berth' && dock.children.length > 1 ? ['row', 'column'] : ['row'];
+    let nearby: ReturnType<typeof placeActionCard> | null = null;
+    let clear: Rectangle | null = null;
+    for (const obstacles of avoidSets) {
+      for (const layout of layouts) {
+        dock.dataset.layout = layout;
+        if (dock.offsetWidth > bounds.right - bounds.left) dock.dataset.layout = 'column';
+        nearby = placeActionCard(dock.offsetWidth, dock.offsetHeight, bounds, boat, { avoid: obstacles });
+        clear = placeLocalCard(
+          dock.offsetWidth,
+          dock.offsetHeight,
+          bounds,
+          obstacles,
+          [[nearby.left, nearby.top]],
+          [boat.left, boat.top],
+        );
+        if (clear) break;
+      }
+      if (clear) break;
+    }
+    const choice = clear ? { ...clear, layout: 'floating' as const } : nearby!;
+    dockPlacement = choice;
+    dock.style.left = choice.left + 'px';
+    dock.style.top = choice.top + 'px';
+    placed.push(choice);
+    return choice;
+  };
+  const reservedDock =
+    level.id === 'wide-berth' ? placeDock([...figures, ...markers.map((m) => m.bounds)]) : null;
+  const nameObstacles = reservedDock
+    ? [
+        ...markers,
+        {
+          id: 'dock-controls',
+          x: (reservedDock.left + reservedDock.right) / 2,
+          y: (reservedDock.top + reservedDock.bottom) / 2,
+          bounds: reservedDock,
+        },
+      ]
+    : markers;
   const driftwoodNames =
     level.id === 'driftwood-yard' || level.id === 'wide-berth'
       ? placeDriftwoodLabels(
@@ -2088,9 +2178,13 @@ function positionMap() {
               marker.y <= bounds.bottom
             );
           }),
-          markers,
+          nameObstacles,
           bounds,
-          [...figures, ...(hintBounds ? [hintBounds] : [])],
+          [
+            ...figures,
+            ...(level.id === 'wide-berth' ? frame.places.map(atLocal) : []),
+            ...(hintBounds ? [hintBounds] : []),
+          ],
           labelLayout,
         )
       : null;
@@ -2140,35 +2234,7 @@ function positionMap() {
       );
   }
   if ($('map-leaders')) $('map-leaders').innerHTML = leaders.join('');
-  dockPlacement = null;
-  const dock = $('dock-actions');
-  if (!dock.hidden) {
-    const boat = atLocal(frame.boat),
-      visible =
-        boat.right > bounds.left &&
-        boat.left < bounds.right &&
-        boat.bottom > bounds.top &&
-        boat.top < bounds.bottom;
-    dock.style.visibility = visible || keyboardInput ? 'visible' : 'hidden';
-    dock.dataset.layout = 'row';
-    if (dock.offsetWidth > bounds.right - bounds.left) dock.dataset.layout = 'column';
-    const nearby = placeActionCard(dock.offsetWidth, dock.offsetHeight, bounds, boat, {
-      avoid: [...figures, ...placed],
-    });
-    const clear = placeLocalCard(
-      dock.offsetWidth,
-      dock.offsetHeight,
-      bounds,
-      [...figures, ...placed],
-      [[nearby.left, nearby.top]],
-      [boat.left, boat.top],
-    );
-    const choice = clear ? { ...clear, layout: 'floating' as const } : nearby;
-    dockPlacement = choice;
-    dock.style.left = choice.left + 'px';
-    dock.style.top = choice.top + 'px';
-    placed.push(choice);
-  }
+  if (level.id !== 'wide-berth') placeDock([...figures, ...placed]);
   cardPlacement = null;
   if (locationSelection && !$('local-context').hidden) {
     const local = $('local-context'),

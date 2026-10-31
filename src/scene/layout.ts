@@ -1,4 +1,5 @@
-export type IslandStyle = 'garden' | 'crag' | 'reeds' | 'rocky';
+export type IslandStyle =
+  'garden' | 'crag' | 'reeds' | 'rocky' | 'refuge' | 'working' | 'quay' | 'spit';
 type Landmark = {
   kind: 'lighthouse' | 'cottage' | 'bell' | 'yard' | 'waterfront';
   islandId: string;
@@ -22,10 +23,15 @@ export type SceneLayout = {
 const layouts: Record<string, SceneLayout> = {
   'wide-berth': {
     landmarks: [
-      { kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-10.2, -7] },
-      { kind: 'waterfront', islandId: 'wide-island', positionXZ: [7, -17.5] },
+      { kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-8.75, -5.1] },
+      { kind: 'waterfront', islandId: 'wide-island', positionXZ: [7.65, -12.3] },
     ],
-    islandStyles: { 'quay-island': 'rocky', 'wide-island': 'rocky', 'shell-island': 'reeds' },
+    islandStyles: {
+      'lighthouse-island': 'refuge',
+      'quay-island': 'quay',
+      'wide-island': 'working',
+      'shell-island': 'spit',
+    },
     stonePiers: ['high-quay-pier'],
     centeredWaitingPairs: true,
     cameraPosition: [0, 34, 24],

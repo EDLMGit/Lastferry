@@ -4,7 +4,15 @@ Updated: 2026-10-31. This is the compact continuity record for the current proje
 
 Read this before choosing scope. Detailed implementation history belongs in `STATUS.md`; evidence belongs under `reviews/`. Update this record after each handoff and after a confirmed deployment. User feedback can revise an accepted decision.
 
-## Current scoped pass
+## Current scoped pass — Wide Berth visual repair
+
+WIDE_BERTH_VISUAL_REPAIR_01 corrects the presentation rejected by the user at reviewed `45ab9768792ddd3a8dffb67da6c332f8fe2234ff`. Functional verification did not establish visual acceptance. Campaign expansion is paused. The exact supplied task resolved in the package one directory above the Git root and is retained beside package.json.
+
+The completed correction reauthors the six-space ferry/cabin/deck, supported staggered shore groups, fitted compact landings/gangways, four distinct coastlines and grounded launch. Native inspection drove a Wide-only local phone frame that fits boat and shore neighbors; dock controls avoid landmarks and current markers avoid both faces and other endpoints. Original regressions/corrections remain in reviews/wide-berth-visual-repair. The supplied non-spatial lock, original four-space coves, all79 IDs, accepted audio/water/sailing and strict save boundaries remain. The generated board is direction only.
+
+Final build/TypeScript,388/388units,79-family validation and browser batches5+2+4+1pass. Actual13-/14-action rescues, five bodies/six spaces, six ashore, both tide boundaries, complete Undo, old coves, historical saves, keyboard/touch, fullscreen/rotation and built-game choice fit are covered. Native matched frames and uninterrupted93.961s/63.835s runtime-audio sequences are source-indexed in the review. User visual/listening acceptance and physical-device behavior remain pending; long Overview label leaders/small silhouettes and inherited limits remain explicit. No deployment: existing private Site version12 and its receipt/history are unchanged. The exact implementation/final handoff SHA is recorded in the review packaging audit and PR1.
+
+## Previous scoped pass — Wide Berth implementation (presentation rejected)
 
 `WIDE_BERTH_01` is the combined `LAST_FERRY_WIDE_BERTH_PACKAGE/NEXT_TASK_WIDE_BERTH.md` milestone. The supplied exact task resolved one directory above the actual Lastferry Git root; package retained beside package.json. Started clean on `m1-first-crossing` at reviewed `7e324e88827857469bf348fca311548344d03da6`, matching the fetched remote. Newer/unrelated work is preserved; no reset.
 
@@ -63,8 +71,8 @@ Local Codex implements the current task. ChatGPT reviews the identifiable handof
 | Illustrated story production | `bdd7e86f1e2953144b11108eb828ab85c88eb542` — implemented and focused checks complete; following handoff commit records packaging/continuity only; not published |
 | Home/play implementation | `682ee816537d9a9955f49ed35a3cfdcb3d67f752` — complete combined HOME_PLAY_FLOW_01; review and exact source/media audit in reviews/home-play-flow, not deployed |
 | Driftwood implementation | `16742dbc6007c322db4abc5ebe67f1d1a7acd37b`, reviewed handoff `7e324e88827857469bf348fca311548344d03da6` — gameplay accepted; not deployed |
-| Wide Berth implementation | `d298db84c0e979680bf7b5a20522265d105d1fc1` — six-space physical ferry, launch and fourth cove; focused checks complete, awaiting review; not deployed |
-| Reviewed implementation baseline | `7e324e88827857469bf348fca311548344d03da6` — Wide Berth comparison |
+| Wide Berth implementation | `d298db84c0e979680bf7b5a20522265d105d1fc1` — six-space physical ferry, launch and fourth cove; functional foundation retained, presentation rejected and under correction; not deployed |
+| Reviewed implementation baseline | `45ab9768792ddd3a8dffb67da6c332f8fe2234ff` — visual-repair comparison |
 | Published private phone game | `1a85874883af5caa59f6294a75495eccf2afebbc` — Sites version 12, publication confirmed 2026-10-25 17:28 Madrid |
 | Stable phone URL | https://last-ferry-playtest.abumech.chatgpt.site |
 | Published hosting source | `e87c5c5baa53a39001c5a89b07b59aab2ad150fc` |

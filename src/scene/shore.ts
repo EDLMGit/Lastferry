@@ -46,6 +46,14 @@ export function contactScale(island: Island, waterY: number) {
   return levels.at(-1)![0];
 }
 export function buildCoastGeometry(island: Island, style: IslandStyle = 'garden') {
+  style =
+    style === 'quay'
+      ? 'rocky'
+      : style === 'spit'
+        ? 'reeds'
+        : style === 'working' || style === 'refuge'
+          ? 'garden'
+          : style;
   const contour = shoreContour(island),
     center = islandCenter(island),
     positions: number[] = [],
@@ -105,6 +113,29 @@ export function buildCoastGeometry(island: Island, style: IslandStyle = 'garden'
 export function shoreRockPlacements(island: Island, style: IslandStyle = 'garden') {
   const center = islandCenter(island),
     points = island.footprintXZ;
+  if (['refuge', 'quay', 'working', 'spit'].includes(style)) {
+    const places =
+      style === 'quay'
+        ? [
+            [-1.85, 0.15, 0.38],
+            [1.95, 0.35, 0.32],
+            [-1.8, -0.95, 0.3],
+          ]
+        : style === 'spit'
+          ? [
+              [-1.55, -0.25, 0.18],
+              [1.95, 0.1, 0.14],
+            ]
+          : [
+              [-1.8, 0.2, 0.25],
+              [style === 'refuge' ? 2.3 : 1.7, -0.4, 0.22],
+            ];
+    return places.map(([x, z, radius], i) => ({
+      position: new T.Vector3(center.x + x, island.elevation * 0.18 + radius * 0.06, center.y + z),
+      scale: new T.Vector3(radius, radius * 0.7, radius * 0.75),
+      rotation: new T.Euler(0.1 * i, 0.8 + i, 0.1),
+    }));
+  }
   const count = style === 'reeds' ? 2 : style === 'rocky' ? 5 : 3;
   return Array.from({ length: count }, (_, i) => {
     const a = points[(i * 2 + 1) % points.length],

@@ -1,3 +1,13 @@
+# Current task — Wide Berth visual repair
+
+Started on clean m1-first-crossing at reviewed45ab9768792ddd3a8dffb67da6c332f8fe2234ff. Exact package resolved at parent LAST_FERRY_WIDE_BERTH_VISUAL_REPAIR_PACKAGE and copied unchanged beside package.json. Read required guidance and visually inspected the supplied original direction board. Earlier functional passes are retained; the user rejected the resulting presentation. Campaign expansion is paused for this correction.
+
+Completed: compact substantial-cabin ferry, full-size stable deck/shore groups, fitted T piers and short supported gangways, four distinct compact shores, current marker clear of animals and other targets, and grounded eight-second launch. Native inspection corrected a six-ashore short-landscape crop and a dock control covering the lighthouse. An actual original-cove rescue then exposed a Reeds current cue intercepting Shallow Bend; its exact failure and correction remain. Wide-only local framing protects the actual bodies without changing their scale, rules or sailing plan.
+
+Final Node24 build/TypeScript, **388/388 units in41files** and **79-family validation** pass. Final browser batches pass **5 native interaction cases +2 actual rescue/recording cases +4 lifecycle cases +1 production rescue/fit case**. Both13-/14-action plans, five bodies, six ashore/delivered, both tide boundaries, losing-subset correction, complete Undo, original coves, historical save continuation, settings/fullscreen/rotation and native labels/choices are covered. All original failures and bounded fixture corrections remain. No real collision margin, viewport assertion or timing limit was weakened.
+
+Source-indexed native frames, matched baseline states and two uninterrupted runtime-audio sequences (93.961s landscape;63.835s portrait) are in [the visual repair review](reviews/wide-berth-visual-repair/REVIEW.md). All79 IDs remain, with10 existing entries updated and the gallery deriving corrected production geometry. Human art/listening approval, physical Android and inherited timing/layout/loading limits remain distinct; short Overview labels can have long leaders and small silhouettes. PR1 stays draft, main unchanged, no deployment. Local Journey remains http://127.0.0.1:5270/ and independent practice is /?cove=wide-berth.
+
 # Previous task — Illustrated story production
 
 Implementation committed as `bdd7e86f1e2953144b11108eb828ab85c88eb542`. The packaging audit matches 217 source entries and 80 selected review-media files (283 byte-exact, 14 text newline normalizations), with all 66 tested runtime entries exact. The following commit adds handoff metadata only; final pushed SHA/remote equality are reported in PR #1 and the handoff, separately from unchanged Site version 12.

@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { wideBerth as level } from '../../src/levels/level';
 import proposal from '../../LAST_FERRY_WIDE_BERTH_PACKAGE/design/wide-proof/wide-berth-mechanics.proposal.json';
 import witnessData from '../../data/wide-berth/witnesses.json';
+import visualRepairLock from '../../LAST_FERRY_WIDE_BERTH_VISUAL_REPAIR_PACKAGE/verification/mechanics-before.json';
 import {
   draft,
   initial,
@@ -43,6 +44,10 @@ const replay = (actions: Action[], start = initial(level)) =>
   }, start);
 
 describe('actual authored Wide Berth', () => {
+  test('visual repair preserves every field in the reviewed non-spatial mechanics lock', () => {
+    const { world_contract, ...contract } = visualRepairLock.level;
+    expect(level).toMatchObject({ ...contract, world: world_contract });
+  });
   test('complete geometry retains the exact non-spatial proposal and ordered draft coverage', () => {
     expect(level.rules).toEqual(proposal.rules);
     expect(

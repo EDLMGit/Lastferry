@@ -12,6 +12,7 @@ import {
 import { World } from '../../src/scene/world';
 import { initial } from '../../src/game/rules';
 import { holdingPier } from '../../src/levels/level';
+import { ferryProfile } from '../../src/scene/ferry-profile';
 import {
   clampViewFocus,
   phonePlayScale,
@@ -51,6 +52,7 @@ function fixture(width: number, height: number, usable: ViewRectangle) {
       ['rabbit-1', remote],
     ]),
     state: initial(holdingPier),
+    profile: ferryProfile(holdingPier),
     viewBounds: { minX: -10, maxX: 10, minY: -5, maxY: 7 },
     measuredUsable: null,
     viewMode: 'play',

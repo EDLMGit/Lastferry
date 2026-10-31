@@ -38,7 +38,7 @@ import {
   transferHeading,
 } from './deck-transfer';
 import { sceneLayout, type SceneLayout } from './layout';
-import { bellLandmark, cottage, driftwoodYard, wideWaterfront } from './scenery';
+import { bellLandmark, cottage, driftwoodYard, wideWaterfront, decorateWideIsland } from './scenery';
 import { createPier } from './pier';
 import { getLevelPaths, type CanonicalPath } from './paths';
 import { Shores, createReedBeds } from './shore';
@@ -75,7 +75,7 @@ export class World {
   boatRoot = new T.Group();
   profile: FerryProfile;
   hull: T.Group;
-  gangway: T.Mesh | null = null;
+  gangway: T.Group | null = null;
   animals = new Map<string, T.Group>();
   passengerAnchors = new Map<string, T.Object3D>();
   markers = new Map<string, T.Group>();
@@ -242,7 +242,7 @@ export class World {
       } else this.nonInteractivePlaces.push(shore.mesh, shore.rocks, decoration);
     }
     for (const p of this.level.piers) {
-      const group = createPier(p, this.layout.stonePiers.includes(p.id));
+      const group = createPier(p, this.layout.stonePiers.includes(p.id), this.profile.id === 'six-space');
       this.scene.add(group);
       if (
         p.id === this.level.objective.deliveryPierId ||
@@ -346,7 +346,14 @@ export class World {
     this.boatRoot.add(this.hull);
     this.scene.add(this.boatRoot);
     if (this.profile.id === 'six-space') {
-      this.gangway = mesh(new T.BoxGeometry(1.05, 0.06, 1), '#ac784b', this.scene);
+      this.gangway = new T.Group();
+      this.scene.add(this.gangway);
+      for (const side of [-1, 1])
+        box(this.gangway, '#816446', [0.07, 0.07, 1.04], [side * 0.39, -0.06, 0], 0.012);
+      for (let index = 0; index < 7; index++)
+        box(this.gangway, index % 2 ? '#c6a170' : '#bd935d', [0.86, 0.045, 1 / 7 - 0.008], [0, -0.0225, -0.5 + (index + 0.5) / 7], 0.008);
+      for (const end of [-0.48, 0.48])
+        box(this.gangway, '#66776c', [0.86, 0.018, 0.035], [0, 0.008, end], 0.006);
       this.gangway.name = 'wide-pier-gangway';
     }
     for (const p of this.level.passengers) {
@@ -393,6 +400,9 @@ export class World {
       cz = points.reduce((a, p) => a + p[1], 0) / points.length;
     const height = island.elevation * 0.18;
     const style = this.layout.islandStyles[island.id] ?? 'garden';
+    if (this.level.id === 'wide-berth') {
+      return decorateWideIsland(group, island, style);
+    }
     if (style === 'crag') {
       const rock = mesh(
         new T.DodecahedronGeometry(0.85, 0),
@@ -946,6 +956,53 @@ export class World {
     point.applyMatrix4(this.camera.matrixWorldInverse);
     return { x: point.x, y: point.y + 0.8 };
   }
+  private wideDockFrame(state: State, heading: number, usable: ViewRectangle, scale: number) {
+    const node = this.level.nodes.find((node) => node.id === state.boatNodeId)!;
+    const center = V(node.positionXZ).applyMatrix4(this.camera.matrixWorldInverse);
+    const ordinary = { focus: { x: center.x, y: center.y + 0.8 }, scale };
+    const pier = this.level.piers.find((pier) => pier.nodeId === state.boatNodeId);
+    if (!pier || !this.layoutAnimalBounds.size) return ordinary;
+    const ids = new Set([
+      ...state.aboard,
+      ...state.waitingByPier[pier.id],
+      ...(pier.isDeliveryPier ? state.delivered : []),
+    ]);
+    if (!ids.size) return ordinary;
+    const subjects = new T.Box3();
+    const include = (bounds: T.Box3, transform: T.Matrix4) => {
+      const matrix = this.camera.matrixWorldInverse.clone().multiply(transform);
+      for (const x of [bounds.min.x, bounds.max.x])
+        for (const y of [bounds.min.y, bounds.max.y])
+          for (const z of [bounds.min.z, bounds.max.z])
+            subjects.expandByPoint(new T.Vector3(x, y, z).applyMatrix4(matrix));
+    };
+    for (const height of [hullDraftY(4) - 0.02, 0.36 + hullDraftY(1) + 0.06]) {
+      const hull = new T.Matrix4()
+        .makeRotationY(heading)
+        .setPosition(node.positionXZ[0], height, node.positionXZ[1]);
+      include(this.layoutHullBounds, hull);
+      for (const id of ids) {
+        const passenger = this.level.passengers.find((passenger) => passenger.id === id)!;
+        const seat = deckSeat(this.level, id);
+        const transform = hull.clone().multiply(new T.Matrix4().makeTranslation(seat.x, seat.y, seat.z));
+        transform.scale(new T.Vector3(...passengerScale(passenger.species)));
+        include(this.layoutAnimalBounds.get(id)!, transform);
+      }
+    }
+    for (const id of ids) {
+      const passenger = this.level.passengers.find((passenger) => passenger.id === id)!;
+      const shore = shoreSeat(this.level, id, pier, !!pier.isDeliveryPier);
+      const transform = new T.Matrix4().makeTranslation(shore.x, shore.y + 0.05, shore.z);
+      transform.scale(new T.Vector3(...passengerScale(passenger.species)));
+      include(this.layoutAnimalBounds.get(id)!, transform);
+    }
+    const bounds = { minX: subjects.min.x, maxX: subjects.max.x, minY: subjects.min.y, maxY: subjects.max.y };
+    const padded = { left: usable.left + 8, right: usable.right - 8, top: usable.top + 8, bottom: usable.bottom - 8 };
+    return {
+      focus: { x: (bounds.minX + bounds.maxX) / 2, y: (bounds.minY + bounds.maxY) / 2 },
+      scale: Math.min(scale, overviewScale(bounds, padded)),
+    };
+  }
   private viewChanged() {
     this.camera.updateProjectionMatrix();
     this.coastalWater.setView(this.camera);
@@ -964,6 +1021,7 @@ export class World {
       this.viewMode === 'play' && phone ? phonePlayScale(this.viewBounds, usable) : overview;
     let focus = this.viewFocus;
     let harborFrame = false;
+    let localFrame = false;
     if (this.viewMode === 'overview' && !this.viewPanned)
       focus = {
         x: (this.viewBounds.minX + this.viewBounds.maxX) / 2,
@@ -975,6 +1033,28 @@ export class World {
         x: (this.viewBounds.minX + this.viewBounds.maxX) / 2,
         y: (this.viewBounds.minY + this.viewBounds.maxY) / 2,
       };
+    if (this.profile.id === 'six-space' && phone && this.viewMode === 'play' &&
+      !this.storyFraming && !this.viewPanned && !this.viewLocation) {
+      localFrame = true;
+      const journey = this.transition?.journey;
+      if (journey && this.transition?.path) {
+        const before = this.wideDockFrame(this.transition.before, journey.fromAngle, usable, this.viewScale);
+        const after = this.wideDockFrame(this.transition.after, journey.toAngle, usable, this.viewScale);
+        const offset = (state: State, frame: typeof before) => {
+          const node = this.level.nodes.find((node) => node.id === state.boatNodeId)!;
+          const point = V(node.positionXZ).applyMatrix4(this.camera.matrixWorldInverse);
+          return { x: frame.focus.x - point.x, y: frame.focus.y - point.y - 0.8 };
+        };
+        const from = offset(this.transition.before, before), to = offset(this.transition.after, after);
+        const progress = smooth(this.journeyFrame?.progress ?? 0), moving = this.activeViewFocus();
+        focus = { x: moving.x + T.MathUtils.lerp(from.x, to.x, progress), y: moving.y + T.MathUtils.lerp(from.y, to.y, progress) };
+        this.viewScale = T.MathUtils.lerp(before.scale, after.scale, progress);
+      } else {
+        const frame = this.wideDockFrame(this.state, this.poses.heading, usable, this.viewScale);
+        focus = frame.focus;
+        this.viewScale = frame.scale;
+      }
+    }
     if (
       !this.storyFraming &&
       phone &&
@@ -1052,7 +1132,7 @@ export class World {
       }
     }
     focus =
-      harborFrame || this.storyFraming
+      harborFrame || localFrame || this.storyFraming
         ? focus!
         : clampViewFocus(focus ?? this.activeViewFocus(), this.viewBounds, usable, this.viewScale);
     this.viewFocus = focus;
@@ -1350,7 +1430,6 @@ export class World {
     );
     const direction = path.gate.clone().sub(path.bridge);
     this.gangway.position.copy(path.bridge).add(path.gate).multiplyScalar(0.5);
-    this.gangway.position.y -= 0.03;
     this.gangway.scale.z = direction.length();
     this.gangway.quaternion.setFromUnitVectors(new T.Vector3(0, 0, 1), direction.normalize());
   }
@@ -1617,6 +1696,8 @@ export class World {
               this.boatRoot.rotation.y,
               progress,
               path.turnAt,
+              path.turnStart,
+              path.turnEnd,
             );
             if (!this.reduced && progress > 0 && progress < 1)
               g.position.y += Math.sin(progress * Math.PI * 4) ** 2 * 0.035;

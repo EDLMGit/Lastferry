@@ -1066,77 +1066,95 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
     ctx.save();
     ctx.translate(x, y);
     ctx.scale(s, s);
-    ellipse(0, 24, 137, 17, 'rgba(20,61,65,.17)');
+    ellipse(0, 29, 132, 10, 'rgba(20,61,65,.22)');
     path(
-      'M -139 -13 Q -143 11 -105 36 L 98 36 Q 143 29 151 -4 L 127 -32 L -103 -44 Z',
+      'M -130 -13 Q -137 12 -105 31 Q 5 48 104 29 Q 130 20 139 -6 L 121 -31 L -105 -39 Z',
       '#d3a84e',
       '#b0aa7d',
       1.5,
     );
     path(
-      'M -105 22 L 101 22 Q 133 15 151 -4 L 143 13 Q 131 35 97 39 L -103 39 Q -130 28 -139 7 Z',
+      'M -129 8 Q -110 31 -89 29 L 96 27 Q 123 23 137 4 Q 126 32 102 36 Q 0 49 -104 36 Q -128 28 -129 8 Z',
       '#b88f43',
     );
-    path('M -137 -14 L -104 -46 L 124 -34 L 148 -5 L 101 18 L -105 18 Z', '#e9c268', '#f0db9b', 2);
-    path('M -108 -13 L -93 -33 L 118 -25 L 132 -7 L 94 10 L -100 10 Z', '#bba37a', '#e6cf99', 1.5);
-    for (let i = 0; i < 6; i++)
+    path(
+      'M -130 -14 Q -131 -27 -105 -41 Q 0 -48 118 -31 Q 135 -25 139 -6 Q 127 12 103 15 Q -6 26 -106 13 Z',
+      '#e9c268',
+      '#f0db9b',
+      2.4,
+    );
+    path(
+      'M -119 -15 Q -120 -28 -99 -32 Q 3 -39 115 -24 Q 128 -19 129 -7 Q 118 5 99 7 Q -3 17 -101 5 Z',
+      '#bba37a',
+      '#e6cf99',
+      1.5,
+    );
+    for (let i = 0; i < 8; i++)
       line(
         [
-          [-89 + 35 * i, -29],
-          [-95 + 35 * i, 8],
+          [-101 + 29 * i, -29],
+          [-105 + 29 * i, 9],
         ],
         '#8a7f60',
-        1.2,
+        1,
       );
-    line(
-      [
-        [-102, -4],
-        [116, -2],
-      ],
-      '#d4bd8d',
-      1,
-    );
-    path('M -105 -17 L -105 -71 L -44 -68 L -29 -51 L -29 -12 Z', '#a95e4f', '#d2b38c', 1.5);
-    path('M -44 -68 L -29 -51 L -29 -12 L -44 -22 Z', '#804d45');
+    path('M -106 -17 L -106 -84 L -32 -80 L -15 -63 L -15 -11 Z', '#a95e4f', '#d2b38c', 1.5);
+    path('M -32 -80 L -15 -63 L -15 -11 L -32 -20 Z', '#804d45');
     path(
-      'M -112 -72 L -85 -90 L -34 -83 L -22 -53 L -44 -63 L -107 -65 Z',
+      'M -114 -86 L -89 -105 L -25 -96 L -7 -63 L -32 -74 L -111 -78 Z',
       '#b86c58',
       '#dfb88a',
-      1.6,
+      1.8,
+    );
+    line(
+      [
+        [-82, -103],
+        [-63, -82],
+      ],
+      '#d58b6b',
+      1.2,
+    );
+    line(
+      [
+        [-54, -99],
+        [-37, -78],
+      ],
+      '#d58b6b',
+      1.2,
     );
     ctx.fillStyle = '#3c615b';
-    ctx.fillRect(-95, -57, 20, 23);
-    ctx.fillRect(-65, -56, 15, 23);
+    ctx.fillRect(-96, -67, 25, 27);
+    ctx.fillRect(-60, -65, 21, 27);
     ctx.fillStyle = '#ead7a9';
-    ctx.fillRect(-92, -54, 14, 17);
-    ctx.fillRect(-62, -53, 9, 17);
+    ctx.fillRect(-92, -63, 17, 19);
+    ctx.fillRect(-56, -61, 13, 19);
     line(
       [
-        [-83, -84],
-        [-83, -98],
+        [-84, -100],
+        [-84, -119],
       ],
       '#425b50',
-      5,
+      6,
     );
     line(
       [
-        [-102, -16],
-        [-40, -12],
+        [-106, -17],
+        [-32, -13],
       ],
       '#e9cf93',
       2,
     );
     for (const [xx, yy] of [
-      [-119, -18],
-      [7, 16],
-      [58, 16],
-      [105, 12],
-      [133, -7],
+      [-120, -15],
+      [-4, 17],
+      [51, 15],
+      [100, 10],
+      [126, -10],
     ]) {
       line(
         [
           [xx, yy],
-          [xx, yy - 18],
+          [xx, yy - 17],
         ],
         '#657363',
         2.4,
@@ -1144,17 +1162,26 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
     }
     line(
       [
-        [-119, -36],
-        [8, -2],
-        [60, -2],
-        [104, -6],
-        [133, -25],
+        [-120, -32],
+        [-106, -32],
       ],
       '#e8d5a2',
       2.3,
     );
-    ellipse(-119, 8, 6, 8, '#59635b');
-    ellipse(72, 28, 6, 8, '#59635b');
+    line(
+      [
+        [-4, 0],
+        [51, -2],
+        [100, -7],
+        [126, -27],
+      ],
+      '#e8d5a2',
+      2.3,
+    );
+    ellipse(-119, 8, 7, 9, '#465b54');
+    ellipse(74, 25, 7, 9, '#465b54');
+    ellipse(-119, 8, 3, 4.5, '#bb9a54');
+    ellipse(74, 25, 3, 4.5, '#bb9a54');
     ctx.restore();
   }
   function launchShot(t: number) {
@@ -1165,40 +1192,75 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
       acknowledge = ease((t - 5.8) / 1.4),
       settle = t < 6.1 ? 0 : Math.sin((t - 6.1) * Math.PI * 1.4) * Math.max(0, 1 - (t - 6.1) / 1.6),
       s = Math.min(
-        portrait ? (W - 35) / 300 : (W * 0.48) / 300,
-        portrait ? 1.3 : short ? 1.04 : 1.8,
+        portrait ? (W * 0.88) / 280 : (W * 0.4) / 280,
+        H / 210,
+        portrait ? 1.2 : short ? 1.02 : 1.8,
       ),
-      ground = H * (portrait ? 0.41 : 0.46),
-      nellX = W * (portrait ? 0.43 : 0.57),
-      nellS = Math.min(portrait ? 1.12 : short ? 0.59 : 1.1, (H * 0.28) / 90),
-      boatX = W * (portrait ? 0.46 : 0.69) + glide * W * (portrait ? 0.055 : 0.065),
-      boatY = H * (portrait ? 0.73 : 0.79) + glide * H * (portrait ? 0.055 : 0.045) + settle * 1.8;
+      ground = H * (portrait ? 0.58 : 0.56),
+      quayLeft = W * (portrait ? 0.58 : 0.81),
+      shoreTop = ground - 22 * s,
+      waterline = ground + 69 * s,
+      boatX = W * (portrait ? 0.5 : 0.625) - glide * 19 * s,
+      boatY = waterline - 35 * s + settle * 1.1,
+      nellS = s * 0.77,
+      nellX = quayLeft + 30 * s,
+      nellFeet = ground - 3 * s,
+      cleatX = nellX - 34 * nellS,
+      cleatY = nellFeet - 14 * nellS;
     backdrop(t, 1);
-    foregroundWater(H * 0.55, t, { x: boatX, strength: 0.3 });
-    const quayLeft = W * (portrait ? 0.04 : 0.49),
-      quayRight = W + 20;
+    foregroundWater(ground + 8 * s, t, { x: boatX, strength: 0.3 });
     path(
-      `M ${quayLeft} ${ground + 4} L ${quayRight} ${ground - 9} L ${quayRight} ${ground + 49} L ${quayLeft} ${ground + 43} Z`,
-      '#496d65',
+      `M ${quayLeft + 38 * s} ${shoreTop} Q ${W * 0.89} ${shoreTop - 15 * s} ${W + 30} ${shoreTop - 30 * s} L ${W + 30} ${waterline + 38 * s} Q ${W * 0.89} ${waterline + 12 * s} ${quayLeft + 52 * s} ${waterline - 12 * s} Z`,
+      '#648478',
     );
     path(
-      `M ${quayLeft} ${ground - 4} L ${quayRight} ${ground - 15} L ${quayRight} ${ground + 3} L ${quayLeft} ${ground + 15} Z`,
-      '#a2916c',
+      `M ${quayLeft + 38 * s} ${shoreTop} Q ${W * 0.89} ${shoreTop - 15 * s} ${W + 30} ${shoreTop - 30 * s} L ${W + 30} ${ground + 2 * s} Q ${W * 0.88} ${ground + 20 * s} ${quayLeft + 36 * s} ${ground + 14 * s} Z`,
+      '#a6aa85',
+      '#d2c69d',
+      1.4,
+    );
+    for (const offset of [5, 65, 127]) {
+      const px = quayLeft + offset * s;
+      line(
+        [
+          [px, ground + 4 * s],
+          [px, waterline + 16 * s],
+        ],
+        '#536b59',
+        8 * s,
+      );
+      line(
+        [
+          [px - 2 * s, ground + 7 * s],
+          [px - 2 * s, waterline + 12 * s],
+        ],
+        '#a69b73',
+        2 * s,
+      );
+      ellipse(px, waterline + 14 * s, 13 * s, 2.1 * s, 'rgba(38,79,74,.24)');
+    }
+    path(
+      `M ${quayLeft - 13 * s} ${ground - 5 * s} L ${W + 25} ${ground - 17 * s} L ${W + 25} ${ground + 1 * s} L ${quayLeft - 13 * s} ${ground + 12 * s} Z`,
+      '#9d8c66',
       '#d5bf90',
       1.4,
     );
-    for (let i = 0; i < 5; i++)
+    path(
+      `M ${quayLeft - 13 * s} ${ground + 12 * s} L ${W + 25} ${ground + 1 * s} L ${W + 25} ${ground + 9 * s} L ${quayLeft - 13 * s} ${ground + 20 * s} Z`,
+      '#726c51',
+    );
+    for (let px = quayLeft; px < W + 25; px += 19 * s)
       line(
         [
-          [quayLeft + 30 + 52 * i, ground + 12],
-          [quayLeft + 27 + 52 * i, ground + 42],
+          [px, ground - 5 * s],
+          [px + 4 * s, ground + 10 * s],
         ],
-        '#567366',
-        1.5,
+        '#b9aa80',
+        1,
       );
-    const houseX = W * (portrait ? 0.75 : 0.87),
-      houseY = ground - 8,
-      houseS = portrait ? 0.9 : short ? 0.6 : 1;
+    const houseX = W * 0.94,
+      houseY = shoreTop - 3 * s,
+      houseS = s * 0.7;
     ctx.save();
     ctx.translate(houseX, houseY);
     ctx.scale(houseS, houseS);
@@ -1214,50 +1276,48 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
       3,
     );
     ctx.restore();
-    const helperS = Math.min(portrait ? 0.68 : short ? 0.45 : 0.83, (H * 0.24) / 91);
-    rabbit(W * (portrait ? 0.72 : 0.77), ground - 2, helperS, 'cream', {
+    const helperS = s * (portrait ? 0.46 : 0.48);
+    rabbit(quayLeft + 78 * s, ground - 6 * s, helperS, 'cream', {
       guide: Math.sin(release * Math.PI) * 0.9,
       head: mix(-0.13, 0.09, glide),
     });
-    rabbit(W * (portrait ? 0.88 : 0.88), ground - 5, helperS * 0.93, 'tan', {
+    rabbit(quayLeft + 111 * s, ground - 9 * s, helperS * 0.93, 'tan', {
       head: mix(-0.14, 0.07, acknowledge),
       warmth: 0.35,
     });
-    const cleatX = nellX - 39 * nellS,
-      cleatY = ground - 10;
+    readyFerry(boatX, boatY, s);
     line(
       [
-        [cleatX - 8, cleatY],
-        [cleatX + 8, cleatY],
+        [cleatX - 8 * s, cleatY],
+        [cleatX + 8 * s, cleatY],
       ],
       '#4b6157',
-      4,
+      4 * s,
     );
     line(
       [
         [cleatX, cleatY],
-        [cleatX, cleatY + 10],
+        [cleatX, ground + 7 * s],
       ],
       '#4b6157',
-      4,
+      4 * s,
     );
-    readyFerry(boatX, boatY, s);
     if (release < 1) {
       ctx.globalAlpha = 1 - release;
       line(
         [
           [cleatX, cleatY],
-          [mix(cleatX, boatX - 108 * s, 0.55), mix(cleatY, boatY - 15 * s, 0.55) + release * 18],
-          [boatX - 108 * s, boatY - 15 * s],
+          [mix(cleatX, boatX + 125 * s, 0.5), mix(cleatY, boatY - 13 * s, 0.5) + release * 12 * s],
+          [boatX + 125 * s, boatY - 13 * s],
         ],
         '#d6be8d',
-        2.6,
+        2.6 * s,
       );
       ctx.globalAlpha = 1;
     }
-    launchBeaver(nellX, ground - 4, nellS, release, acknowledge);
+    launchBeaver(nellX, nellFeet, nellS, release, acknowledge);
     const handX = nellX + mix(-38, -33, release) * nellS,
-      handY = ground - 4 + mix(-20, -65, release) * nellS;
+      handY = nellFeet + mix(-20, -65, release) * nellS;
     line(
       [
         [cleatX, cleatY],
@@ -1272,8 +1332,8 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
       for (let i = 0; i < 3; i++)
         line(
           [
-            [boatX - 148 * s - i * 9, boatY + 13 * s + i * 4],
-            [boatX - 170 * s - i * 10, boatY + 14 * s + i * 4],
+            [boatX + 141 * s + i * 8, waterline + i * 4],
+            [boatX + 165 * s + i * 9, waterline + 1 + i * 4],
           ],
           '#dce5c9',
           1.6,

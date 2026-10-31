@@ -316,6 +316,7 @@ test('earned Driftwood launch and full six-space deep-route rescue with runtime 
     deviceScaleFactor: 1,
   });
   const page = await context.newPage();
+  page.setDefaultTimeout(15000);
   let stop: any;
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
@@ -374,6 +375,7 @@ test('portrait staging strategy and current-depth shortcut with real full rescue
     isMobile: true,
   });
   const page = await context.newPage();
+  page.setDefaultTimeout(15000);
   let stop: Awaited<ReturnType<typeof recordRuntime>> | undefined;
   try {
     await seeded(page, complete3);
@@ -434,6 +436,7 @@ test('five-body six-space witness, six waiting choices, overcapacity and usable 
     isMobile: true,
   });
   const page = await context.newPage();
+  page.setDefaultTimeout(15000);
   try {
     await beginWide(page);
     await choose(page, 'unload', ['alder']);
@@ -521,6 +524,7 @@ test('historical two and three boundaries stay read-only then advance fresh and 
       isMobile: true,
     });
     const page = await context.newPage();
+  page.setDefaultTimeout(15000);
     try {
       await seeded(page, record);
       await page.goto('/');
@@ -561,6 +565,7 @@ test('original profiles, dynamic Help, reduced transfers, keyboard and fullscree
     isMobile: true,
   });
   const page = await context.newPage();
+  page.setDefaultTimeout(15000);
   try {
     await ready(page, 'wide-berth');
     await activate(page, 'menu', true);
@@ -630,6 +635,7 @@ test('launch playback intent, pause, skip, replay, mute and controlled backgroun
     isMobile: true,
   });
   const page = await context.newPage();
+  page.setDefaultTimeout(15000);
   try {
     await seeded(page, complete3);
     await page.goto('/');
@@ -693,6 +699,7 @@ test('launch repeated handoff, real Restart and cove-change recovery preserve ca
     isMobile: true,
   });
   const page = await context.newPage();
+  page.setDefaultTimeout(15000);
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
   try {

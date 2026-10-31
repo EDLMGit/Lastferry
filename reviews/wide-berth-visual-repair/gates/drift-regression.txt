@@ -1,0 +1,68 @@
+
+> last-ferry@1.0.0 test:e2e
+> playwright test wide-visual-repair.spec.ts --grep Driftwood current
+
+
+Running 1 test using 1 worker
+
+(node:49684) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\e2e\wide-visual-repair.spec.ts:14:1 › Driftwood current cue leaves the next passage available after rabbit boarding (33.8s)
+
+
+  1) tests\e2e\wide-visual-repair.spec.ts:14:1 › Driftwood current cue leaves the next passage available after rabbit boarding 
+
+    TimeoutError: locator.tap: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for locator('#map-bend')
+        - locator resolved to <button id="map-bend" data-risk="safe" class="map-target" aria-expanded="false" data-status="available" data-destination="bend" aria-controls="local-context" title="adjacent passage available" aria-label="Select Shallow Bend; adjacent passage available">…</button>
+      - attempting tap action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <span class="map-symbol" aria-hidden="true">•</span> from <div id="stop-reeds" class="map-stop" data-adjacent="false">…</div> subtree intercepts pointer events
+        - retrying tap action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <span class="map-symbol" aria-hidden="true">•</span> from <div id="stop-reeds" class="map-stop" data-adjacent="false">…</div> subtree intercepts pointer events
+        - retrying tap action
+          - waiting 100ms
+        24 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <span class="map-symbol" aria-hidden="true">•</span> from <div id="stop-reeds" class="map-stop" data-adjacent="false">…</div> subtree intercepts pointer events
+         - retrying tap action
+           - waiting 500ms
+
+
+       at ui.ts:39
+
+      37 |     await activate(page, current, touch);
+      38 |   }
+    > 39 |   if (touch) await page.locator(`#${id}`).tap();
+         |                                           ^
+      40 |   else await page.locator(`#${id}`).click();
+      41 | }
+      42 | export async function wholeCove(page: Page, touch = false) {
+        at activate (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\ui.ts:39:43)
+        at selectPlace (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\ui.ts:56:3)
+        at startMove (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\ui.ts:60:3)
+        at act (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\ui.ts:64:30)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\wide-visual-repair.spec.ts:27:3
+
+    Error Context: test-results\wide-visual-repair-Driftwo-01c94-lable-after-rabbit-boarding\error-context.md
+
+    Error Context: test-results\wide-visual-repair-Driftwo-01c94-lable-after-rabbit-boarding\error-context.md
+
+  1 failed
+    tests\e2e\wide-visual-repair.spec.ts:14:1 › Driftwood current cue leaves the next passage available after rabbit boarding 
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice
