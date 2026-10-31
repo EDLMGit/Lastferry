@@ -243,40 +243,58 @@
         {
           "path": "src/scene/world.ts",
           "symbol": "World.boatRoot / hull / passengerAnchors"
+        },
+        {
+          "path": "src/scene/ferry-profile.ts",
+          "symbol": "ferryProfile, deckSeat, hullDraftY, shoreSeat, wideTransferPath: shared physical presentation contract"
+        },
+        {
+          "path": "src/scene/pier.ts",
+          "symbol": "Shared actual pier factory used by runtime and clearance checks"
         }
       ],
       "variants": [
         "empty and loaded draft",
-        "both safe berth headings"
+        "both safe berth headings",
+        "four-space original profile preserved",
+        "six-space wider/longer deck, full draft four",
+        "fixed identity seating for every legal two-sheep/four-rabbit subset",
+        "up to five bodies occupying six spaces"
       ],
       "visualSignature": "Curved yellow hull, warm red cabin, planked open deck, cream trim, dark fenders.",
       "reuseAndOwnership": "One reusable geometry family per cove. Named deck-anchor-{passengerId} children belong to the animated hull. Shared matte materials; scoped water-contact hull material.",
-      "behaviorToPreserve": "Keep shaped bow, deck positions, passenger attachment, heading history and current pick/framing envelope.",
+      "behaviorToPreserve": "Keep shaped bow, deck positions, passenger attachment, heading history and current pick/framing envelope. Active level alone chooses hull; old cove profiles remain byte-equivalent. Fixed seats never reshuffle stationary passengers. Six-space sequential group presentation retains accepted action/audio timing.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "part-of-accepted-baseline",
-        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+        "state": "four-space-accepted-six-space-integrated-awaiting-human-review",
+        "reviewedBaseline": "7e324e88827857469bf348fca311548344d03da6",
+        "basis": "Existing small boat accepted; new larger variant requires native moving/phone review separately."
       },
       "evidence": [
         {
           "path": "reviews/phone-audio-fullscreen/REVIEW.md",
           "role": "Current build identity and preservation; not an isolated visual test of every family"
+        },
+        {
+          "path": "reviews/wide-berth/original-model-audit.json",
+          "role": "Original small-ferry actual mesh/index/transform/color signature preservation"
         }
       ],
       "meaning": "Yellow ferry with red cabin. Keep shaped bow, deck positions, passenger attachment, heading history and current pick/framing envelope.",
       "consumers": [
-        "src/scene/world.ts"
+        "src/scene/world.ts",
+        "src/dev/asset-gallery.ts"
       ],
       "gallery": {
-        "section": "inventory",
-        "preview": "Source links and attributed existing evidence; no isolated rendering claimed"
+        "section": "wide-ferry",
+        "preview": "Actual factory, unchanged full-size cast and production seats: five bodies occupying six spaces; developer specimen not gameplay."
       },
       "typeSpecific": {
         "factory/source symbol": "src/scene/models.ts: ferry; src/scene/world.ts: World.boatRoot / hull / passengerAnchors",
         "semantic unit/axis/pivot convention or authoritative source": "ferry() local origin at nominal light-load hull reference; +Z bow, Y up. World.boatRoot owns route/heading, hull owns draft/bob.",
-        "named attachment points when relevant": "World creates deck-anchor-{passengerId} beneath animated hull. Canonical passenger-slot order comes from level passenger data.",
+        "named attachment points when relevant": "World creates deck-anchor-{passengerId} beneath the animated hull. Four-space profiles preserve full-level species ordinal; six-space seats use the full-level species peers sorted by stable passenger ID, independent of the aboard subset.",
         "material references": "src/scene/models.ts palette/mat and local authored colors; scoped contact/lighthouse materials where used.",
-        "actual variant parameters": "empty and loaded draft; both safe berth headings",
+        "actual variant parameters": "Default four-space, or active capacity-six wide profile. Shared beam/bow/stern/deck/gate/wake/berth dimensions in ferry-profile.ts; no fleet selector.",
         "consumers and scale/placement owner": "One reusable geometry family per cove. Named deck-anchor-{passengerId} children belong to the animated hull. Shared matte materials; scoped water-contact hull material.",
         "pick/framing role": "World uses geometry for framing and scene selection; gameplay identities remain canonical nodes/passengers.",
         "disposal owner": "World.dispose traverses shared geometry/material/texture sets and disposes each once; CoastalWater owns its separate resources."
@@ -567,20 +585,26 @@
         {
           "path": "src/scene/layout.ts",
           "symbol": "SceneLayout.stonePiers"
+        },
+        {
+          "path": "src/scene/pier.ts",
+          "symbol": "createPier shared original factory; broad new pier/standing-row variant"
         }
       ],
       "variants": [
         "wood boards",
         "grey stone boards",
-        "water-contact vulnerable/home piles"
+        "water-contact vulnerable/home piles",
+        "Wide Berth broad six-neighbor piers with actual matched gangway"
       ],
       "visualSignature": "Substantial rounded boards, four piles with pale caps, small warm mooring lantern.",
       "reuseAndOwnership": "Generated from pier width, landAnchorXZ, elevation and positionXZ; no independent mesh file.",
-      "behaviorToPreserve": "Keep geometry-derived berth/gangplank positions, flood water height and land contact; both ferry headings support transfer.",
+      "behaviorToPreserve": "Keep geometry-derived berth/gangplank positions, flood water height and land contact; both ferry headings support transfer. Old factory mesh/placement behavior retained; new broad geometry supports six waiting/delivered neighbors.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "part-of-accepted-baseline",
-        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+        "state": "original-four-space-accepted-six-space-integrated-awaiting-human-review",
+        "reviewedBaseline": "7e324e88827857469bf348fca311548344d03da6",
+        "basis": "Historical acceptance applies to original variants. The new Wide Berth/profile variant is integrated and focused checks are recorded separately; native visual and human approval are not inherited."
       },
       "evidence": [
         {
@@ -1242,16 +1266,21 @@
       ],
       "visualSignature": "Open pearl #d3e7df crests over muted teal #3b8889.",
       "reuseAndOwnership": "One dynamic mesh; fixed 12-event pool, 1800ms lifetime, independent saved world pose and age.",
-      "behaviorToPreserve": "Pure yaw/bob/draft emit no wake; subsequent boat movement does not drag previous crests; reset/Undo/hide clear.",
+      "behaviorToPreserve": "Pure yaw/bob/draft emit no wake; subsequent boat movement does not drag previous crests; reset/Undo/hide clear. Six-space contact/crest dimensions follow the actual larger hull outline; original small-profile contact remains exact. Release lifecycle, palette, masks, finite residual and Reduced clearing remain.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "part-of-accepted-baseline",
-        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+        "state": "original-four-space-accepted-six-space-integrated-awaiting-human-review",
+        "reviewedBaseline": "7e324e88827857469bf348fca311548344d03da6",
+        "basis": "Historical acceptance applies to original variants. The new Wide Berth/profile variant is integrated and focused checks are recorded separately; native visual and human approval are not inherited."
       },
       "evidence": [
         {
           "path": "reviews/phone-audio-fullscreen/REVIEW.md",
           "role": "Current build identity and preservation; not an isolated visual test of every family"
+        },
+        {
+          "path": "LAST_FERRY_WIDE_BERTH_PACKAGE/contracts/FERRY_AND_TRANSFERS.md",
+          "role": "Current scoped wider-profile contract; verification remains distinct from specification"
         }
       ],
       "meaning": "Independently released ferry crests. Pure yaw/bob/draft emit no wake; subsequent boat movement does not drag previous crests; reset/Undo/hide clear.",
@@ -1590,16 +1619,21 @@
       ],
       "visualSignature": "Grounded gangplank travel and proper deck attachment.",
       "reuseAndOwnership": "Shared paths/timeline for real changed passenger subset; crossing/settling contacts drive sound.",
-      "behaviorToPreserve": "One canonical action, cancellable transient presentation, both berth headings; new icon does not immediately transfer.",
+      "behaviorToPreserve": "One canonical action, cancellable transient presentation, both berth headings; new icon does not immediately transfer. Six-space profile uses fixed identity seats and a sequential foredeck/central aisle path inside the same accepted action duration; group audio stays grouped. Old small profiles retain their prior paths.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "part-of-accepted-baseline",
-        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+        "state": "original-four-space-accepted-six-space-integrated-awaiting-human-review",
+        "reviewedBaseline": "7e324e88827857469bf348fca311548344d03da6",
+        "basis": "Historical acceptance applies to original variants. The new Wide Berth/profile variant is integrated and focused checks are recorded separately; native visual and human approval are not inherited."
       },
       "evidence": [
         {
           "path": "reviews/phone-audio-fullscreen/REVIEW.md",
           "role": "Current build identity and preservation; not an isolated visual test of every family"
+        },
+        {
+          "path": "LAST_FERRY_WIDE_BERTH_PACKAGE/contracts/FERRY_AND_TRANSFERS.md",
+          "role": "Current scoped wider-profile contract; verification remains distinct from specification"
         }
       ],
       "meaning": "Passenger boarding and unloading presentation. One canonical action, cancellable transient presentation, both berth headings; new icon does not immediately transfer.",
@@ -2388,7 +2422,7 @@
       ],
       "visualSignature": "Compact opaque painted card with preserved nearby placement and fixed transfer-sheet height; three-passenger names and full costs adapt to the panel width. Static44px original model-derived portraits now sit beside full name/capacity in native choices.",
       "reuseAndOwnership": "Same native dialog preserves focus/subset/scroll during fullscreen promotion.",
-      "behaviorToPreserve": "Preview uses future delivery language and qualified projected load/tide; opening/toggling/cancelling keeps committed state/history and victory effects unchanged. Same native dialog/choices/focus/scroll survive fullscreen; portrait recovery and stable footer remain. Image decode/failure and rerendering reserve the same geometry; portrait children remain decoration within each existing native button. No portrait-specific overlay or replacement dialog. Story uses this same native owner; cove-boundary progression requires explicit departure and never follows previews, victory display or Undo.",
+      "behaviorToPreserve": "Preview uses future delivery language and qualified projected load/tide; opening/toggling/cancelling keeps committed state/history and victory effects unchanged. Same native dialog/choices/focus/scroll survive fullscreen; portrait recovery and stable footer remain. Image decode/failure and rerendering reserve the same geometry; portrait children remain decoration within each existing native button. No portrait-specific overlay or replacement dialog. Story uses this same native owner; cove-boundary progression requires explicit departure and never follows previews, victory display or Undo. Six-option groups use a bounded wider short-landscape chooser; Confirm stays near the initiating context with native choices and overcapacity rejection.",
       "provenance": "original-project-code",
       "acceptance": {
         "state": "accepted-painted-panel-direction; published-portrait-integration; story-awaiting-review",
@@ -2461,6 +2495,10 @@
         {
           "path": "reviews/home-play-flow/REVIEW.md",
           "role": "Named direct single-passenger actions, compact subset chooser and completion-derived receipts; existing choice identities preserved."
+        },
+        {
+          "path": "LAST_FERRY_WIDE_BERTH_PACKAGE/contracts/FERRY_AND_TRANSFERS.md",
+          "role": "Current scoped wider-profile contract; verification remains distinct from specification"
         }
       ],
       "meaning": "Local preview, forecast, Menu, Settings and completion retain native semantics; projected future action is explicit and every full passenger label/cost remains readable.",
@@ -2684,7 +2722,7 @@
     },
     {
       "id": "ui.icon.harbor-home",
-      "name": "Harbor · Home",
+      "name": "Harbor Â· Home",
       "kind": "svg-icon",
       "status": "integrated",
       "sources": [
@@ -2699,7 +2737,7 @@
       ],
       "integrationTarget": "cove-ui-package/ui/icons/harbor-home.svg",
       "meaning": "The cove lighthouse identifies the rescue destination. It must not be used for Back to boat, a main menu or a free travel action.",
-      "visibleLabel": "Harbor · Home",
+      "visibleLabel": "Harbor Â· Home",
       "variants": [
         "one-color",
         "optional soft accent"
@@ -2742,7 +2780,7 @@
       },
       "typeSpecific": {
         "24x24 viewBox and optical size": "viewBox0 0 24 24; 1.8px rounded stroke. Default glyph24px; narrow HUD Undo22px inside48px control; passenger check20px inside22px checkshape; optional28px gallery use.",
-        "meaning and visible/accessible label rule": "The cove lighthouse identifies the rescue destination. It must not be used for Back to boat, a main menu or a free travel action. Harbor · Home",
+        "meaning and visible/accessible label rule": "The cove lighthouse identifies the rescue destination. It must not be used for Back to boat, a main menu or a free travel action. Harbor Â· Home",
         "one-color fallback": "currentColor; optional accent collapses to currentColor for monochrome.",
         "state variants and permitted rotation": "Fixed upright pictogram; never rotate full transfer icon. State comes from canonical action/audio/fullscreen mode.",
         "native owner hit area": "Native button owns 48px main or constrained 44px minimum; SVG decorative, aria-hidden, focusable false, pointer-events none.",
@@ -3961,7 +3999,7 @@
       ],
       "visualSignature": "Quiet selected/unselected inset tile,44px transparent animal beside16px live copy and distinct check. Width-aware columns and reserved image geometry retain compact height where the text fits.",
       "reuseAndOwnership": "Same actual helper and original PNG URLs in game and gallery. Full-level/passenger-ID resolver owns appearance; level helpers own names and costs. Native button owns one action/Tab stop; decoration cannot intercept input.",
-      "behaviorToPreserve": "Complete name/cost, native ID/aria-pressed/order/focus, nearby fixed sheet/footer and complete subset semantics. Delayed or failed decode leaves a reserved slot with all decision text and selected state usable; no live viewport or image animation.",
+      "behaviorToPreserve": "Complete name/cost, native ID/aria-pressed/order/focus, nearby fixed sheet/footer and complete subset semantics. Delayed or failed decode leaves a reserved slot with all decision text and selected state usable; no live viewport or image animation. Six full-name existing sheep/rabbit portraits remain independent of selection order; selecting eight spaces reports the active six-space limit and does not commit.",
       "accessibility": {
         "essentialText": "about 16px on phones",
         "contrast": "Verify actual composited normal text >=4.5:1 and meaningful icons/states >=3:1",
@@ -4033,6 +4071,10 @@
         {
           "path": "reviews/home-play-flow/REVIEW.md",
           "role": "Named direct single-passenger actions, compact subset chooser and completion-derived receipts; existing choice identities preserved."
+        },
+        {
+          "path": "LAST_FERRY_WIDE_BERTH_PACKAGE/contracts/FERRY_AND_TRANSFERS.md",
+          "role": "Current scoped wider-profile contract; verification remains distinct from specification"
         }
       ],
       "consumers": [
@@ -4826,6 +4868,10 @@
         {
           "path": "LAST_FERRY_DRIFTWOOD_YARD_PACKAGE/direction/NELL_AND_YARD.md",
           "symbol": "New original Nell seven-second lantern lift and greeting direction"
+        },
+        {
+          "path": "LAST_FERRY_WIDE_BERTH_PACKAGE/direction/LAUNCH_AND_DIFFICULTY.md",
+          "symbol": "Prepared-ferry launch composition, finite beats and exact caption"
         }
       ],
       "meaning": "Presentation-only narrative pictures of changing shoreline, neighbors keeping a light, the answering ferry and safe Harbor. Illustration geometry is never route or passenger-state data.",
@@ -4834,16 +4880,17 @@
         "lantern",
         "ferry",
         "harbor",
-        "driftwood"
+        "driftwood",
+        "launch"
       ],
-      "visualSignature": "Soft teal water, dusk lavender/peach, tan Rue left and cream Pip right, woolly Moss, yellow ferry/red cabin and restrained warm lantern/lighthouse light. Three approved opening compositions plus one new protected-Harbor picture. Driftwood adds warm brown Nell, broad flat tail, timber rail and a visibly lifted lantern.",
-      "reuseAndOwnership": "One current Canvas2D surface in the story view; painter receives illustration/time and bounded DPR1â€“2. Shared paths/characters/shore/light helpers are reused across four variants. It owns no frame loop, puzzle state, audio or progress. Driftwood uses the same painter and player; accepted original opening/Harbor paths remain unchanged.",
+      "visualSignature": "Soft teal water, dusk lavender/peach, tan Rue left and cream Pip right, woolly Moss, yellow ferry/red cabin and restrained warm lantern/lighthouse light. Three approved opening compositions plus one new protected-Harbor picture. Driftwood adds warm brown Nell, broad flat tail, timber rail and a visibly lifted lantern. Launch shows the full wider yellow hull/red cabin, safe Nell releasing a mooring and two safe helpers, then glide and settle.",
+      "reuseAndOwnership": "One current Canvas2D surface in the story view; painter receives illustration/time and bounded DPR1Ã¢â‚¬â€œ2. Shared paths/characters/shore/light helpers are reused across six variants. It owns no frame loop, puzzle state, audio or progress. Driftwood uses the same painter and player; accepted original opening/Harbor paths remain unchanged. Launch reuses the same finite painter/player/audio owners.",
       "behaviorToPreserve": "Opening finite actions retain supplied art and 6/6/7-second endpoints. Harbor is five seconds. Milliseconds convert explicitly to painter seconds. Resize recomposes portrait/landscape; settled endpoints redraw only when needed. No rabbits board during the prelude and the Harbor ferry remains empty.",
       "provenance": "original-package-canvas-art",
       "acceptance": {
         "state": "approved-opening-reference-production-port-and-harbor-await-review",
         "reviewedBaseline": "6fc5a09dd4ef876ad96ad12d623532f0d13deb10",
-        "basis": "Reference approval applies to the supplied opening; it does not automatically approve the TypeScript port, new Harbor illustration, device performance or actual runtime presentation."
+        "basis": "Reference approval applies to the supplied opening; it does not automatically approve the TypeScript port, new Harbor illustration, device performance or actual runtime presentation. Driftwood and the new launch are implemented original compositions; launch native movement/phone checks remain distinct from human art/pacing approval."
       },
       "evidence": [
         {
@@ -4869,7 +4916,7 @@
       ],
       "gallery": {
         "section": "story",
-        "preview": "Four semantic canvas endpoints rendered from the production painter; captions from the single runtime registry. No independent story application."
+        "preview": "Six semantic illustration endpoints rendered from the production painter; captions from the single runtime registry. Static developer specimens are design evidence, not actual scene playback."
       },
       "typeSpecific": {
         "authoritative geometry inputs": "Original code-native Canvas paths and coordinate recipes in scene-painter.js, adapted to story-painter.ts. Width/height/DPR and explicit illustration/time are the only drawing inputs; gameplay geometry is separate.",
@@ -5154,6 +5201,65 @@
         "material/texture dependencies": "Shared original wood, stone, reeds and coast palette; no new texture",
         "generation and disposal owner": "World creates scenery Group and disposes geometry/material ownership with cove"
       }
+    },
+    {
+      "id": "environment.wide-berth",
+      "name": "Wide Berth sheltered waterfront composition",
+      "kind": "procedural-geometry",
+      "status": "integrated",
+      "sources": [
+        {
+          "path": "data/wide-berth.level.json",
+          "symbol": "Complete authored five-stop islands, broad piers and shallow/deep course geometry"
+        },
+        {
+          "path": "src/scene/layout.ts",
+          "symbol": "Wide Berth landmark/styles and camera composition"
+        },
+        {
+          "path": "src/scene/scenery.ts",
+          "symbol": "wideWaterfront: shelter/rope/timber original composition reusing existing materials"
+        }
+      ],
+      "variants": [
+        "Wide Berth low working pier",
+        "High Quay safe staging",
+        "Shell Landing lower shore",
+        "Harbor refuge"
+      ],
+      "visualSignature": "Broad wooden landings, high stone quay, modest roofed working shelter and rope, luminous unchanged shallow/deep water.",
+      "reuseAndOwnership": "Original authored composition reuses existing coast, wood, stone, reeds and lighthouse families. JSON owns exact instances and courses; World owns lifetime.",
+      "behaviorToPreserve": "Composition never changes mechanics. Actual wider hull and cast must clear the authored land/pier meshes and remain readable.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "integrated-awaiting-human-visual-review"
+      },
+      "evidence": [
+        {
+          "path": "LAST_FERRY_WIDE_BERTH_PACKAGE/direction/LAUNCH_AND_DIFFICULTY.md",
+          "role": "Supplied art/design direction, not gameplay evidence"
+        }
+      ],
+      "meaning": "Broad working waterfront, safe stone High Quay and lower Shell Landing support the six-space rescue decision.",
+      "consumers": [
+        "src/scene/world.ts"
+      ],
+      "gallery": {
+        "section": "wide-ferry",
+        "preview": "Actual production larger-ferry specimen and direct authored Wide Berth gameplay link."
+      },
+      "typeSpecific": {
+        "factory/source symbol": "src/scene/scenery.ts: wideWaterfront; src/scene/layout.ts: Wide Berth layout; data/wide-berth.level.json: authored composition",
+        "semantic unit/axis/pivot convention or authoritative source": "World XZ units, Y up; instances authored in level/layout; decorative props never define rules",
+        "named attachment points when relevant": "Broad working piers and fixed six-neighbor shore rows derive from the active level; ferry gangway and gate derive from the physical profile.",
+        "material references": "Shared existing wood and stone matte materials",
+        "actual variant parameters": "Wide Berth roofed working shelter/rope/timber, raised stone High Quay, lower Shell Landing and Harbor refuge.",
+        "authoritative geometry inputs": "data/wide-berth.level.json, src/scene/layout.ts, scenery.ts::wideWaterfront",
+        "style/elevation parameters": "Wide Berth1, Shell Landing2, High Quay/Harbor3. Exact spatial values in level JSON.",
+        "mechanical versus decorative boundary": "JSON/reducer own passages/deadlines; decorative waterfront props add no rule or collision exception.",
+        "material/texture dependencies": "Reused original wood, stone, reeds, coast/water and lantern palette; no external asset",
+        "generation and disposal owner": "One active World creates/disposes the level composition; shared pier/profile helpers provide production geometry"
+      }
     }
   ],
   "seedSource": "cove-ui-package/asset-catalog.seed.json",
@@ -5291,5 +5397,12 @@
       "ui.component.action-capsule"
     ],
     "newWorldAssets": false
+  },
+  "wideBerthChanges": {
+    "baselineFamilies": 78,
+    "added": [
+      "environment.wide-berth"
+    ],
+    "reused": "Actual larger ferry variant, existing sheep/rabbit portraits, story painter and shared original materials; no new species or external bitmap."
   }
 }

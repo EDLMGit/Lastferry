@@ -104,3 +104,48 @@ export function driftwoodYard(parent: T.Object3D, position: [number, number, num
   cylinder(group, '#716048', 0.1, 0.08, 0.07, [0.6, 0.9, -0.14], 8);
   return group;
 }
+
+export function wideWaterfront(parent: T.Object3D, position: [number, number, number]) {
+  const group = new T.Group();
+  group.name = 'wide-berth-waterfront';
+  group.position.set(...position);
+  parent.add(group);
+  for (const x of [-1.18, 1.18]) {
+    for (const z of [-0.5, 0.5]) {
+      box(group, '#776248', [0.15, 1.7, 0.15], [x, 0.85, z], 0.03);
+      box(group, '#c4a777', [0.21, 0.08, 0.22], [x, 1.68, z], 0.025);
+    }
+  }
+  for (const z of [-0.52, 0.52]) box(group, '#a47d51', [2.58, 0.16, 0.2], [0, 1.56, z], 0.03);
+  for (let index = 0; index < 7; index++) {
+    const board = box(
+      group,
+      index % 2 ? '#b8694a' : '#a96045',
+      [0.43, 0.1, 1.44],
+      [-1.29 + index * 0.43, 1.82, 0],
+      0.025,
+    );
+    board.rotation.z = -0.08;
+  }
+  for (const x of [-0.82, 0.82]) box(group, '#8c6c49', [0.15, 0.66, 0.58], [x, 0.33, 0], 0.03);
+  for (const z of [-0.2, 0, 0.2]) box(group, '#c9a776', [2.05, 0.1, 0.17], [0, 0.72, z], 0.025);
+  for (let i = 0; i < 3; i++) {
+    box(group, '#ac8859', [0.15, 0.14, 1.35], [1.65 + i * 0.19, 0.1, -0.1], 0.035).rotation.y =
+      0.12;
+  }
+  for (let loop = 0; loop < 3; loop++) {
+    const rope = mesh(
+      new T.TorusGeometry(0.15 + loop * 0.03, 0.018, 6, 28),
+      '#d9c395',
+      group,
+      -0.65,
+      0.8 + loop * 0.015,
+      0.05,
+    );
+    rope.rotation.x = Math.PI / 2;
+  }
+  box(group, '#796246', [0.18, 0.07, 0.18], [0.72, 0.82, -0.03], 0.02);
+  box(group, '#f1cc82', [0.13, 0.19, 0.13], [0.72, 0.95, -0.03], 0.02);
+  cylinder(group, '#726046', 0.11, 0.09, 0.08, [0.72, 1.08, -0.03], 8);
+  return group;
+}

@@ -2,13 +2,14 @@ import {
   bellwater,
   driftwoodYard,
   holdingPier,
+  wideBerth,
   level as firstCrossing,
   type Level,
 } from '../levels/level';
 
-export type CoveId = 'holding-pier' | 'bellwater' | 'driftwood-yard';
-export type SceneId = 'opening' | 'another-bell' | 'driftwood-light';
-export type IllustrationId = 'tide' | 'lantern' | 'ferry' | 'harbor' | 'driftwood';
+export type CoveId = 'holding-pier' | 'bellwater' | 'driftwood-yard' | 'wide-berth';
+export type SceneId = 'opening' | 'another-bell' | 'driftwood-light' | 'a-wider-deck';
+export type IllustrationId = 'tide' | 'lantern' | 'ferry' | 'harbor' | 'driftwood' | 'launch';
 export type StoryCue = {
   id: string;
   atMs: number;
@@ -122,6 +123,26 @@ export const storyScenes: Record<SceneId, StoryScene> = {
     destination: 'driftwood-yard',
     continueLabel: 'Continue to Driftwood',
   },
+  'a-wider-deck': {
+    id: 'a-wider-deck',
+    title: 'A wider deck',
+    shots: [
+      {
+        id: 'launch',
+        illustration: 'launch',
+        durationMs: 8000,
+        captionCueMs: 1050,
+        caption: 'Nell had a bigger boat ready. Now there are hands to launch it.',
+        description:
+          'At the protected boathouse, safely rescued Nell frees a visible mooring line. Pip guides with an outstretched paw while Rue watches from the high quay. The prepared wider yellow ferry, red cabin and large open deck glide out onto the water, then settle ready for the next crossing. Nobody boards or becomes stranded during the launch.',
+        cues: [
+          { id: 'a-wider-deck.launch.water', atMs: 3500, kind: 'ferry-water', strength: 0.65 },
+        ],
+      },
+    ],
+    destination: 'wide-berth',
+    continueLabel: 'Continue to Wide Berth',
+  },
 };
 
 export type StoryCove = {
@@ -135,9 +156,16 @@ export const storyCoves: readonly StoryCove[] = [
   { id: 'holding-pier', level: holdingPier, order: 0, entryScene: 'opening' },
   { id: 'bellwater', level: bellwater, order: 1, entryScene: 'another-bell' },
   { id: 'driftwood-yard', level: driftwoodYard, order: 2, entryScene: 'driftwood-light' },
+  { id: 'wide-berth', level: wideBerth, order: 3, entryScene: 'a-wider-deck' },
 ];
 
-export const practiceCoves = [firstCrossing, holdingPier, bellwater, driftwoodYard] as const;
+export const practiceCoves = [
+  firstCrossing,
+  holdingPier,
+  bellwater,
+  driftwoodYard,
+  wideBerth,
+] as const;
 
 export function storyCove(id: string): StoryCove | undefined {
   return storyCoves.find((cove) => cove.id === id);
@@ -145,4 +173,9 @@ export function storyCove(id: string): StoryCove | undefined {
 
 export function practiceCove(id: string): Level | undefined {
   return practiceCoves.find((cove) => cove.id === id);
+}
+
+export function scenePredecessor(id: SceneId): Level {
+  const index = storyCoves.findIndex((cove) => cove.entryScene === id);
+  return storyCoves[Math.max(0, index - 1)].level;
 }

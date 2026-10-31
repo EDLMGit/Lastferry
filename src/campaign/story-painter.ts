@@ -1,4 +1,4 @@
-export type StoryIllustration = 'tide' | 'lantern' | 'ferry' | 'harbor' | 'driftwood';
+export type StoryIllustration = 'tide' | 'lantern' | 'ferry' | 'harbor' | 'driftwood' | 'launch';
 type Paint = string | CanvasGradient;
 type RabbitPose = {
   lift?: number;
@@ -40,6 +40,7 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
     ferry: 7,
     harbor: 5,
     driftwood: 7,
+    launch: 8,
   };
   const grains = Array.from({ length: 560 }, (_, i) => ({
     x: ((i * 173 + 43) % 997) / 997,
@@ -978,6 +979,309 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
     lantern(lampX, lampY, s, 1, Math.sin(lift * Math.PI) * -0.1);
     finish(t);
   }
+  function launchBeaver(x: number, y: number, s: number, release: number, acknowledge: number) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(s, s);
+    ellipse(30, -6, 30, 11, '#5b4438', -0.18);
+    line(
+      [
+        [12, -9],
+        [42, -17],
+        [53, -10],
+      ],
+      '#80634b',
+      1.4,
+    );
+    line(
+      [
+        [26, -18],
+        [32, 1],
+      ],
+      '#423c33',
+      1.2,
+    );
+    line(
+      [
+        [39, -20],
+        [44, -2],
+      ],
+      '#423c33',
+      1.2,
+    );
+    ellipse(0, -28, 25, 31, '#8e6848');
+    ellipse(-10, -30, 18, 25, '#c3a47a');
+    ellipse(-13, -1, 17, 5, '#8e6848');
+    ellipse(13, -1, 17, 5, '#8e6848');
+    ctx.save();
+    ctx.translate(-5, -60);
+    ctx.rotate(mix(0.08, -0.1, acknowledge));
+    ellipse(-15, -15, 8, 9, '#8e6848');
+    ellipse(15, -14, 8, 9, '#8e6848');
+    ellipse(-15, -15, 3.7, 4.6, '#b38a65');
+    ellipse(15, -14, 3.7, 4.6, '#b38a65');
+    ellipse(0, 0, 24, 23, '#8e6848');
+    ellipse(-12, 11, 19, 12, '#c3a47a');
+    ellipse(-24, 8, 7, 5, '#3f352d');
+    ellipse(-9, -5, 2.5, 2.8, '#223b36');
+    ellipse(9, -4, 2.1, 2.6, '#223b36');
+    ellipse(-9.8, -6, 0.8, 0.9, '#fff0cd');
+    ctx.fillStyle = '#f3e4bf';
+    ctx.fillRect(-16, 20, 6, 7);
+    ctx.fillRect(-9, 20, 6, 7);
+    line(
+      [
+        [-17, 17],
+        [-9, 19],
+        [-1, 17],
+      ],
+      '#795b43',
+      1.2,
+    );
+    ctx.restore();
+    const handX = mix(-38, -33, release),
+      handY = mix(-20, -65, release);
+    line(
+      [
+        [-14, -37],
+        [-29, mix(-23, -43, release)],
+        [handX, handY],
+      ],
+      '#8e6848',
+      11,
+    );
+    ellipse(handX, handY, 6, 6, '#b28b64');
+    line(
+      [
+        [17, -34],
+        [23, -20],
+      ],
+      '#8e6848',
+      10,
+    );
+    ellipse(23, -20, 5.5, 5.5, '#b28b64');
+    ctx.restore();
+  }
+  function readyFerry(x: number, y: number, s: number) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(s, s);
+    ellipse(0, 24, 137, 17, 'rgba(20,61,65,.17)');
+    path(
+      'M -139 -13 Q -143 11 -105 36 L 98 36 Q 143 29 151 -4 L 127 -32 L -103 -44 Z',
+      '#d3a84e',
+      '#b0aa7d',
+      1.5,
+    );
+    path(
+      'M -105 22 L 101 22 Q 133 15 151 -4 L 143 13 Q 131 35 97 39 L -103 39 Q -130 28 -139 7 Z',
+      '#b88f43',
+    );
+    path('M -137 -14 L -104 -46 L 124 -34 L 148 -5 L 101 18 L -105 18 Z', '#e9c268', '#f0db9b', 2);
+    path('M -108 -13 L -93 -33 L 118 -25 L 132 -7 L 94 10 L -100 10 Z', '#bba37a', '#e6cf99', 1.5);
+    for (let i = 0; i < 6; i++)
+      line(
+        [
+          [-89 + 35 * i, -29],
+          [-95 + 35 * i, 8],
+        ],
+        '#8a7f60',
+        1.2,
+      );
+    line(
+      [
+        [-102, -4],
+        [116, -2],
+      ],
+      '#d4bd8d',
+      1,
+    );
+    path('M -105 -17 L -105 -71 L -44 -68 L -29 -51 L -29 -12 Z', '#a95e4f', '#d2b38c', 1.5);
+    path('M -44 -68 L -29 -51 L -29 -12 L -44 -22 Z', '#804d45');
+    path(
+      'M -112 -72 L -85 -90 L -34 -83 L -22 -53 L -44 -63 L -107 -65 Z',
+      '#b86c58',
+      '#dfb88a',
+      1.6,
+    );
+    ctx.fillStyle = '#3c615b';
+    ctx.fillRect(-95, -57, 20, 23);
+    ctx.fillRect(-65, -56, 15, 23);
+    ctx.fillStyle = '#ead7a9';
+    ctx.fillRect(-92, -54, 14, 17);
+    ctx.fillRect(-62, -53, 9, 17);
+    line(
+      [
+        [-83, -84],
+        [-83, -98],
+      ],
+      '#425b50',
+      5,
+    );
+    line(
+      [
+        [-102, -16],
+        [-40, -12],
+      ],
+      '#e9cf93',
+      2,
+    );
+    for (const [xx, yy] of [
+      [-119, -18],
+      [7, 16],
+      [58, 16],
+      [105, 12],
+      [133, -7],
+    ]) {
+      line(
+        [
+          [xx, yy],
+          [xx, yy - 18],
+        ],
+        '#657363',
+        2.4,
+      );
+    }
+    line(
+      [
+        [-119, -36],
+        [8, -2],
+        [60, -2],
+        [104, -6],
+        [133, -25],
+      ],
+      '#e8d5a2',
+      2.3,
+    );
+    ellipse(-119, 8, 6, 8, '#59635b');
+    ellipse(72, 28, 6, 8, '#59635b');
+    ctx.restore();
+  }
+  function launchShot(t: number) {
+    const portrait = W < 480,
+      short = H < 300,
+      release = ease((t - 1.1) / 2),
+      glide = ease((t - 3.1) / 3.2),
+      acknowledge = ease((t - 5.8) / 1.4),
+      settle = t < 6.1 ? 0 : Math.sin((t - 6.1) * Math.PI * 1.4) * Math.max(0, 1 - (t - 6.1) / 1.6),
+      s = Math.min(
+        portrait ? (W - 35) / 300 : (W * 0.48) / 300,
+        portrait ? 1.3 : short ? 1.04 : 1.8,
+      ),
+      ground = H * (portrait ? 0.41 : 0.46),
+      nellX = W * (portrait ? 0.43 : 0.57),
+      nellS = Math.min(portrait ? 1.12 : short ? 0.59 : 1.1, (H * 0.28) / 90),
+      boatX = W * (portrait ? 0.46 : 0.69) + glide * W * (portrait ? 0.055 : 0.065),
+      boatY = H * (portrait ? 0.73 : 0.79) + glide * H * (portrait ? 0.055 : 0.045) + settle * 1.8;
+    backdrop(t, 1);
+    foregroundWater(H * 0.55, t, { x: boatX, strength: 0.3 });
+    const quayLeft = W * (portrait ? 0.04 : 0.49),
+      quayRight = W + 20;
+    path(
+      `M ${quayLeft} ${ground + 4} L ${quayRight} ${ground - 9} L ${quayRight} ${ground + 49} L ${quayLeft} ${ground + 43} Z`,
+      '#496d65',
+    );
+    path(
+      `M ${quayLeft} ${ground - 4} L ${quayRight} ${ground - 15} L ${quayRight} ${ground + 3} L ${quayLeft} ${ground + 15} Z`,
+      '#a2916c',
+      '#d5bf90',
+      1.4,
+    );
+    for (let i = 0; i < 5; i++)
+      line(
+        [
+          [quayLeft + 30 + 52 * i, ground + 12],
+          [quayLeft + 27 + 52 * i, ground + 42],
+        ],
+        '#567366',
+        1.5,
+      );
+    const houseX = W * (portrait ? 0.75 : 0.87),
+      houseY = ground - 8,
+      houseS = portrait ? 0.9 : short ? 0.6 : 1;
+    ctx.save();
+    ctx.translate(houseX, houseY);
+    ctx.scale(houseS, houseS);
+    path('M -58 0 L -58 -71 L 38 -71 L 38 0 Z', '#729181', '#b4b695', 1.5);
+    path('M -66 -71 L -13 -106 L 47 -70 Z', '#536e70', '#a6a78b', 1.6);
+    path('M -24 0 L -24 -55 Q 0 -70 20 -53 L 20 0 Z', '#345c5c');
+    line(
+      [
+        [-47, -61],
+        [-47, -4],
+      ],
+      '#abc0a0',
+      3,
+    );
+    ctx.restore();
+    const helperS = Math.min(portrait ? 0.68 : short ? 0.45 : 0.83, (H * 0.24) / 91);
+    rabbit(W * (portrait ? 0.72 : 0.77), ground - 2, helperS, 'cream', {
+      guide: Math.sin(release * Math.PI) * 0.9,
+      head: mix(-0.13, 0.09, glide),
+    });
+    rabbit(W * (portrait ? 0.88 : 0.88), ground - 5, helperS * 0.93, 'tan', {
+      head: mix(-0.14, 0.07, acknowledge),
+      warmth: 0.35,
+    });
+    const cleatX = nellX - 39 * nellS,
+      cleatY = ground - 10;
+    line(
+      [
+        [cleatX - 8, cleatY],
+        [cleatX + 8, cleatY],
+      ],
+      '#4b6157',
+      4,
+    );
+    line(
+      [
+        [cleatX, cleatY],
+        [cleatX, cleatY + 10],
+      ],
+      '#4b6157',
+      4,
+    );
+    readyFerry(boatX, boatY, s);
+    if (release < 1) {
+      ctx.globalAlpha = 1 - release;
+      line(
+        [
+          [cleatX, cleatY],
+          [mix(cleatX, boatX - 108 * s, 0.55), mix(cleatY, boatY - 15 * s, 0.55) + release * 18],
+          [boatX - 108 * s, boatY - 15 * s],
+        ],
+        '#d6be8d',
+        2.6,
+      );
+      ctx.globalAlpha = 1;
+    }
+    launchBeaver(nellX, ground - 4, nellS, release, acknowledge);
+    const handX = nellX + mix(-38, -33, release) * nellS,
+      handY = ground - 4 + mix(-20, -65, release) * nellS;
+    line(
+      [
+        [cleatX, cleatY],
+        [handX - 8 * nellS, handY + 15 * nellS],
+        [handX, handY],
+      ],
+      '#d6be8d',
+      2.3,
+    );
+    if (glide > 0) {
+      ctx.globalAlpha = 0.35 * Math.sin(glide * Math.PI);
+      for (let i = 0; i < 3; i++)
+        line(
+          [
+            [boatX - 148 * s - i * 9, boatY + 13 * s + i * 4],
+            [boatX - 170 * s - i * 10, boatY + 14 * s + i * 4],
+          ],
+          '#dce5c9',
+          1.6,
+        );
+      ctx.globalAlpha = 1;
+    }
+    finish(t);
+  }
   return {
     durations,
     resize(width: number, height: number, dpr = 1) {
@@ -1000,6 +1304,7 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
         ferry: answerShot,
         harbor: harborShot,
         driftwood: driftwoodShot,
+        launch: launchShot,
       })[illustration](t);
     },
   };

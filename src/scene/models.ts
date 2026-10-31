@@ -1,3 +1,4 @@
+import { smallFerryProfile, wideHullOutline, type FerryProfile } from './ferry-profile.ts';
 import * as T from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 export const palette = {
@@ -64,7 +65,8 @@ export function cylinder(
     ...(pos as [number, number, number]),
   );
 }
-export function ferry() {
+export function ferry(profile: FerryProfile = smallFerryProfile) {
+  if (profile.id === 'six-space') return wideFerry(profile);
   const g = new T.Group();
   g.name = 'ferry-hull-and-deck';
   const hull = new T.Shape();
@@ -122,6 +124,76 @@ export function ferry() {
   flag.rotation.z = -0.12;
   return g;
 }
+function wideFerry(profile: FerryProfile) {
+  const group = new T.Group();
+  group.name = 'ferry-six-space-hull-and-deck';
+  const outline = wideHullOutline();
+  for (const [depth, y, color, scale] of [
+    [0.18, -0.19, '#824b35', 0.97],
+    [0.26, -0.1, palette.hull, 1],
+    [0.055, 0.17, '#f9d477', 1.025],
+    [0.02, 0.225, '#be8a4e', 0.94],
+  ] as const) {
+    const geometry = new T.ExtrudeGeometry(outline, {
+      depth,
+      bevelEnabled: true,
+      bevelSegments: 3,
+      steps: 1,
+      bevelSize: 0.06,
+      bevelThickness: 0.035,
+      curveSegments: 24,
+    });
+    geometry.rotateX(Math.PI / 2);
+    geometry.translate(0, depth, 0);
+    const hull = mesh(geometry, color, group, 0, y, 0);
+    hull.scale.set(scale, 1, scale);
+    if (y < 0) hull.name = 'water-contact-hull';
+  }
+  for (let row = 0; row < 17; row++)
+    box(group, '#e0ac68', [2.42, 0.015, 0.018], [0, 0.25, -1.5 + row * 0.25], 0.006);
+  const cabin = box(group, palette.red, [1.04, 0.68, 0.8], [0, 0.565, -1.14], 0.065);
+  cabin.name = 'wide-cabin-obstacle';
+  const roof = box(group, '#df7557', [1.22, 0.11, 0.98], [0, 0.95, -1.14], 0.045);
+  roof.name = 'wide-cabin-roof';
+  box(group, '#f4ca70', [0.72, 0.38, 0.025], [0, 0.61, -0.725], 0.02);
+  box(group, '#6d543d', [0.035, 0.4, 0.03], [0, 0.61, -0.7]);
+  for (const side of [-1, 1]) {
+    box(group, '#f2c979', [0.025, 0.36, 0.5], [side * 0.535, 0.62, -1.14], 0.01);
+    box(group, '#684c36', [0.03, 0.39, 0.03], [side * 0.55, 0.61, -1.14], 0.01);
+    for (const z of [-1.5, -0.7, 0.25, 1.15, 2.05]) {
+      const post = cylinder(group, '#f5d179', 0.028, 0.028, 0.28, [side * 1.36, 0.4, z], 8);
+      post.name = 'wide-rail-obstacle';
+    }
+    const rail = box(group, '#f5d179', [0.04, 0.04, 3.55], [side * 1.36, 0.55, 0.25], 0.012);
+    rail.name = 'wide-rail-obstacle';
+    for (const z of [-1.1, 0.7, 1.9]) {
+      const fender = mesh(
+        new T.TorusGeometry(0.13, 0.04, 8, 16),
+        '#2c4248',
+        group,
+        side * 1.43,
+        0.15,
+        z,
+      );
+      fender.rotation.y = Math.PI / 2;
+    }
+  }
+  cylinder(group, '#3a4a49', 0.075, 0.08, 0.5, [0.3, 1.09, -1.35]);
+  cylinder(group, '#d5c9ab', 0.1, 0.1, 0.06, [0.3, 1.37, -1.35]);
+  const life = mesh(
+    new T.TorusGeometry(0.15, 0.038, 8, 20),
+    palette.wool,
+    group,
+    -0.56,
+    0.63,
+    -1.12,
+  );
+  life.rotation.y = Math.PI / 2;
+  cylinder(group, '#70513b', 0.016, 0.016, 0.52, [0, 1.18, -1.02], 8);
+  box(group, '#f4d59b', [0.22, 0.12, 0.016], [0.1, 1.4, -1.02], 0.012).rotation.z = -0.12;
+  group.userData.ferryProfile = profile.id;
+  return group;
+}
 export function animal(species: string, variant = 0) {
   const g = new T.Group();
   g.name = species;
@@ -141,7 +213,9 @@ export function animal(species: string, variant = 0) {
     ball(g, '#ba7b6b', [0, 0.38, 0.16], [0.025, 0.018, 0.02]);
     ball(g, wool, [0, 0.18, -0.13], [0.065, 0.065, 0.065]);
   } else if (species === 'beaver') {
-    const fur = '#8e6848', muzzle = '#c3a47a', tailColor = '#5b4438';
+    const fur = '#8e6848',
+      muzzle = '#c3a47a',
+      tailColor = '#5b4438';
     const tail = new T.Group();
     tail.name = 'beaver-flat-tail';
     tail.position.set(0.1, 0.18, 0.02);
@@ -153,8 +227,7 @@ export function animal(species: string, variant = 0) {
       const seam = box(tail, '#765747', [0.008, 0.008, 0.12], [x, 0.044, -0.065], 0.003);
       seam.rotation.y = x > 0 ? -0.24 : 0.24;
     }
-    for (const x of [-0.115, 0.115])
-      ball(g, '#684b37', [x, 0.045, 0.045], [0.075, 0.045, 0.1]);
+    for (const x of [-0.115, 0.115]) ball(g, '#684b37', [x, 0.045, 0.045], [0.075, 0.045, 0.1]);
     ball(g, fur, [0, 0.245, 0], [0.19, 0.23, 0.17]);
     ball(g, muzzle, [0, 0.235, 0.13], [0.125, 0.145, 0.055]);
     ball(g, fur, [0, 0.45, 0.045], [0.185, 0.155, 0.15]);
@@ -165,8 +238,7 @@ export function animal(species: string, variant = 0) {
       paw.rotation.z = x > 0 ? 0.35 : -0.35;
       ball(g, '#263d43', [x * 0.56, 0.475, 0.177], [0.019, 0.022, 0.013]);
     }
-    for (const x of [-0.058, 0.058])
-      ball(g, muzzle, [x, 0.407, 0.178], [0.075, 0.055, 0.045]);
+    for (const x of [-0.058, 0.058]) ball(g, muzzle, [x, 0.407, 0.178], [0.075, 0.055, 0.045]);
     ball(g, '#3f352d', [0, 0.44, 0.212], [0.057, 0.035, 0.024]);
     for (const x of [-0.018, 0.018])
       box(g, '#f3e4bf', [0.03, 0.033, 0.014], [x, 0.366, 0.202], 0.005);

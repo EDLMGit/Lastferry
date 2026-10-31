@@ -55,15 +55,38 @@ function sameItems(value: unknown, expected: readonly string[]): boolean {
   );
 }
 
-export function isLegacyCompletion(value: unknown): value is JourneyRecord {
+const historicalCompletions = [
+  {
+    completed: ['holding-pier', 'bellwater'],
+    scenes: ['opening', 'another-bell'],
+    next: 'driftwood-light',
+  },
+  {
+    completed: ['holding-pier', 'bellwater', 'driftwood-yard'],
+    scenes: ['opening', 'another-bell', 'driftwood-light'],
+    next: 'a-wider-deck',
+  },
+] as const;
+
+export function legacyContinuationScene(value: unknown): SceneId | null {
+  if (
+    !keys(value, ['version', 'checkpoint', 'completed', 'acknowledgedScenes']) ||
+    value.version !== 1 ||
+    !keys(value.checkpoint, ['kind']) ||
+    value.checkpoint.kind !== 'complete'
+  )
+    return null;
   return (
-    keys(value, ['version', 'checkpoint', 'completed', 'acknowledgedScenes']) &&
-    value.version === 1 &&
-    keys(value.checkpoint, ['kind']) &&
-    value.checkpoint.kind === 'complete' &&
-    sameItems(value.completed, ['holding-pier', 'bellwater']) &&
-    sameItems(value.acknowledgedScenes, ['opening', 'another-bell'])
+    historicalCompletions.find(
+      (boundary) =>
+        sameItems(value.completed, boundary.completed) &&
+        sameItems(value.acknowledgedScenes, boundary.scenes),
+    )?.next ?? null
   );
+}
+
+export function isLegacyCompletion(value: unknown): value is JourneyRecord {
+  return legacyContinuationScene(value) !== null;
 }
 
 export function newJourney(): JourneyRecord {
@@ -185,8 +208,7 @@ export function acceptCove(record: JourneyRecord, id: CoveId, status: string): J
 
 export function checkpointCove(record: JourneyRecord): CoveId {
   const checkpoint = record.checkpoint;
-  if (checkpoint.kind === 'complete')
-    return isLegacyCompletion(record) ? 'bellwater' : storyCoves.at(-1)!.id;
+  if (checkpoint.kind === 'complete') return record.completed.at(-1)!;
   return checkpoint.kind === 'scene' ? storyScenes[checkpoint.id].destination : checkpoint.id;
 }
 
@@ -227,8 +249,9 @@ export class JourneyProgress {
 
   continueAvailableContent(): boolean {
     const record = this.current.record;
-    if (!isLegacyCompletion(record)) return false;
-    this.save({ ...copy(record), checkpoint: { kind: 'scene', id: 'driftwood-light' } });
+    const nextScene = legacyContinuationScene(record);
+    if (!record || !nextScene) return false;
+    this.save({ ...copy(record), checkpoint: { kind: 'scene', id: nextScene } });
     return true;
   }
 

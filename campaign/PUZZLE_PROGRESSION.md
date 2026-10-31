@@ -1,6 +1,6 @@
 # Puzzle progression — selected campaign direction
 
-Original design baseline: `1a85874883af5caa59f6294a75495eccf2afebbc`, reviewed 2026-10-25. Current implementation slice: `DRIFTWOOD_YARD_01`, built forward from the reviewed Home/play game `da1f2686ce6aff8d754e13111447dabb6e1313f0`. **Holding Pier, Bellwater and Driftwood Yard are now authored playable campaign coves; First Crossing remains optional practice. Later encounters remain proposals.** Production witness/geometry checks and actual UI evidence are recorded in `reviews/driftwood-yard/`, separately from supplied design proof and human puzzle acceptance.
+Original design baseline: `1a85874883af5caa59f6294a75495eccf2afebbc`. Current milestone `WIDE_BERTH_01` builds from reviewed `7e324e88827857469bf348fca311548344d03da6`. **Holding Pier, Bellwater, Driftwood Yard and Wide Berth are authored playable campaign coves; First Crossing remains optional practice.** The user accepted Driftwood gameplay. Wide Berth deliberately revises the former gentle C4 introduction to a six-space benefit followed by a meaningful planning choice. Production proof, real geometry, actual UI evidence and human calibration remain separate in `reviews/wide-berth/`.
 
 ## Campaign sequence
 
@@ -10,8 +10,8 @@ The campaign targets twelve coves in four phases. Milestones follow C3, C6 and C
 | --- | --- | --- |
 | I · C1 | **Holding Pier** | Accepted introduction: trust a safe temporary landing, lighten the boat, rescue Pip/Rue and collect Moss. Preserve its puzzle. |
 | I · C2 | **Bellwater** | Accepted route/deadline composition: consider the loaded return and two shore heights. Preserve its puzzle. |
-| I · C3 | **Driftwood Yard** | Rescue **Nell, a beaver who uses 2 spaces**, using existing load, staging and tide rules. Her introduction adds character, not a special ability. Stage Nell at High Mooring to reach Fern and Oat before Reed Landing floods, then collect her through the newly deepened return. The larger spare boat is deferred to the next milestone. |
-| II · C4 | **Wide Berth** | Enjoy the 6-space boat on forgiving deep water. Use familiar species with new named neighbors. Introduce only the boat and its load table. |
+| I · C3 | **Driftwood Yard** | Rescue **Nell, a beaver who uses 2 spaces**, using existing load, staging and tide rules. Her introduction adds character, not a special ability. Stage Nell at High Mooring to reach Fern and Oat before Reed Landing floods, then collect her through the newly deepened return. The following launch now introduces the prepared larger ferry. |
+| II · C4 | **Wide Berth** | Carry six spaces, then compare full deep delivery before a late low-pair rescue against safe sheep staging and a lighter shortcut that rescues the pair earlier. Two occupied flood boundaries and draft four make route/load choice consequential. |
 | II · C5 | **Orchard Landing** | Meet **Orin, a deer who uses 3 spaces** in a clear, generous encounter. Teach his space cost separately from current changes or a tight full-load bottleneck. |
 | II · C6 | **Two Landings** | Combine known load choices, safe staging and the larger boat. A thoughtful subset or delivery order matters. No new rule. |
 | III · C7 | **Tidal Gate** | Teach one clearly marked fixed one-way passage, with a legible ordinary return route and forgiving timing. |
@@ -23,7 +23,7 @@ The campaign targets twelve coves in four phases. Milestones follow C3, C6 and C
 
 Each encounter needs a distinct insight. More animals, nodes or actions do not establish greater difficulty. Keep maps small enough for phone orientation changes and cap simultaneous dependencies. A newcomer may matter through their story or familiar capacity rule; every species does not need a power.
 
-Rescued characters remain rescued. Recurring helpers may appear at the refuge or take an explicitly framed later trip; do not silently strand them again. Additional named neighbors may reuse established species. Future appearances should use explicit stable character/appearance IDs: reordering a level's passenger list must not unexpectedly recolor a recurring character. Any extension preserves the current nine appearance mappings.
+Rescued characters remain rescued. Recurring helpers may appear at the refuge or take an explicitly framed later trip; do not silently strand them again. Additional named neighbors may reuse established species. Future appearances should use explicit stable character/appearance IDs: reordering a level's passenger list must not unexpectedly recolor a recurring character. Any extension preserves all existing appearance mappings. Wide Berth uses explicit sheep/rabbit appearances for six new neighbors.
 
 ## The larger boat
 
@@ -36,17 +36,13 @@ After C3, the story makes a prepared **6-space spare boat** available. Its yello
 | 3–4 | 3 |
 | 5–6 | 4 |
 
-The benefit should be felt before its tradeoff. Wide Berth permits a satisfying larger delivery; later, loading 5–6 spaces can exclude a shallow shortcut that a lighter group can use. Empty and partial-load behavior stays familiar. Boat capacity is space cost, not the count of animal bodies.
+The benefit is felt before its tradeoff. Wide Berth starts empty at Harbor; its first full pickup carries six spaces/four bodies. Draft four then excludes the shorter Harbor route even after the first rise. The full deep delivery and earlier staged rescue remain valid distinct critical plans. Empty and partial-load behavior stays familiar. Boat capacity is space cost, not the count of animal bodies.
 
-This requires more than changing a number. Current production draft lookup has no band beyond 4, rejection/help copy includes fixed values, and world seating provides only three effective anchors: first rabbit, other rabbit and nonrabbit. Additional bodies would overlap. The larger-boat milestone must include:
+The production profile is selected by active-level data: only Wide Berth uses the actual larger hull/deck, automatic identity-stable seating, transfer/berth/wake geometry and its four draft bands. Original coves and gallery default callers retain their smaller profile. Capacity is the entire loading rule; seating adds no packing interaction. The roster includes two sheep and four rabbits, eight total required spaces, with a reachable five-body/six-space load and six neighbors safely waiting at High Quay. Every capacity-legal subset needs valid presentation.
 
-- Complete, validated draft-band coverage and dynamic capacity/help/preview copy.
-- A real hull/deck and deterministic automatic seating for every supported group. Seating remains presentation, not a new packing puzzle.
-- Actual hull/passenger/transfer-path clearance in both travel directions and at every supported tide/load; required berths and passages must support draft 4.
-- Correct deck attachment, embark/disembark paths, contact/wake origins and phone framing for that geometry.
-- Preserved four-space behavior and evidence for **all three existing coves**, plus asset/inventory updates.
+Developer witnesses cover the full deep route (13 actions), staging both sheep and returning four rabbits by the depth-three shortcut (14), five bodies/six spaces with harmless waits after both endangered landings are clear (17), and two recoverable opening Waits (16). These are proof observations, not player targets, a global limit, measured playtime or an automatic difficulty claim. Preserve preview/current-water validation and action → increment → rise → loss → win ordering.
 
-New species also require actual models, proportions, portraits, identity mapping and transfer/arrival behavior. The present animal factory renders any nonrabbit through its sheep branch; an unknown-species fallback is not a beaver or deer implementation. Their 2/3-space values reuse the existing load concept.
+Current Nell has a real beaver model and portrait. Future Orin still requires his own actual deer model, proportions, portrait, stable identity and transfer/arrival coverage; a generic nonrabbit fallback is not completion.
 
 ## One bounded current rule
 
@@ -96,11 +92,11 @@ If using reachability search, document its bounds. After the last scheduled chan
 
 ## Implementation boundaries and saves
 
-The first task creates the campaign opening, connective story scene and explicit progression/checkpoints around Holding/Bellwater. It does not implement this whole roadmap. Until further content exists, the playable slice ends honestly after Bellwater.
+The foundation first implemented Holding/Bellwater. The current four-cove slice now ends honestly after Wide Berth with “Four coves are safe.” The remaining campaign roadmap is still future content.
 
 Campaign completion becomes durable on explicit **Continue** after a win; terminal Undo remains available before that boundary. Replaying/Undoing/redelivering must not duplicate milestones. Initial checkpoints may resume at the current cove's beginning, with that behavior stated clearly.
 
-Before releasing the longer phone campaign, add full mid-puzzle restoration including gameplay state, complete Undo history and the corresponding presentation/boat-pose history. A restored position without heading history is not complete recovery. Test tab/background/reload and storage failure, and retain settings independently. Current cove-boundary checkpoints are implemented, including the narrowly recognized historical two-cove completion. Full mid-puzzle persistence remains deferred; this document does not claim it.
+Before releasing the longer phone campaign, add full mid-puzzle restoration including gameplay state, complete Undo history and the corresponding presentation/boat-pose history. A restored position without heading history is not complete recovery. Test tab/background/reload and storage failure, and retain settings independently. Current cove-boundary checkpoints are implemented, including only the two exact historical two-cove/three-cove completions. Home/Options/Practice remain byte-preserving; deliberate Continue saves the correct pending scene and plays fresh, while later pending reloads use recap. Earlier boundaries never display a future Wide Berth rescue. Full mid-puzzle persistence remains deferred; this document does not claim it.
 
 ## Source grounding
 

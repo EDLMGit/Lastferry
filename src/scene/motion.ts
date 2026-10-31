@@ -16,6 +16,8 @@ export type JourneyPlan = {
   departureTurn: number;
   fromBerth: boolean;
   toBerth: boolean;
+  berthHold?: number;
+  berthTurn?: number;
 };
 
 function smooth(value: number) {
@@ -53,7 +55,7 @@ export function planJourney(
   path: CanonicalPath,
   fromAngle: number,
   reverse = false,
-  berths: { fromBerth?: number; toBerth?: number } = {},
+  berths: { fromBerth?: number; toBerth?: number; berthHold?: number; berthTurn?: number } = {},
 ): JourneyPlan {
   const rawInitial = samplePath(path, 0, reverse).angle,
     initialCourseAngle = fromAngle + angularChange(fromAngle, rawInitial),
@@ -77,6 +79,9 @@ export function planJourney(
     departureTurn,
     fromBerth,
     toBerth,
+    ...(berths.berthHold !== undefined
+      ? { berthHold: berths.berthHold, berthTurn: berths.berthTurn }
+      : {}),
   };
 }
 
@@ -111,8 +116,13 @@ export function sampleJourney(
         (plan.initialCourseAngle - plan.fromAngle) * smooth(t / plan.departureTurn),
     };
   const courseAngle = pose.angle + plan.courseOffset,
-    departure = plan.fromBerth ? smooth((pose.distance - 0.45) / 0.55) : 1,
-    approach = plan.toBerth ? 1 - smooth((path.length - pose.distance - 0.45) / 0.55) : 0,
+    departure = plan.fromBerth
+      ? smooth((pose.distance - (plan.berthHold ?? 0.45)) / (plan.berthTurn ?? 0.55))
+      : 1,
+    approach = plan.toBerth
+      ? 1 -
+        smooth((path.length - pose.distance - (plan.berthHold ?? 0.45)) / (plan.berthTurn ?? 0.55))
+      : 0,
     steering = plan.fromAngle + (courseAngle - plan.fromAngle) * departure;
   return { ...pose, angle: steering + (plan.toAngle - steering) * approach };
 }

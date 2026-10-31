@@ -59,7 +59,7 @@ export function validate(s: State, a: Action, l = level): string | null {
     if (ids.some((id) => !s.waitingByPier[pier.id].includes(id)))
       return 'These passengers are not waiting here.';
     const next = { ...s, aboard: [...s.aboard, ...ids] };
-    if (load(next, l) > l.rules.capacity) return 'There are only four passenger spaces.';
+    if (load(next, l) > l.rules.capacity) return `The boat has ${l.rules.capacity} spaces; this group needs ${load(next, l)}.`;
     if (
       pier &&
       l.nodes.find((n) => n.id === s.boatNodeId)!.baseDepth + s.tideLevel < draft(next, l)

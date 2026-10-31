@@ -1,4 +1,4 @@
-import { draft, edgeTo, pierAt, preview, type Action, type State } from '../game/rules';
+import { draft, edgeTo, load, pierAt, preview, type Action, type State } from '../game/rules';
 import { nodeName, type Level } from '../levels/level';
 import { passengerList, previewCopy } from './presentation';
 
@@ -26,6 +26,7 @@ export function transferFacts(before: State, action: Transfer, level: Level) {
   return {
     label,
     depth,
+    load: `${load(proposed.state, level)}/${level.rules.capacity} spaces`,
     detail,
     error: proposed.error,
     direct: action.passengerIds.length === 1 && !proposed.error && proposed.state.status !== 'lost',

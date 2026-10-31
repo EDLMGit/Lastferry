@@ -124,7 +124,7 @@ describe('independent game reducer', () => {
     s.waitingByPier['sheep-pier'].push('synthetic-rabbit');
     expect(
       validate(s, { type: 'board', passengerIds: ['sheep-1', 'synthetic-rabbit'] }, l),
-    ).toContain('four');
+    ).toContain(`boat has ${l.rules.capacity} spaces`);
     l.nodes.find((n) => n.id === 'sheep-pier')!.baseDepth = 2;
     expect(validate(s, board, l)).toContain('berth');
     expect(

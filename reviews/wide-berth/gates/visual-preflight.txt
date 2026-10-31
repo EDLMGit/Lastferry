@@ -1,0 +1,90 @@
+(node:51184) ExperimentalWarning: Transform Types is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+locator.tap: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('#map-wide-berth')
+    - locator resolved to <button data-risk="safe" class="map-target" id="map-wide-berth" aria-expanded="false" data-status="nonadjacent" title="no direct passage" data-destination="wide-berth" aria-controls="local-context" aria-label="Select Wide Berth; no direct passage">…</button>
+  - attempting tap action
+    - waiting for element to be visible, enabled and stable
+    - element is visible, enabled and stable
+    - scrolling into view if needed
+    - locator resolved to <button data-risk="safe" class="map-target" id="map-wide-berth" aria-expanded="false" data-status="nonadjacent" title="no direct passage" data-destination="wide-berth" aria-controls="local-context" aria-label="Select Wide Berth; no direct passage">…</button>
+  - attempting tap action
+    - waiting for element to be visible, enabled and stable
+  - element was detached from the DOM, retrying
+    - waiting for "http://127.0.0.1:5270/?cove=wide-berth" navigation to finish...
+    - navigated to "http://127.0.0.1:5270/?cove=wide-berth"
+    - locator resolved to <button data-risk="safe" class="map-target" id="map-wide-berth" aria-expanded="false" data-status="nonadjacent" title="no direct passage" data-destination="wide-berth" aria-controls="local-context" aria-label="Select Wide Berth; no direct passage">…</button>
+  - attempting tap action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <section id="seascape" aria-busy="false" aria-label="Wide Berth">…</section> intercepts pointer events
+    - retrying tap action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <section id="seascape" aria-busy="false" aria-label="Wide Berth">…</section> intercepts pointer events
+    - retrying tap action
+      - waiting 100ms
+    43 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <section id="seascape" aria-busy="false" aria-label="Wide Berth">…</section> intercepts pointer events
+     - retrying tap action
+       - waiting 500ms
+
+    at activate (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\ui.ts:39:43)
+    at async selectPlace (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\ui.ts:56:3)
+    at async startMove (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\ui.ts:60:3)
+    at async act (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\ui.ts:64:30)
+    at async file:///C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/reviews/wide-berth/raw/play-preflight.mjs:6:463 {
+  log: [
+    "  - waiting for locator('#map-wide-berth')",
+    '    - locator resolved to <button data-risk="safe" class="map-target" id="map-wide-berth" aria-expanded="false" data-status="nonadjacent" title="no direct passage" data-destination="wide-berth" aria-controls="local-context" aria-label="Select Wide Berth; no direct passage">…</button>',
+    '  - attempting tap action',
+    '    - waiting for element to be visible, enabled and stable',
+    '    - element is visible, enabled and stable',
+    '    - scrolling into view if needed',
+    '    - locator resolved to <button data-risk="safe" class="map-target" id="map-wide-berth" aria-expanded="false" data-status="nonadjacent" title="no direct passage" data-destination="wide-berth" aria-controls="local-context" aria-label="Select Wide Berth; no direct passage">…</button>',
+    '  - attempting tap action',
+    '    - waiting for element to be visible, enabled and stable',
+    '  - element was detached from the DOM, retrying',
+    '    - waiting for "http://127.0.0.1:5270/?cove=wide-berth" navigation to finish...',
+    '    - navigated to "http://127.0.0.1:5270/?cove=wide-berth"',
+    '    - locator resolved to <button data-risk="safe" class="map-target" id="map-wide-berth" aria-expanded="false" data-status="nonadjacent" title="no direct passage" data-destination="wide-berth" aria-controls="local-context" aria-label="Select Wide Berth; no direct passage">…</button>',
+    '  - attempting tap action',
+    '    2 × waiting for element to be visible, enabled and stable',
+    '      - element is visible, enabled and stable',
+    '      - scrolling into view if needed',
+    '      - done scrolling',
+    '      - <section id="seascape" aria-busy="false" aria-label="Wide Berth">…</section> intercepts pointer events',
+    '    - retrying tap action',
+    '    - waiting 20ms',
+    '    2 × waiting for element to be visible, enabled and stable',
+    '      - element is visible, enabled and stable',
+    '      - scrolling into view if needed',
+    '      - done scrolling',
+    '      - <section id="seascape" aria-busy="false" aria-label="Wide Berth">…</section> intercepts pointer events',
+    '    - retrying tap action',
+    '      - waiting 100ms',
+    '    43 × waiting for element to be visible, enabled and stable',
+    '       - element is visible, enabled and stable',
+    '       - scrolling into view if needed',
+    '       - done scrolling',
+    '       - <section id="seascape" aria-busy="false" aria-label="Wide Berth">…</section> intercepts pointer events',
+    '     - retrying tap action',
+    '       - waiting 500ms'
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.15.0

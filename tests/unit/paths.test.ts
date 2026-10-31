@@ -1,6 +1,13 @@
 import { describe, expect, test } from 'vitest';
 import { Vector3 } from 'three';
-import { bellwater, driftwoodYard, holdingPier, level, type Level } from '../../src/levels/level';
+import {
+  bellwater,
+  driftwoodYard,
+  wideBerth,
+  holdingPier,
+  level,
+  type Level,
+} from '../../src/levels/level';
 import { buildPath, getLevelPaths, samplePath } from '../../src/scene/paths';
 import {
   angularChange,
@@ -80,7 +87,7 @@ function networkProblems(l: Level) {
 }
 
 describe('canonical curved courses', () => {
-  test.each([level, holdingPier, bellwater, driftwoodYard])(
+  test.each([level, holdingPier, bellwater, driftwoodYard, wideBerth])(
     '$id caches finite paths with exact endpoints and uniform distance samples',
     (l) => {
       const paths = getLevelPaths(l);
@@ -259,7 +266,7 @@ describe('canonical curved courses', () => {
     expect(berthHeading(turned, 'stone', 0)).toBe(0);
   });
 
-  test.each([level, holdingPier, bellwater, driftwoodYard])(
+  test.each([level, holdingPier, bellwater, driftwoodYard, wideBerth])(
     '$id actual curved network has no extra junction or unrelated-stop contact',
     (l) => {
       expect(networkProblems(l)).toEqual([]);

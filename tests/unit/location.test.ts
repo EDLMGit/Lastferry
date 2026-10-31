@@ -132,7 +132,7 @@ describe('free location-card facts', () => {
     expect(preview(state, facts.board!, variant).error).toBeNull();
     expect(
       preview(state, { type: 'board', passengerIds: facts.boardOptions }, variant).error,
-    ).toContain('four passenger spaces');
+    ).toContain('boat has 3 spaces');
   });
 
   test('derives remaining local safety, Home and delivery from the active cove', () => {

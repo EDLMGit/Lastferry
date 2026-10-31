@@ -1,0 +1,538 @@
+{
+  "id": "wide-berth",
+  "title": "Wide Berth",
+  "rules": {
+    "capacity": 6,
+    "draftBands": [
+      {
+        "maxLoad": 0,
+        "draft": 1
+      },
+      {
+        "maxLoad": 2,
+        "draft": 2
+      },
+      {
+        "maxLoad": 4,
+        "draft": 3
+      },
+      {
+        "maxLoad": 6,
+        "draft": 4
+      }
+    ],
+    "tide": {
+      "initialLevel": 0,
+      "rises": [
+        {
+          "afterTurn": 5,
+          "level": 1
+        },
+        {
+          "afterTurn": 10,
+          "level": 2
+        }
+      ]
+    },
+    "actionCost": 1,
+    "depthFormula": "baseDepth + tideLevel",
+    "pierDryWhen": "tideLevel < elevation",
+    "failureRule": "required passenger waiting at a flooded pier"
+  },
+  "names": {
+    "nodes": {
+      "harbor": "Harbor",
+      "high-quay": "High Quay",
+      "wide-berth": "Wide Berth",
+      "shell-landing": "Shell Landing",
+      "outer-buoy": "Outer Buoy"
+    },
+    "passengers": {
+      "alder": "Alder",
+      "clover": "Clover",
+      "poppy": "Poppy",
+      "wren": "Wren",
+      "sorrel": "Sorrel",
+      "finch": "Finch"
+    }
+  },
+  "nodes": [
+    {
+      "id": "harbor",
+      "baseDepth": 4,
+      "pierId": "harbor-pier",
+      "positionXZ": [
+        -9,
+        0
+      ]
+    },
+    {
+      "id": "high-quay",
+      "baseDepth": 4,
+      "pierId": "high-quay-pier",
+      "positionXZ": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "wide-berth",
+      "baseDepth": 4,
+      "pierId": "wide-berth-pier",
+      "positionXZ": [
+        7,
+        -11
+      ]
+    },
+    {
+      "id": "shell-landing",
+      "baseDepth": 4,
+      "pierId": "shell-landing-pier",
+      "positionXZ": [
+        14,
+        5
+      ]
+    },
+    {
+      "id": "outer-buoy",
+      "baseDepth": 4,
+      "positionXZ": [
+        -4,
+        8
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "harbor-high-quay",
+      "nodes": [
+        "harbor",
+        "high-quay"
+      ],
+      "baseDepth": 2,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [
+          -9,
+          0
+        ],
+        [
+          -6,
+          0
+        ],
+        [
+          -3,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "id": "high-quay-wide-berth",
+      "nodes": [
+        "high-quay",
+        "wide-berth"
+      ],
+      "baseDepth": 4,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [
+          0,
+          0
+        ],
+        [
+          5.4,
+          -0.3
+        ],
+        [
+          7.3,
+          -5
+        ],
+        [
+          11,
+          -8
+        ],
+        [
+          11,
+          -11
+        ],
+        [
+          7,
+          -11
+        ]
+      ]
+    },
+    {
+      "id": "high-quay-shell-landing",
+      "nodes": [
+        "high-quay",
+        "shell-landing"
+      ],
+      "baseDepth": 2,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [
+          0,
+          0
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          9,
+          5
+        ],
+        [
+          14,
+          5
+        ]
+      ]
+    },
+    {
+      "id": "high-quay-outer-buoy",
+      "nodes": [
+        "high-quay",
+        "outer-buoy"
+      ],
+      "baseDepth": 4,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [
+          0,
+          0
+        ],
+        [
+          -2,
+          1
+        ],
+        [
+          -4,
+          4
+        ],
+        [
+          -4,
+          8
+        ]
+      ]
+    },
+    {
+      "id": "outer-buoy-harbor",
+      "nodes": [
+        "outer-buoy",
+        "harbor"
+      ],
+      "baseDepth": 4,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [
+          -4,
+          8
+        ],
+        [
+          -8,
+          7
+        ],
+        [
+          -11,
+          4
+        ],
+        [
+          -12,
+          0
+        ],
+        [
+          -9,
+          0
+        ]
+      ]
+    }
+  ],
+  "piers": [
+    {
+      "id": "harbor-pier",
+      "nodeId": "harbor",
+      "elevation": 3,
+      "isDeliveryPier": true,
+      "islandId": "lighthouse-island",
+      "positionXZ": [
+        -9,
+        -3.7
+      ],
+      "landAnchorXZ": [
+        -9,
+        -5.8999999999999995
+      ],
+      "width": 6.4
+    },
+    {
+      "id": "high-quay-pier",
+      "nodeId": "high-quay",
+      "elevation": 3,
+      "isDeliveryPier": false,
+      "islandId": "quay-island",
+      "positionXZ": [
+        0,
+        -3.7
+      ],
+      "landAnchorXZ": [
+        0,
+        -5.8999999999999995
+      ],
+      "width": 6.4
+    },
+    {
+      "id": "wide-berth-pier",
+      "nodeId": "wide-berth",
+      "elevation": 1,
+      "isDeliveryPier": false,
+      "islandId": "wide-island",
+      "positionXZ": [
+        7,
+        -14.7
+      ],
+      "landAnchorXZ": [
+        7,
+        -16.9
+      ],
+      "width": 6.4
+    },
+    {
+      "id": "shell-landing-pier",
+      "nodeId": "shell-landing",
+      "elevation": 2,
+      "isDeliveryPier": false,
+      "islandId": "shell-island",
+      "positionXZ": [
+        14,
+        1.2999999999999998
+      ],
+      "landAnchorXZ": [
+        14,
+        -0.8999999999999997
+      ],
+      "width": 6.4
+    }
+  ],
+  "passengers": [
+    {
+      "id": "alder",
+      "species": "sheep",
+      "slots": 2,
+      "appearance": "sheep-wool"
+    },
+    {
+      "id": "clover",
+      "species": "sheep",
+      "slots": 2,
+      "appearance": "sheep-wool"
+    },
+    {
+      "id": "poppy",
+      "species": "rabbit",
+      "slots": 1,
+      "appearance": "rabbit-cream"
+    },
+    {
+      "id": "wren",
+      "species": "rabbit",
+      "slots": 1,
+      "appearance": "rabbit-tan"
+    },
+    {
+      "id": "sorrel",
+      "species": "rabbit",
+      "slots": 1,
+      "appearance": "rabbit-cream"
+    },
+    {
+      "id": "finch",
+      "species": "rabbit",
+      "slots": 1,
+      "appearance": "rabbit-tan"
+    }
+  ],
+  "start": {
+    "boatNodeId": "harbor",
+    "aboard": [],
+    "waitingByPier": {
+      "harbor-pier": [],
+      "high-quay-pier": [],
+      "wide-berth-pier": [
+        "alder",
+        "clover",
+        "poppy",
+        "wren"
+      ],
+      "shell-landing-pier": [
+        "sorrel",
+        "finch"
+      ]
+    }
+  },
+  "objective": {
+    "deliveryPierId": "harbor-pier",
+    "requiredPassengerIds": [
+      "alder",
+      "clover",
+      "poppy",
+      "wren",
+      "sorrel",
+      "finch"
+    ]
+  },
+  "validation": {
+    "witnessReplays": [
+      "data/wide-berth/witnesses.json"
+    ],
+    "searchDepthLimit": 26
+  },
+  "world": {
+    "plane": "XZ",
+    "north": "negative Z",
+    "waterYPerTideLevel": 0.18,
+    "referenceBoatRadius": 0.3,
+    "requiredRouteClearance": 0.45,
+    "clearanceScope": "Actual six-space ferry and occupied geometry checked through both directions and docking orientations; reference radius is not the proof.",
+    "presentationNote": "Broad sheltered working landings with a safe stone High Quay; the deep return bends south through Outer Buoy and the two shallow alternatives remain distinct.",
+    "suggestedCamera": {
+      "projection": "orthographic",
+      "positionXYZ": [
+        0,
+        34,
+        24
+      ],
+      "targetXYZ": [
+        1,
+        0,
+        -4
+      ],
+      "verticalSpan": 24
+    },
+    "islands": [
+      {
+        "id": "lighthouse-island",
+        "elevation": 3,
+        "footprintXZ": [
+          [
+            -13,
+            -8.5
+          ],
+          [
+            -5.3,
+            -8.5
+          ],
+          [
+            -4.9,
+            -6.4
+          ],
+          [
+            -5.7,
+            -4.1
+          ],
+          [
+            -12.6,
+            -4.1
+          ],
+          [
+            -13.4,
+            -6.4
+          ]
+        ]
+      },
+      {
+        "id": "quay-island",
+        "elevation": 3,
+        "footprintXZ": [
+          [
+            -4,
+            -8.5
+          ],
+          [
+            3.7,
+            -8.5
+          ],
+          [
+            4.1,
+            -6.4
+          ],
+          [
+            3.3,
+            -4.1
+          ],
+          [
+            -3.6,
+            -4.1
+          ],
+          [
+            -4.4,
+            -6.4
+          ]
+        ]
+      },
+      {
+        "id": "wide-island",
+        "elevation": 1,
+        "footprintXZ": [
+          [
+            3,
+            -19.5
+          ],
+          [
+            10.7,
+            -19.5
+          ],
+          [
+            11.1,
+            -17.4
+          ],
+          [
+            10.3,
+            -15.1
+          ],
+          [
+            3.4,
+            -15.1
+          ],
+          [
+            2.6,
+            -17.4
+          ]
+        ]
+      },
+      {
+        "id": "shell-island",
+        "elevation": 2,
+        "footprintXZ": [
+          [
+            10,
+            -3.5
+          ],
+          [
+            17.7,
+            -3.5
+          ],
+          [
+            18.1,
+            -1.4
+          ],
+          [
+            17.3,
+            0.9
+          ],
+          [
+            10.4,
+            0.9
+          ],
+          [
+            9.6,
+            -1.4
+          ]
+        ]
+      }
+    ]
+  }
+}

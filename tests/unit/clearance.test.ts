@@ -3,7 +3,7 @@ import { InstancedMesh, Matrix4, Mesh, Vector3 } from 'three';
 import { ferry } from '../../src/scene/models';
 import { berthHeading, initialHeading, planJourney, sampleJourney } from '../../src/scene/motion';
 import { getLevelPaths, samplePath } from '../../src/scene/paths';
-import { level, holdingPier, bellwater, driftwoodYard } from '../../src/levels/level';
+import { level, holdingPier, bellwater, driftwoodYard, wideBerth } from '../../src/levels/level';
 import { sceneLayout } from '../../src/scene/layout';
 import { buildCoastGeometry, createReedBeds, createShoreRocks } from '../../src/scene/shore';
 type P = [number, number];
@@ -148,7 +148,7 @@ test.each([level, holdingPier, bellwater, driftwoodYard])(
   },
 );
 
-test.each([level, holdingPier, bellwater, driftwoodYard])(
+test.each([level, holdingPier, bellwater, driftwoodYard, wideBerth])(
   '$id: actual refined coasts, rocks and reeds stay inside the validated land envelope',
   (level) => {
     const failures: string[] = [];

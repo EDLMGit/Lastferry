@@ -2,6 +2,39 @@ import * as T from 'three';
 
 export type WakeCoast = { texture: T.Texture; bounds: T.Vector4 };
 
+export type WakeDimensions = {
+  fore: number;
+  aft: number;
+  lateral: number;
+  outline?: [number, number][];
+  margin?: number;
+};
+export function wakeContactReach(dimensions: WakeDimensions, forward: number, sideways: number) {
+  if (!dimensions.outline)
+    return (
+      1 /
+      Math.hypot(
+        forward / (forward >= 0 ? dimensions.aft : dimensions.fore),
+        sideways / dimensions.lateral,
+      )
+    );
+  const direction = [-sideways, -forward],
+    points = dimensions.outline;
+  const cross = (ax: number, az: number, bx: number, bz: number) => ax * bz - az * bx;
+  let nearest = Infinity;
+  for (let i = 0; i < points.length; i++) {
+    const a = points[i],
+      b = points[(i + 1) % points.length],
+      sx = b[0] - a[0],
+      sz = b[1] - a[1],
+      den = cross(direction[0], direction[1], sx, sz);
+    if (Math.abs(den) < 1e-9) continue;
+    const distance = cross(a[0], a[1], sx, sz) / den,
+      along = cross(a[0], a[1], direction[0], direction[1]) / den;
+    if (distance >= 0 && along >= 0 && along <= 1) nearest = Math.min(nearest, distance);
+  }
+  return Number.isFinite(nearest) ? nearest + (dimensions.margin ?? 0.08) : 0;
+}
 export const wakeLimits = {
   capacity: 12,
   lifetime: 1800,
@@ -55,7 +88,10 @@ export class FerryWake {
   strength = 0;
   vertices = 0;
 
-  constructor(coast?: WakeCoast) {
+  constructor(
+    coast?: WakeCoast,
+    readonly dimensions: WakeDimensions = { fore: 0.76, aft: 0.76, lateral: 0.48 },
+  ) {
     const capacity = wakeLimits.capacity * wakeLimits.sections * 6,
       geometry = new T.BufferGeometry();
     geometry.setAttribute(
@@ -178,7 +214,7 @@ export class FerryWake {
     const point = this.point(this.count++),
       forward = dx * Math.sin(angle) + dz * Math.cos(angle),
       sideways = dx * Math.cos(angle) - dz * Math.sin(angle),
-      reach = 1 / Math.hypot(forward / 0.76, sideways / 0.48);
+      reach = wakeContactReach(this.dimensions, forward, sideways);
     point.id = ++this.serial;
     point.center.set(x, waterY, z);
     point.position.set(x - dx * reach, waterY + 0.018, z - dz * reach);
@@ -267,7 +303,10 @@ export class FerryWake {
       drift = spread * 0.24,
       skew = (point.seed - 0.5) * 0.3;
     this.shape.age = age;
-    this.shape.width = 0.43 + point.seed * 0.1 + spread * (0.72 + point.seed * 0.22);
+    this.shape.width =
+      (this.dimensions.outline ? this.dimensions.lateral * 0.9 : 0.43) +
+      point.seed * 0.1 +
+      spread * (0.72 + point.seed * 0.22);
     this.shape.bend = 0.12 + spread * 0.36;
     this.shape.skew = skew;
     this.shape.opacity = point.strength * T.MathUtils.smoothstep(age, 0, 0.07) * (1 - age) ** 1.1;

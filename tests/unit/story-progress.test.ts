@@ -6,6 +6,7 @@ import {
   acknowledgeScene,
   checkpointCove,
   isLegacyCompletion,
+  legacyContinuationScene,
   newJourney,
   parseJourney,
   validateJourney,
@@ -18,6 +19,7 @@ import {
   storyCove,
   storyCoves,
   storyScenes,
+  scenePredecessor,
 } from '../../src/campaign/registry';
 import { Session } from '../../src/game/session';
 import type { Action } from '../../src/game/rules';
@@ -25,6 +27,7 @@ import {
   bellwater,
   driftwoodYard,
   holdingPier,
+  wideBerth,
   level as firstCrossing,
 } from '../../src/levels/level';
 import narration from '../../LAST_FERRY_STORY_PRODUCTION_PACKAGE/audio/narration-script.json';
@@ -36,8 +39,10 @@ function checkpoints() {
   const second = acknowledgeScene(transition, 'another-bell');
   const yardEntry = acceptCove(second, 'bellwater', 'won');
   const third = acknowledgeScene(yardEntry, 'driftwood-light');
-  const complete = acceptCove(third, 'driftwood-yard', 'won');
-  return { opening, holding, transition, second, yardEntry, third, complete };
+  const launchEntry = acceptCove(third, 'driftwood-yard', 'won');
+  const fourth = acknowledgeScene(launchEntry, 'a-wider-deck');
+  const complete = acceptCove(fourth, 'wide-berth', 'won');
+  return { opening, holding, transition, second, yardEntry, third, launchEntry, fourth, complete };
 }
 
 function memory(raw: string | null = null) {
@@ -77,17 +82,25 @@ describe('authored story registry', () => {
       });
     }
   });
-  test('three authored story puzzles are registered, with First Crossing practice separate', () => {
+  test('four authored story puzzles are registered, with First Crossing practice separate', () => {
     expect(storyCoves.map(({ id, order }) => [id, order])).toEqual([
       ['holding-pier', 0],
       ['bellwater', 1],
       ['driftwood-yard', 2],
+      ['wide-berth', 3],
     ]);
     expect(storyCove('holding-pier')?.level).toBe(holdingPier);
     expect(storyCove('bellwater')?.level).toBe(bellwater);
     expect(storyCove('driftwood-yard')?.level).toBe(driftwoodYard);
+    expect(storyCove('wide-berth')?.level).toBe(wideBerth);
     expect(storyCove('first-crossing')).toBeUndefined();
-    expect(practiceCoves).toEqual([firstCrossing, holdingPier, bellwater, driftwoodYard]);
+    expect(practiceCoves).toEqual([
+      firstCrossing,
+      holdingPier,
+      bellwater,
+      driftwoodYard,
+      wideBerth,
+    ]);
     expect(practiceCove('first-crossing')).toBe(firstCrossing);
     expect(practiceCove('future-cove')).toBeUndefined();
     expect(storyCove('future-cove')).toBeUndefined();
@@ -97,7 +110,12 @@ describe('authored story registry', () => {
   });
 
   test('all opening copy and the connective beat remain available without sound or motion', () => {
-    expect(Object.keys(storyScenes)).toEqual(['opening', 'another-bell', 'driftwood-light']);
+    expect(Object.keys(storyScenes)).toEqual([
+      'opening',
+      'another-bell',
+      'driftwood-light',
+      'a-wider-deck',
+    ]);
     expect(storyScenes.opening.shots.map((shot) => shot.caption)).toEqual([
       'Your first evening at the helm.\nA high tide ahead.',
       'Pip and Rue have kept a light for you.',
@@ -114,7 +132,7 @@ describe('authored story registry', () => {
 });
 
 describe('journey checkpoint transactions', () => {
-  test('all seven checkpoints round-trip with coherent accepted completions and scene acknowledgments', () => {
+  test('all nine checkpoints round-trip with coherent accepted completions and scene acknowledgments', () => {
     const records = Object.values(checkpoints());
     expect(records.map(checkpointCove)).toEqual([
       'holding-pier',
@@ -123,7 +141,9 @@ describe('journey checkpoint transactions', () => {
       'bellwater',
       'driftwood-yard',
       'driftwood-yard',
-      'driftwood-yard',
+      'wide-berth',
+      'wide-berth',
+      'wide-berth',
     ]);
     for (const record of records) {
       expect(validateJourney(record)).toEqual({ valid: true, record });
@@ -149,7 +169,7 @@ describe('journey checkpoint transactions', () => {
     });
     expect(records[6]).toEqual({
       version: 1,
-      checkpoint: { kind: 'complete' },
+      checkpoint: { kind: 'scene', id: 'a-wider-deck' },
       completed: ['holding-pier', 'bellwater', 'driftwood-yard'],
       acknowledgedScenes: ['opening', 'another-bell', 'driftwood-light'],
     });
@@ -321,8 +341,12 @@ describe('validated local journey storage', () => {
     expect(backing.writes.length).toBe(3);
     expect(endpoint.acknowledge('driftwood-light')).toBe(true);
     expect(endpoint.accept('driftwood-yard', 'won')).toBe(true);
-    expect(endpoint.snapshot.record).toEqual(checkpoints().complete);
+    expect(endpoint.snapshot.record).toEqual(checkpoints().launchEntry);
     expect(backing.writes.length).toBe(5);
+    expect(endpoint.acknowledge('a-wider-deck')).toBe(true);
+    expect(endpoint.accept('wide-berth', 'won')).toBe(true);
+    expect(endpoint.snapshot.record).toEqual(checkpoints().complete);
+    expect(backing.writes.length).toBe(7);
   });
 
   test('snapshots cannot mutate stored progress behind validation', () => {
@@ -363,6 +387,8 @@ describe('validated local journey storage', () => {
       expect(progress.accept('bellwater', 'won')).toBe(true);
       expect(progress.acknowledge('driftwood-light')).toBe(true);
       expect(progress.accept('driftwood-yard', 'won')).toBe(true);
+      expect(progress.acknowledge('a-wider-deck')).toBe(true);
+      expect(progress.accept('wide-berth', 'won')).toBe(true);
       expect(progress.snapshot.record).toEqual(checkpoints().complete);
       expect(backing.values.get(JOURNEY_STORAGE_KEY)).toBeUndefined();
       expect(backing.values.get('last-ferry.sound')).toBe('muted');
@@ -423,7 +449,7 @@ describe('narrow two-cove completion compatibility', () => {
     expect(restored.acknowledge('driftwood-light')).toBe(true);
     expect(restored.snapshot.record).toEqual(checkpoints().third);
     expect(restored.accept('driftwood-yard', 'won')).toBe(true);
-    expect(restored.snapshot.record).toEqual(checkpoints().complete);
+    expect(restored.snapshot.record).toEqual(checkpoints().launchEntry);
     expect(restored.accept('driftwood-yard', 'won')).toBe(false);
     expect(restored.continueAvailableContent()).toBe(false);
   });
@@ -464,5 +490,94 @@ describe('narrow two-cove completion compatibility', () => {
     expect(progress.continueAvailableContent()).toBe(false);
     expect(backing.values.get('last-ferry.sound')).toBe('muted');
     expect(backing.values.get('last-ferry.motion')).toBe('reduced');
+  });
+});
+
+describe('both exact historical boundaries and current completed world', () => {
+  const third: JourneyRecord = {
+    version: 1,
+    checkpoint: { kind: 'complete' },
+    completed: ['holding-pier', 'bellwater', 'driftwood-yard'],
+    acknowledgedScenes: ['opening', 'another-bell', 'driftwood-light'],
+  };
+  test('three-cove completion remains byte-preserving, then begins launch exactly once', () => {
+    const raw = JSON.stringify(third, null, 2),
+      backing = memory(raw),
+      progress = new JourneyProgress(() => backing.storage);
+    expect(progress.snapshot.raw).toBe(raw);
+    expect(progress.snapshot.record).toEqual(third);
+    expect(backing.writes).toEqual([]);
+    expect(checkpointCove(third)).toBe('driftwood-yard');
+    expect(legacyContinuationScene(third)).toBe('a-wider-deck');
+    expect(progress.acknowledge('a-wider-deck')).toBe(false);
+    expect(progress.accept('wide-berth', 'won')).toBe(false);
+    expect(progress.continueAvailableContent()).toBe(true);
+    expect(progress.snapshot.record).toEqual(checkpoints().launchEntry);
+    expect(progress.continueAvailableContent()).toBe(false);
+    expect(backing.writes).toHaveLength(1);
+    const restored = new JourneyProgress(() => backing.storage);
+    expect(restored.snapshot.record).toEqual(checkpoints().launchEntry);
+    expect(restored.continueAvailableContent()).toBe(false);
+    expect(restored.acknowledge('a-wider-deck')).toBe(true);
+    expect(restored.acknowledge('a-wider-deck')).toBe(false);
+    expect(restored.snapshot.record).toEqual(checkpoints().fourth);
+    expect(restored.accept('wide-berth', 'won')).toBe(true);
+    expect(restored.snapshot.record).toEqual(checkpoints().complete);
+    expect(legacyContinuationScene(restored.snapshot.record)).toBeNull();
+    expect(checkpointCove(restored.snapshot.record!)).toBe('wide-berth');
+    expect(restored.continueAvailableContent()).toBe(false);
+  });
+  test.each([
+    { ...third, extra: true },
+    { ...third, version: 2 },
+    { ...third, checkpoint: { kind: 'complete', id: 'driftwood-yard' } },
+    { ...third, completed: ['holding-pier', 'driftwood-yard', 'bellwater'] },
+    { ...third, acknowledgedScenes: ['opening', 'driftwood-light', 'another-bell'] },
+    { ...third, completed: ['holding-pier', 'bellwater', 'wide-berth'] },
+    { ...third, acknowledgedScenes: ['opening', 'another-bell'] },
+  ])('rejects altered three-cove shapes without rewriting: %j', (record) => {
+    const raw = JSON.stringify(record),
+      backing = memory(raw),
+      progress = new JourneyProgress(() => backing.storage);
+    expect(legacyContinuationScene(record)).toBeNull();
+    expect(progress.snapshot.kind).toBe('invalid');
+    expect(progress.continueAvailableContent()).toBe(false);
+    expect(backing.values.get(JOURNEY_STORAGE_KEY)).toBe(raw);
+    expect(backing.writes).toEqual([]);
+  });
+  test('failed three-cove continuation write preserves bytes and remains usable in memory', () => {
+    const raw = JSON.stringify(third),
+      backing = memory(raw),
+      progress = new JourneyProgress(() => ({
+        getItem: backing.storage.getItem,
+        setItem() {
+          throw new Error('Full');
+        },
+      }));
+    expect(progress.continueAvailableContent()).toBe(true);
+    expect(progress.snapshot.record).toEqual(checkpoints().launchEntry);
+    expect(progress.snapshot.persistent).toBe(false);
+    expect(progress.snapshot.issue).toContain('will not survive closing');
+    expect(backing.values.get(JOURNEY_STORAGE_KEY)).toBe(raw);
+    expect(progress.acknowledge('a-wider-deck')).toBe(true);
+    expect(progress.accept('wide-berth', 'won')).toBe(true);
+    expect(progress.snapshot.record).toEqual(checkpoints().complete);
+    expect(backing.values.get('last-ferry.sound')).toBe('muted');
+    expect(backing.values.get('last-ferry.motion')).toBe('reduced');
+  });
+  test('each scene uses its actual predecessor and old complete worlds never display a new rescue', () => {
+    expect(scenePredecessor('opening')).toBe(holdingPier);
+    expect(scenePredecessor('another-bell')).toBe(holdingPier);
+    expect(scenePredecessor('driftwood-light')).toBe(bellwater);
+    expect(scenePredecessor('a-wider-deck')).toBe(driftwoodYard);
+    expect(
+      checkpointCove({
+        ...third,
+        completed: ['holding-pier', 'bellwater'],
+        acknowledgedScenes: ['opening', 'another-bell'],
+      }),
+    ).toBe('bellwater');
+    expect(checkpointCove(third)).toBe('driftwood-yard');
+    expect(validateJourney(checkpoints().complete).valid).toBe(true);
   });
 });

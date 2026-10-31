@@ -1,5 +1,8 @@
 import * as T from 'three';
-import { animal } from '../scene/models';
+import { animal, ferry } from '../scene/models';
+import { wideBerth } from '../levels/level';
+import { deckSeat, ferryProfile, passengerScale } from '../scene/ferry-profile';
+import { passengerModelVariant, resolvePassengerAppearance } from '../game/passenger-appearance';
 import '../ui/cove-ui.css';
 import './asset-gallery.css';
 import catalog from '../../assets/catalog.json';
@@ -53,7 +56,13 @@ root.innerHTML = `<header><p>Last Ferry · developer tools</p><h1>Cove asset gal
 )}<p>Gallery-only labels use explicit appearance fixtures to test wrapping. Actual passenger and level data are unchanged.</p></article>
 </div><div class="cove-panel cove-surface cove-surface--compact gallery-panel"><h3>Compact face</h3><p>Shared opaque wash with no corner decoration. HUD, names, forecast and local options retain their own dimensions.</p><button id="gallery-forecast" class="cove-panel cove-surface cove-surface--compact gallery-forecast" data-demo-state="focus">! Rabbit Pier floods in 1 action.</button></div>
 <div class="cove-panel cove-surface cove-surface--arrival gallery-panel"><h3>Everyone home.</h3><p>Arrival uses only a warmer upper catchlight. Normal action and home colors remain the existing button family.</p><button id="gallery-next"></button></div></section>
-<section aria-labelledby="beaver-heading"><h2 id="beaver-heading">Nell · real beaver model</h2><p>The production geometry, including the broad resting tail, muzzle and compact paws. A static developer specimen uses the same model factory; it is not gameplay evidence.</p><div class="panel-specimens"><figure class="cove-panel cove-surface gallery-panel"><canvas id="gallery-beaver-model" style="width:100%;height:260px;display:block" role="img" aria-label="Nell the warm brown beaver with a lighter muzzle, small round ears, broad nose and flat darker tail"></canvas><figcaption>Nell · two spaces · original editable geometry</figcaption></figure><article class="cove-panel cove-surface gallery-panel panel-specimen--narrow"><h3>Driftwood neighbors</h3>${choices([['Nell',2,true,'beaver-brown'],['Fern',1,true,'rabbit-cream'],['Oat',1,true,'rabbit-tan']])}<p>Explicit stable coats survive offered subsets and passenger-array reorder.</p><p><a href="/?cove=driftwood-yard">Open the actual Driftwood rescue</a></p></article></div></section><section aria-labelledby="portrait-heading"><h2 id="portrait-heading">Model-derived static portraits</h2><p>Four original transparent 256px PNG derivatives, displayed at 44px beside live copy in the shared choice helper. Offline SVG diffuse shading is not pixel-identical WebGL. These are design specimens, not gameplay captures.</p><div class="portrait-sources">${(Object.entries(portraitSources) as [PortraitKey, string][]).map(([key, url]) => `<figure class="cove-panel cove-surface gallery-panel"><img class="portrait-source" src="${url}" width="256" height="256" alt="${key.replace('-', ' ')} model-derived source portrait" draggable="false" /><figcaption>${key} · 256×256 PNG</figcaption></figure>`).join('')}</div><div class="panel-specimens"><article id="gallery-bellwater-portraits" class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow"><h3>Bellwater names, same appearances</h3>${choices(
+<section aria-labelledby="beaver-heading"><h2 id="beaver-heading">Nell · real beaver model</h2><p>The production geometry, including the broad resting tail, muzzle and compact paws. A static developer specimen uses the same model factory; it is not gameplay evidence.</p><div class="panel-specimens"><figure class="cove-panel cove-surface gallery-panel"><canvas id="gallery-beaver-model" style="width:100%;height:260px;display:block" role="img" aria-label="Nell the warm brown beaver with a lighter muzzle, small round ears, broad nose and flat darker tail"></canvas><figcaption>Nell · two spaces · original editable geometry</figcaption></figure><article class="cove-panel cove-surface gallery-panel panel-specimen--narrow"><h3>Driftwood neighbors</h3>${choices(
+  [
+    ['Nell', 2, true, 'beaver-brown'],
+    ['Fern', 1, true, 'rabbit-cream'],
+    ['Oat', 1, true, 'rabbit-tan'],
+  ],
+)}<p>Explicit stable coats survive offered subsets and passenger-array reorder.</p><p><a href="/?cove=driftwood-yard">Open the actual Driftwood rescue</a></p></article></div></section><section aria-labelledby="portrait-heading"><h2 id="portrait-heading">Model-derived static portraits</h2><p>Four original transparent 256px PNG derivatives, displayed at 44px beside live copy in the shared choice helper. Offline SVG diffuse shading is not pixel-identical WebGL. These are design specimens, not gameplay captures.</p><div class="portrait-sources">${(Object.entries(portraitSources) as [PortraitKey, string][]).map(([key, url]) => `<figure class="cove-panel cove-surface gallery-panel"><img class="portrait-source" src="${url}" width="256" height="256" alt="${key.replace('-', ' ')} model-derived source portrait" draggable="false" /><figcaption>${key} · 256×256 PNG</figcaption></figure>`).join('')}</div><div class="panel-specimens"><article id="gallery-bellwater-portraits" class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow"><h3>Bellwater names, same appearances</h3>${choices(
   [
     ['Tansy', 1, false, 'rabbit-cream'],
     ['Lark', 1, true, 'rabbit-tan'],
@@ -109,8 +118,8 @@ const beaverResize = new ResizeObserver(([entry]) => {
   const { width, height } = entry.contentRect;
   if (width <= 0 || height <= 0) return;
   const halfHeight = 0.65;
-  beaverCamera.left = -halfHeight * width / height;
-  beaverCamera.right = halfHeight * width / height;
+  beaverCamera.left = (-halfHeight * width) / height;
+  beaverCamera.right = (halfHeight * width) / height;
   beaverCamera.top = halfHeight;
   beaverCamera.bottom = -halfHeight;
   beaverCamera.updateProjectionMatrix();
@@ -200,7 +209,68 @@ const showInventory = () => {
 document.querySelector('#filter')!.addEventListener('input', showInventory);
 showInventory();
 
-const driftwoodLink = document.createElement("section");
-driftwoodLink.id = "driftwood-yard";
+const driftwoodLink = document.createElement('section');
+driftwoodLink.id = 'driftwood-yard';
 driftwoodLink.innerHTML = `<h2>Driftwood Yard · authored environment and illustrated connection</h2><p><a href="/?cove=driftwood-yard">Play the actual timber-yard cove</a> · <a href="/">Open the journey for the earned Nell lantern scene</a></p>`;
-document.querySelector("main")!.append(driftwoodLink);
+document.querySelector('main')!.append(driftwoodLink);
+
+const wideSection = document.createElement('section');
+wideSection.id = 'wide-ferry';
+wideSection.className = 'cove-panel cove-surface gallery-panel';
+wideSection.innerHTML = `<h2>Six-space ferry · actual production model</h2><p>Developer specimen, not gameplay evidence. One sheep and four rabbits occupy six spaces on fixed automatic identity anchors; other legal subsets use these same sources. Original coves retain the original smaller ferry.</p><canvas id="gallery-wide-ferry" aria-label="Production larger yellow ferry with red cabin and five full-size neighbors" style="width:100%;height:320px;display:block"></canvas><p><a href="/?cove=wide-berth">Play actual Wide Berth</a> · <a href="/">Root journey and earned launch</a></p>`;
+root.append(wideSection);
+const wideCanvas = wideSection.querySelector<HTMLCanvasElement>('canvas')!;
+const wideRenderer = new T.WebGLRenderer({ canvas: wideCanvas, antialias: true });
+wideRenderer.setPixelRatio(Math.min(devicePixelRatio, 1.7));
+wideRenderer.outputColorSpace = T.SRGBColorSpace;
+wideRenderer.toneMapping = T.ACESFilmicToneMapping;
+wideRenderer.toneMappingExposure = 1;
+const wideScene = new T.Scene();
+wideScene.background = new T.Color('#245f70');
+wideScene.add(new T.HemisphereLight('#fff1dc', '#5f8c9a', 1.9));
+const wideSun = new T.DirectionalLight('#ffe0af', 2.4);
+wideSun.position.set(-8, 16, 7);
+wideScene.add(wideSun);
+const wideModel = ferry(ferryProfile(wideBerth));
+wideScene.add(wideModel);
+for (const id of ['alder', 'poppy', 'wren', 'sorrel', 'finch']) {
+  const passenger = wideBerth.passengers.find((p) => p.id === id)!;
+  const figure = animal(passenger.species, passengerModelVariant(wideBerth, id));
+  figure.scale.set(...passengerScale(passenger.species));
+  figure.position.copy(deckSeat(wideBerth, id));
+  wideModel.add(figure);
+}
+const wideCamera = new T.OrthographicCamera();
+wideCamera.position.set(7, 7, 10);
+wideCamera.lookAt(0, 0.65, 0.6);
+const wideResize = new ResizeObserver((entries) => {
+  for (const entry of entries) {
+    const { width, height } = entry.contentRect;
+    if (!width || !height) continue;
+    const aspect = width / height,
+      vertical = Math.max(3.2, 3.3 / aspect);
+    Object.assign(wideCamera, {
+      left: -vertical * aspect,
+      right: vertical * aspect,
+      top: vertical,
+      bottom: -vertical,
+      near: 0.1,
+      far: 60,
+    });
+    wideCamera.updateProjectionMatrix();
+    wideRenderer.setSize(width, height, false);
+    wideRenderer.render(wideScene, wideCamera);
+  }
+});
+wideResize.observe(wideCanvas);
+window.addEventListener(
+  'pagehide',
+  () => {
+    wideResize.disconnect();
+    wideModel.traverse((object) => {
+      if (object instanceof T.Mesh) object.geometry.dispose();
+    });
+    wideRenderer.dispose();
+  },
+  { once: true },
+);

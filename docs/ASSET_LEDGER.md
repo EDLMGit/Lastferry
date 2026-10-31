@@ -124,3 +124,13 @@ The developer gallery renders the actual Nell factory in one static disposable 3
 ## Driftwood Yard environment and story additions
 
 `environment.driftwood-yard` reuses original shared wood, stone, reeds and coast materials in `src/scene/scenery.ts`/`layout.ts`, with authored geometry in `data/driftwood-yard.level.json`. `story.illustrations` adds the original seven-second Nell greeting in `src/campaign/story-painter.ts`; no external images, narration or new score. Supplied direction is retained in `LAST_FERRY_DRIFTWOOD_YARD_PACKAGE/direction/NELL_AND_YARD.md`. Original project-authored editable code; integration is separate from human visual acceptance. Real gameplay evidence and final source identities are in `reviews/driftwood-yard/`.
+
+## Wide Berth — larger ferry, launch and authored waterfront
+
+`model.ferry` gains an original six-space variant in models.ts, with shared physical dimensions/seating/transfers in ferry-profile.ts and the actual pier factory in pier.ts. Existing four-space factory output is separately audited unchanged. Full-size original sheep/rabbit models and all existing portraits are reused through explicit stable IDs. Actual production helpers also drive the developer gallery; it is a design specimen, not gameplay evidence.
+
+`story.illustrations` gains the original eight-second launch in story-painter.ts, reusing the same player/palette, safe existing characters, existing finite water cue and exact supplied caption. No new narration or score. `environment.wide-berth` is one justified authored reusable waterfront/cove composition (level/layout/scenery), with broad working piers and safe High Quay; it reuses existing wood/stone/coast/rope materials and avoids per-prop duplicate families.
+
+Editable sources remain local project code and JSON, authored for this project. Supplied direction/proof remains in LAST_FERRY_WIDE_BERTH_PACKAGE unchanged. Current verification, source identity, native game frames and human-acceptance limitations belong in reviews/wide-berth; integration is not visual, difficulty, physical-device or acoustic approval.
+
+The final inventory retains all 78 baseline IDs and contains 79 families. Existing ferry, pier, wake, transfer, passenger-choice and story families extend in place; only `environment.wide-berth` is added. Existing acceptance applies to original variants; the new wide-profile geometry, launch and waterfront await human visual/pacing approval. Six-space automatic seats use full-level species peers sorted by stable passenger ID; the original four-space species ordinals and appearances are preserved.

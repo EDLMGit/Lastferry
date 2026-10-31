@@ -1,6 +1,6 @@
 import * as T from 'three';
 import type { lighthouse } from './models';
-import { FerryWake, type WakeCoast } from './wake';
+import { FerryWake, type WakeCoast, type WakeDimensions } from './wake';
 
 export class CrossingEffects {
   wake: T.Mesh;
@@ -19,8 +19,8 @@ export class CrossingEffects {
   lensBase = 0;
   lampBase = 0;
   reduced = false;
-  constructor(home: ReturnType<typeof lighthouse>, coast?: WakeCoast) {
-    this.movement = new FerryWake(coast);
+  constructor(home: ReturnType<typeof lighthouse>, coast?: WakeCoast, dimensions?: WakeDimensions) {
+    this.movement = new FerryWake(coast, dimensions);
     this.wake = this.movement.mesh;
     this.interaction = this.movement.interaction;
     const pixels = new Uint8Array(32 * 32 * 4);

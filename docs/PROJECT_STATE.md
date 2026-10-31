@@ -6,6 +6,16 @@ Read this before choosing scope. Detailed implementation history belongs in `STA
 
 ## Current scoped pass
 
+`WIDE_BERTH_01` is the combined `LAST_FERRY_WIDE_BERTH_PACKAGE/NEXT_TASK_WIDE_BERTH.md` milestone. The supplied exact task resolved one directory above the actual Lastferry Git root; package retained beside package.json. Started clean on `m1-first-crossing` at reviewed `7e324e88827857469bf348fca311548344d03da6`, matching the fetched remote. Newer/unrelated work is preserved; no reset.
+
+Driftwood gameplay is accepted by the user. Its acceptance does not close earlier image-loading, Bellwater overlap, timing, physical-device or acoustic limits. Current scope adds the prepared-ferry launch, an actual six-space boat with automatic seats/transfers, one authored Wide Berth cove and exact historical two-/three-cove continuation. Earlier four coves retain their four-space boat; First Crossing remains practice. Wide Berth deliberately replaces the former wholly gentle C4 calibration with a useful six-space rescue and full-load detour versus safe staging choice. Human difficulty/satisfaction is still for playtest.
+
+The implemented journey is Holding → Bellwater → Driftwood → Wide Berth, with explicit scene/rescue acceptance and cove-boundary checkpoints. Newcomers are Alder/Clover (sheep) and Poppy/Wren/Sorrel/Finch (rabbits). No Orin, currents, fleet system or real-time deadline. After four rescues, available content ends honestly. Orchard Landing/Orin, mixed-load synthesis and later currents remain future work.
+
+**Implementation and focused verification complete.** Node24 production build/TypeScript, 381/381 units in41files and79-family validation pass, retaining all78 prior IDs. Both actual UI strategies, five-body/six-neighbor staging, exact old-save continuation, tide/terminal Undo and final production rescue/5size chooser fit pass across the recorded batches. Native launch beats and two uninterrupted runtime-audio sequences are retained. The current marker partially obscures a sheep face at rest; prior image-loading, overlap, precise timing, device and acoustic limits remain open. Full details, original failures and exact source/evidence comparisons are in `reviews/wide-berth/REVIEW.md`. Implementation/packaging commits and final pushed identity are recorded separately at handoff. No publication is authorized: the last confirmed private Site remains version 12/game `1a85874883af5caa59f6294a75495eccf2afebbc`, hosting `e87c5c5baa53a39001c5a89b07b59aab2ad150fc`. Earlier receipts/history below remain intact.
+
+## Previous scoped pass: Driftwood Yard
+
 `DRIFTWOOD_YARD_01` implements `LAST_FERRY_DRIFTWOOD_YARD_PACKAGE/NEXT_TASK_DRIFTWOOD_YARD.md`. The supplied package resolved one directory above this Git root and is retained here unchanged. HOME_PLAY_FLOW_01 is complete and its dock-paragraph requirement is superseded: ordinary actions use icon/short label, free current-place inspection holds predicted facts, and real loss warnings remain deliberate.
 
 Reviewed game baseline: `da1f2686ce6aff8d754e13111447dabb6e1313f0`. Local checkout was there; fetched/fast-forwarded to newer remote `879c9d1cfb6745ce8a294e4dbba4aa3d984ef4b3`, preserving its six additional commits with identical tree `4aa851646f66cb0eda3ee9960ca9c5125170b0e0`. No reset or unrelated changes.
@@ -50,7 +60,8 @@ Local Codex implements the current task. ChatGPT reviews the identifiable handof
 | Authored-scenes implementation | `1aa73c59c37082f43990235a9efffd6f793cf642`, reviewed handoff `6fc5a09dd4ef876ad96ad12d623532f0d13deb10` — working journey retained; illustrated presentation supersedes its distant-model scenes; not published |
 | Illustrated story production | `bdd7e86f1e2953144b11108eb828ab85c88eb542` — implemented and focused checks complete; following handoff commit records packaging/continuity only; not published |
 | Home/play implementation | `682ee816537d9a9955f49ed35a3cfdcb3d67f752` — complete combined HOME_PLAY_FLOW_01; review and exact source/media audit in reviews/home-play-flow, not deployed |
-| Reviewed implementation baseline | `da1f2686ce6aff8d754e13111447dabb6e1313f0` — Driftwood comparison; newer identical-tree history preserved through `879c9d1` |
+| Driftwood implementation | `16742dbc6007c322db4abc5ebe67f1d1a7acd37b`, reviewed handoff `7e324e88827857469bf348fca311548344d03da6` — gameplay accepted; not deployed |
+| Reviewed implementation baseline | `7e324e88827857469bf348fca311548344d03da6` — Wide Berth comparison |
 | Published private phone game | `1a85874883af5caa59f6294a75495eccf2afebbc` — Sites version 12, publication confirmed 2026-10-25 17:28 Madrid |
 | Stable phone URL | https://last-ferry-playtest.abumech.chatgpt.site |
 | Published hosting source | `e87c5c5baa53a39001c5a89b07b59aab2ad150fc` |
@@ -233,8 +244,8 @@ Build/typecheck and **200/200 units** pass. **20 distinct browser passes across 
 ## Queue and scope boundaries
 
 - Further playtest feedback will arrive incrementally. Add it here with a brief status and concrete intent; do not implement it automatically during the active task.
-- Homecoming, lighthouse light, sailing direction, released crests and phone playability with the audio/fullscreen correction are accepted and published. The illustrated opening/Harbor production task is current; additional ideas remain queued.
-- More authored coves and increasing difficulty remain a later product direction. The active pass adds no puzzle or mechanic.
+- Homecoming, lighthouse light, sailing direction, released crests and phone playability with the audio/fullscreen correction are accepted and published. Home/story/Driftwood are implemented; Driftwood gameplay is accepted. Wide Berth is implemented for review; additional ideas remain queued.
+- Wide Berth is the implemented C4 experiment. Orchard Landing/Orin, mixed-size synthesis and later currents remain queued; this pass adds no new generic rule.
 - Broader environment/art changes and further audio changes require a later active task or new user feedback.
 - Extra volume sliders, graphics presets, rewards, accounts and progression systems are not requested deliverables.
 - Unseen “more queued” ideas have not been specified. Do not invent their content.

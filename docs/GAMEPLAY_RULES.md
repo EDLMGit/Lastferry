@@ -16,7 +16,7 @@ There is no additional move limit, real-time countdown, fuel meter, score target
 
 ## Load and draft
 
-The ferry has **four passenger slots**. A rabbit uses one slot; a sheep uses two. Occupied slots are the entire load calculation. There is no separate mass, cargo grid, animal mood, or inventory system.
+First Crossing, Holding, Bellwater and Driftwood use the **four-space ferry**. Wide Berth uses the **six-space ferry**, selected by its own level data. A rabbit uses one slot; a sheep uses two. Occupied slots are the entire load calculation. There is no separate mass, cargo grid, animal mood, or inventory system.
 
 | Occupied slots | Boat draft | Example                          |
 | -------------- | ---------: | -------------------------------- |
@@ -24,7 +24,7 @@ The ferry has **four passenger slots**. A rabbit uses one slot; a sheep uses two
 | 1–2            |          2 | One sheep, or two rabbits        |
 | 3–4            |          3 | One sheep and one or two rabbits |
 
-A route is usable when its current depth is **greater than or equal to** the boat's draft. Equality is safe. A maximum-load boat has draft 3; it is afloat at every authored stopping node even at the initial tide.
+A route is usable when its current depth is **greater than or equal to** the boat's draft. Equality is safe. The original four-space boat at maximum load has draft 3; Wide Berth adds the ordered 5–6-space band with draft 4. Capacity and complete ordered bands come from the active level. The boat is afloat at every authored stopping node even at the initial tide.
 
 The rules use integer depth units. A renderer may group depths of 3 or more into the same “deep” visual band, but the actual depth remains `baseDepth + tideLevel`; it is not numerically capped.
 
@@ -35,7 +35,7 @@ Every valid action below costs exactly **one turn**. A selection is a set of dis
 | Action | Payload                                               | Preconditions                                                                                                                          | Immediate effect                                                                                        |
 | ------ | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
 | Move   | `{ "type": "move", "to": "node-id" }`                 | Destination is a different adjacent node; the connecting edge and destination basin support the current draft at the current tide.     | Move to that node along the edge's authored waypoints.                                                  |
-| Board  | `{ "type": "board", "passengerIds": ["id", "..."] }`  | At a dry pier; selected nonempty subset waits at that exact pier; resulting load is at most 4; the berth supports the resulting draft. | Transfer the whole selection from the pier to the boat.                                                 |
+| Board  | `{ "type": "board", "passengerIds": ["id", "..."] }`  | At a dry pier; selected nonempty subset waits at that exact pier; resulting load is at most the active capacity (4 or 6); the berth supports the resulting draft. | Transfer the whole selection from the pier to the boat.                                                 |
 | Unload | `{ "type": "unload", "passengerIds": ["id", "..."] }` | At a dry pier; selected nonempty subset is aboard.                                                                                     | At the harbor, mark selected passengers delivered. At another pier, make them waiting passengers there. |
 | Wait   | `{ "type": "wait" }`                                  | Puzzle is playing.                                                                                                                     | Leave boat and passenger locations unchanged.                                                           |
 
@@ -163,3 +163,7 @@ Capacity, passenger costs, draft bands, action costs, tide rises after actions 4
 Bellwater has no mandatory Wait, action cap or score requirement. Both asymmetric route families, shallow travel both ways with a well-timed Wait, and separate rabbit boarding remain valid. Once everyone is aboard, harmless longer play stays legal. Developer witnesses and unsuccessful alternatives are documented in `BELLWATER.md` and `data/bellwater/witnesses.json`; the player interface provides rules and consequences without prescribing a plan.
 
 The normal entry is Holding Pier. Its success offers Next cove into a fresh Bellwater state. Both coves and the explicit First Crossing baseline remain available in Menu and query routes. This small sequence adds no persistence, unlocks or new rules.
+
+## Wide Berth authored values
+
+`data/wide-berth.level.json` owns the exact five-stop layout, two waiting groups and rises after actions 5 and 10. All nodes have depth 4; shallow connections base depth 2 and deep connections base depth 4. The extra 5–6-space/draft-4 band changes route choices without a new loading rule. Six neighbors total eight required spaces; all legal aboard subsets are seated automatically, with no packing mechanic. Harmless later waiting remains legal after endangered piers are cleared. All existing event order, current-depth validation, previews, conservation and full Undo apply unchanged. Developer witnesses are not action limits or difficulty measurements.

@@ -156,3 +156,34 @@ html[data-motion='reduced'] #transfer-receipt {
     width: min(500px, calc(var(--viewport-width, 100vw) - 16px));
   }
 }
+
+.route-details summary {
+  min-height: 44px;
+  padding: 10px 0;
+  cursor: pointer;
+}
+.route-details button {
+  min-height: 44px;
+  margin-top: 6px;
+}
+@media (orientation: landscape) {
+  #app #dialog[data-large-group='true'] {
+    width: min(660px, calc(var(--viewport-width, 100vw) - 16px));
+  }
+}
+
+@media (max-height: 460px) and (orientation: landscape) {
+  #app #dialog[data-large-group='true'] #dialog-content {
+    padding: 8px;
+    gap: 6px;
+  }
+  #app #dialog[data-large-group='true'] #preview {
+    padding: 6px;
+  }
+  #app #dialog[data-large-group='true'] .passenger-options {
+    gap: 6px;
+  }
+  #app #dialog[data-large-group='true'] .dialog-body > * + * {
+    margin-top: 6px;
+  }
+}

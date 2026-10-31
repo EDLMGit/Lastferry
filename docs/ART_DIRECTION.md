@@ -147,3 +147,10 @@ The ending uses one short line and a two-column action group. Holding progresses
 ## Driftwood Yard and Nell
 
 The authored third cove contrasts a low timber yard/reed landing with a raised stone High Mooring. Sparse stacked beams, a trestle/rail and rope reuse the existing wood, stone and reed language. Nell is a real warm-brown two-space beaver with a lighter muzzle, round ears, teeth and a visible broad flat tail resting along her flank for deck clearance. Fern is cream and Oat tan through explicit stable appearance IDs. The illustrated seven-second greeting uses the same original painter and palette, visible lantern lift/turn and a held final handoff. The unchanged four-space ferry uses a Nell-only foredeck transfer approach to avoid seated rabbits; anchors and timing are retained. Native review evidence is under reviews/driftwood-yard; integration does not imply human art or acoustic acceptance.
+
+
+## Wide Berth and Nell’s prepared ferry
+
+The six-space ferry retains the original yellow hull/red cabin language with a genuinely wider open deck, full-size sheep/rabbits and automatic identity-stable seating. A visible wooden gangway and foredeck opening connect broad supported piers to a central aisle. Partial transfers never reshuffle passengers staying aboard. New-only wake contact follows the actual modeled hull outline; the accepted independent released crests, water palette, finite docking fade and sailing pace remain. Original four-space factory output is preserved.
+
+Wide Berth uses restrained timber sheds, broad working piers, rope/stone and a raised safe High Quay. The launch is a close original illustrated composition in the existing player: Nell releases the cleat, safe neighbors help, the empty prepared boat glides and settles. It is not construction, a new rescue or a distant gameplay-model gesture. Native actual launch/full-load/arrival evidence is in reviews/wide-berth; the partially face-covering current marker and human art/choreography/puzzle approval remain explicit limits.

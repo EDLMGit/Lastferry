@@ -1,0 +1,41 @@
+
+> last-ferry@1.0.0 test:e2e
+> playwright test wide-berth.spec.ts -g historical two|original profiles|launch playback
+
+
+Running 3 tests using 1 worker
+
+(node:6428) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\e2e\wide-berth.spec.ts:467:1 › historical two and three boundaries stay read-only then advance fresh and restore recap (11.5s)
+  x  2 tests\e2e\wide-berth.spec.ts:511:1 › original profiles, dynamic Help, reduced transfers, keyboard and fullscreen lifecycle (3.4s)
+(node:46824) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 3 tests\e2e\wide-berth.spec.ts:567:1 › launch playback intent, pause, skip, replay, mute and controlled background recovery (8.0s)
+
+
+  1) tests\e2e\wide-berth.spec.ts:511:1 › original profiles, dynamic Help, reduced transfers, keyboard and fullscreen lifecycle 
+
+    Error: page.setViewportSize: Protocol error (Browser.setWindowBounds): To resize minimized/maximized/fullscreen window, restore it to normal state first.
+
+      529 |     await activate(page, 'fullscreen', true);
+      530 |     await expect.poll(() => page.evaluate(() => document.fullscreenElement?.id)).toBe('app');
+    > 531 |     await page.setViewportSize({ width: 390, height: 844 });
+          |                ^
+      532 |     await page.evaluate(() => document.exitFullscreen());
+      533 |     await page.keyboard.press('Escape');
+      534 |     await page.keyboard.press('Escape');
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\wide-berth.spec.ts:531:16
+
+    Error Context: test-results\wide-berth-original-profil-72341-rd-and-fullscreen-lifecycle\error-context.md
+
+    Error Context: test-results\wide-berth-original-profil-72341-rd-and-fullscreen-lifecycle\error-context.md
+
+  1 failed
+    tests\e2e\wide-berth.spec.ts:511:1 › original profiles, dynamic Help, reduced transfers, keyboard and fullscreen lifecycle 
+  2 passed (26.6s)
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

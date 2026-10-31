@@ -2,9 +2,9 @@
 
 **Campaign direction v1 · 25 October 2026**
 
-Original direction baseline: `1a85874883af5caa59f6294a75495eccf2afebbc`, `EDLMGit/Lastferry`, branch `m1-first-crossing`. The current contained implementation is `DRIFTWOOD_YARD_01`, starting from the reviewed Home/play game `da1f2686ce6aff8d754e13111447dabb6e1313f0` and preserving newer work. Holding Pier → Bellwater Cove → Driftwood Yard is now the implemented journey; First Crossing is separate practice. Nell, Fern and Oat, the authored yard puzzle, short illustrated entry and narrow two-cove completion compatibility are implemented in this slice. The remaining nine coves, six-space ferry, deer, launch scene and current rule are future direction, not shipped content. Actual checks and human-acceptance limits are recorded separately in `reviews/driftwood-yard/`.
+Original direction baseline: `1a85874883af5caa59f6294a75495eccf2afebbc`. Current milestone: `WIDE_BERTH_01`, building forward from reviewed `7e324e88827857469bf348fca311548344d03da6`. Holding Pier → Bellwater Cove → Driftwood Yard → Wide Berth is the implemented journey; First Crossing stays independent practice. The user accepts Driftwood gameplay. That does not close unrelated portrait-load, layout, timing, acoustic or physical-device limits. Current source/evidence and human acceptance are separate in `reviews/wide-berth/`.
 
-The illustrated opening/Harbor production and accepted live Home/story autoplay/direct-transfer pass are complete foundations. Their historical assignments are not active prerequisites. This slice retains the four-space ferry, unchanged ordinary rules and cove-boundary checkpoint contract.
+The accepted live Home, illustrated opening/Harbor/Driftwood scenes, autoplay and direct/group transfer foundation remain. This slice adds Nell's prepared-ferry launch and the actual six-space Wide Berth profile; earlier coves keep their four-space boat and unchanged rules. The remaining eight coves, Orin and currents stay future direction. Cove-boundary checkpoints remain honest; full mid-puzzle persistence is deferred.
 
 ## 1. The story we are making
 
@@ -50,7 +50,7 @@ After cove 3, Nell and the safe neighbors launch the spare ferry already prepare
 
 **Feeling:** the pleasure of extra room, followed by more interesting choices.
 
-Cove 4 introduces the six-space ferry with familiar species and a forgiving route. Let the player carry a group that would not fit together on the original boat. Show the benefit before asking for a difficult tradeoff.
+Cove 4 introduces the six-space ferry with familiar species and a satisfying first pickup, then asks for a consequential plan: carry the full group by deep water before a tight second rescue, or stage a deliberate subset safely and rescue the low pair earlier through a lighter shortcut. This deliberately strengthens the former wholly forgiving C4 calibration without forcing staging or outlawing harmless later waiting. More passengers or a witness length do not establish greater difficulty; the user’s playtest judges the choice.
 
 Cove 5 introduces Orin, a deer using three spaces. His size is legible in his body, portrait and explicit cost. Cove 6 combines the larger capacity, different costs, route depth and safe staging. The task is to choose a sensible plan, not to fill every available space automatically.
 
@@ -84,8 +84,8 @@ Future titles are working names. Each row is a design intention, not a proven pu
 | --- | --- | --- | --- | --- |
 | 1 | Holding Pier | Bring Pip, Rue and Moss home | Accepted introduction: load, depth, temporary landing and deadlines | Existing |
 | 2 | Bellwater Cove | Meet Tansy, Lark and Bram | Accepted route and rescue-order puzzle with staged tide consequences | Existing |
-| 3 | Driftwood Yard | Rescue Nell, Fern and Oat | Four-space staging at High Mooring, shallow rescue and deepened return | Implemented; human puzzle acceptance pending |
-| 4 | Wide Berth | Enjoy the larger ferry | Six spaces and the new full-load draft band, with forgiving timing | Proposed |
+| 3 | Driftwood Yard | Rescue Nell, Fern and Oat | Four-space staging at High Mooring, shallow rescue and deepened return | Implemented; user accepted gameplay |
+| 4 | Wide Berth | Launch the prepared larger ferry and rescue new neighbors | Six-space benefit, full-load draft four, deep detour versus useful staging and two occupied flood boundaries | Implemented; user difficulty/visual acceptance pending |
 | 5 | Orchard Landing | Meet Orin | A three-space passenger introduced separately from the boat lesson | Proposed |
 | 6 | Two Landings | Bring a larger group together | Combine capacity, mixed costs, partial delivery and temporary staging | Proposed |
 | 7 | Tidal Gate | Reach the headland | One clearly marked, fixed-direction passage | Proposed |
@@ -114,7 +114,7 @@ Nell and Orin are the two new species planned for this campaign. Additional resi
 
 Nell's contribution is a story event, not an activated ability. Orin's different cost uses the familiar capacity vocabulary. Every newcomer does not need a new rule. A recognizable silhouette, a clear place in the community and a later greeting can carry a character.
 
-Maintain one stable identity per character across world models, portraits, level data and story appearances. The current full-level ordinal mapping works for the existing cast, but a future character must not change coat when a later level puts it first in a list. Introduce explicit appearance metadata when expanding the cast, while retaining ordinals separately for any existing placement consumers.
+Maintain one stable identity per character across world models, portraits, level data and story appearances. The current shared resolver uses explicit appearance metadata for the expanded cast while retaining full species ordinals separately for placement consumers. Reordering a level or selecting a subset must not change coats. Preserve every existing mapping when adding future neighbors.
 
 Keep the captain unseen if that remains the most effective production choice. The first-person role and final empty place are enough; a human character model and facial animation are unnecessary for this story.
 
@@ -208,9 +208,9 @@ The first task saves progress between coves and labels that limitation honestly.
 
 ## 12. Asset ownership and project decisions
 
-Keep the existing catalog authoritative. It currently has 72 families. Register only assets actually added in a pass; future names in this plan do not count as integrated artwork. Reuse the current painted UI, model/portrait pipeline, lighthouse, water, sound and ferry family wherever they fit.
+Keep the existing catalog authoritative. Its reviewed starting point has 78 families; the live catalog records actual integrated changes. Register only assets actually added in a pass; future names in this plan do not count as integrated artwork. Reuse the current painted UI, model/portrait pipeline, lighthouse, water, sound and ferry family wherever they fit.
 
-Future work will need Nell and Orin world models plus portrait variants, the larger ferry, current markers and a small story-prop set. Add variants to an existing family when appropriate instead of duplicating every scene or character name as a new family. Record source, derivatives, consumers, native phone evidence and human acceptance separately.
+Nell, her portrait, the larger ferry and its launch are implemented in their contained milestones. Future work needs Orin and his portrait, current markers and later story props. Add variants to an existing family when appropriate instead of duplicating every scene or character name as a new family. Record source, derivatives, consumers, native phone evidence and human acceptance separately.
 
 This direction revises the original brief's optional exclusion of upgrades: there is now one fixed story-earned boat change. It also selects one later water-rule family and a concrete four-phase structure. These are deliberate product decisions driven by the user's current request. Existing accepted puzzles and their contracts remain authoritative until a specifically scoped task changes them.
 

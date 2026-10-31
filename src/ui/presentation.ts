@@ -229,3 +229,19 @@ export function previewCopy(
   }
   return { summary, consequence, requirement, error: null };
 }
+
+export function draftBandsCopy(l: Level): string {
+  let first = 0;
+  return l.rules.draftBands
+    .map((band) => {
+      const label =
+        first === 0 && band.maxLoad === 0
+          ? 'empty'
+          : first === band.maxLoad
+            ? `${first} spaces`
+            : `${first}–${band.maxLoad} spaces`;
+      first = band.maxLoad + 1;
+      return `${label} = ${band.draft}`;
+    })
+    .join('; ');
+}

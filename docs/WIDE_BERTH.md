@@ -1,0 +1,13 @@
+# Wide Berth — developer notes (puzzle spoilers)
+
+The production contract is `data/wide-berth.level.json`, with exact sequences in `data/wide-berth/witnesses.json`. Supplied non-spatial design/proof is retained under `LAST_FERRY_WIDE_BERTH_PACKAGE/design/wide-proof`; it is not production geometry evidence.
+
+The ferry has six spaces. Alder and Clover each use two; Poppy/Wren/Sorrel/Finch each use one. All six neighbors total eight spaces. Draft is 1 empty, 2 at loads1–2, 3 at3–4 and 4 at5–6. Capacity is the whole loading rule: fixed automatic identity seats support every legal subset, up to five actual bodies. Earlier levels retain their original four-space hull/rules even after the launch.
+
+The first group must all leave Wide Berth before its flood after action5. Both main plans start Harbor→High Quay→Wide Berth→Board the whole six-space group→High Quay, reaching the fork after action4. Full load needs depth4. The direct Harbor and Shell links have depth2, then3 after the first rise; the deep outer route has4 and is available. High Quay remains dry through both rises. Shell Landing's pair must board by action10; arriving there on10 loses them.
+
+The13-action plan delivers the first group through Outer Buoy and reaches the low pair just in time. The14-action plan stages both sheep, rescues the pair early and returns four rabbits through the depth3 shortcut before retrieving the sheep. The17-action variation stages one sheep, takes five bodies/six spaces, then waits safely after all endangered piers are cleared. Two entry Waits can be recovered by the16-action staging plan. These are witnesses, not a move budget or a difficulty score. More strategic freedom is not proof of a harder puzzle; human playtest judges satisfaction.
+
+The larger physical model, deck/shore seats, gangway, transfer paths, draft and wake/berth dimensions share `src/scene/ferry-profile.ts`; actual pier construction is shared with geometry checks. Bodies keep their size, stationary seats do not reshuffle, and the winning batch finishes before the unchanged arrival cue. The original boat's modeled attributes are audited unchanged. See `FERRY_PROFILES.md` and the current review for actual coverage and limits.
+
+Driftwood acceptance earns `a-wider-deck`; the spare was already prepared, safe neighbors launch it, and no existing character is stranded again. Only Continue to Wide Berth acknowledges the scene. Exact older two-/three-cove completions remain read-only until deliberate continuation into the correct next scene. After four actual rescues, the available slice ends honestly. Orchard Landing/Orin and currents remain future tasks. No deployment follows this implementation automatically.

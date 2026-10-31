@@ -3,6 +3,19 @@ import { level as baseline, type Level } from '../levels/level';
 import { draft, edgeTo, type State, type Action } from '../game/rules';
 import { passengerModelVariant, resolvePassengerAppearance } from '../game/passenger-appearance';
 import { animal, ball, box, cylinder, ferry, lighthouse, mat, mesh, pine } from './models';
+import {
+  ferryProfile,
+  hullDraftY,
+  deckSeat,
+  passengerScale,
+  shoreSeat,
+  wideTransferPath,
+  wideTransferProgress,
+  wideTransferWindow,
+  sampleWideTransfer,
+  wideTransferAngle,
+  type FerryProfile,
+} from './ferry-profile';
 import { sampleJourney, type JourneyPlan } from './motion';
 import { PresentationPoses } from './poses';
 import {
@@ -25,7 +38,8 @@ import {
   transferHeading,
 } from './deck-transfer';
 import { sceneLayout, type SceneLayout } from './layout';
-import { bellLandmark, cottage, driftwoodYard } from './scenery';
+import { bellLandmark, cottage, driftwoodYard, wideWaterfront } from './scenery';
+import { createPier } from './pier';
 import { getLevelPaths, type CanonicalPath } from './paths';
 import { Shores, createReedBeds } from './shore';
 import { CoastalWater } from './water';
@@ -59,7 +73,9 @@ export class World {
   camera = new T.OrthographicCamera();
   renderer: T.WebGLRenderer;
   boatRoot = new T.Group();
-  hull = ferry();
+  profile: FerryProfile;
+  hull: T.Group;
+  gangway: T.Mesh | null = null;
   animals = new Map<string, T.Group>();
   passengerAnchors = new Map<string, T.Object3D>();
   markers = new Map<string, T.Group>();
@@ -157,6 +173,8 @@ export class World {
     state: State,
     public level: Level = baseline,
   ) {
+    this.profile = ferryProfile(level);
+    this.hull = ferry(this.profile);
     this.state = state;
     this.layout = sceneLayout(this.level.id);
     this.paths = getLevelPaths(this.level);
@@ -224,46 +242,22 @@ export class World {
       } else this.nonInteractivePlaces.push(shore.mesh, shore.rocks, decoration);
     }
     for (const p of this.level.piers) {
-      const group = new T.Group();
-      group.name = `pier-${p.id}`;
+      const group = createPier(p, this.layout.stonePiers.includes(p.id));
       this.scene.add(group);
-      const [x, z] = p.positionXZ,
-        end = p.landAnchorXZ[1],
-        y = p.elevation * 0.18 - 0.06;
-      for (let i = 0; i < 9; i++)
-        box(
-          group,
-          this.layout.stonePiers.includes(p.id)
-            ? i % 2
-              ? '#a9b6ac'
-              : '#899d97'
-            : i % 2
-              ? '#c09560'
-              : '#b78b58',
-          [p.width, 0.09, 0.14],
-          [x, y, z + ((end - z) * i) / 8],
-          0.015,
-        );
-      for (const px of [x - p.width / 2, x + p.width / 2])
-        for (const pz of [z + 0.02, end]) {
-          const pile = cylinder(group, '#79644a', 0.065, 0.07, 0.83, [px, y - 0.27, pz], 9);
-          if (
-            p.id === this.level.objective.deliveryPierId ||
-            p.id === this.level.piers.find((pier) => pier.elevation < 3)?.id
-          ) {
-            pile.name = `water-contact-${p.id}`;
-            pile.material = contactMaterial(
-              pile.material as T.MeshStandardMaterial,
-              this.shores.water,
-              'pile',
-            );
-            this.contactMeshes.push(pile as T.Mesh<T.BufferGeometry, T.MeshStandardMaterial>);
-          }
-          cylinder(group, '#dbc799', 0.075, 0.075, 0.055, [px, y + 0.17, pz], 9);
-        }
-      box(group, '#b68f5b', [0.35, 0.055, 0.49], [x, y - 0.015, z + 0.25], 0.015);
-      cylinder(group, '#655b43', 0.025, 0.025, 0.65, [x + 0.36, y + 0.33, z - 0.1], 7);
-      box(group, '#f5cb77', [0.13, 0.19, 0.13], [x + 0.36, y + 0.68, z - 0.1]);
+      if (
+        p.id === this.level.objective.deliveryPierId ||
+        p.id === this.level.piers.find((pier) => pier.elevation < 3)?.id
+      )
+        group.traverse((object) => {
+          if (!(object instanceof T.Mesh) || !object.userData.pierPile) return;
+          object.name = `water-contact-${p.id}`;
+          object.material = contactMaterial(
+            object.material as T.MeshStandardMaterial,
+            this.shores.water,
+            'pile',
+          );
+          this.contactMeshes.push(object as T.Mesh<T.BufferGeometry, T.MeshStandardMaterial>);
+        });
       this.registerPlace(p.nodeId, 'pier', group);
     }
     for (const landmark of this.layout.landmarks) {
@@ -284,7 +278,9 @@ export class World {
             ? cottage(this.scene, [x, y, z])
             : landmark.kind === 'yard'
               ? driftwoodYard(this.scene, [x, y, z])
-              : bellLandmark(this.scene, [x, y, z]);
+              : landmark.kind === 'waterfront'
+                ? wideWaterfront(this.scene, [x, y, z])
+                : bellLandmark(this.scene, [x, y, z]);
         if (node) this.registerPlace(node, 'landmark', model);
       }
     }
@@ -343,32 +339,26 @@ export class World {
       }
       this.registerPlace(n.id, 'waypoint', g);
     }
-    this.effects = new CrossingEffects(this.home, this.coastalWater.mask);
+    this.effects = new CrossingEffects(this.home, this.coastalWater.mask, this.profile.wake);
     this.scene.add(this.effects.wake, this.effects.glow, this.effects.sweep);
     this.forecast = this.shores.forecast;
     this.scene.add(this.forecast);
     this.boatRoot.add(this.hull);
     this.scene.add(this.boatRoot);
+    if (this.profile.id === 'six-space') {
+      this.gangway = mesh(new T.BoxGeometry(1.05, 0.06, 1), '#ac784b', this.scene);
+      this.gangway.name = 'wide-pier-gangway';
+    }
     for (const p of this.level.passengers) {
       const anchor = new T.Object3D();
       anchor.name = `deck-anchor-${p.id}`;
-      const index = this.speciesIndex(p.id);
-      anchor.position.set(
-        ...((p.species === 'rabbit'
-          ? index === 0
-            ? [-0.22, 0.26, firstRabbitDeckZ]
-            : [0.22, 0.26, 0.3]
-          : [0, 0.26, 0.69]) as [number, number, number]),
-      );
+      anchor.position.copy(deckSeat(this.level, p.id));
       this.hull.add(anchor);
       this.passengerAnchors.set(p.id, anchor);
       const g = animal(p.species, passengerModelVariant(this.level, p.id));
       g.name = p.id;
-      g.scale.set(
-        p.species === 'rabbit' ? 1.25 : 1.15,
-        p.species === 'rabbit' ? 1.65 : 1.5,
-        p.species === 'rabbit' ? 1.25 : 1.15,
-      );
+      g.scale.set(...passengerScale(p.species));
+
       this.scene.add(g);
       this.animals.set(p.id, g);
     }
@@ -1310,6 +1300,15 @@ export class World {
     if (s.aboard.includes(id)) {
       return this.passengerAnchors.get(id)!.getWorldPosition(new T.Vector3());
     }
+    if (this.profile.id === 'six-space') {
+      const delivered = s.delivered.includes(id);
+      const pier = this.level.piers.find((p) =>
+        delivered
+          ? p.id === this.level.objective.deliveryPierId
+          : s.waitingByPier[p.id].includes(id),
+      )!;
+      return shoreSeat(this.level, id, pier, delivered);
+    }
     if (s.delivered.includes(id)) {
       const i = this.level.passengers.findIndex((p) => p.id === id);
       const p = this.level.piers.find((p) => p.id === this.level.objective.deliveryPierId)!;
@@ -1332,8 +1331,31 @@ export class World {
       p.positionXZ[1] - 0.12 - Math.floor(i / 2) * 0.3,
     );
   }
+  updateGangway(state: State) {
+    if (!this.gangway) return;
+    const pier = this.level.piers.find((p) => p.nodeId === state.boatNodeId);
+    this.gangway.visible = !!pier && !this.transition?.path;
+    if (!pier || !this.gangway.visible) return;
+    this.hull.updateWorldMatrix(true, false);
+    const id = this.level.passengers[0].id;
+    const endpoint = this.hull.localToWorld(deckSeat(this.level, id));
+    const path = wideTransferPath(
+      this.level,
+      id,
+      pier,
+      this.hull.matrixWorld,
+      endpoint,
+      endpoint,
+      true,
+    );
+    const direction = path.gate.clone().sub(path.bridge);
+    this.gangway.position.copy(path.bridge).add(path.gate).multiplyScalar(0.5);
+    this.gangway.position.y -= 0.03;
+    this.gangway.scale.z = direction.length();
+    this.gangway.quaternion.setFromUnitVectors(new T.Vector3(0, 0, 1), direction.normalize());
+  }
   draftY(s: State) {
-    return 0.03 - (draft(s, this.level) - 1) * 0.075;
+    return hullDraftY(draft(s, this.level));
   }
   clearMovement() {
     this.effects.clearMovement();
@@ -1367,6 +1389,7 @@ export class World {
       }
       g.rotation.set(0, 0, 0);
     }
+    this.updateGangway(s);
     this.indicate(s);
     this.reframeView();
   }
@@ -1564,6 +1587,41 @@ export class World {
         if (tr.before.aboard.includes(id) !== tr.after.aboard.includes(id)) {
           const pier = this.level.piers.find((p) => p.nodeId === tr.before.boatNodeId)!;
           const passenger = this.level.passengers.find((passenger) => passenger.id === id)!;
+          if (this.profile.id === 'six-space') {
+            const board = tr.after.aboard.includes(id);
+            const ids = this.level.passengers
+              .map((p) => p.id)
+              .filter((id) => tr.before.aboard.includes(id) !== tr.after.aboard.includes(id));
+            const progress = wideTransferProgress(
+              ids,
+              id,
+              k,
+              wideTransferWindow(tr.after.status === 'won'),
+            );
+            this.hull.updateWorldMatrix(true, false);
+            const start = board
+              ? tr.positions.get(id)!
+              : this.passengerAnchors.get(id)!.getWorldPosition(new T.Vector3());
+            const path = wideTransferPath(
+              this.level,
+              id,
+              pier,
+              this.hull.matrixWorld,
+              start,
+              dest,
+              board,
+            );
+            g.position.copy(sampleWideTransfer(path.points, progress));
+            g.rotation.y = wideTransferAngle(
+              board,
+              this.boatRoot.rotation.y,
+              progress,
+              path.turnAt,
+            );
+            if (!this.reduced && progress > 0 && progress < 1)
+              g.position.y += Math.sin(progress * Math.PI * 4) ** 2 * 0.035;
+            continue;
+          }
           const entry = deckTransferEntry(passenger.species);
           const offset =
             passenger.species === 'rabbit' ? (this.speciesIndex(id) ? 0.07 : -0.07) : 0;
@@ -1599,6 +1657,7 @@ export class World {
           g.position.copy(dest);
         }
       }
+      this.updateGangway(tr.after);
       this.shadow.position.y = this.water.position.y + 0.008;
       const contact = tr.transfer?.timeline.advance(t);
       if (contact) this.onTransferContact(contact);
@@ -1776,6 +1835,7 @@ export class World {
     return {
       boatWorldPosition: this.boatRoot.getWorldPosition(new T.Vector3()).toArray(),
       boatHeading: this.boatRoot.rotation.y,
+      profile: this.profile,
       pose: this.poses.presentation(),
       active:
         transition?.path && this.journeyFrame

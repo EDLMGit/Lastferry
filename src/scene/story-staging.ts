@@ -1,6 +1,6 @@
 import { overviewScale, viewFrame, type ViewBounds, type ViewRectangle } from './view';
 
-export type StorySceneId = 'opening' | 'another-bell' | 'driftwood-light';
+export type StorySceneId = 'opening' | 'another-bell' | 'driftwood-light' | 'a-wider-deck';
 export type StoryStage = {
   id: StorySceneId;
   elapsed: number;

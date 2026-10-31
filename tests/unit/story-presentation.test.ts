@@ -280,3 +280,42 @@ test('Driftwood entry holds an explicit handoff and preserves pause, still and r
     'Nell, the boatwright, is still at the yard.',
   );
 });
+
+test('launch remains a finite shared-owner scene, paused or skipped without acknowledgment', () => {
+  const cue = vi.fn(),
+    run = vi.fn(),
+    presentation = new StoryPresentation(vi.fn(), run, cue);
+  presentation.start('a-wider-deck', false, 0);
+  for (let t = 100; t <= 2600; t += 100) presentation.update(t);
+  presentation.pause();
+  const held = presentation.frame.elapsed;
+  presentation.update(8000);
+  expect(presentation.frame.elapsed).toBe(held);
+  presentation.resume(false, 10000);
+  for (let t = 10100; t <= 17000; t += 100) presentation.update(t);
+  expect(presentation.frame).toMatchObject({
+    scene: 'a-wider-deck',
+    shot: 'launch',
+    elapsed: 8000,
+    settled: true,
+    final: true,
+    recap: false,
+  });
+  expect(cue).toHaveBeenCalledTimes(1);
+  expect(presentation.next(false, 18000)).toBe(false);
+  presentation.start('a-wider-deck', false, 19000, true);
+  expect(presentation.frame).toMatchObject({ elapsed: 8000, recap: true, paused: true });
+  presentation.replay(false, true, 20000);
+  expect(presentation.frame).toMatchObject({ elapsed: 0, recap: false, paused: false });
+  presentation.skip();
+  expect(presentation.frame).toMatchObject({ elapsed: 8000, recap: true, settled: true });
+  presentation.start('a-wider-deck', true, 21000);
+  expect(presentation.frame).toMatchObject({ elapsed: 8000, recap: false, settled: true });
+  expect(storyScenes['a-wider-deck'].shots[0].caption).toBe(
+    'Nell had a bigger boat ready. Now there are hands to launch it.',
+  );
+  expect(storyScenes['a-wider-deck'].continueLabel).toBe('Continue to Wide Berth');
+  presentation.cancel();
+  presentation.update(50000);
+  expect(presentation.frame.scene).toBeNull();
+});

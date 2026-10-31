@@ -1,3 +1,4 @@
+import { ferryProfile } from './ferry-profile';
 import type { Action, State } from '../game/rules';
 import { edgeTo } from '../game/rules';
 import type { Level } from '../levels/level';
@@ -26,6 +27,12 @@ export class PresentationPoses {
       journey = planJourney(path, from, reverse, {
         fromBerth: berthHeading(this.level, before.boatNodeId, from) ?? undefined,
         toBerth: berthHeading(this.level, action.to, incoming) ?? undefined,
+        ...(ferryProfile(this.level).id === 'six-space'
+          ? {
+              berthHold: ferryProfile(this.level).berthHold,
+              berthTurn: ferryProfile(this.level).berthTurn,
+            }
+          : {}),
       });
     }
     this.history.push(from);
