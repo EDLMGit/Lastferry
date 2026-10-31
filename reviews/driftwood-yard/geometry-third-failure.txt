@@ -1,0 +1,53 @@
+
+ RUN  v5.0.5 C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry
+
+ ❯ tests/unit/clearance.test.ts (8 tests | 1 failed) 5800ms
+   × driftwood-yard: full modeled ferry clears land and piers from all reachable headings, both berth sides and reverse departures 1899ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/clearance.test.ts > driftwood-yard: full modeled ferry clears land and piers from all reachable headings, both berth sides and reverse departures
+AssertionError: expected [ …(14) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "yard-mooring/reverse from 1.5707963267948966 frame 188: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948966 frame 189: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948966 frame 190: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948966 frame 191: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948966 frame 192: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948966 frame 193: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948966 frame 194: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948961 frame 188: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948961 frame 189: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948961 frame 190: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948961 frame 191: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948961 frame 192: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948961 frame 193: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948961 frame 194: mooring-pier",
++ ]
+
+ ❯ tests/unit/clearance.test.ts:146:22
+    144|         }
+    145|       }
+    146|     expect(failures).toEqual([]);
+       |                      ^
+    147|     expect(marginFailures).toEqual([]);
+    148|   },
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  1 failed | 33 passed (34)
+   Start at  17:28:29
+   Duration  6.14s (tests 95%, import 3%, transform 2%)
+
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

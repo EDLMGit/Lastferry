@@ -1,0 +1,404 @@
+@import '../../cove-panel-package/material/cove-panel-material.css';
+
+.cove-kit {
+  --cove-panel: #143d46;
+  --cove-panel-soft: #234e55;
+  --cove-ink: #173d43;
+  --cove-ivory: #fff3d9;
+  --cove-secondary: #d6e5d8;
+  --cove-foam-top: #c0ded1;
+  --cove-foam: #a9cfc1;
+  --cove-foam-lip: #6f9e92;
+  --cove-warm-top: #f3d6a0;
+  --cove-warm: #e7bd77;
+  --cove-warm-lip: #ad8551;
+  --cove-warning: #f2b7a0;
+  --cove-focus: #f6cf8a;
+  --cove-edge: #092f3c;
+  --panel: rgb(20 61 70 / 97%);
+  --panel-solid: var(--cove-panel);
+  --surface: var(--cove-panel-soft);
+  --text: var(--cove-ivory);
+  --muted: var(--cove-secondary);
+  --border: #b5bca1;
+  --amber: var(--cove-focus);
+  color: var(--cove-ivory);
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+.cove-kit .cove-button,
+#app .cove-button {
+  --face-top: var(--cove-foam-top);
+  --face-bottom: var(--cove-foam);
+  --face-lip: var(--cove-foam-lip);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-width: 48px;
+  min-height: 48px;
+  padding: 7px 12px;
+  border: 1px solid var(--cove-edge);
+  border-radius: 999px;
+  color: var(--cove-ink);
+  background: linear-gradient(var(--face-top), var(--face-bottom));
+  box-shadow:
+    inset 0 1px 0 #ffffff75,
+    inset 0 -3px 0 var(--face-lip),
+    0 2px 5px #06212a45;
+  font:
+    600 16px/1.25 'Segoe UI',
+    Arial,
+    sans-serif;
+  text-align: center;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition:
+    box-shadow 120ms ease,
+    background-color 120ms ease;
+}
+.cove-kit .cove-button--quiet,
+#app .cove-button--quiet {
+  --face-top: #345f64;
+  --face-bottom: var(--cove-panel-soft);
+  --face-lip: #173c44;
+  color: var(--cove-ivory);
+  border-color: #a4b7a9;
+  box-shadow:
+    inset 0 1px 0 #d7e8cc30,
+    inset 0 -3px 0 var(--face-lip),
+    0 2px 5px #06212a45;
+}
+.cove-kit .cove-button--warm,
+#app .cove-button--warm {
+  --face-top: var(--cove-warm-top);
+  --face-bottom: var(--cove-warm);
+  --face-lip: var(--cove-warm-lip);
+}
+.cove-kit .cove-button--icon,
+#app .cove-button--icon {
+  width: 48px;
+  height: 48px;
+  padding: 7px;
+  flex: 0 0 48px;
+}
+.cove-kit .cove-button:active:not(:disabled),
+.cove-kit .cove-button[data-demo-state='pressed'],
+#app .cove-button:active:not(:disabled) {
+  box-shadow:
+    inset 0 2px 3px #092f3c45,
+    inset 0 -1px 0 var(--face-lip),
+    0 1px 2px #06212a40;
+}
+.cove-kit .cove-button:focus-visible,
+.cove-kit .cove-button[data-demo-state='focus'],
+#app .cove-button:focus-visible {
+  transition: none;
+  outline: 3px solid var(--cove-focus);
+  outline-offset: 2px;
+  box-shadow:
+    inset 0 1px 0 #ffffff60,
+    inset 0 -3px 0 var(--face-lip),
+    0 0 0 6px var(--cove-edge);
+}
+.cove-kit .cove-button:disabled,
+#app .cove-button:disabled {
+  background: #345158;
+  color: #d5e0d7;
+  border-color: #8da9a0;
+  border-style: dashed;
+  box-shadow: inset 0 -2px 0 #213c44;
+  cursor: default;
+}
+.cove-kit .cove-glyph {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  vertical-align: middle;
+  pointer-events: none;
+}
+.cove-kit .cove-label,
+.cove-kit .cove-button > span,
+.cove-kit .cove-choice > *,
+.cove-kit .cove-glyph * {
+  pointer-events: none;
+}
+.cove-kit .cove-label {
+  min-width: 0;
+  overflow-wrap: normal;
+}
+.cove-kit .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.cove-kit .cove-panel,
+#app .cove-panel {
+  color: var(--cove-ivory);
+  border: 1px solid var(--cove-surface-rim, var(--border));
+  border-radius: 20px;
+}
+.cove-kit .cove-choice,
+#app .cove-choice {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  align-items: center;
+  gap: 4px 7px;
+  min-width: 0;
+  min-height: 62px;
+  padding: 7px;
+  border: 1px solid #91aaa1;
+  border-radius: 12px;
+  color: var(--cove-ivory);
+  background: #204952;
+  box-shadow: inset 0 2px 3px #092f3c42;
+  font:
+    400 16px/1.25 'Segoe UI',
+    Arial,
+    sans-serif;
+  text-align: left;
+  white-space: normal;
+}
+.cove-kit .cove-choice[aria-pressed='true'],
+#app .cove-choice[aria-pressed='true'] {
+  background: #315e5e;
+  border-color: var(--cove-focus);
+}
+.cove-kit .cove-choice-portrait {
+  display: block;
+  width: 44px;
+  height: 44px;
+  align-self: center;
+  pointer-events: none;
+}
+.cove-kit .cove-portrait-image {
+  display: block;
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  opacity: 0;
+  pointer-events: none;
+}
+.cove-kit .cove-portrait-image[data-portrait-state='loaded'] {
+  opacity: 1;
+}
+.cove-kit .cove-choice-copy {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  align-items: center;
+  gap: 4px 7px;
+  min-width: 0;
+}
+.cove-kit .cove-choice-check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  border: 1px solid #b5cfc2;
+  border-radius: 6px;
+  background: #173e46;
+  color: var(--cove-ink);
+}
+.cove-kit .cove-choice-check .cove-glyph {
+  visibility: hidden;
+  width: 20px;
+  height: 20px;
+  flex-basis: 20px;
+}
+.cove-kit .cove-choice[aria-pressed='true'] .cove-choice-check {
+  background: var(--cove-warm-top);
+  border-color: var(--cove-warm-top);
+}
+.cove-kit .cove-choice[aria-pressed='true'] .cove-choice-check .cove-glyph {
+  visibility: visible;
+}
+.cove-kit .passenger-options,
+#app .passenger-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
+  gap: 7px;
+  min-width: 0;
+}
+.cove-kit .cove-choice-name,
+.cove-kit .cove-choice-capacity {
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.cove-kit .cove-choice-capacity {
+  grid-column: 1 / -1;
+  color: var(--cove-secondary);
+}
+#app #dialog-content,
+#app .dialog-body,
+#app .dialog-head > div {
+  min-width: 0;
+}
+#app .dialog-head > div {
+  overflow-wrap: anywhere;
+}
+.cove-kit .cove-choice:focus-visible,
+.cove-kit .cove-choice[data-demo-state='focus'],
+#app .cove-choice:focus-visible {
+  outline: 3px solid var(--cove-focus);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 6px var(--cove-edge);
+}
+.cove-kit .cove-name,
+#app .map-name .cove-name {
+  color: var(--cove-ivory);
+  padding: 3px 6px;
+  border-radius: 7px;
+}
+.cove-kit .cove-objective {
+  color: var(--cove-warm-top);
+}
+.cove-kit .cove-objective .cove-glyph {
+  margin-right: 3px;
+}
+#app .map-name .map-home {
+  color: var(--cove-warm-top);
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+}
+#app .map-name .cove-glyph {
+  color: var(--cove-warm-top);
+}
+#app .hud.cove-panel {
+  border-radius: 14px;
+}
+#app #status-toggle.cove-panel {
+  border-left: 3px solid var(--foam);
+  border-radius: 15px;
+}
+#app #status-toggle.urgent {
+  border-color: var(--cove-warning);
+}
+#app #status-toggle.urgent .status-symbol {
+  color: var(--cove-warning);
+}
+#app #preview {
+  border: 0;
+  padding: 7px;
+  background: transparent;
+  border-radius: 0;
+}
+#app #preview.warning {
+  background: transparent;
+}
+#app #preview.warning .consequence,
+#app .location-warning {
+  color: var(--cove-warning);
+  border-left: 3px solid var(--cove-warning);
+  padding-left: 8px;
+}
+#app #location-facts {
+  background: transparent;
+}
+#app #view-toggle[aria-pressed='true'] {
+  border-color: var(--cove-focus);
+}
+#app .tools .cove-button {
+  padding: 5px 8px;
+  gap: 5px;
+  flex-shrink: 0;
+}
+#app #sound-toggle {
+  min-width: 48px;
+  width: 48px;
+  padding: 3px 2px;
+  flex-direction: column;
+  gap: 0;
+  font-size: 14px;
+  line-height: 16px;
+}
+#app #sound-toggle .cove-label:empty {
+  display: none;
+}
+#app .view-controls .cove-button {
+  padding: 7px 9px;
+}
+#app .settings-row select,
+#app .cove-picker select,
+#app #fullscreen-details {
+  color: var(--cove-ivory);
+  background: #204952;
+  border-color: #91aaa1;
+  border-radius: 10px;
+  box-shadow: inset 0 2px 3px #092f3c42;
+}
+#app .settings-row select {
+  font-size: 16px;
+}
+#app #fullscreen-support {
+  white-space: normal;
+}
+@media (max-width: 700px) {
+  #app .tools {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr) 48px 48px;
+  }
+  #app .tools .cove-button {
+    min-width: 0;
+    padding: 5px 4px;
+    gap: 4px;
+  }
+  #app #wait .cove-label {
+    white-space: normal;
+  }
+  #app .view-controls .cove-button {
+    padding: 7px 8px;
+    gap: 5px;
+  }
+}
+@media (max-width: 380px) {
+  #app .tools .cove-button {
+    padding-block: 3px;
+  }
+  #app .tools #undo {
+    flex-direction: column;
+    gap: 0;
+    padding-block: 1px;
+  }
+  #app .tools #undo .cove-glyph {
+    width: 22px;
+    height: 22px;
+    flex-basis: 22px;
+  }
+}
+@media (min-width: 701px) and (max-width: 820px) and (max-height: 600px) {
+  #app .tools #undo {
+    width: 52px;
+    flex-direction: column;
+    gap: 0;
+    padding: 1px 2px;
+  }
+  #app .tools #undo .cove-glyph {
+    width: 22px;
+    height: 22px;
+    flex-basis: 22px;
+  }
+}
+@media (max-height: 360px) and (min-width: 701px) {
+  #app #cancel,
+  #app #close-location {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    flex-basis: 44px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cove-kit .cove-button {
+    transition: none;
+  }
+}

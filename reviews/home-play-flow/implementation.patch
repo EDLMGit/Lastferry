@@ -1,0 +1,1553 @@
+diff --git a/src/audio/atmosphere.ts b/src/audio/atmosphere.ts
+index 40dd819..ebaac18 100644
+--- a/src/audio/atmosphere.ts
++++ b/src/audio/atmosphere.ts
+@@ -38,6 +38,7 @@ export class Sound {
+   private ambience: GainNode | null = null;
+   private effects: GainNode | null = null;
+   private analyser: AnalyserNode | null = null;
++  private scoreAnalyser: AnalyserNode | null = null;
+   private meter = new Float32Array(1024);
+   private noise: AudioBuffer | null = null;
+   private wood = new Map<TransferContact['weight'], AudioBuffer>();
+@@ -166,6 +167,9 @@ export class Sound {
+     reverb.connect(wet);
+     wet.connect(this.musicOutput);
+     this.musicOutput.connect(this.master);
++    this.scoreAnalyser = context.createAnalyser();
++    this.scoreAnalyser.fftSize = 1024;
++    this.musicOutput.connect(this.scoreAnalyser);
+     this.ambience.connect(this.master);
+     this.effects.connect(this.master);
+     this.analyser = context.createAnalyser();
+@@ -182,6 +186,7 @@ export class Sound {
+       send,
+       wet,
+       this.analyser,
++      this.scoreAnalyser,
+     );
+     this.noise = makeNoise(context);
+     this.padWave = context.createPeriodicWave(
+@@ -820,8 +825,22 @@ export class Sound {
+         peak = Math.max(peak, Math.abs(sample));
+       }
+     }
++    let scoreSum = 0,
++      scorePeak = 0;
++    if (this.scoreAnalyser) {
++      this.scoreAnalyser.getFloatTimeDomainData(this.meter);
++      for (const sample of this.meter) {
++        scoreSum += sample * sample;
++        scorePeak = Math.max(scorePeak, Math.abs(sample));
++      }
++    }
+     const records = [...this.owned.values()];
+     return {
++      scoreOutputRms: Math.sqrt(scoreSum / this.meter.length),
++      scoreOutputPeak: scorePeak,
++      scoreRoute: 'music dry + reverb -> victory gain -> master',
++      scoreEffectiveOutputRms:
++        Math.sqrt(scoreSum / this.meter.length) * (this.master?.gain.value ?? 0),
+       ...this.playback(),
+       muted: this.muted,
+       activated: this.activated,
+diff --git a/src/campaign/presentation.ts b/src/campaign/presentation.ts
+index 17d8b8b..d38db1c 100644
+--- a/src/campaign/presentation.ts
++++ b/src/campaign/presentation.ts
+@@ -23,6 +23,9 @@ export class StoryPresentation {
+   private consumed = new Set<string>();
+   private recap = false;
+   settled = true;
++  paused = false;
++  private revealed = false;
++  private interruptionGap = 0;
+   constructor(
+     private readonly changed: () => void,
+     private readonly runChanged: (token: number | null) => void = () => {},
+@@ -32,12 +35,15 @@ export class StoryPresentation {
+     this.scene = scene;
+     this.shotIndex = restored ? storyScenes[scene].shots.length - 1 : 0;
+     this.recap = restored;
++    this.interruptionGap = 0;
++    this.paused = still || restored;
+     this.enter(still || restored, now);
+   }
+   private enter(still: boolean, now: number) {
+     this.runToken++;
+-    this.runChanged(still ? null : this.runToken);
++    this.runChanged(still || this.paused ? null : this.runToken);
+     this.consumed.clear();
++    this.revealed = still || this.paused;
+     this.startedAt = now;
+     this.lastUpdate = now;
+     this.settled = still;
+@@ -48,8 +54,9 @@ export class StoryPresentation {
+   }
+   update(now = performance.now()) {
+     const shot = this.shot;
+-    if (!shot || this.settled) return;
++    if (!shot || this.settled || this.paused) return;
+     if (now - this.lastUpdate > 1000) {
++      this.interruptionGap = now - this.lastUpdate;
+       this.settle();
+       return;
+     }
+@@ -60,7 +67,14 @@ export class StoryPresentation {
+       this.consumed.add(cue.id);
+       if (this.elapsed - cue.atMs <= 250) this.cue(this.runToken, cue);
+     }
+-    if (this.elapsed >= shot.durationMs) this.settle();
++    if (this.elapsed >= shot.durationMs) {
++      if (!this.frame.final) this.next(false, now);
++      else {
++        this.settled = true;
++        this.runChanged(null);
++        this.changed();
++      }
++    }
+   }
+   next(still: boolean, now = performance.now()) {
+     if (!this.scene || this.frame.final) return false;
+@@ -72,7 +86,10 @@ export class StoryPresentation {
+   }
+   replay(still: boolean, wholeScene = false, now = performance.now()) {
+     if (!this.scene) return;
+-    if (wholeScene) this.shotIndex = 0;
++    if (wholeScene) {
++      this.shotIndex = 0;
++      this.paused = still;
++    }
+     this.recap = false;
+     this.enter(still, now);
+     this.changed();
+@@ -81,6 +98,7 @@ export class StoryPresentation {
+     if (!this.scene) return;
+     this.shotIndex = storyScenes[this.scene].shots.length - 1;
+     this.recap = true;
++    this.paused = true;
+     this.enter(true, performance.now());
+     this.changed();
+   }
+@@ -88,7 +106,7 @@ export class StoryPresentation {
+     const shot = this.shot;
+     const captionOpacity = !shot
+       ? 0
+-      : this.settled
++      : this.settled || this.revealed
+         ? 1
+         : Math.max(0, Math.min(1, (this.elapsed - shot.captionCueMs) / 240));
+     return {
+@@ -98,6 +116,8 @@ export class StoryPresentation {
+       elapsed: this.elapsed,
+       duration: shot?.durationMs ?? 0,
+       settled: this.settled,
++      paused: this.paused,
++      interruptionGap: this.interruptionGap,
+       captionVisible: captionOpacity > 0,
+       captionOpacity,
+       runToken: this.runToken,
+@@ -105,8 +125,32 @@ export class StoryPresentation {
+       recap: this.recap,
+     };
+   }
++  pause() {
++    if (!this.shot || this.paused) return;
++    this.paused = true;
++    this.revealed = true;
++    this.runToken++;
++    this.runChanged(null);
++    this.changed();
++  }
++  resume(still: boolean, now = performance.now()) {
++    if (!this.shot || still || !this.paused) return;
++    this.paused = false;
++    if (this.settled) {
++      if (!this.frame.final) this.next(false, now);
++      else this.changed();
++      return;
++    }
++    this.startedAt = now - this.elapsed;
++    this.lastUpdate = now;
++    this.runToken++;
++    this.runChanged(this.runToken);
++    this.changed();
++  }
+   settle() {
+-    if (!this.shot || this.settled) return;
++    if (!this.shot || (this.settled && this.paused)) return;
++    this.paused = true;
++    this.revealed = true;
+     this.elapsed = this.shot.durationMs;
+     this.settled = true;
+     this.runToken++;
+@@ -120,5 +164,6 @@ export class StoryPresentation {
+     this.elapsed = 0;
+     this.settled = true;
+     this.recap = false;
++    this.paused = false;
+   }
+ }
+diff --git a/src/campaign/story.css b/src/campaign/story.css
+index 8480f20..5b37c72 100644
+--- a/src/campaign/story.css
++++ b/src/campaign/story.css
+@@ -303,3 +303,87 @@
+     padding-inline: 9px;
+   }
+ }
++
++.story-controls {
++  grid-template-columns: minmax(38px, 1fr) auto auto auto minmax(150px, auto);
++}
++#story-pause,
++#story-sound,
++#story-more,
++#story-continue {
++  grid-row: 1;
++}
++#story-pause {
++  grid-column: 2;
++}
++#story-sound {
++  grid-column: 3;
++}
++#story-more {
++  grid-column: 4;
++  position: relative;
++}
++#story-continue {
++  grid-column: 5;
++}
++#story-more summary {
++  min-height: 46px;
++  display: flex;
++  align-items: center;
++  justify-content: center;
++  padding: 8px 14px;
++  border: 1px solid #b6a478;
++  border-radius: 18px;
++  cursor: pointer;
++  font-size: 14px;
++}
++#story-more summary:focus-visible {
++  outline: 3px solid #ffe09a;
++  outline-offset: 3px;
++}
++.story-secondary {
++  position: absolute;
++  z-index: 2;
++  bottom: calc(100% + 10px);
++  right: 0;
++  display: grid;
++  gap: 7px;
++  padding: 12px;
++  width: 180px;
++  background: #173e46;
++  border: 1px solid #cab586;
++  border-radius: 18px;
++  box-shadow: 0 4px 20px #08262b80;
++}
++.story-secondary > button {
++  grid-column: auto !important;
++  grid-row: auto !important;
++}
++@media (max-width: 599px) {
++  .story-controls {
++    grid-template-columns: repeat(3, minmax(0, 1fr));
++  }
++  #story-position {
++    grid-row: 1;
++    grid-column: 1;
++  }
++  #story-pause {
++    grid-row: 2;
++    grid-column: 1;
++  }
++  #story-sound {
++    grid-row: 2;
++    grid-column: 2;
++  }
++  #story-more {
++    grid-row: 2;
++    grid-column: 3;
++  }
++  #story-continue {
++    grid-row: 3;
++    grid-column: 1 / -1;
++  }
++  #story-captions {
++    min-height: 125px;
++  }
++}
+diff --git a/src/dev/asset-gallery.ts b/src/dev/asset-gallery.ts
+index d0e251f..68696cf 100644
+--- a/src/dev/asset-gallery.ts
++++ b/src/dev/asset-gallery.ts
+@@ -1,7 +1,17 @@
+ import '../ui/cove-ui.css';
+ import './asset-gallery.css';
+ import catalog from '../../assets/catalog.json';
+-import { controlContent, escapeLabel, iconMarkup, iconNames, observePassengerPortraits, passengerChoiceContent, portraitSources, setControl, type CoveIcon } from '../ui/cove-ui';
++import {
++  controlContent,
++  escapeLabel,
++  iconMarkup,
++  iconNames,
++  observePassengerPortraits,
++  passengerChoiceContent,
++  portraitSources,
++  setControl,
++  type CoveIcon,
++} from '../ui/cove-ui';
+ import type { PortraitKey } from '../game/passenger-appearance';
+ import { storyScenes } from '../campaign/registry';
+ import { checkpointCopy } from '../campaign/progress';
+@@ -10,37 +20,84 @@ import { createCoveStoryPainter } from '../campaign/story-painter';
+ const root = document.querySelector<HTMLElement>('#gallery')!;
+ const text = escapeLabel;
+ const entries = catalog.entries;
+-const sourceLink = (path: string, label: string) => `<a href="/${encodeURI(path)}" target="_blank" rel="noopener">${text(label)}</a>`;
++const sourceLink = (path: string, label: string) =>
++  `<a href="/${encodeURI(path)}" target="_blank" rel="noopener">${text(label)}</a>`;
+ const choices = (names: [string, number, boolean, PortraitKey | null][], focus = false) =>
+   `<div class="passenger-options" role="group" aria-label="Specimen passenger selection">${names.map(([name, spaces, selected, appearance], index) => `<button class="cove-choice" aria-pressed="${selected}"${focus && index === 0 ? ' data-demo-state="focus"' : ''}>${passengerChoiceContent(name, spaces, appearance)}</button>`).join('')}</div>`;
+-const residents: [string, number, boolean, PortraitKey][] = [['Pip', 1, true, 'rabbit-cream'], ['Rue', 1, true, 'rabbit-tan'], ['Moss', 2, true, 'sheep-wool']];
++const residents: [string, number, boolean, PortraitKey][] = [
++  ['Pip', 1, true, 'rabbit-cream'],
++  ['Rue', 1, true, 'rabbit-tan'],
++  ['Moss', 2, true, 'sheep-wool'],
++];
+ observePassengerPortraits(root);
+ root.innerHTML = `<header><p>Last Ferry · developer tools</p><h1>Cove asset gallery</h1><p>Live component sources and canonical inventory. This is design evidence, not a gameplay capture.</p><p>${entries.length} families · <a href="/">Open the game</a> · <a href="/assets/catalog.json">Canonical JSON</a></p></header>
+ <section class="cove-panel cove-surface gallery-panel"><h2>Shared controls</h2><div id="controls" class="specimens"></div><p><span class="cove-name cove-surface cove-surface--compact cove-objective">${iconMarkup('harbor-home')}Harbor · Home</span> &nbsp; ${controlContent('back-to-boat', 'Back to boat identifies the camera control')}</p></section>
+ <section aria-labelledby="panel-material-heading"><h2 id="panel-material-heading">Painted reading material</h2><p>Actual shared CSS and one original SVG corner. Component geometry remains local; no text is baked into the decoration.</p><div class="panel-specimens">
+ <article id="gallery-three-passengers" class="cove-panel cove-surface gallery-panel panel-specimen"><p>Harbor · inspection is free</p><h3>Deliver Pip, Rue and Moss</h3>${choices(residents)}<p><strong>After unloading: boat needs depth 1.</strong></p><p>Everyone will be safely home at Harbor.</p><p>After this action: Boat 0/4 spaces · tide 2.</p><button id="gallery-confirm"></button></article>
+-<article id="gallery-narrow-passengers" class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow"><p>320px panel · native selection buttons</p><h3>Room for full labels</h3>${choices([['Pip', 1, true, 'rabbit-cream'], ['Rue', 1, false, 'rabbit-tan'], ['Moss', 2, true, 'sheep-wool']], true)}<p class="gallery-warning">Pip boards, then the tide rises. Rue is still waiting at Rabbit Pier when it floods. This ends the crossing.</p></article>
+-<article id="gallery-text-stress" class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow gallery-text-stress"><p>Bounded stress specimen · 320px panel, 20px text (125%)</p><h3>Longer names</h3>${choices([['Alexandria', 1, true, 'rabbit-cream'], ['Marigold', 1, false, 'rabbit-tan'], ['Moss', 2, true, 'sheep-wool']])}<p>Gallery-only labels use explicit appearance fixtures to test wrapping. Actual passenger and level data are unchanged.</p></article>
++<article id="gallery-narrow-passengers" class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow"><p>320px panel · native selection buttons</p><h3>Room for full labels</h3>${choices(
++  [
++    ['Pip', 1, true, 'rabbit-cream'],
++    ['Rue', 1, false, 'rabbit-tan'],
++    ['Moss', 2, true, 'sheep-wool'],
++  ],
++  true,
++)}<p class="gallery-warning">Pip boards, then the tide rises. Rue is still waiting at Rabbit Pier when it floods. This ends the crossing.</p></article>
++<article id="gallery-text-stress" class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow gallery-text-stress"><p>Bounded stress specimen · 320px panel, 20px text (125%)</p><h3>Longer names</h3>${choices(
++  [
++    ['Alexandria', 1, true, 'rabbit-cream'],
++    ['Marigold', 1, false, 'rabbit-tan'],
++    ['Moss', 2, true, 'sheep-wool'],
++  ],
++)}<p>Gallery-only labels use explicit appearance fixtures to test wrapping. Actual passenger and level data are unchanged.</p></article>
+ </div><div class="cove-panel cove-surface cove-surface--compact gallery-panel"><h3>Compact face</h3><p>Shared opaque wash with no corner decoration. HUD, names, forecast and local options retain their own dimensions.</p><button id="gallery-forecast" class="cove-panel cove-surface cove-surface--compact gallery-forecast" data-demo-state="focus">! Rabbit Pier floods in 1 action.</button></div>
+ <div class="cove-panel cove-surface cove-surface--arrival gallery-panel"><h3>Everyone home.</h3><p>Arrival uses only a warmer upper catchlight. Normal action and home colors remain the existing button family.</p><button id="gallery-next"></button></div></section>
+-<section aria-labelledby="portrait-heading"><h2 id="portrait-heading">Model-derived static portraits</h2><p>Three original transparent 256px PNG derivatives, displayed at 44px beside live copy in the shared choice helper. Offline SVG diffuse shading is not pixel-identical WebGL. These are design specimens, not gameplay captures.</p><div class="portrait-sources">${(Object.entries(portraitSources) as [PortraitKey, string][]).map(([key, url]) => `<figure class="cove-panel cove-surface gallery-panel"><img class="portrait-source" src="${url}" width="256" height="256" alt="${key.replace('-', ' ')} model-derived source portrait" draggable="false" /><figcaption>${key} · 256×256 PNG</figcaption></figure>`).join('')}</div><div class="panel-specimens"><article id="gallery-bellwater-portraits" class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow"><h3>Bellwater names, same appearances</h3>${choices([['Tansy', 1, false, 'rabbit-cream'], ['Lark', 1, true, 'rabbit-tan'], ['Bram', 2, false, 'sheep-wool']], true)}<p>Names and capacities remain level-owned. Offered order cannot recolor Lark.</p></article><article id="gallery-failed-portrait" class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow"><h3>Unavailable image</h3>${choices([['Lark', 1, true, 'rabbit-tan']])}<p>The image request intentionally fails. The reserved slot, full name/cost and selected check stay usable.</p></article><article id="gallery-unknown-portrait" class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow"><h3>Future appearance fallback</h3>${choices([['Future passenger', 1, false, null]])}<p>Explicit unavailable appearance preserves text instead of guessing a different animal.</p></article></div></section>
+-<section aria-labelledby="story-heading"><h2 id="story-heading">Illustrated story and journey surfaces</h2><p>The four composed endpoints below use the actual production painter and registry captions. These static design specimens are not journey recordings or gameplay evidence. The opening reference is approved; the production port, new Harbor art and story sound mix await human review.</p><article class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow"><p>Journey entrance</p><h3>Last Ferry</h3><p>${text(checkpointCopy)}</p><button id="gallery-journey-new"></button><button id="gallery-journey-continue"></button></article><div class="story-specimens">${Object.values(storyScenes).flatMap((scene) => scene.shots.map((shot, index) => `<figure class="cove-panel cove-surface gallery-story"><h3>${text(scene.title)} · ${text(shot.id)}</h3><canvas data-illustration="${shot.illustration}" data-duration-ms="${shot.durationMs}" role="img" aria-label="${text(shot.description)}"></canvas><figcaption class="gallery-story-caption">${text(shot.caption)}</figcaption><button class="gallery-story-continue" data-continue-label="${text(index === scene.shots.length - 1 ? scene.continueLabel : 'Next')}"></button><p>${shot.durationMs / 1000}s finite illustration, then a held endpoint. The primary action is immediately available. Next changes only the picture; only the final handoff acknowledges the scene.</p><p>${text(shot.description)}</p></figure>`)).join('')}</div><div class="cove-panel cove-surface gallery-panel"><h3>Story effects and optional narration</h3><p>Finite tide wash, lantern contact and ferry water share the existing Sound owner. This gallery does not autoplay sound. Actual runtime audio, cancellation checks and listening limitations belong in the review report.</p><p>${sourceLink('src/audio/story-effects.ts', 'Story envelope definitions')} · ${sourceLink('src/audio/atmosphere.ts', 'Sound ownership and routing')} · ${sourceLink('LAST_FERRY_STORY_PRODUCTION_PACKAGE/audio/narration-script.json', 'Narration script: recordings absent')}</p><p>Four narration IDs are optional asset slots only. There is no delivered voice, live TTS or unavailable narration control.</p></div></section>
++<section aria-labelledby="portrait-heading"><h2 id="portrait-heading">Model-derived static portraits</h2><p>Three original transparent 256px PNG derivatives, displayed at 44px beside live copy in the shared choice helper. Offline SVG diffuse shading is not pixel-identical WebGL. These are design specimens, not gameplay captures.</p><div class="portrait-sources">${(Object.entries(portraitSources) as [PortraitKey, string][]).map(([key, url]) => `<figure class="cove-panel cove-surface gallery-panel"><img class="portrait-source" src="${url}" width="256" height="256" alt="${key.replace('-', ' ')} model-derived source portrait" draggable="false" /><figcaption>${key} · 256×256 PNG</figcaption></figure>`).join('')}</div><div class="panel-specimens"><article id="gallery-bellwater-portraits" class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow"><h3>Bellwater names, same appearances</h3>${choices(
++  [
++    ['Tansy', 1, false, 'rabbit-cream'],
++    ['Lark', 1, true, 'rabbit-tan'],
++    ['Bram', 2, false, 'sheep-wool'],
++  ],
++  true,
++)}<p>Names and capacities remain level-owned. Offered order cannot recolor Lark.</p></article><article id="gallery-failed-portrait" class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow"><h3>Unavailable image</h3>${choices([['Lark', 1, true, 'rabbit-tan']])}<p>The image request intentionally fails. The reserved slot, full name/cost and selected check stay usable.</p></article><article id="gallery-unknown-portrait" class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow"><h3>Future appearance fallback</h3>${choices([['Future passenger', 1, false, null]])}<p>Explicit unavailable appearance preserves text instead of guessing a different animal.</p></article></div></section>
++<section aria-labelledby="home-heading"><h2 id="home-heading">Live Home composition</h2><p>Authored framing of the retained ferry, lighthouse and water. The actual root composes around measured title/menu bounds; this gallery does not create a second World.</p><p><a href="/">Open actual Home</a> · ${sourceLink('docs/HOME_COMPOSITION.md', 'Camera, layouts and ownership recipe')}</p><div class="cove-panel cove-surface gallery-panel"><h3>Last Ferry · The Long Tide</h3><button id="gallery-home-play"></button><button id="gallery-home-options"></button><p>Saved cove: Continue · from cove start. These are shared control specimens, not gameplay evidence.</p></div></section><section aria-labelledby="story-heading"><h2 id="story-heading">Illustrated story and journey surfaces</h2><p>The four composed endpoints below use the actual production painter and registry captions. These static design specimens are not journey recordings or gameplay evidence. The opening reference is approved; the production port, new Harbor art and story sound mix await human review.</p><article class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow"><p>Journey entrance</p><h3>Last Ferry</h3><p>${text(checkpointCopy)}</p><button id="gallery-journey-new"></button><button id="gallery-journey-continue"></button></article><div class="story-specimens">${Object.values(
++  storyScenes,
++)
++  .flatMap((scene) =>
++    scene.shots.map(
++      (shot, index) =>
++        `<figure class="cove-panel cove-surface gallery-story"><h3>${text(scene.title)} · ${text(shot.id)}</h3><canvas data-illustration="${shot.illustration}" data-duration-ms="${shot.durationMs}" role="img" aria-label="${text(shot.description)}"></canvas><figcaption class="gallery-story-caption">${text(shot.caption)}</figcaption><button class="gallery-story-continue" data-continue-label="${text(index === scene.shots.length - 1 ? scene.continueLabel : 'Next')}"></button><p>${shot.durationMs / 1000}s finite illustration; normal opening playback advances until the final held endpoint. The primary action is immediately available. Next changes only the picture; only the final handoff acknowledges the scene.</p><p>${text(shot.description)}</p></figure>`,
++    ),
++  )
++  .join(
++    '',
++  )}</div><div class="cove-panel cove-surface gallery-panel"><h3>Story effects and optional narration</h3><p>Finite tide wash, lantern contact and ferry water share the existing Sound owner. This gallery does not autoplay sound. Actual runtime audio, cancellation checks and listening limitations belong in the review report.</p><p>${sourceLink('src/audio/story-effects.ts', 'Story envelope definitions')} · ${sourceLink('src/audio/atmosphere.ts', 'Sound ownership and routing')} · ${sourceLink('LAST_FERRY_STORY_PRODUCTION_PACKAGE/audio/narration-script.json', 'Narration script: recordings absent')}</p><p>Four narration IDs are optional asset slots only. There is no delivered voice, live TTS or unavailable narration control.</p></div></section>
+ <section class="cove-panel cove-surface gallery-panel"><h2>Original 24px glyphs</h2><div class="icon-grid">${iconNames.map((name) => `<div>${iconMarkup(name)}<span>${name}</span></div>`).join('')}</div></section><section><h2>Canonical inventory</h2><label>Filter by family, kind or meaning <input id="filter" type="search" /></label><p id="count" role="status"></p><div id="inventory"></div></section>`;
+ const failedPortrait = root.querySelector<HTMLImageElement>('#gallery-failed-portrait img')!;
+ failedPortrait.dataset.portraitState = 'pending';
+ failedPortrait.src = '/__portrait-unavailable.png';
+ setControl(document.querySelector('#gallery-confirm')!, 'confirm', 'Confirm · 1 action', 'warm');
+ setControl(document.querySelector('#gallery-next')!, 'next-cove', 'Next cove', 'warm');
++setControl(document.querySelector('#gallery-home-play')!, null, 'Play', 'warm');
++setControl(document.querySelector('#gallery-home-options')!, 'settings', 'Options', 'quiet');
+ setControl(document.querySelector('#gallery-journey-new')!, 'next-cove', 'New journey', 'warm');
+-setControl(document.querySelector('#gallery-journey-continue')!, 'next-cove', 'Continue journey · from cove start', 'action');
+-for (const button of root.querySelectorAll<HTMLButtonElement>('.gallery-story-continue')) setControl(button, 'next-cove', button.dataset.continueLabel!, 'warm');
++setControl(
++  document.querySelector('#gallery-journey-continue')!,
++  'next-cove',
++  'Continue journey · from cove start',
++  'action',
++);
++for (const button of root.querySelectorAll<HTMLButtonElement>('.gallery-story-continue'))
++  setControl(button, 'next-cove', button.dataset.continueLabel!, 'warm');
+ const storyPainters = new Map<HTMLCanvasElement, ReturnType<typeof createCoveStoryPainter>>();
+ const storyResize = new ResizeObserver((entries) => {
+   for (const entry of entries) {
+     const canvas = entry.target as HTMLCanvasElement,
+       painter = storyPainters.get(canvas)!;
+     painter.resize(entry.contentRect.width, entry.contentRect.height, devicePixelRatio);
+-    painter.draw(canvas.dataset.illustration as Parameters<typeof painter.draw>[0], Number(canvas.dataset.durationMs) / 1000);
++    painter.draw(
++      canvas.dataset.illustration as Parameters<typeof painter.draw>[0],
++      Number(canvas.dataset.durationMs) / 1000,
++    );
+   }
+ });
+ for (const canvas of root.querySelectorAll<HTMLCanvasElement>('[data-illustration]')) {
+@@ -53,13 +110,20 @@ function releaseStoryGallery() {
+ }
+ window.addEventListener('pagehide', releaseStoryGallery, { once: true });
+ const demoControls: [CoveIcon | null, string, 'quiet' | 'action' | 'warm', string?][] = [
+-  ['board', 'Board', 'action'], ['unload', 'Let ashore', 'action'],
+-  ['unload', 'Bring home', 'warm'], ['sail', 'Sail · 1 action', 'action'],
+-  ['confirm', 'Confirm · 1 action', 'action'], ['next-cove', 'Next cove', 'warm'],
+-  ['undo', 'Undo', 'quiet'], ['wait', 'Wait · 1 action', 'quiet'],
+-  ['whole-cove', 'Whole cove', 'quiet'], ['back-to-boat', 'Back to boat', 'quiet'],
+-  ['sound-retry', 'Retry sound', 'quiet'], ['fullscreen-exit', 'Exit fullscreen', 'quiet'],
+-  ['board', 'Pressed', 'action', 'pressed'], ['board', 'Focus', 'action', 'focus'],
++  ['board', 'Board', 'action'],
++  ['unload', 'Let ashore', 'action'],
++  ['unload', 'Bring home', 'warm'],
++  ['sail', 'Sail · 1 action', 'action'],
++  ['confirm', 'Confirm · 1 action', 'action'],
++  ['next-cove', 'Next cove', 'warm'],
++  ['undo', 'Undo', 'quiet'],
++  ['wait', 'Wait · 1 action', 'quiet'],
++  ['whole-cove', 'Whole cove', 'quiet'],
++  ['back-to-boat', 'Back to boat', 'quiet'],
++  ['sound-retry', 'Retry sound', 'quiet'],
++  ['fullscreen-exit', 'Exit fullscreen', 'quiet'],
++  ['board', 'Pressed', 'action', 'pressed'],
++  ['board', 'Focus', 'action', 'focus'],
+   ['sail', 'Unavailable', 'action', 'disabled'],
+ ];
+ for (const [icon, label, face, state] of demoControls) {
+@@ -70,8 +134,11 @@ for (const [icon, label, face, state] of demoControls) {
+   document.querySelector('#controls')!.append(button);
+ }
+ for (const [icon, label] of [
+-  ['menu', 'Menu'], ['settings', 'Settings'], ['close', 'Close'],
+-  ['sound-on', 'Mute sound'], ['sound-off', 'Enable sound'],
++  ['menu', 'Menu'],
++  ['settings', 'Settings'],
++  ['close', 'Close'],
++  ['sound-on', 'Mute sound'],
++  ['sound-off', 'Enable sound'],
+   ['fullscreen-enter', 'Fullscreen'],
+ ] as const) {
+   const button = document.createElement('button');
+@@ -80,12 +147,20 @@ for (const [icon, label] of [
+   document.querySelector('#controls')!.append(button);
+ }
+ for (const button of root.querySelectorAll<HTMLButtonElement>('.cove-choice'))
+-  button.onclick = () => button.setAttribute('aria-pressed', String(button.getAttribute('aria-pressed') !== 'true'));
++  button.onclick = () =>
++    button.setAttribute('aria-pressed', String(button.getAttribute('aria-pressed') !== 'true'));
+ const showInventory = () => {
+   const query = (document.querySelector('#filter') as HTMLInputElement).value.toLowerCase();
+-  const shown = entries.filter((entry) => `${entry.id} ${entry.name} ${entry.kind} ${entry.meaning}`.toLowerCase().includes(query));
++  const shown = entries.filter((entry) =>
++    `${entry.id} ${entry.name} ${entry.kind} ${entry.meaning}`.toLowerCase().includes(query),
++  );
+   document.querySelector('#count')!.textContent = `${shown.length} of ${entries.length} families`;
+-  document.querySelector('#inventory')!.innerHTML = shown.map((entry) => `<details class="cove-panel cove-surface cove-surface--compact gallery-panel"><summary><b>${text(entry.name)}</b> <span>${text(entry.id)} · ${text(entry.status)}</span></summary><p>${text(entry.meaning)}</p><p>${text(entry.visualSignature)}</p><p>Human acceptance: ${text(entry.acceptance.state)}</p><h3>Source and ownership</h3><ul>${entry.sources.map((source) => `<li>${sourceLink(source.path, source.path)} · ${text(source.symbol)}</li>`).join('')}</ul><p>${text(entry.reuseAndOwnership)}</p><p>${text(entry.behaviorToPreserve)}</p><h3>Provenance</h3><p>${text(entry.provenance)}</p><pre>${text(JSON.stringify(catalog.provenanceProfiles[entry.provenance as keyof typeof catalog.provenanceProfiles], null, 2))}</pre><h3>Evidence</h3><ul>${entry.evidence.map((item) => `<li>${sourceLink(item.path, item.role)}</li>`).join('')}</ul><h3>Type contract</h3><pre>${text(JSON.stringify(entry.typeSpecific, null, 2))}</pre></details>`).join('');
++  document.querySelector('#inventory')!.innerHTML = shown
++    .map(
++      (entry) =>
++        `<details class="cove-panel cove-surface cove-surface--compact gallery-panel"><summary><b>${text(entry.name)}</b> <span>${text(entry.id)} · ${text(entry.status)}</span></summary><p>${text(entry.meaning)}</p><p>${text(entry.visualSignature)}</p><p>Human acceptance: ${text(entry.acceptance.state)}</p><h3>Source and ownership</h3><ul>${entry.sources.map((source) => `<li>${sourceLink(source.path, source.path)} · ${text(source.symbol)}</li>`).join('')}</ul><p>${text(entry.reuseAndOwnership)}</p><p>${text(entry.behaviorToPreserve)}</p><h3>Provenance</h3><p>${text(entry.provenance)}</p><pre>${text(JSON.stringify(catalog.provenanceProfiles[entry.provenance as keyof typeof catalog.provenanceProfiles], null, 2))}</pre><h3>Evidence</h3><ul>${entry.evidence.map((item) => `<li>${sourceLink(item.path, item.role)}</li>`).join('')}</ul><h3>Type contract</h3><pre>${text(JSON.stringify(entry.typeSpecific, null, 2))}</pre></details>`,
++    )
++    .join('');
+ };
+ document.querySelector('#filter')!.addEventListener('input', showInventory);
+ showInventory();
+diff --git a/src/main.ts b/src/main.ts
+index 7e6214b..d116904 100644
+--- a/src/main.ts
++++ b/src/main.ts
+@@ -41,7 +41,7 @@ import {
+   type TransitionPlan,
+ } from './scene/transitions';
+ import { waterPresets, type WaterTuning } from './scene/water';
+-import { placeActionCard, overlaps, type Rectangle } from './ui/placement';
++import { placeActionCard, placeLocalCard, overlaps, type Rectangle } from './ui/placement';
+ import { locationFacts } from './ui/location';
+ import { endpointTargets } from './ui/cove-layout';
+ import { MotionPreference, type MotionMode } from './ui/motion-preference';
+@@ -54,6 +54,10 @@ import { StoryPresentation, restoredHarbor } from './campaign/presentation';
+ import { StoryView } from './campaign/story-view';
+ import './campaign/story.css';
+ 
++import './campaign/home.css';
++
++import { transferFacts, transferReceipt } from './ui/transfer';
++
+ const cove = new URLSearchParams(location.search).get('cove');
+ const journey = cove === null ? new JourneyProgress() : null;
+ let campaignPlay = false;
+@@ -67,6 +71,39 @@ const app = document.querySelector<HTMLDivElement>('#app')!;
+ app.classList.add('cove-kit');
+ observePassengerPortraits(app);
+ app.innerHTML = `<main class="game ${experiment ? 'holding' : isBellwater ? 'bellwater' : 'baseline'}"><section id="seascape" aria-label="${level.title}" aria-busy="false"><div id="world"></div><header class="hud"><div class="identity"><h1>${title}</h1><p id="objective"></p></div><div id="readout" aria-label="Crossing progress"></div><nav class="tools" aria-label="Crossing controls"><button id="undo">↶ Undo</button><button id="wait">Wait <span>· 1 action</span></button><button id="menu">Menu</button><button id="sound-toggle" aria-label="Mute sound" aria-pressed="false">♫</button></nav></header><nav id="map-labels" aria-label="Map stops"></nav><nav id="dock-actions" aria-label="Passenger actions" hidden></nav><section id="local-context" role="region" aria-labelledby="local-heading" hidden></section><p id="selection-hint">Select a place to see its options.</p><svg id="selection-leader" aria-hidden="true"></svg><button id="status-toggle" aria-haspopup="dialog" aria-label="Open tide and pier forecast"></button><p id="transition-status" role="status" tabindex="-1" hidden>Finishing this action…</p><p class="portrait-note">Turn sideways for a wider view.</p></section><div id="announcement" class="sr-only" role="status" aria-live="polite"></div></main><dialog id="dialog" aria-labelledby="dialog-title"><div id="dialog-content"></div></dialog>`;
++
++const homeSurface = document.createElement('section');
++
++homeSurface.id = 'home';
++
++homeSurface.hidden = true;
++
++homeSurface.setAttribute('aria-label', 'Last Ferry home');
++
++app.append(homeSurface);
++
++const receipt = document.createElement('div');
++
++receipt.id = 'transfer-receipt';
++
++receipt.hidden = true;
++
++receipt.setAttribute('aria-hidden', 'true');
++
++app.append(receipt);
++
++let receiptTimer: ReturnType<typeof setTimeout> | undefined;
++
++let pendingReceipt: { id: number; title: string; depth: string } | null = null;
++
++function clearReceipt() {
++  clearTimeout(receiptTimer);
++
++  pendingReceipt = null;
++
++  receipt.hidden = true;
++}
++
+ const $ = (id: string) => document.getElementById(id)!;
+ for (const [id, icon, label] of [
+   ['undo', 'undo', 'Undo'],
+@@ -117,6 +154,11 @@ let storyId: SceneId | null = null;
+ let storyView: StoryView | null = null;
+ let storyUiKey = '';
+ let storyFrameRequest = 0;
++
++let storyActionIntent: string | null = null;
++
++const storyActionKey = () => `${storyId}:${storyPresentation.frame.shotIndex}`;
++
+ const storyPresentation = new StoryPresentation(
+   () => renderStoryStatus(),
+   (token) => {
+@@ -187,10 +229,114 @@ const completionCounts: Record<CompletionReason, number> = {
+ function journeySurface() {
+   return app.classList.contains('journey-screen');
+ }
++
++function setHomeVisible(active: boolean) {
++  homeSurface.hidden = !active;
++
++  app.classList.toggle('home-screen', active);
++
++  world.setHomePresentation(active);
++}
++
++function showHome(focusId?: string) {
++  clearReceipt();
++
++  storyPresentation.cancel();
++
++  storyId = null;
++
++  if (dialog.open) closeDialog(false);
++
++  mode = 'journey';
++
++  campaignPlay = false;
++
++  app.classList.add('journey-screen');
++
++  $('seascape').inert = true;
++
++  world.setStoryCovered(false);
++
++  setHomeVisible(true);
++
++  const snapshot = journey?.snapshot;
++
++  const checkpoint = snapshot?.record?.checkpoint;
++
++  const complete = checkpoint?.kind === 'complete';
++
++  const invalid = snapshot?.kind === 'invalid';
++
++  const label = complete
++    ? 'Play a cove'
++    : checkpoint
++      ? 'Continue'
++      : invalid
++        ? 'New journey'
++        : 'Play';
++
++  const notice =
++    checkpoint?.kind === 'cove'
++      ? `${storyCoves.find((entry) => entry.id === checkpoint.id)!.level.title} · from cove start.`
++      : checkpoint?.kind === 'scene'
++        ? `${storyScenes[checkpoint.id].title} · saved story.`
++        : complete
++          ? 'Both available coves are safe.'
++          : '';
++
++  homeSurface.innerHTML = `<header id="home-title"><h1>Last Ferry</h1><p>The Long Tide</p></header><nav id="home-menu" aria-label="Home"><p class="home-notice">${notice}${snapshot && !snapshot.persistent ? ' Progress lasts only for this visit.' : ''}${invalid ? ` ${snapshot.issue}` : ''}</p><button id="home-play">${label}</button><div class="home-secondary"><button id="home-options">Options</button><button id="home-practice">Practice</button></div><div class="home-secondary"><button id="home-sound"></button>${checkpoint ? '<button id="home-new">New journey</button>' : ''}</div></nav>`;
++
++  for (const button of homeSurface.querySelectorAll<HTMLButtonElement>('button'))
++    setControl(
++      button,
++      button.id === 'home-options' ? 'settings' : null,
++      button.textContent ?? '',
++      button.id === 'home-play' ? 'warm' : 'quiet',
++    );
++
++  const fresh = () =>
++    invalid || checkpoint ? showJourney('replace', 'journey-replace-cancel') : beginJourney();
++
++  $('home-play').onclick = (event) => {
++    if (event.detail > 1) return;
++
++    if (complete) showJourney('practice', 'practice-first-crossing');
++    else if (checkpoint) resumeJourney();
++    else fresh();
++  };
++
++  $('home-options').onclick = () => openSettings('journey');
++
++  $('home-practice').onclick = () => showJourney('practice', 'practice-first-crossing');
++
++  $('home-sound').onclick = toggleSound;
++
++  if ($('home-new')) $('home-new').onclick = fresh;
++
++  renderSound();
++
++  flushLayout();
++
++  if (focusId || keyboardInput)
++    ($(focusId ?? 'home-play') ?? $('home-play')).focus({ preventScroll: true });
++}
++
+ function showJourney(next: JourneyMode, focusId: string) {
++  if (next === 'journey') {
++    showHome(focusId === 'journey-new' ? 'home-new' : 'home-play');
++    return;
++  }
++
++  clearReceipt();
++
++  if (next === 'story' || next === 'journey-end') setHomeVisible(false);
++
+   if (mode === 'story' && next !== 'story') storyPresentation.cancel();
+   if (next !== 'return-title') {
+     app.classList.add('journey-screen');
++
++    $('seascape').inert = true;
++
+     world.setStoryFraming(true);
+   }
+   world.setStoryCovered(next === 'story');
+@@ -208,8 +354,10 @@ function returnToJourneyTitle() {
+   storyPresentation.cancel();
+   storyId = null;
+   campaignPlay = false;
+-  mountCove(holdingPier);
+-  showJourney('journey', journey?.snapshot.record ? 'journey-continue' : 'journey-new');
++
++  if (!app.classList.contains('home-screen')) mountCove(holdingPier);
++
++  showHome(mode === 'practice' ? 'home-practice' : undefined);
+ }
+ function beginJourney() {
+   journey?.replace();
+@@ -254,6 +402,11 @@ function startPlayable(next: typeof level, story: boolean) {
+   campaignPlay = story;
+   if (dialog.open) closeDialog(false);
+   app.classList.remove('journey-screen');
++
++  $('seascape').inert = false;
++
++  setHomeVisible(false);
++
+   mountCove(next);
+   world.setReducedMotion(motion.reduced);
+   if (!keyboardInput && lastPointer)
+@@ -283,20 +436,28 @@ function renderStoryStatus() {
+   const frame = storyPresentation.frame;
+   const scene = storyScenes[storyId];
+   const shot = scene.shots[frame.shotIndex];
+-  const key = `${frame.runToken}:${frame.shotIndex}:${frame.captionOpacity}:${frame.recap}:${frame.settled}`;
++
++  const key = `${frame.runToken}:${frame.shotIndex}:${frame.captionOpacity}:${frame.recap}:${frame.settled}:${frame.paused}`;
++
+   if (key === storyUiKey) {
+     storyView?.render(frame);
+     scheduleStoryClock();
+     return;
+   }
+   storyUiKey = key;
++
++  const pause = $('story-pause');
++
++  if (pause) {
++    setControl(pause, null, frame.paused ? 'Resume' : 'Pause', 'quiet');
++
++    (pause as HTMLButtonElement).disabled = motion.reduced || (frame.final && frame.settled);
++  }
++
+   const skip = $('story-skip') as HTMLButtonElement | null;
+   const next = $('story-continue') as HTMLButtonElement | null;
+-  if (skip) {
+-    if (frame.final && frame.settled && document.activeElement === skip)
+-      next?.focus({ preventScroll: true });
+-    skip.hidden = frame.final && frame.settled;
+-  }
++
++  if (skip) skip.hidden = false;
+   if (next && next.textContent !== (frame.final ? scene.continueLabel : 'Next'))
+     setControl(next, null, frame.final ? scene.continueLabel : 'Next', 'warm');
+   const caption = $('story-caption');
+@@ -329,6 +490,7 @@ function scheduleStoryClock() {
+     mode !== 'story' ||
+     !storyId ||
+     storyPresentation.settled ||
++    storyPresentation.paused ||
+     document.hidden
+   )
+     return;
+@@ -340,6 +502,8 @@ function scheduleStoryClock() {
+   });
+ }
+ function mountCove(next: typeof level) {
++  clearReceipt();
++
+   storyPresentation.cancel();
+   storyView = null;
+   world.clearStory();
+@@ -356,6 +520,9 @@ function mountCove(next: typeof level) {
+   session = new Session(level);
+   world = new World($('world'), session.state, level);
+   world.setReducedMotion(motion.reduced);
++
++  world.setHomePresentation(app.classList.contains('home-screen'));
++
+   world.setStoryFraming(journeySurface());
+   bindWorld();
+   canvas = world.renderer.domElement;
+@@ -420,10 +587,11 @@ function renderJourneyDialog() {
+     actions =
+       '<button id="journey-replace-cancel">Keep current journey</button><button id="journey-replace-confirm">Replace journey</button>';
+   } else if (mode === 'return-title') {
+-    heading = 'Return to title?';
++    heading = 'Return home?';
++
+     body = `<p>This crossing will start again from its beginning. Its moves and Undo history are only kept while you play.</p><p>${checkpointNotice}</p>`;
+     actions =
+-      '<button id="journey-return-cancel">Keep playing</button><button id="journey-return-confirm">Return to title</button>';
++      '<button id="journey-return-cancel">Keep playing</button><button id="journey-return-confirm">Return home</button>';
+   } else {
+     heading = 'Both coves are safe.';
+     body = '<p>The next part of the journey is still being made.</p>' + notice;
+@@ -453,9 +621,16 @@ function renderJourneyDialog() {
+   on('journey-practice', () => showJourney('practice', 'practice-first-crossing'));
+   on('journey-settings', () => openSettings(mode as JourneyMode));
+   on('journey-title', returnToJourneyTitle);
+-  on('journey-return-confirm', returnToJourneyTitle);
++
++  on('journey-return-confirm', () =>
++    journey ? returnToJourneyTitle() : location.assign(location.pathname),
++  );
++
+   on('journey-return-cancel', () => {
+     app.classList.remove('journey-screen');
++
++    $('seascape').inert = false;
++
+     world.setStoryFraming(false);
+     switchDialog('menu', 'journey-return');
+     flushLayout();
+@@ -482,7 +657,8 @@ function renderIllustratedStory(transcript: boolean) {
+     return;
+   }
+   $('dialog-content').innerHTML =
+-    `<h2 id="dialog-title" class="sr-only">${scene.title}</h2><div class="story-picture"><canvas id="story-canvas" role="img"></canvas><p class="story-chapter" aria-hidden="true">Last Ferry <span>The Long Tide</span></p><div id="story-captions"><p id="story-caption" aria-live="polite" aria-atomic="true"></p></div></div><nav class="story-controls" aria-label="Story controls"><span id="story-position" aria-label="Shot"></span><button id="story-replay">Replay</button><button id="story-replay-scene" hidden>Replay scene</button><button id="story-skip">Skip animation</button><button id="story-read">Read story</button><button id="story-settings">Settings</button><button id="story-continue">Next</button></nav>`;
++    `<h2 id="dialog-title" class="sr-only">${scene.title}</h2><div class="story-picture"><canvas id="story-canvas" role="img"></canvas><p class="story-chapter" aria-hidden="true">Last Ferry <span>The Long Tide</span></p><div id="story-captions"><p id="story-caption" aria-live="polite" aria-atomic="true"></p></div></div><nav class="story-controls" aria-label="Story controls"><span id="story-position" aria-label="Shot"></span><button id="story-pause">Pause</button><button id="story-sound"></button><details id="story-more"><summary>More</summary><div class="story-secondary"><button id="story-replay">Replay</button><button id="story-replay-scene" hidden>Replay scene</button><button id="story-skip">Skip animation</button><button id="story-read">Read story</button><button id="story-settings">Options</button></div></details><button id="story-continue">Next</button></nav>`;
++
+   for (const button of dialog.querySelectorAll<HTMLButtonElement>('button'))
+     setControl(
+       button,
+@@ -493,12 +669,27 @@ function renderIllustratedStory(transcript: boolean) {
+   storyView = new StoryView($('story-canvas') as HTMLCanvasElement);
+   storyUiKey = '';
+   $('story-continue').onclick = (event) => {
+-    if (event.detail < 2) continueStory();
++    if (event.detail > 1 || (event.isTrusted && storyActionIntent !== storyActionKey())) return;
++
++    storyActionIntent = null;
++
++    continueStory();
+   };
+   $('story-continue').onkeydown = (event) => {
+     if (event.repeat && (event.key === 'Enter' || event.key === ' ')) event.preventDefault();
+   };
++
++  $('story-pause').onclick = () =>
++    storyPresentation.paused
++      ? storyPresentation.resume(motion.reduced || document.hidden)
++      : storyPresentation.pause();
++
++  $('story-sound').onclick = toggleSound;
++
++  renderSound();
++
+   $('story-skip').onclick = () => {
++    ($('story-more') as HTMLDetailsElement).open = false;
+     storyPresentation.skip();
+     $('story-continue').focus({ preventScroll: true });
+   };
+@@ -535,13 +726,19 @@ function renderSound() {
+   const compactLabel =
+     sound.muted || playback.running ? label : playback.requested ? 'Retry' : 'Sound';
+   setControl(control, icon, compactLabel, 'quiet', sound.muted || playback.running);
+-  const settings = $('settings-sound');
+-  if (settings) {
+-    setControl(settings, icon, label);
+-    settings.dataset.playback = playback.state;
+-    settings.dataset.soundIntent = intent;
+-    settings.setAttribute('aria-pressed', String(playback.running));
+-    settings.setAttribute('aria-label', label);
++
++  for (const settings of [$('settings-sound'), $('home-sound'), $('story-sound')]) {
++    if (settings) {
++      setControl(settings, icon, label);
++
++      settings.dataset.playback = playback.state;
++
++      settings.dataset.soundIntent = intent;
++
++      settings.setAttribute('aria-pressed', String(playback.running));
++
++      settings.setAttribute('aria-label', label);
++    }
+   }
+   const mute = $('settings-mute');
+   if (mute) {
+@@ -574,7 +771,9 @@ function toggleSound(event: MouseEvent) {
+ }
+ function audioControl(target: EventTarget | null) {
+   return target instanceof Element
+-    ? target.closest<HTMLElement>('#sound-toggle, #settings-sound, #settings-mute')
++    ? target.closest<HTMLElement>(
++        '#sound-toggle, #settings-sound, #settings-mute, #home-sound, #story-sound',
++      )
+     : null;
+ }
+ function captureSoundIntent(target: EventTarget | null) {
+@@ -614,7 +813,8 @@ function notifyView(message: string) {
+       const details = JSON.stringify(
+         {
+           ...fullscreenSupport.details(),
+-          audio: sound.playback(),
++
++          audio: sound.presentation(),
+         },
+         null,
+         2,
+@@ -707,6 +907,8 @@ function flushLayout() {
+     updateViewport();
+     positionMap();
+     renderView();
++
++    positionReceipt();
+   } finally {
+     layoutFlushing = false;
+   }
+@@ -742,7 +944,27 @@ function updateViewport() {
+       $('status-toggle').hidden ? safeBounds.bottom : forecast.top - 8,
+     ),
+   };
+-  if (journeySurface() && dialog.open) {
++
++  if (app.classList.contains('home-screen')) {
++    const menu = $('home-menu').getBoundingClientRect();
++
++    const title = $('home-title').getBoundingClientRect();
++
++    usableBounds =
++      width > height
++        ? {
++            left: menu.right + 20,
++            right: safeBounds.right - 12,
++            top: safeBounds.top + 12,
++            bottom: safeBounds.bottom - 12,
++          }
++        : {
++            left: safeBounds.left + 12,
++            right: safeBounds.right - 12,
++            top: title.bottom + 12,
++            bottom: menu.top - 12,
++          };
++  } else if (journeySurface() && dialog.open) {
+     positionDialog();
+     const panel = dialog.getBoundingClientRect();
+     usableBounds =
+@@ -817,7 +1039,7 @@ function focusAvailable(preferred?: string) {
+   available(preferred).focus({ preventScroll: true });
+ }
+ function blocked() {
+-  return session.busy || dialog.open || fullscreenSupport.promoting;
++  return journeySurface() || session.busy || dialog.open || fullscreenSupport.promoting;
+ }
+ function highlight(id?: string) {
+   emphasis = id;
+@@ -905,14 +1127,28 @@ function switchDialog(next: DialogMode, focusId: string) {
+   actionAnchor = null;
+   actionPlace = null;
+   renderDialog();
+-  $(focusId).focus({ preventScroll: true });
++  const target = $(focusId);
++  const disclosure = target?.closest('details');
++  if (disclosure) disclosure.open = true;
++  target?.focus({ preventScroll: true });
+ }
+ function openSettings(parent: 'menu' | 'terminal' | JourneyMode) {
+   if (parent === 'story') storyPresentation.settle();
+   settingsParent = parent;
+   switchDialog('settings', 'settings-sound');
++
++  if (!dialog.open) {
++    dialog.showModal();
++    $('settings-sound').focus();
++    positionDialog();
++  }
+ }
+ function backFromSettings() {
++  if (settingsParent === 'journey') {
++    showHome('home-options');
++    return;
++  }
++
+   switchDialog(
+     settingsParent,
+     settingsParent === 'terminal'
+@@ -939,6 +1175,9 @@ function renderDialog() {
+   const s = session.state,
+     p = pierAt(s, level);
+   dialog.dataset.mode = mode;
++  dialog.dataset.transfer = String(
++    mode === 'action' && (selected?.type === 'board' || selected?.type === 'unload'),
++  );
+   if (
+     [
+       'journey',
+@@ -957,14 +1196,17 @@ function renderDialog() {
+   if (mode === 'action' && selected) {
+     const a = selected,
+       proposed = preview(s, a, level),
+-      text = previewCopy(s, a, level);
++      text = previewCopy(s, a, level),
++      transfer = a.type === 'board' || a.type === 'unload' ? transferFacts(s, a, level) : null;
++
+     const ids = a.type === 'board' ? s.waitingByPier[p!.id] : a.type === 'unload' ? s.aboard : [];
+     const choices =
+       a.type === 'board' || a.type === 'unload'
+         ? `<div class="passenger-options" role="group" aria-label="Passenger selection">${ids.map((id) => `<button id="passenger-${id}" class="cove-choice" aria-pressed="${a.passengerIds.includes(id)}">${passengerChoiceContent(passengerNames[id].split(' ·')[0], level.passengers.find((p) => p.id === id)!.slots, resolvePassengerAppearance(level, id)?.portraitKey ?? null)}</button>`).join('')}</div>`
+         : '';
+     $('dialog-content').innerHTML =
+-      `${header(actionLabel(s, a, level), `${nodeNames[a.type === 'move' ? a.to : s.boatNodeId]} · inspection is free`)}<div id="preview" class="dialog-body ${proposed.error || proposed.state.status === 'lost' ? 'warning' : ''}" aria-live="polite" aria-atomic="true">${choices}<p class="requirement">${text.error ?? text.requirement}</p>${text.consequence ? `<p class="consequence">${text.consequence}</p>` : ''}${!proposed.error ? `<p class="preview-result">After this action: Boat ${load(proposed.state, level)}/${level.rules.capacity} spaces · tide ${proposed.state.tideLevel}${s.tideLevel !== proposed.state.tideLevel ? ` (now ${s.tideLevel})` : ''}</p>` : ''}</div><footer class="dialog-footer"><button id="commit" ${proposed.error ? 'disabled' : ''}>${proposed.error ? 'Action unavailable' : 'Confirm · 1 action'}</button></footer>`;
++      `${header(transfer ? (a.type === 'board' ? 'Board passengers' : p?.isDeliveryPier ? 'Bring passengers home' : 'Let passengers ashore') : actionLabel(s, a, level), `${nodeNames[a.type === 'move' ? a.to : s.boatNodeId]} · inspection is free`)}<div id="preview" class="dialog-body ${proposed.error || proposed.state.status === 'lost' ? 'warning' : ''}" aria-live="polite" aria-atomic="true">${choices}<p class="requirement">${text.error ?? (transfer ? transfer.depth : text.requirement)}</p>${text.consequence ? `<p class="consequence">${text.consequence}</p>` : ''}${!proposed.error && !transfer ? `<p class="preview-result">After this action: Boat ${load(proposed.state, level)}/${level.rules.capacity} spaces · tide ${proposed.state.tideLevel}${s.tideLevel !== proposed.state.tideLevel ? ` (now ${s.tideLevel})` : ''}</p>` : ''}</div><footer class="dialog-footer"><button id="commit" ${proposed.error ? 'disabled' : ''}>${proposed.error ? 'Action unavailable' : transfer ? `${transfer.label} · 1 action` : 'Confirm · 1 action'}</button></footer>`;
++
+     if (a.type === 'board' || a.type === 'unload')
+       for (const id of ids)
+         $(`passenger-${id}`).onclick = () => {
+@@ -1000,12 +1242,16 @@ function renderDialog() {
+   } else if (mode === 'menu') {
+     const sheep = level.passengers.find((p) => p.species === 'sheep')!;
+     $('dialog-content').innerHTML =
+-      `${header('Crossing menu')}<div class="dialog-body menu-body">${s.status === 'won' ? '<button id="return-arrival">Return to arrival</button>' : ''}<div class="menu-actions"><button id="restart">Restart crossing</button><button id="settings">Settings</button></div><label class="cove-picker">Choose cove<select id="cove-picker">${[baseline, holdingPier, bellwater].map((l) => `<option value="${l.id}" ${l.id === level.id ? 'selected' : ''}>${l.title}${l.id === baseline.id ? ' · baseline' : ''}</option>`).join('')}</select></label><details id="help-details"><summary>How to play · actions and depth</summary><p>${actionCostCopy(level)}</p><p>Select a named place, island, pier or landmark to see its options for free. Choose Sail to travel one passage. Select the ferry for its current place. Passenger actions open a subset preview; choose names, then Confirm.</p><p>Boat depth needed: empty = 1; 1–2 spaces = 2; 3–4 spaces = 3. Each rabbit uses 1 space; ${passengerList([sheep.id], level)} uses ${sheep.slots}. A passage must be at least as deep as the boat needs.</p><p>Boarding and unloading happen before the tide rises. Use the status button for the tide and pier forecast. Undo earlier actions or restart to recover from a losing plan.</p><p>Tab and Shift+Tab move between controls; Enter or Space activates them. Escape closes a dialog first; press it again to close the location card. Selection never spends an action.</p></details></div>`;
++      `${header('Crossing menu')}<div class="dialog-body menu-body">${s.status === 'won' ? '<button id="return-arrival">Return to arrival</button>' : ''}<div class="menu-actions"><button id="restart">Restart crossing</button><button id="settings">Settings</button></div><label class="cove-picker">Choose cove<select id="cove-picker">${[baseline, holdingPier, bellwater].map((l) => `<option value="${l.id}" ${l.id === level.id ? 'selected' : ''}>${l.title}${l.id === baseline.id ? ' · baseline' : ''}</option>`).join('')}</select></label><details id="help-details"><summary>How to play · actions and depth</summary><p>${actionCostCopy(level)}</p><p>Select a named place, island, pier or landmark to see its options for free. Choose Sail to travel one passage. Select the ferry for its current place. A named single-passenger action acts directly. For several passengers, choose names in the nearby chooser, then use its named action. Cost, depth and tide consequences appear before you act.</p><p>Boat depth needed: empty = 1; 1–2 spaces = 2; 3–4 spaces = 3. Each rabbit uses 1 space; ${passengerList([sheep.id], level)} uses ${sheep.slots}. A passage must be at least as deep as the boat needs.</p><p>Boarding and unloading happen before the tide rises. Use the status button for the tide and pier forecast. Undo earlier actions or restart to recover from a losing plan.</p><p>Tab and Shift+Tab move between controls; Enter or Space activates them. Escape closes a dialog first; press it again to close the location card. Selection never spends an action.</p></details></div>`;
++
+     $('restart').onclick = restart;
+-    if (journey) {
++
++    {
+       const returnButton = document.createElement('button');
+       returnButton.id = 'journey-return';
+-      setControl(returnButton, null, 'Return to title', 'quiet');
++
++      setControl(returnButton, null, 'Home', 'quiet');
++
+       $('settings').closest('.menu-actions')!.after(returnButton);
+       returnButton.onclick = () => showJourney('return-title', 'journey-return-cancel');
+       const policy = document.createElement('p');
+@@ -1125,15 +1371,36 @@ function finish(id: number, reason: CompletionReason) {
+   session.finish();
+   if (locationSelection === session.state.boatNodeId) locationSelection = null;
+   render();
++
++  if (pendingReceipt?.id === id && reason === 'complete' && !document.hidden) {
++    const data = pendingReceipt;
++
++    receipt.innerHTML = `<strong>${data.title}</strong>${data.depth ? `<span>${data.depth}</span>` : ''}`;
++
++    receipt.hidden = false;
++
++    receipt.dataset.transition = String(id);
++
++    positionReceipt();
++
++    receiptTimer = setTimeout(clearReceipt, 3200);
++  } else clearReceipt();
++
+   $('announcement').textContent =
+-    `${session.state.turn} actions completed. ${statusCopy(session.state, level).headline}`;
++    `${pendingReceipt?.title ? pendingReceipt.title + '. ' + pendingReceipt.depth + '. ' : ''}${session.state.turn} actions completed. ${statusCopy(session.state, level).headline}`;
++
+   if (session.state.status !== 'playing') openDialog('terminal', undefined, 'undo');
+   else focusAvailable(returnId);
++  positionReceipt();
+ }
+ function execute(action: Action) {
+-  if (session.busy) return;
++  if (session.busy || journeySurface()) return;
++
+   const transaction = session.commit(copy(action));
+   if (!transaction) return;
++
++  clearReceipt();
++
+   world.poses.accept(transaction.before, action);
+   actionOrigin = !keyboardInput && lastPointer ? { x: lastPointer.x, y: lastPointer.y } : null;
+   sound.reconcileState(transaction.after, level, true);
+@@ -1142,6 +1409,13 @@ function execute(action: Action) {
+   const plan = world.plan(transaction.before, transaction.after, action);
+   const id = ++transitionSerial;
+   activeTransition = { id, action: copy(action), plan, startedAt: performance.now() };
++
++  if (action.type === 'board' || action.type === 'unload')
++    pendingReceipt = {
++      id,
++      ...transferReceipt(transaction.before, transaction.after, action, level),
++    };
++
+   if (dialog.open) closeDialog(false);
+   render();
+   if (keyboardInput) $('transition-status').focus();
+@@ -1332,6 +1606,7 @@ function renderDock() {
+   const dock = $('dock-actions'),
+     facts = locationFacts(session.state, session.state.boatNodeId, level),
+     visible =
++      !journeySurface() &&
+       !session.busy &&
+       !dialog.open &&
+       session.state.status === 'playing' &&
+@@ -1342,31 +1617,78 @@ function renderDock() {
+   dock.inert = !visible;
+   if (!visible) return;
+   dock.setAttribute('aria-label', `Passenger actions at ${facts.name}`);
+-  dock.innerHTML =
+-    (facts.board
+-      ? `<button id="board" aria-haspopup="dialog" aria-label="${facts.boardLabel}; choose passengers">${controlContent('board', 'Board')}</button>`
+-      : '') +
+-    (facts.unload
+-      ? `<button id="unload" aria-haspopup="dialog" aria-label="${facts.unloadLabel}; choose passengers">${controlContent('unload', facts.home ? 'Bring home' : 'Let ashore')}</button>`
+-      : '');
+-  if (facts.board) setControl($('board'), 'board', 'Board', 'action');
+-  if (facts.unload)
++
++  dock.replaceChildren();
++
++  for (const type of ['board', 'unload'] as const) {
++    const ids = type === 'board' ? facts.boardOptions : facts.aboard;
++
++    if (!ids.length || !facts[type]) continue;
++
++    const action = { type, passengerIds: [...ids] };
++
++    const info = transferFacts(session.state, action, level);
++
++    const direct = ids.length === 1 && info.direct;
++
++    const button = document.createElement('button');
++
++    button.id = type;
++
++    const groupLabel = type === 'board' ? 'Board' : facts.home ? 'Bring home' : 'Let ashore';
++
+     setControl(
+-      $('unload'),
+-      'unload',
+-      facts.home ? 'Bring home' : 'Let ashore',
+-      facts.home ? 'warm' : 'action',
++      button,
++      type === 'unload' && facts.home ? 'harbor-home' : type,
++      ids.length === 1 ? info.label : groupLabel,
++      facts.home && type === 'unload' ? 'warm' : 'action',
+     );
+-  if (facts.board)
+-    $('board').onclick = (event) => {
+-      event.stopPropagation();
+-      openDialog('action', { type: 'board', passengerIds: [...facts.boardOptions] }, 'board');
+-    };
+-  if (facts.unload)
+-    $('unload').onclick = (event) => {
++
++    if (!direct) button.setAttribute('aria-haspopup', 'dialog');
++
++    const note = document.createElement('span');
++
++    note.className = 'dock-facts';
++
++    note.textContent = direct ? `1 action · ${info.depth}` : 'Choose passengers · 1 action';
++
++    button.append(note);
++
++    if (direct && info.detail) {
++      const detail = document.createElement('span');
++
++      detail.className = 'dock-consequence';
++
++      detail.textContent = info.detail;
++
++      button.append(detail);
++    }
++
++    dock.append(button);
++
++    button.onclick = (event) => {
+       event.stopPropagation();
+-      openDialog('action', facts.unload!, 'unload');
++
++      if (blocked() || event.detail > 1) return;
++
++      const current = transferFacts(session.state, action, level);
++
++      if (direct && current.direct) {
++        returnId = type;
++
++        if (!keyboardInput)
++          closingFence = {
++            scope: 'commit',
++            rect: button.getBoundingClientRect(),
++            until: performance.now() + 180,
++            x: event.clientX,
++            y: event.clientY,
++          };
++
++        execute(action);
++      } else openDialog('action', action, type);
+     };
++  }
+ }
+ function render() {
+   const s = session.state,
+@@ -1408,6 +1730,9 @@ function render() {
+ }
+ function undo() {
+   if (session.busy) return;
++
++  clearReceipt();
++
+   if (dialog.open) closeDialog(false);
+   if (session.undo()) {
+     world.poses.undo();
+@@ -1425,6 +1750,9 @@ function undo() {
+ }
+ function restart() {
+   if (session.busy) return;
++
++  clearReceipt();
++
+   if (dialog.open) closeDialog(false);
+   if (session.restart()) {
+     world.poses.reset();
+@@ -1439,6 +1767,50 @@ function restart() {
+     focusAvailable('menu');
+   }
+ }
++
++function positionReceipt() {
++  if (receipt.hidden) return;
++  const canvas = world.host.getBoundingClientRect();
++  const frame = world.layoutFrameStatus();
++  const rect = receipt.getBoundingClientRect();
++  const local = (r: Rectangle): Rectangle => ({
++    left: r.left + canvas.left,
++    right: r.right + canvas.left,
++    top: r.top + canvas.top,
++    bottom: r.bottom + canvas.top,
++  });
++  const boat = local(frame.boat);
++  const obstacles = [
++    ...document.querySelectorAll<HTMLElement>(
++      '.hud, #dock-actions, #status-toggle, .view-controls, .map-target, .map-name, #local-context, #dialog[open]',
++    ),
++  ]
++    .filter(
++      (e) =>
++        !e.hidden &&
++        !e.closest('[hidden]') &&
++        getComputedStyle(e).visibility !== 'hidden' &&
++        e.getBoundingClientRect().width > 0,
++    )
++    .map((e) => e.getBoundingClientRect());
++  const placement = placeLocalCard(
++    rect.width,
++    rect.height,
++    safeBounds,
++    [...obstacles, boat, ...frame.passengers.map(local)],
++    [
++      [boat.left - rect.width - 12, boat.top],
++      [boat.left, boat.bottom + 12],
++      [boat.right + 12, boat.top],
++    ],
++    [boat.left, boat.top],
++  );
++  receipt.style.visibility = placement ? 'visible' : 'hidden';
++  if (placement) {
++    receipt.style.left = placement.left + 'px';
++    receipt.style.top = placement.top + 'px';
++  }
++}
+ function positionDialog() {
+   if (!dialog.open) return;
+   const canvas = world.host.getBoundingClientRect();
+@@ -1495,9 +1867,11 @@ function positionDialog() {
+     }
+     dialog.style.setProperty('--dialog-max-height', safeBounds.bottom - safeBounds.top + 'px');
+     const transfer = selected.type === 'board' || selected.type === 'unload';
+-    if (transfer) dialog.style.height = Math.min(380, safeBounds.bottom - safeBounds.top) + 'px';
+-    else dialog.style.removeProperty('height');
++
++    dialog.style.removeProperty('height');
++
+     const rect = dialog.getBoundingClientRect();
++    const previousPlacement = actionPlacement;
+     actionPlacement = placeActionCard(rect.width, rect.height, safeBounds, actionAnchor, {
+       portrait: canvas.width < canvas.height,
+       previous: actionPlacement,
+@@ -1516,11 +1890,18 @@ function positionDialog() {
+       actionPlacement = {
+         left,
+         right: left + rect.width,
+-        top: safeBounds.top,
+-        bottom: safeBounds.top + rect.height,
++        top: safeBounds.bottom - rect.height,
++        bottom: safeBounds.bottom,
+         layout: 'sheet',
+       };
+     }
++    if (transfer && previousPlacement && canvas.width >= canvas.height && canvas.height > 360) {
++      const bottom = Math.min(
++        safeBounds.bottom,
++        Math.max(safeBounds.top + rect.height, previousPlacement.bottom),
++      );
++      actionPlacement = { ...actionPlacement, top: bottom - rect.height, bottom };
++    }
+     dialog.dataset.layout = actionPlacement.layout;
+     dialog.style.left = actionPlacement.left + 'px';
+     dialog.style.top = actionPlacement.top + 'px';
+@@ -1710,9 +2091,18 @@ function positionMap() {
+     dock.style.visibility = visible ? 'visible' : 'hidden';
+     dock.dataset.layout = 'row';
+     if (dock.offsetWidth > bounds.right - bounds.left) dock.dataset.layout = 'column';
+-    const choice = placeActionCard(dock.offsetWidth, dock.offsetHeight, bounds, boat, {
++    const nearby = placeActionCard(dock.offsetWidth, dock.offsetHeight, bounds, boat, {
+       avoid: [...figures, ...placed],
+     });
++    const clear = placeLocalCard(
++      dock.offsetWidth,
++      dock.offsetHeight,
++      bounds,
++      [...figures, ...placed],
++      [[nearby.left, nearby.top]],
++      [boat.left, boat.top],
++    );
++    const choice = clear ? { ...clear, layout: 'floating' as const } : nearby;
+     dockPlacement = choice;
+     dock.style.left = choice.left + 'px';
+     dock.style.top = choice.top + 'px';
+@@ -1887,6 +2277,12 @@ function dismissDialogLayer() {
+     else if (mode === 'return-title') $('journey-return-cancel').click();
+     else if (mode === 'transcript') switchDialog('story', 'story-read');
+     else if (mode === 'story') {
++      const more = $('story-more') as HTMLDetailsElement;
++      if (more.open) {
++        more.open = false;
++        more.querySelector('summary')!.focus();
++        return;
++      }
+       storyPresentation.skip();
+       $('story-continue').focus({ preventScroll: true });
+     }
+@@ -1939,8 +2335,13 @@ document.addEventListener(
+       keyboardInput = true;
+       if (!e.repeat) {
+         viewFence = null;
+-        if (e.key === 'Enter' || e.key === ' ') captureSoundIntent(e.target);
+-        else soundIntent = null;
++
++        if (e.key === 'Enter' || e.key === ' ') {
++          captureSoundIntent(e.target);
++          storyActionIntent = (e.target as Element).closest('#story-continue')
++            ? storyActionKey()
++            : null;
++        } else soundIntent = null;
+       }
+     }
+     if (e.repeat && ['Enter', ' '].includes(e.key)) {
+@@ -1986,6 +2387,7 @@ document.addEventListener(
+     keyboardInput = false;
+     lastPointer = { x: e.clientX, y: e.clientY, control: (e.target as Element).closest('button') };
+     captureSoundIntent(e.target);
++    storyActionIntent = (e.target as Element).closest('#story-continue') ? storyActionKey() : null;
+   },
+   true,
+ );
+@@ -2009,7 +2411,11 @@ document.addEventListener(
+       e.stopImmediatePropagation();
+       return;
+     }
+-    const commit = (e.target as Element).closest('#sail, #commit, #board, #unload');
++
++    const commit = (e.target as Element).closest(
++      '#sail, #commit, #board, #unload, #story-continue, #home-play',
++    );
++
+     if (commit && e.isTrusted && e.detail > 0 && lastPointer?.control !== commit) {
+       e.preventDefault();
+       e.stopImmediatePropagation();
+@@ -2054,6 +2460,8 @@ document.addEventListener('visibilitychange', () => {
+   sound.visibility(document.hidden);
+   if (document.hidden && mode === 'story') storyPresentation.settle();
+   if (document.hidden) {
++    clearReceipt();
++
+     world.settleHomecoming();
+     world.clearMovement();
+   }
+@@ -2065,6 +2473,9 @@ document.addEventListener('visibilitychange', () => {
+ });
+ addEventListener('pagehide', () => {
+   pageDisposed = true;
++
++  clearReceipt();
++
+   storyPresentation.cancel();
+   storyView = null;
+   sound.onChange = null;
+@@ -2084,7 +2495,9 @@ addEventListener('pageshow', (event) => {
+ updateViewport();
+ render();
+ scheduleLayout();
+-if (journey) showJourney('journey', journey.snapshot.record ? 'journey-continue' : 'journey-new');
++
++if (journey) showHome();
++
+ if (import.meta.env.DEV)
+   Object.assign(window, {
+     __LAST_FERRY__: {
+diff --git a/src/scene/world.ts b/src/scene/world.ts
+index bc6081e..0bcaa2a 100644
+--- a/src/scene/world.ts
++++ b/src/scene/world.ts
+@@ -106,6 +106,7 @@ export class World {
+   viewFocus: ViewPoint | null = null;
+   viewScale = 1;
+   private storyFraming = false;
++  private homePresentation = false;
+   private storyJob: StoryStage | null = null;
+   private storyRestore: {
+     animals: Map<T.Object3D, { position: T.Vector3; rotation: T.Euler }>;
+@@ -731,6 +732,12 @@ export class World {
+     this.measuredUsable = { ...rectangle };
+     this.reframeView();
+   }
++  setHomePresentation(active: boolean) {
++    if (this.homePresentation === active) return;
++    this.homePresentation = active;
++    this.setStoryFraming(active);
++    this.indicate(this.state);
++  }
+   setStoryFraming(active: boolean) {
+     if (this.storyFraming === active) return;
+     this.storyFraming = active;
+@@ -1377,7 +1384,7 @@ export class World {
+               ? 'too-shallow'
+               : 'available';
+       const active = id === this.navigationSelected;
+-      g.visible = true;
++      g.visible = !this.homePresentation;
+       const color =
+         active || id === emphasis
+           ? '#ffe09a'
+@@ -1400,6 +1407,7 @@ export class World {
+       g.position.y = s.tideLevel * 0.18 + 0.04;
+     }
+     for (const [id, line] of this.routes) {
++      line.visible = !this.homePresentation;
+       const e = this.level.edges.find((e) => e.id === id)!;
+       line.position.y = s.tideLevel * 0.18;
+       const m = line.material as T.LineDashedMaterial;
+diff --git a/tests/e2e/ui.ts b/tests/e2e/ui.ts
+index 3140664..bdc5833 100644
+--- a/tests/e2e/ui.ts
++++ b/tests/e2e/ui.ts
+@@ -64,7 +64,8 @@ export async function act(page: Page, id: string, touch = false) {
+   if (id.startsWith('map-')) await startMove(page, id, touch);
+   else {
+     await activate(page, id, touch);
+-    await activate(page, 'commit', touch);
++    if (await page.locator('#dialog[open][data-mode=action]').count())
++      await activate(page, 'commit', touch);
+   }
+   await idle(page);
+ }
+@@ -107,7 +108,7 @@ export async function keyAct(page: Page, id: string) {
+     await expect(page.locator('#local-heading')).toBeFocused();
+     await tabTo(page, 'sail');
+     await page.keyboard.press('Enter');
+-  } else {
++  } else if (await page.locator('#dialog[open][data-mode=action]').count()) {
+     await expect(page.locator('#cancel')).toBeFocused();
+     await tabTo(page, 'commit');
+     await page.keyboard.press('Enter');
+diff --git a/tests/unit/audio.test.ts b/tests/unit/audio.test.ts
+index f3b179b..f9b13b4 100644
+--- a/tests/unit/audio.test.ts
++++ b/tests/unit/audio.test.ts
+@@ -1009,7 +1009,8 @@ describe('continuous audio ownership and phase', () => {
+       wet = [...reverb.connections][0];
+     expect([...music.connections]).toEqual([output, send]);
+     expect([...wet.connections]).toEqual([output]);
+-    expect([...output.connections]).toEqual([master]);
++    expect([...output.connections]).toEqual([master, (value as any).scoreAnalyser]);
++    expect([...(value as any).scoreAnalyser.connections]).toEqual([]);
+     expect([...effects.connections]).toEqual([master]);
+     expect([...ambience.connections]).toEqual([master]);
+     expect(effects.gain.value).toBe(0.34);
+diff --git a/tests/unit/story-presentation.test.ts b/tests/unit/story-presentation.test.ts
+index 409582f..cc9cab7 100644
+--- a/tests/unit/story-presentation.test.ts
++++ b/tests/unit/story-presentation.test.ts
+@@ -32,24 +32,61 @@ describe('bounded optional story motion', () => {
+     );
+   });
+ 
+-  test('each shot holds until Next without touching the pending checkpoint', () => {
+-    const changed = vi.fn();
+-    const presentation = new StoryPresentation(changed);
++  test('normal playback advances exactly once per shot and holds the final scene without acknowledgment', () => {
++    const presentation = new StoryPresentation(vi.fn());
+     presentation.start('opening', false, 0);
+     for (let t = 100; t <= 8000; t += 100) presentation.update(t);
+     expect(presentation.frame).toMatchObject({
+-      shot: 'tide',
+-      elapsed: 6000,
+-      settled: true,
++      shot: 'lantern',
++      elapsed: 2000,
++      settled: false,
+       final: false,
+     });
+-    expect(changed).toHaveBeenCalledTimes(1);
+-    expect(presentation.next(false, 8000)).toBe(true);
+-    expect(presentation.frame).toMatchObject({ shot: 'lantern', elapsed: 0, settled: false });
+-    expect(presentation.next(false, 8001)).toBe(true);
+-    expect(presentation.frame).toMatchObject({ shot: 'ferry', elapsed: 0, final: true });
+-    expect(presentation.next(false, 8002)).toBe(false);
+-    expect(presentation.frame.scene).toBe('opening');
++    for (let t = 8100; t <= 30000; t += 100) presentation.update(t);
++    expect(presentation.frame).toMatchObject({
++      scene: 'opening',
++      shot: 'ferry',
++      elapsed: 7000,
++      settled: true,
++      final: true,
++    });
++    expect(presentation.next(false, 30001)).toBe(false);
++  });
++
++  test.each([1500, 2000])(
++    'pause at %ims preserves elapsed and consumed cues through resume',
++    (at) => {
++      const cue = vi.fn();
++      const presentation = new StoryPresentation(vi.fn(), vi.fn(), cue);
++      presentation.start('opening', false, 0);
++      for (let t = 100; t <= at; t += 100) presentation.update(t);
++      presentation.pause();
++      const frame = presentation.frame;
++      presentation.update(10000);
++      expect(presentation.frame).toEqual(frame);
++      expect(frame.captionOpacity).toBe(1);
++      presentation.resume(false, 11000);
++      for (let t = 11100; t <= 15000; t += 100) presentation.update(t);
++      expect(cue).toHaveBeenCalledTimes(1);
++      expect(presentation.frame.shot).toBe(at === 2000 ? 'lantern' : 'tide');
++    },
++  );
++
++  test('paused Next and Replay preserve user intent; resume at a settled endpoint advances only once', () => {
++    const presentation = new StoryPresentation(vi.fn());
++    presentation.start('opening', false, 0);
++    presentation.pause();
++    presentation.next(false, 100);
++    presentation.update(500);
++    expect(presentation.frame).toMatchObject({ shot: 'lantern', paused: true, elapsed: 0 });
++    presentation.replay(false, false, 600);
++    expect(presentation.frame).toMatchObject({ paused: true, elapsed: 0 });
++    presentation.settle();
++    presentation.resume(false, 10000);
++    expect(presentation.frame).toMatchObject({ shot: 'ferry', paused: false, elapsed: 0 });
++    presentation.settle();
++    presentation.resume(false, 20000);
++    expect(presentation.frame).toMatchObject({ shot: 'ferry', settled: true, scene: 'opening' });
+   });
+ 
+   test('caption reveals the complete current phrase after its brief visual lead and remains held', () => {
+diff --git a/tools/encode-story-production.mjs b/tools/encode-story-production.mjs
+index a783bd7..ed8ebb9 100644
+--- a/tools/encode-story-production.mjs
++++ b/tools/encode-story-production.mjs
+@@ -12,7 +12,7 @@ if (frames.length < 2) throw Error('No complete screencast');
+ const concat = `${dir}/raw/actual-journey/frames.ffconcat`;
+ const duration = frames.at(-1).timestamp - frames[0].timestamp;
+ const offset = frames[0].timestamp - manifest.audioStartEpochMs / 1000;
+-if (offset < 0 || offset > 3) throw Error(`Unexpected native clock offset ${offset}`);
++if (offset < -10 || offset > 3) throw Error(`Unexpected native clock offset ${offset}`);
+ const lines = ['ffconcat version 1.0'];
+ for (let i = 0; i < frames.length; i++) {
+   lines.push(`file '${resolve(frames[i].path).replaceAll('\\', '/')}'`);
+@@ -32,10 +32,10 @@ const command = [
+   '0',
+   '-i',
+   concat,
+-  '-ss',
+-  String(offset),
++  ...(offset > 0 ? ['-ss', String(offset)] : []),
+   '-i',
+   manifest.audio,
++  ...(offset < 0 ? ['-af', `adelay=${Math.round(-offset * 1000)}:all=1`] : []),
+   '-map',
+   '0:v:0',
+   '-map',
+@@ -85,9 +85,10 @@ writeFileSync(
+       rawFrameCount: manifest.frames.length,
+       encodedFrameCount: frames.length,
+       elapsedSeconds: duration,
+-      audioLeadingTrimSeconds: offset,
++      audioLeadingTrimSeconds: Math.max(0, offset),
++      videoBeforeAudioActivationSeconds: Math.max(0, -offset),
+       timing:
+-        'Video timestamps from native CDP frame metadata; audio recording start from performance.timeOrigin + performance.now(). Only pre-first-frame audio is trimmed to align the continuously recorded streams. VFR preserves observed source frame durations; no speed adjustment or internal edits.',
++        'Video timestamps from native CDP frame metadata; audio recording start from performance.timeOrigin + performance.now(). Positive offsets trim pre-first-frame audio; negative offsets preserve the real silent Home interval before trusted audio activation using leading silence. No existing audio samples are amplified or replaced. VFR preserves observed source frame durations; no speed adjustment or internal edits.',
+       sound:
+         'Actual runtime Sound.captureStream master output, unchanged gain; AAC encoding only, no normalization, boost, substitute audio or narration.',
+       decoding: 'ffmpeg full video/audio decode completed without errors',

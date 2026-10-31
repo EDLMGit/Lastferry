@@ -1,0 +1,62 @@
+{
+  "auditedAt": "2026-10-23T06:24:48.758Z",
+  "originalManifest": {
+    "path": "reviews/audio-polish/browser/source-manifest.json",
+    "snapshotTime": "2026-10-23T06:21:12.671Z",
+    "sourceHash": "dec2f1b996aab62d8d5c3fbb0b2ef6b071e2ca7eb05619bac13f9b1c60f5331d",
+    "preservedWithoutModification": true
+  },
+  "originalFinalizeGuard": {
+    "result": "failed",
+    "reportedBy": "parent agent executing the original snapshot finalization",
+    "message": "Tested source changed after the snapshot. Repeat affected checks and captures.",
+    "diagnosis": "The guard correctly rejected a test-file hash difference. The exact difference was an unused helper/import cleanup 505 ms after the snapshot, not a runtime or executed-test behavior change.",
+    "rawLogSaved": false
+  },
+  "file": {
+    "path": "tests/e2e/audio-polish.spec.ts",
+    "snapshotSha256": "ff4b98a690ad30ea654541869106308537a9fac4350899f04e0787c30dac3af7",
+    "snapshotBytes": 7311,
+    "currentSha256": "8fddc6d18eb69c71d5742528e44fc1e8f8bf038de740894597eb042b6f5ca0b0",
+    "currentBytes": 7199,
+    "lastModified": "2026-10-23T06:21:13.176Z",
+    "millisecondsAfterSnapshot": 504.875
+  },
+  "delta": {
+    "removedTypeImport": "type Page",
+    "removedUnusedDeclaration": "const audio = (page: Page) => page.evaluate(() => (window as any).__LAST_FERRY__.getAudioStatus());",
+    "otherChanges": false,
+    "executedStatementsChanged": false,
+    "assertionsChanged": false,
+    "interactionOrTimingChanged": false,
+    "prettierAlreadyCompleteBeforeSnapshot": true
+  },
+  "reconstruction": {
+    "method": "Restore only type Page in the Playwright import and the exact unused audio helper declaration in memory; hash the reconstructed UTF-8 bytes.",
+    "sha256": "ff4b98a690ad30ea654541869106308537a9fac4350899f04e0787c30dac3af7",
+    "matchesOriginalManifestExactly": true,
+    "originalBytesWrittenToDisk": false
+  },
+  "preservation": {
+    "trackedInManifest": 102,
+    "remainingFiles": 101,
+    "remainingFilesByteIdentical": true,
+    "runtimeFilesChecked": 44,
+    "runtimeByteIdentical": true,
+    "differences": [
+      {
+        "path": "tests/e2e/audio-polish.spec.ts",
+        "expected": "ff4b98a690ad30ea654541869106308537a9fac4350899f04e0787c30dac3af7",
+        "actual": "8fddc6d18eb69c71d5742528e44fc1e8f8bf038de740894597eb042b6f5ca0b0"
+      }
+    ]
+  },
+  "cleanRerun": {
+    "manifestPath": "reviews/audio-polish/browser-final/source-manifest.json",
+    "snapshotTime": "2026-10-23T06:23:52.302Z",
+    "sourceHash": "f214ca6c68e8729528fc51d7763a527637a61cff7f7c8c9626a0b30b26143a6a",
+    "currentTestHashMatches": true,
+    "resultLocation": "reviews/audio-polish/browser-final/automation-results.json",
+    "note": "The parent launched a targeted rerun against this clean post-cleanup snapshot; consult its results rather than relabeling the original three-test run."
+  }
+}

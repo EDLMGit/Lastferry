@@ -1,0 +1,46 @@
+{
+  "run": "2026-10-24 14:50:06 local",
+  "result": "4/4 passed, 1 file, 2.74s",
+  "command": "npx vitest run --config .cache/sailing-direction/idle-bob.config.mjs",
+  "originalTest": {
+    "path": "tests/unit/deck-volume.test.ts",
+    "sha256": "5fa74c5d5e23321e6b1b8c31bceae6c91fda44a1a8ccec4e33fefc6243f39de1"
+  },
+  "sources": [
+    {
+      "path": "src/scene/deck-transfer.ts",
+      "sha256": "2ff793330a83d25821738f9639bdf4d421b5129544230f7c15d3ac65b939e01c"
+    },
+    {
+      "path": "src/scene/world.ts",
+      "sha256": "c14c0157f9355f2c554dd2145ace4de7a0fa3019bc98a8552d16d99ea5cc9ab9"
+    },
+    {
+      "path": "src/scene/models.ts",
+      "sha256": "37ee9b94ce017632921a089db8df1263ea020f31382160292a9779f3efd24dfb"
+    },
+    {
+      "path": "src/scene/transitions.ts",
+      "sha256": "09b2b8d68a50d6853befa7161a4e4993e45f7ba9868b79c491171026bcf5e447"
+    }
+  ],
+  "method": "Ignored copy of the existing production-mesh volume unit test; both berth headings crossed with idle bob -0.012/+0.012. Initial aboard anchor includes bob. Later hull height includes bob*(1-settled), using production settlingProgress and accepted 520ms/900ms duration with final <=550ms draft phase. All101 progress samples and all modeled animal vertices retained across Holding unload/reboard, rabbit tide boundary and final Harbor unload. Actual convex cabin/rail triangle planes refine broadphase bounds.",
+  "limits": "Finite sampled vertex containment, not a continuous swept-volume collision proof, browser capture or physical-device observation. Existing tracked unit omits bob extremes; this is additional read-only coverage. No runtime or tracked test mutation.",
+  "artifacts": [
+    {
+      "originalPath": ".cache/sailing-direction/idle-bob-results.txt",
+      "path": "reviews/sailing-direction-wake/development/idle-bob-results.txt",
+      "sha256": "640ab6de3d954f2fcf902d2bda78b9c8a2eced28d857847ecb9d1826c7c630e1"
+    },
+    {
+      "originalPath": ".cache/sailing-direction/idle-bob-deck-volume.test.ts",
+      "path": "reviews/sailing-direction-wake/development/idle-bob-test-source.txt",
+      "sha256": "b9da461059c9129bcf0ebb0f260e8c5508e0406e64f8dd067ffe198590d64988"
+    },
+    {
+      "originalPath": ".cache/sailing-direction/idle-bob.config.mjs",
+      "path": "reviews/sailing-direction-wake/development/idle-bob-config-source.txt",
+      "sha256": "e2a694305ed30fa59a1b49af4af2be169765b8fb997e5687b570c50f917d539d"
+    }
+  ]
+}

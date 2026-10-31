@@ -1,0 +1,53 @@
+.cove-kit .cove-surface,
+#app .cove-surface {
+  --cove-surface-top: #2b5356;
+  --cove-surface-face: #1b434b;
+  --cove-surface-bottom: #123741;
+  --cove-surface-rim: #9eb5a5;
+  --cove-surface-edge: #0b2d36;
+  --cove-surface-highlight: rgb(255 243 217 / 18%);
+  --cove-surface-motif: url('./shoreline-corner.svg');
+
+  background-color: var(--cove-surface-face);
+  background-image:
+    var(--cove-surface-motif),
+    linear-gradient(
+      155deg,
+      var(--cove-surface-top) 0%,
+      var(--cove-surface-face) 44%,
+      var(--cove-surface-bottom) 100%
+    );
+  background-position: right bottom, center;
+  background-size: 192px 128px, 100% 100%;
+  background-repeat: no-repeat;
+  border-color: var(--cove-surface-rim);
+  box-shadow:
+    inset 0 1px 0 var(--cove-surface-highlight),
+    inset 0 -3px 0 var(--cove-surface-edge),
+    0 5px 14px rgb(6 33 42 / 21%);
+}
+
+.cove-kit .cove-surface.cove-surface--compact,
+#app .cove-surface.cove-surface--compact {
+  --cove-surface-motif: none;
+  box-shadow:
+    inset 0 1px 0 var(--cove-surface-highlight),
+    inset 0 -2px 0 var(--cove-surface-edge),
+    0 3px 8px rgb(6 33 42 / 18%);
+}
+
+.cove-kit .cove-surface.cove-surface--arrival,
+#app .cove-surface.cove-surface--arrival {
+  --cove-surface-highlight: rgb(243 214 160 / 38%);
+}
+
+.cove-kit .cove-surface:focus-visible,
+.cove-kit .cove-surface[data-demo-state='focus'],
+#app .cove-surface:focus-visible {
+  outline: 3px solid var(--cove-focus);
+  outline-offset: 2px;
+  box-shadow:
+    inset 0 1px 0 var(--cove-surface-highlight),
+    inset 0 -3px 0 var(--cove-surface-edge),
+    0 0 0 6px var(--cove-edge);
+}

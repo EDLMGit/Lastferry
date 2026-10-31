@@ -1,0 +1,63 @@
+{
+  "baseline": {
+    "commit": "23a644aba24e6479b9d82a106a745d15c3f8c7dc",
+    "method": "Read-only git archive of runtime, data and package inputs into .cache/portrait-baseline, served at port 5251. Parent installed dependencies resolve normally. No main or worktree reset. All six baseline captures pass inherited text-fit checks and actual rescue.",
+    "source": "before/source.json",
+    "toolSource": "before/capture-tool.txt"
+  },
+  "originals": [
+    {
+      "stage": "baseline setup",
+      "outcome": "Initial setup call was rejected before command execution because its intended working directory did not yet exist. Creating/extracting from the root workspace, then separately starting Vite, succeeded.",
+      "gameFailure": false
+    },
+    {
+      "stage": "10rem grid",
+      "outcome": "The 780×320 actual UI rescue passed text-fit, image containment and footer checks. Native inspection showed three stacked Harbor choices, with the third portrait partly below the scrollable body fold.",
+      "source": "development/initial-fit/source.json",
+      "result": "development/initial-fit/capture-manifest.json"
+    },
+    {
+      "stage": "9.25rem grid",
+      "outcome": "The 780×320 actual UI rescue passed. Native inspection still showed one column: 310px preview client width includes 14px padding, leaving a 296px group, less than the 303px needed for two 148px tiles plus gap.",
+      "source": "development/grid-refined/source.json",
+      "result": "development/grid-refined/capture-manifest.json"
+    },
+    {
+      "stage": "9rem144px grid",
+      "outcome": "The 780×320 actual UI rescue passed. The 296px group supports two 144.5px tiles plus a 7px gap, keeping all three choices visible at 62px height.",
+      "source": "development/grid-144/source.json",
+      "result": "development/grid-144/capture-manifest.json"
+    },
+    {
+      "stage": "initial delayedimage fixture",
+      "outcome": "Timed out at 180000ms during cold page.goto. The broad PNG URL route also held the Vite PNG?import JavaScript module before app load. The fixture was corrected to hold resourceType=image only. Both corrected loading/failure cases subsequently passed.",
+      "result": "development/browser-initial/automation-results.json",
+      "gameFailure": false
+    },
+    {
+      "stage": "initial Bellwatermapping fixture",
+      "outcome": "Two loading/input cases passed. The mapping fixture expected playing but reached the correct turn-8 loss because an extra individual boarding action left Bram at flooding Bell Pier. The revised fixture undoes the temporary partial boarding, follows the accepted rescue and gets Bram aboard before partial delivery.",
+      "result": "development/browser-refined/automation-results.json",
+      "gameFailure": false
+    },
+    {
+      "stage": "interrupted capture for resource coordination",
+      "outcome": "The 844×390 case completed rescue and terminal Undo/redelivery; 780×320 reached Harbor with all fit checks passing. The process was interrupted on parent request to isolate unit checks from concurrent SwiftShader CPU load. The entire incomplete run is retained as development evidence, not a final all-size pass.",
+      "source": "development/interrupted-capture/source.json",
+      "result": "development/interrupted-capture/capture-manifest.json",
+      "originalPathPrefix": "after/",
+      "newPathPrefix": "development/interrupted-capture/",
+      "gameFailure": false
+    },
+    {
+      "stage": "Initial matched-view comparator",
+      "outcome": "The first comparator rejected identical views because it compared animation/layout revision counters across independently timed runs. Diagnostic inspection found only revision counters differed; all actual mode, pan, focus, scale, usable bounds, world bounds and focus coordinates were exact, as were state, HUD height and initial ferry width. The final comparison records raw equality and both counter values separately, requiring exact equality of every actual framing field. Existing per-interaction view/placement assertions remain unchanged.",
+      "gameFailure": false
+    }
+  ],
+  "limits": [
+    "The prior card/dock overlap, delivered-heading observation and ≤180ms rapid-touch condition remain open.",
+    "No physical Android, other engine, native GPU or new acoustic approval is claimed."
+  ]
+}

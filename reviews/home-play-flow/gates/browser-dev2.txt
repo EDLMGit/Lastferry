@@ -1,0 +1,75 @@
+
+> last-ferry@1.0.0 test:e2e
+> playwright test home-play-flow.spec.ts
+
+
+Running 2 tests using 1 worker
+
+(node:23120) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\e2e\home-play-flow.spec.ts:153:1 › integrated cold-touch Home autoplay direct transfers and two actual rescues with runtime audio (24.7s)
+(node:20456) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  2 tests\e2e\home-play-flow.spec.ts:283:1 › native Home and story fit, orientation, Options focus and inactive gameplay (25.2s)
+
+
+  1) tests\e2e\home-play-flow.spec.ts:153:1 › integrated cold-touch Home autoplay direct transfers and two actual rescues with runtime audio 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "ferry"
+    Received: "lantern"
+
+    Call Log:
+    - Timeout 9000ms exceeded while waiting on the predicate
+
+      178 |       await expect
+      179 |         .poll(async () => (await timeline(page)).shot, { timeout: 9000, intervals: [100] })
+    > 180 |         .toBe(shot);
+          |          ^
+      181 |       await expect
+      182 |         .poll(async () => (await timeline(page)).elapsed, { intervals: [100] })
+      183 |         .toBeGreaterThan(1500);
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\home-play-flow.spec.ts:180:10
+
+    Error Context: test-results\home-play-flow-integrated--440d2--rescues-with-runtime-audio\error-context.md
+
+    Error Context: test-results\home-play-flow-integrated--440d2--rescues-with-runtime-audio\error-context.md
+
+  2) tests\e2e\home-play-flow.spec.ts:283:1 › native Home and story fit, orientation, Options focus and inactive gameplay 
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  locator('#story-read')
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeFocused" locator('#story-read') with timeout 10000ms
+      - waiting for locator('#story-read')
+        23 × locator resolved to <button id="story-read" class="cove-button cove-button--quiet">…</button>
+           - unexpected value "inactive"
+
+
+      330 |   await more(page, 'story-read');
+      331 |   await activate(page, 'story-read-back');
+    > 332 |   await expect(page.locator('#story-read')).toBeFocused();
+          |                                             ^
+      333 |   expect((await timeline(page)).paused).toBe(true);
+      334 |   await page.keyboard.press('Escape');
+      335 |   await activate(page, 'story-pause');
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\home-play-flow.spec.ts:332:45
+
+    Error Context: test-results\home-play-flow-native-Home-60f64-focus-and-inactive-gameplay\error-context.md
+
+    Error Context: test-results\home-play-flow-native-Home-60f64-focus-and-inactive-gameplay\error-context.md
+
+  2 failed
+    tests\e2e\home-play-flow.spec.ts:153:1 › integrated cold-touch Home autoplay direct transfers and two actual rescues with runtime audio 
+    tests\e2e\home-play-flow.spec.ts:283:1 › native Home and story fit, orientation, Options focus and inactive gameplay 
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

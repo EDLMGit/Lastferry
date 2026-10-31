@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "levelId": "first-crossing",
+  "id": "last-safe-boarding",
+  "purpose": "Event-order boundary: boarding committed from turn 7 removes the sheep before the turn-8 rise; reaching the pier on turn 8 would be too late.",
+  "actions": [
+    { "type": "move", "to": "sheep-pier" },
+    { "type": "wait" },
+    { "type": "wait" },
+    { "type": "wait" },
+    { "type": "wait" },
+    { "type": "wait" },
+    { "type": "wait" },
+    { "type": "board", "passengerIds": ["sheep-1"] }
+  ],
+  "expected": { "status": "playing", "turn": 8, "tideLevel": 2, "boatNodeId": "sheep-pier", "delivered": [], "aboard": ["rabbit-1", "rabbit-2", "sheep-1"] }
+}

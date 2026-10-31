@@ -1,0 +1,34 @@
+* { box-sizing: border-box; }
+body { margin: 0; background: #194650; }
+main { max-width: 1120px; padding: 24px; margin: auto; }
+h1, h2, h3 { font-family: Georgia, serif; }
+p, li { line-height: 1.5; }
+a { color: #f3d6a0; }
+.gallery-panel { padding: 20px; margin: 20px 0; }
+.specimens { display: flex; flex-wrap: wrap; gap: 16px; margin: 20px 0; }
+.passenger-options { margin: 20px 0; }
+.panel-specimens { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 20px; }
+.panel-specimen { width: 400px; max-width: 100%; min-width: 0; }
+.panel-specimen--narrow { width: 320px; }
+.panel-specimen h3 { overflow-wrap: anywhere; }
+.gallery-text-stress { font-size: 20px; }
+.gallery-text-stress .cove-choice { font-size: inherit; line-height: 1.4; }
+.gallery-forecast { padding: 12px; min-height: 48px; font: inherit; text-align: left; }
+.gallery-warning { color: var(--cove-warning); }
+.portrait-sources { display: flex; flex-wrap: wrap; gap: 20px; }
+.portrait-sources figure { margin: 0; max-width: 100%; min-width: 0; padding: 10px; }
+.portrait-source { display: block; width: 256px; height: 256px; max-width: 100%; object-fit: contain; }
+.portrait-sources figcaption { margin: 10px 0 0; overflow-wrap: anywhere; }
+.story-specimens { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 20px; }
+.gallery-story { min-width: 0; margin: 0; padding: 14px; }
+.gallery-story canvas { display: block; width: 100%; height: 300px; border-radius: 8px; background: #1d4b55; }
+.gallery-story-caption { font: 22px/1.4 Georgia, serif; white-space: pre-line; margin: 18px 0; }
+.gallery-story p { overflow-wrap: anywhere; }
+.icon-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 20px; }
+.icon-grid > div { display: flex; align-items: center; gap: 10px; }
+summary { min-height: 48px; cursor: pointer; line-height: 1.5; }
+summary span { display: block; color: var(--cove-secondary); }
+input { display: block; font: inherit; width: 100%; min-height: 48px; margin: 10px 0; border-radius: 8px; padding: 8px; }
+pre { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.5; }
+li { overflow-wrap: anywhere; }
+@media (max-width: 500px) { main { padding: 12px; } .gallery-panel { padding: 14px; } }

@@ -1,0 +1,150 @@
+{
+  "viewport": [
+    780,
+    390
+  ],
+  "input": "emulated touch",
+  "frame": {
+    "canvas": {
+      "width": 780,
+      "height": 258
+    },
+    "boat": {
+      "left": 230.9338976556471,
+      "right": 277.53334736385426,
+      "top": 129.02824119716416,
+      "bottom": 174.03891993956574,
+      "height": 45.01067874240158
+    },
+    "lighthouse": {
+      "left": 229.98093021935256,
+      "right": 269.6435331609226,
+      "top": 18.21528491474111,
+      "bottom": 107.84583972260455,
+      "height": 89.63055480786345
+    },
+    "bell": {
+      "left": 381.68175975197795,
+      "right": 425.327871845069,
+      "top": 10.000000000000004,
+      "bottom": 74.6900839885609,
+      "height": 64.6900839885609
+    },
+    "passengers": [
+      {
+        "id": "tansy",
+        "left": 521.0438978761247,
+        "right": 530.8823032355758,
+        "top": 126.99213971471222,
+        "bottom": 158.18407284156757,
+        "height": 31.191933126855346
+      },
+      {
+        "id": "lark",
+        "left": 530.7563944547354,
+        "right": 541.9926728910045,
+        "top": 126.94437689463332,
+        "bottom": 158.18407284156757,
+        "height": 31.239695946934248
+      },
+      {
+        "id": "bram",
+        "left": 394.0024361641866,
+        "right": 410.5325331525118,
+        "top": 71.63859294751713,
+        "bottom": 101.66523350010273,
+        "height": 30.026640552585604
+      }
+    ],
+    "nodes": [
+      {
+        "id": "harbor",
+        "x": 253.53060066050173,
+        "y": 160.11045939055174
+      },
+      {
+        "id": "shallows",
+        "x": 392.34970888743095,
+        "y": 174.14499750260163
+      },
+      {
+        "id": "low-pier",
+        "x": 531.1688171143601,
+        "y": 174.14499750260163
+      },
+      {
+        "id": "west-buoy",
+        "x": 280.7986397765057,
+        "y": 219.75724636676364
+      },
+      {
+        "id": "east-buoy",
+        "x": 503.90077799835615,
+        "y": 225.02019815878234
+      },
+      {
+        "id": "bell-pier",
+        "x": 402.2653594750687,
+        "y": 116.25252779039592
+      }
+    ]
+  },
+  "beforeFirst": {
+    "turn": 3,
+    "tideLevel": 0,
+    "boatNodeId": "low-pier",
+    "aboard": [],
+    "waitingByPier": {
+      "harbor-pier": [],
+      "low-pier": [
+        "tansy",
+        "lark"
+      ],
+      "bell-pier": [
+        "bram"
+      ]
+    },
+    "delivered": [],
+    "status": "playing",
+    "lossReason": null
+  },
+  "beforeSecond": {
+    "turn": 7,
+    "tideLevel": 1,
+    "boatNodeId": "bell-pier",
+    "aboard": [
+      "tansy",
+      "lark"
+    ],
+    "waitingByPier": {
+      "harbor-pier": [],
+      "low-pier": [],
+      "bell-pier": [
+        "bram"
+      ]
+    },
+    "delivered": [],
+    "status": "playing",
+    "lossReason": null
+  },
+  "final": {
+    "turn": 10,
+    "tideLevel": 2,
+    "boatNodeId": "harbor",
+    "aboard": [],
+    "waitingByPier": {
+      "harbor-pier": [],
+      "low-pier": [],
+      "bell-pier": []
+    },
+    "delivered": [
+      "tansy",
+      "lark",
+      "bram"
+    ],
+    "status": "won",
+    "lossReason": null
+  },
+  "errors": [],
+  "browser": "156.0.8078.4"
+}

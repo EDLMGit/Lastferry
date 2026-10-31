@@ -1,0 +1,191 @@
+{
+  "package": "last-ferry-codex-starter",
+  "packageVersion": 1,
+  "preparedOn": "2026-10-20",
+  "purpose": "M1 repository-ready design and implementation handoff",
+  "playableImplementationPresent": false,
+  "manifestScope": "All supplied files except this manifest; paths are relative to the package root.",
+  "verification": {
+    "designCommand": "node tools/verify-design.mjs --write-report",
+    "nodeVersion": "v24.19.0",
+    "designChecks": {
+      "status": "passed",
+      "totalChecks": 32,
+      "passedChecks": 32,
+      "failedChecks": 0
+    },
+    "boundedSearch": {
+      "maxActions": 12,
+      "reachableCanonicalStates": 502,
+      "shortestSolutionLength": 7
+    },
+    "jsonFilesParsed": 7,
+    "localMarkdownFileLinksChecked": 12,
+    "pngFilesDecoded": 5,
+    "svgXmlParsed": true,
+    "layoutSchematicVisuallyInspected": true,
+    "gameRuntimeOrBrowserTested": false
+  },
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 200,
+      "sha256": "b3857de450d865a7ab794ccaae4428aa0317d10405c0b346d06ccfb44757962b"
+    },
+    {
+      "path": ".github/pull_request_template.md",
+      "bytes": 3168,
+      "sha256": "f8108275e67bcfb35f4db92177bd926b4e302fd0a8d878cce149bc346c5f2cf9"
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 284,
+      "sha256": "abeed19b932093395a3f0d6e3298c6b4f80cdad63cd46c136681195eccafad58"
+    },
+    {
+      "path": ".nvmrc",
+      "bytes": 3,
+      "sha256": "68ca3fba3b7e864770cb61aeb306d4bd4354b68ab4dd38450860c5d823e42a53"
+    },
+    {
+      "path": "AGENTS.md",
+      "bytes": 3686,
+      "sha256": "8b7d3af4dc4a8e4ba072e0e0781cfd5a92c72874afbb2d77d1ef6e61b559a115"
+    },
+    {
+      "path": "FIRST_TASK.md",
+      "bytes": 7601,
+      "sha256": "dbc7ff8172a6f4bfcc465e1c87d084d365dabd65146250a29e1f61502e597bb0"
+    },
+    {
+      "path": "README.md",
+      "bytes": 5307,
+      "sha256": "2aedeaa9d31446f7555cc1354202b85443f8bcea5c9df6623fce8f290da44662"
+    },
+    {
+      "path": "STATUS.md",
+      "bytes": 1952,
+      "sha256": "77d81776494f87d7fbb8d833a73475d5a25dcad7f42a610068f582dfd0914ec3"
+    },
+    {
+      "path": "data/first-crossing.level.json",
+      "bytes": 4939,
+      "sha256": "403a19ddd7840a52f5706490d6e2f5a35ddf1a38dd20715b602fcc572f6167ab"
+    },
+    {
+      "path": "data/replays/full-boat-detour.json",
+      "bytes": 713,
+      "sha256": "b88cb6c0a2935d2700526e8194fd57b97d436c1922da05a10d209ac1f48674a5"
+    },
+    {
+      "path": "data/replays/harbor-first.json",
+      "bytes": 716,
+      "sha256": "27bf293ba908464fb32097a6c92ec632f3611521094160abecb107780ea9e038"
+    },
+    {
+      "path": "data/replays/last-safe-boarding.json",
+      "bytes": 663,
+      "sha256": "73386dc35b4b495bcbaddbf8de50e768230b34f7598f67f8c871b3e19535ad31"
+    },
+    {
+      "path": "data/replays/missed-sheep-deadline.json",
+      "bytes": 614,
+      "sha256": "372f48fd32380d31189d461ff23ce39606033b3369278b245b4f7fe4ec6603b5"
+    },
+    {
+      "path": "data/replays/wait-for-tide.json",
+      "bytes": 663,
+      "sha256": "3dacc1cc212a57ecda08decac203b322d222d5a113ba60f2e4cafc9e01b59a9f"
+    },
+    {
+      "path": "docs/ART_DIRECTION.md",
+      "bytes": 8135,
+      "sha256": "47a4437ea5e8104dc89bf60561dcb2f99fbffd7595e7d3f4cccb486ad4079235"
+    },
+    {
+      "path": "docs/ASSET_PLAN.md",
+      "bytes": 7883,
+      "sha256": "e426c54a36d6bdd867edf6b11b1f881ddff07a61919840f032f6d3915bdd7e67"
+    },
+    {
+      "path": "docs/FIRST_COVE.md",
+      "bytes": 15038,
+      "sha256": "e002a9195e0415f900ba56eacc7487daa34149a8c831de82db956614fa48b71f"
+    },
+    {
+      "path": "docs/GAMEPLAY_RULES.md",
+      "bytes": 12734,
+      "sha256": "29e56def41c31fd6e6ef765b27dc6bc71e83e5d37b3e193e9ac584deba3859e6"
+    },
+    {
+      "path": "docs/PRODUCT_BRIEF.md",
+      "bytes": 3914,
+      "sha256": "89819109f54859576c6a63df53de2ab9eda4bcf95be461b1e849b60a9de67c31"
+    },
+    {
+      "path": "docs/REVIEW_WORKFLOW.md",
+      "bytes": 10125,
+      "sha256": "abab94bab6a1ee76c88ca5407dcc5cf0e6e429535576a8c4ff9a44de9f62b5aa"
+    },
+    {
+      "path": "docs/SOURCES.md",
+      "bytes": 1910,
+      "sha256": "cb9eb54d85b106e32561da6f95f67136b8a33e8b30ae60003b608e766cd56d69"
+    },
+    {
+      "path": "docs/TECHNICAL_PLAN.md",
+      "bytes": 7876,
+      "sha256": "2ac1102e8f2e78a8ec974ecf54a1222e21493b5720b861d3b6e63df07d04f5b4"
+    },
+    {
+      "path": "docs/validation/design-validation.json",
+      "bytes": 23229,
+      "sha256": "93539b95ed91ffab1b06afedb8d2ad31a0e764be5ce15f4a011258778883a34a"
+    },
+    {
+      "path": "references/README.md",
+      "bytes": 1510,
+      "sha256": "7a0c29e477ec72c1f8ee21a41740ae8ca04a77c0bfaabac87cd9b804255d6c64"
+    },
+    {
+      "path": "references/drowned-orchard.png",
+      "bytes": 3035221,
+      "sha256": "1afd72c9cdabbb47c5d733c2c715d95aba77f53c1bd44e9fe891e5ac277a9c69"
+    },
+    {
+      "path": "references/first-cove-layout.png",
+      "bytes": 293316,
+      "sha256": "fb9f13130da90cc89f8c8380bee4250921ff8a662e16830e8fb20f78384a3392"
+    },
+    {
+      "path": "references/first-cove-layout.svg",
+      "bytes": 25512,
+      "sha256": "186974e330020ce0142776fb528b3136dfebd74f3bdb41fba297adeadf5824a8"
+    },
+    {
+      "path": "references/first-crossing.png",
+      "bytes": 2905878,
+      "sha256": "e1450028ce4f7498514ac856bd3b4556a4a4af0562221ce2f813bba0f58e618c"
+    },
+    {
+      "path": "references/original-concept.png",
+      "bytes": 2637939,
+      "sha256": "27a92c473134d8cb7a6be9d6a63fce08c7fc351e15b5d8bd23665917c0b40393"
+    },
+    {
+      "path": "references/sanctuary-ending.png",
+      "bytes": 2728874,
+      "sha256": "fe964d68b8c34761df3a4c26c01e2d9cc394ec25eb04463b8f710186d66b226c"
+    },
+    {
+      "path": "reviews/REVIEW_TEMPLATE.md",
+      "bytes": 4010,
+      "sha256": "7b48f1c6df41964d923b5112324f9b0e7a7b53c31bbca50690f1752a1d5cfba4"
+    },
+    {
+      "path": "tools/verify-design.mjs",
+      "bytes": 40246,
+      "sha256": "94150dcdd8cdfa8568be15b0f71880aa6f8a6574f15b43298e240dc1a3cfae10"
+    }
+  ]
+}

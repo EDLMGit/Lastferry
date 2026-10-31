@@ -1,0 +1,10 @@
+{
+  "check": "npx vitest run tests/unit/homecoming.test.ts",
+  "initialResult": "3 passed, 1 failed",
+  "failure": "Expected original Three.js Euler to deeply equal clone; original includes _onChangeCallback, clone does not. at tests/unit/homecoming.test.ts:68",
+  "classification": "Test assertion defect; no runtime scene defect reproduced",
+  "fix": "Compare Euler.toArray() before and after sweep rather than private callback-bearing objects",
+  "rerunResult": "4 passed",
+  "environment": "Node 24 / Windows / Vitest 5.0.5",
+  "provenance": "Observed local command output during scene implementation, before browser verification"
+}

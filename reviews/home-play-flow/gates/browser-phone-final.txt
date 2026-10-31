@@ -1,0 +1,20 @@
+
+> last-ferry@1.0.0 test:e2e
+> playwright test home-play-flow.spec.ts --grep portrait real|receipt cancellation
+
+[WebServer] (node:37008) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] [plugin builtin:vite-reporter] 
+[WebServer] (!) Some chunks are larger than 500 kB after minification. Consider:
+[WebServer] - Using dynamic import() to code-split the application
+[WebServer] - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+[WebServer] - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[WebServer] (node:2464) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 1 worker
+
+(node:21176) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\e2e\home-play-flow.spec.ts:786:1 › portrait real chooser loss/cancel and rescue with natural keyboard focus and full phone labels (16.5s)
+  x  2 tests\e2e\home-play-flow.spec.ts:866:1 › receipt cancellation, empty native choices and live Home barriers (19.2s)

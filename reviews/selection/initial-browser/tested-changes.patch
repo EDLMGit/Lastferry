@@ -1,0 +1,3189 @@
+diff --git a/src/main.ts b/src/main.ts
+index e6ed0e9..a9292da 100644
+--- a/src/main.ts
++++ b/src/main.ts
+@@ -30,7 +30,8 @@ import {
+   type TransitionPlan,
+ } from './scene/transitions';
+ import { waterPresets, type WaterTuning } from './scene/water';
+-import { placeLocalCard } from './ui/placement';
++import { placeLocalCard, overlaps, type Rectangle } from './ui/placement';
++import { locationFacts } from './ui/location';
+ 
+ const cove = new URLSearchParams(location.search).get('cove');
+ const level = cove === 'first-crossing' ? baseline : cove === 'bellwater' ? bellwater : holdingPier;
+@@ -40,7 +41,7 @@ const { nodeNames, passengerNames } = levelNames(level);
+ const homeNodeId = level.piers.find((pier) => pier.id === level.objective.deliveryPierId)!.nodeId;
+ const title = level.id === baseline.id ? 'The First Crossing' : level.title;
+ const app = document.querySelector<HTMLDivElement>('#app')!;
+-app.innerHTML = `<main class="game ${experiment ? 'holding' : isBellwater ? 'bellwater' : 'baseline'}"><section id="seascape" aria-label="${level.title}" aria-busy="false"><div id="world"></div><header class="hud"><div class="identity"><h1>${title}</h1><p id="objective"></p></div><div id="readout" aria-label="Crossing progress"></div><nav class="tools" aria-label="Crossing controls"><button id="undo">↶ Undo</button><button id="wait">Wait <span>· 1 action</span></button><button id="menu">Menu</button><button id="sound-toggle" aria-label="Mute sound" aria-pressed="false">♫</button></nav></header><nav id="map-labels" aria-label="Map stops"></nav><section id="local-context" aria-labelledby="local-heading"></section><button id="status-toggle" aria-haspopup="dialog" aria-label="Open tide and pier forecast"></button><p id="transition-status" role="status" tabindex="-1" hidden>Finishing this action…</p><p class="portrait-note">Turn sideways for a wider view.</p></section><div id="announcement" class="sr-only" role="status" aria-live="polite"></div></main><dialog id="dialog" aria-labelledby="dialog-title"><div id="dialog-content"></div></dialog>`;
++app.innerHTML = `<main class="game ${experiment ? 'holding' : isBellwater ? 'bellwater' : 'baseline'}"><section id="seascape" aria-label="${level.title}" aria-busy="false"><div id="world"></div><header class="hud"><div class="identity"><h1>${title}</h1><p id="objective"></p></div><div id="readout" aria-label="Crossing progress"></div><nav class="tools" aria-label="Crossing controls"><button id="undo">↶ Undo</button><button id="wait">Wait <span>· 1 action</span></button><button id="menu">Menu</button><button id="sound-toggle" aria-label="Mute sound" aria-pressed="false">♫</button></nav></header><nav id="map-labels" aria-label="Map stops"></nav><section id="local-context" role="region" aria-labelledby="local-heading" hidden></section><p id="selection-hint">Select a place to see its options.</p><svg id="selection-leader" aria-hidden="true"></svg><button id="status-toggle" aria-haspopup="dialog" aria-label="Open tide and pier forecast"></button><p id="transition-status" role="status" tabindex="-1" hidden>Finishing this action…</p><p class="portrait-note">Turn sideways for a wider view.</p></section><div id="announcement" class="sr-only" role="status" aria-live="polite"></div></main><dialog id="dialog" aria-labelledby="dialog-title"><div id="dialog-content"></div></dialog>`;
+ const $ = (id: string) => document.getElementById(id)!;
+ const session = new Session(level),
+   sound = new Sound(),
+@@ -52,6 +53,12 @@ let mode: DialogMode | null = null,
+   selected: Action | null = null,
+   returnId = '',
+   keyboardInput = false;
++let locationSelection: string | null = null;
++let emphasis: string | undefined;
++let selectionOrigin: { x: number; y: number } | null = null;
++let lastPointer: { x: number; y: number; control: Element | null } | null = null;
++let cardPlacement: Rectangle | null = null;
++let protectedBounds: Rectangle[] = [];
+ let fallback: ReturnType<typeof setTimeout> | undefined;
+ let closingFence: { rect: DOMRect; until: number; x: number; y: number } | null = null;
+ let transitionSerial = 0;
+@@ -92,13 +99,16 @@ function toggleSound() {
+ }
+ 
+ function available(preferred?: string) {
+-  const target = (preferred ? $(preferred) : null) as HTMLButtonElement | null;
+-  if (target && !target.disabled && target.getClientRects().length) return target;
+-  return (
+-    document.querySelector<HTMLButtonElement>(
+-      '#local-context button:not(:disabled), .map-stop[data-adjacent="true"] .map-target:not(:disabled)',
+-    ) ?? $('menu')
+-  );
++  const target = preferred ? $(preferred) : null;
++  if (
++    target &&
++    !(target as HTMLButtonElement).disabled &&
++    target.getClientRects().length &&
++    !target.closest('[inert]')
++  )
++    return target;
++  if (locationSelection && !$('local-context').hidden) return $('local-heading');
++  return $(`map-${session.state.boatNodeId}`) ?? $('menu');
+ }
+ function focusAvailable(preferred?: string) {
+   available(preferred).focus({ preventScroll: true });
+@@ -107,10 +117,10 @@ function blocked() {
+   return session.busy || dialog.open;
+ }
+ function highlight(id?: string) {
+-  const to = id && edgeTo(session.state, id, level) ? id : undefined;
+-  world.indicate(session.state, to);
++  emphasis = id;
++  world.indicate(session.state, locationSelection ?? undefined, id);
+   for (const target of document.querySelectorAll<HTMLElement>('[data-destination]'))
+-    target.classList.toggle('highlighted', target.dataset.destination === to);
++    target.classList.toggle('highlighted', target.dataset.destination === id);
+ }
+ function restoreHighlight() {
+   if (dialog.open) highlight(selected?.type === 'move' ? selected.to : undefined);
+@@ -128,6 +138,8 @@ function closeDialog(restore = true, fence = false) {
+   mode = null;
+   selected = null;
+   world.setForecast(false, session.state.tideLevel);
++  renderLocation();
++  positionMap();
+   if (restore) focusAvailable(returnId);
+   restoreHighlight();
+ }
+@@ -139,6 +151,7 @@ function openDialog(next: DialogMode, action?: Action, trigger?: string) {
+   selected = action ?? null;
+   renderDialog();
+   dialog.showModal();
++  $('local-context').inert = true;
+   (next === 'terminal' ? $('terminal-undo') : $('cancel')).focus();
+   positionDialog();
+   restoreHighlight();
+@@ -197,7 +210,7 @@ function renderDialog() {
+   } else if (mode === 'menu') {
+     const sheep = level.passengers.find((p) => p.species === 'sheep')!;
+     $('dialog-content').innerHTML =
+-      `${header('Crossing menu')}<div class="dialog-body menu-body"><div class="menu-actions"><button id="restart">Restart crossing</button><button id="sound" aria-pressed="${sound.muted}" aria-label="${sound.muted ? 'Unmute sound' : 'Mute sound'}">Sound ${sound.muted ? 'off' : 'on'}</button></div><label class="cove-picker">Choose cove<select id="cove-picker">${[baseline, holdingPier, bellwater].map((l) => `<option value="${l.id}" ${l.id === level.id ? 'selected' : ''}>${l.title}${l.id === baseline.id ? ' · baseline' : ''}</option>`).join('')}</select></label><details id="help-details"><summary>How to play · actions and depth</summary><p>${actionCostCopy(level)}</p><p>Use a named destination to sail one passage. Its separate Inspect button is free. Board or let passengers ashore at the current pier; select their names in the card, then confirm.</p><p>Boat depth needed: empty = 1; 1–2 spaces = 2; 3–4 spaces = 3. Each rabbit uses 1 space; ${passengerList([sheep.id], level)} uses ${sheep.slots}. A passage must be at least as deep as the boat needs.</p><p>Boarding and unloading happen before the tide rises. Use the status button for the tide and pier forecast. Undo earlier actions or restart to recover from a losing plan.</p><p>Tab and Shift+Tab move between controls; Enter or Space activates them. Escape closes a card.</p></details></div>`;
++      `${header('Crossing menu')}<div class="dialog-body menu-body"><div class="menu-actions"><button id="restart">Restart crossing</button><button id="sound" aria-pressed="${sound.muted}" aria-label="${sound.muted ? 'Unmute sound' : 'Mute sound'}">Sound ${sound.muted ? 'off' : 'on'}</button></div><label class="cove-picker">Choose cove<select id="cove-picker">${[baseline, holdingPier, bellwater].map((l) => `<option value="${l.id}" ${l.id === level.id ? 'selected' : ''}>${l.title}${l.id === baseline.id ? ' · baseline' : ''}</option>`).join('')}</select></label><details id="help-details"><summary>How to play · actions and depth</summary><p>${actionCostCopy(level)}</p><p>Select a named place, island, pier or landmark to see its options for free. Choose Sail to travel one passage. Select the ferry for its current place. Passenger actions open a subset preview; choose names, then Confirm.</p><p>Boat depth needed: empty = 1; 1–2 spaces = 2; 3–4 spaces = 3. Each rabbit uses 1 space; ${passengerList([sheep.id], level)} uses ${sheep.slots}. A passage must be at least as deep as the boat needs.</p><p>Boarding and unloading happen before the tide rises. Use the status button for the tide and pier forecast. Undo earlier actions or restart to recover from a losing plan.</p><p>Tab and Shift+Tab move between controls; Enter or Space activates them. Escape closes a dialog first; press it again to close the location card. Selection never spends an action.</p></details></div>`;
+     $('restart').onclick = restart;
+     $('sound').onclick = toggleSound;
+     ($('cove-picker') as HTMLSelectElement).onchange = (e) => {
+@@ -251,6 +264,8 @@ function execute(action: Action) {
+   const transaction = session.commit(copy(action));
+   if (!transaction) return;
+   sound.reconcileState(transaction.after, level, true);
++  if (action.type === 'move') locationSelection = action.to;
++  emphasis = undefined;
+   const plan = world.plan(transaction.before, transaction.after, action);
+   const id = ++transitionSerial;
+   activeTransition = { id, action: copy(action), plan, startedAt: performance.now() };
+@@ -283,43 +298,50 @@ function execute(action: Action) {
+     }
+   }
+ }
+-function localContext() {
+-  if (blocked() || session.state.status !== 'playing') return;
+-  const local = document.querySelector<HTMLButtonElement>('#local-context button');
+-  if (local) {
+-    local.focus();
+-    $('local-context').classList.remove('attention');
+-    requestAnimationFrame(() => $('local-context').classList.add('attention'));
+-    $('announcement').textContent =
+-      `You are at ${nodeNames[session.state.boatNodeId]}. Passenger actions are here.`;
+-  } else {
+-    focusAvailable();
+-    $('announcement').textContent =
+-      `You are at ${nodeNames[session.state.boatNodeId]}. Choose an adjacent passage.`;
+-  }
++function clearLocation(restore = false) {
++  if (blocked()) return;
++  const previous = locationSelection;
++  locationSelection = null;
++  selectionOrigin = null;
++  renderMap();
++  renderLocation();
++  positionMap();
++  highlight();
++  if (restore || $('local-context').contains(document.activeElement))
++    focusAvailable(previous ? `map-${previous}` : undefined);
+ }
+-function activateMove(to: string) {
+-  if (blocked() || session.state.status !== 'playing') return;
+-  if (to === session.state.boatNodeId) {
+-    localContext();
++function selectLocation(id: string) {
++  if (
++    blocked() ||
++    session.state.status !== 'playing' ||
++    !level.nodes.some((node) => node.id === id)
++  )
+     return;
++  if (locationSelection !== id) {
++    locationSelection = id;
++    selectionOrigin = !keyboardInput && lastPointer ? { x: lastPointer.x, y: lastPointer.y } : null;
++    renderMap();
++    renderLocation();
++    positionMap();
+   }
+-  const a: Action = { type: 'move', to },
+-    proposed = preview(session.state, a, level);
+-  if (!proposed.error && proposed.state.status !== 'lost') {
+-    returnId = `map-${to}`;
+-    execute(a);
+-  } else openDialog('action', a, `map-${to}`);
++  highlight();
++  $('local-heading').focus({ preventScroll: true });
++  $('announcement').textContent = `${nodeNames[id]} selected. Inspection is free.`;
++}
++function localContext() {
++  selectLocation(session.state.boatNodeId);
+ }
+-function bindTarget(button: HTMLElement, id: string, inspect = false) {
+-  button.onclick = () =>
+-    inspect ? openDialog('action', { type: 'move', to: id }, button.id) : activateMove(id);
++function bindTarget(button: HTMLElement, id: string) {
++  button.onclick = (event) => {
++    event.stopPropagation();
++    selectLocation(id);
++  };
+   button.onpointerenter = () => {
+-    if (!dialog.open) highlight(id);
++    if (!blocked()) highlight(id);
+   };
+   button.onpointerleave = restoreHighlight;
+   button.onfocus = () => {
+-    if (!dialog.open) highlight(id);
++    if (!blocked()) highlight(id);
+   };
+   button.onblur = restoreHighlight;
+ }
+@@ -329,34 +351,95 @@ function renderMap() {
+     '<svg id="map-leaders" aria-hidden="true"></svg>' +
+     level.nodes
+       .map((n) => {
+-        const edge = edgeTo(s, n.id, level),
+-          current = n.id === s.boatNodeId;
+-        const status = current
++        const facts = locationFacts(s, n.id, level);
++        const status = facts.current
+           ? 'current'
+-          : !edge
++          : facts.relation === 'remote'
+             ? 'nonadjacent'
+-            : edge.baseDepth + s.tideLevel < draft(s, level)
++            : facts.status === 'too-shallow'
+               ? 'too-shallow'
+               : 'available';
+-        const loses =
+-          status === 'available' &&
+-          preview(s, { type: 'move', to: n.id }, level).state.status === 'lost';
+-        const home = n.id === homeNodeId;
+-        const label =
+-          (current
+-            ? `You are at ${nodeNames[n.id]}`
+-            : !edge
+-              ? `${nodeNames[n.id]}: no direct passage`
+-              : `Sail to ${nodeNames[n.id]}${loses ? '; flood warning' : status === 'too-shallow' ? '; too shallow' : ''}`) +
+-          (home ? '; Home, delivery destination' : '');
+-        const disabled = session.busy || s.status !== 'playing' ? 'disabled' : '';
+-        return `<div id="stop-${n.id}" class="map-stop" data-adjacent="${!!edge}"><button id="map-${n.id}" class="map-target" data-status="${status}" data-risk="${loses ? 'loss' : 'safe'}" data-destination="${n.id}" ${current ? 'aria-current="location"' : ''} aria-label="${label}" title="${passageCopy(s, n.id, level)}" ${disabled}><span class="map-symbol" aria-hidden="true">${current ? '●' : !edge ? '◇' : status === 'too-shallow' ? '⊘' : loses ? '!' : '○'}</span><span><b>${current || !edge ? nodeNames[n.id] : `Sail to ${nodeNames[n.id]}`}${home ? ' · Home' : ''}</b><span class="map-state">${current ? 'You are here' : !edge ? 'No direct passage' : status === 'too-shallow' ? 'Too shallow' : loses ? 'Flood warning' : '1 action'}</span></span></button>${edge ? `<button id="inspect-${n.id}" class="inspect-route" data-destination="${n.id}" aria-label="Inspect passage to ${nodeNames[n.id]} for free" ${disabled}>Inspect</button>` : ''}</div>`;
++        const description = facts.current
++          ? 'current location'
++          : facts.relation === 'remote'
++            ? 'no direct passage'
++            : facts.status === 'too-shallow'
++              ? 'adjacent, too shallow'
++              : facts.wouldLose
++                ? 'adjacent, flood warning'
++                : 'adjacent passage available';
++        return `<div id="stop-${n.id}" class="map-stop" data-adjacent="${facts.relation === 'adjacent'}"><button id="map-${n.id}" class="map-target" data-status="${status}" data-risk="${facts.wouldLose ? 'loss' : 'safe'}" data-destination="${n.id}" aria-expanded="${locationSelection === n.id}" aria-controls="local-context" ${facts.current ? 'aria-current="location"' : ''} aria-label="Select ${facts.name}; ${description}${facts.home ? '; Home, delivery destination' : ''}" title="${description}" ${session.busy || s.status !== 'playing' ? 'disabled' : ''}><span class="map-symbol" aria-hidden="true">${facts.current ? '◉' : facts.relation === 'remote' ? '◇' : facts.status === 'too-shallow' ? '⊘' : facts.wouldLose ? '!' : '○'}</span><b>${facts.name}${facts.home ? ' · Home' : ''}</b></button></div>`;
+       })
+       .join('');
+-  for (const n of level.nodes) {
+-    bindTarget($(`map-${n.id}`), n.id);
+-    if ($(`inspect-${n.id}`)) bindTarget($(`inspect-${n.id}`), n.id, true);
++  for (const node of level.nodes) bindTarget($(`map-${node.id}`), node.id);
++}
++function renderLocation() {
++  const card = $('local-context');
++  const visible = !!locationSelection && !session.busy && session.state.status === 'playing';
++  card.hidden = !visible;
++  card.inert = dialog.open || session.busy;
++  $('selection-hint').hidden =
++    !!locationSelection || session.busy || session.state.status !== 'playing';
++  if (!visible) {
++    $('selection-leader').innerHTML = '';
++    return;
+   }
++  const facts = locationFacts(session.state, locationSelection!, level);
++  card.dataset.location = facts.id;
++  card.dataset.status = facts.status;
++  const paragraph = (text: string, className = '') =>
++    text ? `<p class="${className}">${text}</p>` : '';
++  const details = facts.wouldLose
++    ? paragraph(facts.consequence, 'location-warning') + paragraph(facts.passage, 'requirement')
++    : facts.current
++      ? paragraph(facts.aboardCopy) +
++        paragraph(facts.waiting.length ? facts.waitingCopy : '') +
++        paragraph(facts.safety) +
++        paragraph(facts.transferNote)
++      : paragraph(facts.passage, 'requirement') +
++        paragraph(facts.limitation && !facts.passage ? facts.limitation : '') +
++        paragraph(facts.waiting.length ? facts.waitingCopy : '') +
++        paragraph(facts.safety) +
++        paragraph(facts.consequence, facts.wouldLose ? 'location-warning' : '');
++  const actions = facts.current
++    ? (facts.board ? `<button id="board">${facts.boardLabel}</button>` : '') +
++      (facts.unload ? `<button id="unload">${facts.unloadLabel}</button>` : '')
++    : facts.move
++      ? `<button id="sail" data-risk="${facts.wouldLose ? 'loss' : 'safe'}" ${facts.canSail ? '' : 'disabled'}>Sail · 1 action</button>`
++      : '';
++  card.innerHTML = `<header class="location-head"><div><p class="location-role">${facts.current ? 'You are here' : facts.home ? 'Home · delivery destination' : facts.relation === 'remote' ? 'Free inspection' : facts.wouldLose ? 'Flood warning' : 'Direct passage'}</p><h2 id="local-heading" tabindex="-1">${facts.name}${facts.home && facts.current ? ' · Home' : ''}</h2></div><button id="close-location" aria-label="Close location card">×</button></header><div id="location-facts">${details}</div>${actions ? `<footer id="local-actions">${actions}</footer>` : ''}`;
++  $('close-location').onclick = (event) => {
++    event.stopPropagation();
++    if (!keyboardInput)
++      closingFence = {
++        rect: $('close-location').getBoundingClientRect(),
++        until: performance.now() + 180,
++        x: event.clientX,
++        y: event.clientY,
++      };
++    clearLocation(true);
++  };
++  if ($('board'))
++    $('board').onclick = () =>
++      openDialog('action', { type: 'board', passengerIds: [...facts.boardOptions] }, 'board');
++  if ($('unload')) $('unload').onclick = () => openDialog('action', facts.unload!, 'unload');
++  if ($('sail'))
++    $('sail').onclick = (event) => {
++      event.stopPropagation();
++      if (blocked() || !facts.move || !facts.canSail) return;
++      if (facts.wouldLose) openDialog('action', facts.move, 'sail');
++      else {
++        if (!keyboardInput)
++          closingFence = {
++            rect: $('sail').getBoundingClientRect(),
++            until: performance.now() + 180,
++            x: event.clientX,
++            y: event.clientY,
++          };
++        returnId = 'local-heading';
++        execute(facts.move);
++      }
++    };
+ }
+ function render() {
+   const s = session.state,
+@@ -370,26 +453,7 @@ function render() {
+     `<span class="status-symbol" aria-hidden="true">${facts.urgent ? '!' : '≈'}</span><span><strong id="status-headline">${facts.headline}</strong>${facts.detail ? `<span id="status-detail">${facts.detail}</span>` : '<span id="status-detail"></span>'}</span><span class="forecast-label">Forecast</span>`;
+   $('status-toggle').classList.toggle('urgent', facts.urgent);
+   $('status-toggle').onclick = () => openDialog('forecast', undefined, 'status-toggle');
+-  const dry = p && s.tideLevel < p.elevation;
+-  const boarding = dry && s.status === 'playing' ? s.waitingByPier[p.id] : [],
+-    unloading = dry && s.status === 'playing' ? s.aboard : [];
+-  const local = (type: 'board' | 'unload', ids: string[]) => {
+-    const label =
+-      type === 'unload' && p!.isDeliveryPier
+-        ? 'Bring passengers home'
+-        : actionLabel(s, { type, passengerIds: ids }, level);
+-    return `<button id="${type}" ${session.busy ? 'disabled' : ''}>${label}</button>`;
+-  };
+-  $('local-context').innerHTML =
+-    `<h2 id="local-heading">${nodeNames[s.boatNodeId]}</h2><div id="local-actions">${boarding.length ? local('board', boarding) : ''}${unloading.length ? local('unload', unloading) : ''}${!boarding.length && !unloading.length ? `<p>${p && !dry ? 'Pier flooded · ferry can leave' : p ? 'No passengers to transfer' : 'Choose the next passage'}</p>` : ''}</div>`;
+-  $('local-context').classList.toggle('no-transfer', !boarding.length && !unloading.length);
+-  $('local-context').hidden = session.busy && activeTransition?.action.type === 'move';
+-  if ($('board'))
+-    $('board').onclick = () =>
+-      openDialog('action', { type: 'board', passengerIds: [...boarding] }, 'board');
+-  if ($('unload'))
+-    $('unload').onclick = () =>
+-      openDialog('action', { type: 'unload', passengerIds: [...unloading] }, 'unload');
++  renderLocation();
+   ($('undo') as HTMLButtonElement).disabled = session.busy || !session.history.length;
+   ($('wait') as HTMLButtonElement).disabled = session.busy || s.status !== 'playing';
+   ($('menu') as HTMLButtonElement).disabled = session.busy;
+@@ -409,12 +473,14 @@ function render() {
+   $('seascape').setAttribute('aria-busy', String(session.busy));
+   renderMap();
+   positionMap();
+-  highlight();
++  restoreHighlight();
+ }
+ function undo() {
+   if (session.busy) return;
+   if (dialog.open) closeDialog(false);
+   if (session.undo()) {
++    locationSelection = null;
++    selectionOrigin = null;
+     sound.resetActionEffects();
+     sound.reconcileState(session.state, level);
+     world.sync(session.state);
+@@ -427,6 +493,8 @@ function restart() {
+   if (session.busy) return;
+   if (dialog.open) closeDialog(false);
+   if (session.restart()) {
++    locationSelection = null;
++    selectionOrigin = null;
+     sound.resetActionEffects();
+     sound.reconcileState(session.state, level);
+     world.sync(session.state);
+@@ -442,163 +510,139 @@ function positionDialog() {
+ }
+ function positionMap() {
+   const host = world.host,
+-    small = matchMedia('(max-height: 600px) and (min-width: 701px)').matches;
++    canvas = host.getBoundingClientRect();
++  const frame = world.frameStatus();
++  const atPage = (r: Rectangle): Rectangle => ({
++    left: r.left + canvas.left,
++    right: r.right + canvas.left,
++    top: r.top + canvas.top,
++    bottom: r.bottom + canvas.top,
++  });
++  const figures = [
++    frame.boat,
++    ...frame.passengers,
++    frame.lighthouse,
++    ...(frame.bell ? [frame.bell] : []),
++  ].map(atPage);
++  const chrome = [
++    document.querySelector<HTMLElement>('.hud')!,
++    $('status-toggle'),
++    ...(!$('selection-hint').hidden ? [$('selection-hint')] : []),
++  ].map((element) => element.getBoundingClientRect());
++  const bounds = { left: 8, top: 8, right: innerWidth - 8, bottom: innerHeight - 8 };
++  const placed: Rectangle[] = [];
++  const leaders: string[] = [];
+   for (const n of level.nodes) {
+     const group = $(`stop-${n.id}`);
+     if (!group) continue;
+-    const offset = experiment
+-      ? n.id === 'stone' || n.id === 'rabbit-pier'
+-        ? -3.6
+-        : n.id === 'shallows'
+-          ? 0.85
+-          : 1.3
+-      : n.id === 'cut'
+-        ? -3.6
+-        : n.id.startsWith('outer')
+-          ? 0.7
+-          : 1.4;
+-    const point = world.project([n.positionXZ[0], n.positionXZ[1] + offset]);
+-    if (!experiment && !isBellwater && small) {
+-      if (n.id === 'harbor' || n.id === 'outer-west') point.x -= 145;
+-      if (n.id === 'sheep-pier' || n.id === 'outer-east') point.x += 145;
+-    }
+-    if (experiment && small && session.state.boatNodeId === 'shallows') {
+-      if (n.id === 'stone') point.x -= 28;
+-      if (n.id === 'rabbit-pier') point.x += 36;
+-    }
+-    if (experiment && n.id === session.state.boatNodeId) {
+-      if (n.id === 'shallows') point.x += small ? 100 : 170;
+-      if (n.id === 'harbor') point.x -= small ? 95 : 170;
+-    }
+-    if (!experiment && n.id === 'outer-south' && n.id === session.state.boatNodeId) point.y -= 65;
+-    if (
+-      isBellwater &&
+-      !small &&
+-      n.id === 'low-pier' &&
+-      session.state.boatNodeId === 'east-buoy' &&
+-      session.state.aboard.length
+-    ) {
+-      const head = Math.min(
+-        ...world
+-          .frameStatus()
+-          .passengers.filter((p) => session.state.aboard.includes(p.id))
+-          .map((p) => p.top),
+-      );
+-      point.y = Math.min(point.y, head - group.offsetHeight / 2 - 8);
+-    }
+-    const half = group.offsetWidth / 2;
+-    if (isBellwater && small) {
+-      const row = {
+-        harbor: 0.51,
+-        shallows: 0.85,
+-        'low-pier': 0.51,
+-        'west-buoy': 0.85,
+-        'east-buoy': 0.85,
+-        'bell-pier': 0.11,
+-      }[n.id];
+-      point.x =
+-        n.id === 'shallows'
+-          ? host.clientWidth / 2
+-          : n.id === 'harbor' || n.id === 'west-buoy'
+-            ? half + 8
+-            : host.clientWidth - half - 8;
+-      point.y = host.clientHeight * (row ?? 0.5);
+-    }
+-    const x = Math.max(half + 8, Math.min(host.clientWidth - half - 8, point.x));
+-    let bottom = host.offsetTop + host.clientHeight - group.offsetHeight / 2 - 4;
+-    if (isBellwater) {
+-      const forecast = $('status-toggle').getBoundingClientRect();
+-      if (x + half > forecast.left && x - half < forecast.right)
+-        bottom = Math.min(bottom, forecast.top - group.offsetHeight / 2 - 8);
+-    }
+-    group.style.left = `${x}px`;
+-    group.style.top = `${Math.max(host.offsetTop + group.offsetHeight / 2 + 4, Math.min(bottom, point.y + host.offsetTop))}px`;
++    const point = world.project(n.positionXZ),
++      x = point.x + canvas.left,
++      y = point.y + canvas.top;
++    const w = group.offsetWidth,
++      h = group.offsetHeight;
++    const preferred: [number, number][] = [
++      [x - w / 2, y + 18],
++      [x - w / 2, y - h - 18],
++      [x + 22, y - h / 2],
++      [x - w - 22, y - h / 2],
++    ];
++    const choice = placeLocalCard(
++      w,
++      h,
++      bounds,
++      [...chrome, ...figures, ...placed],
++      preferred,
++      preferred[0],
++    ) ?? {
++      left: Math.max(8, Math.min(innerWidth - w - 8, x - w / 2)),
++      top: Math.max(8, Math.min(innerHeight - h - 8, y + 18)),
++      right: 0,
++      bottom: 0,
++    };
++    choice.right = choice.left + w;
++    choice.bottom = choice.top + h;
++    group.style.left = `${choice.left}px`;
++    group.style.top = `${choice.top}px`;
++    placed.push(choice);
++    const centerX = Math.max(choice.left, Math.min(choice.right, x)),
++      centerY = Math.max(choice.top, Math.min(choice.bottom, y));
++    if (Math.hypot(centerX - x, centerY - y) > 20)
++      leaders.push(`<line x1="${x}" y1="${y}" x2="${centerX}" y2="${centerY}" />`);
+   }
+-  if ($('map-leaders'))
+-    $('map-leaders').innerHTML =
+-      !experiment && small
+-        ? level.nodes
+-            .filter(
+-              (n) =>
+-                isBellwater || ['harbor', 'sheep-pier', 'outer-west', 'outer-east'].includes(n.id),
+-            )
+-            .map((n) => {
+-              const point = world.project(n.positionXZ),
+-                group = $(`stop-${n.id}`),
+-                rect = group.getBoundingClientRect();
+-              const targetX = isBellwater
+-                ? n.id === 'shallows'
+-                  ? rect.left + rect.width / 2
+-                  : n.id === 'harbor' || n.id === 'west-buoy'
+-                    ? rect.right
+-                    : rect.left
+-                : n.id === 'harbor' || n.id === 'outer-west'
+-                  ? rect.right
+-                  : rect.left;
+-              return `<line x1="${point.x}" y1="${point.y + host.offsetTop}" x2="${targetX}" y2="${rect.top + rect.height / 2}" />`;
+-            })
+-            .join('')
+-        : '';
+-  if (!small && innerWidth > 700 && !$('local-context').hidden) {
+-    const frame = world.frameStatus(),
+-      boat = frame.boat;
++  if ($('map-leaders')) $('map-leaders').innerHTML = leaders.join('');
++  cardPlacement = null;
++  if (locationSelection && !$('local-context').hidden) {
+     const local = $('local-context'),
+-      canvas = host.getBoundingClientRect(),
+-      obstacles = [
+-        ...document.querySelectorAll<HTMLElement>('.map-stop, .hud, #status-toggle'),
+-      ].map((e) => e.getBoundingClientRect()),
+-      centerX = (boat.left + boat.right) / 2,
+-      centerY = (boat.top + boat.bottom) / 2 + host.offsetTop;
+-    const carried = frame.passengers.filter((passenger) =>
+-      session.state.aboard.includes(passenger.id),
+-    );
+-    const ferry = {
+-      left: Math.min(boat.left, ...carried.map((p) => p.left)) + canvas.left,
+-      right: Math.max(boat.right, ...carried.map((p) => p.right)) + canvas.left,
+-      top: Math.min(boat.top, ...carried.map((p) => p.top)) + canvas.top,
+-      bottom: Math.max(boat.bottom, ...carried.map((p) => p.bottom)) + canvas.top,
+-    };
+-    const bounds = {
+-      left: 16,
+-      right: innerWidth - 16,
+-      top: canvas.top + 8,
+-      bottom: canvas.bottom - 8,
+-    };
+-    local.classList.remove('compact-placement');
+-    const choose = () => {
+-      const width = local.offsetWidth,
+-        height = local.offsetHeight;
+-      return placeLocalCard(
++      node = level.nodes.find((node) => node.id === locationSelection)!;
++    const point = world.project(node.positionXZ),
++      x = point.x + canvas.left,
++      y = point.y + canvas.top;
++    const places = frame.places.map((place) => atPage(place));
++    const origin = selectionOrigin
++      ? [
++          {
++            left: selectionOrigin.x - 30,
++            right: selectionOrigin.x + 30,
++            top: selectionOrigin.y - 30,
++            bottom: selectionOrigin.y + 30,
++          },
++        ]
++      : [];
++    protectedBounds = [...chrome, ...figures, ...places, ...placed, ...origin];
++    for (const width of [280, 248, 224]) {
++      local.style.width = `${width}px`;
++      const height = local.offsetHeight;
++      const choice = placeLocalCard(
+         width,
+         height,
+         bounds,
+-        [...obstacles, ferry],
++        protectedBounds,
+         [
+-          [centerX - width / 2, ferry.bottom + 10],
+-          [ferry.left - width - 12, centerY - height / 2],
+-          [ferry.right + 12, centerY - height / 2],
+-          [centerX - width / 2, ferry.top - height - 12],
++          [x - width / 2, y + 70],
++          [x + 80, y - height / 2],
++          [x - width - 80, y - height / 2],
++          [x - width / 2, y - height - 80],
+         ],
++        [x - width / 2, y + 70],
+       );
+-    };
+-    let chosen = choose();
+-    if (!chosen) {
+-      local.classList.add('compact-placement');
+-      bounds.bottom = innerHeight - 12;
+-      chosen = choose();
++      if (choice) {
++        cardPlacement = choice;
++        break;
++      }
+     }
+-    if (chosen) {
+-      local.style.left = `${chosen.left + local.offsetWidth / 2}px`;
+-      local.style.top = `${chosen.top}px`;
++    if (!cardPlacement) {
++      const width = local.offsetWidth,
++        height = local.offsetHeight;
++      cardPlacement = placeLocalCard(
++        width,
++        height,
++        bounds,
++        [...chrome, ...figures, ...placed, ...origin],
++        [
++          [8, innerHeight - height - 8],
++          [innerWidth - width - 8, innerHeight - height - 8],
++        ],
++      ) ?? {
++        left: 8,
++        top: Math.max(chrome[0].bottom + 8, innerHeight - height - 8),
++        right: 8 + width,
++        bottom: innerHeight - 8,
++      };
+     }
++    local.style.left = `${cardPlacement.left}px`;
++    local.style.top = `${cardPlacement.top}px`;
++    const endX = Math.max(cardPlacement.left, Math.min(cardPlacement.right, x)),
++      endY = Math.max(cardPlacement.top, Math.min(cardPlacement.bottom, y));
++    $('selection-leader').innerHTML = `<line x1="${x}" y1="${y}" x2="${endX}" y2="${endY}" />`;
+   } else {
+-    $('local-context').style.removeProperty('left');
+-    $('local-context').style.removeProperty('top');
++    protectedBounds = [];
++    $('selection-leader').innerHTML = '';
+   }
+   positionDialog();
+ }
+-world.onSelect = activateMove;
++world.onSelect = selectLocation;
+ world.onCurrent = localContext;
++world.onClear = () => clearLocation();
+ world.onPresentationStart = (action) => {
+   if (action.type === 'move') sound.startTravel();
+   else if (action.type !== 'unload' || session.state.status !== 'won') sound.play(action.type);
+@@ -641,6 +685,17 @@ document.addEventListener(
+   'keydown',
+   (e) => {
+     if (['Tab', 'Enter', ' ', 'Escape'].includes(e.key)) keyboardInput = true;
++    if (e.repeat && ['Enter', ' '].includes(e.key)) {
++      e.preventDefault();
++      e.stopImmediatePropagation();
++      return;
++    }
++    if (e.key === 'Escape' && !dialog.open && locationSelection) {
++      e.preventDefault();
++      e.stopImmediatePropagation();
++      clearLocation(true);
++      return;
++    }
+     if (e.isTrusted && !e.repeat && ['Enter', ' '].includes(e.key)) void sound.activate();
+   },
+   true,
+@@ -649,6 +704,7 @@ document.addEventListener(
+   'pointerdown',
+   (e) => {
+     keyboardInput = false;
++    lastPointer = { x: e.clientX, y: e.clientY, control: (e.target as Element).closest('button') };
+     if (e.isTrusted) void sound.activate();
+   },
+   true,
+@@ -656,6 +712,12 @@ document.addEventListener(
+ document.addEventListener(
+   'click',
+   (e) => {
++    const commit = (e.target as Element).closest('#sail, #commit, #board, #unload');
++    if (commit && e.isTrusted && e.detail > 0 && lastPointer?.control !== commit) {
++      e.preventDefault();
++      e.stopImmediatePropagation();
++      return;
++    }
+     if (
+       closingFence &&
+       performance.now() < closingFence.until &&
+@@ -663,11 +725,6 @@ document.addEventListener(
+       e.isTrusted &&
+       e.detail > 0
+     ) {
+-      if (
+-        (e.target as Element).closest('.inspect-route') &&
+-        Math.hypot(e.clientX - closingFence.x, e.clientY - closingFence.y) > 3
+-      )
+-        return;
+       const r = closingFence.rect;
+       if (
+         e.clientX >= r.left &&
+@@ -712,6 +769,20 @@ if (import.meta.env.DEV)
+         hullY: world.hull.position.y,
+       }),
+       getFrameStatus: () => world.frameStatus(),
++      getPickTargetAt: (x: number, y: number) => world.pickAt(x, y),
++      getPickDetailAt: (x: number, y: number) => world.pickDetailAt(x, y),
++      getSelectionStatus: () =>
++        copy({
++          selectedId: locationSelection,
++          cardOpen: !$('local-context').hidden,
++          emphasis,
++          origin: selectionOrigin,
++          cardPlacement,
++          protectedBounds,
++          protectedOverlaps: cardPlacement
++            ? protectedBounds.filter((bounds) => overlaps(cardPlacement!, bounds, 0))
++            : [],
++        }),
+       getNavigationStatus: () => world.navigationPresentation(),
+       getEnvironmentStatus: () => copy(world.environmentPresentation()),
+       getJourneyStatus: () => copy(world.journeyPresentation()),
+diff --git a/src/scene/effects.ts b/src/scene/effects.ts
+index 41c55cc..d51fd47 100644
+--- a/src/scene/effects.ts
++++ b/src/scene/effects.ts
+@@ -11,6 +11,7 @@ export class CrossingEffects {
+   resting = false;
+   lamp?: T.PointLight;
+   lens?: T.MeshStandardMaterial;
++  lensBase = 0;
+   lampBase = 0;
+   reduced = false;
+   constructor(home: ReturnType<typeof lighthouse>) {
+@@ -72,11 +73,12 @@ export class CrossingEffects {
+     );
+     this.glow.name = 'harbor-lantern-response';
+     this.glow.position.copy(home.anchor.getWorldPosition(new T.Vector3()));
+-    this.glow.scale.set(1.8, 1.8, 1);
++    this.glow.scale.set(1.1, 1.1, 1);
+     this.glow.userData.excludeFromFrame = true;
+     this.lamp = home.lamp;
+     this.lampBase = home.lamp.intensity;
+     this.lens = home.lens.material as T.MeshStandardMaterial;
++    this.lensBase = this.lens.emissiveIntensity;
+     this.reset();
+   }
+   reset() {
+@@ -90,7 +92,7 @@ export class CrossingEffects {
+     this.glow.visible = true;
+     this.glow.material.opacity = 0.08;
+     if (this.lamp) this.lamp.intensity = this.lampBase;
+-    if (this.lens) this.lens.emissiveIntensity = 0.42;
++    if (this.lens) this.lens.emissiveIntensity = this.lensBase;
+   }
+   arrive(time: number, reduced: boolean) {
+     if (this.arrivalStarted === null) this.arrivalStarted = time;
+@@ -105,7 +107,7 @@ export class CrossingEffects {
+   }
+   private applyLight() {
+     if (this.lamp) this.lamp.intensity = this.lampBase + this.arrivalIntensity * 2;
+-    if (this.lens) this.lens.emissiveIntensity = 0.42 + this.arrivalIntensity;
++    if (this.lens) this.lens.emissiveIntensity = this.lensBase + this.arrivalIntensity;
+     this.glow.visible = true;
+     this.glow.material.opacity = 0.08 + this.arrivalIntensity * 0.26;
+   }
+diff --git a/src/scene/layout.ts b/src/scene/layout.ts
+index d90c7e3..d30f1d7 100644
+--- a/src/scene/layout.ts
++++ b/src/scene/layout.ts
+@@ -36,10 +36,11 @@ const layouts: Record<string, SceneLayout> = {
+       { kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-6.15, -3.25] },
+       { kind: 'cottage', islandId: 'rabbit-island', positionXZ: [6.3, -3.25] },
+     ],
+-    islandStyles: {},
++    islandStyles: { 'stone-island': 'rocky' },
+     stonePiers: ['stone-pier'],
+     centeredWaitingPairs: true,
+     cameraPosition: [0, 34, 24],
++    landscapeCameraPosition: [0, 30, 30],
+   },
+   bellwater: {
+     landmarks: [
+diff --git a/src/scene/models.ts b/src/scene/models.ts
+index 96c9f5e..87c18a5 100644
+--- a/src/scene/models.ts
++++ b/src/scene/models.ts
+@@ -186,7 +186,20 @@ export function lighthouse(parent: T.Object3D, x: number, y: number, z: number)
+   g.position.set(x, y, z);
+   parent.add(g);
+   cylinder(g, '#b3b09b', 0.68, 0.8, 0.15, [0, 0.075, 0]);
+-  cylinder(g, '#eee3c6', 0.38, 0.62, 2.15, [0, 1.16, 0], 20);
++  const tower = cylinder(g, '#eee3c6', 0.38, 0.62, 2.15, [0, 1.16, 0], 20);
++  tower.material = (tower.material as T.MeshStandardMaterial).clone();
++  tower.material.onBeforeCompile = (shader) => {
++    shader.vertexShader = shader.vertexShader
++      .replace('#include <common>', '#include <common>\nvarying vec3 lanternSurface;')
++      .replace('#include <begin_vertex>', '#include <begin_vertex>\nlanternSurface=position;');
++    shader.fragmentShader = shader.fragmentShader
++      .replace('#include <common>', '#include <common>\nvarying vec3 lanternSurface;')
++      .replace(
++        '#include <color_fragment>',
++        '#include <color_fragment>\nfloat lanternSpill=smoothstep(.55,1.,lanternSurface.y)*smoothstep(-.05,.38,lanternSurface.z);diffuseColor.rgb*=mix(vec3(1.),vec3(1.1,.95,.72),lanternSpill*.5);',
++      );
++  };
++  tower.material.customProgramCacheKey = () => 'lantern-upper-spill-1';
+   for (let i = 0; i < 5; i++) {
+     const a = i * 1.3;
+     box(
+@@ -198,23 +211,48 @@ export function lighthouse(parent: T.Object3D, x: number, y: number, z: number)
+   }
+   box(g, '#765d44', [0.25, 0.48, 0.08], [0, 0.38, 0.56], 0.1);
+   box(g, '#f0be63', [0.16, 0.28, 0.035], [0.12, 1.48, 0.445], 0.06);
+-  cylinder(g, '#a69b7c', 0.64, 0.64, 0.12, [0, 2.26, 0]);
+-  const lens = cylinder(g, '#f9cb70', 0.36, 0.36, 0.56, [0, 2.6, 0], 12);
++  const gallery = cylinder(g, '#b7a580', 0.6, 0.6, 0.12, [0, 2.26, 0]);
++  gallery.material = (gallery.material as T.MeshStandardMaterial).clone();
++  gallery.material.emissive.set('#c68a3e');
++  gallery.material.emissiveIntensity = 0.1;
++  const lens = cylinder(g, '#e6a44f', 0.355, 0.355, 0.59, [0, 2.6, 0], 16);
+   lens.name = 'home-lens';
+   lens.material = (lens.material as T.MeshStandardMaterial).clone();
+-  lens.material.emissive.set('#ffbf70');
+-  lens.material.emissiveIntensity = 0.42;
++  lens.material.emissive.set('#ffd391');
++  lens.material.emissiveIntensity = 0.72;
++  lens.material.roughness = 0.55;
++  const core = cylinder(g, '#ffe8b6', 0.125, 0.125, 0.34, [0, 2.51, 0.32], 12);
++  core.name = 'lantern-core';
++  core.material = (core.material as T.MeshStandardMaterial).clone();
++  core.material.emissive.set('#ffe1a0');
++  core.material.emissiveIntensity = 1.1;
+   for (let i = 0; i < 8; i++) {
+     const a = (i * Math.PI) / 4;
+-    cylinder(g, '#705b43', 0.025, 0.025, 0.62, [Math.sin(a) * 0.4, 2.6, Math.cos(a) * 0.4], 6);
++    cylinder(g, '#665441', 0.025, 0.025, 0.66, [Math.sin(a) * 0.4, 2.6, Math.cos(a) * 0.4], 6);
+     cylinder(g, '#8b7050', 0.017, 0.017, 0.24, [Math.sin(a) * 0.58, 2.43, Math.cos(a) * 0.58], 6);
+   }
+   const ring = mesh(new T.TorusGeometry(0.59, 0.025, 6, 32), '#8b7050', g, 0, 2.55, 0);
+   ring.rotation.x = Math.PI / 2;
+-  mesh(new T.ConeGeometry(0.66, 0.45, 16), palette.red, g, 0, 3.1, 0);
++  const roof = mesh(new T.ConeGeometry(0.61, 0.4, 16), palette.red, g, 0, 3.18, 0);
++  roof.material = (roof.material as T.MeshStandardMaterial).clone();
++  roof.material.onBeforeCompile = (shader) => {
++    shader.vertexShader = shader.vertexShader
++      .replace('#include <common>', '#include <common>\nvarying float lanternUnderside;')
++      .replace(
++        '#include <begin_vertex>',
++        '#include <begin_vertex>\nlanternUnderside=step(.8,-normal.y);',
++      );
++    shader.fragmentShader = shader.fragmentShader
++      .replace('#include <common>', '#include <common>\nvarying float lanternUnderside;')
++      .replace(
++        '#include <color_fragment>',
++        '#include <color_fragment>\ndiffuseColor.rgb=mix(diffuseColor.rgb,vec3(.58,.34,.12),lanternUnderside*.7);',
++      );
++  };
++  roof.material.customProgramCacheKey = () => 'lantern-roof-spill-1';
+   cylinder(g, palette.red, 0.065, 0.07, 0.23, [0, 3.4, 0]);
+-  const lamp = new T.PointLight('#ffbf62', 2.5, 6, 2);
+-  lamp.position.y = 2.6;
++  const lamp = new T.PointLight('#ffbf62', 2.5, 3.4, 2);
++  lamp.position.set(0, 2.54, 0.45);
+   g.add(lamp);
+-  return { group: g, lens, lamp, anchor: lamp };
++  return { group: g, lens, lamp, anchor: lamp, core, tower, gallery, roof };
+ }
+diff --git a/src/scene/world.ts b/src/scene/world.ts
+index 2fe458b..6ed7fde 100644
+--- a/src/scene/world.ts
++++ b/src/scene/world.ts
+@@ -32,6 +32,13 @@ export class World {
+   routes = new Map<string, T.Line>();
+   navigationCurrent = '';
+   navigationSelected: string | null = null;
++  navigationEmphasis: string | null = null;
++  placeObjects = new Map<string, T.Object3D[]>();
++  pickTargets: { id: string; kind: string; object: T.Object3D }[] = [];
++  nonInteractivePlaces: T.Object3D[] = [];
++  framePoints: T.Vector3[] = [];
++  ferryEnvelope = { radius: 0, bottom: 0, top: 0 };
++  raycaster = new T.Raycaster();
+   forecast = new T.Group();
+   water: T.Mesh;
+   shadow: T.Mesh;
+@@ -71,6 +78,7 @@ export class World {
+   lastTime = 0;
+   onSelect: (id: string) => void = () => {};
+   onCurrent: () => void = () => {};
++  onClear: () => void = () => {};
+   constructor(
+     public host: HTMLElement,
+     state: State,
+@@ -133,14 +141,24 @@ export class World {
+       }
+     });
+     this.scene.add(this.shores.group, this.shores.contacts);
+-    for (const island of this.level.world.islands) this.island(island);
++    for (const island of this.level.world.islands) {
++      const node = this.level.piers.find((pier) => pier.islandId === island.id)?.nodeId;
++      const decoration = this.island(island);
++      const shore = this.shores.entries.find((entry) => entry.island.id === island.id)!;
++      if (node) {
++        this.registerPlace(node, 'island', shore.mesh, shore.rocks, decoration);
++      } else this.nonInteractivePlaces.push(shore.mesh, shore.rocks, decoration);
++    }
+     for (const p of this.level.piers) {
++      const group = new T.Group();
++      group.name = `pier-${p.id}`;
++      this.scene.add(group);
+       const [x, z] = p.positionXZ,
+         end = p.landAnchorXZ[1],
+         y = p.elevation * 0.18 - 0.06;
+       for (let i = 0; i < 9; i++)
+         box(
+-          this.scene,
++          group,
+           this.layout.stonePiers.includes(p.id)
+             ? i % 2
+               ? '#a9b6ac'
+@@ -154,7 +172,7 @@ export class World {
+         );
+       for (const px of [x - p.width / 2, x + p.width / 2])
+         for (const pz of [z + 0.02, end]) {
+-          const pile = cylinder(this.scene, '#79644a', 0.065, 0.07, 0.83, [px, y - 0.27, pz], 9);
++          const pile = cylinder(group, '#79644a', 0.065, 0.07, 0.83, [px, y - 0.27, pz], 9);
+           if (
+             p.id === this.level.objective.deliveryPierId ||
+             p.id === this.level.piers.find((pier) => pier.elevation < 3)?.id
+@@ -167,24 +185,32 @@ export class World {
+             );
+             this.contactMeshes.push(pile as T.Mesh<T.BufferGeometry, T.MeshStandardMaterial>);
+           }
+-          cylinder(this.scene, '#dbc799', 0.075, 0.075, 0.055, [px, y + 0.17, pz], 9);
++          cylinder(group, '#dbc799', 0.075, 0.075, 0.055, [px, y + 0.17, pz], 9);
+         }
+-      box(this.scene, '#b68f5b', [0.35, 0.055, 0.49], [x, y - 0.015, z + 0.25], 0.015);
+-      cylinder(this.scene, '#655b43', 0.025, 0.025, 0.65, [x + 0.36, y + 0.33, z - 0.1], 7);
+-      box(this.scene, '#f5cb77', [0.13, 0.19, 0.13], [x + 0.36, y + 0.68, z - 0.1]);
++      box(group, '#b68f5b', [0.35, 0.055, 0.49], [x, y - 0.015, z + 0.25], 0.015);
++      cylinder(group, '#655b43', 0.025, 0.025, 0.65, [x + 0.36, y + 0.33, z - 0.1], 7);
++      box(group, '#f5cb77', [0.13, 0.19, 0.13], [x + 0.36, y + 0.68, z - 0.1]);
++      this.registerPlace(p.nodeId, 'pier', group);
+     }
+     for (const landmark of this.layout.landmarks) {
+       const island = this.level.world.islands.find((island) => island.id === landmark.islandId)!;
+       const [x, z] = landmark.positionXZ;
+       const y = island.elevation * 0.18;
++      const node = this.level.piers.find((pier) => pier.islandId === island.id)?.nodeId;
+       if (landmark.kind === 'lighthouse') {
+         const model = lighthouse(this.scene, x, y, z);
+         const delivery = this.level.piers.find(
+           (pier) => pier.id === this.level.objective.deliveryPierId,
+         )!;
+         if (island.id === delivery.islandId) this.home = model;
+-      } else if (landmark.kind === 'cottage') cottage(this.scene, [x, y, z]);
+-      else bellLandmark(this.scene, [x, y, z]);
++        if (node) this.registerPlace(node, 'landmark', model.group);
++      } else {
++        const model =
++          landmark.kind === 'cottage'
++            ? cottage(this.scene, [x, y, z])
++            : bellLandmark(this.scene, [x, y, z]);
++        if (node) this.registerPlace(node, 'landmark', model);
++      }
+     }
+     for (const e of this.level.edges) {
+       const pts = this.paths.get(e.id)!.points.map((p) => p.clone().setY(0.035));
+@@ -239,6 +265,7 @@ export class World {
+         cylinder(g, '#e2bf70', 0.055, 0.13, 0.2, [0, 0.07, 0], 10);
+         cylinder(g, '#eee2bc', 0.025, 0.025, 0.25, [0, 0.28, 0], 7);
+       }
++      this.registerPlace(n.id, 'waypoint', g);
+     }
+     this.effects = new CrossingEffects(this.home);
+     this.scene.add(this.effects.wake, this.effects.glow);
+@@ -270,66 +297,18 @@ export class World {
+       this.animals.set(p.id, g);
+     }
+     this.sync(state);
++    this.prepareFrame();
+     this.resizeObserver = new ResizeObserver(() => this.resize());
+     this.resizeObserver.observe(host);
+     this.resize();
+     this.renderer.domElement.addEventListener('click', (ev) => {
+       if (this.transition || this.state.status !== 'playing') return;
++      ev.stopPropagation();
+       const bounds = host.getBoundingClientRect();
+-      const point = { x: ev.clientX - bounds.left, y: ev.clientY - bounds.top };
+-      const boatBounds = new T.Box3().setFromObject(this.boatRoot);
+-      const boatCorners: T.Vector3[] = [];
+-      for (const x of [boatBounds.min.x, boatBounds.max.x])
+-        for (const y of [boatBounds.min.y, boatBounds.max.y])
+-          for (const z of [boatBounds.min.z, boatBounds.max.z])
+-            boatCorners.push(new T.Vector3(x, y, z).project(this.camera));
+-      const boatX = boatCorners.map((p) => ((p.x + 1) * host.clientWidth) / 2);
+-      const boatY = boatCorners.map((p) => ((1 - p.y) * host.clientHeight) / 2);
+-      if (
+-        point.x >= Math.min(...boatX) - 6 &&
+-        point.x <= Math.max(...boatX) + 6 &&
+-        point.y >= Math.min(...boatY) - 6 &&
+-        point.y <= Math.max(...boatY) + 6
+-      ) {
+-        this.onCurrent();
+-        return;
+-      }
+-      const currentPier = this.level.piers.find((pier) => pier.nodeId === this.state.boatNodeId);
+-      if (currentPier) {
+-        const corners = [
+-          V(
+-            [currentPier.positionXZ[0] - currentPier.width / 2, currentPier.positionXZ[1] + 0.5],
+-            currentPier.elevation * 0.18,
+-          ),
+-          V(
+-            [currentPier.positionXZ[0] + currentPier.width / 2, currentPier.landAnchorXZ[1]],
+-            currentPier.elevation * 0.18,
+-          ),
+-        ].map((p) => p.project(this.camera));
+-        const xs = corners.map((p) => ((p.x + 1) * host.clientWidth) / 2);
+-        const ys = corners.map((p) => ((1 - p.y) * host.clientHeight) / 2);
+-        if (
+-          point.x >= Math.min(...xs) - 6 &&
+-          point.x <= Math.max(...xs) + 6 &&
+-          point.y >= Math.min(...ys) - 6 &&
+-          point.y <= Math.max(...ys) + 6
+-        ) {
+-          this.onCurrent();
+-          return;
+-        }
+-      }
+-      let closest: string | undefined,
+-        dist = 32;
+-      for (const n of this.level.nodes) {
+-        const p = this.project(n.positionXZ);
+-        const d = Math.hypot(p.x - point.x, p.y - point.y);
+-        if (d < dist) {
+-          closest = n.id;
+-          dist = d;
+-        }
+-      }
+-      if (closest === this.state.boatNodeId) this.onCurrent();
+-      else if (closest) this.onSelect(closest);
++      const id = this.pickAt(ev.clientX - bounds.left, ev.clientY - bounds.top);
++      if (id === this.state.boatNodeId) this.onCurrent();
++      else if (id) this.onSelect(id);
++      else this.onClear();
+     });
+     this.renderer.domElement.addEventListener('webglcontextlost', (ev) => {
+       ev.preventDefault();
+@@ -341,6 +320,9 @@ export class World {
+     this.frameRequest = requestAnimationFrame((t) => this.tick(t));
+   }
+   island(island: Level['world']['islands'][number]) {
++    const group = new T.Group();
++    group.name = `island-decoration-${island.id}`;
++    this.scene.add(group);
+     const points = island.footprintXZ,
+       cx = points.reduce((a, p) => a + p[0], 0) / points.length,
+       cz = points.reduce((a, p) => a + p[1], 0) / points.length;
+@@ -350,28 +332,28 @@ export class World {
+       const rock = mesh(
+         new T.DodecahedronGeometry(0.85, 0),
+         '#87988d',
+-        this.scene,
++        group,
+         -0.45,
+         height + 0.25,
+         2.5,
+       );
+       rock.scale.set(1.1, 0.85, 0.9);
+       rock.rotation.y = 0.4;
+-      pine(this.scene, 0.7, height, 2.5, 1.05);
+-      pine(this.scene, -1.1, height, 2.7, 0.55);
++      pine(group, 0.7, height, 2.5, 1.05);
++      pine(group, -1.1, height, 2.7, 0.55);
+     } else if (style === 'reeds') {
+-      this.scene.add(createReedBeds(island));
++      group.add(createReedBeds(island));
+       for (const x of [-0.8, 0.9])
+-        ball(this.scene, '#c3ba93', [cx + x, height - 0.07, cz], [0.6, 0.045, 0.34]);
++        ball(group, '#c3ba93', [cx + x, height - 0.07, cz], [0.6, 0.045, 0.34]);
+     } else if (style === 'rocky') {
+-      pine(this.scene, cx - 1.05, height, cz - 0.35, 0.68);
+-      pine(this.scene, cx + 1.02, height, cz - 0.3, 0.43);
++      pine(group, cx - 1.05, height, cz - 0.35, 0.68);
++      pine(group, cx + 1.02, height, cz - 0.3, 0.43);
+     } else {
+-      pine(this.scene, cx - 1.05, height, cz - 0.28, 0.85);
+-      pine(this.scene, cx + 0.92, height, cz - 0.55, 0.65);
++      pine(group, cx - 1.05, height, cz - 0.28, 0.85);
++      pine(group, cx + 0.92, height, cz - 0.55, 0.65);
+       for (let i = 0; i < 7; i++)
+         box(
+-          this.scene,
++          group,
+           '#d7c59d',
+           [0.38, 0.035, 0.23],
+           [cx + Math.sin(i * 0.7) * 0.12, height + 0.045, cz + 0.45 + i * 0.12],
+@@ -384,30 +366,194 @@ export class World {
+         x = cx + Math.cos(a) * r * 1.3,
+         z = cz + Math.sin(a) * r * 0.7;
+       if (style !== 'crag' && Math.abs(x - cx) < 0.68) continue;
+-      ball(this.scene, i % 4 ? '#91a273' : '#f0e8c8', [x, height + 0.11, z], [0.045, 0.09, 0.045]);
++      ball(group, i % 4 ? '#91a273' : '#f0e8c8', [x, height + 0.11, z], [0.045, 0.09, 0.045]);
+     }
+     if (style === 'garden')
+       for (const side of [-1, 1]) {
+         const x = cx + side * 1.05,
+           z = cz + 0.25;
+-        ball(this.scene, '#6f8b59', [x, height + 0.18, z], [0.3, 0.2, 0.23]);
++        ball(group, '#6f8b59', [x, height + 0.18, z], [0.3, 0.2, 0.23]);
+         for (let j = 0; j < 5; j++) {
+           const a = j * 2.4;
+           ball(
+-            this.scene,
++            group,
+             '#f5e9c5',
+             [x + Math.sin(a) * 0.24, height + 0.3, z + Math.cos(a) * 0.17],
+             [0.035, 0.035, 0.035],
+           );
+         }
+-        box(this.scene, '#a37546', [0.24, 0.23, 0.24], [x, height + 0.11, cz + 0.65]);
+-        box(this.scene, '#d1ae74', [0.25, 0.027, 0.027], [x, height + 0.2, cz + 0.78]);
++        box(group, '#a37546', [0.24, 0.23, 0.24], [x, height + 0.11, cz + 0.65]);
++        box(group, '#d1ae74', [0.25, 0.027, 0.027], [x, height + 0.2, cz + 0.78]);
+       }
++    return group;
+   }
+   setForecast(visible: boolean, tide: number) {
+     this.forecast.visible = visible;
+     this.shores.preview(visible, tide);
+   }
++  registerPlace(id: string, kind: string, ...objects: T.Object3D[]) {
++    const existing = this.placeObjects.get(id) ?? [];
++    for (const object of objects) {
++      object.userData.locationId = id;
++      object.userData.locationKind = kind;
++      this.pickTargets.push({ id, kind, object });
++      existing.push(object);
++    }
++    this.placeObjects.set(id, existing);
++  }
++  rectangle(objects: T.Object3D[]) {
++    const bounds = new T.Box3();
++    for (const object of objects) bounds.expandByObject(object);
++    const points: T.Vector3[] = [];
++    for (const x of [bounds.min.x, bounds.max.x])
++      for (const y of [bounds.min.y, bounds.max.y])
++        for (const z of [bounds.min.z, bounds.max.z])
++          points.push(new T.Vector3(x, y, z).project(this.camera));
++    const xs = points.map((p) => ((p.x + 1) * this.host.clientWidth) / 2),
++      ys = points.map((p) => ((1 - p.y) * this.host.clientHeight) / 2);
++    return {
++      left: Math.min(...xs),
++      right: Math.max(...xs),
++      top: Math.min(...ys),
++      bottom: Math.max(...ys),
++      width: Math.max(...xs) - Math.min(...xs),
++      height: Math.max(...ys) - Math.min(...ys),
++    };
++  }
++  placeBounds(id: string) {
++    return this.rectangle(this.placeObjects.get(id) ?? [this.markers.get(id)!]);
++  }
++  pickAt(x: number, y: number) {
++    return this.pickDetailAt(x, y)?.id ?? null;
++  }
++  pickDetailAt(x: number, y: number): { id: string; kind: string } | null {
++    this.scene.updateMatrixWorld(true);
++    const boat = this.rectangle([this.boatRoot]);
++    if (x >= boat.left - 4 && x <= boat.right + 4 && y >= boat.top - 4 && y <= boat.bottom + 4)
++      return { id: this.state.boatNodeId, kind: 'ferry' };
++    this.raycaster.setFromCamera(
++      new T.Vector2((x / this.host.clientWidth) * 2 - 1, 1 - (y / this.host.clientHeight) * 2),
++      this.camera,
++    );
++    const intersections = this.raycaster.intersectObjects(
++      [...this.pickTargets.map((target) => target.object), ...this.nonInteractivePlaces],
++      true,
++    );
++    for (const hit of intersections) {
++      let object: T.Object3D | null = hit.object;
++      while (object && !object.userData.locationId) object = object.parent;
++      return object
++        ? { id: object.userData.locationId as string, kind: object.userData.locationKind as string }
++        : null;
++    }
++    let nearest: string | null = null,
++      distance = 22;
++    for (const node of this.level.nodes) {
++      const p = this.project(node.positionXZ),
++        d = Math.hypot(p.x - x, p.y - y);
++      if (d < distance) {
++        nearest = node.id;
++        distance = d;
++      }
++    }
++    return nearest ? { id: nearest, kind: 'waypoint' } : null;
++  }
++  prepareFrame() {
++    this.scene.updateMatrixWorld(true);
++    const inverseHull = this.hull.matrixWorld.clone().invert();
++    let radius = 0,
++      low = Infinity,
++      high = -Infinity;
++    const measure = (root: T.Object3D, origin?: T.Vector3, anchor?: T.Vector3) => {
++      root.traverse((object) => {
++        if (!(object instanceof T.Mesh)) return;
++        if (!object.geometry.boundingBox) object.geometry.computeBoundingBox();
++        const box = object.geometry.boundingBox!;
++        for (const x of [box.min.x, box.max.x])
++          for (const y of [box.min.y, box.max.y])
++            for (const z of [box.min.z, box.max.z]) {
++              const point = new T.Vector3(x, y, z).applyMatrix4(object.matrixWorld);
++              if (origin && anchor) point.sub(origin).add(anchor);
++              else point.applyMatrix4(inverseHull);
++              radius = Math.max(radius, Math.hypot(point.x, point.z));
++              low = Math.min(low, point.y);
++              high = Math.max(high, point.y);
++            }
++      });
++    };
++    measure(this.hull);
++    for (const [id, animal] of this.animals)
++      if (!this.state.aboard.includes(id))
++        measure(
++          animal,
++          animal.getWorldPosition(new T.Vector3()),
++          this.passengerAnchors.get(id)!.position,
++        );
++    const offsets = this.level.rules.draftBands.map((band) => 0.03 - (band.draft - 1) * 0.075);
++    const maximumWater =
++      Math.max(
++        this.level.rules.tide.initialLevel,
++        ...this.level.rules.tide.rises.map((rise) => rise.level),
++      ) * this.level.world.waterYPerTideLevel;
++    this.ferryEnvelope = {
++      radius: radius + 0.02,
++      bottom: low + Math.min(...offsets) - 0.012,
++      top: high + maximumWater + Math.max(...offsets) + 0.012,
++    };
++    const add = (bounds: T.Box3) => {
++      if (bounds.isEmpty()) return;
++      for (const x of [bounds.min.x, bounds.max.x])
++        for (const y of [bounds.min.y, bounds.max.y])
++          for (const z of [bounds.min.z, bounds.max.z])
++            this.framePoints.push(new T.Vector3(x, y, z));
++    };
++    for (const object of this.scene.children) {
++      if (
++        object === this.water ||
++        object === this.shadow ||
++        object === this.boatRoot ||
++        object === this.forecast ||
++        object.userData.excludeFromFrame ||
++        [...this.animals.values()].includes(object as T.Group) ||
++        [...this.markers.values()].includes(object as T.Group) ||
++        [...this.routes.values()].includes(object as T.Line)
++      )
++        continue;
++      add(new T.Box3().setFromObject(object));
++    }
++    for (const path of this.paths.values())
++      for (const point of path.points)
++        add(
++          new T.Box3(
++            new T.Vector3(
++              point.x - this.ferryEnvelope.radius,
++              this.ferryEnvelope.bottom,
++              point.z - this.ferryEnvelope.radius,
++            ),
++            new T.Vector3(
++              point.x + this.ferryEnvelope.radius,
++              this.ferryEnvelope.top,
++              point.z + this.ferryEnvelope.radius,
++            ),
++          ),
++        );
++    for (const pier of this.level.piers)
++      add(
++        new T.Box3(
++          V(
++            [pier.landAnchorXZ[0] - 0.75, Math.min(pier.positionXZ[1], pier.landAnchorXZ[1]) - 0.5],
++            pier.elevation * 0.18,
++          ),
++          V(
++            [
++              pier.landAnchorXZ[0] + 0.85,
++              Math.max(pier.positionXZ[1], pier.landAnchorXZ[1]) + 0.35,
++            ],
++            pier.elevation * 0.18 + 1.35,
++          ),
++        ),
++      );
++  }
+   project(p: number[]) {
+     const v = V(p, 0.06).project(this.camera);
+     return {
+@@ -435,45 +581,45 @@ export class World {
+         : this.layout.cameraPosition),
+     );
+     this.camera.lookAt(0, 0, 0.05);
+-    {
+-      this.scene.updateMatrixWorld(true);
+-      this.camera.updateMatrixWorld(true);
+-      const points: T.Vector3[] = [];
+-      const corners = (b: T.Box3) => {
+-        if (b.isEmpty()) return;
+-        for (const x of [b.min.x, b.max.x])
+-          for (const y of [b.min.y, b.max.y])
+-            for (const z of [b.min.z, b.max.z])
+-              points.push(new T.Vector3(x, y, z).applyMatrix4(this.camera.matrixWorldInverse));
+-      };
+-      for (const object of this.scene.children) {
+-        if (
+-          object === this.water ||
+-          object === this.shadow ||
+-          object === this.boatRoot ||
+-          object === this.forecast ||
+-          object.userData.excludeFromFrame ||
+-          [...this.animals.values()].includes(object as T.Group)
+-        )
+-          continue;
+-        corners(new T.Box3().setFromObject(object));
+-      }
+-      for (const node of this.level.nodes)
+-        corners(
+-          new T.Box3(
+-            V([node.positionXZ[0] - 1.25, node.positionXZ[1] - 1.25], 0),
+-            V([node.positionXZ[0] + 1.25, node.positionXZ[1] + 1.25], 2),
+-          ),
++    this.camera.updateMatrixWorld(true);
++    const points = this.framePoints.map((point) =>
++      point.clone().applyMatrix4(this.camera.matrixWorldInverse),
++    );
++    const bounds = new T.Box3().setFromPoints(points),
++      center = bounds.getCenter(new T.Vector3()),
++      size = bounds.getSize(new T.Vector3());
++    const compact = h <= 600 && w > 700;
++    const top = compact ? 70 : w <= 700 ? 198 : 104;
++    const bottom = w <= 700 ? 150 : 16;
++    const availableHeight = Math.max(100, h - top - bottom);
++    const targetY = top + availableHeight / 2;
++    let scale = Math.min((w - 32) / size.x, availableHeight / size.y);
++    let targetX = w / 2;
++    const statusLeft = w - (compact ? Math.min(300, w * 0.4) : 510) - 16;
++    const statusTop = h - (compact ? 76 : 84);
++    if (w > 700)
++      for (let attempt = 0; attempt < 60; attempt++) {
++        const lowPoints = points.filter(
++          (point) => targetY - (point.y - center.y) * scale > statusTop,
+         );
+-      const bounds = new T.Box3().setFromPoints(points),
+-        center = bounds.getCenter(new T.Vector3()),
+-        size = bounds.getSize(new T.Vector3());
+-      const scale = Math.min((w - 24) / size.x, (h - 20) / size.y);
+-      this.camera.left = center.x - w / scale / 2;
+-      this.camera.right = center.x + w / scale / 2;
+-      this.camera.top = center.y + h / scale / 2;
+-      this.camera.bottom = center.y - h / scale / 2;
+-    }
++        const left = 16 - (bounds.min.x - center.x) * scale;
++        const right = w - 16 - (bounds.max.x - center.x) * scale;
++        const belowStatus = lowPoints.length
++          ? statusLeft - Math.max(...lowPoints.map((point) => (point.x - center.x) * scale)) - 8
++          : right;
++        const maximum = Math.min(right, belowStatus);
++        if (left <= maximum) {
++          targetX = Math.max(left, Math.min(maximum, w / 2));
++          break;
++        }
++        scale *= 0.985;
++      }
++    const centerX = center.x + (w / 2 - targetX) / scale;
++    const centerY = center.y + (targetY - h / 2) / scale;
++    this.camera.left = centerX - w / scale / 2;
++    this.camera.right = centerX + w / scale / 2;
++    this.camera.top = centerY + h / scale / 2;
++    this.camera.bottom = centerY - h / scale / 2;
+     this.camera.updateProjectionMatrix();
+     this.coastalWater.setView(this.camera);
+   }
+@@ -537,10 +683,12 @@ export class World {
+     }
+     this.indicate(s);
+   }
+-  indicate(s: State, selected?: string) {
+-    const selectedEdge = selected ? edgeTo(s, selected, this.level) : undefined;
++  indicate(s: State, selected?: string, emphasis?: string) {
++    const focus = emphasis ?? selected;
++    const selectedEdge = focus ? edgeTo(s, focus, this.level) : undefined;
+     this.navigationCurrent = s.boatNodeId;
+-    this.navigationSelected = selectedEdge ? selected! : null;
++    this.navigationSelected = selected && this.markers.has(selected) ? selected : null;
++    this.navigationEmphasis = emphasis && this.markers.has(emphasis) ? emphasis : null;
+     for (const [id, g] of this.markers) {
+       const e = edgeTo(s, id, this.level);
+       const status =
+@@ -553,13 +701,14 @@ export class World {
+               : 'available';
+       const active = id === this.navigationSelected;
+       g.visible = true;
+-      const color = active
+-        ? '#ffe09a'
+-        : status === 'too-shallow'
+-          ? '#d19272'
+-          : status === 'current'
+-            ? '#fff1d7'
+-            : '#cce2d6';
++      const color =
++        active || id === emphasis
++          ? '#ffe09a'
++          : status === 'too-shallow'
++            ? '#d19272'
++            : status === 'current'
++              ? '#fff1d7'
++              : '#cce2d6';
+       const ring = g.getObjectByName('stop-ring') as T.Mesh;
+       ring.material = mat(color);
+       ring.visible = status !== 'nonadjacent';
+@@ -569,6 +718,7 @@ export class World {
+       g.getObjectByName('nonadjacent-diamond')!.visible = status === 'nonadjacent';
+       g.userData.navigationStatus = status;
+       g.userData.selected = active;
++      g.userData.emphasized = id === emphasis;
+       g.scale.setScalar(active ? 1.15 : 1);
+       g.position.y = s.tideLevel * 0.18 + 0.04;
+     }
+@@ -880,6 +1030,7 @@ export class World {
+     return {
+       currentNode: this.navigationCurrent,
+       selectedDestination: this.navigationSelected,
++      emphasizedDestination: this.navigationEmphasis,
+       routes: [...this.routes].map(([id, route]) => {
+         const material = route.material as T.LineDashedMaterial;
+         return {
+@@ -906,32 +1057,55 @@ export class World {
+     };
+   }
+   frameStatus() {
+-    const rectangle = (object: T.Object3D) => {
+-      const b = new T.Box3().setFromObject(object),
+-        points: T.Vector3[] = [];
+-      for (const x of [b.min.x, b.max.x])
+-        for (const y of [b.min.y, b.max.y])
+-          for (const z of [b.min.z, b.max.z])
+-            points.push(new T.Vector3(x, y, z).project(this.camera));
+-      const xs = points.map((p) => ((p.x + 1) * this.host.clientWidth) / 2),
+-        ys = points.map((p) => ((1 - p.y) * this.host.clientHeight) / 2);
+-      return {
+-        left: Math.min(...xs),
+-        right: Math.max(...xs),
+-        top: Math.min(...ys),
+-        bottom: Math.max(...ys),
+-        height: Math.max(...ys) - Math.min(...ys),
+-      };
+-    };
++    const rectangle = (object: T.Object3D) => this.rectangle([object]);
++    const envelope = this.framePoints.map((point) => point.clone().project(this.camera));
+     return {
+-      canvas: { width: this.host.clientWidth, height: this.host.clientHeight },
++      canvas: {
++        width: this.host.clientWidth,
++        height: this.host.clientHeight,
++        bufferWidth: this.renderer.domElement.width,
++        bufferHeight: this.renderer.domElement.height,
++      },
++      camera: {
++        left: this.camera.left,
++        right: this.camera.right,
++        top: this.camera.top,
++        bottom: this.camera.bottom,
++        position: this.camera.position.toArray(),
++        projection: this.camera.projectionMatrix.toArray(),
++      },
++      envelope: {
++        left: Math.min(...envelope.map((point) => ((point.x + 1) * this.host.clientWidth) / 2)),
++        right: Math.max(...envelope.map((point) => ((point.x + 1) * this.host.clientWidth) / 2)),
++        top: Math.min(...envelope.map((point) => ((1 - point.y) * this.host.clientHeight) / 2)),
++        bottom: Math.max(...envelope.map((point) => ((1 - point.y) * this.host.clientHeight) / 2)),
++        points: this.framePoints.length,
++        ferry: { ...this.ferryEnvelope },
++      },
+       boat: rectangle(this.boatRoot),
+       lighthouse: rectangle(this.scene.getObjectByName('lighthouse')!),
++      lantern: rectangle(this.home.lens),
++      lanternCore: rectangle(this.home.core),
+       bell: this.scene.getObjectByName('bell-landmark')
+         ? rectangle(this.scene.getObjectByName('bell-landmark')!)
+         : null,
+       passengers: [...this.animals].map(([id, g]) => ({ id, ...rectangle(g) })),
+       nodes: this.level.nodes.map((n) => ({ id: n.id, ...this.project(n.positionXZ) })),
++      places: this.level.nodes.map((node) => ({ id: node.id, ...this.placeBounds(node.id) })),
++      pickTargets: [
++        ...this.pickTargets.map(({ id, kind, object }) => {
++          const bounds = rectangle(object);
++          return {
++            id,
++            kind,
++            ...bounds,
++            x: (bounds.left + bounds.right) / 2,
++            y: (bounds.top + bounds.bottom) / 2,
++          };
++        }),
++        { id: this.state.boatNodeId, kind: 'ferry', ...rectangle(this.boatRoot) },
++      ],
++      nonInteractivePlaces: this.nonInteractivePlaces.map((object) => rectangle(object)),
+     };
+   }
+ }
+diff --git a/src/style.css b/src/style.css
+index d6ba05f..08457d1 100644
+--- a/src/style.css
++++ b/src/style.css
+@@ -118,121 +118,6 @@ h1 {
+   font-size: 21px;
+   font-weight: 400;
+ }
+-#local-context.compact-placement {
+-  max-width: 300px;
+-  padding: 5px 7px;
+-}
+-#local-context.compact-placement #local-heading {
+-  padding: 1px 2px 4px;
+-}
+-#map-labels {
+-  position: absolute;
+-  inset: 0;
+-  pointer-events: none;
+-}
+-.map-stop {
+-  position: absolute;
+-  width: max-content;
+-  transform: translate(-50%, -50%);
+-  display: flex;
+-  gap: 4px;
+-  pointer-events: auto;
+-}
+-.map-target {
+-  display: flex;
+-  align-items: center;
+-  justify-content: center;
+-  gap: 5px;
+-  padding: 6px 9px;
+-  min-width: 100px;
+-  max-width: 170px;
+-  min-height: 48px;
+-  background: #f9f1dff5;
+-  box-shadow: 0 2px 7px #173c4c40;
+-  text-align: left;
+-}
+-.map-target b {
+-  display: block;
+-  font-size: 14px;
+-  font-weight: 600;
+-}
+-.map-state {
+-  display: block;
+-  font-size: 14px;
+-  margin-top: 2px;
+-}
+-.map-symbol {
+-  font-size: 19px;
+-}
+-.map-target[data-status='current'] {
+-  border: 2px solid #294e50;
+-  background: #dce9d7;
+-}
+-.map-target[data-status='nonadjacent'] {
+-  background: #e2e6dcf2;
+-  border-style: dashed;
+-  color: #405850;
+-}
+-.map-target[data-status='too-shallow'],
+-.map-target[data-risk='loss'] {
+-  border: 2px solid #af6942;
+-  background: #f8e4c7;
+-}
+-.inspect-route {
+-  min-width: 60px;
+-  min-height: 48px;
+-  padding: 6px;
+-  background: #e6ebd5f5;
+-  box-shadow: 0 2px 7px #173c4c40;
+-}
+-.map-target.highlighted,
+-.inspect-route.highlighted {
+-  border-color: #b37e24;
+-  box-shadow: 0 0 0 2px #f6d687;
+-  background: #fff0bc;
+-}
+-#local-context {
+-  position: absolute;
+-  width: max-content;
+-  transform: translateX(-50%);
+-  max-width: 440px;
+-  padding: 8px;
+-  border-radius: 9px;
+-  background: #f7f0dff2;
+-  border: 1px solid #c9d4bd;
+-  box-shadow: 0 2px 10px #173c4c40;
+-}
+-#local-heading {
+-  font-size: 14px;
+-  line-height: 1.2;
+-  font-weight: 600;
+-  margin: 0 0 5px;
+-}
+-#local-actions {
+-  display: flex;
+-  gap: 7px;
+-  align-items: center;
+-}
+-#local-actions button {
+-  background: #e5ebd5;
+-  font-weight: 600;
+-}
+-#local-actions p {
+-  font-size: 14px;
+-  padding: 5px 2px;
+-  line-height: 1.25;
+-}
+-#local-context.attention {
+-  animation: local-notice 700ms ease-out;
+-}
+-@keyframes local-notice {
+-  from {
+-    box-shadow: 0 0 0 5px #f3bc4e;
+-  }
+-  to {
+-    box-shadow: 0 2px 10px #173c4c40;
+-  }
+-}
+ #status-toggle {
+   position: absolute;
+   bottom: 12px;
+@@ -451,10 +336,214 @@ details p {
+   white-space: nowrap;
+   border: 0;
+ }
++
++#world {
++  inset: 0;
++}
++.hud,
++#status-toggle {
++  z-index: 3;
++}
++#map-labels {
++  position: absolute;
++  inset: 0;
++  pointer-events: none;
++  z-index: 2;
++}
++.map-stop {
++  position: absolute;
++  width: max-content;
++  pointer-events: auto;
++}
++.map-target {
++  display: flex;
++  align-items: center;
++  justify-content: center;
++  gap: 6px;
++  min-width: 44px;
++  min-height: 44px;
++  max-width: 180px;
++  padding: 7px 10px;
++  color: #fff3d9;
++  background: #123d48c9;
++  border: 1px solid #ccd7c0;
++  box-shadow:
++    inset 0 0 0 1px #ffffff15,
++    0 3px 8px #09293236;
++  text-align: left;
++  border-radius: 18px;
++  transition: background-color 120ms;
++}
++.map-target b {
++  font-size: 14px;
++  line-height: 1.2;
++  font-weight: 600;
++}
++.map-symbol {
++  font-size: 20px;
++  line-height: 1;
++  min-width: 16px;
++  text-align: center;
++}
++.map-target[data-status='current'] {
++  border-style: double;
++  border-width: 3px;
++  padding: 5px 8px;
++}
++.map-target[data-status='nonadjacent'] {
++  border-style: dashed;
++}
++.map-target[data-status='too-shallow'],
++.map-target[data-risk='loss'] {
++  border: 2px solid #ecb87c;
++  padding: 6px 9px;
++}
++.map-target.highlighted {
++  background: #315b60e8;
++  box-shadow: 0 0 0 2px #f8d99c66;
++}
++.map-target[aria-expanded='true'] {
++  border: 2px solid #f2d098;
++  background: #284f58eb;
++  box-shadow:
++    inset 0 0 0 1px #fff2d32e,
++    0 0 0 2px #f2d09833;
++  padding: 6px 9px;
++}
++#map-leaders,
++#selection-leader {
++  position: absolute;
++  inset: 0;
++  width: 100%;
++  height: 100%;
++  pointer-events: none;
++}
++#map-leaders line {
++  stroke: #d0e1cc;
++  stroke-width: 1;
++  opacity: 0.5;
++}
++#selection-leader {
++  z-index: 1;
++}
++#selection-leader line {
++  stroke: #efd09b;
++  stroke-width: 1.5;
++  opacity: 0.7;
++  stroke-dasharray: 3 4;
++}
++#local-context {
++  position: absolute;
++  z-index: 4;
++  width: 280px;
++  max-width: calc(100vw - 16px);
++  max-height: min(330px, calc(100svh - 90px));
++  overflow: hidden;
++  padding: 9px 11px;
++  color: #fff3d9;
++  background: #103a45a8;
++  border: 1px solid #efd09b;
++  border-radius: 12px;
++  box-shadow:
++    inset 0 0 0 1px #fff5dc26,
++    0 6px 18px #09293252;
++  display: flex;
++  flex-direction: column;
++  gap: 7px;
++}
++.location-head {
++  display: flex;
++  justify-content: space-between;
++  align-items: center;
++  gap: 8px;
++  min-height: 44px;
++  flex-shrink: 0;
++}
++.location-role {
++  font-size: 14px;
++  line-height: 1.2;
++  color: #e0dfc6;
++}
++#local-heading {
++  font:
++    600 17px/1.25 'Segoe UI',
++    Arial,
++    sans-serif;
++  margin-top: 2px;
++}
++#local-heading:focus-visible {
++  outline: 2px solid #f5d198;
++  outline-offset: 3px;
++  border-radius: 2px;
++}
++#close-location {
++  min-width: 44px;
++  width: 44px;
++  height: 44px;
++  padding: 0;
++  background: #143b45b8;
++  border-color: #abbdae;
++  color: #fff3d9;
++  font-size: 24px;
++}
++#location-facts {
++  font-size: 14px;
++  line-height: 1.3;
++  overflow: auto;
++  min-height: 0;
++  padding: 4px 5px;
++  margin: -2px -5px;
++  background: #092b3421;
++  border-radius: 5px;
++}
++#location-facts p {
++  font-size: 14px;
++  line-height: 1.3;
++}
++#location-facts p + p {
++  margin-top: 4px;
++}
++.location-warning {
++  color: #ffdaad;
++  border-left: 2px solid #e9b77a;
++  padding-left: 6px;
++}
++#local-actions {
++  display: flex;
++  gap: 7px;
++  flex-shrink: 0;
++}
++#local-actions button {
++  flex: 1;
++  min-width: 0;
++  min-height: 44px;
++  padding: 6px 8px;
++  color: #fff3d9;
++  background: #23545de8;
++  border-color: #dac999;
++  font-weight: 600;
++}
++#sail:disabled {
++  opacity: 1;
++  color: #d7d6c3;
++  background: #23454ce0;
++  border-style: dashed;
++}
++#local-context[inert] {
++  pointer-events: none;
++}
++#selection-hint {
++  position: absolute;
++  bottom: 18px;
++  left: 24px;
++  color: #fff3dc;
++  background: #123b43a6;
++  padding: 8px 10px;
++  border-radius: 6px;
++  font-size: 14px;
++  pointer-events: none;
++}
+ @media (max-height: 600px) and (min-width: 701px) {
+-  #world {
+-    inset: 62px 0 70px;
+-  }
+   .hud {
+     inset: 4px 8px auto;
+     gap: 10px;
+@@ -485,45 +574,31 @@ details p {
+     padding: 5px 8px;
+   }
+   .map-target {
+-    padding: 5px 7px;
+-    min-width: 96px;
+-    max-width: 160px;
+-  }
+-  .map-target b,
+-  .map-state {
+-    font-size: 14px;
+-    line-height: 1.15;
++    max-width: 158px;
++    padding: 5px 8px;
+   }
+-  .map-symbol {
+-    font-size: 17px;
++  .map-target[data-status='current'] {
++    padding: 3px 6px;
+   }
+-  .inspect-route {
+-    min-width: 56px;
+-    padding: 5px;
++  .map-target[data-status='too-shallow'],
++  .map-target[data-risk='loss'],
++  .map-target[aria-expanded='true'] {
++    padding: 4px 7px;
+   }
+   #local-context {
+-    bottom: 6px;
+-    left: 8px;
+-    top: auto;
+-    transform: none;
+-    max-width: calc(100% - 376px);
+-    padding: 5px 7px;
+-  }
+-  #local-heading {
+-    margin-bottom: 3px;
+-  }
+-  #local-actions {
++    max-height: 224px;
++    padding: 6px 9px;
+     gap: 5px;
+   }
+-  #local-actions button {
+-    padding: 5px 8px;
++  #local-heading {
++    font-size: 16px;
+   }
+   #status-toggle {
+     right: 8px;
+     bottom: 6px;
+-    width: 352px;
+-    max-width: 46%;
+-    min-height: 62px;
++    width: 300px;
++    max-width: 40%;
++    min-height: 56px;
+     padding: 5px 7px;
+     gap: 5px;
+   }
+@@ -534,6 +609,10 @@ details p {
+     bottom: 6px;
+     left: 8px;
+   }
++  #selection-hint {
++    bottom: 12px;
++    left: 8px;
++  }
+   dialog {
+     width: min(344px, calc(100vw - 16px));
+     inset: auto 8px 8px auto;
+@@ -565,27 +644,17 @@ details p {
+   .game {
+     min-height: 680px;
+   }
+-  #world {
+-    inset: 198px 0 150px;
+-  }
+   .hud {
+     inset: 8px 8px auto;
+     display: grid;
+     grid-template-columns: 1fr;
+-    flex-wrap: wrap;
+     gap: 8px;
+     padding: 9px;
+   }
+-  .identity {
+-    width: 100%;
+-  }
+   h1 {
+     font-size: 22px;
+   }
+-  #readout {
+-    flex: 1;
+-    font-size: 14px;
+-  }
++  #readout,
+   #boat-summary {
+     font-size: 14px;
+   }
+@@ -595,16 +664,6 @@ details p {
+   .tools button {
+     padding: 5px 7px;
+   }
+-  #wait span {
+-    display: inline;
+-  }
+-  #local-context {
+-    left: 8px;
+-    bottom: 82px;
+-    top: auto;
+-    transform: none;
+-    max-width: calc(100% - 16px);
+-  }
+   #status-toggle {
+     left: 8px;
+     right: 8px;
+@@ -628,11 +687,8 @@ details p {
+     max-width: 130px;
+     padding: 5px;
+   }
+-  .inspect-route {
+-    min-width: 54px;
+-  }
+-  .map-state {
+-    line-height: 1.15;
++  #selection-hint {
++    display: none;
+   }
+   dialog,
+   dialog[data-side='left'] {
+@@ -654,18 +710,3 @@ details p {
+     transition: none !important;
+   }
+ }
+-#map-leaders {
+-  position: absolute;
+-  inset: 0;
+-  width: 100%;
+-  height: 100%;
+-  pointer-events: none;
+-}
+-#map-leaders line {
+-  stroke: #d7e6d6;
+-  stroke-width: 1;
+-  opacity: 0.6;
+-}
+-#local-context.no-transfer {
+-  display: none;
+-}
+diff --git a/src/ui/placement.ts b/src/ui/placement.ts
+index bd55473..5478895 100644
+--- a/src/ui/placement.ts
++++ b/src/ui/placement.ts
+@@ -15,21 +15,30 @@ export function placeLocalCard(
+   bounds: Rectangle,
+   obstacles: Rectangle[],
+   preferred: [number, number][],
++  anchor?: [number, number],
+ ) {
+   if (width > bounds.right - bounds.left || height > bounds.bottom - bounds.top) return null;
+   const candidates = [...preferred];
+-  const xs = [bounds.left, bounds.right - width];
+-  const ys = [bounds.top, bounds.bottom - height];
++  const xs = [bounds.left, bounds.right - width, ...preferred.map(([x]) => x)];
++  const ys = [bounds.top, bounds.bottom - height, ...preferred.map(([, y]) => y)];
+   for (const obstacle of obstacles) {
+     xs.push(obstacle.left - width - 10, obstacle.right + 10);
+     ys.push(obstacle.top - height - 10, obstacle.bottom + 10);
+   }
+   for (const y of ys) for (const x of xs) candidates.push([x, y]);
++  let nearest: Rectangle | null = null;
++  let distance = Number.POSITIVE_INFINITY;
+   for (const [x, y] of candidates) {
+     const left = Math.max(bounds.left, Math.min(bounds.right - width, x));
+     const top = Math.max(bounds.top, Math.min(bounds.bottom - height, y));
+     const rectangle = { left, top, right: left + width, bottom: top + height };
+-    if (obstacles.every((obstacle) => !overlaps(rectangle, obstacle))) return rectangle;
++    if (obstacles.some((obstacle) => overlaps(rectangle, obstacle))) continue;
++    if (!anchor) return rectangle;
++    const cost = Math.hypot(left - anchor[0], top - anchor[1]);
++    if (cost < distance) {
++      nearest = rectangle;
++      distance = cost;
++    }
+   }
+-  return null;
++  return nearest;
+ }
+diff --git a/tests/e2e/atmosphere.spec.ts b/tests/e2e/atmosphere.spec.ts
+index 3f83a90..d7eaef4 100644
+--- a/tests/e2e/atmosphere.spec.ts
++++ b/tests/e2e/atmosphere.spec.ts
+@@ -1,7 +1,7 @@
+ import { test, expect, type Page } from '@playwright/test';
+ import { mkdirSync, writeFileSync } from 'node:fs';
+ import { reviewDir } from './evidence';
+-import { act, ready, state, idle, undo, restart, fullyVisible, readable, tabTo } from './ui';
++import { act, ready, state, idle, undo, restart, fullyVisible, readable, tabTo, startMove, selectPlace } from './ui';
+ 
+ const transition = (page: Page) =>
+   page.evaluate(() => (window as any).__LAST_FERRY__.getTransitionStatus());
+@@ -21,6 +21,8 @@ const holding = [
+ ];
+ 
+ async function checkCard(page: Page) {
++  if (!(await page.locator('#unload').isVisible()))
++    await page.locator('.map-target[aria-current="location"]').click();
+   await fullyVisible(page, page.locator('#local-context'), false);
+   await fullyVisible(page, page.locator('#unload'));
+   await readable(page.locator('#unload'));
+@@ -69,7 +71,7 @@ for (const width of [1440, 844, 780])
+     for (const id of holding.slice(0, 7)) await act(page, id, touch);
+     await checkCard(page);
+     const before = await state(page);
+-    await page.locator('#map-harbor')[touch ? 'tap' : 'click']();
++    await startMove(page, 'map-harbor', touch);
+     await expect(page.locator('#seascape')).toHaveAttribute('aria-busy', 'true');
+     await expect(page.locator('#local-context')).toBeHidden();
+     await expect(page.locator('#transition-status')).toContainText('Sailing to Harbor');
+@@ -153,6 +155,7 @@ test('atmosphere: longest crossings finish normally, tide rises in the final pha
+     requestAnimationFrame(sample);
+   });
+   await page.locator('#map-east-buoy').click();
++  await page.locator('#sail').click();
+   await expect(page.locator('#dialog')).toContainText('Bram is still waiting at Bell Pier');
+   expect((await state(page)).turn).toBe(7);
+   await page.locator('#commit').click();
+@@ -187,7 +190,7 @@ test('atmosphere: longest crossings finish normally, tide rises in the final pha
+   expect(await state(page)).toMatchObject({ turn: 7, tideLevel: 1, boatNodeId: 'west-buoy' });
+   await restart(page);
+   const prior = await transition(page);
+-  await page.locator('#map-west-buoy').click();
++  await startMove(page, 'map-west-buoy');
+   await page.waitForFunction(
+     () => (window as any).__LAST_FERRY__.getJourneyStatus().active !== null,
+   );
+@@ -246,8 +249,8 @@ test('atmosphere: audio persistence, live mute, Undo and Restart retain one musi
+     contextCount: 0,
+     schedulerCount: 0,
+   });
+-  await page.locator('#inspect-west-buoy').click();
+-  await page.locator('#cancel').click();
++  await selectPlace(page, 'west-buoy');
++  await page.locator('#close-location').click();
+   await expect.poll(async () => (await audio(page)).contextState).toBe('running');
+   await expect.poll(async () => (await audio(page)).rms).toBeGreaterThan(0);
+   expect(await audio(page)).toMatchObject({
+@@ -255,7 +258,7 @@ test('atmosphere: audio persistence, live mute, Undo and Restart retain one musi
+     schedulerCount: 1,
+     ambienceSources: 2,
+   });
+-  await page.locator('#map-west-buoy').click();
++  await startMove(page, 'map-west-buoy');
+   await expect.poll(async () => (await audio(page)).travelActive).toBe(true);
+   await page.locator('#sound-toggle').click();
+   await expect.poll(async () => (await audio(page)).contextState).toBe('suspended');
+@@ -267,8 +270,8 @@ test('atmosphere: audio persistence, live mute, Undo and Restart retain one musi
+   expect((await audio(page)).currentTime).toBe(mutedPhase);
+   await page.reload();
+   await page.waitForFunction(() => (window as any).__LAST_FERRY__?.getMetrics().frames > 4);
+-  await page.locator('#inspect-west-buoy').click();
+-  await page.locator('#cancel').click();
++  await selectPlace(page, 'west-buoy');
++  await page.locator('#close-location').click();
+   expect(await audio(page)).toMatchObject({
+     muted: true,
+     contextState: 'not-created',
+@@ -320,8 +323,8 @@ test('atmosphere: actual runtime mix crosses the full musical phrase while idle
+ }) => {
+   mkdirSync(`${reviewDir}/raw`, { recursive: true });
+   await ready(page, 'holding-pier');
+-  await page.locator('#inspect-shallows').click();
+-  await page.locator('#cancel').click();
++  await selectPlace(page, 'shallows');
++  await page.locator('#close-location').click();
+   await expect.poll(async () => (await audio(page)).contextState).toBe('running');
+   const initial = await state(page);
+   const recording = await page.evaluate(async () => {
+diff --git a/tests/e2e/bellwater.spec.ts b/tests/e2e/bellwater.spec.ts
+index 0ef55ee..9ab4aed 100644
+--- a/tests/e2e/bellwater.spec.ts
++++ b/tests/e2e/bellwater.spec.ts
+@@ -14,7 +14,6 @@ import {
+   tabTo,
+   fullyVisible,
+   readable,
+-  dialogCycle,
+ } from './ui';
+ 
+ const residents = ['tansy', 'lark', 'bram'];
+@@ -43,10 +42,13 @@ async function readableMap(page: Page) {
+     const button = page.locator(`#map-${id}`);
+     await fullyVisible(page, button);
+     await readable(button.locator('b'));
+-    await readable(button.locator('.map-state'));
++    await expect(button).toHaveAttribute('aria-controls', 'local-context');
++    await expect(button).toHaveAttribute('aria-expanded', /^(true|false)$/);
+   }
+   for (const button of await page
+-    .locator('.inspect-route, #local-actions button, #undo, #wait, #menu, #status-toggle')
++    .locator(
++      '#local-actions button:visible, #close-location:visible, #undo, #wait, #menu, #status-toggle',
++    )
+     .all()) {
+     await fullyVisible(page, button);
+     await readable(button);
+@@ -70,6 +72,10 @@ async function readableMap(page: Page) {
+       ).toBe(true);
+     }
+   const frame = await page.evaluate(() => (window as any).__LAST_FERRY__.getFrameStatus());
++  expect(frame.envelope.left).toBeGreaterThanOrEqual(8);
++  expect(frame.envelope.top).toBeGreaterThanOrEqual(8);
++  expect(frame.envelope.right).toBeLessThanOrEqual(frame.canvas.width - 8);
++  expect(frame.envelope.bottom).toBeLessThanOrEqual(frame.canvas.height - 8);
+   expect(frame.lighthouse.top).toBeGreaterThanOrEqual(8);
+   expect(frame.lighthouse.bottom).toBeLessThan(frame.canvas.height - 8);
+   expect(frame.bell).not.toBeNull();
+@@ -172,11 +178,11 @@ test('Bellwater mouse: uninterrupted shallow outward, blocked return, deep retur
+   }
+   const blocked = await state(page),
+     history = (await rendered(page)).historyLength;
+-  await activate(page, 'inspect-shallows');
+-  await expect(page.locator('.requirement')).toHaveText(
++  await activate(page, 'map-shallows');
++  await expect(page.locator('#local-context')).toContainText(
+     'Boat needs depth 2. Passage has depth 1: too shallow.',
+   );
+-  await expect(page.locator('#commit')).toBeDisabled();
++  await expect(page.locator('#sail')).toBeDisabled();
+   expect(await state(page)).toEqual(blocked);
+   expect((await rendered(page)).historyLength).toBe(history);
+   const highlight = await navigation(page);
+@@ -187,7 +193,7 @@ test('Bellwater mouse: uninterrupted shallow outward, blocked return, deep retur
+     'shallows',
+   ]);
+   await capture(page, 'desktop', 'blocked-return');
+-  await activate(page, 'cancel');
++  await activate(page, 'close-location');
+   for (const id of ['map-east-buoy', 'map-west-buoy', 'map-harbor', 'map-bell-pier']) {
+     await act(page, id);
+     trace.push(await state(page));
+@@ -243,12 +249,14 @@ test('Bellwater natural keyboard: deep outward, shallow return, both tide Undo a
+ }) => {
+   await bellReady(page);
+   const original = await state(page);
+-  await tabTo(page, 'inspect-shallows');
++  await tabTo(page, 'map-shallows');
+   await page.keyboard.press('Enter');
+-  await dialogCycle(page);
++  await expect(page.locator('#local-heading')).toBeFocused();
++  await tabTo(page, 'sail');
++  await expect(page.locator('#sail')).toBeFocused();
++  await tabTo(page, 'close-location', true);
++  await expect(page.locator('#close-location')).toBeFocused();
+   await page.keyboard.press('Escape');
+-  await expect(page.locator('#inspect-shallows')).toBeFocused();
+-  await page.keyboard.press('Shift+Tab');
+   await expect(page.locator('#map-shallows')).toBeFocused();
+   expect(await state(page)).toEqual(original);
+   for (const id of outerOutward) await keyAct(page, id);
+@@ -308,14 +316,15 @@ for (const width of [844, 780]) {
+       label = `phone-${width}`;
+     await capture(page, label, 'start');
+     const initial = await state(page);
+-    await activate(page, 'inspect-west-buoy', true);
+-    await dialogCycle(page);
++    await activate(page, 'map-west-buoy', true);
++    await expect(page.locator('#local-context')).toBeVisible();
++    await fullyVisible(page, page.locator('#sail'));
+     expect(await state(page)).toEqual(initial);
+     const inspected = await navigation(page);
+     expect(inspected.selectedDestination).toBe('west-buoy');
+     expect(inspected.routes.filter((route: any) => route.highlighted)).toHaveLength(1);
+     await page.keyboard.press('Escape');
+-    await expect(page.locator('#inspect-west-buoy')).toBeFocused();
++    await expect(page.locator('#map-west-buoy')).toBeFocused();
+     for (const id of outerOutward) await act(page, id, true);
+     await readableMap(page);
+     const beforeFirst = await state(page),
+@@ -473,6 +482,7 @@ for (const plan of ['Bell Pier first', 'deep route both ways', 'early rabbit del
+       beforeRender = await rendered(page);
+     const lossTarget = plan === 'Bell Pier first' ? 'map-west-buoy' : 'map-bell-pier';
+     await activate(page, lossTarget);
++    await activate(page, 'sail');
+     await expect(page.locator('.consequence')).toContainText('This ends the crossing.');
+     await expect(page.locator('.consequence')).toContainText(
+       plan === 'Bell Pier first' ? 'Tansy and Lark' : 'Bram',
+diff --git a/tests/e2e/environment.spec.ts b/tests/e2e/environment.spec.ts
+index f347b2e..549847b 100644
+--- a/tests/e2e/environment.spec.ts
++++ b/tests/e2e/environment.spec.ts
+@@ -156,11 +156,11 @@ test('environment: visible curved courses carry the ferry, tangent and fading wa
+     await act(page, bellwater[i]);
+     expect((await state(page)).turn).toBe(i + 1);
+     if (i === 3 || i === 8) {
+-      await page.locator(i === 3 ? '#inspect-west-buoy' : '#inspect-bell-pier').click();
++      await page.locator(i === 3 ? '#map-west-buoy' : '#map-bell-pier').click();
+       const highlighted = await journey(page);
+       for (const route of highlighted.routeBuffers)
+         expect(route.pointsXYZ).toEqual(buffers.get(route.id).pointsXYZ);
+-      await page.locator('#cancel').click();
++      await page.locator('#close-location').click();
+     }
+     if (i === 3) {
+       expect((await environment(page)).wake.emitting).toBe(false);
+@@ -271,10 +271,10 @@ test('environment: shores, free forecast and complete Undo follow both tide boun
+     shores = (await environment(page)).shores;
+   coastIsAtWater(await environment(page), 0);
+   const ordinary = (await journey(page)).routeBuffers;
+-  await page.locator('#inspect-shallows').click();
++  await page.locator('#map-shallows').click();
+   expect((await journey(page)).routeBuffers).toEqual(ordinary);
+   expect(await state(page)).toEqual(initial);
+-  await page.locator('#cancel').click();
++  await page.locator('#close-location').click();
+   await page.locator('#status-toggle').click();
+   const preview = await environment(page);
+   expect(await state(page)).toEqual(initial);
+@@ -320,6 +320,7 @@ test('environment: interrupted travel, restart and changing cove clear transient
+ }) => {
+   await ready(page, 'bellwater');
+   await page.locator('#map-west-buoy').click();
++  await page.locator('#sail').click();
+   await page.waitForFunction(
+     () => (window as any).__LAST_FERRY__.getJourneyStatus().active !== null,
+   );
+diff --git a/tests/e2e/fallback.spec.ts b/tests/e2e/fallback.spec.ts
+index b0a5d29..b01d4f6 100644
+--- a/tests/e2e/fallback.spec.ts
++++ b/tests/e2e/fallback.spec.ts
+@@ -8,6 +8,7 @@ test('fallback completes a stalled presentation without another gameplay action'
+     window.requestAnimationFrame = () => 0;
+   });
+   await page.locator('#map-sheep-pier').click();
++  await page.locator('#sail').click();
+   await page.waitForFunction(
+     () => !(window as any).__LAST_FERRY__.getRenderStatus().pendingAnimation,
+   );
+diff --git a/tests/e2e/game.spec.ts b/tests/e2e/game.spec.ts
+index 62135b7..64bf6f3 100644
+--- a/tests/e2e/game.spec.ts
++++ b/tests/e2e/game.spec.ts
+@@ -37,9 +37,10 @@ test('desktop: real rescue, blocked preview, tide undo, terminal undo and restar
+   await expect(page.locator('.forecast-detail')).toContainText('The tide rises in 4 actions.');
+   expect(await state(page)).toEqual(original);
+   await page.keyboard.press('Escape');
+-  await page.locator('#inspect-sheep-pier').click();
++  await page.locator('#map-sheep-pier').click();
++  await expect(page.locator('#local-context')).toBeVisible();
+   expect(await state(page)).toEqual(original);
+-  await page.locator('#cancel').click();
++  await page.locator('#close-location').click();
+   expect(await state(page)).toEqual(original);
+   await act(page, 'map-sheep-pier');
+   await page.locator('#board').click();
+@@ -56,12 +57,12 @@ test('desktop: real rescue, blocked preview, tide undo, terminal undo and restar
+   expect((await state(page)).turn).toBe(2);
+   const full = await state(page);
+   await page.locator('#map-cut').click();
+-  await expect(page.locator('#commit')).toBeDisabled();
+-  await expect(page.locator('#dialog')).toContainText(
++  await expect(page.locator('#sail')).toBeDisabled();
++  await expect(page.locator('#local-context')).toContainText(
+     'Boat needs depth 3. Passage has depth 2: too shallow.',
+   );
+   expect(await state(page)).toEqual(full);
+-  await page.locator('#cancel').click();
++  await page.locator('#close-location').click();
+   await act(page, 'map-outer-east');
+   const beforeRise = await state(page),
+     beforeRender = await rendered(page);
+@@ -175,7 +176,7 @@ test('keyboard-only tide-wait witness and subset selection', async ({ page }) =>
+   await keyAct(page, 'wait');
+   await tabTo(page, 'map-cut');
+   await page.keyboard.press('Enter');
+-  await expect(page.locator('#commit')).toBeDisabled();
++  await expect(page.locator('#sail')).toBeDisabled();
+   expect((await state(page)).turn).toBe(3);
+   await page.keyboard.press('Escape');
+   for (const id of ['wait', 'map-cut', 'map-harbor', 'unload']) await keyAct(page, id);
+@@ -206,6 +207,7 @@ test('visibility cancellation releases lock and reconciles to committed state',
+ }) => {
+   await ready(page);
+   await page.locator('#map-sheep-pier').click();
++  await page.locator('#sail').click();
+   await page.evaluate(() => {
+     Object.defineProperty(document, 'hidden', { configurable: true, value: true });
+     document.dispatchEvent(new Event('visibilitychange'));
+diff --git a/tests/e2e/holding-pier.spec.ts b/tests/e2e/holding-pier.spec.ts
+index 4e5573a..f0ff78c 100644
+--- a/tests/e2e/holding-pier.spec.ts
++++ b/tests/e2e/holding-pier.spec.ts
+@@ -3,6 +3,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
+ import { reviewDir, productionURL } from './evidence';
+ import {
+   act,
++  activate,
+   ready as baseReady,
+   state,
+   idle,
+@@ -29,13 +30,13 @@ test('Holding Pier: uninterrupted nine-action actual UI rescue and gameplay evid
+   const trace = [await state(page)];
+   await page.waitForTimeout(700);
+   await page.locator('#map-shallows').click();
+-  await expect(page.locator('#dialog')).toContainText(
++  await expect(page.locator('#local-context')).toContainText(
+     'Boat needs depth 2. Passage has depth 1: too shallow.',
+   );
+   expect(await state(page)).toEqual(trace[0]);
+   await page.waitForTimeout(600);
+-  await page.locator('#cancel').click();
+-  await page.locator('#unload').click();
++  await page.locator('#close-location').click();
++  await activate(page, 'unload');
+   await expect(page.locator('#dialog')).toContainText('After unloading: boat needs depth 1.');
+   await expect(page.locator('#dialog')).toContainText('Moss will wait at Stone Pier.');
+   await fullyVisible(page, page.locator('#commit'));
+@@ -139,6 +140,7 @@ test('Holding Pier: unloading Undo, tide Undo, losing alternatives and baseline
+   await expect(page.locator('#map-harbor')).toHaveAttribute('aria-current', 'location');
+   await act(page, 'map-stone');
+   await page.locator('#map-shallows').click();
++  await page.locator('#sail').click();
+   await expect(page.locator('#dialog')).toContainText(
+     'still waiting at Rabbit Pier when it floods',
+   );
+@@ -152,9 +154,9 @@ test('Holding Pier: unloading Undo, tide Undo, losing alternatives and baseline
+   await restart(page);
+   for (let count = 0; count < 3; count++) await act(page, 'wait');
+   await page.locator('#map-shallows').click();
+-  await expect(page.locator('#commit')).toBeDisabled();
++  await expect(page.locator('#sail')).toBeDisabled();
+   expect((await state(page)).turn).toBe(3);
+-  await page.locator('#cancel').click();
++  await page.locator('#close-location').click();
+   await page.locator('#wait').click();
+   await expect(page.locator('#dialog')).toContainText(
+     'still waiting at Rabbit Pier when it floods',
+@@ -196,15 +198,21 @@ test('Holding Pier: phone landscape touch, direct double-tap guard, preview and
+     expect(node.y).toBeLessThan(frame.canvas.height);
+   }
+   for (const passenger of frame.passengers) expect(passenger.height).toBeGreaterThan(22);
++  await page.locator('#map-stone').tap();
+   await fullyVisible(page, page.locator('#unload'));
+-  await page.locator('#inspect-harbor').tap();
++  await page.locator('#map-harbor').tap();
+   const initial = await state(page);
+-  await page.locator('#cancel').tap();
++  await page.locator('#close-location').tap();
+   expect(await state(page)).toEqual(initial);
+   await act(page, 'unload', true);
+   const bounds = await page.locator('#map-shallows').boundingBox();
+   await page.touchscreen.tap(bounds!.x + bounds!.width / 2, bounds!.y + bounds!.height / 2);
+   await page.touchscreen.tap(bounds!.x + bounds!.width / 2, bounds!.y + bounds!.height / 2);
++  expect((await state(page)).turn).toBe(1);
++  const sail = await page.locator('#sail').boundingBox();
++  expect(sail).not.toBeNull();
++  await page.touchscreen.tap(sail!.x + sail!.width / 2, sail!.y + sail!.height / 2);
++  await page.touchscreen.tap(sail!.x + sail!.width / 2, sail!.y + sail!.height / 2);
+   await idle(page);
+   expect((await state(page)).turn).toBe(2);
+   await act(page, 'map-rabbit-pier', true);
+@@ -228,19 +236,19 @@ for (const [label, width, height] of [
+   ['desktop', 1440, 900],
+   ['phone', 844, 390],
+ ] as const) {
+-  test(`Holding Pier: natural ${label} keyboard, preview cancellation, direct sailing and terminal Undo`, async ({
++  test(`Holding Pier: natural ${label} keyboard, selection cancellation, explicit sailing and terminal Undo`, async ({
+     page,
+   }) => {
+     await page.setViewportSize({ width, height });
+     await page.emulateMedia({ reducedMotion: 'reduce' });
+     await ready(page);
+-    await tabTo(page, 'inspect-harbor');
++    await tabTo(page, 'map-harbor');
+     await page.keyboard.press('Enter');
+-    await expect(page.locator('#cancel')).toBeFocused();
++    await expect(page.locator('#local-heading')).toBeFocused();
+     await page.keyboard.press('Escape');
+-    await expect(page.locator('#inspect-harbor')).toBeFocused();
+-    await page.keyboard.press('Shift+Tab');
+     await expect(page.locator('#map-harbor')).toBeFocused();
++    await page.keyboard.press('Shift+Tab');
++    await expect(page.locator('#sound-toggle')).toBeFocused();
+     expect((await state(page)).turn).toBe(0);
+     await keyAct(page, 'unload');
+     await keyAct(page, 'map-shallows');
+diff --git a/tests/e2e/home-refinement.spec.ts b/tests/e2e/home-refinement.spec.ts
+index ae3ec2d..fbb18bc 100644
+--- a/tests/e2e/home-refinement.spec.ts
++++ b/tests/e2e/home-refinement.spec.ts
+@@ -14,6 +14,7 @@ import {
+   tabTo,
+   keyAct,
+   dialogCycle,
++  selectPlace,
+ } from './ui';
+ 
+ const audio = (page: Page) => page.evaluate(() => (window as any).__LAST_FERRY__.getAudioStatus());
+@@ -59,6 +60,8 @@ async function home(page: Page) {
+ }
+ 
+ async function clearCard(page: Page) {
++  if (!(await page.locator('#unload').isVisible()))
++    await page.locator('.map-target[aria-current="location"]').click();
+   await fullyVisible(page, page.locator('#unload'));
+   await readable(page.locator('#unload'));
+   const overlap = await page.evaluate(() => {
+@@ -101,9 +104,9 @@ for (const width of [844, 780])
+     const initial = await state(page);
+     await page.locator('#map-harbor').tap();
+     expect(await state(page)).toEqual(initial);
+-    await page.locator('#inspect-bell-pier').tap();
+-    await expect(page.locator('#dialog')).toContainText('Bell Pier');
+-    await page.locator('#cancel').tap();
++    await selectPlace(page, 'bell-pier', true);
++    await expect(page.locator('#local-context')).toContainText('Bell Pier');
++    await page.locator('#close-location').tap();
+     expect(await state(page)).toEqual(initial);
+     for (const id of bell.slice(0, 9)) {
+       const before = await state(page);
+@@ -112,7 +115,7 @@ for (const width of [844, 780])
+       await home(page);
+       if ((await state(page)).turn === 2)
+         await expect(page.locator('#map-harbor')).toHaveAccessibleName(
+-          'Harbor: no direct passage; Home, delivery destination',
++          /Select Harbor.*no direct passage.*Home, delivery destination/i,
+         );
+       if ((await state(page)).turn === 8) {
+         expect(await audio(page)).toMatchObject({ desiredArrangement: 'homeward' });
+@@ -124,9 +127,9 @@ for (const width of [844, 780])
+     expect(await state(page)).toMatchObject({ boatNodeId: 'harbor', status: 'playing', turn: 9 });
+     expect((await view(page)).arrival.active).toBe(false);
+     await clearCard(page);
+-    await page.locator('#inspect-bell-pier').tap();
+-    await fullyVisible(page, page.locator('#cancel'));
+-    await page.locator('#cancel').tap();
++    await selectPlace(page, 'bell-pier', true);
++    await fullyVisible(page, page.locator('#close-location'));
++    await page.locator('#close-location').tap();
+     await act(page, 'unload', true);
+     expect((await state(page)).status).toBe('won');
+     expect((await view(page)).arrival.active).toBe(true);
+@@ -148,11 +151,11 @@ test('home refinement: natural keyboard inspection, subset cancellation, boundar
+   await ready(page, 'holding-pier');
+   await home(page);
+   const original = await state(page);
+-  await tabTo(page, 'inspect-harbor');
++  await tabTo(page, 'map-harbor');
+   await page.keyboard.press('Enter');
+-  await dialogCycle(page);
++  await expect(page.locator('#local-heading')).toBeFocused();
+   await page.keyboard.press('Escape');
+-  await expect(page.locator('#inspect-harbor')).toBeFocused();
++  await expect(page.locator('#map-harbor')).toBeFocused();
+   expect(await state(page)).toEqual(original);
+   await keyAct(page, 'unload');
+   expect(await audio(page)).toMatchObject({ desiredArrangement: 'ordinary' });
+@@ -232,8 +235,8 @@ test('home refinement: actual adaptive runtime mix follows rescue, Undo and a lo
+ }) => {
+   mkdirSync(`${reviewDir}/raw`, { recursive: true });
+   await ready(page, 'holding-pier');
+-  await page.locator('#inspect-shallows').click();
+-  await page.locator('#cancel').click();
++  await selectPlace(page, 'shallows');
++  await page.locator('#close-location').click();
+   await page.waitForFunction(
+     () => (window as any).__LAST_FERRY__.getAudioStatus().contextState === 'running',
+   );
+diff --git a/tests/e2e/navigation.spec.ts b/tests/e2e/navigation.spec.ts
+index 467cd6e..8a8ec5d 100644
+--- a/tests/e2e/navigation.spec.ts
++++ b/tests/e2e/navigation.spec.ts
+@@ -1,43 +1,29 @@
+ import { test, expect, type Page } from '@playwright/test';
+ import { mkdirSync, writeFileSync } from 'node:fs';
+ import { reviewDir } from './evidence';
+-import {
+-  activate,
+-  act,
+-  ready,
+-  state,
+-  navigation,
+-  idle,
+-  undo,
+-  tabTo,
+-  fullyVisible,
+-  readable,
+-  dialogCycle,
+-} from './ui';
++import { activate, act, ready, state, navigation, idle, undo, tabTo, fullyVisible, readable, dialogCycle, selectPlace } from './ui';
+ 
+-async function selectedPassage(page: Page, destination: string, edgeId: string) {
+-  await expect.poll(async () => (await navigation(page)).selectedDestination).toBe(destination);
++const selection = (page: Page) => page.evaluate(() => (window as any).__LAST_FERRY__.getSelectionStatus());
++const audio = (page: Page) => page.evaluate(() => (window as any).__LAST_FERRY__.getAudioStatus());
++
++async function selectedPassage(page: Page, destination: string, edgeId: string, selected = true) {
+   const view = await navigation(page);
+-  expect(
+-    view.routes.filter((route: any) => route.highlighted).map((route: any) => route.id),
+-  ).toEqual([edgeId]);
+-  expect(view.markers.find((marker: any) => marker.id === destination).selected).toBe(true);
++  expect(view.routes.filter((route: any) => route.highlighted).map((route: any) => route.id)).toEqual([edgeId]);
++  if (selected) {
++    expect(view.selectedDestination).toBe(destination);
++    expect(view.markers.find((marker: any) => marker.id === destination).selected).toBe(true);
++  }
+ }
+ 
+ async function backgroundBlocked(page: Page, touch: boolean) {
+-  const before = await state(page),
+-    title = await page.locator('#dialog-title').innerText();
++  const before = await state(page), selected = await selection(page), title = await page.locator('#dialog-title').innerText();
+   const card = await page.locator('#dialog').boundingBox();
+-  expect(card).not.toBeNull();
+   let tried = false;
+   for (const id of ['map-harbor', 'map-shallows', 'wait', 'menu']) {
+-    const target = page.locator(`#${id}`);
+-    const bounds = await target.boundingBox();
++    const bounds = await page.locator(`#${id}`).boundingBox();
+     if (!bounds) continue;
+-    const x = bounds.x + bounds.width / 2,
+-      y = bounds.y + bounds.height / 2;
+-    if (x >= card!.x && x <= card!.x + card!.width && y >= card!.y && y <= card!.y + card!.height)
+-      continue;
++    const x = bounds.x + bounds.width / 2, y = bounds.y + bounds.height / 2;
++    if (x >= card!.x && x <= card!.x + card!.width && y >= card!.y && y <= card!.y + card!.height) continue;
+     if (touch) await page.touchscreen.tap(x, y);
+     else await page.mouse.click(x, y);
+     tried = true;
+@@ -45,12 +31,10 @@ async function backgroundBlocked(page: Page, touch: boolean) {
+   }
+   expect(tried).toBe(true);
+   await page.evaluate(() => {
+-    (document.getElementById('map-harbor') as HTMLButtonElement).click();
+-    (document.getElementById('wait') as HTMLButtonElement).click();
+-    (document.getElementById('menu') as HTMLButtonElement).click();
++    for (const id of ['map-harbor', 'wait', 'menu']) (document.getElementById(id) as HTMLButtonElement).click();
+   });
+   expect(await state(page)).toEqual(before);
+-  await expect(page.locator('#dialog')).toBeVisible();
++  expect((await selection(page)).selectedId).toBe(selected.selectedId);
+   await expect(page.locator('#dialog-title')).toHaveText(title);
+ }
+ 
+@@ -59,18 +43,9 @@ for (const [label, width, height, touch] of [
+   ['phone-contextual', 844, 390, true],
+   ['phone-narrow-contextual', 780, 390, true],
+ ] as const) {
+-  test(`${label}: full-width cove, free inspection, modal safety and tide-boundary subsets`, async ({
+-    browser,
+-  }) => {
+-    test.setTimeout(180000);
+-    const context = await browser.newContext({
+-      viewport: { width, height },
+-      deviceScaleFactor: 1,
+-      hasTouch: touch,
+-      isMobile: touch,
+-    });
+-    const page = await context.newPage(),
+-      errors: string[] = [];
++  test(`${label}: selection, explicit sailing, modal safety and tide-boundary subsets`, async ({ browser }) => {
++    const context = await browser.newContext({ viewport: { width, height }, deviceScaleFactor: 1, hasTouch: touch, isMobile: touch });
++    const page = await context.newPage(), errors: string[] = [];
+     page.on('pageerror', (error) => errors.push(error.message));
+     mkdirSync(reviewDir, { recursive: true });
+     await ready(page, 'holding-pier');
+@@ -80,319 +55,167 @@ for (const [label, width, height, touch] of [
+       await act(page, `map-${id}`, touch);
+       expect((await state(page)).turn).toBe(before.turn + 1);
+       expect((await state(page)).boatNodeId).toBe(id);
++      expect((await selection(page)).selectedId).toBe(id);
+       await expect(page.locator('#dialog')).not.toBeVisible();
++      await expect(page.locator('#local-heading')).toContainText(id === 'stone' ? 'Stone Pier' : id === 'rabbit-pier' ? 'Rabbit Pier' : id === 'harbor' ? 'Harbor' : 'Shallows');
+     };
+     const canvas = await page.locator('#world canvas').boundingBox();
+     expect(canvas!.x).toBe(0);
+     expect(canvas!.width).toBeGreaterThanOrEqual(width - 1);
+-    await expect(page.locator('.panel, #controls')).toHaveCount(0);
++    await expect(page.locator('#local-context')).toBeHidden();
++    await expect(page.locator('.inspect-route, .panel, #controls')).toHaveCount(0);
+     await expect(page.locator('#objective')).toHaveText('Bring all three passengers to Harbor');
+     await expect(page.locator('#progress')).toHaveText('Home 0/3');
+     await expect(page.locator('#boat-summary')).toHaveText('Depth 2 · 2/4 spaces');
+     await expect(page.locator('#status-headline')).toHaveText('Rabbit Pier floods in 4 actions.');
+-    await expect(page.locator('#map-harbor')).toHaveAccessibleName(
+-      'Sail to Harbor; Home, delivery destination',
+-    );
+-    await expect(page.locator('#map-stone')).toHaveAccessibleName('You are at Stone Pier');
+-    await expect(page.locator('#map-shallows')).toHaveAccessibleName(/^Sail to Shallows/);
+-    await expect(page.locator('#map-rabbit-pier')).toHaveAccessibleName(
+-      'Rabbit Pier: no direct passage',
+-    );
++    await expect(page.locator('#map-harbor')).toHaveAccessibleName(/Select Harbor.*Home, delivery destination/);
++    await expect(page.locator('#map-stone')).toHaveAccessibleName(/Select Stone Pier.*(?:here|current)/i);
++    await expect(page.locator('#map-shallows')).toHaveAccessibleName(/Select Shallows.*too shallow/i);
++    await expect(page.locator('#map-rabbit-pier')).toHaveAccessibleName(/Select Rabbit Pier.*no direct passage/i);
+     await expect(page.locator('#map-stone')).toHaveAttribute('aria-current', 'location');
+-    await expect(page.locator('#map-stone')).toContainText(/here|current/i);
+-    await expect(page.locator('#map-shallows')).toContainText(/too shallow/i);
+-    await expect(page.locator('#map-rabbit-pier')).toContainText(/no direct passage/i);
+-    for (const id of [
+-      'map-harbor',
+-      'map-stone',
+-      'map-shallows',
+-      'map-rabbit-pier',
+-      'inspect-harbor',
+-      'inspect-shallows',
+-      'unload',
+-      'undo',
+-      'wait',
+-      'menu',
+-      'status-toggle',
+-    ]) {
++    for (const id of ['map-harbor', 'map-stone', 'map-shallows', 'map-rabbit-pier', 'undo', 'wait', 'menu', 'status-toggle']) {
+       await fullyVisible(page, page.locator(`#${id}`));
+       await readable(page.locator(`#${id}`));
+     }
+-    for (const id of ['objective', 'boat-summary', 'status-headline', 'local-heading'])
+-      await readable(page.locator(`#${id}`));
++    for (const id of ['objective', 'boat-summary', 'status-headline']) await readable(page.locator(`#${id}`));
+     const firstNavigation = await navigation(page);
+     expect(firstNavigation.markers.map((marker: any) => [marker.id, marker.status])).toEqual([
+-      ['harbor', 'available'],
+-      ['stone', 'current'],
+-      ['shallows', 'too-shallow'],
+-      ['rabbit-pier', 'nonadjacent'],
++      ['harbor', 'available'], ['stone', 'current'], ['shallows', 'too-shallow'], ['rabbit-pier', 'nonadjacent'],
+     ]);
+     expect(new Set(firstNavigation.markers.map((marker: any) => marker.shape)).size).toBe(4);
+     const frame = await page.evaluate(() => (window as any).__LAST_FERRY__.getFrameStatus());
+     expect(frame.lighthouse.top).toBeGreaterThanOrEqual(8);
+     expect(frame.lighthouse.bottom).toBeLessThan(frame.canvas.height - 8);
+     for (const node of frame.nodes) {
+-      expect(node.x).toBeGreaterThan(0);
+-      expect(node.x).toBeLessThan(frame.canvas.width);
+-      expect(node.y).toBeGreaterThan(0);
+-      expect(node.y).toBeLessThan(frame.canvas.height);
++      expect(node.x).toBeGreaterThan(0); expect(node.x).toBeLessThan(frame.canvas.width);
++      expect(node.y).toBeGreaterThan(0); expect(node.y).toBeLessThan(frame.canvas.height);
+     }
+     for (const passenger of frame.passengers) expect(passenger.height).toBeGreaterThan(22);
+     await page.screenshot({ path: `${reviewDir}/${label}-start.png` });
+-    const initial = await state(page);
++    const initial = await state(page), desired = (await audio(page)).desiredArrangement;
+     await hit('map-stone');
++    await expect(page.locator('#unload')).toBeVisible();
+     expect(await state(page)).toEqual(initial);
+-    await expect(page.locator('#dialog')).not.toBeVisible();
+-    await expect(page.locator('#unload')).toBeFocused();
+     const boat = frame.boat;
+-    const boatX = canvas!.x + (boat.left + boat.right) / 2,
+-      boatY = canvas!.y + (boat.top + boat.bottom) / 2;
+-    if (touch) await page.touchscreen.tap(boatX, boatY);
+-    else await page.mouse.click(boatX, boatY);
++    if (touch) await page.touchscreen.tap(canvas!.x + (boat.left + boat.right) / 2, canvas!.y + (boat.top + boat.bottom) / 2);
++    else await page.mouse.click(canvas!.x + (boat.left + boat.right) / 2, canvas!.y + (boat.top + boat.bottom) / 2);
++    expect((await selection(page)).selectedId).toBe('stone');
+     expect(await state(page)).toEqual(initial);
+-    await expect(page.locator('#dialog')).not.toBeVisible();
+-    await expect(page.locator('#unload')).toBeFocused();
+     await hit('map-rabbit-pier');
+-    await expect(page.locator('#dialog')).toContainText(
+-      'No direct passage. Sail to an adjacent stop first.',
+-    );
+-    await expect(page.locator('#commit')).toBeDisabled();
++    await expect(page.locator('#local-context')).toContainText('No direct passage from Stone Pier.');
++    await expect(page.locator('#local-context')).toContainText('Pip');
+     expect((await navigation(page)).routes.filter((route: any) => route.highlighted)).toEqual([]);
+-    await dialogCycle(page);
+-    await hit('cancel');
++    await page.keyboard.press('Escape');
++    await expect(page.locator('#local-context')).toBeHidden();
+     if (!touch) {
+-      await page.locator('#map-harbor').hover();
+-      await selectedPassage(page, 'harbor', 'harbor-stone');
+-      await page.locator('#map-shallows').hover();
+-      await selectedPassage(page, 'shallows', 'stone-shallows');
+-      expect(await state(page)).toEqual(initial);
++      await page.locator('#map-harbor').hover(); await selectedPassage(page, 'harbor', 'harbor-stone', false);
++      await page.locator('#map-shallows').hover(); await selectedPassage(page, 'shallows', 'stone-shallows', false);
++      await expect(page.locator('#local-context')).toBeHidden();
+     }
+-    await hit('inspect-harbor');
+-    await expect(page.locator('#dialog-title')).toContainText('Harbor');
++    await hit('map-harbor');
++    await expect(page.locator('#local-heading')).toContainText('Harbor');
+     await selectedPassage(page, 'harbor', 'harbor-stone');
++    await fullyVisible(page, page.locator('#sail'));
+     expect(await state(page)).toEqual(initial);
+-    await dialogCycle(page);
+-    await backgroundBlocked(page, touch);
+-    await page.keyboard.press('Escape');
+-    await expect(page.locator('#inspect-harbor')).toBeFocused();
+-    await hit('inspect-shallows');
+-    await expect(page.locator('#dialog')).toContainText(
+-      'Boat needs depth 2. Passage has depth 1: too shallow.',
+-    );
++    await hit('map-shallows');
++    await expect(page.locator('#local-context')).toContainText('Boat needs depth 2. Passage has depth 1: too shallow.');
++    await expect(page.locator('#sail')).toBeDisabled();
+     await selectedPassage(page, 'shallows', 'stone-shallows');
+-    expect(await state(page)).toEqual(initial);
+-    for (const paragraph of await page.locator('#dialog p').all()) await readable(paragraph);
+-    await fullyVisible(page, page.locator('.requirement'), false);
++    for (const paragraph of await page.locator('#local-context p').all()) await readable(paragraph);
+     await page.screenshot({ path: `${reviewDir}/${label}-route-inspection.png` });
+-    await dialogCycle(page);
+-    const oldClose = await page.locator('#cancel').boundingBox();
++    const close = await page.locator('#close-location').boundingBox();
++    await page.evaluate(() => {
++      const runtime = window as any; runtime.__selectionClicks = [];
++      runtime.__traceSelectionClick = (event: MouseEvent) => runtime.__selectionClicks.push({ at: performance.now(), trusted: event.isTrusted, target: (event.target as HTMLElement).id, x: event.clientX, y: event.clientY });
++      window.addEventListener('click', runtime.__traceSelectionClick, true);
++    });
+     if (touch) {
+-      await page.evaluate(() => {
+-        const runtime = window as any;
+-        runtime.__closeClicks = [];
+-        runtime.__traceCloseClick = (event: MouseEvent) => {
+-          runtime.__closeClicks.push({
+-            at: performance.now(),
+-            trusted: event.isTrusted,
+-            target: (event.target as HTMLElement).id,
+-            x: event.clientX,
+-            y: event.clientY,
+-          });
+-        };
+-        window.addEventListener('click', runtime.__traceCloseClick, true);
+-      });
+-      await page.touchscreen.tap(
+-        oldClose!.x + oldClose!.width / 2,
+-        oldClose!.y + oldClose!.height / 2,
+-      );
+-      await page.touchscreen.tap(
+-        oldClose!.x + oldClose!.width / 2,
+-        oldClose!.y + oldClose!.height / 2,
+-      );
+-      const clicks = await page.evaluate(() => {
+-        const runtime = window as any;
+-        window.removeEventListener('click', runtime.__traceCloseClick, true);
+-        return runtime.__closeClicks as { at: number; trusted: boolean; target: string }[];
+-      });
+-      writeFileSync(
+-        `${reviewDir}/${label}-cancel-clicks.json`,
+-        JSON.stringify({ clicks, gapMs: clicks[1]?.at - clicks[0]?.at }, null, 2),
+-      );
+-      expect(clicks).toHaveLength(2);
+-      expect(clicks.every((click) => click.trusted)).toBe(true);
+-      expect(
+-        clicks[1].at - clicks[0].at,
+-        'The double-tap must exercise the 180ms fence',
+-      ).toBeLessThanOrEqual(180);
++      await page.touchscreen.tap(close!.x + close!.width / 2, close!.y + close!.height / 2);
++      await page.touchscreen.tap(close!.x + close!.width / 2, close!.y + close!.height / 2);
+     } else {
+-      await page.mouse.click(
+-        oldClose!.x + oldClose!.width / 2,
+-        oldClose!.y + oldClose!.height / 2,
+-        { clickCount: 2 },
+-      );
++      await page.mouse.click(close!.x + close!.width / 2, close!.y + close!.height / 2);
++      await page.mouse.click(close!.x + close!.width / 2, close!.y + close!.height / 2);
+     }
++    const clicks = await page.evaluate(() => {
++      const runtime = window as any; window.removeEventListener('click', runtime.__traceSelectionClick, true); return runtime.__selectionClicks;
++    });
++    writeFileSync(`${reviewDir}/${label}-close-clicks.json`, JSON.stringify({ clicks, gapMs: clicks[1]?.at - clicks[0]?.at }, null, 2));
++    expect(clicks).toHaveLength(2);
++    expect(clicks.every((click: any) => click.trusted)).toBe(true);
++    expect(clicks[1].at - clicks[0].at, 'The repeat pair must exercise the existing 180ms input fence').toBeLessThanOrEqual(180);
+     expect(await state(page)).toEqual(initial);
+     await expect(page.locator('#dialog')).not.toBeVisible();
+-    await tabTo(page, 'map-stone');
+-    await tabTo(page, 'map-harbor', true);
+-    await expect(page.locator('#map-harbor')).toBeFocused();
+-    await selectedPassage(page, 'harbor', 'harbor-stone');
+-    await tabTo(page, 'inspect-shallows');
++    await expect(page.locator('#local-context')).toBeHidden();
++    await tabTo(page, 'map-shallows');
+     await page.keyboard.press('Enter');
+-    await expect(page.locator('#cancel')).toBeFocused();
+-    await page.keyboard.press('Escape');
+-    await expect(page.locator('#inspect-shallows')).toBeFocused();
+-    await hit('wait');
+-    await expect(page.locator('#dialog-title')).toContainText('Wait');
+-    await expect(page.locator('#commit')).toContainText('1 action');
+-    await dialogCycle(page);
+-    await backgroundBlocked(page, touch);
++    await expect(page.locator('#local-heading')).toBeFocused();
++    await page.keyboard.down('Enter');
++    await page.keyboard.press('Enter');
++    await page.keyboard.up('Enter');
++    expect(await state(page)).toEqual(initial);
++    await expect(page.locator('#local-heading')).toBeFocused();
+     await page.keyboard.press('Escape');
+-    await expect(page.locator('#wait')).toBeFocused();
+-    await hit('menu');
+-    await dialogCycle(page);
+-    await backgroundBlocked(page, touch);
+-    for (const id of ['restart', 'sound', 'cove-picker'])
+-      await fullyVisible(page, page.locator(`#${id}`));
++    await expect(page.locator('#local-context')).toBeHidden();
++    await hit('wait'); await dialogCycle(page); await backgroundBlocked(page, touch);
++    await page.keyboard.press('Escape'); await expect(page.locator('#wait')).toBeFocused();
++    await expect(page.locator('#local-context')).toBeHidden();
++    await hit('menu'); await dialogCycle(page); await backgroundBlocked(page, touch);
++    for (const id of ['restart', 'sound', 'cove-picker']) await fullyVisible(page, page.locator(`#${id}`));
+     const soundLabel = await page.locator('#sound').getAttribute('aria-label');
+-    await tabTo(page, 'sound');
+-    await page.keyboard.press('Enter');
++    await tabTo(page, 'sound'); await page.keyboard.press('Enter');
+     await expect(page.locator('#sound')).not.toHaveAttribute('aria-label', soundLabel!);
+-    await expect(page.locator('#dialog')).toBeVisible();
+     const help = page.locator('#help-details summary');
+-    for (let count = 0; count < 32; count++) {
+-      if (await help.evaluate((element) => element === document.activeElement)) break;
+-      await page.keyboard.press('Tab');
+-    }
+-    await expect(help).toBeFocused();
+-    await page.keyboard.press('Enter');
+-    await expect(page.locator('#help-details')).toHaveAttribute('open', '');
+-    await expect(page.locator('#help-details')).toContainText(
+-      'Sailing, boarding, unloading and waiting each cost 1 action. Inspection is free.',
+-    );
+-    await page.keyboard.press('Escape');
+-    await expect(page.locator('#menu')).toBeFocused();
+-    await hit('status-toggle');
+-    await expect(page.locator('.forecast-detail')).toContainText('Rabbit Pier');
+-    await dialogCycle(page);
+-    await page.keyboard.press('Escape');
+-    await expect(page.locator('#status-toggle')).toBeFocused();
+-    expect(await state(page)).toEqual(initial);
++    for (let count = 0; count < 32; count++) { if (await help.evaluate((element) => element === document.activeElement)) break; await page.keyboard.press('Tab'); }
++    await expect(help).toBeFocused(); await page.keyboard.press('Enter');
++    await expect(page.locator('#help-details')).toContainText('Sailing, boarding, unloading and waiting each cost 1 action. Inspection is free.');
++    await page.keyboard.press('Escape'); await expect(page.locator('#menu')).toBeFocused();
++    await hit('status-toggle'); await dialogCycle(page); await expect(page.locator('.forecast-detail')).toContainText('Rabbit Pier');
++    await page.keyboard.press('Escape'); await expect(page.locator('#status-toggle')).toBeFocused();
++    expect(await state(page)).toEqual(initial); expect((await audio(page)).desiredArrangement).toBe(desired);
+     await hit('unload');
+     await expect(page.locator('#dialog')).toContainText('After unloading: boat needs depth 1.');
+-    await expect(page.locator('#dialog')).toContainText(
+-      'Moss will wait at Stone Pier. Stone Pier stays safe through all tide rises.',
+-    );
+-    await dialogCycle(page);
+-    await fullyVisible(page, page.locator('#commit'));
+-    await hit('commit');
+-    await idle(page);
+-    await sail('shallows');
+-    await sail('rabbit-pier');
+-    await expect(page.locator('#status-detail')).toContainText(
+-      'The tide rises after your next action.',
+-    );
++    await expect(page.locator('#dialog')).toContainText('Moss will wait at Stone Pier. Stone Pier stays safe through all tide rises.');
++    await dialogCycle(page); await fullyVisible(page, page.locator('#commit')); await hit('commit'); await idle(page);
++    await sail('shallows'); await sail('rabbit-pier');
++    await expect(page.locator('#status-detail')).toContainText('The tide rises after your next action.');
+     const dry = await state(page);
+-    await expect(page.locator('#map-shallows')).toContainText('Flood warning');
+     await hit('map-shallows');
+-    await expect(page.locator('.consequence')).toContainText('This ends the crossing.');
+-    await fullyVisible(page, page.locator('.consequence'), false);
++    await expect(page.locator('#local-context')).toContainText('This ends the crossing.');
+     expect(await state(page)).toEqual(dry);
+-    await hit('cancel');
++    await hit('sail'); await expect(page.locator('.consequence')).toContainText('This ends the crossing.');
++    await fullyVisible(page, page.locator('.consequence'), false); await hit('cancel');
++    await expect(page.locator('#sail')).toBeFocused();
+     await hit('board');
+-    await expect(page.locator('.consequence')).toContainText(
+-      /Pip and Rue board(?:, then the tide rises| first\. The tide then rises)\. Both are safe aboard\./,
+-    );
+-    await expect(page.locator('.consequence')).toContainText('Both are safe aboard.');
+-    for (const id of ['passenger-rabbit-1', 'passenger-rabbit-2']) {
+-      await fullyVisible(page, page.locator(`#${id}`));
+-      await readable(page.locator(`#${id}`));
+-    }
+-    await hit('passenger-rabbit-2');
+-    await expect(page.locator('#passenger-rabbit-2')).toBeFocused();
+-    await expect(page.locator('.consequence')).toContainText('Pip');
+-    await expect(page.locator('.consequence')).toContainText(
+-      'Rue is still waiting at Rabbit Pier when it floods. This ends the crossing.',
+-    );
+-    await fullyVisible(page, page.locator('.requirement'), false);
+-    await fullyVisible(page, page.locator('.consequence'), false);
+-    await fullyVisible(page, page.locator('#commit'));
++    await expect(page.locator('.consequence')).toContainText(/Pip and Rue board(?:, then the tide rises| first\. The tide then rises)\. Both are safe aboard\./);
++    for (const id of ['passenger-rabbit-1', 'passenger-rabbit-2']) { await fullyVisible(page, page.locator(`#${id}`)); await readable(page.locator(`#${id}`)); }
++    await hit('passenger-rabbit-2'); await expect(page.locator('#passenger-rabbit-2')).toBeFocused();
++    await expect(page.locator('.consequence')).toContainText('Rue is still waiting at Rabbit Pier when it floods. This ends the crossing.');
++    await fullyVisible(page, page.locator('.requirement'), false); await fullyVisible(page, page.locator('.consequence'), false); await fullyVisible(page, page.locator('#commit'));
+     await page.screenshot({ path: `${reviewDir}/${label}-subset-warning.png` });
+-    expect(await state(page)).toEqual(dry);
+-    await hit('commit');
+-    await idle(page);
+-    expect(await state(page)).toMatchObject({
+-      turn: 4,
+-      tideLevel: 1,
+-      status: 'lost',
+-      lossReason: { passengerIds: ['rabbit-2'] },
+-    });
+-    await expect(page.locator('.loss')).toContainText('Undo earlier moves, or restart');
+-    await dialogCycle(page, 'terminal-undo');
+-    const loss = await state(page);
+-    await page.keyboard.press('Escape');
+-    expect(await state(page)).toEqual(loss);
+-    await undo(page, touch);
+-    expect(await state(page)).toEqual(dry);
+-    await hit('board');
+-    await expect(page.locator('.consequence')).toContainText('Both are safe aboard.');
+-    await fullyVisible(page, page.locator('#commit'));
+-    await fullyVisible(page, page.locator('.consequence'), false);
+-    for (const paragraph of await page.locator('#dialog p').all()) await readable(paragraph);
++    expect(await state(page)).toEqual(dry); await hit('commit'); await idle(page);
++    expect(await state(page)).toMatchObject({ turn: 4, tideLevel: 1, status: 'lost', lossReason: { passengerIds: ['rabbit-2'] } });
++    await expect(page.locator('.loss')).toContainText('Undo earlier moves, or restart'); await dialogCycle(page, 'terminal-undo');
++    const loss = await state(page); await page.keyboard.press('Escape'); expect(await state(page)).toEqual(loss);
++    await undo(page, touch); expect(await state(page)).toEqual(dry); await expect(page.locator('#local-context')).toBeHidden();
++    await hit('board'); await expect(page.locator('.consequence')).toContainText('Both are safe aboard.');
++    await fullyVisible(page, page.locator('#commit')); await fullyVisible(page, page.locator('.consequence'), false);
+     await page.screenshot({ path: `${reviewDir}/${label}-critical-boarding.png` });
+-    await hit('commit');
+-    await idle(page);
+-    expect(await state(page)).toMatchObject({
+-      turn: 4,
+-      tideLevel: 1,
+-      status: 'playing',
+-      waitingByPier: { 'rabbit-pier': [], 'stone-pier': ['sheep-1'] },
+-    });
++    await hit('commit'); await idle(page);
++    expect(await state(page)).toMatchObject({ turn: 4, tideLevel: 1, status: 'playing', waitingByPier: { 'rabbit-pier': [], 'stone-pier': ['sheep-1'] } });
+     await expect(page.locator('#status-headline')).toHaveText('Pip and Rue are safe aboard.');
+     await expect(page.locator('#status-detail')).toContainText('Moss waits safely at Stone Pier.');
+     await expect(page.locator('#status-headline')).not.toContainText(/flood/i);
+     await page.screenshot({ path: `${reviewDir}/${label}-after-rise.png` });
+-    await hit('status-toggle');
+-    await expect(page.locator('.forecast-detail')).toContainText(
+-      'Rabbit Pier is flooded and empty.',
+-    );
+-    await hit('cancel');
+-    await sail('shallows');
+-    await sail('stone');
+-    await act(page, 'board', touch);
+-    await sail('harbor');
+-    await act(page, 'unload', touch);
+-    expect(await state(page)).toMatchObject({
+-      turn: 9,
+-      tideLevel: 2,
+-      status: 'won',
+-      delivered: ['rabbit-1', 'rabbit-2', 'sheep-1'],
+-    });
++    await hit('status-toggle'); await expect(page.locator('.forecast-detail')).toContainText('Rabbit Pier is flooded and empty.'); await hit('cancel');
++    await sail('shallows'); await sail('stone'); await act(page, 'board', touch); await sail('harbor'); await act(page, 'unload', touch);
++    expect(await state(page)).toMatchObject({ turn: 9, tideLevel: 2, status: 'won', delivered: ['rabbit-1', 'rabbit-2', 'sheep-1'] });
+     await expect(page.locator('#map-harbor')).toHaveAttribute('aria-current', 'location');
+-    await fullyVisible(page, page.locator('#terminal-undo'));
+-    await fullyVisible(page, page.locator('#terminal-restart'));
+-    await dialogCycle(page, 'terminal-undo');
++    await expect(page.locator('#local-context')).toBeHidden();
++    await fullyVisible(page, page.locator('#terminal-undo')); await fullyVisible(page, page.locator('#terminal-restart')); await dialogCycle(page, 'terminal-undo');
+     await page.screenshot({ path: `${reviewDir}/${label}-success.png` });
+-    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+-      true,
+-    );
++    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+     expect(errors).toEqual([]);
+-    writeFileSync(
+-      `${reviewDir}/${label}-verification.json`,
+-      JSON.stringify(
+-        {
+-          viewport: [width, height],
+-          touchEmulation: touch,
+-          initialState: initial,
+-          startNavigation: firstNavigation,
+-          frame,
+-          finalState: await state(page),
+-          errors,
+-        },
+-        null,
+-        2,
+-      ),
+-    );
++    writeFileSync(`${reviewDir}/${label}-verification.json`, JSON.stringify({ viewport: [width, height], touchEmulation: touch, initialState: initial, startNavigation: firstNavigation, frame, finalState: await state(page), errors }, null, 2));
+     await context.close();
+   });
+ }
+diff --git a/tests/e2e/refinement.spec.ts b/tests/e2e/refinement.spec.ts
+index 55e3403..083262d 100644
+--- a/tests/e2e/refinement.spec.ts
++++ b/tests/e2e/refinement.spec.ts
+@@ -23,15 +23,15 @@ for (const [name, width, height] of [
+     await page.setViewportSize({ width, height });
+     await ready(page);
+     await tabTo(page, 'map-sheep-pier');
+-    await tabTo(page, 'inspect-harbor', true);
+-    await expect(page.locator('#inspect-harbor')).toBeFocused();
++    await tabTo(page, 'map-harbor', true);
++    await expect(page.locator('#map-harbor')).toBeFocused();
+     await page.keyboard.press('Enter');
+-    await expect(page.locator('#cancel')).toBeFocused();
++    await expect(page.locator('#local-heading')).toBeFocused();
+     await page.keyboard.press('Escape');
+-    await expect(page.locator('#inspect-harbor')).toBeFocused();
++    await expect(page.locator('#map-harbor')).toBeFocused();
+     expect((await api(page)).turn).toBe(0);
+     await keyAction(page, 'map-sheep-pier');
+-    expect(await active(page)).toMatch(/^(board|unload|wait|map-|inspect-)/);
++    expect(await active(page)).toMatch(/^(local-heading|board|unload|wait|map-)/);
+     await fullyVisible(page, page.locator('#board'));
+     await tabTo(page, 'board');
+     await page.keyboard.press('Enter');
+@@ -66,7 +66,7 @@ for (const [name, width, height] of [
+     await page.screenshot({ path: `${reviewDir}/${name}-keyboard-success.png` });
+     await page.keyboard.press('Enter');
+     expect(await api(page)).toMatchObject({ status: 'playing', turn: 6, delivered: [] });
+-    expect(await active(page)).toMatch(/^(board|unload|wait|undo|map-|inspect-)/);
++    expect(await active(page)).toMatch(/^(local-heading|board|unload|wait|undo|map-)/);
+     await keyAction(page, 'unload');
+     expect((await api(page)).status).toBe('won');
+   });
+diff --git a/tests/e2e/responsive.spec.ts b/tests/e2e/responsive.spec.ts
+index 88dd641..50209b0 100644
+--- a/tests/e2e/responsive.spec.ts
++++ b/tests/e2e/responsive.spec.ts
+@@ -33,6 +33,8 @@ async function noOverlap(first: Locator, second: Locator) {
+ }
+ 
+ async function localLayout(page: Page) {
++  if (!(await page.locator('#local-context').isVisible()))
++    await page.locator('.map-target[aria-current="location"]').click();
+   const local = page.locator('#local-context');
+   await fullyVisible(page, local, false);
+   await fullyVisible(page, page.locator('#status-toggle'));
+@@ -59,11 +61,7 @@ async function localLayout(page: Page) {
+     };
+   });
+   expect(measurements.cardHeight).toBeLessThanOrEqual(measurements.naturalHeight + 1);
+-  expect(measurements.cardHeight).toBeLessThanOrEqual(120);
+-  if (measurements.width > 700 && measurements.height <= 600) {
+-    expect(measurements.inlineTop).toBe('');
+-    expect(measurements.inlineLeft).toBe('');
+-  }
++  expect(measurements.cardHeight).toBeLessThanOrEqual(Math.min(260, measurements.height * 0.5));
+   await noOverlap(local, page.locator('#status-toggle'));
+   for (const route of await page.locator('#map-labels button').all()) {
+     await fullyVisible(page, route);
+diff --git a/tests/e2e/ui.ts b/tests/e2e/ui.ts
+index 6923e47..9fa5cab 100644
+--- a/tests/e2e/ui.ts
++++ b/tests/e2e/ui.ts
+@@ -15,12 +15,29 @@ export async function ready(page: Page, cove = 'first-crossing') {
+   await idle(page);
+ }
+ export async function activate(page: Page, id: string, touch = false) {
++  if ((id === 'board' || id === 'unload') && !(await page.locator(`#${id}`).isVisible())) {
++    const current = await page.locator('.map-target[aria-current="location"]').getAttribute('id');
++    if (!current) throw Error('No current location selector is available');
++    if (touch) await page.locator(`#${current}`).tap();
++    else await page.locator(`#${current}`).click();
++  }
+   if (touch) await page.locator(`#${id}`).tap();
+   else await page.locator(`#${id}`).click();
+ }
++export async function selectPlace(page: Page, id: string, touch = false) {
++  await activate(page, id.startsWith('map-') ? id : `map-${id}`, touch);
++  await expect(page.locator('#local-context')).toBeVisible();
++}
++export async function startMove(page: Page, id: string, touch = false) {
++  await selectPlace(page, id, touch);
++  await activate(page, 'sail', touch);
++}
+ export async function act(page: Page, id: string, touch = false) {
+-  await activate(page, id, touch);
+-  if (!id.startsWith('map-')) await activate(page, 'commit', touch);
++  if (id.startsWith('map-')) await startMove(page, id, touch);
++  else {
++    await activate(page, id, touch);
++    await activate(page, 'commit', touch);
++  }
+   await idle(page);
+ }
+ export async function undo(page: Page, touch = false) {
+@@ -49,9 +66,20 @@ export async function tabTo(page: Page, id: string, backwards = false) {
+   throw Error(`Natural Tab navigation did not reach ${id}; active=${await active(page)}`);
+ }
+ export async function keyAct(page: Page, id: string) {
++  if ((id === 'board' || id === 'unload') && !(await page.locator(`#${id}`).isVisible())) {
++    const current = await page.locator('.map-target[aria-current="location"]').getAttribute('id');
++    if (!current) throw Error('No current location selector is available');
++    await tabTo(page, current);
++    await page.keyboard.press('Enter');
++    await expect(page.locator('#local-heading')).toBeFocused();
++  }
+   await tabTo(page, id);
+   await page.keyboard.press('Enter');
+-  if (!id.startsWith('map-')) {
++  if (id.startsWith('map-')) {
++    await expect(page.locator('#local-heading')).toBeFocused();
++    await tabTo(page, 'sail');
++    await page.keyboard.press('Enter');
++  } else {
+     await expect(page.locator('#cancel')).toBeFocused();
+     await tabTo(page, 'commit');
+     await page.keyboard.press('Enter');
+diff --git a/tests/unit/contact.test.ts b/tests/unit/contact.test.ts
+index bf522f6..5577968 100644
+--- a/tests/unit/contact.test.ts
++++ b/tests/unit/contact.test.ts
+@@ -1,9 +1,34 @@
+ import { expect, test } from 'vitest';
+ import * as T from 'three';
+-import { lighthouse, mat, ferry } from '../../src/scene/models';
++import { lighthouse, mat, ferry, palette } from '../../src/scene/models';
+ import { contactMaterial } from '../../src/scene/contact';
+ import { CrossingEffects } from '../../src/scene/effects';
+ 
++test('lantern warmth stays scoped to its visible source and receivers with normal occlusion', () => {
++  const shared = [mat('#eee3c6'), mat(palette.red), mat('#b7a580'), mat('#ffe8b6')];
++  const original = shared.map((material) => ({
++    color: material.color.clone(),
++    emissive: material.emissive.clone(),
++    intensity: material.emissiveIntensity,
++    compile: material.onBeforeCompile,
++  }));
++  const home = lighthouse(new T.Group(), 0, 0.54, 0);
++  const effects = new CrossingEffects(home);
++  for (const object of [home.lens, home.core, home.tower, home.gallery, home.roof]) {
++    expect(shared).not.toContain(object.material);
++    expect(object.material.depthTest).toBe(true);
++  }
++  expect(effects.glow.material.depthTest).toBe(true);
++  expect(home.core.material.emissiveIntensity).toBeGreaterThan(0);
++  expect(home.lamp.castShadow).toBe(false);
++  for (const [index, material] of shared.entries()) {
++    expect(material.color).toEqual(original[index].color);
++    expect(material.emissive).toEqual(original[index].emissive);
++    expect(material.emissiveIntensity).toBe(original[index].intensity);
++    expect(material.onBeforeCompile).toBe(original[index].compile);
++  }
++});
++
+ test('home light uses the explicit lens and world anchor and restores its baseline after a delivery', () => {
+   const scene = new T.Group();
+   scene.position.set(2, 0.3, -1);

@@ -1,0 +1,22 @@
+
+Running 13 tests using 1 worker
+
+(node:57908) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\e2e\phone-audio-fullscreen.spec.ts:457:1 › phone saved mute: ordinary touch stays silent and one explicit Enable starts audio (4.4s)
+  ok  2 tests\e2e\phone-audio-fullscreen.spec.ts:489:3 › phone controlled resume reject: Retry owns newer pending request and Mute wins late completion (3.3s)
+  ok  3 tests\e2e\phone-audio-fullscreen.spec.ts:542:1 › phone controlled pending mute: explicit Settings mute never activates playback first (3.2s)
+  ok  4 tests\e2e\phone-audio-fullscreen.spec.ts:577:1 › phone controlled explicit touch intent: late running or suspension cannot invert Retry or Mute (2.9s)
+  ok  5 tests\e2e\phone-audio-fullscreen.spec.ts:667:3 › phone supported fullscreen cold-muted: real entry, visible dialog hit and external exit retain subset (5.0s)
+  ok  6 tests\e2e\phone-audio-fullscreen.spec.ts:667:3 › phone supported fullscreen pending: real entry, visible dialog hit and external exit retain subset (5.4s)
+  ok  7 tests\e2e\phone-audio-fullscreen.spec.ts:667:3 › phone supported fullscreen running: real entry, visible dialog hit and external exit retain subset (5.3s)
+  ok  8 tests\e2e\phone-audio-fullscreen.spec.ts:747:1 › phone fullscreen real header policy denial: effective restriction is separate from unsupported API (2.9s)
+  ok  9 tests\e2e\phone-audio-fullscreen.spec.ts:804:3 › phone fullscreen mocked rejected: short landscape feedback and manual support copy remain reachable (3.7s)
+  ok 10 tests\e2e\phone-audio-fullscreen.spec.ts:804:3 › phone fullscreen mocked unavailable: short landscape feedback and manual support copy remain reachable (3.6s)
+  ok 11 tests\e2e\phone-audio-fullscreen.spec.ts:865:3 › phone audio rescue 844x390: UI subsets, tide and terminal Undo, restart and visibility preserve ownership (26.6s)
+  ok 12 tests\e2e\phone-audio-fullscreen.spec.ts:865:3 › phone audio rescue 390x844: UI subsets, tide and terminal Undo, restart and visibility preserve ownership (25.0s)
+(node:25296) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 13 tests\e2e\phone-playability.spec.ts:656:1 › phone fullscreen: real API result, root includes dialogs and external exit preserves subset (8.5s)
+
+  13 passed (1.7m)

@@ -1,0 +1,383 @@
+
+Running 19 tests using 1 worker
+
+(node:22212) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   1 tests\e2e\phone-audio-fullscreen.spec.ts:304:1 › phone native autoplay policy calibration: untrusted resume stays pending until trusted touch (674ms)
+(node:4340) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   2 tests\e2e\phone-audio-fullscreen.spec.ts:354:3 › phone audio cold holding-pier: first completed touch starts sustained real output (109ms)
+(node:26228) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   3 tests\e2e\phone-audio-fullscreen.spec.ts:354:3 › phone audio cold first-crossing: first completed touch starts sustained real output (77ms)
+(node:54484) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   4 tests\e2e\phone-audio-fullscreen.spec.ts:393:1 › phone saved mute: ordinary touch stays silent and one explicit Enable starts audio (78ms)
+(node:46640) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   5 tests\e2e\phone-audio-fullscreen.spec.ts:425:3 › phone controlled resume resolve: Retry owns newer pending request and Mute wins late completion (150ms)
+(node:39440) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   6 tests\e2e\phone-audio-fullscreen.spec.ts:425:3 › phone controlled resume reject: Retry owns newer pending request and Mute wins late completion (149ms)
+(node:38268) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   7 tests\e2e\phone-audio-fullscreen.spec.ts:477:1 › phone controlled pending mute: explicit Settings mute never activates playback first (146ms)
+(node:30880) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   8 tests\e2e\phone-audio-fullscreen.spec.ts:512:1 › phone controlled explicit touch intent: late running or suspension cannot invert Retry or Mute (143ms)
+(node:54740) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   9 tests\e2e\phone-audio-fullscreen.spec.ts:563:3 › phone supported fullscreen cold-muted: real entry, visible dialog hit and external exit retain subset (79ms)
+(node:58276) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  10 tests\e2e\phone-audio-fullscreen.spec.ts:563:3 › phone supported fullscreen pending: real entry, visible dialog hit and external exit retain subset (150ms)
+(node:16492) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  11 tests\e2e\phone-audio-fullscreen.spec.ts:563:3 › phone supported fullscreen running: real entry, visible dialog hit and external exit retain subset (79ms)
+(node:23200) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  12 tests\e2e\phone-audio-fullscreen.spec.ts:642:1 › phone fullscreen real header policy denial: effective restriction is separate from unsupported API (78ms)
+(node:57108) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  13 tests\e2e\phone-audio-fullscreen.spec.ts:699:3 › phone fullscreen mocked rejected: short landscape feedback and manual support copy remain reachable (78ms)
+(node:14328) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  14 tests\e2e\phone-audio-fullscreen.spec.ts:699:3 › phone fullscreen mocked unavailable: short landscape feedback and manual support copy remain reachable (80ms)
+(node:4148) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  15 tests\e2e\phone-audio-fullscreen.spec.ts:760:3 › phone audio rescue 844x390: UI subsets, tide and terminal Undo, restart and visibility preserve ownership (76ms)
+(node:4900) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  16 tests\e2e\phone-audio-fullscreen.spec.ts:760:3 › phone audio rescue 390x844: UI subsets, tide and terminal Undo, restart and visibility preserve ownership (88ms)
+(node:12788) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 17 tests\e2e\phone-playability.spec.ts:656:1 › phone fullscreen: real API result, root includes dialogs and external exit preserves subset (9.0s)
+  x  18 tests\e2e\selection.spec.ts:242:1 › selection regression: an explicit new place permits the next trusted Sail inside the previous 180ms fence (6.7s)
+(node:29236) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  19 tests\e2e\selection.spec.ts:267:1 › selection regression: the arrived dock permits a deliberate local action inside the prior Sail fence (6.1s)
+
+
+  1) tests\e2e\phone-audio-fullscreen.spec.ts:304:1 › phone native autoplay policy calibration: untrusted resume stays pending until trusted touch 
+
+    Error: expect(received).toMatchObject(expected)
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "hasBeenActive": false,
+    +   "hasBeenActive": true,
+        "settled": false,
+        "state": "suspended",
+      }
+
+      324 |     await page.waitForTimeout(250);
+      325 |     before = await page.evaluate(() => (window as any).policyStatus());
+    > 326 |     expect(before).toMatchObject({ state: 'suspended', settled: false, hasBeenActive: false });
+          |                    ^
+      327 |     await page.locator('#activate').tap();
+      328 |     await expect
+      329 |       .poll(() => page.evaluate(() => (window as any).policyStatus().state))
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-audio-fullscreen.spec.ts:326:20
+
+    Error Context: test-results\phone-audio-fullscreen-pho-da69f-pending-until-trusted-touch\error-context.md
+
+  2) tests\e2e\phone-audio-fullscreen.spec.ts:354:3 › phone audio cold holding-pier: first completed touch starts sustained real output 
+
+    Error: cdpSession.send: Protocol error (Browser.getBrowserCommandLine): Command line not returned because --enable-automation not set.
+
+      146 |   let failure: string | null = null;
+      147 |   const cdp = await browser.newBrowserCDPSession();
+    > 148 |   const command = await cdp.send('Browser.getBrowserCommandLine');
+          |                             ^
+      149 |   await cdp.detach();
+      150 |   const autoplayFlags = command.arguments.filter((argument: string) =>
+      151 |     argument.includes('autoplay-policy'),
+        at scenario (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-audio-fullscreen.spec.ts:148:29)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-audio-fullscreen.spec.ts:357:5
+
+    Error Context: test-results\phone-audio-fullscreen-pho-9d447-tarts-sustained-real-output\error-context.md
+
+  3) tests\e2e\phone-audio-fullscreen.spec.ts:354:3 › phone audio cold first-crossing: first completed touch starts sustained real output 
+
+    Error: cdpSession.send: Protocol error (Browser.getBrowserCommandLine): Command line not returned because --enable-automation not set.
+
+      146 |   let failure: string | null = null;
+      147 |   const cdp = await browser.newBrowserCDPSession();
+    > 148 |   const command = await cdp.send('Browser.getBrowserCommandLine');
+          |                             ^
+      149 |   await cdp.detach();
+      150 |   const autoplayFlags = command.arguments.filter((argument: string) =>
+      151 |     argument.includes('autoplay-policy'),
+        at scenario (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-audio-fullscreen.spec.ts:148:29)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-audio-fullscreen.spec.ts:357:5
+
+    Error Context: test-results\phone-audio-fullscreen-pho-ac8ef-tarts-sustained-real-output\error-context.md
+
+  4) tests\e2e\phone-audio-fullscreen.spec.ts:393:1 › phone saved mute: ordinary touch stays silent and one explicit Enable starts audio 
+
+    Error: cdpSession.send: Protocol error (Browser.getBrowserCommandLine): Command line not returned because --enable-automation not set.
+
+      146 |   let failure: string | null = null;
+      147 |   const cdp = await browser.newBrowserCDPSession();
+    > 148 |   const command = await cdp.send('Browser.getBrowserCommandLine');
+          |                             ^
+      149 |   await cdp.detach();
+      150 |   const autoplayFlags = command.arguments.filter((argument: string) =>
+      151 |     argument.includes('autoplay-policy'),
+        at scenario (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-audio-fullscreen.spec.ts:148:29)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-audio-fullscreen.spec.ts:396:3
+
+    Error Context: test-results\phone-audio-fullscreen-pho-a058a-xplicit-Enable-starts-audio\error-context.md
+
+  5) tests\e2e\phone-audio-fullscreen.spec.ts:425:3 › phone controlled resume resolve: Retry owns newer pending request and Mute wins late completion 
+
+    Error: cdpSession.send: Protocol error (Browser.getBrowserCommandLine): Command line not returned because --enable-automation not set.
+
+      146 |   let failure: string | null = null;
+      147 |   const cdp = await browser.newBrowserCDPSession();
+    > 148 |   const command = await cdp.send('Browser.getBrowserCommandLine');
+          |                             ^
+      149 |   await cdp.detach();
+      150 |   const autoplayFlags = command.arguments.filter((argument: string) =>
+      151 |     argument.includes('autoplay-policy'),
+        at scenario (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-audio-fullscreen.spec.ts:148:29)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-audio-fullscreen.spec.ts:428:5
+
+    Error Context: test-results\phone-audio-fullscreen-pho-57a7e-d-Mute-wins-late-completion\error-context.md
+
+  6) tests\e2e\phone-audio-fullscreen.spec.ts:425:3 › phone controlled resume reject: Retry owns newer pending request and Mute wins late completion 
+
+    Error: cdpSession.send: Protocol error (Browser.getBrowserCommandLine): Command line not returned because --enable-automation not set.
+
+      146 |   let failure: string | null = null;
+      147 |   const cdp = await browser.newBrowserCDPSession();
+    > 148 |   const command = await cdp.send('Browser.getBrowserCommandLine');
+          |                             ^
+      149 |   await cdp.detach();
+      150 |   const autoplayFlags = command.arguments.filter((argument: string) =>
+      151 |     argument.includes('autoplay-policy'),
+        at scenario (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-audio-fullscreen.spec.ts:148:29)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-audio-fullscreen.spec.ts:428:5
+
+    Error Context: test-results\phone-audio-fullscreen-pho-be809-d-Mute-wins-late-completion\error-context.md
+
+  7) tests\e2e\phone-audio-fullscreen.spec.ts:477:1 › phone controlled pending mute: explicit Settings mute never activates playback first 
+
+    Error: cdpSession.send: Protocol error (Browser.getBrowserCommandLine): Command line not returned because --enable-automation not set.
+
+      146 |   let failure: string | null = null;
+      147 |   const cdp = await browser.newBrowserCDPSession();
+    > 148 |   const command = await cdp.send('Browser.getBrowserCommandLine');
+          |                             ^
+      149 |   await cdp.detach();
+      150 |   const autoplayFlags = command.arguments.filter((argument: string) =>
+      151 |     argument.includes('autoplay-policy'),
+        at scenario (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-audio-fullscreen.spec.ts:148:29)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-audio-fullscreen.spec.ts:480:3
+
+    Error Context: test-results\phone-audio-fullscreen-pho-59361-er-activates-playback-first\error-context.md
+
+  8) tests\e2e\phone-audio-fullscreen.spec.ts:512:1 › phone controlled explicit touch intent: late running or suspension cannot invert Retry or Mute 
+
+    Error: cdpSession.send: Protocol error (Browser.getBrowserCommandLine): Command line not returned because --enable-automation not set.
+
+      146 |   let failure: string | null = null;
+      147 |   const cdp = await browser.newBrowserCDPSession();
+    > 148 |   const command = await cdp.send('Browser.getBrowserCommandLine');
+          |                             ^
+      149 |   await cdp.detach();
+      150 |   const autoplayFlags = command.arguments.filter((argument: string) =>
+      151 |     argument.includes('autoplay-policy'),
+        at scenario (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-audio-fullscreen.spec.ts:148:29)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-audio-fullscreen.spec.ts:515:3
+
+    Error Context: test-results\phone-audio-fullscreen-pho-f4cbc-cannot-invert-Retry-or-Mute\error-context.md
+
+  9) tests\e2e\phone-audio-fullscreen.spec.ts:563:3 › phone supported fullscreen cold-muted: real entry, visible dialog hit and external exit retain subset 
+
+    Error: cdpSession.send: Protocol error (Browser.getBrowserCommandLine): Command line not returned because --enable-automation not set.
+
+      146 |   let failure: string | null = null;
+      147 |   const cdp = await browser.newBrowserCDPSession();
+    > 148 |   const command = await cdp.send('Browser.getBrowserCommandLine');
+          |                             ^
+      149 |   await cdp.detach();
+      150 |   const autoplayFlags = command.arguments.filter((argument: string) =>
+      151 |     argument.includes('autoplay-policy'),
+        at scenario (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-audio-fullscreen.spec.ts:148:29)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-audio-fullscreen.spec.ts:566:5
+
+    Error Context: test-results\phone-audio-fullscreen-pho-f08a5-external-exit-retain-subset\error-context.md
+
+  10) tests\e2e\phone-audio-fullscreen.spec.ts:563:3 › phone supported fullscreen pending: real entry, visible dialog hit and external exit retain subset 
+
+    Error: cdpSession.send: Protocol error (Browser.getBrowserCommandLine): Command line not returned because --enable-automation not set.
+
+      146 |   let failure: string | null = null;
+      147 |   const cdp = await browser.newBrowserCDPSession();
+    > 148 |   const command = await cdp.send('Browser.getBrowserCommandLine');
+          |                             ^
+      149 |   await cdp.detach();
+      150 |   const autoplayFlags = command.arguments.filter((argument: string) =>
+      151 |     argument.includes('autoplay-policy'),
+        at scenario (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-audio-fullscreen.spec.ts:148:29)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-audio-fullscreen.spec.ts:566:5
+
+    Error Context: test-results\phone-audio-fullscreen-pho-9601a-external-exit-retain-subset\error-context.md
+
+  11) tests\e2e\phone-audio-fullscreen.spec.ts:563:3 › phone supported fullscreen running: real entry, visible dialog hit and external exit retain subset 
+
+    Error: cdpSession.send: Protocol error (Browser.getBrowserCommandLine): Command line not returned because --enable-automation not set.
+
+      146 |   let failure: string | null = null;
+      147 |   const cdp = await browser.newBrowserCDPSession();
+    > 148 |   const command = await cdp.send('Browser.getBrowserCommandLine');
+          |                             ^
+      149 |   await cdp.detach();
+      150 |   const autoplayFlags = command.arguments.filter((argument: string) =>
+      151 |     argument.includes('autoplay-policy'),
+        at scenario (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-audio-fullscreen.spec.ts:148:29)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-audio-fullscreen.spec.ts:566:5
+
+    Error Context: test-results\phone-audio-fullscreen-pho-8da01-external-exit-retain-subset\error-context.md
+
+  12) tests\e2e\phone-audio-fullscreen.spec.ts:642:1 › phone fullscreen real header policy denial: effective restriction is separate from unsupported API 
+
+    Error: cdpSession.send: Protocol error (Browser.getBrowserCommandLine): Command line not returned because --enable-automation not set.
+
+      146 |   let failure: string | null = null;
+      147 |   const cdp = await browser.newBrowserCDPSession();
+    > 148 |   const command = await cdp.send('Browser.getBrowserCommandLine');
+          |                             ^
+      149 |   await cdp.detach();
+      150 |   const autoplayFlags = command.arguments.filter((argument: string) =>
+      151 |     argument.includes('autoplay-policy'),
+        at scenario (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-audio-fullscreen.spec.ts:148:29)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-audio-fullscreen.spec.ts:645:3
+
+    Error Context: test-results\phone-audio-fullscreen-pho-718f0-parate-from-unsupported-API\error-context.md
+
+  13) tests\e2e\phone-audio-fullscreen.spec.ts:699:3 › phone fullscreen mocked rejected: short landscape feedback and manual support copy remain reachable 
+
+    Error: cdpSession.send: Protocol error (Browser.getBrowserCommandLine): Command line not returned because --enable-automation not set.
+
+      146 |   let failure: string | null = null;
+      147 |   const cdp = await browser.newBrowserCDPSession();
+    > 148 |   const command = await cdp.send('Browser.getBrowserCommandLine');
+          |                             ^
+      149 |   await cdp.detach();
+      150 |   const autoplayFlags = command.arguments.filter((argument: string) =>
+      151 |     argument.includes('autoplay-policy'),
+        at scenario (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-audio-fullscreen.spec.ts:148:29)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-audio-fullscreen.spec.ts:702:5
+
+    Error Context: test-results\phone-audio-fullscreen-pho-7fa79-pport-copy-remain-reachable\error-context.md
+
+  14) tests\e2e\phone-audio-fullscreen.spec.ts:699:3 › phone fullscreen mocked unavailable: short landscape feedback and manual support copy remain reachable 
+
+    Error: cdpSession.send: Protocol error (Browser.getBrowserCommandLine): Command line not returned because --enable-automation not set.
+
+      146 |   let failure: string | null = null;
+      147 |   const cdp = await browser.newBrowserCDPSession();
+    > 148 |   const command = await cdp.send('Browser.getBrowserCommandLine');
+          |                             ^
+      149 |   await cdp.detach();
+      150 |   const autoplayFlags = command.arguments.filter((argument: string) =>
+      151 |     argument.includes('autoplay-policy'),
+        at scenario (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-audio-fullscreen.spec.ts:148:29)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-audio-fullscreen.spec.ts:702:5
+
+    Error Context: test-results\phone-audio-fullscreen-pho-c3aa5-pport-copy-remain-reachable\error-context.md
+
+  15) tests\e2e\phone-audio-fullscreen.spec.ts:760:3 › phone audio rescue 844x390: UI subsets, tide and terminal Undo, restart and visibility preserve ownership 
+
+    Error: cdpSession.send: Protocol error (Browser.getBrowserCommandLine): Command line not returned because --enable-automation not set.
+
+      146 |   let failure: string | null = null;
+      147 |   const cdp = await browser.newBrowserCDPSession();
+    > 148 |   const command = await cdp.send('Browser.getBrowserCommandLine');
+          |                             ^
+      149 |   await cdp.detach();
+      150 |   const autoplayFlags = command.arguments.filter((argument: string) =>
+      151 |     argument.includes('autoplay-policy'),
+        at scenario (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-audio-fullscreen.spec.ts:148:29)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-audio-fullscreen.spec.ts:763:5
+
+    Error Context: test-results\phone-audio-fullscreen-pho-cc614-sibility-preserve-ownership\error-context.md
+
+  16) tests\e2e\phone-audio-fullscreen.spec.ts:760:3 › phone audio rescue 390x844: UI subsets, tide and terminal Undo, restart and visibility preserve ownership 
+
+    Error: cdpSession.send: Protocol error (Browser.getBrowserCommandLine): Command line not returned because --enable-automation not set.
+
+      146 |   let failure: string | null = null;
+      147 |   const cdp = await browser.newBrowserCDPSession();
+    > 148 |   const command = await cdp.send('Browser.getBrowserCommandLine');
+          |                             ^
+      149 |   await cdp.detach();
+      150 |   const autoplayFlags = command.arguments.filter((argument: string) =>
+      151 |     argument.includes('autoplay-policy'),
+        at scenario (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-audio-fullscreen.spec.ts:148:29)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-audio-fullscreen.spec.ts:763:5
+
+    Error Context: test-results\phone-audio-fullscreen-pho-994f1-sibility-preserve-ownership\error-context.md
+
+  17) tests\e2e\selection.spec.ts:242:1 › selection regression: an explicit new place permits the next trusted Sail inside the previous 180ms fence 
+
+    Error: expect(received).toHaveLength(expected)
+
+    Expected length: 3
+    Received length: 1
+    Received array:  [{"at": 915.5, "dialogOpen": false, "selectedId": "map-shallows", "snapshot": {"desiredMusic": "ordinary", "history": 1, "state": {"aboard": [], "boatNodeId": "stone", "delivered": [], "lossReason": null, "status": "playing", "tideLevel": 0, "turn": 1, "waitingByPier": {"harbor-pier": [], "rabbit-pier": ["rabbit-1", "rabbit-2"], "stone-pier": ["sheep-1"]}}, "view": {"focus": {"x": -0.07315278053283691, "y": 1.451497596185665}, "mode": "overview", "scale": 84.76356609712745}}, "target": "sail", "trusted": true, "x": 1179, "y": 770}]
+
+      253 |   const result = { clicks, trace, gapMs: clicks[2]?.at - clicks[0]?.at, first, second: trace.points.second, final: await snapshot(page) };
+      254 |   writeFileSync(`${reviewDir}/consecutive-sail-regression.json`, JSON.stringify(result, null, 2));
+    > 255 |   expect(clicks).toHaveLength(3);
+          |                  ^
+      256 |   expect(trace.error).toBeNull();
+      257 |   expect(clicks.every((click: any) => click.trusted)).toBe(true);
+      258 |   expect(clicks.map((click: any) => click.target)).toEqual(['sail', 'map-rabbit-pier', 'sail']);
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\selection.spec.ts:255:18
+
+    Error Context: test-results\selection-selection-regres-9c0df-de-the-previous-180ms-fence\error-context.md
+
+  18) tests\e2e\selection.spec.ts:267:1 › selection regression: the arrived dock permits a deliberate local action inside the prior Sail fence 
+
+    Error: expect(received).toHaveLength(expected)
+
+    Expected length: 3
+    Received length: 1
+    Received array:  [{"at": 1003.5999999642372, "dialogOpen": false, "selectedId": "map-sheep-pier", "snapshot": {"desiredMusic": "ordinary", "history": 0, "state": {"aboard": ["rabbit-1", "rabbit-2"], "boatNodeId": "cut", "delivered": [], "lossReason": null, "status": "playing", "tideLevel": 0, "turn": 0, "waitingByPier": {"harbor-pier": [], "sheep-pier": ["sheep-1"]}}, "view": {"focus": {"x": 8.881784197001252e-16, "y": -0.1281499221043716}, "mode": "overview", "scale": 21.71467831435603}}, "target": "sail", "trusted": true, "x": 353, "y": 269}]
+
+      279 |   const result = { sail, board, trace, gapMs: clicks[2]?.at - clicks[0]?.at, repeatGapMs: clicks[1]?.at - clicks[0]?.at, clicks, arrived, final, modalOpen: await page.locator('#dialog[open]').count() === 1 };
+      280 |   writeFileSync(`${reviewDir}/arrived-local-action-regression.json`, JSON.stringify(result, null, 2));
+    > 281 |   expect(clicks).toHaveLength(3);
+          |                  ^
+      282 |   expect(trace.error).toBeNull();
+      283 |   expect(clicks[0].target).toBe('sail');
+      284 |   expect(clicks[2].target).toBe('board');
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\selection.spec.ts:281:18
+
+    Error Context: test-results\selection-selection-regres-fed88-inside-the-prior-Sail-fence\error-context.md
+
+  18 failed
+    tests\e2e\phone-audio-fullscreen.spec.ts:304:1 › phone native autoplay policy calibration: untrusted resume stays pending until trusted touch 
+    tests\e2e\phone-audio-fullscreen.spec.ts:354:3 › phone audio cold holding-pier: first completed touch starts sustained real output 
+    tests\e2e\phone-audio-fullscreen.spec.ts:354:3 › phone audio cold first-crossing: first completed touch starts sustained real output 
+    tests\e2e\phone-audio-fullscreen.spec.ts:393:1 › phone saved mute: ordinary touch stays silent and one explicit Enable starts audio 
+    tests\e2e\phone-audio-fullscreen.spec.ts:425:3 › phone controlled resume resolve: Retry owns newer pending request and Mute wins late completion 
+    tests\e2e\phone-audio-fullscreen.spec.ts:425:3 › phone controlled resume reject: Retry owns newer pending request and Mute wins late completion 
+    tests\e2e\phone-audio-fullscreen.spec.ts:477:1 › phone controlled pending mute: explicit Settings mute never activates playback first 
+    tests\e2e\phone-audio-fullscreen.spec.ts:512:1 › phone controlled explicit touch intent: late running or suspension cannot invert Retry or Mute 
+    tests\e2e\phone-audio-fullscreen.spec.ts:563:3 › phone supported fullscreen cold-muted: real entry, visible dialog hit and external exit retain subset 
+    tests\e2e\phone-audio-fullscreen.spec.ts:563:3 › phone supported fullscreen pending: real entry, visible dialog hit and external exit retain subset 
+    tests\e2e\phone-audio-fullscreen.spec.ts:563:3 › phone supported fullscreen running: real entry, visible dialog hit and external exit retain subset 
+    tests\e2e\phone-audio-fullscreen.spec.ts:642:1 › phone fullscreen real header policy denial: effective restriction is separate from unsupported API 
+    tests\e2e\phone-audio-fullscreen.spec.ts:699:3 › phone fullscreen mocked rejected: short landscape feedback and manual support copy remain reachable 
+    tests\e2e\phone-audio-fullscreen.spec.ts:699:3 › phone fullscreen mocked unavailable: short landscape feedback and manual support copy remain reachable 
+    tests\e2e\phone-audio-fullscreen.spec.ts:760:3 › phone audio rescue 844x390: UI subsets, tide and terminal Undo, restart and visibility preserve ownership 
+    tests\e2e\phone-audio-fullscreen.spec.ts:760:3 › phone audio rescue 390x844: UI subsets, tide and terminal Undo, restart and visibility preserve ownership 
+    tests\e2e\selection.spec.ts:242:1 › selection regression: an explicit new place permits the next trusted Sail inside the previous 180ms fence 
+    tests\e2e\selection.spec.ts:267:1 › selection regression: the arrived dock permits a deliberate local action inside the prior Sail fence 
+  1 passed (51.1s)

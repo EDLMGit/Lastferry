@@ -1,0 +1,272 @@
+{
+  "source": {
+    "head": "a4325353cf11cd4edba8d5384b58fe138e4772e3",
+    "runtimeHash": "dcea96f3f613b61c2dd76914ff134407d66d8d4dfab5ff08a6d680042ea2c054",
+    "sourceManifest": "after/source.json",
+    "runtimeUnchanged": true
+  },
+  "original": {
+    "path": "after/raw/page@83557dcb10f4d73316834e1b99efdf71.webm",
+    "available": "Local ignored original",
+    "sha256": "151967cf3a4f7422285b1d713b211e92ae11186a028ed0bc5c940b51ece995e5",
+    "bytes": 5747562,
+    "codec": "VP9",
+    "width": 844,
+    "height": 390,
+    "fps": 25,
+    "durationSeconds": 38.8,
+    "audio": "Silent Playwright full-interface video; no audio track"
+  },
+  "derivative": {
+    "path": "gameplay-844.webp",
+    "sha256": "646d3a21e31ad482af5fa96203d3ad0bb19fb4042a2f7babce9c76779f416130",
+    "bytes": 3094202,
+    "width": 844,
+    "height": 390,
+    "format": "AnimatedWebP",
+    "sampleFps": 8,
+    "decodedFrames": 300,
+    "durationSeconds": 38.75,
+    "minFrameMs": 125,
+    "maxFrameMs": 500,
+    "method": "Entire uninterrupted source at native dimensions. No cuts, crop or speed change. 8fps sampling and coalescing identical frames retain wall timing; endpoint frame rounding removes50ms.",
+    "command": "ffmpeg -nostdin -y -loglevel error -i <original> -vf fps=8 -c:v libwebp_anim -quality65 -compression_level4 -loop0 -threads1 gameplay-844.webp",
+    "validation": "Original decoded by ffmpeg without errors; all300 WebPframes decoded by Pillow at844x390."
+  },
+  "coverage": "Actual UI Menu/Settings, unloadMoss, sailing, losing rabbit subset and vertical scroll, safe fullboarding/tiderise, tideUndo/reboarding, returnStone/boardMoss, Harbor allthree preConfirm, fullfuturecopy by wheel,0/1/2/3 selected with unchangedstate/stableConfirm, cancel/reopen, delivery, terminalUndo/redelivery.",
+  "actions": [
+    {
+      "seconds": 3.996,
+      "id": "menu",
+      "turn": 0,
+      "tide": 0
+    },
+    {
+      "seconds": 5.212,
+      "id": "settings",
+      "turn": 0,
+      "tide": 0
+    },
+    {
+      "seconds": 6.781,
+      "id": "settings-back",
+      "turn": 0,
+      "tide": 0
+    },
+    {
+      "seconds": 6.989,
+      "id": "cancel",
+      "turn": 0,
+      "tide": 0
+    },
+    {
+      "seconds": 7.193,
+      "id": "unload",
+      "turn": 0,
+      "tide": 0
+    },
+    {
+      "seconds": 7.455,
+      "id": "commit",
+      "turn": 1,
+      "tide": 0
+    },
+    {
+      "seconds": 8.678,
+      "id": "map-shallows",
+      "turn": 1,
+      "tide": 0
+    },
+    {
+      "seconds": 8.957,
+      "id": "sail",
+      "turn": 2,
+      "tide": 0
+    },
+    {
+      "seconds": 11.262,
+      "id": "map-rabbit-pier",
+      "turn": 2,
+      "tide": 0
+    },
+    {
+      "seconds": 11.47,
+      "id": "sail",
+      "turn": 3,
+      "tide": 0
+    },
+    {
+      "seconds": 13.53,
+      "id": "board",
+      "turn": 3,
+      "tide": 0
+    },
+    {
+      "seconds": 13.727,
+      "id": "passenger-rabbit-2",
+      "turn": 3,
+      "tide": 0
+    },
+    {
+      "seconds": 16.361,
+      "id": "passenger-rabbit-2",
+      "turn": 3,
+      "tide": 0
+    },
+    {
+      "seconds": 16.613,
+      "id": "commit",
+      "turn": 4,
+      "tide": 1
+    },
+    {
+      "seconds": 17.788,
+      "id": "undo",
+      "turn": 3,
+      "tide": 0
+    },
+    {
+      "seconds": 17.978,
+      "id": "board",
+      "turn": 3,
+      "tide": 0
+    },
+    {
+      "seconds": 18.213,
+      "id": "commit",
+      "turn": 4,
+      "tide": 1
+    },
+    {
+      "seconds": 19.309,
+      "id": "map-shallows",
+      "turn": 4,
+      "tide": 1
+    },
+    {
+      "seconds": 19.533,
+      "id": "sail",
+      "turn": 5,
+      "tide": 1
+    },
+    {
+      "seconds": 21.705,
+      "id": "map-stone",
+      "turn": 5,
+      "tide": 1
+    },
+    {
+      "seconds": 21.91,
+      "id": "sail",
+      "turn": 6,
+      "tide": 1
+    },
+    {
+      "seconds": 24.071,
+      "id": "board",
+      "turn": 6,
+      "tide": 1
+    },
+    {
+      "seconds": 24.249,
+      "id": "commit",
+      "turn": 7,
+      "tide": 1
+    },
+    {
+      "seconds": 25.33,
+      "id": "map-harbor",
+      "turn": 7,
+      "tide": 1
+    },
+    {
+      "seconds": 25.577,
+      "id": "sail",
+      "turn": 8,
+      "tide": 2
+    },
+    {
+      "seconds": 28.307,
+      "id": "unload",
+      "turn": 8,
+      "tide": 2
+    },
+    {
+      "seconds": 30.847,
+      "id": "passenger-rabbit-2",
+      "turn": 8,
+      "tide": 2
+    },
+    {
+      "seconds": 31.151,
+      "id": "passenger-sheep-1",
+      "turn": 8,
+      "tide": 2
+    },
+    {
+      "seconds": 31.381,
+      "id": "passenger-rabbit-1",
+      "turn": 8,
+      "tide": 2
+    },
+    {
+      "seconds": 31.635,
+      "id": "passenger-rabbit-1",
+      "turn": 8,
+      "tide": 2
+    },
+    {
+      "seconds": 32.081,
+      "id": "passenger-sheep-1",
+      "turn": 8,
+      "tide": 2
+    },
+    {
+      "seconds": 32.474,
+      "id": "passenger-rabbit-2",
+      "turn": 8,
+      "tide": 2
+    },
+    {
+      "seconds": 32.65,
+      "id": "cancel",
+      "turn": 8,
+      "tide": 2
+    },
+    {
+      "seconds": 33.024,
+      "id": "unload",
+      "turn": 8,
+      "tide": 2
+    },
+    {
+      "seconds": 33.422,
+      "id": "commit",
+      "turn": 9,
+      "tide": 2
+    },
+    {
+      "seconds": 37.232,
+      "id": "terminal-undo",
+      "turn": 8,
+      "tide": 2
+    },
+    {
+      "seconds": 37.576,
+      "id": "unload",
+      "turn": 8,
+      "tide": 2
+    },
+    {
+      "seconds": 37.877,
+      "id": "commit",
+      "turn": 9,
+      "tide": 2
+    }
+  ],
+  "timingNote": "Action offsets are relative to the capture run start; no audio synchronization is claimed.",
+  "limitations": [
+    "Chromium156.0.8078.4/SwiftShader/DPR1 onWindows; emulatedtouch with native mousewheel for verticalscroll, notphysicalAndroid.",
+    "Silent visualevidence; no new acoustic approval."
+  ]
+}

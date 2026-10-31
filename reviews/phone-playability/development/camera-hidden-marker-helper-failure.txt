@@ -1,0 +1,66 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+locator.tap: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('#map-shallows')
+    - locator resolved to <button data-risk="safe" id="map-shallows" class="map-target" aria-expanded="false" data-status="available" data-destination="shallows" aria-controls="local-context" title="adjacent passage available" aria-label="Select Shallows; adjacent passage available">…</button>
+  - attempting tap action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <canvas width="780" height="320" data-engine="three.js r186" aria-label="The Holding Pier. Use the labeled waypoint controls to navigate."></canvas> from <div id="world">…</div> subtree intercepts pointer events
+    - retrying tap action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <canvas width="780" height="320" data-engine="three.js r186" aria-label="The Holding Pier. Use the labeled waypoint controls to navigate."></canvas> from <div id="world">…</div> subtree intercepts pointer events
+    - retrying tap action
+      - waiting 100ms
+    48 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <canvas width="780" height="320" data-engine="three.js r186" aria-label="The Holding Pier. Use the labeled waypoint controls to navigate."></canvas> from <div id="world">…</div> subtree intercepts pointer events
+     - retrying tap action
+       - waiting 500ms
+
+    at activate (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\ui.ts:37:43)
+    at async selectPlace (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\ui.ts:54:3)
+    at async startMove (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\ui.ts:58:3)
+    at async act (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\ui.ts:62:30)
+    at async file:///C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/.cache/phone-camera-ending.mjs:12:7 {
+  log: [
+    "  - waiting for locator('#map-shallows')",
+    '    - locator resolved to <button data-risk="safe" id="map-shallows" class="map-target" aria-expanded="false" data-status="available" data-destination="shallows" aria-controls="local-context" title="adjacent passage available" aria-label="Select Shallows; adjacent passage available">…</button>',
+    '  - attempting tap action',
+    '    2 × waiting for element to be visible, enabled and stable',
+    '      - element is visible, enabled and stable',
+    '      - scrolling into view if needed',
+    '      - done scrolling',
+    '      - <canvas width="780" height="320" data-engine="three.js r186" aria-label="The Holding Pier. Use the labeled waypoint controls to navigate."></canvas> from <div id="world">…</div> subtree intercepts pointer events',
+    '    - retrying tap action',
+    '    - waiting 20ms',
+    '    2 × waiting for element to be visible, enabled and stable',
+    '      - element is visible, enabled and stable',
+    '      - scrolling into view if needed',
+    '      - done scrolling',
+    '      - <canvas width="780" height="320" data-engine="three.js r186" aria-label="The Holding Pier. Use the labeled waypoint controls to navigate."></canvas> from <div id="world">…</div> subtree intercepts pointer events',
+    '    - retrying tap action',
+    '      - waiting 100ms',
+    '    48 × waiting for element to be visible, enabled and stable',
+    '       - element is visible, enabled and stable',
+    '       - scrolling into view if needed',
+    '       - done scrolling',
+    '       - <canvas width="780" height="320" data-engine="three.js r186" aria-label="The Holding Pier. Use the labeled waypoint controls to navigate."></canvas> from <div id="world">…</div> subtree intercepts pointer events',
+    '     - retrying tap action',
+    '       - waiting 500ms'
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.15.0

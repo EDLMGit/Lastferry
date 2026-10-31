@@ -1,0 +1,16 @@
+{
+  "kind": "Verification tooling side effect",
+  "historicalPath": "reviews/m1/automation-results.json",
+  "cause": "Playwright listing used its default JSON reporter and rewrote a tracked historical results file. Initial task checkout was clean.",
+  "accidentalOutput": {
+    "path": "reviews/water-motion/development/raw/m1-listing-output.json",
+    "sha256": "3f38452a3c8321eb39b7698cba8d502afa683b56dcead2ada64da3323e39e938",
+    "available": "Local ignored original"
+  },
+  "restoration": {
+    "from": "0ee7d685071179b82ec2a599fac2f818251d0e54:reviews/m1/automation-results.json",
+    "sha256": "73c7cbf2e50e0e8993c2597be3630dfb6f89fe1ceb0d0e919fdde529f683d5dc",
+    "contentRestored": true
+  },
+  "prevention": "Focused runs use explicit current review directory and absolute reporter output."
+}

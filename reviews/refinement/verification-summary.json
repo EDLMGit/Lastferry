@@ -1,0 +1,93 @@
+{
+  "sourceHash": "1e5b542046859a129b77fbd1bc21237b6b3d91e1d85e614910975c60c3d18bd1",
+  "sourceManifest": "source-manifest.json",
+  "runtimeHash": "f48aa67712f913a50af4d527e3936e9b568cbfac86ccddf13e79ab44ba0979f2",
+  "preservation": "preservation-audit.json",
+  "build": {
+    "result": "pass",
+    "command": "npm run build",
+    "includes": "npm run typecheck && vite build",
+    "output": "build-output.txt",
+    "advisory": "Existing >500kB bundle warning; JS692.74kB/183.56kB gzip."
+  },
+  "unit": {
+    "result": "pass",
+    "command": "npm run test:unit -- --reporter=default --reporter=json --outputFile=reviews/refinement/unit-results.json",
+    "passed": 92,
+    "failed": 0,
+    "output": "unit-results.json"
+  },
+  "browser": {
+    "result": "12 distinct selected scenarios covered successfully across identified runs; not a clean full-suite result.",
+    "detail": "BROWSER_QA.md",
+    "runs": [
+      {
+        "path": "initial-browser/automation-results.json",
+        "sourceHash": "25ab25c9e7be71730492b5545098879e1f1dd67024974b5a7631d4d2eb1a090e",
+        "passed": 6,
+        "failed": 6,
+        "skipped": 0,
+        "flaky": 0,
+        "startTime": "2026-10-22T15:54:14.105Z",
+        "durationMs": 328199.88
+      },
+      {
+        "path": "affected/automation-results.json",
+        "sourceHash": "1b7800ee9af3c9de88478e51c3650c30d7f79776311dec5abca9077a2afc6753",
+        "passed": 5,
+        "failed": 1,
+        "skipped": 0,
+        "flaky": 0,
+        "startTime": "2026-10-22T16:00:52.204Z",
+        "durationMs": 293448.478
+      },
+      {
+        "path": "final-modal/automation-results.json",
+        "sourceHash": "3eb5a58d2e991a47638759d386d4e9df4fe4b62add53fcd4570ab1c6b8ebcea6",
+        "passed": 0,
+        "failed": 1,
+        "skipped": 0,
+        "flaky": 0,
+        "startTime": "2026-10-22T16:11:55.890Z",
+        "durationMs": 19860.395
+      },
+      {
+        "path": "modal-verified/automation-results.json",
+        "sourceHash": "d58db75bf298622f06e94055935be31a547b6ca91bf831c5b36303d63259e13a",
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "flaky": 0,
+        "startTime": "2026-10-22T16:12:36.775Z",
+        "durationMs": 57026.578
+      }
+    ],
+    "originalFailureLimit": "The first failed repeat-Cancel pair has no timing trace; its cause remains uncertain. One later instrumentation attempt only executed one tap. Final trusted pair112.2ms passes all original assertions."
+  },
+  "captures": {
+    "result": "pass",
+    "index": "capture-manifest.json",
+    "detail": "MEDIA_QA.md",
+    "fresh": "Holding and Bellwater actual UI rescues; tide and terminal Undo; 1440x900,844x390,780x390; reduced motion and production First Crossing checked separately."
+  },
+  "audio": {
+    "result": "Runtime lifecycle/resource checks pass; listening pending",
+    "detail": "AUDIO_QA.md",
+    "mix": "affected/adaptive-runtime-mix.json",
+    "comparison": "audio-comparison/comparison.json"
+  },
+  "performance": {
+    "result": "Mixed; field construction improved, repeated Holding idle p95 remains higher",
+    "detail": "RENDERER_QA.md"
+  },
+  "notRun": [
+    "Fresh npm ci",
+    "Physical phones/native GPU",
+    "Safari/Firefox",
+    "Screen-reader speech",
+    "Speaker/headphone listening",
+    "Actual OS audio interruption policy",
+    "Unrelated full browser suite",
+    "Fresh reference-simulator run"
+  ]
+}

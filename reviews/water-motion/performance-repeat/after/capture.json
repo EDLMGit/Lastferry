@@ -1,0 +1,414 @@
+{
+  "phase": "performance-repeat-final",
+  "sourceHead": "0ee7d685071179b82ec2a599fac2f818251d0e54",
+  "runtimeHash": "be1d42f21ba0b4f45687fda21c1db730254e5f68dfc7a0ccd7eba16956a8c62b",
+  "startedAt": "2026-10-24T11:30:01.788Z",
+  "environment": {
+    "node": "v24.15.0",
+    "browser": "156.0.8078.4",
+    "platform": "win32",
+    "renderer": "SwiftShader",
+    "width": 844,
+    "height": 390,
+    "dpr": 1,
+    "input": "emulated touch",
+    "sampling": "rAF intervals and small transition/metrics/state reads; no per-frame environment or route-buffer copy"
+  },
+  "routes": [
+    {
+      "length": "long",
+      "cove": "bellwater",
+      "timing": "restrained",
+      "response": "active",
+      "setup": [
+        "map-shallows",
+        "map-low-pier",
+        "board",
+        "map-east-buoy"
+      ],
+      "crossings": [
+        {
+          "index": 0,
+          "action": "map-west-buoy",
+          "before": {
+            "turn": 4,
+            "tideLevel": 1,
+            "boatNodeId": "east-buoy",
+            "aboard": [
+              "tansy",
+              "lark"
+            ],
+            "waitingByPier": {
+              "harbor-pier": [],
+              "low-pier": [],
+              "bell-pier": [
+                "bram"
+              ]
+            },
+            "delivered": [],
+            "status": "playing",
+            "lossReason": null
+          },
+          "after": {
+            "turn": 5,
+            "tideLevel": 1,
+            "boatNodeId": "west-buoy",
+            "aboard": [
+              "tansy",
+              "lark"
+            ],
+            "waitingByPier": {
+              "harbor-pier": [],
+              "low-pier": [],
+              "bell-pier": [
+                "bram"
+              ]
+            },
+            "delivered": [],
+            "status": "playing",
+            "lossReason": null
+          },
+          "transition": {
+            "id": 5,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 10428.5,
+            "finishedAt": 12532.59999999404,
+            "reason": "complete"
+          },
+          "postDockHoldMs": 2250,
+          "afterHold": {
+            "state": {
+              "turn": 5,
+              "tideLevel": 1,
+              "boatNodeId": "west-buoy",
+              "aboard": [
+                "tansy",
+                "lark"
+              ],
+              "waitingByPier": {
+                "harbor-pier": [],
+                "low-pier": [],
+                "bell-pier": [
+                  "bram"
+                ]
+              },
+              "delivered": [],
+              "status": "playing",
+              "lossReason": null
+            },
+            "wake": {
+              "emitting": false,
+              "visible": false,
+              "vertices": 0,
+              "positions": [],
+              "opacity": [],
+              "points": [],
+              "limits": {
+                "capacity": 96,
+                "lifetime": 1800,
+                "length": 3.6,
+                "spacing": 0.055
+              },
+              "speed": 0,
+              "strength": 0,
+              "contactStrength": 0,
+              "docking": false,
+              "interaction": {
+                "position": [
+                  -4.5,
+                  0.18,
+                  3.9
+                ],
+                "direction": [
+                  1,
+                  0,
+                  6.123233995736766e-17
+                ],
+                "strength": 0
+              }
+            },
+            "waterInteraction": null
+          }
+        },
+        {
+          "index": 1,
+          "action": "map-east-buoy",
+          "before": {
+            "turn": 5,
+            "tideLevel": 1,
+            "boatNodeId": "west-buoy",
+            "aboard": [
+              "tansy",
+              "lark"
+            ],
+            "waitingByPier": {
+              "harbor-pier": [],
+              "low-pier": [],
+              "bell-pier": [
+                "bram"
+              ]
+            },
+            "delivered": [],
+            "status": "playing",
+            "lossReason": null
+          },
+          "after": {
+            "turn": 6,
+            "tideLevel": 1,
+            "boatNodeId": "east-buoy",
+            "aboard": [
+              "tansy",
+              "lark"
+            ],
+            "waitingByPier": {
+              "harbor-pier": [],
+              "low-pier": [],
+              "bell-pier": [
+                "bram"
+              ]
+            },
+            "delivered": [],
+            "status": "playing",
+            "lossReason": null
+          },
+          "transition": {
+            "id": 6,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 16078.40000000596,
+            "finishedAt": 18197.59999999404,
+            "reason": "complete"
+          },
+          "postDockHoldMs": 2250,
+          "afterHold": {
+            "state": {
+              "turn": 6,
+              "tideLevel": 1,
+              "boatNodeId": "east-buoy",
+              "aboard": [
+                "tansy",
+                "lark"
+              ],
+              "waitingByPier": {
+                "harbor-pier": [],
+                "low-pier": [],
+                "bell-pier": [
+                  "bram"
+                ]
+              },
+              "delivered": [],
+              "status": "playing",
+              "lossReason": null
+            },
+            "wake": {
+              "emitting": false,
+              "visible": false,
+              "vertices": 0,
+              "positions": [],
+              "opacity": [],
+              "points": [],
+              "limits": {
+                "capacity": 96,
+                "lifetime": 1800,
+                "length": 3.6,
+                "spacing": 0.055
+              },
+              "speed": 0,
+              "strength": 0,
+              "contactStrength": 0,
+              "docking": false,
+              "interaction": {
+                "position": [
+                  4.5,
+                  0.18,
+                  4.2
+                ],
+                "direction": [
+                  1,
+                  0,
+                  6.123233995736766e-17
+                ],
+                "strength": 0
+              }
+            },
+            "waterInteraction": null
+          }
+        }
+      ],
+      "screenshots": [],
+      "idleSample": {
+        "intervals": [
+          13.5,
+          33.30000000000018,
+          50,
+          33.30000000000018,
+          33.29999999999927,
+          50.100000000000364,
+          66.60000000000036,
+          16.699999999999818,
+          16.699999999999818,
+          49.899999999999636,
+          33.30000000000018,
+          33.5,
+          49.900000000000546,
+          33.29999999999927,
+          33.400000000000546,
+          50,
+          33.30000000000018,
+          33.29999999999927,
+          33.400000000000546,
+          83.39999999999964,
+          33.19999999999982,
+          33.400000000000546,
+          16.599999999999454,
+          33.30000000000109,
+          33.399999999999636,
+          50,
+          50,
+          33.29999999999927,
+          33.399999999999636,
+          33.30000000000109,
+          50,
+          33.29999999999927,
+          50,
+          33.399999999999636,
+          33.30000000000109,
+          50,
+          66.60000000000036,
+          33.29999999999927,
+          33.399999999999636,
+          50,
+          33.30000000000109,
+          50.099999999998545,
+          33.30000000000109,
+          33.29999999999927,
+          33.30000000000109,
+          50,
+          33.399999999999636,
+          33.29999999999927,
+          16.700000000000728,
+          33.29999999999927,
+          33.399999999999636,
+          83.30000000000109,
+          33.29999999999927,
+          33.30000000000109,
+          16.69999999999891,
+          33.30000000000109,
+          33.29999999999927,
+          33.399999999999636,
+          49.899999999999636,
+          33.400000000001455
+        ],
+        "metrics": {
+          "frames": 225,
+          "drawCalls": 565,
+          "triangles": 102090,
+          "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+          "pixelRatio": 1,
+          "resources": {
+            "geometries": 303,
+            "textures": 6,
+            "programs": 20,
+            "sweepObjects": 1
+          }
+        }
+      },
+      "samples": {
+        "path": "reviews/water-motion/performance-repeat/after/raw/long-samples.json",
+        "sha256": "f94955ecf95dc1eceefb87229bc6ef54f329f5ba0ba71c8d3600c571d884037b",
+        "count": 277
+      },
+      "phaseStills": [],
+      "pageClockAtCaptureEnd": {
+        "now": 21064,
+        "timeOrigin": 1792841401880.2
+      },
+      "recording": null,
+      "activeFrameSummary": [
+        {
+          "turn": 5,
+          "action": "map-west-buoy",
+          "frames": 56,
+          "intervals": {
+            "count": 55,
+            "median": 33.399999999999636,
+            "p95": 50,
+            "maximum": 83.29999999999927
+          },
+          "progressRange": [
+            -0.0034679538265284756,
+            0.9919311264377805
+          ],
+          "firstPose": [],
+          "lastPose": [],
+          "steadyDrawCalls": [
+            566
+          ],
+          "steadyResources": {
+            "geometries": 305,
+            "textures": 6,
+            "programs": 20,
+            "sweepObjects": 1
+          },
+          "wakeObservations": "Not collected in metrics-only mode; empty arrays do not mean no wake",
+          "waterInteractionProbe": "Unavailable in this take; null is not proof of zero response."
+        },
+        {
+          "turn": 6,
+          "action": "map-east-buoy",
+          "frames": 52,
+          "intervals": {
+            "count": 51,
+            "median": 33.399999999999636,
+            "p95": 50.099999999998545,
+            "maximum": 66.70000000000073
+          },
+          "progressRange": [
+            -0.003516119854767315,
+            0.9918829604095417
+          ],
+          "firstPose": [],
+          "lastPose": [],
+          "steadyDrawCalls": [
+            566
+          ],
+          "steadyResources": {
+            "geometries": 305,
+            "textures": 6,
+            "programs": 20,
+            "sweepObjects": 1
+          },
+          "wakeObservations": "Not collected in metrics-only mode; empty arrays do not mean no wake",
+          "waterInteractionProbe": "Unavailable in this take; null is not proof of zero response."
+        }
+      ],
+      "excludedPhaseStills": []
+    }
+  ],
+  "errors": [],
+  "sourceUnchanged": true,
+  "finishedAt": "2026-10-24T11:30:24.238Z",
+  "outcome": "passed",
+  "reviewDerivative": {
+    "method": "Compact post-capture review derivative: exact before/after game states, plans/times, idle frame intervals as originally captured, per-crossing active frame statistics, resource budgets, exact synchronous phase pose/camera/source and cleanup state retained. Full original observations and all per-frame data remain local/ignored. No source, PNG or media bytes changed.",
+    "rawOriginal": "reviews/water-motion/performance-repeat/after/raw/capture-full.json",
+    "rawSha256": "a06c81112a332938d7d3b6b542978c86e054a70add0d0a7770d7bbdd498f678c",
+    "rawBytes": 76798,
+    "availability": "Local ignored original; unavailable in a fresh clone"
+  }
+}

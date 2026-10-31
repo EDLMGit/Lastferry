@@ -1,0 +1,23 @@
+
+> last-ferry@1.0.0 test:e2e
+> playwright test home-play-flow.spec.ts --grep integrated cold|reduced motion|portrait real
+
+[WebServer] (node:43480) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] [plugin builtin:vite-reporter] 
+[WebServer] (!) Some chunks are larger than 500 kB after minification. Consider:
+[WebServer] - Using dynamic import() to code-split the application
+[WebServer] - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+[WebServer] - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[WebServer] (node:9076) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 3 tests using 1 worker
+
+(node:14456) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\e2e\home-play-flow.spec.ts:156:1 › integrated cold-touch Home autoplay direct transfers and two actual rescues with runtime audio (1.1m)
+(node:35692) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 2 tests\e2e\home-play-flow.spec.ts:633:1 › reduced motion, mixed and same-band delivery, repeat input, fullscreen and production root (13.1s)
+  x  3 tests\e2e\home-play-flow.spec.ts:780:1 › portrait real chooser loss/cancel and rescue with natural keyboard focus and full phone labels (14.6s)

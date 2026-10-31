@@ -1,0 +1,77 @@
+{
+  "purpose": "Integration plan only. Merge the changes into the existing assets/catalog.json; never replace the canonical inventory with this file.",
+  "reviewedSourceCommit": "23a644aba24e6479b9d82a106a745d15c3f8c7dc",
+  "preserveExistingIds": 71,
+  "expectedTotalIfOnlyThisFamilyIsAdded": 72,
+  "candidateStatus": "model-derived portraits authored; runtime integration and human acceptance remain separate",
+  "add": [
+    {
+      "id": "ui.passenger-portraits",
+      "kind": "generated-ui-image",
+      "variants": ["rabbit-cream", "rabbit-tan", "sheep-wool"],
+      "originalModelSource": "src/scene/models.ts",
+      "generatorSource": "cove-portrait-package/tools/render-portraits.mjs",
+      "outputPaths": "Use the actual generated-file paths in the supplied portrait metadata; record final runtime paths after integration.",
+      "dimensions": "256x256 transparent PNG derivatives, approximately 40–44 CSS px display beside name/capacity",
+      "requiredTypeFields": [
+        "original model source and shared full-level/passenger-ID appearance resolver",
+        "render recipe: camera/crop, world proportions, shading/light, transparency and color semantics",
+        "derived output paths, dimensions, formats and appearance variants",
+        "generation command/environment and source/output identity",
+        "actual consumers, displayed size/framing and semantic purpose",
+        "native-control ownership and text-preserving loading/failure behavior",
+        "source-tied small-screen evidence and separate human acceptance state"
+      ],
+      "implementationNotes": [
+        "Extend the current fixed validator kind/type requirements narrowly; do not mislabel runtime portraits as reference-only images or 24px icons.",
+        "The SVG stage is source-derived offline shading, not pixel-identical WebGL output.",
+        "No per-choice canvas, context, renderer, animation or production rasterizer dependency."
+      ]
+    }
+  ],
+  "update": [
+    {
+      "id": "model.rabbit",
+      "changes": [
+        "Add portrait-generation consumer/derivation source.",
+        "Keep cream/tan coat and ear-splay variants and existing world proportions authoritative.",
+        "Record shared identity resolver if extracted without changing ordinal behavior."
+      ]
+    },
+    {
+      "id": "model.sheep",
+      "changes": [
+        "Add portrait-generation consumer/derivation source.",
+        "Preserve clustered wool, dark face and existing world proportions."
+      ]
+    },
+    {
+      "id": "ui.component.passenger-choice",
+      "changes": [
+        "Extend the actual shared helper with an explicit resolved portrait descriptor/key.",
+        "Record compact portrait-beside-copy layout, native semantics and width-aware columns.",
+        "Retain full labels/costs, check state, stable geometry, loading fallback and source-tied phone evidence."
+      ]
+    },
+    {
+      "id": "ui.dialogs",
+      "changes": [
+        "Record portrait selection consumer/evidence while preserving fixed footer, nearby placement, focus and fullscreen dialog identity.",
+        "Keep three-passenger Harbor, full-warning and delayed/broken-image fit evidence."
+      ]
+    }
+  ],
+  "identityRules": [
+    "Resolve from complete level + passenger ID, never display name or offered/selected/aboard list index.",
+    "Pip/Tansy use rabbit-cream; Rue/Lark use rabbit-tan; Moss/Bram use sheep-wool.",
+    "Keep the full species ordinal for existing world deck/pose consumers.",
+    "Names and capacities remain existing level/helper data."
+  ],
+  "relatedDocumentation": [
+    "docs/ASSET_LEDGER.md",
+    "docs/UI_STYLE_GUIDE.md",
+    "docs/PROJECT_STATE.md",
+    "STATUS.md"
+  ],
+  "gallery": "Reuse the actual images/helper at source and phone display sizes, all three appearance variants, both naming schemes, selected/unselected/focus/failure states and constrained longer-label stress."
+}
