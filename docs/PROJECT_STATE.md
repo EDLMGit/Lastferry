@@ -39,6 +39,7 @@ Local Codex implements the current task. ChatGPT reviews the identifiable handof
 | Story foundation implementation | `ca59e78fb877024296c1484eb6b5fee8b8e66717`, reviewed handoff `8cc43c794274fe64d5fb634961fbf79aaff251f8` — working journey/checkpoints retained; scene presentation requires the correction below; not published |
 | Authored-scenes implementation | `1aa73c59c37082f43990235a9efffd6f793cf642`, reviewed handoff `6fc5a09dd4ef876ad96ad12d623532f0d13deb10` — working journey retained; illustrated presentation supersedes its distant-model scenes; not published |
 | Illustrated story production | `bdd7e86f1e2953144b11108eb828ab85c88eb542` — implemented and focused checks complete; following handoff commit records packaging/continuity only; not published |
+| Home/play implementation | `682ee816537d9a9955f49ed35a3cfdcb3d67f752` — complete combined HOME_PLAY_FLOW_01; review and exact source/media audit in reviews/home-play-flow, not deployed |
 | Reviewed implementation baseline | `d532c62f0f25854387869466572a1ed0cf35a0ac` — Home/play comparison; prior illustrated production is complete and retained |
 | Published private phone game | `1a85874883af5caa59f6294a75495eccf2afebbc` — Sites version 12, publication confirmed 2026-10-25 17:28 Madrid |
 | Stable phone URL | https://last-ferry-playtest.abumech.chatgpt.site |

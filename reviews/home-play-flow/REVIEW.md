@@ -4,6 +4,8 @@ Ready for ChatGPT review of the combined Home, story flow and direct-transfer pa
 
 ## Source and scope
 
+Implementation commit: `682ee816537d9a9955f49ed35a3cfdcb3d67f752`. The following packaging commit only records this identity and audit; final branch SHA is supplied in the PR handoff.
+
 Started clean on `m1-first-crossing` at reviewed `d532c62f0f25854387869466572a1ed0cf35a0ac`. The exact supplied task resolved to `C:/Users/ernes/Documents/last-ferry-codex-starter/LAST_FERRY_HOME_PLAY_PACKAGE/NEXT_TASK_HOME_PLAY_FLOW.md`; the actual Git root is its sibling `Lastferry/`. The package is retained byte-for-byte under this repository's `LAST_FERRY_HOME_PLAY_PACKAGE/`. This task replaces both unstarted flow/feedback assignments; the prior illustrated production assignment was already complete.
 
 Captures were made from that baseline **plus working-tree changes**, not from an invented later commit. Per-run manifests retain all 68 runtime/data/dependency file hashes and timestamps. The final `handoff/` recording/phone frames and `cold-entry/` checks match all final runtime entries exactly. `source-audit.json` records scoped reuse of earlier portrait/full-label/subset/fullscreen results: only receipt placement, closing More after Skip and a redundant pure keyboard-intent assignment changed afterward; affected checks were repeated. Implementation commit and committed-blob comparison are in `packaging-audit.json`.
