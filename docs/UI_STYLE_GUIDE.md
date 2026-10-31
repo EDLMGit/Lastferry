@@ -103,3 +103,11 @@ Preserve Segoe UI/Arial/sans-serif body text and Georgia/serif titles for now. E
 Choose an existing material and icon family before inventing another. Copy [`assets/ASSET_ENTRY.template.json`](../assets/ASSET_ENTRY.template.json), add a stable ID, editable source, semantics, states, provenance and evidence in the same change as a new asset. Keep instance placement in level data. The gallery renders actual shared sources so it cannot drift into a second implementation of the UI. Run `npm run check:assets`; each type's required details are listed in the catalog and in the supplied [`ASSET_INVENTORY.md`](../cove-ui-package/ASSET_INVENTORY.md). A procedural factory is an asset source, and a reference image remains reference-only. Retired entries retain their source revision and replacement IDs; integration does not imply human acceptance.
 
 References: [text contrast](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html), [non-text contrast](https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html), [larger targets](https://www.w3.org/WAI/WCAG22/Understanding/target-size-enhanced.html).
+
+## Home and direct passenger actions
+
+The root Home is a full-screen live cove composition, with a quiet side menu on landscape and title/art/actions on portrait. Play/Continue is the warm primary capsule; Options/Practice/Sound use the established quiet family. See HOME_COMPOSITION.md.
+
+A single valid, non-losing passenger transfer is a named direct action: Board Moss, Let Moss ashore, Bring Moss home. Its visible secondary copy gives one-action cost, actual before/after required depth and relevant tide/landing consequence. Multiple eligible passengers retain native pressed choices, full labels and portraits, plus one named group action. Loss always retains the pre-commit warning and free Cancel. Empty/invalid choices cannot commit. The chooser is content-sized, bounded by the visible viewport; its primary action remains anchored while choices change.
+
+A successful completed transfer supplies one noninteractive receipt from its actual transaction, with `1 action used` and only a changed `Needs depth` band. It is cleared by Undo/restart/hide/Home/cove changes; Reduced Motion holds it without drift. Persistent HUD and one coalesced status announcement retain authoritative results.

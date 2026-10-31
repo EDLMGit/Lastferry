@@ -41,7 +41,7 @@ import {
   type TransitionPlan,
 } from './scene/transitions';
 import { waterPresets, type WaterTuning } from './scene/water';
-import { placeActionCard, overlaps, type Rectangle } from './ui/placement';
+import { placeActionCard, placeLocalCard, overlaps, type Rectangle } from './ui/placement';
 import { locationFacts } from './ui/location';
 import { endpointTargets } from './ui/cove-layout';
 import { MotionPreference, type MotionMode } from './ui/motion-preference';
@@ -53,6 +53,10 @@ import { JourneyProgress } from './campaign/progress';
 import { StoryPresentation, restoredHarbor } from './campaign/presentation';
 import { StoryView } from './campaign/story-view';
 import './campaign/story.css';
+
+import './campaign/home.css';
+
+import { transferFacts, transferReceipt } from './ui/transfer';
 
 const cove = new URLSearchParams(location.search).get('cove');
 const journey = cove === null ? new JourneyProgress() : null;
@@ -67,6 +71,39 @@ const app = document.querySelector<HTMLDivElement>('#app')!;
 app.classList.add('cove-kit');
 observePassengerPortraits(app);
 app.innerHTML = `<main class="game ${experiment ? 'holding' : isBellwater ? 'bellwater' : 'baseline'}"><section id="seascape" aria-label="${level.title}" aria-busy="false"><div id="world"></div><header class="hud"><div class="identity"><h1>${title}</h1><p id="objective"></p></div><div id="readout" aria-label="Crossing progress"></div><nav class="tools" aria-label="Crossing controls"><button id="undo">↶ Undo</button><button id="wait">Wait <span>· 1 action</span></button><button id="menu">Menu</button><button id="sound-toggle" aria-label="Mute sound" aria-pressed="false">♫</button></nav></header><nav id="map-labels" aria-label="Map stops"></nav><nav id="dock-actions" aria-label="Passenger actions" hidden></nav><section id="local-context" role="region" aria-labelledby="local-heading" hidden></section><p id="selection-hint">Select a place to see its options.</p><svg id="selection-leader" aria-hidden="true"></svg><button id="status-toggle" aria-haspopup="dialog" aria-label="Open tide and pier forecast"></button><p id="transition-status" role="status" tabindex="-1" hidden>Finishing this action…</p><p class="portrait-note">Turn sideways for a wider view.</p></section><div id="announcement" class="sr-only" role="status" aria-live="polite"></div></main><dialog id="dialog" aria-labelledby="dialog-title"><div id="dialog-content"></div></dialog>`;
+
+const homeSurface = document.createElement('section');
+
+homeSurface.id = 'home';
+
+homeSurface.hidden = true;
+
+homeSurface.setAttribute('aria-label', 'Last Ferry home');
+
+app.append(homeSurface);
+
+const receipt = document.createElement('div');
+
+receipt.id = 'transfer-receipt';
+
+receipt.hidden = true;
+
+receipt.setAttribute('aria-hidden', 'true');
+
+app.append(receipt);
+
+let receiptTimer: ReturnType<typeof setTimeout> | undefined;
+
+let pendingReceipt: { id: number; title: string; depth: string } | null = null;
+
+function clearReceipt() {
+  clearTimeout(receiptTimer);
+
+  pendingReceipt = null;
+
+  receipt.hidden = true;
+}
+
 const $ = (id: string) => document.getElementById(id)!;
 for (const [id, icon, label] of [
   ['undo', 'undo', 'Undo'],
@@ -117,6 +154,11 @@ let storyId: SceneId | null = null;
 let storyView: StoryView | null = null;
 let storyUiKey = '';
 let storyFrameRequest = 0;
+
+let storyActionIntent: string | null = null;
+
+const storyActionKey = () => `${storyId}:${storyPresentation.frame.shotIndex}`;
+
 const storyPresentation = new StoryPresentation(
   () => renderStoryStatus(),
   (token) => {
@@ -187,10 +229,114 @@ const completionCounts: Record<CompletionReason, number> = {
 function journeySurface() {
   return app.classList.contains('journey-screen');
 }
+
+function setHomeVisible(active: boolean) {
+  homeSurface.hidden = !active;
+
+  app.classList.toggle('home-screen', active);
+
+  world.setHomePresentation(active);
+}
+
+function showHome(focusId?: string) {
+  clearReceipt();
+
+  storyPresentation.cancel();
+
+  storyId = null;
+
+  if (dialog.open) closeDialog(false);
+
+  mode = 'journey';
+
+  campaignPlay = false;
+
+  app.classList.add('journey-screen');
+
+  $('seascape').inert = true;
+
+  world.setStoryCovered(false);
+
+  setHomeVisible(true);
+
+  const snapshot = journey?.snapshot;
+
+  const checkpoint = snapshot?.record?.checkpoint;
+
+  const complete = checkpoint?.kind === 'complete';
+
+  const invalid = snapshot?.kind === 'invalid';
+
+  const label = complete
+    ? 'Play a cove'
+    : checkpoint
+      ? 'Continue'
+      : invalid
+        ? 'New journey'
+        : 'Play';
+
+  const notice =
+    checkpoint?.kind === 'cove'
+      ? `${storyCoves.find((entry) => entry.id === checkpoint.id)!.level.title} · from cove start.`
+      : checkpoint?.kind === 'scene'
+        ? `${storyScenes[checkpoint.id].title} · saved story.`
+        : complete
+          ? 'Both available coves are safe.'
+          : '';
+
+  homeSurface.innerHTML = `<header id="home-title"><h1>Last Ferry</h1><p>The Long Tide</p></header><nav id="home-menu" aria-label="Home"><p class="home-notice">${notice}${snapshot && !snapshot.persistent ? ' Progress lasts only for this visit.' : ''}${invalid ? ` ${snapshot.issue}` : ''}</p><button id="home-play">${label}</button><div class="home-secondary"><button id="home-options">Options</button><button id="home-practice">Practice</button></div><div class="home-secondary"><button id="home-sound"></button>${checkpoint ? '<button id="home-new">New journey</button>' : ''}</div></nav>`;
+
+  for (const button of homeSurface.querySelectorAll<HTMLButtonElement>('button'))
+    setControl(
+      button,
+      button.id === 'home-options' ? 'settings' : null,
+      button.textContent ?? '',
+      button.id === 'home-play' ? 'warm' : 'quiet',
+    );
+
+  const fresh = () =>
+    invalid || checkpoint ? showJourney('replace', 'journey-replace-cancel') : beginJourney();
+
+  $('home-play').onclick = (event) => {
+    if (event.detail > 1) return;
+
+    if (complete) showJourney('practice', 'practice-first-crossing');
+    else if (checkpoint) resumeJourney();
+    else fresh();
+  };
+
+  $('home-options').onclick = () => openSettings('journey');
+
+  $('home-practice').onclick = () => showJourney('practice', 'practice-first-crossing');
+
+  $('home-sound').onclick = toggleSound;
+
+  if ($('home-new')) $('home-new').onclick = fresh;
+
+  renderSound();
+
+  flushLayout();
+
+  if (focusId || keyboardInput)
+    ($(focusId ?? 'home-play') ?? $('home-play')).focus({ preventScroll: true });
+}
+
 function showJourney(next: JourneyMode, focusId: string) {
+  if (next === 'journey') {
+    showHome(focusId === 'journey-new' ? 'home-new' : 'home-play');
+    return;
+  }
+
+  clearReceipt();
+
+  if (next === 'story' || next === 'journey-end') setHomeVisible(false);
+
   if (mode === 'story' && next !== 'story') storyPresentation.cancel();
   if (next !== 'return-title') {
     app.classList.add('journey-screen');
+
+    $('seascape').inert = true;
+
     world.setStoryFraming(true);
   }
   world.setStoryCovered(next === 'story');
@@ -208,8 +354,10 @@ function returnToJourneyTitle() {
   storyPresentation.cancel();
   storyId = null;
   campaignPlay = false;
-  mountCove(holdingPier);
-  showJourney('journey', journey?.snapshot.record ? 'journey-continue' : 'journey-new');
+
+  if (!app.classList.contains('home-screen')) mountCove(holdingPier);
+
+  showHome(mode === 'practice' ? 'home-practice' : undefined);
 }
 function beginJourney() {
   journey?.replace();
@@ -254,6 +402,11 @@ function startPlayable(next: typeof level, story: boolean) {
   campaignPlay = story;
   if (dialog.open) closeDialog(false);
   app.classList.remove('journey-screen');
+
+  $('seascape').inert = false;
+
+  setHomeVisible(false);
+
   mountCove(next);
   world.setReducedMotion(motion.reduced);
   if (!keyboardInput && lastPointer)
@@ -283,20 +436,28 @@ function renderStoryStatus() {
   const frame = storyPresentation.frame;
   const scene = storyScenes[storyId];
   const shot = scene.shots[frame.shotIndex];
-  const key = `${frame.runToken}:${frame.shotIndex}:${frame.captionOpacity}:${frame.recap}:${frame.settled}`;
+
+  const key = `${frame.runToken}:${frame.shotIndex}:${frame.captionOpacity}:${frame.recap}:${frame.settled}:${frame.paused}`;
+
   if (key === storyUiKey) {
     storyView?.render(frame);
     scheduleStoryClock();
     return;
   }
   storyUiKey = key;
+
+  const pause = $('story-pause');
+
+  if (pause) {
+    setControl(pause, null, frame.paused ? 'Resume' : 'Pause', 'quiet');
+
+    (pause as HTMLButtonElement).disabled = motion.reduced || (frame.final && frame.settled);
+  }
+
   const skip = $('story-skip') as HTMLButtonElement | null;
   const next = $('story-continue') as HTMLButtonElement | null;
-  if (skip) {
-    if (frame.final && frame.settled && document.activeElement === skip)
-      next?.focus({ preventScroll: true });
-    skip.hidden = frame.final && frame.settled;
-  }
+
+  if (skip) skip.hidden = false;
   if (next && next.textContent !== (frame.final ? scene.continueLabel : 'Next'))
     setControl(next, null, frame.final ? scene.continueLabel : 'Next', 'warm');
   const caption = $('story-caption');
@@ -329,6 +490,7 @@ function scheduleStoryClock() {
     mode !== 'story' ||
     !storyId ||
     storyPresentation.settled ||
+    storyPresentation.paused ||
     document.hidden
   )
     return;
@@ -340,6 +502,8 @@ function scheduleStoryClock() {
   });
 }
 function mountCove(next: typeof level) {
+  clearReceipt();
+
   storyPresentation.cancel();
   storyView = null;
   world.clearStory();
@@ -356,6 +520,9 @@ function mountCove(next: typeof level) {
   session = new Session(level);
   world = new World($('world'), session.state, level);
   world.setReducedMotion(motion.reduced);
+
+  world.setHomePresentation(app.classList.contains('home-screen'));
+
   world.setStoryFraming(journeySurface());
   bindWorld();
   canvas = world.renderer.domElement;
@@ -420,10 +587,11 @@ function renderJourneyDialog() {
     actions =
       '<button id="journey-replace-cancel">Keep current journey</button><button id="journey-replace-confirm">Replace journey</button>';
   } else if (mode === 'return-title') {
-    heading = 'Return to title?';
+    heading = 'Return home?';
+
     body = `<p>This crossing will start again from its beginning. Its moves and Undo history are only kept while you play.</p><p>${checkpointNotice}</p>`;
     actions =
-      '<button id="journey-return-cancel">Keep playing</button><button id="journey-return-confirm">Return to title</button>';
+      '<button id="journey-return-cancel">Keep playing</button><button id="journey-return-confirm">Return home</button>';
   } else {
     heading = 'Both coves are safe.';
     body = '<p>The next part of the journey is still being made.</p>' + notice;
@@ -453,9 +621,16 @@ function renderJourneyDialog() {
   on('journey-practice', () => showJourney('practice', 'practice-first-crossing'));
   on('journey-settings', () => openSettings(mode as JourneyMode));
   on('journey-title', returnToJourneyTitle);
-  on('journey-return-confirm', returnToJourneyTitle);
+
+  on('journey-return-confirm', () =>
+    journey ? returnToJourneyTitle() : location.assign(location.pathname),
+  );
+
   on('journey-return-cancel', () => {
     app.classList.remove('journey-screen');
+
+    $('seascape').inert = false;
+
     world.setStoryFraming(false);
     switchDialog('menu', 'journey-return');
     flushLayout();
@@ -482,7 +657,8 @@ function renderIllustratedStory(transcript: boolean) {
     return;
   }
   $('dialog-content').innerHTML =
-    `<h2 id="dialog-title" class="sr-only">${scene.title}</h2><div class="story-picture"><canvas id="story-canvas" role="img"></canvas><p class="story-chapter" aria-hidden="true">Last Ferry <span>The Long Tide</span></p><div id="story-captions"><p id="story-caption" aria-live="polite" aria-atomic="true"></p></div></div><nav class="story-controls" aria-label="Story controls"><span id="story-position" aria-label="Shot"></span><button id="story-replay">Replay</button><button id="story-replay-scene" hidden>Replay scene</button><button id="story-skip">Skip animation</button><button id="story-read">Read story</button><button id="story-settings">Settings</button><button id="story-continue">Next</button></nav>`;
+    `<h2 id="dialog-title" class="sr-only">${scene.title}</h2><div class="story-picture"><canvas id="story-canvas" role="img"></canvas><p class="story-chapter" aria-hidden="true">Last Ferry <span>The Long Tide</span></p><div id="story-captions"><p id="story-caption" aria-live="polite" aria-atomic="true"></p></div></div><nav class="story-controls" aria-label="Story controls"><span id="story-position" aria-label="Shot"></span><button id="story-pause">Pause</button><button id="story-sound"></button><details id="story-more"><summary>More</summary><div class="story-secondary"><button id="story-replay">Replay</button><button id="story-replay-scene" hidden>Replay scene</button><button id="story-skip">Skip animation</button><button id="story-read">Read story</button><button id="story-settings">Options</button></div></details><button id="story-continue">Next</button></nav>`;
+
   for (const button of dialog.querySelectorAll<HTMLButtonElement>('button'))
     setControl(
       button,
@@ -493,12 +669,27 @@ function renderIllustratedStory(transcript: boolean) {
   storyView = new StoryView($('story-canvas') as HTMLCanvasElement);
   storyUiKey = '';
   $('story-continue').onclick = (event) => {
-    if (event.detail < 2) continueStory();
+    if (event.detail > 1 || (event.isTrusted && storyActionIntent !== storyActionKey())) return;
+
+    storyActionIntent = null;
+
+    continueStory();
   };
   $('story-continue').onkeydown = (event) => {
     if (event.repeat && (event.key === 'Enter' || event.key === ' ')) event.preventDefault();
   };
+
+  $('story-pause').onclick = () =>
+    storyPresentation.paused
+      ? storyPresentation.resume(motion.reduced || document.hidden)
+      : storyPresentation.pause();
+
+  $('story-sound').onclick = toggleSound;
+
+  renderSound();
+
   $('story-skip').onclick = () => {
+    ($('story-more') as HTMLDetailsElement).open = false;
     storyPresentation.skip();
     $('story-continue').focus({ preventScroll: true });
   };
@@ -535,13 +726,19 @@ function renderSound() {
   const compactLabel =
     sound.muted || playback.running ? label : playback.requested ? 'Retry' : 'Sound';
   setControl(control, icon, compactLabel, 'quiet', sound.muted || playback.running);
-  const settings = $('settings-sound');
-  if (settings) {
-    setControl(settings, icon, label);
-    settings.dataset.playback = playback.state;
-    settings.dataset.soundIntent = intent;
-    settings.setAttribute('aria-pressed', String(playback.running));
-    settings.setAttribute('aria-label', label);
+
+  for (const settings of [$('settings-sound'), $('home-sound'), $('story-sound')]) {
+    if (settings) {
+      setControl(settings, icon, label);
+
+      settings.dataset.playback = playback.state;
+
+      settings.dataset.soundIntent = intent;
+
+      settings.setAttribute('aria-pressed', String(playback.running));
+
+      settings.setAttribute('aria-label', label);
+    }
   }
   const mute = $('settings-mute');
   if (mute) {
@@ -574,7 +771,9 @@ function toggleSound(event: MouseEvent) {
 }
 function audioControl(target: EventTarget | null) {
   return target instanceof Element
-    ? target.closest<HTMLElement>('#sound-toggle, #settings-sound, #settings-mute')
+    ? target.closest<HTMLElement>(
+        '#sound-toggle, #settings-sound, #settings-mute, #home-sound, #story-sound',
+      )
     : null;
 }
 function captureSoundIntent(target: EventTarget | null) {
@@ -614,7 +813,8 @@ function notifyView(message: string) {
       const details = JSON.stringify(
         {
           ...fullscreenSupport.details(),
-          audio: sound.playback(),
+
+          audio: sound.presentation(),
         },
         null,
         2,
@@ -707,6 +907,8 @@ function flushLayout() {
     updateViewport();
     positionMap();
     renderView();
+
+    positionReceipt();
   } finally {
     layoutFlushing = false;
   }
@@ -742,7 +944,27 @@ function updateViewport() {
       $('status-toggle').hidden ? safeBounds.bottom : forecast.top - 8,
     ),
   };
-  if (journeySurface() && dialog.open) {
+
+  if (app.classList.contains('home-screen')) {
+    const menu = $('home-menu').getBoundingClientRect();
+
+    const title = $('home-title').getBoundingClientRect();
+
+    usableBounds =
+      width > height
+        ? {
+            left: menu.right + 20,
+            right: safeBounds.right - 12,
+            top: safeBounds.top + 12,
+            bottom: safeBounds.bottom - 12,
+          }
+        : {
+            left: safeBounds.left + 12,
+            right: safeBounds.right - 12,
+            top: title.bottom + 12,
+            bottom: menu.top - 12,
+          };
+  } else if (journeySurface() && dialog.open) {
     positionDialog();
     const panel = dialog.getBoundingClientRect();
     usableBounds =
@@ -817,7 +1039,7 @@ function focusAvailable(preferred?: string) {
   available(preferred).focus({ preventScroll: true });
 }
 function blocked() {
-  return session.busy || dialog.open || fullscreenSupport.promoting;
+  return journeySurface() || session.busy || dialog.open || fullscreenSupport.promoting;
 }
 function highlight(id?: string) {
   emphasis = id;
@@ -905,14 +1127,28 @@ function switchDialog(next: DialogMode, focusId: string) {
   actionAnchor = null;
   actionPlace = null;
   renderDialog();
-  $(focusId).focus({ preventScroll: true });
+  const target = $(focusId);
+  const disclosure = target?.closest('details');
+  if (disclosure) disclosure.open = true;
+  target?.focus({ preventScroll: true });
 }
 function openSettings(parent: 'menu' | 'terminal' | JourneyMode) {
   if (parent === 'story') storyPresentation.settle();
   settingsParent = parent;
   switchDialog('settings', 'settings-sound');
+
+  if (!dialog.open) {
+    dialog.showModal();
+    $('settings-sound').focus();
+    positionDialog();
+  }
 }
 function backFromSettings() {
+  if (settingsParent === 'journey') {
+    showHome('home-options');
+    return;
+  }
+
   switchDialog(
     settingsParent,
     settingsParent === 'terminal'
@@ -939,6 +1175,9 @@ function renderDialog() {
   const s = session.state,
     p = pierAt(s, level);
   dialog.dataset.mode = mode;
+  dialog.dataset.transfer = String(
+    mode === 'action' && (selected?.type === 'board' || selected?.type === 'unload'),
+  );
   if (
     [
       'journey',
@@ -957,14 +1196,17 @@ function renderDialog() {
   if (mode === 'action' && selected) {
     const a = selected,
       proposed = preview(s, a, level),
-      text = previewCopy(s, a, level);
+      text = previewCopy(s, a, level),
+      transfer = a.type === 'board' || a.type === 'unload' ? transferFacts(s, a, level) : null;
+
     const ids = a.type === 'board' ? s.waitingByPier[p!.id] : a.type === 'unload' ? s.aboard : [];
     const choices =
       a.type === 'board' || a.type === 'unload'
         ? `<div class="passenger-options" role="group" aria-label="Passenger selection">${ids.map((id) => `<button id="passenger-${id}" class="cove-choice" aria-pressed="${a.passengerIds.includes(id)}">${passengerChoiceContent(passengerNames[id].split(' ·')[0], level.passengers.find((p) => p.id === id)!.slots, resolvePassengerAppearance(level, id)?.portraitKey ?? null)}</button>`).join('')}</div>`
         : '';
     $('dialog-content').innerHTML =
-      `${header(actionLabel(s, a, level), `${nodeNames[a.type === 'move' ? a.to : s.boatNodeId]} · inspection is free`)}<div id="preview" class="dialog-body ${proposed.error || proposed.state.status === 'lost' ? 'warning' : ''}" aria-live="polite" aria-atomic="true">${choices}<p class="requirement">${text.error ?? text.requirement}</p>${text.consequence ? `<p class="consequence">${text.consequence}</p>` : ''}${!proposed.error ? `<p class="preview-result">After this action: Boat ${load(proposed.state, level)}/${level.rules.capacity} spaces · tide ${proposed.state.tideLevel}${s.tideLevel !== proposed.state.tideLevel ? ` (now ${s.tideLevel})` : ''}</p>` : ''}</div><footer class="dialog-footer"><button id="commit" ${proposed.error ? 'disabled' : ''}>${proposed.error ? 'Action unavailable' : 'Confirm · 1 action'}</button></footer>`;
+      `${header(transfer ? (a.type === 'board' ? 'Board passengers' : p?.isDeliveryPier ? 'Bring passengers home' : 'Let passengers ashore') : actionLabel(s, a, level), `${nodeNames[a.type === 'move' ? a.to : s.boatNodeId]} · inspection is free`)}<div id="preview" class="dialog-body ${proposed.error || proposed.state.status === 'lost' ? 'warning' : ''}" aria-live="polite" aria-atomic="true">${choices}<p class="requirement">${text.error ?? (transfer ? transfer.depth : text.requirement)}</p>${text.consequence ? `<p class="consequence">${text.consequence}</p>` : ''}${!proposed.error && !transfer ? `<p class="preview-result">After this action: Boat ${load(proposed.state, level)}/${level.rules.capacity} spaces · tide ${proposed.state.tideLevel}${s.tideLevel !== proposed.state.tideLevel ? ` (now ${s.tideLevel})` : ''}</p>` : ''}</div><footer class="dialog-footer"><button id="commit" ${proposed.error ? 'disabled' : ''}>${proposed.error ? 'Action unavailable' : transfer ? `${transfer.label} · 1 action` : 'Confirm · 1 action'}</button></footer>`;
+
     if (a.type === 'board' || a.type === 'unload')
       for (const id of ids)
         $(`passenger-${id}`).onclick = () => {
@@ -1000,12 +1242,16 @@ function renderDialog() {
   } else if (mode === 'menu') {
     const sheep = level.passengers.find((p) => p.species === 'sheep')!;
     $('dialog-content').innerHTML =
-      `${header('Crossing menu')}<div class="dialog-body menu-body">${s.status === 'won' ? '<button id="return-arrival">Return to arrival</button>' : ''}<div class="menu-actions"><button id="restart">Restart crossing</button><button id="settings">Settings</button></div><label class="cove-picker">Choose cove<select id="cove-picker">${[baseline, holdingPier, bellwater].map((l) => `<option value="${l.id}" ${l.id === level.id ? 'selected' : ''}>${l.title}${l.id === baseline.id ? ' · baseline' : ''}</option>`).join('')}</select></label><details id="help-details"><summary>How to play · actions and depth</summary><p>${actionCostCopy(level)}</p><p>Select a named place, island, pier or landmark to see its options for free. Choose Sail to travel one passage. Select the ferry for its current place. Passenger actions open a subset preview; choose names, then Confirm.</p><p>Boat depth needed: empty = 1; 1–2 spaces = 2; 3–4 spaces = 3. Each rabbit uses 1 space; ${passengerList([sheep.id], level)} uses ${sheep.slots}. A passage must be at least as deep as the boat needs.</p><p>Boarding and unloading happen before the tide rises. Use the status button for the tide and pier forecast. Undo earlier actions or restart to recover from a losing plan.</p><p>Tab and Shift+Tab move between controls; Enter or Space activates them. Escape closes a dialog first; press it again to close the location card. Selection never spends an action.</p></details></div>`;
+      `${header('Crossing menu')}<div class="dialog-body menu-body">${s.status === 'won' ? '<button id="return-arrival">Return to arrival</button>' : ''}<div class="menu-actions"><button id="restart">Restart crossing</button><button id="settings">Settings</button></div><label class="cove-picker">Choose cove<select id="cove-picker">${[baseline, holdingPier, bellwater].map((l) => `<option value="${l.id}" ${l.id === level.id ? 'selected' : ''}>${l.title}${l.id === baseline.id ? ' · baseline' : ''}</option>`).join('')}</select></label><details id="help-details"><summary>How to play · actions and depth</summary><p>${actionCostCopy(level)}</p><p>Select a named place, island, pier or landmark to see its options for free. Choose Sail to travel one passage. Select the ferry for its current place. A named single-passenger action acts directly. For several passengers, choose names in the nearby chooser, then use its named action. Cost, depth and tide consequences appear before you act.</p><p>Boat depth needed: empty = 1; 1–2 spaces = 2; 3–4 spaces = 3. Each rabbit uses 1 space; ${passengerList([sheep.id], level)} uses ${sheep.slots}. A passage must be at least as deep as the boat needs.</p><p>Boarding and unloading happen before the tide rises. Use the status button for the tide and pier forecast. Undo earlier actions or restart to recover from a losing plan.</p><p>Tab and Shift+Tab move between controls; Enter or Space activates them. Escape closes a dialog first; press it again to close the location card. Selection never spends an action.</p></details></div>`;
+
     $('restart').onclick = restart;
-    if (journey) {
+
+    {
       const returnButton = document.createElement('button');
       returnButton.id = 'journey-return';
-      setControl(returnButton, null, 'Return to title', 'quiet');
+
+      setControl(returnButton, null, 'Home', 'quiet');
+
       $('settings').closest('.menu-actions')!.after(returnButton);
       returnButton.onclick = () => showJourney('return-title', 'journey-return-cancel');
       const policy = document.createElement('p');
@@ -1125,15 +1371,36 @@ function finish(id: number, reason: CompletionReason) {
   session.finish();
   if (locationSelection === session.state.boatNodeId) locationSelection = null;
   render();
+
+  if (pendingReceipt?.id === id && reason === 'complete' && !document.hidden) {
+    const data = pendingReceipt;
+
+    receipt.innerHTML = `<strong>${data.title}</strong>${data.depth ? `<span>${data.depth}</span>` : ''}`;
+
+    receipt.hidden = false;
+
+    receipt.dataset.transition = String(id);
+
+    positionReceipt();
+
+    receiptTimer = setTimeout(clearReceipt, 3200);
+  } else clearReceipt();
+
   $('announcement').textContent =
-    `${session.state.turn} actions completed. ${statusCopy(session.state, level).headline}`;
+    `${pendingReceipt?.title ? pendingReceipt.title + '. ' + pendingReceipt.depth + '. ' : ''}${session.state.turn} actions completed. ${statusCopy(session.state, level).headline}`;
+
   if (session.state.status !== 'playing') openDialog('terminal', undefined, 'undo');
   else focusAvailable(returnId);
+  positionReceipt();
 }
 function execute(action: Action) {
-  if (session.busy) return;
+  if (session.busy || journeySurface()) return;
+
   const transaction = session.commit(copy(action));
   if (!transaction) return;
+
+  clearReceipt();
+
   world.poses.accept(transaction.before, action);
   actionOrigin = !keyboardInput && lastPointer ? { x: lastPointer.x, y: lastPointer.y } : null;
   sound.reconcileState(transaction.after, level, true);
@@ -1142,6 +1409,13 @@ function execute(action: Action) {
   const plan = world.plan(transaction.before, transaction.after, action);
   const id = ++transitionSerial;
   activeTransition = { id, action: copy(action), plan, startedAt: performance.now() };
+
+  if (action.type === 'board' || action.type === 'unload')
+    pendingReceipt = {
+      id,
+      ...transferReceipt(transaction.before, transaction.after, action, level),
+    };
+
   if (dialog.open) closeDialog(false);
   render();
   if (keyboardInput) $('transition-status').focus();
@@ -1332,6 +1606,7 @@ function renderDock() {
   const dock = $('dock-actions'),
     facts = locationFacts(session.state, session.state.boatNodeId, level),
     visible =
+      !journeySurface() &&
       !session.busy &&
       !dialog.open &&
       session.state.status === 'playing' &&
@@ -1342,31 +1617,78 @@ function renderDock() {
   dock.inert = !visible;
   if (!visible) return;
   dock.setAttribute('aria-label', `Passenger actions at ${facts.name}`);
-  dock.innerHTML =
-    (facts.board
-      ? `<button id="board" aria-haspopup="dialog" aria-label="${facts.boardLabel}; choose passengers">${controlContent('board', 'Board')}</button>`
-      : '') +
-    (facts.unload
-      ? `<button id="unload" aria-haspopup="dialog" aria-label="${facts.unloadLabel}; choose passengers">${controlContent('unload', facts.home ? 'Bring home' : 'Let ashore')}</button>`
-      : '');
-  if (facts.board) setControl($('board'), 'board', 'Board', 'action');
-  if (facts.unload)
+
+  dock.replaceChildren();
+
+  for (const type of ['board', 'unload'] as const) {
+    const ids = type === 'board' ? facts.boardOptions : facts.aboard;
+
+    if (!ids.length || !facts[type]) continue;
+
+    const action = { type, passengerIds: [...ids] };
+
+    const info = transferFacts(session.state, action, level);
+
+    const direct = ids.length === 1 && info.direct;
+
+    const button = document.createElement('button');
+
+    button.id = type;
+
+    const groupLabel = type === 'board' ? 'Board' : facts.home ? 'Bring home' : 'Let ashore';
+
     setControl(
-      $('unload'),
-      'unload',
-      facts.home ? 'Bring home' : 'Let ashore',
-      facts.home ? 'warm' : 'action',
+      button,
+      type === 'unload' && facts.home ? 'harbor-home' : type,
+      ids.length === 1 ? info.label : groupLabel,
+      facts.home && type === 'unload' ? 'warm' : 'action',
     );
-  if (facts.board)
-    $('board').onclick = (event) => {
+
+    if (!direct) button.setAttribute('aria-haspopup', 'dialog');
+
+    const note = document.createElement('span');
+
+    note.className = 'dock-facts';
+
+    note.textContent = direct ? `1 action · ${info.depth}` : 'Choose passengers · 1 action';
+
+    button.append(note);
+
+    if (direct && info.detail) {
+      const detail = document.createElement('span');
+
+      detail.className = 'dock-consequence';
+
+      detail.textContent = info.detail;
+
+      button.append(detail);
+    }
+
+    dock.append(button);
+
+    button.onclick = (event) => {
       event.stopPropagation();
-      openDialog('action', { type: 'board', passengerIds: [...facts.boardOptions] }, 'board');
+
+      if (blocked() || event.detail > 1) return;
+
+      const current = transferFacts(session.state, action, level);
+
+      if (direct && current.direct) {
+        returnId = type;
+
+        if (!keyboardInput)
+          closingFence = {
+            scope: 'commit',
+            rect: button.getBoundingClientRect(),
+            until: performance.now() + 180,
+            x: event.clientX,
+            y: event.clientY,
+          };
+
+        execute(action);
+      } else openDialog('action', action, type);
     };
-  if (facts.unload)
-    $('unload').onclick = (event) => {
-      event.stopPropagation();
-      openDialog('action', facts.unload!, 'unload');
-    };
+  }
 }
 function render() {
   const s = session.state,
@@ -1408,6 +1730,9 @@ function render() {
 }
 function undo() {
   if (session.busy) return;
+
+  clearReceipt();
+
   if (dialog.open) closeDialog(false);
   if (session.undo()) {
     world.poses.undo();
@@ -1425,6 +1750,9 @@ function undo() {
 }
 function restart() {
   if (session.busy) return;
+
+  clearReceipt();
+
   if (dialog.open) closeDialog(false);
   if (session.restart()) {
     world.poses.reset();
@@ -1437,6 +1765,50 @@ function restart() {
     world.backToBoat();
     render();
     focusAvailable('menu');
+  }
+}
+
+function positionReceipt() {
+  if (receipt.hidden) return;
+  const canvas = world.host.getBoundingClientRect();
+  const frame = world.layoutFrameStatus();
+  const rect = receipt.getBoundingClientRect();
+  const local = (r: Rectangle): Rectangle => ({
+    left: r.left + canvas.left,
+    right: r.right + canvas.left,
+    top: r.top + canvas.top,
+    bottom: r.bottom + canvas.top,
+  });
+  const boat = local(frame.boat);
+  const obstacles = [
+    ...document.querySelectorAll<HTMLElement>(
+      '.hud, #dock-actions, #status-toggle, .view-controls, .map-target, .map-name, #local-context, #dialog[open]',
+    ),
+  ]
+    .filter(
+      (e) =>
+        !e.hidden &&
+        !e.closest('[hidden]') &&
+        getComputedStyle(e).visibility !== 'hidden' &&
+        e.getBoundingClientRect().width > 0,
+    )
+    .map((e) => e.getBoundingClientRect());
+  const placement = placeLocalCard(
+    rect.width,
+    rect.height,
+    safeBounds,
+    [...obstacles, boat, ...frame.passengers.map(local)],
+    [
+      [boat.left - rect.width - 12, boat.top],
+      [boat.left, boat.bottom + 12],
+      [boat.right + 12, boat.top],
+    ],
+    [boat.left, boat.top],
+  );
+  receipt.style.visibility = placement ? 'visible' : 'hidden';
+  if (placement) {
+    receipt.style.left = placement.left + 'px';
+    receipt.style.top = placement.top + 'px';
   }
 }
 function positionDialog() {
@@ -1495,9 +1867,11 @@ function positionDialog() {
     }
     dialog.style.setProperty('--dialog-max-height', safeBounds.bottom - safeBounds.top + 'px');
     const transfer = selected.type === 'board' || selected.type === 'unload';
-    if (transfer) dialog.style.height = Math.min(380, safeBounds.bottom - safeBounds.top) + 'px';
-    else dialog.style.removeProperty('height');
+
+    dialog.style.removeProperty('height');
+
     const rect = dialog.getBoundingClientRect();
+    const previousPlacement = actionPlacement;
     actionPlacement = placeActionCard(rect.width, rect.height, safeBounds, actionAnchor, {
       portrait: canvas.width < canvas.height,
       previous: actionPlacement,
@@ -1516,10 +1890,17 @@ function positionDialog() {
       actionPlacement = {
         left,
         right: left + rect.width,
-        top: safeBounds.top,
-        bottom: safeBounds.top + rect.height,
+        top: safeBounds.bottom - rect.height,
+        bottom: safeBounds.bottom,
         layout: 'sheet',
       };
+    }
+    if (transfer && previousPlacement && canvas.width >= canvas.height && canvas.height > 360) {
+      const bottom = Math.min(
+        safeBounds.bottom,
+        Math.max(safeBounds.top + rect.height, previousPlacement.bottom),
+      );
+      actionPlacement = { ...actionPlacement, top: bottom - rect.height, bottom };
     }
     dialog.dataset.layout = actionPlacement.layout;
     dialog.style.left = actionPlacement.left + 'px';
@@ -1710,9 +2091,18 @@ function positionMap() {
     dock.style.visibility = visible ? 'visible' : 'hidden';
     dock.dataset.layout = 'row';
     if (dock.offsetWidth > bounds.right - bounds.left) dock.dataset.layout = 'column';
-    const choice = placeActionCard(dock.offsetWidth, dock.offsetHeight, bounds, boat, {
+    const nearby = placeActionCard(dock.offsetWidth, dock.offsetHeight, bounds, boat, {
       avoid: [...figures, ...placed],
     });
+    const clear = placeLocalCard(
+      dock.offsetWidth,
+      dock.offsetHeight,
+      bounds,
+      [...figures, ...placed],
+      [[nearby.left, nearby.top]],
+      [boat.left, boat.top],
+    );
+    const choice = clear ? { ...clear, layout: 'floating' as const } : nearby;
     dockPlacement = choice;
     dock.style.left = choice.left + 'px';
     dock.style.top = choice.top + 'px';
@@ -1887,6 +2277,12 @@ function dismissDialogLayer() {
     else if (mode === 'return-title') $('journey-return-cancel').click();
     else if (mode === 'transcript') switchDialog('story', 'story-read');
     else if (mode === 'story') {
+      const more = $('story-more') as HTMLDetailsElement;
+      if (more.open) {
+        more.open = false;
+        more.querySelector('summary')!.focus();
+        return;
+      }
       storyPresentation.skip();
       $('story-continue').focus({ preventScroll: true });
     }
@@ -1939,8 +2335,13 @@ document.addEventListener(
       keyboardInput = true;
       if (!e.repeat) {
         viewFence = null;
-        if (e.key === 'Enter' || e.key === ' ') captureSoundIntent(e.target);
-        else soundIntent = null;
+
+        if (e.key === 'Enter' || e.key === ' ') {
+          captureSoundIntent(e.target);
+          storyActionIntent = (e.target as Element).closest('#story-continue')
+            ? storyActionKey()
+            : null;
+        } else soundIntent = null;
       }
     }
     if (e.repeat && ['Enter', ' '].includes(e.key)) {
@@ -1986,6 +2387,7 @@ document.addEventListener(
     keyboardInput = false;
     lastPointer = { x: e.clientX, y: e.clientY, control: (e.target as Element).closest('button') };
     captureSoundIntent(e.target);
+    storyActionIntent = (e.target as Element).closest('#story-continue') ? storyActionKey() : null;
   },
   true,
 );
@@ -2009,7 +2411,11 @@ document.addEventListener(
       e.stopImmediatePropagation();
       return;
     }
-    const commit = (e.target as Element).closest('#sail, #commit, #board, #unload');
+
+    const commit = (e.target as Element).closest(
+      '#sail, #commit, #board, #unload, #story-continue, #home-play',
+    );
+
     if (commit && e.isTrusted && e.detail > 0 && lastPointer?.control !== commit) {
       e.preventDefault();
       e.stopImmediatePropagation();
@@ -2054,6 +2460,8 @@ document.addEventListener('visibilitychange', () => {
   sound.visibility(document.hidden);
   if (document.hidden && mode === 'story') storyPresentation.settle();
   if (document.hidden) {
+    clearReceipt();
+
     world.settleHomecoming();
     world.clearMovement();
   }
@@ -2065,6 +2473,9 @@ document.addEventListener('visibilitychange', () => {
 });
 addEventListener('pagehide', () => {
   pageDisposed = true;
+
+  clearReceipt();
+
   storyPresentation.cancel();
   storyView = null;
   sound.onChange = null;
@@ -2084,7 +2495,9 @@ addEventListener('pageshow', (event) => {
 updateViewport();
 render();
 scheduleLayout();
-if (journey) showJourney('journey', journey.snapshot.record ? 'journey-continue' : 'journey-new');
+
+if (journey) showHome();
+
 if (import.meta.env.DEV)
   Object.assign(window, {
     __LAST_FERRY__: {

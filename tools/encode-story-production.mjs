@@ -12,7 +12,7 @@ if (frames.length < 2) throw Error('No complete screencast');
 const concat = `${dir}/raw/actual-journey/frames.ffconcat`;
 const duration = frames.at(-1).timestamp - frames[0].timestamp;
 const offset = frames[0].timestamp - manifest.audioStartEpochMs / 1000;
-if (offset < 0 || offset > 3) throw Error(`Unexpected native clock offset ${offset}`);
+if (offset < -10 || offset > 3) throw Error(`Unexpected native clock offset ${offset}`);
 const lines = ['ffconcat version 1.0'];
 for (let i = 0; i < frames.length; i++) {
   lines.push(`file '${resolve(frames[i].path).replaceAll('\\', '/')}'`);
@@ -32,10 +32,10 @@ const command = [
   '0',
   '-i',
   concat,
-  '-ss',
-  String(offset),
+  ...(offset > 0 ? ['-ss', String(offset)] : []),
   '-i',
   manifest.audio,
+  ...(offset < 0 ? ['-af', `adelay=${Math.round(-offset * 1000)}:all=1`] : []),
   '-map',
   '0:v:0',
   '-map',
@@ -85,9 +85,10 @@ writeFileSync(
       rawFrameCount: manifest.frames.length,
       encodedFrameCount: frames.length,
       elapsedSeconds: duration,
-      audioLeadingTrimSeconds: offset,
+      audioLeadingTrimSeconds: Math.max(0, offset),
+      videoBeforeAudioActivationSeconds: Math.max(0, -offset),
       timing:
-        'Video timestamps from native CDP frame metadata; audio recording start from performance.timeOrigin + performance.now(). Only pre-first-frame audio is trimmed to align the continuously recorded streams. VFR preserves observed source frame durations; no speed adjustment or internal edits.',
+        'Video timestamps from native CDP frame metadata; audio recording start from performance.timeOrigin + performance.now(). Positive offsets trim pre-first-frame audio; negative offsets preserve the real silent Home interval before trusted audio activation using leading silence. No existing audio samples are amplified or replaced. VFR preserves observed source frame durations; no speed adjustment or internal edits.',
       sound:
         'Actual runtime Sound.captureStream master output, unchanged gain; AAC encoding only, no normalization, boost, substitute audio or narration.',
       decoding: 'ffmpeg full video/audio decode completed without errors',

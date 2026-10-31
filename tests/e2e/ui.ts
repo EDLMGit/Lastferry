@@ -64,7 +64,8 @@ export async function act(page: Page, id: string, touch = false) {
   if (id.startsWith('map-')) await startMove(page, id, touch);
   else {
     await activate(page, id, touch);
-    await activate(page, 'commit', touch);
+    if (await page.locator('#dialog[open][data-mode=action]').count())
+      await activate(page, 'commit', touch);
   }
   await idle(page);
 }
@@ -107,7 +108,7 @@ export async function keyAct(page: Page, id: string) {
     await expect(page.locator('#local-heading')).toBeFocused();
     await tabTo(page, 'sail');
     await page.keyboard.press('Enter');
-  } else {
+  } else if (await page.locator('#dialog[open][data-mode=action]').count()) {
     await expect(page.locator('#cancel')).toBeFocused();
     await tabTo(page, 'commit');
     await page.keyboard.press('Enter');

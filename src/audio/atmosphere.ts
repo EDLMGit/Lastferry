@@ -38,6 +38,7 @@ export class Sound {
   private ambience: GainNode | null = null;
   private effects: GainNode | null = null;
   private analyser: AnalyserNode | null = null;
+  private scoreAnalyser: AnalyserNode | null = null;
   private meter = new Float32Array(1024);
   private noise: AudioBuffer | null = null;
   private wood = new Map<TransferContact['weight'], AudioBuffer>();
@@ -166,6 +167,9 @@ export class Sound {
     reverb.connect(wet);
     wet.connect(this.musicOutput);
     this.musicOutput.connect(this.master);
+    this.scoreAnalyser = context.createAnalyser();
+    this.scoreAnalyser.fftSize = 1024;
+    this.musicOutput.connect(this.scoreAnalyser);
     this.ambience.connect(this.master);
     this.effects.connect(this.master);
     this.analyser = context.createAnalyser();
@@ -182,6 +186,7 @@ export class Sound {
       send,
       wet,
       this.analyser,
+      this.scoreAnalyser,
     );
     this.noise = makeNoise(context);
     this.padWave = context.createPeriodicWave(
@@ -820,8 +825,22 @@ export class Sound {
         peak = Math.max(peak, Math.abs(sample));
       }
     }
+    let scoreSum = 0,
+      scorePeak = 0;
+    if (this.scoreAnalyser) {
+      this.scoreAnalyser.getFloatTimeDomainData(this.meter);
+      for (const sample of this.meter) {
+        scoreSum += sample * sample;
+        scorePeak = Math.max(scorePeak, Math.abs(sample));
+      }
+    }
     const records = [...this.owned.values()];
     return {
+      scoreOutputRms: Math.sqrt(scoreSum / this.meter.length),
+      scoreOutputPeak: scorePeak,
+      scoreRoute: 'music dry + reverb -> victory gain -> master',
+      scoreEffectiveOutputRms:
+        Math.sqrt(scoreSum / this.meter.length) * (this.master?.gain.value ?? 0),
       ...this.playback(),
       muted: this.muted,
       activated: this.activated,

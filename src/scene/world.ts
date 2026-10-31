@@ -106,6 +106,7 @@ export class World {
   viewFocus: ViewPoint | null = null;
   viewScale = 1;
   private storyFraming = false;
+  private homePresentation = false;
   private storyJob: StoryStage | null = null;
   private storyRestore: {
     animals: Map<T.Object3D, { position: T.Vector3; rotation: T.Euler }>;
@@ -730,6 +731,12 @@ export class World {
       return;
     this.measuredUsable = { ...rectangle };
     this.reframeView();
+  }
+  setHomePresentation(active: boolean) {
+    if (this.homePresentation === active) return;
+    this.homePresentation = active;
+    this.setStoryFraming(active);
+    this.indicate(this.state);
   }
   setStoryFraming(active: boolean) {
     if (this.storyFraming === active) return;
@@ -1377,7 +1384,7 @@ export class World {
               ? 'too-shallow'
               : 'available';
       const active = id === this.navigationSelected;
-      g.visible = true;
+      g.visible = !this.homePresentation;
       const color =
         active || id === emphasis
           ? '#ffe09a'
@@ -1400,6 +1407,7 @@ export class World {
       g.position.y = s.tideLevel * 0.18 + 0.04;
     }
     for (const [id, line] of this.routes) {
+      line.visible = !this.homePresentation;
       const e = this.level.edges.find((e) => e.id === id)!;
       line.position.y = s.tideLevel * 0.18;
       const m = line.material as T.LineDashedMaterial;

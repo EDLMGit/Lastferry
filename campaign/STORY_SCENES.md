@@ -1,6 +1,8 @@
 # Last Ferry — story scenes for The Long Tide
 
-**Current implementation:** illustrated story production, task `STORY_PRODUCTION_01` in `LAST_FERRY_STORY_PRODUCTION_PACKAGE/NEXT_TASK_STORY_PRODUCTION.md`, from reviewed `6fc5a09dd4ef876ad96ad12d623532f0d13deb10`. The working journey, checkpoints, practice isolation and puzzles remain. The supplied Words and Light opening reference is user-approved; the production port, new Harbor drawing, runtime mix and physical-device experience have separate verification and human-approval status in `reviews/story-production/`. Implementation and focused verification are complete for the documented coverage; human review remains pending.
+**Current flow:** `HOME_PLAY_FLOW_01` in `LAST_FERRY_HOME_PLAY_PACKAGE/NEXT_TASK_HOME_PLAY_FLOW.md` adds live Home and automatic normal-motion progression while preserving the illustrated production below. It replaces both unstarted tasks in `LAST_FERRY_FLOW_AND_FEEDBACK_PACKAGE`; no old Task 01 prerequisite applies. Current evidence: `reviews/home-play-flow/REVIEW.md`.
+
+**Illustrated art implementation:** task `STORY_PRODUCTION_01` in `LAST_FERRY_STORY_PRODUCTION_PACKAGE/NEXT_TASK_STORY_PRODUCTION.md`, from reviewed `6fc5a09dd4ef876ad96ad12d623532f0d13deb10`. The working journey, checkpoints, practice isolation and puzzles remain. The supplied Words and Light opening reference is user-approved; the production port, new Harbor drawing, runtime mix and physical-device experience have separate verification and human-approval status in `reviews/story-production/`. Implementation and focused verification are complete for the documented coverage; human review remains pending.
 
 The campaign has four phases of three coves. Nell joins in Cove 3; a prepared larger ferry launches afterward. Cove 4 teaches its six spaces before Cove 5 introduces Orin. Cove 11 is the hardest puzzle. Cove 12 is a gentle, short final rescue, followed by supper. Those later coves, species, hull and current mechanics are still future work.
 
@@ -10,15 +12,15 @@ The opening and first connection use a close illustrated Canvas2D layer inside t
 
 The reference's lavender/peach dusk, teal water, cream/tan animals, yellow ferry/red cabin and warm lights are retained. Rue is tan on the left and Pip cream on the right in the opening. Portrait uses an attached deep teal reading area under recomposed artwork; landscape uses the quiet space beside the focal action. Narrative captions use Georgia with a serif fallback and remain readable HTML. Controls use the accepted cove interface language and native semantics.
 
-Normal motion reveals the entire current caption after about 1,050ms with a brief 240ms opacity fade. The finite image and caption then hold until the player acts. Read story exposes all current-scene copy immediately. Reduced Motion presents each shot's endpoint and caption immediately, preserving ordinary Next navigation. There is no typewriter, automatic advance, mandatory sound or timed reading limit.
+Normal motion reveals the entire current caption after about 1,050ms with a brief 240ms opacity fade. Normal opening playback advances Tide → Lantern → Ferry at the existing 6 / 6 / 7-second endpoints; the final picture holds indefinitely. Harbor remains one five-second action with an explicit final handoff. Read story exposes all current-scene copy immediately. Reduced Motion presents each shot's endpoint and caption immediately, preserving ordinary Next navigation. Pause reveals the full caption and preserves elapsed art time; Resume retains consumed cues. Next remains immediate. There is no typewriter or mandatory sound. Reduced Motion remains manual stills.
 
 Next is available immediately and changes only the shot. Only the final Take the helm or Continue to Bellwater action explicitly acknowledges the scene once and enters its destination. Replay restarts the current shot; Replay scene restarts the sequence. Skip animation and Escape from the main scene settle the final shot and expose the complete recap without advancing campaign progress. A pending scene restored from its existing checkpoint starts at that final static endpoint and remains pending until its final action.
 
-Read story and Settings settle only the current shot and cancel its pending/active cues. Closing either returns to that held shot and trigger focus; Escape closes the subordinate reading/settings view before it can skip the scene. Hide/recovery and enabling Reduced Motion settle the current shot without Next or acknowledgment. Turning motion back on does not replay consumed work. Navigation, replacement and disposal cancel owned presentation and sound work. One story clock advances the existing controller; held illustrations do not draw repeatedly. The gameplay world is retained across shots.
+Read story and Options settle only the current shot, pause progression and cancel pending/active cues. Returning opens the secondary disclosure before restoring its trigger focus. Closing either returns to that held shot and trigger focus; Escape closes the subordinate reading/settings view before it can skip the scene. Hide/recovery and enabling Reduced Motion settle the current shot without Next or acknowledgment. Turning motion back on does not replay consumed work. Navigation, replacement and disposal cancel owned presentation and sound work. One story clock advances the existing controller; held illustrations do not draw repeatedly. The gameplay world is retained across shots.
 
 Story presentation spends no turns and changes no tide, passenger, capacity, delivery or Undo state. The opening is a narrative prelude, not simulated travel. Terminal Undo remains available after a rescue until the player accepts Continue story. Explicit `?cove=` entrances stay independent practice/review flows. The existing strict checkpoint format stores scene/cove boundaries, not shot position or a mid-puzzle action history.
 
-Use the established Sound owner, accepted score and activation intent. Finite tide wash, lantern contact and ferry-water effects have separate cancellable story ownership; they do not invoke gameplay travel, transfer or victory events. Muted, skipped, hidden, superseded or unavailable cues are consumed rather than caught up later. The Harbor connection does not replay victory or unloading contacts. No new score or continuous ambience layer is added.
+Home Play uses the existing trusted click capture to request Sound synchronously before routing. Home/story Sound controls share Enable/Retry/Mute intent. Use the established Sound owner, accepted score and activation intent. Finite tide wash, lantern contact and ferry-water effects have separate cancellable story ownership; they do not invoke gameplay travel, transfer or victory events. Muted, skipped, hidden, superseded or unavailable cues are consumed rather than caught up later. The Harbor connection does not replay victory or unloading contacts. No new score or continuous ambience layer is added.
 
 Optional narration IDs and the exact four-clip script are prepared in `LAST_FERRY_STORY_PRODUCTION_PACKAGE/audio/narration-script.json`. Every asset is null and every recording remains pending. There is no generated voice, live TTS, unavailable narration toggle or voice-service dependency. Finished local voice recordings and human listening approval belong to a later contained pass.
 
@@ -28,7 +30,7 @@ This task explicitly supersedes the older story-only requirements for distant ga
 
 ## 1. The first evening — `opening`
 
-**Trigger:** Begin journey enters the first picture directly, before Holding Pier. **Implemented scope, pending production review.**
+**Trigger:** Fresh Home Play enters the first picture directly, before Holding Pier. **Implemented scope, pending production review.**
 
 ### Shot 1 — Tide · six seconds
 
@@ -39,7 +41,7 @@ The water reaches the lower steps and covers part of the marked post. Pip and Ru
 > Your first evening at the helm.<br>
 > A high tide ahead.
 
-The waterline reaches a composed endpoint and holds. Next never waits for that endpoint.
+The waterline reaches its composed endpoint before normal playback advances to Lantern. Pause and Reduced Motion hold it; Next never waits for the endpoint.
 
 ### Shot 2 — Lantern · six seconds
 

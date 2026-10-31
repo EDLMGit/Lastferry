@@ -2457,6 +2457,10 @@
         {
           "path": "review/deployment-confirmation.json",
           "role": "Supplied version12 publication receipt for the reviewed portrait baseline; this story pass is not deployed"
+        },
+        {
+          "path": "reviews/home-play-flow/REVIEW.md",
+          "role": "Named direct single-passenger actions, compact subset chooser and completion-derived receipts; existing choice identities preserved."
         }
       ],
       "meaning": "Local preview, forecast, Menu, Settings and completion retain native semantics; projected future action is explicit and every full passenger label/cost remains readable.",
@@ -3800,6 +3804,10 @@
         {
           "path": "reviews/cove-ui-assets/REVIEW.md",
           "role": "Actual native gameplay, interaction checks and exact source identity; contributor verification"
+        },
+        {
+          "path": "reviews/home-play-flow/REVIEW.md",
+          "role": "Named direct single-passenger actions, compact subset chooser and completion-derived receipts; existing choice identities preserved."
         }
       ],
       "consumers": [
@@ -4021,6 +4029,10 @@
         {
           "path": "reviews/passenger-portraits/browser/automation-results.json",
           "role": "Fresh identity, delayed/failure, native input, cold audio and actual fullscreen cases"
+        },
+        {
+          "path": "reviews/home-play-flow/REVIEW.md",
+          "role": "Named direct single-passenger actions, compact subset chooser and completion-derived receipts; existing choice identities preserved."
         }
       ],
       "consumers": [
@@ -4665,7 +4677,7 @@
     },
     {
       "id": "ui.story-presentation",
-      "name": "Journey entrance and player-paced illustrated story",
+      "name": "Autoplay illustrated story with explicit final handoff",
       "kind": "dom-component-family",
       "status": "integrated",
       "sources": [
@@ -4710,7 +4722,7 @@
       ],
       "visualSignature": "Close supplied teal/dusk/peach illustrations with complete Georgia captions and stable native cove controls. Portrait reads below the art; landscape reserves quiet space beside the action.",
       "reuseAndOwnership": "One small finite shot controller, one Canvas2D story view and the existing app, gameplay World, dialog/fullscreen and Sound owners. Registry data is the sole runtime copy/cue source. No iframe or second campaign system.",
-      "behaviorToPreserve": "Next changes only a shot. Only Take the helm or Continue to Bellwater acknowledges a scene, once. Skip goes to the final held endpoint without acknowledgment. Read story/Settings settle the current shot and preserve return focus. Reduced/hide/restored/cancel paths suppress stale motion/cues; no puzzle/checkpoint mutation or per-shot save.",
+      "behaviorToPreserve": "Normal 6/6/7-second shots advance automatically, then hold the final handoff. Pause retains elapsed/consumed cues and reveals copy. Resume never catches up unseen shots. Next/Replay/Skip are presentation only. Reduced/restored/secondary/background paths hold readable stills. Fresh pointer/keyboard final intent; no timed checkpoint writes.",
       "provenance": "original-project-code",
       "acceptance": {
         "state": "integrated-awaiting-production-visual-and-listening-review",
@@ -4737,6 +4749,10 @@
         {
           "path": "reviews/story-scenes/REVIEW.md",
           "role": "Prior authored-miniature implementation history, superseded in current story presentation only"
+        },
+        {
+          "path": "reviews/home-play-flow/REVIEW.md",
+          "role": "Current Home/autoplay/music and direct-transfer verification; prior manual pacing is historical."
         }
       ],
       "consumers": [
@@ -4899,6 +4915,89 @@
         "mute/hide/Undo/disposal behavior": "All clearActions/context/mute/hide/reset/dispose paths invalidate story tokens and release nodes. Pending resume never schedules old cues. Cancel uses a bounded<=60ms tail; a new run reclaims it before new sources.",
         "listening evidence separate from generated-output evidence": "Focused ownership unit checks and runtime recorded output are separate from human listening. See reviews/story-production/REVIEW.md; no approved narration/voice or physical-speaker claim."
       }
+    },
+    {
+      "id": "ui.home-composition",
+      "name": "Last Ferry live Home composition",
+      "kind": "dom-component-family",
+      "status": "integrated",
+      "sources": [
+        {
+          "path": "src/main.ts",
+          "symbol": "showHome, setHomeVisible, updateViewport measured title/menu exclusion, blocked input ownership"
+        },
+        {
+          "path": "src/campaign/home.css",
+          "symbol": "Portrait title/art/actions and landscape quiet-side menu; safe-area-aware live composition"
+        },
+        {
+          "path": "src/scene/world.ts",
+          "symbol": "World.setHomePresentation, setStoryFraming and indicate; retained subject framing and navigation suppression"
+        },
+        {
+          "path": "docs/HOME_COMPOSITION.md",
+          "symbol": "Authored reusable composition recipe and dependencies"
+        }
+      ],
+      "meaning": "Welcoming root entrance around the actual retained cove; save state is read without spending actions or changing checkpoints.",
+      "variants": [
+        "fresh Play",
+        "Continue from scene recap or cove start",
+        "available-coves complete",
+        "invalid save replacement",
+        "visit-only progress",
+        "portrait",
+        "short landscape",
+        "Reduced Motion"
+      ],
+      "visualSignature": "Living accepted teal cove with full warm lighthouse and yellow/red ferry, real cream serif title, warm Play capsule and quieter rounded utility controls.",
+      "reuseAndOwnership": "One retained World; measured art rectangle excludes Home menu/title, fits lighthouse/ferry subject bounds. No new renderer, model, screenshot background, generated art, puzzle position or fake won state.",
+      "behaviorToPreserve": "Home does not create/save/acknowledge progress. Covered gameplay inert plus explicit blocked gate. Native Options/Practice return to their Home triggers without recreating World. One trusted Play activation requests shared Sound before transition; remembered mute preserved.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "integrated-awaiting-review",
+        "reviewedBaseline": "d532c62f0f25854387869466572a1ed0cf35a0ac",
+        "basis": "New authored composition requires actual phone review; reused assets do not imply visual or acoustic approval."
+      },
+      "evidence": [
+        {
+          "path": "LAST_FERRY_HOME_PLAY_PACKAGE/direction/HOME_SCREEN.md",
+          "role": "Supplied current authored direction"
+        },
+        {
+          "path": "reviews/home-play-flow/REVIEW.md",
+          "role": "Actual runtime phone frames, verification and limitations"
+        }
+      ],
+      "consumers": [
+        "src/main.ts",
+        "src/scene/world.ts",
+        "src/dev/asset-gallery.ts"
+      ],
+      "gallery": {
+        "section": "home",
+        "preview": "Shared Home control specimens and link to actual root; no second World or fake playable background."
+      },
+      "typeSpecific": {
+        "render/placement sources": "src/main.ts showHome/updateViewport, src/campaign/home.css, World.setHomePresentation; authored recipe docs/HOME_COMPOSITION.md",
+        "semantic role/accessible name": "Last Ferry home section and Home navigation; native Play/Continue, Options, Practice, Sound, New journey controls",
+        "icon and label mappings": "Warm text Play/Continue; quiet Options with settings icon; existing Sound Enable/Retry/Mute icon and intent mapping",
+        "interaction states": "Fresh, cove checkpoint, scene checkpoint, complete, invalid and unavailable storage; Home is read-only until an explicit action",
+        "nearby placement and viewport contract": "Measured title/menu bounds determine portrait middle or landscape right art region inside safe viewport; full lighthouse and ferry subject fit",
+        "focus/cancel/fullscreen preservation": "Inert covered seascape plus blocked() input gate; one native dialog and #app fullscreen root; secondary views restore Home opener focus without rebuilding World"
+      },
+      "dependencies": [
+        "model.ferry",
+        "model.lighthouse",
+        "shader.water",
+        "ui.typography",
+        "ui.component.action-capsule",
+        "ui.component.round-utility",
+        "ui.icon.settings",
+        "ui.icon.sound-on",
+        "ui.icon.sound-off",
+        "ui.icon.sound-retry"
+      ]
     }
   ],
   "seedSource": "cove-ui-package/asset-catalog.seed.json",
@@ -4946,5 +5045,95 @@
     ],
     "unchangedWorldAudio": "Existing world/audio families remain accepted-baseline assets; this inventory change adds no runtime model/texture/recording/font file."
   },
-  "refinementSourceCommit": "a4325353cf11cd4edba8d5384b58fe138e4772e3"
+  "refinementSourceCommit": "a4325353cf11cd4edba8d5384b58fe138e4772e3",
+  "homePlayFlowChanges": {
+    "baseline": "d532c62f0f25854387869466572a1ed0cf35a0ac",
+    "preservedIds": [
+      "model.ferry",
+      "model.rabbit",
+      "model.sheep",
+      "model.lighthouse",
+      "model.cottage",
+      "model.bell",
+      "model.pier-kit",
+      "model.waypoint-buoy",
+      "scenery.pine",
+      "scenery.rocks",
+      "scenery.reeds",
+      "scenery.garden-kit",
+      "terrain.coast",
+      "material.miniature-palette",
+      "lighting.cove",
+      "material.wet-contact",
+      "texture.coastal-mask",
+      "texture.seabed",
+      "shader.water",
+      "effect.wake",
+      "effect.shore-contact",
+      "effect.forecast",
+      "effect.harbor-glow",
+      "effect.harbor-sweep",
+      "indicator.routes",
+      "indicator.world-stops",
+      "motion.transfer",
+      "motion.homecoming",
+      "audio.score",
+      "audio.accompaniment",
+      "audio.ambience-travel",
+      "audio.transfer-wood",
+      "audio.arrival",
+      "audio.reverb",
+      "ui.surfaces",
+      "ui.typography",
+      "ui.map-markers",
+      "ui.dock-icons",
+      "ui.utility-icons",
+      "ui.dialogs",
+      "ui.icon.board",
+      "ui.icon.unload",
+      "ui.icon.sail",
+      "ui.icon.harbor-home",
+      "ui.icon.undo",
+      "ui.icon.wait",
+      "ui.icon.whole-cove",
+      "ui.icon.back-to-boat",
+      "ui.icon.menu",
+      "ui.icon.settings",
+      "ui.icon.close",
+      "ui.icon.confirm",
+      "ui.icon.next-cove",
+      "ui.icon.sound-on",
+      "ui.icon.sound-off",
+      "ui.icon.sound-retry",
+      "ui.icon.fullscreen-enter",
+      "ui.icon.fullscreen-exit",
+      "ui.component.round-utility",
+      "ui.component.action-capsule",
+      "ui.component.panel",
+      "ui.component.passenger-choice",
+      "ui.component.location-name",
+      "ui.component.harbor-mark",
+      "material.cove-ui-tokens",
+      "reference.first-crossing-png",
+      "reference.original-concept-png",
+      "reference.drowned-orchard-png",
+      "reference.sanctuary-ending-png",
+      "reference.first-cove-layout-svg",
+      "reference.first-cove-layout-png",
+      "ui.passenger-portraits",
+      "ui.story-presentation",
+      "story.illustrations",
+      "audio.story-effects"
+    ],
+    "added": [
+      "ui.home-composition"
+    ],
+    "updated": [
+      "ui.story-presentation",
+      "ui.dialogs",
+      "ui.component.passenger-choice",
+      "ui.component.action-capsule"
+    ],
+    "newWorldAssets": false
+  }
 }

@@ -1,0 +1,169 @@
+#home {
+  position: fixed;
+  inset: var(--viewport-top, 0) auto auto var(--viewport-left, 0);
+  width: var(--viewport-width, 100vw);
+  height: var(--viewport-height, 100dvh);
+  padding: max(24px, var(--safe-top)) max(24px, var(--safe-right)) max(24px, var(--safe-bottom))
+    max(28px, var(--safe-left));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 22px;
+  background: linear-gradient(90deg, rgb(9 43 46 / 92%), rgb(9 43 46 / 65%) 28%, transparent 65%);
+  z-index: 5;
+}
+#home[hidden] {
+  display: none;
+}
+#home-title,
+#home-menu {
+  width: clamp(235px, 28vw, 350px);
+}
+#home-title h1 {
+  margin: 0;
+  color: #f2dfae;
+  font:
+    500 clamp(40px, 5vw, 72px)/1 Georgia,
+    serif;
+  letter-spacing: -1.8px;
+}
+#home-title p {
+  margin: 12px 0 0;
+  color: #e6d3a6;
+  font:
+    20px/1.2 Georgia,
+    serif;
+  letter-spacing: 1px;
+}
+#home-menu {
+  display: grid;
+  gap: 10px;
+}
+.home-secondary {
+  display: flex;
+  gap: 8px;
+}
+.home-secondary > button {
+  flex: 1;
+}
+#home .cove-button {
+  min-height: 46px;
+  font-size: 16px;
+  line-height: 1.2;
+  white-space: normal;
+  min-width: 0;
+}
+#home-play {
+  width: 100%;
+}
+.home-notice {
+  font-size: 14px;
+  line-height: 1.35;
+  color: #eee3c9;
+  margin: 0;
+}
+.home-notice:empty {
+  display: none;
+}
+#transfer-receipt {
+  position: fixed;
+  z-index: 8;
+  max-width: min(300px, calc(100vw - 24px));
+  padding: 9px 13px;
+  color: #fff0cc;
+  background: rgb(20 63 65 / 96%);
+  border: 1px solid #c7ad79;
+  border-radius: 15px;
+  box-shadow: 0 3px 12px #08262b44;
+  pointer-events: none;
+  font-size: 14px;
+  line-height: 1.35;
+  animation: transfer-receipt 3.2s ease-out both;
+}
+#transfer-receipt span {
+  display: block;
+}
+@keyframes transfer-receipt {
+  0% {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  12%,
+  82% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-7px);
+  }
+}
+html[data-motion='reduced'] #transfer-receipt {
+  animation: none;
+}
+#dock-actions button {
+  flex-wrap: wrap;
+  max-width: 295px;
+}
+#dock-actions .dock-facts,
+#dock-actions .dock-consequence {
+  width: 100%;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.25;
+  white-space: normal;
+}
+#dock-actions .dock-consequence {
+  max-width: 260px;
+}
+@media (orientation: portrait) {
+  #home {
+    justify-content: space-between;
+    align-items: center;
+    padding: max(28px, var(--safe-top)) 20px max(22px, var(--safe-bottom));
+    background: linear-gradient(180deg, #092b2ec9, transparent 28%, transparent 57%, #092b2eee);
+  }
+  #home-title,
+  #home-menu {
+    width: min(350px, 100%);
+  }
+  #home-title {
+    text-align: center;
+  }
+  #home-title h1 {
+    font-size: 52px;
+  }
+  #home-title p {
+    font-size: 20px;
+    margin-top: 8px;
+  }
+}
+@media (max-height: 460px) and (orientation: landscape) {
+  #home {
+    padding: max(14px, var(--safe-top)) 18px max(14px, var(--safe-bottom));
+    gap: 12px;
+  }
+  #home-title,
+  #home-menu {
+    width: 255px;
+  }
+  #home-title h1 {
+    font-size: 40px;
+  }
+  #home-title p {
+    font-size: 17px;
+    margin-top: 5px;
+  }
+  #home-menu {
+    gap: 7px;
+  }
+}
+
+#dialog[data-transfer='true'] #commit {
+  min-height: 56px;
+}
+@media (max-height: 460px) and (min-width: 600px) {
+  #app #dialog[data-transfer='true'] {
+    width: min(500px, calc(var(--viewport-width, 100vw) - 16px));
+  }
+}

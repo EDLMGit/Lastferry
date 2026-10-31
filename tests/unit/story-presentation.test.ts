@@ -32,24 +32,61 @@ describe('bounded optional story motion', () => {
     );
   });
 
-  test('each shot holds until Next without touching the pending checkpoint', () => {
-    const changed = vi.fn();
-    const presentation = new StoryPresentation(changed);
+  test('normal playback advances exactly once per shot and holds the final scene without acknowledgment', () => {
+    const presentation = new StoryPresentation(vi.fn());
     presentation.start('opening', false, 0);
     for (let t = 100; t <= 8000; t += 100) presentation.update(t);
     expect(presentation.frame).toMatchObject({
-      shot: 'tide',
-      elapsed: 6000,
-      settled: true,
+      shot: 'lantern',
+      elapsed: 2000,
+      settled: false,
       final: false,
     });
-    expect(changed).toHaveBeenCalledTimes(1);
-    expect(presentation.next(false, 8000)).toBe(true);
-    expect(presentation.frame).toMatchObject({ shot: 'lantern', elapsed: 0, settled: false });
-    expect(presentation.next(false, 8001)).toBe(true);
-    expect(presentation.frame).toMatchObject({ shot: 'ferry', elapsed: 0, final: true });
-    expect(presentation.next(false, 8002)).toBe(false);
-    expect(presentation.frame.scene).toBe('opening');
+    for (let t = 8100; t <= 30000; t += 100) presentation.update(t);
+    expect(presentation.frame).toMatchObject({
+      scene: 'opening',
+      shot: 'ferry',
+      elapsed: 7000,
+      settled: true,
+      final: true,
+    });
+    expect(presentation.next(false, 30001)).toBe(false);
+  });
+
+  test.each([1500, 2000])(
+    'pause at %ims preserves elapsed and consumed cues through resume',
+    (at) => {
+      const cue = vi.fn();
+      const presentation = new StoryPresentation(vi.fn(), vi.fn(), cue);
+      presentation.start('opening', false, 0);
+      for (let t = 100; t <= at; t += 100) presentation.update(t);
+      presentation.pause();
+      const frame = presentation.frame;
+      presentation.update(10000);
+      expect(presentation.frame).toEqual(frame);
+      expect(frame.captionOpacity).toBe(1);
+      presentation.resume(false, 11000);
+      for (let t = 11100; t <= 15000; t += 100) presentation.update(t);
+      expect(cue).toHaveBeenCalledTimes(1);
+      expect(presentation.frame.shot).toBe(at === 2000 ? 'lantern' : 'tide');
+    },
+  );
+
+  test('paused Next and Replay preserve user intent; resume at a settled endpoint advances only once', () => {
+    const presentation = new StoryPresentation(vi.fn());
+    presentation.start('opening', false, 0);
+    presentation.pause();
+    presentation.next(false, 100);
+    presentation.update(500);
+    expect(presentation.frame).toMatchObject({ shot: 'lantern', paused: true, elapsed: 0 });
+    presentation.replay(false, false, 600);
+    expect(presentation.frame).toMatchObject({ paused: true, elapsed: 0 });
+    presentation.settle();
+    presentation.resume(false, 10000);
+    expect(presentation.frame).toMatchObject({ shot: 'ferry', paused: false, elapsed: 0 });
+    presentation.settle();
+    presentation.resume(false, 20000);
+    expect(presentation.frame).toMatchObject({ shot: 'ferry', settled: true, scene: 'opening' });
   });
 
   test('caption reveals the complete current phrase after its brief visual lead and remains held', () => {

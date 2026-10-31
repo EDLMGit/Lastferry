@@ -1,8 +1,16 @@
 # Last Ferry — Project state
 
-Updated: 2026-10-27. This is the compact continuity record for the current project, not a claim that every device or future release requirement has been verified.
+Updated: 2026-10-31. This is the compact continuity record for the current project, not a claim that every device or future release requirement has been verified.
 
 Read this before choosing scope. Detailed implementation history belongs in `STATUS.md`; evidence belongs under `reviews/`. Update this record after each handoff and after a confirmed deployment. User feedback can revise an accepted decision.
+
+## Current scoped pass
+
+`HOME_PLAY_FLOW_01` is the current implementation task: `LAST_FERRY_HOME_PLAY_PACKAGE/NEXT_TASK_HOME_PLAY_FLOW.md`, supplied one directory above the repository and retained here unchanged. It replaces both unstarted flow/feedback tasks. `STORY_PRODUCTION_01` is complete and retained, not rerun. Baseline: `d532c62f0f25854387869466572a1ed0cf35a0ac`; implementation and focused verification are complete, with source identity, original failures and remaining limitations recorded in `reviews/home-play-flow/REVIEW.md` at handoff.
+
+Live Home reuses the cove and honest checkpoints; normal stories autoplay with Pause/Resume and an explicit final handoff; single safe passenger actions act directly and groups retain deliberate selection. The score composition/gains, puzzles, Undo, water, sailing, headings and lighthouse remain accepted foundations. Missing music did not reproduce in cold touch/pointer/keyboard checks: score-specific dry/wet output and an unchanged-level actual journey recording are retained. This does not establish physical phone playback. Build/typecheck, 303 unit checks, 76-family validation and nine distinct browser cases passed across documented runs; capture stalls and the unchanged timing/device limitations remain explicit.
+
+A denser final capture later timed out waiting for two Harbor portraits, despite the same-source completed rescue/fit checks passing; original failure and separate continuous opening excerpt are retained. Its cause remains unestablished. No publication occurs in this pass. The supplied receipt still records owner-private Site version 12, game `1a85874883af5caa59f6294a75495eccf2afebbc`, hosting source `e87c5c5baa53a39001c5a89b07b59aab2ad150fc`. Earlier publication history below remains intact. A GitHub push does not publish a Site.
 
 ## Product and working relationship
 
@@ -31,7 +39,7 @@ Local Codex implements the current task. ChatGPT reviews the identifiable handof
 | Story foundation implementation | `ca59e78fb877024296c1484eb6b5fee8b8e66717`, reviewed handoff `8cc43c794274fe64d5fb634961fbf79aaff251f8` — working journey/checkpoints retained; scene presentation requires the correction below; not published |
 | Authored-scenes implementation | `1aa73c59c37082f43990235a9efffd6f793cf642`, reviewed handoff `6fc5a09dd4ef876ad96ad12d623532f0d13deb10` — working journey retained; illustrated presentation supersedes its distant-model scenes; not published |
 | Illustrated story production | `bdd7e86f1e2953144b11108eb828ab85c88eb542` — implemented and focused checks complete; following handoff commit records packaging/continuity only; not published |
-| Reviewed implementation baseline | `6fc5a09dd4ef876ad96ad12d623532f0d13deb10` — current source comparison, distinct from the published game |
+| Reviewed implementation baseline | `d532c62f0f25854387869466572a1ed0cf35a0ac` — Home/play comparison; prior illustrated production is complete and retained |
 | Published private phone game | `1a85874883af5caa59f6294a75495eccf2afebbc` — Sites version 12, publication confirmed 2026-10-25 17:28 Madrid |
 | Stable phone URL | https://last-ferry-playtest.abumech.chatgpt.site |
 | Published hosting source | `e87c5c5baa53a39001c5a89b07b59aab2ad150fc` |

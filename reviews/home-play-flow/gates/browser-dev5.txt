@@ -1,0 +1,76 @@
+
+> last-ferry@1.0.0 test:e2e
+> playwright test home-play-flow.spec.ts
+
+
+Running 6 tests using 1 worker
+
+(node:14712) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\e2e\home-play-flow.spec.ts:156:1 › integrated cold-touch Home autoplay direct transfers and two actual rescues with runtime audio (1.7m)
+  ok 2 tests\e2e\home-play-flow.spec.ts:287:1 › native Home and story fit, orientation, Options focus and inactive gameplay (26.4s)
+  ok 3 tests\e2e\home-play-flow.spec.ts:372:1 › first pointer and natural keyboard Play produce score output; mute and fresh final intent survive autoplay (49.1s)
+  x  4 tests\e2e\home-play-flow.spec.ts:436:1 › checkpoint, invalid-byte recovery, replacement, practice isolation and unavailable storage (15.2s)
+(node:38332) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 5 tests\e2e\home-play-flow.spec.ts:502:1 › pending sound Retry and late completion after mute or hide use one owner (16.6s)
+  x  6 tests\e2e\home-play-flow.spec.ts:607:1 › reduced motion, mixed and same-band delivery, repeat input, fullscreen and production root (11.5s)
+
+
+  1) tests\e2e\home-play-flow.spec.ts:436:1 › checkpoint, invalid-byte recovery, replacement, practice isolation and unavailable storage 
+
+    TimeoutError: locator.evaluate: Timeout 12000ms exceeded.
+    Call log:
+      - waiting for locator('#map-rabbit-pier')
+
+
+       at ui.ts:19
+
+      17 | export async function activate(page: Page, id: string, touch = false) {
+      18 |   if (id.startsWith('map-')) {
+    > 19 |     const inFrame = await page.locator(`#${id}`).evaluate((element) => {
+         |                                                  ^
+      20 |       const r = element.getBoundingClientRect();
+      21 |       return (
+      22 |         !element.closest('.offscreen') &&
+        at activate (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\ui.ts:19:50)
+        at selectPlace (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\ui.ts:56:9)
+        at startMove (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\ui.ts:60:9)
+        at act (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\ui.ts:64:36)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\home-play-flow.spec.ts:479:11
+
+    Error Context: test-results\home-play-flow-checkpoint--0570a-ion-and-unavailable-storage\error-context.md
+
+    Error Context: test-results\home-play-flow-checkpoint--0570a-ion-and-unavailable-storage\error-context.md
+
+  2) tests\e2e\home-play-flow.spec.ts:607:1 › reduced motion, mixed and same-band delivery, repeat input, fullscreen and production root 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('#fullscreen-feedback')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" locator('#fullscreen-feedback') with timeout 10000ms
+      - waiting for locator('#fullscreen-feedback')
+
+
+      632 |     await activate(page, 'fullscreen');
+      633 |     await expect.poll(() => page.evaluate(() => document.fullscreenElement === null)).toBe(true);
+    > 634 |   } else await expect(page.locator('#fullscreen-feedback')).toBeVisible();
+          |                                                             ^
+      635 |   await activate(page, 'settings-back');
+      636 |   await activate(page, 'home-play');
+      637 |   expect(await timeline(page)).toMatchObject({
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\home-play-flow.spec.ts:634:61
+
+    Error Context: test-results\home-play-flow-reduced-mot-f2a32-lscreen-and-production-root\error-context.md
+
+    Error Context: test-results\home-play-flow-reduced-mot-f2a32-lscreen-and-production-root\error-context.md
+
+  2 failed
+    tests\e2e\home-play-flow.spec.ts:436:1 › checkpoint, invalid-byte recovery, replacement, practice isolation and unavailable storage 
+    tests\e2e\home-play-flow.spec.ts:607:1 › reduced motion, mixed and same-band delivery, repeat input, fullscreen and production root 
+  4 passed (3.7m)

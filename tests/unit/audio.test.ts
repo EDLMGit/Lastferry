@@ -1009,7 +1009,8 @@ describe('continuous audio ownership and phase', () => {
       wet = [...reverb.connections][0];
     expect([...music.connections]).toEqual([output, send]);
     expect([...wet.connections]).toEqual([output]);
-    expect([...output.connections]).toEqual([master]);
+    expect([...output.connections]).toEqual([master, (value as any).scoreAnalyser]);
+    expect([...(value as any).scoreAnalyser.connections]).toEqual([]);
     expect([...effects.connections]).toEqual([master]);
     expect([...ambience.connections]).toEqual([master]);
     expect(effects.gain.value).toBe(0.34);
