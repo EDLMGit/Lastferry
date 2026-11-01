@@ -10,6 +10,8 @@ At the user's explicit request, published game `2e4f99268da4691b315fe8467d9e539c
 
 ## Current scoped pass — Two Shelters Practice candidate
 
+Implementation `e4694baeeb0ef64f6c1c0fada3b3e9027bddf277`; packaging audit matches all77 captured source inputs (70 exact,7 newline-only) and53 selected media to Git. A following evidence/continuity-only handoff commit changes no runtime. The exact final pushed SHA is in PR1 and the handoff.
+
 `TWO_SHELTERS_PROTOTYPE_01` starts from clean continuity HEAD `98f9713b1a69474b4066cca8f336cb8c4ca21a50`, preserving reviewed/published game `2e4f99268da4691b315fe8467d9e539cda15e927`. The exact supplied task resolved one directory above the Git root and its unchanged package is retained beside package.json. The private Site remains version 14 with the receipt above; this candidate is not deployed.
 
 Two Shelters is independent Practice at `?cove=two-shelters`, also reachable from Home Practice. It uses the original four-space ferry with Hazel (two-space beaver), Bracken (two-space beaver) and Mica (one-space rabbit). Low Landing requires the rabbit home before retrieving both larger neighbors; High Refuge permits a mixed first delivery safely. Production-rule proof precedes scene authoring. No new rule, species, boat, scene, current or action limit is introduced.

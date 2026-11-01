@@ -1,5 +1,7 @@
 # Current task — Two Shelters Practice candidate
 
+Implementation `e4694baeeb0ef64f6c1c0fada3b3e9027bddf277`. The packaging audit matches77 captured source inputs and53 selected media; final audit/continuity handoff adds no runtime change.
+
 2026-11-01: `TWO_SHELTERS_PROTOTYPE_01` starts clean at `98f9713b1a69474b4066cca8f336cb8c4ca21a50`. The exact package resolved above the actual Git root and was retained unchanged beside package.json. Independent `?cove=two-shelters` preserves the four-cove Journey, strict checkpoints and all five earlier puzzles. The original four-space ferry carries Hazel, Bracken and Mica from existing species.
 
 Mechanical proof precedes scene authoring. Both shelters can win: Low Landing requires Mica home before retrieving both larger neighbors, while High Refuge permits a mixed first delivery. Production reachability rejects a no-staging win and shows greedy low retrieval cannot recover without Undo. Actual deck inspection narrowed the initial four-body proposal to three while retaining the same decision. No model shrinking, new mechanic or packing interaction.
