@@ -3,6 +3,7 @@ import holdingData from '../../data/holding-pier.level.json';
 import bellwaterData from '../../data/bellwater.level.json';
 import driftwoodData from '../../data/driftwood-yard.level.json';
 import wideData from '../../data/wide-berth.level.json';
+import sheltersData from '../../data/two-shelters.level.json';
 export type Level = Pick<
   typeof data,
   'id' | 'title' | 'rules' | 'world' | 'nodes' | 'edges' | 'piers' | 'objective' | 'validation'
@@ -16,6 +17,7 @@ export const holdingPier: Level = holdingData;
 export const bellwater: Level = bellwaterData;
 export const driftwoodYard: Level = driftwoodData;
 export const wideBerth: Level = wideData;
+export const twoShelters: Level = sheltersData;
 export const nodeNames: Record<string, string> = {
   harbor: 'Harbor',
   cut: 'Shallow Cut',

@@ -1,5 +1,13 @@
 # Last Ferry — Art Direction
 
+## Two Shelters Practice composition
+
+The independent candidate reuses the original four-space ferry at its accepted proportions, two existing brown beaver instances (Hazel and Bracken) and cream rabbit Mica. Its compact diamond of places groups a low cottage/timber landing, raised stone refuge with the existing bell landmark, sparse reed shore and home lighthouse. The deep return bends west of Low Landing; the pale shallow approaches stay east and retain deeper turning pockets. This is original level geometry, not a painted background or a Wide Berth repair.
+
+Native Play carries the local scene: the boat, shore neighbors and short boarding connection remain prominent while Whole cove explains the complete graph. Portrait uses the high refuge above the active low landing instead of empty upper water; short landscape prioritizes the local group and allows distant landmarks outside the closer frame. Preserve free panning and Whole cove. A name must remain traceable to its endpoint; do not mistake a bounds check for visual approval.
+
+Candidate-only automatic anchors let the two larger neighbors use the existing deck without changing its model or introducing packing. Compact shore rows and separate walking lanes keep existing silhouettes apart. A short reusable wooden gangway follows the actual transfer connection and finishes with the deck; it is presentation only. Earlier-cove placements, timing, water, audio and models remain unchanged. The discarded mixed sheep/beaver trial and its failed clearance checks remain review history. Human puzzle and visual acceptance are still pending; actual evidence is in `reviews/two-shelters-prototype/`.
+
 ## Current readability correction
 
 PLAY_READABILITY_01 removes the continuous play HUD and its invisible layout strip. Keep individual rounded Undo, Wait, Menu and Sound controls in the upper corner, a compact load/capacity and required-depth capsule, and a separate occupied-pier deadline. Secondary identity, progress, elapsed-action and tide facts expand on demand. Empty space between controls belongs to the cove. Measured visible rectangles protect controls and local figures without making the camera jump when information expands.

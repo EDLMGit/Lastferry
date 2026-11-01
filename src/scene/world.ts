@@ -17,6 +17,13 @@ import {
   type FerryProfile,
 } from './ferry-profile';
 import { sampleJourney, type JourneyPlan } from './motion';
+import {
+  shelterDeckSeat,
+  shelterAnchorDuring,
+  shelterTransferProgress,
+  shelterTransferPose,
+  shelterShoreSeat,
+} from './two-shelters-seating';
 import { PresentationPoses } from './poses';
 import {
   clampViewFocus,
@@ -46,7 +53,7 @@ import {
   wideWaterfront,
   decorateWideIsland,
 } from './scenery';
-import { createPier } from './pier';
+import { createPier, createShelterGangway, updateShelterGangway } from './pier';
 import { getLevelPaths, type CanonicalPath } from './paths';
 import { Shores, createReedBeds } from './shore';
 import { CoastalWater } from './water';
@@ -256,6 +263,7 @@ export class World {
         p,
         this.layout.stonePiers.includes(p.id),
         this.profile.id === 'six-space',
+        this.level.id === 'two-shelters',
       );
       this.scene.add(group);
       if (
@@ -375,6 +383,10 @@ export class World {
       for (const end of [-0.48, 0.48])
         box(this.gangway, '#66776c', [0.86, 0.018, 0.035], [0, 0.008, end], 0.006);
       this.gangway.name = 'wide-pier-gangway';
+    }
+    if (this.level.id === 'two-shelters') {
+      this.gangway = createShelterGangway();
+      this.scene.add(this.gangway);
     }
     for (const p of this.level.passengers) {
       const anchor = new T.Object3D();
@@ -672,7 +684,10 @@ export class World {
     for (const pier of this.level.piers) {
       const group = new T.Box3();
       for (const passenger of this.level.passengers) {
-        const shore = shoreSeat(this.level, passenger.id, pier, !!pier.isDeliveryPier);
+        const shore =
+          this.level.id === 'two-shelters'
+            ? shelterShoreSeat(this.level, passenger.id, pier, !!pier.isDeliveryPier)
+            : shoreSeat(this.level, passenger.id, pier, !!pier.isDeliveryPier);
         const transform = new T.Matrix4().makeTranslation(shore.x, shore.y + 0.08, shore.z);
         transform.scale(new T.Vector3(...passengerScale(passenger.species)));
         group.union(this.layoutAnimalBounds.get(passenger.id)!.clone().applyMatrix4(transform));
@@ -1473,6 +1488,15 @@ export class World {
     if (s.aboard.includes(id)) {
       return this.passengerAnchors.get(id)!.getWorldPosition(new T.Vector3());
     }
+    if (this.level.id === 'two-shelters') {
+      const delivered = s.delivered.includes(id);
+      const pier = this.level.piers.find((p) =>
+        delivered
+          ? p.id === this.level.objective.deliveryPierId
+          : s.waitingByPier[p.id].includes(id),
+      )!;
+      return shelterShoreSeat(this.level, id, pier, delivered);
+    }
     if (this.profile.id === 'six-space') {
       const delivered = s.delivered.includes(id);
       const pier = this.level.piers.find((p) =>
@@ -1510,6 +1534,59 @@ export class World {
     this.gangway.visible = !!pier && !this.transition?.path;
     if (!pier || !this.gangway.visible) return;
     this.hull.updateWorldMatrix(true, false);
+    if (this.level.id === 'two-shelters') {
+      this.gangway.visible = this.water.position.y < pier.elevation * 0.18 - 0.001;
+      const tr = this.transition;
+      const selected = tr
+        ? this.level.passengers
+            .map((p) => p.id)
+            .filter((id) => tr.before.aboard.includes(id) !== tr.after.aboard.includes(id))
+        : [];
+      const time = tr
+        ? Math.min(
+            1,
+            (this.lastTime - tr.start) / tr.duration / (tr.after.status === 'won' ? 0.72 : 1),
+          )
+        : 1;
+      const id =
+        selected.find((id) => {
+          const p = shelterTransferProgress(
+            this.level,
+            id,
+            tr!.before.aboard,
+            tr!.after.aboard,
+            time,
+          );
+          return p > 0 && p < 1;
+        }) ??
+        selected[0] ??
+        state.aboard[0] ??
+        state.waitingByPier[pier.id][0] ??
+        this.level.passengers[0].id;
+      const aboard =
+        tr && selected.includes(id)
+          ? tr.after.aboard.includes(id)
+            ? tr.after.aboard
+            : tr.before.aboard
+          : state.aboard.includes(id)
+            ? state.aboard
+            : [...state.aboard, id];
+      const endpoint = this.hull.localToWorld(shelterDeckSeat(this.level, id, aboard));
+      const pose = shelterTransferPose(
+        this.level,
+        id,
+        aboard,
+        pier,
+        this.hull.matrixWorld,
+        endpoint,
+        endpoint,
+        true,
+        this.boatRoot.rotation.y,
+        0.6,
+      );
+      updateShelterGangway(this.gangway, pose.bridge, pose.gate);
+      return;
+    }
     const id = this.level.passengers[0].id;
     const endpoint = this.hull.localToWorld(deckSeat(this.level, id));
     const path = wideTransferPath(
@@ -1551,6 +1628,9 @@ export class World {
     this.boatRoot.position.copy(V(n.positionXZ, s.tideLevel * 0.18));
     this.boatRoot.rotation.y = this.poses.heading;
     this.hull.position.y = this.draftY(s);
+    if (this.level.id === 'two-shelters')
+      for (const [id, anchor] of this.passengerAnchors)
+        anchor.position.copy(shelterDeckSeat(this.level, id, s.aboard));
     for (const [id, g] of this.animals) {
       if (s.aboard.includes(id)) {
         this.passengerAnchors.get(id)!.add(g);
@@ -1753,6 +1833,12 @@ export class World {
       }
       this.boatRoot.position.y = this.water.position.y;
       this.hull.position.y = T.MathUtils.lerp(tr.fromHullY, this.draftY(tr.after), tideProgress);
+      const shelterProgress = Math.min(1, t / (tr.after.status === 'won' ? 0.72 : 1));
+      if (this.level.id === 'two-shelters')
+        for (const [id, anchor] of this.passengerAnchors)
+          anchor.position.copy(
+            shelterAnchorDuring(this.level, id, tr.before.aboard, tr.after.aboard, shelterProgress),
+          );
       for (const [id, g] of this.animals) {
         const dest = this.passengerPos(id, tr.after);
         if (tr.before.aboard.includes(id) && tr.after.aboard.includes(id)) continue;
@@ -1794,6 +1880,36 @@ export class World {
             );
             if (!this.reduced && progress > 0 && progress < 1)
               g.position.y += Math.sin(progress * Math.PI * 4) ** 2 * 0.035;
+            continue;
+          }
+          if (this.level.id === 'two-shelters') {
+            const board = tr.after.aboard.includes(id);
+            const progress = shelterTransferProgress(
+              this.level,
+              id,
+              tr.before.aboard,
+              tr.after.aboard,
+              shelterProgress,
+            );
+            this.hull.updateWorldMatrix(true, false);
+            const from = board
+              ? tr.positions.get(id)!
+              : this.passengerAnchors.get(id)!.getWorldPosition(new T.Vector3());
+            const pose = shelterTransferPose(
+              this.level,
+              id,
+              board ? tr.after.aboard : tr.before.aboard,
+              pier,
+              this.hull.matrixWorld,
+              from,
+              dest,
+              board,
+              this.boatRoot.rotation.y,
+              progress,
+            );
+            g.position.copy(pose.position);
+            g.rotation.y = pose.angle;
+            if (!this.reduced) g.position.y += Math.sin(progress * Math.PI * 4) ** 2 * 0.035;
             continue;
           }
           const entry = deckTransferEntry(passenger.species);

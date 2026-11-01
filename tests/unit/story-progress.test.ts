@@ -28,6 +28,7 @@ import {
   driftwoodYard,
   holdingPier,
   wideBerth,
+  twoShelters,
   level as firstCrossing,
 } from '../../src/levels/level';
 import narration from '../../LAST_FERRY_STORY_PRODUCTION_PACKAGE/audio/narration-script.json';
@@ -100,6 +101,7 @@ describe('authored story registry', () => {
       bellwater,
       driftwoodYard,
       wideBerth,
+      twoShelters,
     ]);
     expect(practiceCove('first-crossing')).toBe(firstCrossing);
     expect(practiceCove('future-cove')).toBeUndefined();

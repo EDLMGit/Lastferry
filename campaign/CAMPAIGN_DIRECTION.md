@@ -2,6 +2,8 @@
 
 **Campaign direction v2 · 1 November 2026**
 
+Implementation update — `TWO_SHELTERS_PROTOTYPE_01`: the proposed C4 now has an independent playable Practice candidate at `?cove=two-shelters`. Hazel (beaver), Bracken (beaver) and Mica (rabbit) reuse existing species and the original four-space ferry. Both temporary shelters have production-rule witnesses; Low Landing requires Mica home before retrieval, while High Refuge permits a mixed first delivery. See [actual candidate design](../reviews/two-shelters-prototype/DESIGN.md). Human playtest has not accepted it into the campaign. Holding → Bellwater → Driftwood → Wide, launch and save prefixes remain unchanged. No chapter, migration or future cove is implemented. Private Site version14/game2e4f992 and its receipt remain current; this candidate is not deployed. The earlier recalibration record below is retained as planning history.
+
 Original direction baseline: `1a85874883af5caa59f6294a75495eccf2afebbc`. Current task: `PLAY_READABILITY_01`, reviewed runtime `7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695`, later continuity HEAD `52f72d6cdb1caa292425511394f4a11efa024a61`. Holding Pier → Bellwater Cove → Driftwood Yard → Wide Berth remains the implemented journey; First Crossing stays independent practice. The user accepts Driftwood gameplay and reports that Wide Berth is too easy and not fun. Wide's mandatory campaign slot is under revision; technical verification does not establish difficulty acceptance. Portrait-load, layout, timing, acoustic and physical-device limits remain separately recorded.
 
 The accepted Home, illustrated scenes, autoplay, direct/group transfers, prepared-ferry launch and actual six-space Wide Berth profile remain available. This task changes readability and planning direction only: no future cove, route reorder, launch relocation or save migration is implemented. The current private Site remains version 13/game `7ae1d8a`; the publication receipt and earlier history are retained in project state. Cove-boundary checkpoints remain honest; full mid-puzzle persistence is deferred.
@@ -52,7 +54,7 @@ After cove 3, Nell is safe at the refuge. In the revised plan, she and the neigh
 
 **Feeling:** deeper planning on familiar water, then the pleasure of useful extra room.
 
-Cove 4 is now proposed as **Two Shelters**, using the four-space boat and three or four bodies from existing species. Its question is: which temporary landing and retrieval order keep the later rescue possible? It must add a placement dependency beyond Driftwood's single safe staging pier. This is an unproven design brief, not authored or accepted content.
+Cove 4 is now proposed as **Two Shelters**, using the four-space boat and three or four bodies from existing species. Its question is: which temporary landing and retrieval order keep the later rescue possible? It must add a placement dependency beyond Driftwood's single safe staging pier. This was the initial design brief. A concrete independent Practice candidate is now implemented and production-proven; campaign placement and human satisfaction remain unaccepted.
 
 Cove 5 introduces Orin, a deer using three spaces, in the original four-space boat. His size is legible in his body, portrait and explicit cost. After explicit C5 completion, the prepared six-space ferry launches before Cove 6, Two Landings. That cove introduces and applies its capacity through mixed loads, route depth and the choice of whether a lighter return justifies an extra trip. These are future proposals awaiting mechanical proof and playtest.
 
@@ -87,7 +89,7 @@ Future titles are working names. Each row is a design intention, not a proven pu
 | 1 | Holding Pier | Bring Pip, Rue and Moss home | Accepted introduction: load, depth, temporary landing and deadlines | Existing |
 | 2 | Bellwater Cove | Meet Tansy, Lark and Bram | Accepted route and rescue-order puzzle with staged tide consequences | Existing |
 | 3 | Driftwood Yard | Rescue Nell, Fern and Oat | Four-space staging at High Mooring, shallow rescue and deepened return | Implemented; user accepted gameplay |
-| 4 | Two Shelters — working title | Finish the inner coast while Nell helps at home | Choose a temporary landing and retrieval order that preserve the later rescue | Proposed replacement; four-space boat |
+| 4 | Two Shelters — working title | Finish the inner coast while Nell helps at home | Choose a temporary landing and retrieval order that preserve the later rescue | Independent Practice candidate; four-space boat; campaign slot pending playtest |
 | 5 | Orchard Landing | Meet Orin | Fit a three-space passenger into a useful four-space plan | Proposed; four-space boat |
 | 6 | Two Landings, preceded by the launch | The community provides a ferry suited to the next stretch | Choose mixed loads and when a lighter return is worth an extra trip | Proposed; six-space introduction and application |
 | 7 | Tidal Gate | Reach the headland | One clearly marked, fixed-direction passage | Proposed |
@@ -203,8 +205,8 @@ The actual authoring and mechanical acceptance details are in `PUZZLE_PROGRESSIO
 | --- | --- | --- |
 | Story foundation and illustrated production — complete, retained | Approved three-shot opening and compact Harbor connection inside the working journey/practice flow and honest cove-boundary checkpoints | New levels, species, hull or currents |
 | Complete Phase I — implemented in DRIFTWOOD_YARD_01 | Driftwood Yard and Nell, using the existing four-space rules | Six-space gameplay |
-| Play readability — current | Lighter play controls, visible depth geography and composed Harbor; document recalibration | New coves, launch relocation, route/save changes |
-| Prove replacement C4 | Small four-space Two Shelters candidate in separate Practice; distinct placement/retrieval decision | New art or chapter scene before gameplay acceptance |
+| Play readability — completed | Lighter play controls, visible depth geography and composed Harbor; document recalibration | New coves, launch relocation, route/save changes |
+| Prove replacement C4 — candidate implemented | Small four-space Two Shelters candidate in separate Practice; distinct placement/retrieval decision | New art or chapter scene before gameplay acceptance |
 | Integrate accepted C4 | Explicit route/save revision with honest preservation of old completion history | Silent progress rewrites or fabricated new-cove completion |
 | Meet Orin | Deer world model/portrait and Orchard Landing using four spaces | New water rules or premature upgrade |
 | Launch and complete Phase II | Reuse the six-space ferry/launch after C5; prove mixed-load Two Landings | Broad content multiplication |

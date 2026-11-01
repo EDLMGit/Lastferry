@@ -8,7 +8,19 @@ Read this before choosing scope. Detailed implementation history belongs in `STA
 
 At the user's explicit request, published game `2e4f99268da4691b315fe8467d9e539cda15e927` to the existing owner-private Site on2026-11-01 at10:31:16UTC. Sites version14, hosting `d01264d26cb7b5abaf68920a9014718ab21d97b4`, succeeded. All seven production files match the fresh Node24 game build/typecheck byte-for-byte. Source-tied gameplay evidence is reused; physical-phone and listening limits remain. Receipt: `reviews/play-readability/deployment-confirmation.json`. Version13 and all earlier history below remain historical. GitHub continuity commits do not change the deployed game.
 
-## Current scoped pass — Play readability
+## Current scoped pass — Two Shelters Practice candidate
+
+`TWO_SHELTERS_PROTOTYPE_01` starts from clean continuity HEAD `98f9713b1a69474b4066cca8f336cb8c4ca21a50`, preserving reviewed/published game `2e4f99268da4691b315fe8467d9e539cda15e927`. The exact supplied task resolved one directory above the Git root and its unchanged package is retained beside package.json. The private Site remains version 14 with the receipt above; this candidate is not deployed.
+
+Two Shelters is independent Practice at `?cove=two-shelters`, also reachable from Home Practice. It uses the original four-space ferry with Hazel (two-space beaver), Bracken (two-space beaver) and Mica (one-space rabbit). Low Landing requires the rabbit home before retrieving both larger neighbors; High Refuge permits a mixed first delivery safely. Production-rule proof precedes scene authoring. No new rule, species, boat, scene, current or action limit is introduced.
+
+The runtime Journey remains Holding → Bellwater → Driftwood → Wide, with the same launch and strict saves. The candidate has not earned C4. Wide's difficulty and visual feeling remain negatively reviewed; the twelve-cove plan beyond accepted content remains proposed. Route/save integration and launch relocation require a later scoped assignment after playtest. Version-14 and earlier publication receipts remain unchanged.
+
+Native observations, original failures, verification results and source provenance belong in `reviews/two-shelters-prototype/REVIEW.md`; mechanics and alternatives are in `DESIGN.md`. Human puzzle/visual acceptance and physical-phone listening/performance remain separate. Inherited portrait-loading, constrained overlap, delivered-heading, precise rapid-touch and device/listening limits stay open.
+
+Implementation verification is complete: Node24 build/typecheck,428/428 units,79-family validation,12/12 focused browser cases and7/7 affected recaptures after the final busy-marker correction. Both shelters win through actual phone UI; subset, tide and terminal Undo are exercised. Exact pending-launch/active-Wide/completed-four save bytes remain unchanged through Practice completion/reload. Final native images and the317-frame uninterrupted runtime-audio rescue are under `reviews/two-shelters-prototype/final/`. The one-line evidence reuse and protected-source audits explain which earlier results remain applicable. This is ready for candidate playtest, not campaign integration or deployment.
+
+## Previous scoped pass — Play readability
 
 Implementation: `c53b241a05e4dfcc955bfb85669eabf21c553dad`. Packaging audit matches86 source/input files and117 selected media; the following audit/continuity commit changes no runtime. The final pushed SHA is in PR1 and the handoff.
 

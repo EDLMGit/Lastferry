@@ -3,7 +3,14 @@ import { InstancedMesh, Matrix4, Mesh, Vector3 } from 'three';
 import { ferry } from '../../src/scene/models';
 import { berthHeading, initialHeading, planJourney, sampleJourney } from '../../src/scene/motion';
 import { getLevelPaths, samplePath } from '../../src/scene/paths';
-import { level, holdingPier, bellwater, driftwoodYard, wideBerth } from '../../src/levels/level';
+import {
+  level,
+  holdingPier,
+  bellwater,
+  driftwoodYard,
+  wideBerth,
+  twoShelters,
+} from '../../src/levels/level';
 import { sceneLayout } from '../../src/scene/layout';
 import { buildCoastGeometry, createReedBeds, createShoreRocks } from '../../src/scene/shore';
 type P = [number, number];
@@ -54,7 +61,7 @@ function segmentDistance(p: P, a: P, b: P) {
   const t = span ? Math.max(0, Math.min(1, ((p[0] - a[0]) * x + (p[1] - a[1]) * z) / span)) : 0;
   return Math.hypot(p[0] - a[0] - t * x, p[1] - a[1] - t * z);
 }
-test.each([level, holdingPier, bellwater, driftwoodYard])(
+test.each([level, holdingPier, bellwater, driftwoodYard, twoShelters])(
   '$id: full modeled ferry clears land and piers from all reachable headings, both berth sides and reverse departures',
   (level) => {
     const model = ferry();
@@ -148,7 +155,7 @@ test.each([level, holdingPier, bellwater, driftwoodYard])(
   },
 );
 
-test.each([level, holdingPier, bellwater, driftwoodYard, wideBerth])(
+test.each([level, holdingPier, bellwater, driftwoodYard, wideBerth, twoShelters])(
   '$id: actual refined coasts, rocks and reeds stay inside the validated land envelope',
   (level) => {
     const failures: string[] = [];

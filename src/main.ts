@@ -2063,7 +2063,7 @@ function positionMap() {
   });
   const figures = [frame.boat, ...frame.passengers].map(atLocal);
   const chrome = playObstacles().map(toLocal);
-  const bounds = toLocal(insetRectangle(safeBounds, { left: 8, right: 8, top: 8, bottom: 8 }));
+  const bounds = toLocal(level.id === 'two-shelters' ? safeBounds : insetRectangle(safeBounds, { left: 8, right: 8, top: 8, bottom: 8 }));
   const markerKey = [
     level.id,
     canvas.width,
@@ -2093,7 +2093,7 @@ function positionMap() {
           endpoint,
           currentBoat,
           bounds,
-          [...chrome, ...otherTargets.map((target) => target.bounds)],
+          [...chrome, ...otherTargets.map((target) => target.bounds), ...(level.id === 'two-shelters' ? frame.places.map(atLocal) : [])],
         );
         currentMarkerOffset = { key: markerKey, x: clear.x - endpoint.x, y: clear.y - endpoint.y };
       }
@@ -2214,6 +2214,7 @@ function positionMap() {
           obstacles,
           [[nearby.left, nearby.top]],
           [boat.left, boat.top],
+          level.id === 'two-shelters' ? 2 : 8,
         );
         if (clear) break;
       }
@@ -2227,7 +2228,9 @@ function positionMap() {
     return choice;
   };
   const reservedDock =
-    level.id === 'wide-berth' ? placeDock([...chrome, ...figures, ...placed, ...markers.map((m) => m.bounds)]) : null;
+    level.id === 'wide-berth' || level.id === 'two-shelters'
+      ? placeDock([...chrome, ...figures, ...placed, ...markers.map((m) => m.bounds)])
+      : null;
   const nameObstacles = reservedDock
     ? [
         ...markers,
@@ -2266,6 +2269,7 @@ function positionMap() {
   for (const { id, group, name, width: w, height: h } of labels) {
     const marker = markers.find((m) => m.id === id)!;
     const visible =
+      !(level.id === 'two-shelters' && session.busy && id === session.state.boatNodeId) &&
       marker.x >= bounds.left &&
       marker.x <= bounds.right &&
       marker.y >= bounds.top &&
@@ -2278,12 +2282,20 @@ function positionMap() {
     group.style.top = marker.bounds.top + 'px';
     if (!visible) continue;
     const place = atLocal(frame.places.find((place) => place.id === id)!);
-    const preferred: [number, number][] = [
-      [marker.x - w / 2, place.top - h - 6],
-      [marker.x - w / 2, marker.bounds.bottom + 8],
-      [place.right + 8, place.top],
-      [place.left - w - 8, place.top],
-    ];
+    const preferred: [number, number][] =
+      level.id === 'two-shelters'
+        ? [
+            [marker.bounds.right + 8, marker.y - h / 2],
+            [marker.bounds.left - w - 8, marker.y - h / 2],
+            [marker.x - w / 2, marker.bounds.bottom + 8],
+            [marker.x - w / 2, place.top - h - 6],
+          ]
+        : [
+            [marker.x - w / 2, place.top - h - 6],
+            [marker.x - w / 2, marker.bounds.bottom + 8],
+            [place.right + 8, place.top],
+            [place.left - w - 8, place.top],
+          ];
     const candidates = preferred.map(([x, y]) => {
       const left = Math.max(bounds.left, Math.min(bounds.right - w, x));
       const top = Math.max(bounds.top, Math.min(bounds.bottom - h, y));
@@ -2293,11 +2305,14 @@ function positionMap() {
     const score = (choice: Rectangle) =>
       avoid.filter((r) => overlaps(choice, r, 2)).length * 200 +
       Math.hypot(choice.left - preferred[0][0], choice.top - preferred[0][1]);
-    const existing = driftwoodNames?.get(id) ?? labelLayout.get(id);
-    const choice = existing && !avoid.some((r) => overlaps(existing, r, 2))
+    const preferredChoice = level.id === 'two-shelters'
+      ? candidates.find((candidate) => ![...avoid, ...markers.map((m) => m.bounds)].some((r) => overlaps(candidate, r)))
+      : undefined;
+    const existing = level.id === 'two-shelters' ? undefined : driftwoodNames?.get(id) ?? labelLayout.get(id);
+    const choice = preferredChoice ?? (existing && !avoid.some((r) => overlaps(existing, r, 2))
       ? existing
       : placeLocalCard(w, h, bounds, [...avoid, ...markers.map((m) => m.bounds)], preferred, [marker.x - w / 2, marker.y])
-        ?? candidates.sort((a, b) => score(a) - score(b))[0];
+        ?? candidates.sort((a, b) => score(a) - score(b))[0]);
     labelLayout.set(id, choice);
     name.style.left = choice.left - marker.bounds.left + 'px';
     name.style.top = choice.top - marker.bounds.top + 'px';
@@ -2310,7 +2325,7 @@ function positionMap() {
       );
   }
   if ($('map-leaders')) $('map-leaders').innerHTML = leaders.join('');
-  if (level.id !== 'wide-berth') placeDock([...chrome, ...figures, ...placed]);
+  if (level.id !== 'wide-berth' && level.id !== 'two-shelters') placeDock([...chrome, ...figures, ...placed]);
   positionDialog();
 }
 function bindWorld() {

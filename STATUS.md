@@ -1,8 +1,20 @@
+# Current task — Two Shelters Practice candidate
+
+2026-11-01: `TWO_SHELTERS_PROTOTYPE_01` starts clean at `98f9713b1a69474b4066cca8f336cb8c4ca21a50`. The exact package resolved above the actual Git root and was retained unchanged beside package.json. Independent `?cove=two-shelters` preserves the four-cove Journey, strict checkpoints and all five earlier puzzles. The original four-space ferry carries Hazel, Bracken and Mica from existing species.
+
+Mechanical proof precedes scene authoring. Both shelters can win: Low Landing requires Mica home before retrieving both larger neighbors, while High Refuge permits a mixed first delivery. Production reachability rejects a no-staging win and shows greedy low retrieval cannot recover without Undo. Actual deck inspection narrowed the initial four-body proposal to three while retaining the same decision. No model shrinking, new mechanic or packing interaction.
+
+The compact scene groups a cottage landing, high stone/bell refuge, reed pier and home lighthouse. Initial hull/coast checks exposed approach clipping and rock overhang; authored paths and footprints were corrected. Moving the deep return away from the shallow passage restored honest bank geography. Candidate-only seating and shore walking lanes preserve accepted earlier-cove presentation. Original failures, native evidence and exact verification belong in `reviews/two-shelters-prototype/`.
+
+No deployment: private Site version14/game `2e4f992` remains live. PR1 stays draft; main unchanged. Human candidate acceptance remains pending. The final review records checks, source identity and inherited limits.
+
+Completed verification: Node24 build/typecheck,428/428 units in45 files and79-family validation pass. A12/12 browser batch covers both actual rescue strategies, native phone/desktop sizes, exact save isolation, input/lifecycle and production play. After one candidate-only busy-marker visibility correction,7/7 affected cases and the runtime-audio movie were recaptured; the remaining5 checks are reused with an exact one-line source audit. Final movie retains317/317 frames at native390×844 and natural elapsed timing. Original geometry, fixture, capture and temporary missing-evidence failures remain explicit. `reviews/two-shelters-prototype/REVIEW.md` separates functionality, native observations and pending user acceptance.
+
 # Phone publication — version14
 
 2026-11-01: User-requested publication succeeded for game2e4f99268da4691b315fe8467d9e539cda15e927, hostingd01264d26cb7b5abaf68920a9014718ab21d97b4, at10:31:16UTC. Existing private audience/URL retained. Seven production files match fresh build/typecheck; prior verification reused with its limits. Receipt and audits in reviews/play-readability. Earlier no-deployment statements describe implementation handoff.
 
-# Current task — Play readability
+# Previous task — Play readability
 
 Implementation `c53b241a05e4dfcc955bfb85669eabf21c553dad`;86 source/input files and117 media match the commit. Final audit/continuity handoff follows without runtime edits.
 

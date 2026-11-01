@@ -1,9 +1,14 @@
-import { Group } from 'three';
+import { Group, Matrix4, Vector3 } from 'three';
 import type { Level } from '../levels/level';
 import { box, cylinder } from './models';
 import { islandCenter, shoreContour } from './shore';
 
-export function createPier(p: Level['piers'][number], stone: boolean, compact = false) {
+export function createPier(
+  p: Level['piers'][number],
+  stone: boolean,
+  compact = false,
+  broadStep = false,
+) {
   if (compact) return compactPier(p, stone);
   const group = new Group();
   group.name = `pier-${p.id}`;
@@ -24,10 +29,43 @@ export function createPier(p: Level['piers'][number], stone: boolean, compact = 
       pile.userData.pierPile = true;
       cylinder(group, '#dbc799', 0.075, 0.075, 0.055, [px, y + 0.17, pz], 9);
     }
-  box(group, '#b68f5b', [0.35, 0.055, 0.49], [x, y - 0.015, z + 0.25], 0.015);
+  box(
+    group,
+    '#b68f5b',
+    [broadStep ? p.width : 0.35, 0.055, broadStep ? 0.65 : 0.49],
+    [x, y - 0.015, z + (broadStep ? 0.33 : 0.25)],
+    0.015,
+  );
   cylinder(group, '#655b43', 0.025, 0.025, 0.65, [x + 0.36, y + 0.33, z - 0.1], 7);
   box(group, '#f5cb77', [0.13, 0.19, 0.13], [x + 0.36, y + 0.68, z - 0.1]);
   return group;
+}
+
+export function createShelterGangway() {
+  const group = new Group();
+  group.name = 'shelter-wooden-gangway';
+  for (const side of [-1, 1])
+    box(group, '#816446', [0.055, 0.06, 1], [side * 0.29, -0.065, 0], 0.008);
+  for (let plank = 0; plank < 8; plank++)
+    box(
+      group,
+      plank % 2 ? '#c09560' : '#b78b58',
+      [0.68, 0.055, 0.118],
+      [0, -0.0275, -0.4375 + plank * 0.125],
+      0.006,
+    );
+  return group;
+}
+
+export function updateShelterGangway(group: Group, bridge: Vector3, gate: Vector3) {
+  const direction = gate.clone().sub(bridge);
+  group.position.copy(bridge).add(gate).multiplyScalar(0.5);
+  group.scale.z = direction.length() + 0.42;
+  const forward = direction.normalize();
+  const right = new Vector3().crossVectors(new Vector3(0, 1, 0), forward).normalize();
+  const normal = new Vector3().crossVectors(forward, right).normalize();
+  group.quaternion.setFromRotationMatrix(new Matrix4().makeBasis(right, normal, forward));
+  group.updateMatrixWorld(true);
 }
 
 function compactPier(p: Level['piers'][number], stone: boolean) {

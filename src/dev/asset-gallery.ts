@@ -1,6 +1,6 @@
 import * as T from 'three';
 import { animal, ferry } from '../scene/models';
-import { wideBerth } from '../levels/level';
+import { passengerName, twoShelters, wideBerth } from '../levels/level';
 import { deckSeat, ferryProfile, passengerScale } from '../scene/ferry-profile';
 import { passengerModelVariant, resolvePassengerAppearance } from '../game/passenger-appearance';
 import '../ui/cove-ui.css';
@@ -84,6 +84,18 @@ root.innerHTML = `<header><p>Last Ferry · developer tools</p><h1>Cove asset gal
     '',
   )}</div><div class="cove-panel cove-surface gallery-panel"><h3>Story effects and optional narration</h3><p>Finite tide wash, lantern contact and ferry water share the existing Sound owner. This gallery does not autoplay sound. Actual runtime audio, cancellation checks and listening limitations belong in the review report.</p><p>${sourceLink('src/audio/story-effects.ts', 'Story envelope definitions')} · ${sourceLink('src/audio/atmosphere.ts', 'Sound ownership and routing')} · ${sourceLink('LAST_FERRY_STORY_PRODUCTION_PACKAGE/audio/narration-script.json', 'Narration script: recordings absent')}</p><p>Four narration IDs are optional asset slots only. There is no delivered voice, live TTS or unavailable narration control.</p></div></section>
 <section class="cove-panel cove-surface gallery-panel"><h2>Original 24px glyphs</h2><div class="icon-grid">${iconNames.map((name) => `<div>${iconMarkup(name)}<span>${name}</span></div>`).join('')}</div></section><section><h2>Canonical inventory</h2><label>Filter by family, kind or meaning <input id="filter" type="search" /></label><p id="count" role="status"></p><div id="inventory"></div></section>`;
+const shelterSection = document.createElement('section');
+shelterSection.id = 'two-shelters';
+shelterSection.className = 'cove-panel cove-surface gallery-panel';
+const shelterResidents: [string, number, boolean, PortraitKey | null][] =
+  twoShelters.passengers.map((passenger) => [
+    passengerName(passenger.id, twoShelters),
+    passenger.slots,
+    twoShelters.start.aboard.includes(passenger.id),
+    resolvePassengerAppearance(twoShelters, passenger.id)?.portraitKey ?? null,
+  ]);
+shelterSection.innerHTML = `<h2>Two Shelters · independent Practice candidate</h2><p>Hazel, Bracken and Mica reuse the original beaver and rabbit models and static portraits. The original four-space yellow ferry, timber and stone piers, lighthouse, cottage, bell and reed coast are existing families; the new level authors their instances.</p><article class="panel-specimen panel-specimen--narrow"><h3>Existing portraits, new neighbors</h3>${choices(shelterResidents)}<p>Hazel and Bracken occupy four spaces together. These native 44px portrait choices use the production level and appearance resolver. This is a developer specimen, not gameplay evidence.</p></article><p><a href="/?cove=two-shelters">Play actual Two Shelters</a> · <a href="/">Root Journey · unchanged</a></p><p>${sourceLink('reviews/two-shelters-prototype/DESIGN.md', 'Production-rule proof and alternatives')} · ${sourceLink('reviews/two-shelters-prototype/REVIEW.md', 'Actual native gameplay review and evidence')}</p><p>The candidate has no chapter scene and does not write campaign progress. Its place in the campaign and visual acceptance remain for human playtest.</p>`;
+root.querySelector('#readability-heading')!.closest('section')!.after(shelterSection);
 const failedPortrait = root.querySelector<HTMLImageElement>('#gallery-failed-portrait img')!;
 failedPortrait.dataset.portraitState = 'pending';
 failedPortrait.src = '/__portrait-unavailable.png';

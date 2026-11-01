@@ -3,6 +3,7 @@ import {
   driftwoodYard,
   holdingPier,
   wideBerth,
+  twoShelters,
   level as firstCrossing,
   type Level,
 } from '../levels/level';
@@ -165,6 +166,7 @@ export const practiceCoves = [
   bellwater,
   driftwoodYard,
   wideBerth,
+  twoShelters,
 ] as const;
 
 export function storyCove(id: string): StoryCove | undefined {

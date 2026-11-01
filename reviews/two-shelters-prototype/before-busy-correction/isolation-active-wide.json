@@ -1,0 +1,340 @@
+{
+  "at": "2026-11-01T15:14:47.622Z",
+  "head": "98f9713b1a69474b4066cca8f336cb8c4ca21a50",
+  "files": {
+    "src/campaign/registry.ts": "4b0fb9d91c36fd21ffbebe66641305e5d374a93a0d6ced2ea5df4a9aa0ba2772",
+    "src/campaign/progress.ts": "6715ca65f85af6c9e22b8ba35b40407561e053b09fde9db1d6143c72c8a3a82a",
+    "src/levels/level.ts": "9c629c1d755d8a2066fac96c550d04a41b0dd160c7d8dd49e14963ccac941dae",
+    "src/main.ts": "36e8b8660e431100f720b55d0f62133440374d9431b2c6ea927df875c66f3fd9",
+    "data/two-shelters.level.json": "8ff6796b64038bedd91d5274de3f9296f9afc7829c572253a3292c68b7945832",
+    "data/two-shelters/witnesses.json": "7207f2245d64c8970e32c01428e0c73ffe25a5565a10a161545592090b3698df",
+    "tests/e2e/two-shelters-isolation.spec.ts": "bc756681fa1f3fd82df74132ff728ef9ba5488128fd1753dae5e22f63ce59113"
+  },
+  "record": {
+    "version": 1,
+    "checkpoint": {
+      "kind": "cove",
+      "id": "wide-berth"
+    },
+    "completed": [
+      "holding-pier",
+      "bellwater",
+      "driftwood-yard"
+    ],
+    "acknowledgedScenes": [
+      "opening",
+      "another-bell",
+      "driftwood-light",
+      "a-wider-deck"
+    ]
+  },
+  "raw": "\n{\n  \"version\": 1,\n  \"checkpoint\": {\n    \"kind\": \"cove\",\n    \"id\": \"wide-berth\"\n  },\n  \"completed\": [\n    \"holding-pier\",\n    \"bellwater\",\n    \"driftwood-yard\"\n  ],\n  \"acknowledgedScenes\": [\n    \"opening\",\n    \"another-bell\",\n    \"driftwood-light\",\n    \"a-wider-deck\"\n  ]\n}\n",
+  "observations": [
+    {
+      "action": {
+        "type": "unload",
+        "passengerIds": [
+          "hazel",
+          "bracken"
+        ]
+      },
+      "state": {
+        "turn": 1,
+        "tideLevel": 0,
+        "boatNodeId": "low",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [
+            "hazel",
+            "bracken"
+          ],
+          "refuge-pier": [],
+          "reeds-pier": [
+            "mica"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "action": {
+        "type": "move",
+        "to": "reeds"
+      },
+      "state": {
+        "turn": 2,
+        "tideLevel": 0,
+        "boatNodeId": "reeds",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [
+            "hazel",
+            "bracken"
+          ],
+          "refuge-pier": [],
+          "reeds-pier": [
+            "mica"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "action": {
+        "type": "board",
+        "passengerIds": [
+          "mica"
+        ]
+      },
+      "state": {
+        "turn": 3,
+        "tideLevel": 0,
+        "boatNodeId": "reeds",
+        "aboard": [
+          "mica"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [
+            "hazel",
+            "bracken"
+          ],
+          "refuge-pier": [],
+          "reeds-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "action": {
+        "type": "wait"
+      },
+      "state": {
+        "turn": 4,
+        "tideLevel": 1,
+        "boatNodeId": "reeds",
+        "aboard": [
+          "mica"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [
+            "hazel",
+            "bracken"
+          ],
+          "refuge-pier": [],
+          "reeds-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "action": {
+        "type": "move",
+        "to": "low"
+      },
+      "state": {
+        "turn": 5,
+        "tideLevel": 1,
+        "boatNodeId": "low",
+        "aboard": [
+          "mica"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [
+            "hazel",
+            "bracken"
+          ],
+          "refuge-pier": [],
+          "reeds-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "action": {
+        "type": "move",
+        "to": "harbor"
+      },
+      "state": {
+        "turn": 6,
+        "tideLevel": 1,
+        "boatNodeId": "harbor",
+        "aboard": [
+          "mica"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [
+            "hazel",
+            "bracken"
+          ],
+          "refuge-pier": [],
+          "reeds-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "action": {
+        "type": "unload",
+        "passengerIds": [
+          "mica"
+        ]
+      },
+      "state": {
+        "turn": 7,
+        "tideLevel": 1,
+        "boatNodeId": "harbor",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [
+            "hazel",
+            "bracken"
+          ],
+          "refuge-pier": [],
+          "reeds-pier": []
+        },
+        "delivered": [
+          "mica"
+        ],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "action": {
+        "type": "move",
+        "to": "low"
+      },
+      "state": {
+        "turn": 8,
+        "tideLevel": 1,
+        "boatNodeId": "low",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [
+            "hazel",
+            "bracken"
+          ],
+          "refuge-pier": [],
+          "reeds-pier": []
+        },
+        "delivered": [
+          "mica"
+        ],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "action": {
+        "type": "board",
+        "passengerIds": [
+          "hazel",
+          "bracken"
+        ]
+      },
+      "state": {
+        "turn": 9,
+        "tideLevel": 2,
+        "boatNodeId": "low",
+        "aboard": [
+          "hazel",
+          "bracken"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "refuge-pier": [],
+          "reeds-pier": []
+        },
+        "delivered": [
+          "mica"
+        ],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "action": {
+        "type": "move",
+        "to": "harbor"
+      },
+      "state": {
+        "turn": 10,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "aboard": [
+          "hazel",
+          "bracken"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "refuge-pier": [],
+          "reeds-pier": []
+        },
+        "delivered": [
+          "mica"
+        ],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "action": {
+        "type": "unload",
+        "passengerIds": [
+          "hazel",
+          "bracken"
+        ]
+      },
+      "state": {
+        "turn": 11,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "refuge-pier": [],
+          "reeds-pier": []
+        },
+        "delivered": [
+          "mica",
+          "hazel",
+          "bracken"
+        ],
+        "status": "won",
+        "lossReason": null
+      }
+    }
+  ],
+  "browser": "156.0.8078.4",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "actualUI": true,
+  "reducedMotion": true,
+  "muted": true,
+  "passed": true
+}

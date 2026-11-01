@@ -251,6 +251,14 @@
         {
           "path": "src/scene/pier.ts",
           "symbol": "Shared actual pier factory used by runtime and clearance checks"
+        },
+        {
+          "path": "src/scene/two-shelters-seating.ts",
+          "symbol": "shelterDeckSeat / shelterAnchorDuring: candidate-only automatic anchors on the unchanged original ferry"
+        },
+        {
+          "path": "data/two-shelters.level.json",
+          "symbol": "capacity four and three existing-species passenger instances"
         }
       ],
       "variants": [
@@ -259,16 +267,24 @@
         "four-space original profile preserved",
         "six-space wider/longer deck, full draft four",
         "fixed identity seating for every legal two-sheep/four-rabbit subset",
-        "up to five bodies occupying six spaces"
+        "up to five bodies occupying six spaces",
+        "Two Shelters original four-space ferry with automatically arranged two-beaver/rabbit legal subsets"
       ],
       "visualSignature": "Yellow shaped hull, substantial red cabin/roof/window/chimney, compact working deck, full-size animal banks, restrained fenders and rounded gunwale. Original four-space variant preserved.",
       "reuseAndOwnership": "One reusable geometry family per cove. Named deck-anchor-{passengerId} children belong to the animated hull. Shared matte materials; scoped water-contact hull material.",
-      "behaviorToPreserve": "Keep shaped bow, deck positions, passenger attachment, heading history and current pick/framing envelope. Active level alone chooses hull; old cove profiles remain byte-equivalent. Fixed seats never reshuffle stationary passengers. Six-space sequential group presentation retains accepted action/audio timing.",
+      "behaviorToPreserve": "Keep shaped bow, deck positions, passenger attachment, heading history and current pick/framing envelope. Active level alone chooses hull; old cove profiles remain byte-equivalent. Earlier coves retain fixed seats without reshuffling stationary passengers. Six-space sequential group presentation retains accepted action/audio timing. Two Shelters alone adapts deck anchors to the actual aboard subset during the same accepted transfer; it adds no hull, scale change or packing choice. Old cove anchors remain unchanged.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "original-accepted-variants-preserved-wide-berth-visual-repair-awaiting-human-review",
-        "reviewedBaseline": "45ab9768792ddd3a8dffb67da6c332f8fe2234ff",
-        "basis": "Prior Wide Berth functional verification did not establish visual acceptance. Existing original variants remain preserved; this scoped correction needs its own actual visual observations and user playtest."
+        "state": "existing-family-reused-two-shelters-practice-awaiting-human-playtest",
+        "reviewedBaseline": "2e4f99268da4691b315fe8467d9e539cda15e927",
+        "basis": "Existing original family reused by one independent three-body four-space Practice candidate. Earlier accepted variants and historical reviews remain below; candidate integration and mechanical proof do not establish visual acceptance or campaign suitability. No deployment in this pass.",
+        "history": [
+          {
+            "state": "original-accepted-variants-preserved-wide-berth-visual-repair-awaiting-human-review",
+            "reviewedBaseline": "45ab9768792ddd3a8dffb67da6c332f8fe2234ff",
+            "basis": "Prior Wide Berth functional verification did not establish visual acceptance. Existing original variants remain preserved; this scoped correction needs its own actual visual observations and user playtest."
+          }
+        ]
       },
       "evidence": [
         {
@@ -286,6 +302,26 @@
         {
           "path": "LAST_FERRY_WIDE_BERTH_VISUAL_REPAIR_PACKAGE/art/WIDE_BERTH_VISUAL_TARGET.png",
           "role": "Supplied generated art direction only, never runtime proof or a shipped background."
+        },
+        {
+          "path": "reviews/two-shelters-prototype/DESIGN.md",
+          "role": "Actual chosen Practice contract, production-rule witnesses and alternatives; design proof is not gameplay or visual acceptance."
+        },
+        {
+          "path": "src/dev/asset-gallery.ts",
+          "role": "Shared original 44px portrait choices and actual Two Shelters Practice link; developer specimen only."
+        },
+        {
+          "path": "reviews/two-shelters-prototype/REVIEW.md",
+          "role": "Actual implementation, source-tied evidence, original failures, focused verification and remaining human playtest limits."
+        },
+        {
+          "path": "reviews/two-shelters-prototype/final/390x844-turn2-play.png",
+          "role": "Native portrait actual Practice gameplay; not a gallery specimen or concept reference."
+        },
+        {
+          "path": "reviews/two-shelters-prototype/final/780x320-turn6-play.png",
+          "role": "Native short-landscape actual Practice gameplay; not a gallery specimen or concept reference."
         }
       ],
       "meaning": "Yellow ferry with red cabin. Keep shaped bow, deck positions, passenger attachment, heading history and current pick/framing envelope.",
@@ -294,13 +330,13 @@
         "src/dev/asset-gallery.ts"
       ],
       "gallery": {
-        "section": "wide-ferry",
-        "preview": "Actual factory, unchanged full-size cast and production seats: five bodies occupying six spaces; developer specimen not gameplay."
+        "section": "two-shelters",
+        "preview": "Actual factory, unchanged full-size cast and production seats: five bodies occupying six spaces; developer specimen not gameplay. Two Shelters reuses this family with Hazel, Bracken and Mica; the candidate section links actual gameplay and retains separate design specimens."
       },
       "typeSpecific": {
         "factory/source symbol": "src/scene/models.ts: ferry; src/scene/world.ts: World.boatRoot / hull / passengerAnchors",
         "semantic unit/axis/pivot convention or authoritative source": "ferry() local origin at nominal light-load hull reference; +Z bow, Y up. World.boatRoot owns route/heading, hull owns draft/bob.",
-        "named attachment points when relevant": "Deck anchors remain identity-stable. The repaired six-space profile owns compact banks, clear foredeck/gate and actual short gangway; all59 legal memberships retain original animal scales.",
+        "named attachment points when relevant": "Deck anchors remain identity-stable. The repaired six-space profile owns compact banks, clear foredeck/gate and actual short gangway; all59 legal memberships retain original animal scales. Two Shelters shelterDeckSeat and shelterAnchorDuring own candidate-only settled/transition anchors without changing the four-space hull.",
         "material references": "src/scene/models.ts palette/mat and local authored colors; scoped contact/lighthouse materials where used.",
         "actual variant parameters": "Default four-space, or active capacity-six wide profile. Shared beam/bow/stern/deck/gate/wake/berth dimensions in ferry-profile.ts; no fleet selector.",
         "consumers and scale/placement owner": "One reusable geometry family per cove. Named deck-anchor-{passengerId} children belong to the animated hull. Shared matte materials; scoped water-contact hull material.",
@@ -329,6 +365,10 @@
         {
           "path": "cove-portrait-package/tools/render-portraits.mjs",
           "symbol": "isolated animal(species, variant) SVG derivation with unchanged world proportions"
+        },
+        {
+          "path": "data/two-shelters.level.json",
+          "symbol": "passengers: explicit Mica: rabbit-cream, one space; new independent neighbor, not a repeated rescue of an existing story identity"
         }
       ],
       "variants": [
@@ -337,11 +377,18 @@
       ],
       "visualSignature": "Separated tall ears, compact body, tiny dark face and pink inner ears.",
       "reuseAndOwnership": "Shared factory; names and gameplay identities come from level passengers. World scales rabbits 1.25 / 1.65 / 1.25.",
-      "behaviorToPreserve": "Coat and pose variation imply no abilities. Keep feet/contact, aboard attachment and canonical settled pose. Fern/Oat explicit cream/tan identities survive full passenger-array reorder; speciesOrdinal remains the full placement index.",
+      "behaviorToPreserve": "Coat and pose variation imply no abilities. Keep feet/contact, aboard attachment and canonical settled pose. Fern/Oat explicit cream/tan identities survive full passenger-array reorder; speciesOrdinal remains the full placement index. Two Shelters reuses the unchanged model and explicit appearance for Mica: rabbit-cream, one space; full species ordinal and original proportions remain.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "part-of-accepted-baseline",
-        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+        "state": "existing-family-reused-two-shelters-practice-awaiting-human-playtest",
+        "reviewedBaseline": "2e4f99268da4691b315fe8467d9e539cda15e927",
+        "basis": "Existing original family reused by one independent three-body four-space Practice candidate. Earlier accepted variants and historical reviews remain below; candidate integration and mechanical proof do not establish visual acceptance or campaign suitability. No deployment in this pass.",
+        "history": [
+          {
+            "state": "part-of-accepted-baseline",
+            "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+          }
+        ]
       },
       "evidence": [
         {
@@ -351,6 +398,26 @@
         {
           "path": "reviews/passenger-portraits/generation-audit.json",
           "role": "Fresh isolated model-derived SVG reproduction; unchanged original PNG/model hashes, not a live WebGL capture"
+        },
+        {
+          "path": "reviews/two-shelters-prototype/DESIGN.md",
+          "role": "Actual chosen Practice contract, production-rule witnesses and alternatives; design proof is not gameplay or visual acceptance."
+        },
+        {
+          "path": "src/dev/asset-gallery.ts",
+          "role": "Shared original 44px portrait choices and actual Two Shelters Practice link; developer specimen only."
+        },
+        {
+          "path": "reviews/two-shelters-prototype/REVIEW.md",
+          "role": "Actual implementation, source-tied evidence, original failures, focused verification and remaining human playtest limits."
+        },
+        {
+          "path": "reviews/two-shelters-prototype/final/390x844-turn2-play.png",
+          "role": "Native portrait actual Practice gameplay; not a gallery specimen or concept reference."
+        },
+        {
+          "path": "reviews/two-shelters-prototype/final/780x320-turn6-play.png",
+          "role": "Native short-landscape actual Practice gameplay; not a gallery specimen or concept reference."
         }
       ],
       "meaning": "Rabbit passenger family. Coat and pose variation imply no abilities. Keep feet/contact, aboard attachment and canonical settled pose.",
@@ -359,8 +426,8 @@
         "cove-portrait-package/tools/render-portraits.mjs"
       ],
       "gallery": {
-        "section": "inventory",
-        "preview": "Source links and attributed existing evidence; no isolated rendering claimed"
+        "section": "two-shelters",
+        "preview": "Source links and attributed existing evidence; no isolated rendering claimed Two Shelters reuses this family with Hazel, Bracken and Mica; the candidate section links actual gameplay and retains separate design specimens."
       },
       "typeSpecific": {
         "factory/source symbol": "src/scene/models.ts: animal(species, variant); src/scene/world.ts: World.speciesIndex / passengerAnchors",
@@ -596,23 +663,35 @@
         },
         {
           "path": "src/scene/pier.ts",
-          "symbol": "createPier preserves old factory; compactPier and isWalkableAt support repaired landings"
+          "symbol": "createPier preserves old factory; compactPier/isWalkableAt support repaired landings; candidate-only broadStep and createShelterGangway/updateShelterGangway reuse the timber kit"
+        },
+        {
+          "path": "data/two-shelters.level.json",
+          "symbol": "piers: modest Harbor, Low Landing, High Refuge and Reed Pier placements/elevations"
         }
       ],
       "variants": [
         "original four-space wood boards",
         "original four-space stone variant",
         "Wide Berth fitted compact T landing and short hinged gangway",
-        "High Quay stone landing"
+        "High Quay stone landing",
+        "Two Shelters modest broad landing step and short fitted timber gangway"
       ],
       "visualSignature": "Supported fitted timber with narrow seams or coherent stone blocks; shore groups stand mainly on actual land/quay, not a full-width apron.",
       "reuseAndOwnership": "Generated from pier width, landAnchorXZ, elevation and positionXZ; no independent mesh file.",
       "behaviorToPreserve": "Original four-space factory output, actual walkable support, both berth orientations, matched bridge/gate endpoints and body/obstacle clearance.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "original-accepted-variants-preserved-wide-berth-visual-repair-awaiting-human-review",
-        "reviewedBaseline": "45ab9768792ddd3a8dffb67da6c332f8fe2234ff",
-        "basis": "Prior Wide Berth functional verification did not establish visual acceptance. Existing original variants remain preserved; this scoped correction needs its own actual visual observations and user playtest."
+        "state": "existing-family-reused-two-shelters-practice-awaiting-human-playtest",
+        "reviewedBaseline": "2e4f99268da4691b315fe8467d9e539cda15e927",
+        "basis": "Existing original family reused by one independent three-body four-space Practice candidate. Earlier accepted variants and historical reviews remain below; candidate integration and mechanical proof do not establish visual acceptance or campaign suitability. No deployment in this pass.",
+        "history": [
+          {
+            "state": "original-accepted-variants-preserved-wide-berth-visual-repair-awaiting-human-review",
+            "reviewedBaseline": "45ab9768792ddd3a8dffb67da6c332f8fe2234ff",
+            "basis": "Prior Wide Berth functional verification did not establish visual acceptance. Existing original variants remain preserved; this scoped correction needs its own actual visual observations and user playtest."
+          }
+        ]
       },
       "evidence": [
         {
@@ -622,6 +701,26 @@
         {
           "path": "reviews/wide-berth-visual-repair/REVIEW.md",
           "role": "Current corrective implementation and actual source-indexed phone comparisons; prior45ab976presentation was rejected, human acceptance of this repair remains pending."
+        },
+        {
+          "path": "reviews/two-shelters-prototype/DESIGN.md",
+          "role": "Actual chosen Practice contract, production-rule witnesses and alternatives; design proof is not gameplay or visual acceptance."
+        },
+        {
+          "path": "src/dev/asset-gallery.ts",
+          "role": "Shared original 44px portrait choices and actual Two Shelters Practice link; developer specimen only."
+        },
+        {
+          "path": "reviews/two-shelters-prototype/REVIEW.md",
+          "role": "Actual implementation, source-tied evidence, original failures, focused verification and remaining human playtest limits."
+        },
+        {
+          "path": "reviews/two-shelters-prototype/final/390x844-turn2-play.png",
+          "role": "Native portrait actual Practice gameplay; not a gallery specimen or concept reference."
+        },
+        {
+          "path": "reviews/two-shelters-prototype/final/780x320-turn6-play.png",
+          "role": "Native short-landscape actual Practice gameplay; not a gallery specimen or concept reference."
         }
       ],
       "meaning": "Boarded piers, piles, gangplank and lantern. Keep geometry-derived berth/gangplank positions, flood water height and land contact; both ferry headings support transfer.",
@@ -629,16 +728,16 @@
         "src/scene/world.ts"
       ],
       "gallery": {
-        "section": "inventory",
-        "preview": "Source links and attributed existing evidence; no isolated rendering claimed"
+        "section": "two-shelters",
+        "preview": "Source links and attributed existing evidence; no isolated rendering claimed Two Shelters reuses this family with Hazel, Bracken and Mica; the candidate section links actual gameplay and retains separate design specimens."
       },
       "typeSpecific": {
         "factory/source symbol": "src/scene/world.ts: World.constructor: for (const p of this.level.piers); src/scene/layout.ts: SceneLayout.stonePiers",
         "semantic unit/axis/pivot convention or authoritative source": "World builds boards/piles from each pier positionXZ, landAnchorXZ, width and elevation*0.18; berth/gangplank anchors are derived from that geometry.",
-        "named attachment points when relevant": "berthHeading in src/scene/motion.ts derives allowed broadside headings; World.tick builds bridge/gate/land transfer points using pier geometry and the actual hull transform. No exported rig or GLB.",
+        "named attachment points when relevant": "berthHeading in src/scene/motion.ts derives allowed broadside headings; World.tick builds bridge/gate/land transfer points using pier geometry and the actual hull transform. No exported rig or GLB. Two Shelters bridge/gate endpoints drive the same short timber gangway in actual transfer and support checks; old pier defaults are unchanged.",
         "material references": "src/scene/models.ts palette/mat and local authored colors; scoped contact/lighthouse materials where used.",
         "actual variant parameters": "wood boards; grey stone boards; water-contact vulnerable/home piles",
-        "consumers and scale/placement owner": "Generated from pier width, landAnchorXZ, elevation and positionXZ; no independent mesh file.",
+        "consumers and scale/placement owner": "Generated from pier width, landAnchorXZ, elevation and positionXZ; no independent mesh file. Candidate pier instances remain authored in two-shelters.level.json and reuse the original four-space material/factory.",
         "pick/framing role": "World uses geometry for framing and scene selection; gameplay identities remain canonical nodes/passengers.",
         "disposal owner": "World.dispose traverses shared geometry/material/texture sets and disposes each once; CoastalWater owns its separate resources."
       }
@@ -927,6 +1026,10 @@
         {
           "path": "data/bellwater.level.json",
           "symbol": "world.islands"
+        },
+        {
+          "path": "data/two-shelters.level.json",
+          "symbol": "world.islands: compact lighthouse, low shelter, raised refuge and reed shore footprints"
         }
       ],
       "variants": [
@@ -941,9 +1044,16 @@
       "behaviorToPreserve": "Terrain visual fields never replace canonical channel depth or flood rules.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "original-accepted-variants-preserved-wide-berth-visual-repair-awaiting-human-review",
-        "reviewedBaseline": "45ab9768792ddd3a8dffb67da6c332f8fe2234ff",
-        "basis": "Prior Wide Berth functional verification did not establish visual acceptance. Existing original variants remain preserved; this scoped correction needs its own actual visual observations and user playtest."
+        "state": "existing-family-reused-two-shelters-practice-awaiting-human-playtest",
+        "reviewedBaseline": "2e4f99268da4691b315fe8467d9e539cda15e927",
+        "basis": "Existing original family reused by one independent three-body four-space Practice candidate. Earlier accepted variants and historical reviews remain below; candidate integration and mechanical proof do not establish visual acceptance or campaign suitability. No deployment in this pass.",
+        "history": [
+          {
+            "state": "original-accepted-variants-preserved-wide-berth-visual-repair-awaiting-human-review",
+            "reviewedBaseline": "45ab9768792ddd3a8dffb67da6c332f8fe2234ff",
+            "basis": "Prior Wide Berth functional verification did not establish visual acceptance. Existing original variants remain preserved; this scoped correction needs its own actual visual observations and user playtest."
+          }
+        ]
       },
       "evidence": [
         {
@@ -953,6 +1063,26 @@
         {
           "path": "reviews/wide-berth-visual-repair/REVIEW.md",
           "role": "Current corrective implementation and actual source-indexed phone comparisons; prior45ab976presentation was rejected, human acceptance of this repair remains pending."
+        },
+        {
+          "path": "reviews/two-shelters-prototype/DESIGN.md",
+          "role": "Actual chosen Practice contract, production-rule witnesses and alternatives; design proof is not gameplay or visual acceptance."
+        },
+        {
+          "path": "src/dev/asset-gallery.ts",
+          "role": "Shared original 44px portrait choices and actual Two Shelters Practice link; developer specimen only."
+        },
+        {
+          "path": "reviews/two-shelters-prototype/REVIEW.md",
+          "role": "Actual implementation, source-tied evidence, original failures, focused verification and remaining human playtest limits."
+        },
+        {
+          "path": "reviews/two-shelters-prototype/final/390x844-turn2-play.png",
+          "role": "Native portrait actual Practice gameplay; not a gallery specimen or concept reference."
+        },
+        {
+          "path": "reviews/two-shelters-prototype/final/780x320-turn6-play.png",
+          "role": "Native short-landscape actual Practice gameplay; not a gallery specimen or concept reference."
         }
       ],
       "meaning": "Rounded island coast. Terrain visual fields never replace canonical channel depth or flood rules.",
@@ -960,11 +1090,11 @@
         "src/scene/world.ts"
       ],
       "gallery": {
-        "section": "inventory",
-        "preview": "Source links and attributed existing evidence; no isolated rendering claimed"
+        "section": "two-shelters",
+        "preview": "Source links and attributed existing evidence; no isolated rendering claimed Two Shelters reuses this family with Hazel, Bracken and Mica; the candidate section links actual gameplay and retains separate design specimens."
       },
       "typeSpecific": {
-        "authoritative geometry inputs": "Level world.islands footprintXZ/elevation; shoreContour and sceneLayout.",
+        "authoritative geometry inputs": "Level world.islands footprintXZ/elevation; shoreContour and sceneLayout. Two Shelters authored footprints reuse existing rocky/reed/garden styles; no new terrain family.",
         "style/elevation parameters": "IslandStyle garden/crag/reeds/rocky and exact level elevations.",
         "mechanical versus decorative boundary": "Terrain visual fields never replace canonical channel depth or flood rules.",
         "material/texture dependencies": "Shores vertex-colored matte material and world-height wetness uniform.",
@@ -1569,6 +1699,10 @@
         {
           "path": "src/scene/world.ts",
           "symbol": "World.routes / indicate"
+        },
+        {
+          "path": "data/two-shelters.level.json",
+          "symbol": "edges/nodes: five canonical routes with shallow side approaches and deeper stopping pockets"
         }
       ],
       "variants": [
@@ -1581,13 +1715,40 @@
       "behaviorToPreserve": "No decorative shortcuts or new junctions; selection and move use same geometry.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "part-of-accepted-baseline",
-        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+        "state": "existing-family-reused-two-shelters-practice-awaiting-human-playtest",
+        "reviewedBaseline": "2e4f99268da4691b315fe8467d9e539cda15e927",
+        "basis": "Existing original family reused by one independent three-body four-space Practice candidate. Earlier accepted variants and historical reviews remain below; candidate integration and mechanical proof do not establish visual acceptance or campaign suitability. No deployment in this pass.",
+        "history": [
+          {
+            "state": "part-of-accepted-baseline",
+            "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+          }
+        ]
       },
       "evidence": [
         {
           "path": "reviews/phone-audio-fullscreen/REVIEW.md",
           "role": "Current build identity and preservation; not an isolated visual test of every family"
+        },
+        {
+          "path": "reviews/two-shelters-prototype/DESIGN.md",
+          "role": "Actual chosen Practice contract, production-rule witnesses and alternatives; design proof is not gameplay or visual acceptance."
+        },
+        {
+          "path": "src/dev/asset-gallery.ts",
+          "role": "Shared original 44px portrait choices and actual Two Shelters Practice link; developer specimen only."
+        },
+        {
+          "path": "reviews/two-shelters-prototype/REVIEW.md",
+          "role": "Actual implementation, source-tied evidence, original failures, focused verification and remaining human playtest limits."
+        },
+        {
+          "path": "reviews/two-shelters-prototype/final/390x844-turn2-play.png",
+          "role": "Native portrait actual Practice gameplay; not a gallery specimen or concept reference."
+        },
+        {
+          "path": "reviews/two-shelters-prototype/final/780x320-turn6-play.png",
+          "role": "Native short-landscape actual Practice gameplay; not a gallery specimen or concept reference."
         }
       ],
       "meaning": "Canonical rounded navigation courses. No decorative shortcuts or new junctions; selection and move use same geometry.",
@@ -1595,14 +1756,14 @@
         "src/scene/world.ts"
       ],
       "gallery": {
-        "section": "inventory",
-        "preview": "Source links and attributed existing evidence; no isolated rendering claimed"
+        "section": "two-shelters",
+        "preview": "Source links and attributed existing evidence; no isolated rendering claimed Two Shelters reuses this family with Hazel, Bracken and Mica; the candidate section links actual gameplay and retains separate design specimens."
       },
       "typeSpecific": {
         "canonical semantic fact": "No decorative shortcuts or new junctions; selection and move use same geometry.",
         "shape/text/color encoding": "Quiet curved dashed seafoam routes; same course used by ferry.",
         "variants": "ordinary shallow/deep; highlighted; blocked",
-        "free inspection versus action commitment": "Inspection changes highlight/forecast only; native explicit action confirmation commits.",
+        "free inspection versus action commitment": "Inspection changes highlight/forecast only; one nearby explicit Sail commits one adjacent passage. Blocked depth and immediate-loss consequences remain visible.",
         "source geometry and update owner": "src/scene/paths.ts: getLevelPaths; src/scene/world.ts: World.routes / indicate",
         "accessibility and picking": "World geometry is paired with named DOM selection/action controls; canonical node/edge IDs determine picking."
       }
@@ -1673,6 +1834,10 @@
         {
           "path": "src/scene/world.ts",
           "symbol": "World.transferHistory / tick"
+        },
+        {
+          "path": "src/scene/two-shelters-seating.ts",
+          "symbol": "shelterTransferProgress / shelterTransferEntry / shelterTransferPose / shelterShoreSeat: candidate-only automatic transfer order, deck entry, full path and supported shore anchors"
         }
       ],
       "variants": [
@@ -1685,9 +1850,16 @@
       "behaviorToPreserve": "One canonical action, cancellable transient presentation, both berth headings; new icon does not immediately transfer. Six-space profile uses fixed identity seats and a sequential foredeck/central aisle path inside the same accepted action duration; group audio stays grouped. Old small profiles retain their prior paths.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "original-accepted-variants-preserved-wide-berth-visual-repair-awaiting-human-review",
-        "reviewedBaseline": "45ab9768792ddd3a8dffb67da6c332f8fe2234ff",
-        "basis": "Prior Wide Berth functional verification did not establish visual acceptance. Existing original variants remain preserved; this scoped correction needs its own actual visual observations and user playtest."
+        "state": "existing-family-reused-two-shelters-practice-awaiting-human-playtest",
+        "reviewedBaseline": "2e4f99268da4691b315fe8467d9e539cda15e927",
+        "basis": "Existing original family reused by one independent three-body four-space Practice candidate. Earlier accepted variants and historical reviews remain below; candidate integration and mechanical proof do not establish visual acceptance or campaign suitability. No deployment in this pass.",
+        "history": [
+          {
+            "state": "original-accepted-variants-preserved-wide-berth-visual-repair-awaiting-human-review",
+            "reviewedBaseline": "45ab9768792ddd3a8dffb67da6c332f8fe2234ff",
+            "basis": "Prior Wide Berth functional verification did not establish visual acceptance. Existing original variants remain preserved; this scoped correction needs its own actual visual observations and user playtest."
+          }
+        ]
       },
       "evidence": [
         {
@@ -1701,6 +1873,26 @@
         {
           "path": "reviews/wide-berth-visual-repair/REVIEW.md",
           "role": "Current corrective implementation and actual source-indexed phone comparisons; prior45ab976presentation was rejected, human acceptance of this repair remains pending."
+        },
+        {
+          "path": "reviews/two-shelters-prototype/DESIGN.md",
+          "role": "Actual chosen Practice contract, production-rule witnesses and alternatives; design proof is not gameplay or visual acceptance."
+        },
+        {
+          "path": "src/dev/asset-gallery.ts",
+          "role": "Shared original 44px portrait choices and actual Two Shelters Practice link; developer specimen only."
+        },
+        {
+          "path": "reviews/two-shelters-prototype/REVIEW.md",
+          "role": "Actual implementation, source-tied evidence, original failures, focused verification and remaining human playtest limits."
+        },
+        {
+          "path": "reviews/two-shelters-prototype/final/390x844-turn2-play.png",
+          "role": "Native portrait actual Practice gameplay; not a gallery specimen or concept reference."
+        },
+        {
+          "path": "reviews/two-shelters-prototype/final/780x320-turn6-play.png",
+          "role": "Native short-landscape actual Practice gameplay; not a gallery specimen or concept reference."
         }
       ],
       "meaning": "Passenger boarding and unloading presentation. One canonical action, cancellable transient presentation, both berth headings; new icon does not immediately transfer.",
@@ -1708,14 +1900,14 @@
         "src/scene/world.ts"
       ],
       "gallery": {
-        "section": "inventory",
-        "preview": "Source links and attributed existing evidence; no isolated rendering claimed"
+        "section": "two-shelters",
+        "preview": "Source links and attributed existing evidence; no isolated rendering claimed Two Shelters reuses this family with Hazel, Bracken and Mica; the candidate section links actual gameplay and retains separate design specimens."
       },
       "typeSpecific": {
         "trigger": "src/scene/deck-transfer.ts: sampleDeckTransfer / transferHeading; src/scene/transfer.ts: TransferTimeline; src/scene/world.ts: World.transferHistory / tick",
         "duration source": "transitionPlan: 520ms board/ordinary unload, 900ms successful unload, 30ms Reduced; final tide/draft settling capped at550ms.",
         "canonical start/end transform ownership": "World canonical state/deck anchors and accepted presentation pose history own start/end transforms.",
-        "variant/species parameters": "board; unload; compact Reduced",
+        "variant/species parameters": "board; unload; compact Reduced; Two Shelters three-body two-beaver/rabbit subsets use the original four-space hull, with automatic ordering and bounded seat adjustment inside the unchanged transfer budget.",
         "Reduced/cancellation/recovery": "One canonical action, cancellable transient presentation, both berth headings; new icon does not immediately transfer.",
         "associated audio events": "src/scene/transfer.ts TransferTimeline emits crossing/settling/compact contacts; visible final arrival invokes existing delivery cue."
       }
@@ -2275,7 +2467,7 @@
       "sources": [
         {
           "path": "src/main.ts",
-          "symbol": "Independent visible control obstacles, safe viewport and overlay placement, native one-action Sail/focus ownership"
+          "symbol": "Independent visible control obstacles, safe viewport and overlay placement, native one-action Sail/focus ownership; Two Shelters side-first labels with nearest local fallback and dock reservation"
         },
         {
           "path": "src/style.css",
@@ -2304,6 +2496,10 @@
         {
           "path": "src/scene/world.ts",
           "symbol": "Stable Whole-cove composition around measured individual controls; complete cove fit and unchanged Play/pan ownership"
+        },
+        {
+          "path": "src/ui/placement.ts",
+          "symbol": "placeLocalCard optional separation parameter retains 8px default; candidate dock uses 2px around unchanged rectangles"
         }
       ],
       "variants": [
@@ -2316,17 +2512,24 @@
       ],
       "visualSignature": "Small 28px visual marker with larger stationary hit region and freestanding label.",
       "reuseAndOwnership": "Name plus marker is one semantic button and one Tab stop for each real node.",
-      "behaviorToPreserve": "Free selection and exact endpoint identity remain. A compact nearby Sail activation commits one revalidated edge/action. Blocked and no-direct-passage states never detour. Legal immediate loss is stated inline before Sail anyway; no second sailing dialog.",
+      "behaviorToPreserve": "Free selection and exact endpoint identity remain. A compact nearby Sail activation commits one revalidated edge/action. Blocked and no-direct-passage states never detour. Legal immediate loss is stated inline before Sail anyway; no second sailing dialog. Two Shelters alone reserves nearby dock actions before names and prefers unobstructed side placements, falling back near the exact marker. Older-cove placement, native hit areas, endpoint identity and free inspection remain unchanged. The candidate uses the actual safe viewport rather than an additional inset, and its current marker avoids other island silhouettes while preserving a leader to the boat. Candidate dock placement permits 2px separation around the unchanged visual and hit rectangles; the shared helper retains 8px by default for every existing caller. The candidate current marker/name is hidden during busy presentation while input is locked, preventing overlap with moving passengers; idle, cancellation and Undo restore it.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "integrated-play-readability-awaiting-human-review",
-        "reviewedBaseline": "7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695",
-        "basis": "Existing family reused for the scoped readable-play correction. Earlier accepted material, identity and behavior remain; new composition and perceptual readability require their own actual evidence and user review. Published version13 still contains the reviewed baseline.",
+        "state": "existing-family-reused-two-shelters-practice-awaiting-human-playtest",
+        "reviewedBaseline": "2e4f99268da4691b315fe8467d9e539cda15e927",
+        "basis": "Original shared marker family reused for the independent Practice candidate. Native phone composition is inspected separately; the candidate is not approved campaign content.",
         "history": [
           {
-            "state": "original-accepted-variants-preserved-wide-berth-visual-repair-awaiting-human-review",
-            "reviewedBaseline": "45ab9768792ddd3a8dffb67da6c332f8fe2234ff",
-            "basis": "Prior Wide Berth functional verification did not establish visual acceptance. Existing original variants remain preserved; this scoped correction needs its own actual visual observations and user playtest."
+            "state": "integrated-play-readability-awaiting-human-review",
+            "reviewedBaseline": "7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695",
+            "basis": "Existing family reused for the scoped readable-play correction. Earlier accepted material, identity and behavior remain; new composition and perceptual readability require their own actual evidence and user review. Published version13 still contains the reviewed baseline.",
+            "history": [
+              {
+                "state": "original-accepted-variants-preserved-wide-berth-visual-repair-awaiting-human-review",
+                "reviewedBaseline": "45ab9768792ddd3a8dffb67da6c332f8fe2234ff",
+                "basis": "Prior Wide Berth functional verification did not establish visual acceptance. Existing original variants remain preserved; this scoped correction needs its own actual visual observations and user playtest."
+              }
+            ]
           }
         ]
       },
@@ -2346,6 +2549,18 @@
         {
           "path": "reviews/play-readability/REVIEW.md",
           "role": "PLAY_READABILITY_01 actual native UI/water/Harbor evidence, exact source identity, focused results and retained limitations; human visual acceptance is separate."
+        },
+        {
+          "path": "reviews/two-shelters-prototype/REVIEW.md",
+          "role": "Actual implementation, source-tied evidence, original failures, focused verification and remaining human playtest limits."
+        },
+        {
+          "path": "reviews/two-shelters-prototype/final/390x844-turn2-play.png",
+          "role": "Native portrait actual Practice gameplay; not a gallery specimen or concept reference."
+        },
+        {
+          "path": "reviews/two-shelters-prototype/final/780x320-turn6-play.png",
+          "role": "Native short-landscape actual Practice gameplay; not a gallery specimen or concept reference."
         }
       ],
       "meaning": "Freestanding names and selectable marker buttons. Preserve real status shape/text, free selection, collision/occlusion avoidance and no forced pan on selecting.",
@@ -2353,15 +2568,15 @@
         "src/main.ts"
       ],
       "gallery": {
-        "section": "interface",
-        "preview": "Source links and attributed existing evidence; no isolated rendering claimed The gallery links to actual Holding/Driftwood practice and this pass evidence; gallery specimens remain design evidence."
+        "section": "two-shelters",
+        "preview": "Shared native choices and an actual Two Shelters Practice link; the developer specimen is design evidence, not gameplay."
       },
       "typeSpecific": {
         "render/placement sources": "src/main.ts: renderMap; src/style.css: .map-target / .map-hit / .map-symbol / .map-name / .map-home",
         "semantic role/accessible name": "Freestanding names and selectable marker buttons. Preserve real status shape/text, free selection, collision/occlusion avoidance and no forced pan on selecting.",
         "icon and label mappings": "Native visible words remain authoritative; SVG adds redundant semantic visual cue.",
         "interaction states": "current; remote; too shallow; loss risk; selected; Home role",
-        "nearby placement and viewport contract": "Placement uses independent measured visible controls with full safe canvas bounds. Local context is the non-committing keyboard focus owner, replacing the removed heading; same selection gesture cannot activate the newly appeared Sail.",
+        "nearby placement and viewport contract": "Placement uses independent measured visible controls with full safe canvas bounds. Local context is the non-committing keyboard focus owner, replacing the removed heading; same selection gesture cannot activate the newly appeared Sail. Candidate-only ordered side preferences retain the nearest-marker fallback when obstructed; dock reservation is made before label layout to keep the local action beside the boat. Existing safe-area bounds remain authoritative; candidate controls use the available edge space and current-ring placement includes other land silhouettes as obstacles.",
         "focus/cancel/fullscreen preservation": "Native buttons/aria-pressed; Escape cancels; same dialog promoted on fullscreen with DOM, focus, subset and scroll retained.",
         "size/hit target/layout behavior": "Independent visible control rectangles replace the removed full-width HUD exclusion. Safe viewport remains stable when information expands; nearby actions and receipts avoid actual controls, selected endpoints and figures. At least44px native hit targets; critical text wraps."
       }
@@ -4826,6 +5041,10 @@
         {
           "path": "assets/portraits/generation-manifest.json",
           "symbol": "exact Nell model/generator/camera/shading and output provenance"
+        },
+        {
+          "path": "data/two-shelters.level.json",
+          "symbol": "Hazel and Bracken beaver-brown, and Mica rabbit-cream explicitly reuse unchanged portrait outputs"
         }
       ],
       "originalModelSource": "src/scene/models.ts",
@@ -4890,9 +5109,9 @@
       "behaviorToPreserve": "Full species ordinal remains intact for world deck/pose; Rue/Lark staytan when offeredalone. Preserve modelproportions/geometry/colors, live names/costs, stable44pxslot/footer, focus/subsets/Undo, allacceptedgameplay/world/audio. Unknownappearance uses text-preserving reservedslot.",
       "provenance": "original-model-derived-ui-image",
       "acceptance": {
-        "state": "prior-three-portraits-published-version12; new-beaver-integrated-human-review-pending",
-        "gameCommit": "1a85874883af5caa59f6294a75495eccf2afebbc",
-        "basis": "Nell is an original model-derived extension; prior images and publication history unchanged. Native phone art and physical-device approval remain separate.",
+        "state": "existing-family-reused-two-shelters-practice-awaiting-human-playtest",
+        "reviewedBaseline": "2e4f99268da4691b315fe8467d9e539cda15e927",
+        "basis": "Existing original family reused by one independent three-body four-space Practice candidate. Earlier accepted variants and historical reviews remain below; candidate integration and mechanical proof do not establish visual acceptance or campaign suitability. No deployment in this pass.",
         "history": [
           {
             "state": "integrated-candidate-awaiting-human-playtest",
@@ -4903,6 +5122,11 @@
             "state": "reviewed-and-published-version12; no-new-device-acceptance-claim",
             "gameCommit": "1a85874883af5caa59f6294a75495eccf2afebbc",
             "basis": "Supplied version12 receipt confirms the independently reviewed portrait build was published to the unchanged owner-private Site; publication is not new physical-device or blanket human visual approval."
+          },
+          {
+            "state": "prior-three-portraits-published-version12; new-beaver-integrated-human-review-pending",
+            "gameCommit": "1a85874883af5caa59f6294a75495eccf2afebbc",
+            "basis": "Nell is an original model-derived extension; prior images and publication history unchanged. Native phone art and physical-device approval remain separate."
           }
         ]
       },
@@ -4942,6 +5166,26 @@
         {
           "path": "assets/portraits/generation-manifest.json",
           "role": "Nell source/output/environment provenance; model-derived diffuse shading differs from runtime WebGL"
+        },
+        {
+          "path": "reviews/two-shelters-prototype/DESIGN.md",
+          "role": "Actual chosen Practice contract, production-rule witnesses and alternatives; design proof is not gameplay or visual acceptance."
+        },
+        {
+          "path": "src/dev/asset-gallery.ts",
+          "role": "Shared original 44px portrait choices and actual Two Shelters Practice link; developer specimen only."
+        },
+        {
+          "path": "reviews/two-shelters-prototype/REVIEW.md",
+          "role": "Actual implementation, source-tied evidence, original failures, focused verification and remaining human playtest limits."
+        },
+        {
+          "path": "reviews/two-shelters-prototype/final/390x844-turn2-play.png",
+          "role": "Native portrait actual Practice gameplay; not a gallery specimen or concept reference."
+        },
+        {
+          "path": "reviews/two-shelters-prototype/final/780x320-turn6-play.png",
+          "role": "Native short-landscape actual Practice gameplay; not a gallery specimen or concept reference."
         }
       ],
       "typeSpecific": {
@@ -4949,7 +5193,7 @@
         "camera/crop, world proportions and shading recipe": "Original generation-manifest.json: orthographic offset[1.8,1,5], projected head/upper-chest square with8%totalpadding, rabbit floor.23/sheep.15; rabbit scale[1.25,1.65,1.25],sheep[1.15,1.5,1.15]. Ambient linearRGB[.43,.45,.44], warmkey#fff1dc.75 at[-3,5,4],tealfill#aed5d1.26 at[4,1,2]. Offline diffuse SVG shading differs from liveWebGL/ACES/shadows. Nell uses full-model/tail framing, scale[1.15,1.5,1.15], cameraoffset[2.7,1.8,5], same original diffuse ambient/key/fill colors.",
         "derived output format/dimensions/variants and alpha/color semantics": "Four256x256 straight-alpha sRGB PNGs. Three unchanged supplied images plus original full-body beaver-brown; editable SVG intermediates retained; no baked labels or background.",
         "generation command/environment and source/output provenance": "Node24.15.0 with existingThree0.186.1 freshly reproduces every suppliedSVG byte; no PNG regeneration because all suppliedmodel/generator/SVG/PNG hashes remain exact. Supplied PNGrasterization Node24.22.1/Sharp0.35.5/Lanczos3 768->256 and completeversions retained. Exact command/source/output audit reviews/passenger-portraits/generation-audit.json; no production rasterizer dependency. Nell: node tools/render-nell-portrait.mjs; Node24, installedThreeSVGRenderer and installedChromium transparent rasterization; exact versions/hashes in assets/portraits/generation-manifest.json. Family record lists both generation paths.",
-        "actual consumers, displayed size and semantic purpose": "Board/Letashore/Bringhome in src/main.ts use passengerChoiceContent with explicit resolved appearance; src/dev/asset-gallery.ts shares the original URLs/helper at44CSSpx plus source-size256px specimens. Identity recognition supports live name and capacity; it creates no gameplay difference.",
+        "actual consumers, displayed size and semantic purpose": "Board/Letashore/Bringhome in src/main.ts use passengerChoiceContent with explicit resolved appearance; src/dev/asset-gallery.ts shares the original URLs/helper at44CSSpx plus source-size256px specimens. Identity recognition supports live name and capacity; it creates no gameplay difference. Two Shelters adds only named level instances using the same beaver-brown and rabbit-cream outputs; no new generator output or portrait family.",
         "native-control ownership and text-preserving load/failure behavior": "One nativebutton perpassenger, stableID/aria-pressed/order/focus. Emptyalt/non-draggable decorative PNG has reserved44px slot and no independentpointer/focus behavior. Pending/error leaves quietreservedslot; full labels, costs, selection, Close/Confirm remain live. Same dialog survives fullscreen; no newcanvas/context/loop.",
         "small-screen evidence and human acceptance boundary": "Actual source-tied Driftwood phone evidence is retained with the task review; developer gallery and fullsize PNG inspection are design evidence. New beaver art/hardware listening/physicalAndroid approval remains pending."
       },
@@ -4959,8 +5203,8 @@
         "src/dev/asset-gallery.ts"
       ],
       "gallery": {
-        "section": "interface",
-        "preview": "Four shared44px choices and source-size images; real static beaver model; named Driftwood companions with stable cream/tan mapping and text-preserving fallback."
+        "section": "two-shelters",
+        "preview": "Four shared44px choices and source-size images; real static beaver model; named Driftwood companions with stable cream/tan mapping and text-preserving fallback. Two Shelters reuses this family with Hazel, Bracken and Mica; the candidate section links actual gameplay and retains separate design specimens."
       }
     },
     {
@@ -5337,7 +5581,7 @@
     },
     {
       "id": "model.beaver",
-      "name": "Beaver boatwright passenger",
+      "name": "Beaver passenger family",
       "kind": "procedural-model",
       "status": "integrated",
       "sources": [
@@ -5352,17 +5596,28 @@
         {
           "path": "tools/render-nell-portrait.mjs",
           "symbol": "matching model-derived static portrait"
+        },
+        {
+          "path": "data/two-shelters.level.json",
+          "symbol": "passengers: explicit Hazel and Bracken beaver-brown identities, two spaces each; new independent neighbors, not repeated rescues of existing story identities"
         }
       ],
       "variants": [
-        "warm-brown Nell; fixed lighter muzzle and broad resting tail"
+        "warm-brown beaver with fixed lighter muzzle and broad resting tail; explicit Nell, Hazel and Bracken identities"
       ],
       "visualSignature": "Compact warm brown body, lighter muzzle/chest, small rounded ears, broad nose, paired teeth and flattened darker tail.",
       "reuseAndOwnership": "Original code-native model shares existing matte material palette/factory; World owns canonical deck/pier transforms.",
-      "behaviorToPreserve": "Two-space capacity is level data, not a species ability. Tail remains visible and attached with clearance through deck transfer, tide, berth headings and Undo.",
+      "behaviorToPreserve": "Two-space capacity is level data, not a species ability. Tail remains visible and attached with clearance through deck transfer, tide, berth headings and Undo. Two Shelters reuses the unchanged model and explicit appearance for Hazel and Bracken: beaver-brown, two spaces each; full species ordinal and original proportions remain.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "integrated-awaiting-human-visual-review"
+        "state": "existing-family-reused-two-shelters-practice-awaiting-human-playtest",
+        "reviewedBaseline": "2e4f99268da4691b315fe8467d9e539cda15e927",
+        "basis": "Existing original family reused by one independent three-body four-space Practice candidate. Earlier accepted variants and historical reviews remain below; candidate integration and mechanical proof do not establish visual acceptance or campaign suitability. No deployment in this pass.",
+        "history": [
+          {
+            "state": "integrated-awaiting-human-visual-review"
+          }
+        ]
       },
       "evidence": [
         {
@@ -5372,17 +5627,37 @@
         {
           "path": "src/dev/asset-gallery.ts",
           "role": "Actual factory static 3D specimen; developer design view"
+        },
+        {
+          "path": "reviews/two-shelters-prototype/DESIGN.md",
+          "role": "Actual chosen Practice contract, production-rule witnesses and alternatives; design proof is not gameplay or visual acceptance."
+        },
+        {
+          "path": "src/dev/asset-gallery.ts",
+          "role": "Shared original 44px portrait choices and actual Two Shelters Practice link; developer specimen only."
+        },
+        {
+          "path": "reviews/two-shelters-prototype/REVIEW.md",
+          "role": "Actual implementation, source-tied evidence, original failures, focused verification and remaining human playtest limits."
+        },
+        {
+          "path": "reviews/two-shelters-prototype/final/390x844-turn2-play.png",
+          "role": "Native portrait actual Practice gameplay; not a gallery specimen or concept reference."
+        },
+        {
+          "path": "reviews/two-shelters-prototype/final/780x320-turn6-play.png",
+          "role": "Native short-landscape actual Practice gameplay; not a gallery specimen or concept reference."
         }
       ],
-      "meaning": "Nell the two-space beaver boatwright; a new neighbor without a gameplay ability.",
+      "meaning": "Original two-space beaver model shared by Nell the boatwright and independent Practice neighbors Hazel and Bracken; no species ability or new model.",
       "consumers": [
         "src/scene/world.ts",
         "src/dev/asset-gallery.ts",
         "tools/render-nell-portrait.mjs"
       ],
       "gallery": {
-        "section": "beaver-heading",
-        "preview": "Static real3D model, original256px portrait and shared44px Nell/Fern/Oat choices; links actual Driftwood."
+        "section": "two-shelters",
+        "preview": "Static real3D model, original256px portrait and shared44px Nell/Fern/Oat choices; links actual Driftwood. Two Shelters reuses this family with Hazel, Bracken and Mica; the candidate section links actual gameplay and retains separate design specimens."
       },
       "typeSpecific": {
         "factory/source symbol": "src/scene/models.ts: animal(species, variant)",
@@ -5703,5 +5978,27 @@
     "preservedIdCount": 79,
     "publication": "Not deployed; version13/game7ae1d8a receipt/history retained",
     "provenance": "Original existing project Canvas2D, CSS and field/shader code; no external image, font, narration, renderer or duplicate family added."
+  },
+  "twoSheltersPrototypeChanges": {
+    "task": "TWO_SHELTERS_PROTOTYPE_01",
+    "reviewedRuntime": "2e4f99268da4691b315fe8467d9e539cda15e927",
+    "continuityHead": "98f9713b1a69474b4066cca8f336cb8c4ca21a50",
+    "changedExisting": [
+      "model.ferry",
+      "model.rabbit",
+      "model.beaver",
+      "model.pier-kit",
+      "terrain.coast",
+      "indicator.routes",
+      "motion.transfer",
+      "ui.passenger-portraits",
+      "ui.map-markers"
+    ],
+    "added": [],
+    "retired": [],
+    "preservedIdCount": 79,
+    "content": "One independent Practice cove; original four-space ferry, Hazel beaver2, Bracken beaver2 and Mica rabbit1. Current root Journey, scenes and saves unchanged.",
+    "publication": "Not deployed. Confirmed private Site version14/game2e4f992 and hosting sourced01264d remain unchanged; receipt reviews/play-readability/deployment-confirmation.json and prior history retained.",
+    "provenance": "Original existing code-native models, coast/pier/landmark families, procedural water/audio and unchanged model-derived PNGs. Level/layout author new instances; candidate-only automatic seating/transfer code reuses the original ferry. No new species, boat, image, icon, sound, story or asset family."
   }
 }

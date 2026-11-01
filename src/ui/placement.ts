@@ -16,6 +16,7 @@ export function placeLocalCard(
   obstacles: Rectangle[],
   preferred: [number, number][],
   anchor?: [number, number],
+  gap = 8,
 ) {
   if (width > bounds.right - bounds.left || height > bounds.bottom - bounds.top) return null;
   const candidates = [...preferred];
@@ -32,7 +33,7 @@ export function placeLocalCard(
     const left = Math.max(bounds.left, Math.min(bounds.right - width, x));
     const top = Math.max(bounds.top, Math.min(bounds.bottom - height, y));
     const rectangle = { left, top, right: left + width, bottom: top + height };
-    if (obstacles.some((obstacle) => overlaps(rectangle, obstacle))) continue;
+    if (obstacles.some((obstacle) => overlaps(rectangle, obstacle, gap))) continue;
     if (!anchor) return rectangle;
     const cost = Math.hypot(left - anchor[0], top - anchor[1]);
     if (cost < distance) {

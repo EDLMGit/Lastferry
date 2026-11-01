@@ -1,10 +1,12 @@
 # Puzzle progression — selected campaign direction
 
+Current implementation update — `TWO_SHELTERS_PROTOTYPE_01`: one independent Practice candidate is available at `?cove=two-shelters`. The original four-space ferry starts at Low Landing carrying Hazel (2) and Bracken (2); Mica (1) waits at Reed Pier. Tides rise after actions 4 and 9. Low Landing floods at the second rise; High Refuge remains safe. Both staging choices win, but low staging requires taking Mica home before retrieving both larger neighbors. Greedy mixed retrieval works from High Refuge and loses from Low Landing. Actual production-rule witnesses and alternatives are in [DESIGN](../reviews/two-shelters-prototype/DESIGN.md). This proves a distinct candidate, not enjoyment or campaign acceptance. The current Journey, launch, strict saves and five earlier level contracts remain unchanged; no migration or deployment.
+
 Recalibrated 1 November 2026 for `PLAY_READABILITY_01`, from reviewed runtime `7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695` and continuity `52f72d6cdb1caa292425511394f4a11efa024a61`. **Holding Pier, Bellwater, Driftwood Yard and Wide Berth remain the authored runtime campaign; First Crossing remains optional practice.** Holding, Bellwater and Driftwood gameplay are accepted. The user reports Wide Berth is too easy and not fun, so its mandatory campaign role is under revision. Its valid witnesses and physical/interface checks remain useful evidence; they do not overturn that difficulty feedback. The earlier C4 assignment was followed and the direction is being corrected.
 
 ## Campaign sequence
 
-The revised target has twelve coves in four phases; the larger-ferry launch is proposed after explicit C5 completion, before C6. This is a content target, not a runtime reorder or measured playtime promise. First Crossing remains optional practice: placing it in the main sequence would repeat the rescue of Pip, Rue and Moss already completed in Holding. Rows C4–C12 below are unproven proposals; current Wide remains playable unchanged during this pass.
+The revised target has twelve coves in four phases; the larger-ferry launch is proposed after explicit C5 completion, before C6. This is a content target, not a runtime reorder or measured playtime promise. First Crossing remains optional practice: placing it in the main sequence would repeat the rescue of Pip, Rue and Moss already completed in Holding. C4 has a production-proven independent Practice candidate, still awaiting human acceptance; C5–C12 remain unproven proposals. Current Wide stays in the unchanged runtime Journey.
 
 | Phase / cove | Encounter | Intended decision and teaching role |
 | --- | --- | --- |
@@ -31,7 +33,7 @@ The planning question is **“Which temporary landing keeps the later rescue pos
 
 The staging location and subsequent retrieval order must interact. A convenient shelter can impose a later cost while another preserves a useful approach. Simply leaving the heavy passenger at the only safe pier repeats Driftwood. Show all waiting passengers and relevant shore/return-path differences through the world, inspection and forecast; no concealed later objective or unforecastable punishment.
 
-This brief specifies no map, tide schedule, witness or solution count. Author a compact candidate with existing placeholder assets and its own Practice entrance in a later task. Prove a rescue through the production reducer, inspect a plausible losing/blocked alternative and useful Undo recovery, and test whether routine earliest-group collection plus the obvious return bypasses the intended reasoning. If it does, revise or discard the candidate. Prove multiple strategies only when the design makes that claim. User playtest must establish clarity, distinctness and satisfaction before additional art or a chapter scene is commissioned.
+The original brief specified no map, tide schedule or witness. The current candidate authors those values with existing finished assets and its own Practice entrance; see the implementation update and DESIGN above. Prove a rescue through the production reducer, inspect a plausible losing/blocked alternative and useful Undo recovery, and test whether routine earliest-group collection plus the obvious return bypasses the intended reasoning. If it does, revise or discard the candidate. Prove multiple strategies only when the design makes that claim. User playtest must establish clarity, distinctness and satisfaction before additional art or a chapter scene is commissioned.
 
 ## The larger boat: implemented capability, revised planned placement
 
@@ -100,7 +102,7 @@ If using reachability search, document its bounds. After the last scheduled chan
 
 ## Implementation boundaries and saves
 
-The foundation first implemented Holding/Bellwater. The current four-cove slice still ends honestly after Wide Berth with “Four coves are safe.” `PLAY_READABILITY_01` preserves every current level JSON, the reducer, registry, launch trigger and strict ordered checkpoint semantics. Two Shelters, Orin, revised launch placement and the remaining roadmap are future content.
+The foundation first implemented Holding/Bellwater. The current four-cove slice still ends honestly after Wide Berth with “Four coves are safe.” `PLAY_READABILITY_01` preserves every current level JSON, the reducer, registry, launch trigger and strict ordered checkpoint semantics. Two Shelters is now independent Practice only. Orin, revised campaign placement/launch and the remaining roadmap are future content.
 
 After C4 earns its place through playtest, use a separately scoped route/save revision. Pending-launch, active-Wide and completed-four-cove version-1 records depend on the existing ordered prefixes. Preserve their original data and recognized C1–C3 completion; retain old Wide completion as history without pretending the new C4 was rescued. Previously seeing the launch cannot grant later completion. Explain the revised continuation point in a brief honest notice. Home, Options and Practice must not silently rewrite progress; unknown/malformed data remains recoverable. Define exact mappings once replacement content and route are settled, without implementing a migration framework here.
 
