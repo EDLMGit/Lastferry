@@ -60,3 +60,7 @@ Node24: `npm ci`, then `npm run dev -- --port 5270 --strictPort`.
 [Local Journey](http://127.0.0.1:5270/) · [Holding practice](http://127.0.0.1:5270/?cove=holding-pier) · [Driftwood practice](http://127.0.0.1:5270/?cove=driftwood-yard).
 
 **Not deployed.** The existing owner-private Site remains version13/game `7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695`, hosting `c24aa6528675bc278de848e111ee73f9e22810ac`. Its confirmed receipt and earlier history are preserved. This GitHub push is a separate review build; PR1 stays draft and main unchanged.
+
+## Subsequent user-requested publication
+
+Published successfully as owner-private Sites version14 on2026-11-01, game `2e4f99268da4691b315fe8467d9e539cda15e927`, hosting `d01264d26cb7b5abaf68920a9014718ab21d97b4`. All seven production files match the fresh game build byte-for-byte. [Receipt](deployment-confirmation.json), [build audit](site-build-audit.json), [source audit](site-source-audit.json). Earlier no-deployment prose records the original implementation handoff. No new physical-phone or human listening claim.

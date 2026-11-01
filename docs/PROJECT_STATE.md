@@ -4,6 +4,10 @@ Updated: 2026-11-01. This is the compact continuity record for the current proje
 
 Read this before choosing scope. Detailed implementation history belongs in `STATUS.md`; evidence belongs under `reviews/`. Update this record after each handoff and after a confirmed deployment. User feedback can revise an accepted decision.
 
+## Current publication — Sites version 14
+
+At the user's explicit request, published game `2e4f99268da4691b315fe8467d9e539cda15e927` to the existing owner-private Site on2026-11-01 at10:31:16UTC. Sites version14, hosting `d01264d26cb7b5abaf68920a9014718ab21d97b4`, succeeded. All seven production files match the fresh Node24 game build/typecheck byte-for-byte. Source-tied gameplay evidence is reused; physical-phone and listening limits remain. Receipt: `reviews/play-readability/deployment-confirmation.json`. Version13 and all earlier history below remain historical. GitHub continuity commits do not change the deployed game.
+
 ## Current scoped pass — Play readability
 
 Implementation: `c53b241a05e4dfcc955bfb85669eabf21c553dad`. Packaging audit matches86 source/input files and117 selected media; the following audit/continuity commit changes no runtime. The final pushed SHA is in PR1 and the handoff.
@@ -14,7 +18,7 @@ The active pass removes the continuous HUD and its full-width layout exclusion, 
 
 Wide Berth followed the earlier written assignment, but the user's difficulty feedback is now negative: easy and not fun. Its mandatory campaign slot is under revision. Revised planning proposes four-space Two Shelters at C4, Orin at four-space C5, and the six-space launch after C5 before C6. None is new playable content. The runtime still runs Holding → Bellwater → Driftwood → Wide, with original five levels, launch trigger and strict checkpoint prefixes. New puzzle proof/playtest and an explicit later route/save migration are required before changing that order; old completion must not fabricate a replacement rescue. Canonical campaign documents contain the proposed twelve-cove arc.
 
-Implementation and focused verification are complete under reviews/play-readability: build/TypeScript,395/395 units,79-family validation and a14/14-case actual UI batch pass. Native inspection additionally corrected card/chrome overlaps, a forecast-intercepted waypoint and Wide Overview animals under Undo. A separately reproduced Overview-drag recovery issue was fixed with one scoped guard;6 view units and2/2 final recovery/production cases pass. The evidence audit distinguishes that final guard from the earlier14-case source and movie. Actual9/12-action rescues, tide/terminal Undo, all original coves, fullscreen/rotation and a runtime-audio Holding-to-Harbor sequence are retained. All25 protected mechanics/data/receipt comparisons and9 supplied inputs match. Original failures and inherited image-loading/overlap/heading/timing/device/listening limits remain explicit. Exact implementation/packaging SHA is recorded in the review and PR1. The private Site is unchanged at version13/game7ae1d8a; publication/history below remain authoritative.
+Implementation and focused verification are complete under reviews/play-readability: build/TypeScript,395/395 units,79-family validation and a14/14-case actual UI batch pass. Native inspection additionally corrected card/chrome overlaps, a forecast-intercepted waypoint and Wide Overview animals under Undo. A separately reproduced Overview-drag recovery issue was fixed with one scoped guard;6 view units and2/2 final recovery/production cases pass. The evidence audit distinguishes that final guard from the earlier14-case source and movie. Actual9/12-action rescues, tide/terminal Undo, all original coves, fullscreen/rotation and a runtime-audio Holding-to-Harbor sequence are retained. All25 protected mechanics/data/receipt comparisons and9 supplied inputs match. Original failures and inherited image-loading/overlap/heading/timing/device/listening limits remain explicit. Exact implementation/packaging SHA is recorded in the review and PR1. At implementation handoff the private Site remained version13/game7ae1d8a. The later user-requested version14 publication is recorded above; earlier receipts remain unchanged.
 
 ## Previous scoped pass — Wide Berth visual repair
 
@@ -88,9 +92,9 @@ Local Codex implements the current task. ChatGPT reviews the identifiable handof
 | Wide Berth implementation | `d298db84c0e979680bf7b5a20522265d105d1fc1` — six-space physical ferry, launch and fourth cove; functional foundation retained, presentation rejected and corrected by the visual repair; included in version13 |
 | Wide Berth visual repair | Implementation `9aab76f180b6bf5bd859414001ea4fd5b3a87639`; published handoff game `7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695` |
 | Reviewed implementation baseline | `45ab9768792ddd3a8dffb67da6c332f8fe2234ff` — visual-repair comparison |
-| Published private phone game | `7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695` — Sites version 13, confirmed 2026-10-31 23:02 UTC / 2026-11-01 00:02 Madrid |
+| Published private phone game | `2e4f99268da4691b315fe8467d9e539cda15e927` — Sites version14, confirmed2026-11-01 10:31 UTC |
 | Stable phone URL | https://last-ferry-playtest.abumech.chatgpt.site |
-| Published hosting source | `c24aa6528675bc278de848e111ee73f9e22810ac` |
+| Published hosting source | `d01264d26cb7b5abaf68920a9014718ab21d97b4` |
 | Main | Unchanged by this workflow; no merge authorized |
 
 At the user's explicit request, native Sites publication succeeded at `2026-10-31T23:02:36.877836Z` for game `7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695`, version13, hosting `c24aa6528675bc278de848e111ee73f9e22810ac`. The same owner-private Site and URL are preserved. Receipt: `reviews/wide-berth-visual-repair/deployment-confirmation.json`. A fresh Node24 build/typecheck passed and all seven production files match the tested local build byte-for-byte. Existing game/unit/browser evidence is reused; this deployment does not claim physical-phone or human visual/listening acceptance. Historical no-deployment statements describe the original handoff dates.
