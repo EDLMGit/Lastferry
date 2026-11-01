@@ -100,12 +100,12 @@ export async function keyAct(page: Page, id: string) {
     if (!current) throw Error('No current location selector is available');
     await tabTo(page, current);
     await page.keyboard.press('Enter');
-    await expect(page.locator('#local-heading')).toBeFocused();
+    await expect(page.locator('#local-context')).toBeFocused();
   }
   await tabTo(page, id);
   await page.keyboard.press('Enter');
   if (id.startsWith('map-')) {
-    await expect(page.locator('#local-heading')).toBeFocused();
+    await expect(page.locator('#local-context')).toBeFocused();
     await tabTo(page, 'sail');
     await page.keyboard.press('Enter');
   } else if (await page.locator('#dialog[open][data-mode=action]').count()) {

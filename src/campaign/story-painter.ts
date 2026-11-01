@@ -10,6 +10,29 @@ type RabbitPose = {
   restHand?: number;
 };
 
+export function harborComposition(width: number, height: number) {
+  const portrait = width < 600;
+  const short = !portrait && height < 360;
+  const scale = portrait
+    ? Math.min((width - 28) / 350, (height - 72) / 290, 1.2)
+    : short
+      ? Math.min((width - 270) / 610, (height - 42) / 260, 1.95)
+      : Math.min((width - 80) / 670, (height - 96) / 330, 1.95);
+  const x = portrait ? width * 0.5 : short ? width * 0.66 : width * 0.5 + 38 * scale;
+  const y = height * (portrait ? 0.62 : short ? 0.64 : 0.66);
+  return {
+    portrait,
+    x,
+    y,
+    scale,
+    caption: {
+      left: short ? 22 : Math.max(26, x - 315 * scale),
+      top: short ? 38 : Math.max(52, y - 262 * scale),
+      width: short ? Math.min(220, width * 0.3) : Math.min(440, 250 * scale),
+    },
+  };
+}
+
 export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
   const context = canvas.getContext('2d');
   if (!context) throw new Error('Story artwork requires Canvas2D.');
@@ -724,15 +747,15 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
     finish(t);
   }
   function harborShot(t: number) {
-    const portrait = W < 480,
-      short = H < 300,
+    const composition = harborComposition(W, H),
+      { portrait, x, y, scale: s } = composition,
       place = ease((t - 0.6) / 2.6),
       rest = ease((t - 3.4) / 1.1),
       lift = 1 - place;
     backdrop(t, 1);
-    tower(W * 0.86, H * 0.46, portrait ? 0.62 : short ? 0.53 : 0.78);
-    const distantX = W * (portrait ? 0.15 : 0.45),
-      distantY = H * 0.51;
+    tower(x + (portrait ? 125 : 215) * s, y - 108 * s, s * 0.45);
+    const distantX = x - (portrait ? 128 : 236) * s,
+      distantY = y - (portrait ? 148 : 145) * s;
     path(
       `M ${distantX - 9} ${distantY} L ${distantX - 9} ${distantY - 9} L ${distantX + 7} ${distantY - 9} L ${distantX + 7} ${distantY} Z`,
       '#6e9388',
@@ -744,60 +767,63 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
     glow(distantX, distantY - 4, 15, 0.22);
     ctx.fillStyle = '#efcf8d';
     ctx.fillRect(distantX - 2, distantY - 7, 4, 5);
-    foregroundWater(H * 0.61, t, { x: distantX, strength: 0.3 });
-    const boatScale = portrait ? Math.min(0.6, W / 650) : short ? 0.62 : 0.94;
-    boat(W * (portrait ? 0.18 : 0.3), H * 0.88, boatScale, 7, 1, false, false);
-    const ground = H * (portrait ? 0.765 : 0.82),
-      left = W * (portrait ? 0.34 : 0.54),
-      right = W + 20;
+    foregroundWater(y - 80 * s, t, { x: distantX, strength: 0.3 });
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(s, s);
+    const left = portrait ? -44 : -45,
+      right = portrait ? 172 : 263,
+      back = portrait ? -17 : -20,
+      waterline = portrait ? 92 : 102;
     path(
-      `M ${left} ${ground + 9} Q ${left + 8} ${ground - 8} ${left + 35} ${ground - 8} L ${right} ${ground - 8} L ${right} ${H + 20} L ${left + 20} ${H + 20} Z`,
+      `M ${left} 9 Q ${left + 8} -8 ${left + 35} ${back} L ${right - 24} ${back - 15} L ${right} -2 L ${right - 11} ${waterline - 2} Q ${right - 49} ${waterline + 22} ${left + 19} ${waterline} Z`,
       C.rock,
     );
     path(
-      `M ${left} ${ground + 9} Q ${left + 8} ${ground - 8} ${left + 35} ${ground - 8} L ${right} ${ground - 8} L ${right} ${ground + 13} L ${left + 14} ${ground + 17} Z`,
+      `M ${left} 9 Q ${left + 8} -8 ${left + 35} ${back} L ${right - 24} ${back - 15} L ${right} -2 L ${right - 7} 17 L ${left + 14} 23 Z`,
       C.grass,
     );
     line(
       [
-        [left + 12, ground + 17],
-        [right, ground + 13],
+        [left + 12, 23],
+        [right - 7, 17],
       ],
       '#b8bb96',
       2,
     );
-    line(
-      [
-        [left + 19, ground + 24],
-        [left + 32, H],
-      ],
-      '#729482',
-      1.3,
-    );
-    const scale = Math.min(portrait ? 1.55 : short ? 1.02 : 1.75, (H * 0.4) / 91),
-      rueX = W * (portrait ? 0.5 : 0.66),
-      pipX = W * (portrait ? 0.72 : 0.79),
-      mossX =
-        portrait && W < 360
-          ? Math.min(W * 0.855, W - 38 * scale * 0.87 - 6)
-          : W * (portrait ? 0.855 : 0.915);
+    for (const offset of [28, 106, 183])
+      if (left + offset < right - 15)
+        line([[left + offset, 30], [left + offset + 8, waterline - 10]], '#729482', 1.3);
+    path(`M ${left + 20} 49 L ${right - 16} 42 M ${left + 24} 76 L ${right - 20} 68`, null, '#60877b', 1.4);
+    ellipse((left + right) / 2, waterline + 2, (right - left) * 0.45, 7, 'rgba(25,71,72,.22)');
+    line([[left + 27, waterline + 5], [right - 48, waterline + 4]], '#a9c7b2', 1.6);
+    const boatX = portrait ? -90 : -184,
+      boatY = portrait ? 82 : 84,
+      boatScale = portrait ? 0.78 : 1.08;
+    line([[left + 8, 14], [boatX + 80 * boatScale, boatY - 8]], '#b9a57d', 1.7);
+    boat(boatX, boatY, boatScale, 7, 1, false, false);
+    const scale = portrait ? 1.22 : 1.44,
+      rueX = portrait ? -1 : 28,
+      pipX = portrait ? 72 : 120,
+      mossX = portrait ? 132 : 207;
     const mossSettle = ease((t - 0.5) / 2);
-    sheep(mossX, ground - 3 + mossSettle * 2, scale * 0.87, Math.sin(mossSettle * Math.PI) * 0.12);
-    rabbit(pipX, ground, scale * 0.82, 'cream', {
+    sheep(mossX, -5 + mossSettle * 2, scale * 0.87, Math.sin(mossSettle * Math.PI) * 0.12);
+    rabbit(pipX, -5, scale * 0.82, 'cream', {
       head: mix(0.1, -0.16, ease((t - 1.7) / 1.7)),
       warmth: 0.45,
     });
-    rabbit(rueX, ground, scale, 'tan', {
+    rabbit(rueX, 0, scale, 'tan', {
       lift,
       restHand: rest,
       head: mix(-0.12, 0.05, place),
       warmth: 0.7,
     });
     const lampX = rueX + (mix(-9, -34, lift) - 7) * scale,
-      lampY = ground + (mix(-25, -61, lift) + 14) * scale;
-    ellipse(rueX - 16 * scale, ground + 2, 15 * scale, 3 * scale, 'rgba(21,58,59,.20)');
+      lampY = (mix(-25, -61, lift) + 14) * scale;
+    ellipse(rueX - 16 * scale, 2, 15 * scale, 3 * scale, 'rgba(21,58,59,.20)');
     lantern(lampX, lampY, scale, 1, Math.sin(place * Math.PI) * 0.04);
     glow(lampX, lampY, 58 * scale, 0.22);
+    ctx.restore();
     finish(t);
   }
   function driftwoodShot(t: number) {

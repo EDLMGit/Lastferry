@@ -1,4 +1,4 @@
-import { createCoveStoryPainter } from './story-painter';
+import { createCoveStoryPainter, harborComposition } from './story-painter';
 import type { StoryPresentation } from './presentation';
 import { storyScenes } from './registry';
 
@@ -15,6 +15,15 @@ export class StoryView {
     const rect = this.canvas.getBoundingClientRect();
     if (rect.width < 1 || rect.height < 1) return;
     const ratio = Math.min(devicePixelRatio || 1, 2);
+    const shot = storyScenes[frame.scene].shots[frame.shotIndex];
+    const picture = this.canvas.parentElement!;
+    picture.dataset.illustration = shot.illustration;
+    if (shot.illustration === 'harbor') {
+      const { caption } = harborComposition(rect.width, rect.height);
+      picture.style.setProperty('--harbor-caption-left', `${caption.left}px`);
+      picture.style.setProperty('--harbor-caption-top', `${caption.top}px`);
+      picture.style.setProperty('--harbor-caption-width', `${caption.width}px`);
+    }
     const size = `${rect.width}:${rect.height}:${ratio}`;
     if (size !== this.lastSize) {
       this.painter.resize(rect.width, rect.height, ratio);
@@ -23,7 +32,6 @@ export class StoryView {
     }
     const key = `${frame.scene}:${frame.shot}:${frame.elapsed}`;
     if (key === this.lastFrame) return;
-    const shot = storyScenes[frame.scene].shots[frame.shotIndex];
     this.painter.draw(shot.illustration, frame.elapsed / 1000);
     this.lastFrame = key;
     this.drawCount++;

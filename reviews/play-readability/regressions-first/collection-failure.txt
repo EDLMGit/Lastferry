@@ -1,0 +1,4 @@
+First attempt: Node 24.15.0 / Playwright 1.64.1 collection failed before browser launch.
+TypeError: Module data/bellwater/witnesses.json needs an import attribute of type: json.
+Error: No tests found.
+The spec now uses readFileSync + JSON.parse for source witness loading. No runtime code changed.

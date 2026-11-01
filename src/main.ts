@@ -1,5 +1,6 @@
 import './style.css';
 import './ui/cove-ui.css';
+import './ui/play-controls.css';
 import {
   controlContent,
   iconMarkup,
@@ -83,7 +84,7 @@ let title = level.id === baseline.id ? 'The First Crossing' : level.title;
 const app = document.querySelector<HTMLDivElement>('#app')!;
 app.classList.add('cove-kit');
 observePassengerPortraits(app);
-app.innerHTML = `<main class="game ${experiment ? 'holding' : isBellwater ? 'bellwater' : 'baseline'}"><section id="seascape" aria-label="${level.title}" aria-busy="false"><div id="world"></div><header class="hud"><div class="identity"><h1>${title}</h1><p id="objective"></p></div><div id="readout" aria-label="Crossing progress"></div><nav class="tools" aria-label="Crossing controls"><button id="undo">↶ Undo</button><button id="wait">Wait <span>· 1 action</span></button><button id="menu">Menu</button><button id="sound-toggle" aria-label="Mute sound" aria-pressed="false">♫</button></nav></header><nav id="map-labels" aria-label="Map stops"></nav><nav id="dock-actions" aria-label="Passenger actions" hidden></nav><section id="local-context" role="region" aria-labelledby="local-heading" hidden></section><p id="selection-hint">Select a place to see its options.</p><svg id="selection-leader" aria-hidden="true"></svg><button id="status-toggle" aria-haspopup="dialog" aria-label="Open tide and pier forecast"></button><p id="transition-status" role="status" tabindex="-1" hidden>Finishing this action…</p><p class="portrait-note">Turn sideways for a wider view.</p></section><div id="announcement" class="sr-only" role="status" aria-live="polite"></div></main><dialog id="dialog" aria-labelledby="dialog-title"><div id="dialog-content"></div></dialog>`;
+app.innerHTML = `<main class="game ${experiment ? 'holding' : isBellwater ? 'bellwater' : 'baseline'}"><section id="seascape" aria-label="${level.title}" aria-busy="false"><div id="world"></div><button id="load-toggle" aria-expanded="false" aria-controls="crossing-details" aria-label="Crossing status"></button><section id="crossing-details" class="cove-panel cove-surface cove-surface--compact" aria-label="Crossing details" hidden><div class="identity"><h1>${title}</h1><p id="objective"></p></div><div id="readout" aria-label="Crossing progress"></div><button id="close-status">Close status</button></section><nav class="tools" aria-label="Crossing controls"><button id="undo">↶ Undo</button><button id="wait">Wait <span>· 1 action</span></button><button id="menu">Menu</button><button id="sound-toggle" aria-label="Mute sound" aria-pressed="false">♫</button></nav><nav id="map-labels" aria-label="Map stops"></nav><nav id="dock-actions" aria-label="Passenger actions" hidden></nav><section id="local-context" role="region" aria-label="Selected place" tabindex="-1" hidden></section><p id="selection-hint">Select a place to see its options.</p><svg id="selection-leader" aria-hidden="true"></svg><button id="status-toggle" aria-haspopup="dialog" aria-label="Open tide and pier forecast"></button><p id="transition-status" role="status" tabindex="-1" hidden>Finishing this action…</p><p class="portrait-note">Turn sideways for a wider view.</p></section><div id="announcement" class="sr-only" role="status" aria-live="polite"></div></main><dialog id="dialog" aria-labelledby="dialog-title"><div id="dialog-content"></div></dialog>`;
 
 const homeSurface = document.createElement('section');
 
@@ -126,9 +127,8 @@ for (const [id, icon, label] of [
   setControl($(id), icon, label);
 setControl($('menu'), 'menu', 'Menu', 'quiet', true);
 $('menu').title = 'Menu';
-document
-  .querySelector('.hud')!
-  .classList.add('cove-panel', 'cove-surface', 'cove-surface--compact');
+setControl($('load-toggle'), null, '0/4 · Depth 1', 'quiet');
+setControl($('close-status'), 'close', 'Close status', 'quiet');
 $('local-context').classList.add('cove-panel', 'cove-surface', 'cove-surface--compact');
 $('status-toggle').classList.add('cove-panel', 'cove-surface', 'cove-surface--compact');
 let session = new Session(level);
@@ -185,6 +185,7 @@ type SoundIntent = 'enable' | 'retry' | 'mute';
 let soundIntent: { control: HTMLElement; intent: SoundIntent } | null = null;
 let viewFence: { x: number; y: number; until: number } | null = null;
 let locationSelection: string | null = null;
+let locationDetails = false;
 let emphasis: string | undefined;
 let selectionOrigin: { x: number; y: number } | null = null;
 let actionOrigin: { x: number; y: number } | null = null;
@@ -210,6 +211,7 @@ let pageDisposed = false;
 let viewport = visibleViewport(window.visualViewport, innerWidth, innerHeight);
 let safeBounds: Rectangle = viewport;
 let usableBounds: Rectangle = viewport;
+let overviewObstaclesKey = '';
 let closingFence: {
   rect: DOMRect;
   until: number;
@@ -523,6 +525,7 @@ function scheduleStoryClock() {
   });
 }
 function mountCove(next: typeof level) {
+  overviewObstaclesKey = '';
   clearReceipt();
 
   storyPresentation.cancel();
@@ -551,6 +554,7 @@ function mountCove(next: typeof level) {
   panPointer = null;
   suppressPanClick = false;
   locationSelection = null;
+  locationDetails = false;
   selectionOrigin = null;
   actionOrigin = null;
   actionAnchor = null;
@@ -953,18 +957,7 @@ function updateViewport() {
     right: inset('right'),
     bottom: inset('bottom'),
   });
-  const hud = document.querySelector<HTMLElement>('.hud')!.getBoundingClientRect();
-  const controls = viewControls.getBoundingClientRect();
-  const forecast = $('status-toggle').getBoundingClientRect();
-  usableBounds = {
-    ...safeBounds,
-    top: Math.max(safeBounds.top, hud.bottom + 8),
-    bottom: Math.min(
-      safeBounds.bottom,
-      controls.top - 8,
-      $('status-toggle').hidden ? safeBounds.bottom : forecast.top - 8,
-    ),
-  };
+  usableBounds = insetRectangle(safeBounds, { left: 10, right: 10, top: 10, bottom: 10 });
 
   if (app.classList.contains('home-screen')) {
     const menu = $('home-menu').getBoundingClientRect();
@@ -1010,6 +1003,18 @@ function updateViewport() {
     top: usableBounds.top - canvas.top,
     bottom: usableBounds.bottom - canvas.top,
   });
+  if (!journeySurface()) {
+    const key = [level.id, width, height, canvas.left, canvas.top, ...Object.values(safeBounds), world.viewStatus().mode].join(':');
+    if (overviewObstaclesKey !== key) {
+      overviewObstaclesKey = key;
+      const rectangles = [...document.querySelectorAll<HTMLElement>('.tools button, #load-toggle, #status-toggle, .view-controls button')]
+        .filter((element) => !element.hidden && element.getClientRects().length > 0 && getComputedStyle(element).visibility !== 'hidden')
+        .map((element) => element.getBoundingClientRect())
+        .filter((rect) => rect.width > 0 && rect.height > 0)
+        .map((rect) => ({ left: rect.left - canvas.left, right: rect.right - canvas.left, top: rect.top - canvas.top, bottom: rect.bottom - canvas.top }));
+      world.setOverviewObstacles(rectangles);
+    }
+  }
 }
 
 function renderMotion() {
@@ -1040,7 +1045,7 @@ function available(preferred?: string) {
     !target.closest('[inert]')
   )
     return target;
-  if (locationSelection && !$('local-context').hidden) return $('local-heading');
+  if (locationSelection && !$('local-context').hidden) return $('local-context');
   const marker = $(`map-${session.state.boatNodeId}`);
   return marker?.getClientRects().length ? marker : $('menu');
 }
@@ -1491,6 +1496,7 @@ function clearLocation(restore = false) {
   actionOrigin = null;
   renderMap();
   renderLocation();
+  renderDock();
   positionMap();
   highlight();
   if (restore || $('local-context').contains(document.activeElement))
@@ -1507,14 +1513,16 @@ function selectLocation(id: string) {
   actionOrigin = null;
   if (locationSelection !== id) {
     locationSelection = id;
+    locationDetails = false;
     selectionOrigin = !keyboardInput && lastPointer ? { x: lastPointer.x, y: lastPointer.y } : null;
     world.frameLocation(id);
     renderMap();
     renderLocation();
+    renderDock();
     positionMap();
   }
   highlight();
-  $('local-heading').focus({ preventScroll: true });
+  $('local-context').focus({ preventScroll: true });
   $('announcement').textContent = `${nodeNames[id]} selected. Inspection is free.`;
 }
 function localContext() {
@@ -1613,56 +1621,68 @@ function renderLocation() {
           })
           .join('')}</details>`
       : '';
-  const actions =
-    !facts.current && facts.move
-      ? `<button id="sail" data-risk="${facts.wouldLose ? 'loss' : 'safe'}" ${facts.canSail ? '' : 'disabled'}>Sail · 1 action</button>`
-      : '';
-  card.innerHTML = `<header class="location-head"><div><p class="location-role">${facts.current ? 'You are here' : facts.home ? 'Home · delivery destination' : facts.relation === 'remote' ? 'Free inspection' : facts.wouldLose ? 'Flood warning' : 'Direct passage'}</p><h2 id="local-heading" tabindex="-1">${facts.name}${facts.home && facts.current ? ' · Home' : ''}</h2></div><button id="close-location" aria-label="Close location card">×</button></header><div id="location-facts">${details}${routes}</div>${actions ? `<footer id="local-actions">${actions}</footer>` : ''}`;
+  const edge = facts.move ? edgeTo(session.state, facts.id, level) : null;
+  const loss = facts.wouldLose && facts.move ? preview(session.state, facts.move, level).state.lossReason : null;
+  const reason = facts.relation === 'remote'
+    ? 'No direct passage'
+    : !facts.current && !facts.canSail
+      ? edge && edge.baseDepth + session.state.tideLevel < draft(session.state, level)
+        ? 'Needs depth ' + draft(session.state, level) + ' · passage ' + (edge.baseDepth + session.state.tideLevel)
+        : facts.limitation
+      : loss ? `${passengerList(loss.passengerIds, level)} will be lost when ${nodeNames[level.piers.find((pier) => pier.id === loss.pierId)!.nodeId]} floods.` : facts.consequence;
+  const actions = !facts.current && facts.move
+    ? '<button id="sail" data-risk="' + (facts.wouldLose ? 'loss' : 'safe') + '" ' + (facts.canSail ? '' : 'disabled') + '>Sail · 1 action</button>'
+    : facts.current ? '<span class="current-place">You are here</span>' : '';
+  card.setAttribute('aria-label', facts.name + ' · free inspection');
+  card.innerHTML = '<div class="location-toolbar">' + actions + '<button id="location-details" aria-expanded="' + locationDetails + '" aria-controls="location-facts">Details</button><button id="close-location" aria-label="Close location card">×</button></div>' + paragraph(reason, facts.wouldLose ? 'location-warning' : 'location-reason') + '<div id="location-facts" ' + (locationDetails ? '' : 'hidden') + '>' + details + routes + '</div>';
   for (const button of card.querySelectorAll<HTMLButtonElement>('[data-inspect-route]')) {
     setControl(button, null, button.textContent ?? '', 'quiet');
     button.onclick = () => selectLocation(button.dataset.inspectRoute!);
   }
+  setControl($('location-details'), null, 'Details', 'quiet');
+  $('location-details').onclick = () => {
+    locationDetails = !locationDetails;
+    $('location-details').setAttribute('aria-expanded', String(locationDetails));
+    $('location-facts').hidden = !locationDetails;
+    positionMap();
+  };
   setControl($('close-location'), 'close', 'Close location card', 'quiet', true);
   if ($('sail')) {
-    setControl($('sail'), 'sail', 'Sail · 1 action', 'action');
-    $('sail').setAttribute('aria-label', `Sail to ${facts.name} · 1 action`);
+    setControl($('sail'), 'sail', facts.wouldLose ? 'Sail anyway · 1 action' : 'Sail · 1 action', 'action');
+    $('sail').setAttribute('aria-label', (facts.wouldLose ? 'Sail anyway to ' : 'Sail to ') + facts.name + ' · 1 action');
   }
   $('close-location').onclick = (event) => {
     event.stopPropagation();
-    if (!keyboardInput)
-      closingFence = {
-        scope: 'dismiss',
-        rect: $('close-location').getBoundingClientRect(),
-        until: performance.now() + 180,
-        x: event.clientX,
-        y: event.clientY,
-      };
+    if (!keyboardInput) closingFence = {
+      scope: 'dismiss', rect: $('close-location').getBoundingClientRect(),
+      until: performance.now() + 180, x: event.clientX, y: event.clientY,
+    };
     clearLocation(true);
   };
-  if ($('sail'))
-    $('sail').onclick = (event) => {
-      event.stopPropagation();
-      if (blocked() || !facts.move || !facts.canSail) return;
-      if (facts.wouldLose) openDialog('action', facts.move, 'sail');
-      else {
-        if (!keyboardInput)
-          closingFence = {
-            scope: 'commit',
-            rect: $('sail').getBoundingClientRect(),
-            until: performance.now() + 180,
-            x: event.clientX,
-            y: event.clientY,
-          };
-        returnId = 'local-heading';
-        execute(facts.move);
-      }
+  if ($('sail')) $('sail').onclick = (event) => {
+    event.stopPropagation();
+    if (blocked() || event.detail > 1 || locationSelection !== facts.id) return;
+    const current = locationFacts(session.state, facts.id, level);
+    if (!current.move || !current.canSail) return;
+    if (current.wouldLose !== facts.wouldLose || current.consequence !== facts.consequence) {
+      renderLocation();
+      positionMap();
+      return;
+    }
+    if (!keyboardInput) closingFence = {
+      scope: 'commit', rect: $('sail').getBoundingClientRect(),
+      until: performance.now() + 180, x: event.clientX, y: event.clientY,
     };
+    returnId = 'local-context';
+    execute(current.move);
+  };
 }
 function renderDock() {
   const dock = $('dock-actions'),
     facts = locationFacts(session.state, session.state.boatNodeId, level),
     visible =
       !journeySurface() &&
+      (!locationSelection || locationSelection === session.state.boatNodeId) &&
       !session.busy &&
       !dialog.open &&
       session.state.status === 'playing' &&
@@ -1737,10 +1757,12 @@ function render() {
     facts = statusCopy(s, level),
     objective = objectiveCopy(s, level);
   $('objective').textContent = objective.headline;
+  setControl($('load-toggle'), null, `${load(s, level)}/${level.rules.capacity} · Depth ${draft(s, level)}`, 'quiet');
+  $('load-toggle').setAttribute('aria-label', `${load(s, level)} of ${level.rules.capacity} spaces · boat needs depth ${draft(s, level)} · crossing status`);
   $('readout').innerHTML =
     `<strong id="boat-summary">Depth ${draft(s, level)} · ${load(s, level)}/${level.rules.capacity} spaces</strong><span><b data-testid="turn">${String(s.turn).padStart(2, '0')}</b> actions · Tide <b data-testid="tide">${s.tideLevel}</b> · <b id="progress">${objective.progress}</b></span>`;
   $('status-toggle').innerHTML =
-    `<span class="status-symbol" aria-hidden="true">${facts.urgent ? '!' : '≈'}</span><span><strong id="status-headline">${facts.headline}</strong>${facts.detail ? `<span id="status-detail">${facts.detail}</span>` : '<span id="status-detail"></span>'}</span><span class="forecast-label">Forecast</span>`;
+    `<span class="status-symbol" aria-hidden="true">${facts.urgent ? '!' : '≈'}</span><strong id="status-headline">${facts.urgent ? facts.headline : forecastCopy(s, level).headline}</strong>`;
   $('status-toggle').classList.toggle('urgent', facts.urgent);
   $('status-toggle').hidden = s.status === 'won';
   $('selection-hint').hidden = s.status === 'won' || !!locationSelection;
@@ -1823,7 +1845,7 @@ function positionReceipt() {
   const boat = local(frame.boat);
   const obstacles = [
     ...document.querySelectorAll<HTMLElement>(
-      '.hud, #dock-actions, #status-toggle, .view-controls, .map-target, .map-name, #local-context, #dialog[open]',
+      '.tools button, #load-toggle, #crossing-details, #dock-actions, #status-toggle, .view-controls, .map-target, .map-name, #local-context, #dialog[open]',
     ),
   ]
     .filter(
@@ -1838,7 +1860,7 @@ function positionReceipt() {
     rect.width,
     rect.height,
     safeBounds,
-    [...obstacles, boat, ...frame.passengers.map(local)],
+    [...obstacles, boat, ...frame.passengers.map(local), local(frame.lighthouse), ...(frame.bell ? [local(frame.bell)] : [])],
     [
       [boat.left - rect.width - 12, boat.top],
       [boat.left, boat.bottom + 12],
@@ -1997,6 +2019,23 @@ function positionDialog() {
     }
   }
 }
+function playObstacles() {
+  return [...document.querySelectorAll<HTMLElement>('.tools button, #load-toggle, #crossing-details, #status-toggle, .view-controls button')]
+    .filter((element) => !element.hidden && !element.closest('[hidden]') && element.getClientRects().length > 0 && getComputedStyle(element).visibility !== 'hidden')
+    .map((element) => element.getBoundingClientRect());
+}
+function factsWidth() {
+  return locationSelection && locationFacts(session.state, locationSelection, level).wouldLose ? 320 : 292;
+}
+function toggleStatus(open: boolean) {
+  $('crossing-details').hidden = !open;
+  $('load-toggle').setAttribute('aria-expanded', String(open));
+  labelLayout.clear();
+  scheduleLayout();
+}
+$('load-toggle').onclick = () => toggleStatus(!!$('crossing-details').hidden);
+$('close-status').onclick = () => { toggleStatus(false); $('load-toggle').focus({ preventScroll: true }); };
+
 function positionMap() {
   if (session.state.status === 'won') {
     labelLayout.clear();
@@ -2023,17 +2062,8 @@ function positionMap() {
     bottom: r.bottom - stage.top,
   });
   const figures = [frame.boat, ...frame.passengers].map(atLocal);
-  const chrome = [
-    document.querySelector<HTMLElement>('.hud')!,
-    viewControls,
-    ...(!$('status-toggle').hidden ? [$('status-toggle')] : []),
-  ].map((e) => toLocal(e.getBoundingClientRect()));
-  const bounds = toLocal(safeBounds);
-  bounds.top = Math.max(bounds.top, chrome[0].bottom + 6);
-  bounds.bottom = Math.max(
-    bounds.top + 80,
-    Math.min(bounds.bottom, ...chrome.slice(1).map((r) => r.top - 6)),
-  );
+  const chrome = playObstacles().map(toLocal);
+  const bounds = toLocal(insetRectangle(safeBounds, { left: 8, right: 8, top: 8, bottom: 8 }));
   const markerKey = [
     level.id,
     canvas.width,
@@ -2063,7 +2093,7 @@ function positionMap() {
           endpoint,
           currentBoat,
           bounds,
-          otherTargets.map((target) => target.bounds),
+          [...chrome, ...otherTargets.map((target) => target.bounds)],
         );
         currentMarkerOffset = { key: markerKey, x: clear.x - endpoint.x, y: clear.y - endpoint.y };
       }
@@ -2076,11 +2106,54 @@ function positionMap() {
   );
   const placed: Rectangle[] = [];
   const leaders: string[] = [];
+  for (const marker of markers) {
+    const inside = marker.x >= bounds.left && marker.x <= bounds.right && marker.y >= bounds.top && marker.y <= bounds.bottom;
+    if (!inside || !chrome.some((obstacle) => overlaps(marker.bounds, obstacle, 2))) continue;
+    const origin = { x: marker.x, y: marker.y };
+    const clear = placeLocalCard(marker.size, marker.size, bounds,
+      [...chrome, ...figures, ...markers.filter((other) => other.id !== marker.id).map((other) => other.bounds)],
+      [[marker.bounds.left, marker.bounds.top]], [marker.bounds.left, marker.bounds.top]);
+    if (!clear) continue;
+    marker.bounds = clear;
+    marker.x = (clear.left + clear.right) / 2;
+    marker.y = (clear.top + clear.bottom) / 2;
+    leaders.push(`<line x1="${marker.x}" y1="${marker.y}" x2="${origin.x}" y2="${origin.y}" />`);
+  }
   if (!session.busy) {
     const current = markers.find((marker) => marker.id === session.state.boatNodeId)!;
     const contactX = Math.max(currentBoat.left, Math.min(currentBoat.right, current.x));
     const contactY = Math.max(currentBoat.top, Math.min(currentBoat.bottom, current.y));
     leaders.push(`<line x1="${current.x}" y1="${current.y}" x2="${contactX}" y2="${contactY}" />`);
+  }
+  cardPlacement = null;
+  if (locationSelection && !$('local-context').hidden) {
+    const local = $('local-context'),
+      marker = markers.find((m) => m.id === locationSelection)!;
+    local.style.width = Math.min(locationDetails ? 330 : factsWidth(), bounds.right - bounds.left) + 'px';
+    local.style.setProperty('--local-max-height', Math.max(80, bounds.bottom - bounds.top) + 'px');
+    protectedBounds = [...figures, ...chrome];
+    const avoid = [
+      ...figures, ...chrome,
+      atLocal(frame.lighthouse), ...(frame.bell ? [atLocal(frame.bell)] : []),
+      ...markers.map((m) => m.bounds),
+      ...(selectionOrigin ? [{ left: selectionOrigin.x - stage.left - 12, right: selectionOrigin.x - stage.left + 12, top: selectionOrigin.y - stage.top - 12, bottom: selectionOrigin.y - stage.top + 12 }] : []),
+    ];
+    const nearby = placeActionCard(local.offsetWidth, local.offsetHeight, bounds, marker.bounds, {
+      portrait: canvas.width < canvas.height,
+      avoid,
+    });
+    const choice = placeLocalCard(local.offsetWidth, local.offsetHeight, bounds, avoid, [[nearby.left, nearby.top]], [marker.x - local.offsetWidth / 2, marker.y]) ?? nearby;
+    cardPlacement = choice;
+    placed.push(choice);
+    local.style.left = choice.left + 'px';
+    local.style.top = choice.top + 'px';
+    const x = Math.max(choice.left, Math.min(choice.right, marker.x)),
+      y = Math.max(choice.top, Math.min(choice.bottom, marker.y));
+    $('selection-leader').innerHTML =
+      '<line x1="' + marker.x + '" y1="' + marker.y + '" x2="' + x + '" y2="' + y + '" />';
+  } else if (!dialog.open) {
+    protectedBounds = [];
+    $('selection-leader').innerHTML = '';
   }
   const layoutKey = [canvas.width, canvas.height, world.layoutRevision, session.state.turn].join(
     ':',
@@ -2124,8 +2197,8 @@ function positionMap() {
         boat.bottom > bounds.top &&
         boat.top < bounds.bottom;
     dock.style.visibility = visible || keyboardInput ? 'visible' : 'hidden';
-    const avoidSets =
-      level.id === 'wide-berth' ? [[...avoid, ...frame.places.map(atLocal)], avoid] : [avoid];
+    const landmarks = level.id === 'wide-berth' ? frame.places.map(atLocal) : [atLocal(frame.lighthouse), ...(frame.bell ? [atLocal(frame.bell)] : [])];
+    const avoidSets = [[...avoid, ...landmarks], avoid];
     const layouts = level.id === 'wide-berth' && dock.children.length > 1 ? ['row', 'column'] : ['row'];
     let nearby: ReturnType<typeof placeActionCard> | null = null;
     let clear: Rectangle | null = null;
@@ -2154,7 +2227,7 @@ function positionMap() {
     return choice;
   };
   const reservedDock =
-    level.id === 'wide-berth' ? placeDock([...figures, ...markers.map((m) => m.bounds)]) : null;
+    level.id === 'wide-berth' ? placeDock([...chrome, ...figures, ...placed, ...markers.map((m) => m.bounds)]) : null;
   const nameObstacles = reservedDock
     ? [
         ...markers,
@@ -2181,7 +2254,9 @@ function positionMap() {
           nameObstacles,
           bounds,
           [
+            ...chrome,
             ...figures,
+            ...placed,
             ...(level.id === 'wide-berth' ? frame.places.map(atLocal) : []),
             ...(hintBounds ? [hintBounds] : []),
           ],
@@ -2214,14 +2289,15 @@ function positionMap() {
       const top = Math.max(bounds.top, Math.min(bounds.bottom - h, y));
       return { left, top, right: left + w, bottom: top + h };
     });
-    const avoid = [...figures, ...placed, ...(hintBounds ? [hintBounds] : [])];
+    const avoid = [...chrome, ...figures, ...placed, ...(hintBounds ? [hintBounds] : [])];
     const score = (choice: Rectangle) =>
       avoid.filter((r) => overlaps(choice, r, 2)).length * 200 +
       Math.hypot(choice.left - preferred[0][0], choice.top - preferred[0][1]);
-    const choice =
-      driftwoodNames?.get(id) ??
-      labelLayout.get(id) ??
-      candidates.sort((a, b) => score(a) - score(b))[0];
+    const existing = driftwoodNames?.get(id) ?? labelLayout.get(id);
+    const choice = existing && !avoid.some((r) => overlaps(existing, r, 2))
+      ? existing
+      : placeLocalCard(w, h, bounds, [...avoid, ...markers.map((m) => m.bounds)], preferred, [marker.x - w / 2, marker.y])
+        ?? candidates.sort((a, b) => score(a) - score(b))[0];
     labelLayout.set(id, choice);
     name.style.left = choice.left - marker.bounds.left + 'px';
     name.style.top = choice.top - marker.bounds.top + 'px';
@@ -2234,33 +2310,7 @@ function positionMap() {
       );
   }
   if ($('map-leaders')) $('map-leaders').innerHTML = leaders.join('');
-  if (level.id !== 'wide-berth') placeDock([...figures, ...placed]);
-  cardPlacement = null;
-  if (locationSelection && !$('local-context').hidden) {
-    const local = $('local-context'),
-      marker = markers.find((m) => m.id === locationSelection)!;
-    local.style.width = Math.min(330, bounds.right - bounds.left) + 'px';
-    local.style.setProperty('--local-max-height', Math.max(80, bounds.bottom - bounds.top) + 'px');
-    protectedBounds = [...figures, ...chrome];
-    const choice = placeActionCard(local.offsetWidth, local.offsetHeight, bounds, marker.bounds, {
-      portrait: canvas.width < canvas.height,
-      avoid: [
-        ...figures,
-        ...markers.filter((m) => m.id !== locationSelection).map((m) => m.bounds),
-        ...(dockPlacement ? [dockPlacement] : []),
-      ],
-    });
-    cardPlacement = choice;
-    local.style.left = choice.left + 'px';
-    local.style.top = choice.top + 'px';
-    const x = Math.max(choice.left, Math.min(choice.right, marker.x)),
-      y = Math.max(choice.top, Math.min(choice.bottom, marker.y));
-    $('selection-leader').innerHTML =
-      '<line x1="' + marker.x + '" y1="' + marker.y + '" x2="' + x + '" y2="' + y + '" />';
-  } else if (!dialog.open) {
-    protectedBounds = [];
-    $('selection-leader').innerHTML = '';
-  }
+  if (level.id !== 'wide-berth') placeDock([...chrome, ...figures, ...placed]);
   positionDialog();
 }
 function bindWorld() {
@@ -2368,7 +2418,7 @@ function bindCanvas() {
 bindCanvas();
 const layoutObserver = new ResizeObserver(scheduleLayout);
 layoutObserver.observe(world.host);
-layoutObserver.observe(document.querySelector('.hud')!);
+for (const control of document.querySelectorAll<HTMLElement>('.tools button, #load-toggle, #crossing-details, #local-context')) layoutObserver.observe(control);
 layoutObserver.observe(viewControls);
 layoutObserver.observe($('status-toggle'));
 const refreshLabelFonts = () => {
@@ -2476,6 +2526,20 @@ document.addEventListener(
     if (e.repeat && ['Enter', ' '].includes(e.key)) {
       e.preventDefault();
       e.stopImmediatePropagation();
+      return;
+    }
+    if (e.key === 'Escape' && !dialog.open && !$('crossing-details').hidden) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      toggleStatus(false);
+      $('load-toggle').focus({ preventScroll: true });
+      return;
+    }
+    if (e.key === 'Escape' && !dialog.open && locationSelection && locationDetails) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      $('location-details').click();
+      $('location-details').focus({ preventScroll: true });
       return;
     }
     if (e.key === 'Escape' && !dialog.open && locationSelection) {
@@ -2669,7 +2733,7 @@ if (import.meta.env.DEV)
           safe: safeBounds,
           usable: usableBounds,
           canvas: world.host.getBoundingClientRect().toJSON(),
-          hud: document.querySelector('.hud')!.getBoundingClientRect().toJSON(),
+          controls: playObstacles(),
           fullscreen: document.fullscreenElement === app,
         }),
       getActionPlacement: () =>

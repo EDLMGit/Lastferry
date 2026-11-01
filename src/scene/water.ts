@@ -2,7 +2,7 @@ import * as T from 'three';
 import type { Level } from '../levels/level';
 import type { CanonicalPath } from './paths';
 import { shoreContour } from './shore';
-import { createSeabedField, prepareContour } from './seabed';
+import { createPassageBathymetry, createSeabedField, prepareContour } from './seabed';
 import { sceneLayout } from './layout';
 import { waterVertexShader, waterFragmentShader } from './water-shader';
 
@@ -75,21 +75,7 @@ export function coastalMask(level: Level, paths: Map<string, CanonicalPath>) {
     contour: prepareContour(shoreContour(island, 0.98)),
     height: island.elevation * 0.18,
   }));
-  const shallow = level.edges
-    .filter((edge) => edge.baseDepth < 3)
-    .flatMap((edge) => {
-      const points = paths.get(edge.id)!.points.filter((_, i) => i % 5 === 0);
-      const last = paths.get(edge.id)!.points.at(-1)!;
-      if (points.at(-1) !== last) points.push(last);
-      return points.slice(1).map((b, i) => ({
-        a: new T.Vector2(points[i].x, points[i].z),
-        b: new T.Vector2(b.x, b.z),
-        dx: b.x - points[i].x,
-        dz: b.z - points[i].z,
-        inverseLength: 1 / Math.max(1e-9, (b.x - points[i].x) ** 2 + (b.z - points[i].z) ** 2),
-        strength: edge.baseDepth === 1 ? 1 : 0.5,
-      }));
-    });
+  const bathymetry = createPassageBathymetry(level, paths);
   const size = 256,
     data = new Uint8Array(size * size * 4),
     span = bounds.getSize(new T.Vector2());
@@ -97,23 +83,11 @@ export function coastalMask(level: Level, paths: Map<string, CanonicalPath>) {
     for (let i = 0; i < size; i++) {
       const x = bounds.min.x + ((i + 0.5) / size) * span.x,
         z = bounds.min.y + ((j + 0.5) / size) * span.y;
-      let bank = 0,
-        shore = 0,
+      const bank = bathymetry.sample(x, z).bank;
+      let shore = 0,
         landHeight = 0,
         land = 0,
         nearestCoast = Number.POSITIVE_INFINITY;
-      const width = 1.2 + 0.3 * Math.sin(x * 0.73 - z * 0.91);
-      for (const segment of shallow) {
-        const px = x - segment.a.x,
-          pz = z - segment.a.y;
-        const t = Math.max(
-          0,
-          Math.min(1, (px * segment.dx + pz * segment.dz) * segment.inverseLength),
-        );
-        const dx = px - segment.dx * t,
-          dz = pz - segment.dz * t;
-        bank = Math.max(bank, Math.exp(-(dx * dx + dz * dz) / (width * width)) * segment.strength);
-      }
       for (const coast of coasts) {
         const { distance: d, land: isLand } = coast.contour.sample(x, z);
         shore = Math.max(shore, Math.exp(-(d * d) / 0.2));
@@ -137,7 +111,7 @@ export function coastalMask(level: Level, paths: Map<string, CanonicalPath>) {
   return {
     texture,
     bounds: new T.Vector4(bounds.min.x, bounds.min.y, span.x, span.y),
-    shallowSegments: shallow.length,
+    shallowSegments: bathymetry.shallowSegments,
   };
 }
 export class CoastalWater {
@@ -149,7 +123,7 @@ export class CoastalWater {
   view = new T.Vector3();
   constructor(level: Level, paths: Map<string, CanonicalPath>) {
     this.mask = coastalMask(level, paths);
-    this.seabed = createSeabedField(level, this.mask.bounds);
+    this.seabed = createSeabedField(level, this.mask.bounds, 256, paths);
     const light = sceneLayout(level.id).light;
     const material = new T.ShaderMaterial({
       uniforms: {

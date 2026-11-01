@@ -1,10 +1,10 @@
 # Last Ferry — story scenes for The Long Tide
 
-**Current task:** `WIDE_BERTH_01` adds `a-wider-deck` / `launch` and the actual Wide Berth cove. Holding → Bellwater → Driftwood → Wide Berth is implemented; First Crossing stays independent practice. Driftwood gameplay is user accepted. The new launch and difficulty calibration await human review. Existing Home, autoplay, Pause/Resume, Sound intent and direct/group transfers remain. Current evidence is under `reviews/wide-berth/`; previous records retain their historical scope.
+**Current task:** `PLAY_READABILITY_01` recomposes `another-bell` / `harbor` without changing its five-second shot, caption/cue timing, Sound owner or explicit handoff. Holding → Bellwater → Driftwood → Wide Berth remains the implemented route; First Crossing stays independent practice. Driftwood gameplay is user accepted. Wide's difficulty is now negatively reviewed: the user finds it easy and not fun. Its mandatory campaign role is under revision; functional verification is not difficulty acceptance. Existing Home, autoplay, Pause/Resume, Sound intent and direct/group transfers remain. Current evidence belongs under `reviews/play-readability/`; previous records retain their historical scope.
 
 **Illustrated art implementation:** task `STORY_PRODUCTION_01` in `LAST_FERRY_STORY_PRODUCTION_PACKAGE/NEXT_TASK_STORY_PRODUCTION.md`, from reviewed `6fc5a09dd4ef876ad96ad12d623532f0d13deb10`. The working journey, checkpoints, practice isolation and puzzles remain. The supplied Words and Light opening reference is user-approved; the production port, new Harbor drawing, runtime mix and physical-device experience have separate verification and human-approval status in `reviews/story-production/`. Implementation and focused verification are complete for the documented coverage; human review remains pending.
 
-The campaign has four phases of three coves. Nell joins in Cove 3; a prepared larger ferry launches afterward. Cove 4 teaches its six spaces before Cove 5 introduces Orin. Cove 11 is the hardest puzzle. Cove 12 is a gentle, short final rescue, followed by supper. Orchard and subsequent coves, deer and current mechanics remain future work. C4 now combines its clear six-space benefit with a consequential deep-route versus earlier-staged-rescue choice, deliberately revising its formerly gentle brief.
+The revised twelve-cove plan keeps Nell's rescue at C3, proposes a compact four-space Two Shelters puzzle at C4 and Orin's four-space rescue at C5, then moves the prepared-ferry launch to the C5 → C6 threshold. Two Landings introduces useful six-space mixed groups. C7 teaches a fixed current before C8 reversal; C9 revisits the orchard with different neighbors. C10 is a breather, C11 the hardest synthesis, and C12 the gentle final rescue and supper. These changes are planning only. Current runtime still launches after Driftwood and enters Wide; no scene trigger, save prefix or completion record is moved in this pass. See [recalibration](../LAST_FERRY_PLAY_READABILITY_PACKAGE/CAMPAIGN_RECALIBRATION.md) and the canonical direction/progression documents.
 
 ## Shared presentation contract
 
@@ -70,7 +70,9 @@ The yellow ferry with its red cabin approaches through open water with Moss aboa
 
 ### Shot — Harbor · five seconds
 
-Pip, Rue and Moss are safe on the protected high landing. Rue lowers her lantern onto the landing, completing its contact at about 3.2 seconds, then releases it. Pip turns toward the empty waiting ferry and open water; Moss settles nearby. The warm lighthouse welcome and a small distant cottage light suggest the next community. The image rests as a quiet gathering; nobody boards again.
+Pip, Rue and Moss are safe on a visibly supported high Harbor landing connected to the water. The landing, Rue's lantern, Pip, Moss and nearby empty ferry form one bounded foreground group in local design coordinates. The group scales coherently while sky, water and distant coast extend independently, with deliberate portrait and short-landscape arrangements. Captions sit in relation to the group within the story player's art/caption/control bounds. Do not stretch character spacing with viewport width or use gameplay HUD insets.
+
+Rue lowers her lantern onto the landing, completing its contact at 3.2 seconds, then releases it. Pip's glance links the waiting ferry and distant Bellwater light; Moss settles close by. The image rests as a quiet gathering; nobody boards again. The shot remains five seconds with the normal caption reveal at 1.05 seconds and the existing finite contact cue. Reduced Motion shows a readable settled composition immediately. This presentation correction grants no turns, rescue progress or scene acknowledgment.
 
 **Caption, exact:**
 
@@ -97,11 +99,13 @@ The existing brief caption lead-in, readable HTML, complete description/transcri
 
 **Continue to Driftwood** is immediately available and alone acknowledges the scene before entering the authored original Driftwood start. Presentation spends no actions and grants no larger ferry. After the third actual rescue, terminal Undo remains until explicit acceptance. Explicit Driftwood acceptance now earns the prepared-ferry launch below. The former **Three coves are safe** endpoint is historical and retained through its exact compatible save shape.
 
-**Assets:** `src/campaign/story-painter.ts` is the editable original beaver/yard illustration; `registry.ts` supplies its caption, timing, description and cue. Existing painter functions for opening and Harbor remain unchanged. The actual world, portrait and illustration are distinct renderings of the same stable character identity.
+**Assets:** `src/campaign/story-painter.ts` is the editable original beaver/yard illustration; `registry.ts` supplies its caption, timing, description and cue. The Driftwood addition preserved the then-existing opening and Harbor painters; the current Harbor recomposition has its own scoped evidence. The actual world, portrait and illustration are distinct renderings of the same stable character identity.
 
 ## 2. A wider deck — `a-wider-deck`
 
-**Trigger:** explicit acceptance of Cove 3, Driftwood Yard. **Implemented in WIDE_BERTH_01; new art/pacing acceptance remains separate.** Exact historical three-cove completion offers this scene only after deliberate Continue. Its predecessor is Driftwood's safe Harbor; no new Wide Berth rescue is implied.
+**Runtime trigger, preserved:** explicit acceptance of Cove 3, Driftwood Yard. **Implemented in WIDE_BERTH_01 and visually repaired; human art/pacing acceptance remains separate.** Exact historical three-cove completion offers this scene only after deliberate Continue. Its predecessor is Driftwood's safe Harbor; no new Wide Berth rescue is implied.
+
+**Revised planned trigger:** after explicit C5 Orchard Landing completion, before C6 Two Landings. Nell's already-built spare ferry is prepared by safe neighbors while the captain finishes the inner coast. This relocation is not implemented here and must share a later scoped route/save revision with accepted replacement content. Preserve the existing eight-second artwork, timing and player semantics for reuse. The earlier C3/C4 placement followed the written assignment; negative Wide playtest feedback changes the plan, not historical completion facts.
 
 ### Shot — Launch · eight seconds
 
@@ -115,17 +119,17 @@ The shared 1,050ms visual lead-in, complete caption, accessible description, tra
 
 Only **Continue to Wide Berth** acknowledges `a-wider-deck` and enters the new original start. All scene actions remain presentation-only, with no turn/tide/passenger/Undo mutation. This is a launch of a prepared boat, not construction during a rescue or a currency upgrade. C4 uses its own actual six-space profile; earlier coves keep their four-space boat in Journey and Practice. After actual Wide Berth victory and explicit acceptance, the available-content endpoint says **Four coves are safe**, with Home/Practice/Options. The remaining planned story is not presented as shipped.
 
-**Assets:** the existing `story.illustrations` family gains the editable `launchShot`, `readyFerry` and `launchBeaver` drawing in `src/campaign/story-painter.ts`; registry supplies description, caption, finite duration and cue. Existing opening, Harbor and Driftwood drawing functions retain their accepted equations. The actual six-space ferry/environment families are integrated separately with their production geometry and evidence. No second renderer, live story 3D engine, video or external image dependency is introduced.
+**Assets:** the existing `story.illustrations` family contains the editable `launchShot`, `readyFerry` and `launchBeaver` drawing in `src/campaign/story-painter.ts`; registry supplies description, caption, finite duration and cue. The launch pass preserved the other scene functions; this task changes only the bounded Harbor composition and any necessary shared layout, with regressions inspected separately. The actual six-space ferry/environment families are integrated separately with their production geometry and evidence. No second renderer, live story 3D engine, video or external image dependency is introduced.
 
 ## 3. The orchard neighbor
 
-**Trigger:** entering Cove 5, after the larger boat's introductory cove. **Future milestone.**
+**Planned trigger:** entering Cove 5 with the original four-space ferry, after the proposed Two Shelters encounter. **Future milestone; no scene/model/level is implemented by this plan.** The larger ferry is planned only after this rescue, before C6.
 
 **Composition:** a few orchard leaves frame a landing. Orin steps into a clear view, his short antlers and larger silhouette readable on a phone. Settle into the playable cove while he waits under its authored starting forecast.
 
 **Caption:** “Orin knows every path through the orchard. Tonight, he needs the ferry.”
 
-The real passenger choice teaches Orin's three-space cost. Do not suggest the old four-space ferry could not carry him alone, or that a cinematic creates his cost. His identity needs no hidden ability or special emotional rule.
+The real passenger choice teaches Orin's three-space cost within a useful four-space plan. Do not suggest the old ferry could not carry him alone, or that a cinematic creates his cost. Later six-space capacity enables mixed groups; it does not make Orin transportable for the first time. His identity needs no hidden ability or special emotional rule.
 
 **Assets:** Orin's approved deer model/portrait and a restrained orchard environment family. The small orchard bough may later recur at supper as decoration, without becoming cargo or inventory.
 
@@ -169,4 +173,4 @@ Let the player linger with the water and quiet score. Continue leads to credits 
 
 The first-evening, lighthouse-refuge and supper-table foundation comes from the [existing product brief](https://github.com/EDLMGit/Lastferry/blob/1a85874883af5caa59f6294a75495eccf2afebbc/docs/PRODUCT_BRIEF.md). Names, new scenes, ordering and captions here are proposed campaign content. The existing [gameplay contract](https://github.com/EDLMGit/Lastferry/blob/1a85874883af5caa59f6294a75495eccf2afebbc/docs/GAMEPLAY_RULES.md) remains authoritative for committed turns and Undo.
 
-Keep authored direction, implemented scene, verified interaction and human visual/audio acceptance as separate statuses. Future Orchard/Orin scenes, later newcomers and currents are not implemented merely because this document describes them. The current larger boat/launch/Wide Berth claims require their actual production sources and scoped verification, recorded separately.
+Keep authored direction, implemented scene, verified interaction and human visual/audio acceptance as separate statuses. Future Two Shelters, Orchard/Orin scenes, later newcomers, launch relocation and currents are not implemented merely because this document describes them. Wide Berth is implemented but its difficulty is not accepted. Current scene/runtime sources and scoped verification remain separate from the proposed ordering. Preserve original saves, publication receipts and historical reports; a later route change must not silently reinterpret old Wide completion as a new C4 rescue or rewrite data merely from Home/Options/Practice.

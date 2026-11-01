@@ -1,0 +1,641 @@
+{
+  "viewport": {
+    "width": 780,
+    "height": 320,
+    "dpr": 1
+  },
+  "state": {
+    "turn": 0,
+    "tideLevel": 0,
+    "boatNodeId": "cut",
+    "aboard": [
+      "rabbit-1",
+      "rabbit-2"
+    ],
+    "waitingByPier": {
+      "harbor-pier": [],
+      "sheep-pier": [
+        "sheep-1"
+      ]
+    },
+    "delivered": [],
+    "status": "playing",
+    "lossReason": null
+  },
+  "frame": {
+    "view": {
+      "mode": "play",
+      "panned": false,
+      "focused": null,
+      "revision": 7,
+      "scale": 44,
+      "usable": {
+        "left": 26,
+        "right": 754,
+        "top": 26,
+        "bottom": 294
+      },
+      "bounds": {
+        "minX": -8.100395560895839,
+        "maxX": 8.10039556089584,
+        "minY": -6.022780187724126,
+        "maxY": 5.766480343515383
+      },
+      "focus": {
+        "x": 8.881784197001252e-16,
+        "y": 1.5430810962633423
+      },
+      "overviewAvoidance": {
+        "overlap": 0,
+        "displacement": 6946.334822951021
+      }
+    },
+    "canvas": {
+      "width": 780,
+      "height": 320,
+      "bufferWidth": 780,
+      "bufferHeight": 320
+    },
+    "camera": {
+      "left": -8.863636363636363,
+      "right": 8.863636363636363,
+      "top": 5.179444732626979,
+      "bottom": -2.0932825401002937,
+      "position": [
+        0,
+        30,
+        30
+      ],
+      "projection": [
+        0.11282051282051282,
+        0,
+        0,
+        0,
+        0,
+        0.275,
+        0,
+        0,
+        0,
+        0,
+        -0.02002002002002002,
+        0,
+        0,
+        -0.4243473014724192,
+        -1.002002002002002,
+        1
+      ],
+      "inverse": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0.7065167883519743,
+        0.7076962821555668,
+        0,
+        0,
+        -0.7076962821555668,
+        0.7065167883519743,
+        0,
+        0,
+        0.0353848141077755,
+        -42.426392115226236,
+        1
+      ]
+    },
+    "envelope": {
+      "left": 33.58259532058309,
+      "right": 746.417404679417,
+      "top": -25.82956687908979,
+      "bottom": 492.89789649544866,
+      "points": 5904,
+      "ferry": {
+        "radius": 1.2039974662135047,
+        "bottom": -0.3570000038743019,
+        "top": 1.9761726894107043
+      }
+    },
+    "boat": {
+      "left": 349.8914897847176,
+      "right": 432.6041981053352,
+      "top": 131.43859193120917,
+      "bottom": 220.32071246817355,
+      "width": 82.7127083206176,
+      "height": 88.88212053696438
+    },
+    "lighthouse": {
+      "left": 84.1999994754791,
+      "right": 154.60000052452085,
+      "top": -25.82956687908979,
+      "bottom": 133.2621387710791,
+      "width": 70.40000104904175,
+      "height": 159.09170565016888
+    },
+    "lantern": {
+      "left": 103.78000047206875,
+      "right": 135.01999952793122,
+      "top": 7.300905489533989,
+      "bottom": 47.75051168624632,
+      "width": 31.23999905586247,
+      "height": 40.44960619671233
+    },
+    "lanternCore": {
+      "left": 113.89999999999996,
+      "right": 124.89999999999996,
+      "top": 31.11080353819851,
+      "bottom": 49.46495390683012,
+      "width": 11,
+      "height": 18.354150368631608
+    },
+    "bell": null,
+    "passengers": [
+      {
+        "id": "rabbit-1",
+        "left": 383.675,
+        "right": 404.3,
+        "top": 148.67051234742874,
+        "bottom": 201.79750134851662,
+        "width": 20.625,
+        "height": 53.12698900108788
+      },
+      {
+        "id": "rabbit-2",
+        "left": 392.47499999999997,
+        "right": 413.09999999999997,
+        "top": 134.00677187255417,
+        "bottom": 188.97446412042623,
+        "width": 20.625,
+        "height": 54.967692247872066
+      },
+      {
+        "id": "sheep-1",
+        "left": 639.3335442807116,
+        "right": 668.674,
+        "top": 145.28495663303335,
+        "bottom": 198.58139634263424,
+        "width": 29.340455719288343,
+        "height": 53.29643970960089
+      }
+    ],
+    "nodes": [
+      {
+        "id": "harbor",
+        "x": 125.99999999999999,
+        "y": 225.09516686734548
+      },
+      {
+        "id": "cut",
+        "x": 390,
+        "y": 193.95653045250054
+      },
+      {
+        "id": "sheep-pier",
+        "x": 654,
+        "y": 225.09516686734548
+      },
+      {
+        "id": "outer-east",
+        "x": 654,
+        "y": 380.7883489415702
+      },
+      {
+        "id": "outer-south",
+        "x": 390,
+        "y": 443.06562177126006
+      },
+      {
+        "id": "outer-west",
+        "x": 125.99999999999999,
+        "y": 380.7883489415702
+      }
+    ],
+    "places": [
+      {
+        "id": "harbor",
+        "left": 34.52032852172852,
+        "right": 215.3248872756958,
+        "top": -42.10469313426856,
+        "bottom": 246.84835839992695,
+        "width": 180.80455875396729,
+        "height": 288.95305153419554
+      },
+      {
+        "id": "cut",
+        "left": 370.0240001678467,
+        "right": 409.9759998321534,
+        "top": 179.13568138457808,
+        "bottom": 208.76651888957994,
+        "width": 39.9519996643067,
+        "height": 29.630837505001864
+      },
+      {
+        "id": "sheep-pier",
+        "left": 568.9577732086182,
+        "right": 739.0422267913818,
+        "top": 25.174725992237157,
+        "bottom": 252.44397136367456,
+        "width": 170.08445358276367,
+        "height": 227.26924537143742
+      },
+      {
+        "id": "outer-east",
+        "left": 634.0240001678468,
+        "right": 673.9759998321533,
+        "top": 354.0612789595829,
+        "bottom": 395.8578919620727,
+        "width": 39.95199966430653,
+        "height": 41.79661300248978
+      },
+      {
+        "id": "outer-south",
+        "left": 370.0240001678467,
+        "right": 409.9759998321534,
+        "top": 416.33855178927274,
+        "bottom": 458.1351647917627,
+        "width": 39.9519996643067,
+        "height": 41.79661300248995
+      },
+      {
+        "id": "outer-west",
+        "left": 106.02400016784668,
+        "right": 145.9759998321533,
+        "top": 354.0612789595829,
+        "bottom": 395.8578919620727,
+        "width": 39.95199966430661,
+        "height": 41.79661300248978
+      }
+    ],
+    "pickTargets": [
+      {
+        "id": "harbor",
+        "kind": "island",
+        "left": 34.52032852172852,
+        "right": 215.3248872756958,
+        "top": 67.32062629525501,
+        "bottom": 171.31874320203283,
+        "width": 180.80455875396729,
+        "height": 103.99811690677782,
+        "x": 124.92260789871216,
+        "y": 119.31968474864392
+      },
+      {
+        "id": "harbor",
+        "kind": "island",
+        "left": 48.45592639074454,
+        "right": 195.9212085642699,
+        "top": 67.03132164289642,
+        "bottom": 163.75095604279096,
+        "width": 147.46528217352537,
+        "height": 96.71963439989455,
+        "x": 122.18856747750722,
+        "y": 115.39113884284369
+      },
+      {
+        "id": "harbor",
+        "kind": "island",
+        "left": 57.17157981408298,
+        "right": 183.93333333333328,
+        "top": 26.708905160587726,
+        "bottom": 149.5050890807225,
+        "width": 126.7617535192503,
+        "height": 122.79618392013478,
+        "x": 120.55245657370813,
+        "y": 88.10699712065512
+      },
+      {
+        "id": "sheep-pier",
+        "kind": "island",
+        "left": 568.9577732086182,
+        "right": 739.0422267913818,
+        "top": 79.10244657887492,
+        "bottom": 171.40177725940728,
+        "width": 170.08445358276367,
+        "height": 92.29933068053236,
+        "x": 654,
+        "y": 125.2521119191411
+      },
+      {
+        "id": "sheep-pier",
+        "kind": "island",
+        "left": 582.5425924979223,
+        "right": 721.6918689646606,
+        "top": 78.08658000752811,
+        "bottom": 170.8827410520277,
+        "width": 139.14927646673823,
+        "height": 92.7961610444996,
+        "x": 652.1172307312914,
+        "y": 124.48466052977791
+      },
+      {
+        "id": "sheep-pier",
+        "kind": "island",
+        "left": 586.6382464807497,
+        "right": 713.4,
+        "top": 36.45633631298136,
+        "bottom": 159.25252023311612,
+        "width": 126.7617535192503,
+        "height": 122.79618392013475,
+        "x": 650.0191232403748,
+        "y": 97.85442827304874
+      },
+      {
+        "id": "harbor",
+        "kind": "pier",
+        "left": 109.5501345574856,
+        "right": 144.69999989509583,
+        "top": 119.73908683070147,
+        "bottom": 220.1002699868402,
+        "width": 35.14986533761022,
+        "height": 100.36118315613874,
+        "x": 127.12506722629072,
+        "y": 169.91967840877084
+      },
+      {
+        "id": "sheep-pier",
+        "kind": "pier",
+        "left": 637.5501345574855,
+        "right": 672.6999998950959,
+        "top": 125.3346997944491,
+        "bottom": 225.69588295058782,
+        "width": 35.14986533761032,
+        "height": 100.36118315613872,
+        "x": 655.1250672262906,
+        "y": 175.51529137251845
+      },
+      {
+        "id": "harbor",
+        "kind": "landmark",
+        "left": 84.1999994754791,
+        "right": 154.60000052452085,
+        "top": -25.82956687908979,
+        "bottom": 133.2621387710791,
+        "width": 70.40000104904175,
+        "height": 159.09170565016888,
+        "x": 119.39999999999998,
+        "y": 53.716285945994656
+      },
+      {
+        "id": "sheep-pier",
+        "kind": "landmark",
+        "left": 629.3409776210784,
+        "right": 705.0590223789216,
+        "top": 41.79083655710144,
+        "bottom": 134.80972638469984,
+        "width": 75.71804475784313,
+        "height": 93.0188898275984,
+        "x": 667.2,
+        "y": 88.30028147090064
+      },
+      {
+        "id": "harbor",
+        "kind": "waypoint",
+        "left": 106.02400016784668,
+        "right": 145.9759998321533,
+        "top": 210.27431779942305,
+        "bottom": 239.9051553044249,
+        "width": 39.95199966430661,
+        "height": 29.630837505001864,
+        "x": 125.99999999999999,
+        "y": 225.08973655192398
+      },
+      {
+        "id": "cut",
+        "kind": "waypoint",
+        "left": 370.0240001678467,
+        "right": 409.9759998321534,
+        "top": 179.13568138457808,
+        "bottom": 208.76651888957994,
+        "width": 39.9519996643067,
+        "height": 29.630837505001864,
+        "x": 390,
+        "y": 193.951100137079
+      },
+      {
+        "id": "sheep-pier",
+        "kind": "waypoint",
+        "left": 634.0240001678468,
+        "right": 673.9759998321533,
+        "top": 210.27431779942305,
+        "bottom": 239.9051553044249,
+        "width": 39.95199966430653,
+        "height": 29.630837505001864,
+        "x": 654,
+        "y": 225.08973655192398
+      },
+      {
+        "id": "outer-east",
+        "kind": "waypoint",
+        "left": 634.0240001678468,
+        "right": 673.9759998321533,
+        "top": 354.0612789595829,
+        "bottom": 395.8578919620727,
+        "width": 39.95199966430653,
+        "height": 41.79661300248978,
+        "x": 654,
+        "y": 374.95958546082784
+      },
+      {
+        "id": "outer-south",
+        "kind": "waypoint",
+        "left": 370.0240001678467,
+        "right": 409.9759998321534,
+        "top": 416.33855178927274,
+        "bottom": 458.1351647917627,
+        "width": 39.9519996643067,
+        "height": 41.79661300248995,
+        "x": 390,
+        "y": 437.2368582905177
+      },
+      {
+        "id": "outer-west",
+        "kind": "waypoint",
+        "left": 106.02400016784668,
+        "right": 145.9759998321533,
+        "top": 354.0612789595829,
+        "bottom": 395.8578919620727,
+        "width": 39.95199966430661,
+        "height": 41.79661300248978,
+        "x": 125.99999999999999,
+        "y": 374.95958546082784
+      },
+      {
+        "id": "cut",
+        "kind": "ferry",
+        "left": 349.8914897847176,
+        "right": 432.6041981053352,
+        "top": 131.43859193120917,
+        "bottom": 220.32071246817355,
+        "width": 82.7127083206176,
+        "height": 88.88212053696438
+      }
+    ],
+    "nonInteractivePlaces": [
+      {
+        "left": 285.79333305358887,
+        "right": 494.20666694641113,
+        "top": 241.75926743182416,
+        "bottom": 354.91214436514605,
+        "width": 208.41333389282227,
+        "height": 113.15287693332189
+      },
+      {
+        "left": 307.45459363088736,
+        "right": 468.77986783169547,
+        "top": 242.5598177266357,
+        "bottom": 345.164658447608,
+        "width": 161.3252742008081,
+        "height": 102.6048407209723
+      },
+      {
+        "left": 322.5569558526361,
+        "right": 448.002220559351,
+        "top": 189.88602290034964,
+        "bottom": 331.69614947297447,
+        "width": 125.44526470671485,
+        "height": 141.81012657262482
+      }
+    ]
+  },
+  "view": {
+    "mode": "play",
+    "panned": false,
+    "focused": null,
+    "revision": 7,
+    "scale": 44,
+    "usable": {
+      "left": 26,
+      "right": 754,
+      "top": 26,
+      "bottom": 294
+    },
+    "bounds": {
+      "minX": -8.100395560895839,
+      "maxX": 8.10039556089584,
+      "minY": -6.022780187724126,
+      "maxY": 5.766480343515383
+    },
+    "focus": {
+      "x": 8.881784197001252e-16,
+      "y": 1.5430810962633423
+    },
+    "overviewAvoidance": {
+      "overlap": 0,
+      "displacement": 6946.334822951021
+    }
+  },
+  "selection": {
+    "selectedId": null,
+    "cardOpen": false,
+    "origin": null,
+    "actionOrigin": null,
+    "cardPlacement": null,
+    "dockPlacement": null,
+    "labels": [
+      {
+        "id": "harbor",
+        "left": 49.499999999999986,
+        "top": 147.09516686734548,
+        "right": 202.5,
+        "bottom": 191.09516686734548
+      },
+      {
+        "id": "cut",
+        "left": 423.0625,
+        "top": 252,
+        "right": 527.0625,
+        "bottom": 296
+      },
+      {
+        "id": "sheep-pier",
+        "left": 525,
+        "top": 198.37263189375594,
+        "right": 620,
+        "bottom": 242.37263189375594
+      }
+    ],
+    "protectedBounds": [],
+    "protectedOverlaps": []
+  },
+  "audio": {
+    "scoreOutputRms": 0.02330258842443725,
+    "scoreOutputPeak": 0.05716199055314064,
+    "scoreRoute": "music dry + reverb -> victory gain -> master",
+    "scoreEffectiveOutputRms": 0.01514668192030721,
+    "state": "running",
+    "requested": true,
+    "running": true,
+    "retryPending": false,
+    "muted": false,
+    "activated": true,
+    "hidden": false,
+    "disposed": false,
+    "unavailable": false,
+    "error": null,
+    "contextState": "running",
+    "currentTime": 2.7013333333333334,
+    "contextCount": 1,
+    "schedulerActive": true,
+    "schedulerCount": 1,
+    "schedulerStarts": 1,
+    "sourceCount": 7,
+    "sourceNodesCreated": 7,
+    "peakOwnedSources": 7,
+    "graphNodeCount": 40,
+    "musicSources": 5,
+    "ambienceSources": 2,
+    "travelRequested": false,
+    "travelActive": false,
+    "arrivalActive": false,
+    "deliveryCount": 0,
+    "arrivalEventCount": 0,
+    "victorySettled": false,
+    "victoryTarget": 1,
+    "victoryGain": 1,
+    "arrangementTarget": 0.72,
+    "arrangementGain": 0.7200000286102295,
+    "effectiveMusicTarget": 0.72,
+    "lastVictoryMixChange": null,
+    "arrivalSources": 0,
+    "arrivalVoicesPlayed": 0,
+    "arrivalVoicesSkipped": 0,
+    "arrivalVoicesReclaimed": 0,
+    "lastArrival": null,
+    "transferContacts": 0,
+    "transferPlayed": 0,
+    "transferSkipped": 0,
+    "transferSources": 0,
+    "peakTransferSources": 0,
+    "lastTransferContact": null,
+    "storyToken": null,
+    "storyConsumedIds": [],
+    "storyCueCount": 0,
+    "storyPlayed": 0,
+    "storySkipped": 0,
+    "storyRejected": 0,
+    "storyReclaimed": 0,
+    "storySources": 0,
+    "storyOwnedSources": 0,
+    "peakStorySources": 0,
+    "lastStoryCue": null,
+    "desiredArrangement": "ordinary",
+    "arrangement": "ordinary",
+    "pendingTerminal": false,
+    "accompanimentEnabled": true,
+    "companionSources": 0,
+    "companionNotes": 0,
+    "companionDeferrals": 0,
+    "droppedTones": 0,
+    "masterGain": 0.6499999761581421,
+    "phrase": "Between the lamps",
+    "bpm": 64,
+    "phraseSeconds": 75,
+    "cueDuration": 75,
+    "phaseSeconds": 2.6213333333333333,
+    "loopCount": 0,
+    "scheduledEvents": 2,
+    "skippedEvents": 0,
+    "rms": 0.015922174302737173,
+    "peak": 0.03938613086938858
+  },
+  "active": "view-toggle"
+}

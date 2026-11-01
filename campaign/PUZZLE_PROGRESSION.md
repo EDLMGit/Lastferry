@@ -1,19 +1,19 @@
 # Puzzle progression — selected campaign direction
 
-Original design baseline: `1a85874883af5caa59f6294a75495eccf2afebbc`. Current milestone `WIDE_BERTH_01` builds from reviewed `7e324e88827857469bf348fca311548344d03da6`. **Holding Pier, Bellwater, Driftwood Yard and Wide Berth are authored playable campaign coves; First Crossing remains optional practice.** The user accepted Driftwood gameplay. Wide Berth deliberately revises the former gentle C4 introduction to a six-space benefit followed by a meaningful planning choice. Production proof, real geometry, actual UI evidence and human calibration remain separate in `reviews/wide-berth/`.
+Recalibrated 1 November 2026 for `PLAY_READABILITY_01`, from reviewed runtime `7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695` and continuity `52f72d6cdb1caa292425511394f4a11efa024a61`. **Holding Pier, Bellwater, Driftwood Yard and Wide Berth remain the authored runtime campaign; First Crossing remains optional practice.** Holding, Bellwater and Driftwood gameplay are accepted. The user reports Wide Berth is too easy and not fun, so its mandatory campaign role is under revision. Its valid witnesses and physical/interface checks remain useful evidence; they do not overturn that difficulty feedback. The earlier C4 assignment was followed and the direction is being corrected.
 
 ## Campaign sequence
 
-The campaign targets twelve coves in four phases. Milestones follow C3, C6 and C9. This is a content target, not a measured playtime promise. First Crossing remains optional practice: placing it in the main sequence would repeat the rescue of Pip, Rue and Moss already completed in Holding.
+The revised target has twelve coves in four phases; the larger-ferry launch is proposed after explicit C5 completion, before C6. This is a content target, not a runtime reorder or measured playtime promise. First Crossing remains optional practice: placing it in the main sequence would repeat the rescue of Pip, Rue and Moss already completed in Holding. Rows C4–C12 below are unproven proposals; current Wide remains playable unchanged during this pass.
 
 | Phase / cove | Encounter | Intended decision and teaching role |
 | --- | --- | --- |
 | I · C1 | **Holding Pier** | Accepted introduction: trust a safe temporary landing, lighten the boat, rescue Pip/Rue and collect Moss. Preserve its puzzle. |
 | I · C2 | **Bellwater** | Accepted route/deadline composition: consider the loaded return and two shore heights. Preserve its puzzle. |
-| I · C3 | **Driftwood Yard** | Rescue **Nell, a beaver who uses 2 spaces**, using existing load, staging and tide rules. Her introduction adds character, not a special ability. Stage Nell at High Mooring to reach Fern and Oat before Reed Landing floods, then collect her through the newly deepened return. The following launch now introduces the prepared larger ferry. |
-| II · C4 | **Wide Berth** | Carry six spaces, then compare full deep delivery before a late low-pair rescue against safe sheep staging and a lighter shortcut that rescues the pair earlier. Two occupied flood boundaries and draft four make route/load choice consequential. |
-| II · C5 | **Orchard Landing** | Meet **Orin, a deer who uses 3 spaces** in a clear, generous encounter. Teach his space cost separately from current changes or a tight full-load bottleneck. |
-| II · C6 | **Two Landings** | Combine known load choices, safe staging and the larger boat. A thoughtful subset or delivery order matters. No new rule. |
+| I · C3 | **Driftwood Yard** | Accepted gameplay: stage **Nell, the two-space beaver**, at High Mooring to reach Fern and Oat, then retrieve her through the deepened return. The current runtime still launches the larger boat afterward; revised planning delays that event. |
+| II · C4 | **Two Shelters — working title** | Proposed four-space replacement: choose a temporary landing and retrieval order that preserve the later rescue. Placement must create a distinct dependency beyond Driftwood's sole safe staging point. |
+| II · C5 | **Orchard Landing** | Proposed four-space encounter with **Orin, a three-space deer**. Fit his cost into a useful plan before increasing capacity. |
+| II · C6 | **Two Landings, preceded by the launch** | Proposed six-space introduction/application: choose mixed loads and when a lighter return is worth an extra trip. No new current rule. |
 | III · C7 | **Tidal Gate** | Teach one clearly marked fixed one-way passage, with a legible ordinary return route and forgiving timing. |
 | III · C8 | **Reed Narrows** | Forecast a direction reversal at a scheduled tide rise. The same current rule gains a temporal dependency. |
 | III · C9 | **Drowned Orchard** | Revisit C5 geometry at changed water conditions with a **new waiting group**. Orin has already been rescued. Combine route memory, current and load. |
@@ -25,9 +25,17 @@ Each encounter needs a distinct insight. More animals, nodes or actions do not e
 
 Rescued characters remain rescued. Recurring helpers may appear at the refuge or take an explicitly framed later trip; do not silently strand them again. Additional named neighbors may reuse established species. Future appearances should use explicit stable character/appearance IDs: reordering a level's passenger list must not unexpectedly recolor a recurring character. Any extension preserves all existing appearance mappings. Wide Berth uses explicit sheep/rabbit appearances for six new neighbors.
 
-## The larger boat
+## Proposed C4: Two Shelters
 
-After C3, the story makes a prepared **6-space spare boat** available. Its yellow-ferry identity remains familiar. This is one authored milestone, without purchases, currencies or a fleet-selection system. Replaying earlier coves retains their 4-space boat and original rules.
+The planning question is **“Which temporary landing keeps the later rescue possible?”** Use the original four-space ferry and three or four bodies from established species, with familiar draft, route depth and local flooding. Introduce no new species, current rule, inventory or scoring system.
+
+The staging location and subsequent retrieval order must interact. A convenient shelter can impose a later cost while another preserves a useful approach. Simply leaving the heavy passenger at the only safe pier repeats Driftwood. Show all waiting passengers and relevant shore/return-path differences through the world, inspection and forecast; no concealed later objective or unforecastable punishment.
+
+This brief specifies no map, tide schedule, witness or solution count. Author a compact candidate with existing placeholder assets and its own Practice entrance in a later task. Prove a rescue through the production reducer, inspect a plausible losing/blocked alternative and useful Undo recovery, and test whether routine earliest-group collection plus the obvious return bypasses the intended reasoning. If it does, revise or discard the candidate. Prove multiple strategies only when the design makes that claim. User playtest must establish clarity, distinctness and satisfaction before additional art or a chapter scene is commissioned.
+
+## The larger boat: implemented capability, revised planned placement
+
+The runtime currently makes the prepared **6-space spare boat** available after C3. Keep that trigger, hull, seating, transfers and launch intact for reuse. The revised plan delays launch until explicit C5 completion, before C6, while Nell and the safe neighbors prepare her already-built boat at home. No construction timer, purchases, currency or fleet-selection system is introduced. Orin fits the original ferry; three-, two- and one-space neighbors filling six spaces illustrates useful mixed capacity, not a proven C6 puzzle. Earlier coves retain their four-space boat and original rules.
 
 | Occupied spaces | Draft needed |
 | ---: | ---: |
@@ -36,7 +44,7 @@ After C3, the story makes a prepared **6-space spare boat** available. Its yello
 | 3–4 | 3 |
 | 5–6 | 4 |
 
-The benefit is felt before its tradeoff. Wide Berth starts empty at Harbor; its first full pickup carries six spaces/four bodies. Draft four then excludes the shorter Harbor route even after the first rise. The full deep delivery and earlier staged rescue remain valid distinct critical plans. Empty and partial-load behavior stays familiar. Boat capacity is space cost, not the count of animal bodies.
+Current Wide Berth starts empty at Harbor; its first full pickup carries six spaces/four bodies. Draft four excludes the shorter Harbor route even after the first rise. Full deep delivery and staged rescue are valid routes, but the simple collect/deep-return/deliver/repeat plan can bypass the intended insight. The user rejected its difficulty. More passengers and routes did not establish a stronger decision than Driftwood. Retain Wide in the current runtime until a separate integration task; the later direction is an optional development/Practice prototype, not a promised mandatory slot. Empty/partial-load behavior and the distinction between spaces and bodies remain unchanged.
 
 The production profile is selected by active-level data: only Wide Berth uses the actual larger hull/deck, automatic identity-stable seating, transfer/berth/wake geometry and its four draft bands. Original coves and gallery default callers retain their smaller profile. Capacity is the entire loading rule; seating adds no packing interaction. The roster includes two sheep and four rabbits, eight total required spaces, with a reachable five-body/six-space load and six neighbors safely waiting at High Quay. Every capacity-legal subset needs valid presentation.
 
@@ -83,7 +91,7 @@ Before accepting any future encounter:
 
 1. **Name its decision.** Describe the intended insight and at least two readable choices whose consequences the player can inspect.
 2. **Author the exact contract.** Graph, clearances, depths, boat, passenger costs/locations, pier elevations, tide/current schedule and required delivery IDs belong in level data.
-3. **Prove a witness.** Replay a successful route through the production reducer; add a meaningfully different successful plan where feasible. Distinguish witness length from proven minimum moves or difficulty.
+3. **Prove a witness.** Replay a successful route through the production reducer. Where the design claims multiple meaningful plans, prove those specific claims; do not add strategies merely to increase the report. Distinguish witness length from proven minimum moves or difficulty.
 4. **Explain the temptation.** Record an understandable losing/blocked alternative, its correct preview and recovery through Undo. Verify tide-boundary boarding, terminal Undo and conservation of passenger identity.
 5. **Inspect the actual game.** Complete a real rescue, inspect loaded return choices and check phone portrait/landscape fit, animal separation, route clearance, warnings and reachable controls.
 6. **Playtest the insight.** The user's comprehension and satisfaction decide whether the puzzle earns its place. Solver success and screenshots do not establish fun. Preserve failures and limitations honestly.
@@ -92,13 +100,17 @@ If using reachability search, document its bounds. After the last scheduled chan
 
 ## Implementation boundaries and saves
 
-The foundation first implemented Holding/Bellwater. The current four-cove slice now ends honestly after Wide Berth with “Four coves are safe.” The remaining campaign roadmap is still future content.
+The foundation first implemented Holding/Bellwater. The current four-cove slice still ends honestly after Wide Berth with “Four coves are safe.” `PLAY_READABILITY_01` preserves every current level JSON, the reducer, registry, launch trigger and strict ordered checkpoint semantics. Two Shelters, Orin, revised launch placement and the remaining roadmap are future content.
+
+After C4 earns its place through playtest, use a separately scoped route/save revision. Pending-launch, active-Wide and completed-four-cove version-1 records depend on the existing ordered prefixes. Preserve their original data and recognized C1–C3 completion; retain old Wide completion as history without pretending the new C4 was rescued. Previously seeing the launch cannot grant later completion. Explain the revised continuation point in a brief honest notice. Home, Options and Practice must not silently rewrite progress; unknown/malformed data remains recoverable. Define exact mappings once replacement content and route are settled, without implementing a migration framework here.
 
 Campaign completion becomes durable on explicit **Continue** after a win; terminal Undo remains available before that boundary. Replaying/Undoing/redelivering must not duplicate milestones. Initial checkpoints may resume at the current cove's beginning, with that behavior stated clearly.
 
 Before releasing the longer phone campaign, add full mid-puzzle restoration including gameplay state, complete Undo history and the corresponding presentation/boat-pose history. A restored position without heading history is not complete recovery. Test tab/background/reload and storage failure, and retain settings independently. Current cove-boundary checkpoints are implemented, including only the two exact historical two-cove/three-cove completions. Home/Options/Practice remain byte-preserving; deliberate Continue saves the correct pending scene and plays fresh, while later pending reloads use recap. Earlier boundaries never display a future Wide Berth rescue. Full mid-puzzle persistence remains deferred; this document does not claim it.
 
 ## Source grounding
+
+- [Current recalibration and unproven C4 brief](../LAST_FERRY_PLAY_READABILITY_PACKAGE/CAMPAIGN_RECALIBRATION.md), [review findings](../LAST_FERRY_PLAY_READABILITY_PACKAGE/REVIEW_FINDINGS.md) and [task scope](../LAST_FERRY_PLAY_READABILITY_PACKAGE/NEXT_TASK_PLAY_READABILITY.md)
 
 - [Original finite-story brief](https://github.com/EDLMGit/Lastferry/blob/1a85874883af5caa59f6294a75495eccf2afebbc/docs/PRODUCT_BRIEF.md)
 - [Gameplay contract](https://github.com/EDLMGit/Lastferry/blob/1a85874883af5caa59f6294a75495eccf2afebbc/docs/GAMEPLAY_RULES.md)

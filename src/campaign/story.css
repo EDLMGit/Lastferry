@@ -136,6 +136,14 @@
   font-size: 22px;
   line-height: 1.2;
 }
+@media (min-width: 600px) {
+  .story-picture[data-illustration='harbor'] #story-captions {
+    left: var(--harbor-caption-left);
+    top: var(--harbor-caption-top);
+    width: var(--harbor-caption-width);
+    max-width: none;
+  }
+}
 .story-controls {
   display: grid;
   grid-template-columns: minmax(30px, 1fr) auto auto auto auto minmax(150px, auto);

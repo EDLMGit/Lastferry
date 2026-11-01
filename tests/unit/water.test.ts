@@ -1,12 +1,12 @@
 import { expect, test } from 'vitest';
 import { NoColorSpace, OrthographicCamera, Vector2, Vector3 } from 'three';
-import { bellwater, holdingPier, level } from '../../src/levels/level';
-import { getLevelPaths } from '../../src/scene/paths';
+import { bellwater, driftwoodYard, holdingPier, level, wideBerth } from '../../src/levels/level';
+import { getLevelPaths, samplePath } from '../../src/scene/paths';
 import { CoastalWater } from '../../src/scene/water';
 import { islandCenter } from '../../src/scene/shore';
-import { prepareContour } from '../../src/scene/seabed';
+import { createPassageBathymetry, prepareContour } from '../../src/scene/seabed';
 
-test.each([level, holdingPier, bellwater])(
+test.each([level, holdingPier, bellwater, driftwoodYard, wideBerth])(
   '$id decorative seabed represents coast, apron and genuinely deep open water without changing authored data',
   (cove) => {
     const before = structuredClone(cove),
@@ -32,6 +32,66 @@ test.each([level, holdingPier, bellwater])(
     water.dispose();
   },
 );
+
+test.each([
+  { cove: holdingPier, pocketId: 'shallows' },
+  { cove: driftwoodYard, pocketId: 'bend' },
+])(
+  '$cove.id shallow approaches retain deeper stopping pockets and tide-independent banks',
+  ({ cove, pocketId }) => {
+    const paths = getLevelPaths(cove);
+    const water = new CoastalWater(cove, paths);
+    const shallowEdge = cove.edges.find((edge) => edge.baseDepth === 1)!;
+    const deepEdge = cove.edges.find((edge) => edge.baseDepth === 3)!;
+    const point = (edgeId: string) =>
+      samplePath(paths.get(edgeId)!, paths.get(edgeId)!.length * 0.5).position;
+    const approach = point(shallowEdge.id),
+      deep = point(deepEdge.id);
+    const shallowBed = water.seabed.sampleAuthored(approach.x, approach.z);
+    const deepBed = water.seabed.sampleAuthored(deep.x, deep.z);
+    const pocket = cove.nodes.find((node) => node.id === pocketId)!;
+    const pocketBed = water.seabed.sampleAuthored(...(pocket.positionXZ as [number, number]));
+    expect(shallowBed.height).toBeGreaterThan(-0.5);
+    expect(shallowBed.height - deepBed.height).toBeGreaterThan(1);
+    expect(pocketBed.height).toBeLessThan(-1.5);
+    const snapshots = [
+      water.mask.texture.image.data!.slice(),
+      water.seabed.texture.image.data!.slice(),
+    ];
+    const opticalDepths = [0, 1, 2].map((tide) => {
+      water.update(tide * cove.world.waterYPerTideLevel, 3);
+      return water.presentation().waterY - shallowBed.height;
+    });
+    expect(opticalDepths[1] - opticalDepths[0]).toBeCloseTo(0.18);
+    expect(opticalDepths[2] - opticalDepths[1]).toBeCloseTo(0.18);
+    water.update(0, 3);
+    expect(
+      water.mask.texture.image.data!.every((value, index) => value === snapshots[0][index]),
+    ).toBe(true);
+    expect(
+      water.seabed.texture.image.data!.every((value, index) => value === snapshots[1][index]),
+    ).toBe(true);
+    water.dispose();
+  },
+);
+
+test('passage substrate follows authored depth and curved course, never passenger loading', () => {
+  const paths = getLevelPaths(holdingPier),
+    path = paths.get('stone-shallows')!;
+  const middle = samplePath(path, path.length * 0.5).position;
+  const field = createPassageBathymetry(holdingPier);
+  const bank = field.sample(middle.x, middle.z);
+  const loaded = structuredClone(holdingPier);
+  loaded.start.aboard = loaded.passengers.map((passenger) => passenger.id);
+  expect(createPassageBathymetry(loaded).sample(middle.x, middle.z)).toEqual(bank);
+  const changed = structuredClone(holdingPier);
+  changed.edges.find((edge) => edge.id === 'stone-shallows')!.baseDepth = 3;
+  expect(createPassageBathymetry(changed).sample(middle.x, middle.z).height).toBeLessThan(
+    bank.height - 1,
+  );
+  const across = field.sample(middle.x - 4, middle.z + 4);
+  expect(across.height).toBeLessThan(bank.height - 1);
+});
 
 test('actual water level controls the transition from low ground to submerged ground while Harbor remains exposed', () => {
   const water = new CoastalWater(bellwater, getLevelPaths(bellwater));

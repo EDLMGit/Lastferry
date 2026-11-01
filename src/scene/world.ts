@@ -21,6 +21,7 @@ import { PresentationPoses } from './poses';
 import {
   clampViewFocus,
   overviewScale,
+  unobscuredOverview,
   panViewFocus,
   phonePlayScale,
   usableViewRectangle,
@@ -38,7 +39,13 @@ import {
   transferHeading,
 } from './deck-transfer';
 import { sceneLayout, type SceneLayout } from './layout';
-import { bellLandmark, cottage, driftwoodYard, wideWaterfront, decorateWideIsland } from './scenery';
+import {
+  bellLandmark,
+  cottage,
+  driftwoodYard,
+  wideWaterfront,
+  decorateWideIsland,
+} from './scenery';
 import { createPier } from './pier';
 import { getLevelPaths, type CanonicalPath } from './paths';
 import { Shores, createReedBeds } from './shore';
@@ -119,6 +126,9 @@ export class World {
   viewPanned = false;
   viewLocation: string | null = null;
   measuredUsable: ViewRectangle | null = null;
+  overviewObstacles: ViewRectangle[] = [];
+  overviewSubjects: T.Box3[] = [];
+  overviewAvoidance = { overlap: 0, displacement: 0 };
   viewBounds: ViewBounds | null = null;
   viewFocus: ViewPoint | null = null;
   viewScale = 1;
@@ -242,7 +252,11 @@ export class World {
       } else this.nonInteractivePlaces.push(shore.mesh, shore.rocks, decoration);
     }
     for (const p of this.level.piers) {
-      const group = createPier(p, this.layout.stonePiers.includes(p.id), this.profile.id === 'six-space');
+      const group = createPier(
+        p,
+        this.layout.stonePiers.includes(p.id),
+        this.profile.id === 'six-space',
+      );
       this.scene.add(group);
       if (
         p.id === this.level.objective.deliveryPierId ||
@@ -351,7 +365,13 @@ export class World {
       for (const side of [-1, 1])
         box(this.gangway, '#816446', [0.07, 0.07, 1.04], [side * 0.39, -0.06, 0], 0.012);
       for (let index = 0; index < 7; index++)
-        box(this.gangway, index % 2 ? '#c6a170' : '#bd935d', [0.86, 0.045, 1 / 7 - 0.008], [0, -0.0225, -0.5 + (index + 0.5) / 7], 0.008);
+        box(
+          this.gangway,
+          index % 2 ? '#c6a170' : '#bd935d',
+          [0.86, 0.045, 1 / 7 - 0.008],
+          [0, -0.0225, -0.5 + (index + 0.5) / 7],
+          0.008,
+        );
       for (const end of [-0.48, 0.48])
         box(this.gangway, '#66776c', [0.86, 0.018, 0.035], [0, 0.008, end], 0.006);
       this.gangway.name = 'wide-pier-gangway';
@@ -646,6 +666,19 @@ export class World {
     this.layoutHullBounds = this.localGeometryBounds(this.hull, new Set(this.animals.values()));
     for (const [id, animal] of this.animals)
       this.layoutAnimalBounds.set(id, this.localGeometryBounds(animal));
+    this.overviewSubjects = [this.layoutStaticBounds.get('lighthouse')!.clone()];
+    if (this.layoutStaticBounds.has('bell'))
+      this.overviewSubjects.push(this.layoutStaticBounds.get('bell')!.clone());
+    for (const pier of this.level.piers) {
+      const group = new T.Box3();
+      for (const passenger of this.level.passengers) {
+        const shore = shoreSeat(this.level, passenger.id, pier, !!pier.isDeliveryPier);
+        const transform = new T.Matrix4().makeTranslation(shore.x, shore.y + 0.08, shore.z);
+        transform.scale(new T.Vector3(...passengerScale(passenger.species)));
+        group.union(this.layoutAnimalBounds.get(passenger.id)!.clone().applyMatrix4(transform));
+      }
+      if (!group.isEmpty()) this.overviewSubjects.push(group);
+    }
   }
   project(p: number[], height = this.water.position.y + 0.04) {
     const v = V(p, height).project(this.camera);
@@ -733,6 +766,18 @@ export class World {
     )
       return;
     this.measuredUsable = { ...rectangle };
+    this.reframeView();
+  }
+  setOverviewObstacles(rectangles: ViewRectangle[]) {
+    const same =
+      rectangles.length === this.overviewObstacles.length &&
+      rectangles.every((rect, i) =>
+        (Object.keys(rect) as (keyof ViewRectangle)[]).every(
+          (key) => Math.abs(rect[key] - this.overviewObstacles[i][key]) < 0.5,
+        ),
+      );
+    if (same) return;
+    this.overviewObstacles = rectangles.map((rect) => ({ ...rect }));
     this.reframeView();
   }
   setHomePresentation(active: boolean) {
@@ -912,6 +957,7 @@ export class World {
     this.setViewMode('play');
   }
   panByPixels(deltaX: number, deltaY: number) {
+    if (this.viewMode === 'overview') return;
     if (!this.viewBounds || !this.viewFocus || this.homecoming.active || this.transition) return;
     this.viewFocus = panViewFocus(this.viewFocus, deltaX, deltaY, this.viewScale);
     this.viewPanned = true;
@@ -948,6 +994,7 @@ export class World {
       usable: this.usableRectangle(),
       bounds: this.viewBounds ? { ...this.viewBounds } : null,
       focus: this.viewFocus ? { ...this.viewFocus } : null,
+      overviewAvoidance: { ...this.overviewAvoidance },
     };
   }
   private activeViewFocus() {
@@ -984,7 +1031,9 @@ export class World {
       for (const id of ids) {
         const passenger = this.level.passengers.find((passenger) => passenger.id === id)!;
         const seat = deckSeat(this.level, id);
-        const transform = hull.clone().multiply(new T.Matrix4().makeTranslation(seat.x, seat.y, seat.z));
+        const transform = hull
+          .clone()
+          .multiply(new T.Matrix4().makeTranslation(seat.x, seat.y, seat.z));
         transform.scale(new T.Vector3(...passengerScale(passenger.species)));
         include(this.layoutAnimalBounds.get(id)!, transform);
       }
@@ -996,8 +1045,18 @@ export class World {
       transform.scale(new T.Vector3(...passengerScale(passenger.species)));
       include(this.layoutAnimalBounds.get(id)!, transform);
     }
-    const bounds = { minX: subjects.min.x, maxX: subjects.max.x, minY: subjects.min.y, maxY: subjects.max.y };
-    const padded = { left: usable.left + 8, right: usable.right - 8, top: usable.top + 8, bottom: usable.bottom - 8 };
+    const bounds = {
+      minX: subjects.min.x,
+      maxX: subjects.max.x,
+      minY: subjects.min.y,
+      maxY: subjects.max.y,
+    };
+    const padded = {
+      left: usable.left + 8,
+      right: usable.right - 8,
+      top: usable.top + 8,
+      bottom: usable.bottom - 8,
+    };
     return {
       focus: { x: (bounds.minX + bounds.maxX) / 2, y: (bounds.minY + bounds.maxY) / 2 },
       scale: Math.min(scale, overviewScale(bounds, padded)),
@@ -1033,21 +1092,42 @@ export class World {
         x: (this.viewBounds.minX + this.viewBounds.maxX) / 2,
         y: (this.viewBounds.minY + this.viewBounds.maxY) / 2,
       };
-    if (this.profile.id === 'six-space' && phone && this.viewMode === 'play' &&
-      !this.storyFraming && !this.viewPanned && !this.viewLocation) {
+    if (
+      this.profile.id === 'six-space' &&
+      phone &&
+      this.viewMode === 'play' &&
+      !this.storyFraming &&
+      !this.viewPanned &&
+      !this.viewLocation
+    ) {
       localFrame = true;
       const journey = this.transition?.journey;
       if (journey && this.transition?.path) {
-        const before = this.wideDockFrame(this.transition.before, journey.fromAngle, usable, this.viewScale);
-        const after = this.wideDockFrame(this.transition.after, journey.toAngle, usable, this.viewScale);
+        const before = this.wideDockFrame(
+          this.transition.before,
+          journey.fromAngle,
+          usable,
+          this.viewScale,
+        );
+        const after = this.wideDockFrame(
+          this.transition.after,
+          journey.toAngle,
+          usable,
+          this.viewScale,
+        );
         const offset = (state: State, frame: typeof before) => {
           const node = this.level.nodes.find((node) => node.id === state.boatNodeId)!;
           const point = V(node.positionXZ).applyMatrix4(this.camera.matrixWorldInverse);
           return { x: frame.focus.x - point.x, y: frame.focus.y - point.y - 0.8 };
         };
-        const from = offset(this.transition.before, before), to = offset(this.transition.after, after);
-        const progress = smooth(this.journeyFrame?.progress ?? 0), moving = this.activeViewFocus();
-        focus = { x: moving.x + T.MathUtils.lerp(from.x, to.x, progress), y: moving.y + T.MathUtils.lerp(from.y, to.y, progress) };
+        const from = offset(this.transition.before, before),
+          to = offset(this.transition.after, after);
+        const progress = smooth(this.journeyFrame?.progress ?? 0),
+          moving = this.activeViewFocus();
+        focus = {
+          x: moving.x + T.MathUtils.lerp(from.x, to.x, progress),
+          y: moving.y + T.MathUtils.lerp(from.y, to.y, progress),
+        };
         this.viewScale = T.MathUtils.lerp(before.scale, after.scale, progress);
       } else {
         const frame = this.wideDockFrame(this.state, this.poses.heading, usable, this.viewScale);
@@ -1131,8 +1211,21 @@ export class World {
         focus = authored.focus;
       }
     }
+    const automaticOverview =
+      this.viewMode === 'overview' && !this.viewPanned && !this.storyFraming;
+    if (automaticOverview) {
+      const result = unobscuredOverview(
+        this.viewBounds,
+        this.overviewSubjects.map((box) => this.projectedStoryBounds(box)),
+        usable,
+        this.overviewObstacles,
+      );
+      focus = result.focus;
+      this.viewScale = result.scale;
+      this.overviewAvoidance = { overlap: result.overlap, displacement: result.displacement };
+    }
     focus =
-      harborFrame || localFrame || this.storyFraming
+      harborFrame || localFrame || this.storyFraming || automaticOverview
         ? focus!
         : clampViewFocus(focus ?? this.activeViewFocus(), this.viewBounds, usable, this.viewScale);
     this.viewFocus = focus;

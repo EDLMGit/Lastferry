@@ -1135,23 +1135,38 @@
         {
           "path": "src/scene/water.ts",
           "symbol": "coastalMask"
+        },
+        {
+          "path": "src/scene/seabed.ts",
+          "symbol": "createPassageBathymetry samples canonical curved passages and authored base-depth node pockets"
         }
       ],
       "variants": [
         "one field per level"
       ],
-      "visualSignature": "Non-display RGBA data for banks, coast, height and land mask.",
+      "visualSignature": "Non-display RGBA field: broad load-independent canonical shallow banks, shore proximity, land elevation and land mask.",
       "reuseAndOwnership": "256x256 RGBA unsigned-byte texture; linear filtering, NoColorSpace. Shared with water/wake masking.",
       "behaviorToPreserve": "Generated once from actual level geometry, disposed with CoastalWater.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "part-of-accepted-baseline",
-        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+        "state": "integrated-play-readability-awaiting-human-review",
+        "reviewedBaseline": "7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695",
+        "basis": "Existing family reused for the scoped readable-play correction. Earlier accepted material, identity and behavior remain; new composition and perceptual readability require their own actual evidence and user review. Published version13 still contains the reviewed baseline.",
+        "history": [
+          {
+            "state": "part-of-accepted-baseline",
+            "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+          }
+        ]
       },
       "evidence": [
         {
           "path": "reviews/phone-audio-fullscreen/REVIEW.md",
           "role": "Current build identity and preservation; not an isolated visual test of every family"
+        },
+        {
+          "path": "reviews/play-readability/REVIEW.md",
+          "role": "PLAY_READABILITY_01 actual native UI/water/Harbor evidence, exact source identity, focused results and retained limitations; human visual acceptance is separate."
         }
       ],
       "meaning": "Coast and land data field. Generated once from actual level geometry, disposed with CoastalWater.",
@@ -1160,11 +1175,11 @@
       ],
       "gallery": {
         "section": "inventory",
-        "preview": "Source links and attributed existing evidence; no isolated rendering claimed"
+        "preview": "Source links and attributed existing evidence; no isolated rendering claimed The gallery links to actual Holding/Driftwood practice and this pass evidence; gallery specimens remain design evidence."
       },
       "typeSpecific": {
-        "generator/seed/data source": "src/scene/water.ts: coastalMask",
-        "dimensions/channels/data meaning": "256x256 RGBA Uint8: R shallow bank, G coast proximity, B land height/0.72, A land mask.",
+        "generator/seed/data source": "coastalMask consumes the pure createPassageBathymetry field derived from Level edges, canonical paths and node baseDepth. No passenger or load state input.",
+        "dimensions/channels/data meaning": "256x256 RGBA Uint8: R shallow bank with deeper node pockets, G coast proximity, B land height/0.72, A land mask; the shader now uses R for the visible canonical depth response.",
         "color space/filtering": "RGBA unsigned-byte data, NoColorSpace; LinearFilter minification/magnification.",
         "generation frequency": "Generated once per cove from authored level geometry; no network or per-frame allocation.",
         "consumers and disposal": "CoastalWater owns and disposes texture; wake borrows coastal mask."
@@ -1186,30 +1201,41 @@
         "connected stone forms",
         "subdued ground"
       ],
-      "visualSignature": "Broad connected sand/stone detail beneath water.",
+      "visualSignature": "Broad irregular connected sand/stone banks follow the real shallow approaches, with quieter intermediate transitions and deeper turning pockets.",
       "reuseAndOwnership": "256x256 RGBA generated field; paired with coast field, 524288 bytes combined.",
-      "behaviorToPreserve": "Decorative substrate independent of mechanical passage depths; retain disposal.",
+      "behaviorToPreserve": "Static geography derives from canonical base-depth passages and preserves deeper authored node pockets. Tide changes optical depth at0.18world units per level; load changes legality only. The field never validates actions and is disposed with CoastalWater.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "part-of-accepted-baseline",
-        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+        "state": "integrated-play-readability-awaiting-human-review",
+        "reviewedBaseline": "7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695",
+        "basis": "Existing family reused for the scoped readable-play correction. Earlier accepted material, identity and behavior remain; new composition and perceptual readability require their own actual evidence and user review. Published version13 still contains the reviewed baseline.",
+        "history": [
+          {
+            "state": "part-of-accepted-baseline",
+            "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+          }
+        ]
       },
       "evidence": [
         {
           "path": "reviews/phone-audio-fullscreen/REVIEW.md",
           "role": "Current build identity and preservation; not an isolated visual test of every family"
+        },
+        {
+          "path": "reviews/play-readability/REVIEW.md",
+          "role": "PLAY_READABILITY_01 actual native UI/water/Harbor evidence, exact source identity, focused results and retained limitations; human visual acceptance is separate."
         }
       ],
-      "meaning": "Submerged albedo and height field. Decorative substrate independent of mechanical passage depths; retain disposal.",
+      "meaning": "Submerged albedo and height field shared with canonical passage bathymetry; it communicates authored depth categories without treating integer rule depths as meters.",
       "consumers": [
         "src/scene/world.ts"
       ],
       "gallery": {
         "section": "inventory",
-        "preview": "Source links and attributed existing evidence; no isolated rendering claimed"
+        "preview": "Source links and attributed existing evidence; no isolated rendering claimed The gallery links to actual Holding/Driftwood practice and this pass evidence; gallery specimens remain design evidence."
       },
       "typeSpecific": {
-        "generator/seed/data source": "src/scene/seabed.ts: createSeabedField / seabedHeightRange",
+        "generator/seed/data source": "src/scene/seabed.ts createPassageBathymetry and createSeabedField: canonical paths, authored edge/node baseDepth and original shore geometry. No load input or per-frame regeneration.",
         "dimensions/channels/data meaning": "256x256 RGBA Uint8: RGB linear albedo, A normalized substrate height; heightRange supplies decode bounds. 262144 bytes per field.",
         "color space/filtering": "RGBA unsigned-byte data, NoColorSpace; LinearFilter minification/magnification.",
         "generation frequency": "Generated once per cove from authored level geometry; no network or per-frame allocation.",
@@ -1235,18 +1261,29 @@
         "luminous is runtime default",
         "restrained is existing tuning preset"
       ],
-      "visualSignature": "Deep #123e55, coastal #3e7e88, pearl #bbd8e2, amber #ffbf62 in luminous preset.",
+      "visualSignature": "Deep #123e55, coastal #3e7e88, pearl #bbd8e2, amber #ffbf62 in luminous preset. Canonical base-depth1 approaches now have restrained lighter teal and submerged sand/stone; base-depth2 transitions are quieter and deep alternatives/pockets retain darker water.",
       "reuseAndOwnership": "One plane/render treatment, analytic normals, coast/substrate textures and local lamp reflection; no reflection render target.",
       "behaviorToPreserve": "Freeze decorative motion under Reduced; view and water height update with accepted camera/tide. Do not treat restrained as an extra shipped level style.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "part-of-accepted-baseline",
-        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+        "state": "integrated-play-readability-awaiting-human-review",
+        "reviewedBaseline": "7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695",
+        "basis": "Existing family reused for the scoped readable-play correction. Earlier accepted material, identity and behavior remain; new composition and perceptual readability require their own actual evidence and user review. Published version13 still contains the reviewed baseline.",
+        "history": [
+          {
+            "state": "part-of-accepted-baseline",
+            "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+          }
+        ]
       },
       "evidence": [
         {
           "path": "reviews/phone-audio-fullscreen/REVIEW.md",
           "role": "Current build identity and preservation; not an isolated visual test of every family"
+        },
+        {
+          "path": "reviews/play-readability/REVIEW.md",
+          "role": "PLAY_READABILITY_01 actual native UI/water/Harbor evidence, exact source identity, focused results and retained limitations; human visual acceptance is separate."
         }
       ],
       "meaning": "Luminous coastal water. Freeze decorative motion under Reduced; view and water height update with accepted camera/tide. Do not treat restrained as an extra shipped level style.",
@@ -1255,10 +1292,10 @@
       ],
       "gallery": {
         "section": "inventory",
-        "preview": "Source links and attributed existing evidence; no isolated rendering claimed"
+        "preview": "Source links and attributed existing evidence; no isolated rendering claimed The gallery links to actual Holding/Driftwood practice and this pass evidence; gallery specimens remain design evidence."
       },
       "typeSpecific": {
-        "entry point/uniform inputs": "CoastalWater binds waterVertexShader/waterFragmentShader; time, waterY, coast/substrate/field/heightRange, view/sun direction, sky/sun/lamp/arrival and waterPresets tuning uniforms.",
+        "entry point/uniform inputs": "CoastalWater binds waterVertexShader/waterFragmentShader; time, waterY, coast/substrate/field/heightRange, view/sun direction, sky/sun/lamp/arrival and waterPresets tuning uniforms. The existing coastal R bank channel now affects visible water color, and the shared substrate height controls tide-dependent absorption; integer depth categories remain separate from the0.18world-height tide mapping.",
         "color/data texture semantics": "Coastal mask and substrate are NoColorSpace data; hex colors become Three.js working-linear colors. Output uses retained tone/color-space chunks.",
         "transparency/depth/render order": "Opaque ShaderMaterial on 200x200 plane; normal depth test/write; excluded from scene framing.",
         "bounded allocation/pass needs": "Existing geometry and material instance; no added postprocessing pass.",
@@ -2062,7 +2099,7 @@
       "sources": [
         {
           "path": "src/style.css",
-          "symbol": ":root / button / .hud / #local-context / dialog / .dialog-footer"
+          "symbol": ":root / button / #local-context / dialog / .dialog-footer"
         },
         {
           "path": "src/ui/cove-ui.ts",
@@ -2075,6 +2112,14 @@
         {
           "path": "cove-panel-package/material/cove-panel-material.css",
           "symbol": ".cove-surface / .cove-surface--compact / .cove-surface--arrival / focus state"
+        },
+        {
+          "path": "src/ui/play-controls.css",
+          "symbol": "Standalone corner utilities, compact load/depth and deadline capsules, optional details and nearby Sail toolbar"
+        },
+        {
+          "path": "src/main.ts",
+          "symbol": "Independent visible control obstacles, safe viewport and overlay placement, native one-action Sail/focus ownership"
         }
       ],
       "variants": [
@@ -2085,21 +2130,28 @@
         "warning",
         "terminal"
       ],
-      "visualSignature": "Shared opaque painted reading faces; current seafoam actions, quiet utilities and warm objective/progression faces are retained.",
+      "visualSignature": "Existing opaque painted faces appear only on independent controls, compact capsules and optional reading panels; no continuous play HUD background or invisible full-width exclusion.",
       "reuseAndOwnership": "Existing layout family retained; one imported canonical material owns reading appearance, while cove-ui.css owns the existing component geometry/controls and native input remains authoritative.",
       "behaviorToPreserve": "Keep 16px primary text, 48px main actions/44px minima, measured placement and readable text opacity.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "accepted-painted-panel-direction",
-        "gameCommit": "23a644aba24e6479b9d82a106a745d15c3f8c7dc",
-        "basis": "Current user reports the published painted panels look good. Sites version11 publication is confirmed in cove-portrait-package/verification/deployment-confirmation.json. New portraits are a separate unaccepted integration, not in that live build; no blanket device/engine approval.",
-        "reviewedSourceCommit": "23a644aba24e6479b9d82a106a745d15c3f8c7dc",
+        "state": "integrated-play-readability-awaiting-human-review",
+        "reviewedBaseline": "7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695",
+        "basis": "Existing family reused for the scoped readable-play correction. Earlier accepted material, identity and behavior remain; new composition and perceptual readability require their own actual evidence and user review. Published version13 still contains the reviewed baseline.",
         "history": [
           {
-            "state": "accepted-button-direction; panel-and-three-choice-refinement-awaiting-human-playtest",
-            "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b",
-            "basis": "User likes the new button/icon direction at a432535; the supplied review requests panel and three-passenger correction. Integration, independent baseline code checks and human visual acceptance are separate.",
-            "reviewedSourceCommit": "a4325353cf11cd4edba8d5384b58fe138e4772e3"
+            "state": "accepted-painted-panel-direction",
+            "gameCommit": "23a644aba24e6479b9d82a106a745d15c3f8c7dc",
+            "basis": "Current user reports the published painted panels look good. Sites version11 publication is confirmed in cove-portrait-package/verification/deployment-confirmation.json. New portraits are a separate unaccepted integration, not in that live build; no blanket device/engine approval.",
+            "reviewedSourceCommit": "23a644aba24e6479b9d82a106a745d15c3f8c7dc",
+            "history": [
+              {
+                "state": "accepted-button-direction; panel-and-three-choice-refinement-awaiting-human-playtest",
+                "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b",
+                "basis": "User likes the new button/icon direction at a432535; the supplied review requests panel and three-passenger correction. Integration, independent baseline code checks and human visual acceptance are separate.",
+                "reviewedSourceCommit": "a4325353cf11cd4edba8d5384b58fe138e4772e3"
+              }
+            ]
           }
         ]
       },
@@ -2131,6 +2183,10 @@
         {
           "path": "reviews/cove-panel-refinement/contrast.json",
           "role": "272 passing integrated comparisons across13actualUIstages; every parsed gradient and source-matched browser-decoded motif included; not complete accessibility certification"
+        },
+        {
+          "path": "reviews/play-readability/REVIEW.md",
+          "role": "PLAY_READABILITY_01 actual native UI/water/Harbor evidence, exact source identity, focused results and retained limitations; human visual acceptance is separate."
         }
       ],
       "meaning": "Current teal surfaces and controls. Keep 16px primary text, 48px main actions/44px minima, measured placement and readable text opacity.",
@@ -2139,13 +2195,13 @@
       ],
       "gallery": {
         "section": "interface",
-        "preview": "Actual shared material and passengerChoiceContent; ordinary/compact/arrival, long warning, native selected/unselected/focus states and constrained three-passenger specimens. Gallery is design evidence only."
+        "preview": "Actual shared material and passengerChoiceContent; ordinary/compact/arrival, long warning, native selected/unselected/focus states and constrained three-passenger specimens. Gallery is design evidence only. The gallery links to actual Holding/Driftwood practice and this pass evidence; gallery specimens remain design evidence."
       },
       "typeSpecific": {
         "component/selector sources": "src/style.css: :root / button / .hud / #local-context / dialog / .dialog-footer; src/ui/cove-ui.ts: shared icon and control rendering helpers; src/ui/cove-ui.css: shared cove interface surfaces; cove-panel-package/material/cove-panel-material.css: .cove-surface / .cove-surface--compact / .cove-surface--arrival / focus state",
         "token and elevation roles": "material.cove-ui-tokens owns semantic control roles; cove-panel material owns opaque wash, sage rim and lowerlip. Compact surfaces remove motif without enlarging layout.",
         "interaction states": "ordinary; hover/pressed as implemented; disabled; focus-visible; warning; terminal",
-        "size/hit target/layout behavior": "Existing measured phone placement; 48px main target and constrained 44px floor. Outer hit bounds remain stable under press.",
+        "size/hit target/layout behavior": "Independent visible control rectangles replace the removed full-width HUD exclusion. Safe viewport remains stable when information expands; nearby actions and receipts avoid actual controls, selected endpoints and figures. At least44px native hit targets; critical text wraps.",
         "text/icon contract": "Native button owns label and accessible name; inline decorative SVG has no focus or pointer target.",
         "focus and disabled/warning semantics": "Focus keyline; selected/disabled/warning have shape and text as well as color.",
         "mobile and reduced-motion evidence": "Current cove-panel-refinement review and capture-manifest identify actual Harbor pre-confirmation UI at844x390,780x320,390x844,360x740and1440x900. Integrated contrast passes272checks/13stages; all13SettingsReduced measured button transitions are0s. Gallery18choices/39Rangefragments fit at1440/320viewports, including20pxlongnames; not physical-device certification."
@@ -2160,6 +2216,10 @@
         {
           "path": "src/style.css",
           "symbol": ":root / h1 / #local-heading"
+        },
+        {
+          "path": "src/ui/play-controls.css",
+          "symbol": "Standalone corner utilities, compact load/depth and deadline capsules, optional details and nearby Sail toolbar"
         }
       ],
       "variants": [
@@ -2171,28 +2231,40 @@
       "behaviorToPreserve": "Do not bake essential text into icons or textures; labels remain localizable DOM text.",
       "provenance": "system-font-stack",
       "acceptance": {
-        "state": "part-of-accepted-baseline",
-        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+        "state": "integrated-play-readability-awaiting-human-review",
+        "reviewedBaseline": "7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695",
+        "basis": "Existing family reused for the scoped readable-play correction. Earlier accepted material, identity and behavior remain; new composition and perceptual readability require their own actual evidence and user review. Published version13 still contains the reviewed baseline.",
+        "history": [
+          {
+            "state": "part-of-accepted-baseline",
+            "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+          }
+        ]
       },
       "evidence": [
         {
           "path": "reviews/phone-audio-fullscreen/REVIEW.md",
           "role": "Current build identity and preservation; not an isolated visual test of every family"
+        },
+        {
+          "path": "reviews/play-readability/REVIEW.md",
+          "role": "PLAY_READABILITY_01 actual native UI/water/Harbor evidence, exact source identity, focused results and retained limitations; human visual acceptance is separate."
         }
       ],
-      "meaning": "System typography. Do not bake essential text into icons or textures; labels remain localizable DOM text.",
+      "meaning": "Live DOM labels preserve readable names and consequences. Default status keeps load/capacity and required depth visible; a separate occupied-pier deadline stays visible while secondary facts expand on demand.",
       "consumers": [
         "src/main.ts"
       ],
       "gallery": {
         "section": "interface",
-        "preview": "Source links and attributed existing evidence; no isolated rendering claimed"
+        "preview": "Source links and attributed existing evidence; no isolated rendering claimed The gallery links to actual Holding/Driftwood practice and this pass evidence; gallery specimens remain design evidence."
       },
       "typeSpecific": {
         "CSS stack and roles": "'Segoe UI', Arial, sans-serif body; Georgia, serif cove titles.",
         "weights/sizes": "Essential action labels 16px; body/secondary and responsive title sizes follow src/style.css; native weights 400/600/700.",
         "fallback behavior": "Browser/system fallback; no network font fetch; dimensions remeasured by existing layout.",
-        "whether any font file is redistributed": "No font file redistributed."
+        "whether any font file is redistributed": "No font file redistributed.",
+        "size/hit target/layout behavior": "Independent visible control rectangles replace the removed full-width HUD exclusion. Safe viewport remains stable when information expands; nearby actions and receipts avoid actual controls, selected endpoints and figures. At least44px native hit targets; critical text wraps."
       }
     },
     {
@@ -2203,7 +2275,7 @@
       "sources": [
         {
           "path": "src/main.ts",
-          "symbol": "renderMap"
+          "symbol": "Independent visible control obstacles, safe viewport and overlay placement, native one-action Sail/focus ownership"
         },
         {
           "path": "src/style.css",
@@ -2220,6 +2292,18 @@
         {
           "path": "src/ui/cove-layout.ts",
           "symbol": "clearCurrentEndpoint and endpointTargets"
+        },
+        {
+          "path": "src/ui/play-controls.css",
+          "symbol": "Standalone corner utilities, compact load/depth and deadline capsules, optional details and nearby Sail toolbar"
+        },
+        {
+          "path": "src/scene/view.ts",
+          "symbol": "Stable Whole-cove composition around measured individual controls; complete cove fit and unchanged Play/pan ownership"
+        },
+        {
+          "path": "src/scene/world.ts",
+          "symbol": "Stable Whole-cove composition around measured individual controls; complete cove fit and unchanged Play/pan ownership"
         }
       ],
       "variants": [
@@ -2232,12 +2316,19 @@
       ],
       "visualSignature": "Small 28px visual marker with larger stationary hit region and freestanding label.",
       "reuseAndOwnership": "Name plus marker is one semantic button and one Tab stop for each real node.",
-      "behaviorToPreserve": "One semantic endpoint/tab stop with44px-or-larger hit area. Current cue is offset outside the boat at a stable camera/state anchor, with a leader to its boundary; hover/focus/selection retain true endpoint identity.",
+      "behaviorToPreserve": "Free selection and exact endpoint identity remain. A compact nearby Sail activation commits one revalidated edge/action. Blocked and no-direct-passage states never detour. Legal immediate loss is stated inline before Sail anyway; no second sailing dialog.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "original-accepted-variants-preserved-wide-berth-visual-repair-awaiting-human-review",
-        "reviewedBaseline": "45ab9768792ddd3a8dffb67da6c332f8fe2234ff",
-        "basis": "Prior Wide Berth functional verification did not establish visual acceptance. Existing original variants remain preserved; this scoped correction needs its own actual visual observations and user playtest."
+        "state": "integrated-play-readability-awaiting-human-review",
+        "reviewedBaseline": "7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695",
+        "basis": "Existing family reused for the scoped readable-play correction. Earlier accepted material, identity and behavior remain; new composition and perceptual readability require their own actual evidence and user review. Published version13 still contains the reviewed baseline.",
+        "history": [
+          {
+            "state": "original-accepted-variants-preserved-wide-berth-visual-repair-awaiting-human-review",
+            "reviewedBaseline": "45ab9768792ddd3a8dffb67da6c332f8fe2234ff",
+            "basis": "Prior Wide Berth functional verification did not establish visual acceptance. Existing original variants remain preserved; this scoped correction needs its own actual visual observations and user playtest."
+          }
+        ]
       },
       "evidence": [
         {
@@ -2251,6 +2342,10 @@
         {
           "path": "reviews/wide-berth-visual-repair/REVIEW.md",
           "role": "Current corrective implementation and actual source-indexed phone comparisons; prior45ab976presentation was rejected, human acceptance of this repair remains pending."
+        },
+        {
+          "path": "reviews/play-readability/REVIEW.md",
+          "role": "PLAY_READABILITY_01 actual native UI/water/Harbor evidence, exact source identity, focused results and retained limitations; human visual acceptance is separate."
         }
       ],
       "meaning": "Freestanding names and selectable marker buttons. Preserve real status shape/text, free selection, collision/occlusion avoidance and no forced pan on selecting.",
@@ -2259,15 +2354,16 @@
       ],
       "gallery": {
         "section": "interface",
-        "preview": "Source links and attributed existing evidence; no isolated rendering claimed"
+        "preview": "Source links and attributed existing evidence; no isolated rendering claimed The gallery links to actual Holding/Driftwood practice and this pass evidence; gallery specimens remain design evidence."
       },
       "typeSpecific": {
         "render/placement sources": "src/main.ts: renderMap; src/style.css: .map-target / .map-hit / .map-symbol / .map-name / .map-home",
         "semantic role/accessible name": "Freestanding names and selectable marker buttons. Preserve real status shape/text, free selection, collision/occlusion avoidance and no forced pan on selecting.",
         "icon and label mappings": "Native visible words remain authoritative; SVG adds redundant semantic visual cue.",
         "interaction states": "current; remote; too shallow; loss risk; selected; Home role",
-        "nearby placement and viewport contract": "main.ts positionMap/positionCard with measured safe viewport; nearby confirmation and stable subset sheet.",
-        "focus/cancel/fullscreen preservation": "Native buttons/aria-pressed; Escape cancels; same dialog promoted on fullscreen with DOM, focus, subset and scroll retained."
+        "nearby placement and viewport contract": "Placement uses independent measured visible controls with full safe canvas bounds. Local context is the non-committing keyboard focus owner, replacing the removed heading; same selection gesture cannot activate the newly appeared Sail.",
+        "focus/cancel/fullscreen preservation": "Native buttons/aria-pressed; Escape cancels; same dialog promoted on fullscreen with DOM, focus, subset and scroll retained.",
+        "size/hit target/layout behavior": "Independent visible control rectangles replace the removed full-width HUD exclusion. Safe viewport remains stable when information expands; nearby actions and receipts avoid actual controls, selected endpoints and figures. At least44px native hit targets; critical text wraps."
       }
     },
     {
@@ -2411,7 +2507,7 @@
       "sources": [
         {
           "path": "src/main.ts",
-          "symbol": "renderDialog / renderLocation"
+          "symbol": "Independent visible control obstacles, safe viewport and overlay placement, native one-action Sail/focus ownership"
         },
         {
           "path": "src/ui/placement.ts",
@@ -2444,6 +2540,10 @@
         {
           "path": "src/ui/presentation.ts",
           "symbol": "previewCopy future winning consequence"
+        },
+        {
+          "path": "src/ui/play-controls.css",
+          "symbol": "Standalone corner utilities, compact load/depth and deadline capsules, optional details and nearby Sail toolbar"
         }
       ],
       "variants": [
@@ -2461,24 +2561,31 @@
       ],
       "visualSignature": "Compact opaque painted card with preserved nearby placement and fixed transfer-sheet height; three-passenger names and full costs adapt to the panel width. Static44px original model-derived portraits now sit beside full name/capacity in native choices.",
       "reuseAndOwnership": "Same native dialog preserves focus/subset/scroll during fullscreen promotion.",
-      "behaviorToPreserve": "Preview uses future delivery language and qualified projected load/tide; opening/toggling/cancelling keeps committed state/history and victory effects unchanged. Same native dialog/choices/focus/scroll survive fullscreen; portrait recovery and stable footer remain. Image decode/failure and rerendering reserve the same geometry; portrait children remain decoration within each existing native button. No portrait-specific overlay or replacement dialog. Story uses this same native owner; cove-boundary progression requires explicit departure and never follows previews, victory display or Undo. Six-option groups use a bounded wider short-landscape chooser; Confirm stays near the initiating context with native choices and overcapacity rejection.",
+      "behaviorToPreserve": "Preview uses future delivery language and qualified projected load/tide; opening/toggling/cancelling keeps committed state/history and victory effects unchanged. Same native dialog/choices/focus/scroll survive fullscreen; portrait recovery and stable footer remain. Image decode/failure and rerendering reserve the same geometry; portrait children remain decoration within each existing native button. No portrait-specific overlay or replacement dialog. Story uses this same native owner; cove-boundary progression requires explicit departure and never follows previews, victory display or Undo. Six-option groups use a bounded wider short-landscape chooser; Confirm stays near the initiating context with native choices and overcapacity rejection. Sailing uses inline consequences and its explicit nearby action; native passenger subset/loss dialogs, fullscreen identity and complete Undo remain.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "accepted-painted-panel-direction; published-portrait-integration; story-awaiting-review",
-        "gameCommit": "1a85874883af5caa59f6294a75495eccf2afebbc",
-        "basis": "Supplied version12 receipt confirms the independently reviewed portrait build was published to the unchanged owner-private Site; publication is not new physical-device or blanket human visual approval.",
+        "state": "integrated-play-readability-awaiting-human-review",
+        "reviewedBaseline": "7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695",
+        "basis": "Existing family reused for the scoped readable-play correction. Earlier accepted material, identity and behavior remain; new composition and perceptual readability require their own actual evidence and user review. Published version13 still contains the reviewed baseline.",
         "history": [
           {
-            "state": "accepted-button-direction; panel-and-three-choice-refinement-awaiting-human-playtest",
-            "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b",
-            "basis": "User likes the new button/icon direction at a432535; the supplied review requests panel and three-passenger correction. Integration, independent baseline code checks and human visual acceptance are separate.",
-            "reviewedSourceCommit": "a4325353cf11cd4edba8d5384b58fe138e4772e3"
-          },
-          {
-            "state": "accepted-painted-panel-direction; portrait-integration-awaiting-human-playtest",
-            "gameCommit": "23a644aba24e6479b9d82a106a745d15c3f8c7dc",
-            "basis": "Current user reports the published painted panels look good. Sites version11 publication is confirmed in cove-portrait-package/verification/deployment-confirmation.json. New portraits are a separate unaccepted integration, not in that live build; no blanket device/engine approval.",
-            "reviewedSourceCommit": "23a644aba24e6479b9d82a106a745d15c3f8c7dc"
+            "state": "accepted-painted-panel-direction; published-portrait-integration; story-awaiting-review",
+            "gameCommit": "1a85874883af5caa59f6294a75495eccf2afebbc",
+            "basis": "Supplied version12 receipt confirms the independently reviewed portrait build was published to the unchanged owner-private Site; publication is not new physical-device or blanket human visual approval.",
+            "history": [
+              {
+                "state": "accepted-button-direction; panel-and-three-choice-refinement-awaiting-human-playtest",
+                "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b",
+                "basis": "User likes the new button/icon direction at a432535; the supplied review requests panel and three-passenger correction. Integration, independent baseline code checks and human visual acceptance are separate.",
+                "reviewedSourceCommit": "a4325353cf11cd4edba8d5384b58fe138e4772e3"
+              },
+              {
+                "state": "accepted-painted-panel-direction; portrait-integration-awaiting-human-playtest",
+                "gameCommit": "23a644aba24e6479b9d82a106a745d15c3f8c7dc",
+                "basis": "Current user reports the published painted panels look good. Sites version11 publication is confirmed in cove-portrait-package/verification/deployment-confirmation.json. New portraits are a separate unaccepted integration, not in that live build; no blanket device/engine approval.",
+                "reviewedSourceCommit": "23a644aba24e6479b9d82a106a745d15c3f8c7dc"
+              }
+            ]
           }
         ]
       },
@@ -2538,6 +2645,10 @@
         {
           "path": "LAST_FERRY_WIDE_BERTH_PACKAGE/contracts/FERRY_AND_TRANSFERS.md",
           "role": "Current scoped wider-profile contract; verification remains distinct from specification"
+        },
+        {
+          "path": "reviews/play-readability/REVIEW.md",
+          "role": "PLAY_READABILITY_01 actual native UI/water/Harbor evidence, exact source identity, focused results and retained limitations; human visual acceptance is separate."
         }
       ],
       "meaning": "Local preview, forecast, Menu, Settings and completion retain native semantics; projected future action is explicit and every full passenger label/cost remains readable.",
@@ -2547,7 +2658,7 @@
       ],
       "gallery": {
         "section": "interface",
-        "preview": "Actual shared material and passengerChoiceContent; ordinary/compact/arrival, long warning, native selected/unselected/focus states and constrained three-passenger specimens. Gallery is design evidence only."
+        "preview": "Actual shared material and passengerChoiceContent; ordinary/compact/arrival, long warning, native selected/unselected/focus states and constrained three-passenger specimens. Gallery is design evidence only. The gallery links to actual Holding/Driftwood practice and this pass evidence; gallery specimens remain design evidence."
       },
       "typeSpecific": {
         "render/placement sources": "src/main.ts: renderDialog / renderLocation; src/ui/placement.ts: placeLocalCard / placeActionCard; src/ui/cove-layout.ts: endpointTargets; src/ui/fullscreen.ts: FullscreenSupport.changed; src/style.css: dialog / .dialog-body / .dialog-footer / .terminal-actions; src/ui/cove-ui.ts: shared icon and control rendering helpers; src/ui/cove-ui.css: shared cove interface surfaces; cove-panel-package/material/cove-panel-material.css: .cove-surface / .cove-surface--compact / .cove-surface--arrival / focus state; src/ui/presentation.ts: previewCopy future winning consequence",
@@ -2555,7 +2666,8 @@
         "icon and label mappings": "Native visible words remain authoritative; SVG adds redundant semantic visual cue.",
         "interaction states": "passenger subset; tide forecast; crossing menu; settings; won; lost; support-details fallback",
         "nearby placement and viewport contract": "Existing measured safe viewport/anchor and fixed subset-sheet height stay; native reading order and stable footer across toggles; nested overflow and per-line text fit checked separately from outer control visibility.",
-        "focus/cancel/fullscreen preservation": "Native buttons/aria-pressed; Escape cancels; same dialog promoted on fullscreen with DOM, focus, subset and scroll retained."
+        "focus/cancel/fullscreen preservation": "Native buttons/aria-pressed; Escape cancels; same dialog promoted on fullscreen with DOM, focus, subset and scroll retained.",
+        "size/hit target/layout behavior": "Independent visible control rectangles replace the removed full-width HUD exclusion. Safe viewport remains stable when information expands; nearby actions and receipts avoid actual controls, selected endpoints and figures. At least44px native hit targets; critical text wraps."
       }
     },
     {
@@ -3777,10 +3889,18 @@
         {
           "path": "src/ui/cove-ui.ts",
           "symbol": "shared icon and control rendering helpers"
+        },
+        {
+          "path": "src/ui/play-controls.css",
+          "symbol": "Standalone corner utilities, compact load/depth and deadline capsules, optional details and nearby Sail toolbar"
+        },
+        {
+          "path": "src/main.ts",
+          "symbol": "Independent visible control obstacles, safe viewport and overlay placement, native one-action Sail/focus ownership"
         }
       ],
       "integrationTarget": "src/ui/cove-ui.css",
-      "meaning": "Small familiar utilities; 48px stable target, 24px glyph.",
+      "meaning": "Small familiar utilities; 48px stable target, 24px glyph. Undo, Wait, Menu and Sound are separate corner controls; Wait remains one action while free view/settings controls remain separate.",
       "variants": [
         "quiet",
         "focus",
@@ -3797,8 +3917,15 @@
       },
       "provenance": "original-package-vector-and-css",
       "acceptance": {
-        "state": "awaiting-human-playtest",
-        "basis": "Integrated and contributor-verified in actual game; not yet human-accepted"
+        "state": "integrated-play-readability-awaiting-human-review",
+        "reviewedBaseline": "7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695",
+        "basis": "Existing family reused for the scoped readable-play correction. Earlier accepted material, identity and behavior remain; new composition and perceptual readability require their own actual evidence and user review. Published version13 still contains the reviewed baseline.",
+        "history": [
+          {
+            "state": "awaiting-human-playtest",
+            "basis": "Integrated and contributor-verified in actual game; not yet human-accepted"
+          }
+        ]
       },
       "evidence": [
         {
@@ -3812,6 +3939,10 @@
         {
           "path": "reviews/cove-ui-assets/REVIEW.md",
           "role": "Actual native gameplay, interaction checks and exact source identity; contributor verification"
+        },
+        {
+          "path": "reviews/play-readability/REVIEW.md",
+          "role": "PLAY_READABILITY_01 actual native UI/water/Harbor evidence, exact source identity, focused results and retained limitations; human visual acceptance is separate."
         }
       ],
       "consumers": [
@@ -3819,13 +3950,13 @@
       ],
       "gallery": {
         "section": "interface",
-        "preview": "Actual shared CSS/component states; design evidence separate from gameplay"
+        "preview": "Actual shared CSS/component states; design evidence separate from gameplay The gallery links to actual Holding/Driftwood practice and this pass evidence; gallery specimens remain design evidence."
       },
       "typeSpecific": {
         "component/selector sources": "src/ui/cove-ui.css: .cove-button.cove-button--icon; src/ui/cove-ui.ts: shared icon and control rendering helpers",
         "token and elevation roles": "Rounded matte surface, shallow lower edge and restrained top highlight; tokens in the same shared CSS",
         "interaction states": "quiet; focus; pressed; disabled",
-        "size/hit target/layout behavior": "Existing measured phone placement; 48px main target and constrained 44px floor. Outer hit bounds remain stable under press.",
+        "size/hit target/layout behavior": "Independent visible control rectangles replace the removed full-width HUD exclusion. Safe viewport remains stable when information expands; nearby actions and receipts avoid actual controls, selected endpoints and figures. At least44px native hit targets; critical text wraps.",
         "text/icon contract": "Native button owns label and accessible name; inline decorative SVG has no focus or pointer target.",
         "focus and disabled/warning semantics": "Focus keyline; selected/disabled/warning have shape and text as well as color.",
         "mobile and reduced-motion evidence": "reviews/cove-ui-assets/REVIEW.md native phone gameplay. contrast.json records169checks/9actualstages and13SettingsReduced control transition durations0s; no physical-device certification."
@@ -3844,10 +3975,18 @@
         {
           "path": "src/ui/cove-ui.ts",
           "symbol": "shared icon and control rendering helpers"
+        },
+        {
+          "path": "src/ui/play-controls.css",
+          "symbol": "Standalone corner utilities, compact load/depth and deadline capsules, optional details and nearby Sail toolbar"
+        },
+        {
+          "path": "src/main.ts",
+          "symbol": "Independent visible control obstacles, safe viewport and overlay placement, native one-action Sail/focus ownership"
         }
       ],
       "integrationTarget": "src/ui/cove-ui.css",
-      "meaning": "Board / Let ashore / Bring home / Sail / Wait / Undo / confirmation; retain visible action labels.",
+      "meaning": "Board / Let ashore / Bring home / Sail / Wait / Undo / confirmation; retain visible action labels. Nearby Sail shows its one-action cost with optional free Details. Direct safe single-passenger transfers and named group commitment retain the existing flow.",
       "variants": [
         "foam",
         "warm",
@@ -3866,8 +4005,15 @@
       },
       "provenance": "original-package-vector-and-css",
       "acceptance": {
-        "state": "awaiting-human-playtest",
-        "basis": "Integrated and contributor-verified in actual game; not yet human-accepted"
+        "state": "integrated-play-readability-awaiting-human-review",
+        "reviewedBaseline": "7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695",
+        "basis": "Existing family reused for the scoped readable-play correction. Earlier accepted material, identity and behavior remain; new composition and perceptual readability require their own actual evidence and user review. Published version13 still contains the reviewed baseline.",
+        "history": [
+          {
+            "state": "awaiting-human-playtest",
+            "basis": "Integrated and contributor-verified in actual game; not yet human-accepted"
+          }
+        ]
       },
       "evidence": [
         {
@@ -3885,6 +4031,10 @@
         {
           "path": "reviews/home-play-flow/REVIEW.md",
           "role": "Named direct single-passenger actions, compact subset chooser and completion-derived receipts; existing choice identities preserved."
+        },
+        {
+          "path": "reviews/play-readability/REVIEW.md",
+          "role": "PLAY_READABILITY_01 actual native UI/water/Harbor evidence, exact source identity, focused results and retained limitations; human visual acceptance is separate."
         }
       ],
       "consumers": [
@@ -3892,13 +4042,13 @@
       ],
       "gallery": {
         "section": "interface",
-        "preview": "Actual shared CSS/component states; design evidence separate from gameplay"
+        "preview": "Actual shared CSS/component states; design evidence separate from gameplay The gallery links to actual Holding/Driftwood practice and this pass evidence; gallery specimens remain design evidence."
       },
       "typeSpecific": {
         "component/selector sources": "src/ui/cove-ui.css: .cove-button; src/ui/cove-ui.ts: shared icon and control rendering helpers",
         "token and elevation roles": "Rounded matte surface, shallow lower edge and restrained top highlight; tokens in the same shared CSS",
         "interaction states": "foam; warm; quiet; focus; pressed; disabled",
-        "size/hit target/layout behavior": "Existing measured phone placement; 48px main target and constrained 44px floor. Outer hit bounds remain stable under press.",
+        "size/hit target/layout behavior": "Independent visible control rectangles replace the removed full-width HUD exclusion. Safe viewport remains stable when information expands; nearby actions and receipts avoid actual controls, selected endpoints and figures. At least44px native hit targets; critical text wraps.",
         "text/icon contract": "Native button owns label and accessible name; inline decorative SVG has no focus or pointer target.",
         "focus and disabled/warning semantics": "Focus keyline; selected/disabled/warning have shape and text as well as color.",
         "mobile and reduced-motion evidence": "reviews/cove-ui-assets/REVIEW.md native phone gameplay. contrast.json records169checks/9actualstages and13SettingsReduced control transition durations0s; no physical-device certification."
@@ -3925,6 +4075,14 @@
         {
           "path": "cove-panel-package/material/shoreline-corner.svg",
           "symbol": "three original lower-corner contour paths, one 5.5%-opacity stroke group"
+        },
+        {
+          "path": "src/ui/play-controls.css",
+          "symbol": "Standalone corner utilities, compact load/depth and deadline capsules, optional details and nearby Sail toolbar"
+        },
+        {
+          "path": "src/main.ts",
+          "symbol": "Independent visible control obstacles, safe viewport and overlay placement, native one-action Sail/focus ownership"
         }
       ],
       "integrationTarget": "cove-panel-package/material/cove-panel-material.css",
@@ -3938,7 +4096,7 @@
       ],
       "visualSignature": "Opaque three-stop blue-green wash (#2b5356 / #1b434b / #123741), sage #9eb5a5 rim, dark #0b2d36 lip, optional sparse 5.5%-opacity shoreline contours and a warm arrival catchlight.",
       "reuseAndOwnership": "cove-panel-package/material/cove-panel-material.css is the only editable runtime material, imported by shared cove-ui.css; its sibling SVG is the only decoration path source. Existing panel components own dimensions, radius, padding, placement and scroll.",
-      "behaviorToPreserve": "No world silhouettes under reading text, no new target/z-order/frame loop, no enlarged HUD or smaller scene; native focus/warning keylines and stable nearby confirmation retain ownership.",
+      "behaviorToPreserve": "Existing opaque material serves optional status/location details, native passenger dialogs and arrival. No continuous HUD reading panel or full-width invisible scene exclusion. Native focus/warning keylines and stable nearby confirmation retain ownership.",
       "accessibility": {
         "essentialText": "about 16px on phones",
         "contrast": "Verify actual composited normal text >=4.5:1 and meaningful icons/states >=3:1",
@@ -3946,17 +4104,24 @@
       },
       "provenance": "original-package-vector-and-css",
       "acceptance": {
-        "state": "accepted-painted-panel-direction",
-        "basis": "Current user reports the published painted panels look good. Sites version11 publication is confirmed in cove-portrait-package/verification/deployment-confirmation.json. New portraits are a separate unaccepted integration, not in that live build; no blanket device/engine approval.",
-        "reviewedSourceCommit": "23a644aba24e6479b9d82a106a745d15c3f8c7dc",
+        "state": "integrated-play-readability-awaiting-human-review",
+        "reviewedBaseline": "7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695",
+        "basis": "Existing family reused for the scoped readable-play correction. Earlier accepted material, identity and behavior remain; new composition and perceptual readability require their own actual evidence and user review. Published version13 still contains the reviewed baseline.",
         "history": [
           {
-            "state": "accepted-button-direction; panel-and-three-choice-refinement-awaiting-human-playtest",
-            "basis": "User likes the new button/icon direction at a432535; the supplied review requests panel and three-passenger correction. Integration, independent baseline code checks and human visual acceptance are separate.",
-            "reviewedSourceCommit": "a4325353cf11cd4edba8d5384b58fe138e4772e3"
+            "state": "accepted-painted-panel-direction",
+            "basis": "Current user reports the published painted panels look good. Sites version11 publication is confirmed in cove-portrait-package/verification/deployment-confirmation.json. New portraits are a separate unaccepted integration, not in that live build; no blanket device/engine approval.",
+            "reviewedSourceCommit": "23a644aba24e6479b9d82a106a745d15c3f8c7dc",
+            "history": [
+              {
+                "state": "accepted-button-direction; panel-and-three-choice-refinement-awaiting-human-playtest",
+                "basis": "User likes the new button/icon direction at a432535; the supplied review requests panel and three-passenger correction. Integration, independent baseline code checks and human visual acceptance are separate.",
+                "reviewedSourceCommit": "a4325353cf11cd4edba8d5384b58fe138e4772e3"
+              }
+            ],
+            "gameCommit": "23a644aba24e6479b9d82a106a745d15c3f8c7dc"
           }
-        ],
-        "gameCommit": "23a644aba24e6479b9d82a106a745d15c3f8c7dc"
+        ]
       },
       "evidence": [
         {
@@ -3990,6 +4155,10 @@
         {
           "path": "reviews/cove-panel-refinement/contrast.json",
           "role": "272 passing integrated comparisons across13actualUIstages; every parsed gradient and source-matched browser-decoded motif included; not complete accessibility certification"
+        },
+        {
+          "path": "reviews/play-readability/REVIEW.md",
+          "role": "PLAY_READABILITY_01 actual native UI/water/Harbor evidence, exact source identity, focused results and retained limitations; human visual acceptance is separate."
         }
       ],
       "consumers": [
@@ -3997,13 +4166,13 @@
       ],
       "gallery": {
         "section": "interface",
-        "preview": "Actual shared material and passengerChoiceContent; ordinary/compact/arrival, long warning, native selected/unselected/focus states and constrained three-passenger specimens. Gallery is design evidence only."
+        "preview": "Actual shared material and passengerChoiceContent; ordinary/compact/arrival, long warning, native selected/unselected/focus states and constrained three-passenger specimens. Gallery is design evidence only. The gallery links to actual Holding/Driftwood practice and this pass evidence; gallery specimens remain design evidence."
       },
       "typeSpecific": {
         "component/selector sources": "src/ui/cove-ui.css: .cove-panel; src/ui/cove-ui.ts: shared icon and control rendering helpers; cove-panel-package/material/cove-panel-material.css: .cove-surface / .cove-surface--compact / .cove-surface--arrival / focus state; cove-panel-package/material/shoreline-corner.svg: three original lower-corner contour paths, one 5.5%-opacity stroke group",
         "token and elevation roles": "Opaque three-stop blue-green wash (#2b5356 / #1b434b / #123741), sage #9eb5a5 rim, dark #0b2d36 lip, optional sparse 5.5%-opacity shoreline contours and a warm arrival catchlight.",
         "interaction states": "regular with corner motif; compact without motif; arrival upper highlight; keyboard focus; warning text and edge",
-        "size/hit target/layout behavior": "Material declares no dimensions, positioning, overflow, opacity, transforms, pointer handling or transitions. Existing component layout retains safe viewport and nearby placement; the focused forecast remains a native control.",
+        "size/hit target/layout behavior": "Independent visible control rectangles replace the removed full-width HUD exclusion. Safe viewport remains stable when information expands; nearby actions and receipts avoid actual controls, selected endpoints and figures. At least44px native hit targets; critical text wraps.",
         "text/icon contract": "Opaque reading gradient/fallback; optional decorative SVG stays outside the accessibility tree as CSS background. All words remain live DOM text.",
         "focus and disabled/warning semantics": "Focus keyline; selected/disabled/warning have shape and text as well as color.",
         "mobile and reduced-motion evidence": "Current cove-panel-refinement review and capture-manifest identify actual Harbor pre-confirmation UI at844x390,780x320,390x844,360x740and1440x900. Integrated contrast passes272checks/13stages; all13SettingsReduced measured button transitions are0s. Gallery18choices/39Rangefragments fit at1440/320viewports, including20pxlongnames; not physical-device certification."
@@ -4844,9 +5013,16 @@
       "behaviorToPreserve": "Normal 6/6/7-second shots advance automatically, then hold the final handoff. Pause retains elapsed/consumed cues and reveals copy. Resume never catches up unseen shots. Next/Replay/Skip are presentation only. Reduced/restored/secondary/background paths hold readable stills. Fresh pointer/keyboard final intent; no timed checkpoint writes.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "integrated-awaiting-production-visual-and-listening-review",
-        "reviewedBaseline": "6fc5a09dd4ef876ad96ad12d623532f0d13deb10",
-        "basis": "The supplied illustrated opening reference is user-approved. Production integration, new Harbor composition and runtime sound mix remain subject to the current review. Executed checks and original failures are reported separately; no new Site publication or physical-device acceptance is claimed."
+        "state": "integrated-play-readability-awaiting-human-review",
+        "reviewedBaseline": "7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695",
+        "basis": "Existing family reused for the scoped readable-play correction. Earlier accepted material, identity and behavior remain; new composition and perceptual readability require their own actual evidence and user review. Published version13 still contains the reviewed baseline.",
+        "history": [
+          {
+            "state": "integrated-awaiting-production-visual-and-listening-review",
+            "reviewedBaseline": "6fc5a09dd4ef876ad96ad12d623532f0d13deb10",
+            "basis": "The supplied illustrated opening reference is user-approved. Production integration, new Harbor composition and runtime sound mix remain subject to the current review. Executed checks and original failures are reported separately; no new Site publication or physical-device acceptance is claimed."
+          }
+        ]
       },
       "evidence": [
         {
@@ -4872,6 +5048,14 @@
         {
           "path": "reviews/home-play-flow/REVIEW.md",
           "role": "Current Home/autoplay/music and direct-transfer verification; prior manual pacing is historical."
+        },
+        {
+          "path": "reviews/play-readability/REVIEW.md",
+          "role": "PLAY_READABILITY_01 actual native UI/water/Harbor evidence, exact source identity, focused results and retained limitations; human visual acceptance is separate."
+        },
+        {
+          "path": "reviews/play-readability/harbor-second/capture.json",
+          "role": "12actual native held frames across2048x930,390x844,780x320and320x740 with exact source hashes, timing,44px/control/caption fit and4explicit handoffs."
         }
       ],
       "consumers": [
@@ -4880,14 +5064,14 @@
       ],
       "gallery": {
         "section": "story",
-        "preview": "Four static actual-painter endpoints with shared captions/descriptions and immediate primary labels. Gallery does not simulate progression, autoplay audio or substitute for gameplay evidence."
+        "preview": "Four static actual-painter endpoints with shared captions/descriptions and immediate primary labels. Gallery does not simulate progression, autoplay audio or substitute for gameplay evidence. The gallery links to actual Holding/Driftwood practice and this pass evidence; gallery specimens remain design evidence."
       },
       "typeSpecific": {
         "render/placement sources": "src/campaign/story-view.ts and story.css own one Canvas2D view with real HTML copy; registry and presentation own content and current-shot time; main alone owns checkpoint acknowledgment.",
         "semantic role/accessible name": "Existing native dialog, stable scene heading, concise per-shot canvas description and complete real caption. Read story exposes all text immediately without frame-by-frame announcements.",
         "icon and label mappings": "Existing next-cove/Settings/close/fullscreen control family with explicit Next, Take the helm, Continue to Bellwater, Replay, Skip animation and Read story wording.",
         "interaction states": "Fresh first shot, immediate Next/final action, held endpoint, Replay shot/scene, Skip final endpoint, transcript/Settings current-shot hold, Reduced endpoints, pending-scene final restore, hide and disposal cancellation.",
-        "nearby placement and viewport contract": "Art, complete current copy and primary controls must fit the actual visible 320x740, 390x844, 780x320 and 844x390 viewport; transcript can scroll. No copied 330px minimum on 320px landscape. Native evidence and remaining limitations are in the review.",
+        "nearby placement and viewport contract": "Art, complete current copy and primary controls must fit the actual visible 320x740, 390x844, 780x320 and 844x390 viewport; transcript can scroll. No copied 330px minimum on 320px landscape. Native evidence and remaining limitations are in the review. Harbor-only caption coordinates share the foreground design box on desktop/short landscape; portrait retains complete copy below art. The existing five-second clock,1.05second reveal and3.2second audio cue are unchanged.",
         "focus/cancel/fullscreen preservation": "One app/dialog/fullscreen owner; story fences gameplay input. Escape closes transcript/Settings before settling main story. Closing returns trigger focus. Scene changes cancel owned story work without altering accepted audio intent."
       }
     },
@@ -4899,7 +5083,7 @@
       "sources": [
         {
           "path": "src/campaign/story-painter.ts",
-          "symbol": "createCoveStoryPainter: typed Canvas2D tide, lantern, ferry and Harbor compositions"
+          "symbol": "createCoveStoryPainter and harborComposition: existing six-variant painter plus bounded Harbor foreground"
         },
         {
           "path": "LAST_FERRY_STORY_PRODUCTION_PACKAGE/reference/scene-painter.js",
@@ -4931,14 +5115,21 @@
         "driftwood",
         "launch"
       ],
-      "visualSignature": "Soft teal water, dusk lavender/peach, tan Rue left and cream Pip right, woolly Moss, yellow ferry/red cabin and restrained warm lantern/lighthouse light. Three approved opening compositions plus one new protected-Harbor picture. Driftwood adds warm brown Nell, broad flat tail, timber rail and a visibly lifted lantern. Launch shows the full wider yellow hull/red cabin, safe Nell releasing a mooring and two safe helpers, then glide and settle. The repaired launch uses common quay/waterline/boat/feet anchors, supported landing, visible Nell/cabin separation and the compact larger ferry silhouette.",
-      "reuseAndOwnership": "One current Canvas2D surface in the story view; painter receives illustration/time and bounded DPR1Ã¢â‚¬â€œ2. Shared paths/characters/shore/light helpers are reused across six variants. It owns no frame loop, puzzle state, audio or progress. Driftwood uses the same painter and player; accepted original opening/Harbor paths remain unchanged. Launch reuses the same finite painter/player/audio owners.",
+      "visualSignature": "Soft teal water, dusk lavender/peach, tan Rue left and cream Pip right, woolly Moss, yellow ferry/red cabin and restrained warm lantern/lighthouse light. Three approved opening compositions plus one new protected-Harbor picture. Driftwood adds warm brown Nell, broad flat tail, timber rail and a visibly lifted lantern. Launch shows the full wider yellow hull/red cabin, safe Nell releasing a mooring and two safe helpers, then glide and settle. The repaired launch uses common quay/waterline/boat/feet anchors, supported landing, visible Nell/cabin separation and the compact larger ferry silhouette. Harbor now groups the empty ferry, high stone landing, Rue’s placed lantern, Pip and Moss inside one coherently scaled foreground box, with authored portrait/short-landscape arrangements and independently extended background.",
+      "reuseAndOwnership": "One current Canvas2D surface in the story view; painter receives illustration/time and bounded DPR1–2. Shared paths/characters/shore/light helpers are reused across six variants. It owns no frame loop, puzzle state, audio or progress. Driftwood uses the same painter and player; accepted opening art remains unchanged; Harbor now uses a bounded original composition. Launch reuses the same finite painter/player/audio owners.",
       "behaviorToPreserve": "Opening finite actions retain supplied art and 6/6/7-second endpoints. Harbor is five seconds. Milliseconds convert explicitly to painter seconds. Resize recomposes portrait/landscape; settled endpoints redraw only when needed. No rabbits board during the prelude and the Harbor ferry remains empty.",
       "provenance": "original-package-canvas-art",
       "acceptance": {
-        "state": "original-accepted-variants-preserved-wide-berth-visual-repair-awaiting-human-review",
-        "reviewedBaseline": "45ab9768792ddd3a8dffb67da6c332f8fe2234ff",
-        "basis": "Prior Wide Berth functional verification did not establish visual acceptance. Existing original variants remain preserved; this scoped correction needs its own actual visual observations and user playtest."
+        "state": "integrated-play-readability-awaiting-human-review",
+        "reviewedBaseline": "7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695",
+        "basis": "Existing family reused for the scoped readable-play correction. Earlier accepted material, identity and behavior remain; new composition and perceptual readability require their own actual evidence and user review. Published version13 still contains the reviewed baseline.",
+        "history": [
+          {
+            "state": "original-accepted-variants-preserved-wide-berth-visual-repair-awaiting-human-review",
+            "reviewedBaseline": "45ab9768792ddd3a8dffb67da6c332f8fe2234ff",
+            "basis": "Prior Wide Berth functional verification did not establish visual acceptance. Existing original variants remain preserved; this scoped correction needs its own actual visual observations and user playtest."
+          }
+        ]
       },
       "evidence": [
         {
@@ -4960,6 +5151,14 @@
         {
           "path": "reviews/wide-berth-visual-repair/REVIEW.md",
           "role": "Current corrective implementation and actual source-indexed phone comparisons; prior45ab976presentation was rejected, human acceptance of this repair remains pending."
+        },
+        {
+          "path": "reviews/play-readability/REVIEW.md",
+          "role": "PLAY_READABILITY_01 actual native UI/water/Harbor evidence, exact source identity, focused results and retained limitations; human visual acceptance is separate."
+        },
+        {
+          "path": "reviews/play-readability/HARBOR_OBSERVATIONS.md",
+          "role": "Native beginning/lantern-placement/endpoint inspection and actual explicit Bellwater handoffs; held frames disclose Pause and original failed captures."
         }
       ],
       "consumers": [
@@ -4968,11 +5167,11 @@
       ],
       "gallery": {
         "section": "story",
-        "preview": "Six semantic illustration endpoints rendered from the production painter; captions from the single runtime registry. Static developer specimens are design evidence, not actual scene playback."
+        "preview": "Six semantic illustration endpoints rendered from the production painter; captions from the single runtime registry. Static developer specimens are design evidence, not actual scene playback. The gallery links to actual Holding/Driftwood practice and this pass evidence; gallery specimens remain design evidence."
       },
       "typeSpecific": {
         "authoritative geometry inputs": "Original code-native Canvas paths and coordinate recipes in scene-painter.js, adapted to story-painter.ts. Width/height/DPR and explicit illustration/time are the only drawing inputs; gameplay geometry is separate.",
-        "style/elevation parameters": "Canvas CSS-pixel compositions recompose under480px width and short height; shared dusk/teal/cream/tan/gold palette and finite per-shot pose interpolation retain supplied identity.",
+        "style/elevation parameters": "Canvas CSS-pixel compositions recompose under480px width and short height; shared dusk/teal/cream/tan/gold palette and finite per-shot pose interpolation retain supplied identity. harborComposition owns the Harbor-only local design coordinate system and caption relationship; no gameplay HUD inset controls story framing.",
         "mechanical versus decorative boundary": "Entirely narrative decorative art. It does not execute move/board/unload, tide changes, rescue completion or checkpoint writes. Existing game models/data remain authoritative.",
         "material/texture dependencies": "Canvas2D gradients, vector paths and deterministic560-point grain; no fetched image, font, WebGL model or raster texture. Georgia captions are HTML and owned by the UI family.",
         "generation and disposal owner": "createCoveStoryPainter draws into one view-owned canvas at DPR<=2. The view handles resize/draw lifetime; the controller clamps finite time. No painter timer, second WebGL context or per-shot gameplay rebuild."
@@ -5481,5 +5680,28 @@
     ],
     "direction": "LAST_FERRY_WIDE_BERTH_VISUAL_REPAIR_PACKAGE/art/VISUAL_TARGET.md",
     "status": "corrective visual implementation; native inspection and human acceptance remain separately reported"
+  },
+  "playReadabilityChanges": {
+    "task": "PLAY_READABILITY_01",
+    "reviewedRuntime": "7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695",
+    "changedExisting": [
+      "texture.coastal-mask",
+      "texture.seabed",
+      "shader.water",
+      "ui.surfaces",
+      "ui.typography",
+      "ui.map-markers",
+      "ui.dialogs",
+      "ui.component.round-utility",
+      "ui.component.action-capsule",
+      "ui.component.panel",
+      "ui.story-presentation",
+      "story.illustrations"
+    ],
+    "added": [],
+    "retired": [],
+    "preservedIdCount": 79,
+    "publication": "Not deployed; version13/game7ae1d8a receipt/history retained",
+    "provenance": "Original existing project Canvas2D, CSS and field/shader code; no external image, font, narration, renderer or duplicate family added."
   }
 }

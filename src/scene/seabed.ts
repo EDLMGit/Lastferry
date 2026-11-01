@@ -1,6 +1,7 @@
 import * as T from 'three';
 import type { Level } from '../levels/level';
 import { islandCenter, shoreContour, shoreTop } from './shore';
+import { getLevelPaths, type CanonicalPath } from './paths';
 
 export const seabedHeightRange = new T.Vector2(-2.2, 0.72);
 
@@ -63,7 +64,82 @@ function noise(x: number, z: number) {
   );
 }
 
-export function createSeabedField(level: Level, bounds: T.Vector4, size = 256) {
+export function createPassageBathymetry(level: Level, paths = getLevelPaths(level)) {
+  const segments = level.edges.flatMap((edge) => {
+    const path = paths.get(edge.id)!;
+    const points = path.points.filter((_, i) => i % 10 === 0);
+    if (points.at(-1) !== path.points.at(-1)) points.push(path.points.at(-1)!);
+    return points.slice(1).map((b, i) => {
+      const a = points[i],
+        dx = b.x - a.x,
+        dz = b.z - a.z;
+      const margin = edge.baseDepth >= 3 ? 1.3 : 2.85;
+      return {
+        x: a.x,
+        z: a.z,
+        dx,
+        dz,
+        inverseLength: 1 / Math.max(1e-9, dx * dx + dz * dz),
+        depth: edge.baseDepth,
+        minX: Math.min(a.x, b.x) - margin,
+        maxX: Math.max(a.x, b.x) + margin,
+        minZ: Math.min(a.z, b.z) - margin,
+        maxZ: Math.max(a.z, b.z) + margin,
+      };
+    });
+  });
+  return {
+    shallowSegments: segments.filter((segment) => segment.depth < 3).length,
+    sample(x: number, z: number) {
+      let shallow = 0,
+        intermediate = 0,
+        deep = 0;
+      const broad = noise(x * 0.62 + 11.2, z * 0.62 - 5.7);
+      const width = 1.05 + broad * 1.65 + noise(x * 1.5, z * 1.5) * 0.15;
+      for (const segment of segments) {
+        if (x < segment.minX || x > segment.maxX || z < segment.minZ || z > segment.maxZ) continue;
+        const px = x - segment.x,
+          pz = z - segment.z;
+        const t = T.MathUtils.clamp(
+          (px * segment.dx + pz * segment.dz) * segment.inverseLength,
+          0,
+          1,
+        );
+        const distance = Math.hypot(px - segment.dx * t, pz - segment.dz * t);
+        if (segment.depth >= 3) deep = Math.max(deep, 1 - smooth(distance, 0.55, 1.3));
+        else {
+          const bank = 1 - smooth(distance, width * 0.16, width);
+          if (segment.depth === 1) shallow = Math.max(shallow, bank);
+          else intermediate = Math.max(intermediate, bank);
+        }
+      }
+      for (const node of level.nodes) {
+        if (node.baseDepth < 3) continue;
+        const dx = x - node.positionXZ[0],
+          dz = z - node.positionXZ[1];
+        const distance = Math.hypot(dx * 0.92, dz * 1.08);
+        const radius = 0.68 + broad * 0.14;
+        deep = Math.max(deep, 1 - smooth(distance, radius, radius + 0.86));
+      }
+      shallow *= 1 - deep;
+      intermediate *= 1 - deep;
+      return {
+        shallow,
+        intermediate,
+        bank: Math.max(shallow, intermediate * 0.5),
+        height: Math.max(-2.2 + shallow * (1.82 + broad * 0.12), -2.2 + intermediate * 1.5),
+      };
+    },
+  };
+}
+
+export function createSeabedField(
+  level: Level,
+  bounds: T.Vector4,
+  size = 256,
+  paths?: Map<string, CanonicalPath>,
+) {
+  const bathymetry = createPassageBathymetry(level, paths);
   const coasts = level.world.islands.map((island, i) => {
     const points = shoreContour(island, 0.98);
     return {
@@ -116,7 +192,8 @@ export function createSeabedField(level: Level, bounds: T.Vector4, size = 256) {
   let minimumHeight = Infinity,
     maximumHeight = -Infinity;
   const sampleAuthored = (x: number, z: number) => {
-    let height = seabedHeightRange.x,
+    const passage = bathymetry.sample(x, z);
+    let height = passage.height,
       shoreDistance = Infinity,
       landColor = 0,
       groundStone = 0;
@@ -167,10 +244,14 @@ export function createSeabedField(level: Level, bounds: T.Vector4, size = 256) {
     }
     if (height < -0.025) height = Math.min(-0.04, height + sandForm * 0.13 + rockForm * 0.12);
     height = T.MathUtils.clamp(height, seabedHeightRange.x, seabedHeightRange.y);
+    const bankStone = smooth(noise(x * 0.85 - 3.4, z * 0.85 + 8.2), 0.58, 0.85) * passage.bank;
     color
       .copy(ground)
-      .lerp(sand, Math.max(landColor, sandForm * 0.72))
-      .lerp(stone, Math.max(groundStone, rockForm * 0.92));
+      .lerp(
+        sand,
+        Math.max(landColor, sandForm * 0.72, passage.shallow * 0.82, passage.intermediate * 0.38),
+      )
+      .lerp(stone, Math.max(groundStone, rockForm * 0.92, bankStone * 0.45));
     color.multiplyScalar(0.86 + broad * 0.16 + noise(x * 3, z * 3) * 0.025 + facet * 0.16);
     return {
       height,
@@ -178,6 +259,7 @@ export function createSeabedField(level: Level, bounds: T.Vector4, size = 256) {
       shoreDistance,
       sandForm,
       rockForm,
+      passage,
     };
   };
   for (let j = 0; j < size; j++)

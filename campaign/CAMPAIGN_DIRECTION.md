@@ -1,10 +1,12 @@
 # Last Ferry — The Long Tide
 
-**Campaign direction v1 · 25 October 2026**
+**Campaign direction v2 · 1 November 2026**
 
-Original direction baseline: `1a85874883af5caa59f6294a75495eccf2afebbc`. Current milestone: `WIDE_BERTH_01`, building forward from reviewed `7e324e88827857469bf348fca311548344d03da6`. Holding Pier → Bellwater Cove → Driftwood Yard → Wide Berth is the implemented journey; First Crossing stays independent practice. The user accepts Driftwood gameplay. That does not close unrelated portrait-load, layout, timing, acoustic or physical-device limits. Current source/evidence and human acceptance are separate in `reviews/wide-berth/`.
+Original direction baseline: `1a85874883af5caa59f6294a75495eccf2afebbc`. Current task: `PLAY_READABILITY_01`, reviewed runtime `7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695`, later continuity HEAD `52f72d6cdb1caa292425511394f4a11efa024a61`. Holding Pier → Bellwater Cove → Driftwood Yard → Wide Berth remains the implemented journey; First Crossing stays independent practice. The user accepts Driftwood gameplay and reports that Wide Berth is too easy and not fun. Wide's mandatory campaign slot is under revision; technical verification does not establish difficulty acceptance. Portrait-load, layout, timing, acoustic and physical-device limits remain separately recorded.
 
-The accepted live Home, illustrated opening/Harbor/Driftwood scenes, autoplay and direct/group transfer foundation remain. This slice adds Nell's prepared-ferry launch and the actual six-space Wide Berth profile; earlier coves keep their four-space boat and unchanged rules. The remaining eight coves, Orin and currents stay future direction. Cove-boundary checkpoints remain honest; full mid-puzzle persistence is deferred.
+The accepted Home, illustrated scenes, autoplay, direct/group transfers, prepared-ferry launch and actual six-space Wide Berth profile remain available. This task changes readability and planning direction only: no future cove, route reorder, launch relocation or save migration is implemented. The current private Site remains version 13/game `7ae1d8a`; the publication receipt and earlier history are retained in project state. Cove-boundary checkpoints remain honest; full mid-puzzle persistence is deferred.
+
+The earlier written plan placed the launch after Nell's rescue and Wide at C4. Codex followed it; this is a correction to our direction. A straightforward collect/deep-return/deliver/repeat strategy bypasses the intended staging insight. More bodies, actions or valid witnesses do not make that decision stronger than Driftwood. Delay the planned upgrade until it serves mixed passenger sizes. First prove and playtest a compact replacement C4; later retain Wide as an optional development/Practice prototype and reuse its ferry, seating, transfers and launch work. Those later integration changes have not happened in this pass.
 
 ## 1. The story we are making
 
@@ -12,7 +14,7 @@ It is your first evening alone at the helm of the little yellow ferry. The tide 
 
 You start close to home. Two rabbits and a sheep are enough to make you think about who boards, how low the boat sits, and which way you can return. With each crossing, the refuge becomes less empty. Someone lights a window. Someone brings a cloth to the table. A neighbor watches for the next ferry.
 
-Farther along the coast, the routes ask more of you. A boatwright you bring home helps launch a larger ferry. An orchard neighbor needs more room. Beyond the headland, a current changes which passages can be used and when. A familiar orchard looks different when the water is among its trees.
+Farther along the coast, the routes ask more of you. An orchard neighbor needs more room within the original ferry. The boatwright you brought home then helps launch a larger ferry suited to useful mixed groups. Beyond the headland, a current changes which passages can be used and when. A familiar orchard looks different when the water is among its trees.
 
 At last, the final waiting group is aboard. The rescue window no longer presses on this crossing. There is time to watch the wake, listen to the music and follow the lighthouse home. The camera opens onto the supper the others have been preparing. One place has been left empty, facing the arriving ferry.
 
@@ -44,15 +46,15 @@ The little ferry has four spaces. The player learns the relationship between pas
 
 The refuge begins to respond. Pip and Rue watch an arrival; Moss settles near the high pier. Bellwater's neighbors add a small cloth and the sound of a bell. These are brief visual returns, not another set of endangered appearances.
 
-After cove 3, Nell and the safe neighbors launch the spare ferry already prepared at the protected boathouse. This is the first major threshold: the community now helps the captain carry on.
+After cove 3, Nell is safe at the refuge. In the revised plan, she and the neighbors prepare her already-built spare ferry while the captain finishes the inner coast; its launch is delayed until after C5. The current runtime still launches after Driftwood, pending a separate route/save integration task.
 
 ### Phase II — Room for one more · coves 4–6
 
-**Feeling:** the pleasure of extra room, followed by more interesting choices.
+**Feeling:** deeper planning on familiar water, then the pleasure of useful extra room.
 
-Cove 4 introduces the six-space ferry with familiar species and a satisfying first pickup, then asks for a consequential plan: carry the full group by deep water before a tight second rescue, or stage a deliberate subset safely and rescue the low pair earlier through a lighter shortcut. This deliberately strengthens the former wholly forgiving C4 calibration without forcing staging or outlawing harmless later waiting. More passengers or a witness length do not establish greater difficulty; the user’s playtest judges the choice.
+Cove 4 is now proposed as **Two Shelters**, using the four-space boat and three or four bodies from existing species. Its question is: which temporary landing and retrieval order keep the later rescue possible? It must add a placement dependency beyond Driftwood's single safe staging pier. This is an unproven design brief, not authored or accepted content.
 
-Cove 5 introduces Orin, a deer using three spaces. His size is legible in his body, portrait and explicit cost. Cove 6 combines the larger capacity, different costs, route depth and safe staging. The task is to choose a sensible plan, not to fill every available space automatically.
+Cove 5 introduces Orin, a deer using three spaces, in the original four-space boat. His size is legible in his body, portrait and explicit cost. After explicit C5 completion, the prepared six-space ferry launches before Cove 6, Two Landings. That cove introduces and applies its capacity through mixed loads, route depth and the choice of whether a lighter return justifies an extra trip. These are future proposals awaiting mechanical proof and playtest.
 
 The three-space deer could fit alone in the original four-space boat. The story must not claim otherwise. The larger ferry allows useful combinations and bigger groups; it does not magically make one deer transportable for the first time.
 
@@ -85,9 +87,9 @@ Future titles are working names. Each row is a design intention, not a proven pu
 | 1 | Holding Pier | Bring Pip, Rue and Moss home | Accepted introduction: load, depth, temporary landing and deadlines | Existing |
 | 2 | Bellwater Cove | Meet Tansy, Lark and Bram | Accepted route and rescue-order puzzle with staged tide consequences | Existing |
 | 3 | Driftwood Yard | Rescue Nell, Fern and Oat | Four-space staging at High Mooring, shallow rescue and deepened return | Implemented; user accepted gameplay |
-| 4 | Wide Berth | Launch the prepared larger ferry and rescue new neighbors | Six-space benefit, full-load draft four, deep detour versus useful staging and two occupied flood boundaries | Implemented; user difficulty/visual acceptance pending |
-| 5 | Orchard Landing | Meet Orin | A three-space passenger introduced separately from the boat lesson | Proposed |
-| 6 | Two Landings | Bring a larger group together | Combine capacity, mixed costs, partial delivery and temporary staging | Proposed |
+| 4 | Two Shelters — working title | Finish the inner coast while Nell helps at home | Choose a temporary landing and retrieval order that preserve the later rescue | Proposed replacement; four-space boat |
+| 5 | Orchard Landing | Meet Orin | Fit a three-space passenger into a useful four-space plan | Proposed; four-space boat |
+| 6 | Two Landings, preceded by the launch | The community provides a ferry suited to the next stretch | Choose mixed loads and when a lighter return is worth an extra trip | Proposed; six-space introduction and application |
 | 7 | Tidal Gate | Reach the headland | One clearly marked, fixed-direction passage | Proposed |
 | 8 | Reed Narrows | Plan a different way back | A current reverses after a forecasted tide transition | Proposed |
 | 9 | Drowned Orchard | Recognize changed water in a familiar place | Reuse the orchard's landmarks; combine current, load and local deadlines | Proposed |
@@ -96,6 +98,8 @@ Future titles are working names. Each row is a design intention, not a proven pu
 | 12 | Last Ferry | Bring the final neighbors home | Shorter, gentler final rescue and an unhurried return | Proposed |
 
 **First Crossing stays available as optional practice.** It repeats Holding's Pip/Rue/Moss rescue in a different starting arrangement. Keeping it outside the canonical sequence avoids pretending those characters have become stranded again. Preserve its puzzle and regression coverage.
+
+This table is the revised target, not the runtime registry. Current C4 remains Wide Berth with unchanged data and saves; its difficulty is not accepted. Moving it to optional Practice and integrating Two Shelters require their own scoped tasks.
 
 ## 5. Characters and recognition
 
@@ -107,8 +111,8 @@ The portraits are the start of a relationship between the player and the animals
 | Rue | Attentive; turns toward an arriving boat | Existing one-space tan rabbit |
 | Moss | Calm; settles near the table with an unhurried nod | Existing two-space sheep |
 | Tansy, Lark and Bram | Bellwater neighbors; prepare the table, watch the channel markers and ring the bell | Existing costs and identities retained |
-| Nell | Practical boatwright; broad tail, warm face, a small rope/tool prop | New beaver, two spaces; story unlocks the larger ferry |
-| Orin | Gentle orchard neighbor; readable short antlers, deliberate boarding | New deer, three spaces |
+| Nell | Practical boatwright; broad tail, warm face, a small rope/tool prop | Implemented beaver, two spaces; later planned contribution is the prepared larger ferry |
+| Orin | Gentle orchard neighbor; readable short antlers, deliberate boarding | Proposed deer, three spaces; first rescued with the original ferry |
 
 Nell and Orin are the two new species planned for this campaign. Additional residents can use the existing species with their own stable names and appearances. Keep the recurring lead group small enough to remember.
 
@@ -120,11 +124,11 @@ Keep the captain unseen if that remains the most effective production choice. Th
 
 ## 6. The larger boat is a story milestone
 
-Nell has an already-built spare ferry at the protected boathouse. After her rescue, the neighbors help launch it. The scene reveals work the community had prepared; it does not imply building an entire vessel while someone waits on a flooding pier.
+Nell has an already-built spare ferry at the protected boathouse. The revised launch threshold is after explicit completion of C5, before C6. Safe neighbors prepare it while the captain finishes the inner coast. The scene reveals work the community had prepared; it does not imply building an entire vessel while someone waits on a flooding pier. There is no construction timer or currency. The implemented launch still follows C3 until a separate route/save change is approved.
 
-The larger boat retains the yellow hull and red-cabin family resemblance, with a visibly wider/longer passenger deck. Its capacity becomes six. Use this proposed draft table for the separate mechanical prototype:
+The implemented larger boat retains the yellow hull and red-cabin family resemblance with a visibly larger passenger deck. Preserve its existing capacity and draft bands for later reuse:
 
-| Occupied spaces | Original ferry draft | Larger ferry draft, proposed |
+| Occupied spaces | Original ferry draft | Implemented larger ferry draft |
 | --- | ---: | ---: |
 | 0 | 1 | 1 |
 | 1–2 | 2 | 2 |
@@ -132,6 +136,8 @@ The larger boat retains the yellow hull and red-cabin family resemblance, with a
 | 5–6 | Unavailable | 4 |
 
 Lightly loaded, the new ferry keeps the familiar relationships. Loaded to five or six spaces, it needs deeper water. A visible example might offer a route of depth 3 and a deeper detour: carrying six helps capacity but closes the shallow route; leaving two spaces free keeps it open. This illustrates the intended decision only. It is not a validated future level.
+
+A three-space deer, a two-space neighbor and a one-space rabbit fill six spaces with three bodies. That is a useful capacity example, not a proven C6 puzzle. Orin already fits the original four-space boat; the upgrade must never be described as making his first rescue possible.
 
 The old coves retain their authored four-space ferry on replay. The new boat belongs to the levels designed for it. There is no need for a hull-selection system.
 
@@ -155,7 +161,7 @@ Use six short major story scenes, plus a brief connection between the existing f
 | --- | --- | --- |
 | Begin the journey | First evening at the helm | Captain, tide, lighthouse goal |
 | Before cove 3 | A light at the yard — implemented | Introduce Nell before the Driftwood rescue |
-| After cove 3 — future | A wider deck | Safe neighbors launch Nell's prepared ferry |
+| Planned after cove 5, before cove 6 | A wider deck — implemented after C3 today | Safe neighbors launch Nell's prepared ferry for useful mixed groups |
 | Before cove 5 | The orchard neighbor | Introduce Orin before his first selection |
 | After cove 6 | The water turns | Prepare the player to learn the channel rule |
 | After cove 9 | The last lights | Show the gathering and the remaining occupied landings |
@@ -183,6 +189,8 @@ Aim for increasing interaction between understandable ideas. Extra passengers, e
 
 Before accepting a new cove, require a valid witness against the real reducer, an independent rule check where practical, and at least one attractive losing or blocked alternative with a fair explanation and useful Undo recovery. Where the design claims multiple approaches, prove them. Never present a search horizon as a gameplay limit or a shortest route as the only acceptable play.
 
+For proposed C4, check whether routine earliest-group collection and the only available return bypass the intended placement/retrieval reasoning. If so, revise or discard the candidate. Approve the mechanical idea through the user's playtest before commissioning additional art or a chapter scene. Do not require multiple strategies merely to inflate the report.
+
 The user remains our human playtester. Their feedback determines whether the intended insight is understandable and satisfying. Technical checks establish rule consistency and interface behavior. Neither replaces the other.
 
 Keep room to breathe after demanding decisions. Cove 11 is the main peak; cove 12 offers an earned, gentler conclusion. Undo does not reduce rewards or alter the ending. Completing the story means everyone required is safely home.
@@ -195,9 +203,11 @@ The actual authoring and mechanical acceptance details are in `PUZZLE_PROGRESSIO
 | --- | --- | --- |
 | Story foundation and illustrated production — complete, retained | Approved three-shot opening and compact Harbor connection inside the working journey/practice flow and honest cove-boundary checkpoints | New levels, species, hull or currents |
 | Complete Phase I — implemented in DRIFTWOOD_YARD_01 | Driftwood Yard and Nell, using the existing four-space rules | Six-space gameplay |
-| Launch the larger ferry | Launch scene, actual six-space hull/seating and forgiving Wide Berth | Deer or currents |
-| Meet Orin | Deer world model/portrait and Orchard Landing | New water rules |
-| Complete Phase II | Two Landings; demonstrate that the known choices combine well | Broad content multiplication |
+| Play readability — current | Lighter play controls, visible depth geography and composed Harbor; document recalibration | New coves, launch relocation, route/save changes |
+| Prove replacement C4 | Small four-space Two Shelters candidate in separate Practice; distinct placement/retrieval decision | New art or chapter scene before gameplay acceptance |
+| Integrate accepted C4 | Explicit route/save revision with honest preservation of old completion history | Silent progress rewrites or fabricated new-cove completion |
+| Meet Orin | Deer world model/portrait and Orchard Landing using four spaces | New water rules or premature upgrade |
+| Launch and complete Phase II | Reuse the six-space ferry/launch after C5; prove mixed-load Two Landings | Broad content multiplication |
 | Learn the current | Implement and prove the direction rule through Tidal Gate | Complex reversals across many routes |
 | Complete Phase III | Reed Narrows, orchard revisit and the last-lights transition | Final chapter until these ideas are clear |
 | The final crossings | Breather, hardest synthesis, final rescue and supper | Additional systems beyond the complete story |
@@ -205,6 +215,8 @@ The actual authoring and mechanical acceptance details are in `PUZZLE_PROGRESSIO
 Review each slice before moving its accepted result to the private phone Site. Future tasks may be split further when one asset or interaction needs another pass. The roadmap is a direction for the whole experience, not an instruction to implement twelve coves at once.
 
 The first task saves progress between coves and labels that limitation honestly. Full mid-puzzle resume, including coherent Undo and heading/pose recovery, is a requirement before shipping the longer phone campaign. Do not silently imply that the initial checkpoint is already that system.
+
+The current version-1 journey validates ordered cove and scene prefixes. Removing Wide or relocating `a-wider-deck` would affect pending-launch, active-Wide and completed-four-cove records. A later scoped route/save revision must preserve the original bytes and recognized C1–C3 completion, retain old Wide completion as history without marking new C4 rescued, and explain the revised continuation point briefly. Having seen the launch must not grant later cove completion. Home, Options and Practice remain read-only; unknown/malformed saves stay recoverable. Define exact mappings only after replacement content is settled, without a migration framework in this pass.
 
 ## 12. Asset ownership and project decisions
 
@@ -222,4 +234,4 @@ This direction revises the original brief's optional exclusion of upgrades: ther
 - [Current world presentation](https://github.com/EDLMGit/Lastferry/blob/1a85874883af5caa59f6294a75495eccf2afebbc/src/scene/world.ts).
 - [Portrait handoff](https://github.com/EDLMGit/Lastferry/blob/1a85874883af5caa59f6294a75495eccf2afebbc/reviews/passenger-portraits/REVIEW.md).
 
-The narrative, names, future encounter intentions and larger-boat/current designs in this document are original proposals. Their implementation, solvability, duration and player enjoyment remain to be established by the contained tasks and playtesting.
+The current recalibration comes from [the supplied planning input](../LAST_FERRY_PLAY_READABILITY_PACKAGE/CAMPAIGN_RECALIBRATION.md) and [review findings](../LAST_FERRY_PLAY_READABILITY_PACKAGE/REVIEW_FINDINGS.md). Earlier assignments and their evidence remain historical. Future encounter intentions and current designs are proposals; the larger ferry and launch already exist, but their revised campaign placement does not. Future solvability, duration and player enjoyment remain to be established by contained tasks and playtesting.

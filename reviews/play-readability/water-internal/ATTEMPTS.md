@@ -1,0 +1,9 @@
+# Internal water iterations
+
+The first internal candidate connected canonical banks to the real substrate and water color. The initial seven existing water units and the extended12-case suite passed. Native844×390 Chromium1217/SwiftShader frames showed readable banks, but Bellwater's shelves looked too flat/pale. The second candidate lowered the bank surface and direct water tint and increased width variation. Current images here belong to that second working-tree candidate during simultaneous UI editing; they are internal observations, not final source-frozen evidence.
+
+Capture setup failures: expected browser1248 was absent at the repository-local path; the installed1217 executable then hit Windows sandbox launch exit3221225506. Escalated launch worked, but the old5270server was absent. An isolated5278preview responded; one30second load wait timed out, while the retry using DOM-content readiness captured all four coves with no pageerrors. The capture process closed its browser. These failures did not establish a product defect.
+
+Second-candidate unit rerun during concurrent rendering:11/12passed; Holding's new bank/tide case timed out at5000ms, observed5988ms, whole suite20.86s. Original error: `Error: Test timed out in 5000ms` at tests/unit/water.test.ts:39. The prior same-shape test had passed; no assertion mismatch was emitted. The repeated full-array matcher was replaced with an exact every-byte comparison, keeping the identity requirement and original timeout. A later result must be recorded separately.
+
+After exact-byte matcher simplification and conservative segment-bound skipping outside every possible bank influence, the12-case suite passed again with its original5000ms per-test timeout (18.85s overall, under concurrent machine load). No numerical bathymetry or viewport assertion was weakened. The final browser captures remain separate from these iterations.

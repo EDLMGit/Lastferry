@@ -1,0 +1,1420 @@
+diff --git a/src/campaign/story-painter.ts b/src/campaign/story-painter.ts
+index 5efb5fa..d3b99b5 100644
+--- a/src/campaign/story-painter.ts
++++ b/src/campaign/story-painter.ts
+@@ -10,6 +10,29 @@ type RabbitPose = {
+   restHand?: number;
+ };
+ 
++export function harborComposition(width: number, height: number) {
++  const portrait = width < 600;
++  const short = !portrait && height < 360;
++  const scale = portrait
++    ? Math.min((width - 28) / 350, (height - 72) / 290, 1.2)
++    : short
++      ? Math.min((width - 270) / 610, (height - 42) / 260, 1.95)
++      : Math.min((width - 80) / 670, (height - 96) / 330, 1.95);
++  const x = portrait ? width * 0.5 : short ? width * 0.66 : width * 0.5 + 38 * scale;
++  const y = height * (portrait ? 0.62 : short ? 0.64 : 0.66);
++  return {
++    portrait,
++    x,
++    y,
++    scale,
++    caption: {
++      left: short ? 22 : Math.max(26, x - 315 * scale),
++      top: short ? 38 : Math.max(52, y - 262 * scale),
++      width: short ? Math.min(220, width * 0.3) : Math.min(440, 250 * scale),
++    },
++  };
++}
++
+ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
+   const context = canvas.getContext('2d');
+   if (!context) throw new Error('Story artwork requires Canvas2D.');
+@@ -724,15 +747,15 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
+     finish(t);
+   }
+   function harborShot(t: number) {
+-    const portrait = W < 480,
+-      short = H < 300,
++    const composition = harborComposition(W, H),
++      { portrait, x, y, scale: s } = composition,
+       place = ease((t - 0.6) / 2.6),
+       rest = ease((t - 3.4) / 1.1),
+       lift = 1 - place;
+     backdrop(t, 1);
+-    tower(W * 0.86, H * 0.46, portrait ? 0.62 : short ? 0.53 : 0.78);
+-    const distantX = W * (portrait ? 0.15 : 0.45),
+-      distantY = H * 0.51;
++    tower(x + (portrait ? 125 : 215) * s, y - 108 * s, s * 0.45);
++    const distantX = x - (portrait ? 128 : 236) * s,
++      distantY = y - (portrait ? 148 : 145) * s;
+     path(
+       `M ${distantX - 9} ${distantY} L ${distantX - 9} ${distantY - 9} L ${distantX + 7} ${distantY - 9} L ${distantX + 7} ${distantY} Z`,
+       '#6e9388',
+@@ -744,60 +767,63 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
+     glow(distantX, distantY - 4, 15, 0.22);
+     ctx.fillStyle = '#efcf8d';
+     ctx.fillRect(distantX - 2, distantY - 7, 4, 5);
+-    foregroundWater(H * 0.61, t, { x: distantX, strength: 0.3 });
+-    const boatScale = portrait ? Math.min(0.6, W / 650) : short ? 0.62 : 0.94;
+-    boat(W * (portrait ? 0.18 : 0.3), H * 0.88, boatScale, 7, 1, false, false);
+-    const ground = H * (portrait ? 0.765 : 0.82),
+-      left = W * (portrait ? 0.34 : 0.54),
+-      right = W + 20;
++    foregroundWater(y - 80 * s, t, { x: distantX, strength: 0.3 });
++    ctx.save();
++    ctx.translate(x, y);
++    ctx.scale(s, s);
++    const left = portrait ? -44 : -45,
++      right = portrait ? 172 : 263,
++      back = portrait ? -17 : -20,
++      waterline = portrait ? 92 : 102;
+     path(
+-      `M ${left} ${ground + 9} Q ${left + 8} ${ground - 8} ${left + 35} ${ground - 8} L ${right} ${ground - 8} L ${right} ${H + 20} L ${left + 20} ${H + 20} Z`,
++      `M ${left} 9 Q ${left + 8} -8 ${left + 35} ${back} L ${right - 24} ${back - 15} L ${right} -2 L ${right - 11} ${waterline - 2} Q ${right - 49} ${waterline + 22} ${left + 19} ${waterline} Z`,
+       C.rock,
+     );
+     path(
+-      `M ${left} ${ground + 9} Q ${left + 8} ${ground - 8} ${left + 35} ${ground - 8} L ${right} ${ground - 8} L ${right} ${ground + 13} L ${left + 14} ${ground + 17} Z`,
++      `M ${left} 9 Q ${left + 8} -8 ${left + 35} ${back} L ${right - 24} ${back - 15} L ${right} -2 L ${right - 7} 17 L ${left + 14} 23 Z`,
+       C.grass,
+     );
+     line(
+       [
+-        [left + 12, ground + 17],
+-        [right, ground + 13],
++        [left + 12, 23],
++        [right - 7, 17],
+       ],
+       '#b8bb96',
+       2,
+     );
+-    line(
+-      [
+-        [left + 19, ground + 24],
+-        [left + 32, H],
+-      ],
+-      '#729482',
+-      1.3,
+-    );
+-    const scale = Math.min(portrait ? 1.55 : short ? 1.02 : 1.75, (H * 0.4) / 91),
+-      rueX = W * (portrait ? 0.5 : 0.66),
+-      pipX = W * (portrait ? 0.72 : 0.79),
+-      mossX =
+-        portrait && W < 360
+-          ? Math.min(W * 0.855, W - 38 * scale * 0.87 - 6)
+-          : W * (portrait ? 0.855 : 0.915);
++    for (const offset of [28, 106, 183])
++      if (left + offset < right - 15)
++        line([[left + offset, 30], [left + offset + 8, waterline - 10]], '#729482', 1.3);
++    path(`M ${left + 20} 49 L ${right - 16} 42 M ${left + 24} 76 L ${right - 20} 68`, null, '#60877b', 1.4);
++    ellipse((left + right) / 2, waterline + 2, (right - left) * 0.45, 7, 'rgba(25,71,72,.22)');
++    line([[left + 27, waterline + 5], [right - 48, waterline + 4]], '#a9c7b2', 1.6);
++    const boatX = portrait ? -90 : -184,
++      boatY = portrait ? 82 : 84,
++      boatScale = portrait ? 0.78 : 1.08;
++    line([[left + 8, 14], [boatX + 80 * boatScale, boatY - 8]], '#b9a57d', 1.7);
++    boat(boatX, boatY, boatScale, 7, 1, false, false);
++    const scale = portrait ? 1.22 : 1.44,
++      rueX = portrait ? -1 : 28,
++      pipX = portrait ? 72 : 120,
++      mossX = portrait ? 132 : 207;
+     const mossSettle = ease((t - 0.5) / 2);
+-    sheep(mossX, ground - 3 + mossSettle * 2, scale * 0.87, Math.sin(mossSettle * Math.PI) * 0.12);
+-    rabbit(pipX, ground, scale * 0.82, 'cream', {
++    sheep(mossX, -5 + mossSettle * 2, scale * 0.87, Math.sin(mossSettle * Math.PI) * 0.12);
++    rabbit(pipX, -5, scale * 0.82, 'cream', {
+       head: mix(0.1, -0.16, ease((t - 1.7) / 1.7)),
+       warmth: 0.45,
+     });
+-    rabbit(rueX, ground, scale, 'tan', {
++    rabbit(rueX, 0, scale, 'tan', {
+       lift,
+       restHand: rest,
+       head: mix(-0.12, 0.05, place),
+       warmth: 0.7,
+     });
+     const lampX = rueX + (mix(-9, -34, lift) - 7) * scale,
+-      lampY = ground + (mix(-25, -61, lift) + 14) * scale;
+-    ellipse(rueX - 16 * scale, ground + 2, 15 * scale, 3 * scale, 'rgba(21,58,59,.20)');
++      lampY = (mix(-25, -61, lift) + 14) * scale;
++    ellipse(rueX - 16 * scale, 2, 15 * scale, 3 * scale, 'rgba(21,58,59,.20)');
+     lantern(lampX, lampY, scale, 1, Math.sin(place * Math.PI) * 0.04);
+     glow(lampX, lampY, 58 * scale, 0.22);
++    ctx.restore();
+     finish(t);
+   }
+   function driftwoodShot(t: number) {
+diff --git a/src/campaign/story-view.ts b/src/campaign/story-view.ts
+index 50c5f1a..3a1fbdc 100644
+--- a/src/campaign/story-view.ts
++++ b/src/campaign/story-view.ts
+@@ -1,4 +1,4 @@
+-import { createCoveStoryPainter } from './story-painter';
++import { createCoveStoryPainter, harborComposition } from './story-painter';
+ import type { StoryPresentation } from './presentation';
+ import { storyScenes } from './registry';
+ 
+@@ -15,6 +15,15 @@ export class StoryView {
+     const rect = this.canvas.getBoundingClientRect();
+     if (rect.width < 1 || rect.height < 1) return;
+     const ratio = Math.min(devicePixelRatio || 1, 2);
++    const shot = storyScenes[frame.scene].shots[frame.shotIndex];
++    const picture = this.canvas.parentElement!;
++    picture.dataset.illustration = shot.illustration;
++    if (shot.illustration === 'harbor') {
++      const { caption } = harborComposition(rect.width, rect.height);
++      picture.style.setProperty('--harbor-caption-left', `${caption.left}px`);
++      picture.style.setProperty('--harbor-caption-top', `${caption.top}px`);
++      picture.style.setProperty('--harbor-caption-width', `${caption.width}px`);
++    }
+     const size = `${rect.width}:${rect.height}:${ratio}`;
+     if (size !== this.lastSize) {
+       this.painter.resize(rect.width, rect.height, ratio);
+@@ -23,7 +32,6 @@ export class StoryView {
+     }
+     const key = `${frame.scene}:${frame.shot}:${frame.elapsed}`;
+     if (key === this.lastFrame) return;
+-    const shot = storyScenes[frame.scene].shots[frame.shotIndex];
+     this.painter.draw(shot.illustration, frame.elapsed / 1000);
+     this.lastFrame = key;
+     this.drawCount++;
+diff --git a/src/campaign/story.css b/src/campaign/story.css
+index 5b37c72..dee80a8 100644
+--- a/src/campaign/story.css
++++ b/src/campaign/story.css
+@@ -136,6 +136,14 @@
+   font-size: 22px;
+   line-height: 1.2;
+ }
++@media (min-width: 600px) {
++  .story-picture[data-illustration='harbor'] #story-captions {
++    left: var(--harbor-caption-left);
++    top: var(--harbor-caption-top);
++    width: var(--harbor-caption-width);
++    max-width: none;
++  }
++}
+ .story-controls {
+   display: grid;
+   grid-template-columns: minmax(30px, 1fr) auto auto auto auto minmax(150px, auto);
+diff --git a/src/dev/asset-gallery.ts b/src/dev/asset-gallery.ts
+index 276660d..ae41cf8 100644
+--- a/src/dev/asset-gallery.ts
++++ b/src/dev/asset-gallery.ts
+@@ -36,6 +36,7 @@ const residents: [string, number, boolean, PortraitKey][] = [
+ ];
+ observePassengerPortraits(root);
+ root.innerHTML = `<header><p>Last Ferry · developer tools</p><h1>Cove asset gallery</h1><p>Live component sources and canonical inventory. This is design evidence, not a gameplay capture.</p><p>${entries.length} families · <a href="/">Open the game</a> · <a href="/assets/catalog.json">Canonical JSON</a></p></header>
++<section class="cove-panel cove-surface gallery-panel" aria-labelledby="readability-heading"><h2 id="readability-heading">Readable play in context</h2><p>The game uses separate corner controls, compact load/depth and occupied-pier deadline capsules, optional details and one nearby Sail action. Canonical shallow banks and deeper turning pockets are shown by the actual water renderer. These layout and world relationships require gameplay inspection; this gallery does not simulate them.</p><p><a href="/?cove=holding-pier">Holding Pier practice</a> · <a href="/?cove=driftwood-yard">Driftwood Yard practice</a> · <a href="/">Journey and Harbor connection</a></p><p>${sourceLink('reviews/play-readability/REVIEW.md', 'Actual play review and source-tied evidence')} · ${sourceLink('reviews/play-readability/HARBOR_OBSERVATIONS.md', 'Native Harbor composition observations')}</p><p>The Harbor specimen below uses the same bounded foreground painter. Prior acceptance of the opening art is distinct from human review of this correction.</p></section>
+ <section class="cove-panel cove-surface gallery-panel"><h2>Shared controls</h2><div id="controls" class="specimens"></div><p><span class="cove-name cove-surface cove-surface--compact cove-objective">${iconMarkup('harbor-home')}Harbor · Home</span> &nbsp; ${controlContent('back-to-boat', 'Back to boat identifies the camera control')}</p></section>
+ <section aria-labelledby="panel-material-heading"><h2 id="panel-material-heading">Painted reading material</h2><p>Actual shared CSS and one original SVG corner. Component geometry remains local; no text is baked into the decoration.</p><div class="panel-specimens">
+ <article id="gallery-three-passengers" class="cove-panel cove-surface gallery-panel panel-specimen"><p>Harbor · inspection is free</p><h3>Deliver Pip, Rue and Moss</h3>${choices(residents)}<p><strong>After unloading: boat needs depth 1.</strong></p><p>Everyone will be safely home at Harbor.</p><p>After this action: Boat 0/4 spaces · tide 2.</p><button id="gallery-confirm"></button></article>
+diff --git a/src/main.ts b/src/main.ts
+index b66164b..bce84eb 100644
+--- a/src/main.ts
++++ b/src/main.ts
+@@ -1,5 +1,6 @@
+ import './style.css';
+ import './ui/cove-ui.css';
++import './ui/play-controls.css';
+ import {
+   controlContent,
+   iconMarkup,
+@@ -83,7 +84,7 @@ let title = level.id === baseline.id ? 'The First Crossing' : level.title;
+ const app = document.querySelector<HTMLDivElement>('#app')!;
+ app.classList.add('cove-kit');
+ observePassengerPortraits(app);
+-app.innerHTML = `<main class="game ${experiment ? 'holding' : isBellwater ? 'bellwater' : 'baseline'}"><section id="seascape" aria-label="${level.title}" aria-busy="false"><div id="world"></div><header class="hud"><div class="identity"><h1>${title}</h1><p id="objective"></p></div><div id="readout" aria-label="Crossing progress"></div><nav class="tools" aria-label="Crossing controls"><button id="undo">↶ Undo</button><button id="wait">Wait <span>· 1 action</span></button><button id="menu">Menu</button><button id="sound-toggle" aria-label="Mute sound" aria-pressed="false">♫</button></nav></header><nav id="map-labels" aria-label="Map stops"></nav><nav id="dock-actions" aria-label="Passenger actions" hidden></nav><section id="local-context" role="region" aria-labelledby="local-heading" hidden></section><p id="selection-hint">Select a place to see its options.</p><svg id="selection-leader" aria-hidden="true"></svg><button id="status-toggle" aria-haspopup="dialog" aria-label="Open tide and pier forecast"></button><p id="transition-status" role="status" tabindex="-1" hidden>Finishing this action…</p><p class="portrait-note">Turn sideways for a wider view.</p></section><div id="announcement" class="sr-only" role="status" aria-live="polite"></div></main><dialog id="dialog" aria-labelledby="dialog-title"><div id="dialog-content"></div></dialog>`;
++app.innerHTML = `<main class="game ${experiment ? 'holding' : isBellwater ? 'bellwater' : 'baseline'}"><section id="seascape" aria-label="${level.title}" aria-busy="false"><div id="world"></div><button id="load-toggle" aria-expanded="false" aria-controls="crossing-details" aria-label="Crossing status"></button><section id="crossing-details" class="cove-panel cove-surface cove-surface--compact" aria-label="Crossing details" hidden><div class="identity"><h1>${title}</h1><p id="objective"></p></div><div id="readout" aria-label="Crossing progress"></div><button id="close-status">Close status</button></section><nav class="tools" aria-label="Crossing controls"><button id="undo">↶ Undo</button><button id="wait">Wait <span>· 1 action</span></button><button id="menu">Menu</button><button id="sound-toggle" aria-label="Mute sound" aria-pressed="false">♫</button></nav><nav id="map-labels" aria-label="Map stops"></nav><nav id="dock-actions" aria-label="Passenger actions" hidden></nav><section id="local-context" role="region" aria-label="Selected place" tabindex="-1" hidden></section><p id="selection-hint">Select a place to see its options.</p><svg id="selection-leader" aria-hidden="true"></svg><button id="status-toggle" aria-haspopup="dialog" aria-label="Open tide and pier forecast"></button><p id="transition-status" role="status" tabindex="-1" hidden>Finishing this action…</p><p class="portrait-note">Turn sideways for a wider view.</p></section><div id="announcement" class="sr-only" role="status" aria-live="polite"></div></main><dialog id="dialog" aria-labelledby="dialog-title"><div id="dialog-content"></div></dialog>`;
+ 
+ const homeSurface = document.createElement('section');
+ 
+@@ -126,9 +127,8 @@ for (const [id, icon, label] of [
+   setControl($(id), icon, label);
+ setControl($('menu'), 'menu', 'Menu', 'quiet', true);
+ $('menu').title = 'Menu';
+-document
+-  .querySelector('.hud')!
+-  .classList.add('cove-panel', 'cove-surface', 'cove-surface--compact');
++setControl($('load-toggle'), null, '0/4 · Depth 1', 'quiet');
++setControl($('close-status'), 'close', 'Close status', 'quiet');
+ $('local-context').classList.add('cove-panel', 'cove-surface', 'cove-surface--compact');
+ $('status-toggle').classList.add('cove-panel', 'cove-surface', 'cove-surface--compact');
+ let session = new Session(level);
+@@ -185,6 +185,7 @@ type SoundIntent = 'enable' | 'retry' | 'mute';
+ let soundIntent: { control: HTMLElement; intent: SoundIntent } | null = null;
+ let viewFence: { x: number; y: number; until: number } | null = null;
+ let locationSelection: string | null = null;
++let locationDetails = false;
+ let emphasis: string | undefined;
+ let selectionOrigin: { x: number; y: number } | null = null;
+ let actionOrigin: { x: number; y: number } | null = null;
+@@ -210,6 +211,7 @@ let pageDisposed = false;
+ let viewport = visibleViewport(window.visualViewport, innerWidth, innerHeight);
+ let safeBounds: Rectangle = viewport;
+ let usableBounds: Rectangle = viewport;
++let overviewObstaclesKey = '';
+ let closingFence: {
+   rect: DOMRect;
+   until: number;
+@@ -523,6 +525,7 @@ function scheduleStoryClock() {
+   });
+ }
+ function mountCove(next: typeof level) {
++  overviewObstaclesKey = '';
+   clearReceipt();
+ 
+   storyPresentation.cancel();
+@@ -551,6 +554,7 @@ function mountCove(next: typeof level) {
+   panPointer = null;
+   suppressPanClick = false;
+   locationSelection = null;
++  locationDetails = false;
+   selectionOrigin = null;
+   actionOrigin = null;
+   actionAnchor = null;
+@@ -953,18 +957,7 @@ function updateViewport() {
+     right: inset('right'),
+     bottom: inset('bottom'),
+   });
+-  const hud = document.querySelector<HTMLElement>('.hud')!.getBoundingClientRect();
+-  const controls = viewControls.getBoundingClientRect();
+-  const forecast = $('status-toggle').getBoundingClientRect();
+-  usableBounds = {
+-    ...safeBounds,
+-    top: Math.max(safeBounds.top, hud.bottom + 8),
+-    bottom: Math.min(
+-      safeBounds.bottom,
+-      controls.top - 8,
+-      $('status-toggle').hidden ? safeBounds.bottom : forecast.top - 8,
+-    ),
+-  };
++  usableBounds = insetRectangle(safeBounds, { left: 10, right: 10, top: 10, bottom: 10 });
+ 
+   if (app.classList.contains('home-screen')) {
+     const menu = $('home-menu').getBoundingClientRect();
+@@ -1010,6 +1003,18 @@ function updateViewport() {
+     top: usableBounds.top - canvas.top,
+     bottom: usableBounds.bottom - canvas.top,
+   });
++  if (!journeySurface()) {
++    const key = [level.id, width, height, canvas.left, canvas.top, ...Object.values(safeBounds), world.viewStatus().mode].join(':');
++    if (overviewObstaclesKey !== key) {
++      overviewObstaclesKey = key;
++      const rectangles = [...document.querySelectorAll<HTMLElement>('.tools button, #load-toggle, #status-toggle, .view-controls button')]
++        .filter((element) => !element.hidden && element.getClientRects().length > 0 && getComputedStyle(element).visibility !== 'hidden')
++        .map((element) => element.getBoundingClientRect())
++        .filter((rect) => rect.width > 0 && rect.height > 0)
++        .map((rect) => ({ left: rect.left - canvas.left, right: rect.right - canvas.left, top: rect.top - canvas.top, bottom: rect.bottom - canvas.top }));
++      world.setOverviewObstacles(rectangles);
++    }
++  }
+ }
+ 
+ function renderMotion() {
+@@ -1040,7 +1045,7 @@ function available(preferred?: string) {
+     !target.closest('[inert]')
+   )
+     return target;
+-  if (locationSelection && !$('local-context').hidden) return $('local-heading');
++  if (locationSelection && !$('local-context').hidden) return $('local-context');
+   const marker = $(`map-${session.state.boatNodeId}`);
+   return marker?.getClientRects().length ? marker : $('menu');
+ }
+@@ -1491,6 +1496,7 @@ function clearLocation(restore = false) {
+   actionOrigin = null;
+   renderMap();
+   renderLocation();
++  renderDock();
+   positionMap();
+   highlight();
+   if (restore || $('local-context').contains(document.activeElement))
+@@ -1507,14 +1513,16 @@ function selectLocation(id: string) {
+   actionOrigin = null;
+   if (locationSelection !== id) {
+     locationSelection = id;
++    locationDetails = false;
+     selectionOrigin = !keyboardInput && lastPointer ? { x: lastPointer.x, y: lastPointer.y } : null;
+     world.frameLocation(id);
+     renderMap();
+     renderLocation();
++    renderDock();
+     positionMap();
+   }
+   highlight();
+-  $('local-heading').focus({ preventScroll: true });
++  $('local-context').focus({ preventScroll: true });
+   $('announcement').textContent = `${nodeNames[id]} selected. Inspection is free.`;
+ }
+ function localContext() {
+@@ -1613,56 +1621,68 @@ function renderLocation() {
+           })
+           .join('')}</details>`
+       : '';
+-  const actions =
+-    !facts.current && facts.move
+-      ? `<button id="sail" data-risk="${facts.wouldLose ? 'loss' : 'safe'}" ${facts.canSail ? '' : 'disabled'}>Sail · 1 action</button>`
+-      : '';
+-  card.innerHTML = `<header class="location-head"><div><p class="location-role">${facts.current ? 'You are here' : facts.home ? 'Home · delivery destination' : facts.relation === 'remote' ? 'Free inspection' : facts.wouldLose ? 'Flood warning' : 'Direct passage'}</p><h2 id="local-heading" tabindex="-1">${facts.name}${facts.home && facts.current ? ' · Home' : ''}</h2></div><button id="close-location" aria-label="Close location card">×</button></header><div id="location-facts">${details}${routes}</div>${actions ? `<footer id="local-actions">${actions}</footer>` : ''}`;
++  const edge = facts.move ? edgeTo(session.state, facts.id, level) : null;
++  const loss = facts.wouldLose && facts.move ? preview(session.state, facts.move, level).state.lossReason : null;
++  const reason = facts.relation === 'remote'
++    ? 'No direct passage'
++    : !facts.current && !facts.canSail
++      ? edge && edge.baseDepth + session.state.tideLevel < draft(session.state, level)
++        ? 'Needs depth ' + draft(session.state, level) + ' · passage ' + (edge.baseDepth + session.state.tideLevel)
++        : facts.limitation
++      : loss ? `${passengerList(loss.passengerIds, level)} will be lost when ${nodeNames[level.piers.find((pier) => pier.id === loss.pierId)!.nodeId]} floods.` : facts.consequence;
++  const actions = !facts.current && facts.move
++    ? '<button id="sail" data-risk="' + (facts.wouldLose ? 'loss' : 'safe') + '" ' + (facts.canSail ? '' : 'disabled') + '>Sail · 1 action</button>'
++    : facts.current ? '<span class="current-place">You are here</span>' : '';
++  card.setAttribute('aria-label', facts.name + ' · free inspection');
++  card.innerHTML = '<div class="location-toolbar">' + actions + '<button id="location-details" aria-expanded="' + locationDetails + '" aria-controls="location-facts">Details</button><button id="close-location" aria-label="Close location card">×</button></div>' + paragraph(reason, facts.wouldLose ? 'location-warning' : 'location-reason') + '<div id="location-facts" ' + (locationDetails ? '' : 'hidden') + '>' + details + routes + '</div>';
+   for (const button of card.querySelectorAll<HTMLButtonElement>('[data-inspect-route]')) {
+     setControl(button, null, button.textContent ?? '', 'quiet');
+     button.onclick = () => selectLocation(button.dataset.inspectRoute!);
+   }
++  setControl($('location-details'), null, 'Details', 'quiet');
++  $('location-details').onclick = () => {
++    locationDetails = !locationDetails;
++    $('location-details').setAttribute('aria-expanded', String(locationDetails));
++    $('location-facts').hidden = !locationDetails;
++    positionMap();
++  };
+   setControl($('close-location'), 'close', 'Close location card', 'quiet', true);
+   if ($('sail')) {
+-    setControl($('sail'), 'sail', 'Sail · 1 action', 'action');
+-    $('sail').setAttribute('aria-label', `Sail to ${facts.name} · 1 action`);
++    setControl($('sail'), 'sail', facts.wouldLose ? 'Sail anyway · 1 action' : 'Sail · 1 action', 'action');
++    $('sail').setAttribute('aria-label', (facts.wouldLose ? 'Sail anyway to ' : 'Sail to ') + facts.name + ' · 1 action');
+   }
+   $('close-location').onclick = (event) => {
+     event.stopPropagation();
+-    if (!keyboardInput)
+-      closingFence = {
+-        scope: 'dismiss',
+-        rect: $('close-location').getBoundingClientRect(),
+-        until: performance.now() + 180,
+-        x: event.clientX,
+-        y: event.clientY,
+-      };
++    if (!keyboardInput) closingFence = {
++      scope: 'dismiss', rect: $('close-location').getBoundingClientRect(),
++      until: performance.now() + 180, x: event.clientX, y: event.clientY,
++    };
+     clearLocation(true);
+   };
+-  if ($('sail'))
+-    $('sail').onclick = (event) => {
+-      event.stopPropagation();
+-      if (blocked() || !facts.move || !facts.canSail) return;
+-      if (facts.wouldLose) openDialog('action', facts.move, 'sail');
+-      else {
+-        if (!keyboardInput)
+-          closingFence = {
+-            scope: 'commit',
+-            rect: $('sail').getBoundingClientRect(),
+-            until: performance.now() + 180,
+-            x: event.clientX,
+-            y: event.clientY,
+-          };
+-        returnId = 'local-heading';
+-        execute(facts.move);
+-      }
++  if ($('sail')) $('sail').onclick = (event) => {
++    event.stopPropagation();
++    if (blocked() || event.detail > 1 || locationSelection !== facts.id) return;
++    const current = locationFacts(session.state, facts.id, level);
++    if (!current.move || !current.canSail) return;
++    if (current.wouldLose !== facts.wouldLose || current.consequence !== facts.consequence) {
++      renderLocation();
++      positionMap();
++      return;
++    }
++    if (!keyboardInput) closingFence = {
++      scope: 'commit', rect: $('sail').getBoundingClientRect(),
++      until: performance.now() + 180, x: event.clientX, y: event.clientY,
+     };
++    returnId = 'local-context';
++    execute(current.move);
++  };
+ }
+ function renderDock() {
+   const dock = $('dock-actions'),
+     facts = locationFacts(session.state, session.state.boatNodeId, level),
+     visible =
+       !journeySurface() &&
++      (!locationSelection || locationSelection === session.state.boatNodeId) &&
+       !session.busy &&
+       !dialog.open &&
+       session.state.status === 'playing' &&
+@@ -1737,10 +1757,12 @@ function render() {
+     facts = statusCopy(s, level),
+     objective = objectiveCopy(s, level);
+   $('objective').textContent = objective.headline;
++  setControl($('load-toggle'), null, `${load(s, level)}/${level.rules.capacity} · Depth ${draft(s, level)}`, 'quiet');
++  $('load-toggle').setAttribute('aria-label', `${load(s, level)} of ${level.rules.capacity} spaces · boat needs depth ${draft(s, level)} · crossing status`);
+   $('readout').innerHTML =
+     `<strong id="boat-summary">Depth ${draft(s, level)} · ${load(s, level)}/${level.rules.capacity} spaces</strong><span><b data-testid="turn">${String(s.turn).padStart(2, '0')}</b> actions · Tide <b data-testid="tide">${s.tideLevel}</b> · <b id="progress">${objective.progress}</b></span>`;
+   $('status-toggle').innerHTML =
+-    `<span class="status-symbol" aria-hidden="true">${facts.urgent ? '!' : '≈'}</span><span><strong id="status-headline">${facts.headline}</strong>${facts.detail ? `<span id="status-detail">${facts.detail}</span>` : '<span id="status-detail"></span>'}</span><span class="forecast-label">Forecast</span>`;
++    `<span class="status-symbol" aria-hidden="true">${facts.urgent ? '!' : '≈'}</span><strong id="status-headline">${facts.urgent ? facts.headline : forecastCopy(s, level).headline}</strong>`;
+   $('status-toggle').classList.toggle('urgent', facts.urgent);
+   $('status-toggle').hidden = s.status === 'won';
+   $('selection-hint').hidden = s.status === 'won' || !!locationSelection;
+@@ -1823,7 +1845,7 @@ function positionReceipt() {
+   const boat = local(frame.boat);
+   const obstacles = [
+     ...document.querySelectorAll<HTMLElement>(
+-      '.hud, #dock-actions, #status-toggle, .view-controls, .map-target, .map-name, #local-context, #dialog[open]',
++      '.tools button, #load-toggle, #crossing-details, #dock-actions, #status-toggle, .view-controls, .map-target, .map-name, #local-context, #dialog[open]',
+     ),
+   ]
+     .filter(
+@@ -1838,7 +1860,7 @@ function positionReceipt() {
+     rect.width,
+     rect.height,
+     safeBounds,
+-    [...obstacles, boat, ...frame.passengers.map(local)],
++    [...obstacles, boat, ...frame.passengers.map(local), local(frame.lighthouse), ...(frame.bell ? [local(frame.bell)] : [])],
+     [
+       [boat.left - rect.width - 12, boat.top],
+       [boat.left, boat.bottom + 12],
+@@ -1997,6 +2019,23 @@ function positionDialog() {
+     }
+   }
+ }
++function playObstacles() {
++  return [...document.querySelectorAll<HTMLElement>('.tools button, #load-toggle, #crossing-details, #status-toggle, .view-controls button')]
++    .filter((element) => !element.hidden && !element.closest('[hidden]') && element.getClientRects().length > 0 && getComputedStyle(element).visibility !== 'hidden')
++    .map((element) => element.getBoundingClientRect());
++}
++function factsWidth() {
++  return locationSelection && locationFacts(session.state, locationSelection, level).wouldLose ? 320 : 292;
++}
++function toggleStatus(open: boolean) {
++  $('crossing-details').hidden = !open;
++  $('load-toggle').setAttribute('aria-expanded', String(open));
++  labelLayout.clear();
++  scheduleLayout();
++}
++$('load-toggle').onclick = () => toggleStatus(!!$('crossing-details').hidden);
++$('close-status').onclick = () => { toggleStatus(false); $('load-toggle').focus({ preventScroll: true }); };
++
+ function positionMap() {
+   if (session.state.status === 'won') {
+     labelLayout.clear();
+@@ -2023,17 +2062,8 @@ function positionMap() {
+     bottom: r.bottom - stage.top,
+   });
+   const figures = [frame.boat, ...frame.passengers].map(atLocal);
+-  const chrome = [
+-    document.querySelector<HTMLElement>('.hud')!,
+-    viewControls,
+-    ...(!$('status-toggle').hidden ? [$('status-toggle')] : []),
+-  ].map((e) => toLocal(e.getBoundingClientRect()));
+-  const bounds = toLocal(safeBounds);
+-  bounds.top = Math.max(bounds.top, chrome[0].bottom + 6);
+-  bounds.bottom = Math.max(
+-    bounds.top + 80,
+-    Math.min(bounds.bottom, ...chrome.slice(1).map((r) => r.top - 6)),
+-  );
++  const chrome = playObstacles().map(toLocal);
++  const bounds = toLocal(insetRectangle(safeBounds, { left: 8, right: 8, top: 8, bottom: 8 }));
+   const markerKey = [
+     level.id,
+     canvas.width,
+@@ -2063,7 +2093,7 @@ function positionMap() {
+           endpoint,
+           currentBoat,
+           bounds,
+-          otherTargets.map((target) => target.bounds),
++          [...chrome, ...otherTargets.map((target) => target.bounds)],
+         );
+         currentMarkerOffset = { key: markerKey, x: clear.x - endpoint.x, y: clear.y - endpoint.y };
+       }
+@@ -2076,12 +2106,55 @@ function positionMap() {
+   );
+   const placed: Rectangle[] = [];
+   const leaders: string[] = [];
++  for (const marker of markers) {
++    const inside = marker.x >= bounds.left && marker.x <= bounds.right && marker.y >= bounds.top && marker.y <= bounds.bottom;
++    if (!inside || !chrome.some((obstacle) => overlaps(marker.bounds, obstacle, 2))) continue;
++    const origin = { x: marker.x, y: marker.y };
++    const clear = placeLocalCard(marker.size, marker.size, bounds,
++      [...chrome, ...figures, ...markers.filter((other) => other.id !== marker.id).map((other) => other.bounds)],
++      [[marker.bounds.left, marker.bounds.top]], [marker.bounds.left, marker.bounds.top]);
++    if (!clear) continue;
++    marker.bounds = clear;
++    marker.x = (clear.left + clear.right) / 2;
++    marker.y = (clear.top + clear.bottom) / 2;
++    leaders.push(`<line x1="${marker.x}" y1="${marker.y}" x2="${origin.x}" y2="${origin.y}" />`);
++  }
+   if (!session.busy) {
+     const current = markers.find((marker) => marker.id === session.state.boatNodeId)!;
+     const contactX = Math.max(currentBoat.left, Math.min(currentBoat.right, current.x));
+     const contactY = Math.max(currentBoat.top, Math.min(currentBoat.bottom, current.y));
+     leaders.push(`<line x1="${current.x}" y1="${current.y}" x2="${contactX}" y2="${contactY}" />`);
+   }
++  cardPlacement = null;
++  if (locationSelection && !$('local-context').hidden) {
++    const local = $('local-context'),
++      marker = markers.find((m) => m.id === locationSelection)!;
++    local.style.width = Math.min(locationDetails ? 330 : factsWidth(), bounds.right - bounds.left) + 'px';
++    local.style.setProperty('--local-max-height', Math.max(80, bounds.bottom - bounds.top) + 'px');
++    protectedBounds = [...figures, ...chrome];
++    const avoid = [
++      ...figures, ...chrome,
++      atLocal(frame.lighthouse), ...(frame.bell ? [atLocal(frame.bell)] : []),
++      ...markers.map((m) => m.bounds),
++      ...(selectionOrigin ? [{ left: selectionOrigin.x - stage.left - 12, right: selectionOrigin.x - stage.left + 12, top: selectionOrigin.y - stage.top - 12, bottom: selectionOrigin.y - stage.top + 12 }] : []),
++    ];
++    const nearby = placeActionCard(local.offsetWidth, local.offsetHeight, bounds, marker.bounds, {
++      portrait: canvas.width < canvas.height,
++      avoid,
++    });
++    const choice = placeLocalCard(local.offsetWidth, local.offsetHeight, bounds, avoid, [[nearby.left, nearby.top]], [marker.x - local.offsetWidth / 2, marker.y]) ?? nearby;
++    cardPlacement = choice;
++    placed.push(choice);
++    local.style.left = choice.left + 'px';
++    local.style.top = choice.top + 'px';
++    const x = Math.max(choice.left, Math.min(choice.right, marker.x)),
++      y = Math.max(choice.top, Math.min(choice.bottom, marker.y));
++    $('selection-leader').innerHTML =
++      '<line x1="' + marker.x + '" y1="' + marker.y + '" x2="' + x + '" y2="' + y + '" />';
++  } else if (!dialog.open) {
++    protectedBounds = [];
++    $('selection-leader').innerHTML = '';
++  }
+   const layoutKey = [canvas.width, canvas.height, world.layoutRevision, session.state.turn].join(
+     ':',
+   );
+@@ -2124,8 +2197,8 @@ function positionMap() {
+         boat.bottom > bounds.top &&
+         boat.top < bounds.bottom;
+     dock.style.visibility = visible || keyboardInput ? 'visible' : 'hidden';
+-    const avoidSets =
+-      level.id === 'wide-berth' ? [[...avoid, ...frame.places.map(atLocal)], avoid] : [avoid];
++    const landmarks = level.id === 'wide-berth' ? frame.places.map(atLocal) : [atLocal(frame.lighthouse), ...(frame.bell ? [atLocal(frame.bell)] : [])];
++    const avoidSets = [[...avoid, ...landmarks], avoid];
+     const layouts = level.id === 'wide-berth' && dock.children.length > 1 ? ['row', 'column'] : ['row'];
+     let nearby: ReturnType<typeof placeActionCard> | null = null;
+     let clear: Rectangle | null = null;
+@@ -2154,7 +2227,7 @@ function positionMap() {
+     return choice;
+   };
+   const reservedDock =
+-    level.id === 'wide-berth' ? placeDock([...figures, ...markers.map((m) => m.bounds)]) : null;
++    level.id === 'wide-berth' ? placeDock([...chrome, ...figures, ...placed, ...markers.map((m) => m.bounds)]) : null;
+   const nameObstacles = reservedDock
+     ? [
+         ...markers,
+@@ -2181,7 +2254,9 @@ function positionMap() {
+           nameObstacles,
+           bounds,
+           [
++            ...chrome,
+             ...figures,
++            ...placed,
+             ...(level.id === 'wide-berth' ? frame.places.map(atLocal) : []),
+             ...(hintBounds ? [hintBounds] : []),
+           ],
+@@ -2214,14 +2289,15 @@ function positionMap() {
+       const top = Math.max(bounds.top, Math.min(bounds.bottom - h, y));
+       return { left, top, right: left + w, bottom: top + h };
+     });
+-    const avoid = [...figures, ...placed, ...(hintBounds ? [hintBounds] : [])];
++    const avoid = [...chrome, ...figures, ...placed, ...(hintBounds ? [hintBounds] : [])];
+     const score = (choice: Rectangle) =>
+       avoid.filter((r) => overlaps(choice, r, 2)).length * 200 +
+       Math.hypot(choice.left - preferred[0][0], choice.top - preferred[0][1]);
+-    const choice =
+-      driftwoodNames?.get(id) ??
+-      labelLayout.get(id) ??
+-      candidates.sort((a, b) => score(a) - score(b))[0];
++    const existing = driftwoodNames?.get(id) ?? labelLayout.get(id);
++    const choice = existing && !avoid.some((r) => overlaps(existing, r, 2))
++      ? existing
++      : placeLocalCard(w, h, bounds, [...avoid, ...markers.map((m) => m.bounds)], preferred, [marker.x - w / 2, marker.y])
++        ?? candidates.sort((a, b) => score(a) - score(b))[0];
+     labelLayout.set(id, choice);
+     name.style.left = choice.left - marker.bounds.left + 'px';
+     name.style.top = choice.top - marker.bounds.top + 'px';
+@@ -2234,33 +2310,7 @@ function positionMap() {
+       );
+   }
+   if ($('map-leaders')) $('map-leaders').innerHTML = leaders.join('');
+-  if (level.id !== 'wide-berth') placeDock([...figures, ...placed]);
+-  cardPlacement = null;
+-  if (locationSelection && !$('local-context').hidden) {
+-    const local = $('local-context'),
+-      marker = markers.find((m) => m.id === locationSelection)!;
+-    local.style.width = Math.min(330, bounds.right - bounds.left) + 'px';
+-    local.style.setProperty('--local-max-height', Math.max(80, bounds.bottom - bounds.top) + 'px');
+-    protectedBounds = [...figures, ...chrome];
+-    const choice = placeActionCard(local.offsetWidth, local.offsetHeight, bounds, marker.bounds, {
+-      portrait: canvas.width < canvas.height,
+-      avoid: [
+-        ...figures,
+-        ...markers.filter((m) => m.id !== locationSelection).map((m) => m.bounds),
+-        ...(dockPlacement ? [dockPlacement] : []),
+-      ],
+-    });
+-    cardPlacement = choice;
+-    local.style.left = choice.left + 'px';
+-    local.style.top = choice.top + 'px';
+-    const x = Math.max(choice.left, Math.min(choice.right, marker.x)),
+-      y = Math.max(choice.top, Math.min(choice.bottom, marker.y));
+-    $('selection-leader').innerHTML =
+-      '<line x1="' + marker.x + '" y1="' + marker.y + '" x2="' + x + '" y2="' + y + '" />';
+-  } else if (!dialog.open) {
+-    protectedBounds = [];
+-    $('selection-leader').innerHTML = '';
+-  }
++  if (level.id !== 'wide-berth') placeDock([...chrome, ...figures, ...placed]);
+   positionDialog();
+ }
+ function bindWorld() {
+@@ -2368,7 +2418,7 @@ function bindCanvas() {
+ bindCanvas();
+ const layoutObserver = new ResizeObserver(scheduleLayout);
+ layoutObserver.observe(world.host);
+-layoutObserver.observe(document.querySelector('.hud')!);
++for (const control of document.querySelectorAll<HTMLElement>('.tools button, #load-toggle, #crossing-details, #local-context')) layoutObserver.observe(control);
+ layoutObserver.observe(viewControls);
+ layoutObserver.observe($('status-toggle'));
+ const refreshLabelFonts = () => {
+@@ -2478,6 +2528,20 @@ document.addEventListener(
+       e.stopImmediatePropagation();
+       return;
+     }
++    if (e.key === 'Escape' && !dialog.open && !$('crossing-details').hidden) {
++      e.preventDefault();
++      e.stopImmediatePropagation();
++      toggleStatus(false);
++      $('load-toggle').focus({ preventScroll: true });
++      return;
++    }
++    if (e.key === 'Escape' && !dialog.open && locationSelection && locationDetails) {
++      e.preventDefault();
++      e.stopImmediatePropagation();
++      $('location-details').click();
++      $('location-details').focus({ preventScroll: true });
++      return;
++    }
+     if (e.key === 'Escape' && !dialog.open && locationSelection) {
+       e.preventDefault();
+       e.stopImmediatePropagation();
+@@ -2669,7 +2733,7 @@ if (import.meta.env.DEV)
+           safe: safeBounds,
+           usable: usableBounds,
+           canvas: world.host.getBoundingClientRect().toJSON(),
+-          hud: document.querySelector('.hud')!.getBoundingClientRect().toJSON(),
++          controls: playObstacles(),
+           fullscreen: document.fullscreenElement === app,
+         }),
+       getActionPlacement: () =>
+diff --git a/src/scene/seabed.ts b/src/scene/seabed.ts
+index 8bf9341..6aab5d1 100644
+--- a/src/scene/seabed.ts
++++ b/src/scene/seabed.ts
+@@ -1,6 +1,7 @@
+ import * as T from 'three';
+ import type { Level } from '../levels/level';
+ import { islandCenter, shoreContour, shoreTop } from './shore';
++import { getLevelPaths, type CanonicalPath } from './paths';
+ 
+ export const seabedHeightRange = new T.Vector2(-2.2, 0.72);
+ 
+@@ -63,7 +64,82 @@ function noise(x: number, z: number) {
+   );
+ }
+ 
+-export function createSeabedField(level: Level, bounds: T.Vector4, size = 256) {
++export function createPassageBathymetry(level: Level, paths = getLevelPaths(level)) {
++  const segments = level.edges.flatMap((edge) => {
++    const path = paths.get(edge.id)!;
++    const points = path.points.filter((_, i) => i % 10 === 0);
++    if (points.at(-1) !== path.points.at(-1)) points.push(path.points.at(-1)!);
++    return points.slice(1).map((b, i) => {
++      const a = points[i],
++        dx = b.x - a.x,
++        dz = b.z - a.z;
++      const margin = edge.baseDepth >= 3 ? 1.3 : 2.85;
++      return {
++        x: a.x,
++        z: a.z,
++        dx,
++        dz,
++        inverseLength: 1 / Math.max(1e-9, dx * dx + dz * dz),
++        depth: edge.baseDepth,
++        minX: Math.min(a.x, b.x) - margin,
++        maxX: Math.max(a.x, b.x) + margin,
++        minZ: Math.min(a.z, b.z) - margin,
++        maxZ: Math.max(a.z, b.z) + margin,
++      };
++    });
++  });
++  return {
++    shallowSegments: segments.filter((segment) => segment.depth < 3).length,
++    sample(x: number, z: number) {
++      let shallow = 0,
++        intermediate = 0,
++        deep = 0;
++      const broad = noise(x * 0.62 + 11.2, z * 0.62 - 5.7);
++      const width = 1.05 + broad * 1.65 + noise(x * 1.5, z * 1.5) * 0.15;
++      for (const segment of segments) {
++        if (x < segment.minX || x > segment.maxX || z < segment.minZ || z > segment.maxZ) continue;
++        const px = x - segment.x,
++          pz = z - segment.z;
++        const t = T.MathUtils.clamp(
++          (px * segment.dx + pz * segment.dz) * segment.inverseLength,
++          0,
++          1,
++        );
++        const distance = Math.hypot(px - segment.dx * t, pz - segment.dz * t);
++        if (segment.depth >= 3) deep = Math.max(deep, 1 - smooth(distance, 0.55, 1.3));
++        else {
++          const bank = 1 - smooth(distance, width * 0.16, width);
++          if (segment.depth === 1) shallow = Math.max(shallow, bank);
++          else intermediate = Math.max(intermediate, bank);
++        }
++      }
++      for (const node of level.nodes) {
++        if (node.baseDepth < 3) continue;
++        const dx = x - node.positionXZ[0],
++          dz = z - node.positionXZ[1];
++        const distance = Math.hypot(dx * 0.92, dz * 1.08);
++        const radius = 0.68 + broad * 0.14;
++        deep = Math.max(deep, 1 - smooth(distance, radius, radius + 0.86));
++      }
++      shallow *= 1 - deep;
++      intermediate *= 1 - deep;
++      return {
++        shallow,
++        intermediate,
++        bank: Math.max(shallow, intermediate * 0.5),
++        height: Math.max(-2.2 + shallow * (1.82 + broad * 0.12), -2.2 + intermediate * 1.5),
++      };
++    },
++  };
++}
++
++export function createSeabedField(
++  level: Level,
++  bounds: T.Vector4,
++  size = 256,
++  paths?: Map<string, CanonicalPath>,
++) {
++  const bathymetry = createPassageBathymetry(level, paths);
+   const coasts = level.world.islands.map((island, i) => {
+     const points = shoreContour(island, 0.98);
+     return {
+@@ -116,7 +192,8 @@ export function createSeabedField(level: Level, bounds: T.Vector4, size = 256) {
+   let minimumHeight = Infinity,
+     maximumHeight = -Infinity;
+   const sampleAuthored = (x: number, z: number) => {
+-    let height = seabedHeightRange.x,
++    const passage = bathymetry.sample(x, z);
++    let height = passage.height,
+       shoreDistance = Infinity,
+       landColor = 0,
+       groundStone = 0;
+@@ -167,10 +244,14 @@ export function createSeabedField(level: Level, bounds: T.Vector4, size = 256) {
+     }
+     if (height < -0.025) height = Math.min(-0.04, height + sandForm * 0.13 + rockForm * 0.12);
+     height = T.MathUtils.clamp(height, seabedHeightRange.x, seabedHeightRange.y);
++    const bankStone = smooth(noise(x * 0.85 - 3.4, z * 0.85 + 8.2), 0.58, 0.85) * passage.bank;
+     color
+       .copy(ground)
+-      .lerp(sand, Math.max(landColor, sandForm * 0.72))
+-      .lerp(stone, Math.max(groundStone, rockForm * 0.92));
++      .lerp(
++        sand,
++        Math.max(landColor, sandForm * 0.72, passage.shallow * 0.82, passage.intermediate * 0.38),
++      )
++      .lerp(stone, Math.max(groundStone, rockForm * 0.92, bankStone * 0.45));
+     color.multiplyScalar(0.86 + broad * 0.16 + noise(x * 3, z * 3) * 0.025 + facet * 0.16);
+     return {
+       height,
+@@ -178,6 +259,7 @@ export function createSeabedField(level: Level, bounds: T.Vector4, size = 256) {
+       shoreDistance,
+       sandForm,
+       rockForm,
++      passage,
+     };
+   };
+   for (let j = 0; j < size; j++)
+diff --git a/src/scene/view.ts b/src/scene/view.ts
+index ee1373e..25082e8 100644
+--- a/src/scene/view.ts
++++ b/src/scene/view.ts
+@@ -24,6 +24,88 @@ export function overviewScale(bounds: ViewBounds, usable: ViewRectangle) {
+   );
+ }
+ 
++export function unobscuredOverview(
++  bounds: ViewBounds,
++  subjects: ViewBounds[],
++  usable: ViewRectangle,
++  obstacles: ViewRectangle[],
++) {
++  const center = { x: (bounds.minX + bounds.maxX) / 2, y: (bounds.minY + bounds.maxY) / 2 };
++  const initialScale = overviewScale(bounds, usable);
++  const midpoint = { x: (usable.left + usable.right) / 2, y: (usable.top + usable.bottom) / 2 };
++  const blocked = obstacles.filter(
++    (rect) =>
++      rect.right > usable.left &&
++      rect.left < usable.right &&
++      rect.bottom > usable.top &&
++      rect.top < usable.bottom,
++  );
++  let best = { focus: center, scale: initialScale, overlap: Infinity, displacement: Infinity };
++  for (const factor of [1, 0.98, 0.96, 0.94, 0.92]) {
++    const scale = initialScale * factor;
++    const project = (box: ViewBounds): ViewRectangle => ({
++      left: midpoint.x + (box.minX - center.x) * scale,
++      right: midpoint.x + (box.maxX - center.x) * scale,
++      top: midpoint.y - (box.maxY - center.y) * scale,
++      bottom: midpoint.y - (box.minY - center.y) * scale,
++    });
++    const envelope = project(bounds),
++      protectedRects = subjects.map(project);
++    const minimumX = usable.left - envelope.left,
++      maximumX = usable.right - envelope.right;
++    const minimumY = usable.top - envelope.top,
++      maximumY = usable.bottom - envelope.bottom;
++    const xs = new Set([0, minimumX, maximumX]),
++      ys = new Set([0, minimumY, maximumY]);
++    for (const subject of protectedRects)
++      for (const obstacle of blocked) {
++        xs.add(Math.max(minimumX, Math.min(maximumX, obstacle.left - subject.right - 8)));
++        xs.add(Math.max(minimumX, Math.min(maximumX, obstacle.right - subject.left + 8)));
++        ys.add(Math.max(minimumY, Math.min(maximumY, obstacle.top - subject.bottom - 8)));
++        ys.add(Math.max(minimumY, Math.min(maximumY, obstacle.bottom - subject.top + 8)));
++      }
++    let candidate = { focus: center, scale, overlap: Infinity, displacement: Infinity };
++    for (const dx of xs)
++      for (const dy of ys) {
++        if (
++          dx < minimumX - 1e-7 ||
++          dx > maximumX + 1e-7 ||
++          dy < minimumY - 1e-7 ||
++          dy > maximumY + 1e-7
++        )
++          continue;
++        let overlap = 0;
++        for (const subject of protectedRects)
++          for (const obstacle of blocked)
++            overlap +=
++              Math.max(
++                0,
++                Math.min(subject.right + dx + 6, obstacle.right) -
++                  Math.max(subject.left + dx - 6, obstacle.left),
++              ) *
++              Math.max(
++                0,
++                Math.min(subject.bottom + dy + 6, obstacle.bottom) -
++                  Math.max(subject.top + dy - 6, obstacle.top),
++              );
++        const displacement = dx * dx + dy * dy;
++        if (
++          overlap < candidate.overlap - 1e-7 ||
++          (Math.abs(overlap - candidate.overlap) < 1e-7 && displacement < candidate.displacement)
++        )
++          candidate = {
++            focus: { x: center.x - dx / scale, y: center.y + dy / scale },
++            scale,
++            overlap,
++            displacement,
++          };
++      }
++    if (candidate.overlap === 0) return candidate;
++    if (candidate.overlap < best.overlap) best = candidate;
++  }
++  return best;
++}
++
+ export function phonePlayScale(bounds: ViewBounds, usable: ViewRectangle) {
+   return Math.max(
+     overviewScale(bounds, usable) * 1.4,
+diff --git a/src/scene/water-shader.ts b/src/scene/water-shader.ts
+index e73b44b..6a61048 100644
+--- a/src/scene/water-shader.ts
++++ b/src/scene/water-shader.ts
+@@ -61,7 +61,8 @@ float depth=clamp(waterY-bedHeight(bed),0.,3.);
+ float thickness=depth/max(v.y,.3);
+ vec3 transmission=exp(-vec3(2.3,1.08,.72)*thickness*absorption);
+ float shallow=exp(-thickness*1.5);
+-vec3 waterBody=mix(deepColor,shallowColor,shallow*.62);
++float bank=coastData.r*exp(-max(waterY,0.)*1.15);
++vec3 waterBody=mix(deepColor,shallowColor,max(shallow*.62,bank*.34));
+ vec3 bedLight=bed.rgb*(.86+.16*max(dot(n,sunDirection),0.));
+ bedLight=mix(vec3(dot(bedLight,vec3(.2126,.7152,.0722))),bedLight,shallowContrast);
+ float caustic=pow(max(0.,sin(dot(bedPoint,vec2(3.2,1.4))+time*.29)*sin(dot(bedPoint,vec2(-1.6,2.6))-time*.21)),7.);
+diff --git a/src/scene/water.ts b/src/scene/water.ts
+index df33573..3d9c951 100644
+--- a/src/scene/water.ts
++++ b/src/scene/water.ts
+@@ -2,7 +2,7 @@ import * as T from 'three';
+ import type { Level } from '../levels/level';
+ import type { CanonicalPath } from './paths';
+ import { shoreContour } from './shore';
+-import { createSeabedField, prepareContour } from './seabed';
++import { createPassageBathymetry, createSeabedField, prepareContour } from './seabed';
+ import { sceneLayout } from './layout';
+ import { waterVertexShader, waterFragmentShader } from './water-shader';
+ 
+@@ -75,21 +75,7 @@ export function coastalMask(level: Level, paths: Map<string, CanonicalPath>) {
+     contour: prepareContour(shoreContour(island, 0.98)),
+     height: island.elevation * 0.18,
+   }));
+-  const shallow = level.edges
+-    .filter((edge) => edge.baseDepth < 3)
+-    .flatMap((edge) => {
+-      const points = paths.get(edge.id)!.points.filter((_, i) => i % 5 === 0);
+-      const last = paths.get(edge.id)!.points.at(-1)!;
+-      if (points.at(-1) !== last) points.push(last);
+-      return points.slice(1).map((b, i) => ({
+-        a: new T.Vector2(points[i].x, points[i].z),
+-        b: new T.Vector2(b.x, b.z),
+-        dx: b.x - points[i].x,
+-        dz: b.z - points[i].z,
+-        inverseLength: 1 / Math.max(1e-9, (b.x - points[i].x) ** 2 + (b.z - points[i].z) ** 2),
+-        strength: edge.baseDepth === 1 ? 1 : 0.5,
+-      }));
+-    });
++  const bathymetry = createPassageBathymetry(level, paths);
+   const size = 256,
+     data = new Uint8Array(size * size * 4),
+     span = bounds.getSize(new T.Vector2());
+@@ -97,23 +83,11 @@ export function coastalMask(level: Level, paths: Map<string, CanonicalPath>) {
+     for (let i = 0; i < size; i++) {
+       const x = bounds.min.x + ((i + 0.5) / size) * span.x,
+         z = bounds.min.y + ((j + 0.5) / size) * span.y;
+-      let bank = 0,
+-        shore = 0,
++      const bank = bathymetry.sample(x, z).bank;
++      let shore = 0,
+         landHeight = 0,
+         land = 0,
+         nearestCoast = Number.POSITIVE_INFINITY;
+-      const width = 1.2 + 0.3 * Math.sin(x * 0.73 - z * 0.91);
+-      for (const segment of shallow) {
+-        const px = x - segment.a.x,
+-          pz = z - segment.a.y;
+-        const t = Math.max(
+-          0,
+-          Math.min(1, (px * segment.dx + pz * segment.dz) * segment.inverseLength),
+-        );
+-        const dx = px - segment.dx * t,
+-          dz = pz - segment.dz * t;
+-        bank = Math.max(bank, Math.exp(-(dx * dx + dz * dz) / (width * width)) * segment.strength);
+-      }
+       for (const coast of coasts) {
+         const { distance: d, land: isLand } = coast.contour.sample(x, z);
+         shore = Math.max(shore, Math.exp(-(d * d) / 0.2));
+@@ -137,7 +111,7 @@ export function coastalMask(level: Level, paths: Map<string, CanonicalPath>) {
+   return {
+     texture,
+     bounds: new T.Vector4(bounds.min.x, bounds.min.y, span.x, span.y),
+-    shallowSegments: shallow.length,
++    shallowSegments: bathymetry.shallowSegments,
+   };
+ }
+ export class CoastalWater {
+@@ -149,7 +123,7 @@ export class CoastalWater {
+   view = new T.Vector3();
+   constructor(level: Level, paths: Map<string, CanonicalPath>) {
+     this.mask = coastalMask(level, paths);
+-    this.seabed = createSeabedField(level, this.mask.bounds);
++    this.seabed = createSeabedField(level, this.mask.bounds, 256, paths);
+     const light = sceneLayout(level.id).light;
+     const material = new T.ShaderMaterial({
+       uniforms: {
+diff --git a/src/scene/world.ts b/src/scene/world.ts
+index af695f3..8a6154c 100644
+--- a/src/scene/world.ts
++++ b/src/scene/world.ts
+@@ -21,6 +21,7 @@ import { PresentationPoses } from './poses';
+ import {
+   clampViewFocus,
+   overviewScale,
++  unobscuredOverview,
+   panViewFocus,
+   phonePlayScale,
+   usableViewRectangle,
+@@ -38,7 +39,13 @@ import {
+   transferHeading,
+ } from './deck-transfer';
+ import { sceneLayout, type SceneLayout } from './layout';
+-import { bellLandmark, cottage, driftwoodYard, wideWaterfront, decorateWideIsland } from './scenery';
++import {
++  bellLandmark,
++  cottage,
++  driftwoodYard,
++  wideWaterfront,
++  decorateWideIsland,
++} from './scenery';
+ import { createPier } from './pier';
+ import { getLevelPaths, type CanonicalPath } from './paths';
+ import { Shores, createReedBeds } from './shore';
+@@ -119,6 +126,9 @@ export class World {
+   viewPanned = false;
+   viewLocation: string | null = null;
+   measuredUsable: ViewRectangle | null = null;
++  overviewObstacles: ViewRectangle[] = [];
++  overviewSubjects: T.Box3[] = [];
++  overviewAvoidance = { overlap: 0, displacement: 0 };
+   viewBounds: ViewBounds | null = null;
+   viewFocus: ViewPoint | null = null;
+   viewScale = 1;
+@@ -242,7 +252,11 @@ export class World {
+       } else this.nonInteractivePlaces.push(shore.mesh, shore.rocks, decoration);
+     }
+     for (const p of this.level.piers) {
+-      const group = createPier(p, this.layout.stonePiers.includes(p.id), this.profile.id === 'six-space');
++      const group = createPier(
++        p,
++        this.layout.stonePiers.includes(p.id),
++        this.profile.id === 'six-space',
++      );
+       this.scene.add(group);
+       if (
+         p.id === this.level.objective.deliveryPierId ||
+@@ -351,7 +365,13 @@ export class World {
+       for (const side of [-1, 1])
+         box(this.gangway, '#816446', [0.07, 0.07, 1.04], [side * 0.39, -0.06, 0], 0.012);
+       for (let index = 0; index < 7; index++)
+-        box(this.gangway, index % 2 ? '#c6a170' : '#bd935d', [0.86, 0.045, 1 / 7 - 0.008], [0, -0.0225, -0.5 + (index + 0.5) / 7], 0.008);
++        box(
++          this.gangway,
++          index % 2 ? '#c6a170' : '#bd935d',
++          [0.86, 0.045, 1 / 7 - 0.008],
++          [0, -0.0225, -0.5 + (index + 0.5) / 7],
++          0.008,
++        );
+       for (const end of [-0.48, 0.48])
+         box(this.gangway, '#66776c', [0.86, 0.018, 0.035], [0, 0.008, end], 0.006);
+       this.gangway.name = 'wide-pier-gangway';
+@@ -646,6 +666,19 @@ export class World {
+     this.layoutHullBounds = this.localGeometryBounds(this.hull, new Set(this.animals.values()));
+     for (const [id, animal] of this.animals)
+       this.layoutAnimalBounds.set(id, this.localGeometryBounds(animal));
++    this.overviewSubjects = [this.layoutStaticBounds.get('lighthouse')!.clone()];
++    if (this.layoutStaticBounds.has('bell'))
++      this.overviewSubjects.push(this.layoutStaticBounds.get('bell')!.clone());
++    for (const pier of this.level.piers) {
++      const group = new T.Box3();
++      for (const passenger of this.level.passengers) {
++        const shore = shoreSeat(this.level, passenger.id, pier, !!pier.isDeliveryPier);
++        const transform = new T.Matrix4().makeTranslation(shore.x, shore.y + 0.08, shore.z);
++        transform.scale(new T.Vector3(...passengerScale(passenger.species)));
++        group.union(this.layoutAnimalBounds.get(passenger.id)!.clone().applyMatrix4(transform));
++      }
++      if (!group.isEmpty()) this.overviewSubjects.push(group);
++    }
+   }
+   project(p: number[], height = this.water.position.y + 0.04) {
+     const v = V(p, height).project(this.camera);
+@@ -735,6 +768,18 @@ export class World {
+     this.measuredUsable = { ...rectangle };
+     this.reframeView();
+   }
++  setOverviewObstacles(rectangles: ViewRectangle[]) {
++    const same =
++      rectangles.length === this.overviewObstacles.length &&
++      rectangles.every((rect, i) =>
++        (Object.keys(rect) as (keyof ViewRectangle)[]).every(
++          (key) => Math.abs(rect[key] - this.overviewObstacles[i][key]) < 0.5,
++        ),
++      );
++    if (same) return;
++    this.overviewObstacles = rectangles.map((rect) => ({ ...rect }));
++    this.reframeView();
++  }
+   setHomePresentation(active: boolean) {
+     if (this.homePresentation === active) return;
+     this.homePresentation = active;
+@@ -912,6 +957,7 @@ export class World {
+     this.setViewMode('play');
+   }
+   panByPixels(deltaX: number, deltaY: number) {
++    if (this.viewMode === 'overview') return;
+     if (!this.viewBounds || !this.viewFocus || this.homecoming.active || this.transition) return;
+     this.viewFocus = panViewFocus(this.viewFocus, deltaX, deltaY, this.viewScale);
+     this.viewPanned = true;
+@@ -948,6 +994,7 @@ export class World {
+       usable: this.usableRectangle(),
+       bounds: this.viewBounds ? { ...this.viewBounds } : null,
+       focus: this.viewFocus ? { ...this.viewFocus } : null,
++      overviewAvoidance: { ...this.overviewAvoidance },
+     };
+   }
+   private activeViewFocus() {
+@@ -984,7 +1031,9 @@ export class World {
+       for (const id of ids) {
+         const passenger = this.level.passengers.find((passenger) => passenger.id === id)!;
+         const seat = deckSeat(this.level, id);
+-        const transform = hull.clone().multiply(new T.Matrix4().makeTranslation(seat.x, seat.y, seat.z));
++        const transform = hull
++          .clone()
++          .multiply(new T.Matrix4().makeTranslation(seat.x, seat.y, seat.z));
+         transform.scale(new T.Vector3(...passengerScale(passenger.species)));
+         include(this.layoutAnimalBounds.get(id)!, transform);
+       }
+@@ -996,8 +1045,18 @@ export class World {
+       transform.scale(new T.Vector3(...passengerScale(passenger.species)));
+       include(this.layoutAnimalBounds.get(id)!, transform);
+     }
+-    const bounds = { minX: subjects.min.x, maxX: subjects.max.x, minY: subjects.min.y, maxY: subjects.max.y };
+-    const padded = { left: usable.left + 8, right: usable.right - 8, top: usable.top + 8, bottom: usable.bottom - 8 };
++    const bounds = {
++      minX: subjects.min.x,
++      maxX: subjects.max.x,
++      minY: subjects.min.y,
++      maxY: subjects.max.y,
++    };
++    const padded = {
++      left: usable.left + 8,
++      right: usable.right - 8,
++      top: usable.top + 8,
++      bottom: usable.bottom - 8,
++    };
+     return {
+       focus: { x: (bounds.minX + bounds.maxX) / 2, y: (bounds.minY + bounds.maxY) / 2 },
+       scale: Math.min(scale, overviewScale(bounds, padded)),
+@@ -1033,21 +1092,42 @@ export class World {
+         x: (this.viewBounds.minX + this.viewBounds.maxX) / 2,
+         y: (this.viewBounds.minY + this.viewBounds.maxY) / 2,
+       };
+-    if (this.profile.id === 'six-space' && phone && this.viewMode === 'play' &&
+-      !this.storyFraming && !this.viewPanned && !this.viewLocation) {
++    if (
++      this.profile.id === 'six-space' &&
++      phone &&
++      this.viewMode === 'play' &&
++      !this.storyFraming &&
++      !this.viewPanned &&
++      !this.viewLocation
++    ) {
+       localFrame = true;
+       const journey = this.transition?.journey;
+       if (journey && this.transition?.path) {
+-        const before = this.wideDockFrame(this.transition.before, journey.fromAngle, usable, this.viewScale);
+-        const after = this.wideDockFrame(this.transition.after, journey.toAngle, usable, this.viewScale);
++        const before = this.wideDockFrame(
++          this.transition.before,
++          journey.fromAngle,
++          usable,
++          this.viewScale,
++        );
++        const after = this.wideDockFrame(
++          this.transition.after,
++          journey.toAngle,
++          usable,
++          this.viewScale,
++        );
+         const offset = (state: State, frame: typeof before) => {
+           const node = this.level.nodes.find((node) => node.id === state.boatNodeId)!;
+           const point = V(node.positionXZ).applyMatrix4(this.camera.matrixWorldInverse);
+           return { x: frame.focus.x - point.x, y: frame.focus.y - point.y - 0.8 };
+         };
+-        const from = offset(this.transition.before, before), to = offset(this.transition.after, after);
+-        const progress = smooth(this.journeyFrame?.progress ?? 0), moving = this.activeViewFocus();
+-        focus = { x: moving.x + T.MathUtils.lerp(from.x, to.x, progress), y: moving.y + T.MathUtils.lerp(from.y, to.y, progress) };
++        const from = offset(this.transition.before, before),
++          to = offset(this.transition.after, after);
++        const progress = smooth(this.journeyFrame?.progress ?? 0),
++          moving = this.activeViewFocus();
++        focus = {
++          x: moving.x + T.MathUtils.lerp(from.x, to.x, progress),
++          y: moving.y + T.MathUtils.lerp(from.y, to.y, progress),
++        };
+         this.viewScale = T.MathUtils.lerp(before.scale, after.scale, progress);
+       } else {
+         const frame = this.wideDockFrame(this.state, this.poses.heading, usable, this.viewScale);
+@@ -1131,8 +1211,21 @@ export class World {
+         focus = authored.focus;
+       }
+     }
++    const automaticOverview =
++      this.viewMode === 'overview' && !this.viewPanned && !this.storyFraming;
++    if (automaticOverview) {
++      const result = unobscuredOverview(
++        this.viewBounds,
++        this.overviewSubjects.map((box) => this.projectedStoryBounds(box)),
++        usable,
++        this.overviewObstacles,
++      );
++      focus = result.focus;
++      this.viewScale = result.scale;
++      this.overviewAvoidance = { overlap: result.overlap, displacement: result.displacement };
++    }
+     focus =
+-      harborFrame || localFrame || this.storyFraming
++      harborFrame || localFrame || this.storyFraming || automaticOverview
+         ? focus!
+         : clampViewFocus(focus ?? this.activeViewFocus(), this.viewBounds, usable, this.viewScale);
+     this.viewFocus = focus;
+diff --git a/src/ui/play-controls.css b/src/ui/play-controls.css
+new file mode 100644
+index 0000000..1b9033b
+--- /dev/null
++++ b/src/ui/play-controls.css
+@@ -0,0 +1,152 @@
++#app .tools {
++  position: absolute;
++  top: max(8px, var(--safe-top));
++  right: max(8px, var(--safe-right));
++  display: flex;
++  gap: 6px;
++  z-index: 5;
++  padding: 0;
++  background: none;
++}
++#app .tools .cove-button {
++  min-width: 48px;
++  min-height: 48px;
++  font-size: 14px;
++}
++#app #load-toggle {
++  position: absolute;
++  top: max(8px, var(--safe-top));
++  left: max(8px, var(--safe-left));
++  min-height: 48px;
++  padding: 8px 12px;
++  z-index: 5;
++  font-size: 15px;
++}
++#app #crossing-details {
++  position: absolute;
++  left: max(8px, var(--safe-left));
++  top: max(64px, calc(var(--safe-top) + 56px));
++  width: min(300px, calc(var(--viewport-width) - 16px));
++  max-height: calc(var(--viewport-height) - 144px);
++  overflow: auto;
++  padding: 12px;
++  z-index: 6;
++}
++#app #crossing-details .identity {
++  display: block;
++}
++#app #crossing-details h1 {
++  font-size: 21px;
++}
++#app #crossing-details #objective {
++  font-size: 14px;
++  margin: 6px 0;
++}
++#app #readout {
++  display: flex;
++  flex-direction: column;
++  align-items: flex-start;
++  font-size: 14px;
++  margin: 8px 0;
++}
++#app #readout > span {
++  white-space: normal;
++}
++#app #status-toggle {
++  inset: auto max(8px, var(--safe-right)) max(8px, var(--safe-bottom)) auto;
++  width: max-content;
++  max-width: min(300px, 43vw);
++  min-height: 48px;
++  padding: 7px 10px;
++  gap: 7px;
++  z-index: 5;
++}
++#app #status-headline {
++  font-size: 14px;
++  line-height: 1.3;
++}
++#app .view-controls {
++  left: max(8px, var(--safe-left));
++  right: auto;
++  bottom: max(8px, var(--safe-bottom));
++  flex-wrap: nowrap;
++  max-width: calc(var(--viewport-width) - 16px);
++}
++#app .view-controls .cove-button {
++  min-height: 48px;
++  font-size: 14px;
++}
++#app #selection-hint {
++  display: none;
++}
++#app #local-context {
++  gap: 0;
++  padding: 3px;
++  width: max-content;
++}
++#app #local-context:focus-visible {
++  outline: 3px solid var(--cove-focus);
++  outline-offset: 3px;
++}
++#app .location-toolbar {
++  display: flex;
++  align-items: center;
++  gap: 5px;
++  flex-shrink: 0;
++}
++#app .location-toolbar button {
++  min-height: 44px;
++  min-width: 44px;
++  padding: 5px 7px;
++  font-size: 14px;
++  line-height: 1.2;
++}
++#app .location-toolbar #sail {
++  flex: 1;
++}
++#app .location-toolbar #close-location {
++  flex: 0 0 44px;
++}
++#app .current-place {
++  flex: 1;
++  padding-left: 6px;
++  font-size: 14px;
++}
++#app .location-reason,
++#app .location-warning {
++  font-size: 14px;
++  line-height: 1.3;
++  margin: 0 4px;
++}
++#app #location-facts {
++  margin: 0;
++  padding: 5px;
++  max-height: min(240px, calc(var(--viewport-height) - 150px));
++  overflow: auto;
++}
++#app #location-facts p {
++  font-size: 14px;
++}
++#app.journey-screen .tools,
++#app.journey-screen #load-toggle,
++#app.journey-screen #crossing-details {
++  visibility: hidden;
++  pointer-events: none;
++}
++@media (max-width: 580px) {
++  #app #load-toggle {
++    top: max(64px, calc(var(--safe-top) + 56px));
++  }
++  #app #crossing-details {
++    top: max(120px, calc(var(--safe-top) + 112px));
++    max-height: calc(var(--viewport-height) - 208px);
++  }
++  #app #status-toggle {
++    inset: auto auto max(64px, calc(var(--safe-bottom) + 64px)) max(8px, var(--safe-left));
++    max-width: min(270px, calc(var(--viewport-width) - 16px));
++  }
++  #app #transition-status,
++  #app #view-notice {
++    bottom: max(120px, calc(var(--safe-bottom) + 120px));
++  }
++}

@@ -2,6 +2,7 @@ import { expect, test } from 'vitest';
 import {
   clampViewFocus,
   overviewScale,
+  unobscuredOverview,
   panViewFocus,
   phonePlayScale,
   usableViewRectangle,
@@ -34,6 +35,56 @@ test('whole-cove fitting respects the same asymmetric usable rectangle at every 
         expect(point.y).toBeLessThanOrEqual(usable.bottom + 1e-8);
       }
   }
+});
+
+test('Overview uses horizontal slack around real corner controls without excluding an invisible top strip', () => {
+  const bounds = { minX: -10, maxX: 10, minY: -6, maxY: 6 };
+  const usable = { left: 8, right: 836, top: 8, bottom: 382 };
+  const subjects = [
+    { minX: 3, maxX: 5, minY: 4, maxY: 5.9 },
+    { minX: -8, maxX: -6, minY: 0, maxY: 3 },
+  ];
+  const controls = [{ left: 500, right: 836, top: 8, bottom: 56 }];
+  const result = unobscuredOverview(bounds, subjects, usable, controls);
+  expect(result.scale).toBe(overviewScale(bounds, usable));
+  expect(result.overlap).toBe(0);
+  expect(result.displacement).toBeGreaterThan(0);
+  const frame = viewFrame(844, 390, usable, result.scale, result.focus);
+  const project = (x: number, y: number) => ({
+    x: (x - frame.left) * result.scale,
+    y: (frame.top - y) * result.scale,
+  });
+  for (const x of [bounds.minX, bounds.maxX])
+    for (const y of [bounds.minY, bounds.maxY]) {
+      const point = project(x, y);
+      expect(point.x).toBeGreaterThanOrEqual(usable.left - 1e-7);
+      expect(point.x).toBeLessThanOrEqual(usable.right + 1e-7);
+      expect(point.y).toBeGreaterThanOrEqual(usable.top - 1e-7);
+      expect(point.y).toBeLessThanOrEqual(usable.bottom + 1e-7);
+    }
+  expect(project(subjects[0].maxX, subjects[0].maxY).x).toBeLessThanOrEqual(controls[0].left - 6);
+  expect(project(bounds.maxX, bounds.maxY).y).toBeCloseTo(usable.top);
+});
+
+test('Overview keeps its frame when subjects and persistent controls are unchanged, with bounded fallback for crowded corners', () => {
+  const usable = { left: 8, right: 382, top: 8, bottom: 836 };
+  const subjects = [{ minX: -2, maxX: 2, minY: 4, maxY: 6 }];
+  const controls = [{ left: 8, right: 382, top: 8, bottom: 60 }];
+  const first = unobscuredOverview(network, subjects, usable, controls);
+  expect(
+    unobscuredOverview(
+      structuredClone(network),
+      structuredClone(subjects),
+      { ...usable },
+      structuredClone(controls),
+    ),
+  ).toEqual(first);
+  expect(first.overlap).toBe(0);
+  expect(first.scale).toBe(overviewScale(network, usable));
+  const full = unobscuredOverview(network, subjects, usable, [{ ...usable }]);
+  expect(full.scale).toBeGreaterThanOrEqual(overviewScale(network, usable) * 0.92);
+  expect(Object.values(full.focus).every(Number.isFinite)).toBe(true);
+  expect(full.overlap).toBeGreaterThan(0);
 });
 
 test('Play magnifies the same ferry without reducing portrait to a whole-network postage stamp', () => {
