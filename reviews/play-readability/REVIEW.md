@@ -2,7 +2,7 @@
 
 ## Disposition and source
 
-**Ready for review.** Implementation and focused verification are complete. Human visual and physical-phone acceptance remain separate.
+**Ready for review.** Implementation `c53b241a05e4dfcc955bfb85669eabf21c553dad` is complete. [Packaging audit](packaging-audit.json) matches86 source/input files (77 exact,9 newline-only) and117 selected media files to that commit. A following metadata-only commit records this audit; its exact pushed SHA is in PR1 and the handoff. Human visual and physical-phone acceptance remain separate.
 
 Started clean on `m1-first-crossing` at `52f72d6cdb1caa292425511394f4a11efa024a61`, retaining reviewed runtime `7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695`. The exact supplied task resolved at `C:/Users/ernes/Documents/last-ferry-codex-starter/LAST_FERRY_PLAY_READABILITY_PACKAGE/NEXT_TASK_PLAY_READABILITY.md`; all nine package files are retained byte-exact beside package.json in the actual Lastferry Git root. No reset or unrelated work was overwritten.
 

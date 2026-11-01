@@ -1,5 +1,7 @@
 # Current task — Play readability
 
+Implementation `c53b241a05e4dfcc955bfb85669eabf21c553dad`;86 source/input files and117 media match the commit. Final audit/continuity handoff follows without runtime edits.
+
 2026-11-01: PLAY_READABILITY_01 is the only active task. Exact package located at C:/Users/ernes/Documents/last-ferry-codex-starter/LAST_FERRY_PLAY_READABILITY_PACKAGE/NEXT_TASK_PLAY_READABILITY.md and retained unchanged in the real Lastferry checkout beside package.json. Started clean on m1-first-crossing at52f72d6cdb1caa292425511394f4a11efa024a61. Independent controls/Sail, canonical shallow geography and bounded Harbor composition are implemented; focused verification is complete. Build/typecheck,395/395 units,79-family validation and14/14 serialized browser cases pass. Native inspection corrected blocked/loss-card overlap, marker interception and Whole-cove group occlusion. One subsequently reproduced Overview-drag reset is fixed;6 focused view units and2/2 final recovery/production checks pass. Exact source reuse, original failures and selected native/runtime-audio evidence are in reviews/play-readability. All25 protected source/data/receipt comparisons and9 supplied package files match. Planning records negative Wide difficulty feedback and proposed delayed upgrade; runtime route, saves and puzzles remain unchanged. No deployment is authorized or performed.
 
 # Phone publication — version 13

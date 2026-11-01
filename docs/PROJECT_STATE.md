@@ -6,6 +6,8 @@ Read this before choosing scope. Detailed implementation history belongs in `STA
 
 ## Current scoped pass — Play readability
 
+Implementation: `c53b241a05e4dfcc955bfb85669eabf21c553dad`. Packaging audit matches86 source/input files and117 selected media; the following audit/continuity commit changes no runtime. The final pushed SHA is in PR1 and the handoff.
+
 PLAY_READABILITY_01 implements the exact task retained in LAST_FERRY_PLAY_READABILITY_PACKAGE beside package.json. It originally resolved one directory above the actual Git root. Started clean on m1-first-crossing at reviewed continuity HEAD52f72d6cdb1caa292425511394f4a11efa024a61, preserving game7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695 and the confirmed version13 receipt. No reset or unrelated work is overwritten. This task does not publish.
 
 The active pass removes the continuous HUD and its full-width layout exclusion, uses independent corner controls plus expandable load/status and an occupied-pier deadline, and reduces free destination inspection to one nearby Sail action with optional Details. A legal immediate loss is warned inline before the same explicit Sail. Direct transfers, subsets and complete Undo remain. Canonical base-depth banks now affect actual submerged ground and water while preserving deeper node pockets and the0.18 visual tide scale. The five-second Harbor connection groups its quay, trio, lantern and ferry in a bounded local composition; timing, Sound ownership and explicit continuation are unchanged.
