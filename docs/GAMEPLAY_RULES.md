@@ -16,7 +16,7 @@ There is no additional move limit, real-time countdown, fuel meter, score target
 
 ## Load and draft
 
-First Crossing, Holding, Bellwater and Driftwood use the **four-space ferry**. Wide Berth uses the **six-space ferry**, selected by its own level data. A rabbit uses one slot; a sheep uses two. Occupied slots are the entire load calculation. There is no separate mass, cargo grid, animal mood, or inventory system.
+First Crossing, Holding, Bellwater, Driftwood and Two Shelters use the **four-space ferry**. Wide Berth and Reef Return select the **six-space ferry** through their level data. A rabbit uses one space. Sheep and beavers use two spaces each. Occupied slots are the entire load calculation. There is no separate mass, cargo grid, animal mood, or inventory system.
 
 | Occupied slots | Boat draft | Example                          |
 | -------------- | ---------: | -------------------------------- |
@@ -128,7 +128,7 @@ Use stable IDs from the level data and preserve each passenger in exactly one lo
 | `waitingByPier` | Object mapping every pier ID to distinct waiting passenger IDs.                                    |
 | `delivered`     | Distinct IDs unloaded at the harbor; these passengers cannot return.                               |
 | `status`        | `playing`, `won`, or `lost`.                                                                       |
-| `lossReason`    | `null`, or `PASSENGER_STRANDED` with the affected pier and passenger IDs.                          |
+| `lossReason`    | `null`, `PASSENGER_STRANDED` with the flooded pier and passenger IDs, or `RETURN_CUT_OFF` with the current passage and passenger IDs. |
 
 Load, draft, route depth, and pier dryness are derived values. If an implementation caches them, invalidate/recompute those caches from the restored state during Undo.
 
@@ -167,3 +167,11 @@ The normal entry is Holding Pier. Its success offers Next cove into a fresh Bell
 ## Wide Berth authored values
 
 `data/wide-berth.level.json` owns the exact five-stop layout, two waiting groups and rises after actions 5 and 10. All nodes have depth 4; shallow connections base depth 2 and deep connections base depth 4. The extra 5–6-space/draft-4 band changes route choices without a new loading rule. Six neighbors total eight required spaces; all legal aboard subsets are seated automatically, with no packing mechanic. Harmless later waiting remains legal after endangered piers are cleared. All existing event order, current-depth validation, previews, conservation and full Undo apply unchanged. Developer witnesses are not action limits or difficulty measurements.
+
+## Tidal passages in Reef Return Practice
+
+Each cove supports at most one current passage, so a cutoff names the specific passage responsible. A passage with a current names its allowed origin and destination at every authored tide level. An ordinary passage permits travel in both directions. The same current applies to an empty boat and a loaded one. A move must follow the flow **and** meet the depth requirements at the start of its action. After the move arrives, a scheduled rise changes the flow for the next action. Free inspection and animation consume no turns.
+
+After checking flooded piers and delivery, the reducer checks whether the ferry could still collect each waiting passenger and carry them to Harbor in the remaining sequence of current phases. Passengers aboard need a homeward route from the boat. If the directions alone permanently rule out that journey, the crossing ends with `RETURN_CUT_OFF`. This also catches arriving home prematurely when the next outward opportunity comes after the final way back. The check allows unlimited travel per phase and ignores depth when determining permanent separation, so it never declares a loss merely because one attempted route is too shallow or one plan takes too many turns.
+
+Undo restores the complete prior turn, including tide, route permissions, passenger positions and outcome. A boat that reached Harbor with everyone aboard can wait, unload in subsets or finish the rescue there. Exact Reef Return depths, preparation time and formatted developer witnesses are in [the level](../data/reef-return.level.json) and [the puzzle review](../reviews/reef-return/DESIGN.md).

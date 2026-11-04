@@ -29,6 +29,7 @@ import {
   holdingPier,
   wideBerth,
   twoShelters,
+  reefReturn,
   level as firstCrossing,
 } from '../../src/levels/level';
 import narration from '../../LAST_FERRY_STORY_PRODUCTION_PACKAGE/audio/narration-script.json';
@@ -102,7 +103,10 @@ describe('authored story registry', () => {
       driftwoodYard,
       wideBerth,
       twoShelters,
+      reefReturn,
     ]);
+    expect(practiceCove('reef-return')).toBe(reefReturn);
+    expect(storyCove('reef-return')).toBeUndefined();
     expect(practiceCove('first-crossing')).toBe(firstCrossing);
     expect(practiceCove('future-cove')).toBeUndefined();
     expect(storyCove('future-cove')).toBeUndefined();

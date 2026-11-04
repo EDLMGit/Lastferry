@@ -4,10 +4,16 @@ import bellwaterData from '../../data/bellwater.level.json';
 import driftwoodData from '../../data/driftwood-yard.level.json';
 import wideData from '../../data/wide-berth.level.json';
 import sheltersData from '../../data/two-shelters.level.json';
+import reefData from '../../data/reef-return.level.json';
+export type CurrentPhase = { tideLevel: number; from: string; to: string };
+export type Passage = (typeof data.edges)[number] & {
+  current?: { name: string; phases: CurrentPhase[] };
+};
 export type Level = Pick<
   typeof data,
-  'id' | 'title' | 'rules' | 'world' | 'nodes' | 'edges' | 'piers' | 'objective' | 'validation'
+  'id' | 'title' | 'rules' | 'world' | 'nodes' | 'piers' | 'objective' | 'validation'
 > & {
+  edges: Passage[];
   passengers: ((typeof data.passengers)[number] & { appearance?: string })[];
   start: { boatNodeId: string; aboard: string[]; waitingByPier: Record<string, string[]> };
   names?: { nodes?: Record<string, string>; passengers?: Record<string, string> };
@@ -18,6 +24,25 @@ export const bellwater: Level = bellwaterData;
 export const driftwoodYard: Level = driftwoodData;
 export const wideBerth: Level = wideData;
 export const twoShelters: Level = sheltersData;
+export function checkCurrents(l: Level): Level {
+  if (l.edges.filter((edge) => edge.current).length > 1)
+    throw new Error(`Only one current passage is supported in ${l.id}.`);
+  const levels = new Set([l.rules.tide.initialLevel, ...l.rules.tide.rises.map((rise) => rise.level)]);
+  for (const edge of l.edges) {
+    if (!edge.current) {
+      if (!edge.bidirectional) throw new Error(`Missing current schedule for ${edge.id}.`);
+      continue;
+    }
+    const phases = edge.current.phases;
+    if (
+      edge.bidirectional || phases.length !== levels.size ||
+      ![...levels].every((tide) => phases.some((phase) => phase.tideLevel === tide)) ||
+      phases.some(({ from, to }) => from === to || !edge.nodes.includes(from) || !edge.nodes.includes(to))
+    ) throw new Error(`Invalid current schedule for ${edge.id}.`);
+  }
+  return l;
+}
+export const reefReturn = checkCurrents(reefData);
 export const nodeNames: Record<string, string> = {
   harbor: 'Harbor',
   cut: 'Shallow Cut',

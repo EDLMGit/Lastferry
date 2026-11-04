@@ -15,7 +15,7 @@ import {
   storyScenes,
   type CoveId,
 } from '../../src/campaign/registry';
-import { twoShelters } from '../../src/levels/level';
+import { reefReturn, twoShelters } from '../../src/levels/level';
 
 const completed = ['holding-pier', 'bellwater', 'driftwood-yard'] as const;
 const acknowledged = ['opening', 'another-bell', 'driftwood-light'] as const;
@@ -40,11 +40,11 @@ const records: Record<string, JourneyRecord> = {
   },
 };
 
-describe('Two Shelters independent Practice boundary', () => {
+describe.each([twoShelters, reefReturn])('$title independent Practice boundary', (candidate) => {
   test('the candidate is playable without acquiring a campaign slot or launch', () => {
-    expect(practiceCove('two-shelters')).toBe(twoShelters);
-    expect(practiceCoves.filter((entry) => entry.id === 'two-shelters')).toHaveLength(1);
-    expect(storyCove('two-shelters')).toBeUndefined();
+    expect(practiceCove(candidate.id)).toBe(candidate);
+    expect(practiceCoves.filter((entry) => entry.id === candidate.id)).toHaveLength(1);
+    expect(storyCove(candidate.id)).toBeUndefined();
     expect(storyCoves.map(({ id, entryScene }) => [id, entryScene])).toEqual([
       ['holding-pier', 'opening'],
       ['bellwater', 'another-bell'],
@@ -53,6 +53,7 @@ describe('Two Shelters independent Practice boundary', () => {
     ]);
     expect(storyScenes['a-wider-deck'].destination).toBe('wide-berth');
     expect(twoShelters.rules.capacity).toBe(4);
+    expect(reefReturn.rules.capacity).toBe(6);
   });
 
   test.each(Object.entries(records))(
@@ -70,7 +71,7 @@ describe('Two Shelters independent Practice boundary', () => {
       };
       const progress = new JourneyProgress(() => storage);
       expect(progress.snapshot).toMatchObject({ kind: 'valid', raw, record });
-      expect(progress.accept('two-shelters' as CoveId, 'won')).toBe(false);
+      expect(progress.accept(candidate.id as CoveId, 'won')).toBe(false);
       expect(progress.snapshot).toMatchObject({ kind: 'valid', raw, record });
       expect(writes).toEqual([]);
       expect(stored).toBe(raw);
@@ -82,14 +83,14 @@ describe('Two Shelters independent Practice boundary', () => {
     expect(
       validateJourney({
         ...records.activeWide,
-        checkpoint: { kind: 'cove', id: 'two-shelters' },
+        checkpoint: { kind: 'cove', id: candidate.id },
       }).valid,
     ).toBe(false);
     expect(
       parseJourney(
         JSON.stringify({
           ...records.completedFour,
-          completed: [...completed, 'two-shelters'],
+          completed: [...completed, candidate.id],
         }),
       ).valid,
     ).toBe(false);

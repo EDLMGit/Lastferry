@@ -1,4 +1,4 @@
-import { level, type Level } from '../levels/level';
+import { level, nodeName, type Level, type Passage } from '../levels/level';
 export type { Level } from '../levels/level';
 export type Action =
   | { type: 'move'; to: string }
@@ -12,7 +12,9 @@ export type State = {
   waitingByPier: Record<string, string[]>;
   delivered: string[];
   status: 'playing' | 'won' | 'lost';
-  lossReason: null | { code: 'PASSENGER_STRANDED'; pierId: string; passengerIds: string[] };
+  lossReason: null
+    | { code: 'PASSENGER_STRANDED'; pierId: string; passengerIds: string[] }
+    | { code: 'RETURN_CUT_OFF'; edgeId: string; passengerIds: string[] };
 };
 export const copy = <T>(v: T): T => structuredClone(v);
 export function initial(l: Level = level): State {
@@ -34,19 +36,70 @@ export const edgeTo = (s: State, to: string, l = level) =>
   l.edges.find(
     (e) => e.nodes.includes(s.boatNodeId) && e.nodes.includes(to) && to !== s.boatNodeId,
   );
+export function passageFlow(edge: Passage, tideLevel: number) {
+  if (!edge.current) return undefined;
+  const phase = edge.current.phases.find((entry) => entry.tideLevel === tideLevel);
+  if (!phase) throw new Error(`No current direction for ${edge.id} at tide ${tideLevel}.`);
+  return phase;
+}
+
+function reachable(l: Level, tide: number, origins: Set<string>, reverse: boolean) {
+  const reached = new Set(origins);
+  for (const node of reached) {
+    for (const edge of l.edges) {
+      if (!edge.nodes.includes(node)) continue;
+      const flow = passageFlow(edge, tide);
+      if (flow && node !== (reverse ? flow.to : flow.from)) continue;
+      reached.add(edge.nodes[edge.nodes[0] === node ? 1 : 0]);
+    }
+  }
+  return reached;
+}
+
+function checkReturn(s: State, l: Level): State['lossReason'] {
+  const reef = l.edges.find((edge) => edge.current);
+  if (!reef) return null;
+  const home = l.piers.find((pier) => pier.id === l.objective.deliveryPierId)!.nodeId;
+  const tides = [s.tideLevel, ...l.rules.tide.rises.filter((rise) => rise.afterTurn > s.turn).map((rise) => rise.level)];
+  const canReturn: Set<string>[] = [];
+  let towardHome = new Set([home]);
+  for (let i = tides.length - 1; i >= 0; i--) {
+    towardHome = reachable(l, tides[i], towardHome, true);
+    canReturn.unshift(towardHome);
+  }
+  let boatReach = new Set([s.boatNodeId]);
+  const rescueStops = new Set<string>();
+  tides.forEach((tide, index) => {
+    boatReach = reachable(l, tide, boatReach, false);
+    for (const node of boatReach) if (canReturn[index].has(node)) rescueStops.add(node);
+  });
+  const unreachable = new Set(canReturn[0].has(s.boatNodeId) ? [] : s.aboard);
+  for (const pier of l.piers) {
+    if (!rescueStops.has(pier.nodeId))
+      for (const id of s.waitingByPier[pier.id]) unreachable.add(id);
+  }
+  const passengerIds = l.objective.requiredPassengerIds.filter((id) => unreachable.has(id));
+  return passengerIds.length ? { code: 'RETURN_CUT_OFF', edgeId: reef.id, passengerIds } : null;
+}
+
+export function passageError(s: State, to: string, l = level): string | null {
+  const edge = edgeTo(s, to, l);
+  const node = l.nodes.find((n) => n.id === to);
+  if (!edge || !node) return 'Choose an adjacent waypoint. Each passage is one turn.';
+  const flow = passageFlow(edge, s.tideLevel);
+  if (flow && flow.from !== s.boatNodeId)
+    return `${edge.current!.name} flows only from ${nodeName(flow.from, l)} to ${nodeName(flow.to, l)}.`;
+  if (edge.baseDepth + s.tideLevel < draft(s, l))
+    return `Too shallow: depth ${edge.baseDepth + s.tideLevel} is below draft ${draft(s, l)}. A lighter load needs less depth. Tide changes after an action.`;
+  if (node.baseDepth + s.tideLevel < draft(s, l)) return 'The destination berth is too shallow.';
+  return null;
+}
+
 export function validate(s: State, a: Action, l = level): string | null {
   if (s.status !== 'playing') return 'This crossing has ended. Undo or restart to continue.';
   if (!a || !['move', 'board', 'unload', 'wait'].includes(a.type)) return 'Unknown action.';
   if (a.type === 'wait') return null;
-  if (a.type === 'move') {
-    const edge = edgeTo(s, a.to, l),
-      node = l.nodes.find((n) => n.id === a.to);
-    if (!edge || !node) return 'Choose an adjacent waypoint. Each passage is one turn.';
-    if (edge.baseDepth + s.tideLevel < draft(s, l))
-      return `Too shallow: depth ${edge.baseDepth + s.tideLevel} is below draft ${draft(s, l)}. A lighter load needs less depth. Tide changes after an action.`;
-    if (node.baseDepth + s.tideLevel < draft(s, l)) return 'The destination berth is too shallow.';
-    return null;
-  }
+  if (a.type === 'move') return passageError(s, a.to, l);
   const ids = a.passengerIds;
   if (!Array.isArray(ids) || !ids.length || ids.some((id) => typeof id !== 'string'))
     return 'Select at least one passenger.';
@@ -97,11 +150,13 @@ export function reduce(s: State, a: Action, l = level): State {
       break;
     }
   }
-  if (
-    n.status !== 'lost' &&
-    l.objective.requiredPassengerIds.every((id) => n.delivered.includes(id))
-  )
-    n.status = 'won';
+  if (n.status !== 'lost') {
+    if (l.objective.requiredPassengerIds.every((id) => n.delivered.includes(id))) n.status = 'won';
+    else {
+      n.lossReason = checkReturn(n, l);
+      if (n.lossReason) n.status = 'lost';
+    }
+  }
   return n;
 }
 export function preview(s: State, a: Action, l = level) {

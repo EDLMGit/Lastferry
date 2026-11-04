@@ -1,12 +1,14 @@
 # Puzzle progression — selected campaign direction
 
-Current implementation update — `TWO_SHELTERS_PROTOTYPE_01`: one independent Practice candidate is available at `?cove=two-shelters`. The original four-space ferry starts at Low Landing carrying Hazel (2) and Bracken (2); Mica (1) waits at Reed Pier. Tides rise after actions 4 and 9. Low Landing floods at the second rise; High Refuge remains safe. Both staging choices win, but low staging requires taking Mica home before retrieving both larger neighbors. Greedy mixed retrieval works from High Refuge and loses from Low Landing. Actual production-rule witnesses and alternatives are in [DESIGN](../reviews/two-shelters-prototype/DESIGN.md). This proves a distinct candidate, not enjoyment or campaign acceptance. The current Journey, launch, strict saves and five earlier level contracts remain unchanged; no migration or deployment.
+**4 November 2026.** Two Shelters received positive player feedback and is published as private Site version 15. Reef Return tests the six-space ferry, temporary staging and one tide-dependent return passage in independent Practice. Wide Berth still occupies the fourth Journey slot. Reef Return and the proposed twelve-cove sequence await playtest and separate campaign decisions. [Reef Return review](../reviews/reef-return/REVIEW.md)
+
+Previous implementation update — `TWO_SHELTERS_PROTOTYPE_01`: one independent Practice candidate is available at `?cove=two-shelters`. The original four-space ferry starts at Low Landing carrying Hazel (2) and Bracken (2); Mica (1) waits at Reed Pier. Tides rise after actions 4 and 9. Low Landing floods at the second rise; High Refuge remains safe. Both staging choices win, but low staging requires taking Mica home before retrieving both larger neighbors. Greedy mixed retrieval works from High Refuge and loses from Low Landing. Actual production-rule witnesses and alternatives are in [DESIGN](../reviews/two-shelters-prototype/DESIGN.md). The subsequent human gameplay feedback was positive. Campaign placement remains open. The current Journey, launch, strict saves and five earlier level contracts remain unchanged; no migration or deployment.
 
 Recalibrated 1 November 2026 for `PLAY_READABILITY_01`, from reviewed runtime `7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695` and continuity `52f72d6cdb1caa292425511394f4a11efa024a61`. **Holding Pier, Bellwater, Driftwood Yard and Wide Berth remain the authored runtime campaign; First Crossing remains optional practice.** Holding, Bellwater and Driftwood gameplay are accepted. The user reports Wide Berth is too easy and not fun, so its mandatory campaign role is under revision. Its valid witnesses and physical/interface checks remain useful evidence; they do not overturn that difficulty feedback. The earlier C4 assignment was followed and the direction is being corrected.
 
 ## Campaign sequence
 
-The revised target has twelve coves in four phases; the larger-ferry launch is proposed after explicit C5 completion, before C6. This is a content target, not a runtime reorder or measured playtime promise. First Crossing remains optional practice: placing it in the main sequence would repeat the rescue of Pip, Rue and Moss already completed in Holding. C4 has a production-proven independent Practice candidate, still awaiting human acceptance; C5–C12 remain unproven proposals. Current Wide stays in the unchanged runtime Journey.
+The revised target has twelve coves in four phases; the larger-ferry launch is proposed after explicit C5 completion, before C6. This is a content target, not a runtime reorder or measured playtime promise. First Crossing remains optional practice: placing it in the main sequence would repeat the rescue of Pip, Rue and Moss already completed in Holding. The player liked Two Shelters as a Practice puzzle. C4 placement is open. C5–C12 remain campaign proposals. Current Wide stays in the unchanged runtime Journey.
 
 | Phase / cove | Encounter | Intended decision and teaching role |
 | --- | --- | --- |
@@ -48,7 +50,7 @@ The runtime currently makes the prepared **6-space spare boat** available after 
 
 Current Wide Berth starts empty at Harbor; its first full pickup carries six spaces/four bodies. Draft four excludes the shorter Harbor route even after the first rise. Full deep delivery and staged rescue are valid routes, but the simple collect/deep-return/deliver/repeat plan can bypass the intended insight. The user rejected its difficulty. More passengers and routes did not establish a stronger decision than Driftwood. Retain Wide in the current runtime until a separate integration task; the later direction is an optional development/Practice prototype, not a promised mandatory slot. Empty/partial-load behavior and the distinction between spaces and bodies remain unchanged.
 
-The production profile is selected by active-level data: only Wide Berth uses the actual larger hull/deck, automatic identity-stable seating, transfer/berth/wake geometry and its four draft bands. Original coves and gallery default callers retain their smaller profile. Capacity is the entire loading rule; seating adds no packing interaction. The roster includes two sheep and four rabbits, eight total required spaces, with a reachable five-body/six-space load and six neighbors safely waiting at High Quay. Every capacity-legal subset needs valid presentation.
+Wide Berth and Reef Return select the larger hull, automatic passenger seats, transfer and wake geometry, and four draft bands through their level data. Original coves and gallery default callers retain their smaller profile. Capacity is the entire loading rule; seating adds no packing interaction. The roster includes two sheep and four rabbits, eight total required spaces, with a reachable five-body/six-space load and six neighbors safely waiting at High Quay. Every capacity-legal subset needs valid presentation.
 
 Developer witnesses cover the full deep route (13 actions), staging both sheep and returning four rabbits by the depth-three shortcut (14), five bodies/six spaces with harmless waits after both endangered landings are clear (17), and two recoverable opening Waits (16). These are proof observations, not player targets, a global limit, measured playtime or an automatic difficulty claim. Preserve preview/current-water validation and action → increment → rise → loss → win ordering.
 
@@ -58,28 +60,33 @@ Current Nell has a real beaver model and portrait. Future Orin still requires hi
 
 An ordinary passage is bidirectional. A current passage permits travel from one authored endpoint at each reachable tide stage. C7 repeats one direction across its stages; C8 changes it. There is no independent current clock.
 
-Illustrative future data contract:
+Reef Return authors this passage in its level data. The omitted waypoints describe its physical course.
 
 ```json
 {
-  "id": "tidal-channel",
-  "nodes": ["mouth", "inner-buoy"],
-  "travelByTide": [
-    { "tideLevel": 0, "fromNodeId": "mouth" },
-    { "tideLevel": 1, "fromNodeId": "inner-buoy" },
-    { "tideLevel": 2, "fromNodeId": "inner-buoy" }
-  ]
+  "id": "needle-reef",
+  "nodes": ["quay", "harbor"],
+  "baseDepth": 3,
+  "bidirectional": false,
+  "current": {
+    "name": "Needle Reef",
+    "phases": [
+      { "tideLevel": 0, "from": "quay", "to": "harbor" },
+      { "tideLevel": 1, "from": "quay", "to": "harbor" },
+      { "tideLevel": 2, "from": "harbor", "to": "quay" }
+    ]
+  }
 }
 ```
 
-Author/validate all reachable stages, including the final plateau after the last rise; endpoint IDs must belong to that edge. Missing coverage must not silently grant bidirectional travel. Existing levels omit the field and retain current behavior. Today `edgeTo()` ignores the JSON bidirectional flag, so a data flag alone cannot implement this rule.
+Author/validate all reachable stages, including the final plateau after the last rise; endpoint IDs must belong to that edge. Missing coverage must not silently grant bidirectional travel. Existing levels omit the field and retain current behavior. Undirected adjacency identifies the inspected passage even when its current prevents travel.
 
 Keep topology lookup separate from permission so blocked passages remain inspectable. A shared passage-status calculation should supply validation, preview, route arrows, accessible copy and forecast.
 
 1. Validate direction, edge depth and destination berth against the **current** state.
 2. Save the complete Undo snapshot and apply one legal move across one edge.
 3. Increment the turn, apply any scheduled tide rise, then derive the new current direction.
-4. Check flooded waiting passengers, then victory, using existing event order.
+4. Check for stranded passengers at flooded piers, then check delivery for victory. If the rescue is still underway in a cove with a current, each remaining neighbor also needs a reachable trip home through the remaining directions.
 
 A move against today's current cannot anticipate the reversal after that action. Rejection changes no turn, history or position. Every permitted edge still costs one action. **No automatic movement, drift while thinking, multi-turn crossing or speed-based action cost.** Wait is the explicit way to reach a scheduled change. Undo restores tide and therefore direction, with presentation reconstructed consistently.
 
@@ -87,7 +94,7 @@ Show direction through stable arrows/text and restrained water streaks. It remai
 
 ## Pressure and encounter acceptance
 
-There is **no global action budget**, real-time countdown or musical deadline. Only a required passenger still waiting on an occupied pier is endangered by that pier's scheduled flooding. Once everyone is aboard or delivered, harmless longer play remains legal. A longer animation, caption, music phrase or thinking pause never consumes a turn.
+An occupied pier can flood. A safe pier can also lose its last route home. In Reef Return the tide determines which direction the ferry can cross. Once everyone reaches the Harbor side, the player can wait and unload at leisure. A longer animation, caption, music phrase or thinking pause never consumes a turn.
 
 Before accepting any future encounter:
 

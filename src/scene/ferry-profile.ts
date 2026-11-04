@@ -85,11 +85,12 @@ export function deckSeat(level: Level, id: string): Vector3 {
           : [0.22, 0.26, 0.3]
         : [0, 0.26, 0.69]) as [number, number, number]),
     );
-  const stable = [...peers].sort((a, b) => a.id.localeCompare(b.id)).findIndex((p) => p.id === id);
+  const bank = level.passengers.filter((p) => p.slots === passenger.slots);
+  const stable = bank.sort((a, b) => a.id.localeCompare(b.id)).findIndex((p) => p.id === id);
   return new Vector3(
     stable % 2 ? 0.7 : -0.7,
     wideFerryProfile.deckY,
-    passenger.species === 'sheep' ? -0.15 : 0.6 + Math.floor(stable / 2) * 0.5,
+    passenger.slots === 2 ? -0.15 : 0.6 + Math.floor(stable / 2) * 0.5,
   );
 }
 export function shoreSeat(
@@ -99,6 +100,17 @@ export function shoreSeat(
   delivered = false,
 ): Vector3 {
   const passenger = level.passengers.find((p) => p.id === id)!;
+  if (level.id === 'reef-return') {
+    const peers = level.passengers.filter((p) => p.slots === passenger.slots)
+      .sort((a, b) => a.id.localeCompare(b.id));
+    const side = peers[0].id === id ? -1 : 1;
+    const larger = passenger.slots === 2;
+    return new Vector3(
+      pier.positionXZ[0] + side * (larger ? 0.75 : -0.62),
+      pier.elevation * 0.18 + (delivered ? 0.03 : -0.005),
+      pier.positionXZ[1] - (larger ? 1.95 : 1.13),
+    );
+  }
   const peers = level.passengers.filter((p) => p.species === passenger.species).sort((a, b) => a.id.localeCompare(b.id));
   const index = peers.findIndex((p) => p.id === id);
   const bank = passenger.species === 'sheep' ? 0.75 : index < 2 ? 0.62 : 1.05;
@@ -151,7 +163,9 @@ export function wideTransferPath(
   const gate = new Vector3(side * profile.gateX, profile.deckY, profile.gateZ).applyMatrix4(
     hullMatrix,
   );
-  const bridge = new Vector3(gate.x, pierY, pier.positionXZ[1] - 0.225);
+  const landingHalf = pier.width / 2 - 0.13;
+  const bridgeX = level.id !== 'reef-return' ? gate.x : Math.max(pier.positionXZ[0] - landingHalf, Math.min(pier.positionXZ[0] + landingHalf, gate.x));
+  const bridge = new Vector3(bridgeX, pierY, pier.positionXZ[1] - 0.225);
   const shore = new Vector3(pier.positionXZ[0], pierY, pier.positionXZ[1] - 0.225);
   const shoreAisle = new Vector3(pier.positionXZ[0], pierY, board ? from.z : destination.z);
   const fore = new Vector3(0, profile.deckY, profile.gateZ).applyMatrix4(hullMatrix);

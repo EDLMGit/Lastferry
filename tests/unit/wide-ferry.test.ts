@@ -3,6 +3,7 @@ import { Box3, Matrix4, Mesh, Vector3 } from 'three';
 import { animal, ferry } from '../../src/scene/models';
 import {
   wideBerth,
+  reefReturn,
   level as firstCrossing,
   holdingPier,
   bellwater,
@@ -28,7 +29,7 @@ import { settlingProgress, transitionPlan } from '../../src/scene/transitions';
 import { FerryWake, wakeContactReach } from '../../src/scene/wake';
 import { isWalkableAt } from '../../src/scene/pier';
 
-const level = wideBerth;
+describe.each([wideBerth, reefReturn])('$title seating and transfers', (level) => {
 const localBoxes = new Map(
   level.passengers.map((passenger) => {
     const figure = animal(passenger.species, passenger.appearance === 'rabbit-tan' ? 1 : 0);
@@ -36,7 +37,7 @@ const localBoxes = new Map(
     return [passenger.id, new Box3().setFromObject(figure)];
   }),
 );
-const masks = Array.from({ length: 64 }, (_, mask) => mask);
+const masks = Array.from({ length: 2 ** level.passengers.length }, (_, mask) => mask);
 const feet = new Map(level.passengers.map((passenger) => {
   const figure = animal(passenger.species, passenger.appearance === 'rabbit-tan' ? 1 : 0);
   figure.scale.set(...passengerScale(passenger.species));
@@ -77,7 +78,7 @@ test('active-level profiles preserve all four original boats and provide a physi
   const deck = model.children.filter((object) => object instanceof Mesh && object.geometry.type === 'ExtrudeGeometry');
   expect(deck.length).toBe(4);
   expect(model.children.some((object) => object.name === 'wide-cabin-obstacle')).toBe(true);
-  expect(legal).toHaveLength(59);
+  expect(legal).toHaveLength(level.id === 'wide-berth' ? 59 : 16);
   expect(ferry().name).toBe('ferry-hull-and-deck');
 });
 
@@ -88,7 +89,8 @@ test('every capacity-legal roster uses stable automatic real-body seating withou
     .filter((o) => o.name.includes('obstacle') || o.name === 'wide-cabin-roof')
     .map((o) => new Box3().setFromObject(o));
   const failures: string[] = [];
-  expect(legal.some((mask) => idsFor(mask).length === 5 && loadFor(mask) === 6)).toBe(true);
+  const fullParty = level.id === 'wide-berth' ? 5 : 4;
+  expect(legal.some((mask) => idsFor(mask).length === fullParty && loadFor(mask) === 6)).toBe(true);
   for (const mask of legal) {
     const ids = idsFor(mask),
       boxes = ids.map((id) => body(id, deckSeat(level, id), 0));
@@ -105,7 +107,7 @@ test('every capacity-legal roster uses stable automatic real-body seating withou
     expect(deckSeat(reversed, p.id).toArray()).toEqual(deckSeat(level, p.id).toArray());
 });
 
-test('six neighbors have supported compact land and quay positions with stable identity and no body overlap', () => {
+test('the whole roster has supported compact land and quay positions with stable identity and no body overlap', () => {
   const failures: string[] = [];
   for (const pier of level.piers)
     for (const delivered of [false, true]) {
@@ -157,7 +159,8 @@ test('actual foot bounds remain supported by land, fitted landing, gangway and d
                   const point = foot.clone().applyMatrix4(actor), local = point.clone().applyMatrix4(inverse), relative = point.clone().sub(path.bridge);
                   const q = relative.clone().setY(0).dot(bridgeXZ) / (bridgeLength * bridgeLength);
                   const cross = Math.abs(relative.x * bridgeXZ.z - relative.z * bridgeXZ.x) / bridgeLength;
-                  const onBridge = q >= -0.001 && q <= 1.001 && cross <= 0.43 && Math.abs(point.y - (path.bridge.y + bridge.y * q)) < 0.13;
+                  const overlap = level.id === 'reef-return' ? 0.21 / bridge.length() : 0;
+                  const onBridge = q >= -overlap - 0.001 && q <= 1 + overlap + 0.001 && cross <= 0.43 && Math.abs(point.y - (path.bridge.y + bridge.y * q)) < 0.13;
                   const onDeck = inside(local.x, local.z) && Math.abs(local.y - wideFerryProfile.deckY) < 0.13;
                   const onShore = isWalkableAt(level, pier, point.x, point.z) && Math.abs(point.y - pier.elevation * 0.18) < 0.08;
                   if (!onBridge && !onDeck && !onShore && failures.length < 16) failures.push(`${pier.id}:${heading}:tide${tide}:draft${required}:${p.id}:${board}:${step}:${point.toArray()}`);
@@ -252,6 +255,8 @@ test.each(
   },
   60000,
 );
+
+});
 
 test('draft four retains a dry attached deck and profile wake releases from actual displaced sides', () => {
   expect(wideFerryProfile.deckY + hullDraftY(4)).toBeCloseTo(0.065);

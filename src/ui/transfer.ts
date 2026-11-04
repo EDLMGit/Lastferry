@@ -1,6 +1,6 @@
 import { draft, edgeTo, load, pierAt, preview, type Action, type State } from '../game/rules';
 import { nodeName, type Level } from '../levels/level';
-import { passengerList, previewCopy } from './presentation';
+import { currentNotice, passengerList, previewCopy } from './presentation';
 
 export type Transfer = Extract<Action, { type: 'board' | 'unload' }>;
 
@@ -16,6 +16,8 @@ export function transferFacts(before: State, action: Transfer, level: Level) {
   if (action.type === 'board' && !proposed.error && proposed.state.status === 'playing') {
     const next = proposed.state;
     detail = next.tideLevel > before.tideLevel ? 'The tide rises after this action.' : '';
+    const boundary = currentNotice(before, level)?.boundary;
+    if (boundary) detail += ` ${boundary}`;
     for (const node of level.nodes) {
       const edge = edgeTo(next, node.id, level);
       if (edge && edge.baseDepth + next.tideLevel < draft(next, level))

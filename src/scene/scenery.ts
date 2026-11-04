@@ -38,6 +38,42 @@ export function decorateWideIsland(
   return group;
 }
 
+export function decorateReefIsland(group: T.Group, island: Level['world']['islands'][number], style: IslandStyle) {
+  const {x, y: z} = islandCenter(island);
+  const y = island.elevation * 0.18;
+  if (island.id === 'pool-island') {
+    const fronds = createReedBeds(island);
+    fronds.scale.set(0.69,1,0.55);
+    fronds.position.set(x*(1-0.69),0,z*(1-0.55)-0.46);
+    group.add(fronds);
+    for (const [dx,dz] of [[0.95,-0.38],[1.22,-0.57],[-1.21,-0.26]]) {
+      const shell = ball(group,'#e3cfa6',[x+dx,y+0.037,z+dz],[0.13,0.048,0.10]);
+      shell.rotation.y = dx;
+    }
+    return group;
+  }
+  if (island.id === 'wrack-island') {
+    const log = cylinder(group, '#a79470', 0.11, 0.15, 1.13, [x + 0.41, y + 0.13, z - 0.66], 8);
+    log.rotation.set(0.17, -0.27, 1.49);
+    const branch = cylinder(group, '#b6a580', 0.041, 0.082, 0.47, [x + 0.53, y + 0.23, z - 0.79], 7);
+    branch.rotation.set(-0.85, 0.21, -0.55);
+    for (const [dx, dz] of [[-0.86,-0.44],[0.92,-0.36],[0.3,-1.0]])
+      for (let i = 0; i < 5; i++)
+        ball(group, i % 2 ? '#abaf75' : '#85966b', [x + dx + i*0.052, y + 0.07, z + dz - i*0.028], [0.032, 0.12 + (i%3)*0.04, 0.04]);
+    return group;
+  }
+  if (island.id === 'quay-island') {
+    for (let tier = 0; tier < 3; tier++) {
+      const radius = 0.36 - tier*0.074;
+      const stone = mesh(new T.DodecahedronGeometry(1,0), tier % 2 ? '#9da697' : '#84958d', group, x+1.16-tier*0.04, y+0.11+tier*0.19, z-0.55);
+      stone.scale.set(radius,radius*0.49,radius*0.8);
+      stone.rotation.y = tier*0.85;
+    }
+    return group;
+  }
+  return decorateWideIsland(group,island,style);
+}
+
 export function cottage(parent: T.Object3D, position: [number, number, number]) {
   const house = new T.Group();
   house.name = 'cottage';

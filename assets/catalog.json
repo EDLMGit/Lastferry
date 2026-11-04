@@ -259,6 +259,10 @@
         {
           "path": "data/two-shelters.level.json",
           "symbol": "capacity four and three existing-species passenger instances"
+        },
+        {
+          "path": "src/scene/ferry-profile.ts",
+          "symbol": "deckSeat and shoreSeat for mixed cost peers"
         }
       ],
       "variants": [
@@ -322,6 +326,10 @@
         {
           "path": "reviews/two-shelters-prototype/final/780x320-turn6-play.png",
           "role": "Native short-landscape actual Practice gameplay; not a gallery specimen or concept reference."
+        },
+        {
+          "path": "reviews/reef-return/REVIEW.md",
+          "role": "Six-space prepared ferry loading at three outer landings"
         }
       ],
       "meaning": "Yellow ferry with red cabin. Keep shaped bow, deck positions, passenger attachment, heading history and current pick/framing envelope.",
@@ -342,6 +350,11 @@
         "consumers and scale/placement owner": "One reusable geometry family per cove. Named deck-anchor-{passengerId} children belong to the animated hull. Shared matte materials; scoped water-contact hull material.",
         "pick/framing role": "World uses geometry for framing and scene selection; gameplay identities remain canonical nodes/passengers.",
         "disposal owner": "World.dispose traverses shared geometry/material/texture sets and disposes each once; CoastalWater owns its separate resources."
+      },
+      "reefReturnUse": {
+        "description": "Six-space prepared ferry loading at three outer landings",
+        "evidence": "reviews/reef-return/REVIEW.md",
+        "humanReview": "pending"
       }
     },
     {
@@ -369,6 +382,10 @@
         {
           "path": "data/two-shelters.level.json",
           "symbol": "passengers: explicit Mica: rabbit-cream, one space; new independent neighbor, not a repeated rescue of an existing story identity"
+        },
+        {
+          "path": "data/reef-return.level.json",
+          "symbol": "passengers.flick and passengers.dot"
         }
       ],
       "variants": [
@@ -418,6 +435,10 @@
         {
           "path": "reviews/two-shelters-prototype/final/780x320-turn6-play.png",
           "role": "Native short-landscape actual Practice gameplay; not a gallery specimen or concept reference."
+        },
+        {
+          "path": "reviews/reef-return/REVIEW.md",
+          "role": "Flick in tan fur and Dot in cream fur"
         }
       ],
       "meaning": "Rabbit passenger family. Coat and pose variation imply no abilities. Keep feet/contact, aboard attachment and canonical settled pose.",
@@ -438,6 +459,11 @@
         "consumers and scale/placement owner": "Shared factory; names and gameplay identities come from level passengers. World scales rabbits 1.25 / 1.65 / 1.25. Offline portrait generation reuses these exact proportions; src/game/passenger-appearance.ts preserves the full species ordinal for World and independently resolves the static image key.",
         "pick/framing role": "World uses geometry for framing and scene selection; gameplay identities remain canonical nodes/passengers.",
         "disposal owner": "World.dispose traverses shared geometry/material/texture sets and disposes each once; CoastalWater owns its separate resources."
+      },
+      "reefReturnUse": {
+        "description": "Flick in tan fur and Dot in cream fur",
+        "evidence": "reviews/reef-return/REVIEW.md",
+        "humanReview": "pending"
       }
     },
     {
@@ -457,6 +483,10 @@
         {
           "path": "cove-portrait-package/tools/render-portraits.mjs",
           "symbol": "isolated animal(species, variant) SVG derivation with unchanged world proportions"
+        },
+        {
+          "path": "data/reef-return.level.json",
+          "symbol": "passengers.heather"
         }
       ],
       "variants": [
@@ -478,6 +508,10 @@
         {
           "path": "reviews/passenger-portraits/generation-audit.json",
           "role": "Fresh isolated model-derived SVG reproduction; unchanged original PNG/model hashes, not a live WebGL capture"
+        },
+        {
+          "path": "reviews/reef-return/REVIEW.md",
+          "role": "Heather, wool sheep at Wrack Pier"
         }
       ],
       "meaning": "Sheep passenger family. Keep larger passenger silhouette and true capacity semantics; presentation never determines passenger weight.",
@@ -498,6 +532,11 @@
         "consumers and scale/placement owner": "Same factory per sheep identity. World scale 1.15 / 1.5 / 1.15. Offline portrait generation reuses these exact proportions; src/game/passenger-appearance.ts preserves the full species ordinal for World and independently resolves the static image key.",
         "pick/framing role": "World uses geometry for framing and scene selection; gameplay identities remain canonical nodes/passengers.",
         "disposal owner": "World.dispose traverses shared geometry/material/texture sets and disposes each once; CoastalWater owns its separate resources."
+      },
+      "reefReturnUse": {
+        "description": "Heather, wool sheep at Wrack Pier",
+        "evidence": "reviews/reef-return/REVIEW.md",
+        "humanReview": "pending"
       }
     },
     {
@@ -668,6 +707,10 @@
         {
           "path": "data/two-shelters.level.json",
           "symbol": "piers: modest Harbor, Low Landing, High Refuge and Reed Pier placements/elevations"
+        },
+        {
+          "path": "data/reef-return.level.json",
+          "symbol": "piers"
         }
       ],
       "variants": [
@@ -721,6 +764,10 @@
         {
           "path": "reviews/two-shelters-prototype/final/780x320-turn6-play.png",
           "role": "Native short-landscape actual Practice gameplay; not a gallery specimen or concept reference."
+        },
+        {
+          "path": "reviews/reef-return/REVIEW.md",
+          "role": "Short quay, timber landings and a fitted approach to the six-space deck"
         }
       ],
       "meaning": "Boarded piers, piles, gangplank and lantern. Keep geometry-derived berth/gangplank positions, flood water height and land contact; both ferry headings support transfer.",
@@ -740,6 +787,11 @@
         "consumers and scale/placement owner": "Generated from pier width, landAnchorXZ, elevation and positionXZ; no independent mesh file. Candidate pier instances remain authored in two-shelters.level.json and reuse the original four-space material/factory.",
         "pick/framing role": "World uses geometry for framing and scene selection; gameplay identities remain canonical nodes/passengers.",
         "disposal owner": "World.dispose traverses shared geometry/material/texture sets and disposes each once; CoastalWater owns its separate resources."
+      },
+      "reefReturnUse": {
+        "description": "Short quay, timber landings and a fitted approach to the six-space deck",
+        "evidence": "reviews/reef-return/REVIEW.md",
+        "humanReview": "pending"
       }
     },
     {
@@ -853,6 +905,10 @@
         {
           "path": "src/scene/world.ts",
           "symbol": "World.island: crag branch"
+        },
+        {
+          "path": "src/scene/reef.ts",
+          "symbol": "createReefPassage"
         }
       ],
       "variants": [
@@ -878,6 +934,10 @@
         {
           "path": "reviews/wide-berth-visual-repair/REVIEW.md",
           "role": "Current corrective implementation and actual source-indexed phone comparisons; prior45ab976presentation was rejected, human acceptance of this repair remains pending."
+        },
+        {
+          "path": "reviews/reef-return/REVIEW.md",
+          "role": "Needle Reef rock clusters and Cairn Quay stone stack"
         }
       ],
       "meaning": "Shore rocks and crag. Fit validated island footprints; tide contacts track real height.",
@@ -897,6 +957,11 @@
         "consumers and scale/placement owner": "Instanced shoreline rock geometry per island; crag dressing is separate.",
         "pick/framing role": "World uses geometry for framing and scene selection; gameplay identities remain canonical nodes/passengers.",
         "disposal owner": "World.dispose traverses shared geometry/material/texture sets and disposes each once; CoastalWater owns its separate resources."
+      },
+      "reefReturnUse": {
+        "description": "Needle Reef rock clusters and Cairn Quay stone stack",
+        "evidence": "reviews/reef-return/REVIEW.md",
+        "humanReview": "pending"
       }
     },
     {
@@ -1030,6 +1095,10 @@
         {
           "path": "data/two-shelters.level.json",
           "symbol": "world.islands: compact lighthouse, low shelter, raised refuge and reed shore footprints"
+        },
+        {
+          "path": "src/scene/reef.ts",
+          "symbol": "reefShelves"
         }
       ],
       "variants": [
@@ -1083,6 +1152,10 @@
         {
           "path": "reviews/two-shelters-prototype/final/780x320-turn6-play.png",
           "role": "Native short-landscape actual Practice gameplay; not a gallery specimen or concept reference."
+        },
+        {
+          "path": "reviews/reef-return/REVIEW.md",
+          "role": "Shelves framing the deeper navigable throat of Needle Reef"
         }
       ],
       "meaning": "Rounded island coast. Terrain visual fields never replace canonical channel depth or flood rules.",
@@ -1099,6 +1172,11 @@
         "mechanical versus decorative boundary": "Terrain visual fields never replace canonical channel depth or flood rules.",
         "material/texture dependencies": "Shores vertex-colored matte material and world-height wetness uniform.",
         "generation and disposal owner": "Shores created per World; World.dispose owns coast geometry/material resources."
+      },
+      "reefReturnUse": {
+        "description": "Shelves framing the deeper navigable throat of Needle Reef",
+        "evidence": "reviews/reef-return/REVIEW.md",
+        "humanReview": "pending"
       }
     },
     {
@@ -1703,12 +1781,17 @@
         {
           "path": "data/two-shelters.level.json",
           "symbol": "edges/nodes: five canonical routes with shallow side approaches and deeper stopping pockets"
+        },
+        {
+          "path": "src/scene/reef.ts",
+          "symbol": "createReefPassage and setReefDirection"
         }
       ],
       "variants": [
         "ordinary shallow/deep",
         "highlighted",
-        "blocked"
+        "blocked",
+        "one-way tidal reef with static direction chevrons"
       ],
       "visualSignature": "Quiet curved dashed seafoam routes; same course used by ferry.",
       "reuseAndOwnership": "One cached canonical course per level edge.",
@@ -1749,6 +1832,10 @@
         {
           "path": "reviews/two-shelters-prototype/final/780x320-turn6-play.png",
           "role": "Native short-landscape actual Practice gameplay; not a gallery specimen or concept reference."
+        },
+        {
+          "path": "reviews/reef-return/REVIEW.md",
+          "role": "Stationary chevrons follow the permitted direction at each tide"
         }
       ],
       "meaning": "Canonical rounded navigation courses. No decorative shortcuts or new junctions; selection and move use same geometry.",
@@ -1761,11 +1848,16 @@
       },
       "typeSpecific": {
         "canonical semantic fact": "No decorative shortcuts or new junctions; selection and move use same geometry.",
-        "shape/text/color encoding": "Quiet curved dashed seafoam routes; same course used by ferry.",
+        "shape/text/color encoding": "Quiet curved dashed seafoam routes; same course used by ferry. On Needle Reef the cream, dark-edged chevrons point along the legal heading. The forecast and selected passage also name the endpoints.",
         "variants": "ordinary shallow/deep; highlighted; blocked",
         "free inspection versus action commitment": "Inspection changes highlight/forecast only; one nearby explicit Sail commits one adjacent passage. Blocked depth and immediate-loss consequences remain visible.",
-        "source geometry and update owner": "src/scene/paths.ts: getLevelPaths; src/scene/world.ts: World.routes / indicate",
+        "source geometry and update owner": "src/scene/paths.ts: getLevelPaths; src/scene/world.ts: World.routes / indicate The current variant samples the same canonical path and reads the same passageFlow as movement.",
         "accessibility and picking": "World geometry is paired with named DOM selection/action controls; canonical node/edge IDs determine picking."
+      },
+      "reefReturnUse": {
+        "description": "Stationary chevrons follow the permitted direction at each tide",
+        "evidence": "reviews/reef-return/REVIEW.md",
+        "humanReview": "pending"
       }
     },
     {
@@ -1838,6 +1930,10 @@
         {
           "path": "src/scene/two-shelters-seating.ts",
           "symbol": "shelterTransferProgress / shelterTransferEntry / shelterTransferPose / shelterShoreSeat: candidate-only automatic transfer order, deck entry, full path and supported shore anchors"
+        },
+        {
+          "path": "src/scene/ferry-profile.ts",
+          "symbol": "wideTransferPath"
         }
       ],
       "variants": [
@@ -1893,6 +1989,10 @@
         {
           "path": "reviews/two-shelters-prototype/final/780x320-turn6-play.png",
           "role": "Native short-landscape actual Practice gameplay; not a gallery specimen or concept reference."
+        },
+        {
+          "path": "reviews/reef-return/REVIEW.md",
+          "role": "Two-space sheep and beaver with two one-space rabbits on the prepared deck"
         }
       ],
       "meaning": "Passenger boarding and unloading presentation. One canonical action, cancellable transient presentation, both berth headings; new icon does not immediately transfer.",
@@ -1910,6 +2010,11 @@
         "variant/species parameters": "board; unload; compact Reduced; Two Shelters three-body two-beaver/rabbit subsets use the original four-space hull, with automatic ordering and bounded seat adjustment inside the unchanged transfer budget.",
         "Reduced/cancellation/recovery": "One canonical action, cancellable transient presentation, both berth headings; new icon does not immediately transfer.",
         "associated audio events": "src/scene/transfer.ts TransferTimeline emits crossing/settling/compact contacts; visible final arrival invokes existing delivery cue."
+      },
+      "reefReturnUse": {
+        "description": "Two-space sheep and beaver with two one-space rabbits on the prepared deck",
+        "evidence": "reviews/reef-return/REVIEW.md",
+        "humanReview": "pending"
       }
     },
     {
@@ -2500,6 +2605,10 @@
         {
           "path": "src/ui/placement.ts",
           "symbol": "placeLocalCard optional separation parameter retains 8px default; candidate dock uses 2px around unchanged rectangles"
+        },
+        {
+          "path": "src/ui/location.ts",
+          "symbol": "locationFacts"
         }
       ],
       "variants": [
@@ -2561,6 +2670,10 @@
         {
           "path": "reviews/two-shelters-prototype/final/780x320-turn6-play.png",
           "role": "Native short-landscape actual Practice gameplay; not a gallery specimen or concept reference."
+        },
+        {
+          "path": "reviews/reef-return/REVIEW.md",
+          "role": "Against-current and cut-off passage feedback with free inspection"
         }
       ],
       "meaning": "Freestanding names and selectable marker buttons. Preserve real status shape/text, free selection, collision/occlusion avoidance and no forced pan on selecting.",
@@ -2579,6 +2692,11 @@
         "nearby placement and viewport contract": "Placement uses independent measured visible controls with full safe canvas bounds. Local context is the non-committing keyboard focus owner, replacing the removed heading; same selection gesture cannot activate the newly appeared Sail. Candidate-only ordered side preferences retain the nearest-marker fallback when obstructed; dock reservation is made before label layout to keep the local action beside the boat. Existing safe-area bounds remain authoritative; candidate controls use the available edge space and current-ring placement includes other land silhouettes as obstacles.",
         "focus/cancel/fullscreen preservation": "Native buttons/aria-pressed; Escape cancels; same dialog promoted on fullscreen with DOM, focus, subset and scroll retained.",
         "size/hit target/layout behavior": "Independent visible control rectangles replace the removed full-width HUD exclusion. Safe viewport remains stable when information expands; nearby actions and receipts avoid actual controls, selected endpoints and figures. At least44px native hit targets; critical text wraps."
+      },
+      "reefReturnUse": {
+        "description": "Against-current and cut-off passage feedback with free inspection",
+        "evidence": "reviews/reef-return/REVIEW.md",
+        "humanReview": "pending"
       }
     },
     {
@@ -2759,6 +2877,10 @@
         {
           "path": "src/ui/play-controls.css",
           "symbol": "Standalone corner utilities, compact load/depth and deadline capsules, optional details and nearby Sail toolbar"
+        },
+        {
+          "path": "src/ui/presentation.ts",
+          "symbol": "currentNotice and passage forecast"
         }
       ],
       "variants": [
@@ -2864,6 +2986,10 @@
         {
           "path": "reviews/play-readability/REVIEW.md",
           "role": "PLAY_READABILITY_01 actual native UI/water/Harbor evidence, exact source identity, focused results and retained limitations; human visual acceptance is separate."
+        },
+        {
+          "path": "reviews/reef-return/REVIEW.md",
+          "role": "Reef forecast, missed homeward crossing and Undo recovery"
         }
       ],
       "meaning": "Local preview, forecast, Menu, Settings and completion retain native semantics; projected future action is explicit and every full passenger label/cost remains readable.",
@@ -2883,6 +3009,11 @@
         "nearby placement and viewport contract": "Existing measured safe viewport/anchor and fixed subset-sheet height stay; native reading order and stable footer across toggles; nested overflow and per-line text fit checked separately from outer control visibility.",
         "focus/cancel/fullscreen preservation": "Native buttons/aria-pressed; Escape cancels; same dialog promoted on fullscreen with DOM, focus, subset and scroll retained.",
         "size/hit target/layout behavior": "Independent visible control rectangles replace the removed full-width HUD exclusion. Safe viewport remains stable when information expands; nearby actions and receipts avoid actual controls, selected endpoints and figures. At least44px native hit targets; critical text wraps."
+      },
+      "reefReturnUse": {
+        "description": "Reef forecast, missed homeward crossing and Undo recovery",
+        "evidence": "reviews/reef-return/REVIEW.md",
+        "humanReview": "pending"
       }
     },
     {
@@ -5045,6 +5176,10 @@
         {
           "path": "data/two-shelters.level.json",
           "symbol": "Hazel and Bracken beaver-brown, and Mica rabbit-cream explicitly reuse unchanged portrait outputs"
+        },
+        {
+          "path": "data/reef-return.level.json",
+          "symbol": "explicit appearance for all four passengers"
         }
       ],
       "originalModelSource": "src/scene/models.ts",
@@ -5186,6 +5321,10 @@
         {
           "path": "reviews/two-shelters-prototype/final/780x320-turn6-play.png",
           "role": "Native short-landscape actual Practice gameplay; not a gallery specimen or concept reference."
+        },
+        {
+          "path": "reviews/reef-return/REVIEW.md",
+          "role": "Existing cream, tan, brown and wool portraits at mobile chooser size"
         }
       ],
       "typeSpecific": {
@@ -5205,6 +5344,11 @@
       "gallery": {
         "section": "two-shelters",
         "preview": "Four shared44px choices and source-size images; real static beaver model; named Driftwood companions with stable cream/tan mapping and text-preserving fallback. Two Shelters reuses this family with Hazel, Bracken and Mica; the candidate section links actual gameplay and retains separate design specimens."
+      },
+      "reefReturnUse": {
+        "description": "Existing cream, tan, brown and wool portraits at mobile chooser size",
+        "evidence": "reviews/reef-return/REVIEW.md",
+        "humanReview": "pending"
       }
     },
     {
@@ -5600,6 +5744,10 @@
         {
           "path": "data/two-shelters.level.json",
           "symbol": "passengers: explicit Hazel and Bracken beaver-brown identities, two spaces each; new independent neighbors, not repeated rescues of existing story identities"
+        },
+        {
+          "path": "data/reef-return.level.json",
+          "symbol": "passengers.birch"
         }
       ],
       "variants": [
@@ -5647,6 +5795,10 @@
         {
           "path": "reviews/two-shelters-prototype/final/780x320-turn6-play.png",
           "role": "Native short-landscape actual Practice gameplay; not a gallery specimen or concept reference."
+        },
+        {
+          "path": "reviews/reef-return/REVIEW.md",
+          "role": "Birch, brown beaver at Shell Pool"
         }
       ],
       "meaning": "Original two-space beaver model shared by Nell the boatwright and independent Practice neighbors Hazel and Bracken; no species ability or new model.",
@@ -5668,6 +5820,11 @@
         "consumers and scale/placement owner": "World applies1.15/1.5/1.15 scale and canonical deck/shore transforms; same scale used by portrait exporter.",
         "pick/framing role": "World uses geometry for framing and scene selection; gameplay identities remain canonical nodes/passengers.",
         "disposal owner": "World.dispose traverses shared geometry/material/texture sets and disposes each once; CoastalWater owns its separate resources."
+      },
+      "reefReturnUse": {
+        "description": "Birch, brown beaver at Shell Pool",
+        "evidence": "reviews/reef-return/REVIEW.md",
+        "humanReview": "pending"
       }
     },
     {
@@ -6000,5 +6157,27 @@
     "content": "One independent Practice cove; original four-space ferry, Hazel beaver2, Bracken beaver2 and Mica rabbit1. Current root Journey, scenes and saves unchanged.",
     "publication": "Not deployed. Confirmed private Site version14/game2e4f992 and hosting sourced01264d remain unchanged; receipt reviews/play-readability/deployment-confirmation.json and prior history retained.",
     "provenance": "Original existing code-native models, coast/pier/landmark families, procedural water/audio and unchanged model-derived PNGs. Level/layout author new instances; candidate-only automatic seating/transfer code reuses the original ferry. No new species, boat, image, icon, sound, story or asset family."
+  },
+  "reefReturnChanges": {
+    "task": "REEF_RETURN_01",
+    "base": "b64583dd295b488de013fb2d6db32e63ba79427e",
+    "updatedFamilies": [
+      "model.ferry",
+      "model.sheep",
+      "model.beaver",
+      "model.rabbit",
+      "model.pier-kit",
+      "terrain.coast",
+      "scenery.rocks",
+      "indicator.routes",
+      "ui.map-markers",
+      "ui.dialogs",
+      "motion.transfer",
+      "ui.passenger-portraits"
+    ],
+    "preservedIds": 79,
+    "gallery": "asset-gallery.html#reef-return",
+    "level": "data/reef-return.level.json",
+    "publicationReceipt": "LAST_FERRY_REEF_RETURN_PACKAGE/PUBLICATION_RECEIPT.json"
   }
 }

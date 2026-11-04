@@ -1,6 +1,7 @@
 import * as T from 'three';
 import type { Level } from '../levels/level';
 import { islandCenter, shoreContour, shoreTop } from './shore';
+import { reefShelves } from './reef';
 import { getLevelPaths, type CanonicalPath } from './paths';
 
 export const seabedHeightRange = new T.Vector2(-2.2, 0.72);
@@ -184,6 +185,8 @@ export function createSeabedField(
       sine: Math.sin(patch.turn),
     }));
   });
+  const reefBanks = level.edges.filter((edge) => edge.current)
+    .flatMap((edge) => reefShelves((paths ?? getLevelPaths(level)).get(edge.id)!));
   const sand = new T.Color('#c7bb91'),
     ground = new T.Color('#7b9284'),
     stone = new T.Color('#536b67');
@@ -222,6 +225,16 @@ export function createSeabedField(
         );
         groundStone = Math.max(groundStone, interior * (1 - sweep) * (coast.sandy ? 0.28 : 0.48));
       }
+    }
+    for (const shelf of reefBanks) {
+      const dx = x - shelf.x, dz = z - shelf.z;
+      const along = (shelf.cosine * dx + shelf.sine * dz) / (shelf.rx + 0.42);
+      const across = (-shelf.sine * dx + shelf.cosine * dz) / (shelf.rz + 0.32);
+      const separation = Math.hypot(along, across + 0.12 * along * along);
+      const relief = 1 - smooth(separation + (broad - 0.5) * 0.12, 0.28, 1.12);
+      height = Math.max(height, -2.2 + relief * 2.05);
+      landColor = Math.max(landColor, relief * 0.75);
+      groundStone = Math.max(groundStone, relief * 0.34);
     }
     let sandForm = 0,
       rockForm = 0,

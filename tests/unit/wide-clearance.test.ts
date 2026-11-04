@@ -1,6 +1,6 @@
-import { expect, test } from 'vitest';
+import { describe, expect, test } from 'vitest';
 import { Box3, Group, InstancedMesh, Matrix4, Mesh, Vector3 } from 'three';
-import { wideBerth as level } from '../../src/levels/level';
+import { wideBerth, reefReturn } from '../../src/levels/level';
 import { animal, ferry, lighthouse } from '../../src/scene/models';
 import {
   ferryProfile,
@@ -15,7 +15,8 @@ import {
 import { createPier, isWalkableAt } from '../../src/scene/pier';
 import { sceneLayout } from '../../src/scene/layout';
 import { islandCenter, shoreContour, createShoreRocks } from '../../src/scene/shore';
-import { decorateWideIsland, wideWaterfront } from '../../src/scene/scenery';
+import { createReefPassage } from '../../src/scene/reef';
+import { cottage, decorateReefIsland, decorateWideIsland, wideWaterfront } from '../../src/scene/scenery';
 import { passengerModelVariant } from '../../src/game/passenger-appearance';
 import { getLevelPaths, samplePath } from '../../src/scene/paths';
 import { berthHeading, initialHeading, planJourney, sampleJourney } from '../../src/scene/motion';
@@ -68,7 +69,8 @@ function segmentDistance(p: P, a: P, b: P) {
   const t = span ? Math.max(0, Math.min(1, ((p[0] - a[0]) * x + (p[1] - a[1]) * z) / span)) : 0;
   return Math.hypot(p[0] - a[0] - t * x, p[1] - a[1] - t * z);
 }
-test('Wide Berth occupied real modeled hull clears land and piers at every reachable heading in both directions', () => {
+describe.each([wideBerth, reefReturn])('$title physical clearances', (level) => {
+test('occupied real modeled hull clears land and piers at every reachable heading in both directions', () => {
   const profile = ferryProfile(level),
     model = ferry(profile);
   for (const passenger of level.passengers) {
@@ -95,8 +97,12 @@ test('Wide Berth occupied real modeled hull clears land and piers at every reach
   const exclusions = [
     ...level.world.islands.map((island) => ({ id: island.id, polygon: island.footprintXZ as P[] })),
   ];
-  for (const pier of level.piers) {
-    const group = createPier(pier, sceneLayout(level.id).stonePiers.includes(pier.id), true);
+  const obstacles3D: [string, Group][] = level.piers.map((pier) => [
+    pier.id, createPier(pier, sceneLayout(level.id).stonePiers.includes(pier.id), true),
+  ]);
+  for (const edge of level.edges.filter((e) => e.current))
+    obstacles3D.push([edge.id, createReefPassage(paths.get(edge.id)!).rocks]);
+  for (const [id, group] of obstacles3D) {
     group.updateMatrixWorld(true);
     let meshIndex = 0;
     group.traverse((object) => {
@@ -107,7 +113,7 @@ test('Wide Berth occupied real modeled hull clears land and piers at every reach
         const v = new Vector3().fromBufferAttribute(attribute, i).applyMatrix4(object.matrixWorld);
         points.push([v.x, v.z]);
       }
-      exclusions.push({ id: `${pier.id}/mesh${meshIndex++}`, polygon: convex(points) });
+      exclusions.push({ id: `${id}/mesh${meshIndex++}`, polygon: convex(points) });
     });
   }
   const obstacles = exclusions.map((exclusion) => ({
@@ -235,11 +241,13 @@ test('compact waiting groups and actual transfer bodies clear each rendered shor
     const island = level.world.islands.find((i) => i.id === pier.islandId)!,
       style = layout.islandStyles[island.id],
       group = new Group();
-    decorateWideIsland(group, island, style);
+    if (level.id === 'reef-return') decorateReefIsland(group, island, style);
+    else decorateWideIsland(group, island, style);
     group.add(createShoreRocks(island, style));
     for (const landmark of layout.landmarks.filter((l) => l.islandId === island.id)) {
       const [x, z] = landmark.positionXZ;
       if (landmark.kind === 'lighthouse') lighthouse(group, x, island.elevation * 0.18, z);
+      if (landmark.kind === 'cottage') cottage(group, [x, island.elevation * 0.18, z]);
       if (landmark.kind === 'waterfront') wideWaterfront(group, [x, island.elevation * 0.18, z]);
     }
     group.updateMatrixWorld(true);
@@ -344,6 +352,7 @@ test('lighthouse foundation and working shed feet stand on the actual smoothed s
       group = new Group(),
       [x, z] = landmark.positionXZ;
     if (landmark.kind === 'lighthouse') lighthouse(group, x, height, z);
+    if (landmark.kind === 'cottage') cottage(group, [x, height, z]);
     if (landmark.kind === 'waterfront') wideWaterfront(group, [x, height, z]);
     group.updateMatrixWorld(true);
     group.traverse((o) => {
@@ -357,4 +366,5 @@ test('lighthouse foundation and working shed feet stand on the actual smoothed s
     });
   }
   expect(failures).toEqual([]);
+});
 });

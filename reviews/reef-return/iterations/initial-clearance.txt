@@ -1,0 +1,136 @@
+
+ RUN  v5.0.5 C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry
+
+stdout | tests/unit/wide-clearance.test.ts > Reef Return physical clearances > occupied real modeled hull clears land and piers at every reachable heading in both directions
+{"wrack-quay/forward/needle-reef/mesh4":{"count":648,"position":[-2.60742207704685,0,4.656727707686209],"angle":-2.8008916910435993},"wrack-quay/forward/needle-reef/mesh3":{"count":708,"position":[-2.622731570586479,0,4.612054666887166],"angle":-2.8214421646649486},"wrack-quay/reverse/needle-reef/mesh3":{"count":968,"position":[-1.7279193782797992,0,0.6311240285621863],"angle":-0.5693131911006644},"wrack-quay/reverse/needle-reef/mesh4":{"count":888,"position":[-1.9400615810592705,0,0.9625962204051098],"angle":-0.5693131911006617},"quay-pool/forward/wrack-island":{"count":298,"position":[5.410959478061011,0,1.0350099624400912],"angle":1.3996453158727742},"quay-pool/reverse/wrack-island":{"count":173,"position":[5.920864635257791,0,0.9750210629789459],"angle":1.5707963267948972}}
+
+----x·x·
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/wide-clearance.test.ts > Reef Return physical clearances > occupied real modeled hull clears land and piers at every reachable heading in both directions
+AssertionError: expected [ …(30) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "wrack-quay/forward from1.5707963267948966 sample474: needle-reef/mesh4",
++   "wrack-quay/forward from1.5707963267948966 sample475: needle-reef/mesh4",
++   "wrack-quay/forward from1.5707963267948966 sample476: needle-reef/mesh4",
++   "wrack-quay/forward from1.5707963267948966 sample477: needle-reef/mesh3",
++   "wrack-quay/forward from1.5707963267948966 sample477: needle-reef/mesh4",
++   "wrack-quay/forward from1.5707963267948966 sample478: needle-reef/mesh3",
++   "wrack-quay/forward from1.5707963267948966 sample478: needle-reef/mesh4",
++   "wrack-quay/forward from1.5707963267948966 sample479: needle-reef/mesh3",
++   "wrack-quay/forward from1.5707963267948966 sample479: needle-reef/mesh4",
++   "wrack-quay/forward from1.5707963267948966 sample480: needle-reef/mesh3",
++   "wrack-quay/forward from1.5707963267948966 sample480: needle-reef/mesh4",
++   "wrack-quay/forward from1.5707963267948966 sample481: needle-reef/mesh3",
++   "wrack-quay/forward from1.5707963267948966 sample481: needle-reef/mesh4",
++   "wrack-quay/forward from1.5707963267948966 sample482: needle-reef/mesh3",
++   "wrack-quay/forward from1.5707963267948966 sample482: needle-reef/mesh4",
++   "wrack-quay/forward from1.5707963267948966 sample483: needle-reef/mesh3",
++   "wrack-quay/forward from1.5707963267948966 sample483: needle-reef/mesh4",
++   "wrack-quay/forward from1.5707963267948966 sample484: needle-reef/mesh3",
++   "wrack-quay/forward from1.5707963267948966 sample484: needle-reef/mesh4",
++   "wrack-quay/forward from1.5707963267948966 sample485: needle-reef/mesh3",
++   "wrack-quay/forward from1.5707963267948966 sample485: needle-reef/mesh4",
++   "wrack-quay/forward from1.5707963267948966 sample486: needle-reef/mesh3",
++   "wrack-quay/forward from1.5707963267948966 sample486: needle-reef/mesh4",
++   "wrack-quay/forward from1.5707963267948966 sample487: needle-reef/mesh3",
++   "wrack-quay/forward from1.5707963267948966 sample487: needle-reef/mesh4",
++   "wrack-quay/forward from1.5707963267948966 sample488: needle-reef/mesh3",
++   "wrack-quay/forward from1.5707963267948966 sample488: needle-reef/mesh4",
++   "wrack-quay/forward from1.5707963267948966 sample489: needle-reef/mesh3",
++   "wrack-quay/forward from1.5707963267948966 sample489: needle-reef/mesh4",
++   "wrack-quay/forward from1.5707963267948966 sample490: needle-reef/mesh3",
++ ]
+
+ ❯ tests/unit/wide-clearance.test.ts:208:20
+    206|     }
+    207|   if (failures.length) console.log(JSON.stringify(contacts));
+    208|   expect(failures).toEqual([]);
+       |                    ^
+    209|   expect(margins).toEqual([]);
+    210| }, 20000);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/unit/wide-clearance.test.ts > Reef Return physical clearances > compact waiting groups and actual transfer bodies clear each rendered shore prop
+AssertionError: expected [ …(50) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "pool-pier/heather/waiting/shore-rocks-pool-island/3",
++   "pool-pier/heather/delivered/shore-rocks-pool-island/3",
++   "pool-pier/heather/board/-1.5707963267948966/tide0/draft1/0/shore-rocks-pool-island/3",
++   "pool-pier/heather/board/-1.5707963267948966/tide0/draft1/1/shore-rocks-pool-island/3",
++   "pool-pier/heather/board/-1.5707963267948966/tide0/draft1/2/shore-rocks-pool-island/3",
++   "pool-pier/heather/board/-1.5707963267948966/tide0/draft1/3/shore-rocks-pool-island/3",
++   "pool-pier/heather/board/-1.5707963267948966/tide0/draft1/4/shore-rocks-pool-island/3",
++   "pool-pier/heather/board/-1.5707963267948966/tide0/draft1/5/shore-rocks-pool-island/3",
++   "pool-pier/heather/unload/-1.5707963267948966/tide0/draft1/95/shore-rocks-pool-island/3",
++   "pool-pier/heather/unload/-1.5707963267948966/tide0/draft1/96/shore-rocks-pool-island/3",
++   "pool-pier/heather/unload/-1.5707963267948966/tide0/draft1/97/shore-rocks-pool-island/3",
++   "pool-pier/heather/unload/-1.5707963267948966/tide0/draft1/98/shore-rocks-pool-island/3",
++   "pool-pier/heather/unload/-1.5707963267948966/tide0/draft1/99/shore-rocks-pool-island/3",
++   "pool-pier/heather/unload/-1.5707963267948966/tide0/draft1/100/shore-rocks-pool-island/3",
++   "pool-pier/heather/board/-1.5707963267948966/tide0/draft2/0/shore-rocks-pool-island/3",
++   "pool-pier/heather/board/-1.5707963267948966/tide0/draft2/1/shore-rocks-pool-island/3",
++   "pool-pier/heather/board/-1.5707963267948966/tide0/draft2/2/shore-rocks-pool-island/3",
++   "pool-pier/heather/board/-1.5707963267948966/tide0/draft2/3/shore-rocks-pool-island/3",
++   "pool-pier/heather/board/-1.5707963267948966/tide0/draft2/4/shore-rocks-pool-island/3",
++   "pool-pier/heather/board/-1.5707963267948966/tide0/draft2/5/shore-rocks-pool-island/3",
++   "pool-pier/heather/unload/-1.5707963267948966/tide0/draft2/95/shore-rocks-pool-island/3",
++   "pool-pier/heather/unload/-1.5707963267948966/tide0/draft2/96/shore-rocks-pool-island/3",
++   "pool-pier/heather/unload/-1.5707963267948966/tide0/draft2/97/shore-rocks-pool-island/3",
++   "pool-pier/heather/unload/-1.5707963267948966/tide0/draft2/98/shore-rocks-pool-island/3",
++   "pool-pier/heather/unload/-1.5707963267948966/tide0/draft2/99/shore-rocks-pool-island/3",
++   "pool-pier/heather/unload/-1.5707963267948966/tide0/draft2/100/shore-rocks-pool-island/3",
++   "pool-pier/heather/board/-1.5707963267948966/tide0/draft3/0/shore-rocks-pool-island/3",
++   "pool-pier/heather/board/-1.5707963267948966/tide0/draft3/1/shore-rocks-pool-island/3",
++   "pool-pier/heather/board/-1.5707963267948966/tide0/draft3/2/shore-rocks-pool-island/3",
++   "pool-pier/heather/board/-1.5707963267948966/tide0/draft3/3/shore-rocks-pool-island/3",
++   "pool-pier/heather/board/-1.5707963267948966/tide0/draft3/4/shore-rocks-pool-island/3",
++   "pool-pier/heather/board/-1.5707963267948966/tide0/draft3/5/shore-rocks-pool-island/3",
++   "pool-pier/heather/unload/-1.5707963267948966/tide0/draft3/95/shore-rocks-pool-island/3",
++   "pool-pier/heather/unload/-1.5707963267948966/tide0/draft3/96/shore-rocks-pool-island/3",
++   "pool-pier/heather/unload/-1.5707963267948966/tide0/draft3/97/shore-rocks-pool-island/3",
++   "pool-pier/heather/unload/-1.5707963267948966/tide0/draft3/98/shore-rocks-pool-island/3",
++   "pool-pier/heather/unload/-1.5707963267948966/tide0/draft3/99/shore-rocks-pool-island/3",
++   "pool-pier/heather/unload/-1.5707963267948966/tide0/draft3/100/shore-rocks-pool-island/3",
++   "pool-pier/heather/board/-1.5707963267948966/tide0/draft4/0/shore-rocks-pool-island/3",
++   "pool-pier/heather/board/-1.5707963267948966/tide0/draft4/1/shore-rocks-pool-island/3",
++   "pool-pier/heather/board/-1.5707963267948966/tide0/draft4/2/shore-rocks-pool-island/3",
++   "pool-pier/heather/board/-1.5707963267948966/tide0/draft4/3/shore-rocks-pool-island/3",
++   "pool-pier/heather/board/-1.5707963267948966/tide0/draft4/4/shore-rocks-pool-island/3",
++   "pool-pier/heather/board/-1.5707963267948966/tide0/draft4/5/shore-rocks-pool-island/3",
++   "pool-pier/heather/unload/-1.5707963267948966/tide0/draft4/95/shore-rocks-pool-island/3",
++   "pool-pier/heather/unload/-1.5707963267948966/tide0/draft4/96/shore-rocks-pool-island/3",
++   "pool-pier/heather/unload/-1.5707963267948966/tide0/draft4/97/shore-rocks-pool-island/3",
++   "pool-pier/heather/unload/-1.5707963267948966/tide0/draft4/98/shore-rocks-pool-island/3",
++   "pool-pier/heather/unload/-1.5707963267948966/tide0/draft4/99/shore-rocks-pool-island/3",
++   "pool-pier/heather/unload/-1.5707963267948966/tide0/draft4/100/shore-rocks-pool-island/3",
++ ]
+
+ ❯ tests/unit/wide-clearance.test.ts:342:20
+    340|     }
+    341|   }
+    342|   expect(failures).toEqual([]);
+       |                    ^
+    343| });
+    344|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 2 passed | 4 skipped (8)
+   Start at  20:36:46
+   Duration  1.63s (tests 79%, transform 15%, import 6%)
+

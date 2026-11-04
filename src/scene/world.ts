@@ -1,6 +1,6 @@
 import * as T from 'three';
 import { level as baseline, type Level } from '../levels/level';
-import { draft, edgeTo, type State, type Action } from '../game/rules';
+import { draft, edgeTo, passageFlow, passageError, type State, type Action } from '../game/rules';
 import { passengerModelVariant, resolvePassengerAppearance } from '../game/passenger-appearance';
 import { animal, ball, box, cylinder, ferry, lighthouse, mat, mesh, pine } from './models';
 import {
@@ -52,10 +52,12 @@ import {
   driftwoodYard,
   wideWaterfront,
   decorateWideIsland,
+  decorateReefIsland,
 } from './scenery';
 import { createPier, createShelterGangway, updateShelterGangway } from './pier';
 import { getLevelPaths, type CanonicalPath } from './paths';
 import { Shores, createReedBeds } from './shore';
+import { addWorkingDeckSeams, createReefPassage, setReefDirection } from './reef';
 import { CoastalWater } from './water';
 import { CrossingEffects } from './effects';
 import { storyCameraFrame, storyStage, type StorySceneId, type StoryStage } from './story-staging';
@@ -192,6 +194,7 @@ export class World {
   ) {
     this.profile = ferryProfile(level);
     this.hull = ferry(this.profile);
+    if (level.id === 'reef-return') addWorkingDeckSeams(this.hull);
     this.state = state;
     this.layout = sceneLayout(this.level.id);
     this.paths = getLevelPaths(this.level);
@@ -322,6 +325,11 @@ export class World {
       line.computeLineDistances();
       this.scene.add(line);
       this.routes.set(e.id, line);
+      if (e.current) {
+        const { rocks, arrows } = createReefPassage(this.paths.get(e.id)!);
+        this.scene.add(rocks);
+        line.add(arrows);
+      }
     }
     for (const n of this.level.nodes) {
       const g = new T.Group();
@@ -432,6 +440,7 @@ export class World {
       cz = points.reduce((a, p) => a + p[1], 0) / points.length;
     const height = island.elevation * 0.18;
     const style = this.layout.islandStyles[island.id] ?? 'garden';
+    if (this.level.id === 'reef-return') return decorateReefIsland(group, island, style);
     if (this.level.id === 'wide-berth') {
       return decorateWideIsland(group, island, style);
     }
@@ -1072,10 +1081,16 @@ export class World {
       top: usable.top + 8,
       bottom: usable.bottom - 8,
     };
-    return {
-      focus: { x: (bounds.minX + bounds.maxX) / 2, y: (bounds.minY + bounds.maxY) / 2 },
-      scale: Math.min(scale, overviewScale(bounds, padded)),
-    };
+    const dockScale = Math.min(scale, overviewScale(bounds, padded));
+    const focus = { x: (bounds.minX + bounds.maxX) / 2, y: (bounds.minY + bounds.maxY) / 2 };
+    if (this.level.id === 'reef-return' && node.id === 'wrack') {
+      const spareX = ((padded.right - padded.left) / dockScale - (bounds.maxX - bounds.minX)) / 2;
+      const spareY = ((padded.bottom - padded.top) / dockScale - (bounds.maxY - bounds.minY)) / 2;
+      const portrait = this.host.clientHeight > this.host.clientWidth;
+      focus.x -= Math.min(portrait ? 1.55 : 1.85, Math.max(0, spareX - 0.3));
+      focus.y += portrait ? -Math.min(1.8, Math.max(0, spareY - 0.3)) : Math.min(0.72, Math.max(0, spareY - 0.3));
+    }
+    return { focus, scale: dockScale };
   }
   private viewChanged() {
     this.camera.updateProjectionMatrix();
@@ -1598,6 +1613,10 @@ export class World {
       endpoint,
       true,
     );
+    if (this.level.id === 'reef-return') {
+      updateShelterGangway(this.gangway, path.bridge, path.gate);
+      return;
+    }
     const direction = path.gate.clone().sub(path.bridge);
     this.gangway.position.copy(path.bridge).add(path.gate).multiplyScalar(0.5);
     this.gangway.scale.z = direction.length();
@@ -1645,7 +1664,11 @@ export class World {
     this.indicate(s);
     this.reframeView();
   }
-  indicate(s: State, selected?: string, emphasis?: string) {
+  indicate(state: State, selected?: string, emphasis?: string) {
+    const crossing = this.transition?.edgeId
+      ? this.level.edges.find((edge) => edge.id === this.transition!.edgeId && edge.current)
+      : undefined;
+    const s = crossing ? this.transition!.before : state;
     const focus = emphasis ?? selected;
     const selectedEdge = focus ? edgeTo(s, focus, this.level) : undefined;
     this.navigationCurrent = s.boatNodeId;
@@ -1653,20 +1676,22 @@ export class World {
     this.navigationEmphasis = emphasis && this.markers.has(emphasis) ? emphasis : null;
     for (const [id, g] of this.markers) {
       const e = edgeTo(s, id, this.level);
+      const flow = e && passageFlow(e, s.tideLevel);
+      const blocked = !!e && !!passageError(s, id, this.level);
       const status =
         id === s.boatNodeId
           ? 'current'
           : !e
             ? 'nonadjacent'
-            : e.baseDepth + s.tideLevel < draft(s, this.level)
-              ? 'too-shallow'
+            : blocked
+              ? flow && flow.from !== s.boatNodeId ? 'against-current' : 'too-shallow'
               : 'available';
       const active = id === this.navigationSelected;
-      g.visible = !this.homePresentation;
+      g.visible = !this.homePresentation && !crossing?.nodes.includes(id);
       const color =
         active || id === emphasis
           ? '#ffe09a'
-          : status === 'too-shallow'
+          : blocked
             ? '#d19272'
             : status === 'current'
               ? '#fff1d7'
@@ -1676,7 +1701,7 @@ export class World {
       ring.visible = status !== 'nonadjacent';
       g.getObjectByName('selection-ring')!.visible = active;
       g.getObjectByName('current-ring')!.visible = status === 'current';
-      g.getObjectByName('blocked-cross')!.visible = status === 'too-shallow';
+      g.getObjectByName('blocked-cross')!.visible = blocked;
       g.getObjectByName('nonadjacent-diamond')!.visible = status === 'nonadjacent';
       g.userData.navigationStatus = status;
       g.userData.selected = active;
@@ -1700,10 +1725,15 @@ export class World {
             : 0.3;
       m.dashSize = highlighted ? 0.35 : 0.09;
       m.gapSize = highlighted ? 0.055 : 0.16;
+      const flow = passageFlow(e, s.tideLevel);
+      if (flow) {
+        const arrows = line.getObjectByName('tidal-reef-flow') as T.Group;
+        setReefDirection(arrows, flow.from !== e.nodes[0]);
+      }
       m.color.set(
         highlighted
           ? '#ffe09a'
-          : e.baseDepth + s.tideLevel < draft(s, this.level)
+          : (flow && flow.to === s.boatNodeId) || e.baseDepth + s.tideLevel < draft(s, this.level)
             ? '#dca180'
             : '#a6d3cc',
       );
@@ -1780,6 +1810,8 @@ export class World {
       fromHullY: this.hull.position.y,
       transfer,
     };
+    if (edgeId && this.level.edges.find((edge) => edge.id === edgeId)?.current)
+      this.indicate(before, action.type === 'move' ? action.to : undefined);
     this.reframeView();
   }
   cancel(reason: CompletionReason = 'cancelled') {
@@ -2168,9 +2200,13 @@ export class World {
       emphasizedDestination: this.navigationEmphasis,
       routes: [...this.routes].map(([id, route]) => {
         const material = route.material as T.LineDashedMaterial;
+        const edge = this.level.edges.find((edge) => edge.id === id)!;
+        const arrow = route.getObjectByName('tidal-reef-flow')?.children[0];
+        const forward = arrow && Math.cos(arrow.rotation.y - arrow.userData.canonicalAngle) > 0;
         return {
           id,
-          nodes: [...this.level.edges.find((edge) => edge.id === id)!.nodes],
+          nodes: [...edge.nodes],
+          ...(arrow ? { flowFrom: edge.nodes[forward ? 0 : 1] } : {}),
           highlighted: route.userData.highlighted === true,
           dashSize: material.dashSize,
           gapSize: material.gapSize,
@@ -2179,12 +2215,13 @@ export class World {
       markers: [...this.markers].map(([id, marker]) => ({
         id,
         worldPosition: marker.getWorldPosition(new T.Vector3()).toArray(),
+        visible: marker.visible,
         status: marker.userData.navigationStatus as string,
         selected: marker.userData.selected === true,
         shape:
           marker.userData.navigationStatus === 'current'
             ? 'double ring'
-            : marker.userData.navigationStatus === 'too-shallow'
+            : ['too-shallow', 'against-current'].includes(marker.userData.navigationStatus)
               ? 'crossed ring'
               : marker.userData.navigationStatus === 'nonadjacent'
                 ? 'diamond'

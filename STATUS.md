@@ -1,4 +1,12 @@
-# Current task — Two Shelters Practice candidate
+# Reef Return — independent Practice candidate
+
+Verified 4 November 2026. The production build and TypeScript passed, 462 unit checks passed, and the 79-family inventory validated. All six final browser cases passed, including the two previous coves in production. The 390×844 normal-motion rescue and 780×320 muted, Reduced Motion rescue delivered all four neighbors in nine actions. Native inspection corrected the shore-pair composition and an early visual current reversal. [34-second real rescue with runtime sound](reviews/reef-return/phone/reef-rescue.mp4) · [Full evidence and original failures](reviews/reef-return/REVIEW.md)
+
+Started from `b64583dd295b488de013fb2d6db32e63ba79427e` on `m1-first-crossing`. The six-space boat carries neighbors across a reef whose permitted direction follows the tide. The [review](reviews/reef-return/REVIEW.md) records the winning return, the missed crossing and Undo recovery.
+
+On 4 November 2026, Sites published Two Shelters as version **15** of the existing owner-private playtest. Game commit `b64583dd295b488de013fb2d6db32e63ba79427e` and hosting commit `bdb33c051185a291e7d6ba70d32dda137a8f54c0` identify separate repositories. The player likes Two Shelters. This is positive gameplay feedback. Physical-device validation and a campaign placement decision are still open. [Publication receipt](LAST_FERRY_REEF_RETURN_PACKAGE/PUBLICATION_RECEIPT.json)
+
+# Previous task — Two Shelters Practice candidate
 
 Implementation `e4694baeeb0ef64f6c1c0fada3b3e9027bddf277`. The packaging audit matches77 captured source inputs and53 selected media; final audit/continuity handoff adds no runtime change.
 

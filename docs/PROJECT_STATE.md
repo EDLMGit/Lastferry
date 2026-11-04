@@ -1,22 +1,32 @@
 # Last Ferry — Project state
 
-Updated: 2026-11-01. This is the compact continuity record for the current project, not a claim that every device or future release requirement has been verified.
+Updated: 2026-11-04. This is the compact continuity record for the current project, not a claim that every device or future release requirement has been verified.
 
 Read this before choosing scope. Detailed implementation history belongs in `STATUS.md`; evidence belongs under `reviews/`. Update this record after each handoff and after a confirmed deployment. User feedback can revise an accepted decision.
 
-## Current publication — Sites version 14
+## Current publication — Sites version 15
+
+On 4 November 2026, Sites published Two Shelters as version **15** of the existing owner-private playtest. Game commit `b64583dd295b488de013fb2d6db32e63ba79427e` and hosting commit `bdb33c051185a291e7d6ba70d32dda137a8f54c0` identify separate repositories. The player likes Two Shelters. This is positive gameplay feedback. Physical-device validation and a campaign placement decision are still open. [Publication receipt](../LAST_FERRY_REEF_RETURN_PACKAGE/PUBLICATION_RECEIPT.json)
+
+## Prior publication — Sites version 14
 
 At the user's explicit request, published game `2e4f99268da4691b315fe8467d9e539cda15e927` to the existing owner-private Site on2026-11-01 at10:31:16UTC. Sites version14, hosting `d01264d26cb7b5abaf68920a9014718ab21d97b4`, succeeded. All seven production files match the fresh Node24 game build/typecheck byte-for-byte. Source-tied gameplay evidence is reused; physical-phone and listening limits remain. Receipt: `reviews/play-readability/deployment-confirmation.json`. Version13 and all earlier history below remain historical. GitHub continuity commits do not change the deployed game.
 
-## Current scoped pass — Two Shelters Practice candidate
+## Current scoped pass — Reef Return
+
+The candidate is ready for local player review. The production checks found two nine-action rescue witnesses and no win that bypasses staging Heather at Cairn Quay or bringing the full six spaces through Needle Reef. Native portrait and short-landscape rescues, loss/Undo recovery, source preservation, the 462-unit suite, asset validation and all six final browser cases passed. The [review](../reviews/reef-return/REVIEW.md) links the uninterrupted recording, shore revisions and original failures. The published game and hosting source are recorded separately above.
+
+Reef Return is a six-space Practice candidate at `?cove=reef-return`. Needle Reef changes direction with the tide. The timing of the departure from Cairn Quay matters even when everyone is aboard or on high ground. See the [verification and native gameplay](../reviews/reef-return/REVIEW.md). The four-cove Journey and its checkpoints retain the version 15 contract.
+
+## Previous scoped pass — Two Shelters Practice candidate
 
 Implementation `e4694baeeb0ef64f6c1c0fada3b3e9027bddf277`; packaging audit matches all77 captured source inputs (70 exact,7 newline-only) and53 selected media to Git. A following evidence/continuity-only handoff commit changes no runtime. The exact final pushed SHA is in PR1 and the handoff.
 
-`TWO_SHELTERS_PROTOTYPE_01` starts from clean continuity HEAD `98f9713b1a69474b4066cca8f336cb8c4ca21a50`, preserving reviewed/published game `2e4f99268da4691b315fe8467d9e539cda15e927`. The exact supplied task resolved one directory above the Git root and its unchanged package is retained beside package.json. The private Site remains version 14 with the receipt above; this candidate is not deployed.
+`TWO_SHELTERS_PROTOTYPE_01` starts from clean continuity HEAD `98f9713b1a69474b4066cca8f336cb8c4ca21a50`, preserving reviewed/published game `2e4f99268da4691b315fe8467d9e539cda15e927`. The exact supplied task resolved one directory above the Git root and its unchanged package is retained beside package.json. At its implementation handoff the private Site was version 14. Two Shelters was subsequently published in version 15.
 
 Two Shelters is independent Practice at `?cove=two-shelters`, also reachable from Home Practice. It uses the original four-space ferry with Hazel (two-space beaver), Bracken (two-space beaver) and Mica (one-space rabbit). Low Landing requires the rabbit home before retrieving both larger neighbors; High Refuge permits a mixed first delivery safely. Production-rule proof precedes scene authoring. No new rule, species, boat, scene, current or action limit is introduced.
 
-The runtime Journey remains Holding → Bellwater → Driftwood → Wide, with the same launch and strict saves. The candidate has not earned C4. Wide's difficulty and visual feeling remain negatively reviewed; the twelve-cove plan beyond accepted content remains proposed. Route/save integration and launch relocation require a later scoped assignment after playtest. Version-14 and earlier publication receipts remain unchanged.
+The runtime Journey remains Holding → Bellwater → Driftwood → Wide, with the same launch and strict saves. The player subsequently liked the candidate. Its campaign placement is still open. Wide's difficulty and visual feeling remain negatively reviewed; the twelve-cove plan beyond accepted content remains proposed. Route/save integration and launch relocation require a later scoped assignment after playtest. Version-14 and earlier publication receipts remain unchanged.
 
 Native observations, original failures, verification results and source provenance belong in `reviews/two-shelters-prototype/REVIEW.md`; mechanics and alternatives are in `DESIGN.md`. Human puzzle/visual acceptance and physical-phone listening/performance remain separate. Inherited portrait-loading, constrained overlap, delivered-heading, precise rapid-touch and device/listening limits stay open.
 
@@ -105,10 +115,11 @@ Local Codex implements the current task. ChatGPT reviews the identifiable handof
 | Driftwood implementation | `16742dbc6007c322db4abc5ebe67f1d1a7acd37b`, reviewed handoff `7e324e88827857469bf348fca311548344d03da6` — gameplay accepted; included in version13 |
 | Wide Berth implementation | `d298db84c0e979680bf7b5a20522265d105d1fc1` — six-space physical ferry, launch and fourth cove; functional foundation retained, presentation rejected and corrected by the visual repair; included in version13 |
 | Wide Berth visual repair | Implementation `9aab76f180b6bf5bd859414001ea4fd5b3a87639`; published handoff game `7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695` |
-| Reviewed implementation baseline | `45ab9768792ddd3a8dffb67da6c332f8fe2234ff` — visual-repair comparison |
-| Published private phone game | `2e4f99268da4691b315fe8467d9e539cda15e927` — Sites version14, confirmed2026-11-01 10:31 UTC |
+| Wide Berth visual-repair baseline | `45ab9768792ddd3a8dffb67da6c332f8fe2234ff` |
+| Reef Return comparison baseline | `b64583dd295b488de013fb2d6db32e63ba79427e` — Two Shelters |
+| Published private phone game | `b64583dd295b488de013fb2d6db32e63ba79427e` — Sites version 15, confirmed 4 November 2026 at 19:25 UTC |
 | Stable phone URL | https://last-ferry-playtest.abumech.chatgpt.site |
-| Published hosting source | `d01264d26cb7b5abaf68920a9014718ab21d97b4` |
+| Published hosting source | `bdb33c051185a291e7d6ba70d32dda137a8f54c0` |
 | Main | Unchanged by this workflow; no merge authorized |
 
 At the user's explicit request, native Sites publication succeeded at `2026-10-31T23:02:36.877836Z` for game `7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695`, version13, hosting `c24aa6528675bc278de848e111ee73f9e22810ac`. The same owner-private Site and URL are preserved. Receipt: `reviews/wide-berth-visual-repair/deployment-confirmation.json`. A fresh Node24 build/typecheck passed and all seven production files match the tested local build byte-for-byte. Existing game/unit/browser evidence is reused; this deployment does not claim physical-phone or human visual/listening acceptance. Historical no-deployment statements describe the original handoff dates.

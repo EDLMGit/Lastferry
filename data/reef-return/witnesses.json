@@ -1,0 +1,56 @@
+{
+  "levelId": "reef-return",
+  "witnesses": [
+    {
+      "id": "keep-flick-aboard",
+      "actions": [
+        { "type": "board", "passengerIds": ["heather", "flick"] },
+        { "type": "move", "to": "quay" },
+        { "type": "unload", "passengerIds": ["heather"] },
+        { "type": "move", "to": "pool" },
+        { "type": "board", "passengerIds": ["birch", "dot"] },
+        { "type": "move", "to": "quay" },
+        { "type": "board", "passengerIds": ["heather"] },
+        { "type": "move", "to": "harbor" },
+        { "type": "unload", "passengerIds": ["heather", "flick", "birch", "dot"] }
+      ]
+    },
+    {
+      "id": "stage-both",
+      "actions": [
+        { "type": "board", "passengerIds": ["heather", "flick"] },
+        { "type": "move", "to": "quay" },
+        { "type": "unload", "passengerIds": ["heather", "flick"] },
+        { "type": "move", "to": "pool" },
+        { "type": "board", "passengerIds": ["birch", "dot"] },
+        { "type": "move", "to": "quay" },
+        { "type": "board", "passengerIds": ["heather", "flick"] },
+        { "type": "move", "to": "harbor" },
+        { "type": "unload", "passengerIds": ["heather", "flick", "birch", "dot"] }
+      ]
+    }
+  ],
+  "losingAlternatives": [
+    {
+      "id": "everyone-at-shell-pool",
+      "actions": [
+        { "type": "board", "passengerIds": ["heather", "flick"] },
+        { "type": "move", "to": "quay" },
+        { "type": "wait" },
+        { "type": "move", "to": "pool" },
+        { "type": "board", "passengerIds": ["birch", "dot"] },
+        { "type": "wait" },
+        { "type": "wait" },
+        { "type": "wait" }
+      ]
+    },
+    {
+      "id": "first-three-spaces-home",
+      "actions": [
+        { "type": "board", "passengerIds": ["heather", "flick"] },
+        { "type": "move", "to": "quay" },
+        { "type": "move", "to": "harbor" }
+      ]
+    }
+  ]
+}

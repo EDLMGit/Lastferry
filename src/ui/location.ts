@@ -1,4 +1,4 @@
-import { edgeTo, legalActions, preview, type Action, type State } from '../game/rules';
+import { edgeTo, legalActions, passageError, passageFlow, preview, type Action, type State } from '../game/rules';
 import { nodeName, type Level } from '../levels/level';
 import {
   actionLabel,
@@ -17,7 +17,7 @@ export type LocationFacts = {
   home: boolean;
   current: boolean;
   relation: 'current' | 'adjacent' | 'remote';
-  status: 'current' | 'safe' | 'too-shallow' | 'loss' | 'remote';
+  status: 'current' | 'safe' | 'too-shallow' | 'against-current' | 'loss' | 'remote';
   pierId: string | null;
   flooded: boolean;
   waiting: string[];
@@ -44,6 +44,7 @@ export type LocationFacts = {
 export function locationFacts(s: State, nodeId: string, l: Level): LocationFacts {
   const current = nodeId === s.boatNodeId,
     edge = edgeTo(s, nodeId, l),
+    flow = edge && passageFlow(edge, s.tideLevel),
     pier = l.piers.find((p) => p.nodeId === nodeId),
     home = pier?.id === l.objective.deliveryPierId,
     flooded = !!pier && s.tideLevel >= pier.elevation,
@@ -84,8 +85,8 @@ export function locationFacts(s: State, nodeId: string, l: Level): LocationFacts
       ? 'current'
       : !edge
         ? 'remote'
-        : !canSail
-          ? 'too-shallow'
+        : !canSail && (s.status === 'playing' || passageError(s, nodeId, l))
+          ? flow && flow.from !== s.boatNodeId ? 'against-current' : 'too-shallow'
           : wouldLose
             ? 'loss'
             : 'safe',

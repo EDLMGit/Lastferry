@@ -96,6 +96,11 @@ const shelterResidents: [string, number, boolean, PortraitKey | null][] =
   ]);
 shelterSection.innerHTML = `<h2>Two Shelters · independent Practice candidate</h2><p>Hazel, Bracken and Mica reuse the original beaver and rabbit models and static portraits. The original four-space yellow ferry, timber and stone piers, lighthouse, cottage, bell and reed coast are existing families; the new level authors their instances.</p><article class="panel-specimen panel-specimen--narrow"><h3>Existing portraits, new neighbors</h3>${choices(shelterResidents)}<p>Hazel and Bracken occupy four spaces together. These native 44px portrait choices use the production level and appearance resolver. This is a developer specimen, not gameplay evidence.</p></article><p><a href="/?cove=two-shelters">Play actual Two Shelters</a> · <a href="/">Root Journey · unchanged</a></p><p>${sourceLink('reviews/two-shelters-prototype/DESIGN.md', 'Production-rule proof and alternatives')} · ${sourceLink('reviews/two-shelters-prototype/REVIEW.md', 'Actual native gameplay review and evidence')}</p><p>The candidate has no chapter scene and does not write campaign progress. Its place in the campaign and visual acceptance remain for human playtest.</p>`;
 root.querySelector('#readability-heading')!.closest('section')!.after(shelterSection);
+const reefSection = document.createElement('section');
+reefSection.id = 'reef-return';
+reefSection.className = shelterSection.className;
+reefSection.innerHTML = `<h2>Reef Return</h2><p>The six-space ferry serves four neighbors at Wrack Pier and Shell Pool. Two rocky shelves mark Needle Reef. The pale chevrons point along the passage in its permitted direction, even with Motion reduced.</p><p><a href="/?cove=reef-return">Play Reef Return</a> · ${sourceLink('reviews/reef-return/REVIEW.md', 'Native frames and playtest notes')}</p>`;
+shelterSection.after(reefSection);
 const failedPortrait = root.querySelector<HTMLImageElement>('#gallery-failed-portrait img')!;
 failedPortrait.dataset.portraitState = 'pending';
 failedPortrait.src = '/__portrait-unavailable.png';

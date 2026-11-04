@@ -1,5 +1,13 @@
 # Last Ferry asset provenance and history
 
+## Reef Return
+
+The Practice cove reuses the prepared six-space ferry and the original full-size wool sheep, brown beaver, cream rabbit and tan rabbit. The same four static portrait assets identify the neighbors in the chooser. The level authors a wrack line at the low pier, reed and shell clusters at Shell Pool, a stacked cairn beside the quay cottage and the lighthouse across the reef.
+
+Needle Reef adds a direction variant to `indicator.routes`. Two uneven rock shelves flank the canonical sailing path. Pale, dark-edged chevrons turn with the passage permission derived from the current tide and stay readable at rest. These shapes, shore details and the placement of the four neighbors are original Three.js geometry and level data. See [reef geometry](../src/scene/reef.ts), [level data](../data/reef-return.level.json) and the [native gameplay review](../reviews/reef-return/REVIEW.md). The gallery links the scene under `#reef-return`. The canonical catalog records twelve family uses and retains all 79 existing IDs.
+
+The player liked the earlier Two Shelters puzzle. It is the game served by owner-private Site version 15. That feedback concerns Two Shelters gameplay. The Reef Return arrangement awaits playtest. [Version 15 receipt](../LAST_FERRY_REEF_RETURN_PACKAGE/PUBLICATION_RECEIPT.json)
+
 ## TWO_SHELTERS_PROTOTYPE_01 — independent Practice composition
 
 This pass reuses nine existing catalog families and preserves all 79 IDs: `model.ferry`, `model.rabbit`, `model.beaver`, `model.pier-kit`, `terrain.coast`, `indicator.routes`, `motion.transfer`, `ui.passenger-portraits` and `ui.map-markers`. No model family, species, portrait output, soundtrack, chapter scene or duplicate environment family is added. The independent candidate is reached at `?cove=two-shelters`; the root Journey, its four-cove order, larger-ferry launch and save semantics stay unchanged. Human playtest must decide whether the candidate earns the proposed campaign slot.

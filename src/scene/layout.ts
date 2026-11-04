@@ -21,6 +21,17 @@ export type SceneLayout = {
   };
 };
 const layouts: Record<string, SceneLayout> = {
+  'reef-return': {
+    landmarks: [
+      { kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-8.78, -5.61] },
+      { kind: 'cottage', islandId: 'quay-island', positionXZ: [-0.56, -6.02] },
+    ],
+    islandStyles: { 'lighthouse-island': 'refuge', 'quay-island': 'quay', 'wrack-island': 'working', 'pool-island': 'spit' },
+    stonePiers: ['quay-pier'],
+    centeredWaitingPairs: true,
+    cameraPosition: [0, 34, 24],
+    landscapeCameraPosition: [0, 30, 30],
+  },
   'two-shelters': {
     landmarks: [
       { kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-6.5, -2.1] },

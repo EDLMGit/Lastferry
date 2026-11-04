@@ -1,5 +1,11 @@
 # Last Ferry — Art Direction
 
+## Needle Reef
+
+In Reef Return, the two rock shelves mark the sides of a navigable throat. Leave breathing room around the sailing line. Its pale chevrons need a dark edge over the shallower water and a clear point towards the permitted destination. Their direction can be read in a still frame and confirmed by name in the forecast.
+
+Keep the mixed pair at each shore staggered so their faces separate in portrait and short landscape. The normal Play view centers the working boat and local landing. A wrack log, a stone cairn, shell beds and the lighthouse identify the four shores. [Runtime frames and playtest notes](../reviews/reef-return/REVIEW.md)
+
 ## Two Shelters Practice composition
 
 The independent candidate reuses the original four-space ferry at its accepted proportions, two existing brown beaver instances (Hazel and Bracken) and cream rabbit Mica. Its compact diamond of places groups a low cottage/timber landing, raised stone refuge with the existing bell landmark, sparse reed shore and home lighthouse. The deep return bends west of Low Landing; the pale shallow approaches stay east and retain deeper turning pockets. This is original level geometry, not a painted background or a Wide Berth repair.

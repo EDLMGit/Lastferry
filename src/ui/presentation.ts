@@ -1,11 +1,50 @@
 import { occupiedPierDeadline } from '../game/rescue-facts';
-import { draft, edgeTo, pierAt, preview, type Action, type State } from '../game/rules';
+import { draft, edgeTo, passageFlow, pierAt, preview, type Action, type State } from '../game/rules';
 import { level as baseline, nodeName, passengerName, type Level } from '../levels/level';
 
 const stop = (id: string, l: Level) => nodeName(id, l);
 const verb = (ids: string[], singular: string, plural: string) =>
   ids.length === 1 ? singular : plural;
 const countActions = (n: number) => `${n} action${n === 1 ? '' : 's'}`;
+
+export function currentNotice(s: State, l: Level, edge = l.edges.find((entry) => entry.current)) {
+  if (!edge?.current) return null;
+  const flow = passageFlow(edge, s.tideLevel);
+  if (!flow) return null;
+  const name = edge.current.name;
+  const toward = stop(flow.to, l);
+  const direction = `${name} flows from ${stop(flow.from, l)} to ${toward}.`;
+  const reversal = l.rules.tide.rises.find((rise) =>
+    rise.afterTurn > s.turn && passageFlow(edge, rise.level)?.from !== flow.from);
+  const following = reversal && passageFlow(edge, reversal.level);
+  const remaining = reversal ? reversal.afterTurn - s.turn : null;
+  const next = following && remaining !== null
+    ? `After ${remaining === 1 ? 'your next action' : countActions(remaining)}, it turns toward ${stop(following.to, l)}.`
+    : 'It stays this way.';
+  return {
+    flow,
+    direction,
+    next,
+    compact: `${name} to ${toward}${remaining === null ? ' only' : ` · turns in ${countActions(remaining)}`}`,
+    underway: `${name} to ${toward}${remaining === 1 ? ' · turns on arrival' : ''}`,
+    boundary: remaining === 1 && following ? `Then ${name} turns toward ${stop(following.to, l)}.` : '',
+  };
+}
+
+function cutoffCopy(s: State, l: Level, loss: Extract<State['lossReason'], { code: 'RETURN_CUT_OFF' }>, before?: State) {
+  const edge = l.edges.find((entry) => entry.id === loss.edgeId)!;
+  const home = l.piers.find((p) => p.id === l.objective.deliveryPierId)!.nodeId;
+  const cause = passageFlow(edge, s.tideLevel)?.to === home
+    ? 'The ferry can only cross back for them after the homeward current ends.'
+    : before && passageFlow(edge, before.tideLevel)?.to === home
+      ? `After this action, ${edge.current!.name} will flow away from ${stop(home, l)} for the rest of the crossing.`
+      : `${edge.current!.name} flows away from ${stop(home, l)} and will not turn again.`;
+  return {
+    headline: `${passengerList(loss.passengerIds, l)} can no longer reach ${stop(home, l)}.`,
+    warning: `This action will cut ${passengerList(loss.passengerIds, l)} off from ${stop(home, l)}.`,
+    detail: cause,
+  };
+}
 
 export function passengerList(ids: string[], l: Level = baseline): string {
   const names = ids.map((id) => passengerName(id, l));
@@ -46,7 +85,9 @@ export function passageCopy(s: State, to: string, l: Level): string {
   if (!edge) return 'No direct passage. Sail to an adjacent stop first.';
   const need = draft(s, l),
     depth = edge.baseDepth + s.tideLevel;
-  return `Boat needs depth ${need}. Passage has depth ${depth}: ${depth < need ? 'too shallow' : 'enough depth'}.`;
+  const depthText = `Boat needs depth ${need}. Passage has depth ${depth}: ${depth < need ? 'too shallow' : 'enough depth'}.`;
+  const current = currentNotice(s, l, edge);
+  return current ? `${depthText} ${current.direction} ${current.next}` : depthText;
 }
 
 export function actionCostCopy(l: Level): string {
@@ -88,8 +129,12 @@ export function statusCopy(
   l: Level,
 ): { headline: string; detail: string; urgent: boolean } {
   if (s.status === 'lost') {
-    const loss = s.lossReason!,
-      pier = l.piers.find((p) => p.id === loss.pierId)!;
+    const loss = s.lossReason!;
+    if (loss.code === 'RETURN_CUT_OFF') {
+      const cutoff = cutoffCopy(s, l, loss);
+      return { headline: cutoff.headline, detail: `${cutoff.detail} Undo an earlier action, or restart.`, urgent: true };
+    }
+    const pier = l.piers.find((p) => p.id === loss.pierId)!;
     return {
       headline: `${stop(pier.nodeId, l)} flooded with ${passengerList(loss.passengerIds, l)} still waiting.`,
       detail: 'Undo earlier moves, or restart to try a different plan.',
@@ -133,11 +178,12 @@ export function statusCopy(
   };
 }
 
-export function forecastCopy(s: State, l: Level): { headline: string; detail: string } {
+export function forecastCopy(s: State, l: Level) {
   const next = l.rules.tide.rises.find((r) => r.afterTurn > s.turn),
     futureTide = next?.level ?? s.tideLevel;
   return {
     headline: tideCopy(s, l),
+    current: currentNotice(s, l),
     detail: l.piers
       .map((p) => {
         const ids = s.waitingByPier[p.id] ?? [],
@@ -164,9 +210,11 @@ export function previewCopy(
     summary = `${actionLabel(s, a, l)} · ${countActions(l.rules.actionCost)}.`;
   if (proposed.error) {
     const edge = a.type === 'move' ? edgeTo(s, a.to, l) : undefined,
+      flow = edge && passageFlow(edge, s.tideLevel),
       plainMoveError =
         a.type === 'move' &&
         s.status === 'playing' &&
+        (!flow || flow.from === s.boatNodeId) &&
         (!edge || edge.baseDepth + s.tideLevel < draft(s, l));
     return {
       summary,
@@ -183,8 +231,12 @@ export function previewCopy(
         : `Boat needs depth ${draft(n, l)}.`;
   let consequence: string;
   if (n.status === 'lost') {
-    const loss = n.lossReason!,
-      flooded = l.piers.find((p) => p.id === loss.pierId)!;
+    const loss = n.lossReason!;
+    if (loss.code === 'RETURN_CUT_OFF') {
+      const cutoff = cutoffCopy(n, l, loss, s);
+      return { summary, requirement, error: null, consequence: `${cutoff.warning} ${cutoff.detail}` };
+    }
+    const flooded = l.piers.find((p) => p.id === loss.pierId)!;
     const order =
       a.type === 'board'
         ? `${passengerList(a.passengerIds, l)} ${verb(a.passengerIds, 'boards', 'board')}${rise ? ', then the tide rises' : ''}. `
@@ -226,6 +278,10 @@ export function previewCopy(
       const edge = edgeTo(n, blocked.id, l)!;
       consequence += ` Passage to ${stop(blocked.id, l)} has depth ${edge.baseDepth + n.tideLevel}: too shallow.`;
     }
+  }
+  if (rise && n.status === 'playing') {
+    const boundary = currentNotice(s, l)?.boundary;
+    if (boundary) consequence += ` ${boundary}`;
   }
   return { summary, consequence, requirement, error: null };
 }
