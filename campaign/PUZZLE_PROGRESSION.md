@@ -1,5 +1,11 @@
 # Puzzle progression — selected campaign direction
 
+## Active correction — 4 November 2026
+
+Follow [EXISTING_COVES_REPAIR_01](../NEXT_TASK_EXISTING_COVES_REPAIR.md). The user rejects Wide Berth and Reef Return's current looks/difficulty and directs us to **fix both existing IDs**, with Wide first and a shared cute six-space ferry/dock redesign. Stop adding levels or successor Practice entries. Use the current mechanic already implemented in Reef Return to repair Wide now.
+
+Preserve current Journey IDs/order, save history and accepted earlier puzzles/Two Shelters; do not freeze rejected level data or geometry. The older independent-successor, larger-hull preservation, mandatory C4 replacement and C7/C8-only current-teaching constraints are superseded for this repair. Twelve demanding, readable coves remain the target; their final ordering is provisional. The following roadmap records earlier planning, not an instruction to defer the user's requested fix. No new cove, campaign reorder or automatic deployment is part of this task.
+
 **4 November 2026.** Two Shelters received positive player feedback and is published as private Site version 15. Reef Return tests the six-space ferry, temporary staging and one tide-dependent return passage in independent Practice. Wide Berth still occupies the fourth Journey slot. Reef Return and the proposed twelve-cove sequence await playtest and separate campaign decisions. [Reef Return review](../reviews/reef-return/REVIEW.md)
 
 Previous implementation update — `TWO_SHELTERS_PROTOTYPE_01`: one independent Practice candidate is available at `?cove=two-shelters`. The original four-space ferry starts at Low Landing carrying Hazel (2) and Bracken (2); Mica (1) waits at Reed Pier. Tides rise after actions 4 and 9. Low Landing floods at the second rise; High Refuge remains safe. Both staging choices win, but low staging requires taking Mica home before retrieving both larger neighbors. Greedy mixed retrieval works from High Refuge and loses from Low Landing. Actual production-rule witnesses and alternatives are in [DESIGN](../reviews/two-shelters-prototype/DESIGN.md). The subsequent human gameplay feedback was positive. Campaign placement remains open. The current Journey, launch, strict saves and five earlier level contracts remain unchanged; no migration or deployment.

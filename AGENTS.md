@@ -2,7 +2,7 @@
 
 ## Objective
 
-Build the current task in `FIRST_TASK.md`: one polished, playable 3D tutorial cove for a finite ferry puzzle story. The broader game direction is in `docs/PRODUCT_BRIEF.md`. Work independently through the stated milestone, including routine fixes and verification. Update `STATUS.md` with observed progress and material decisions.
+Implement the current root task in `NEXT_TASK_EXISTING_COVES_REPAIR.md` (`EXISTING_COVES_REPAIR_01`). The latest user direction is to stop adding levels and repair existing Wide Berth and Reef Return, including the shared large ferry and docks. Read the active section of `docs/PROJECT_STATE.md`; historical `FIRST_TASK.md` and older campaign/task packages do not override the current scope. Work independently through this task, including routine fixes and verification, and update `STATUS.md` with observed progress and material decisions.
 
 ## Read and preserve the project decisions
 
@@ -38,4 +38,4 @@ Prefer actionable findings with reproduction and consequences. Separate verified
 
 ## Completion
 
-Complete the M1 acceptance criteria in `FIRST_TASK.md`, maintain `STATUS.md`, and prepare a review record. Stop at the end of M1 with a clear result and any remaining gaps. Future chapters, progression systems, publishing, and a large asset catalog are later work.
+Complete the current named task, maintain `STATUS.md` and the active project state, and prepare its focused review evidence. Keep PR #1 draft and GitHub `main` unchanged. Do not add new levels or automatically deploy this repair. Preserve earlier milestone records as history.
