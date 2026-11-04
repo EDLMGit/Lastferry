@@ -199,13 +199,13 @@ test('Wide Berth full-six pickup and staged subset retain native controls and bo
   page.on('pageerror', (error) => errors.push(error.message));
   await ready(page, 'wide-berth');
   const prefix = wideWitnesses.witnesses
-    .find((witness) => witness.id === 'stage-sheep-light-return')!
-    .actions.slice(0, 4);
+    .find((witness) => witness.id === 'light-through-beacon')!
+    .actions.slice(0, 2);
   for (const action of prefix)
     await act(page, action.type === 'move' ? `map-${action.to}` : action.type, true);
   const full = await state(page);
   expect(full).toMatchObject({
-    turn: 4,
+    turn: 2,
     tideLevel: 0,
     aboard: ['alder', 'clover', 'poppy', 'wren'],
     boatNodeId: 'high-quay',
@@ -223,7 +223,7 @@ test('Wide Berth full-six pickup and staged subset retain native controls and bo
   await activate(page, 'commit', true);
   await idle(page);
   expect(await state(page)).toMatchObject({
-    turn: 5,
+    turn: 3,
     aboard: ['poppy', 'wren'],
     status: 'playing',
   });

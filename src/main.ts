@@ -1275,8 +1275,11 @@ function renderDialog() {
     };
   } else if (mode === 'forecast') {
     const f = forecastCopy(s, level);
+    const tideTable = f.schedule.length
+      ? '<ol class="current-schedule">' + f.schedule.map(row => `<li><strong>After action ${row.turn}</strong> · ${row.direction} · depth ${row.depth}.${row.floods.length ? ' Flooding at ' + row.floods.join(' and ') + '.' : ''}</li>`).join('') + '</ol>'
+      : '';
     $('dialog-content').innerHTML =
-      `${header(f.current ? 'Reef and tide forecast' : 'Tide and pier forecast', 'Inspection · no action spent')}<div class="dialog-body forecast-detail"><strong>${f.headline}</strong>${f.current ? `<p>${f.current.direction} ${f.current.next} Sail with the current. Your action finishes before the tide changes.</p>` : ''}<p>${f.detail}</p><p>Each accepted action advances the tide schedule. Thinking and inspection do not.</p></div>`;
+      `${header(f.current ? 'Reef and tide forecast' : 'Tide and pier forecast', 'Inspection · no action spent')}<div class="dialog-body forecast-detail"><strong>${f.headline}</strong>${f.current ? `<p>${f.current.direction} ${f.current.next}</p>${tideTable}<p>Sail with the current. Your action finishes before the tide changes.</p>` : ''}<p>${f.detail}</p><p>Each accepted action advances the tide schedule. Thinking and inspection do not.</p></div>`;
     world.setForecast(
       true,
       level.rules.tide.rises.find((r) => r.afterTurn > s.turn)?.level ?? s.tideLevel,
@@ -1344,7 +1347,12 @@ function renderDialog() {
       won = s.status === 'won',
       next = won && experiment;
     dialog.dataset.outcome = won ? 'won' : 'lost';
-    const lossTitle = s.lossReason?.code === 'RETURN_CUT_OFF' ? 'The way home is cut off.' : 'A turn too late.';
+    const lossTitle = s.lossReason ? {
+      PASSENGER_STRANDED: 'A turn too late.',
+      RETURN_CUT_OFF: 'The way home is cut off.',
+      RETURN_CAPACITY: 'Too few homeward trips.',
+      RETURN_DEPTH: 'No way to lighten the boat.',
+    }[s.lossReason.code] : '';
     $('dialog-content').innerHTML =
       `${header(won ? (isBellwater ? 'Bellwater is safe.' : 'Everyone home.') : lossTitle)}<div class="dialog-body ending ${won ? '' : 'loss'}"><p>${won ? `${level.objective.requiredPassengerIds.length} passengers safe at Harbor · ${s.turn} actions.` : f.headline}</p>${won ? '' : `<p>${f.detail}</p>`}</div><footer class="dialog-footer terminal-actions">${won ? `<button id="${next ? 'next-cove' : 'choose-cove'}">${next ? 'Next cove' : 'Choose a cove'}</button><button id="terminal-settings">Settings</button>` : ''}<button id="terminal-undo">↶ Undo last action</button><button id="terminal-restart">Restart</button></footer>`;
     if (next)
@@ -1568,7 +1576,7 @@ function renderMap() {
           remote: ['nonadjacent', '◇', 'no direct passage'],
           'too-shallow': ['too-shallow', '╱', 'adjacent, too shallow'],
           'against-current': ['against-current', '×', 'adjacent, against the current'],
-          loss: ['available', '!', level.id === 'reef-return' ? 'adjacent, ' + facts.consequence : 'adjacent, flood warning'],
+          loss: ['available', '!', 'adjacent, ' + facts.consequence],
           safe: ['available', '', 'adjacent passage available'],
         }[departure && facts.wouldLose ? 'safe' : facts.status];
         return `<div id="stop-${n.id}" class="map-stop" data-adjacent="${facts.relation === 'adjacent'}"><button id="map-${n.id}" class="map-target" data-status="${status}" data-risk="${!departure && facts.wouldLose ? 'loss' : 'safe'}" data-destination="${n.id}" aria-expanded="${locationSelection === n.id}" aria-controls="local-context" ${facts.current ? 'aria-current="location"' : ''} aria-label="Select ${facts.name}; ${description}${facts.home ? '; Home, delivery destination' : ''}" title="${description}" ${session.busy || s.status !== 'playing' ? 'disabled' : ''}><span class="map-hit"><span class="map-symbol" aria-hidden="true">${symbol}</span></span><span class="map-name"><b class="cove-name cove-surface cove-surface--compact">${facts.home ? iconMarkup('harbor-home') : ''}${facts.name}${facts.home ? '<span class="map-home cove-objective"> · Home</span>' : ''}</b></span></button></div>`;
@@ -1772,12 +1780,13 @@ function render() {
   const forecast = forecastCopy(s, level);
   const current = s.status === 'playing' ? forecast.current : null;
   const headline = departure && current ? current.underway : facts.urgent ? facts.headline : current?.compact ?? forecast.headline;
+  const showDeadline = facts.urgent && !departure;
   $('status-toggle').innerHTML =
-    `<span class="status-symbol" aria-hidden="true">${facts.urgent ? '!' : '≈'}</span><span><strong id="status-headline">${headline}</strong>${facts.urgent && current ? `<span class="reef-outlook">${current.compact}</span>` : ''}</span>`;
+    `<span class="status-symbol" aria-hidden="true">${showDeadline ? '!' : '≈'}</span><span><strong id="status-headline">${headline}</strong>${showDeadline && current ? `<span class="reef-outlook">${current.compact}</span>` : ''}</span>`;
   $('status-toggle').setAttribute('aria-label', current
     ? departure ? `${current.direction} ${current.underway}.` : `${facts.urgent ? facts.headline + ' ' : ''}${current.direction} ${current.next} Open reef and tide forecast.`
     : 'Open tide and pier forecast');
-  $('status-toggle').classList.toggle('urgent', facts.urgent);
+  $('status-toggle').classList.toggle('urgent', showDeadline);
   $('status-toggle').hidden = s.status === 'won';
   $('selection-hint').hidden = s.status === 'won' || !!locationSelection;
   $('selection-leader').hidden = s.status === 'won';
@@ -2146,8 +2155,15 @@ function positionMap() {
   if (locationSelection && !$('local-context').hidden) {
     const local = $('local-context'),
       marker = markers.find((m) => m.id === locationSelection)!;
-    local.style.width = Math.min(locationDetails ? 330 : factsWidth(), bounds.right - bounds.left) + 'px';
-    local.style.setProperty('--local-max-height', Math.max(80, bounds.bottom - bounds.top) + 'px');
+    const cardBounds = { ...bounds };
+    if (locationDetails && level.rules.capacity === 6 && canvas.width > canvas.height && canvas.height <= 460) {
+      const middle = (bounds.top + bounds.bottom) / 2;
+      const top = Math.max(bounds.top, ...chrome.filter(r => r.bottom < middle).map(r => r.bottom + 8));
+      const bottom = Math.min(bounds.bottom, ...chrome.filter(r => r.top > middle).map(r => r.top - 8));
+      if (bottom - top >= 100) Object.assign(cardBounds, { top, bottom });
+    }
+    local.style.width = Math.min(locationDetails ? 330 : factsWidth(), cardBounds.right - cardBounds.left) + 'px';
+    local.style.setProperty('--local-max-height', Math.max(80, cardBounds.bottom - cardBounds.top) + 'px');
     protectedBounds = [...figures, ...chrome];
     const avoid = [
       ...figures, ...chrome,
@@ -2155,11 +2171,17 @@ function positionMap() {
       ...markers.map((m) => m.bounds),
       ...(selectionOrigin ? [{ left: selectionOrigin.x - stage.left - 12, right: selectionOrigin.x - stage.left + 12, top: selectionOrigin.y - stage.top - 12, bottom: selectionOrigin.y - stage.top + 12 }] : []),
     ];
-    const nearby = placeActionCard(local.offsetWidth, local.offsetHeight, bounds, marker.bounds, {
+    const nearby = placeActionCard(local.offsetWidth, local.offsetHeight, cardBounds, marker.bounds, {
       portrait: canvas.width < canvas.height,
       avoid,
     });
-    const choice = placeLocalCard(local.offsetWidth, local.offsetHeight, bounds, avoid, [[nearby.left, nearby.top]], [marker.x - local.offsetWidth / 2, marker.y]) ?? nearby;
+    const preferred: [number, number][] = [[nearby.left, nearby.top]];
+    const anchor: [number, number] = [marker.x - local.offsetWidth / 2, marker.y];
+    const clear = placeLocalCard(local.offsetWidth, local.offsetHeight, cardBounds, avoid, preferred, anchor);
+    const clearOfControls = !clear && level.rules.capacity === 6
+      ? placeLocalCard(local.offsetWidth, local.offsetHeight, cardBounds, chrome, preferred, anchor)
+      : null;
+    const choice = clear ?? clearOfControls ?? nearby;
     cardPlacement = choice;
     placed.push(choice);
     local.style.left = choice.left + 'px';
@@ -2217,6 +2239,7 @@ function positionMap() {
     const landmarks = level.rules.capacity === 6 ? frame.places.map(atLocal) : [atLocal(frame.lighthouse), ...(frame.bell ? [atLocal(frame.bell)] : [])];
     const avoidSets = [[...avoid, ...landmarks], avoid];
     const layouts = level.rules.capacity === 6 && dock.children.length > 1 ? ['row', 'column'] : ['row'];
+    const currentMarker = level.rules.capacity === 6 ? markers.find(m => m.id === session.state.boatNodeId) : null;
     let nearby: ReturnType<typeof placeActionCard> | null = null;
     let clear: Rectangle | null = null;
     for (const obstacles of avoidSets) {
@@ -2230,9 +2253,16 @@ function positionMap() {
           bounds,
           obstacles,
           [[nearby.left, nearby.top]],
-          [boat.left, boat.top],
+          currentMarker
+            ? [currentMarker.x < (bounds.left + bounds.right) / 2 ? currentMarker.bounds.right + 8 : currentMarker.bounds.left - dock.offsetWidth - 8, currentMarker.y - dock.offsetHeight / 2]
+            : [boat.left, boat.top],
           closeLabels ? 2 : 8,
         );
+        if (clear && level.rules.capacity === 6 && obstacles !== avoid) {
+          const gap = Math.hypot(Math.max(0, boat.left - clear.right, clear.left - boat.right),
+            Math.max(0, boat.top - clear.bottom, clear.top - boat.bottom));
+          if (gap > 56) clear = null;
+        }
         if (clear) break;
       }
       if (clear) break;

@@ -1,5 +1,20 @@
 # Puzzle progression — selected campaign direction
+## Existing coves under playtest · 4 November 2026
+The prepared ferry's working variant serves Wide and Reef. It supports the same rule bands for every legal subset while preserving individual animal scale. Six-space seats, docks, launch art and gallery now depict the repaired family.
 
+The former Wide puzzle started empty at Harbor. Its 13- and 14-action deliveries and its safe-quay waiting loop were valid under the rejected contract. The first Reef puzzle had a three-edge layout and two nine-action witnesses with the same route. Those records explain the 4 November correction. The current decision and witness sets are listed above.
+The four-cove Journey runs Holding → Bellwater → Driftwood → Wide. First Crossing, Two Shelters and Reef Return are also available through Practice. Two Shelters received positive player feedback and is live on private Site version 15. The earlier six-space puzzles and their presentation were rejected. Both existing coves have now been reworked at their original IDs. The next decision is whether the repaired puzzles and shared ferry satisfy the player. [Current task](../NEXT_TASK_EXISTING_COVES_REPAIR.md) · [Project state](../docs/PROJECT_STATE.md)
+
+| Existing encounter | Planning decision | Why waiting or shuttling cannot remove it |
+| --- | --- | --- |
+| **Wide Berth**, Journey chapter 4 and Practice | Split eight spaces across two homeward opportunities. Decide which two spaces go first and whether to approach the second landing inshore or by Outer Buoy. | High Quay is safe. Beacon Reef reverses and the final trip holds six. Outer Buoy stays on the offshore side. |
+| **Reef Return**, Practice | Decide at the first unloading whether the boat can gather both rabbits through the shoal or must take a heavier group home first, then approach the remaining pickup from Harbor. | The four neighbors can fit on one boat. That loaded boat cannot use the shallow alternative at high tide, and the outer landings flood. A split delivery uses the alternate route for a light return. |
+
+These puzzles share the larger ferry, existing movement rules and visible tide schedule. Wide asks how many spaces to reserve for each crossing. Reef asks which landing to approach from which side *after* an earlier loading choice. Both decisions use automatic seats and full in-session Undo. The production witnesses and alternative-plan checks belong in the developer reviews. [Wide decision](../reviews/existing-coves-repair/WIDE_DESIGN.md) · [Reef decision](../reviews/existing-coves-repair/REEF_DESIGN.md)
+
+## Roadmap history and proposed twelve-cove arc
+
+The target is a calm, finite campaign with demanding choices. The following roadmap predates this repair. Future locations, the eventual order and any launch relocation still require separate design and playtesting. The current Journey does launch the larger boat after Driftwood and does teach the current in Wide.
 ## Active correction — 4 November 2026
 
 Follow [EXISTING_COVES_REPAIR_01](../NEXT_TASK_EXISTING_COVES_REPAIR.md). The user rejects Wide Berth and Reef Return's current looks/difficulty and directs us to **fix both existing IDs**, with Wide first and a shared cute six-space ferry/dock redesign. Stop adding levels or successor Practice entries. Use the current mechanic already implemented in Reef Return to repair Wide now.
@@ -77,7 +92,7 @@ Reef Return authors this passage in its level data. The omitted waypoints descri
   "current": {
     "name": "Needle Reef",
     "phases": [
-      { "tideLevel": 0, "from": "quay", "to": "harbor" },
+      { "tideLevel": 0, "from": "harbor", "to": "quay" },
       { "tideLevel": 1, "from": "quay", "to": "harbor" },
       { "tideLevel": 2, "from": "harbor", "to": "quay" }
     ]

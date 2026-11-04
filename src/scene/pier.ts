@@ -68,95 +68,56 @@ export function updateShelterGangway(group: Group, bridge: Vector3, gate: Vector
   group.updateMatrixWorld(true);
 }
 
+function landingWidth(p: Level['piers'][number], distanceFromShore: number) {
+  return p.width * (1 + 0.36 * (1 - distanceFromShore) ** 2 - 0.1 * distanceFromShore);
+}
+
 function compactPier(p: Level['piers'][number], stone: boolean) {
   const group = new Group();
   group.name = `pier-${p.id}`;
-  const [x, z] = p.positionXZ,
-    end = p.landAnchorXZ[1],
-    y = p.elevation * 0.18 - 0.06,
-    run = Math.abs(end - z),
-    center = (z + end) / 2,
-    stemWidth = 1.8,
-    headDepth = 0.45;
-  if (stone) {
-    box(group, '#879b93', [stemWidth, 0.28, run], [x, y - 0.11, center], 0.04);
-    box(group, '#879b93', [p.width, 0.28, headDepth], [x, y - 0.11, z - headDepth / 2], 0.04);
-    for (const side of [-1, 1])
-      for (let row = 0; row < 3; row++)
-        box(
-          group,
-          row % 2 ? '#a5b3a4' : '#96a79d',
-          [stemWidth / 2 - 0.012, 0.05, run / 3 - 0.012],
-          [x + (side * stemWidth) / 4, y + 0.025, end + (run * (row + 0.5)) / 3],
-          0.014,
-        );
-    for (const side of [-1, 1])
-      box(
-        group,
-        '#a5b3a4',
-        [(p.width - stemWidth) / 2 - 0.012, 0.05, headDepth - 0.012],
-        [x + (side * (p.width + stemWidth)) / 4, y + 0.025, z - headDepth / 2],
-        0.014,
-      );
-  } else {
-    const count = Math.ceil(run / 0.16),
-      pitch = run / count;
-    box(group, '#816446', [stemWidth - 0.12, 0.08, run], [x, y - 0.08, center], 0.015);
-    box(
-      group,
-      '#816446',
-      [p.width - 0.08, 0.08, headDepth],
-      [x, y - 0.08, z - headDepth / 2],
-      0.015,
-    );
-    for (let row = 0; row < count; row++)
-      box(
-        group,
-        row % 2 ? '#c6a170' : '#bd935d',
-        [stemWidth, 0.09, pitch - 0.012],
-        [x, y, end + pitch * (row + 0.5)],
-        0.009,
-      );
-    for (const side of [-1, 1])
-      for (let row = 0; row < 3; row++)
-        box(
-          group,
-          row % 2 ? '#c6a170' : '#bd935d',
-          [(p.width - stemWidth) / 2, 0.09, headDepth / 3 - 0.012],
-          [
-            x + (side * (p.width + stemWidth)) / 4,
-            y,
-            z - headDepth + ((row + 0.5) * headDepth) / 3,
-          ],
-          0.009,
-        );
-    for (const [px, pz] of [
-      [x - p.width / 2 + 0.04, z - 0.04],
-      [x + p.width / 2 - 0.04, z - 0.04],
-      [x - stemWidth / 2 + 0.04, end + 0.04],
-      [x + stemWidth / 2 - 0.04, end + 0.04],
-    ]) {
-      const front = pz > center;
-      const pile = cylinder(
-        group,
-        '#79644a',
-        0.065,
-        0.07,
-        front ? 0.5 : 0.7,
-        [px, y - (front ? 0.21 : 0.24), pz],
-        9,
-      );
-      pile.userData.pierPile = true;
-      cylinder(
-        group,
-        '#dbc799',
-        0.075,
-        0.075,
-        front ? 0.025 : 0.055,
-        [px, y + (front ? 0.03 : 0.13), pz],
-        9,
-      );
+  const [x, tip] = p.positionXZ;
+  const root = p.landAnchorXZ[1];
+  const y = p.elevation * 0.18 + 0.011;
+  const run = tip - root;
+  const low = p.elevation === 1;
+  const rows = Math.max(5, Math.ceil(run / (stone ? 0.25 : 0.18)));
+  const pitch = run / rows;
+  for (let row = 0; row < rows; row++) {
+    const along = (row + 0.5) / rows;
+    const width = landingWidth(p, along);
+    const z = root + along * run;
+    if (stone && along < 0.72) {
+      const seam = row % 2 ? 0.12 : -0.14;
+      for (const side of [-1, 1]) {
+        const left = side < 0 ? -width / 2 : seam;
+        const right = side < 0 ? seam : width / 2;
+        box(group, row % 2 ? '#a3afa0' : '#879d92',
+          [right - left - 0.012, 0.30, pitch - 0.008], [x + (right + left)/2, y - 0.15, z], 0.035);
+      }
+    } else {
+      const timber = p.isDeliveryPier ? ['#bc8c55', '#c79b65'] : low ? ['#ac895b','#b79469'] : ['#bd915f','#c69d68'];
+      box(group, timber[row % 2], [width, 0.085, pitch - 0.009], [x, y - 0.0425, z], 0.014);
     }
+  }
+  for (const side of [-1, 1]) {
+    box(group, stone ? '#788b81' : '#795e42', [0.12, 0.13, run], [x + side*p.width*0.33, y-0.13, (tip+root)/2], 0.018);
+    for (const along of [0.18, 0.84]) {
+      const z = root + along * run;
+      const px = x + side * (landingWidth(p, along) / 2 - 0.065);
+      const pile = cylinder(group, '#766447', 0.07, 0.085, 0.95, [px, y - 0.43, z], 9);
+      pile.userData.pierPile = true;
+      cylinder(group, '#dac59d', 0.084, 0.081, 0.035, [px, y+0.061, z], 9);
+    }
+    if (!stone) {
+      const brace = box(group, '#8d7553', [0.066, 0.076, run*0.53], [x+side*(p.width*0.44), y-0.24, root+0.52*run], 0.01);
+      brace.rotation.x = side*0.22;
+    }
+  }
+  if (p.isDeliveryPier) {
+    const px = x - landingWidth(p, 0.18)*0.5;
+    cylinder(group, '#735e43', 0.047, 0.058, 0.35, [px, y+0.18, root+0.17], 8);
+    box(group, '#eac783', [0.14, 0.16, 0.14], [px,y+0.40,root+0.17], 0.026);
+    box(group, '#59716b', [0.17, 0.045, 0.17], [px,y+0.498,root+0.17], 0.014);
   }
   return group;
 }
@@ -164,13 +125,8 @@ function compactPier(p: Level['piers'][number], stone: boolean) {
 const topOutlines = new WeakMap<Level['world']['islands'][number], number[][]>();
 export function isWalkableAt(level: Level, pier: Level['piers'][number], x: number, z: number) {
   const [px, pz] = pier.positionXZ;
-  if (Math.abs(x - px) <= pier.width / 2 && z >= pz - 0.45 && z <= pz) return true;
-  if (
-    Math.abs(x - px) <= 0.9 &&
-    z >= Math.min(pz, pier.landAnchorXZ[1]) &&
-    z <= Math.max(pz, pier.landAnchorXZ[1])
-  )
-    return true;
+  const root = pier.landAnchorXZ[1];
+  if (z >= root && z <= pz && Math.abs(x - px) <= landingWidth(pier, (z-root)/(pz-root))/2) return true;
   const island = level.world.islands.find((island) => island.id === pier.islandId)!;
   let outline = topOutlines.get(island);
   if (!outline) {

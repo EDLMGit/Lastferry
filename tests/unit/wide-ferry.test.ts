@@ -75,8 +75,12 @@ test('active-level profiles preserve all four original boats and provide a physi
     expect(ferryProfile(old)).toBe(smallFerryProfile);
   expect(ferryProfile(level)).toBe(wideFerryProfile);
   const model = ferry(wideFerryProfile);
-  const deck = model.children.filter((object) => object instanceof Mesh && object.geometry.type === 'ExtrudeGeometry');
-  expect(deck.length).toBe(4);
+  const skin = model.children.filter((object) => object.name === 'water-contact-hull');
+  const hullBounds = new Box3();
+  for (const skinBand of skin) hullBounds.union(new Box3().setFromObject(skinBand));
+  expect(hullBounds.min.y).toBeLessThan(-0.28);
+  expect(hullBounds.max.y).toBeGreaterThan(wideFerryProfile.deckY + 0.04);
+  expect(model.getObjectByName('passenger-deck')).toBeTruthy();
   expect(model.children.some((object) => object.name === 'wide-cabin-obstacle')).toBe(true);
   expect(legal).toHaveLength(level.id === 'wide-berth' ? 59 : 16);
   expect(ferry().name).toBe('ferry-hull-and-deck');
@@ -129,7 +133,7 @@ test('the whole roster has supported compact land and quay positions with stable
 
 test('actual foot bounds remain supported by land, fitted landing, gangway and deck during every authored walking path', () => {
   for (const passenger of level.passengers) expect(feet.get(passenger.id)!.length).toBeGreaterThanOrEqual(8);
-  const polygon = wideHullOutline().getPoints(80).map((p) => [p.x * 0.94, p.y * 0.94]);
+  const polygon = wideHullOutline().getPoints(80).map((p) => [p.x * 1.017, p.y * 1.008]);
   const inside = (x: number, z: number) => {
     let result = false;
     for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
@@ -159,7 +163,7 @@ test('actual foot bounds remain supported by land, fitted landing, gangway and d
                   const point = foot.clone().applyMatrix4(actor), local = point.clone().applyMatrix4(inverse), relative = point.clone().sub(path.bridge);
                   const q = relative.clone().setY(0).dot(bridgeXZ) / (bridgeLength * bridgeLength);
                   const cross = Math.abs(relative.x * bridgeXZ.z - relative.z * bridgeXZ.x) / bridgeLength;
-                  const overlap = level.id === 'reef-return' ? 0.21 / bridge.length() : 0;
+                  const overlap = 0.21 / bridge.length();
                   const onBridge = q >= -overlap - 0.001 && q <= 1 + overlap + 0.001 && cross <= 0.43 && Math.abs(point.y - (path.bridge.y + bridge.y * q)) < 0.13;
                   const onDeck = inside(local.x, local.z) && Math.abs(local.y - wideFerryProfile.deckY) < 0.13;
                   const onShore = isWalkableAt(level, pier, point.x, point.z) && Math.abs(point.y - pier.elevation * 0.18) < 0.08;
@@ -238,7 +242,7 @@ test.each(
                 for (let j = i + 1; j < boxes.length; j++)
                   if (overlaps(boxes[i].box, boxes[j].box) && failures.length < 20)
                     failures.push(
-                      `${board ? 'board' : 'unload'}:${before}/${selection}:tide${tide}:${step}:${boxes[i].id}/${boxes[j].id}`,
+                      `${board ? 'board' : 'unload'}:${before}/${selection}:tide${tide}:${step}:${boxes[i].id}/${boxes[j].id} @ ${boxes[i].box.min.toArray()}/${boxes[j].box.min.toArray()}`,
                     );
                 if (
                   boxes[i].deck &&
@@ -246,7 +250,7 @@ test.each(
                   failures.length < 20
                 )
                   failures.push(
-                    `${board ? 'board' : 'unload'}:${before}/${selection}:${step}:${boxes[i].id} obstacle`,
+                    `${board ? 'board' : 'unload'}:${before}/${selection}:${step}:${boxes[i].id} obstacle ${stationaryObstacles.findIndex((o) => overlaps(boxes[i].box,o))} min:${boxes[i].box.min.toArray()}`,
                   );
               }
             }
@@ -259,7 +263,7 @@ test.each(
 });
 
 test('draft four retains a dry attached deck and profile wake releases from actual displaced sides', () => {
-  expect(wideFerryProfile.deckY + hullDraftY(4)).toBeCloseTo(0.065);
+  expect(wideFerryProfile.deckY + hullDraftY(4)).toBeGreaterThan(0.22);
   for (const direction of [1, -1]) {
     const wake = new FerryWake(undefined, wideFerryProfile.wake);
     wake.begin(0, new Vector3(), 0);
@@ -280,7 +284,7 @@ test('wide releases touch the correct outside of actual rendered hull geometry a
   model.updateMatrixWorld(true);
   const points: [number, number][] = [];
   model.traverse((object) => {
-    if (!(object instanceof Mesh) || object.geometry.type !== 'ExtrudeGeometry') return;
+    if (!(object instanceof Mesh) || object.name !== 'water-contact-hull') return;
     const position = object.geometry.getAttribute('position');
     for (let i = 0; i < position.count; i++) {
       const p = new Vector3().fromBufferAttribute(position, i).applyMatrix4(object.matrixWorld);

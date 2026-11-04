@@ -16,8 +16,12 @@ import { checkCurrents, reefReturn as level } from '../../src/levels/level';
 
 const all = level.objective.requiredPassengerIds;
 const winning = plans.witnesses[0].actions as Action[];
-const greedy = plans.losingAlternatives[0].actions as Action[];
-const homeFirst = plans.losingAlternatives[1].actions as Action[];
+const split = plans.witnesses[1].actions as Action[];
+const missedWindow = plans.losingAlternatives[0].actions as Action[];
+const missedPickup = plans.losingAlternatives[1].actions as Action[];
+const board = (...passengerIds: string[]): Action => ({ type: 'board', passengerIds });
+const unload = (...passengerIds: string[]): Action => ({ type: 'unload', passengerIds });
+const sail = (to: string): Action => ({ type: 'move', to });
 const homeward: Action = { type: 'move', to: 'harbor' };
 const wait: Action = { type: 'wait' };
 const reef = level.edges.find((edge) => edge.current)!;
@@ -70,14 +74,15 @@ function firstWin(start: State, allowed: (s: State, a: Action) => boolean = () =
   return null;
 }
 
-describe('Reef Return production rules', () => {
-  for (const plan of plans.witnesses)
-    test(`${plan.id} completes a six-space loaded return`, () => {
+describe('Repaired Reef Return production rules', () => {
+  for (const [index, plan] of plans.witnesses.entries())
+    test(`${plan.id} replays every action and restores every snapshot in reverse`, () => {
       const session = replay(plan.actions as Action[]);
-      expect(session.state).toMatchObject({ turn: 9, tideLevel: 2, status: 'won' });
-      expect(session.history[3]).toMatchObject({ tideLevel: 1, boatNodeId: 'quay' });
-      expect(session.history[7].aboard).toHaveLength(4);
-      expect(load(session.history[7], level)).toBe(6);
+      expect(session.state).toMatchObject({
+        turn: index === 0 ? 10 : 11,
+        tideLevel: 2,
+        status: 'won',
+      });
       while (session.history.length) {
         const snapshot = structuredClone(session.history.at(-1));
         expect(session.undo()).toBe(true);
@@ -86,99 +91,129 @@ describe('Reef Return production rules', () => {
       expect(session.state).toEqual(initial(level));
     });
 
-  test('the same boat at Cairn Quay can cross on action eight and faces the opposite flow immediately afterward', () => {
-    const session = replay(winning.slice(0, 7));
-    const s = structuredClone(session.state);
-    expect(passageFlow(reef, s.tideLevel)?.to).toBe('harbor');
-    expect(passageError(s, 'harbor', level)).toBeNull();
-    expect(preview(s, wait, level).state.lossReason?.code).toBe('RETURN_CUT_OFF');
+  test('the full return gathers both rabbits through the inner shoal; the relay delivers five spaces and approaches the other rabbit from Harbor', () => {
+    const gathered = replay(winning.slice(0, 6)).state;
+    expect(gathered.boatNodeId).toBe('pool');
+    expect([...gathered.aboard].sort()).toEqual(['dot', 'flick']);
+    expect([...gathered.waitingByPier['quay-pier']].sort()).toEqual(['birch', 'heather']);
+    const loadAtReef = replay(winning.slice(0, 8)).state;
+    expect(load(loadAtReef, level)).toBe(6);
+    const relay = replay(split.slice(0, 7)).state;
+    expect(relay.boatNodeId).toBe('harbor');
+    expect([...relay.delivered].sort()).toEqual(['birch', 'dot', 'heather']);
+    expect(relay.waitingByPier['pool-pier']).toEqual(['flick']);
+    const lastPickup = replay(split.slice(0, 9)).state;
+    expect(lastPickup).toMatchObject({ boatNodeId: 'pool', tideLevel: 2, aboard: ['flick'] });
+    expect(passageError(lastPickup, 'harbor', level)).toBeNull();
+  });
+
+  test('the deep reef opens after Dot boards, then the loaded boat must commit its last homeward crossing before the second rise', () => {
+    expect(passageFlow(reef, initial(level).tideLevel)?.from).toBe('harbor');
+    const firstRise = replay(winning.slice(0, 3));
+    expect(passageFlow(reef, firstRise.state.tideLevel)?.to).toBe('harbor');
+    expect(firstRise.undo()).toBe(true);
+    expect(passageFlow(reef, firstRise.state.tideLevel)?.to).toBe('quay');
+    const session = replay(missedWindow.slice(0, -1));
+    const before = structuredClone(session.state);
+    expect(passageError(before, 'harbor', level)).toBeNull();
+    expect(preview(before, wait, level).state.lossReason?.code).toBe('RETURN_DEPTH');
     replay([wait], session);
-    expect(session.state.lossReason?.passengerIds).toEqual(all);
-    expect(passageFlow(reef, session.state.tideLevel)?.to).toBe('quay');
+    expect(session.state.lossReason).toEqual({
+      code: 'RETURN_DEPTH',
+      edgeId: reef.id,
+      passengerIds: all,
+      draft: 4,
+    });
     expect(passageError(session.state, 'harbor', level)).toContain(
       'only from Harbor to Cairn Quay',
     );
+    expect(passageError(session.state, 'pool', level)).toContain('depth 3 is below draft 4');
     expect(session.commit(homeward)).toBeNull();
-    expect(session.history).toHaveLength(8);
     expect(session.undo()).toBe(true);
-    expect(session.state).toEqual(s);
-    replay([homeward], session);
-    expect(session.state).toMatchObject({ turn: 8, boatNodeId: 'harbor', status: 'playing' });
-    expect(passageError(session.state, 'quay', level)).toBeNull();
+    expect(session.state).toEqual(before);
+    replay([homeward, ...Array.from({ length: 30 }, () => wait), unload(...all)], session);
+    expect(session.state).toMatchObject({ status: 'won', turn: 40 });
+  });
+
+  test('parking everyone at the quay or prioritizing a delivery over the last pickup has an actual consequence', () => {
+    const parked = replay([...winning.slice(0, 7), unload('dot', 'flick')]);
+    expect([...parked.state.waitingByPier['quay-pier']].sort()).toEqual([...all].sort());
+    expect(firstWin(parked.state)).toBeNull();
+    replay([wait], parked);
+    expect(parked.state.lossReason).toMatchObject({
+      code: 'PASSENGER_STRANDED',
+      pierId: 'quay-pier',
+    });
+    const missed = replay(missedPickup);
+    expect(missed.state.lossReason).toEqual({
+      code: 'PASSENGER_STRANDED',
+      pierId: 'pool-pier',
+      passengerIds: ['flick'],
+    });
+    expect(missed.undo()).toBe(true);
+    expect(replay(split.slice(8), missed).state.status).toBe('won');
+  });
+
+  test('only a permanent lack of a reachable dry landing strands the heavy boat', () => {
+    const shelf = structuredClone(level);
+    shelf.piers.find((p) => p.nodeId === 'wrack')!.elevation = 3;
+    const session = replay(missedWindow, new Session(shelf));
+    expect(session.state).toMatchObject({ status: 'playing', tideLevel: 2, boatNodeId: 'quay' });
+    expect(passageError(session.state, 'pool', shelf)).toContain('depth 3 is below draft 4');
+    const early = ['dot', 'flick'],
+      late = ['heather', 'birch'];
     replay(
-      Array.from({ length: 30 }, () => wait),
+      [
+        sail('wrack'),
+        unload(...late),
+        sail('quay'),
+        sail('pool'),
+        homeward,
+        unload(...early),
+        sail('pool'),
+        sail('quay'),
+        sail('wrack'),
+        board(...late),
+        sail('quay'),
+        sail('pool'),
+        homeward,
+        unload(...late),
+      ],
       session,
     );
-    expect(replay(winning.slice(8), session).state).toMatchObject({ status: 'won', turn: 39 });
+    expect(session.state.status).toBe('won');
   });
 
-  test('greedy loading fits the hull and outgoing route but the six-space return no longer fits the pool', () => {
-    const session = replay(greedy.slice(0, 5));
-    expect(load(session.state, level)).toBe(6);
-    expect(session.state.status).toBe('playing');
-    const back: Action = { type: 'move', to: 'quay' };
-    expect(preview(session.state, back, level).error).toContain('depth 3 is below draft 4');
-    expect(session.commit(back)).toBeNull();
-    expect(firstWin(session.state)).toBeNull();
-    replay(greedy.slice(5), session);
-    expect(session.state).toMatchObject({
-      status: 'lost',
-      turn: 8,
-      lossReason: { code: 'RETURN_CUT_OFF' },
-    });
-    expect(passageError(session.state, 'quay', level)).toBeNull();
-    while (session.state.turn > 2) session.undo();
-    expect(replay(winning.slice(2), session).state.status).toBe('won');
-  });
-
-  test('sailing just the first group home explains the missing second voyage immediately', () => {
-    const session = replay(homeFirst.slice(0, 2));
-    expect(preview(session.state, homeward, level).state.lossReason).toEqual({
-      code: 'RETURN_CUT_OFF',
-      edgeId: reef.id,
-      passengerIds: ['birch', 'dot'],
-    });
-    replay([homeward], session);
-    expect(session.state).toMatchObject({ status: 'lost', boatNodeId: 'harbor', turn: 3 });
-    session.undo();
-    expect(replay(winning.slice(2), session).state.status).toBe('won');
-  });
-
-  test('an actual open deep bypass would keep early delivery viable', () => {
-    const detour = structuredClone(level);
-    detour.edges.push({
-      id: 'open-detour',
-      nodes: ['pool', 'harbor'],
-      bidirectional: true,
-      baseDepth: 4,
-      waypointsXZ: [],
-    });
-    const session = replay(homeFirst, new Session(detour));
-    expect(session.state.status).toBe('playing');
-    const detourRescue: Action[] = [
-      { type: 'unload', passengerIds: ['heather', 'flick'] },
-      { type: 'move', to: 'pool' },
-      { type: 'board', passengerIds: ['birch', 'dot'] },
-      homeward,
-      { type: 'unload', passengerIds: ['birch', 'dot'] },
-    ];
-    expect(replay(detourRescue, session).state.status).toBe('won');
-  });
-
-  test('all legal subsets, routes and waits still require staging Heather and bringing the whole boat home', () => {
+  test('enumerating every legal subset and path rules out collecting without staging, small ferries and bypassing the reef', () => {
     const start = initial(level);
-    expect(firstWin(start)).toBe(9);
+    expect(firstWin(start)).toBe(10);
+    expect(
+      firstWin(start, (s, a) => !(a.type === 'unload' && s.boatNodeId !== 'harbor')),
+    ).toBeNull();
+    expect(
+      firstWin(start, (s, a) => !(a.type === 'move' && a.to === 'harbor' && load(s, level) > 4)),
+    ).toBeNull();
     expect(
       firstWin(
         start,
-        (s, a) =>
-          !(a.type === 'unload' && s.boatNodeId === 'quay' && a.passengerIds.includes('heather')),
+        (s, a) => !(a.type === 'move' && a.to === 'harbor' && s.boatNodeId === 'quay'),
       ),
     ).toBeNull();
     expect(
       firstWin(start, (s, a) => !(a.type === 'move' && a.to === 'harbor' && load(s, level) === 6)),
+    ).toBe(11);
+    const splitOpening = replay(split.slice(0, 4)).state;
+    expect(
+      firstWin(
+        splitOpening,
+        (s, a) =>
+          !(
+            a.type === 'move' &&
+            a.to === 'harbor' &&
+            s.waitingByPier['pool-pier'].includes('flick')
+          ),
+      ),
     ).toBeNull();
-    expect(firstWin(start, (_, a) => a.type !== 'board' || a.passengerIds.length === 1)).toBeNull();
   });
 
   test('a cove with a second current cannot silently blame the first passage for a cutoff', () => {

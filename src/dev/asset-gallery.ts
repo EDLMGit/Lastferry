@@ -99,7 +99,7 @@ root.querySelector('#readability-heading')!.closest('section')!.after(shelterSec
 const reefSection = document.createElement('section');
 reefSection.id = 'reef-return';
 reefSection.className = shelterSection.className;
-reefSection.innerHTML = `<h2>Reef Return</h2><p>The six-space ferry serves four neighbors at Wrack Pier and Shell Pool. Two rocky shelves mark Needle Reef. The pale chevrons point along the passage in its permitted direction, even with Motion reduced.</p><p><a href="/?cove=reef-return">Play Reef Return</a> · ${sourceLink('reviews/reef-return/REVIEW.md', 'Native frames and playtest notes')}</p>`;
+reefSection.innerHTML = `<h2>Reef Return</h2><p>The six-space ferry serves Cairn Quay, Wrack Pier and Shell Pool. Pale chevrons mark Needle Reef’s permitted direction. The inner shoal offers a second approach to Harbor for a lighter boat.</p><p><a href="/?cove=reef-return">Play Reef Return</a> · ${sourceLink('reviews/existing-coves-repair/REVIEW.md', 'Phone views and rescue evidence')}</p>`;
 shelterSection.after(reefSection);
 const failedPortrait = root.querySelector<HTMLImageElement>('#gallery-failed-portrait img')!;
 failedPortrait.dataset.portraitState = 'pending';
@@ -235,7 +235,7 @@ document.querySelector('main')!.append(driftwoodLink);
 const wideSection = document.createElement('section');
 wideSection.id = 'wide-ferry';
 wideSection.className = 'cove-panel cove-surface gallery-panel';
-wideSection.innerHTML = `<h2>Six-space ferry · actual production model</h2><p>Developer specimen, not gameplay evidence. The corrected compact yellow hull and substantial red cabin use the actual production profile. One full-size sheep and four rabbits occupy six spaces on fixed identity anchors; other legal subsets use these same sources. Real shore support, short gangways and both berth headings are reviewed in the playable cove. Original coves retain the original smaller ferry.</p><canvas id="gallery-wide-ferry" aria-label="Production larger yellow ferry with red cabin and five full-size neighbors" style="width:100%;height:320px;display:block"></canvas><p><a href="/?cove=wide-berth">Play actual Wide Berth</a> · <a href="/">Root journey and earned launch</a></p>`;
+wideSection.innerHTML = `<h2>The six-space harbor ferry</h2><p>This gallery view uses the same rounded hull, raised bow and red wheelhouse as Wide Berth and Reef Return. One sheep and four rabbits occupy its six spaces. In play, passengers use the side gate and a short brow between the deck and the landing.</p><canvas id="gallery-wide-ferry" aria-label="Six-space yellow ferry, red wheelhouse and five neighbors" style="width:100%;height:320px;display:block"></canvas><p><a href="/?cove=wide-berth">Wide Berth</a> · <a href="/?cove=reef-return">Reef Return</a> · ${sourceLink('reviews/existing-coves-repair/REVIEW.md', 'Actual dock and sailing frames')}</p>`;
 root.append(wideSection);
 const wideCanvas = wideSection.querySelector<HTMLCanvasElement>('canvas')!;
 const wideRenderer = new T.WebGLRenderer({ canvas: wideCanvas, antialias: true });
@@ -259,8 +259,8 @@ for (const id of ['alder', 'poppy', 'wren', 'sorrel', 'finch']) {
   wideModel.add(figure);
 }
 const wideCamera = new T.OrthographicCamera();
-wideCamera.position.set(7, 7, 10);
-wideCamera.lookAt(0, 0.65, 0.6);
+wideCamera.position.set(7, 4.5, 8);
+wideCamera.lookAt(0, 0.55, 0);
 const wideResize = new ResizeObserver((entries) => {
   for (const entry of entries) {
     const { width, height } = entry.contentRect;

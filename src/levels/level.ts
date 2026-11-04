@@ -1,10 +1,10 @@
-import data from '../../data/first-crossing.level.json';
-import holdingData from '../../data/holding-pier.level.json';
-import bellwaterData from '../../data/bellwater.level.json';
-import driftwoodData from '../../data/driftwood-yard.level.json';
-import wideData from '../../data/wide-berth.level.json';
-import sheltersData from '../../data/two-shelters.level.json';
-import reefData from '../../data/reef-return.level.json';
+import data from '../../data/first-crossing.level.json' with { type: 'json' };
+import holdingData from '../../data/holding-pier.level.json' with { type: 'json' };
+import bellwaterData from '../../data/bellwater.level.json' with { type: 'json' };
+import driftwoodData from '../../data/driftwood-yard.level.json' with { type: 'json' };
+import wideData from '../../data/wide-berth.level.json' with { type: 'json' };
+import sheltersData from '../../data/two-shelters.level.json' with { type: 'json' };
+import reefData from '../../data/reef-return.level.json' with { type: 'json' };
 export type CurrentPhase = { tideLevel: number; from: string; to: string };
 export type Passage = (typeof data.edges)[number] & {
   current?: { name: string; phases: CurrentPhase[] };
@@ -22,7 +22,7 @@ export const level: Level = data;
 export const holdingPier: Level = holdingData;
 export const bellwater: Level = bellwaterData;
 export const driftwoodYard: Level = driftwoodData;
-export const wideBerth: Level = wideData;
+export const wideBerth = checkCurrents(wideData);
 export const twoShelters: Level = sheltersData;
 export function checkCurrents(l: Level): Level {
   if (l.edges.filter((edge) => edge.current).length > 1)

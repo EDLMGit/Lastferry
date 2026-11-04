@@ -31,14 +31,29 @@ export function currentNotice(s: State, l: Level, edge = l.edges.find((entry) =>
   };
 }
 
-function cutoffCopy(s: State, l: Level, loss: Extract<State['lossReason'], { code: 'RETURN_CUT_OFF' }>, before?: State) {
+function cutoffCopy(s: State, l: Level, loss: Exclude<NonNullable<State['lossReason']>, { code: 'PASSENGER_STRANDED' }>, before?: State) {
   const edge = l.edges.find((entry) => entry.id === loss.edgeId)!;
   const home = l.piers.find((p) => p.id === l.objective.deliveryPierId)!.nodeId;
-  const cause = passageFlow(edge, s.tideLevel)?.to === home
-    ? 'The ferry can only cross back for them after the homeward current ends.'
-    : before && passageFlow(edge, before.tideLevel)?.to === home
-      ? `After this action, ${edge.current!.name} will flow away from ${stop(home, l)} for the rest of the crossing.`
-      : `${edge.current!.name} flows away from ${stop(home, l)} and will not turn again.`;
+  if (loss.code === 'RETURN_CAPACITY') {
+    const trips = loss.homewardTrips === 1 ? 'One homeward trip remains' : `${loss.homewardTrips} homeward trips remain`;
+    const detail = `${trips} through ${edge.current!.name}, with room for ${loss.homewardTrips * l.rules.capacity} spaces. The neighbors still across the reef need ${loss.offshoreSlots}.`;
+    return { headline: 'There is too much to bring home.', warning: 'This leaves too much for the return trip.', detail };
+  }
+  const flow = passageFlow(edge, s.tideLevel)!;
+  const direction = `from ${stop(flow.from, l)} to ${stop(flow.to, l)}`;
+  if (loss.code === 'RETURN_DEPTH') {
+    const detail = before
+      ? `After this action the reef will flow only ${direction}. The boat will need depth ${loss.draft}, with no dry landing in reach to lighten it.`
+      : `The reef flows only ${direction}. The boat needs depth ${loss.draft}, and cannot reach a dry landing to let anyone ashore.`;
+    return { headline: 'The loaded ferry cannot reach Harbor.', warning: 'This leaves the boat too deep for the way home.', detail };
+  }
+  const turnsAgain = l.rules.tide.rises.some(r => r.afterTurn > s.turn && passageFlow(edge, r.level)?.from !== flow.from);
+  const changed = before && passageFlow(edge, before.tideLevel)?.from !== flow.from;
+  const cause = turnsAgain
+    ? 'The remaining currents leave no trip that can collect them and bring them home.'
+    : changed
+      ? `After this action, ${edge.current!.name} will flow only ${direction}.`
+      : `${edge.current!.name} flows only ${direction} and will not turn again.`;
   return {
     headline: `${passengerList(loss.passengerIds, l)} can no longer reach ${stop(home, l)}.`,
     warning: `This action will cut ${passengerList(loss.passengerIds, l)} off from ${stop(home, l)}.`,
@@ -130,7 +145,7 @@ export function statusCopy(
 ): { headline: string; detail: string; urgent: boolean } {
   if (s.status === 'lost') {
     const loss = s.lossReason!;
-    if (loss.code === 'RETURN_CUT_OFF') {
+    if (loss.code !== 'PASSENGER_STRANDED') {
       const cutoff = cutoffCopy(s, l, loss);
       return { headline: cutoff.headline, detail: `${cutoff.detail} Undo an earlier action, or restart.`, urgent: true };
     }
@@ -180,8 +195,17 @@ export function statusCopy(
 
 export function forecastCopy(s: State, l: Level) {
   const next = l.rules.tide.rises.find((r) => r.afterTurn > s.turn),
-    futureTide = next?.level ?? s.tideLevel;
+    futureTide = next?.level ?? s.tideLevel,
+    edge = l.edges.find((e) => e.current);
+  const upcoming = l.rules.tide.rises.filter(r => r.afterTurn > s.turn);
+  const schedule = edge ? upcoming.map((r, index) => {
+    const phase = passageFlow(edge, r.level)!;
+    const previous = index === 0 ? s.tideLevel : upcoming[index - 1].level;
+    const floods = l.piers.filter(p => previous < p.elevation && p.elevation <= r.level).map(p => stop(p.nodeId, l));
+    return { turn: r.afterTurn, direction: `${stop(phase.from, l)} → ${stop(phase.to, l)}`, depth: edge.baseDepth + r.level, floods };
+  }) : [];
   return {
+    schedule,
     headline: tideCopy(s, l),
     current: currentNotice(s, l),
     detail: l.piers
@@ -232,7 +256,7 @@ export function previewCopy(
   let consequence: string;
   if (n.status === 'lost') {
     const loss = n.lossReason!;
-    if (loss.code === 'RETURN_CUT_OFF') {
+    if (loss.code !== 'PASSENGER_STRANDED') {
       const cutoff = cutoffCopy(n, l, loss, s);
       return { summary, requirement, error: null, consequence: `${cutoff.warning} ${cutoff.detail}` };
     }

@@ -128,59 +128,100 @@ function wideFerry(profile: FerryProfile) {
   const group = new T.Group();
   group.name = 'ferry-six-space-hull-and-deck';
   const outline = wideHullOutline();
-  for (const [depth, y, color, scale] of [
-    [0.18, -0.19, '#824b35', 0.97],
-    [0.26, -0.1, palette.hull, 1],
-    [0.055, 0.17, '#f9d477', 1.025],
-    [0.02, 0.225, '#be8a4e', 0.94],
-  ] as const) {
-    const geometry = new T.ExtrudeGeometry(outline, {
-      depth,
-      bevelEnabled: true,
-      bevelSegments: 3,
-      steps: 1,
-      bevelSize: 0.06,
-      bevelThickness: 0.035,
-      curveSegments: 24,
-    });
-    geometry.rotateX(Math.PI / 2);
-    geometry.translate(0, depth, 0);
-    const hull = mesh(geometry, color, group, 0, y, 0);
-    hull.scale.set(scale, 1, scale);
-    if (y < 0) hull.name = 'water-contact-hull';
+  const rim = outline.getSpacedPoints(64).slice(0, -1);
+  function sheer(z: number) {
+    return 0.09 * Math.max(0, (z - 0.6) / 1.38) ** 2 + 0.035 * Math.max(0, -z - 0.75) ** 2;
   }
-  for (let row = 0; row < 14; row++) {
-    const z = -1.45 + row * 0.25;
-    const width = z > 1.5 ? 1.65 : 1.94;
-    box(group, '#e0ac68', [width, 0.015, 0.018], [0, 0.25, z], 0.006);
+  function shell(lower: number, upper: number, lowWidth: number, highWidth: number, lowLength: number, highLength: number, color: string) {
+    const vertices: number[] = [];
+    const point = (p: T.Vector2, width: number, length: number, y: number) =>
+      [p.x * width, y + sheer(p.y), p.y * length];
+    for (let i = 0; i < rim.length; i++) {
+      const a = rim[i], b = rim[(i + 1) % rim.length];
+      const a0 = point(a, lowWidth, lowLength, lower), b0 = point(b, lowWidth, lowLength, lower);
+      const a1 = point(a, highWidth, highLength, upper), b1 = point(b, highWidth, highLength, upper);
+      vertices.push(...a0, ...b0, ...a1, ...b0, ...b1, ...a1);
+    }
+    const geometry = new T.BufferGeometry();
+    geometry.setAttribute('position', new T.Float32BufferAttribute(vertices, 3));
+    geometry.computeVertexNormals();
+    const skin = mesh(geometry, color, group);
+    skin.name = 'water-contact-hull';
+    return skin;
   }
-  const cabin = box(group, palette.red, [1.4, 0.85, 0.95], [0, 0.67, -1.12], 0.065);
+  shell(-0.34, -0.115, 0.39, 0.72, 0.76, 0.89, '#734835');
+  shell(-0.115, 0.045, 0.72, 0.89, 0.89, 0.96, '#aa672f');
+  shell(0.045, 0.32, 0.89, 1, 0.96, 1, '#e6ac38');
+  shell(0.32, 0.384, 1, 1.025, 1, 1.015, '#f6dc9b');
+  shell(0.384, 0.62, 1.025, 1.02, 1.015, 1.01, '#e3a632');
+  shell(0.62, 0.635, 1.02, 0.94, 1.01, 0.94, '#ffcf72');
+  function deckSurface(sx: number, sz: number, y: number, color: string) {
+    const surface = new T.ShapeGeometry(outline, 36);
+    surface.rotateX(Math.PI / 2);
+    surface.scale(sx, 1, sz);
+    const object = mesh(surface, color, group, 0, y, 0);
+    object.material = new T.MeshStandardMaterial({ color, roughness: 0.9, side: T.DoubleSide });
+    return object;
+  }
+  deckSurface(1.017, 1.008, profile.deckY - 0.009, '#edbb60');
+  deckSurface(0.90, 0.90, profile.deckY, '#ceaa73').name = 'passenger-deck';
+  const forecap = new T.Shape();
+  forecap.moveTo(-0.57, 1.64);
+  forecap.quadraticCurveTo(-0.42, 1.86, 0, 1.975);
+  forecap.quadraticCurveTo(0.42, 1.86, 0.57, 1.64);
+  forecap.quadraticCurveTo(0, 1.73, -0.57, 1.64);
+  const capGeometry = new T.ExtrudeGeometry(forecap, {depth:0.046, bevelEnabled:true, bevelSize:0.018, bevelThickness:0.014, bevelSegments:2, curveSegments:12});
+  capGeometry.rotateX(Math.PI/2);
+  mesh(capGeometry,'#f2c670',group,0,profile.deckY+0.073,0);
+  cylinder(group,'#655947',0.039,0.046,0.086,[0,profile.deckY+0.133,1.83],8);
+  for (let row = 0; row < 8; row++) {
+    const z = -0.86 + 0.32 * row;
+    const width = z > 1.25 ? 0.96 : z > 0.95 ? 1.22 : 1.4;
+    const join = box(group, '#b58b59', [width, 0.008, 0.012], [0, profile.deckY + 0.009, z], 0.002);
+    join.castShadow = false;
+  }
+  const cabin = box(group, '#b85342', [1.23, 0.96, 0.70], [0, 1.097, -1.408], 0.105);
   cabin.name = 'wide-cabin-obstacle';
-  const roof = box(group, '#df7557', [1.58, 0.11, 1.13], [0, 1.16, -1.12], 0.045);
+  box(group, '#e7c58f', [1.235, 0.065, 0.704], [0, 0.924, -1.408], 0.025);
+  const gable = new T.Shape();
+  gable.moveTo(-0.704, 0);
+  gable.quadraticCurveTo(-0.72, 0.04, -0.68, 0.082);
+  gable.quadraticCurveTo(0, 0.34, 0.68, 0.082);
+  gable.quadraticCurveTo(0.72, 0.04, 0.704, 0);
+  gable.lineTo(-0.704, 0);
+  const roofGeometry = new T.ExtrudeGeometry(gable, { depth: 1.01, bevelEnabled: true, bevelSize: 0.018, bevelThickness: 0.025, bevelSegments: 2, curveSegments: 14 });
+  const roof = mesh(roofGeometry, '#bb5340', group, 0, 1.564, -1.83);
   roof.name = 'wide-cabin-roof';
-  box(group, '#f4ca70', [0.96, 0.46, 0.025], [0, 0.76, -0.63], 0.02);
-  box(group, '#45676a', [0.83, 0.35, 0.03], [0, 0.77, -0.61], 0.02);
-  box(group, '#6d543d', [0.035, 0.46, 0.03], [0, 0.76, -0.59]);
+  const ridge = box(group, '#cc694d', [0.06,0.04,1.00], [0,1.772,-1.325],0.014);
+  ridge.name = 'wheelhouse-ridge';
   for (const side of [-1, 1]) {
-    box(group, '#f2c979', [0.025, 0.43, 0.55], [side * 0.71, 0.76, -1.12], 0.01);
-    box(group, '#45676a', [0.03, 0.32, 0.42], [side * 0.73, 0.77, -1.12], 0.01);
-    for (const z of [-1.45, -0.5, 0.35, 1.26]) {
-      const post = cylinder(group, '#f5d179', 0.025, 0.025, 0.25, [side * 1.1, 0.39, z], 8);
-      post.name = 'wide-rail-obstacle';
+    box(group, '#f6dc9a', [0.036, 0.43, 0.52], [side * 0.616, 1.244, -1.39], 0.027);
+    box(group, '#426163', [0.038, 0.344, 0.428], [side * 0.634, 1.249, -1.39], 0.024);
+    box(group, '#e7c37a', [0.041, 0.342, 0.028], [side * 0.64, 1.249, -1.39], 0.008);
+    box(group, '#f5d79c', [0.395, 0.37, 0.03], [side * 0.225, 1.244, -1.052], 0.025);
+    box(group, '#4f7170', [0.317, 0.28, 0.032], [side * 0.225, 1.249, -1.043], 0.021);
+    for (const [start, end, x] of [[-1.40, -0.97, 0.86], [1.03, 1.24, 0.835]]) {
+      for (const z of [start, end]) {
+        const post = cylinder(group, '#e9bd70', 0.025, 0.031, 0.2, [side * x, 0.722, z], 8);
+        post.name = 'wide-rail-obstacle';
+      }
+      const rail = box(group, '#f3d295', [0.046, 0.044, end - start], [side * x, 0.822, (start + end)/2], 0.015);
+      rail.name = 'wide-rail-obstacle';
     }
-    const rail = box(group, '#f5d179', [0.035, 0.035, 2.69], [side * 1.1, 0.53, -0.095], 0.012);
-    rail.name = 'wide-rail-obstacle';
-    for (const z of [-1.12, 0.45, 1.4]) {
-      const fender = mesh(new T.TorusGeometry(0.12, 0.035, 8, 16), '#2c4248', group, side * 1.16, 0.14, z);
-      fender.rotation.y = Math.PI / 2;
+    for (const z of [-0.94, 0.73]) {
+      const fender = mesh(new T.TorusGeometry(0.1, 0.036, 7, 16), '#304448', group, side * 0.89, 0.33, z);
+      fender.rotation.y = Math.PI/2;
     }
   }
-  cylinder(group, '#3a4a49', 0.075, 0.08, 0.44, [0.35, 1.36, -1.28]);
-  cylinder(group, '#d5c9ab', 0.1, 0.1, 0.06, [0.35, 1.6, -1.28]);
-  const life = mesh(new T.TorusGeometry(0.15, 0.038, 8, 20), palette.wool, group, -0.74, 0.64, -1.12);
-  life.rotation.y = Math.PI / 2;
-  cylinder(group, '#70513b', 0.016, 0.016, 0.45, [-0.3, 1.38, -0.9], 8);
-  box(group, '#f4d59b', [0.22, 0.12, 0.016], [-0.2, 1.57, -0.9], 0.012).rotation.z = -0.12;
+  cylinder(group, '#36494a', 0.07, 0.086, 0.32, [0.25, 1.81, -1.57]);
+  cylinder(group, '#eee2bc', 0.083, 0.085, 0.062, [0.25, 1.915, -1.57]);
+  cylinder(group, '#534b42', 0.101, 0.101, 0.044, [0.25, 1.96, -1.57]);
+  for (const side of [-1, 1]) {
+    const ring = mesh(new T.TorusGeometry(0.102, 0.034, 8, 20), '#f4e8c8', group, side * 0.619, 0.81, -1.42);
+    ring.rotation.y = Math.PI/2;
+  }
+  cylinder(group, '#70513b', 0.014, 0.014, 0.34, [-0.25, 1.79, -1.26], 8);
+  box(group, '#f4cf72', [0.17, 0.09, 0.015], [-0.17, 1.91, -1.26], 0.014).rotation.z = -0.12;
   group.userData.ferryProfile = profile.id;
   return group;
 }

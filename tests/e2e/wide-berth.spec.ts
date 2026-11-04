@@ -3,6 +3,7 @@ import { mkdirSync, writeFileSync, readFileSync, readdirSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { reviewDir } from './evidence';
+import type { Action } from '../../src/game/rules';
 import { act, activate, idle, state, undo, tabTo, keyAct, ready, fullyVisible, restart } from './ui';
 import { passive, journeyKey, rescueBellwater, measureStory, coldTouch } from './story-support';
 test.use({
@@ -206,19 +207,24 @@ async function choose(page: Page, type: 'board' | 'unload', ids?: string[], comm
   }
   if (commit) expect((await state(page)).turn).toBe(before.turn + 1);
 }
+async function executeWide(page: Page, actions: Action[]) {
+  for (const action of actions) {
+    if (action.type === 'move') await act(page, 'map-' + action.to, true);
+    else if (action.type === 'wait') await act(page, 'wait', true);
+    else await choose(page, action.type, action.passengerIds);
+  }
+}
+const widePlans = JSON.parse(readFileSync('data/wide-berth/witnesses.json', 'utf8')) as {
+  witnesses: { actions: Action[] }[];
+};
+const lightRoute = widePlans.witnesses[0].actions;
+const outerRoute = widePlans.witnesses[1].actions;
 async function beginWide(page: Page) {
   await ready(page, 'wide-berth');
   await snap(page, 'wide-entry');
-  await act(page, 'map-high-quay', true);
-  await act(page, 'map-wide-berth', true);
   await choose(page, 'board');
-  expect(await state(page)).toMatchObject({
-    turn: 3,
-    aboard: ['alder', 'clover', 'poppy', 'wren'],
-  });
+  expect(await state(page)).toMatchObject({turn: 1, aboard: ['alder', 'clover', 'poppy', 'wren']});
   await expect(page.locator('#boat-summary')).toContainText('Depth 4 · 6/6 spaces');
-  if (await page.locator('#back-to-boat').isVisible()) await activate(page, 'back-to-boat', true);
-  await page.waitForTimeout(3300);
   await snap(page, 'six-space-pickup');
   await act(page, 'map-high-quay', true);
 }
@@ -252,39 +258,28 @@ async function repeatCommit(page: Page, name: string) {
   });
 }
 async function fullDeep(page: Page, prefix: string) {
-  await act(page, 'map-high-quay', true);
-  await act(page, 'map-wide-berth', true);
   await choose(page, 'board', undefined, false);
   await repeatCommit(page, 'repeat-six-space-commit');
-  expect((await state(page)).turn).toBe(3);
-  if (await page.locator('#back-to-boat').isVisible()) await activate(page, 'back-to-boat', true);
-  await page.waitForTimeout(3300);
-  await snap(page, `${prefix}-six-spaces`);
+  expect((await state(page)).turn).toBe(1);
+  await snap(page, prefix + '-six-spaces');
   await act(page, 'map-high-quay', true);
   const fork = await state(page);
   await activate(page, 'map-harbor', true);
-  await expect(page.locator('#local-context')).toContainText(/needs depth 4.*depth 2/);
+  await expect(page.locator('#local-context')).toContainText(/Needs depth 4.*passage 2/i);
   await expect(page.locator('#sail')).toBeDisabled();
   expect(await state(page)).toEqual(fork);
   await activate(page, 'close-location', true);
-  await activate(page, 'map-high-quay', true);
-  await page.locator('.route-details summary').tap();
-  await expect(page.locator('.route-details')).toContainText('Outer Buoy');
-  await expect(page.locator('.route-details')).toContainText('Shell Landing');
-  await snap(page, `${prefix}-fork`);
-  await activate(page, 'close-location', true);
-  await act(page, 'map-outer-buoy', true);
-  expect(await state(page)).toMatchObject({ turn: 5, tideLevel: 1 });
-  await snap(page, `${prefix}-first-rise`);
-  await undo(page, true);
-  expect(await state(page)).toEqual(fork);
-  await act(page, 'map-outer-buoy', true);
+  await executeWide(page, outerRoute.slice(2, 3));
+  const staged = await state(page);
   await act(page, 'map-harbor', true);
-  await choose(page, 'unload');
-  for (const id of ['map-high-quay', 'map-shell-landing']) await act(page, id, true);
+  expect(await state(page)).toMatchObject({ turn: 4, tideLevel: 1, aboard: ['alder'] });
+  await snap(page, prefix + '-first-rise');
+  await undo(page, true);
+  expect(await state(page)).toEqual(staged);
+  await executeWide(page, outerRoute.slice(3, 9));
   const before = await state(page);
   await choose(page, 'board', ['sorrel'], false);
-  await expect(page.locator('#preview')).toContainText(/Finch.*floods/);
+  await expect(page.locator('#preview')).toContainText(/Finch.*flood/i);
   await activate(page, 'commit', true);
   await idle(page);
   expect(await state(page)).toMatchObject({ status: 'lost', turn: 10 });
@@ -292,14 +287,12 @@ async function fullDeep(page: Page, prefix: string) {
   expect(await state(page)).toEqual(before);
   await choose(page, 'board');
   expect(await state(page)).toMatchObject({ turn: 10, tideLevel: 2, status: 'playing' });
-  await snap(page, `${prefix}-second-rise`);
-  await act(page, 'map-high-quay', true);
-  await act(page, 'map-harbor', true);
-  await choose(page, 'unload');
-  expect(await state(page)).toMatchObject({ turn: 13, status: 'won' });
-  await snap(page, `${prefix}-arrival`);
+  await snap(page, prefix + '-second-rise');
+  await executeWide(page, outerRoute.slice(10));
+  expect(await state(page)).toMatchObject({ turn: 14, status: 'won' });
+  await snap(page, prefix + '-arrival');
   await undo(page, true);
-  expect(await state(page)).toMatchObject({ turn: 12, status: 'playing' });
+  expect(await state(page)).toMatchObject({ turn: 13, status: 'playing' });
   await choose(page, 'unload');
 }
 
@@ -385,38 +378,19 @@ test('portrait staging strategy and current-depth shortcut with real full rescue
     await endScene(page, '390x844-launch');
     await activate(page, 'story-continue', true);
     await idle(page);
-    for (const id of ['map-high-quay', 'map-wide-berth']) await act(page, id, true);
-    await choose(page, 'board');
-    if (await page.locator('#back-to-boat').isVisible()) await activate(page, 'back-to-boat', true);
-    await page.waitForTimeout(3300);
-    await snap(page, '390x844-six-spaces');
-    await act(page, 'map-high-quay', true);
+    await executeWide(page, lightRoute.slice(0, 2));
     const before = await state(page);
     await choose(page, 'unload', ['alder', 'clover']);
-    expect(await state(page)).toMatchObject({ turn: 5, tideLevel: 1, aboard: ['poppy', 'wren'] });
+    expect(await state(page)).toMatchObject({ turn: 3, tideLevel: 0, aboard: ['poppy', 'wren'] });
     await undo(page, true);
     expect(await state(page)).toEqual(before);
-    await choose(page, 'unload', ['alder', 'clover']);
-    await act(page, 'map-shell-landing', true);
-    await choose(page, 'board');
-    if (await page.locator('#back-to-boat').isVisible()) await activate(page, 'back-to-boat', true);
-    await page.waitForTimeout(3300);
-    await snap(page, '390x844-four-rabbits');
-    await act(page, 'map-high-quay', true);
-    await activate(page, 'map-harbor', true);
-    await expect(page.locator('#local-context')).toContainText(/needs depth 3.*depth 3/);
-    await activate(page, 'sail', true);
-    await idle(page);
-    await choose(page, 'unload');
-    expect(await state(page)).toMatchObject({ turn: 10, tideLevel: 2 });
-    for (const id of ['map-high-quay']) await act(page, id, true);
-    await choose(page, 'board');
-    await act(page, 'map-harbor', true);
-    await choose(page, 'unload');
-    expect(await state(page)).toMatchObject({ turn: 14, status: 'won' });
+    await executeWide(page, lightRoute.slice(2, 4));
+    await snap(page, '390x844-shallow-homeward');
+    await executeWide(page, lightRoute.slice(4));
+    expect(await state(page)).toMatchObject({ turn: 12, status: 'won' });
     await snap(page, '390x844-staging-arrival');
     await undo(page, true);
-    expect(await state(page)).toMatchObject({ turn: 13, status: 'playing' });
+    expect(await state(page)).toMatchObject({ turn: 11, status: 'playing' });
     await choose(page, 'unload');
   } finally {
     if (stop) await stop();
@@ -424,7 +398,7 @@ test('portrait staging strategy and current-depth shortcut with real full rescue
   }
 });
 
-test('five-body six-space witness, six waiting choices, overcapacity and usable fallback', async ({
+test('five-body final load, all reachable manifest choices and usable portrait fallback', async ({
   browser,
   baseURL,
 }) => {
@@ -438,32 +412,20 @@ test('five-body six-space witness, six waiting choices, overcapacity and usable 
   const page = await context.newPage();
   page.setDefaultTimeout(15000);
   try {
-    await beginWide(page);
-    await choose(page, 'unload', ['alder']);
-    await act(page, 'map-shell-landing', true);
-    await choose(page, 'board');
+    await ready(page, 'wide-berth');
+    await executeWide(page, outerRoute.slice(0,10));
     expect((await state(page)).aboard).toHaveLength(5);
-    if (await page.locator('#back-to-boat').isVisible()) await activate(page, 'back-to-boat', true);
-    await page.waitForTimeout(3300);
     await snap(page, '390x844-five-bodies');
-    for (let i = 0; i < 3; i++) await act(page, 'wait', true);
-    await act(page, 'map-high-quay', true);
-    await act(page, 'map-harbor', true);
-    await choose(page, 'unload');
-    await act(page, 'map-high-quay', true);
-    await choose(page, 'board');
-    await act(page, 'map-harbor', true);
-    await choose(page, 'unload');
-    expect(await state(page)).toMatchObject({ turn: 17, status: 'won' });
-    for (let i = 0; i < 6; i++) await undo(page, true);
-    expect(await state(page)).toMatchObject({ turn: 11, boatNodeId: 'high-quay' });
+    await executeWide(page, outerRoute.slice(10,12));
+    const aboard = await state(page);
     await choose(page, 'unload');
     const before = await state(page);
-    expect(before.waitingByPier['high-quay-pier']).toHaveLength(6);
-    await snap(page, '390x844-six-ashore');
+    expect(before.waitingByPier['high-quay-pier']).toHaveLength(5);
+    expect(aboard.delivered).toEqual(['alder']);
+    await snap(page, '390x844-five-ashore');
     await choose(page, 'board', undefined, false);
-    await expect(page.locator('#preview')).toContainText('boat has 6 spaces; this group needs 8');
-    await expect(page.locator('#commit')).toBeDisabled();
+    await expect(page.locator('#preview .requirement')).toContainText('6/6 spaces');
+    await expect(page.locator('#commit')).toBeEnabled();
     expect(await state(page)).toEqual(before);
     for (const size of [
       { width: 390, height: 844 },
@@ -474,14 +436,13 @@ test('five-body six-space witness, six waiting choices, overcapacity and usable 
     ]) {
       await page.setViewportSize(size);
       await expect.poll(async () => (await page.evaluate(measureStory)).failures).toEqual([]);
-      for (const id of ['alder', 'clover', 'poppy', 'wren', 'sorrel', 'finch'])
+      for (const id of ['clover', 'poppy', 'wren', 'sorrel', 'finch'])
         await fullyVisible(page, page.locator(`#passenger-${id}`));
       await fullyVisible(page, page.locator('#preview .requirement'), false);
-      await snap(page, `${size.width}x${size.height}-six-chooser`);
-      save(`${size.width}x${size.height}-six-fit`, await page.evaluate(measureStory));
+      await snap(page, `${size.width}x${size.height}-five-chooser`);
+      save(`${size.width}x${size.height}-five-fit`, await page.evaluate(measureStory));
     }
     await page.setViewportSize({ width: 390, height: 844 });
-    await activate(page, 'passenger-clover', true);
     await expect(page.locator('#commit')).toBeEnabled();
     await expect(page.locator('#preview .requirement')).toContainText('6/6 spaces');
     await page.route('**/*rabbit-tan*', (route) =>
@@ -497,7 +458,7 @@ test('five-body six-space witness, six waiting choices, overcapacity and usable 
       'failed',
     );
     await expect(page.locator('#passenger-finch')).toContainText('Finch');
-    await snap(page, '390x844-six-chooser-fallback');
+    await snap(page, '390x844-five-chooser-fallback');
     await tabTo(page, 'commit');
     await page.keyboard.press('Enter');
     await idle(page);
@@ -592,11 +553,10 @@ test('original profiles, dynamic Help, reduced transfers, keyboard and fullscree
     await page.setViewportSize({ width: 390, height: 844 });
     await page.keyboard.press('Escape');
     await page.keyboard.press('Escape');
-    await keyAct(page, 'map-high-quay');
-    await keyAct(page, 'map-wide-berth');
     await keyAct(page, 'board');
+    await keyAct(page, 'map-high-quay');
     await undo(page, true);
-    expect(await state(page)).toMatchObject({ turn: 2, aboard: [] });
+    expect(await state(page)).toMatchObject({ turn: 1, boatNodeId: 'wide-berth', aboard: ['alder', 'clover', 'poppy', 'wren'] });
     await activate(page, 'menu', true);
     await activate(page, 'settings', true);
     await page.locator('#motion-preference').selectOption('device');
@@ -677,15 +637,49 @@ test('launch playback intent, pause, skip, replay, mute and controlled backgroun
     await snap(page, '390x844-launch-recovery');
     await activate(page, 'story-continue', true);
     await idle(page);
-    expect(await state(page)).toMatchObject({ turn: 0, boatNodeId: 'harbor', aboard: [] });
+    expect(await state(page)).toMatchObject({ turn: 0, boatNodeId: 'wide-berth', aboard: [] });
     save('launch-recovery', await snapshot(page));
   } finally {
     await context.close();
   }
 });
 
-test('critical High Quay free route inspection exposes blocked shortcut, deep route and low deadline',async({browser,baseURL})=>{
-const context=await browser.newContext({baseURL,viewport:{width:780,height:320},hasTouch:true,isMobile:true});const page=await context.newPage();try{await beginWide(page);const before=await state(page);for(const [id,depth]of [['harbor',2],['outer-buoy',4],['shell-landing',2]] as const){await activate(page,'map-high-quay',true);await page.locator('.route-details summary').tap();await page.locator(`[data-inspect-route="${id}"]`).tap();await expect(page.locator('#local-context')).toContainText(`Passage has depth ${depth}`);if(id==='shell-landing')await expect(page.locator('#local-context')).toContainText(/floods in 6 actions/);expect(await state(page)).toEqual(before);await snap(page,`780x320-inspect-${id}`);await activate(page,'close-location',true);await page.waitForTimeout(220);}expect(await recordBytes(page)).toBeNull();}finally{await context.close();}
+test('High Quay free inspection names the current, the deep outer branch and the shell deadline', async ({ browser, baseURL }) => {
+  const context = await browser.newContext({baseURL,viewport:{width:780,height:320},hasTouch:true,isMobile:true});
+  const page=await context.newPage();
+  page.setDefaultTimeout(12000);
+  try {
+    await beginWide(page);
+    const before=await state(page);
+    for (const [id, depth] of [['harbor',2], ['outer-buoy',4], ['shell-landing',1]] as const) {
+      await activate(page,'map-high-quay',true);
+      await activate(page,'location-details',true);
+      await page.locator('.route-details summary').tap();
+      await page.locator('[data-inspect-route="' + id + '"]').tap();
+      if (await page.locator('#location-details').getAttribute('aria-expanded') !== 'true')
+        await activate(page,'location-details',true);
+      await expect(page.locator('#location-facts')).toContainText('Passage has depth ' + depth);
+      if (id === 'shell-landing') await expect(page.locator('#location-facts')).toContainText(/floods in 8 actions/i);
+      expect(await state(page)).toEqual(before);
+      await snap(page, '780x320-inspect-' + id);
+      await activate(page, 'close-location', true);
+    }
+    await executeWide(page, outerRoute.slice(2, 8));
+    expect(await state(page)).toMatchObject({ turn: 8, boatNodeId: 'outer-buoy' });
+    await activate(page, 'map-shell-landing', true);
+    const sail = page.locator('#sail');
+    await fullyVisible(page, sail);
+    const hit = await sail.evaluate(button => {
+      const r = button.getBoundingClientRect();
+      return document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2)?.closest('button')?.id;
+    });
+    expect(hit).toBe('sail');
+    await snap(page, '780x320-outer-to-shell-sail');
+    await activate(page, 'sail', true);
+    await idle(page);
+    expect(await state(page)).toMatchObject({ turn: 9, boatNodeId: 'shell-landing' });
+    expect(await recordBytes(page)).toBeNull();
+  } finally { await context.close(); }
 });
 
 test('launch repeated handoff, real Restart and cove-change recovery preserve campaign bytes', async ({
@@ -721,7 +715,7 @@ test('launch repeated handoff, real Restart and cove-change recovery preserve ca
     await page.touchscreen.tap(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
     await page.touchscreen.tap(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
     await idle(page);
-    expect(await state(page)).toMatchObject({ turn: 0, boatNodeId: 'harbor', aboard: [] });
+    expect(await state(page)).toMatchObject({ turn: 0, boatNodeId: 'wide-berth', aboard: [] });
     const progress = JSON.parse((await recordBytes(page))!);
     expect(progress.checkpoint).toEqual({ kind: 'cove', id: 'wide-berth' });
     expect(progress.acknowledgedScenes).toEqual([
@@ -734,11 +728,10 @@ test('launch repeated handoff, real Restart and cove-change recovery preserve ca
     });
     const checkpoint = await recordBytes(page);
     if (await page.locator('#dialog[open]').count()) await page.keyboard.press('Escape');
-    await act(page, 'map-high-quay', true);
-    await act(page, 'map-wide-berth', true);
     await choose(page, 'board');
+    await act(page, 'map-high-quay', true);
     await restart(page, true);
-    expect(await state(page)).toMatchObject({ turn: 0, boatNodeId: 'harbor', aboard: [] });
+    expect(await state(page)).toMatchObject({ turn: 0, boatNodeId: 'wide-berth', aboard: [] });
     expect((await snapshot(page)).render.historyLength).toBe(0);
     expect((await snapshot(page)).render.poseHistoryLength).toBe(0);
     expect(await recordBytes(page)).toBe(checkpoint);

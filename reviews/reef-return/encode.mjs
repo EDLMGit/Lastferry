@@ -4,7 +4,7 @@ import { createHash } from 'node:crypto';
 import { resolve } from 'node:path';
 
 const directory = process.argv[2] ?? 'reviews/reef-return/phone';
-const name = 'reef-rescue';
+const name = process.argv[3] ?? 'reef-rescue';
 const recording = JSON.parse(readFileSync(`${directory}/${name}-recording.json`, 'utf8'));
 const frames = recording.frames.toSorted((a, b) => a.timestamp - b.timestamp);
 if (frames.length < 2 || !recording.audio) throw Error('The recording needs both native frames and runtime audio.');

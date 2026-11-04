@@ -1,566 +1,91 @@
 {
   "levelId": "wide-berth",
-  "proposalOnly": false,
   "witnesses": [
     {
-      "id": "six-space-deep-delivery-first",
-      "criticalPlan": true,
-      "description": "Carry six spaces through deep water and deliver the whole first group via Outer Buoy. Board the low pair exactly on the second rise.",
+      "id": "light-through-beacon",
+      "description": "Put the two sheep ashore at High Quay. Carry two rabbits through Beacon Reef at low water. Return light and use the inner channel to fetch the second rabbit pair, then board the sheep for the deep final crossing.",
       "actions": [
-        {
-          "type": "move",
-          "to": "high-quay"
-        },
-        {
-          "type": "move",
-          "to": "wide-berth"
-        },
-        {
-          "type": "board",
-          "passengerIds": [
-            "alder",
-            "clover",
-            "poppy",
-            "wren"
-          ]
-        },
-        {
-          "type": "move",
-          "to": "high-quay"
-        },
-        {
-          "type": "move",
-          "to": "outer-buoy"
-        },
-        {
-          "type": "move",
-          "to": "harbor"
-        },
-        {
-          "type": "unload",
-          "passengerIds": [
-            "alder",
-            "clover",
-            "poppy",
-            "wren"
-          ]
-        },
-        {
-          "type": "move",
-          "to": "high-quay"
-        },
-        {
-          "type": "move",
-          "to": "shell-landing"
-        },
-        {
-          "type": "board",
-          "passengerIds": [
-            "sorrel",
-            "finch"
-          ]
-        },
-        {
-          "type": "move",
-          "to": "high-quay"
-        },
-        {
-          "type": "move",
-          "to": "harbor"
-        },
-        {
-          "type": "unload",
-          "passengerIds": [
-            "sorrel",
-            "finch"
-          ]
-        }
+        { "type": "board", "passengerIds": ["alder", "clover", "poppy", "wren"] },
+        { "type": "move", "to": "high-quay" },
+        { "type": "unload", "passengerIds": ["alder", "clover"] },
+        { "type": "move", "to": "harbor" },
+        { "type": "unload", "passengerIds": ["poppy", "wren"] },
+        { "type": "move", "to": "high-quay" },
+        { "type": "move", "to": "shell-landing" },
+        { "type": "board", "passengerIds": ["sorrel", "finch"] },
+        { "type": "move", "to": "high-quay" },
+        { "type": "board", "passengerIds": ["alder", "clover"] },
+        { "type": "move", "to": "harbor" },
+        { "type": "unload", "passengerIds": ["sorrel", "finch", "alder", "clover"] }
       ]
     },
     {
-      "id": "stage-sheep-light-return",
-      "criticalPlan": true,
-      "description": "After carrying six spaces, leave both sheep safely at High Quay. Rescue the low pair early, carry four rabbits through the depth-three shortcut, then collect the sheep.",
+      "id": "bring-the-quay-via-outer",
+      "description": "Send Alder through the first homeward tide. After returning, board the staged four spaces first. Take the deep outer approach to Shell Landing, board its pair before the flood and return with five bodies occupying six spaces.",
       "actions": [
-        {
-          "type": "move",
-          "to": "high-quay"
-        },
-        {
-          "type": "move",
-          "to": "wide-berth"
-        },
-        {
-          "type": "board",
-          "passengerIds": [
-            "alder",
-            "clover",
-            "poppy",
-            "wren"
-          ]
-        },
-        {
-          "type": "move",
-          "to": "high-quay"
-        },
-        {
-          "type": "unload",
-          "passengerIds": [
-            "alder",
-            "clover"
-          ]
-        },
-        {
-          "type": "move",
-          "to": "shell-landing"
-        },
-        {
-          "type": "board",
-          "passengerIds": [
-            "sorrel",
-            "finch"
-          ]
-        },
-        {
-          "type": "move",
-          "to": "high-quay"
-        },
-        {
-          "type": "move",
-          "to": "harbor"
-        },
-        {
-          "type": "unload",
-          "passengerIds": [
-            "poppy",
-            "wren",
-            "sorrel",
-            "finch"
-          ]
-        },
-        {
-          "type": "move",
-          "to": "high-quay"
-        },
-        {
-          "type": "board",
-          "passengerIds": [
-            "alder",
-            "clover"
-          ]
-        },
-        {
-          "type": "move",
-          "to": "harbor"
-        },
-        {
-          "type": "unload",
-          "passengerIds": [
-            "alder",
-            "clover"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "stage-one-sheep-five-bodies-wait-after-rescue",
-      "criticalPlan": false,
-      "description": "A supported safe variation, not the second main critical strategy: stage one sheep, rescue the low pair, then wait only after all endangered piers are empty. Five bodies occupy six spaces; return at the second rise and collect the staged sheep later.",
-      "actions": [
-        {
-          "type": "move",
-          "to": "high-quay"
-        },
-        {
-          "type": "move",
-          "to": "wide-berth"
-        },
-        {
-          "type": "board",
-          "passengerIds": [
-            "alder",
-            "clover",
-            "poppy",
-            "wren"
-          ]
-        },
-        {
-          "type": "move",
-          "to": "high-quay"
-        },
-        {
-          "type": "unload",
-          "passengerIds": [
-            "alder"
-          ]
-        },
-        {
-          "type": "move",
-          "to": "shell-landing"
-        },
-        {
-          "type": "board",
-          "passengerIds": [
-            "sorrel",
-            "finch"
-          ]
-        },
-        {
-          "type": "wait"
-        },
-        {
-          "type": "wait"
-        },
-        {
-          "type": "wait"
-        },
-        {
-          "type": "move",
-          "to": "high-quay"
-        },
-        {
-          "type": "move",
-          "to": "harbor"
-        },
-        {
-          "type": "unload",
-          "passengerIds": [
-            "clover",
-            "poppy",
-            "wren",
-            "sorrel",
-            "finch"
-          ]
-        },
-        {
-          "type": "move",
-          "to": "high-quay"
-        },
-        {
-          "type": "board",
-          "passengerIds": [
-            "alder"
-          ]
-        },
-        {
-          "type": "move",
-          "to": "harbor"
-        },
-        {
-          "type": "unload",
-          "passengerIds": [
-            "alder"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "two-entry-pauses-then-staging",
-      "criticalPlan": false,
-      "description": "Two optional entry pauses remain recoverable by choosing the staging plan; the full deep-delivery plan has less deadline slack.",
-      "actions": [
-        {
-          "type": "wait"
-        },
-        {
-          "type": "wait"
-        },
-        {
-          "type": "move",
-          "to": "high-quay"
-        },
-        {
-          "type": "move",
-          "to": "wide-berth"
-        },
-        {
-          "type": "board",
-          "passengerIds": [
-            "alder",
-            "clover",
-            "poppy",
-            "wren"
-          ]
-        },
-        {
-          "type": "move",
-          "to": "high-quay"
-        },
-        {
-          "type": "unload",
-          "passengerIds": [
-            "alder",
-            "clover"
-          ]
-        },
-        {
-          "type": "move",
-          "to": "shell-landing"
-        },
-        {
-          "type": "board",
-          "passengerIds": [
-            "sorrel",
-            "finch"
-          ]
-        },
-        {
-          "type": "move",
-          "to": "high-quay"
-        },
-        {
-          "type": "move",
-          "to": "harbor"
-        },
-        {
-          "type": "unload",
-          "passengerIds": [
-            "poppy",
-            "wren",
-            "sorrel",
-            "finch"
-          ]
-        },
-        {
-          "type": "move",
-          "to": "high-quay"
-        },
-        {
-          "type": "board",
-          "passengerIds": [
-            "alder",
-            "clover"
-          ]
-        },
-        {
-          "type": "move",
-          "to": "harbor"
-        },
-        {
-          "type": "unload",
-          "passengerIds": [
-            "alder",
-            "clover"
-          ]
-        }
+        { "type": "board", "passengerIds": ["alder", "clover", "poppy", "wren"] },
+        { "type": "move", "to": "high-quay" },
+        { "type": "unload", "passengerIds": ["clover", "poppy", "wren"] },
+        { "type": "move", "to": "harbor" },
+        { "type": "unload", "passengerIds": ["alder"] },
+        { "type": "move", "to": "high-quay" },
+        { "type": "board", "passengerIds": ["clover", "poppy", "wren"] },
+        { "type": "move", "to": "outer-buoy" },
+        { "type": "move", "to": "shell-landing" },
+        { "type": "board", "passengerIds": ["sorrel", "finch"] },
+        { "type": "move", "to": "outer-buoy" },
+        { "type": "move", "to": "high-quay" },
+        { "type": "move", "to": "harbor" },
+        { "type": "unload", "passengerIds": ["clover", "poppy", "wren", "sorrel", "finch"] }
       ]
     }
   ],
   "losingAlternatives": [
     {
-      "id": "full-deep-delivery-after-one-pause",
-      "description": "One extra pause before committing to the full deep-delivery route leaves the low pair waiting when action 10 arrives.",
+      "id": "park-the-first-group",
+      "description": "High Quay stays dry, but waiting through the first return leaves eight spaces offshore for a single six-space homeward voyage.",
       "actions": [
-        {
-          "type": "move",
-          "to": "high-quay"
-        },
-        {
-          "type": "move",
-          "to": "wide-berth"
-        },
-        {
-          "type": "board",
-          "passengerIds": [
-            "alder",
-            "clover",
-            "poppy",
-            "wren"
-          ]
-        },
-        {
-          "type": "move",
-          "to": "high-quay"
-        },
-        {
-          "type": "wait"
-        },
-        {
-          "type": "move",
-          "to": "outer-buoy"
-        },
-        {
-          "type": "move",
-          "to": "harbor"
-        },
-        {
-          "type": "unload",
-          "passengerIds": [
-            "alder",
-            "clover",
-            "poppy",
-            "wren"
-          ]
-        },
-        {
-          "type": "move",
-          "to": "high-quay"
-        },
-        {
-          "type": "move",
-          "to": "shell-landing"
-        }
+        { "type": "board", "passengerIds": ["alder", "clover", "poppy", "wren"] },
+        { "type": "move", "to": "high-quay" },
+        { "type": "unload", "passengerIds": ["alder", "clover", "poppy", "wren"] },
+        { "type": "wait" }
       ]
     },
     {
-      "id": "low-pair-first",
-      "description": "Saving the low pair first reaches Wide Berth at action 5, after the rise has flooded its waiting first group; arrival is not boarding.",
+      "id": "one-space-shuttle",
+      "description": "One early rabbit can cross, but seven spaces then need to come home on one six-space voyage.",
       "actions": [
-        {
-          "type": "move",
-          "to": "high-quay"
-        },
-        {
-          "type": "move",
-          "to": "shell-landing"
-        },
-        {
-          "type": "board",
-          "passengerIds": [
-            "sorrel",
-            "finch"
-          ]
-        },
-        {
-          "type": "move",
-          "to": "high-quay"
-        },
-        {
-          "type": "move",
-          "to": "wide-berth"
-        }
+        { "type": "board", "passengerIds": ["alder", "clover", "poppy", "wren"] },
+        { "type": "move", "to": "high-quay" },
+        { "type": "unload", "passengerIds": ["alder", "clover", "wren"] },
+        { "type": "move", "to": "harbor" }
       ]
     },
     {
-      "id": "take-four-and-return",
-      "description": "Taking a four-space subset and leaving a sheep at Wide Berth cannot get back to board that sheep before the first rise.",
+      "id": "try-the-deep-detour",
+      "description": "From High Quay the Outer Buoy leads to Shell Landing, not Harbor. The full group can sail there, but it still misses the first homeward window.",
       "actions": [
-        {
-          "type": "move",
-          "to": "high-quay"
-        },
-        {
-          "type": "move",
-          "to": "wide-berth"
-        },
-        {
-          "type": "board",
-          "passengerIds": [
-            "alder",
-            "poppy",
-            "wren"
-          ]
-        },
-        {
-          "type": "move",
-          "to": "high-quay"
-        },
-        {
-          "type": "unload",
-          "passengerIds": [
-            "alder",
-            "poppy",
-            "wren"
-          ]
-        }
+        { "type": "board", "passengerIds": ["alder", "clover", "poppy", "wren"] },
+        { "type": "move", "to": "high-quay" },
+        { "type": "move", "to": "outer-buoy" },
+        { "type": "move", "to": "shell-landing" }
       ]
     },
     {
-      "id": "full-load-wait-for-shortcut",
-      "description": "Waiting with the full first group at High Quay until the shortcut reaches depth four floods Shell Landing with its pair still waiting.",
+      "id": "return-a-trip-too-soon",
+      "description": "After the light crossing, waiting at Harbor for the second rise leaves the Shell pair on its flooded landing and misses the outward trip.",
       "actions": [
-        {
-          "type": "move",
-          "to": "high-quay"
-        },
-        {
-          "type": "move",
-          "to": "wide-berth"
-        },
-        {
-          "type": "board",
-          "passengerIds": [
-            "alder",
-            "clover",
-            "poppy",
-            "wren"
-          ]
-        },
-        {
-          "type": "move",
-          "to": "high-quay"
-        },
-        {
-          "type": "wait"
-        },
-        {
-          "type": "wait"
-        },
-        {
-          "type": "wait"
-        },
-        {
-          "type": "wait"
-        },
-        {
-          "type": "wait"
-        },
-        {
-          "type": "wait"
-        }
-      ]
-    },
-    {
-      "id": "stage-everyone-then-wait",
-      "description": "Staging the first group safely does not remove the low pair deadline.",
-      "actions": [
-        {
-          "type": "move",
-          "to": "high-quay"
-        },
-        {
-          "type": "move",
-          "to": "wide-berth"
-        },
-        {
-          "type": "board",
-          "passengerIds": [
-            "alder",
-            "clover",
-            "poppy",
-            "wren"
-          ]
-        },
-        {
-          "type": "move",
-          "to": "high-quay"
-        },
-        {
-          "type": "unload",
-          "passengerIds": [
-            "alder",
-            "clover",
-            "poppy",
-            "wren"
-          ]
-        },
-        {
-          "type": "wait"
-        },
-        {
-          "type": "wait"
-        },
-        {
-          "type": "wait"
-        },
-        {
-          "type": "wait"
-        },
-        {
-          "type": "wait"
-        }
+        { "type": "board", "passengerIds": ["alder", "clover", "poppy", "wren"] },
+        { "type": "move", "to": "high-quay" },
+        { "type": "unload", "passengerIds": ["alder", "clover"] },
+        { "type": "move", "to": "harbor" },
+        { "type": "unload", "passengerIds": ["poppy", "wren"] },
+        { "type": "wait" },
+        { "type": "wait" },
+        { "type": "wait" },
+        { "type": "wait" },
+        { "type": "wait" }
       ]
     }
-  ],
-  "source": "Supplied mechanical witnesses replayed against authored production data; no gameplay action budget."
+  ]
 }

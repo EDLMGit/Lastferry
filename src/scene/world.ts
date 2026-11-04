@@ -57,7 +57,7 @@ import {
 import { createPier, createShelterGangway, updateShelterGangway } from './pier';
 import { getLevelPaths, type CanonicalPath } from './paths';
 import { Shores, createReedBeds } from './shore';
-import { addWorkingDeckSeams, createReefPassage, setReefDirection } from './reef';
+import { createReefPassage, setReefDirection } from './reef';
 import { CoastalWater } from './water';
 import { CrossingEffects } from './effects';
 import { storyCameraFrame, storyStage, type StorySceneId, type StoryStage } from './story-staging';
@@ -194,7 +194,6 @@ export class World {
   ) {
     this.profile = ferryProfile(level);
     this.hull = ferry(this.profile);
-    if (level.id === 'reef-return') addWorkingDeckSeams(this.hull);
     this.state = state;
     this.layout = sceneLayout(this.level.id);
     this.paths = getLevelPaths(this.level);
@@ -1613,14 +1612,7 @@ export class World {
       endpoint,
       true,
     );
-    if (this.level.id === 'reef-return') {
-      updateShelterGangway(this.gangway, path.bridge, path.gate);
-      return;
-    }
-    const direction = path.gate.clone().sub(path.bridge);
-    this.gangway.position.copy(path.bridge).add(path.gate).multiplyScalar(0.5);
-    this.gangway.scale.z = direction.length();
-    this.gangway.quaternion.setFromUnitVectors(new T.Vector3(0, 0, 1), direction.normalize());
+    updateShelterGangway(this.gangway, path.bridge, path.gate);
   }
   draftY(s: State) {
     return hullDraftY(draft(s, this.level));

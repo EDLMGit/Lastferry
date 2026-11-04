@@ -25,7 +25,7 @@
       "initialLevel": 0,
       "rises": [
         {
-          "afterTurn": 5,
+          "afterTurn": 4,
           "level": 1
         },
         {
@@ -37,7 +37,7 @@
     "actionCost": 1,
     "depthFormula": "baseDepth + tideLevel",
     "pierDryWhen": "tideLevel < elevation",
-    "failureRule": "required passenger waiting at a flooded pier"
+    "failureRule": "flooded occupied pier or a required rescue cut off by the current"
   },
   "names": {
     "nodes": {
@@ -61,100 +61,233 @@
       "id": "harbor",
       "baseDepth": 4,
       "pierId": "harbor-pier",
-      "positionXZ": [-6.5, 0]
+      "positionXZ": [
+        -6.5,
+        0
+      ]
     },
     {
       "id": "high-quay",
       "baseDepth": 4,
       "pierId": "high-quay-pier",
-      "positionXZ": [0, 0]
+      "positionXZ": [
+        0,
+        0
+      ]
     },
     {
       "id": "wide-berth",
       "baseDepth": 4,
       "pierId": "wide-berth-pier",
-      "positionXZ": [5.8, -7.4]
+      "positionXZ": [
+        5.8,
+        -7.4
+      ]
     },
     {
       "id": "shell-landing",
       "baseDepth": 4,
       "pierId": "shell-landing-pier",
-      "positionXZ": [10.5, 3.8]
+      "positionXZ": [
+        10.5,
+        3.8
+      ]
     },
     {
       "id": "outer-buoy",
       "baseDepth": 4,
-      "positionXZ": [-3.3, 5.8]
+      "positionXZ": [
+        -3.3,
+        5.8
+      ]
     }
   ],
   "edges": [
     {
       "id": "harbor-high-quay",
-      "nodes": ["harbor", "high-quay"],
+      "nodes": [
+        "harbor",
+        "high-quay"
+      ],
       "baseDepth": 2,
-      "bidirectional": true,
+      "bidirectional": false,
+      "current": {
+        "name": "Beacon Reef",
+        "phases": [
+          {
+            "tideLevel": 0,
+            "from": "high-quay",
+            "to": "harbor"
+          },
+          {
+            "tideLevel": 1,
+            "from": "harbor",
+            "to": "high-quay"
+          },
+          {
+            "tideLevel": 2,
+            "from": "high-quay",
+            "to": "harbor"
+          }
+        ]
+      },
       "waypointsXZ": [
-        [-6.5, 0],
-        [-5.5, 0.8],
-        [-3.25, 1],
-        [-1, 0.8],
-        [0, 0]
+        [
+          -6.5,
+          0
+        ],
+        [
+          -5.5,
+          0.8
+        ],
+        [
+          -3.25,
+          1
+        ],
+        [
+          -1,
+          0.8
+        ],
+        [
+          0,
+          0
+        ]
       ]
     },
     {
       "id": "high-quay-wide-berth",
-      "nodes": ["high-quay", "wide-berth"],
+      "nodes": [
+        "high-quay",
+        "wide-berth"
+      ],
       "baseDepth": 4,
       "bidirectional": true,
       "waypointsXZ": [
-        [0, 0],
-        [1, 0.8],
-        [3.9, 0.5],
-        [5.4, -3.4],
-        [8.8, -5.2],
-        [8.8, -6.6],
-        [6.8, -6.6],
-        [5.8, -7.4]
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0.8
+        ],
+        [
+          3.9,
+          0.5
+        ],
+        [
+          5.4,
+          -3.4
+        ],
+        [
+          8.8,
+          -5.2
+        ],
+        [
+          8.8,
+          -6.6
+        ],
+        [
+          6.8,
+          -6.6
+        ],
+        [
+          5.8,
+          -7.4
+        ]
       ]
     },
     {
       "id": "high-quay-shell-landing",
-      "nodes": ["high-quay", "shell-landing"],
-      "baseDepth": 2,
+      "nodes": [
+        "high-quay",
+        "shell-landing"
+      ],
+      "baseDepth": 1,
       "bidirectional": true,
       "waypointsXZ": [
-        [0, 0],
-        [0.5, 1.2],
-        [3, 2.3],
-        [7.4, 4.6],
-        [9.5, 4.6],
-        [10.5, 3.8]
+        [
+          0,
+          0
+        ],
+        [
+          0.5,
+          1.2
+        ],
+        [
+          3,
+          2.3
+        ],
+        [
+          7.4,
+          4.6
+        ],
+        [
+          9.5,
+          4.6
+        ],
+        [
+          10.5,
+          3.8
+        ]
       ]
     },
     {
       "id": "high-quay-outer-buoy",
-      "nodes": ["high-quay", "outer-buoy"],
+      "nodes": [
+        "high-quay",
+        "outer-buoy"
+      ],
       "baseDepth": 4,
       "bidirectional": true,
       "waypointsXZ": [
-        [0, 0],
-        [0, 1.5],
-        [-1.8, 4],
-        [-3.3, 5.8]
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1.5
+        ],
+        [
+          -1.8,
+          4
+        ],
+        [
+          -3.3,
+          5.8
+        ]
       ]
     },
     {
-      "id": "outer-buoy-harbor",
-      "nodes": ["outer-buoy", "harbor"],
+      "id": "outer-buoy-shell-landing",
+      "nodes": [
+        "outer-buoy",
+        "shell-landing"
+      ],
       "baseDepth": 4,
       "bidirectional": true,
       "waypointsXZ": [
-        [-3.3, 5.8],
-        [-6.8, 5.2],
-        [-9, 3],
-        [-9.4, 0.8],
-        [-7.5, 0.8],
-        [-6.5, 0]
+        [
+          -3.3,
+          5.8
+        ],
+        [
+          0,
+          7
+        ],
+        [
+          4.4,
+          7.6
+        ],
+        [
+          8.4,
+          6.5
+        ],
+        [
+          10.5,
+          3.8
+        ]
       ]
     }
   ],
@@ -165,9 +298,15 @@
       "elevation": 3,
       "isDeliveryPier": true,
       "islandId": "lighthouse-island",
-      "positionXZ": [-6.5, -1.95],
-      "landAnchorXZ": [-6.5, -3.2],
-      "width": 4.2
+      "positionXZ": [
+        -6.5,
+        -1.5
+      ],
+      "landAnchorXZ": [
+        -6.5,
+        -3.2
+      ],
+      "width": 1.48
     },
     {
       "id": "high-quay-pier",
@@ -175,9 +314,15 @@
       "elevation": 3,
       "isDeliveryPier": false,
       "islandId": "quay-island",
-      "positionXZ": [0, -1.95],
-      "landAnchorXZ": [0, -3.2],
-      "width": 4.2
+      "positionXZ": [
+        0,
+        -1.5
+      ],
+      "landAnchorXZ": [
+        0,
+        -3.2
+      ],
+      "width": 1.55
     },
     {
       "id": "wide-berth-pier",
@@ -185,9 +330,15 @@
       "elevation": 1,
       "isDeliveryPier": false,
       "islandId": "wide-island",
-      "positionXZ": [5.8, -9.35],
-      "landAnchorXZ": [5.8, -10.6],
-      "width": 4.2
+      "positionXZ": [
+        5.8,
+        -8.9
+      ],
+      "landAnchorXZ": [
+        5.8,
+        -10.6
+      ],
+      "width": 1.2
     },
     {
       "id": "shell-landing-pier",
@@ -195,9 +346,15 @@
       "elevation": 2,
       "isDeliveryPier": false,
       "islandId": "shell-island",
-      "positionXZ": [10.5, 1.85],
-      "landAnchorXZ": [10.5, 0.6],
-      "width": 4.2
+      "positionXZ": [
+        10.5,
+        2.3
+      ],
+      "landAnchorXZ": [
+        10.5,
+        0.6
+      ],
+      "width": 1.34
     }
   ],
   "passengers": [
@@ -239,21 +396,38 @@
     }
   ],
   "start": {
-    "boatNodeId": "harbor",
+    "boatNodeId": "wide-berth",
     "aboard": [],
     "waitingByPier": {
       "harbor-pier": [],
       "high-quay-pier": [],
-      "wide-berth-pier": ["alder", "clover", "poppy", "wren"],
-      "shell-landing-pier": ["sorrel", "finch"]
+      "wide-berth-pier": [
+        "alder",
+        "clover",
+        "poppy",
+        "wren"
+      ],
+      "shell-landing-pier": [
+        "sorrel",
+        "finch"
+      ]
     }
   },
   "objective": {
     "deliveryPierId": "harbor-pier",
-    "requiredPassengerIds": ["alder", "clover", "poppy", "wren", "sorrel", "finch"]
+    "requiredPassengerIds": [
+      "alder",
+      "clover",
+      "poppy",
+      "wren",
+      "sorrel",
+      "finch"
+    ]
   },
   "validation": {
-    "witnessReplays": ["data/wide-berth/witnesses.json"],
+    "witnessReplays": [
+      "data/wide-berth/witnesses.json"
+    ],
     "searchDepthLimit": 26
   },
   "world": {
@@ -266,8 +440,16 @@
     "presentationNote": "Compact protected refuge, angled stone High Quay, broad working shore and low shell/reed spit; short supported landings connect distinct walkable waiting areas.",
     "suggestedCamera": {
       "projection": "orthographic",
-      "positionXYZ": [0, 34, 24],
-      "targetXYZ": [1.5, 0, -2.8],
+      "positionXYZ": [
+        0,
+        34,
+        24
+      ],
+      "targetXYZ": [
+        1.5,
+        0,
+        -2.8
+      ],
       "verticalSpan": 20
     },
     "islands": [
@@ -275,55 +457,148 @@
         "id": "lighthouse-island",
         "elevation": 3,
         "footprintXZ": [
-          [-10.8, -5.5],
-          [-9.2, -6.3],
-          [-6.0, -6.3],
-          [-4.45, -5.45],
-          [-3.95, -4.2],
-          [-4.6, -2.75],
-          [-7.4, -2.65],
-          [-10.5, -3.8]
+          [
+            -10.8,
+            -5.5
+          ],
+          [
+            -9.2,
+            -6.3
+          ],
+          [
+            -6,
+            -6.3
+          ],
+          [
+            -4.45,
+            -5.45
+          ],
+          [
+            -3.95,
+            -4.2
+          ],
+          [
+            -4.6,
+            -2.75
+          ],
+          [
+            -7.4,
+            -2.65
+          ],
+          [
+            -10.5,
+            -3.8
+          ]
         ]
       },
       {
         "id": "quay-island",
         "elevation": 3,
         "footprintXZ": [
-          [-2.05, -6.25],
-          [0.6, -6.4],
-          [2.4, -5.2],
-          [2.0, -3.15],
-          [0.65, -2.65],
-          [-1.7, -2.95],
-          [-2.5, -4.35]
+          [
+            -2.05,
+            -6.25
+          ],
+          [
+            0.6,
+            -6.4
+          ],
+          [
+            2.4,
+            -5.2
+          ],
+          [
+            2,
+            -3.15
+          ],
+          [
+            0.65,
+            -2.65
+          ],
+          [
+            -1.7,
+            -2.95
+          ],
+          [
+            -2.5,
+            -4.35
+          ]
         ]
       },
       {
         "id": "wide-island",
         "elevation": 1,
         "footprintXZ": [
-          [3.3, -13.05],
-          [4.55, -13.7],
-          [7.6000000000000005, -13.75],
-          [8.950000000000001, -12.55],
-          [9.0, -11.15],
-          [7.7, -10.2],
-          [4.05, -10.05],
-          [3.0, -11.05]
+          [
+            3.3,
+            -13.05
+          ],
+          [
+            4.55,
+            -13.7
+          ],
+          [
+            7.6000000000000005,
+            -13.75
+          ],
+          [
+            8.950000000000001,
+            -12.55
+          ],
+          [
+            9,
+            -11.15
+          ],
+          [
+            7.7,
+            -10.2
+          ],
+          [
+            4.05,
+            -10.05
+          ],
+          [
+            3,
+            -11.05
+          ]
         ]
       },
       {
         "id": "shell-island",
         "elevation": 2,
         "footprintXZ": [
-          [8.4, -1.5],
-          [9.6, -2.45],
-          [11.0, -2.7],
-          [14, -2.1],
-          [12.9, 0.45],
-          [11.4, 1.15],
-          [9.0, 1.0],
-          [8.1, 0.2]
+          [
+            8.4,
+            -1.5
+          ],
+          [
+            9.6,
+            -2.45
+          ],
+          [
+            11,
+            -2.7
+          ],
+          [
+            14,
+            -2.1
+          ],
+          [
+            12.9,
+            0.45
+          ],
+          [
+            11.4,
+            1.15
+          ],
+          [
+            9,
+            1
+          ],
+          [
+            8.1,
+            0.2
+          ]
         ]
       }
     ]

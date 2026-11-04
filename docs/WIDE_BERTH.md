@@ -1,5 +1,12 @@
 # Wide Berth — developer notes (puzzle spoilers)
 
+## Beacon Reef repair
+
+The ferry starts at Wide Berth with the first group waiting ashore. Beacon Reef is the only crossing between High Quay and Harbor. It is homeward at low water, turns outward after action 4 and becomes homeward again after action 10. The shallow first trip and six-space last trip must account for eight spaces of neighbors. Outer Buoy links the pickup shores. See the [current witnesses](../data/wide-berth/witnesses.json), [production proof](../reviews/existing-coves-repair/WIDE_DESIGN.md) and [actual phone rescues](../reviews/existing-coves-repair/REVIEW.md).
+
+## Historical version before EXISTING_COVES_REPAIR_01
+
+
 The production contract is `data/wide-berth.level.json`, with exact sequences in `data/wide-berth/witnesses.json`. Supplied non-spatial design/proof is retained under `LAST_FERRY_WIDE_BERTH_PACKAGE/design/wide-proof`; it is not production geometry evidence.
 
 The ferry has six spaces. Alder and Clover each use two; Poppy/Wren/Sorrel/Finch each use one. All six neighbors total eight spaces. Draft is 1 empty, 2 at loads1–2, 3 at3–4 and 4 at5–6. Capacity is the whole loading rule: fixed automatic identity seats support every legal subset, up to five actual bodies. Earlier levels retain their original four-space hull/rules even after the launch.

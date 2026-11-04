@@ -29,8 +29,8 @@ const layouts: Record<string, SceneLayout> = {
     islandStyles: { 'lighthouse-island': 'refuge', 'quay-island': 'quay', 'wrack-island': 'working', 'pool-island': 'spit' },
     stonePiers: ['quay-pier'],
     centeredWaitingPairs: true,
-    cameraPosition: [0, 34, 24],
-    landscapeCameraPosition: [0, 30, 30],
+    cameraPosition: [3.4, 21, 32],
+    landscapeCameraPosition: [3.4, 20, 32],
   },
   'two-shelters': {
     landmarks: [
@@ -57,8 +57,8 @@ const layouts: Record<string, SceneLayout> = {
     },
     stonePiers: ['high-quay-pier'],
     centeredWaitingPairs: true,
-    cameraPosition: [0, 34, 24],
-    landscapeCameraPosition: [0, 30, 30],
+    cameraPosition: [3.4, 21, 32],
+    landscapeCameraPosition: [3.4, 20, 32],
   },
   'driftwood-yard': {
     landmarks: [

@@ -1,22 +1,16 @@
 # Last Ferry — Project state
 
-## Active direction — EXISTING_COVES_REPAIR_01 · 4 November 2026
+## Current handoff — Wide Berth and Reef Return in place
 
-The latest human review rejects Wide Berth and Reef Return's present large-ferry/dock appearance and planning difficulty. **Stop adding levels. Repair the existing `wide-berth` and `reef-return` in place, Wide first, with a shared six-space ferry/landing redesign.** Add the implemented reef/current mechanic to Wide now. Preserve accepted early coves and Two Shelters.
+The corrective brief in [NEXT_TASK_EXISTING_COVES_REPAIR.md](../NEXT_TASK_EXISTING_COVES_REPAIR.md) superseded the separate-successor assignment. The prior game and its human rejection are recorded in [the corrective handoff](HANDOFF_EXISTING_COVES_2026-11-04.md). Implementation started from a clean fast-forward to `a07be60999505fce3dd3dea76cd948f50903aa78`, above reviewed game `5085b894cd611dfdcd4ffe55d3bc7296d830ce09`.
 
-The root task [NEXT_TASK_EXISTING_COVES_REPAIR.md](../NEXT_TASK_EXISTING_COVES_REPAIR.md) is the active assignment; [the fresh-chat handoff](HANDOFF_EXISTING_COVES_2026-11-04.md) records current facts and decisions. This supersedes the previous independent-successor brief, the freeze on Wide's puzzle and larger-hull geometry, and the proposal to defer currents to C7/C8. Preserve save identities/order/history, not rejected content. No new cove/variant/Practice ID, campaign reorder or automatic deployment is authorized by this task.
+Both existing levels use the rebuilt six-space harbor ferry and fitted shore landings. Wide puts Beacon Reef on the way to Harbor, with a shallow first homeward window and a deeper final one. Reef Return uses Needle Reef and the ordinary shallow circuit for two different delivery plans. The free forecast shows every remaining tide, direction and flood. The loss preview distinguishes an insufficient number of ferry trips from a loaded boat with no reachable dry landing.
 
-Reviewed runtime remains `5085b894cd611dfdcd4ffe55d3bc7296d830ce09`; this direction update changes documentation only. Codex followed the previous assignment; that assignment's scope was wrong for the user's intent. Passing 462 units and six browser cases did not establish human acceptance. The current rule is implemented and reusable; statements below describing it as wholly unimplemented are historical.
+The Journey remains Holding → Bellwater → Driftwood → Wide Berth. Practice still has seven entries. Pending launch, active Wide and prior completions keep their original identities. The existing private Site is version 15/game `b64583dd295b488de013fb2d6db32e63ba79427e`; publication history follows below. The two repairs await human assessment of the boat, docks and puzzle difficulty.
 
-The twelve-cove target now explicitly aims for demanding thought within a calm, attractive experience. Exact future order remains provisional. Current Journey stays Holding → Bellwater → Driftwood → Wide; Reef and Two Shelters remain existing Practice entries during this repair. Same-ID puzzle changes do not inherently require a checkpoint migration.
+The production build and TypeScript, 460 unit tests, 79-family validation and all eight distinct focused browser cases passed. The final desktop comparison required an isolated rerun. Four rescues, losing choices and Undo were exercised at native emulated phone sizes. The launch illustration and gallery use the revised silhouette. [Review, recordings, original failures and limits](../reviews/existing-coves-repair/REVIEW.md)
 
-**Publication remains version 15/game `b64583dd295b488de013fb2d6db32e63ba79427e`. Reef Return has not been deployed.** Preserve its receipt and earlier publication history.
-
-Older scope, queue and roadmap sections below are historical where they conflict with this active direction.
-
-Updated: 2026-11-04. This is the compact continuity record for the current project, not a claim that every device or future release requirement has been verified.
-
-Read this before choosing scope. Detailed implementation history belongs in `STATUS.md`; evidence belongs under `reviews/`. Update this record after each handoff and after a confirmed deployment. User feedback can revise an accepted decision.
+Updated 4 November 2026. Earlier planning and implementation notes below describe their original handoff dates.
 
 ## Current publication — Sites version 15
 

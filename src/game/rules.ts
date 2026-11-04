@@ -14,7 +14,9 @@ export type State = {
   status: 'playing' | 'won' | 'lost';
   lossReason: null
     | { code: 'PASSENGER_STRANDED'; pierId: string; passengerIds: string[] }
-    | { code: 'RETURN_CUT_OFF'; edgeId: string; passengerIds: string[] };
+    | { code: 'RETURN_CUT_OFF'; edgeId: string; passengerIds: string[] }
+    | { code: 'RETURN_DEPTH'; edgeId: string; passengerIds: string[]; draft: number }
+    | { code: 'RETURN_CAPACITY'; edgeId: string; passengerIds: string[]; offshoreSlots: number; homewardTrips: number };
 };
 export const copy = <T>(v: T): T => structuredClone(v);
 export function initial(l: Level = level): State {
@@ -43,17 +45,66 @@ export function passageFlow(edge: Passage, tideLevel: number) {
   return phase;
 }
 
-function reachable(l: Level, tide: number, origins: Set<string>, reverse: boolean) {
+function reachable(l: Level, tide: number, origins: Set<string>, reverse: boolean, omit?: Passage) {
   const reached = new Set(origins);
   for (const node of reached) {
     for (const edge of l.edges) {
-      if (!edge.nodes.includes(node)) continue;
+      if (edge === omit || !edge.nodes.includes(node)) continue;
       const flow = passageFlow(edge, tide);
       if (flow && node !== (reverse ? flow.to : flow.from)) continue;
       reached.add(edge.nodes[edge.nodes[0] === node ? 1 : 0]);
     }
   }
   return reached;
+}
+
+function banks(l: Level, edge: Passage) {
+  const harbor = l.piers.find((pier) => pier.id === l.objective.deliveryPierId)!.nodeId;
+  const homeSide = reachable(l, l.rules.tide.initialLevel, new Set([harbor]), false, edge);
+  const [a, b] = edge.nodes;
+  if (homeSide.has(a) === homeSide.has(b)) return undefined;
+  return { homeSide, endpoint: homeSide.has(a) ? a : b };
+}
+
+export function currentHomeBank(l: Level, edge: Passage) {
+  return edge.current ? banks(l, edge)?.endpoint : undefined;
+}
+
+function capacityCutoff(s: State, l: Level, edge: Passage, tides: number[]): State['lossReason'] {
+  const bank = banks(l, edge);
+  if (!bank) return null;
+  let offshore = !bank.homeSide.has(s.boatNodeId);
+  const passengers = new Set(offshore ? s.aboard : []);
+  for (const pier of l.piers) {
+    if (!bank.homeSide.has(pier.nodeId))
+      for (const id of s.waitingByPier[pier.id]) passengers.add(id);
+  }
+  const passengerIds = l.objective.requiredPassengerIds.filter((id) => passengers.has(id));
+  const offshoreSlots = passengerIds.reduce(
+    (total, id) => total + l.passengers.find((p) => p.id === id)!.slots, 0,
+  );
+  let homewardTrips = 0;
+  for (const tide of tides) {
+    const outward = passageFlow(edge, tide)!.from === bank.endpoint;
+    if (offshore && !outward) homewardTrips++;
+    offshore = outward;
+  }
+  return offshoreSlots > homewardTrips * l.rules.capacity
+    ? { code: 'RETURN_CAPACITY', edgeId: edge.id, passengerIds, offshoreSlots, homewardTrips }
+    : null;
+}
+
+function canReachDryLanding(s: State, l: Level) {
+  const stops = new Set([s.boatNodeId]);
+  for (const boatNodeId of stops) {
+    const here = { ...s, boatNodeId };
+    const pier = pierAt(here, l);
+    if (pier && pier.elevation > s.tideLevel) return true;
+    for (const node of l.nodes) {
+      if (!stops.has(node.id) && !passageError(here, node.id, l)) stops.add(node.id);
+    }
+  }
+  return false;
 }
 
 function checkReturn(s: State, l: Level): State['lossReason'] {
@@ -79,7 +130,12 @@ function checkReturn(s: State, l: Level): State['lossReason'] {
       for (const id of s.waitingByPier[pier.id]) unreachable.add(id);
   }
   const passengerIds = l.objective.requiredPassengerIds.filter((id) => unreachable.has(id));
-  return passengerIds.length ? { code: 'RETURN_CUT_OFF', edgeId: reef.id, passengerIds } : null;
+  if (passengerIds.length) return { code: 'RETURN_CUT_OFF', edgeId: reef.id, passengerIds };
+  if (tides.length === 1 && s.aboard.length && !canReachDryLanding(s, l)) {
+    const trapped = l.objective.requiredPassengerIds.filter((id) => s.aboard.includes(id));
+    if (trapped.length) return { code: 'RETURN_DEPTH', edgeId: reef.id, passengerIds: trapped, draft: draft(s, l) };
+  }
+  return capacityCutoff(s, l, reef, tides);
 }
 
 export function passageError(s: State, to: string, l = level): string | null {

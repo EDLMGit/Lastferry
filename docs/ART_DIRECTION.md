@@ -1,5 +1,9 @@
 # Last Ferry — Art Direction
 
+## The six-space family boat
+
+Keep the fuller wheelhouse, tapered honey-yellow hull, visible band of freeboard, small dark fenders and warm cambered roof readable together in ordinary phone Play. Passengers use a side opening. A shore approach leads along a narrow timber finger or fitted stone landing to the short brow. It should be possible to see where the boat ends and the dock begins. Recheck the loaded waterline, walking support and both berth headings whenever the profile changes. [Actual small-ferry and repaired-cove comparisons](../reviews/existing-coves-repair/REVIEW.md)
+
 ## Needle Reef
 
 In Reef Return, the two rock shelves mark the sides of a navigable throat. Leave breathing room around the sailing line. Its pale chevrons need a dark edge over the shallower water and a clear point towards the permitted destination. Their direction can be read in a still frame and confirmed by name in the forecast.

@@ -35,11 +35,13 @@ export const smallFerryProfile: FerryProfile = {
 };
 export function wideHullOutline() {
   const outline = new Shape();
-  outline.moveTo(-0.98, -1.58);
-  outline.quadraticCurveTo(-1.13, 0.45, -0.96, 2.05);
-  outline.quadraticCurveTo(0, 2.45, 0.96, 2.05);
-  outline.quadraticCurveTo(1.13, 0.45, 0.98, -1.58);
-  outline.quadraticCurveTo(0, -1.75, -0.98, -1.58);
+  outline.moveTo(0, -1.76);
+  outline.bezierCurveTo(-0.74, -1.75, -0.83, -1.69, -0.85, -1.12);
+  outline.bezierCurveTo(-0.88, -0.66, -0.92, 0.64, -0.81, 1.24);
+  outline.bezierCurveTo(-0.75, 1.66, -0.37, 1.86, 0, 1.98);
+  outline.bezierCurveTo(0.37, 1.86, 0.75, 1.66, 0.81, 1.24);
+  outline.bezierCurveTo(0.92, 0.64, 0.88, -0.66, 0.85, -1.12);
+  outline.bezierCurveTo(0.83, -1.69, 0.74, -1.75, 0, -1.76);
   return outline;
 }
 const wakeOutline = wideHullOutline()
@@ -51,12 +53,12 @@ export function hullDraftY(requiredDraft: number) {
 export const wideFerryProfile: FerryProfile = {
   id: 'six-space',
   capacity: 6,
-  deckY: 0.26,
-  beam: 2.4,
-  bow: 2.43,
-  stern: 1.78,
-  gateX: 0.88,
-  gateZ: 1.72,
+  deckY: 0.635,
+  beam: 1.87,
+  bow: 2.04,
+  stern: 1.83,
+  gateX: 0.83,
+  gateZ: 0.335,
   wake: {
     fore: Math.max(...wakeOutline.map((p) => p[1])) + 0.18,
     aft: -Math.min(...wakeOutline.map((p) => p[1])) + 0.18,
@@ -88,9 +90,9 @@ export function deckSeat(level: Level, id: string): Vector3 {
   const bank = level.passengers.filter((p) => p.slots === passenger.slots);
   const stable = bank.sort((a, b) => a.id.localeCompare(b.id)).findIndex((p) => p.id === id);
   return new Vector3(
-    stable % 2 ? 0.7 : -0.7,
+    (stable % 2 ? 1 : -1) * (passenger.slots === 2 ? 0.48 : stable < 2 ? 0.57 : 0.45),
     wideFerryProfile.deckY,
-    passenger.slots === 2 ? -0.15 : 0.6 + Math.floor(stable / 2) * 0.5,
+    passenger.slots === 2 ? -0.525 : 0.93 + Math.floor(stable / 2) * 0.48,
   );
 }
 export function shoreSeat(
@@ -106,9 +108,9 @@ export function shoreSeat(
     const side = peers[0].id === id ? -1 : 1;
     const larger = passenger.slots === 2;
     return new Vector3(
-      pier.positionXZ[0] + side * (larger ? 0.75 : -0.62),
+      pier.positionXZ[0] + side * (larger ? 0.75 : -0.61),
       pier.elevation * 0.18 + (delivered ? 0.03 : -0.005),
-      pier.positionXZ[1] - (larger ? 1.95 : 1.13),
+      pier.landAnchorXZ[1] + (larger ? -0.52 : 0.30),
     );
   }
   const peers = level.passengers.filter((p) => p.species === passenger.species).sort((a, b) => a.id.localeCompare(b.id));
@@ -117,7 +119,7 @@ export function shoreSeat(
   return new Vector3(
     pier.positionXZ[0] + (index % 2 ? bank : -bank),
     pier.elevation * 0.18 + (delivered ? 0.03 : -0.005),
-    pier.positionXZ[1] - (passenger.species === 'sheep' ? 3.3 : 1.85 + Math.floor(index / 2) * 0.6),
+    pier.landAnchorXZ[1] - (passenger.species === 'sheep' ? 2.05 : 0.6 + Math.floor(index / 2) * 0.6),
   );
 }
 export function wideTransferWindow(won: boolean) {
@@ -163,22 +165,25 @@ export function wideTransferPath(
   const gate = new Vector3(side * profile.gateX, profile.deckY, profile.gateZ).applyMatrix4(
     hullMatrix,
   );
-  const landingHalf = pier.width / 2 - 0.13;
-  const bridgeX = level.id !== 'reef-return' ? gate.x : Math.max(pier.positionXZ[0] - landingHalf, Math.min(pier.positionXZ[0] + landingHalf, gate.x));
-  const bridge = new Vector3(bridgeX, pierY, pier.positionXZ[1] - 0.225);
-  const shore = new Vector3(pier.positionXZ[0], pierY, pier.positionXZ[1] - 0.225);
+  const bridge = new Vector3(gate.x, pierY, pier.positionXZ[1] - 0.25);
+  const shore = new Vector3(pier.positionXZ[0], pierY, bridge.z);
   const shoreAisle = new Vector3(pier.positionXZ[0], pierY, board ? from.z : destination.z);
-  const fore = new Vector3(0, profile.deckY, profile.gateZ).applyMatrix4(hullMatrix);
-  const aisle = new Vector3(0, profile.deckY, seat.z).applyMatrix4(hullMatrix);
+  const entryX = level.passengers.find((p) => p.id === id)!.slots === 2 ? seat.x : 0;
+  const transverse = new Vector3(entryX, profile.deckY, profile.gateZ).applyMatrix4(hullMatrix);
+  const aisle = new Vector3(entryX, profile.deckY, seat.z).applyMatrix4(hullMatrix);
   const points = board
-    ? [from, shoreAisle, shore, bridge, gate, fore, aisle, destination]
-    : [from, aisle, fore, gate, bridge, shore, shoreAisle, destination];
+    ? [from, shoreAisle, shore, bridge, gate, transverse, aisle, destination]
+    : [from, aisle, transverse, gate, bridge, shore, shoreAisle, destination];
   const distances = points.slice(1).map((point, index) => point.distanceTo(points[index]));
   const total = distances.reduce((a, b) => a + b, 0);
   const at = (index: number) => distances.slice(0, index).reduce((a, b) => a + b, 0) / total;
-  const bridgeStart = at(3), bridgeEnd = at(4);
-  const turnAt = board ? bridgeStart + (bridgeEnd - bridgeStart) * 0.35 : bridgeStart + (bridgeEnd - bridgeStart) * 0.65;
-  return { points, turnAt, turnStart: board ? bridgeStart : 0, turnEnd: board ? 1 : bridgeEnd, gate, bridge };
+  const start = at(board ? 5 : 1);
+  const end = at(board ? 6 : 2);
+  const large = level.passengers.find((p) => p.id === id)!.slots === 2;
+  const approach = large ? Math.min(0.23 / total, (end - start) * 0.28) : 0;
+  const turning = Math.min((large ? 0.27 : 0.075) / total, (end - start - approach) * 0.7);
+  const turnAt = board ? start + approach + turning : end - approach - turning;
+  return { points, turnAt, turnStart: board ? start + approach : 0, turnEnd: board ? 1 : end - approach, gate, bridge };
 }
 
 export function wideTransferAngle(

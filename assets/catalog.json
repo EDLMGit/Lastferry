@@ -269,24 +269,29 @@
         "empty and loaded draft",
         "both safe berth headings",
         "four-space original profile preserved",
-        "six-space wider/longer deck, full draft four",
+        "Six-space displacement launch, side gate, four load bands",
         "fixed identity seating for every legal two-sheep/four-rabbit subset",
         "up to five bodies occupying six spaces",
         "Two Shelters original four-space ferry with automatically arranged two-beaver/rabbit legal subsets"
       ],
-      "visualSignature": "Yellow shaped hull, substantial red cabin/roof/window/chimney, compact working deck, full-size animal banks, restrained fenders and rounded gunwale. Original four-space variant preserved.",
+      "visualSignature": "Original four-space ferry and a deeper golden six-space hull with a raised forepeak, cream sheer line, compact red pilothouse and two side fenders.",
       "reuseAndOwnership": "One reusable geometry family per cove. Named deck-anchor-{passengerId} children belong to the animated hull. Shared matte materials; scoped water-contact hull material.",
       "behaviorToPreserve": "Keep shaped bow, deck positions, passenger attachment, heading history and current pick/framing envelope. Active level alone chooses hull; old cove profiles remain byte-equivalent. Earlier coves retain fixed seats without reshuffling stationary passengers. Six-space sequential group presentation retains accepted action/audio timing. Two Shelters alone adapts deck anchors to the actual aboard subset during the same accepted transfer; it adds no hull, scale change or packing choice. Old cove anchors remain unchanged.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "existing-family-reused-two-shelters-practice-awaiting-human-playtest",
-        "reviewedBaseline": "2e4f99268da4691b315fe8467d9e539cda15e927",
-        "basis": "Existing original family reused by one independent three-body four-space Practice candidate. Earlier accepted variants and historical reviews remain below; candidate integration and mechanical proof do not establish visual acceptance or campaign suitability. No deployment in this pass.",
+        "state": "implemented-existing-coves-repair-awaiting-player-review",
+        "reviewedBaseline": "5085b894cd611dfdcd4ffe55d3bc7296d830ce09",
+        "basis": "Rounded displacement hull, raised forepeak, red wheelhouse and side entry for both six-space coves.",
         "history": [
           {
             "state": "original-accepted-variants-preserved-wide-berth-visual-repair-awaiting-human-review",
             "reviewedBaseline": "45ab9768792ddd3a8dffb67da6c332f8fe2234ff",
             "basis": "Prior Wide Berth functional verification did not establish visual acceptance. Existing original variants remain preserved; this scoped correction needs its own actual visual observations and user playtest."
+          },
+          {
+            "state": "existing-family-reused-two-shelters-practice-awaiting-human-playtest",
+            "reviewedBaseline": "2e4f99268da4691b315fe8467d9e539cda15e927",
+            "basis": "Existing original family reused by one independent three-body four-space Practice candidate. Earlier accepted variants and historical reviews remain below; candidate integration and mechanical proof do not establish visual acceptance or campaign suitability. No deployment in this pass."
           }
         ]
       },
@@ -330,6 +335,10 @@
         {
           "path": "reviews/reef-return/REVIEW.md",
           "role": "Six-space prepared ferry loading at three outer landings"
+        },
+        {
+          "path": "reviews/existing-coves-repair/REVIEW.md",
+          "role": "Actual revised game and sources. Rounded displacement hull, raised forepeak, red wheelhouse and side entry for both six-space coves."
         }
       ],
       "meaning": "Yellow ferry with red cabin. Keep shaped bow, deck positions, passenger attachment, heading history and current pick/framing envelope.",
@@ -338,8 +347,8 @@
         "src/dev/asset-gallery.ts"
       ],
       "gallery": {
-        "section": "two-shelters",
-        "preview": "Actual factory, unchanged full-size cast and production seats: five bodies occupying six spaces; developer specimen not gameplay. Two Shelters reuses this family with Hazel, Bracken and Mica; the candidate section links actual gameplay and retains separate design specimens."
+        "section": "wide-ferry",
+        "preview": "The actual six-space production model with a five-body load."
       },
       "typeSpecific": {
         "factory/source symbol": "src/scene/models.ts: ferry; src/scene/world.ts: World.boatRoot / hull / passengerAnchors",
@@ -354,6 +363,10 @@
       "reefReturnUse": {
         "description": "Six-space prepared ferry loading at three outer landings",
         "evidence": "reviews/reef-return/REVIEW.md",
+        "humanReview": "pending"
+      },
+      "existingCovesRepair": {
+        "notes": "Rounded displacement hull, raised forepeak, red wheelhouse and side entry for both six-space coves.",
         "humanReview": "pending"
       }
     },
@@ -534,8 +547,8 @@
         "disposal owner": "World.dispose traverses shared geometry/material/texture sets and disposes each once; CoastalWater owns its separate resources."
       },
       "reefReturnUse": {
-        "description": "Heather, wool sheep at Wrack Pier",
-        "evidence": "reviews/reef-return/REVIEW.md",
+        "description": "Heather, wool sheep starting aboard at Cairn Quay",
+        "evidence": "reviews/existing-coves-repair/REVIEW.md",
         "humanReview": "pending"
       }
     },
@@ -716,7 +729,7 @@
       "variants": [
         "original four-space wood boards",
         "original four-space stone variant",
-        "Wide Berth fitted compact T landing and short hinged gangway",
+        "Six-space coastal finger dock, fitted stone slip and short brow",
         "High Quay stone landing",
         "Two Shelters modest broad landing step and short fitted timber gangway"
       ],
@@ -725,14 +738,19 @@
       "behaviorToPreserve": "Original four-space factory output, actual walkable support, both berth orientations, matched bridge/gate endpoints and body/obstacle clearance.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "existing-family-reused-two-shelters-practice-awaiting-human-playtest",
-        "reviewedBaseline": "2e4f99268da4691b315fe8467d9e539cda15e927",
-        "basis": "Existing original family reused by one independent three-body four-space Practice candidate. Earlier accepted variants and historical reviews remain below; candidate integration and mechanical proof do not establish visual acceptance or campaign suitability. No deployment in this pass.",
+        "state": "implemented-existing-coves-repair-awaiting-player-review",
+        "reviewedBaseline": "5085b894cd611dfdcd4ffe55d3bc7296d830ce09",
+        "basis": "Narrow supported timber finger and fitted stone landing with a short gangway to the near side.",
         "history": [
           {
             "state": "original-accepted-variants-preserved-wide-berth-visual-repair-awaiting-human-review",
             "reviewedBaseline": "45ab9768792ddd3a8dffb67da6c332f8fe2234ff",
             "basis": "Prior Wide Berth functional verification did not establish visual acceptance. Existing original variants remain preserved; this scoped correction needs its own actual visual observations and user playtest."
+          },
+          {
+            "state": "existing-family-reused-two-shelters-practice-awaiting-human-playtest",
+            "reviewedBaseline": "2e4f99268da4691b315fe8467d9e539cda15e927",
+            "basis": "Existing original family reused by one independent three-body four-space Practice candidate. Earlier accepted variants and historical reviews remain below; candidate integration and mechanical proof do not establish visual acceptance or campaign suitability. No deployment in this pass."
           }
         ]
       },
@@ -768,6 +786,10 @@
         {
           "path": "reviews/reef-return/REVIEW.md",
           "role": "Short quay, timber landings and a fitted approach to the six-space deck"
+        },
+        {
+          "path": "reviews/existing-coves-repair/REVIEW.md",
+          "role": "Actual revised game and sources. Narrow supported timber finger and fitted stone landing with a short gangway to the near side."
         }
       ],
       "meaning": "Boarded piers, piles, gangplank and lantern. Keep geometry-derived berth/gangplank positions, flood water height and land contact; both ferry headings support transfer.",
@@ -791,6 +813,10 @@
       "reefReturnUse": {
         "description": "Short quay, timber landings and a fitted approach to the six-space deck",
         "evidence": "reviews/reef-return/REVIEW.md",
+        "humanReview": "pending"
+      },
+      "existingCovesRepair": {
+        "notes": "Narrow supported timber finger and fitted stone landing with a short gangway to the near side.",
         "humanReview": "pending"
       }
     },
@@ -1113,14 +1139,19 @@
       "behaviorToPreserve": "Terrain visual fields never replace canonical channel depth or flood rules.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "existing-family-reused-two-shelters-practice-awaiting-human-playtest",
-        "reviewedBaseline": "2e4f99268da4691b315fe8467d9e539cda15e927",
-        "basis": "Existing original family reused by one independent three-body four-space Practice candidate. Earlier accepted variants and historical reviews remain below; candidate integration and mechanical proof do not establish visual acceptance or campaign suitability. No deployment in this pass.",
+        "state": "implemented-existing-coves-repair-awaiting-player-review",
+        "reviewedBaseline": "5085b894cd611dfdcd4ffe55d3bc7296d830ce09",
+        "basis": "Repaired shore approaches and close camera for both six-space encounters.",
         "history": [
           {
             "state": "original-accepted-variants-preserved-wide-berth-visual-repair-awaiting-human-review",
             "reviewedBaseline": "45ab9768792ddd3a8dffb67da6c332f8fe2234ff",
             "basis": "Prior Wide Berth functional verification did not establish visual acceptance. Existing original variants remain preserved; this scoped correction needs its own actual visual observations and user playtest."
+          },
+          {
+            "state": "existing-family-reused-two-shelters-practice-awaiting-human-playtest",
+            "reviewedBaseline": "2e4f99268da4691b315fe8467d9e539cda15e927",
+            "basis": "Existing original family reused by one independent three-body four-space Practice candidate. Earlier accepted variants and historical reviews remain below; candidate integration and mechanical proof do not establish visual acceptance or campaign suitability. No deployment in this pass."
           }
         ]
       },
@@ -1156,6 +1187,10 @@
         {
           "path": "reviews/reef-return/REVIEW.md",
           "role": "Shelves framing the deeper navigable throat of Needle Reef"
+        },
+        {
+          "path": "reviews/existing-coves-repair/REVIEW.md",
+          "role": "Actual revised game and sources. Repaired shore approaches and close camera for both six-space encounters."
         }
       ],
       "meaning": "Rounded island coast. Terrain visual fields never replace canonical channel depth or flood rules.",
@@ -1176,6 +1211,10 @@
       "reefReturnUse": {
         "description": "Shelves framing the deeper navigable throat of Needle Reef",
         "evidence": "reviews/reef-return/REVIEW.md",
+        "humanReview": "pending"
+      },
+      "existingCovesRepair": {
+        "notes": "Repaired shore approaches and close camera for both six-space encounters.",
         "humanReview": "pending"
       }
     },
@@ -1524,6 +1563,10 @@
         {
           "path": "src/scene/effects.ts",
           "symbol": "CrossingEffects.movement"
+        },
+        {
+          "path": "src/scene/ferry-profile.ts",
+          "symbol": "wideFerryProfile.wake"
         }
       ],
       "variants": [
@@ -1536,9 +1579,16 @@
       "behaviorToPreserve": "Pure yaw/bob/draft emit no wake; subsequent boat movement does not drag previous crests; reset/Undo/hide clear. Six-space contact/crest dimensions follow the actual larger hull outline; original small-profile contact remains exact. Release lifecycle, palette, masks, finite residual and Reduced clearing remain.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "original-accepted-variants-preserved-wide-berth-visual-repair-awaiting-human-review",
-        "reviewedBaseline": "45ab9768792ddd3a8dffb67da6c332f8fe2234ff",
-        "basis": "Prior Wide Berth functional verification did not establish visual acceptance. Existing original variants remain preserved; this scoped correction needs its own actual visual observations and user playtest."
+        "state": "implemented-existing-coves-repair-awaiting-player-review",
+        "reviewedBaseline": "5085b894cd611dfdcd4ffe55d3bc7296d830ce09",
+        "basis": "Existing released crests and water contact use the new six-space hull envelope.",
+        "history": [
+          {
+            "state": "original-accepted-variants-preserved-wide-berth-visual-repair-awaiting-human-review",
+            "reviewedBaseline": "45ab9768792ddd3a8dffb67da6c332f8fe2234ff",
+            "basis": "Prior Wide Berth functional verification did not establish visual acceptance. Existing original variants remain preserved; this scoped correction needs its own actual visual observations and user playtest."
+          }
+        ]
       },
       "evidence": [
         {
@@ -1552,6 +1602,10 @@
         {
           "path": "reviews/wide-berth-visual-repair/REVIEW.md",
           "role": "Current corrective implementation and actual source-indexed phone comparisons; prior45ab976presentation was rejected, human acceptance of this repair remains pending."
+        },
+        {
+          "path": "reviews/existing-coves-repair/REVIEW.md",
+          "role": "Actual revised game and sources. Existing released crests and water contact use the new six-space hull envelope."
         }
       ],
       "meaning": "Independently released ferry crests. Pure yaw/bob/draft emit no wake; subsequent boat movement does not drag previous crests; reset/Undo/hide clear.",
@@ -1569,6 +1623,10 @@
         "blend/depth behavior": "Transparent normal blending, depth test on/depth writes off unless override states additive.",
         "picking/framing exclusion": "Decorative/excludeFromFrame; not a new puzzle target.",
         "Reduced/Undo/reset/hide lifecycle": "Pure yaw/bob/draft emit no wake; subsequent boat movement does not drag previous crests; reset/Undo/hide clear."
+      },
+      "existingCovesRepair": {
+        "notes": "Existing released crests and water contact use the new six-space hull envelope.",
+        "humanReview": "pending"
       }
     },
     {
@@ -1798,13 +1856,18 @@
       "behaviorToPreserve": "No decorative shortcuts or new junctions; selection and move use same geometry.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "existing-family-reused-two-shelters-practice-awaiting-human-playtest",
-        "reviewedBaseline": "2e4f99268da4691b315fe8467d9e539cda15e927",
-        "basis": "Existing original family reused by one independent three-body four-space Practice candidate. Earlier accepted variants and historical reviews remain below; candidate integration and mechanical proof do not establish visual acceptance or campaign suitability. No deployment in this pass.",
+        "state": "implemented-existing-coves-repair-awaiting-player-review",
+        "reviewedBaseline": "5085b894cd611dfdcd4ffe55d3bc7296d830ce09",
+        "basis": "Beacon Reef and Needle Reef show the permitted direction on the same curve the boat sails.",
         "history": [
           {
             "state": "part-of-accepted-baseline",
             "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+          },
+          {
+            "state": "existing-family-reused-two-shelters-practice-awaiting-human-playtest",
+            "reviewedBaseline": "2e4f99268da4691b315fe8467d9e539cda15e927",
+            "basis": "Existing original family reused by one independent three-body four-space Practice candidate. Earlier accepted variants and historical reviews remain below; candidate integration and mechanical proof do not establish visual acceptance or campaign suitability. No deployment in this pass."
           }
         ]
       },
@@ -1836,6 +1899,10 @@
         {
           "path": "reviews/reef-return/REVIEW.md",
           "role": "Stationary chevrons follow the permitted direction at each tide"
+        },
+        {
+          "path": "reviews/existing-coves-repair/REVIEW.md",
+          "role": "Actual revised game and sources. Beacon Reef and Needle Reef show the permitted direction on the same curve the boat sails."
         }
       ],
       "meaning": "Canonical rounded navigation courses. No decorative shortcuts or new junctions; selection and move use same geometry.",
@@ -1848,7 +1915,7 @@
       },
       "typeSpecific": {
         "canonical semantic fact": "No decorative shortcuts or new junctions; selection and move use same geometry.",
-        "shape/text/color encoding": "Quiet curved dashed seafoam routes; same course used by ferry. On Needle Reef the cream, dark-edged chevrons point along the legal heading. The forecast and selected passage also name the endpoints.",
+        "shape/text/color encoding": "Quiet curved dashed seafoam routes; same course used by ferry. On Beacon Reef and Needle Reef the cream, dark-edged chevrons point along the legal heading. The forecast and selected passage also name the endpoints.",
         "variants": "ordinary shallow/deep; highlighted; blocked",
         "free inspection versus action commitment": "Inspection changes highlight/forecast only; one nearby explicit Sail commits one adjacent passage. Blocked depth and immediate-loss consequences remain visible.",
         "source geometry and update owner": "src/scene/paths.ts: getLevelPaths; src/scene/world.ts: World.routes / indicate The current variant samples the same canonical path and reads the same passageFlow as movement.",
@@ -1857,6 +1924,10 @@
       "reefReturnUse": {
         "description": "Stationary chevrons follow the permitted direction at each tide",
         "evidence": "reviews/reef-return/REVIEW.md",
+        "humanReview": "pending"
+      },
+      "existingCovesRepair": {
+        "notes": "Beacon Reef and Needle Reef show the permitted direction on the same curve the boat sails.",
         "humanReview": "pending"
       }
     },
@@ -1946,14 +2017,19 @@
       "behaviorToPreserve": "One canonical action, cancellable transient presentation, both berth headings; new icon does not immediately transfer. Six-space profile uses fixed identity seats and a sequential foredeck/central aisle path inside the same accepted action duration; group audio stays grouped. Old small profiles retain their prior paths.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "existing-family-reused-two-shelters-practice-awaiting-human-playtest",
-        "reviewedBaseline": "2e4f99268da4691b315fe8467d9e539cda15e927",
-        "basis": "Existing original family reused by one independent three-body four-space Practice candidate. Earlier accepted variants and historical reviews remain below; candidate integration and mechanical proof do not establish visual acceptance or campaign suitability. No deployment in this pass.",
+        "state": "implemented-existing-coves-repair-awaiting-player-review",
+        "reviewedBaseline": "5085b894cd611dfdcd4ffe55d3bc7296d830ce09",
+        "basis": "Shared adult and rabbit seats and transfer paths at the revised hull and landing.",
         "history": [
           {
             "state": "original-accepted-variants-preserved-wide-berth-visual-repair-awaiting-human-review",
             "reviewedBaseline": "45ab9768792ddd3a8dffb67da6c332f8fe2234ff",
             "basis": "Prior Wide Berth functional verification did not establish visual acceptance. Existing original variants remain preserved; this scoped correction needs its own actual visual observations and user playtest."
+          },
+          {
+            "state": "existing-family-reused-two-shelters-practice-awaiting-human-playtest",
+            "reviewedBaseline": "2e4f99268da4691b315fe8467d9e539cda15e927",
+            "basis": "Existing original family reused by one independent three-body four-space Practice candidate. Earlier accepted variants and historical reviews remain below; candidate integration and mechanical proof do not establish visual acceptance or campaign suitability. No deployment in this pass."
           }
         ]
       },
@@ -1993,6 +2069,10 @@
         {
           "path": "reviews/reef-return/REVIEW.md",
           "role": "Two-space sheep and beaver with two one-space rabbits on the prepared deck"
+        },
+        {
+          "path": "reviews/existing-coves-repair/REVIEW.md",
+          "role": "Actual revised game and sources. Shared adult and rabbit seats and transfer paths at the revised hull and landing."
         }
       ],
       "meaning": "Passenger boarding and unloading presentation. One canonical action, cancellable transient presentation, both berth headings; new icon does not immediately transfer.",
@@ -2014,6 +2094,10 @@
       "reefReturnUse": {
         "description": "Two-space sheep and beaver with two one-space rabbits on the prepared deck",
         "evidence": "reviews/reef-return/REVIEW.md",
+        "humanReview": "pending"
+      },
+      "existingCovesRepair": {
+        "notes": "Shared adult and rabbit seats and transfer paths at the revised hull and landing.",
         "humanReview": "pending"
       }
     },
@@ -2901,9 +2985,9 @@
       "behaviorToPreserve": "Preview uses future delivery language and qualified projected load/tide; opening/toggling/cancelling keeps committed state/history and victory effects unchanged. Same native dialog/choices/focus/scroll survive fullscreen; portrait recovery and stable footer remain. Image decode/failure and rerendering reserve the same geometry; portrait children remain decoration within each existing native button. No portrait-specific overlay or replacement dialog. Story uses this same native owner; cove-boundary progression requires explicit departure and never follows previews, victory display or Undo. Six-option groups use a bounded wider short-landscape chooser; Confirm stays near the initiating context with native choices and overcapacity rejection. Sailing uses inline consequences and its explicit nearby action; native passenger subset/loss dialogs, fullscreen identity and complete Undo remain.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "integrated-play-readability-awaiting-human-review",
-        "reviewedBaseline": "7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695",
-        "basis": "Existing family reused for the scoped readable-play correction. Earlier accepted material, identity and behavior remain; new composition and perceptual readability require their own actual evidence and user review. Published version13 still contains the reviewed baseline.",
+        "state": "implemented-existing-coves-repair-awaiting-player-review",
+        "reviewedBaseline": "5085b894cd611dfdcd4ffe55d3bc7296d830ce09",
+        "basis": "Forecast lists every remaining tide phase, reef depth and flood. Previews explain a final trip with too little space or a boat too deep to get home.",
         "history": [
           {
             "state": "accepted-painted-panel-direction; published-portrait-integration; story-awaiting-review",
@@ -2923,6 +3007,11 @@
                 "reviewedSourceCommit": "23a644aba24e6479b9d82a106a745d15c3f8c7dc"
               }
             ]
+          },
+          {
+            "state": "integrated-play-readability-awaiting-human-review",
+            "reviewedBaseline": "7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695",
+            "basis": "Existing family reused for the scoped readable-play correction. Earlier accepted material, identity and behavior remain; new composition and perceptual readability require their own actual evidence and user review. Published version13 still contains the reviewed baseline."
           }
         ]
       },
@@ -2990,6 +3079,10 @@
         {
           "path": "reviews/reef-return/REVIEW.md",
           "role": "Reef forecast, missed homeward crossing and Undo recovery"
+        },
+        {
+          "path": "reviews/existing-coves-repair/REVIEW.md",
+          "role": "Actual revised game and sources. Forecast lists every remaining tide phase, reef depth and flood. Previews explain a final trip with too little space or a boat too deep to get home."
         }
       ],
       "meaning": "Local preview, forecast, Menu, Settings and completion retain native semantics; projected future action is explicit and every full passenger label/cost remains readable.",
@@ -3013,6 +3106,10 @@
       "reefReturnUse": {
         "description": "Reef forecast, missed homeward crossing and Undo recovery",
         "evidence": "reviews/reef-return/REVIEW.md",
+        "humanReview": "pending"
+      },
+      "existingCovesRepair": {
+        "notes": "Forecast lists every remaining tide phase, reef depth and flood. Previews explain a final trip with too little space or a boat too deep to get home.",
         "humanReview": "pending"
       }
     },
@@ -5508,14 +5605,19 @@
       "behaviorToPreserve": "Opening finite actions retain supplied art and 6/6/7-second endpoints. Harbor is five seconds. Milliseconds convert explicitly to painter seconds. Resize recomposes portrait/landscape; settled endpoints redraw only when needed. No rabbits board during the prelude and the Harbor ferry remains empty.",
       "provenance": "original-package-canvas-art",
       "acceptance": {
-        "state": "integrated-play-readability-awaiting-human-review",
-        "reviewedBaseline": "7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695",
-        "basis": "Existing family reused for the scoped readable-play correction. Earlier accepted material, identity and behavior remain; new composition and perceptual readability require their own actual evidence and user review. Published version13 still contains the reviewed baseline.",
+        "state": "implemented-existing-coves-repair-awaiting-player-review",
+        "reviewedBaseline": "5085b894cd611dfdcd4ffe55d3bc7296d830ce09",
+        "basis": "Eight-second launch with revised deep-sided hull, swept bow, side gate and rounded red pilothouse.",
         "history": [
           {
             "state": "original-accepted-variants-preserved-wide-berth-visual-repair-awaiting-human-review",
             "reviewedBaseline": "45ab9768792ddd3a8dffb67da6c332f8fe2234ff",
             "basis": "Prior Wide Berth functional verification did not establish visual acceptance. Existing original variants remain preserved; this scoped correction needs its own actual visual observations and user playtest."
+          },
+          {
+            "state": "integrated-play-readability-awaiting-human-review",
+            "reviewedBaseline": "7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695",
+            "basis": "Existing family reused for the scoped readable-play correction. Earlier accepted material, identity and behavior remain; new composition and perceptual readability require their own actual evidence and user review. Published version13 still contains the reviewed baseline."
           }
         ]
       },
@@ -5547,6 +5649,10 @@
         {
           "path": "reviews/play-readability/HARBOR_OBSERVATIONS.md",
           "role": "Native beginning/lantern-placement/endpoint inspection and actual explicit Bellwater handoffs; held frames disclose Pause and original failed captures."
+        },
+        {
+          "path": "reviews/existing-coves-repair/REVIEW.md",
+          "role": "Actual revised game and sources. Eight-second launch with revised deep-sided hull, swept bow, side gate and rounded red pilothouse."
         }
       ],
       "consumers": [
@@ -5563,6 +5669,10 @@
         "mechanical versus decorative boundary": "Entirely narrative decorative art. It does not execute move/board/unload, tide changes, rescue completion or checkpoint writes. Existing game models/data remain authoritative.",
         "material/texture dependencies": "Canvas2D gradients, vector paths and deterministic560-point grain; no fetched image, font, WebGL model or raster texture. Georgia captions are HTML and owned by the UI family.",
         "generation and disposal owner": "createCoveStoryPainter draws into one view-owned canvas at DPR<=2. The view handles resize/draw lifetime; the controller clamps finite time. No painter timer, second WebGL context or per-shot gameplay rebuild."
+      },
+      "existingCovesRepair": {
+        "notes": "Eight-second launch with revised deep-sided hull, swept bow, side gate and rounded red pilothouse.",
+        "humanReview": "pending"
       }
     },
     {
@@ -5822,8 +5932,8 @@
         "disposal owner": "World.dispose traverses shared geometry/material/texture sets and disposes each once; CoastalWater owns its separate resources."
       },
       "reefReturnUse": {
-        "description": "Birch, brown beaver at Shell Pool",
-        "evidence": "reviews/reef-return/REVIEW.md",
+        "description": "Birch, brown beaver starting aboard at Cairn Quay",
+        "evidence": "reviews/existing-coves-repair/REVIEW.md",
         "humanReview": "pending"
       }
     },
@@ -5906,7 +6016,7 @@
       ],
       "variants": [
         "Wide Berth low working pier",
-        "High Quay safe staging",
+        "High Quay dry staging between two homeward currents",
         "Shell Landing lower shore",
         "Harbor refuge"
       ],
@@ -5915,9 +6025,16 @@
       "behaviorToPreserve": "Composition never changes mechanics. Actual wider hull and cast must clear the authored land/pier meshes and remain readable.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "original-accepted-variants-preserved-wide-berth-visual-repair-awaiting-human-review",
-        "reviewedBaseline": "45ab9768792ddd3a8dffb67da6c332f8fe2234ff",
-        "basis": "Prior Wide Berth functional verification did not establish visual acceptance. Existing original variants remain preserved; this scoped correction needs its own actual visual observations and user playtest."
+        "state": "implemented-existing-coves-repair-awaiting-player-review",
+        "reviewedBaseline": "5085b894cd611dfdcd4ffe55d3bc7296d830ce09",
+        "basis": "Beacon Reef separates Harbor from the pickup network. Outer Buoy leads around the pickup shores.",
+        "history": [
+          {
+            "state": "original-accepted-variants-preserved-wide-berth-visual-repair-awaiting-human-review",
+            "reviewedBaseline": "45ab9768792ddd3a8dffb67da6c332f8fe2234ff",
+            "basis": "Prior Wide Berth functional verification did not establish visual acceptance. Existing original variants remain preserved; this scoped correction needs its own actual visual observations and user playtest."
+          }
+        ]
       },
       "evidence": [
         {
@@ -5927,9 +6044,13 @@
         {
           "path": "reviews/wide-berth-visual-repair/REVIEW.md",
           "role": "Current corrective implementation and actual source-indexed phone comparisons; prior45ab976presentation was rejected, human acceptance of this repair remains pending."
+        },
+        {
+          "path": "reviews/existing-coves-repair/REVIEW.md",
+          "role": "Actual revised game and sources. Beacon Reef separates Harbor from the pickup network. Outer Buoy leads around the pickup shores."
         }
       ],
-      "meaning": "Four distinct real coast silhouettes and shore treatments frame the unchanged six-space staging/draft puzzle.",
+      "meaning": "Two pickup shores, a dry staging quay, a deep route around the outer side and Beacon Reef on the only way to Harbor.",
       "consumers": [
         "src/scene/world.ts"
       ],
@@ -5948,6 +6069,10 @@
         "mechanical versus decorative boundary": "JSON/reducer own passages/deadlines; decorative waterfront props add no rule or collision exception.",
         "material/texture dependencies": "Reused original wood, stone, reeds, coast/water and lantern palette; no external asset",
         "generation and disposal owner": "One active World creates/disposes the level composition; shared pier/profile helpers provide production geometry"
+      },
+      "existingCovesRepair": {
+        "notes": "Beacon Reef separates Harbor from the pickup network. Outer Buoy leads around the pickup shores.",
+        "humanReview": "pending"
       }
     }
   ],
@@ -6179,5 +6304,24 @@
     "gallery": "asset-gallery.html#reef-return",
     "level": "data/reef-return.level.json",
     "publicationReceipt": "LAST_FERRY_REEF_RETURN_PACKAGE/PUBLICATION_RECEIPT.json"
+  },
+  "existingCovesRepair": {
+    "task": "EXISTING_COVES_REPAIR_01",
+    "runtimeBaseline": "5085b894cd611dfdcd4ffe55d3bc7296d830ce09",
+    "updatedIds": [
+      "model.ferry",
+      "model.pier-kit",
+      "motion.transfer",
+      "effect.wake",
+      "terrain.coast",
+      "environment.wide-berth",
+      "indicator.routes",
+      "ui.dialogs",
+      "story.illustrations"
+    ],
+    "preservedIds": 79,
+    "source": "src/scene/models.ts",
+    "report": "reviews/existing-coves-repair/REVIEW.md",
+    "siteVersion": 15
   }
 }

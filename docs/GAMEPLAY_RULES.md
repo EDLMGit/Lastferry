@@ -164,14 +164,30 @@ Bellwater has no mandatory Wait, action cap or score requirement. Both asymmetri
 
 The normal entry is Holding Pier. Its success offers Next cove into a fresh Bellwater state. Both coves and the explicit First Crossing baseline remain available in Menu and query routes. This small sequence adds no persistence, unlocks or new rules.
 
-## Wide Berth authored values
+## Six-space coves and tidal passages
 
-`data/wide-berth.level.json` owns the exact five-stop layout, two waiting groups and rises after actions 5 and 10. All nodes have depth 4; shallow connections base depth 2 and deep connections base depth 4. The extra 5–6-space/draft-4 band changes route choices without a new loading rule. Six neighbors total eight required spaces; all legal aboard subsets are seated automatically, with no packing mechanic. Harmless later waiting remains legal after endangered piers are cleared. All existing event order, current-depth validation, previews, conservation and full Undo apply unchanged. Developer witnesses are not action limits or difficulty measurements.
+Both large-boat coves use the six-space profile and the depth bands defined above. Automatic seats and boarding paths are presentation. A transfer costs one action for any legal selected group. The seven existing Practice IDs and the four Journey chapters remain the entrances to their authored puzzles.
 
-## Tidal passages in Reef Return Practice
+| Cove | Starting state | What the water changes |
+| --- | --- | --- |
+| Wide Berth | Empty at Wide Berth with a four-body, six-space first pickup. Two more rabbits wait at Shell Landing. | Beacon Reef carries the boat home at low water, out at the middle tide, then home at high water. The first homeward passage supports two spaces. The last supports six. High Quay stays dry. Outer Buoy links offshore landings but has no entrance to Harbor. The tide rises after actions 4 and 10. |
+| Reef Return | Heather and Birch aboard at Cairn Quay. Dot waits at Wrack Pier and Flick at Shell Pool. | At low water Needle Reef flows out of Harbor. After action 3 it flows home, and after action 9 it flows out again. Shell Pool has a separate shallow passage to Harbor. Wrack floods at the first rise. Cairn Quay and Shell Pool flood at the second. |
 
-Each cove supports at most one current passage, so a cutoff names the specific passage responsible. A passage with a current names its allowed origin and destination at every authored tide level. An ordinary passage permits travel in both directions. The same current applies to an empty boat and a loaded one. A move must follow the flow **and** meet the depth requirements at the start of its action. After the move arrives, a scheduled rise changes the flow for the next action. Free inspection and animation consume no turns.
+The levels and developer witnesses specify the exact routes and legal transfers. The original deep Outer Buoy escape and the original three-edge version of Reef Return are historical puzzle data. [Wide Berth](../data/wide-berth.level.json) · [Wide witnesses](../data/wide-berth/witnesses.json) · [Reef Return](../data/reef-return.level.json) · [Reef witnesses](../data/reef-return/witnesses.json)
 
-After checking flooded piers and delivery, the reducer checks whether the ferry could still collect each waiting passenger and carry them to Harbor in the remaining sequence of current phases. Passengers aboard need a homeward route from the boat. If the directions alone permanently rule out that journey, the crossing ends with `RETURN_CUT_OFF`. This also catches arriving home prematurely when the next outward opportunity comes after the final way back. The check allows unlimited travel per phase and ignores depth when determining permanent separation, so it never declares a loss merely because one attempted route is too shallow or one plan takes too many turns.
+### Current and tide order
 
-Undo restores the complete prior turn, including tide, route permissions, passenger positions and outcome. A boat that reached Harbor with everyone aboard can wait, unload in subsets or finish the rescue there. Exact Reef Return depths, preparation time and formatted developer witnesses are in [the level](../data/reef-return.level.json) and [the puzzle review](../reviews/reef-return/DESIGN.md).
+A cove may author one current passage. For every reachable tide its data specifies the permitted origin and destination. Ordinary passages are bidirectional. First validate the move against the present direction, route depth and destination basin. Apply the move, increment the turn and apply the scheduled rise. Then resolve stranding at flooded piers, delivery and permanent cutoff. The last legal homeward move can finish across the reef on the same action that turns it outward.
+
+Free inspection names the direction, the next reversal and its action distance. The expanded forecast lists every remaining scheduled rise from the first frame, with the action number, reef direction and depth, and each landing that will flood. During a committed crossing the stationary chevrons and status continue to show the flow used by the boat. Arrival settles the new direction. Thinking time, animation and the length of the crossing do not advance the tide. Undo restores the entire pre-action snapshot, including passenger locations, delivered neighbors, turn, tide and outcome.
+
+### Permanent return failures
+
+| Outcome | Evidence used by the reducer | Recovery |
+| --- | --- | --- |
+| `PASSENGER_STRANDED` | A required neighbor is still waiting at a pier that has flooded. Boarding happens before the rise. | Undo to the pickup or an earlier decision. |
+| `RETURN_CUT_OFF` | Even allowing unlimited travel in each remaining phase, the sequence of directed passages cannot bring an aboard neighbor home or let the boat reach and retrieve a waiting neighbor. | Undo the crossing or wait that permanently separated the ferry and its passengers. |
+| `RETURN_CAPACITY` | Where the reef is the only connection between offshore and home, the remaining homeward crossings cannot carry the spaces still offshore. The bound allows a full boat on every remaining homeward trip. | Undo and send a sufficient load through the earlier tide. |
+| `RETURN_DEPTH` | On the final tide a required neighbor is aboard, but the loaded boat can reach **no dry landing** using its actual legal direction, channel depth and berth depth. It cannot lighten, and later waits cannot change its options. | Undo the missed crossing or an earlier loading choice. |
+
+A blocked individual passage leaves the game state alone. A dry reachable landing may still permit a new split or another approach. These checks diagnose specific irreversible conditions. Other choices can require earlier Undo even before a terminal reason has been reached. At Harbor with everyone aboard, waiting and unloading in subsets remain legal. [Reducer and movement validator](../src/game/rules.ts) · [Wide proof](../reviews/existing-coves-repair/WIDE_DESIGN.md) · [Reef proof](../reviews/existing-coves-repair/REEF_DESIGN.md)

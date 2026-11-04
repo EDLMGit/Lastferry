@@ -156,28 +156,22 @@ test('released visual matrix with actual full loads, compact shores and marker f
     const prefix = `${size.width}x${size.height}`;
     await ready(page, 'wide-berth');
     await views(page, `${prefix}-empty`);
-    const actions = witnesses.witnesses[2].actions;
-    for (let i = 0; i < 11; i++) {
+    const actions = witnesses.witnesses[1].actions;
+    for (let i = 0; i < actions.length; i++) {
       const action = actions[i];
-      if (action.type === 'move') await act(page, `map-${action.to}`, true);
+      if (action.type === 'move') await act(page, 'map-' + action.to, true);
       else if (action.type === 'wait') await act(page, 'wait', true);
       else await transfer(page, action.type, action.passengerIds!);
-      if (i === 2 || i === 3 || i === 6)
-        await views(
-          page,
-          `${prefix}-${i === 2 ? 'full-wide' : i === 3 ? 'full-quay' : 'five-shell'}`,
-        );
+      if (i === 0 || i === 1 || i === 9)
+        await views(page, prefix + '-' + (i === 0 ? 'full-wide' : i === 1 ? 'full-quay' : 'five-shell'));
+      if (i === 11) {
+        const ids = [...(await state(page)).aboard];
+        await transfer(page, 'unload', ids);
+        expect((await state(page)).waitingByPier['high-quay-pier']).toHaveLength(5);
+        await views(page, prefix + '-five-ashore');
+        await transfer(page, 'board', ids);
+      }
     }
-    await transfer(page, 'unload', ['clover', 'poppy', 'wren', 'sorrel', 'finch']);
-    expect((await state(page)).waitingByPier['high-quay-pier']).toHaveLength(6);
-    await views(page, `${prefix}-six-ashore`);
-    await transfer(page, 'board', ['clover', 'poppy', 'wren', 'sorrel', 'finch']);
-    await act(page, 'map-harbor', true);
-    await transfer(page, 'unload', ['clover', 'poppy', 'wren', 'sorrel', 'finch']);
-    await act(page, 'map-high-quay', true);
-    await transfer(page, 'board', ['alder']);
-    await act(page, 'map-harbor', true);
-    await transfer(page, 'unload', ['alder']);
     expect((await state(page)).status).toBe('won');
     await snapshot(page, `${prefix}-six-delivered`);
     await ctx.close();
@@ -243,7 +237,6 @@ test('occupied ferry marker survives free touch pan, rotation and keyboard cance
   const page = await ctx.newPage();
   page.setDefaultTimeout(15000);
   await ready(page, 'wide-berth');
-  for (const id of ['map-high-quay', 'map-wide-berth']) await act(page, id, true);
   await transfer(page, 'board', ['alder', 'clover', 'poppy', 'wren']);
   const before = await state(page);
   await views(page, '390x844-recovery-loaded');
@@ -306,12 +299,11 @@ test('short landscape staging keeps the next passage touch target free', async (
   page.setDefaultTimeout(15000);
   await ready(page, 'wide-berth');
   await wholeCove(page, true);
-  for (const id of ['map-high-quay', 'map-wide-berth']) await act(page, id, true);
   await transfer(page, 'board', ['alder', 'clover', 'poppy', 'wren']);
   await act(page, 'map-high-quay', true);
-  await transfer(page, 'unload', ['alder']);
+  await transfer(page, 'unload', ['alder', 'clover']);
   await snapshot(page, '780x320-staged-controls');
-  const target = page.locator('#map-shell-landing .map-hit');
+  const target = page.locator('#map-harbor .map-hit');
   const r = await target.boundingBox();
   expect(r!.width).toBeGreaterThanOrEqual(44);
   expect(r!.height).toBeGreaterThanOrEqual(44);
@@ -320,8 +312,8 @@ test('short landscape staging keeps the next passage touch target free', async (
       x: r!.x + r!.width / 2,
       y: r!.y + r!.height / 2,
     }),
-  ).toBe('map-shell-landing');
-  await act(page, 'map-shell-landing', true);
-  expect((await state(page)).boatNodeId).toBe('shell-landing');
+  ).toBe('map-harbor');
+  await act(page, 'map-harbor', true);
+  expect(await state(page)).toMatchObject({ boatNodeId: 'harbor', turn: 4, tideLevel: 1 });
   await ctx.close();
 });

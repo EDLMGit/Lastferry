@@ -1,5 +1,9 @@
 # Last Ferry asset provenance and history
 
+## Existing coves repair
+
+Wide Berth and Reef Return share the rebuilt six-space hull, wheelhouse, fixed automatic seats, side gate and shore connections. The shape and visible freeboard were compared with the actual four-space ferry in matched phone Play views. The launch uses a newly drawn side profile of the same boat. The gallery renders the production ferry and its real seating anchors. Beacon Reef and Needle Reef reuse the directional passage indicator and water shelves. All geometry, paint and placement work is original project code. The catalog keeps the original 79 family IDs. [Review](../reviews/existing-coves-repair/REVIEW.md) · [Inventory](../assets/catalog.json)
+
 ## Reef Return
 
 The Practice cove reuses the prepared six-space ferry and the original full-size wool sheep, brown beaver, cream rabbit and tan rabbit. The same four static portrait assets identify the neighbors in the chooser. The level authors a wrack line at the low pier, reed and shell clusters at Shell Pool, a stacked cairn beside the quay cottage and the lighthouse across the reef.

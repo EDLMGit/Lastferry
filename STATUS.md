@@ -1,3 +1,7 @@
+# Existing coves repair
+
+Started from corrective documentation commit `a07be60999505fce3dd3dea76cd948f50903aa78` on `m1-first-crossing`, compared with reviewed runtime `5085b894cd611dfdcd4ffe55d3bc7296d830ce09`. The two existing IDs now host the repaired boat, landings and puzzles. Wide Berth has verified 12- and 14-action rescues. Reef Return has 10- and 11-action rescues with different return routes. The production build, 460 unit cases, 79-family validation and eight focused browser cases passed. The final browser run passed seven cases and the eighth passed individually with its original timeout. The original version 15 receipt remains the publication record. [Current review](reviews/existing-coves-repair/REVIEW.md)
+
 # Reef Return — independent Practice candidate
 
 Verified 4 November 2026. The production build and TypeScript passed, 462 unit checks passed, and the 79-family inventory validated. All six final browser cases passed, including the two previous coves in production. The 390×844 normal-motion rescue and 780×320 muted, Reduced Motion rescue delivered all four neighbors in nine actions. Native inspection corrected the shore-pair composition and an early visual current reversal. [34-second real rescue with runtime sound](reviews/reef-return/phone/reef-rescue.mp4) · [Full evidence and original failures](reviews/reef-return/REVIEW.md)
