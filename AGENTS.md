@@ -2,7 +2,7 @@
 
 ## Objective
 
-Implement the current root task in `NEXT_TASK_EXISTING_COVES_REPAIR.md` (`EXISTING_COVES_REPAIR_01`). The latest user direction is to stop adding levels and repair existing Wide Berth and Reef Return, including the shared large ferry and docks. Read the active section of `docs/PROJECT_STATE.md`; historical `FIRST_TASK.md` and older campaign/task packages do not override the current scope. Work independently through this task, including routine fixes and verification, and update `STATUS.md` with observed progress and material decisions.
+Implement the current root task in `NEXT_TASK_OPTIONAL_TIPS.md` (`OPTIONAL_TIPS_01`). On 7 November 2026 the player accepted the repaired six-space ferry, docks and increasing complexity in Wide Berth and Reef Return. Make predictive tips optional, Off by default; preserve factual planning information and actual loss/Undo recovery. Read the active section of `docs/PROJECT_STATE.md`; historical `FIRST_TASK.md` and older campaign/task packages do not override the current scope. Work independently through this task, including routine fixes and verification, and update `STATUS.md` with observed progress and material decisions.
 
 ## Read and preserve the project decisions
 
@@ -38,4 +38,4 @@ Prefer actionable findings with reproduction and consequences. Separate verified
 
 ## Completion
 
-Complete the current named task, maintain `STATUS.md` and the active project state, and prepare its focused review evidence. Keep PR #1 draft and GitHub `main` unchanged. Do not add new levels or automatically deploy this repair. Preserve earlier milestone records as history.
+Complete the current named task, maintain `STATUS.md` and the active project state, and prepare its focused review evidence. Keep PR #1 draft and GitHub `main` unchanged. Do not add new levels, rebalance accepted puzzles or automatically deploy this tips pass. Preserve earlier milestone records as history.

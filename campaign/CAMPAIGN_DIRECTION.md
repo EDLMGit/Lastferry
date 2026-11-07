@@ -1,16 +1,19 @@
 # Last Ferry — The Long Tide
-## Current playable slice · 4 November 2026
+
+## Current playable slice · 7 November 2026
 
 The Journey follows Holding Pier, Bellwater Cove, Driftwood Yard and Wide Berth. After Driftwood, Nell launches the six-space ferry. The same shared family appears in the game, the launch illustration and the developer gallery. Existing saved scene boundaries, chapter IDs and completed rescues continue to describe the same places. Practice offers those four plus First Crossing, Two Shelters and Reef Return.
 
-**Wide Berth** introduces the current at Beacon Reef. A safe place to wait is valuable, but the number of remaining trips home matters. **Reef Return** revisits that idea with an ordinary shallow entrance to Harbor as well as a deep tidal route. An early staging decision changes which side the ferry should use to reach the last waiting neighbor. The four-space Two Shelters puzzle received positive gameplay feedback. The next playtest evaluates the repaired six-space boat, landings and both puzzles. [Playable progression and proof](PUZZLE_PROGRESSION.md)
+**Wide Berth** introduces the current at Beacon Reef. A safe place to wait is valuable, but the number of remaining trips home matters. **Reef Return** revisits that idea with an ordinary shallow entrance to Harbor as well as a deep tidal route. An early staging decision changes which side the ferry should use to reach the last waiting neighbor. The four-space Two Shelters puzzle received positive gameplay feedback. On 7 November the player accepted the repaired six-space boat, landings and both puzzles, saying the result feels good and complexity is increasing well. [Playable progression and proof](PUZZLE_PROGRESSION.md)
 
-The private Site carries the published Two Shelters game, version 15. The two local repairs keep their existing level identities. [Publication and project state](../docs/PROJECT_STATE.md)
+The private Site now carries accepted game `8fc0d35f772af73adf06a9dff112b749cbad233a`, version 16. Both repairs keep their existing level identities. The current task is [OPTIONAL_TIPS_01](../NEXT_TASK_OPTIONAL_TIPS.md): predictive guidance Off by default, preserving factual information, actual outcomes and Undo. Expansion and rebalancing remain out of scope. [Publication and project state](../docs/PROJECT_STATE.md)
 
 ## Direction history and future proposals
 
 The twelve-cove arc below is the November 1 planning direction. Later decisions repaired Wide and Reef in place, kept the Journey launch after Driftwood and introduced a current in Wide. Those decisions supersede the earlier proposals to freeze the hull, remove Wide from the Journey or postpone every current to the later chapters. Actual puzzles and playtest feedback guide the timetable.
-## Active correction — 4 November 2026
+## Historical correction — 4 November 2026 (completed and accepted)
+
+The instructions in this historical section describe the completed repair. The current task and acceptance above take precedence; do not reopen the old rejection or roadmap automatically.
 
 Follow [EXISTING_COVES_REPAIR_01](../NEXT_TASK_EXISTING_COVES_REPAIR.md). The user rejects Wide Berth and Reef Return's current looks/difficulty and directs us to **fix both existing IDs**, with Wide first and a shared cute six-space ferry/dock redesign. Stop adding levels or successor Practice entries. Use the current mechanic already implemented in Reef Return to repair Wide now.
 

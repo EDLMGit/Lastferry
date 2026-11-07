@@ -1,6 +1,22 @@
 # Last Ferry — Project state
 
-## Current handoff — Wide Berth and Reef Return in place
+## Active task — Optional tips · 7 November 2026
+
+**OPTIONAL_TIPS_01**, root [NEXT_TASK_OPTIONAL_TIPS.md](../NEXT_TASK_OPTIONAL_TIPS.md), is the current assignment. The player reports that the repaired Wide Berth and Reef Return now feel good and that complexity is increasing well. Record the shared ferry/docks and these puzzles as positively accepted; the earlier rejection below describes superseded builds. Preserve this result. No new level, campaign reorder, art redesign or rebalance is commissioned.
+
+Accepted runtime: `8fc0d35f772af73adf06a9dff112b749cbad233a`. The next change makes predictive advice optional, **Off by default**, with a remembered preference in shared Settings. Current facts, factual schedules, true illegal-action reasons, actual outcomes and complete Undo remain. Hiding forecasts or objective information is not the assignment. No optional-tips implementation is included in the published baseline.
+
+Journey remains Holding → Bellwater → Driftwood → Wide. Practice retains those four plus First Crossing, Two Shelters and Reef Return. The twelve-cove target and future ordering remain provisional; expansion stays paused for this focused pass.
+
+## Current publication — Sites version 16
+
+On 7 November 2026 at 16:56:30 UTC, the existing owner-private Site successfully published the accepted repair: game `8fc0d35f772af73adf06a9dff112b749cbad233a`, hosting source `80d7db9c78e7751e67bf577982daf72f810f2a52`. [Play](https://last-ferry-playtest.abumech.chatgpt.site) · [Publication receipt](../reviews/existing-coves-repair/deployment-confirmation.json). The two SHAs identify different repositories. This continuity/task update does not change the deployed game.
+
+Review independently read exact source, inspected three native phone frames, replayed four winning and six losing production-rule cases, and passed a fresh Node 24 production build/typecheck. The hosting source audit matched 267 of 268 scoped Git blobs exactly; the sole declared adaptation allows the hosting preview hostname in Vite, with no gameplay change. Codex's reported 460 units, asset validation and browser evidence are retained, not relabelled as fresh reruns. The player's visual/difficulty acceptance is positive; physical-device performance, acoustic approval and inherited timing/layout limits remain separate.
+
+## Previous implementation handoff — existing coves repair, 4 November 2026
+
+The original implementation record below predates the player's acceptance and version 16 publication above.
 
 The corrective brief in [NEXT_TASK_EXISTING_COVES_REPAIR.md](../NEXT_TASK_EXISTING_COVES_REPAIR.md) superseded the separate-successor assignment. The prior game and its human rejection are recorded in [the corrective handoff](HANDOFF_EXISTING_COVES_2026-11-04.md). Implementation started from a clean fast-forward to `a07be60999505fce3dd3dea76cd948f50903aa78`, above reviewed game `5085b894cd611dfdcd4ffe55d3bc7296d830ce09`.
 
@@ -12,7 +28,7 @@ The production build and TypeScript, 460 unit tests, 79-family validation and al
 
 Updated 4 November 2026. Earlier planning and implementation notes below describe their original handoff dates.
 
-## Current publication — Sites version 15
+## Prior publication — Sites version 15
 
 On 4 November 2026, Sites published Two Shelters as version **15** of the existing owner-private playtest. Game commit `b64583dd295b488de013fb2d6db32e63ba79427e` and hosting commit `bdb33c051185a291e7d6ba70d32dda137a8f54c0` identify separate repositories. The player likes Two Shelters. This is positive gameplay feedback. Physical-device validation and a campaign placement decision are still open. [Publication receipt](../LAST_FERRY_REEF_RETURN_PACKAGE/PUBLICATION_RECEIPT.json)
 

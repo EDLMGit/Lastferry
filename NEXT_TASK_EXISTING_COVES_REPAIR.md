@@ -1,5 +1,8 @@
 # EXISTING_COVES_REPAIR_01 — repair the levels we already have
 
+> **Completed and accepted, 7 November 2026.** Runtime `8fc0d35f772af73adf06a9dff112b749cbad233a` repairs both existing coves. The player says the result feels good and the complexity is increasing well. This exact game is published privately as Sites version 16. The current assignment is [OPTIONAL_TIPS_01](NEXT_TASK_OPTIONAL_TIPS.md); the original repair brief below is retained as history, not an instruction to redesign the accepted result.
+
+
 ## Current authority and scope
 
 User decision, 4 November 2026: **stop adding levels; repair Wide Berth and Reef Return in place.** Reviewed runtime: `5085b894cd611dfdcd4ffe55d3bc7296d830ce09`. Preserve newer or unrelated work.

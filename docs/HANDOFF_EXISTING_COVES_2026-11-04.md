@@ -1,5 +1,18 @@
 # Last Ferry — fresh-chat handoff
 
+## Current update — 7 November 2026
+
+The repair requested in the historical snapshot below is **completed and positively accepted**. Accepted game `8fc0d35f772af73adf06a9dff112b749cbad233a` repairs the existing Wide Berth and Reef Return and their shared ferry/docks. The player says everything feels good and complexity is increasing well. Do not repeat the rejected-art task or add another successor level.
+
+The same private Site now serves **version 16**, game `8fc0d35f772af73adf06a9dff112b749cbad233a`, hosting source `80d7db9c78e7751e67bf577982daf72f810f2a52`. [Publication receipt](../reviews/existing-coves-repair/deployment-confirmation.json). Journey/save order and seven Practice entries are unchanged. Physical-device performance, listening and inherited limits remain separate from positive human gameplay feedback.
+
+Current root task: [NEXT_TASK_OPTIONAL_TIPS.md](../NEXT_TASK_OPTIONAL_TIPS.md), **OPTIONAL_TIPS_01**. Add default-Off optional predictive tips through existing Settings. Keep objective/rule facts, factual forecasts, actual loss explanations and full Undo. Preserve the accepted art/puzzles; no new level, rebalancing or automatic deployment of the next pass. Read the active [project state](PROJECT_STATE.md) and current branch head, preserving newer work. The published runtime does not yet include this preference.
+
+## Historical snapshot — 4 November 2026
+
+Everything below records the situation before that completed repair and must not override the current update above.
+
+
 **Updated: 4 November 2026 (Europe/Madrid).** This handoff records a course correction. The active implementation assignment is [NEXT_TASK_EXISTING_COVES_REPAIR.md](../NEXT_TASK_EXISTING_COVES_REPAIR.md), task **EXISTING_COVES_REPAIR_01**. Read its current status in the repository before proposing further work.
 
 ## The user's latest instruction takes precedence
