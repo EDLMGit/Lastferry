@@ -1,0 +1,175 @@
+{
+  "viewport": [
+    1440,
+    900
+  ],
+  "touchEmulation": false,
+  "initialState": {
+    "turn": 0,
+    "tideLevel": 0,
+    "boatNodeId": "stone",
+    "aboard": [
+      "sheep-1"
+    ],
+    "waitingByPier": {
+      "harbor-pier": [],
+      "stone-pier": [],
+      "rabbit-pier": [
+        "rabbit-1",
+        "rabbit-2"
+      ]
+    },
+    "delivered": [],
+    "status": "playing",
+    "lossReason": null
+  },
+  "startNavigation": {
+    "currentNode": "stone",
+    "selectedDestination": null,
+    "routes": [
+      {
+        "id": "harbor-stone",
+        "nodes": [
+          "harbor",
+          "stone"
+        ],
+        "highlighted": false,
+        "dashSize": 0.09,
+        "gapSize": 0.16
+      },
+      {
+        "id": "stone-shallows",
+        "nodes": [
+          "stone",
+          "shallows"
+        ],
+        "highlighted": false,
+        "dashSize": 0.09,
+        "gapSize": 0.16
+      },
+      {
+        "id": "shallows-rabbit",
+        "nodes": [
+          "shallows",
+          "rabbit-pier"
+        ],
+        "highlighted": false,
+        "dashSize": 0.09,
+        "gapSize": 0.16
+      }
+    ],
+    "markers": [
+      {
+        "id": "harbor",
+        "status": "available",
+        "selected": false,
+        "shape": "open ring"
+      },
+      {
+        "id": "stone",
+        "status": "current",
+        "selected": false,
+        "shape": "double ring"
+      },
+      {
+        "id": "shallows",
+        "status": "too-shallow",
+        "selected": false,
+        "shape": "crossed ring"
+      },
+      {
+        "id": "rabbit-pier",
+        "status": "nonadjacent",
+        "selected": false,
+        "shape": "diamond"
+      }
+    ]
+  },
+  "frame": {
+    "canvas": {
+      "width": 1440,
+      "height": 730
+    },
+    "boat": {
+      "left": 645.6477411972133,
+      "right": 823.8967042614461,
+      "top": 324.26218668832905,
+      "bottom": 472.5964108572685,
+      "height": 148.33422416893944
+    },
+    "lighthouse": {
+      "left": 129.30485854803467,
+      "right": 266.1197013488297,
+      "top": 10,
+      "bottom": 294.9403498723788,
+      "height": 284.9403498723788
+    },
+    "passengers": [
+      {
+        "id": "rabbit-1",
+        "left": 1201.7244014758194,
+        "right": 1235.6616567953138,
+        "top": 331.26127265830695,
+        "bottom": 428.6097281055689,
+        "height": 97.34845544726193
+      },
+      {
+        "id": "rabbit-2",
+        "left": 1235.2273386018435,
+        "right": 1273.9865110693897,
+        "top": 331.1269801319219,
+        "bottom": 428.6097281055689,
+        "height": 97.48274797364695
+      },
+      {
+        "id": "sheep-1",
+        "left": 749.2483433170898,
+        "right": 823.8967042614461,
+        "top": 347.0468236296808,
+        "bottom": 435.0268502504168,
+        "height": 87.98002662073606
+      }
+    ],
+    "nodes": [
+      {
+        "id": "harbor",
+        "x": 210.53867126987862,
+        "y": 489.8485381335055
+      },
+      {
+        "id": "stone",
+        "x": 723.5943241277351,
+        "y": 419.9418075309271
+      },
+      {
+        "id": "shallows",
+        "x": 980.1221505566633,
+        "y": 629.6619993386622
+      },
+      {
+        "id": "rabbit-pier",
+        "x": 1236.6499769855916,
+        "y": 489.8485381335055
+      }
+    ]
+  },
+  "finalState": {
+    "turn": 9,
+    "tideLevel": 2,
+    "boatNodeId": "harbor",
+    "aboard": [],
+    "waitingByPier": {
+      "harbor-pier": [],
+      "stone-pier": [],
+      "rabbit-pier": []
+    },
+    "delivered": [
+      "rabbit-1",
+      "rabbit-2",
+      "sheep-1"
+    ],
+    "status": "won",
+    "lossReason": null
+  },
+  "errors": []
+}

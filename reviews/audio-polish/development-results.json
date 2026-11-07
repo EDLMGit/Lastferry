@@ -1,0 +1,99 @@
+{
+  "base": "a4fc4658103b630a2ae527e8479ff66d7232dff3",
+  "date": "2026-10-23",
+  "provenance": "Structured observations from visible development tool results and the wood author's exact report of its visible tool results. These are not reconstructed raw logs; full original output remains in the task tool transcripts. Reported start times are the unqualified local times printed by Vitest.",
+  "runtimeIdentity": [
+    {
+      "path": "src/audio/arrival.ts",
+      "sha256": "1422a7d6db7320e3a3aaee4a3c71ab643e4a41d6c6bf74232a232d13a12d2be7"
+    },
+    {
+      "path": "src/audio/atmosphere.ts",
+      "sha256": "f70e8664bde7dd421029b18f5d4bf786481ac5e85fdcdc9ba8c38e368be76aa7"
+    },
+    {
+      "path": "src/audio/wood.ts",
+      "sha256": "c52cdc8e4d69a4a4c992a201eca8e0513225efd6b4260ce6025d5a66820eb777"
+    }
+  ],
+  "runs": [
+    {
+      "command": "npx vitest run tests/unit/arrival.test.ts",
+      "sourceState": "Arrival implementation before lower-register assertion correction; runtime synthesis unchanged by correction.",
+      "startTime": "08:12:17",
+      "durationMs": 221,
+      "exitCode": 1,
+      "testFiles": 1,
+      "passed": 3,
+      "failed": 1,
+      "failures": [
+        {
+          "test": "bounded arrival voicing follows the running harmony > every stage fits every pad audible during its complete lifetime, including the phrase return",
+          "location": "tests/unit/arrival.test.ts:38",
+          "message": "AssertionError: expected 54 to be greater than or equal to 57",
+          "assertion": "expect(note.note).toBeGreaterThanOrEqual(57);"
+        }
+      ],
+      "correction": "The authored nearest shared-harmony pitch can be MIDI 54 (F#3). Corrected the test's minimum register from 57 to 54; no arrival runtime change or harmony assertion was removed."
+    },
+    {
+      "command": "npx vitest run tests/unit/arrival.test.ts",
+      "sourceState": "Corrected register assertion; same runtime implementation.",
+      "startTime": "08:12:46",
+      "durationMs": 238,
+      "exitCode": 0,
+      "testFiles": 1,
+      "passed": 4,
+      "failed": 0
+    },
+    {
+      "command": "npx vitest run tests/unit/wood-polish.test.ts",
+      "sourceState": "Rounded wood implementation before signed-zero assertion correction; synthesis unchanged by correction.",
+      "startTime": "08:11:33",
+      "durationMs": 652,
+      "exitCode": 1,
+      "testFiles": 1,
+      "passed": 2,
+      "failed": 2,
+      "failures": [
+        {
+          "test": "bounded rounded wood buffers > both weights start and end quietly at 44100 Hz",
+          "location": "tests/unit/wood-polish.test.ts:41:26",
+          "message": "AssertionError: expected -0 to be +0 // Object.is equality",
+          "expected": 0,
+          "received": "-0",
+          "assertion": "expect(samples[0]).toBe(0);"
+        },
+        {
+          "test": "bounded rounded wood buffers > both weights start and end quietly at 48000 Hz",
+          "location": "tests/unit/wood-polish.test.ts:41:26",
+          "message": "AssertionError: expected -0 to be +0 // Object.is equality",
+          "expected": 0,
+          "received": "-0",
+          "assertion": "expect(samples[0]).toBe(0);"
+        }
+      ],
+      "correction": "Applied Math.abs to first/last sample checks so +0 and -0 are both treated as silence; wood synthesis unchanged.",
+      "observationLimit": "An earlier invocation of the same command did not surface its result. No pass/fail claim is made for that invocation."
+    },
+    {
+      "command": "npx vitest run tests/unit/wood-polish.test.ts",
+      "sourceState": "Signed-zero assertions corrected; same wood synthesis.",
+      "startTime": "08:11:50",
+      "durationMs": 249,
+      "exitCode": 0,
+      "testFiles": 1,
+      "passed": 4,
+      "failed": 0
+    }
+  ],
+  "baselineReviewReportedByTask": {
+    "source": "NEXT_TASK.md independent baseline review, not rerun by this audit",
+    "productionBuild": "passed",
+    "unitPassed": 110,
+    "unitTimeouts": 1,
+    "timeoutScope": "Unchanged water suite",
+    "isolatedWaterRerun": "Entire unchanged seven-test file passed",
+    "preservation": "No water source, test or timeout changes were made for this audio pass."
+  }
+}

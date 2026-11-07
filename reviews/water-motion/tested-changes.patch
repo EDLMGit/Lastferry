@@ -1,0 +1,2012 @@
+diff --git a/NEXT_TASK_WATER_MOTION.md b/NEXT_TASK_WATER_MOTION.md
+new file mode 100644
+index 0000000..5335fcb
+--- /dev/null
++++ b/NEXT_TASK_WATER_MOTION.md
+@@ -0,0 +1,179 @@
++# Last Ferry — Boat wake and water response
++
++## Active task
++
++Make the ferry's movement through the water a satisfying part of playing Last Ferry. The user wants a more noticeable wake, meaningful slow travel and captivating water interaction.
++
++Deliver one coherent departure → crossing → docking treatment, judged in the actual game at native phone size. The ferry should feel as though it gently parts and disturbs the water. Preserve the calm coastal miniature, luminous teal sea and readable puzzle.
++
++This is the next active implementation task. The lighthouse refinement is accepted. Local Codex implements; ChatGPT reviews the handoff and publishes the reviewed result to the existing private phone Site.
++
++## Baseline and continuity
++
++- Repository: https://github.com/EDLMGit/Lastferry
++- Branch: `m1-first-crossing`; PR #1 stays draft; main stays unchanged.
++- Reviewed game SHA: `0ee7d685071179b82ec2a599fac2f818251d0e54`.
++- The same game SHA was published successfully on 2026-10-23 to https://last-ferry-playtest.abumech.chatgpt.site.
++- Published Site source SHA: `273aa4a9900ca8a302b8708f356a2dc83dac7acd`. This includes hosting metadata and differs from the game SHA.
++- Independent review passed production build/typecheck and 156/156 unit tests; the contributor's 12 focused browser passes and committed images were audited. No physical Android/native-GPU result is implied.
++- The repository's existing project-state/deployment text predates that publication. Correct its reviewed/live baseline using the confirmed values above, then keep the next implementation SHA separate from the live SHA.
++
++Read `AGENTS.md`, `docs/PROJECT_STATE.md`, this task, `docs/ART_DIRECTION.md`, and the relevant scene/test code before editing. Preserve newer or unrelated work if the checkout has advanced; do not reset to the baseline. This task supersedes the completed lighthouse task's restriction against changing wake/water interaction or sailing timing.
++
++## What the current source establishes
++
++| Area | Current implementation |
++| --- | --- |
++| Wake | One preallocated, world-space ribbon in `src/scene/effects.ts`, emitted from a stern offset. |
++| Visibility | Flat muted green; peak vertex alpha 0.16 before lateral feathering. |
++| History | Samples expire after 720 ms; maximum 31 points and 1.8 world units. Sampling occurs after more than 0.045 units of displacement. |
++| Width | Approximately 0.11 units at birth, widening toward 0.51 before expiry. |
++| Water response | `CoastalWater` already provides analytic surface normals, submerged detail, pearl sheen and Harbor reflection. It receives no boat-position/speed interaction. |
++| Travel timing | Active `restrainedTiming`: clamp(800 + 140 × canonical path length, 1200, 2300) milliseconds. The exported `slowerTiming` preset is not active. |
++| Easing | `journeyProgress` already supplies gentle departure/deceleration. |
++| Reduced motion | Moves settle in 30 ms; wake emission/history are suppressed. |
++
++Source-grounded diagnosis: the age, sample-count and distance limits together keep the wake short, particularly at low speed. Its uniform color gives little sense of displaced water. Increasing one opacity or length constant alone will not deliver the requested experience.
++
++Inspect `src/scene/effects.ts`, `water.ts`, `water-shader.ts`, `world.ts`, `motion.ts`, `transitions.ts` and `paths.ts`. The implementation may be refactored locally where that makes ownership and lifecycle clearer.
++
++## Visual direction
++
++### Departure: establish water contact
++
++As horizontal movement begins, introduce a small soft bow crescent and a compact stern disturbance. Let their strength grow with actual movement. They should emerge from the visible hull at the waterline, including when the ferry is loaded.
++
++Use pearl/seafoam highlights and a restrained teal body. Keep the yellow ferry the focal point. The effect should feel gentle and substantial.
++
++### Crossing: leave a readable, curved trail
++
++Create a continuous wake that follows the actual travelled course. Start with softly diverging, broken pearl crests and a subtle central water disturbance. Older sections spread and dissolve in place as the ferry moves onward.
++
++Aim initially for roughly one to two visible hull lengths during sustained slow travel. This is an art target, not a physics rule. Tune lifetime, distance sampling, history capacity, width and contrast together. A roughly 1.5–2-second visual memory is a useful first trial; select the result from moving phone comparisons.
++
++Give the crests a little broad variation so they read as rippled water. Keep their rhythm slow and their edges soft. Avoid an opaque stripe, razor-thin zigzags, fine glitter or a trail that resembles a high-speed motorboat.
++
++On curves, old wake must remain behind in world space. Smooth joins and bounded width must prevent triangular spikes, gaps and doubled brightness at overlapping segments. The same treatment must work in reverse travel.
++
++### Water interaction: let the existing surface respond
++
++Add a localized response around the travelling hull so the established sheen and shallow detail react subtly to its passage. A small normal perturbation is the preferred first experiment: it can bend/break existing highlights without raising the whole sea or changing the accepted palette.
++
++Evaluate this alongside the shaped trail. Keep it only when the difference is visible at native phone size and its cost is proportionate. The final result needs convincing contact and movement; it does not need every possible layer.
++
++Keep distant water, coastline appearance, substrate readability and Harbor reflection consistent with the accepted baseline. Preserve the route dots and destination markers as clear navigation cues.
++
++### Docking: allow the water to settle
++
++Ease new emission down with deceleration. Let the remaining wake broaden and fade naturally after the ferry stops. A small outward settling ripple can finish the arrival if it improves the sequence; use a finite effect with a clear lifetime.
++
++Restore interaction as soon as the existing action presentation completes. The visual tail must not extend the busy lock. A stationary ferry must not continuously produce travel wake.
++
++## Sailing pace
++
++The user has authorized a calmer travel presentation. Compare the current timing with one slower candidate that gives a representative short Holding Pier route about 1.8 seconds and the long Bellwater outer route about 2.8 seconds. Ordinary move bounds around 1.6–3.0 seconds are a useful starting range. These are proposed tuning targets, not measured final durations.
++
++Watch a short Holding Pier route and a long curved Bellwater route, including repeated trips. Choose the pace that gives the bow, trailing ripples and arrival room to read while keeping the puzzle pleasant to operate. Record actual before/after durations for those routes. These are tuning suggestions, not a requirement to stretch every route to the maximum.
++
++Keep the existing easing unless a demonstrated problem requires a narrow adjustment. Do not add a separate cinematic pause. Preserve:
++
++- The same deterministic action count, outcomes, tide deadlines and route geometry.
++- Existing loading/unloading and victory timing, including transfer sound contacts.
++- The 30 ms Reduced behavior.
++- The final tide-settling phase and recovery timeout derived from the same transition plan. The current plan uses at most 550 ms for tide settling and duration + 1000 ms for recovery.
++
++## Implementation approach and performance
++
++Extend the existing bounded effect architecture first.
++
++1. Use travelled distance and actual horizontal speed to govern emission and strength. Tide elevation, draft changes, idle bobbing and a reset/teleport must not create movement wake.
++2. Keep the visible bow/stern anchors aligned with the actual hull pose. Derive trailing direction from real travel where needed; verify near-dock heading changes, rather than assuming the boat's angle always equals the course tangent.
++3. Maintain a fixed-capacity sampled history and preallocated geometry. Choose sample spacing/capacity to support the intended trail at the slowest sustained speed. Use smooth joined tangents or equivalent resampling. Reuse temporary vectors/buffers in the frame loop.
++4. Keep a small constant-size input for any water-shader interaction: boat position, direction, speed/envelope and, if needed, one bounded settling event. Avoid a per-fragment loop over the full wake history across the whole water surface. Historical trail detail belongs in bounded geometry or another demonstrably economical local treatment.
++5. Reuse the installed Three.js/WebGL renderer, render loop and color-management path. Keep effects water-height aware, depth-tested, clear of z-fighting and correctly occluded by hull, docks and land. Prevent expanding crests from visibly painting dry islands.
++6. Exclude decorative geometry from picking and camera-fit bounds. Keep resource ownership/disposal explicit. A small bounded extra layer is acceptable if a real comparison justifies it; measure its cost.
++
++A full fluid simulation, new render-target pipeline, engine upgrade, full-screen bloom or global water redesign is outside this task. The objective is the ferry's local interaction with the accepted sea.
++
++Compare warmed baseline and candidate in the same environment at the same viewport, device-pixel ratio and quality. Inspect both idle and active crossing frames, resource/draw counts and a short frame-interval sample. Recheck a suspected regression once under matched conditions; simplify the effect if a repeatable regression is attributable to it. Software rendering does not establish real Android performance. No new benchmark framework is needed.
++
++## Lifecycle requirements
++
++This task changes transient presentation, so exercise these boundaries carefully:
++
++- Natural move completion currently calls `sync(after, true)`. Preserve a finite trailing fade across completion and allow the next action immediately.
++- Starting another move must not connect old and new emission with a long artificial strip, especially after the docking heading resets. Separate trail segments or handle continuity explicitly within the fixed budget.
++- Undo, Restart, cove changes and discontinuous synchronization clear all movement history, interaction uniforms and pending settling events immediately. Cancellation/recovery synchronizes to the committed after-state, clears those transients, releases the lock exactly once and stops travel audio. It must not schedule a new docking ripple. Only normal completion retains the finite visual tail.
++- Hiding/recovering the page must not synthesize unobserved travel. Preserve the existing settlement behavior and handle large time gaps.
++- Reduced motion suppresses new wake/ripple/boat-normal animation and clears active decorative motion, including when selected mid-crossing. Returning to Follow device begins from the current pose without replaying history.
++- A tide rise moves the effects with the water surface. It must not create extra samples merely because vertical position changed.
++- Selecting/inspecting destinations, waiting, loading and unloading do not masquerade as sailing. A finite residual wake from the previous real crossing may finish fading.
++- Arrival audio, quieter won-state music, lighthouse sweep, animal acknowledgment, fit-checked arrival camera, completion controls and Settings retain their accepted triggers and behavior.
++
++Keep general game state separate from effect history. Preserve the puzzles, subsets, complete Undo, focus, touch controls, music and all other accepted audio. Do not add a wake settings page or new player controls.
++
++## Work and decision process
++
++1. Record a concise baseline of an actual short route and a longer curved route at phone size. Note duration, load, tide, direction and viewport.
++2. Implement the shaped wake and local hull contact at existing timing. Tune in motion at native size.
++3. Evaluate the localized water-response candidate and slower timing. Select and finish one coherent combination.
++4. Check departure, cruise, turn, deceleration, residual fade and the next action as a continuous sequence. Inspect shallow and deeper water and both course directions.
++5. Complete the focused lifecycle checks, record the visual decision and update continuity.
++
++Do not ask the user to choose shader constants or recruit testers. If a rendering/capture capability is unavailable, state the limitation and supply reproducible steps; do not replace visual evidence with test counts.
++
++## Focused verification
++
++Run Node 24 production build/typecheck and the unit suite. Add or adjust targeted tests for changed behavior only: bounded history/resources, stationary/tide/reset suppression, frame-rate-independent progression, fade/clear behavior, and any timing contract that changes.
++
++Existing environment browser checks encode old artistic limits such as 31 points, 720 ms, 1.8 units and an alpha ceiling. Update obsolete tuning assertions intentionally to the selected bounded design. Retain meaningful checks for stern provenance, water-relative height, reverse paths, finite values, cleanup and correct game state. Passing the old numbers would not prove the new wake is visible.
++
++Wake and lighthouse currently share CrossingEffects. Include the existing focused lighthouse/homecoming checks when modifying that class; preserve the accepted light shader and arrival state behavior.
++
++Use actual UI flows for:
++
++- One complete Holding Pier rescue with subset transfers, a tide-boundary Undo, redelivery and the accepted ending.
++- One long curved Bellwater crossing in each direction, including the heavier load/shallow-water conditions already supported by the puzzle.
++- A First Crossing smoke view to catch layout assumptions.
++- Rapid valid follow-up input after docking; no duplicate action, extra delay or stale trail.
++- Undo/Restart/cove change and hide/recovery. Exercise a mid-crossing device reduced-motion change under Follow device, using accurately labeled media emulation if needed. Test choosing Reduced in Settings separately at rest; keep the existing busy lock and controls unchanged. Label simulated lifecycle events accurately.
++
++Inspect 1440×900, 844×390 and 780×390; include a 780×320 smoke check for the existing short-screen layout and ending. Verify wake visibility at native phone size before using a crop.
++
++Capture uninterrupted normal-speed before/after short and curved crossings, with the full interface visible and at least two seconds after docking. Retain one natural in-game sequence showing tide/Undo cleanup and one Reduced result. Comparison stills should use the same route, load, tide, camera and normalized journey progress; explicitly distinguish phase-matched stills from real-time recordings when duration changes. Do not slow down exported footage to sell the effect.
++
++Use the existing evidence tooling. Keep raw media local/ignored by default, commit a compact selected frame sequence and accessible review index, and say which recordings the reviewer can actually access.
++
++## Acceptance and handoff
++
++The pass is ready when:
++
++- The wake is clearly visible during ordinary phone play and follows the ferry through curves.
++- Bow contact and wake feel coherent with the existing surface at the chosen calm pace; any retained local shader response supports that treatment.
++- Docking leaves a finite, soft settling tail while controls become available normally.
++- Navigation, submerged terrain, tide readability and accepted arrival remain clear.
++- No false wake, discontinuity, resource growth, changed puzzle result or attributable unresolved performance regression is demonstrated in the exercised checks.
++
++Create `reviews/water-motion/REVIEW.md` with the chosen visual treatment, actual timing decision, source references, concise before/after media index, exact tested source identity, commands/results, original failures and affected reruns, and device/rendering limits. Keep new versus reused evidence explicit.
++
++Update `docs/PROJECT_STATE.md`: lighthouse light accepted and published; boat wake/water response is the current task; unspecified future feedback remains queued. Briefly update art guidance and `STATUS.md`.
++
++Commit/push the completed pass to `m1-first-crossing` and update existing draft PR #1. Preserve main; no merge or force-push. Return full SHA, remote equality, checkout status, chosen timing/effects, checks, accessible screenshots/recording paths and limitations. State that the new pass awaits ChatGPT review and separate publication to the same private Site; pushing GitHub does not update the phone build.
++
++## Primary references
++
++These inform the proposed implementation; they do not establish that this particular game will meet a device-performance target. Use installed-version APIs.
++
++- [Three.js — How to update Things](https://threejs.org/manual/pages/how-to-update-things.html): preallocate attribute buffers, update their contents and draw only the active range.
++- [Mark Finch / Cyan Worlds — Effective Water Simulation from Physical Models, GPU Gems](https://developer.nvidia.com/gpugems/gpugems/part-i-natural-effects/chapter-1-effective-water-simulation-physical-models): analytic surface normals and local moving disturbances. Adapting those principles inside Last Ferry's existing shader is our implementation proposal; the chapter's full rendering pipeline is not required.
++- [Unity Technical Content Team — The HDRP water system in Unity 2022 LTS](https://discussions.unity.com/t/the-hdrp-water-system-in-unity-2022-lts/359727): conceptual separation of bow/surface deformation and local foam. Borrow the visual distinction, not Unity packages.
++- [Mozilla — WebGL best practices](https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/WebGL_best_practices): bounded resource budgets, draw batching and avoiding unnecessary fragment work.
++
++## Kickoff prompt
++
++Implement the task in NEXT_TASK_WATER_MOTION.md at the repository root. Read AGENTS.md and docs/PROJECT_STATE.md first, then use NEXT_TASK_WATER_MOTION.md as the active scope. Start from the current m1-first-crossing checkout; the reviewed baseline is 0ee7d685071179b82ec2a599fac2f818251d0e54. Preserve newer/unrelated work.
++
++Deliver the more readable curved wake, convincing hull/water contact and finite docking fade, and compare a modestly slower crossing pace in the actual game. Complete the task's phone-size moving comparisons and focused verification. Preserve accepted gameplay, UI, audio and lighthouse behavior.
++
++Make routine implementation/art decisions independently. Commit and push the completed pass to m1-first-crossing, update PR #1 while keeping it draft, and leave main unchanged. Return the exact SHA and review handoff described in the task. Publication follows ChatGPT review.
++
+diff --git a/docs/ART_DIRECTION.md b/docs/ART_DIRECTION.md
+index cf63479..b3a61e2 100644
+--- a/docs/ART_DIRECTION.md
++++ b/docs/ART_DIRECTION.md
+@@ -60,6 +60,10 @@ At a representative small landscape viewport such as 844 × 390 CSS pixels, user
+ 
+ Water is calm and stylized: broad color fields, quiet highlights, and sparse ripples. Prefer a simple water surface and authored shoreline shapes over fluid simulation. Use discrete tide states from the rules, with authored land exposure and waterlines for each state. The scene must clearly distinguish exposed sand, shallow passage, navigable water, and a flooded boarding point.
+ 
++Sailing now leaves a softly spreading, world-space trail with broken pearl crests and a restrained teal body. Its small bow crescent and stern disturbance sit at the actual hull's waterline; horizontal movement governs their strength. Preserve visible curvature and reverse travel without connecting unrelated journeys. The fixed96-sample pool retains at most1800ms/3.6world units, roughly one to two hull lengths at the selected pace. New emission eases with actual speed; normal docking leaves a finite tail and650ms contact settlement while controls unlock normally. Tide moves the existing trail with the surface without emitting extra samples. Reduced, Undo, reset and recovery clear movement effects.
++
++Native phone comparison selected broken crests over the initial continuous rail-like pair, and a calmer1000+200×path-length millisecond sailing policy bounded to1600–3000ms. Representative short/long plans are1874/2823ms; easing and transfer/tide/recovery contracts remain. A localized normal-perturbation experiment did not demonstrate a useful consistent phone-size gain and was rejected. Preserve the accepted water shader, coast/substrate fields and Harbor reflection; the visible contact comes from bounded geometry borrowing the existing dry-land mask. See `reviews/water-motion/REVIEW.md` for moving evidence, exact timing and limits.
++
+ Represent increasing load with a modest, readable change in ferry draft. The hull settles; occupants stay correctly attached to the deck. This movement illustrates the model and never computes navigation validity.
+ 
+ Forecasts must display the actual next state. When the implemented interface offers a next-action or tide preview, use a thin shoreline contour, a clear pier waterline, and route emphasis to show its consequences. Pair this with a compact DOM explanation. Do not invent a separate forecast action or another rule. Color alone must not distinguish safe and unavailable routes.
+diff --git a/docs/ENVIRONMENT.md b/docs/ENVIRONMENT.md
+index d9b634c..3827446 100644
+--- a/docs/ENVIRONMENT.md
++++ b/docs/ENVIRONMENT.md
+@@ -1,6 +1,6 @@
+ # Luminous evening cove
+ 
+-`NEXT_TASK.md` owns the current atmosphere scope. Holding Pier, Bellwater and First Crossing retain their accepted compositions, canonical courses, stops, elevations, rules and complete Undo. The earlier course/shore implementation remains attributed to `reviews/environment/REVIEW.md`; fresh atmosphere evidence belongs to `reviews/atmosphere/REVIEW.md`.
++`NEXT_TASK.md` records the historical atmosphere scope; `NEXT_TASK_WATER_MOTION.md` owns the current boat/water refinement. Holding Pier, Bellwater and First Crossing retain their accepted compositions, canonical courses, stops, elevations, rules and complete Undo. Earlier course/shore and atmosphere results remain attributed to their original review folders; current evidence belongs to `reviews/water-motion/REVIEW.md`.
+ 
+ ## Water and light
+ 
+@@ -18,7 +18,9 @@ One plan supplies animation and duration-plus-1,000ms recovery. Tide and coincid
+ 
+ During travel the local passenger card is hidden and a compact “Sailing to …” status remains. At rest card placement checks the projected full ferry and aboard passengers after viewport clamping, plus map/HUD/forecast obstacles, then tries alternate positions or a compact card. Controls retain accessible focus and touch areas.
+ 
+-A softly feathered wake follows the actual stern, widens with age and is bounded to 720ms, 1.8 world units and 31 samples. It stops emitting at arrival and clears on reconciliation/Undo/Restart. Reduced motion keeps 30ms transitions, freezes normal/refraction/lapping time and suppresses wake; static depth and sheen remain.
++A single preallocated wake mesh combines broken pearl crests, a subtle teal center and small bow/stern contacts. Distance-resampled stern history stays in world space, with smoothed bounded joins and separate segments between journeys. Its fixed96-point budget retains1800ms/3.6world units. Horizontal motion supplies strength; water elevation, draft and idle bob do not emit samples. The existing coast field masks exposed land. Normal completion preserves a finite spreading/fading tail and650ms contact settlement without extending the input lock. Undo, Restart, cove changes, discontinuity, hide/recovery and Reduced clear transients. Reduced keeps30ms transitions and accepted frozen water. The local normal-response trial was rejected after native phone comparison; the water shader/fields and Harbor reflection retain baseline content.
++
++The chosen normal sailing policy is clamp(1000+200×canonical length,1600,3000)ms. Natural short/long trials selected it over clamp(800+140×length,1200,2300). Easing, exact route/endpoints, transfer/final delivery timing, the capped550ms tide phase and duration+1000ms recovery remain. Actual observed durations and software-renderer limits belong to the water-motion review.
+ 
+ ## Shallow detail, contact and home
+ 
+diff --git a/src/main.ts b/src/main.ts
+index 043d582..9b56a2b 100644
+--- a/src/main.ts
++++ b/src/main.ts
+@@ -1027,7 +1027,10 @@ document.addEventListener(
+ );
+ document.addEventListener('visibilitychange', () => {
+   sound.visibility(document.hidden);
+-  if (document.hidden) world.settleHomecoming();
++  if (document.hidden) {
++    world.settleHomecoming();
++    world.clearMovement();
++  }
+   if (document.hidden && session.busy) {
+     const id = activeTransition?.id;
+     world.cancel('visibility');
+diff --git a/src/scene/effects.ts b/src/scene/effects.ts
+index a650119..4312add 100644
+--- a/src/scene/effects.ts
++++ b/src/scene/effects.ts
+@@ -1,5 +1,6 @@
+ import * as T from 'three';
+ import type { lighthouse } from './models';
++import { FerryWake, type WakeCoast } from './wake';
+ 
+ export class CrossingEffects {
+   wake: T.Mesh;
+@@ -8,8 +9,8 @@ export class CrossingEffects {
+   sweepPhase = 0;
+   sweepLastTime: number | null = null;
+   comparisonPhase: number | null = null;
+-  points: { position: T.Vector3; time: number }[] = [];
+-  emitting = false;
++  movement: FerryWake;
++  interaction: FerryWake['interaction'];
+   arrivalStarted: number | null = null;
+   arrivalIntensity = 0;
+   resting = false;
+@@ -18,42 +19,10 @@ export class CrossingEffects {
+   lensBase = 0;
+   lampBase = 0;
+   reduced = false;
+-  constructor(home: ReturnType<typeof lighthouse>) {
+-    const geometry = new T.BufferGeometry();
+-    geometry.setAttribute(
+-      'position',
+-      new T.Float32BufferAttribute(new Float32Array(32 * 6 * 3), 3).setUsage(T.DynamicDrawUsage),
+-    );
+-    geometry.setAttribute(
+-      'fade',
+-      new T.Float32BufferAttribute(new Float32Array(32 * 6), 1).setUsage(T.DynamicDrawUsage),
+-    );
+-    geometry.setAttribute(
+-      'lateral',
+-      new T.Float32BufferAttribute(new Float32Array(32 * 6), 1).setUsage(T.DynamicDrawUsage),
+-    );
+-    geometry.setDrawRange(0, 0);
+-    this.wake = new T.Mesh(
+-      geometry,
+-      new T.ShaderMaterial({
+-        transparent: true,
+-        depthWrite: false,
+-        side: T.DoubleSide,
+-        vertexShader:
+-          'attribute float fade;attribute float lateral;varying float alpha;varying float sideFade;void main(){alpha=fade;sideFade=lateral;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
+-        fragmentShader: `varying float alpha;varying float sideFade;
+-          void main(){
+-            float feather=1.-smoothstep(.25,1.,abs(sideFade));
+-            gl_FragColor=vec4(.36,.52,.48,alpha*feather);
+-            #include <tonemapping_fragment>
+-            #include <colorspace_fragment>
+-          }`,
+-      }),
+-    );
+-    this.wake.name = 'ferry-wake';
+-    this.wake.userData.excludeFromFrame = true;
+-    this.wake.frustumCulled = false;
+-    this.wake.visible = false;
++  constructor(home: ReturnType<typeof lighthouse>, coast?: WakeCoast) {
++    this.movement = new FerryWake(coast);
++    this.wake = this.movement.mesh;
++    this.interaction = this.movement.interaction;
+     const pixels = new Uint8Array(32 * 32 * 4);
+     for (let y = 0; y < 32; y++)
+       for (let x = 0; x < 32; x++) {
+@@ -128,10 +97,7 @@ export class CrossingEffects {
+     this.reset();
+   }
+   reset() {
+-    this.points.length = 0;
+-    this.emitting = false;
+-    this.wake.geometry.setDrawRange(0, 0);
+-    this.wake.visible = false;
++    this.clearMovement();
+     this.arrivalStarted = null;
+     this.arrivalIntensity = 0;
+     this.resting = false;
+@@ -167,6 +133,15 @@ export class CrossingEffects {
+     this.glow.material.blending = T.AdditiveBlending;
+     this.glow.material.opacity = 0.08 + this.arrivalIntensity * 0.26;
+   }
++  beginMovement(time: number, position: T.Vector3, angle?: number) {
++    this.movement.begin(time, position, angle);
++  }
++  finishMovement(time: number) {
++    this.movement.finish(time);
++  }
++  clearMovement() {
++    this.movement.clear();
++  }
+   update(
+     time: number,
+     position: T.Vector3,
+@@ -174,59 +149,10 @@ export class CrossingEffects {
+     moving: boolean,
+     waterY: number,
+     reduced: boolean,
++    hullY = 0,
+   ) {
+     this.reduced = reduced;
+-    this.emitting = moving && !reduced;
+-    if (this.emitting) {
+-      const stern = position
+-        .clone()
+-        .add(new T.Vector3(-Math.sin(angle) * 0.72, 0, -Math.cos(angle) * 0.72));
+-      stern.y = waterY + 0.018;
+-      if (!this.points.length || stern.distanceTo(this.points.at(-1)!.position) > 0.045)
+-        this.points.push({ position: stern, time });
+-    }
+-    while (this.points.length && time - this.points[0].time > 720) this.points.shift();
+-    while (this.points.length > 31) this.points.shift();
+-    let length = 0;
+-    for (let i = this.points.length - 2; i >= 0; i--) {
+-      length += this.points[i].position.distanceTo(this.points[i + 1].position);
+-      if (length > 1.8) {
+-        this.points.splice(0, i + 1);
+-        break;
+-      }
+-    }
+-    if (reduced) this.points.length = 0;
+-    const positions = this.wake.geometry.getAttribute('position') as T.BufferAttribute;
+-    const fade = this.wake.geometry.getAttribute('fade') as T.BufferAttribute;
+-    const lateral = this.wake.geometry.getAttribute('lateral') as T.BufferAttribute;
+-    let count = 0;
+-    for (let i = 1; i < this.points.length; i++) {
+-      const a = this.points[i - 1],
+-        b = this.points[i];
+-      const direction = b.position.clone().sub(a.position).setY(0).normalize();
+-      const normal = new T.Vector3(-direction.z, 0, direction.x);
+-      const widthA = 0.055 + Math.min(1, (time - a.time) / 720) * 0.2,
+-        widthB = 0.055 + Math.min(1, (time - b.time) / 720) * 0.2;
+-      const vertices = [
+-        a.position.clone().addScaledVector(normal, widthA),
+-        a.position.clone().addScaledVector(normal, -widthA),
+-        b.position.clone().addScaledVector(normal, widthB),
+-        a.position.clone().addScaledVector(normal, -widthA),
+-        b.position.clone().addScaledVector(normal, -widthB),
+-        b.position.clone().addScaledVector(normal, widthB),
+-      ];
+-      for (const [j, vertex] of vertices.entries()) {
+-        positions.setXYZ(count, vertex.x, waterY + 0.018, vertex.z);
+-        const age = time - (j < 2 || j === 3 ? a.time : b.time);
+-        fade.setX(count, Math.max(0, 1 - age / 720) ** 1.4 * 0.16);
+-        lateral.setX(count++, [1, -1, 1, -1, -1, 1][j]);
+-      }
+-    }
+-    positions.needsUpdate = true;
+-    fade.needsUpdate = true;
+-    lateral.needsUpdate = true;
+-    this.wake.geometry.setDrawRange(0, count);
+-    this.wake.visible = count > 0;
++    this.movement.update(time, position, angle, moving, waterY, reduced, hullY);
+     if (this.arrivalStarted !== null) {
+       const elapsed = Math.max(0, time - this.arrivalStarted);
+       this.arrivalIntensity = reduced ? 0.45 : 0.27 + 0.55 * Math.exp(-elapsed / 1100);
+@@ -241,26 +167,8 @@ export class CrossingEffects {
+     }
+   }
+   presentation() {
+-    const count = this.wake.geometry.drawRange.count;
+     return {
+-      wake: {
+-        emitting: this.emitting,
+-        visible: this.wake.visible,
+-        vertices: count,
+-        positions: Array.from(
+-          (this.wake.geometry.getAttribute('position') as T.BufferAttribute).array.slice(
+-            0,
+-            count * 3,
+-          ),
+-        ),
+-        opacity: Array.from(
+-          (this.wake.geometry.getAttribute('fade') as T.BufferAttribute).array.slice(0, count),
+-        ),
+-        points: this.points.map((point) => ({
+-          position: point.position.toArray(),
+-          time: point.time,
+-        })),
+-      },
++      wake: this.movement.presentation(),
+       arrival: {
+         active: this.arrivalStarted !== null,
+         resting: this.resting,
+diff --git a/src/scene/transitions.ts b/src/scene/transitions.ts
+index 703ec12..d9dd7b9 100644
+--- a/src/scene/transitions.ts
++++ b/src/scene/transitions.ts
+@@ -2,10 +2,10 @@ import type { Action } from '../game/rules';
+ 
+ export type JourneyTiming = { base: number; perUnit: number; minimum: number; maximum: number };
+ export const slowerTiming: JourneyTiming = {
+-  base: 900,
+-  perUnit: 150,
+-  minimum: 1400,
+-  maximum: 2400,
++  base: 1000,
++  perUnit: 200,
++  minimum: 1600,
++  maximum: 3000,
+ };
+ export const restrainedTiming: JourneyTiming = {
+   base: 800,
+@@ -13,7 +13,7 @@ export const restrainedTiming: JourneyTiming = {
+   minimum: 1200,
+   maximum: 2300,
+ };
+-export const journeyTiming = restrainedTiming;
++export const journeyTiming = slowerTiming;
+ export type CompletionReason = 'complete' | 'recovery' | 'visibility' | 'cancelled' | 'error';
+ export type TransitionPlan = { duration: number; tideDuration: number; recoveryDelay: number };
+ 
+diff --git a/src/scene/wake.ts b/src/scene/wake.ts
+new file mode 100644
+index 0000000..7b5fafb
+--- /dev/null
++++ b/src/scene/wake.ts
+@@ -0,0 +1,429 @@
++import * as T from 'three';
++
++export type WakeCoast = { texture: T.Texture; bounds: T.Vector4 };
++
++export const wakeLimits = { capacity: 96, lifetime: 1800, length: 3.6, spacing: 0.055 };
++
++type WakePoint = {
++  position: T.Vector3;
++  center: T.Vector3;
++  time: number;
++  angle: number;
++  strength: number;
++  distance: number;
++  segment: number;
++};
++
++export class FerryWake {
++  mesh: T.Mesh<T.BufferGeometry, T.ShaderMaterial>;
++  interaction = { position: new T.Vector3(), direction: new T.Vector3(0, 0, 1), strength: 0 };
++  readonly pool: WakePoint[] = Array.from({ length: wakeLimits.capacity }, () => ({
++    position: new T.Vector3(),
++    center: new T.Vector3(),
++    time: 0,
++    angle: 0,
++    strength: 0,
++    distance: 0,
++    segment: 0,
++  }));
++  readonly joins = new Float32Array(wakeLimits.capacity * 2);
++  count = 0;
++  first = 0;
++  segment = 0;
++  emitting = false;
++  active = false;
++  previous = new T.Vector3();
++  previousAngle = 0;
++  previousTime: number | null = null;
++  previousWater = 0;
++  carried = 0;
++  travelled = 0;
++  speed = 0;
++  strength = 0;
++  peakStrength = 0;
++  dockingStarted: number | null = null;
++  dockingStrength = 0;
++  contactStrength = 0;
++  vertices = 0;
++
++  constructor(coast?: WakeCoast) {
++    const capacity = (wakeLimits.capacity + 48) * 6,
++      geometry = new T.BufferGeometry();
++    geometry.setAttribute(
++      'position',
++      new T.Float32BufferAttribute(new Float32Array(capacity * 3), 3).setUsage(T.DynamicDrawUsage),
++    );
++    for (const name of ['fade', 'lateral', 'distance', 'age', 'kind'])
++      geometry.setAttribute(
++        name,
++        new T.Float32BufferAttribute(new Float32Array(capacity), 1).setUsage(T.DynamicDrawUsage),
++      );
++    geometry.setDrawRange(0, 0);
++    const material = new T.ShaderMaterial({
++      transparent: true,
++      depthTest: true,
++      depthWrite: false,
++      side: T.DoubleSide,
++      forceSinglePass: true,
++      uniforms: {
++        pearl: { value: new T.Color('#d3e7df') },
++        body: { value: new T.Color('#3b8889') },
++        coast: { value: coast?.texture ?? null },
++        field: { value: coast?.bounds ?? new T.Vector4(0, 0, 1, 1) },
++        hasCoast: { value: coast ? 1 : 0 },
++        waterY: { value: 0 },
++      },
++      vertexShader: `attribute float fade;attribute float lateral;attribute float distance;attribute float age;attribute float kind;
++        varying float alpha;varying float side;varying float along;varying float old;varying float layer;varying vec2 worldXZ;
++        void main(){
++          alpha=fade;side=lateral;along=distance;old=age;layer=kind;worldXZ=position.xz;
++          gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);
++        }`,
++      fragmentShader: `uniform vec3 pearl;uniform vec3 body;uniform sampler2D coast;uniform vec4 field;uniform float hasCoast;uniform float waterY;
++        varying float alpha;varying float side;varying float along;varying float old;varying float layer;varying vec2 worldXZ;
++        void main(){
++          float feather=1.-smoothstep(.78,1.,abs(side));
++          float rhythm=.12+.88*smoothstep(-.3,.75,sin(along*7.1+side*1.2));
++          float crestCenter=.66+.045*sin(along*3.8+old*.7);
++          float crest=(1.-smoothstep(.065,.22,abs(abs(side)-crestCenter)))*rhythm;
++          float center=(1.-smoothstep(.05,.67,abs(side)))*.15;
++          float coverage=(center+crest*.85)*feather;
++          vec3 color=mix(body,pearl,crest);
++          if(layer>.5){
++            coverage=(1.-smoothstep(.1,1.,abs(side)))*(.72+.28*sin(along*2.4));
++            color=pearl;
++          }
++          float wet=1.;
++          if(hasCoast>.5){
++            vec4 land=texture2D(coast,clamp((worldXZ-field.xy)/field.zw,0.,1.));
++            wet=1.-land.a*smoothstep(waterY+.004,waterY+.025,land.b*.72);
++          }
++          gl_FragColor=vec4(color,alpha*coverage*wet);
++          #include <tonemapping_fragment>
++          #include <colorspace_fragment>
++        }`,
++    });
++    this.mesh = new T.Mesh(geometry, material);
++    this.mesh.name = 'ferry-wake';
++    this.mesh.userData.excludeFromFrame = true;
++    this.mesh.userData.decorative = true;
++    this.mesh.frustumCulled = false;
++    this.mesh.raycast = () => {};
++    this.mesh.visible = false;
++  }
++
++  private point(index: number) {
++    return this.pool[(this.first + index) % wakeLimits.capacity];
++  }
++
++  clear() {
++    this.count = 0;
++    this.first = 0;
++    this.emitting = false;
++    this.active = false;
++    this.previousTime = null;
++    this.carried = 0;
++    this.travelled = 0;
++    this.speed = 0;
++    this.strength = 0;
++    this.peakStrength = 0;
++    this.dockingStarted = null;
++    this.dockingStrength = 0;
++    this.contactStrength = 0;
++    this.interaction.strength = 0;
++    this.vertices = 0;
++    this.mesh.geometry.setDrawRange(0, 0);
++    this.mesh.visible = false;
++  }
++
++  begin(time: number, position: T.Vector3, angle = this.previousAngle) {
++    this.segment++;
++    this.active = true;
++    this.emitting = false;
++    this.previous.copy(position);
++    this.previousAngle = angle;
++    this.previousTime = time;
++    this.previousWater = position.y;
++    this.carried = 0;
++    this.speed = 0;
++    this.strength = 0;
++    this.peakStrength = 0;
++    this.dockingStarted = null;
++    this.dockingStrength = 0;
++    this.interaction.strength = 0;
++  }
++
++  finish(time: number) {
++    if (this.active && this.peakStrength > 0.05) {
++      this.dockingStarted = time;
++      this.dockingStrength = Math.min(0.26, this.peakStrength * 0.32);
++    }
++    this.active = false;
++    this.emitting = false;
++    this.speed = 0;
++    this.strength = 0;
++  }
++
++  private emit(
++    time: number,
++    x: number,
++    z: number,
++    angle: number,
++    waterY: number,
++    distance: number,
++  ) {
++    if (this.count === wakeLimits.capacity) {
++      this.first = (this.first + 1) % wakeLimits.capacity;
++      this.count--;
++    }
++    const point = this.point(this.count++);
++    point.center.set(x, waterY, z);
++    point.position.set(x - Math.sin(angle) * 0.72, waterY + 0.018, z - Math.cos(angle) * 0.72);
++    point.time = time;
++    point.angle = angle;
++    point.strength = this.strength;
++    point.distance = distance;
++    point.segment = this.segment;
++  }
++
++  update(
++    time: number,
++    position: T.Vector3,
++    angle: number,
++    moving: boolean,
++    waterY: number,
++    reduced: boolean,
++    hullY = 0,
++  ) {
++    if (reduced || !Number.isFinite(time + position.x + position.z + angle + waterY + hullY)) {
++      this.clear();
++      return;
++    }
++    if (moving && !this.active) this.begin(time, position, angle);
++    if (!moving && this.active) this.finish(time);
++    const elapsed = this.previousTime === null ? 0 : time - this.previousTime,
++      dx = position.x - this.previous.x,
++      dz = position.z - this.previous.z,
++      horizontal = Math.hypot(dx, dz);
++    if (elapsed < 0 || elapsed > 300 || horizontal > 2.5) {
++      this.clear();
++      if (moving) this.begin(time, position, angle);
++    } else if (moving && elapsed > 0 && horizontal > 0.00001) {
++      this.speed = horizontal / (elapsed * 0.001);
++      this.strength = T.MathUtils.smoothstep(this.speed, 0.08, 1.5) * 0.64;
++      this.peakStrength = Math.max(this.peakStrength, this.strength);
++      this.emitting = this.strength > 0.001;
++      let remaining = horizontal,
++        used = 0;
++      while (this.carried + remaining >= wakeLimits.spacing) {
++        const step = wakeLimits.spacing - this.carried;
++        used += step;
++        remaining -= step;
++        const fraction = used / horizontal;
++        this.emit(
++          time - elapsed * (1 - fraction),
++          this.previous.x + dx * fraction,
++          this.previous.z + dz * fraction,
++          this.previousAngle + (angle - this.previousAngle) * fraction,
++          this.previousWater + (waterY - this.previousWater) * fraction,
++          this.travelled + used,
++        );
++        this.carried = 0;
++      }
++      this.carried += remaining;
++      this.travelled += horizontal;
++    } else {
++      this.emitting = false;
++      this.speed = 0;
++      this.strength = 0;
++    }
++    this.previous.copy(position);
++    this.previousAngle = angle;
++    this.previousTime = time;
++    this.previousWater = waterY;
++    while (this.count && time - this.point(0).time > wakeLimits.lifetime) {
++      this.first = (this.first + 1) % wakeLimits.capacity;
++      this.count--;
++    }
++    let length = 0;
++    for (let i = this.count - 2; i >= 0; i--) {
++      const a = this.point(i),
++        b = this.point(i + 1);
++      if (a.segment === b.segment)
++        length += Math.hypot(a.position.x - b.position.x, a.position.z - b.position.z);
++      if (length > wakeLimits.length) {
++        this.first = (this.first + i + 1) % wakeLimits.capacity;
++        this.count -= i + 1;
++        break;
++      }
++    }
++    let settling = 0;
++    if (this.dockingStarted !== null) {
++      settling = T.MathUtils.clamp((time - this.dockingStarted) / 650, 0, 1);
++      if (settling === 1) {
++        this.dockingStarted = null;
++        this.dockingStrength = 0;
++      }
++    }
++    this.contactStrength = this.strength * 0.5 + this.dockingStrength * (1 - settling) ** 2;
++    this.interaction.position.set(position.x, waterY, position.z);
++    this.interaction.direction.set(Math.sin(angle), 0, Math.cos(angle));
++    this.interaction.strength = this.strength + this.dockingStrength * (1 - settling) ** 2;
++    this.mesh.material.uniforms.waterY.value = waterY;
++    this.vertices = 0;
++    this.buildTrail(time, waterY);
++    if (this.contactStrength > 0.001) {
++      const swell = settling * 0.18,
++        width = 0.51 - Math.min(0.05, hullY * 0.15);
++      this.contact(position, angle, waterY, width, 0.9, -1.43, 1.43, this.contactStrength, 0, 0);
++      this.contact(
++        position,
++        angle,
++        waterY,
++        0.25 + swell,
++        0.19 + swell * 0.7,
++        -Math.PI,
++        Math.PI,
++        this.contactStrength * 0.58,
++        -0.76,
++        1,
++      );
++    }
++    for (const attribute of Object.values(this.mesh.geometry.attributes))
++      attribute.needsUpdate = true;
++    this.mesh.geometry.setDrawRange(0, this.vertices);
++    this.mesh.visible = this.vertices > 0;
++  }
++
++  private vertex(
++    x: number,
++    y: number,
++    z: number,
++    alpha: number,
++    side: number,
++    distance: number,
++    age: number,
++    kind: number,
++  ) {
++    const geometry = this.mesh.geometry,
++      index = this.vertices++;
++    geometry.getAttribute('position').setXYZ(index, x, y, z);
++    geometry.getAttribute('fade').setX(index, alpha);
++    geometry.getAttribute('lateral').setX(index, side);
++    geometry.getAttribute('distance').setX(index, distance);
++    geometry.getAttribute('age').setX(index, age);
++    geometry.getAttribute('kind').setX(index, kind);
++  }
++
++  private buildTrail(time: number, waterY: number) {
++    for (let i = 0; i < this.count; i++) {
++      const current = this.point(i),
++        previous = i && this.point(i - 1).segment === current.segment ? this.point(i - 1) : current,
++        next =
++          i + 1 < this.count && this.point(i + 1).segment === current.segment
++            ? this.point(i + 1)
++            : current,
++        dx = next.position.x - previous.position.x,
++        dz = next.position.z - previous.position.z,
++        length = Math.hypot(dx, dz) || 1;
++      this.joins[i * 2] = -dz / length;
++      this.joins[i * 2 + 1] = dx / length;
++    }
++    for (let i = 1; i < this.count; i++) {
++      const a = this.point(i - 1),
++        b = this.point(i);
++      if (a.segment !== b.segment) continue;
++      const ageA = T.MathUtils.clamp((time - a.time) / wakeLimits.lifetime, 0, 1),
++        ageB = T.MathUtils.clamp((time - b.time) / wakeLimits.lifetime, 0, 1),
++        widthA = 0.36 + ageA * 0.28,
++        widthB = 0.36 + ageB * 0.28,
++        ax = this.joins[(i - 1) * 2] * widthA,
++        az = this.joins[(i - 1) * 2 + 1] * widthA,
++        bx = this.joins[i * 2] * widthB,
++        bz = this.joins[i * 2 + 1] * widthB,
++        fadeA = a.strength * (1 - ageA) ** 0.9,
++        fadeB = b.strength * (1 - ageB) ** 0.9,
++        y = waterY + 0.018;
++      this.vertex(a.position.x + ax, y, a.position.z + az, fadeA, 1, a.distance, ageA, 0);
++      this.vertex(a.position.x - ax, y, a.position.z - az, fadeA, -1, a.distance, ageA, 0);
++      this.vertex(b.position.x + bx, y, b.position.z + bz, fadeB, 1, b.distance, ageB, 0);
++      this.vertex(a.position.x - ax, y, a.position.z - az, fadeA, -1, a.distance, ageA, 0);
++      this.vertex(b.position.x - bx, y, b.position.z - bz, fadeB, -1, b.distance, ageB, 0);
++      this.vertex(b.position.x + bx, y, b.position.z + bz, fadeB, 1, b.distance, ageB, 0);
++    }
++  }
++
++  private contact(
++    position: T.Vector3,
++    angle: number,
++    waterY: number,
++    width: number,
++    reach: number,
++    start: number,
++    end: number,
++    strength: number,
++    offset: number,
++    seed: number,
++  ) {
++    const sine = Math.sin(angle),
++      cosine = Math.cos(angle);
++    for (let i = 0; i < 24; i++) {
++      const a = start + ((end - start) * i) / 24,
++        b = start + ((end - start) * (i + 1)) / 24;
++      for (let j = 0; j < 6; j++) {
++        const front = j === 2 || j === 4 || j === 5,
++          outer = j === 0 || j === 2 || j === 5,
++          theta = front ? b : a,
++          side = outer ? 1 : -1,
++          x = Math.sin(theta) * (width + side * 0.065),
++          z = Math.cos(theta) * (reach + side * 0.065) + offset,
++          endFade = seed ? 1 : Math.sin(((theta - start) / (end - start)) * Math.PI) ** 0.6;
++        this.vertex(
++          position.x + x * cosine + z * sine,
++          waterY + 0.018,
++          position.z - x * sine + z * cosine,
++          strength * endFade,
++          side,
++          theta + seed,
++          0,
++          1,
++        );
++      }
++    }
++  }
++
++  presentation() {
++    const geometry = this.mesh.geometry;
++    return {
++      emitting: this.emitting,
++      visible: this.mesh.visible,
++      vertices: this.vertices,
++      positions: Array.from(
++        (geometry.getAttribute('position') as T.BufferAttribute).array.slice(0, this.vertices * 3),
++      ),
++      opacity: Array.from(
++        (geometry.getAttribute('fade') as T.BufferAttribute).array.slice(0, this.vertices),
++      ),
++      points: Array.from({ length: this.count }, (_, index) => {
++        const point = this.point(index);
++        return {
++          position: point.position.toArray(),
++          center: point.center.toArray(),
++          time: point.time,
++          heading: point.angle,
++          segment: point.segment,
++        };
++      }),
++      limits: { ...wakeLimits },
++      speed: this.speed,
++      strength: this.strength,
++      contactStrength: this.contactStrength,
++      docking: this.dockingStarted !== null,
++      interaction: {
++        position: this.interaction.position.toArray(),
++        direction: this.interaction.direction.toArray(),
++        strength: this.interaction.strength,
++      },
++    };
++  }
++}
+diff --git a/src/scene/world.ts b/src/scene/world.ts
+index 2dcb1cc..9dde56d 100644
+--- a/src/scene/world.ts
++++ b/src/scene/world.ts
+@@ -292,7 +292,7 @@ export class World {
+       }
+       this.registerPlace(n.id, 'waypoint', g);
+     }
+-    this.effects = new CrossingEffects(this.home);
++    this.effects = new CrossingEffects(this.home, this.coastalWater.mask);
+     this.scene.add(this.effects.wake, this.effects.glow, this.effects.sweep);
+     this.forecast = this.shores.forecast;
+     this.scene.add(this.forecast);
+@@ -338,6 +338,7 @@ export class World {
+     this.renderer.domElement.addEventListener('webglcontextlost', (ev) => {
+       ev.preventDefault();
+       this.cancel();
++      this.clearMovement();
+       this.settleHomecoming('context-loss');
+     });
+     this.frameRequest = requestAnimationFrame((t) => this.tick(t));
+@@ -663,6 +664,7 @@ export class World {
+     this.reduced = reduced;
+     if (reduced) {
+       if (this.transition) this.cancel();
++      this.clearMovement();
+       this.homecomingCameraSuppressed = true;
+       this.settleHomecoming('reduced-motion');
+       this.restoreCamera();
+@@ -865,6 +867,9 @@ export class World {
+   draftY(s: State) {
+     return 0.03 - (draft(s, this.level) - 1) * 0.075;
+   }
++  clearMovement() {
++    this.effects.clearMovement();
++  }
+   sync(s: State, preserveEffects = false) {
+     this.state = s;
+     if (!preserveEffects) this.resetHomecoming();
+@@ -991,6 +996,11 @@ export class World {
+       edgeId = edge.id;
+       reverse = edge.nodes[0] !== before.boatNodeId;
+       path = this.paths.get(edge.id)!;
++      this.effects.beginMovement(
++        performance.now(),
++        this.boatRoot.position,
++        this.boatRoot.rotation.y,
++      );
+     }
+     this.journeyFrame = path
+       ? {
+@@ -1109,6 +1119,7 @@ export class World {
+         this.onArrival();
+       }
+       if (t === 1) {
++        if (tr.path) this.effects.finishMovement(time);
+         if (tr.transfer) tr.transfer.completion = 'complete';
+         this.transition = null;
+         this.journeyFrame = null;
+@@ -1131,6 +1142,7 @@ export class World {
+       !!this.transition?.path,
+       this.water.position.y,
+       this.reduced,
++      this.hull.position.y,
+     );
+     this.coastalWater.setHarbor(this.effects.glow.position, this.effects.arrivalIntensity);
+     this.coastalWater.update(this.water.position.y, this.reduced ? 0 : time * 0.001);
+diff --git a/tests/e2e/environment.spec.ts b/tests/e2e/environment.spec.ts
+index b1641f1..42625bc 100644
+--- a/tests/e2e/environment.spec.ts
++++ b/tests/e2e/environment.spec.ts
+@@ -120,19 +120,24 @@ async function stopSamples(page: Page) {
+   });
+ }
+ async function arrivalIsVisible(page: Page, reduced: boolean) {
+-  const view = await environment(page), base = homeBaselines.get(page);
++  const view = await environment(page),
++    base = homeBaselines.get(page);
+   expect(base).toBeDefined();
+   expect(view.arrival.active).toBe(true);
+   expect(view.arrival.intensity).toBeGreaterThan(0);
+   expect(view.arrival.lampIntensity).toBeGreaterThan(base.lampIntensity);
+-  expect(view.arrival.emissiveIntensity).toBeCloseTo(base.emissiveIntensity + view.arrival.intensity, 6);
++  expect(view.arrival.emissiveIntensity).toBeCloseTo(
++    base.emissiveIntensity + view.arrival.intensity,
++    6,
++  );
+   expect(view.arrival.glowVisible).toBe(true);
+   expect(view.arrival.glowOpacity).toBeGreaterThan(base.glowOpacity);
+   if (reduced) expect(view.arrival.intensity).toBe(0.45);
+   return view;
+ }
+ async function effectsAreClear(page: Page) {
+-  const view = await environment(page), base = homeBaselines.get(page);
++  const view = await environment(page),
++    base = homeBaselines.get(page);
+   expect(base).toBeDefined();
+   expect(view.wake).toMatchObject({ emitting: false, visible: false, vertices: 0, points: [] });
+   expect(view.arrival).toMatchObject({
+@@ -190,7 +195,6 @@ test('environment: visible curved courses carry the ferry, tangent and fading wa
+       expect(crossing.some((sample) => sample.wake.emitting)).toBe(true);
+       expect(crossing.some((sample) => sample.wake.visible && sample.wake.vertices > 0)).toBe(true);
+     }
+-  const emissionFrames = new Map(samples.map((sample) => [sample.time, sample]));
+   for (const sample of samples) {
+     const route: any = buffers.get(sample.active.edgeId);
+     const nearest = nearestCourse(sample.pose, route);
+@@ -207,34 +211,58 @@ test('environment: visible curved courses carry the ferry, tangent and fading wa
+           Math.cos(sample.heading) * nearest.direction[1]);
+       expect(aligned).toBeGreaterThan(0.98);
+     }
++    expect(sample.wake.positions.every(Number.isFinite)).toBe(true);
++    let maximumWaterHeightError = 0;
+     for (let i = 1; i < sample.wake.positions.length; i += 3)
+-      expect(sample.wake.positions[i]).toBeCloseTo(sample.waterY + 0.018, 5);
+-    expect(sample.wake.points.length).toBeLessThanOrEqual(31);
+-    let wakeLength = 0;
++      maximumWaterHeightError = Math.max(
++        maximumWaterHeightError,
++        Math.abs(sample.wake.positions[i] - sample.waterY - 0.018),
++      );
++    expect(maximumWaterHeightError).toBeLessThan(0.000005);
++    expect(sample.wake.limits).toMatchObject({ capacity: 96, lifetime: 1800, length: 3.6 });
++    expect(sample.wake.points.length).toBeLessThanOrEqual(sample.wake.limits.capacity);
++    let wakeLength = 0,
++      maximumSternError = 0,
++      maximumCourseDistance = 0,
++      minimumAge = Infinity,
++      maximumAge = 0,
++      finitePoints = true;
+     for (let i = 0; i < sample.wake.points.length; i++) {
+-      const point = sample.wake.points[i],
+-        emitted = emissionFrames.get(point.time);
+-      expect(emitted, `Missing emission frame at ${point.time}`).toBeDefined();
+-      expect(point.position[0]).toBeCloseTo(emitted.pose[0] - Math.sin(emitted.heading) * 0.72, 5);
+-      expect(point.position[1]).toBeCloseTo(emitted.waterY + 0.018, 5);
+-      expect(point.position[2]).toBeCloseTo(emitted.pose[2] - Math.cos(emitted.heading) * 0.72, 5);
+-      expect(
+-        nearestCourse(point.position, buffers.get(emitted.active.edgeId)).distance,
+-      ).toBeLessThanOrEqual(0.721);
+-      expect(sample.time - point.time).toBeGreaterThanOrEqual(0);
+-      expect(sample.time - point.time).toBeLessThanOrEqual(720);
+-      if (i)
++      const point = sample.wake.points[i];
++      finitePoints =
++        finitePoints &&
++        point.position.every(Number.isFinite) &&
++        point.center.every(Number.isFinite) &&
++        Number.isFinite(point.heading);
++      maximumSternError = Math.max(
++        maximumSternError,
++        Math.abs(point.position[0] - point.center[0] + Math.sin(point.heading) * 0.72),
++        Math.abs(point.position[1] - point.center[1] - 0.018),
++        Math.abs(point.position[2] - point.center[2] + Math.cos(point.heading) * 0.72),
++      );
++      maximumCourseDistance = Math.max(
++        maximumCourseDistance,
++        Math.min(
++          ...[...buffers.values()].map((route) => nearestCourse(point.center, route).distance),
++        ),
++      );
++      minimumAge = Math.min(minimumAge, sample.time - point.time);
++      maximumAge = Math.max(maximumAge, sample.time - point.time);
++      if (i && point.segment === sample.wake.points[i - 1].segment)
+         wakeLength += Math.hypot(
+-          ...point.position.map(
+-            (value: number, axis: number) => value - sample.wake.points[i - 1].position[axis],
+-          ),
++          point.position[0] - sample.wake.points[i - 1].position[0],
++          point.position[2] - sample.wake.points[i - 1].position[2],
+         );
+     }
+-    expect(wakeLength).toBeLessThanOrEqual(1.8 + 0.00001);
+-    for (const opacity of sample.wake.opacity) {
+-      expect(opacity).toBeGreaterThanOrEqual(0);
+-      expect(opacity).toBeLessThanOrEqual(0.181);
+-    }
++    expect(finitePoints).toBe(true);
++    expect(maximumSternError).toBeLessThan(0.000005);
++    expect(maximumCourseDistance).toBeLessThanOrEqual(0.08);
++    expect(minimumAge).toBeGreaterThanOrEqual(0);
++    expect(maximumAge).toBeLessThanOrEqual(sample.wake.limits.lifetime);
++    expect(wakeLength).toBeLessThanOrEqual(sample.wake.limits.length + 0.00001);
++    expect(sample.wake.opacity.every(Number.isFinite)).toBe(true);
++    expect(Math.min(0, ...sample.wake.opacity)).toBeGreaterThanOrEqual(0);
++    expect(Math.max(0, ...sample.wake.opacity)).toBeLessThanOrEqual(0.641);
+   }
+   for (const turn of new Set(samples.map((sample) => sample.turn))) {
+     const crossing = samples.filter((sample) => sample.turn === turn);
+diff --git a/tests/e2e/water-motion.spec.ts b/tests/e2e/water-motion.spec.ts
+new file mode 100644
+index 0000000..7433790
+--- /dev/null
++++ b/tests/e2e/water-motion.spec.ts
+@@ -0,0 +1,244 @@
++import { test, expect, type Page } from '@playwright/test';
++import { mkdirSync, writeFileSync } from 'node:fs';
++import { reviewDir } from './evidence';
++import { act, activate, idle, ready, restart, startMove, state, undo } from './ui';
++
++const environment = (page: Page) =>
++  page.evaluate(() => (window as any).__LAST_FERRY__.getEnvironmentStatus());
++async function movementClear(page: Page) {
++  const view = await environment(page);
++  expect(view.wake).toMatchObject({
++    emitting: false,
++    visible: false,
++    vertices: 0,
++    points: [],
++    docking: false,
++  });
++  if (view.water.boat) expect(view.water.boat.strength).toBe(0);
++}
++
++test('water motion: finite docking, immediate follow-up, tide Undo and mid-crossing device reduction clear correctly', async ({
++  browser,
++}) => {
++  test.setTimeout(180000);
++  mkdirSync(`${reviewDir}/raw`, { recursive: true });
++  const context = await browser.newContext({
++    baseURL: String(
++      test.info().project.use.baseURL ??
++        `http://127.0.0.1:${process.env.LAST_FERRY_DEV_PORT ?? 5173}`,
++    ),
++    viewport: { width: 844, height: 390 },
++    deviceScaleFactor: 1,
++    hasTouch: true,
++    isMobile: true,
++    reducedMotion: 'no-preference',
++    recordVideo: { dir: `${reviewDir}/raw`, size: { width: 844, height: 390 } },
++  });
++  const page = await context.newPage();
++  const observations: any[] = [],
++    errors: string[] = [];
++  let failure: string | null = null;
++  page.on('pageerror', (error) => errors.push(error.message));
++  async function save(label: string, screenshot = false) {
++    const item = await page.evaluate((label) => {
++      const api = (window as any).__LAST_FERRY__,
++        view = api.getEnvironmentStatus(),
++        wake = view.wake;
++      return {
++        label,
++        at: performance.now(),
++        state: api.getState(),
++        transition: api.getTransitionStatus(),
++        motion: api.getMotionStatus(),
++        wake: {
++          emitting: wake.emitting,
++          visible: wake.visible,
++          vertices: wake.vertices,
++          points: wake.points,
++          docking: wake.docking,
++          speed: wake.speed,
++          strength: wake.strength,
++          contactStrength: wake.contactStrength,
++        },
++        waterY: view.waterY,
++        boatInteraction: view.water.boat ?? null,
++        homecoming: api.getHomecomingStatus(),
++        audio: api.getAudioStatus(),
++        metrics: api.getMetrics(),
++      };
++    }, label);
++    observations.push(item);
++    if (screenshot) await page.screenshot({ path: `${reviewDir}/water-motion-${label}.png` });
++    return item;
++  }
++  try {
++    await ready(page, 'holding-pier');
++    await page.waitForTimeout(900);
++    await movementClear(page);
++    await save('ordinary', true);
++    await activate(page, 'map-harbor', true);
++    await page.waitForTimeout(250);
++    await movementClear(page);
++    expect((await state(page)).turn).toBe(0);
++    await activate(page, 'close-location', true);
++    await act(page, 'unload', true);
++    await movementClear(page);
++    await startMove(page, 'map-shallows', true);
++    await page.waitForFunction(
++      () => (window as any).__LAST_FERRY__.getEnvironmentStatus().wake.points.length > 5,
++    );
++    await idle(page);
++    const docking = await save('natural-docking');
++    expect(docking.wake.emitting).toBe(false);
++    expect(docking.wake.visible).toBe(true);
++    await expect(page.locator('#undo')).toBeEnabled();
++    const nextStartedAt = await page.evaluate(() => performance.now());
++    await startMove(page, 'map-rabbit-pier', true);
++    await page.waitForFunction(
++      () => (window as any).__LAST_FERRY__.getJourneyStatus().active?.progress > 0.15,
++    );
++    const follow = await save('immediate-follow-up');
++    expect(follow.state.turn).toBe(3);
++    expect(follow.transition.active.startedAt - nextStartedAt).toBeLessThan(1600);
++    expect(follow.wake.points.length).toBeLessThanOrEqual(96);
++    for (let i = 1; i < follow.wake.points.length; i++) {
++      const a = follow.wake.points[i - 1],
++        b = follow.wake.points[i];
++      if (a.segment === b.segment)
++        expect(Math.hypot(b.center[0] - a.center[0], b.center[2] - a.center[2])).toBeLessThan(0.1);
++    }
++    await idle(page);
++    const beforeTide = await state(page);
++    await activate(page, 'board', true);
++    await activate(page, 'passenger-rabbit-2', true);
++    expect(await state(page)).toEqual(beforeTide);
++    await expect(page.locator('#dialog')).toContainText('Rue');
++    await activate(page, 'passenger-rabbit-2', true);
++    const boardingTime = await page.evaluate(() => performance.now());
++    await activate(page, 'commit', true);
++    await idle(page);
++    const rise = await save('after-tide', true);
++    expect(rise.state).toMatchObject({
++      turn: 4,
++      tideLevel: 1,
++      aboard: ['rabbit-1', 'rabbit-2'],
++      status: 'playing',
++    });
++    expect(rise.wake.emitting).toBe(false);
++    for (const point of rise.wake.points) expect(point.time).toBeLessThanOrEqual(boardingTime);
++    await undo(page, true);
++    expect(await state(page)).toEqual(beforeTide);
++    await movementClear(page);
++    await save('tide-undo', true);
++    await act(page, 'board', true);
++    await startMove(page, 'map-shallows', true);
++    await page.waitForFunction(
++      () => (window as any).__LAST_FERRY__.getJourneyStatus().active?.progress > 0.28,
++    );
++    await save('before-device-reduction');
++    const countsBefore = await page.evaluate(
++      () => (window as any).__LAST_FERRY__.getTransitionStatus().completionCounts,
++    );
++    await page.emulateMedia({ reducedMotion: 'reduce' });
++    await idle(page);
++    expect(await state(page)).toMatchObject({ turn: 5, boatNodeId: 'shallows' });
++    await movementClear(page);
++    const reduced = await save('device-reduced', true);
++    expect(reduced.motion).toMatchObject({ mode: 'device', reduced: true });
++    expect(reduced.transition.last.reason).toBe('cancelled');
++    expect(reduced.transition.completionCounts.cancelled).toBe(countsBefore.cancelled + 1);
++    await page.emulateMedia({ reducedMotion: 'no-preference' });
++    await page.waitForTimeout(300);
++    await movementClear(page);
++    expect((await state(page)).turn).toBe(5);
++    await activate(page, 'menu', true);
++    await activate(page, 'settings', true);
++    await page.locator('#motion-preference').selectOption('reduced');
++    expect(await page.evaluate(() => (window as any).__LAST_FERRY__.getMotionStatus())).toEqual({
++      mode: 'reduced',
++      reduced: true,
++    });
++    await movementClear(page);
++    await save('manual-reduced-settings', true);
++    await page.locator('#motion-preference').selectOption('device');
++    await activate(page, 'settings-back', true);
++    await activate(page, 'cancel', true);
++    for (const action of ['map-stone', 'board', 'map-harbor', 'unload'])
++      await act(page, action, true);
++    expect(await state(page)).toMatchObject({
++      turn: 9,
++      status: 'won',
++    });
++    expect((await state(page)).delivered.slice().sort()).toEqual([
++      'rabbit-1',
++      'rabbit-2',
++      'sheep-1',
++    ]);
++    await save('arrival', true);
++    await undo(page, true);
++    await movementClear(page);
++    await act(page, 'unload', true);
++    expect((await state(page)).status).toBe('won');
++    await page.waitForTimeout(2300);
++    await movementClear(page);
++    await save('redelivery-settled', true);
++    await restart(page, true);
++    await movementClear(page);
++    await startMove(page, 'map-harbor', true);
++    await page.waitForFunction(
++      () => (window as any).__LAST_FERRY__.getJourneyStatus().active?.progress > 0.25,
++    );
++    await page.evaluate(() => {
++      Object.defineProperty(document, 'hidden', { configurable: true, value: true });
++      document.dispatchEvent(new Event('visibilitychange'));
++    });
++    await idle(page);
++    await movementClear(page);
++    const hidden = await save('simulated-hidden');
++    expect(hidden.state).toMatchObject({ turn: 1, boatNodeId: 'harbor' });
++    expect(hidden.transition.last.reason).toBe('visibility');
++    await page.evaluate(() => {
++      Object.defineProperty(document, 'hidden', { configurable: true, value: false });
++      document.dispatchEvent(new Event('visibilitychange'));
++    });
++    await page.waitForTimeout(350);
++    await movementClear(page);
++    expect((await state(page)).turn).toBe(1);
++    await undo(page, true);
++    await restart(page, true);
++    await activate(page, 'menu', true);
++    await page.locator('#cove-picker').selectOption('first-crossing');
++    await idle(page);
++    await movementClear(page);
++    expect(await state(page)).toMatchObject({ turn: 0, boatNodeId: 'cut' });
++    await save('first-crossing-smoke', true);
++    expect(errors).toEqual([]);
++  } catch (error) {
++    failure = String(error);
++    throw error;
++  } finally {
++    writeFileSync(
++      `${reviewDir}/water-motion-lifecycle.json`,
++      JSON.stringify(
++        {
++          outcome: failure ? 'failed' : 'passed',
++          failure,
++          environment: {
++            viewport: [844, 390],
++            dpr: 1,
++            input: 'emulated touch',
++            midCrossingMotion: 'emulated prefers-reduced-motion change under Follow device',
++            visibility: 'simulated document.hidden/visibilitychange',
++          },
++          observations,
++          errors,
++        },
++        null,
++        2,
++      ),
++    );
++    const video = page.video();
++    await context.close();
++    if (video) await video.saveAs(`${reviewDir}/raw/water-motion-lifecycle.webm`);
++  }
++});
+diff --git a/tests/unit/transitions.test.ts b/tests/unit/transitions.test.ts
+index 5acbca8..384983e 100644
+--- a/tests/unit/transitions.test.ts
++++ b/tests/unit/transitions.test.ts
+@@ -1,7 +1,14 @@
+ import { describe, expect, test } from 'vitest';
+ import { bellwater, holdingPier } from '../../src/levels/level';
++import type { Action } from '../../src/game/rules';
+ import { getLevelPaths } from '../../src/scene/paths';
+-import { journeyProgress, settlingProgress, transitionPlan } from '../../src/scene/transitions';
++import {
++  journeyProgress,
++  restrainedTiming,
++  settlingProgress,
++  slowerTiming,
++  transitionPlan,
++} from '../../src/scene/transitions';
+ import { overlaps, placeLocalCard } from '../../src/ui/placement';
+ 
+ describe('journey presentation policy', () => {
+@@ -12,8 +19,10 @@ describe('journey presentation policy', () => {
+     const plans = lengths.map((length) =>
+       transitionPlan({ type: 'move', to: 'destination' }, false, length, false),
+     );
+-    expect(Math.max(...plans.map((plan) => plan.duration))).toBeGreaterThan(1800);
+-    expect(Math.min(...plans.map((plan) => plan.duration))).toBeLessThan(1500);
++    expect(Math.max(...plans.map((plan) => plan.duration))).toBeGreaterThan(2700);
++    expect(Math.max(...plans.map((plan) => plan.duration))).toBeLessThanOrEqual(3000);
++    expect(Math.min(...plans.map((plan) => plan.duration))).toBeGreaterThanOrEqual(1600);
++    expect(Math.min(...plans.map((plan) => plan.duration))).toBeLessThan(1950);
+     for (const plan of plans) {
+       expect(plan.tideDuration).toBeLessThan(plan.duration / 2);
+       expect(plan.recoveryDelay - plan.duration).toBeGreaterThanOrEqual(900);
+@@ -27,6 +36,24 @@ describe('journey presentation policy', () => {
+     ).toBeLessThan(plans[0].duration);
+   });
+ 
++  test('calmer sailing leaves Reduced, transfers and visible delivery timing unchanged', () => {
++    const actions: Action[] = [
++      { type: 'move', to: 'destination' },
++      { type: 'wait' },
++      { type: 'board', passengerIds: ['pip'] },
++      { type: 'unload', passengerIds: ['pip'] },
++    ];
++    for (const action of actions) {
++      expect(transitionPlan(action, true, 9, true, slowerTiming)).toEqual(
++        transitionPlan(action, true, 9, true, restrainedTiming),
++      );
++      if (action.type !== 'move')
++        expect(transitionPlan(action, true, 9, false, slowerTiming)).toEqual(
++          transitionPlan(action, true, 9, false, restrainedTiming),
++        );
++    }
++  });
++
+   test('distance progresses monotonically with a steady middle and symmetric gentle ends', () => {
+     const samples = Array.from({ length: 101 }, (_, index) => journeyProgress(index / 100));
+     expect(samples[0]).toBe(0);
+diff --git a/tests/unit/wake.test.ts b/tests/unit/wake.test.ts
+new file mode 100644
+index 0000000..4f7e2ee
+--- /dev/null
++++ b/tests/unit/wake.test.ts
+@@ -0,0 +1,166 @@
++import { expect, test } from 'vitest';
++import * as T from 'three';
++import { FerryWake, wakeLimits } from '../../src/scene/wake';
++
++function runStraight(wake: FerryWake, step: number, until = 1200) {
++  const position = new T.Vector3();
++  wake.begin(0, position, Math.PI / 2);
++  for (let time = step; time <= until; time += step) {
++    position.set(time * 0.002, 0, 0);
++    wake.update(time, position, Math.PI / 2, true, 0, false);
++  }
++}
++
++test('wake depends on horizontal movement, not water elevation, hull draft or dock heading', () => {
++  const wake = new FerryWake(),
++    position = new T.Vector3();
++  wake.begin(0, position, 0);
++  for (let time = 20; time <= 400; time += 20) {
++    position.y = time * 0.0009;
++    wake.update(time, position, time * 0.01, true, position.y, false, -0.12);
++  }
++  expect(wake.presentation()).toMatchObject({
++    emitting: false,
++    visible: false,
++    vertices: 0,
++    points: [],
++    strength: 0,
++  });
++  position.x = 0.2;
++  wake.update(420, position, 0.9, true, 0.36, false, -0.12);
++  expect(wake.count).toBeGreaterThan(0);
++  for (const point of wake.presentation().points) {
++    expect(point.position[0]).toBeCloseTo(point.center[0] - Math.sin(point.heading) * 0.72);
++    expect(point.position[2]).toBeCloseTo(point.center[2] - Math.cos(point.heading) * 0.72);
++    expect(point.position[1]).toBeCloseTo(point.center[1] + 0.018);
++  }
++  wake.update(440, position, 1.2, false, 0.4, false, -0.12);
++  const view = wake.presentation();
++  for (let i = 1; i < view.positions.length; i += 3)
++    expect(view.positions[i]).toBeCloseTo(0.418, 6);
++  expect(view.interaction.direction[0]).toBeCloseTo(Math.sin(1.2));
++});
++
++test('distance sampling is consistent across frame rates and retains world-space history', () => {
++  const fine = new FerryWake(),
++    coarse = new FerryWake();
++  runStraight(fine, 10);
++  runStraight(coarse, 80);
++  expect(fine.count).toBe(coarse.count);
++  const a = fine.presentation().points,
++    b = coarse.presentation().points;
++  for (let i = 0; i < a.length; i++) {
++    expect(a[i].time).toBeCloseTo(b[i].time, 6);
++    expect(a[i].position[0]).toBeCloseTo(b[i].position[0], 6);
++    expect(a[i].position[2]).toBeCloseTo(b[i].position[2], 6);
++  }
++  const old = fine.pool[fine.first].position.clone();
++  fine.update(1220, new T.Vector3(2.44, 0, 0.02), 1.5, true, 0.18, false);
++  expect(fine.pool[fine.first].position).toEqual(old);
++});
++
++test('joined curved history and hull contacts stay finite inside a fixed resource budget', () => {
++  const wake = new FerryWake(),
++    geometry = wake.mesh.geometry,
++    material = wake.mesh.material,
++    attributes = Object.values(geometry.attributes).map((attribute) => attribute.array),
++    pool = wake.pool.map((point) => point.position),
++    position = new T.Vector3();
++  wake.begin(0, position, 0);
++  for (let time = 20; time <= 20000; time += 20) {
++    const angle = time * 0.001;
++    position.set(Math.sin(angle) * 2, 0, Math.cos(angle) * 2 - 2);
++    wake.update(time, position, angle + Math.PI / 2, true, 0, false);
++    expect(wake.count).toBeLessThanOrEqual(wakeLimits.capacity);
++    expect(wake.vertices).toBeLessThanOrEqual((wakeLimits.capacity + 48) * 6);
++  }
++  expect(wake.mesh.geometry).toBe(geometry);
++  expect(wake.mesh.material).toBe(material);
++  Object.values(geometry.attributes).forEach((attribute, index) =>
++    expect(attribute.array).toBe(attributes[index]),
++  );
++  wake.pool.forEach((point, index) => expect(point.position).toBe(pool[index]));
++  const view = wake.presentation();
++  expect(view.positions.every(Number.isFinite)).toBe(true);
++  expect(view.opacity.every((value) => Number.isFinite(value) && value >= 0 && value <= 0.64)).toBe(
++    true,
++  );
++  const points = view.points;
++  let length = 0;
++  for (let i = 1; i < points.length; i++)
++    length += Math.hypot(
++      points[i].position[0] - points[i - 1].position[0],
++      points[i].position[2] - points[i - 1].position[2],
++    );
++  expect(length).toBeLessThanOrEqual(wakeLimits.length + 0.00001);
++  for (let i = 0; i < wake.count; i++)
++    expect(Math.hypot(wake.joins[i * 2], wake.joins[i * 2 + 1])).toBeLessThanOrEqual(1.000001);
++});
++
++test('normal docking retains a finite tail without joining it to a subsequent journey', () => {
++  const wake = new FerryWake(),
++    position = new T.Vector3(2.4, 0, 0);
++  runStraight(wake, 20);
++  wake.finish(1200);
++  wake.update(1220, position, 0, false, 0, false);
++  expect(wake.presentation()).toMatchObject({ emitting: false, visible: true, docking: true });
++  const oldCount = wake.count,
++    firstSegment = wake.presentation().points[0].segment;
++  wake.begin(1220, position, 0);
++  position.z = 0.2;
++  wake.update(1240, position, 0, true, 0, false);
++  const newView = wake.presentation(),
++    segments = new Set(newView.points.map((point) => point.segment));
++  expect(segments.size).toBe(2);
++  expect(newView.points.at(-1)!.segment).not.toBe(firstSegment);
++  const trailVertices = (wake.mesh.geometry.getAttribute('kind').array as Float32Array)
++    .slice(0, wake.vertices)
++    .filter((kind) => kind === 0).length;
++  expect(trailVertices).toBe((wake.count - segments.size) * 6);
++  expect(wake.count).toBeGreaterThan(oldCount);
++  wake.finish(1240);
++  for (let time = 1260; time <= 3200; time += 20) wake.update(time, position, 0, false, 0, false);
++  expect(wake.presentation()).toMatchObject({
++    visible: false,
++    emitting: false,
++    docking: false,
++    vertices: 0,
++    points: [],
++    contactStrength: 0,
++  });
++});
++
++test('reset, reduced motion and discontinuities clear wake and do not synthesize an arrival ripple', () => {
++  const wake = new FerryWake(),
++    position = new T.Vector3(2.4, 0, 0);
++  for (const reason of ['reset', 'reduced', 'gap', 'teleport']) {
++    runStraight(wake, 20);
++    if (reason === 'reset') wake.clear();
++    if (reason === 'reduced') wake.update(1220, position, 0, true, 0, true);
++    if (reason === 'gap') wake.update(2000, position, 0, false, 0, false);
++    if (reason === 'teleport') wake.update(1220, new T.Vector3(20, 0, 0), 0, false, 0, false);
++    expect(wake.presentation()).toMatchObject({
++      visible: false,
++      vertices: 0,
++      points: [],
++      docking: false,
++      contactStrength: 0,
++    });
++    expect(wake.interaction.strength).toBe(0);
++  }
++  wake.update(2020, position, 0, true, 0, false);
++  expect(wake.count).toBe(0);
++});
++
++test('decorative wake keeps depth occlusion and never claims camera bounds or pointer hits', () => {
++  const wake = new FerryWake();
++  runStraight(wake, 20);
++  expect(wake.mesh.material).toMatchObject({
++    depthTest: true,
++    depthWrite: false,
++    forceSinglePass: true,
++  });
++  expect(wake.mesh.userData).toMatchObject({ decorative: true, excludeFromFrame: true });
++  const ray = new T.Raycaster(new T.Vector3(1, 10, 0), new T.Vector3(0, -1, 0));
++  expect(ray.intersectObject(wake.mesh)).toHaveLength(0);
++});
+diff --git a/tools/capture-water-motion.mjs b/tools/capture-water-motion.mjs
+new file mode 100644
+index 0000000..22fa5f0
+--- /dev/null
++++ b/tools/capture-water-motion.mjs
+@@ -0,0 +1,349 @@
++import { chromium } from '@playwright/test';
++import { createHash } from 'node:crypto';
++import { execFileSync } from 'node:child_process';
++import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
++import { relative, resolve } from 'node:path';
++
++const args = Object.fromEntries(process.argv.slice(2).map((v) => v.replace(/^--/, '').split('=')));
++if (args.stills === 'true' && args.metricsOnly === 'true')
++  throw Error('Metrics-only sampling cannot capture phase images');
++const base = args.base ?? 'http://127.0.0.1:5202',
++  phase = args.phase ?? 'baseline';
++const width = Number(args.width ?? 844),
++  height = Number(args.height ?? 390);
++const root = resolve(args.root ?? '.'),
++  out = args.output ?? `reviews/water-motion/${phase}/${width}x${height}`;
++const hash = (value) => createHash('sha256').update(value).digest('hex');
++const walk = (dir) =>
++  readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
++    e.isDirectory() ? walk(`${dir}/${e.name}`) : [`${dir}/${e.name}`],
++  );
++const paths = ['src', 'data', 'public']
++  .map((p) => resolve(root, p))
++  .filter(existsSync)
++  .flatMap(walk)
++  .concat(
++    ['index.html', 'package.json', 'package-lock.json', 'vite.config.ts'].map((p) =>
++      resolve(root, p),
++    ),
++  )
++  .sort();
++const snapshot = () =>
++  Object.fromEntries(
++    paths.map((p) => [relative(root, resolve(p)).replaceAll('\\', '/'), hash(readFileSync(p))]),
++  );
++const files = snapshot(),
++  runtimeHash = hash(JSON.stringify(files));
++mkdirSync(`${out}/raw`, { recursive: true });
++const source = {
++  head: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
++  workingTree: execFileSync('git', ['status', '--short'], { encoding: 'utf8' }).trim(),
++  files,
++  runtimeHash,
++  capturedAt: new Date().toISOString(),
++  command: [process.execPath, ...process.argv.slice(1)],
++  helperHash: hash(readFileSync(new URL(import.meta.url))),
++};
++writeFileSync(`${out}/source.json`, JSON.stringify(source, null, 2) + '\n');
++writeFileSync(`${out}/raw/capture-helper.mjs`, readFileSync(new URL(import.meta.url)));
++const browser = await chromium.launch({
++  headless: true,
++  args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'],
++});
++const result = {
++  phase,
++  sourceHead: source.head,
++  runtimeHash,
++  startedAt: new Date().toISOString(),
++  environment: {
++    node: process.version,
++    browser: browser.version(),
++    platform: process.platform,
++    renderer: 'SwiftShader',
++    width,
++    height,
++    dpr: 1,
++    input: width < 1000 ? 'emulated touch' : 'mouse',
++    sampling:
++      args.metricsOnly === 'true'
++        ? 'rAF intervals and small transition/metrics/state reads; no per-frame environment or route-buffer copy'
++        : 'Full presentation diagnostics per rAF; instrumented capture, not native GPU performance',
++  },
++  routes: [],
++  errors: [],
++};
++const idle = (page) =>
++  page.waitForFunction(
++    () => document.querySelector('#seascape')?.getAttribute('aria-busy') === 'false',
++  );
++const press = async (page, id) => {
++  if ((id === 'board' || id === 'unload') && !(await page.locator(`#${id}`).isVisible()))
++    await page.locator('.map-target[aria-current="location"]').click();
++  await page.locator(`#${id}`).click();
++  if (id.startsWith('map-')) await page.locator('#sail').click();
++  else await page.locator('#commit').click();
++};
++const act = async (page, id) => {
++  await press(page, id);
++  await idle(page);
++};
++for (const length of args.cases ? args.cases.split(',') : ['short', 'long']) {
++  const cove = length === 'short' ? 'holding-pier' : 'bellwater';
++  const context = await browser.newContext({
++    viewport: { width, height },
++    deviceScaleFactor: 1,
++    hasTouch: width < 1000,
++    isMobile: width < 1000,
++    reducedMotion: 'no-preference',
++    ...(args.record === 'false'
++      ? {}
++      : { recordVideo: { dir: `${out}/raw`, size: { width, height } } }),
++  });
++  const page = await context.newPage();
++  page.on('pageerror', (e) => result.errors.push(e.message));
++  await page.goto(`${base}/?cove=${cove}`);
++  await page.waitForFunction(() => window.__LAST_FERRY__?.getMetrics().frames > 6);
++  if (args.timing)
++    await page.evaluate((name) => window.__LAST_FERRY__.setTimingCandidate(name), args.timing);
++  if (args.response !== undefined)
++    await page.evaluate(
++      (enabled) => window.__LAST_FERRY__.setBoatResponseCandidate(enabled),
++      Number(args.response),
++    );
++  const setup =
++    length === 'short' ? ['unload'] : ['map-shallows', 'map-low-pier', 'board', 'map-east-buoy'];
++  for (const id of setup) await act(page, id);
++  const route = {
++    length,
++    cove,
++    timing: args.timing ?? 'active',
++    response: args.response ?? 'active',
++    setup,
++    crossings: [],
++    screenshots: [],
++  };
++  const idleSample = await page.evaluate(async () => {
++    const values = [],
++      api = window.__LAST_FERRY__;
++    let last = performance.now();
++    for (let i = 0; i < 60; i++) {
++      const t = await new Promise(requestAnimationFrame);
++      values.push(t - last);
++      last = t;
++    }
++    return { intervals: values, metrics: api.getMetrics() };
++  });
++  route.idleSample = idleSample;
++  await page.evaluate(
++    ({ stills, targets, metricsOnly }) => {
++      window.__waterMotionSamples = [];
++      window.__waterMotionShots = [];
++      window.__waterMotionSampling = true;
++      function read(time) {
++        if (!window.__waterMotionSampling) return;
++        const api = window.__LAST_FERRY__,
++          transition = metricsOnly ? api.getTransitionStatus().active : null,
++          journey = metricsOnly
++            ? {
++                active:
++                  transition?.action.type === 'move'
++                    ? {
++                        progress: Math.min(
++                          1,
++                          (time - transition.startedAt) / transition.plan.duration,
++                        ),
++                        duration: transition.plan.duration,
++                      }
++                    : null,
++                boatWorldPosition: [],
++                boatHeading: 0,
++              }
++            : api.getJourneyStatus(),
++          environment = metricsOnly ? null : api.getEnvironmentStatus();
++        window.__waterMotionSamples.push({
++          time,
++          state: api.getState(),
++          journey: {
++            active: journey.active,
++            boatWorldPosition: journey.boatWorldPosition,
++            boatHeading: journey.boatHeading,
++          },
++          wake: environment?.wake ?? { points: [], opacity: [] },
++          waterY: environment?.waterY ?? null,
++          waterInteraction:
++            environment?.boatInteraction ??
++            environment?.interaction ??
++            environment?.water?.interaction ??
++            environment?.water?.boat ??
++            null,
++          metrics: api.getMetrics(),
++        });
++        if (stills && journey.active)
++          for (const target of targets) {
++            const key = `${api.getState().turn}-${target}`;
++            if (
++              journey.active.progress >= target &&
++              !window.__waterMotionShots.some((s) => s.key === key)
++            )
++              window.__waterMotionShots.push({
++                key,
++                target,
++                at: time,
++                state: api.getState(),
++                journey,
++                environment,
++                frame: api.getFrameStatus(),
++                dataUrl: document.querySelector('#seascape canvas').toDataURL('image/png'),
++              });
++          }
++        requestAnimationFrame(read);
++      }
++      requestAnimationFrame(read);
++    },
++    {
++      stills: args.stills === 'true',
++      targets: (args.targets ?? '.5').split(',').map(Number),
++      metricsOnly: args.metricsOnly === 'true',
++    },
++  );
++  for (const [index, id] of (length === 'short'
++    ? ['map-shallows', 'map-stone']
++    : ['map-west-buoy', 'map-east-buoy']
++  ).entries()) {
++    const before = await page.evaluate(() => window.__LAST_FERRY__.getState());
++    await press(page, id);
++    await idle(page);
++    const completed = await page.evaluate(() => ({
++      transition: window.__LAST_FERRY__.getTransitionStatus(),
++      state: window.__LAST_FERRY__.getState(),
++      environment: window.__LAST_FERRY__.getEnvironmentStatus(),
++    }));
++    if (completed.transition.last.reason !== 'complete')
++      throw Error(JSON.stringify(completed.transition));
++    await page.waitForTimeout(2250);
++    const settled = await page.evaluate(() => ({
++      state: window.__LAST_FERRY__.getState(),
++      environment: window.__LAST_FERRY__.getEnvironmentStatus(),
++    }));
++    route.crossings.push({
++      index,
++      action: id,
++      before,
++      after: completed.state,
++      transition: completed.transition.last,
++      postDockHoldMs: 2250,
++      afterHold: {
++        state: settled.state,
++        wake: settled.environment.wake,
++        waterInteraction:
++          settled.environment.boatInteraction ??
++          settled.environment.interaction ??
++          settled.environment.water?.interaction ??
++          settled.environment.water?.boat ??
++          null,
++      },
++    });
++  }
++  const samples = await page.evaluate(() => {
++    window.__waterMotionSampling = false;
++    return window.__waterMotionSamples;
++  });
++  const samplesPath = `${out}/raw/${length}-samples.json`;
++  writeFileSync(samplesPath, JSON.stringify(samples));
++  route.samples = {
++    path: samplesPath,
++    sha256: hash(readFileSync(samplesPath)),
++    count: samples.length,
++  };
++  const shots = await page.evaluate(() => window.__waterMotionShots);
++  writeFileSync(
++    `${out}/raw/${length}-phase-observations.json`,
++    JSON.stringify(shots.map(({ dataUrl, ...s }) => s)),
++  );
++  route.phaseStills = [];
++  for (const shot of shots) {
++    const crossing = route.crossings.find((c) => c.after.turn === shot.state.turn);
++    const direction = crossing?.index === 0 ? 'outward' : 'return';
++    const path = `${out}/${length}-${direction}-progress-${Math.round(shot.target * 100)}.png`;
++    writeFileSync(path, Buffer.from(shot.dataUrl.split(',')[1], 'base64'));
++    const { dataUrl, environment, frame, journey, ...observation } = shot;
++    route.phaseStills.push({
++      path,
++      sha256: hash(readFileSync(path)),
++      method:
++        'Native canvas-only PNG captured synchronously with pose/state in rAF; full DOM belongs to the separate natural full-interface recording',
++      ...observation,
++      journey: {
++        active: journey.active,
++        boatWorldPosition: journey.boatWorldPosition,
++        boatHeading: journey.boatHeading,
++      },
++      waterY: environment.waterY,
++      wake: {
++        emitting: environment.wake.emitting,
++        visible: environment.wake.visible,
++        vertices: environment.wake.vertices,
++        points: environment.wake.points,
++      },
++      water: environment.water,
++      camera: frame.camera,
++    });
++  }
++  route.pageClockAtCaptureEnd = await page.evaluate(() => ({
++    now: performance.now(),
++    timeOrigin: performance.timeOrigin,
++  }));
++  route.activeSamples = samples
++    .filter((s) => s.journey.active)
++    .map((s) => ({
++      time: s.time,
++      active: s.journey.active,
++      pose: s.journey.boatWorldPosition,
++      heading: s.journey.boatHeading,
++      metrics: s.metrics,
++      wakeSummary:
++        args.metricsOnly === 'true'
++          ? null
++          : {
++              emitting: s.wake.emitting,
++              visible: s.wake.visible,
++              vertices: s.wake.vertices,
++              points: s.wake.points?.length,
++              maximumOpacity: Math.max(0, ...(s.wake.opacity ?? [])),
++            },
++    }));
++  const video = page.video(),
++    videoPath = `${out}/raw/${length}-natural-full-interface.webm`;
++  await context.close();
++  if (video) await video.saveAs(videoPath);
++  route.recording = video
++    ? {
++        path: videoPath,
++        sha256: hash(readFileSync(videoPath)),
++        bytes: readFileSync(videoPath).length,
++        method:
++          'Uninterrupted actual full interface at natural runtime speed; no timing override unless named. Silent Playwright original; at least2.25saftereachdocking. Setup also recorded. No cuts,slowdown or state injection.',
++      }
++    : null;
++  result.routes.push(route);
++}
++await browser.close();
++result.sourceUnchanged = JSON.stringify(files) === JSON.stringify(snapshot());
++result.finishedAt = new Date().toISOString();
++result.outcome = result.sourceUnchanged && result.errors.length === 0 ? 'passed' : 'failed';
++writeFileSync(`${out}/capture.json`, JSON.stringify(result, null, 2) + '\n');
++if (result.outcome !== 'passed') throw Error('Capture source changed or browser errors');
++process.stdout.write(
++  JSON.stringify(
++    result.routes.map((r) => ({
++      length: r.length,
++      recording: r.recording?.path ?? null,
++      crossings: r.crossings.map((c) => ({
++        action: c.action,
++        plan: c.transition.plan,
++        elapsed: c.transition.finishedAt - c.transition.startedAt,
++      })),
++      samples: r.samples.count,
++    })),
++  ) + '\n',
++);
+diff --git a/tools/extract-water-motion-frames.mjs b/tools/extract-water-motion-frames.mjs
+new file mode 100644
+index 0000000..1a0e65d
+--- /dev/null
++++ b/tools/extract-water-motion-frames.mjs
+@@ -0,0 +1,71 @@
++import { execFileSync } from 'node:child_process';
++import { createHash } from 'node:crypto';
++import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
++
++const folder = process.argv[2];
++if (!folder) throw Error('Pass a water-motion capture folder');
++const hash = (value) => createHash('sha256').update(value).digest('hex');
++const capture = JSON.parse(readFileSync(folder + '/capture.json', 'utf8'));
++const result = {
++  sourceHead: capture.sourceHead,
++  runtimeHash: capture.runtimeHash,
++  environment: capture.environment,
++  method:
++    'Unscaled ordered frames at two frames per encoded-video second from uninterrupted natural full-interface originals. Video times are temporal inspection only: they do not infer normalized journey phase or synchronize the browser performance clock. Use separately captured same-rAF canvas/state PNGs for phase comparisons. No cuts or media speed changes.',
++  frames: [],
++  media: [],
++};
++for (const route of capture.routes) {
++  if (!route.recording) continue;
++  const probe = JSON.parse(
++    execFileSync(
++      'ffprobe',
++      [
++        '-v',
++        'error',
++        '-show_entries',
++        'format=duration:stream=index,codec_name,width,height',
++        '-of',
++        'json',
++        route.recording.path,
++      ],
++      { encoding: 'utf8' },
++    ),
++  );
++  const output = folder + '/raw/' + route.length + '-temporal';
++  mkdirSync(output, { recursive: true });
++  execFileSync('ffmpeg', [
++    '-v',
++    'error',
++    '-threads',
++    '1',
++    '-i',
++    route.recording.path,
++    '-vf',
++    'fps=2',
++    '-y',
++    output + '/frame-%04d.png',
++  ]);
++  result.media.push({ path: route.recording.path, sha256: route.recording.sha256, probe });
++  for (const [index, name] of readdirSync(output)
++    .filter((name) => name.endsWith('.png'))
++    .sort()
++    .entries()) {
++    const path = output + '/' + name,
++      bytes = readFileSync(path);
++    result.frames.push({
++      path,
++      sha256: hash(bytes),
++      width: bytes.readUInt32BE(16),
++      height: bytes.readUInt32BE(20),
++      recording: route.recording.path,
++      sequence: index + 1,
++      videoSecond: index / 2,
++      purpose: 'Ordered native temporal inspection; no journey-progress claim.',
++    });
++  }
++}
++writeFileSync(folder + '/temporal-frames.json', JSON.stringify(result, null, 2) + '\n');
++process.stdout.write(
++  JSON.stringify({ frames: result.frames.length, media: result.media.length }) + '\n',
++);
+diff --git a/tools/snapshot-evidence.mjs b/tools/snapshot-evidence.mjs
+index 3fec597..cfb4e29 100644
+--- a/tools/snapshot-evidence.mjs
++++ b/tools/snapshot-evidence.mjs
+@@ -46,6 +46,7 @@ const paths = [
+   ...(existsSync(new URL('NEXT_TASK_VICTORY.md', root)) ? ['NEXT_TASK_VICTORY.md'] : []),
+   ...(existsSync(new URL('NEXT_TASK_HOMECOMING.md', root)) ? ['NEXT_TASK_HOMECOMING.md'] : []),
+   ...(existsSync(new URL('NEXT_TASK_LIGHTHOUSE.md', root)) ? ['NEXT_TASK_LIGHTHOUSE.md'] : []),
++  ...(existsSync(new URL('NEXT_TASK_WATER_MOTION.md', root)) ? ['NEXT_TASK_WATER_MOTION.md'] : []),
+   'docs/GAMEPLAY_RULES.md',
+   'docs/FIRST_COVE.md',
+   'docs/ART_DIRECTION.md',
+@@ -75,7 +76,8 @@ const paths = [
+       path.includes('cove-contrast') ||
+       path.includes('victory-mix') ||
+       path.includes('homecoming') ||
+-      path.includes('lighthouse-light'),
++      path.includes('lighthouse-light') ||
++      path.includes('water-motion'),
+   ),
+ ].sort();
+ const files = Object.fromEntries(paths.map((p) => [p, digest(readFileSync(new URL(p, root)))]));

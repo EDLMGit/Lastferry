@@ -1,0 +1,884 @@
+
+Running 1 test using 1 worker
+
+(node:40580) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  pw:api => browserType.launch started +0ms
+  pw:api <= browserType.launch succeeded +354ms
+  pw:api => browser.newContext started +290ms
+  pw:api <= browser.newContext succeeded +24ms
+  pw:api => browserContext.newPage started +3ms
+  pw:api <= browserContext.newPage succeeded +228ms
+  pw:api => page.goto started +5ms
+  pw:api navigating to "http://127.0.0.1:5270/?cove=two-shelters", waiting until "load" +1ms
+  pw:api   "commit" event fired +284ms
+  pw:api   navigated to "http://127.0.0.1:5270/?cove=two-shelters" +1ms
+  pw:api   "networkidle" event fired +753ms
+  pw:api   "domcontentloaded" event fired +61ms
+  pw:api   "load" event fired +681ms
+  pw:api <= page.goto succeeded +2ms
+  pw:api => page.waitForFunction started +1ms
+  pw:api <= page.waitForFunction succeeded +1s
+  pw:api => Expect "toHaveAttribute" started +22ms
+  pw:api Expect "toHaveAttribute" locator('#seascape') with timeout 15000ms +2ms
+  pw:api waiting for locator('#seascape') +1ms
+  pw:api <= Expect "toHaveAttribute" succeeded +132ms
+  pw:api => page.evaluate started +4ms
+  pw:api <= page.evaluate succeeded +8ms
+  pw:api => page.evaluate started +1ms
+  pw:api <= page.evaluate succeeded +4ms
+  pw:api => page.evaluate started +3ms
+  pw:api <= page.evaluate succeeded +27ms
+  pw:api => locator.isVisible started +59ms
+  pw:api   checking visibility of locator('#unload') +27ms
+  pw:api <= locator.isVisible succeeded +39ms
+  pw:api => locator.tap started +1ms
+  pw:api waiting for locator('#unload') +2ms
+  pw:api   locator resolved to <button id="unload" class="cove-button" aria-haspopup="dialog">…</button> +32ms
+  pw:api attempting tap action +16ms
+  pw:api   waiting for element to be visible, enabled and stable +1ms
+  pw:api   element is visible, enabled and stable +111ms
+  pw:api   scrolling into view if needed +1ms
+  pw:api   done scrolling +15ms
+  pw:api   performing tap action +15ms
+  pw:api   tap action done +415ms
+  pw:api   waiting for scheduled navigations to finish +0ms
+  pw:api   navigations have finished +1ms
+  pw:api <= locator.tap succeeded +0ms
+  pw:api => locator.count started +4ms
+  pw:api <= locator.count succeeded +36ms
+  pw:api => locator.all started +2ms
+  pw:api <= locator.all succeeded +12ms
+  pw:api => locator.getAttribute started +2ms
+  pw:api waiting for locator('.passenger-options button').first() +0ms
+  pw:api   locator resolved to <button class="cove-choice" aria-pressed="true" id="passenger-hazel">…</button> +4ms
+  pw:api <= locator.getAttribute succeeded +0ms
+  pw:api => locator.getAttribute started +1ms
+  pw:api waiting for locator('.passenger-options button').first() +0ms
+  pw:api   locator resolved to <button class="cove-choice" aria-pressed="true" id="passenger-hazel">…</button> +10ms
+  pw:api <= locator.getAttribute succeeded +0ms
+  pw:api => locator.getAttribute started +1ms
+  pw:api waiting for locator('.passenger-options button').nth(1) +0ms
+  pw:api   locator resolved to <button class="cove-choice" aria-pressed="true" id="passenger-bracken">…</button> +11ms
+  pw:api <= locator.getAttribute succeeded +1ms
+  pw:api => locator.getAttribute started +0ms
+  pw:api waiting for locator('.passenger-options button').nth(1) +1ms
+  pw:api   locator resolved to <button class="cove-choice" aria-pressed="true" id="passenger-bracken">…</button> +2ms
+  pw:api <= locator.getAttribute succeeded +1ms
+  pw:api => locator.click started +0ms
+  pw:api waiting for locator('.passenger-options button').nth(1) +1ms
+  pw:api   locator resolved to <button class="cove-choice" aria-pressed="true" id="passenger-bracken">…</button> +15ms
+  pw:api attempting click action +2ms
+  pw:api   waiting for element to be visible, enabled and stable +0ms
+  pw:api   element is visible, enabled and stable +168ms
+  pw:api   scrolling into view if needed +0ms
+  pw:api   done scrolling +0ms
+  pw:api   performing click action +4ms
+  pw:api   click action done +12ms
+  pw:api   waiting for scheduled navigations to finish +0ms
+  pw:api   navigations have finished +0ms
+  pw:api <= locator.click succeeded +1ms
+  pw:api => Expect "toBeInViewport" started +1ms
+  pw:api Expect "toBeInViewport" locator('#commit') with timeout 15000ms +1ms
+  pw:api waiting for locator('#commit') +0ms
+  pw:api <= Expect "toBeInViewport" succeeded +86ms
+  pw:api => locator.boundingBox started +1ms
+  pw:api waiting for locator('#commit') +0ms
+  pw:api   locator resolved to visible <button id="commit" class="cove-button">…</button> +11ms
+  pw:api <= locator.boundingBox succeeded +7ms
+  pw:api => locator.evaluate started +4ms
+  pw:api waiting for locator('#commit') +1ms
+  pw:api   locator resolved to visible <button id="commit" class="cove-button">…</button> +5ms
+  pw:api <= locator.evaluate succeeded +6ms
+  pw:api => locator.tap started +2ms
+  pw:api waiting for locator('#commit') +1ms
+  pw:api   locator resolved to <button id="commit" class="cove-button">…</button> +13ms
+  pw:api attempting tap action +2ms
+  pw:api   waiting for element to be visible, enabled and stable +0ms
+  pw:api   element is visible, enabled and stable +129ms
+  pw:api   scrolling into view if needed +1ms
+  pw:api   done scrolling +0ms
+  pw:api   performing tap action +8ms
+  pw:api   tap action done +209ms
+  pw:api   waiting for scheduled navigations to finish +0ms
+  pw:api   navigations have finished +1ms
+  pw:api <= locator.tap succeeded +0ms
+  pw:api => Expect "toHaveAttribute" started +3ms
+  pw:api Expect "toHaveAttribute" locator('#seascape') with timeout 15000ms +0ms
+  pw:api waiting for locator('#seascape') +0ms
+  pw:api   locator resolved to <section id="seascape" aria-busy="true" aria-label="Two Shelters">…</section> +17ms
+  pw:api   unexpected value "true" +0ms
+  pw:api   locator resolved to <section id="seascape" aria-busy="true" aria-label="Two Shelters">…</section> +74ms
+  pw:api   unexpected value "true" +0ms
+  pw:api   locator resolved to <section id="seascape" aria-busy="true" aria-label="Two Shelters">…</section> +70ms
+  pw:api   unexpected value "true" +1ms
+  pw:api   locator resolved to <section id="seascape" aria-busy="true" aria-label="Two Shelters">…</section> +210ms
+  pw:api   unexpected value "true" +0ms
+  pw:api   locator resolved to <section id="seascape" aria-busy="false" aria-label="Two Shelters">…</section> +166ms
+  pw:api <= Expect "toHaveAttribute" succeeded +1ms
+  pw:api => page.evaluate started +0ms
+  pw:api <= page.evaluate succeeded +17ms
+  pw:api => locator.textContent started +2ms
+  pw:api waiting for locator('#view-toggle') +1ms
+  pw:api   locator resolved to <button id="view-toggle" aria-pressed="false" class="cove-button cove-button--quiet">…</button> +11ms
+  pw:api <= locator.textContent succeeded +1ms
+  pw:api => locator.isVisible started +0ms
+  pw:api   checking visibility of locator('#back-to-boat') +1ms
+  pw:api <= locator.isVisible succeeded +2ms
+  pw:api => page.waitForTimeout started +1ms
+  pw:api <= page.waitForTimeout succeeded +207ms
+  pw:api => browserContext.newCDPSession started +1ms
+  pw:api <= browserContext.newCDPSession succeeded +2ms
+  pw:api => cdpSession.send started +1ms
+  pw:api <= cdpSession.send succeeded +1s
+  pw:api => cdpSession.detach started +1ms
+  pw:api <= cdpSession.detach succeeded +2ms
+  pw:api => page.evaluate started +0ms
+  pw:api <= page.evaluate succeeded +16ms
+  pw:api => page.evaluate started +4ms
+  pw:api <= page.evaluate succeeded +2ms
+  pw:api => page.evaluate started +4ms
+  pw:api <= page.evaluate succeeded +46ms
+  pw:api => locator.isVisible started +1ms
+  pw:api   checking visibility of locator('#unload') +0ms
+  pw:api <= locator.isVisible succeeded +25ms
+  pw:api => locator.tap started +1ms
+  pw:api waiting for locator('#unload') +0ms
+  pw:api   locator resolved to <button id="unload" class="cove-button">…</button> +8ms
+  pw:api attempting tap action +5ms
+  pw:api   waiting for element to be visible, enabled and stable +0ms
+  pw:api   element is visible, enabled and stable +101ms
+  pw:api   scrolling into view if needed +1ms
+  pw:api   done scrolling +1ms
+  pw:api   performing tap action +6ms
+  pw:api   tap action done +310ms
+  pw:api   waiting for scheduled navigations to finish +0ms
+  pw:api   navigations have finished +0ms
+  pw:api <= locator.tap succeeded +1ms
+  pw:api => locator.count started +1ms
+  pw:api <= locator.count succeeded +10ms
+  pw:api => Expect "toHaveAttribute" started +3ms
+  pw:api Expect "toHaveAttribute" locator('#seascape') with timeout 15000ms +1ms
+  pw:api waiting for locator('#seascape') +0ms
+  pw:api   locator resolved to <section id="seascape" aria-busy="true" aria-label="Two Shelters">…</section> +20ms
+  pw:api   unexpected value "true" +0ms
+  pw:api   locator resolved to <section id="seascape" aria-busy="true" aria-label="Two Shelters">…</section> +50ms
+  pw:api   unexpected value "true" +0ms
+  pw:api   locator resolved to <section id="seascape" aria-busy="true" aria-label="Two Shelters">…</section> +85ms
+  pw:api   unexpected value "true" +0ms
+  pw:api   locator resolved to <section id="seascape" aria-busy="true" aria-label="Two Shelters">…</section> +125ms
+  pw:api   unexpected value "true" +0ms
+  pw:api   locator resolved to <section id="seascape" aria-busy="true" aria-label="Two Shelters">…</section> +122ms
+  pw:api   unexpected value "true" +0ms
+  pw:api   locator resolved to <section id="seascape" aria-busy="false" aria-label="Two Shelters">…</section> +511ms
+  pw:api <= Expect "toHaveAttribute" succeeded +0ms
+  pw:api => page.evaluate started +1ms
+  pw:api <= page.evaluate succeeded +20ms
+  pw:api => locator.textContent started +2ms
+  pw:api waiting for locator('#view-toggle') +0ms
+  pw:api   locator resolved to <button id="view-toggle" aria-pressed="false" class="cove-button cove-button--quiet">…</button> +21ms
+  pw:api <= locator.textContent succeeded +0ms
+  pw:api => locator.isVisible started +1ms
+  pw:api   checking visibility of locator('#back-to-boat') +0ms
+  pw:api <= locator.isVisible succeeded +4ms
+  pw:api => page.waitForTimeout started +1ms
+  pw:api <= page.waitForTimeout succeeded +251ms
+  pw:api => browserContext.newCDPSession started +1ms
+  pw:api <= browserContext.newCDPSession succeeded +3ms
+  pw:api => cdpSession.send started +1ms
+  pw:api <= cdpSession.send succeeded +482ms
+  pw:api => cdpSession.detach started +1ms
+  pw:api <= cdpSession.detach succeeded +6ms
+  pw:api => page.evaluate started +0ms
+  pw:api <= page.evaluate succeeded +9ms
+  pw:api => page.evaluate started +2ms
+  pw:api <= page.evaluate succeeded +2ms
+  pw:api => page.evaluate started +2ms
+  pw:api <= page.evaluate succeeded +7ms
+  pw:api => locator.evaluate started +5ms
+  pw:api waiting for locator('#map-reeds') +0ms
+  pw:api   locator resolved to visible <button id="map-reeds" data-risk="safe" class="map-target" aria-expanded="false" data-status="available" data-destination="reeds" aria-controls="local-context" title="adjacent passage available" aria-label="Select Reed Pier; adjacent passage available">…</button> +5ms
+  pw:api <= locator.evaluate succeeded +8ms
+  pw:api => locator.count started +1ms
+  pw:api <= locator.count succeeded +3ms
+  pw:api => locator.textContent started +1ms
+  pw:api waiting for locator('#view-toggle') +0ms
+  pw:api   locator resolved to <button id="view-toggle" aria-pressed="false" class="cove-button cove-button--quiet">…</button> +4ms
+  pw:api <= locator.textContent succeeded +0ms
+  pw:api => locator.tap started +1ms
+  pw:api waiting for locator('#view-toggle') +0ms
+  pw:api   locator resolved to <button id="view-toggle" aria-pressed="false" class="cove-button cove-button--quiet">…</button> +4ms
+  pw:api attempting tap action +7ms
+  pw:api   waiting for element to be visible, enabled and stable +0ms
+  pw:api   element is visible, enabled and stable +94ms
+  pw:api   scrolling into view if needed +0ms
+  pw:api   done scrolling +1ms
+  pw:api   performing tap action +5ms
+  pw:api   tap action done +691ms
+  pw:api   waiting for scheduled navigations to finish +0ms
+  pw:api   navigations have finished +1ms
+  pw:api <= locator.tap succeeded +0ms
+  pw:api => page.evaluate started +2ms
+  pw:api <= page.evaluate succeeded +243ms
+  pw:api => locator.tap started +2ms
+  pw:api waiting for locator('#map-reeds') +0ms
+  pw:api   locator resolved to <button id="map-reeds" data-risk="safe" class="map-target" aria-expanded="false" data-status="available" data-destination="reeds" aria-controls="local-context" title="adjacent passage available" aria-label="Select Reed Pier; adjacent passage available">…</button> +10ms
+  pw:api attempting tap action +14ms
+  pw:api   waiting for element to be visible, enabled and stable +0ms
+  pw:api   element is visible, enabled and stable +182ms
+  pw:api   scrolling into view if needed +0ms
+  pw:api   done scrolling +2ms
+  pw:api   performing tap action +17ms
+  pw:api   tap action done +152ms
+  pw:api   waiting for scheduled navigations to finish +1ms
+  pw:api   navigations have finished +0ms
+  pw:api <= locator.tap succeeded +0ms
+  pw:api => Expect "toBeVisible" started +2ms
+  pw:api Expect "toBeVisible" locator('#local-context') with timeout 15000ms +0ms
+  pw:api waiting for locator('#local-context') +2ms
+  pw:api <= Expect "toBeVisible" succeeded +79ms
+  pw:api => locator.tap started +2ms
+  pw:api waiting for locator('#sail') +0ms
+  pw:api   locator resolved to <button id="sail" data-risk="safe" class="cove-button" aria-label="Sail to Reed Pier · 1 action">…</button> +81ms
+  pw:api attempting tap action +4ms
+  pw:api   waiting for element to be visible, enabled and stable +1ms
+  pw:api   element is visible, enabled and stable +392ms
+  pw:api   scrolling into view if needed +0ms
+  pw:api   done scrolling +2ms
+  pw:api   performing tap action +25ms
+  pw:api   tap action done +136ms
+  pw:api   waiting for scheduled navigations to finish +0ms
+  pw:api   navigations have finished +1ms
+  pw:api <= locator.tap succeeded +0ms
+  pw:api => Expect "toHaveAttribute" started +2ms
+  pw:api Expect "toHaveAttribute" locator('#seascape') with timeout 15000ms +0ms
+  pw:api waiting for locator('#seascape') +0ms
+  pw:api   locator resolved to <section id="seascape" aria-busy="true" aria-label="Two Shelters">…</section> +25ms
+  pw:api   unexpected value "true" +0ms
+  pw:api   locator resolved to <section id="seascape" aria-busy="true" aria-label="Two Shelters">…</section> +50ms
+  pw:api   unexpected value "true" +0ms
+  pw:api   locator resolved to <section id="seascape" aria-busy="true" aria-label="Two Shelters">…</section> +169ms
+  pw:api   unexpected value "true" +0ms
+  pw:api   locator resolved to <section id="seascape" aria-busy="true" aria-label="Two Shelters">…</section> +228ms
+  pw:api   unexpected value "true" +0ms
+  pw:api   locator resolved to <section id="seascape" aria-busy="true" aria-label="Two Shelters">…</section> +114ms
+  pw:api   unexpected value "true" +1ms
+  pw:api   locator resolved to <section id="seascape" aria-busy="true" aria-label="Two Shelters">…</section> +552ms
+  pw:api   unexpected value "true" +0ms
+  pw:api   locator resolved to <section id="seascape" aria-busy="true" aria-label="Two Shelters">…</section> +549ms
+  pw:api   unexpected value "true" +0ms
+  pw:api   locator resolved to <section id="seascape" aria-busy="true" aria-label="Two Shelters">…</section> +612ms
+  pw:api   unexpected value "true" +0ms
+  pw:api   locator resolved to <section id="seascape" aria-busy="false" aria-label="Two Shelters">…</section> +522ms
+  pw:api <= Expect "toHaveAttribute" succeeded +1ms
+  pw:api => page.evaluate started +0ms
+  pw:api <= page.evaluate succeeded +8ms
+  pw:api => page.evaluate started +2ms
+  pw:api <= page.evaluate succeeded +6ms
+  pw:api => page.evaluate started +4ms
+  pw:api <= page.evaluate succeeded +16ms
+  pw:api => locator.isVisible started +1ms
+  pw:api   checking visibility of locator('#board') +0ms
+  pw:api <= locator.isVisible succeeded +3ms
+  pw:api => locator.tap started +1ms
+  pw:api waiting for locator('#board') +0ms
+  pw:api   locator resolved to <button id="board" class="cove-button">…</button> +4ms
+  pw:api attempting tap action +2ms
+  pw:api   waiting for element to be visible, enabled and stable +0ms
+  pw:api   element is visible, enabled and stable +103ms
+  pw:api   scrolling into view if needed +0ms
+  pw:api   done scrolling +1ms
+  pw:api   performing tap action +5ms
+  pw:api   tap action done +113ms
+  pw:api   waiting for scheduled navigations to finish +1ms
+  pw:api   navigations have finished +0ms
+  pw:api <= locator.tap succeeded +0ms
+  pw:api => locator.count started +1ms
+  pw:api <= locator.count succeeded +4ms
+  pw:api => Expect "toHaveAttribute" started +3ms
+  pw:api Expect "toHaveAttribute" locator('#seascape') with timeout 15000ms +1ms
+  pw:api waiting for locator('#seascape') +0ms
+  pw:api   locator resolved to <section id="seascape" aria-busy="true" aria-label="Two Shelters">…</section> +13ms
+  pw:api   unexpected value "true" +0ms
+  pw:api   locator resolved to <section id="seascape" aria-busy="true" aria-label="Two Shelters">…</section> +32ms
+  pw:api   unexpected value "true" +0ms
+  pw:api   locator resolved to <section id="seascape" aria-busy="true" aria-label="Two Shelters">…</section> +82ms
+  pw:api   unexpected value "true" +0ms
+  pw:api   locator resolved to <section id="seascape" aria-busy="true" aria-label="Two Shelters">…</section> +133ms
+  pw:api   unexpected value "true" +0ms
+  pw:api   locator resolved to <section id="seascape" aria-busy="true" aria-label="Two Shelters">…</section> +170ms
+  pw:api   unexpected value "true" +0ms
+  pw:api   locator resolved to <section id="seascape" aria-busy="false" aria-label="Two Shelters">…</section> +545ms
+  pw:api <= Expect "toHaveAttribute" succeeded +1ms
+  pw:api => page.evaluate started +0ms
+  pw:api <= page.evaluate succeeded +16ms
+  pw:api => locator.textContent started +4ms
+  pw:api waiting for locator('#view-toggle') +0ms
+  pw:api   locator resolved to <button id="view-toggle" aria-pressed="true" class="cove-button cove-button--quiet">…</button> +17ms
+  pw:api <= locator.textContent succeeded +0ms
+  pw:api => locator.tap started +1ms
+  pw:api waiting for locator('#view-toggle') +0ms
+  pw:api   locator resolved to <button id="view-toggle" aria-pressed="true" class="cove-button cove-button--quiet">…</button> +16ms
+  pw:api attempting tap action +31ms
+  pw:api   waiting for element to be visible, enabled and stable +2ms
+  pw:api   element is visible, enabled and stable +71ms
+  pw:api   scrolling into view if needed +0ms
+  pw:api   done scrolling +3ms
+  pw:api   performing tap action +16ms
+  pw:api   tap action done +115ms
+  pw:api   waiting for scheduled navigations to finish +0ms
+  pw:api   navigations have finished +0ms
+  pw:api <= locator.tap succeeded +1ms
+  pw:api => locator.isVisible started +0ms
+  pw:api   checking visibility of locator('#back-to-boat') +0ms
+  pw:api <= locator.isVisible succeeded +6ms
+  pw:api => locator.tap started +1ms
+  pw:api waiting for locator('#back-to-boat') +0ms
+  pw:api   locator resolved to <button id="back-to-boat" class="cove-button cove-button--quiet">…</button> +10ms
+  pw:api attempting tap action +1ms
+  pw:api   waiting for element to be visible, enabled and stable +1ms
+  pw:api   element is not visible +141ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting for element to be visible, enabled and stable +0ms
+  pw:api   element is not visible +75ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 20ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +56ms
+  pw:api   element is not visible +83ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 100ms +1ms
+  pw:api   waiting for element to be visible, enabled and stable +125ms
+  pw:api   element is not visible +73ms
+  pw:api retrying tap action +1ms
+  pw:api   waiting 100ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +132ms
+  pw:api   element is not visible +61ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +527ms
+  pw:api   element is not visible +105ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +502ms
+  pw:api   element is not visible +106ms
+  pw:api retrying tap action +1ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +519ms
+  pw:api   element is not visible +94ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +511ms
+  pw:api   element is not visible +120ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +515ms
+  pw:api   element is not visible +81ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +502ms
+  pw:api   element is not visible +67ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +513ms
+  pw:api   element is not visible +70ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +512ms
+  pw:api   element is not visible +104ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +511ms
+  pw:api   element is not visible +62ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +519ms
+  pw:api   element is not visible +98ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +550ms
+  pw:api   element is not visible +104ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +510ms
+  pw:api   element is not visible +88ms
+  pw:api retrying tap action +1ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +525ms
+  pw:api   element is not visible +54ms
+  pw:api retrying tap action +1ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +519ms
+  pw:api   element is not visible +74ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +600ms
+  pw:api   element is not visible +69ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +1ms
+  pw:api   waiting for element to be visible, enabled and stable +526ms
+  pw:api   element is not visible +447ms
+  pw:api retrying tap action +93ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +534ms
+  pw:api   element is not visible +111ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +519ms
+  pw:api   element is not visible +72ms
+  pw:api retrying tap action +1ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +517ms
+  pw:api   element is not visible +64ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +514ms
+  pw:api   element is not visible +77ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +525ms
+  pw:api   element is not visible +140ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +541ms
+  pw:api   element is not visible +113ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +506ms
+  pw:api   element is not visible +66ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +517ms
+  pw:api   element is not visible +93ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +568ms
+  pw:api   element is not visible +106ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +517ms
+  pw:api   element is not visible +76ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +510ms
+  pw:api   element is not visible +68ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +529ms
+  pw:api   element is not visible +75ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +518ms
+  pw:api   element is not visible +103ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +515ms
+  pw:api   element is not visible +79ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +535ms
+  pw:api   element is not visible +77ms
+  pw:api retrying tap action +1ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +531ms
+  pw:api   element is not visible +64ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +529ms
+  pw:api   element is not visible +159ms
+  pw:api retrying tap action +2ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +546ms
+  pw:api   element is not visible +126ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +515ms
+  pw:api   element is not visible +77ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +527ms
+  pw:api   element is not visible +134ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +594ms
+  pw:api   element is not visible +187ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +1ms
+  pw:api   waiting for element to be visible, enabled and stable +547ms
+  pw:api   element is not visible +112ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +530ms
+  pw:api   element is not visible +116ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +515ms
+  pw:api   element is not visible +78ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +548ms
+  pw:api   element is not visible +113ms
+  pw:api retrying tap action +1ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +526ms
+  pw:api   element is not visible +123ms
+  pw:api retrying tap action +1ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +511ms
+  pw:api   element is not visible +111ms
+  pw:api retrying tap action +1ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +549ms
+  pw:api   element is not visible +118ms
+  pw:api retrying tap action +1ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +577ms
+  pw:api   element is not visible +99ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +509ms
+  pw:api   element is not visible +132ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +1ms
+  pw:api   waiting for element to be visible, enabled and stable +532ms
+  pw:api   element is not visible +125ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +519ms
+  pw:api   element is not visible +116ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +679ms
+  pw:api   element is not visible +119ms
+  pw:api retrying tap action +1ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +511ms
+  pw:api   element is not visible +91ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +508ms
+  pw:api   element is not visible +101ms
+  pw:api retrying tap action +1ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +518ms
+  pw:api   element is not visible +78ms
+  pw:api retrying tap action +1ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +520ms
+  pw:api   element is not visible +64ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +517ms
+  pw:api   element is not visible +138ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +524ms
+  pw:api   element is not visible +76ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +513ms
+  pw:api   element is not visible +103ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +530ms
+  pw:api   element is not visible +117ms
+  pw:api retrying tap action +1ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +520ms
+  pw:api   element is not visible +79ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +517ms
+  pw:api   element is not visible +55ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +516ms
+  pw:api   element is not visible +101ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +517ms
+  pw:api   element is not visible +122ms
+  pw:api retrying tap action +1ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +508ms
+  pw:api   element is not visible +101ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +516ms
+  pw:api   element is not visible +84ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +521ms
+  pw:api   element is not visible +81ms
+  pw:api retrying tap action +1ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +553ms
+  pw:api   element is not visible +74ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +520ms
+  pw:api   element is not visible +52ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +536ms
+  pw:api   element is not visible +72ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +528ms
+  pw:api   element is not visible +133ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +519ms
+  pw:api   element is not visible +103ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +516ms
+  pw:api   element is not visible +73ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +535ms
+  pw:api   element is not visible +100ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +570ms
+  pw:api   element is not visible +71ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +537ms
+  pw:api   element is not visible +106ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +521ms
+  pw:api   element is not visible +79ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +526ms
+  pw:api   element is not visible +111ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +558ms
+  pw:api   element is not visible +131ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +523ms
+  pw:api   element is not visible +63ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +509ms
+  pw:api   element is not visible +115ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +530ms
+  pw:api   element is not visible +68ms
+  pw:api retrying tap action +1ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +512ms
+  pw:api   element is not visible +80ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +504ms
+  pw:api   element is not visible +112ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +506ms
+  pw:api   element is not visible +61ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +522ms
+  pw:api   element is not visible +61ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +521ms
+  pw:api   element is not visible +103ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +533ms
+  pw:api   element is not visible +57ms
+  pw:api retrying tap action +1ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +525ms
+  pw:api   element is not visible +99ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +1ms
+  pw:api   waiting for element to be visible, enabled and stable +506ms
+  pw:api   element is not visible +110ms
+  pw:api retrying tap action +1ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +613ms
+  pw:api   element is not visible +97ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +512ms
+  pw:api   element is not visible +92ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +519ms
+  pw:api   element is not visible +90ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +1ms
+  pw:api   waiting for element to be visible, enabled and stable +512ms
+  pw:api   element is not visible +130ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +509ms
+  pw:api   element is not visible +99ms
+  pw:api retrying tap action +1ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +514ms
+  pw:api   element is not visible +98ms
+  pw:api retrying tap action +1ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +504ms
+  pw:api   element is not visible +97ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +561ms
+  pw:api   element is not visible +89ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +511ms
+  pw:api   element is not visible +89ms
+  pw:api retrying tap action +1ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +509ms
+  pw:api   element is not visible +68ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +564ms
+  pw:api   element is not visible +96ms
+  pw:api retrying tap action +1ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +506ms
+  pw:api   element is not visible +68ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +1ms
+  pw:api   waiting for element to be visible, enabled and stable +541ms
+  pw:api   element is not visible +101ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +516ms
+  pw:api   element is not visible +133ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +575ms
+  pw:api   element is not visible +77ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +513ms
+  pw:api   element is not visible +57ms
+  pw:api retrying tap action +1ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +502ms
+  pw:api   element is not visible +74ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +551ms
+  pw:api   element is not visible +83ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +519ms
+  pw:api   element is not visible +89ms
+  pw:api retrying tap action +1ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +512ms
+  pw:api   element is not visible +88ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +503ms
+  pw:api   element is not visible +85ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +1ms
+  pw:api   waiting for element to be visible, enabled and stable +508ms
+  pw:api   element is not visible +94ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +507ms
+  pw:api   element is not visible +62ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +516ms
+  pw:api   element is not visible +83ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +1ms
+  pw:api   waiting for element to be visible, enabled and stable +521ms
+  pw:api   element is not visible +98ms
+  pw:api retrying tap action +1ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +511ms
+  pw:api   element is not visible +57ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +516ms
+  pw:api   element is not visible +86ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +509ms
+  pw:api   element is not visible +95ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +509ms
+  pw:api   element is not visible +63ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +532ms
+  pw:api   element is not visible +69ms
+  pw:api retrying tap action +1ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +537ms
+  pw:api   element is not visible +231ms
+  pw:api retrying tap action +0ms
+  pw:api   waiting 500ms +0ms
+  pw:api   waiting for element to be visible, enabled and stable +1s
+  pw:api => browser.close started +72ms
+  pw:api <= locator.tap failed +76ms
+  pw:api <= browser.close succeeded +1s
+  x  1 tests\e2e\two-shelters.spec.ts:77:3 › actual 390x844 rescue low-separate-subsets, tide and terminal Undo (1.5m)
+
+
+  1) tests\e2e\two-shelters.spec.ts:77:3 › actual 390x844 rescue low-separate-subsets, tide and terminal Undo 
+
+    Test timeout of 90000ms exceeded.
+
+    Error: locator.tap: Test ended.
+    Call log:
+      - waiting for locator('#back-to-boat')
+        - locator resolved to <button id="back-to-boat" class="cove-button cove-button--quiet">…</button>
+      - attempting tap action
+        2 × waiting for element to be visible, enabled and stable
+          - element is not visible
+        - retrying tap action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is not visible
+        - retrying tap action
+          - waiting 100ms
+        119 × waiting for element to be visible, enabled and stable
+            - element is not visible
+          - retrying tap action
+            - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+
+
+       at ui.ts:39
+
+      37 |     await activate(page, current, touch);
+      38 |   }
+    > 39 |   if (touch) await page.locator(`#${id}`).tap();
+         |                                           ^
+      40 |   else await page.locator(`#${id}`).click();
+      41 | }
+      42 | export async function wholeCove(page: Page, touch = false) {
+        at activate (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\ui.ts:39:43)
+        at playView (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\two-shelters.spec.ts:31:61)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\two-shelters.spec.ts:93:9
+
+    Error Context: test-results\two-shelters\two-shelters-actual-390x84-272a3-sets-tide-and-terminal-Undo\error-context.md
+
+    Error Context: test-results\two-shelters\two-shelters-actual-390x84-272a3-sets-tide-and-terminal-Undo\error-context.md
+
+  1 failed
+    tests\e2e\two-shelters.spec.ts:77:3 › actual 390x844 rescue low-separate-subsets, tide and terminal Undo 
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

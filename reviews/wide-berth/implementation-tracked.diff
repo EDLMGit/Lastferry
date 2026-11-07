@@ -1,0 +1,2661 @@
+diff --git a/README.md b/README.md
+index 683734b..6dd7ea9 100644
+--- a/README.md
++++ b/README.md
+@@ -1,12 +1,12 @@
+ # Last Ferry — the first evening
+ 
+-Open the default root URL, without `?cove=`, for **Last Ferry**. **Play** starts the shared Sound intent and opens three illustrated shots of the changing coast, Rue and Pip’s lantern, and Moss aboard the ferry. Normal motion advances through the three pictures automatically; Take the helm starts **The Holding Pier**. After completing its rescue, **Continue story** accepts that cove and introduces **Bellwater Cove**. Bellwater tests changing route depths and two pickup deadlines. Its explicit continuation introduces Nell at **Driftwood Yard**, the third campaign cove: use a safe mooring while reaching the low reeds in time. After its rescue, explicit continuation ends the available prototype honestly; the larger ferry and later coves are still being made. See the current [Driftwood review](reviews/driftwood-yard/REVIEW.md), the [Home and play review](reviews/home-play-flow/REVIEW.md), the [illustrated story production review](reviews/story-production/REVIEW.md), the [earlier authored-scenes record](reviews/story-scenes/REVIEW.md), the [foundation record](reviews/story-foundation/REVIEW.md), [campaign direction](campaign/CAMPAIGN_DIRECTION.md) and developer notes for [Holding Pier](docs/HOLDING_PIER.md) and [Bellwater](docs/BELLWATER.md), plus [Driftwood developer notes](docs/DRIFTWOOD_YARD.md).
++Open the default root URL, without `?cove=`, for **Last Ferry**. **Play** starts the shared Sound intent and opens three illustrated shots of the changing coast, Rue and Pip’s lantern, and Moss aboard the ferry. Normal motion advances through the three pictures automatically; Take the helm starts **The Holding Pier**. After completing its rescue, **Continue story** accepts that cove and introduces **Bellwater Cove**. Bellwater tests changing route depths and two pickup deadlines. Its explicit continuation introduces Nell at **Driftwood Yard**, the third campaign cove: use a safe mooring while reaching the low reeds in time. After its accepted rescue, **A wider deck** launches Nell’s prepared six-space ferry. **Wide Berth** then combines full-load draft four, a deep route and safe staging with two occupied flood boundaries. Explicit continuation after its rescue ends the current four-cove slice honestly; later encounters are still being made. See the current [Wide Berth review](reviews/wide-berth/REVIEW.md), the [Driftwood review](reviews/driftwood-yard/REVIEW.md), the [Home and play review](reviews/home-play-flow/REVIEW.md), the [illustrated story production review](reviews/story-production/REVIEW.md), the [earlier authored-scenes record](reviews/story-scenes/REVIEW.md), the [foundation record](reviews/story-foundation/REVIEW.md), [campaign direction](campaign/CAMPAIGN_DIRECTION.md) and developer notes for [Holding Pier](docs/HOLDING_PIER.md) and [Bellwater](docs/BELLWATER.md), plus [Driftwood developer notes](docs/DRIFTWOOD_YARD.md).
+ 
+-**Practice** offers all four existing puzzles. Explicit `/?cove=first-crossing`, `/?cove=holding-pier` `/?cove=bellwater` and `/?cove=driftwood-yard` links enter a puzzle directly without story scenes and never read or change journey progress. First Crossing is separate practice, preserving the original baseline. Freestanding island names and light markers open free inspection; nearby dock controls offer direct named single-passenger transfers or a compact group chooser with one named commit. Sailing remains deliberate. Accepted painted panels, portraits, water, lighthouse, wooden contacts, music and sailing pace remain.
++**Practice** offers all five existing puzzles. Explicit `/?cove=first-crossing`, `/?cove=holding-pier` `/?cove=bellwater` `/?cove=driftwood-yard` and `/?cove=wide-berth` links enter a puzzle directly without story scenes and never read or change journey progress. First Crossing is separate practice, preserving the original baseline. Freestanding island names and light markers open free inspection; nearby dock controls offer direct named single-passenger transfers or a compact group chooser with one named commit. Sailing remains deliberate. Accepted painted panels, portraits, water, lighthouse, wooden contacts, music and sailing pace remain.
+ 
+ Baseline M1 is a playable 3D tutorial cove: rescue Moss the sheep with Pip and Rue already aboard, manage how much depth the loaded ferry needs, and bring everyone to the lighthouse. Time advances only on accepted actions. The scene, sounds and rules run locally in the browser.
+ 
+-The [victory mix review](reviews/victory-mix/REVIEW.md) verifies a clearer arrival cue and music that becomes quieter at visible final arrival, staying reduced while the cove is won. Undo, Restart and cove changes restore the gameplay mix. The private Site currently contains reviewed portrait game `1a85874883af5caa59f6294a75495eccf2afebbc` (Sites version **12**, hosting source `e87c5c5baa53a39001c5a89b07b59aab2ad150fc`), confirmed 2026-10-25 in [the supplied publication receipt](review/deployment-confirmation.json). It includes [Harbor homecoming](reviews/homecoming/REVIEW.md), [soft lighthouse light](reviews/lighthouse-light/REVIEW.md), and accepted [sailing direction and released crests](reviews/sailing-direction-wake/REVIEW.md). The earlier water-motion result was not visually accepted. **The Home/story/Driftwood additions are not deployed.** GitHub push alone does not update the Site; [PROJECT_STATE](docs/PROJECT_STATE.md) keeps publication history and current source separate.
++The [victory mix review](reviews/victory-mix/REVIEW.md) verifies a clearer arrival cue and music that becomes quieter at visible final arrival, staying reduced while the cove is won. Undo, Restart and cove changes restore the gameplay mix. The private Site currently contains reviewed portrait game `1a85874883af5caa59f6294a75495eccf2afebbc` (Sites version **12**, hosting source `e87c5c5baa53a39001c5a89b07b59aab2ad150fc`), confirmed 2026-10-25 in [the supplied publication receipt](review/deployment-confirmation.json). It includes [Harbor homecoming](reviews/homecoming/REVIEW.md), [soft lighthouse light](reviews/lighthouse-light/REVIEW.md), and accepted [sailing direction and released crests](reviews/sailing-direction-wake/REVIEW.md). The earlier water-motion result was not visually accepted. **The Home/story/Driftwood/Wide Berth additions are not deployed.** GitHub push alone does not update the Site; [PROJECT_STATE](docs/PROJECT_STATE.md) keeps publication history and current source separate.
+ 
+ ## Run
+ 
+@@ -25,7 +25,7 @@ Open the printed local root URL without `?cove=`, normally `http://127.0.0.1:517
+ 
+ **Progress is saved between coves. An unfinished cove starts again.** Continue journey identifies a cove-start recovery; it is not a mid-puzzle save. Your complete Undo history lasts through the current crossing, including after victory, until you explicitly choose Continue story to leave it. Previews, arrival animations, completion cards and Undo never accept a rescue. Reloading before that departure returns to the cove's initial state with empty Undo history.
+ 
+-Normal-motion opening shots advance after their finite 6 / 6 / 7-second actions, holding the final picture for explicit Take the helm. Pause/Resume keeps elapsed time and consumed cues; the More disclosure contains Replay, Skip animation, Read story and Options. **Next** is available immediately and changes only the picture; **Take the helm** on the final shot enters Holding. Normal captions appear as complete phrases after a brief visual lead-in; **Read story** exposes the full scene text immediately. **Replay** restarts the current shot. **Skip animation** settles the final picture and complete recap without accepting it. **Options** or Read story holds only the current shot; Back or Escape returns to that held shot and its trigger. Reduced Motion shows each still endpoint and caption immediately. A restored pending scene shows its final static recap with Replay scene available. Scenes never spend turns. After Holding’s accepted rescue, the compact Harbor gathering ends with explicit **Continue to Bellwater**. Home after both accepted rescues offers Play a cove and New journey, without implying more playable content. Finite story effects use the existing sound preference; narration recordings are not supplied and are not required for play.
++Normal-motion opening shots advance after their finite 6 / 6 / 7-second actions, holding the final picture for explicit Take the helm. Pause/Resume keeps elapsed time and consumed cues; the More disclosure contains Replay, Skip animation, Read story and Options. **Next** is available immediately and changes only the picture; **Take the helm** on the final shot enters Holding. Normal captions appear as complete phrases after a brief visual lead-in; **Read story** exposes the full scene text immediately. **Replay** restarts the current shot. **Skip animation** settles the final picture and complete recap without accepting it. **Options** or Read story holds only the current shot; Back or Escape returns to that held shot and its trigger. Reduced Motion shows each still endpoint and caption immediately. A restored pending scene shows its final static recap with Replay scene available. Scenes never spend turns. After Holding’s accepted rescue, the compact Harbor gathering ends with explicit **Continue to Bellwater**. Home after all four accepted rescues offers Play a cove and New journey, without implying more playable content. Finite story effects use the existing sound preference; narration recordings are not supplied and are not required for play.
+ 
+ New journey asks before replacing existing progress, and Return home explains the cove-start consequence before leaving a crossing. Settings and Practice do not replace the saved journey. Invalid/unsupported saves are retained until explicit replacement. If local storage is unavailable, play continues in memory with a notice that progress cannot survive closing. Sound and Motion preferences remain independent. Full mid-puzzle resume is deferred until a later phone-usability pass.
+ 
+@@ -35,7 +35,7 @@ Select a named place, its island, pier or landmark to reveal its options for fre
+ 
+ Choose **Sail · 1 action** in an adjacent place's card to cross one passage. Safe travel commits once; a move that would lose passengers opens its explicit consequence and requires confirmation. A shallow passage explains “Boat needs depth 2. Passage has depth 1: too shallow” and disables Sail. Remote places remain freely inspectable and say which current place has no direct passage. Selecting, reselecting, switching and closing cards never spend a turn. Empty water, Close or Escape clears selection; Escape closes an active modal first.
+ 
+-When the ferry is idle at a usable pier, a safe single-passenger **Board Moss**, **Let Moss ashore** or **Bring Moss home** action commits directly. Its cost, resulting depth and relevant tide/landing consequence appear before the tap. Multiple passengers use a nearby compact chooser with portraits, full names and capacities; freely select a subset, then use its named action once. Predicted loss always opens a warning before commitment. A small receipt appears at actual visual completion, showing the accepted action and any changed depth band; Undo clears it. Reaching Harbor does not deliver anyone until you explicitly use Bring home. A rabbit uses one space; Moss uses two; the ferry has four spaces.
++When the ferry is idle at a usable pier, a safe single-passenger **Board Moss**, **Let Moss ashore** or **Bring Moss home** action commits directly. Optional free location details explain the cost, resulting depth and relevant tide/landing consequence; dock buttons stay compact. Multiple passengers use a nearby compact chooser with portraits, full names and capacities; freely select a subset, then use its named action once. Predicted loss always opens a warning before commitment. A small receipt appears at actual visual completion, showing the accepted action and any changed depth band; Undo clears it. Reaching Harbor does not deliver anyone until you explicitly use Bring home. A rabbit uses one space; a sheep or Nell uses two. The original coves use four spaces; Wide Berth uses six with its larger physical boat.
+ 
+ The compact objective, **Home 0/3** progress, boat depth/load and current deadline stay visible during play. Sailing, boarding, unloading and waiting each cost **one action**. Inspection is free, and time never advances while you think. Rabbit Pier floods after the fourth action; the warning counts down the remaining actions, and the boundary says “The tide rises after your next action.” Boarding resolves before that rise. The preview uses the actual selected passengers, including the named passenger who would be left at a flooded pier. After the rescue, current passenger facts replace the obsolete danger warning.
+ 
+@@ -101,13 +101,13 @@ $env:LAST_FERRY_REVIEW_DIR = 'reviews/selection'
+ 
+ On macOS/Linux, set the same variables with `export`. If launching the servers separately, use `npm run dev -- --port 5186` and, after building, `npm run preview -- --port 4182`. This workspace reused its existing browser cache at `../.cache/ms-playwright`; a fresh clone can use the project-local cache above. The [selection report](reviews/selection/REVIEW.md) records actual commands, source ports, results and identity.
+ 
+-`test:unit` checks the independent application reducer, supplied replays, boundaries, history, locking, sampled ferry clearance in all three coves, both puzzle searches and active-level presentation derived from real preview results. Bellwater retains eight ten-action witnesses and its valid timing alternatives. The separate design verifier checks only the supplied reference model. Browser checks use actual mouse, natural keyboard and emulated touch controls for sailing, free inspection, subsets, both rises, complete Undo, input protection, default entry/Next/Menu and production play. Target viewports are 1440×900, 844×390, 780×390, plus 844×500 and 1024×600 with breakpoint resizes. The report distinguishes passed, failed, inconclusive and not-run checks.
++`test:unit` checks the independent application reducer, supplied replays, boundaries, history, locking, sampled ferry clearance in all five playable coves, production puzzle searches and active-level presentation derived from real preview results. Bellwater retains eight ten-action witnesses and its valid timing alternatives. The separate design verifier checks only the supplied reference model. Browser checks use actual mouse, natural keyboard and emulated touch controls for sailing, free inspection, subsets, both rises, complete Undo, input protection, default entry/Next/Menu and production play. Target viewports are 1440×900, 844×390, 780×390, plus 844×500 and 1024×600 with breakpoint resizes. The report distinguishes passed, failed, inconclusive and not-run checks.
+ 
+ Reproduce the First Crossing detour manually: Sheep Pier → Board Moss → East Buoy → South Buoy → West Buoy → Harbor → Deliver all passengers. This wins after action 7. Undo after reaching South Buoy restores action 3 and tide 0. Alternatively board Moss, Wait twice, then Shallow Cut → Harbor → Deliver all passengers; also seven actions.
+ 
+ ## Evidence and source
+ 
+-See the current [Driftwood review](reviews/driftwood-yard/REVIEW.md), the [Home and play review](reviews/home-play-flow/REVIEW.md), the [illustrated story production review](reviews/story-production/REVIEW.md), the historical [story foundation review](reviews/story-foundation/REVIEW.md), and [status](STATUS.md). Source manifests distinguish fresh gameplay evidence from earlier captures and development failures. The [portrait review](reviews/passenger-portraits/REVIEW.md), [cove asset interface review](reviews/cove-ui-assets/REVIEW.md), [cove interface review](reviews/cove-interface/REVIEW.md) and its [capture manifest](reviews/cove-interface/capture-manifest.json) retain their historical identities. The [refinement review](reviews/refinement/REVIEW.md) retains the previous water/music result and actual audio phrase. Raw videos/audio stay local under the review's `raw/` folders, ignored and unavailable in a fresh clone. Versioned screenshots/manifests provide remote evidence. The [atmosphere review](reviews/atmosphere/REVIEW.md), [environment review](reviews/environment/REVIEW.md), [Bellwater review](reviews/bellwater/REVIEW.md), [prerequisite responsive/input report](reviews/bellwater/phase-a/REVIEW.md) and [contextual interface review](reviews/contextual/REVIEW.md) remain historical evidence of preceding source.
++See the current [Wide Berth review](reviews/wide-berth/REVIEW.md), the [Driftwood review](reviews/driftwood-yard/REVIEW.md), the [Home and play review](reviews/home-play-flow/REVIEW.md), the [illustrated story production review](reviews/story-production/REVIEW.md), the historical [story foundation review](reviews/story-foundation/REVIEW.md), and [status](STATUS.md). Source manifests distinguish fresh gameplay evidence from earlier captures and development failures. The [portrait review](reviews/passenger-portraits/REVIEW.md), [cove asset interface review](reviews/cove-ui-assets/REVIEW.md), [cove interface review](reviews/cove-interface/REVIEW.md) and its [capture manifest](reviews/cove-interface/capture-manifest.json) retain their historical identities. The [refinement review](reviews/refinement/REVIEW.md) retains the previous water/music result and actual audio phrase. Raw videos/audio stay local under the review's `raw/` folders, ignored and unavailable in a fresh clone. Versioned screenshots/manifests provide remote evidence. The [atmosphere review](reviews/atmosphere/REVIEW.md), [environment review](reviews/environment/REVIEW.md), [Bellwater review](reviews/bellwater/REVIEW.md), [prerequisite responsive/input report](reviews/bellwater/phase-a/REVIEW.md) and [contextual interface review](reviews/contextual/REVIEW.md) remain historical evidence of preceding source.
+ 
+ The [navigation review](reviews/navigation/REVIEW.md) preserves the accepted navigation, rule wording and phone-layout pass. The [original Holding Pier review](reviews/holding-pier/REVIEW.md) records its nine-action solution, losing alternatives and exhaustive temporary-holding check. The [M1.1 refinement review](reviews/m1-1/REVIEW.md) preserves earlier phone framing, passenger deck attachment and keyboard work. These are historical records, not captures of the contextual interface.
+ 
+diff --git a/STATUS.md b/STATUS.md
+index 40a559f..8fe1e51 100644
+--- a/STATUS.md
++++ b/STATUS.md
+@@ -1,4 +1,4 @@
+-# Current task — Illustrated story production
++# Previous task — Illustrated story production
+ 
+ Implementation committed as `bdd7e86f1e2953144b11108eb828ab85c88eb542`. The packaging audit matches 217 source entries and 80 selected review-media files (283 byte-exact, 14 text newline normalizations), with all 66 tested runtime entries exact. The following commit adds handoff metadata only; final pushed SHA/remote equality are reported in PR #1 and the handoff, separately from unchanged Site version 12.
+ 
+@@ -427,3 +427,15 @@ Fixed reproduced new-cove label overlap with bounded Driftwood-only placement an
+ Dense landscape portrait loading remains intermittent/unexplained; final lower-frequency, portrait and production checks pass. Actual failed-image/naturalWidth0 fallback preserves names/costs and delivery. Inherited Bellwater overview label overlap remains visible. Heading discontinuity, precise rapid-touch, physical Android, other-engine/font, native-GPU and acoustic limits remain. Ready for ChatGPT review and user playtest, without subjective art/fun acceptance. Not deployed: private Site version 12 unchanged. Implementation and final packaging identities accompany the handoff.
+ 
+ Implementation commit: `16742dbc6007c322db4abc5ebe67f1d1a7acd37b`. Committed-blob audit in reviews/driftwood-yard/packaging-audit.json; final packaging SHA accompanies the PR handoff.
++
++## WIDE_BERTH_01 — launch, six-space ferry and fourth cove
++
++2026-10-31: exact supplied package read and retained beside package.json. Started clean at reviewed `7e324e88827857469bf348fca311548344d03da6`; fetched remote matches. Driftwood gameplay is user accepted. This pass deliberately strengthens C4 with both full deep delivery and useful staging/light shortcut, while retaining all earlier four-space levels. No deployment.
++
++Implementation and focused verification complete. The active-level six-space physical boat, stable automatic seats, gangway/transfer paths and hull-matched released wake serve the authored Wide Berth; the original four profiles/data remain. A wider deck uses the shared illustrated player and explicit handoff. Exact two-/three-cove completions stay read-only until deliberate continuation, with correct predecessor world, fresh first scene and later recap. Shared capacity/Help copy is data-derived; optional High Quay route/deadline inspection remains free and dock buttons compact.
++
++Final Node24 build/typecheck,381/381 units in41files and79-family validation pass. Eight distinct dev browser cases pass across retained batches plus the actual final-production rescue/5size full-label/overflow check; the final additional case covers repeated handoff, actual Restart and cove-picker recovery. Actual deep13 and staged14 strategies, five-body17 variation, six-neighbor chooser, invalid8space selection, image fallback, tide/terminal Undo, corrected subset loss and honest four-cove ending are exercised. Native phone launch beats, close full-load/body frames and uninterrupted146.613s landscape/85.314s portrait sequences retain actual runtime audio. Captures are tied to their working-tree hashes and later bounded source comparison, not retroactively relabeled as post-commit evidence.
++
++Original failures remain: obsolete capacity-copy assertions; actual hull/pier lip/shore/transfer collisions; under-hull wake births; final passenger after arrival-cue boundary; development HMR interruption; short-landscape capacity line clipping; fullscreen-window resize protocol rejection; broad chooser locator; and out-of-order CDP export errors. Corrections preserve non-spatial puzzle contract, accepted timing/audio, old clearance thresholds and full-name/overflow assertions. Reports retain original logs, measured inputs and exact corrected runs.
++
++The current-location marker partly masks one sheep face at rest. Human art/puzzle/acoustic approval, actual Android/native-GPU/other-engine/font/screenreader checks and inherited intermittent image loading, Bellwater overlap, delivered-heading and precise≤180ms touch limits remain unresolved. Measured busy-lock input266.9ms does not close the180ms bound. Review: reviews/wide-berth/REVIEW.md. PR#1 remains draft, main unchanged, no force push or deployment. The private Site remains version12/game1a85874883af5caa59f6294a75495eccf2afebbc/hosting e87c5c5baa53a39001c5a89b07b59aab2ad150fc. Local root http://127.0.0.1:5270/ and direct http://127.0.0.1:5270/?cove=wide-berth .
+diff --git a/assets/catalog.json b/assets/catalog.json
+index 5535ba0..5a55dde 100644
+--- a/assets/catalog.json
++++ b/assets/catalog.json
+@@ -243,40 +243,58 @@
+         {
+           "path": "src/scene/world.ts",
+           "symbol": "World.boatRoot / hull / passengerAnchors"
++        },
++        {
++          "path": "src/scene/ferry-profile.ts",
++          "symbol": "ferryProfile, deckSeat, hullDraftY, shoreSeat, wideTransferPath: shared physical presentation contract"
++        },
++        {
++          "path": "src/scene/pier.ts",
++          "symbol": "Shared actual pier factory used by runtime and clearance checks"
+         }
+       ],
+       "variants": [
+         "empty and loaded draft",
+-        "both safe berth headings"
++        "both safe berth headings",
++        "four-space original profile preserved",
++        "six-space wider/longer deck, full draft four",
++        "fixed identity seating for every legal two-sheep/four-rabbit subset",
++        "up to five bodies occupying six spaces"
+       ],
+       "visualSignature": "Curved yellow hull, warm red cabin, planked open deck, cream trim, dark fenders.",
+       "reuseAndOwnership": "One reusable geometry family per cove. Named deck-anchor-{passengerId} children belong to the animated hull. Shared matte materials; scoped water-contact hull material.",
+-      "behaviorToPreserve": "Keep shaped bow, deck positions, passenger attachment, heading history and current pick/framing envelope.",
++      "behaviorToPreserve": "Keep shaped bow, deck positions, passenger attachment, heading history and current pick/framing envelope. Active level alone chooses hull; old cove profiles remain byte-equivalent. Fixed seats never reshuffle stationary passengers. Six-space sequential group presentation retains accepted action/audio timing.",
+       "provenance": "original-project-code",
+       "acceptance": {
+-        "state": "part-of-accepted-baseline",
+-        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
++        "state": "four-space-accepted-six-space-integrated-awaiting-human-review",
++        "reviewedBaseline": "7e324e88827857469bf348fca311548344d03da6",
++        "basis": "Existing small boat accepted; new larger variant requires native moving/phone review separately."
+       },
+       "evidence": [
+         {
+           "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+           "role": "Current build identity and preservation; not an isolated visual test of every family"
++        },
++        {
++          "path": "reviews/wide-berth/original-model-audit.json",
++          "role": "Original small-ferry actual mesh/index/transform/color signature preservation"
+         }
+       ],
+       "meaning": "Yellow ferry with red cabin. Keep shaped bow, deck positions, passenger attachment, heading history and current pick/framing envelope.",
+       "consumers": [
+-        "src/scene/world.ts"
++        "src/scene/world.ts",
++        "src/dev/asset-gallery.ts"
+       ],
+       "gallery": {
+-        "section": "inventory",
+-        "preview": "Source links and attributed existing evidence; no isolated rendering claimed"
++        "section": "wide-ferry",
++        "preview": "Actual factory, unchanged full-size cast and production seats: five bodies occupying six spaces; developer specimen not gameplay."
+       },
+       "typeSpecific": {
+         "factory/source symbol": "src/scene/models.ts: ferry; src/scene/world.ts: World.boatRoot / hull / passengerAnchors",
+         "semantic unit/axis/pivot convention or authoritative source": "ferry() local origin at nominal light-load hull reference; +Z bow, Y up. World.boatRoot owns route/heading, hull owns draft/bob.",
+-        "named attachment points when relevant": "World creates deck-anchor-{passengerId} beneath animated hull. Canonical passenger-slot order comes from level passenger data.",
++        "named attachment points when relevant": "World creates deck-anchor-{passengerId} beneath the animated hull. Four-space profiles preserve full-level species ordinal; six-space seats use the full-level species peers sorted by stable passenger ID, independent of the aboard subset.",
+         "material references": "src/scene/models.ts palette/mat and local authored colors; scoped contact/lighthouse materials where used.",
+-        "actual variant parameters": "empty and loaded draft; both safe berth headings",
++        "actual variant parameters": "Default four-space, or active capacity-six wide profile. Shared beam/bow/stern/deck/gate/wake/berth dimensions in ferry-profile.ts; no fleet selector.",
+         "consumers and scale/placement owner": "One reusable geometry family per cove. Named deck-anchor-{passengerId} children belong to the animated hull. Shared matte materials; scoped water-contact hull material.",
+         "pick/framing role": "World uses geometry for framing and scene selection; gameplay identities remain canonical nodes/passengers.",
+         "disposal owner": "World.dispose traverses shared geometry/material/texture sets and disposes each once; CoastalWater owns its separate resources."
+@@ -567,20 +585,26 @@
+         {
+           "path": "src/scene/layout.ts",
+           "symbol": "SceneLayout.stonePiers"
++        },
++        {
++          "path": "src/scene/pier.ts",
++          "symbol": "createPier shared original factory; broad new pier/standing-row variant"
+         }
+       ],
+       "variants": [
+         "wood boards",
+         "grey stone boards",
+-        "water-contact vulnerable/home piles"
++        "water-contact vulnerable/home piles",
++        "Wide Berth broad six-neighbor piers with actual matched gangway"
+       ],
+       "visualSignature": "Substantial rounded boards, four piles with pale caps, small warm mooring lantern.",
+       "reuseAndOwnership": "Generated from pier width, landAnchorXZ, elevation and positionXZ; no independent mesh file.",
+-      "behaviorToPreserve": "Keep geometry-derived berth/gangplank positions, flood water height and land contact; both ferry headings support transfer.",
++      "behaviorToPreserve": "Keep geometry-derived berth/gangplank positions, flood water height and land contact; both ferry headings support transfer. Old factory mesh/placement behavior retained; new broad geometry supports six waiting/delivered neighbors.",
+       "provenance": "original-project-code",
+       "acceptance": {
+-        "state": "part-of-accepted-baseline",
+-        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
++        "state": "original-four-space-accepted-six-space-integrated-awaiting-human-review",
++        "reviewedBaseline": "7e324e88827857469bf348fca311548344d03da6",
++        "basis": "Historical acceptance applies to original variants. The new Wide Berth/profile variant is integrated and focused checks are recorded separately; native visual and human approval are not inherited."
+       },
+       "evidence": [
+         {
+@@ -1242,16 +1266,21 @@
+       ],
+       "visualSignature": "Open pearl #d3e7df crests over muted teal #3b8889.",
+       "reuseAndOwnership": "One dynamic mesh; fixed 12-event pool, 1800ms lifetime, independent saved world pose and age.",
+-      "behaviorToPreserve": "Pure yaw/bob/draft emit no wake; subsequent boat movement does not drag previous crests; reset/Undo/hide clear.",
++      "behaviorToPreserve": "Pure yaw/bob/draft emit no wake; subsequent boat movement does not drag previous crests; reset/Undo/hide clear. Six-space contact/crest dimensions follow the actual larger hull outline; original small-profile contact remains exact. Release lifecycle, palette, masks, finite residual and Reduced clearing remain.",
+       "provenance": "original-project-code",
+       "acceptance": {
+-        "state": "part-of-accepted-baseline",
+-        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
++        "state": "original-four-space-accepted-six-space-integrated-awaiting-human-review",
++        "reviewedBaseline": "7e324e88827857469bf348fca311548344d03da6",
++        "basis": "Historical acceptance applies to original variants. The new Wide Berth/profile variant is integrated and focused checks are recorded separately; native visual and human approval are not inherited."
+       },
+       "evidence": [
+         {
+           "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+           "role": "Current build identity and preservation; not an isolated visual test of every family"
++        },
++        {
++          "path": "LAST_FERRY_WIDE_BERTH_PACKAGE/contracts/FERRY_AND_TRANSFERS.md",
++          "role": "Current scoped wider-profile contract; verification remains distinct from specification"
+         }
+       ],
+       "meaning": "Independently released ferry crests. Pure yaw/bob/draft emit no wake; subsequent boat movement does not drag previous crests; reset/Undo/hide clear.",
+@@ -1590,16 +1619,21 @@
+       ],
+       "visualSignature": "Grounded gangplank travel and proper deck attachment.",
+       "reuseAndOwnership": "Shared paths/timeline for real changed passenger subset; crossing/settling contacts drive sound.",
+-      "behaviorToPreserve": "One canonical action, cancellable transient presentation, both berth headings; new icon does not immediately transfer.",
++      "behaviorToPreserve": "One canonical action, cancellable transient presentation, both berth headings; new icon does not immediately transfer. Six-space profile uses fixed identity seats and a sequential foredeck/central aisle path inside the same accepted action duration; group audio stays grouped. Old small profiles retain their prior paths.",
+       "provenance": "original-project-code",
+       "acceptance": {
+-        "state": "part-of-accepted-baseline",
+-        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
++        "state": "original-four-space-accepted-six-space-integrated-awaiting-human-review",
++        "reviewedBaseline": "7e324e88827857469bf348fca311548344d03da6",
++        "basis": "Historical acceptance applies to original variants. The new Wide Berth/profile variant is integrated and focused checks are recorded separately; native visual and human approval are not inherited."
+       },
+       "evidence": [
+         {
+           "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+           "role": "Current build identity and preservation; not an isolated visual test of every family"
++        },
++        {
++          "path": "LAST_FERRY_WIDE_BERTH_PACKAGE/contracts/FERRY_AND_TRANSFERS.md",
++          "role": "Current scoped wider-profile contract; verification remains distinct from specification"
+         }
+       ],
+       "meaning": "Passenger boarding and unloading presentation. One canonical action, cancellable transient presentation, both berth headings; new icon does not immediately transfer.",
+@@ -2388,7 +2422,7 @@
+       ],
+       "visualSignature": "Compact opaque painted card with preserved nearby placement and fixed transfer-sheet height; three-passenger names and full costs adapt to the panel width. Static44px original model-derived portraits now sit beside full name/capacity in native choices.",
+       "reuseAndOwnership": "Same native dialog preserves focus/subset/scroll during fullscreen promotion.",
+-      "behaviorToPreserve": "Preview uses future delivery language and qualified projected load/tide; opening/toggling/cancelling keeps committed state/history and victory effects unchanged. Same native dialog/choices/focus/scroll survive fullscreen; portrait recovery and stable footer remain. Image decode/failure and rerendering reserve the same geometry; portrait children remain decoration within each existing native button. No portrait-specific overlay or replacement dialog. Story uses this same native owner; cove-boundary progression requires explicit departure and never follows previews, victory display or Undo.",
++      "behaviorToPreserve": "Preview uses future delivery language and qualified projected load/tide; opening/toggling/cancelling keeps committed state/history and victory effects unchanged. Same native dialog/choices/focus/scroll survive fullscreen; portrait recovery and stable footer remain. Image decode/failure and rerendering reserve the same geometry; portrait children remain decoration within each existing native button. No portrait-specific overlay or replacement dialog. Story uses this same native owner; cove-boundary progression requires explicit departure and never follows previews, victory display or Undo. Six-option groups use a bounded wider short-landscape chooser; Confirm stays near the initiating context with native choices and overcapacity rejection.",
+       "provenance": "original-project-code",
+       "acceptance": {
+         "state": "accepted-painted-panel-direction; published-portrait-integration; story-awaiting-review",
+@@ -2461,6 +2495,10 @@
+         {
+           "path": "reviews/home-play-flow/REVIEW.md",
+           "role": "Named direct single-passenger actions, compact subset chooser and completion-derived receipts; existing choice identities preserved."
++        },
++        {
++          "path": "LAST_FERRY_WIDE_BERTH_PACKAGE/contracts/FERRY_AND_TRANSFERS.md",
++          "role": "Current scoped wider-profile contract; verification remains distinct from specification"
+         }
+       ],
+       "meaning": "Local preview, forecast, Menu, Settings and completion retain native semantics; projected future action is explicit and every full passenger label/cost remains readable.",
+@@ -2684,7 +2722,7 @@
+     },
+     {
+       "id": "ui.icon.harbor-home",
+-      "name": "Harbor · Home",
++      "name": "Harbor Â· Home",
+       "kind": "svg-icon",
+       "status": "integrated",
+       "sources": [
+@@ -2699,7 +2737,7 @@
+       ],
+       "integrationTarget": "cove-ui-package/ui/icons/harbor-home.svg",
+       "meaning": "The cove lighthouse identifies the rescue destination. It must not be used for Back to boat, a main menu or a free travel action.",
+-      "visibleLabel": "Harbor · Home",
++      "visibleLabel": "Harbor Â· Home",
+       "variants": [
+         "one-color",
+         "optional soft accent"
+@@ -2742,7 +2780,7 @@
+       },
+       "typeSpecific": {
+         "24x24 viewBox and optical size": "viewBox0 0 24 24; 1.8px rounded stroke. Default glyph24px; narrow HUD Undo22px inside48px control; passenger check20px inside22px checkshape; optional28px gallery use.",
+-        "meaning and visible/accessible label rule": "The cove lighthouse identifies the rescue destination. It must not be used for Back to boat, a main menu or a free travel action. Harbor · Home",
++        "meaning and visible/accessible label rule": "The cove lighthouse identifies the rescue destination. It must not be used for Back to boat, a main menu or a free travel action. Harbor Â· Home",
+         "one-color fallback": "currentColor; optional accent collapses to currentColor for monochrome.",
+         "state variants and permitted rotation": "Fixed upright pictogram; never rotate full transfer icon. State comes from canonical action/audio/fullscreen mode.",
+         "native owner hit area": "Native button owns 48px main or constrained 44px minimum; SVG decorative, aria-hidden, focusable false, pointer-events none.",
+@@ -3961,7 +3999,7 @@
+       ],
+       "visualSignature": "Quiet selected/unselected inset tile,44px transparent animal beside16px live copy and distinct check. Width-aware columns and reserved image geometry retain compact height where the text fits.",
+       "reuseAndOwnership": "Same actual helper and original PNG URLs in game and gallery. Full-level/passenger-ID resolver owns appearance; level helpers own names and costs. Native button owns one action/Tab stop; decoration cannot intercept input.",
+-      "behaviorToPreserve": "Complete name/cost, native ID/aria-pressed/order/focus, nearby fixed sheet/footer and complete subset semantics. Delayed or failed decode leaves a reserved slot with all decision text and selected state usable; no live viewport or image animation.",
++      "behaviorToPreserve": "Complete name/cost, native ID/aria-pressed/order/focus, nearby fixed sheet/footer and complete subset semantics. Delayed or failed decode leaves a reserved slot with all decision text and selected state usable; no live viewport or image animation. Six full-name existing sheep/rabbit portraits remain independent of selection order; selecting eight spaces reports the active six-space limit and does not commit.",
+       "accessibility": {
+         "essentialText": "about 16px on phones",
+         "contrast": "Verify actual composited normal text >=4.5:1 and meaningful icons/states >=3:1",
+@@ -4033,6 +4071,10 @@
+         {
+           "path": "reviews/home-play-flow/REVIEW.md",
+           "role": "Named direct single-passenger actions, compact subset chooser and completion-derived receipts; existing choice identities preserved."
++        },
++        {
++          "path": "LAST_FERRY_WIDE_BERTH_PACKAGE/contracts/FERRY_AND_TRANSFERS.md",
++          "role": "Current scoped wider-profile contract; verification remains distinct from specification"
+         }
+       ],
+       "consumers": [
+@@ -4826,6 +4868,10 @@
+         {
+           "path": "LAST_FERRY_DRIFTWOOD_YARD_PACKAGE/direction/NELL_AND_YARD.md",
+           "symbol": "New original Nell seven-second lantern lift and greeting direction"
++        },
++        {
++          "path": "LAST_FERRY_WIDE_BERTH_PACKAGE/direction/LAUNCH_AND_DIFFICULTY.md",
++          "symbol": "Prepared-ferry launch composition, finite beats and exact caption"
+         }
+       ],
+       "meaning": "Presentation-only narrative pictures of changing shoreline, neighbors keeping a light, the answering ferry and safe Harbor. Illustration geometry is never route or passenger-state data.",
+@@ -4834,16 +4880,17 @@
+         "lantern",
+         "ferry",
+         "harbor",
+-        "driftwood"
++        "driftwood",
++        "launch"
+       ],
+-      "visualSignature": "Soft teal water, dusk lavender/peach, tan Rue left and cream Pip right, woolly Moss, yellow ferry/red cabin and restrained warm lantern/lighthouse light. Three approved opening compositions plus one new protected-Harbor picture. Driftwood adds warm brown Nell, broad flat tail, timber rail and a visibly lifted lantern.",
+-      "reuseAndOwnership": "One current Canvas2D surface in the story view; painter receives illustration/time and bounded DPR1â€“2. Shared paths/characters/shore/light helpers are reused across four variants. It owns no frame loop, puzzle state, audio or progress. Driftwood uses the same painter and player; accepted original opening/Harbor paths remain unchanged.",
++      "visualSignature": "Soft teal water, dusk lavender/peach, tan Rue left and cream Pip right, woolly Moss, yellow ferry/red cabin and restrained warm lantern/lighthouse light. Three approved opening compositions plus one new protected-Harbor picture. Driftwood adds warm brown Nell, broad flat tail, timber rail and a visibly lifted lantern. Launch shows the full wider yellow hull/red cabin, safe Nell releasing a mooring and two safe helpers, then glide and settle.",
++      "reuseAndOwnership": "One current Canvas2D surface in the story view; painter receives illustration/time and bounded DPR1Ã¢â‚¬â€œ2. Shared paths/characters/shore/light helpers are reused across six variants. It owns no frame loop, puzzle state, audio or progress. Driftwood uses the same painter and player; accepted original opening/Harbor paths remain unchanged. Launch reuses the same finite painter/player/audio owners.",
+       "behaviorToPreserve": "Opening finite actions retain supplied art and 6/6/7-second endpoints. Harbor is five seconds. Milliseconds convert explicitly to painter seconds. Resize recomposes portrait/landscape; settled endpoints redraw only when needed. No rabbits board during the prelude and the Harbor ferry remains empty.",
+       "provenance": "original-package-canvas-art",
+       "acceptance": {
+         "state": "approved-opening-reference-production-port-and-harbor-await-review",
+         "reviewedBaseline": "6fc5a09dd4ef876ad96ad12d623532f0d13deb10",
+-        "basis": "Reference approval applies to the supplied opening; it does not automatically approve the TypeScript port, new Harbor illustration, device performance or actual runtime presentation."
++        "basis": "Reference approval applies to the supplied opening; it does not automatically approve the TypeScript port, new Harbor illustration, device performance or actual runtime presentation. Driftwood and the new launch are implemented original compositions; launch native movement/phone checks remain distinct from human art/pacing approval."
+       },
+       "evidence": [
+         {
+@@ -4869,7 +4916,7 @@
+       ],
+       "gallery": {
+         "section": "story",
+-        "preview": "Four semantic canvas endpoints rendered from the production painter; captions from the single runtime registry. No independent story application."
++        "preview": "Six semantic illustration endpoints rendered from the production painter; captions from the single runtime registry. Static developer specimens are design evidence, not actual scene playback."
+       },
+       "typeSpecific": {
+         "authoritative geometry inputs": "Original code-native Canvas paths and coordinate recipes in scene-painter.js, adapted to story-painter.ts. Width/height/DPR and explicit illustration/time are the only drawing inputs; gameplay geometry is separate.",
+@@ -5154,6 +5201,65 @@
+         "material/texture dependencies": "Shared original wood, stone, reeds and coast palette; no new texture",
+         "generation and disposal owner": "World creates scenery Group and disposes geometry/material ownership with cove"
+       }
++    },
++    {
++      "id": "environment.wide-berth",
++      "name": "Wide Berth sheltered waterfront composition",
++      "kind": "procedural-geometry",
++      "status": "integrated",
++      "sources": [
++        {
++          "path": "data/wide-berth.level.json",
++          "symbol": "Complete authored five-stop islands, broad piers and shallow/deep course geometry"
++        },
++        {
++          "path": "src/scene/layout.ts",
++          "symbol": "Wide Berth landmark/styles and camera composition"
++        },
++        {
++          "path": "src/scene/scenery.ts",
++          "symbol": "wideWaterfront: shelter/rope/timber original composition reusing existing materials"
++        }
++      ],
++      "variants": [
++        "Wide Berth low working pier",
++        "High Quay safe staging",
++        "Shell Landing lower shore",
++        "Harbor refuge"
++      ],
++      "visualSignature": "Broad wooden landings, high stone quay, modest roofed working shelter and rope, luminous unchanged shallow/deep water.",
++      "reuseAndOwnership": "Original authored composition reuses existing coast, wood, stone, reeds and lighthouse families. JSON owns exact instances and courses; World owns lifetime.",
++      "behaviorToPreserve": "Composition never changes mechanics. Actual wider hull and cast must clear the authored land/pier meshes and remain readable.",
++      "provenance": "original-project-code",
++      "acceptance": {
++        "state": "integrated-awaiting-human-visual-review"
++      },
++      "evidence": [
++        {
++          "path": "LAST_FERRY_WIDE_BERTH_PACKAGE/direction/LAUNCH_AND_DIFFICULTY.md",
++          "role": "Supplied art/design direction, not gameplay evidence"
++        }
++      ],
++      "meaning": "Broad working waterfront, safe stone High Quay and lower Shell Landing support the six-space rescue decision.",
++      "consumers": [
++        "src/scene/world.ts"
++      ],
++      "gallery": {
++        "section": "wide-ferry",
++        "preview": "Actual production larger-ferry specimen and direct authored Wide Berth gameplay link."
++      },
++      "typeSpecific": {
++        "factory/source symbol": "src/scene/scenery.ts: wideWaterfront; src/scene/layout.ts: Wide Berth layout; data/wide-berth.level.json: authored composition",
++        "semantic unit/axis/pivot convention or authoritative source": "World XZ units, Y up; instances authored in level/layout; decorative props never define rules",
++        "named attachment points when relevant": "Broad working piers and fixed six-neighbor shore rows derive from the active level; ferry gangway and gate derive from the physical profile.",
++        "material references": "Shared existing wood and stone matte materials",
++        "actual variant parameters": "Wide Berth roofed working shelter/rope/timber, raised stone High Quay, lower Shell Landing and Harbor refuge.",
++        "authoritative geometry inputs": "data/wide-berth.level.json, src/scene/layout.ts, scenery.ts::wideWaterfront",
++        "style/elevation parameters": "Wide Berth1, Shell Landing2, High Quay/Harbor3. Exact spatial values in level JSON.",
++        "mechanical versus decorative boundary": "JSON/reducer own passages/deadlines; decorative waterfront props add no rule or collision exception.",
++        "material/texture dependencies": "Reused original wood, stone, reeds, coast/water and lantern palette; no external asset",
++        "generation and disposal owner": "One active World creates/disposes the level composition; shared pier/profile helpers provide production geometry"
++      }
+     }
+   ],
+   "seedSource": "cove-ui-package/asset-catalog.seed.json",
+@@ -5291,5 +5397,12 @@
+       "ui.component.action-capsule"
+     ],
+     "newWorldAssets": false
++  },
++  "wideBerthChanges": {
++    "baselineFamilies": 78,
++    "added": [
++      "environment.wide-berth"
++    ],
++    "reused": "Actual larger ferry variant, existing sheep/rabbit portraits, story painter and shared original materials; no new species or external bitmap."
+   }
+ }
+diff --git a/campaign/CAMPAIGN_DIRECTION.md b/campaign/CAMPAIGN_DIRECTION.md
+index 757ddfe..cc6bdde 100644
+--- a/campaign/CAMPAIGN_DIRECTION.md
++++ b/campaign/CAMPAIGN_DIRECTION.md
+@@ -2,9 +2,9 @@
+ 
+ **Campaign direction v1 · 25 October 2026**
+ 
+-Original direction baseline: `1a85874883af5caa59f6294a75495eccf2afebbc`, `EDLMGit/Lastferry`, branch `m1-first-crossing`. The current contained implementation is `DRIFTWOOD_YARD_01`, starting from the reviewed Home/play game `da1f2686ce6aff8d754e13111447dabb6e1313f0` and preserving newer work. Holding Pier → Bellwater Cove → Driftwood Yard is now the implemented journey; First Crossing is separate practice. Nell, Fern and Oat, the authored yard puzzle, short illustrated entry and narrow two-cove completion compatibility are implemented in this slice. The remaining nine coves, six-space ferry, deer, launch scene and current rule are future direction, not shipped content. Actual checks and human-acceptance limits are recorded separately in `reviews/driftwood-yard/`.
++Original direction baseline: `1a85874883af5caa59f6294a75495eccf2afebbc`. Current milestone: `WIDE_BERTH_01`, building forward from reviewed `7e324e88827857469bf348fca311548344d03da6`. Holding Pier → Bellwater Cove → Driftwood Yard → Wide Berth is the implemented journey; First Crossing stays independent practice. The user accepts Driftwood gameplay. That does not close unrelated portrait-load, layout, timing, acoustic or physical-device limits. Current source/evidence and human acceptance are separate in `reviews/wide-berth/`.
+ 
+-The illustrated opening/Harbor production and accepted live Home/story autoplay/direct-transfer pass are complete foundations. Their historical assignments are not active prerequisites. This slice retains the four-space ferry, unchanged ordinary rules and cove-boundary checkpoint contract.
++The accepted live Home, illustrated opening/Harbor/Driftwood scenes, autoplay and direct/group transfer foundation remain. This slice adds Nell's prepared-ferry launch and the actual six-space Wide Berth profile; earlier coves keep their four-space boat and unchanged rules. The remaining eight coves, Orin and currents stay future direction. Cove-boundary checkpoints remain honest; full mid-puzzle persistence is deferred.
+ 
+ ## 1. The story we are making
+ 
+@@ -50,7 +50,7 @@ After cove 3, Nell and the safe neighbors launch the spare ferry already prepare
+ 
+ **Feeling:** the pleasure of extra room, followed by more interesting choices.
+ 
+-Cove 4 introduces the six-space ferry with familiar species and a forgiving route. Let the player carry a group that would not fit together on the original boat. Show the benefit before asking for a difficult tradeoff.
++Cove 4 introduces the six-space ferry with familiar species and a satisfying first pickup, then asks for a consequential plan: carry the full group by deep water before a tight second rescue, or stage a deliberate subset safely and rescue the low pair earlier through a lighter shortcut. This deliberately strengthens the former wholly forgiving C4 calibration without forcing staging or outlawing harmless later waiting. More passengers or a witness length do not establish greater difficulty; the user’s playtest judges the choice.
+ 
+ Cove 5 introduces Orin, a deer using three spaces. His size is legible in his body, portrait and explicit cost. Cove 6 combines the larger capacity, different costs, route depth and safe staging. The task is to choose a sensible plan, not to fill every available space automatically.
+ 
+@@ -84,8 +84,8 @@ Future titles are working names. Each row is a design intention, not a proven pu
+ | --- | --- | --- | --- | --- |
+ | 1 | Holding Pier | Bring Pip, Rue and Moss home | Accepted introduction: load, depth, temporary landing and deadlines | Existing |
+ | 2 | Bellwater Cove | Meet Tansy, Lark and Bram | Accepted route and rescue-order puzzle with staged tide consequences | Existing |
+-| 3 | Driftwood Yard | Rescue Nell, Fern and Oat | Four-space staging at High Mooring, shallow rescue and deepened return | Implemented; human puzzle acceptance pending |
+-| 4 | Wide Berth | Enjoy the larger ferry | Six spaces and the new full-load draft band, with forgiving timing | Proposed |
++| 3 | Driftwood Yard | Rescue Nell, Fern and Oat | Four-space staging at High Mooring, shallow rescue and deepened return | Implemented; user accepted gameplay |
++| 4 | Wide Berth | Launch the prepared larger ferry and rescue new neighbors | Six-space benefit, full-load draft four, deep detour versus useful staging and two occupied flood boundaries | Implemented; user difficulty/visual acceptance pending |
+ | 5 | Orchard Landing | Meet Orin | A three-space passenger introduced separately from the boat lesson | Proposed |
+ | 6 | Two Landings | Bring a larger group together | Combine capacity, mixed costs, partial delivery and temporary staging | Proposed |
+ | 7 | Tidal Gate | Reach the headland | One clearly marked, fixed-direction passage | Proposed |
+@@ -114,7 +114,7 @@ Nell and Orin are the two new species planned for this campaign. Additional resi
+ 
+ Nell's contribution is a story event, not an activated ability. Orin's different cost uses the familiar capacity vocabulary. Every newcomer does not need a new rule. A recognizable silhouette, a clear place in the community and a later greeting can carry a character.
+ 
+-Maintain one stable identity per character across world models, portraits, level data and story appearances. The current full-level ordinal mapping works for the existing cast, but a future character must not change coat when a later level puts it first in a list. Introduce explicit appearance metadata when expanding the cast, while retaining ordinals separately for any existing placement consumers.
++Maintain one stable identity per character across world models, portraits, level data and story appearances. The current shared resolver uses explicit appearance metadata for the expanded cast while retaining full species ordinals separately for placement consumers. Reordering a level or selecting a subset must not change coats. Preserve every existing mapping when adding future neighbors.
+ 
+ Keep the captain unseen if that remains the most effective production choice. The first-person role and final empty place are enough; a human character model and facial animation are unnecessary for this story.
+ 
+@@ -208,9 +208,9 @@ The first task saves progress between coves and labels that limitation honestly.
+ 
+ ## 12. Asset ownership and project decisions
+ 
+-Keep the existing catalog authoritative. It currently has 72 families. Register only assets actually added in a pass; future names in this plan do not count as integrated artwork. Reuse the current painted UI, model/portrait pipeline, lighthouse, water, sound and ferry family wherever they fit.
++Keep the existing catalog authoritative. Its reviewed starting point has 78 families; the live catalog records actual integrated changes. Register only assets actually added in a pass; future names in this plan do not count as integrated artwork. Reuse the current painted UI, model/portrait pipeline, lighthouse, water, sound and ferry family wherever they fit.
+ 
+-Future work will need Nell and Orin world models plus portrait variants, the larger ferry, current markers and a small story-prop set. Add variants to an existing family when appropriate instead of duplicating every scene or character name as a new family. Record source, derivatives, consumers, native phone evidence and human acceptance separately.
++Nell, her portrait, the larger ferry and its launch are implemented in their contained milestones. Future work needs Orin and his portrait, current markers and later story props. Add variants to an existing family when appropriate instead of duplicating every scene or character name as a new family. Record source, derivatives, consumers, native phone evidence and human acceptance separately.
+ 
+ This direction revises the original brief's optional exclusion of upgrades: there is now one fixed story-earned boat change. It also selects one later water-rule family and a concrete four-phase structure. These are deliberate product decisions driven by the user's current request. Existing accepted puzzles and their contracts remain authoritative until a specifically scoped task changes them.
+ 
+diff --git a/campaign/PUZZLE_PROGRESSION.md b/campaign/PUZZLE_PROGRESSION.md
+index ccc27c6..94a5749 100644
+--- a/campaign/PUZZLE_PROGRESSION.md
++++ b/campaign/PUZZLE_PROGRESSION.md
+@@ -1,6 +1,6 @@
+ # Puzzle progression — selected campaign direction
+ 
+-Original design baseline: `1a85874883af5caa59f6294a75495eccf2afebbc`, reviewed 2026-10-25. Current implementation slice: `DRIFTWOOD_YARD_01`, built forward from the reviewed Home/play game `da1f2686ce6aff8d754e13111447dabb6e1313f0`. **Holding Pier, Bellwater and Driftwood Yard are now authored playable campaign coves; First Crossing remains optional practice. Later encounters remain proposals.** Production witness/geometry checks and actual UI evidence are recorded in `reviews/driftwood-yard/`, separately from supplied design proof and human puzzle acceptance.
++Original design baseline: `1a85874883af5caa59f6294a75495eccf2afebbc`. Current milestone `WIDE_BERTH_01` builds from reviewed `7e324e88827857469bf348fca311548344d03da6`. **Holding Pier, Bellwater, Driftwood Yard and Wide Berth are authored playable campaign coves; First Crossing remains optional practice.** The user accepted Driftwood gameplay. Wide Berth deliberately revises the former gentle C4 introduction to a six-space benefit followed by a meaningful planning choice. Production proof, real geometry, actual UI evidence and human calibration remain separate in `reviews/wide-berth/`.
+ 
+ ## Campaign sequence
+ 
+@@ -10,8 +10,8 @@ The campaign targets twelve coves in four phases. Milestones follow C3, C6 and C
+ | --- | --- | --- |
+ | I · C1 | **Holding Pier** | Accepted introduction: trust a safe temporary landing, lighten the boat, rescue Pip/Rue and collect Moss. Preserve its puzzle. |
+ | I · C2 | **Bellwater** | Accepted route/deadline composition: consider the loaded return and two shore heights. Preserve its puzzle. |
+-| I · C3 | **Driftwood Yard** | Rescue **Nell, a beaver who uses 2 spaces**, using existing load, staging and tide rules. Her introduction adds character, not a special ability. Stage Nell at High Mooring to reach Fern and Oat before Reed Landing floods, then collect her through the newly deepened return. The larger spare boat is deferred to the next milestone. |
+-| II · C4 | **Wide Berth** | Enjoy the 6-space boat on forgiving deep water. Use familiar species with new named neighbors. Introduce only the boat and its load table. |
++| I · C3 | **Driftwood Yard** | Rescue **Nell, a beaver who uses 2 spaces**, using existing load, staging and tide rules. Her introduction adds character, not a special ability. Stage Nell at High Mooring to reach Fern and Oat before Reed Landing floods, then collect her through the newly deepened return. The following launch now introduces the prepared larger ferry. |
++| II · C4 | **Wide Berth** | Carry six spaces, then compare full deep delivery before a late low-pair rescue against safe sheep staging and a lighter shortcut that rescues the pair earlier. Two occupied flood boundaries and draft four make route/load choice consequential. |
+ | II · C5 | **Orchard Landing** | Meet **Orin, a deer who uses 3 spaces** in a clear, generous encounter. Teach his space cost separately from current changes or a tight full-load bottleneck. |
+ | II · C6 | **Two Landings** | Combine known load choices, safe staging and the larger boat. A thoughtful subset or delivery order matters. No new rule. |
+ | III · C7 | **Tidal Gate** | Teach one clearly marked fixed one-way passage, with a legible ordinary return route and forgiving timing. |
+@@ -23,7 +23,7 @@ The campaign targets twelve coves in four phases. Milestones follow C3, C6 and C
+ 
+ Each encounter needs a distinct insight. More animals, nodes or actions do not establish greater difficulty. Keep maps small enough for phone orientation changes and cap simultaneous dependencies. A newcomer may matter through their story or familiar capacity rule; every species does not need a power.
+ 
+-Rescued characters remain rescued. Recurring helpers may appear at the refuge or take an explicitly framed later trip; do not silently strand them again. Additional named neighbors may reuse established species. Future appearances should use explicit stable character/appearance IDs: reordering a level's passenger list must not unexpectedly recolor a recurring character. Any extension preserves the current nine appearance mappings.
++Rescued characters remain rescued. Recurring helpers may appear at the refuge or take an explicitly framed later trip; do not silently strand them again. Additional named neighbors may reuse established species. Future appearances should use explicit stable character/appearance IDs: reordering a level's passenger list must not unexpectedly recolor a recurring character. Any extension preserves all existing appearance mappings. Wide Berth uses explicit sheep/rabbit appearances for six new neighbors.
+ 
+ ## The larger boat
+ 
+@@ -36,17 +36,13 @@ After C3, the story makes a prepared **6-space spare boat** available. Its yello
+ | 3–4 | 3 |
+ | 5–6 | 4 |
+ 
+-The benefit should be felt before its tradeoff. Wide Berth permits a satisfying larger delivery; later, loading 5–6 spaces can exclude a shallow shortcut that a lighter group can use. Empty and partial-load behavior stays familiar. Boat capacity is space cost, not the count of animal bodies.
++The benefit is felt before its tradeoff. Wide Berth starts empty at Harbor; its first full pickup carries six spaces/four bodies. Draft four then excludes the shorter Harbor route even after the first rise. The full deep delivery and earlier staged rescue remain valid distinct critical plans. Empty and partial-load behavior stays familiar. Boat capacity is space cost, not the count of animal bodies.
+ 
+-This requires more than changing a number. Current production draft lookup has no band beyond 4, rejection/help copy includes fixed values, and world seating provides only three effective anchors: first rabbit, other rabbit and nonrabbit. Additional bodies would overlap. The larger-boat milestone must include:
++The production profile is selected by active-level data: only Wide Berth uses the actual larger hull/deck, automatic identity-stable seating, transfer/berth/wake geometry and its four draft bands. Original coves and gallery default callers retain their smaller profile. Capacity is the entire loading rule; seating adds no packing interaction. The roster includes two sheep and four rabbits, eight total required spaces, with a reachable five-body/six-space load and six neighbors safely waiting at High Quay. Every capacity-legal subset needs valid presentation.
+ 
+-- Complete, validated draft-band coverage and dynamic capacity/help/preview copy.
+-- A real hull/deck and deterministic automatic seating for every supported group. Seating remains presentation, not a new packing puzzle.
+-- Actual hull/passenger/transfer-path clearance in both travel directions and at every supported tide/load; required berths and passages must support draft 4.
+-- Correct deck attachment, embark/disembark paths, contact/wake origins and phone framing for that geometry.
+-- Preserved four-space behavior and evidence for **all three existing coves**, plus asset/inventory updates.
++Developer witnesses cover the full deep route (13 actions), staging both sheep and returning four rabbits by the depth-three shortcut (14), five bodies/six spaces with harmless waits after both endangered landings are clear (17), and two recoverable opening Waits (16). These are proof observations, not player targets, a global limit, measured playtime or an automatic difficulty claim. Preserve preview/current-water validation and action → increment → rise → loss → win ordering.
+ 
+-New species also require actual models, proportions, portraits, identity mapping and transfer/arrival behavior. The present animal factory renders any nonrabbit through its sheep branch; an unknown-species fallback is not a beaver or deer implementation. Their 2/3-space values reuse the existing load concept.
++Current Nell has a real beaver model and portrait. Future Orin still requires his own actual deer model, proportions, portrait, stable identity and transfer/arrival coverage; a generic nonrabbit fallback is not completion.
+ 
+ ## One bounded current rule
+ 
+@@ -96,11 +92,11 @@ If using reachability search, document its bounds. After the last scheduled chan
+ 
+ ## Implementation boundaries and saves
+ 
+-The first task creates the campaign opening, connective story scene and explicit progression/checkpoints around Holding/Bellwater. It does not implement this whole roadmap. Until further content exists, the playable slice ends honestly after Bellwater.
++The foundation first implemented Holding/Bellwater. The current four-cove slice now ends honestly after Wide Berth with “Four coves are safe.” The remaining campaign roadmap is still future content.
+ 
+ Campaign completion becomes durable on explicit **Continue** after a win; terminal Undo remains available before that boundary. Replaying/Undoing/redelivering must not duplicate milestones. Initial checkpoints may resume at the current cove's beginning, with that behavior stated clearly.
+ 
+-Before releasing the longer phone campaign, add full mid-puzzle restoration including gameplay state, complete Undo history and the corresponding presentation/boat-pose history. A restored position without heading history is not complete recovery. Test tab/background/reload and storage failure, and retain settings independently. Current cove-boundary checkpoints are implemented, including the narrowly recognized historical two-cove completion. Full mid-puzzle persistence remains deferred; this document does not claim it.
++Before releasing the longer phone campaign, add full mid-puzzle restoration including gameplay state, complete Undo history and the corresponding presentation/boat-pose history. A restored position without heading history is not complete recovery. Test tab/background/reload and storage failure, and retain settings independently. Current cove-boundary checkpoints are implemented, including only the two exact historical two-cove/three-cove completions. Home/Options/Practice remain byte-preserving; deliberate Continue saves the correct pending scene and plays fresh, while later pending reloads use recap. Earlier boundaries never display a future Wide Berth rescue. Full mid-puzzle persistence remains deferred; this document does not claim it.
+ 
+ ## Source grounding
+ 
+diff --git a/campaign/STORY_SCENES.md b/campaign/STORY_SCENES.md
+index 29c9c97..39adbac 100644
+--- a/campaign/STORY_SCENES.md
++++ b/campaign/STORY_SCENES.md
+@@ -1,20 +1,20 @@
+ # Last Ferry — story scenes for The Long Tide
+ 
+-**Current task:** `DRIFTWOOD_YARD_01` adds the third playable rescue and the one-shot `driftwood-light` entry. Holding → Bellwater → Driftwood is the implemented journey; First Crossing remains independent practice. The accepted `HOME_PLAY_FLOW_01` live Home, normal-motion autoplay, Pause/Resume and direct/group transfer ownership are retained. Evidence and human-acceptance limits belong in `reviews/driftwood-yard/`; earlier Home evidence remains historical in `reviews/home-play-flow/`.
++**Current task:** `WIDE_BERTH_01` adds `a-wider-deck` / `launch` and the actual Wide Berth cove. Holding → Bellwater → Driftwood → Wide Berth is implemented; First Crossing stays independent practice. Driftwood gameplay is user accepted. The new launch and difficulty calibration await human review. Existing Home, autoplay, Pause/Resume, Sound intent and direct/group transfers remain. Current evidence is under `reviews/wide-berth/`; previous records retain their historical scope.
+ 
+ **Illustrated art implementation:** task `STORY_PRODUCTION_01` in `LAST_FERRY_STORY_PRODUCTION_PACKAGE/NEXT_TASK_STORY_PRODUCTION.md`, from reviewed `6fc5a09dd4ef876ad96ad12d623532f0d13deb10`. The working journey, checkpoints, practice isolation and puzzles remain. The supplied Words and Light opening reference is user-approved; the production port, new Harbor drawing, runtime mix and physical-device experience have separate verification and human-approval status in `reviews/story-production/`. Implementation and focused verification are complete for the documented coverage; human review remains pending.
+ 
+-The campaign has four phases of three coves. Nell joins in Cove 3; a prepared larger ferry launches afterward. Cove 4 teaches its six spaces before Cove 5 introduces Orin. Cove 11 is the hardest puzzle. Cove 12 is a gentle, short final rescue, followed by supper. Those later coves, species, hull and current mechanics are still future work.
++The campaign has four phases of three coves. Nell joins in Cove 3; a prepared larger ferry launches afterward. Cove 4 teaches its six spaces before Cove 5 introduces Orin. Cove 11 is the hardest puzzle. Cove 12 is a gentle, short final rescue, followed by supper. Orchard and subsequent coves, deer and current mechanics remain future work. C4 now combines its clear six-space benefit with a consequential deep-route versus earlier-staged-rescue choice, deliberately revising its formerly gentle brief.
+ 
+ ## Shared presentation contract
+ 
+-The opening, Harbor connection and Driftwood entry use a close illustrated Canvas2D layer inside the actual application's dialog/fullscreen surface. A small variable-length scene definition supplies artwork, complete caption groups, duration, cue positions and optional narration IDs; the finite controller owns shot position and its cancellable run. The existing application alone acknowledges scenes and writes checkpoints. Gameplay remains the accepted interactive 3D world. The standalone reference wrapper and prototype navigation are not shipped as a replacement game or iframe.
++The opening, Harbor connection, Driftwood entry and launch use a close illustrated Canvas2D layer inside the actual application's dialog/fullscreen surface. A small variable-length scene definition supplies artwork, complete caption groups, duration, cue positions and optional narration IDs; the finite controller owns shot position and its cancellable run. The existing application alone acknowledges scenes and writes checkpoints. Gameplay remains the accepted interactive 3D world. The standalone reference wrapper and prototype navigation are not shipped as a replacement game or iframe.
+ 
+ The reference's lavender/peach dusk, teal water, cream/tan animals, yellow ferry/red cabin and warm lights are retained. Rue is tan on the left and Pip cream on the right in the opening. Portrait uses an attached deep teal reading area under recomposed artwork; landscape uses the quiet space beside the focal action. Narrative captions use Georgia with a serif fallback and remain readable HTML. Controls use the accepted cove interface language and native semantics.
+ 
+ Normal motion reveals the entire current caption after about 1,050ms with a brief 240ms opacity fade. Normal opening playback advances Tide → Lantern → Ferry at the existing 6 / 6 / 7-second endpoints; the final picture holds indefinitely. Harbor remains one five-second action with an explicit final handoff. Read story exposes all current-scene copy immediately. Reduced Motion presents each shot's endpoint and caption immediately, preserving ordinary Next navigation. Pause reveals the full caption and preserves elapsed art time; Resume retains consumed cues. Next remains immediate. There is no typewriter or mandatory sound. Reduced Motion remains manual stills.
+ 
+-Next is available immediately and changes only the shot. Only the final Take the helm, Continue to Bellwater or Continue to Driftwood action explicitly acknowledges the scene once and enters its destination. Replay restarts the current shot; Replay scene restarts the sequence. Skip animation and Escape from the main scene settle the final shot and expose the complete recap without advancing campaign progress. A pending scene restored from its existing checkpoint starts at that final static endpoint and remains pending until its final action.
++Next is available immediately and changes only the shot. Only the final Take the helm, Continue to Bellwater, Continue to Driftwood or Continue to Wide Berth action explicitly acknowledges the scene once and enters its destination. Replay restarts the current shot; Replay scene restarts the sequence. Skip animation and Escape from the main scene settle the final shot and expose the complete recap without advancing campaign progress. A pending scene restored from its existing checkpoint starts at that final static endpoint and remains pending until its final action.
+ 
+ Read story and Options settle only the current shot, pause progression and cancel pending/active cues. Returning opens the secondary disclosure before restoring its trigger focus. Closing either returns to that held shot and trigger focus; Escape closes the subordinate reading/settings view before it can skip the scene. Hide/recovery and enabling Reduced Motion settle the current shot without Next or acknowledgment. Turning motion back on does not replay consumed work. Navigation, replacement and disposal cancel owned presentation and sound work. One story clock advances the existing controller; held illustrations do not draw repeatedly. The gameplay world is retained across shots.
+ 
+@@ -24,7 +24,7 @@ Home Play uses the existing trusted click capture to request Sound synchronously
+ 
+ Optional narration IDs and the exact four-clip script are prepared in `LAST_FERRY_STORY_PRODUCTION_PACKAGE/audio/narration-script.json`. Every asset is null and every recording remains pending. There is no generated voice, live TTS, unavailable narration toggle or voice-service dependency. Finished local voice recordings and human listening approval belong to a later contained pass.
+ 
+-All Home harbors are protected piers around the same lighthouse island, seen through different coastal vignettes. Delivered characters stay safe. Cosmetic story time never changes the local puzzle forecast. The third-cove extension recognizes only the exact historical version-1 two-cove-complete record. Viewing Home, Options or Practice leaves its original bytes untouched. The first deliberate Continue saves pending `driftwood-light` and plays it freshly; later restored pending scenes use the final static recap. Other invalid or future records are not coerced into a supported prefix. The storage key and version remain unchanged.
++All Home harbors are protected piers around the same lighthouse island, seen through different coastal vignettes. Delivered characters stay safe. Cosmetic story time never changes the local puzzle forecast. The extension recognizes exactly the known version-1 two-cove and three-cove complete shapes. Viewing Home, Options or Practice leaves either record’s original bytes untouched. Deliberate Continue saves pending `driftwood-light` for two-cove completion or `a-wider-deck` for three-cove completion and plays freshly; later restored pending scenes use the final static recap. Registry-derived predecessor worlds keep Bellwater and Driftwood completions truthful instead of displaying Wide Berth as already rescued. Other invalid or future records are not coerced into a supported prefix. The storage key and version remain unchanged.
+ 
+ This task explicitly supersedes the older story-only requirements for distant gameplay-model gestures, one shared scene duration, and every opening caption visible on the first frame. It preserves the working campaign mechanics and all unrelated accepted results. The prior authored-scenes and foundation reports remain historical evidence.
+ 
+@@ -95,21 +95,27 @@ Nell works beside a timber rail with her lantern resting close to a rope coil. H
+ 
+ The existing brief caption lead-in, readable HTML, complete description/transcript, Pause/Resume, Replay, Skip and Reduced Motion apply. A restrained finite existing ferry-water cue supports the approaching light; it does not restart the score, arrival or transfer contacts. No narration recording or new narration slot is claimed.
+ 
+-**Continue to Driftwood** is immediately available and alone acknowledges the scene before entering the authored original Driftwood start. Presentation spends no actions and grants no larger ferry. After the third actual rescue, terminal Undo remains until explicit acceptance. The available-content endpoint says **Three coves are safe**, with Home/Practice/Options. The prepared six-space ferry and Wide Berth remain the next contained task.
++**Continue to Driftwood** is immediately available and alone acknowledges the scene before entering the authored original Driftwood start. Presentation spends no actions and grants no larger ferry. After the third actual rescue, terminal Undo remains until explicit acceptance. Explicit Driftwood acceptance now earns the prepared-ferry launch below. The former **Three coves are safe** endpoint is historical and retained through its exact compatible save shape.
+ 
+ **Assets:** `src/campaign/story-painter.ts` is the editable original beaver/yard illustration; `registry.ts` supplies its caption, timing, description and cue. Existing painter functions for opening and Harbor remain unchanged. The actual world, portrait and illustration are distinct renderings of the same stable character identity.
+ 
+-## 2. A wider deck
++## 2. A wider deck — `a-wider-deck`
+ 
+-**Trigger:** after completing Cove 3, Driftwood Yard, when continuing to Phase II. **Future milestone.**
++**Trigger:** explicit acceptance of Cove 3, Driftwood Yard. **Implemented in WIDE_BERTH_01; new art/pacing acceptance remains separate.** Exact historical three-cove completion offers this scene only after deliberate Continue. Its predecessor is Driftwood's safe Harbor; no new Wide Berth rescue is implied.
+ 
+-**Composition:** Nell is safe at the protected boathouse. Her larger spare ferry is already built and ready beside it. A mooring releases; the wider yellow hull settles onto the water. Pip, Rue and Moss watch from the high refuge pier. Finish with a readable view of the larger passenger deck and familiar red cabin.
++### Shot — Launch · eight seconds
+ 
+-**Caption:** “Nell had a bigger boat ready. Now there are hands to launch it.”
++The protected boathouse holds Nell's already prepared larger yellow ferry with its familiar red cabin and a broad empty open deck. Safely rescued Nell, Pip and Rue stay on the high quay. The first frame includes the full hull, Nell, visible mooring and two helpers. From 1.1–3.1 seconds Nell raises/frees the line at the cleat and Pip visibly guides with a paw. From 3.1–6.3 seconds the boat makes one short evident glide away from the sheltered edge. A small finite settle and Nell's acknowledgment resolve by 7.4 seconds; the clean endpoint holds. Portrait and short landscape have separately composed positions and scale, keeping the entire larger boat, character action and caption/control region readable.
+ 
+-This is a launch, not a rapid construction montage during an emergency. Cove 4 subsequently introduces six spaces through the actual controls and preview. No upgrade shop, currency or hull picker appears in the story scene.
++**Caption, exact:**
++
++> Nell had a bigger boat ready. Now there are hands to launch it.
++
++The shared 1,050ms visual lead-in, complete caption, accessible description, transcript, autoplay/Pause/Resume, immediate skip-to-end, Replay, restored recap, Motion and Sound behavior remain. One restrained finite existing ferry-water cue supports the launch at 3.5 seconds through the persistent owner; score/gains, gameplay transfer contacts and victory mix remain unchanged. No narration asset or voice generation is added.
++
++Only **Continue to Wide Berth** acknowledges `a-wider-deck` and enters the new original start. All scene actions remain presentation-only, with no turn/tide/passenger/Undo mutation. This is a launch of a prepared boat, not construction during a rescue or a currency upgrade. C4 uses its own actual six-space profile; earlier coves keep their four-space boat in Journey and Practice. After actual Wide Berth victory and explicit acceptance, the available-content endpoint says **Four coves are safe**, with Home/Practice/Options. The remaining planned story is not presented as shipped.
+ 
+-**Assets:** Nell's approved beaver model/portrait, six-space ferry, a protected boathouse vignette and reusable rope/mooring prop. Only implement these with their corresponding content milestone and inventory entries.
++**Assets:** the existing `story.illustrations` family gains the editable `launchShot`, `readyFerry` and `launchBeaver` drawing in `src/campaign/story-painter.ts`; registry supplies description, caption, finite duration and cue. Existing opening, Harbor and Driftwood drawing functions retain their accepted equations. The actual six-space ferry/environment families are integrated separately with their production geometry and evidence. No second renderer, live story 3D engine, video or external image dependency is introduced.
+ 
+ ## 3. The orchard neighbor
+ 
+@@ -163,4 +169,4 @@ Let the player linger with the water and quiet score. Continue leads to credits
+ 
+ The first-evening, lighthouse-refuge and supper-table foundation comes from the [existing product brief](https://github.com/EDLMGit/Lastferry/blob/1a85874883af5caa59f6294a75495eccf2afebbc/docs/PRODUCT_BRIEF.md). Names, new scenes, ordering and captions here are proposed campaign content. The existing [gameplay contract](https://github.com/EDLMGit/Lastferry/blob/1a85874883af5caa59f6294a75495eccf2afebbc/docs/GAMEPLAY_RULES.md) remains authoritative for committed turns and Undo.
+ 
+-Keep authored direction, implemented scene, verified interaction and human visual/audio acceptance as separate statuses. The current task must not report future scenes, newcomers, the larger boat or currents as built merely because this document describes them.
++Keep authored direction, implemented scene, verified interaction and human visual/audio acceptance as separate statuses. Future Orchard/Orin scenes, later newcomers and currents are not implemented merely because this document describes them. The current larger boat/launch/Wide Berth claims require their actual production sources and scoped verification, recorded separately.
+diff --git a/docs/ART_DIRECTION.md b/docs/ART_DIRECTION.md
+index b5971a4..c72683f 100644
+--- a/docs/ART_DIRECTION.md
++++ b/docs/ART_DIRECTION.md
+@@ -147,3 +147,10 @@ The ending uses one short line and a two-column action group. Holding progresses
+ ## Driftwood Yard and Nell
+ 
+ The authored third cove contrasts a low timber yard/reed landing with a raised stone High Mooring. Sparse stacked beams, a trestle/rail and rope reuse the existing wood, stone and reed language. Nell is a real warm-brown two-space beaver with a lighter muzzle, round ears, teeth and a visible broad flat tail resting along her flank for deck clearance. Fern is cream and Oat tan through explicit stable appearance IDs. The illustrated seven-second greeting uses the same original painter and palette, visible lantern lift/turn and a held final handoff. The unchanged four-space ferry uses a Nell-only foredeck transfer approach to avoid seated rabbits; anchors and timing are retained. Native review evidence is under reviews/driftwood-yard; integration does not imply human art or acoustic acceptance.
++
++
++## Wide Berth and Nell’s prepared ferry
++
++The six-space ferry retains the original yellow hull/red cabin language with a genuinely wider open deck, full-size sheep/rabbits and automatic identity-stable seating. A visible wooden gangway and foredeck opening connect broad supported piers to a central aisle. Partial transfers never reshuffle passengers staying aboard. New-only wake contact follows the actual modeled hull outline; the accepted independent released crests, water palette, finite docking fade and sailing pace remain. Original four-space factory output is preserved.
++
++Wide Berth uses restrained timber sheds, broad working piers, rope/stone and a raised safe High Quay. The launch is a close original illustrated composition in the existing player: Nell releases the cleat, safe neighbors help, the empty prepared boat glides and settles. It is not construction, a new rescue or a distant gameplay-model gesture. Native actual launch/full-load/arrival evidence is in reviews/wide-berth; the partially face-covering current marker and human art/choreography/puzzle approval remain explicit limits.
+diff --git a/docs/ASSET_LEDGER.md b/docs/ASSET_LEDGER.md
+index a3598ac..81cfb66 100644
+--- a/docs/ASSET_LEDGER.md
++++ b/docs/ASSET_LEDGER.md
+@@ -124,3 +124,13 @@ The developer gallery renders the actual Nell factory in one static disposable 3
+ ## Driftwood Yard environment and story additions
+ 
+ `environment.driftwood-yard` reuses original shared wood, stone, reeds and coast materials in `src/scene/scenery.ts`/`layout.ts`, with authored geometry in `data/driftwood-yard.level.json`. `story.illustrations` adds the original seven-second Nell greeting in `src/campaign/story-painter.ts`; no external images, narration or new score. Supplied direction is retained in `LAST_FERRY_DRIFTWOOD_YARD_PACKAGE/direction/NELL_AND_YARD.md`. Original project-authored editable code; integration is separate from human visual acceptance. Real gameplay evidence and final source identities are in `reviews/driftwood-yard/`.
++
++## Wide Berth — larger ferry, launch and authored waterfront
++
++`model.ferry` gains an original six-space variant in models.ts, with shared physical dimensions/seating/transfers in ferry-profile.ts and the actual pier factory in pier.ts. Existing four-space factory output is separately audited unchanged. Full-size original sheep/rabbit models and all existing portraits are reused through explicit stable IDs. Actual production helpers also drive the developer gallery; it is a design specimen, not gameplay evidence.
++
++`story.illustrations` gains the original eight-second launch in story-painter.ts, reusing the same player/palette, safe existing characters, existing finite water cue and exact supplied caption. No new narration or score. `environment.wide-berth` is one justified authored reusable waterfront/cove composition (level/layout/scenery), with broad working piers and safe High Quay; it reuses existing wood/stone/coast/rope materials and avoids per-prop duplicate families.
++
++Editable sources remain local project code and JSON, authored for this project. Supplied direction/proof remains in LAST_FERRY_WIDE_BERTH_PACKAGE unchanged. Current verification, source identity, native game frames and human-acceptance limitations belong in reviews/wide-berth; integration is not visual, difficulty, physical-device or acoustic approval.
++
++The final inventory retains all 78 baseline IDs and contains 79 families. Existing ferry, pier, wake, transfer, passenger-choice and story families extend in place; only `environment.wide-berth` is added. Existing acceptance applies to original variants; the new wide-profile geometry, launch and waterfront await human visual/pacing approval. Six-space automatic seats use full-level species peers sorted by stable passenger ID; the original four-space species ordinals and appearances are preserved.
+diff --git a/docs/GAMEPLAY_RULES.md b/docs/GAMEPLAY_RULES.md
+index e48a6c5..37b78e1 100644
+--- a/docs/GAMEPLAY_RULES.md
++++ b/docs/GAMEPLAY_RULES.md
+@@ -16,7 +16,7 @@ There is no additional move limit, real-time countdown, fuel meter, score target
+ 
+ ## Load and draft
+ 
+-The ferry has **four passenger slots**. A rabbit uses one slot; a sheep uses two. Occupied slots are the entire load calculation. There is no separate mass, cargo grid, animal mood, or inventory system.
++First Crossing, Holding, Bellwater and Driftwood use the **four-space ferry**. Wide Berth uses the **six-space ferry**, selected by its own level data. A rabbit uses one slot; a sheep uses two. Occupied slots are the entire load calculation. There is no separate mass, cargo grid, animal mood, or inventory system.
+ 
+ | Occupied slots | Boat draft | Example                          |
+ | -------------- | ---------: | -------------------------------- |
+@@ -24,7 +24,7 @@ The ferry has **four passenger slots**. A rabbit uses one slot; a sheep uses two
+ | 1–2            |          2 | One sheep, or two rabbits        |
+ | 3–4            |          3 | One sheep and one or two rabbits |
+ 
+-A route is usable when its current depth is **greater than or equal to** the boat's draft. Equality is safe. A maximum-load boat has draft 3; it is afloat at every authored stopping node even at the initial tide.
++A route is usable when its current depth is **greater than or equal to** the boat's draft. Equality is safe. The original four-space boat at maximum load has draft 3; Wide Berth adds the ordered 5–6-space band with draft 4. Capacity and complete ordered bands come from the active level. The boat is afloat at every authored stopping node even at the initial tide.
+ 
+ The rules use integer depth units. A renderer may group depths of 3 or more into the same “deep” visual band, but the actual depth remains `baseDepth + tideLevel`; it is not numerically capped.
+ 
+@@ -35,7 +35,7 @@ Every valid action below costs exactly **one turn**. A selection is a set of dis
+ | Action | Payload                                               | Preconditions                                                                                                                          | Immediate effect                                                                                        |
+ | ------ | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+ | Move   | `{ "type": "move", "to": "node-id" }`                 | Destination is a different adjacent node; the connecting edge and destination basin support the current draft at the current tide.     | Move to that node along the edge's authored waypoints.                                                  |
+-| Board  | `{ "type": "board", "passengerIds": ["id", "..."] }`  | At a dry pier; selected nonempty subset waits at that exact pier; resulting load is at most 4; the berth supports the resulting draft. | Transfer the whole selection from the pier to the boat.                                                 |
++| Board  | `{ "type": "board", "passengerIds": ["id", "..."] }`  | At a dry pier; selected nonempty subset waits at that exact pier; resulting load is at most the active capacity (4 or 6); the berth supports the resulting draft. | Transfer the whole selection from the pier to the boat.                                                 |
+ | Unload | `{ "type": "unload", "passengerIds": ["id", "..."] }` | At a dry pier; selected nonempty subset is aboard.                                                                                     | At the harbor, mark selected passengers delivered. At another pier, make them waiting passengers there. |
+ | Wait   | `{ "type": "wait" }`                                  | Puzzle is playing.                                                                                                                     | Leave boat and passenger locations unchanged.                                                           |
+ 
+@@ -163,3 +163,7 @@ Capacity, passenger costs, draft bands, action costs, tide rises after actions 4
+ Bellwater has no mandatory Wait, action cap or score requirement. Both asymmetric route families, shallow travel both ways with a well-timed Wait, and separate rabbit boarding remain valid. Once everyone is aboard, harmless longer play stays legal. Developer witnesses and unsuccessful alternatives are documented in `BELLWATER.md` and `data/bellwater/witnesses.json`; the player interface provides rules and consequences without prescribing a plan.
+ 
+ The normal entry is Holding Pier. Its success offers Next cove into a fresh Bellwater state. Both coves and the explicit First Crossing baseline remain available in Menu and query routes. This small sequence adds no persistence, unlocks or new rules.
++
++## Wide Berth authored values
++
++`data/wide-berth.level.json` owns the exact five-stop layout, two waiting groups and rises after actions 5 and 10. All nodes have depth 4; shallow connections base depth 2 and deep connections base depth 4. The extra 5–6-space/draft-4 band changes route choices without a new loading rule. Six neighbors total eight required spaces; all legal aboard subsets are seated automatically, with no packing mechanic. Harmless later waiting remains legal after endangered piers are cleared. All existing event order, current-depth validation, previews, conservation and full Undo apply unchanged. Developer witnesses are not action limits or difficulty measurements.
+diff --git a/docs/PROJECT_STATE.md b/docs/PROJECT_STATE.md
+index c5a0c86..0d839b7 100644
+--- a/docs/PROJECT_STATE.md
++++ b/docs/PROJECT_STATE.md
+@@ -6,6 +6,16 @@ Read this before choosing scope. Detailed implementation history belongs in `STA
+ 
+ ## Current scoped pass
+ 
++`WIDE_BERTH_01` is the combined `LAST_FERRY_WIDE_BERTH_PACKAGE/NEXT_TASK_WIDE_BERTH.md` milestone. The supplied exact task resolved one directory above the actual Lastferry Git root; package retained beside package.json. Started clean on `m1-first-crossing` at reviewed `7e324e88827857469bf348fca311548344d03da6`, matching the fetched remote. Newer/unrelated work is preserved; no reset.
++
++Driftwood gameplay is accepted by the user. Its acceptance does not close earlier image-loading, Bellwater overlap, timing, physical-device or acoustic limits. Current scope adds the prepared-ferry launch, an actual six-space boat with automatic seats/transfers, one authored Wide Berth cove and exact historical two-/three-cove continuation. Earlier four coves retain their four-space boat; First Crossing remains practice. Wide Berth deliberately replaces the former wholly gentle C4 calibration with a useful six-space rescue and full-load detour versus safe staging choice. Human difficulty/satisfaction is still for playtest.
++
++The implemented journey is Holding → Bellwater → Driftwood → Wide Berth, with explicit scene/rescue acceptance and cove-boundary checkpoints. Newcomers are Alder/Clover (sheep) and Poppy/Wren/Sorrel/Finch (rabbits). No Orin, currents, fleet system or real-time deadline. After four rescues, available content ends honestly. Orchard Landing/Orin, mixed-load synthesis and later currents remain future work.
++
++**Implementation and focused verification complete.** Node24 production build/TypeScript, 381/381 units in41files and79-family validation pass, retaining all78 prior IDs. Both actual UI strategies, five-body/six-neighbor staging, exact old-save continuation, tide/terminal Undo and final production rescue/5size chooser fit pass across the recorded batches. Native launch beats and two uninterrupted runtime-audio sequences are retained. The current marker partially obscures a sheep face at rest; prior image-loading, overlap, precise timing, device and acoustic limits remain open. Full details, original failures and exact source/evidence comparisons are in `reviews/wide-berth/REVIEW.md`. Implementation/packaging commits and final pushed identity are recorded separately at handoff. No publication is authorized: the last confirmed private Site remains version 12/game `1a85874883af5caa59f6294a75495eccf2afebbc`, hosting `e87c5c5baa53a39001c5a89b07b59aab2ad150fc`. Earlier receipts/history below remain intact.
++
++## Previous scoped pass: Driftwood Yard
++
+ `DRIFTWOOD_YARD_01` implements `LAST_FERRY_DRIFTWOOD_YARD_PACKAGE/NEXT_TASK_DRIFTWOOD_YARD.md`. The supplied package resolved one directory above this Git root and is retained here unchanged. HOME_PLAY_FLOW_01 is complete and its dock-paragraph requirement is superseded: ordinary actions use icon/short label, free current-place inspection holds predicted facts, and real loss warnings remain deliberate.
+ 
+ Reviewed game baseline: `da1f2686ce6aff8d754e13111447dabb6e1313f0`. Local checkout was there; fetched/fast-forwarded to newer remote `879c9d1cfb6745ce8a294e4dbba4aa3d984ef4b3`, preserving its six additional commits with identical tree `4aa851646f66cb0eda3ee9960ca9c5125170b0e0`. No reset or unrelated changes.
+@@ -50,7 +60,8 @@ Local Codex implements the current task. ChatGPT reviews the identifiable handof
+ | Authored-scenes implementation | `1aa73c59c37082f43990235a9efffd6f793cf642`, reviewed handoff `6fc5a09dd4ef876ad96ad12d623532f0d13deb10` — working journey retained; illustrated presentation supersedes its distant-model scenes; not published |
+ | Illustrated story production | `bdd7e86f1e2953144b11108eb828ab85c88eb542` — implemented and focused checks complete; following handoff commit records packaging/continuity only; not published |
+ | Home/play implementation | `682ee816537d9a9955f49ed35a3cfdcb3d67f752` — complete combined HOME_PLAY_FLOW_01; review and exact source/media audit in reviews/home-play-flow, not deployed |
+-| Reviewed implementation baseline | `da1f2686ce6aff8d754e13111447dabb6e1313f0` — Driftwood comparison; newer identical-tree history preserved through `879c9d1` |
++| Driftwood implementation | `16742dbc6007c322db4abc5ebe67f1d1a7acd37b`, reviewed handoff `7e324e88827857469bf348fca311548344d03da6` — gameplay accepted; not deployed |
++| Reviewed implementation baseline | `7e324e88827857469bf348fca311548344d03da6` — Wide Berth comparison |
+ | Published private phone game | `1a85874883af5caa59f6294a75495eccf2afebbc` — Sites version 12, publication confirmed 2026-10-25 17:28 Madrid |
+ | Stable phone URL | https://last-ferry-playtest.abumech.chatgpt.site |
+ | Published hosting source | `e87c5c5baa53a39001c5a89b07b59aab2ad150fc` |
+@@ -233,8 +244,8 @@ Build/typecheck and **200/200 units** pass. **20 distinct browser passes across
+ ## Queue and scope boundaries
+ 
+ - Further playtest feedback will arrive incrementally. Add it here with a brief status and concrete intent; do not implement it automatically during the active task.
+-- Homecoming, lighthouse light, sailing direction, released crests and phone playability with the audio/fullscreen correction are accepted and published. The illustrated opening/Harbor production task is current; additional ideas remain queued.
+-- More authored coves and increasing difficulty remain a later product direction. The active pass adds no puzzle or mechanic.
++- Homecoming, lighthouse light, sailing direction, released crests and phone playability with the audio/fullscreen correction are accepted and published. Home/story/Driftwood are implemented; Driftwood gameplay is accepted. Wide Berth is implemented for review; additional ideas remain queued.
++- Wide Berth is the implemented C4 experiment. Orchard Landing/Orin, mixed-size synthesis and later currents remain queued; this pass adds no new generic rule.
+ - Broader environment/art changes and further audio changes require a later active task or new user feedback.
+ - Extra volume sliders, graphics presets, rewards, accounts and progression systems are not requested deliverables.
+ - Unseen “more queued” ideas have not been specified. Do not invent their content.
+diff --git a/src/campaign/home.css b/src/campaign/home.css
+index f114c10..270a3ce 100644
+--- a/src/campaign/home.css
++++ b/src/campaign/home.css
+@@ -156,3 +156,34 @@ html[data-motion='reduced'] #transfer-receipt {
+     width: min(500px, calc(var(--viewport-width, 100vw) - 16px));
+   }
+ }
++
++.route-details summary {
++  min-height: 44px;
++  padding: 10px 0;
++  cursor: pointer;
++}
++.route-details button {
++  min-height: 44px;
++  margin-top: 6px;
++}
++@media (orientation: landscape) {
++  #app #dialog[data-large-group='true'] {
++    width: min(660px, calc(var(--viewport-width, 100vw) - 16px));
++  }
++}
++
++@media (max-height: 460px) and (orientation: landscape) {
++  #app #dialog[data-large-group='true'] #dialog-content {
++    padding: 8px;
++    gap: 6px;
++  }
++  #app #dialog[data-large-group='true'] #preview {
++    padding: 6px;
++  }
++  #app #dialog[data-large-group='true'] .passenger-options {
++    gap: 6px;
++  }
++  #app #dialog[data-large-group='true'] .dialog-body > * + * {
++    margin-top: 6px;
++  }
++}
+diff --git a/src/campaign/progress.ts b/src/campaign/progress.ts
+index 39d6438..c1799f5 100644
+--- a/src/campaign/progress.ts
++++ b/src/campaign/progress.ts
+@@ -55,17 +55,40 @@ function sameItems(value: unknown, expected: readonly string[]): boolean {
+   );
+ }
+ 
+-export function isLegacyCompletion(value: unknown): value is JourneyRecord {
++const historicalCompletions = [
++  {
++    completed: ['holding-pier', 'bellwater'],
++    scenes: ['opening', 'another-bell'],
++    next: 'driftwood-light',
++  },
++  {
++    completed: ['holding-pier', 'bellwater', 'driftwood-yard'],
++    scenes: ['opening', 'another-bell', 'driftwood-light'],
++    next: 'a-wider-deck',
++  },
++] as const;
++
++export function legacyContinuationScene(value: unknown): SceneId | null {
++  if (
++    !keys(value, ['version', 'checkpoint', 'completed', 'acknowledgedScenes']) ||
++    value.version !== 1 ||
++    !keys(value.checkpoint, ['kind']) ||
++    value.checkpoint.kind !== 'complete'
++  )
++    return null;
+   return (
+-    keys(value, ['version', 'checkpoint', 'completed', 'acknowledgedScenes']) &&
+-    value.version === 1 &&
+-    keys(value.checkpoint, ['kind']) &&
+-    value.checkpoint.kind === 'complete' &&
+-    sameItems(value.completed, ['holding-pier', 'bellwater']) &&
+-    sameItems(value.acknowledgedScenes, ['opening', 'another-bell'])
++    historicalCompletions.find(
++      (boundary) =>
++        sameItems(value.completed, boundary.completed) &&
++        sameItems(value.acknowledgedScenes, boundary.scenes),
++    )?.next ?? null
+   );
+ }
+ 
++export function isLegacyCompletion(value: unknown): value is JourneyRecord {
++  return legacyContinuationScene(value) !== null;
++}
++
+ export function newJourney(): JourneyRecord {
+   return {
+     version: 1,
+@@ -185,8 +208,7 @@ export function acceptCove(record: JourneyRecord, id: CoveId, status: string): J
+ 
+ export function checkpointCove(record: JourneyRecord): CoveId {
+   const checkpoint = record.checkpoint;
+-  if (checkpoint.kind === 'complete')
+-    return isLegacyCompletion(record) ? 'bellwater' : storyCoves.at(-1)!.id;
++  if (checkpoint.kind === 'complete') return record.completed.at(-1)!;
+   return checkpoint.kind === 'scene' ? storyScenes[checkpoint.id].destination : checkpoint.id;
+ }
+ 
+@@ -227,8 +249,9 @@ export class JourneyProgress {
+ 
+   continueAvailableContent(): boolean {
+     const record = this.current.record;
+-    if (!isLegacyCompletion(record)) return false;
+-    this.save({ ...copy(record), checkpoint: { kind: 'scene', id: 'driftwood-light' } });
++    const nextScene = legacyContinuationScene(record);
++    if (!record || !nextScene) return false;
++    this.save({ ...copy(record), checkpoint: { kind: 'scene', id: nextScene } });
+     return true;
+   }
+ 
+diff --git a/src/campaign/registry.ts b/src/campaign/registry.ts
+index fa1ef51..9edeb70 100644
+--- a/src/campaign/registry.ts
++++ b/src/campaign/registry.ts
+@@ -2,13 +2,14 @@ import {
+   bellwater,
+   driftwoodYard,
+   holdingPier,
++  wideBerth,
+   level as firstCrossing,
+   type Level,
+ } from '../levels/level';
+ 
+-export type CoveId = 'holding-pier' | 'bellwater' | 'driftwood-yard';
+-export type SceneId = 'opening' | 'another-bell' | 'driftwood-light';
+-export type IllustrationId = 'tide' | 'lantern' | 'ferry' | 'harbor' | 'driftwood';
++export type CoveId = 'holding-pier' | 'bellwater' | 'driftwood-yard' | 'wide-berth';
++export type SceneId = 'opening' | 'another-bell' | 'driftwood-light' | 'a-wider-deck';
++export type IllustrationId = 'tide' | 'lantern' | 'ferry' | 'harbor' | 'driftwood' | 'launch';
+ export type StoryCue = {
+   id: string;
+   atMs: number;
+@@ -122,6 +123,26 @@ export const storyScenes: Record<SceneId, StoryScene> = {
+     destination: 'driftwood-yard',
+     continueLabel: 'Continue to Driftwood',
+   },
++  'a-wider-deck': {
++    id: 'a-wider-deck',
++    title: 'A wider deck',
++    shots: [
++      {
++        id: 'launch',
++        illustration: 'launch',
++        durationMs: 8000,
++        captionCueMs: 1050,
++        caption: 'Nell had a bigger boat ready. Now there are hands to launch it.',
++        description:
++          'At the protected boathouse, safely rescued Nell frees a visible mooring line. Pip guides with an outstretched paw while Rue watches from the high quay. The prepared wider yellow ferry, red cabin and large open deck glide out onto the water, then settle ready for the next crossing. Nobody boards or becomes stranded during the launch.',
++        cues: [
++          { id: 'a-wider-deck.launch.water', atMs: 3500, kind: 'ferry-water', strength: 0.65 },
++        ],
++      },
++    ],
++    destination: 'wide-berth',
++    continueLabel: 'Continue to Wide Berth',
++  },
+ };
+ 
+ export type StoryCove = {
+@@ -135,9 +156,16 @@ export const storyCoves: readonly StoryCove[] = [
+   { id: 'holding-pier', level: holdingPier, order: 0, entryScene: 'opening' },
+   { id: 'bellwater', level: bellwater, order: 1, entryScene: 'another-bell' },
+   { id: 'driftwood-yard', level: driftwoodYard, order: 2, entryScene: 'driftwood-light' },
++  { id: 'wide-berth', level: wideBerth, order: 3, entryScene: 'a-wider-deck' },
+ ];
+ 
+-export const practiceCoves = [firstCrossing, holdingPier, bellwater, driftwoodYard] as const;
++export const practiceCoves = [
++  firstCrossing,
++  holdingPier,
++  bellwater,
++  driftwoodYard,
++  wideBerth,
++] as const;
+ 
+ export function storyCove(id: string): StoryCove | undefined {
+   return storyCoves.find((cove) => cove.id === id);
+@@ -146,3 +174,8 @@ export function storyCove(id: string): StoryCove | undefined {
+ export function practiceCove(id: string): Level | undefined {
+   return practiceCoves.find((cove) => cove.id === id);
+ }
++
++export function scenePredecessor(id: SceneId): Level {
++  const index = storyCoves.findIndex((cove) => cove.entryScene === id);
++  return storyCoves[Math.max(0, index - 1)].level;
++}
+diff --git a/src/campaign/story-painter.ts b/src/campaign/story-painter.ts
+index 327a9ab..a19801d 100644
+--- a/src/campaign/story-painter.ts
++++ b/src/campaign/story-painter.ts
+@@ -1,4 +1,4 @@
+-export type StoryIllustration = 'tide' | 'lantern' | 'ferry' | 'harbor' | 'driftwood';
++export type StoryIllustration = 'tide' | 'lantern' | 'ferry' | 'harbor' | 'driftwood' | 'launch';
+ type Paint = string | CanvasGradient;
+ type RabbitPose = {
+   lift?: number;
+@@ -40,6 +40,7 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
+     ferry: 7,
+     harbor: 5,
+     driftwood: 7,
++    launch: 8,
+   };
+   const grains = Array.from({ length: 560 }, (_, i) => ({
+     x: ((i * 173 + 43) % 997) / 997,
+@@ -978,6 +979,309 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
+     lantern(lampX, lampY, s, 1, Math.sin(lift * Math.PI) * -0.1);
+     finish(t);
+   }
++  function launchBeaver(x: number, y: number, s: number, release: number, acknowledge: number) {
++    ctx.save();
++    ctx.translate(x, y);
++    ctx.scale(s, s);
++    ellipse(30, -6, 30, 11, '#5b4438', -0.18);
++    line(
++      [
++        [12, -9],
++        [42, -17],
++        [53, -10],
++      ],
++      '#80634b',
++      1.4,
++    );
++    line(
++      [
++        [26, -18],
++        [32, 1],
++      ],
++      '#423c33',
++      1.2,
++    );
++    line(
++      [
++        [39, -20],
++        [44, -2],
++      ],
++      '#423c33',
++      1.2,
++    );
++    ellipse(0, -28, 25, 31, '#8e6848');
++    ellipse(-10, -30, 18, 25, '#c3a47a');
++    ellipse(-13, -1, 17, 5, '#8e6848');
++    ellipse(13, -1, 17, 5, '#8e6848');
++    ctx.save();
++    ctx.translate(-5, -60);
++    ctx.rotate(mix(0.08, -0.1, acknowledge));
++    ellipse(-15, -15, 8, 9, '#8e6848');
++    ellipse(15, -14, 8, 9, '#8e6848');
++    ellipse(-15, -15, 3.7, 4.6, '#b38a65');
++    ellipse(15, -14, 3.7, 4.6, '#b38a65');
++    ellipse(0, 0, 24, 23, '#8e6848');
++    ellipse(-12, 11, 19, 12, '#c3a47a');
++    ellipse(-24, 8, 7, 5, '#3f352d');
++    ellipse(-9, -5, 2.5, 2.8, '#223b36');
++    ellipse(9, -4, 2.1, 2.6, '#223b36');
++    ellipse(-9.8, -6, 0.8, 0.9, '#fff0cd');
++    ctx.fillStyle = '#f3e4bf';
++    ctx.fillRect(-16, 20, 6, 7);
++    ctx.fillRect(-9, 20, 6, 7);
++    line(
++      [
++        [-17, 17],
++        [-9, 19],
++        [-1, 17],
++      ],
++      '#795b43',
++      1.2,
++    );
++    ctx.restore();
++    const handX = mix(-38, -33, release),
++      handY = mix(-20, -65, release);
++    line(
++      [
++        [-14, -37],
++        [-29, mix(-23, -43, release)],
++        [handX, handY],
++      ],
++      '#8e6848',
++      11,
++    );
++    ellipse(handX, handY, 6, 6, '#b28b64');
++    line(
++      [
++        [17, -34],
++        [23, -20],
++      ],
++      '#8e6848',
++      10,
++    );
++    ellipse(23, -20, 5.5, 5.5, '#b28b64');
++    ctx.restore();
++  }
++  function readyFerry(x: number, y: number, s: number) {
++    ctx.save();
++    ctx.translate(x, y);
++    ctx.scale(s, s);
++    ellipse(0, 24, 137, 17, 'rgba(20,61,65,.17)');
++    path(
++      'M -139 -13 Q -143 11 -105 36 L 98 36 Q 143 29 151 -4 L 127 -32 L -103 -44 Z',
++      '#d3a84e',
++      '#b0aa7d',
++      1.5,
++    );
++    path(
++      'M -105 22 L 101 22 Q 133 15 151 -4 L 143 13 Q 131 35 97 39 L -103 39 Q -130 28 -139 7 Z',
++      '#b88f43',
++    );
++    path('M -137 -14 L -104 -46 L 124 -34 L 148 -5 L 101 18 L -105 18 Z', '#e9c268', '#f0db9b', 2);
++    path('M -108 -13 L -93 -33 L 118 -25 L 132 -7 L 94 10 L -100 10 Z', '#bba37a', '#e6cf99', 1.5);
++    for (let i = 0; i < 6; i++)
++      line(
++        [
++          [-89 + 35 * i, -29],
++          [-95 + 35 * i, 8],
++        ],
++        '#8a7f60',
++        1.2,
++      );
++    line(
++      [
++        [-102, -4],
++        [116, -2],
++      ],
++      '#d4bd8d',
++      1,
++    );
++    path('M -105 -17 L -105 -71 L -44 -68 L -29 -51 L -29 -12 Z', '#a95e4f', '#d2b38c', 1.5);
++    path('M -44 -68 L -29 -51 L -29 -12 L -44 -22 Z', '#804d45');
++    path(
++      'M -112 -72 L -85 -90 L -34 -83 L -22 -53 L -44 -63 L -107 -65 Z',
++      '#b86c58',
++      '#dfb88a',
++      1.6,
++    );
++    ctx.fillStyle = '#3c615b';
++    ctx.fillRect(-95, -57, 20, 23);
++    ctx.fillRect(-65, -56, 15, 23);
++    ctx.fillStyle = '#ead7a9';
++    ctx.fillRect(-92, -54, 14, 17);
++    ctx.fillRect(-62, -53, 9, 17);
++    line(
++      [
++        [-83, -84],
++        [-83, -98],
++      ],
++      '#425b50',
++      5,
++    );
++    line(
++      [
++        [-102, -16],
++        [-40, -12],
++      ],
++      '#e9cf93',
++      2,
++    );
++    for (const [xx, yy] of [
++      [-119, -18],
++      [7, 16],
++      [58, 16],
++      [105, 12],
++      [133, -7],
++    ]) {
++      line(
++        [
++          [xx, yy],
++          [xx, yy - 18],
++        ],
++        '#657363',
++        2.4,
++      );
++    }
++    line(
++      [
++        [-119, -36],
++        [8, -2],
++        [60, -2],
++        [104, -6],
++        [133, -25],
++      ],
++      '#e8d5a2',
++      2.3,
++    );
++    ellipse(-119, 8, 6, 8, '#59635b');
++    ellipse(72, 28, 6, 8, '#59635b');
++    ctx.restore();
++  }
++  function launchShot(t: number) {
++    const portrait = W < 480,
++      short = H < 300,
++      release = ease((t - 1.1) / 2),
++      glide = ease((t - 3.1) / 3.2),
++      acknowledge = ease((t - 5.8) / 1.4),
++      settle = t < 6.1 ? 0 : Math.sin((t - 6.1) * Math.PI * 1.4) * Math.max(0, 1 - (t - 6.1) / 1.6),
++      s = Math.min(
++        portrait ? (W - 35) / 300 : (W * 0.48) / 300,
++        portrait ? 1.3 : short ? 1.04 : 1.8,
++      ),
++      ground = H * (portrait ? 0.41 : 0.46),
++      nellX = W * (portrait ? 0.43 : 0.57),
++      nellS = Math.min(portrait ? 1.12 : short ? 0.59 : 1.1, (H * 0.28) / 90),
++      boatX = W * (portrait ? 0.46 : 0.69) + glide * W * (portrait ? 0.055 : 0.065),
++      boatY = H * (portrait ? 0.73 : 0.79) + glide * H * (portrait ? 0.055 : 0.045) + settle * 1.8;
++    backdrop(t, 1);
++    foregroundWater(H * 0.55, t, { x: boatX, strength: 0.3 });
++    const quayLeft = W * (portrait ? 0.04 : 0.49),
++      quayRight = W + 20;
++    path(
++      `M ${quayLeft} ${ground + 4} L ${quayRight} ${ground - 9} L ${quayRight} ${ground + 49} L ${quayLeft} ${ground + 43} Z`,
++      '#496d65',
++    );
++    path(
++      `M ${quayLeft} ${ground - 4} L ${quayRight} ${ground - 15} L ${quayRight} ${ground + 3} L ${quayLeft} ${ground + 15} Z`,
++      '#a2916c',
++      '#d5bf90',
++      1.4,
++    );
++    for (let i = 0; i < 5; i++)
++      line(
++        [
++          [quayLeft + 30 + 52 * i, ground + 12],
++          [quayLeft + 27 + 52 * i, ground + 42],
++        ],
++        '#567366',
++        1.5,
++      );
++    const houseX = W * (portrait ? 0.75 : 0.87),
++      houseY = ground - 8,
++      houseS = portrait ? 0.9 : short ? 0.6 : 1;
++    ctx.save();
++    ctx.translate(houseX, houseY);
++    ctx.scale(houseS, houseS);
++    path('M -58 0 L -58 -71 L 38 -71 L 38 0 Z', '#729181', '#b4b695', 1.5);
++    path('M -66 -71 L -13 -106 L 47 -70 Z', '#536e70', '#a6a78b', 1.6);
++    path('M -24 0 L -24 -55 Q 0 -70 20 -53 L 20 0 Z', '#345c5c');
++    line(
++      [
++        [-47, -61],
++        [-47, -4],
++      ],
++      '#abc0a0',
++      3,
++    );
++    ctx.restore();
++    const helperS = Math.min(portrait ? 0.68 : short ? 0.45 : 0.83, (H * 0.24) / 91);
++    rabbit(W * (portrait ? 0.72 : 0.77), ground - 2, helperS, 'cream', {
++      guide: Math.sin(release * Math.PI) * 0.9,
++      head: mix(-0.13, 0.09, glide),
++    });
++    rabbit(W * (portrait ? 0.88 : 0.88), ground - 5, helperS * 0.93, 'tan', {
++      head: mix(-0.14, 0.07, acknowledge),
++      warmth: 0.35,
++    });
++    const cleatX = nellX - 39 * nellS,
++      cleatY = ground - 10;
++    line(
++      [
++        [cleatX - 8, cleatY],
++        [cleatX + 8, cleatY],
++      ],
++      '#4b6157',
++      4,
++    );
++    line(
++      [
++        [cleatX, cleatY],
++        [cleatX, cleatY + 10],
++      ],
++      '#4b6157',
++      4,
++    );
++    readyFerry(boatX, boatY, s);
++    if (release < 1) {
++      ctx.globalAlpha = 1 - release;
++      line(
++        [
++          [cleatX, cleatY],
++          [mix(cleatX, boatX - 108 * s, 0.55), mix(cleatY, boatY - 15 * s, 0.55) + release * 18],
++          [boatX - 108 * s, boatY - 15 * s],
++        ],
++        '#d6be8d',
++        2.6,
++      );
++      ctx.globalAlpha = 1;
++    }
++    launchBeaver(nellX, ground - 4, nellS, release, acknowledge);
++    const handX = nellX + mix(-38, -33, release) * nellS,
++      handY = ground - 4 + mix(-20, -65, release) * nellS;
++    line(
++      [
++        [cleatX, cleatY],
++        [handX - 8 * nellS, handY + 15 * nellS],
++        [handX, handY],
++      ],
++      '#d6be8d',
++      2.3,
++    );
++    if (glide > 0) {
++      ctx.globalAlpha = 0.35 * Math.sin(glide * Math.PI);
++      for (let i = 0; i < 3; i++)
++        line(
++          [
++            [boatX - 148 * s - i * 9, boatY + 13 * s + i * 4],
++            [boatX - 170 * s - i * 10, boatY + 14 * s + i * 4],
++          ],
++          '#dce5c9',
++          1.6,
++        );
++      ctx.globalAlpha = 1;
++    }
++    finish(t);
++  }
+   return {
+     durations,
+     resize(width: number, height: number, dpr = 1) {
+@@ -1000,6 +1304,7 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
+         ferry: answerShot,
+         harbor: harborShot,
+         driftwood: driftwoodShot,
++        launch: launchShot,
+       })[illustration](t);
+     },
+   };
+diff --git a/src/dev/asset-gallery.ts b/src/dev/asset-gallery.ts
+index 4becb30..a85ec6d 100644
+--- a/src/dev/asset-gallery.ts
++++ b/src/dev/asset-gallery.ts
+@@ -1,5 +1,8 @@
+ import * as T from 'three';
+-import { animal } from '../scene/models';
++import { animal, ferry } from '../scene/models';
++import { wideBerth } from '../levels/level';
++import { deckSeat, ferryProfile, passengerScale } from '../scene/ferry-profile';
++import { passengerModelVariant, resolvePassengerAppearance } from '../game/passenger-appearance';
+ import '../ui/cove-ui.css';
+ import './asset-gallery.css';
+ import catalog from '../../assets/catalog.json';
+@@ -53,7 +56,13 @@ root.innerHTML = `<header><p>Last Ferry · developer tools</p><h1>Cove asset gal
+ )}<p>Gallery-only labels use explicit appearance fixtures to test wrapping. Actual passenger and level data are unchanged.</p></article>
+ </div><div class="cove-panel cove-surface cove-surface--compact gallery-panel"><h3>Compact face</h3><p>Shared opaque wash with no corner decoration. HUD, names, forecast and local options retain their own dimensions.</p><button id="gallery-forecast" class="cove-panel cove-surface cove-surface--compact gallery-forecast" data-demo-state="focus">! Rabbit Pier floods in 1 action.</button></div>
+ <div class="cove-panel cove-surface cove-surface--arrival gallery-panel"><h3>Everyone home.</h3><p>Arrival uses only a warmer upper catchlight. Normal action and home colors remain the existing button family.</p><button id="gallery-next"></button></div></section>
+-<section aria-labelledby="beaver-heading"><h2 id="beaver-heading">Nell · real beaver model</h2><p>The production geometry, including the broad resting tail, muzzle and compact paws. A static developer specimen uses the same model factory; it is not gameplay evidence.</p><div class="panel-specimens"><figure class="cove-panel cove-surface gallery-panel"><canvas id="gallery-beaver-model" style="width:100%;height:260px;display:block" role="img" aria-label="Nell the warm brown beaver with a lighter muzzle, small round ears, broad nose and flat darker tail"></canvas><figcaption>Nell · two spaces · original editable geometry</figcaption></figure><article class="cove-panel cove-surface gallery-panel panel-specimen--narrow"><h3>Driftwood neighbors</h3>${choices([['Nell',2,true,'beaver-brown'],['Fern',1,true,'rabbit-cream'],['Oat',1,true,'rabbit-tan']])}<p>Explicit stable coats survive offered subsets and passenger-array reorder.</p><p><a href="/?cove=driftwood-yard">Open the actual Driftwood rescue</a></p></article></div></section><section aria-labelledby="portrait-heading"><h2 id="portrait-heading">Model-derived static portraits</h2><p>Four original transparent 256px PNG derivatives, displayed at 44px beside live copy in the shared choice helper. Offline SVG diffuse shading is not pixel-identical WebGL. These are design specimens, not gameplay captures.</p><div class="portrait-sources">${(Object.entries(portraitSources) as [PortraitKey, string][]).map(([key, url]) => `<figure class="cove-panel cove-surface gallery-panel"><img class="portrait-source" src="${url}" width="256" height="256" alt="${key.replace('-', ' ')} model-derived source portrait" draggable="false" /><figcaption>${key} · 256×256 PNG</figcaption></figure>`).join('')}</div><div class="panel-specimens"><article id="gallery-bellwater-portraits" class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow"><h3>Bellwater names, same appearances</h3>${choices(
++<section aria-labelledby="beaver-heading"><h2 id="beaver-heading">Nell · real beaver model</h2><p>The production geometry, including the broad resting tail, muzzle and compact paws. A static developer specimen uses the same model factory; it is not gameplay evidence.</p><div class="panel-specimens"><figure class="cove-panel cove-surface gallery-panel"><canvas id="gallery-beaver-model" style="width:100%;height:260px;display:block" role="img" aria-label="Nell the warm brown beaver with a lighter muzzle, small round ears, broad nose and flat darker tail"></canvas><figcaption>Nell · two spaces · original editable geometry</figcaption></figure><article class="cove-panel cove-surface gallery-panel panel-specimen--narrow"><h3>Driftwood neighbors</h3>${choices(
++  [
++    ['Nell', 2, true, 'beaver-brown'],
++    ['Fern', 1, true, 'rabbit-cream'],
++    ['Oat', 1, true, 'rabbit-tan'],
++  ],
++)}<p>Explicit stable coats survive offered subsets and passenger-array reorder.</p><p><a href="/?cove=driftwood-yard">Open the actual Driftwood rescue</a></p></article></div></section><section aria-labelledby="portrait-heading"><h2 id="portrait-heading">Model-derived static portraits</h2><p>Four original transparent 256px PNG derivatives, displayed at 44px beside live copy in the shared choice helper. Offline SVG diffuse shading is not pixel-identical WebGL. These are design specimens, not gameplay captures.</p><div class="portrait-sources">${(Object.entries(portraitSources) as [PortraitKey, string][]).map(([key, url]) => `<figure class="cove-panel cove-surface gallery-panel"><img class="portrait-source" src="${url}" width="256" height="256" alt="${key.replace('-', ' ')} model-derived source portrait" draggable="false" /><figcaption>${key} · 256×256 PNG</figcaption></figure>`).join('')}</div><div class="panel-specimens"><article id="gallery-bellwater-portraits" class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow"><h3>Bellwater names, same appearances</h3>${choices(
+   [
+     ['Tansy', 1, false, 'rabbit-cream'],
+     ['Lark', 1, true, 'rabbit-tan'],
+@@ -109,8 +118,8 @@ const beaverResize = new ResizeObserver(([entry]) => {
+   const { width, height } = entry.contentRect;
+   if (width <= 0 || height <= 0) return;
+   const halfHeight = 0.65;
+-  beaverCamera.left = -halfHeight * width / height;
+-  beaverCamera.right = halfHeight * width / height;
++  beaverCamera.left = (-halfHeight * width) / height;
++  beaverCamera.right = (halfHeight * width) / height;
+   beaverCamera.top = halfHeight;
+   beaverCamera.bottom = -halfHeight;
+   beaverCamera.updateProjectionMatrix();
+@@ -200,7 +209,68 @@ const showInventory = () => {
+ document.querySelector('#filter')!.addEventListener('input', showInventory);
+ showInventory();
+ 
+-const driftwoodLink = document.createElement("section");
+-driftwoodLink.id = "driftwood-yard";
++const driftwoodLink = document.createElement('section');
++driftwoodLink.id = 'driftwood-yard';
+ driftwoodLink.innerHTML = `<h2>Driftwood Yard · authored environment and illustrated connection</h2><p><a href="/?cove=driftwood-yard">Play the actual timber-yard cove</a> · <a href="/">Open the journey for the earned Nell lantern scene</a></p>`;
+-document.querySelector("main")!.append(driftwoodLink);
++document.querySelector('main')!.append(driftwoodLink);
++
++const wideSection = document.createElement('section');
++wideSection.id = 'wide-ferry';
++wideSection.className = 'cove-panel cove-surface gallery-panel';
++wideSection.innerHTML = `<h2>Six-space ferry · actual production model</h2><p>Developer specimen, not gameplay evidence. One sheep and four rabbits occupy six spaces on fixed automatic identity anchors; other legal subsets use these same sources. Original coves retain the original smaller ferry.</p><canvas id="gallery-wide-ferry" aria-label="Production larger yellow ferry with red cabin and five full-size neighbors" style="width:100%;height:320px;display:block"></canvas><p><a href="/?cove=wide-berth">Play actual Wide Berth</a> · <a href="/">Root journey and earned launch</a></p>`;
++root.append(wideSection);
++const wideCanvas = wideSection.querySelector<HTMLCanvasElement>('canvas')!;
++const wideRenderer = new T.WebGLRenderer({ canvas: wideCanvas, antialias: true });
++wideRenderer.setPixelRatio(Math.min(devicePixelRatio, 1.7));
++wideRenderer.outputColorSpace = T.SRGBColorSpace;
++wideRenderer.toneMapping = T.ACESFilmicToneMapping;
++wideRenderer.toneMappingExposure = 1;
++const wideScene = new T.Scene();
++wideScene.background = new T.Color('#245f70');
++wideScene.add(new T.HemisphereLight('#fff1dc', '#5f8c9a', 1.9));
++const wideSun = new T.DirectionalLight('#ffe0af', 2.4);
++wideSun.position.set(-8, 16, 7);
++wideScene.add(wideSun);
++const wideModel = ferry(ferryProfile(wideBerth));
++wideScene.add(wideModel);
++for (const id of ['alder', 'poppy', 'wren', 'sorrel', 'finch']) {
++  const passenger = wideBerth.passengers.find((p) => p.id === id)!;
++  const figure = animal(passenger.species, passengerModelVariant(wideBerth, id));
++  figure.scale.set(...passengerScale(passenger.species));
++  figure.position.copy(deckSeat(wideBerth, id));
++  wideModel.add(figure);
++}
++const wideCamera = new T.OrthographicCamera();
++wideCamera.position.set(7, 7, 10);
++wideCamera.lookAt(0, 0.65, 0.6);
++const wideResize = new ResizeObserver((entries) => {
++  for (const entry of entries) {
++    const { width, height } = entry.contentRect;
++    if (!width || !height) continue;
++    const aspect = width / height,
++      vertical = Math.max(3.2, 3.3 / aspect);
++    Object.assign(wideCamera, {
++      left: -vertical * aspect,
++      right: vertical * aspect,
++      top: vertical,
++      bottom: -vertical,
++      near: 0.1,
++      far: 60,
++    });
++    wideCamera.updateProjectionMatrix();
++    wideRenderer.setSize(width, height, false);
++    wideRenderer.render(wideScene, wideCamera);
++  }
++});
++wideResize.observe(wideCanvas);
++window.addEventListener(
++  'pagehide',
++  () => {
++    wideResize.disconnect();
++    wideModel.traverse((object) => {
++      if (object instanceof T.Mesh) object.geometry.dispose();
++    });
++    wideRenderer.dispose();
++  },
++  { once: true },
++);
+diff --git a/src/game/rules.ts b/src/game/rules.ts
+index 4cfd49d..a3b747c 100644
+--- a/src/game/rules.ts
++++ b/src/game/rules.ts
+@@ -59,7 +59,7 @@ export function validate(s: State, a: Action, l = level): string | null {
+     if (ids.some((id) => !s.waitingByPier[pier.id].includes(id)))
+       return 'These passengers are not waiting here.';
+     const next = { ...s, aboard: [...s.aboard, ...ids] };
+-    if (load(next, l) > l.rules.capacity) return 'There are only four passenger spaces.';
++    if (load(next, l) > l.rules.capacity) return `The boat has ${l.rules.capacity} spaces; this group needs ${load(next, l)}.`;
+     if (
+       pier &&
+       l.nodes.find((n) => n.id === s.boatNodeId)!.baseDepth + s.tideLevel < draft(next, l)
+diff --git a/src/levels/level.ts b/src/levels/level.ts
+index 60a128b..6acbb46 100644
+--- a/src/levels/level.ts
++++ b/src/levels/level.ts
+@@ -2,6 +2,7 @@ import data from '../../data/first-crossing.level.json';
+ import holdingData from '../../data/holding-pier.level.json';
+ import bellwaterData from '../../data/bellwater.level.json';
+ import driftwoodData from '../../data/driftwood-yard.level.json';
++import wideData from '../../data/wide-berth.level.json';
+ export type Level = Pick<
+   typeof data,
+   'id' | 'title' | 'rules' | 'world' | 'nodes' | 'edges' | 'piers' | 'objective' | 'validation'
+@@ -14,6 +15,7 @@ export const level: Level = data;
+ export const holdingPier: Level = holdingData;
+ export const bellwater: Level = bellwaterData;
+ export const driftwoodYard: Level = driftwoodData;
++export const wideBerth: Level = wideData;
+ export const nodeNames: Record<string, string> = {
+   harbor: 'Harbor',
+   cut: 'Shallow Cut',
+diff --git a/src/main.ts b/src/main.ts
+index 58f3bee..cbc10ba 100644
+--- a/src/main.ts
++++ b/src/main.ts
+@@ -10,7 +10,7 @@ import {
+   type CoveFace,
+ } from './ui/cove-ui';
+ import { resolvePassengerAppearance } from './game/passenger-appearance';
+-import { level as baseline, holdingPier, bellwater, levelNames } from './levels/level';
++import { level as baseline, holdingPier, levelNames } from './levels/level';
+ import {
+   copy,
+   draft,
+@@ -24,6 +24,7 @@ import {
+ import {
+   actionLabel,
+   actionCostCopy,
++  draftBandsCopy,
+   objectiveCopy,
+   passageCopy,
+   statusCopy,
+@@ -49,8 +50,19 @@ import { MotionPreference, type MotionMode } from './ui/motion-preference';
+ import { PanGesture } from './ui/pan-gesture';
+ import { visibleViewport, insetRectangle } from './ui/viewport';
+ import { FullscreenSupport } from './ui/fullscreen';
+-import { storyCoves, practiceCoves, storyScenes, type SceneId } from './campaign/registry';
+-import { JourneyProgress, isLegacyCompletion } from './campaign/progress';
++import {
++  storyCoves,
++  practiceCoves,
++  storyScenes,
++  scenePredecessor,
++  type SceneId,
++} from './campaign/registry';
++import {
++  JourneyProgress,
++  isLegacyCompletion,
++  legacyContinuationScene,
++  checkpointCove,
++} from './campaign/progress';
+ import { StoryPresentation, restoredHarbor } from './campaign/presentation';
+ import { StoryView } from './campaign/story-view';
+ import './campaign/story.css';
+@@ -278,13 +290,13 @@ function showHome(focusId?: string) {
+         : 'Play';
+ 
+   const notice = legacy
+-    ? 'A light at Driftwood Yard is waiting.'
++    ? `${storyScenes[legacyContinuationScene(snapshot!.record)!].title} · new story waiting.`
+     : checkpoint?.kind === 'cove'
+       ? `${storyCoves.find((entry) => entry.id === checkpoint.id)!.level.title} · from cove start.`
+       : checkpoint?.kind === 'scene'
+         ? `${storyScenes[checkpoint.id].title} · saved story.`
+         : complete
+-          ? 'Three coves are safe.'
++          ? 'Four coves are safe.'
+           : '';
+ 
+   homeSurface.innerHTML = `<header id="home-title"><h1>Last Ferry</h1><p>The Long Tide</p></header><nav id="home-menu" aria-label="Home"><p class="home-notice">${notice}${snapshot && !snapshot.persistent ? ' Progress lasts only for this visit.' : ''}${invalid ? ` ${snapshot.issue}` : ''}</p><button id="home-play">${label}</button><div class="home-secondary"><button id="home-options">Options</button><button id="home-practice">Practice</button></div><div class="home-secondary"><button id="home-sound"></button>${checkpoint ? '<button id="home-new">New journey</button>' : ''}</div></nav>`;
+@@ -374,7 +386,9 @@ function resumeJourney(restored = true) {
+   campaignPlay = true;
+   if (checkpoint.kind === 'complete') {
+     if (restored) {
+-      const destination = storyCoves.at(-1)!.level;
++      const destination = storyCoves.find(
++        (entry) => entry.id === checkpointCove(journey!.snapshot.record!),
++      )!.level;
+       mountCove(destination);
+       world.sync(restoredHarbor(destination));
+     }
+@@ -383,7 +397,7 @@ function resumeJourney(restored = true) {
+   }
+   if (checkpoint.kind === 'scene') {
+     storyId = checkpoint.id;
+-    const previous = storyId === 'driftwood-light' ? bellwater : holdingPier;
++    const previous = scenePredecessor(storyId);
+     if (storyId === 'opening' || restored || level.id !== previous.id) {
+       mountCove(previous);
+       if (storyId !== 'opening') world.sync(restoredHarbor(previous));
+@@ -599,7 +613,7 @@ function renderJourneyDialog() {
+     actions =
+       '<button id="journey-return-cancel">Keep playing</button><button id="journey-return-confirm">Return home</button>';
+   } else {
+-    heading = 'Three coves are safe.';
++    heading = 'Four coves are safe.';
+     body = '<p>The next part of the journey is still being made.</p>' + notice;
+     actions =
+       '<button id="journey-title">Return Home</button><button id="journey-practice">Practice</button><button id="journey-settings">Options</button>';
+@@ -1181,6 +1195,15 @@ function renderDialog() {
+   const s = session.state,
+     p = pierAt(s, level);
+   dialog.dataset.mode = mode;
++  dialog.dataset.largeGroup = String(
++    mode === 'action' &&
++      (selected?.type === 'board' || selected?.type === 'unload') &&
++      (selected.type === 'board'
++        ? pierAt(session.state, level)
++          ? session.state.waitingByPier[pierAt(session.state, level)!.id].length
++          : 0
++        : session.state.aboard.length) > 4,
++  );
+   dialog.dataset.transfer = String(
+     mode === 'action' && (selected?.type === 'board' || selected?.type === 'unload'),
+   );
+@@ -1211,7 +1234,7 @@ function renderDialog() {
+         ? `<div class="passenger-options" role="group" aria-label="Passenger selection">${ids.map((id) => `<button id="passenger-${id}" class="cove-choice" aria-pressed="${a.passengerIds.includes(id)}">${passengerChoiceContent(passengerNames[id].split(' ·')[0], level.passengers.find((p) => p.id === id)!.slots, resolvePassengerAppearance(level, id)?.portraitKey ?? null)}</button>`).join('')}</div>`
+         : '';
+     $('dialog-content').innerHTML =
+-      `${header(transfer ? (a.type === 'board' ? 'Board passengers' : p?.isDeliveryPier ? 'Bring passengers home' : 'Let passengers ashore') : actionLabel(s, a, level), `${nodeNames[a.type === 'move' ? a.to : s.boatNodeId]} · inspection is free`)}<div id="preview" class="dialog-body ${proposed.error || proposed.state.status === 'lost' ? 'warning' : ''}" aria-live="polite" aria-atomic="true">${choices}<p class="requirement">${text.error ?? (transfer ? transfer.depth : text.requirement)}</p>${(transfer ? transfer.detail : text.consequence) ? `<p class="consequence">${transfer ? transfer.detail : text.consequence}</p>` : ''}${!proposed.error && !transfer ? `<p class="preview-result">After this action: Boat ${load(proposed.state, level)}/${level.rules.capacity} spaces · tide ${proposed.state.tideLevel}${s.tideLevel !== proposed.state.tideLevel ? ` (now ${s.tideLevel})` : ''}</p>` : ''}</div><footer class="dialog-footer"><button id="commit" ${proposed.error ? 'disabled' : ''}>${proposed.error ? 'Action unavailable' : transfer ? `${transfer.label} · 1 action` : 'Confirm · 1 action'}</button></footer>`;
++      `${header(transfer ? (a.type === 'board' ? 'Board passengers' : p?.isDeliveryPier ? 'Bring passengers home' : 'Let passengers ashore') : actionLabel(s, a, level), `${nodeNames[a.type === 'move' ? a.to : s.boatNodeId]} · inspection is free`)}<div id="preview" class="dialog-body ${proposed.error || proposed.state.status === 'lost' ? 'warning' : ''}" aria-live="polite" aria-atomic="true">${choices}<p class="requirement">${text.error ?? (transfer ? `${transfer.depth} · ${transfer.load}` : text.requirement)}</p>${(transfer ? transfer.detail : text.consequence) ? `<p class="consequence">${transfer ? transfer.detail : text.consequence}</p>` : ''}${!proposed.error && !transfer ? `<p class="preview-result">After this action: Boat ${load(proposed.state, level)}/${level.rules.capacity} spaces · tide ${proposed.state.tideLevel}${s.tideLevel !== proposed.state.tideLevel ? ` (now ${s.tideLevel})` : ''}</p>` : ''}</div><footer class="dialog-footer"><button id="commit" ${proposed.error ? 'disabled' : ''}>${proposed.error ? 'Action unavailable' : transfer ? `${transfer.label} · 1 action` : 'Confirm · 1 action'}</button></footer>`;
+ 
+     if (a.type === 'board' || a.type === 'unload')
+       for (const id of ids)
+@@ -1253,7 +1276,7 @@ function renderDialog() {
+       )
+       .join('; ');
+     $('dialog-content').innerHTML =
+-      `${header('Crossing menu')}<div class="dialog-body menu-body">${s.status === 'won' ? '<button id="return-arrival">Return to arrival</button>' : ''}<div class="menu-actions"><button id="restart">Restart crossing</button><button id="settings">Settings</button></div><label class="cove-picker">Choose cove<select id="cove-picker">${practiceCoves.map((l) => `<option value="${l.id}" ${l.id === level.id ? 'selected' : ''}>${l.title}${l.id === baseline.id ? ' · baseline' : ''}</option>`).join('')}</select></label><details id="help-details"><summary>How to play · actions and depth</summary><p>${actionCostCopy(level)}</p><p>Select a named place, island, pier or landmark to see its options for free. Choose Sail to travel one passage. Select the ferry for its current place. A named single-passenger action acts directly. For several passengers, choose names in the nearby chooser, then use its named action. Select your current place for free transfer details. The chooser shows selected depth and meaningful consequences; a losing action warns before you commit.</p><p>Boat depth needed: empty = 1; 1–2 spaces = 2; 3–4 spaces = 3. ${passengerCosts}. A passage must be at least as deep as the boat needs.</p><p>Boarding and unloading happen before the tide rises. Use the status button for the tide and pier forecast. Undo earlier actions or restart to recover from a losing plan.</p><p>Tab and Shift+Tab move between controls; Enter or Space activates them. Escape closes a dialog first; press it again to close the location card. Selection never spends an action.</p></details></div>`;
++      `${header('Crossing menu')}<div class="dialog-body menu-body">${s.status === 'won' ? '<button id="return-arrival">Return to arrival</button>' : ''}<div class="menu-actions"><button id="restart">Restart crossing</button><button id="settings">Settings</button></div><label class="cove-picker">Choose cove<select id="cove-picker">${practiceCoves.map((l) => `<option value="${l.id}" ${l.id === level.id ? 'selected' : ''}>${l.title}${l.id === baseline.id ? ' · baseline' : ''}</option>`).join('')}</select></label><details id="help-details"><summary>How to play · actions and depth</summary><p>${actionCostCopy(level)}</p><p>Select a named place, island, pier or landmark to see its options for free. Choose Sail to travel one passage. Select the ferry for its current place. A named single-passenger action acts directly. For several passengers, choose names in the nearby chooser, then use its named action. Select your current place for free transfer details. The chooser shows selected depth and meaningful consequences; a losing action warns before you commit.</p><p>Boat depth needed: ${draftBandsCopy(level)}. ${passengerCosts}. A passage must be at least as deep as the boat needs.</p><p>Boarding and unloading happen before the tide rises. Use the status button for the tide and pier forecast. Undo earlier actions or restart to recover from a losing plan.</p><p>Tab and Shift+Tab move between controls; Enter or Space activates them. Escape closes a dialog first; press it again to close the location card. Selection never spends an action.</p></details></div>`;
+ 
+     $('restart').onclick = restart;
+ 
+@@ -1579,11 +1602,25 @@ function renderLocation() {
+         paragraph(facts.waiting.length ? facts.waitingCopy : '') +
+         paragraph(facts.safety) +
+         paragraph(facts.consequence, facts.wouldLose ? 'location-warning' : '');
++  const routes =
++    level.id === 'wide-berth' && facts.current && facts.id === 'high-quay'
++      ? `<details class="route-details"><summary>Routes and deadlines · free</summary>${level.nodes
++          .filter((n) => edgeTo(session.state, n.id, level))
++          .map((n) => {
++            const next = locationFacts(session.state, n.id, level);
++            return `<button data-inspect-route="${n.id}">Inspect ${next.name}</button><p>${next.passage} ${next.safety}</p>`;
++          })
++          .join('')}</details>`
++      : '';
+   const actions =
+     !facts.current && facts.move
+       ? `<button id="sail" data-risk="${facts.wouldLose ? 'loss' : 'safe'}" ${facts.canSail ? '' : 'disabled'}>Sail · 1 action</button>`
+       : '';
+-  card.innerHTML = `<header class="location-head"><div><p class="location-role">${facts.current ? 'You are here' : facts.home ? 'Home · delivery destination' : facts.relation === 'remote' ? 'Free inspection' : facts.wouldLose ? 'Flood warning' : 'Direct passage'}</p><h2 id="local-heading" tabindex="-1">${facts.name}${facts.home && facts.current ? ' · Home' : ''}</h2></div><button id="close-location" aria-label="Close location card">×</button></header><div id="location-facts">${details}</div>${actions ? `<footer id="local-actions">${actions}</footer>` : ''}`;
++  card.innerHTML = `<header class="location-head"><div><p class="location-role">${facts.current ? 'You are here' : facts.home ? 'Home · delivery destination' : facts.relation === 'remote' ? 'Free inspection' : facts.wouldLose ? 'Flood warning' : 'Direct passage'}</p><h2 id="local-heading" tabindex="-1">${facts.name}${facts.home && facts.current ? ' · Home' : ''}</h2></div><button id="close-location" aria-label="Close location card">×</button></header><div id="location-facts">${details}${routes}</div>${actions ? `<footer id="local-actions">${actions}</footer>` : ''}`;
++  for (const button of card.querySelectorAll<HTMLButtonElement>('[data-inspect-route]')) {
++    setControl(button, null, button.textContent ?? '', 'quiet');
++    button.onclick = () => selectLocation(button.dataset.inspectRoute!);
++  }
+   setControl($('close-location'), 'close', 'Close location card', 'quiet', true);
+   if ($('sail')) {
+     setControl($('sail'), 'sail', 'Sail · 1 action', 'action');
+@@ -2040,7 +2077,7 @@ function positionMap() {
+   const hint = $('selection-hint'),
+     hintBounds = hint.hidden ? null : toLocal(hint.getBoundingClientRect());
+   const driftwoodNames =
+-    level.id === 'driftwood-yard'
++    level.id === 'driftwood-yard' || level.id === 'wide-berth'
+       ? placeDriftwoodLabels(
+           labels.filter(({ id }) => {
+             const marker = markers.find((m) => m.id === id)!;
+@@ -2549,6 +2586,7 @@ if (import.meta.env.DEV)
+         }),
+       getLegalActions: () => copy(legalActions(session.state, level)),
+       getRenderStatus: () => ({
++        profile: world.profile,
+         pendingAnimation: session.busy,
+         historyLength: session.history.length,
+         poseHistoryLength: world.poses.history.length,
+diff --git a/src/scene/effects.ts b/src/scene/effects.ts
+index 4312add..ebca08b 100644
+--- a/src/scene/effects.ts
++++ b/src/scene/effects.ts
+@@ -1,6 +1,6 @@
+ import * as T from 'three';
+ import type { lighthouse } from './models';
+-import { FerryWake, type WakeCoast } from './wake';
++import { FerryWake, type WakeCoast, type WakeDimensions } from './wake';
+ 
+ export class CrossingEffects {
+   wake: T.Mesh;
+@@ -19,8 +19,8 @@ export class CrossingEffects {
+   lensBase = 0;
+   lampBase = 0;
+   reduced = false;
+-  constructor(home: ReturnType<typeof lighthouse>, coast?: WakeCoast) {
+-    this.movement = new FerryWake(coast);
++  constructor(home: ReturnType<typeof lighthouse>, coast?: WakeCoast, dimensions?: WakeDimensions) {
++    this.movement = new FerryWake(coast, dimensions);
+     this.wake = this.movement.mesh;
+     this.interaction = this.movement.interaction;
+     const pixels = new Uint8Array(32 * 32 * 4);
+diff --git a/src/scene/layout.ts b/src/scene/layout.ts
+index d731176..a7ea59d 100644
+--- a/src/scene/layout.ts
++++ b/src/scene/layout.ts
+@@ -1,6 +1,6 @@
+ export type IslandStyle = 'garden' | 'crag' | 'reeds' | 'rocky';
+ type Landmark = {
+-  kind: 'lighthouse' | 'cottage' | 'bell' | 'yard';
++  kind: 'lighthouse' | 'cottage' | 'bell' | 'yard' | 'waterfront';
+   islandId: string;
+   positionXZ: [number, number];
+ };
+@@ -20,6 +20,17 @@ export type SceneLayout = {
+   };
+ };
+ const layouts: Record<string, SceneLayout> = {
++  'wide-berth': {
++    landmarks: [
++      { kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-10.2, -7] },
++      { kind: 'waterfront', islandId: 'wide-island', positionXZ: [7, -17.5] },
++    ],
++    islandStyles: { 'quay-island': 'rocky', 'wide-island': 'rocky', 'shell-island': 'reeds' },
++    stonePiers: ['high-quay-pier'],
++    centeredWaitingPairs: true,
++    cameraPosition: [0, 34, 24],
++    landscapeCameraPosition: [0, 30, 30],
++  },
+   'driftwood-yard': {
+     landmarks: [
+       { kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-6.15, -3.25] },
+diff --git a/src/scene/models.ts b/src/scene/models.ts
+index 62a6a6f..62e84d9 100644
+--- a/src/scene/models.ts
++++ b/src/scene/models.ts
+@@ -1,3 +1,4 @@
++import { smallFerryProfile, wideHullOutline, type FerryProfile } from './ferry-profile.ts';
+ import * as T from 'three';
+ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+ export const palette = {
+@@ -64,7 +65,8 @@ export function cylinder(
+     ...(pos as [number, number, number]),
+   );
+ }
+-export function ferry() {
++export function ferry(profile: FerryProfile = smallFerryProfile) {
++  if (profile.id === 'six-space') return wideFerry(profile);
+   const g = new T.Group();
+   g.name = 'ferry-hull-and-deck';
+   const hull = new T.Shape();
+@@ -122,6 +124,76 @@ export function ferry() {
+   flag.rotation.z = -0.12;
+   return g;
+ }
++function wideFerry(profile: FerryProfile) {
++  const group = new T.Group();
++  group.name = 'ferry-six-space-hull-and-deck';
++  const outline = wideHullOutline();
++  for (const [depth, y, color, scale] of [
++    [0.18, -0.19, '#824b35', 0.97],
++    [0.26, -0.1, palette.hull, 1],
++    [0.055, 0.17, '#f9d477', 1.025],
++    [0.02, 0.225, '#be8a4e', 0.94],
++  ] as const) {
++    const geometry = new T.ExtrudeGeometry(outline, {
++      depth,
++      bevelEnabled: true,
++      bevelSegments: 3,
++      steps: 1,
++      bevelSize: 0.06,
++      bevelThickness: 0.035,
++      curveSegments: 24,
++    });
++    geometry.rotateX(Math.PI / 2);
++    geometry.translate(0, depth, 0);
++    const hull = mesh(geometry, color, group, 0, y, 0);
++    hull.scale.set(scale, 1, scale);
++    if (y < 0) hull.name = 'water-contact-hull';
++  }
++  for (let row = 0; row < 17; row++)
++    box(group, '#e0ac68', [2.42, 0.015, 0.018], [0, 0.25, -1.5 + row * 0.25], 0.006);
++  const cabin = box(group, palette.red, [1.04, 0.68, 0.8], [0, 0.565, -1.14], 0.065);
++  cabin.name = 'wide-cabin-obstacle';
++  const roof = box(group, '#df7557', [1.22, 0.11, 0.98], [0, 0.95, -1.14], 0.045);
++  roof.name = 'wide-cabin-roof';
++  box(group, '#f4ca70', [0.72, 0.38, 0.025], [0, 0.61, -0.725], 0.02);
++  box(group, '#6d543d', [0.035, 0.4, 0.03], [0, 0.61, -0.7]);
++  for (const side of [-1, 1]) {
++    box(group, '#f2c979', [0.025, 0.36, 0.5], [side * 0.535, 0.62, -1.14], 0.01);
++    box(group, '#684c36', [0.03, 0.39, 0.03], [side * 0.55, 0.61, -1.14], 0.01);
++    for (const z of [-1.5, -0.7, 0.25, 1.15, 2.05]) {
++      const post = cylinder(group, '#f5d179', 0.028, 0.028, 0.28, [side * 1.36, 0.4, z], 8);
++      post.name = 'wide-rail-obstacle';
++    }
++    const rail = box(group, '#f5d179', [0.04, 0.04, 3.55], [side * 1.36, 0.55, 0.25], 0.012);
++    rail.name = 'wide-rail-obstacle';
++    for (const z of [-1.1, 0.7, 1.9]) {
++      const fender = mesh(
++        new T.TorusGeometry(0.13, 0.04, 8, 16),
++        '#2c4248',
++        group,
++        side * 1.43,
++        0.15,
++        z,
++      );
++      fender.rotation.y = Math.PI / 2;
++    }
++  }
++  cylinder(group, '#3a4a49', 0.075, 0.08, 0.5, [0.3, 1.09, -1.35]);
++  cylinder(group, '#d5c9ab', 0.1, 0.1, 0.06, [0.3, 1.37, -1.35]);
++  const life = mesh(
++    new T.TorusGeometry(0.15, 0.038, 8, 20),
++    palette.wool,
++    group,
++    -0.56,
++    0.63,
++    -1.12,
++  );
++  life.rotation.y = Math.PI / 2;
++  cylinder(group, '#70513b', 0.016, 0.016, 0.52, [0, 1.18, -1.02], 8);
++  box(group, '#f4d59b', [0.22, 0.12, 0.016], [0.1, 1.4, -1.02], 0.012).rotation.z = -0.12;
++  group.userData.ferryProfile = profile.id;
++  return group;
++}
+ export function animal(species: string, variant = 0) {
+   const g = new T.Group();
+   g.name = species;
+@@ -141,7 +213,9 @@ export function animal(species: string, variant = 0) {
+     ball(g, '#ba7b6b', [0, 0.38, 0.16], [0.025, 0.018, 0.02]);
+     ball(g, wool, [0, 0.18, -0.13], [0.065, 0.065, 0.065]);
+   } else if (species === 'beaver') {
+-    const fur = '#8e6848', muzzle = '#c3a47a', tailColor = '#5b4438';
++    const fur = '#8e6848',
++      muzzle = '#c3a47a',
++      tailColor = '#5b4438';
+     const tail = new T.Group();
+     tail.name = 'beaver-flat-tail';
+     tail.position.set(0.1, 0.18, 0.02);
+@@ -153,8 +227,7 @@ export function animal(species: string, variant = 0) {
+       const seam = box(tail, '#765747', [0.008, 0.008, 0.12], [x, 0.044, -0.065], 0.003);
+       seam.rotation.y = x > 0 ? -0.24 : 0.24;
+     }
+-    for (const x of [-0.115, 0.115])
+-      ball(g, '#684b37', [x, 0.045, 0.045], [0.075, 0.045, 0.1]);
++    for (const x of [-0.115, 0.115]) ball(g, '#684b37', [x, 0.045, 0.045], [0.075, 0.045, 0.1]);
+     ball(g, fur, [0, 0.245, 0], [0.19, 0.23, 0.17]);
+     ball(g, muzzle, [0, 0.235, 0.13], [0.125, 0.145, 0.055]);
+     ball(g, fur, [0, 0.45, 0.045], [0.185, 0.155, 0.15]);
+@@ -165,8 +238,7 @@ export function animal(species: string, variant = 0) {
+       paw.rotation.z = x > 0 ? 0.35 : -0.35;
+       ball(g, '#263d43', [x * 0.56, 0.475, 0.177], [0.019, 0.022, 0.013]);
+     }
+-    for (const x of [-0.058, 0.058])
+-      ball(g, muzzle, [x, 0.407, 0.178], [0.075, 0.055, 0.045]);
++    for (const x of [-0.058, 0.058]) ball(g, muzzle, [x, 0.407, 0.178], [0.075, 0.055, 0.045]);
+     ball(g, '#3f352d', [0, 0.44, 0.212], [0.057, 0.035, 0.024]);
+     for (const x of [-0.018, 0.018])
+       box(g, '#f3e4bf', [0.03, 0.033, 0.014], [x, 0.366, 0.202], 0.005);
+diff --git a/src/scene/motion.ts b/src/scene/motion.ts
+index 4861a65..39a6475 100644
+--- a/src/scene/motion.ts
++++ b/src/scene/motion.ts
+@@ -16,6 +16,8 @@ export type JourneyPlan = {
+   departureTurn: number;
+   fromBerth: boolean;
+   toBerth: boolean;
++  berthHold?: number;
++  berthTurn?: number;
+ };
+ 
+ function smooth(value: number) {
+@@ -53,7 +55,7 @@ export function planJourney(
+   path: CanonicalPath,
+   fromAngle: number,
+   reverse = false,
+-  berths: { fromBerth?: number; toBerth?: number } = {},
++  berths: { fromBerth?: number; toBerth?: number; berthHold?: number; berthTurn?: number } = {},
+ ): JourneyPlan {
+   const rawInitial = samplePath(path, 0, reverse).angle,
+     initialCourseAngle = fromAngle + angularChange(fromAngle, rawInitial),
+@@ -77,6 +79,9 @@ export function planJourney(
+     departureTurn,
+     fromBerth,
+     toBerth,
++    ...(berths.berthHold !== undefined
++      ? { berthHold: berths.berthHold, berthTurn: berths.berthTurn }
++      : {}),
+   };
+ }
+ 
+@@ -111,8 +116,13 @@ export function sampleJourney(
+         (plan.initialCourseAngle - plan.fromAngle) * smooth(t / plan.departureTurn),
+     };
+   const courseAngle = pose.angle + plan.courseOffset,
+-    departure = plan.fromBerth ? smooth((pose.distance - 0.45) / 0.55) : 1,
+-    approach = plan.toBerth ? 1 - smooth((path.length - pose.distance - 0.45) / 0.55) : 0,
++    departure = plan.fromBerth
++      ? smooth((pose.distance - (plan.berthHold ?? 0.45)) / (plan.berthTurn ?? 0.55))
++      : 1,
++    approach = plan.toBerth
++      ? 1 -
++        smooth((path.length - pose.distance - (plan.berthHold ?? 0.45)) / (plan.berthTurn ?? 0.55))
++      : 0,
+     steering = plan.fromAngle + (courseAngle - plan.fromAngle) * departure;
+   return { ...pose, angle: steering + (plan.toAngle - steering) * approach };
+ }
+diff --git a/src/scene/poses.ts b/src/scene/poses.ts
+index 9ce2ae3..669cf18 100644
+--- a/src/scene/poses.ts
++++ b/src/scene/poses.ts
+@@ -1,3 +1,4 @@
++import { ferryProfile } from './ferry-profile';
+ import type { Action, State } from '../game/rules';
+ import { edgeTo } from '../game/rules';
+ import type { Level } from '../levels/level';
+@@ -26,6 +27,12 @@ export class PresentationPoses {
+       journey = planJourney(path, from, reverse, {
+         fromBerth: berthHeading(this.level, before.boatNodeId, from) ?? undefined,
+         toBerth: berthHeading(this.level, action.to, incoming) ?? undefined,
++        ...(ferryProfile(this.level).id === 'six-space'
++          ? {
++              berthHold: ferryProfile(this.level).berthHold,
++              berthTurn: ferryProfile(this.level).berthTurn,
++            }
++          : {}),
+       });
+     }
+     this.history.push(from);
+diff --git a/src/scene/scenery.ts b/src/scene/scenery.ts
+index 36d9d67..c422aab 100644
+--- a/src/scene/scenery.ts
++++ b/src/scene/scenery.ts
+@@ -104,3 +104,48 @@ export function driftwoodYard(parent: T.Object3D, position: [number, number, num
+   cylinder(group, '#716048', 0.1, 0.08, 0.07, [0.6, 0.9, -0.14], 8);
+   return group;
+ }
++
++export function wideWaterfront(parent: T.Object3D, position: [number, number, number]) {
++  const group = new T.Group();
++  group.name = 'wide-berth-waterfront';
++  group.position.set(...position);
++  parent.add(group);
++  for (const x of [-1.18, 1.18]) {
++    for (const z of [-0.5, 0.5]) {
++      box(group, '#776248', [0.15, 1.7, 0.15], [x, 0.85, z], 0.03);
++      box(group, '#c4a777', [0.21, 0.08, 0.22], [x, 1.68, z], 0.025);
++    }
++  }
++  for (const z of [-0.52, 0.52]) box(group, '#a47d51', [2.58, 0.16, 0.2], [0, 1.56, z], 0.03);
++  for (let index = 0; index < 7; index++) {
++    const board = box(
++      group,
++      index % 2 ? '#b8694a' : '#a96045',
++      [0.43, 0.1, 1.44],
++      [-1.29 + index * 0.43, 1.82, 0],
++      0.025,
++    );
++    board.rotation.z = -0.08;
++  }
++  for (const x of [-0.82, 0.82]) box(group, '#8c6c49', [0.15, 0.66, 0.58], [x, 0.33, 0], 0.03);
++  for (const z of [-0.2, 0, 0.2]) box(group, '#c9a776', [2.05, 0.1, 0.17], [0, 0.72, z], 0.025);
++  for (let i = 0; i < 3; i++) {
++    box(group, '#ac8859', [0.15, 0.14, 1.35], [1.65 + i * 0.19, 0.1, -0.1], 0.035).rotation.y =
++      0.12;
++  }
++  for (let loop = 0; loop < 3; loop++) {
++    const rope = mesh(
++      new T.TorusGeometry(0.15 + loop * 0.03, 0.018, 6, 28),
++      '#d9c395',
++      group,
++      -0.65,
++      0.8 + loop * 0.015,
++      0.05,
++    );
++    rope.rotation.x = Math.PI / 2;
++  }
++  box(group, '#796246', [0.18, 0.07, 0.18], [0.72, 0.82, -0.03], 0.02);
++  box(group, '#f1cc82', [0.13, 0.19, 0.13], [0.72, 0.95, -0.03], 0.02);
++  cylinder(group, '#726046', 0.11, 0.09, 0.08, [0.72, 1.08, -0.03], 8);
++  return group;
++}
+diff --git a/src/scene/story-staging.ts b/src/scene/story-staging.ts
+index 41fc770..59b8473 100644
+--- a/src/scene/story-staging.ts
++++ b/src/scene/story-staging.ts
+@@ -1,6 +1,6 @@
+ import { overviewScale, viewFrame, type ViewBounds, type ViewRectangle } from './view';
+ 
+-export type StorySceneId = 'opening' | 'another-bell' | 'driftwood-light';
++export type StorySceneId = 'opening' | 'another-bell' | 'driftwood-light' | 'a-wider-deck';
+ export type StoryStage = {
+   id: StorySceneId;
+   elapsed: number;
+diff --git a/src/scene/wake.ts b/src/scene/wake.ts
+index b7aa40f..baad4e3 100644
+--- a/src/scene/wake.ts
++++ b/src/scene/wake.ts
+@@ -2,6 +2,39 @@ import * as T from 'three';
+ 
+ export type WakeCoast = { texture: T.Texture; bounds: T.Vector4 };
+ 
++export type WakeDimensions = {
++  fore: number;
++  aft: number;
++  lateral: number;
++  outline?: [number, number][];
++  margin?: number;
++};
++export function wakeContactReach(dimensions: WakeDimensions, forward: number, sideways: number) {
++  if (!dimensions.outline)
++    return (
++      1 /
++      Math.hypot(
++        forward / (forward >= 0 ? dimensions.aft : dimensions.fore),
++        sideways / dimensions.lateral,
++      )
++    );
++  const direction = [-sideways, -forward],
++    points = dimensions.outline;
++  const cross = (ax: number, az: number, bx: number, bz: number) => ax * bz - az * bx;
++  let nearest = Infinity;
++  for (let i = 0; i < points.length; i++) {
++    const a = points[i],
++      b = points[(i + 1) % points.length],
++      sx = b[0] - a[0],
++      sz = b[1] - a[1],
++      den = cross(direction[0], direction[1], sx, sz);
++    if (Math.abs(den) < 1e-9) continue;
++    const distance = cross(a[0], a[1], sx, sz) / den,
++      along = cross(a[0], a[1], direction[0], direction[1]) / den;
++    if (distance >= 0 && along >= 0 && along <= 1) nearest = Math.min(nearest, distance);
++  }
++  return Number.isFinite(nearest) ? nearest + (dimensions.margin ?? 0.08) : 0;
++}
+ export const wakeLimits = {
+   capacity: 12,
+   lifetime: 1800,
+@@ -55,7 +88,10 @@ export class FerryWake {
+   strength = 0;
+   vertices = 0;
+ 
+-  constructor(coast?: WakeCoast) {
++  constructor(
++    coast?: WakeCoast,
++    readonly dimensions: WakeDimensions = { fore: 0.76, aft: 0.76, lateral: 0.48 },
++  ) {
+     const capacity = wakeLimits.capacity * wakeLimits.sections * 6,
+       geometry = new T.BufferGeometry();
+     geometry.setAttribute(
+@@ -178,7 +214,7 @@ export class FerryWake {
+     const point = this.point(this.count++),
+       forward = dx * Math.sin(angle) + dz * Math.cos(angle),
+       sideways = dx * Math.cos(angle) - dz * Math.sin(angle),
+-      reach = 1 / Math.hypot(forward / 0.76, sideways / 0.48);
++      reach = wakeContactReach(this.dimensions, forward, sideways);
+     point.id = ++this.serial;
+     point.center.set(x, waterY, z);
+     point.position.set(x - dx * reach, waterY + 0.018, z - dz * reach);
+@@ -267,7 +303,10 @@ export class FerryWake {
+       drift = spread * 0.24,
+       skew = (point.seed - 0.5) * 0.3;
+     this.shape.age = age;
+-    this.shape.width = 0.43 + point.seed * 0.1 + spread * (0.72 + point.seed * 0.22);
++    this.shape.width =
++      (this.dimensions.outline ? this.dimensions.lateral * 0.9 : 0.43) +
++      point.seed * 0.1 +
++      spread * (0.72 + point.seed * 0.22);
+     this.shape.bend = 0.12 + spread * 0.36;
+     this.shape.skew = skew;
+     this.shape.opacity = point.strength * T.MathUtils.smoothstep(age, 0, 0.07) * (1 - age) ** 1.1;
+diff --git a/src/scene/world.ts b/src/scene/world.ts
+index ac31ff1..7998559 100644
+--- a/src/scene/world.ts
++++ b/src/scene/world.ts
+@@ -3,6 +3,19 @@ import { level as baseline, type Level } from '../levels/level';
+ import { draft, edgeTo, type State, type Action } from '../game/rules';
+ import { passengerModelVariant, resolvePassengerAppearance } from '../game/passenger-appearance';
+ import { animal, ball, box, cylinder, ferry, lighthouse, mat, mesh, pine } from './models';
++import {
++  ferryProfile,
++  hullDraftY,
++  deckSeat,
++  passengerScale,
++  shoreSeat,
++  wideTransferPath,
++  wideTransferProgress,
++  wideTransferWindow,
++  sampleWideTransfer,
++  wideTransferAngle,
++  type FerryProfile,
++} from './ferry-profile';
+ import { sampleJourney, type JourneyPlan } from './motion';
+ import { PresentationPoses } from './poses';
+ import {
+@@ -25,7 +38,8 @@ import {
+   transferHeading,
+ } from './deck-transfer';
+ import { sceneLayout, type SceneLayout } from './layout';
+-import { bellLandmark, cottage, driftwoodYard } from './scenery';
++import { bellLandmark, cottage, driftwoodYard, wideWaterfront } from './scenery';
++import { createPier } from './pier';
+ import { getLevelPaths, type CanonicalPath } from './paths';
+ import { Shores, createReedBeds } from './shore';
+ import { CoastalWater } from './water';
+@@ -59,7 +73,9 @@ export class World {
+   camera = new T.OrthographicCamera();
+   renderer: T.WebGLRenderer;
+   boatRoot = new T.Group();
+-  hull = ferry();
++  profile: FerryProfile;
++  hull: T.Group;
++  gangway: T.Mesh | null = null;
+   animals = new Map<string, T.Group>();
+   passengerAnchors = new Map<string, T.Object3D>();
+   markers = new Map<string, T.Group>();
+@@ -157,6 +173,8 @@ export class World {
+     state: State,
+     public level: Level = baseline,
+   ) {
++    this.profile = ferryProfile(level);
++    this.hull = ferry(this.profile);
+     this.state = state;
+     this.layout = sceneLayout(this.level.id);
+     this.paths = getLevelPaths(this.level);
+@@ -224,46 +242,22 @@ export class World {
+       } else this.nonInteractivePlaces.push(shore.mesh, shore.rocks, decoration);
+     }
+     for (const p of this.level.piers) {
+-      const group = new T.Group();
+-      group.name = `pier-${p.id}`;
++      const group = createPier(p, this.layout.stonePiers.includes(p.id));
+       this.scene.add(group);
+-      const [x, z] = p.positionXZ,
+-        end = p.landAnchorXZ[1],
+-        y = p.elevation * 0.18 - 0.06;
+-      for (let i = 0; i < 9; i++)
+-        box(
+-          group,
+-          this.layout.stonePiers.includes(p.id)
+-            ? i % 2
+-              ? '#a9b6ac'
+-              : '#899d97'
+-            : i % 2
+-              ? '#c09560'
+-              : '#b78b58',
+-          [p.width, 0.09, 0.14],
+-          [x, y, z + ((end - z) * i) / 8],
+-          0.015,
+-        );
+-      for (const px of [x - p.width / 2, x + p.width / 2])
+-        for (const pz of [z + 0.02, end]) {
+-          const pile = cylinder(group, '#79644a', 0.065, 0.07, 0.83, [px, y - 0.27, pz], 9);
+-          if (
+-            p.id === this.level.objective.deliveryPierId ||
+-            p.id === this.level.piers.find((pier) => pier.elevation < 3)?.id
+-          ) {
+-            pile.name = `water-contact-${p.id}`;
+-            pile.material = contactMaterial(
+-              pile.material as T.MeshStandardMaterial,
+-              this.shores.water,
+-              'pile',
+-            );
+-            this.contactMeshes.push(pile as T.Mesh<T.BufferGeometry, T.MeshStandardMaterial>);
+-          }
+-          cylinder(group, '#dbc799', 0.075, 0.075, 0.055, [px, y + 0.17, pz], 9);
+-        }
+-      box(group, '#b68f5b', [0.35, 0.055, 0.49], [x, y - 0.015, z + 0.25], 0.015);
+-      cylinder(group, '#655b43', 0.025, 0.025, 0.65, [x + 0.36, y + 0.33, z - 0.1], 7);
+-      box(group, '#f5cb77', [0.13, 0.19, 0.13], [x + 0.36, y + 0.68, z - 0.1]);
++      if (
++        p.id === this.level.objective.deliveryPierId ||
++        p.id === this.level.piers.find((pier) => pier.elevation < 3)?.id
++      )
++        group.traverse((object) => {
++          if (!(object instanceof T.Mesh) || !object.userData.pierPile) return;
++          object.name = `water-contact-${p.id}`;
++          object.material = contactMaterial(
++            object.material as T.MeshStandardMaterial,
++            this.shores.water,
++            'pile',
++          );
++          this.contactMeshes.push(object as T.Mesh<T.BufferGeometry, T.MeshStandardMaterial>);
++        });
+       this.registerPlace(p.nodeId, 'pier', group);
+     }
+     for (const landmark of this.layout.landmarks) {
+@@ -284,7 +278,9 @@ export class World {
+             ? cottage(this.scene, [x, y, z])
+             : landmark.kind === 'yard'
+               ? driftwoodYard(this.scene, [x, y, z])
+-              : bellLandmark(this.scene, [x, y, z]);
++              : landmark.kind === 'waterfront'
++                ? wideWaterfront(this.scene, [x, y, z])
++                : bellLandmark(this.scene, [x, y, z]);
+         if (node) this.registerPlace(node, 'landmark', model);
+       }
+     }
+@@ -343,32 +339,26 @@ export class World {
+       }
+       this.registerPlace(n.id, 'waypoint', g);
+     }
+-    this.effects = new CrossingEffects(this.home, this.coastalWater.mask);
++    this.effects = new CrossingEffects(this.home, this.coastalWater.mask, this.profile.wake);
+     this.scene.add(this.effects.wake, this.effects.glow, this.effects.sweep);
+     this.forecast = this.shores.forecast;
+     this.scene.add(this.forecast);
+     this.boatRoot.add(this.hull);
+     this.scene.add(this.boatRoot);
++    if (this.profile.id === 'six-space') {
++      this.gangway = mesh(new T.BoxGeometry(1.05, 0.06, 1), '#ac784b', this.scene);
++      this.gangway.name = 'wide-pier-gangway';
++    }
+     for (const p of this.level.passengers) {
+       const anchor = new T.Object3D();
+       anchor.name = `deck-anchor-${p.id}`;
+-      const index = this.speciesIndex(p.id);
+-      anchor.position.set(
+-        ...((p.species === 'rabbit'
+-          ? index === 0
+-            ? [-0.22, 0.26, firstRabbitDeckZ]
+-            : [0.22, 0.26, 0.3]
+-          : [0, 0.26, 0.69]) as [number, number, number]),
+-      );
++      anchor.position.copy(deckSeat(this.level, p.id));
+       this.hull.add(anchor);
+       this.passengerAnchors.set(p.id, anchor);
+       const g = animal(p.species, passengerModelVariant(this.level, p.id));
+       g.name = p.id;
+-      g.scale.set(
+-        p.species === 'rabbit' ? 1.25 : 1.15,
+-        p.species === 'rabbit' ? 1.65 : 1.5,
+-        p.species === 'rabbit' ? 1.25 : 1.15,
+-      );
++      g.scale.set(...passengerScale(p.species));
++
+       this.scene.add(g);
+       this.animals.set(p.id, g);
+     }
+@@ -1310,6 +1300,15 @@ export class World {
+     if (s.aboard.includes(id)) {
+       return this.passengerAnchors.get(id)!.getWorldPosition(new T.Vector3());
+     }
++    if (this.profile.id === 'six-space') {
++      const delivered = s.delivered.includes(id);
++      const pier = this.level.piers.find((p) =>
++        delivered
++          ? p.id === this.level.objective.deliveryPierId
++          : s.waitingByPier[p.id].includes(id),
++      )!;
++      return shoreSeat(this.level, id, pier, delivered);
++    }
+     if (s.delivered.includes(id)) {
+       const i = this.level.passengers.findIndex((p) => p.id === id);
+       const p = this.level.piers.find((p) => p.id === this.level.objective.deliveryPierId)!;
+@@ -1332,8 +1331,31 @@ export class World {
+       p.positionXZ[1] - 0.12 - Math.floor(i / 2) * 0.3,
+     );
+   }
++  updateGangway(state: State) {
++    if (!this.gangway) return;
++    const pier = this.level.piers.find((p) => p.nodeId === state.boatNodeId);
++    this.gangway.visible = !!pier && !this.transition?.path;
++    if (!pier || !this.gangway.visible) return;
++    this.hull.updateWorldMatrix(true, false);
++    const id = this.level.passengers[0].id;
++    const endpoint = this.hull.localToWorld(deckSeat(this.level, id));
++    const path = wideTransferPath(
++      this.level,
++      id,
++      pier,
++      this.hull.matrixWorld,
++      endpoint,
++      endpoint,
++      true,
++    );
++    const direction = path.gate.clone().sub(path.bridge);
++    this.gangway.position.copy(path.bridge).add(path.gate).multiplyScalar(0.5);
++    this.gangway.position.y -= 0.03;
++    this.gangway.scale.z = direction.length();
++    this.gangway.quaternion.setFromUnitVectors(new T.Vector3(0, 0, 1), direction.normalize());
++  }
+   draftY(s: State) {
+-    return 0.03 - (draft(s, this.level) - 1) * 0.075;
++    return hullDraftY(draft(s, this.level));
+   }
+   clearMovement() {
+     this.effects.clearMovement();
+@@ -1367,6 +1389,7 @@ export class World {
+       }
+       g.rotation.set(0, 0, 0);
+     }
++    this.updateGangway(s);
+     this.indicate(s);
+     this.reframeView();
+   }
+@@ -1564,6 +1587,41 @@ export class World {
+         if (tr.before.aboard.includes(id) !== tr.after.aboard.includes(id)) {
+           const pier = this.level.piers.find((p) => p.nodeId === tr.before.boatNodeId)!;
+           const passenger = this.level.passengers.find((passenger) => passenger.id === id)!;
++          if (this.profile.id === 'six-space') {
++            const board = tr.after.aboard.includes(id);
++            const ids = this.level.passengers
++              .map((p) => p.id)
++              .filter((id) => tr.before.aboard.includes(id) !== tr.after.aboard.includes(id));
++            const progress = wideTransferProgress(
++              ids,
++              id,
++              k,
++              wideTransferWindow(tr.after.status === 'won'),
++            );
++            this.hull.updateWorldMatrix(true, false);
++            const start = board
++              ? tr.positions.get(id)!
++              : this.passengerAnchors.get(id)!.getWorldPosition(new T.Vector3());
++            const path = wideTransferPath(
++              this.level,
++              id,
++              pier,
++              this.hull.matrixWorld,
++              start,
++              dest,
++              board,
++            );
++            g.position.copy(sampleWideTransfer(path.points, progress));
++            g.rotation.y = wideTransferAngle(
++              board,
++              this.boatRoot.rotation.y,
++              progress,
++              path.turnAt,
++            );
++            if (!this.reduced && progress > 0 && progress < 1)
++              g.position.y += Math.sin(progress * Math.PI * 4) ** 2 * 0.035;
++            continue;
++          }
+           const entry = deckTransferEntry(passenger.species);
+           const offset =
+             passenger.species === 'rabbit' ? (this.speciesIndex(id) ? 0.07 : -0.07) : 0;
+@@ -1599,6 +1657,7 @@ export class World {
+           g.position.copy(dest);
+         }
+       }
++      this.updateGangway(tr.after);
+       this.shadow.position.y = this.water.position.y + 0.008;
+       const contact = tr.transfer?.timeline.advance(t);
+       if (contact) this.onTransferContact(contact);
+@@ -1776,6 +1835,7 @@ export class World {
+     return {
+       boatWorldPosition: this.boatRoot.getWorldPosition(new T.Vector3()).toArray(),
+       boatHeading: this.boatRoot.rotation.y,
++      profile: this.profile,
+       pose: this.poses.presentation(),
+       active:
+         transition?.path && this.journeyFrame
+diff --git a/src/ui/presentation.ts b/src/ui/presentation.ts
+index dc06987..01c4422 100644
+--- a/src/ui/presentation.ts
++++ b/src/ui/presentation.ts
+@@ -229,3 +229,19 @@ export function previewCopy(
+   }
+   return { summary, consequence, requirement, error: null };
+ }
++
++export function draftBandsCopy(l: Level): string {
++  let first = 0;
++  return l.rules.draftBands
++    .map((band) => {
++      const label =
++        first === 0 && band.maxLoad === 0
++          ? 'empty'
++          : first === band.maxLoad
++            ? `${first} spaces`
++            : `${first}–${band.maxLoad} spaces`;
++      first = band.maxLoad + 1;
++      return `${label} = ${band.draft}`;
++    })
++    .join('; ');
++}
+diff --git a/src/ui/transfer.ts b/src/ui/transfer.ts
+index 9927bda..7854c9d 100644
+--- a/src/ui/transfer.ts
++++ b/src/ui/transfer.ts
+@@ -1,4 +1,4 @@
+-import { draft, edgeTo, pierAt, preview, type Action, type State } from '../game/rules';
++import { draft, edgeTo, load, pierAt, preview, type Action, type State } from '../game/rules';
+ import { nodeName, type Level } from '../levels/level';
+ import { passengerList, previewCopy } from './presentation';
+ 
+@@ -26,6 +26,7 @@ export function transferFacts(before: State, action: Transfer, level: Level) {
+   return {
+     label,
+     depth,
++    load: `${load(proposed.state, level)}/${level.rules.capacity} spaces`,
+     detail,
+     error: proposed.error,
+     direct: action.passengerIds.length === 1 && !proposed.error && proposed.state.status !== 'lost',
+diff --git a/tests/unit/clearance.test.ts b/tests/unit/clearance.test.ts
+index 7f58c38..a01f675 100644
+--- a/tests/unit/clearance.test.ts
++++ b/tests/unit/clearance.test.ts
+@@ -3,7 +3,7 @@ import { InstancedMesh, Matrix4, Mesh, Vector3 } from 'three';
+ import { ferry } from '../../src/scene/models';
+ import { berthHeading, initialHeading, planJourney, sampleJourney } from '../../src/scene/motion';
+ import { getLevelPaths, samplePath } from '../../src/scene/paths';
+-import { level, holdingPier, bellwater, driftwoodYard } from '../../src/levels/level';
++import { level, holdingPier, bellwater, driftwoodYard, wideBerth } from '../../src/levels/level';
+ import { sceneLayout } from '../../src/scene/layout';
+ import { buildCoastGeometry, createReedBeds, createShoreRocks } from '../../src/scene/shore';
+ type P = [number, number];
+@@ -148,7 +148,7 @@ test.each([level, holdingPier, bellwater, driftwoodYard])(
+   },
+ );
+ 
+-test.each([level, holdingPier, bellwater, driftwoodYard])(
++test.each([level, holdingPier, bellwater, driftwoodYard, wideBerth])(
+   '$id: actual refined coasts, rocks and reeds stay inside the validated land envelope',
+   (level) => {
+     const failures: string[] = [];
+diff --git a/tests/unit/location.test.ts b/tests/unit/location.test.ts
+index 9b57370..05d04cd 100644
+--- a/tests/unit/location.test.ts
++++ b/tests/unit/location.test.ts
+@@ -132,7 +132,7 @@ describe('free location-card facts', () => {
+     expect(preview(state, facts.board!, variant).error).toBeNull();
+     expect(
+       preview(state, { type: 'board', passengerIds: facts.boardOptions }, variant).error,
+-    ).toContain('four passenger spaces');
++    ).toContain('boat has 3 spaces');
+   });
+ 
+   test('derives remaining local safety, Home and delivery from the active cove', () => {
+diff --git a/tests/unit/paths.test.ts b/tests/unit/paths.test.ts
+index e089c9a..4b4c1fa 100644
+--- a/tests/unit/paths.test.ts
++++ b/tests/unit/paths.test.ts
+@@ -1,6 +1,13 @@
+ import { describe, expect, test } from 'vitest';
+ import { Vector3 } from 'three';
+-import { bellwater, driftwoodYard, holdingPier, level, type Level } from '../../src/levels/level';
++import {
++  bellwater,
++  driftwoodYard,
++  wideBerth,
++  holdingPier,
++  level,
++  type Level,
++} from '../../src/levels/level';
+ import { buildPath, getLevelPaths, samplePath } from '../../src/scene/paths';
+ import {
+   angularChange,
+@@ -80,7 +87,7 @@ function networkProblems(l: Level) {
+ }
+ 
+ describe('canonical curved courses', () => {
+-  test.each([level, holdingPier, bellwater, driftwoodYard])(
++  test.each([level, holdingPier, bellwater, driftwoodYard, wideBerth])(
+     '$id caches finite paths with exact endpoints and uniform distance samples',
+     (l) => {
+       const paths = getLevelPaths(l);
+@@ -259,7 +266,7 @@ describe('canonical curved courses', () => {
+     expect(berthHeading(turned, 'stone', 0)).toBe(0);
+   });
+ 
+-  test.each([level, holdingPier, bellwater, driftwoodYard])(
++  test.each([level, holdingPier, bellwater, driftwoodYard, wideBerth])(
+     '$id actual curved network has no extra junction or unrelated-stop contact',
+     (l) => {
+       expect(networkProblems(l)).toEqual([]);
+diff --git a/tests/unit/rules.test.ts b/tests/unit/rules.test.ts
+index abedf62..1eee191 100644
+--- a/tests/unit/rules.test.ts
++++ b/tests/unit/rules.test.ts
+@@ -124,7 +124,7 @@ describe('independent game reducer', () => {
+     s.waitingByPier['sheep-pier'].push('synthetic-rabbit');
+     expect(
+       validate(s, { type: 'board', passengerIds: ['sheep-1', 'synthetic-rabbit'] }, l),
+-    ).toContain('four');
++    ).toContain(`boat has ${l.rules.capacity} spaces`);
+     l.nodes.find((n) => n.id === 'sheep-pier')!.baseDepth = 2;
+     expect(validate(s, board, l)).toContain('berth');
+     expect(
+diff --git a/tests/unit/story-presentation.test.ts b/tests/unit/story-presentation.test.ts
+index f1b0507..d8bd9ca 100644
+--- a/tests/unit/story-presentation.test.ts
++++ b/tests/unit/story-presentation.test.ts
+@@ -280,3 +280,42 @@ test('Driftwood entry holds an explicit handoff and preserves pause, still and r
+     'Nell, the boatwright, is still at the yard.',
+   );
+ });
++
++test('launch remains a finite shared-owner scene, paused or skipped without acknowledgment', () => {
++  const cue = vi.fn(),
++    run = vi.fn(),
++    presentation = new StoryPresentation(vi.fn(), run, cue);
++  presentation.start('a-wider-deck', false, 0);
++  for (let t = 100; t <= 2600; t += 100) presentation.update(t);
++  presentation.pause();
++  const held = presentation.frame.elapsed;
++  presentation.update(8000);
++  expect(presentation.frame.elapsed).toBe(held);
++  presentation.resume(false, 10000);
++  for (let t = 10100; t <= 17000; t += 100) presentation.update(t);
++  expect(presentation.frame).toMatchObject({
++    scene: 'a-wider-deck',
++    shot: 'launch',
++    elapsed: 8000,
++    settled: true,
++    final: true,
++    recap: false,
++  });
++  expect(cue).toHaveBeenCalledTimes(1);
++  expect(presentation.next(false, 18000)).toBe(false);
++  presentation.start('a-wider-deck', false, 19000, true);
++  expect(presentation.frame).toMatchObject({ elapsed: 8000, recap: true, paused: true });
++  presentation.replay(false, true, 20000);
++  expect(presentation.frame).toMatchObject({ elapsed: 0, recap: false, paused: false });
++  presentation.skip();
++  expect(presentation.frame).toMatchObject({ elapsed: 8000, recap: true, settled: true });
++  presentation.start('a-wider-deck', true, 21000);
++  expect(presentation.frame).toMatchObject({ elapsed: 8000, recap: false, settled: true });
++  expect(storyScenes['a-wider-deck'].shots[0].caption).toBe(
++    'Nell had a bigger boat ready. Now there are hands to launch it.',
++  );
++  expect(storyScenes['a-wider-deck'].continueLabel).toBe('Continue to Wide Berth');
++  presentation.cancel();
++  presentation.update(50000);
++  expect(presentation.frame.scene).toBeNull();
++});
+diff --git a/tests/unit/story-progress.test.ts b/tests/unit/story-progress.test.ts
+index 9ace4f5..17a51e4 100644
+--- a/tests/unit/story-progress.test.ts
++++ b/tests/unit/story-progress.test.ts
+@@ -6,6 +6,7 @@ import {
+   acknowledgeScene,
+   checkpointCove,
+   isLegacyCompletion,
++  legacyContinuationScene,
+   newJourney,
+   parseJourney,
+   validateJourney,
+@@ -18,6 +19,7 @@ import {
+   storyCove,
+   storyCoves,
+   storyScenes,
++  scenePredecessor,
+ } from '../../src/campaign/registry';
+ import { Session } from '../../src/game/session';
+ import type { Action } from '../../src/game/rules';
+@@ -25,6 +27,7 @@ import {
+   bellwater,
+   driftwoodYard,
+   holdingPier,
++  wideBerth,
+   level as firstCrossing,
+ } from '../../src/levels/level';
+ import narration from '../../LAST_FERRY_STORY_PRODUCTION_PACKAGE/audio/narration-script.json';
+@@ -36,8 +39,10 @@ function checkpoints() {
+   const second = acknowledgeScene(transition, 'another-bell');
+   const yardEntry = acceptCove(second, 'bellwater', 'won');
+   const third = acknowledgeScene(yardEntry, 'driftwood-light');
+-  const complete = acceptCove(third, 'driftwood-yard', 'won');
+-  return { opening, holding, transition, second, yardEntry, third, complete };
++  const launchEntry = acceptCove(third, 'driftwood-yard', 'won');
++  const fourth = acknowledgeScene(launchEntry, 'a-wider-deck');
++  const complete = acceptCove(fourth, 'wide-berth', 'won');
++  return { opening, holding, transition, second, yardEntry, third, launchEntry, fourth, complete };
+ }
+ 
+ function memory(raw: string | null = null) {
+@@ -77,17 +82,25 @@ describe('authored story registry', () => {
+       });
+     }
+   });
+-  test('three authored story puzzles are registered, with First Crossing practice separate', () => {
++  test('four authored story puzzles are registered, with First Crossing practice separate', () => {
+     expect(storyCoves.map(({ id, order }) => [id, order])).toEqual([
+       ['holding-pier', 0],
+       ['bellwater', 1],
+       ['driftwood-yard', 2],
++      ['wide-berth', 3],
+     ]);
+     expect(storyCove('holding-pier')?.level).toBe(holdingPier);
+     expect(storyCove('bellwater')?.level).toBe(bellwater);
+     expect(storyCove('driftwood-yard')?.level).toBe(driftwoodYard);
++    expect(storyCove('wide-berth')?.level).toBe(wideBerth);
+     expect(storyCove('first-crossing')).toBeUndefined();
+-    expect(practiceCoves).toEqual([firstCrossing, holdingPier, bellwater, driftwoodYard]);
++    expect(practiceCoves).toEqual([
++      firstCrossing,
++      holdingPier,
++      bellwater,
++      driftwoodYard,
++      wideBerth,
++    ]);
+     expect(practiceCove('first-crossing')).toBe(firstCrossing);
+     expect(practiceCove('future-cove')).toBeUndefined();
+     expect(storyCove('future-cove')).toBeUndefined();
+@@ -97,7 +110,12 @@ describe('authored story registry', () => {
+   });
+ 
+   test('all opening copy and the connective beat remain available without sound or motion', () => {
+-    expect(Object.keys(storyScenes)).toEqual(['opening', 'another-bell', 'driftwood-light']);
++    expect(Object.keys(storyScenes)).toEqual([
++      'opening',
++      'another-bell',
++      'driftwood-light',
++      'a-wider-deck',
++    ]);
+     expect(storyScenes.opening.shots.map((shot) => shot.caption)).toEqual([
+       'Your first evening at the helm.\nA high tide ahead.',
+       'Pip and Rue have kept a light for you.',
+@@ -114,7 +132,7 @@ describe('authored story registry', () => {
+ });
+ 
+ describe('journey checkpoint transactions', () => {
+-  test('all seven checkpoints round-trip with coherent accepted completions and scene acknowledgments', () => {
++  test('all nine checkpoints round-trip with coherent accepted completions and scene acknowledgments', () => {
+     const records = Object.values(checkpoints());
+     expect(records.map(checkpointCove)).toEqual([
+       'holding-pier',
+@@ -123,7 +141,9 @@ describe('journey checkpoint transactions', () => {
+       'bellwater',
+       'driftwood-yard',
+       'driftwood-yard',
+-      'driftwood-yard',
++      'wide-berth',
++      'wide-berth',
++      'wide-berth',
+     ]);
+     for (const record of records) {
+       expect(validateJourney(record)).toEqual({ valid: true, record });
+@@ -149,7 +169,7 @@ describe('journey checkpoint transactions', () => {
+     });
+     expect(records[6]).toEqual({
+       version: 1,
+-      checkpoint: { kind: 'complete' },
++      checkpoint: { kind: 'scene', id: 'a-wider-deck' },
+       completed: ['holding-pier', 'bellwater', 'driftwood-yard'],
+       acknowledgedScenes: ['opening', 'another-bell', 'driftwood-light'],
+     });
+@@ -321,8 +341,12 @@ describe('validated local journey storage', () => {
+     expect(backing.writes.length).toBe(3);
+     expect(endpoint.acknowledge('driftwood-light')).toBe(true);
+     expect(endpoint.accept('driftwood-yard', 'won')).toBe(true);
+-    expect(endpoint.snapshot.record).toEqual(checkpoints().complete);
++    expect(endpoint.snapshot.record).toEqual(checkpoints().launchEntry);
+     expect(backing.writes.length).toBe(5);
++    expect(endpoint.acknowledge('a-wider-deck')).toBe(true);
++    expect(endpoint.accept('wide-berth', 'won')).toBe(true);
++    expect(endpoint.snapshot.record).toEqual(checkpoints().complete);
++    expect(backing.writes.length).toBe(7);
+   });
+ 
+   test('snapshots cannot mutate stored progress behind validation', () => {
+@@ -363,6 +387,8 @@ describe('validated local journey storage', () => {
+       expect(progress.accept('bellwater', 'won')).toBe(true);
+       expect(progress.acknowledge('driftwood-light')).toBe(true);
+       expect(progress.accept('driftwood-yard', 'won')).toBe(true);
++      expect(progress.acknowledge('a-wider-deck')).toBe(true);
++      expect(progress.accept('wide-berth', 'won')).toBe(true);
+       expect(progress.snapshot.record).toEqual(checkpoints().complete);
+       expect(backing.values.get(JOURNEY_STORAGE_KEY)).toBeUndefined();
+       expect(backing.values.get('last-ferry.sound')).toBe('muted');
+@@ -423,7 +449,7 @@ describe('narrow two-cove completion compatibility', () => {
+     expect(restored.acknowledge('driftwood-light')).toBe(true);
+     expect(restored.snapshot.record).toEqual(checkpoints().third);
+     expect(restored.accept('driftwood-yard', 'won')).toBe(true);
+-    expect(restored.snapshot.record).toEqual(checkpoints().complete);
++    expect(restored.snapshot.record).toEqual(checkpoints().launchEntry);
+     expect(restored.accept('driftwood-yard', 'won')).toBe(false);
+     expect(restored.continueAvailableContent()).toBe(false);
+   });
+@@ -466,3 +492,92 @@ describe('narrow two-cove completion compatibility', () => {
+     expect(backing.values.get('last-ferry.motion')).toBe('reduced');
+   });
+ });
++
++describe('both exact historical boundaries and current completed world', () => {
++  const third: JourneyRecord = {
++    version: 1,
++    checkpoint: { kind: 'complete' },
++    completed: ['holding-pier', 'bellwater', 'driftwood-yard'],
++    acknowledgedScenes: ['opening', 'another-bell', 'driftwood-light'],
++  };
++  test('three-cove completion remains byte-preserving, then begins launch exactly once', () => {
++    const raw = JSON.stringify(third, null, 2),
++      backing = memory(raw),
++      progress = new JourneyProgress(() => backing.storage);
++    expect(progress.snapshot.raw).toBe(raw);
++    expect(progress.snapshot.record).toEqual(third);
++    expect(backing.writes).toEqual([]);
++    expect(checkpointCove(third)).toBe('driftwood-yard');
++    expect(legacyContinuationScene(third)).toBe('a-wider-deck');
++    expect(progress.acknowledge('a-wider-deck')).toBe(false);
++    expect(progress.accept('wide-berth', 'won')).toBe(false);
++    expect(progress.continueAvailableContent()).toBe(true);
++    expect(progress.snapshot.record).toEqual(checkpoints().launchEntry);
++    expect(progress.continueAvailableContent()).toBe(false);
++    expect(backing.writes).toHaveLength(1);
++    const restored = new JourneyProgress(() => backing.storage);
++    expect(restored.snapshot.record).toEqual(checkpoints().launchEntry);
++    expect(restored.continueAvailableContent()).toBe(false);
++    expect(restored.acknowledge('a-wider-deck')).toBe(true);
++    expect(restored.acknowledge('a-wider-deck')).toBe(false);
++    expect(restored.snapshot.record).toEqual(checkpoints().fourth);
++    expect(restored.accept('wide-berth', 'won')).toBe(true);
++    expect(restored.snapshot.record).toEqual(checkpoints().complete);
++    expect(legacyContinuationScene(restored.snapshot.record)).toBeNull();
++    expect(checkpointCove(restored.snapshot.record!)).toBe('wide-berth');
++    expect(restored.continueAvailableContent()).toBe(false);
++  });
++  test.each([
++    { ...third, extra: true },
++    { ...third, version: 2 },
++    { ...third, checkpoint: { kind: 'complete', id: 'driftwood-yard' } },
++    { ...third, completed: ['holding-pier', 'driftwood-yard', 'bellwater'] },
++    { ...third, acknowledgedScenes: ['opening', 'driftwood-light', 'another-bell'] },
++    { ...third, completed: ['holding-pier', 'bellwater', 'wide-berth'] },
++    { ...third, acknowledgedScenes: ['opening', 'another-bell'] },
++  ])('rejects altered three-cove shapes without rewriting: %j', (record) => {
++    const raw = JSON.stringify(record),
++      backing = memory(raw),
++      progress = new JourneyProgress(() => backing.storage);
++    expect(legacyContinuationScene(record)).toBeNull();
++    expect(progress.snapshot.kind).toBe('invalid');
++    expect(progress.continueAvailableContent()).toBe(false);
++    expect(backing.values.get(JOURNEY_STORAGE_KEY)).toBe(raw);
++    expect(backing.writes).toEqual([]);
++  });
++  test('failed three-cove continuation write preserves bytes and remains usable in memory', () => {
++    const raw = JSON.stringify(third),
++      backing = memory(raw),
++      progress = new JourneyProgress(() => ({
++        getItem: backing.storage.getItem,
++        setItem() {
++          throw new Error('Full');
++        },
++      }));
++    expect(progress.continueAvailableContent()).toBe(true);
++    expect(progress.snapshot.record).toEqual(checkpoints().launchEntry);
++    expect(progress.snapshot.persistent).toBe(false);
++    expect(progress.snapshot.issue).toContain('will not survive closing');
++    expect(backing.values.get(JOURNEY_STORAGE_KEY)).toBe(raw);
++    expect(progress.acknowledge('a-wider-deck')).toBe(true);
++    expect(progress.accept('wide-berth', 'won')).toBe(true);
++    expect(progress.snapshot.record).toEqual(checkpoints().complete);
++    expect(backing.values.get('last-ferry.sound')).toBe('muted');
++    expect(backing.values.get('last-ferry.motion')).toBe('reduced');
++  });
++  test('each scene uses its actual predecessor and old complete worlds never display a new rescue', () => {
++    expect(scenePredecessor('opening')).toBe(holdingPier);
++    expect(scenePredecessor('another-bell')).toBe(holdingPier);
++    expect(scenePredecessor('driftwood-light')).toBe(bellwater);
++    expect(scenePredecessor('a-wider-deck')).toBe(driftwoodYard);
++    expect(
++      checkpointCove({
++        ...third,
++        completed: ['holding-pier', 'bellwater'],
++        acknowledgedScenes: ['opening', 'another-bell'],
++      }),
++    ).toBe('bellwater');
++    expect(checkpointCove(third)).toBe('driftwood-yard');
++    expect(validateJourney(checkpoints().complete).valid).toBe(true);
++  });
++});

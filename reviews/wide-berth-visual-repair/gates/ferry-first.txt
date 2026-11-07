@@ -1,0 +1,214 @@
+
+> last-ferry@1.0.0 test:unit
+> vitest run tests/unit/wide-ferry.test.ts --maxWorkers=1
+
+
+ RUN  v5.0.5 C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry
+
+ ❯ tests/unit/wide-ferry.test.ts (14 tests | 9 failed) 18644ms
+   × six neighbors have supported compact land and quay positions with stable identity and no body overlap 14ms
+   × harbor-pier / 1.5707963267948966: all legal transfer selections clear actual body/cabin/rail bounds 3784ms
+   × harbor-pier / -1.5707963267948966: all legal transfer selections clear actual body/cabin/rail bounds 3089ms
+   × high-quay-pier / 1.5707963267948966: all legal transfer selections clear actual body/cabin/rail bounds 2769ms
+   × high-quay-pier / -1.5707963267948966: all legal transfer selections clear actual body/cabin/rail bounds 3053ms
+   × wide-berth-pier / 1.5707963267948966: all legal transfer selections clear actual body/cabin/rail bounds 1049ms
+   × wide-berth-pier / -1.5707963267948966: all legal transfer selections clear actual body/cabin/rail bounds 966ms
+   × shell-landing-pier / 1.5707963267948966: all legal transfer selections clear actual body/cabin/rail bounds 1881ms
+   × shell-landing-pier / -1.5707963267948966: all legal transfer selections clear actual body/cabin/rail bounds 1896ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 9 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/wide-ferry.test.ts > six neighbors have supported compact land and quay positions with stable identity and no body overlap
+AssertionError: expected [ …(38) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "high-quay-pier:0 unsupported feet -0.22/-0.22",
++   "high-quay-pier:0 unsupported feet 0/-0.22",
++   "high-quay-pier:1 unsupported feet -0.22/-0.22",
++   "high-quay-pier:1 unsupported feet 0/-0.22",
++   "high-quay-pier:1 unsupported feet 0.22/-0.22",
++   "high-quay-pier:0 unsupported feet -0.22/-0.22",
++   "high-quay-pier:0 unsupported feet 0/-0.22",
++   "high-quay-pier:1 unsupported feet -0.22/-0.22",
++   "high-quay-pier:1 unsupported feet 0/-0.22",
++   "high-quay-pier:1 unsupported feet 0.22/-0.22",
++   "wide-berth-pier:0 unsupported feet -0.22/-0.22",
++   "wide-berth-pier:0 unsupported feet 0/-0.22",
++   "wide-berth-pier:0 unsupported feet 0.22/-0.22",
++   "wide-berth-pier:1 unsupported feet -0.22/-0.22",
++   "wide-berth-pier:1 unsupported feet 0/-0.22",
++   "wide-berth-pier:1 unsupported feet 0.22/-0.22",
++   "wide-berth-pier:0 unsupported feet -0.22/-0.22",
++   "wide-berth-pier:0 unsupported feet 0/-0.22",
++   "wide-berth-pier:0 unsupported feet 0.22/-0.22",
++   "wide-berth-pier:1 unsupported feet -0.22/-0.22",
++   "wide-berth-pier:1 unsupported feet 0/-0.22",
++   "wide-berth-pier:1 unsupported feet 0.22/-0.22",
++   "shell-landing-pier:0 unsupported feet -0.22/-0.22",
++   "shell-landing-pier:0 unsupported feet -0.22/0",
++   "shell-landing-pier:0 unsupported feet 0/-0.22",
++   "shell-landing-pier:0 unsupported feet 0.22/-0.22",
++   "shell-landing-pier:1 unsupported feet -0.22/-0.22",
++   "shell-landing-pier:1 unsupported feet 0/-0.22",
++   "shell-landing-pier:1 unsupported feet 0.22/-0.22",
++   "shell-landing-pier:1 unsupported feet 0.22/0",
++   "shell-landing-pier:0 unsupported feet -0.22/-0.22",
++   "shell-landing-pier:0 unsupported feet -0.22/0",
++   "shell-landing-pier:0 unsupported feet 0/-0.22",
++   "shell-landing-pier:0 unsupported feet 0.22/-0.22",
++   "shell-landing-pier:1 unsupported feet -0.22/-0.22",
++   "shell-landing-pier:1 unsupported feet 0/-0.22",
++   "shell-landing-pier:1 unsupported feet 0.22/-0.22",
++   "shell-landing-pier:1 unsupported feet 0.22/0",
++ ]
+
+ ❯ tests/unit/wide-ferry.test.ts:111:20
+    109|       }
+    110|     }
+    111|   expect(failures).toEqual([]);
+       |                    ^
+    112| });
+    113|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/9]⎯
+
+ FAIL  tests/unit/wide-ferry.test.ts > harbor-pier / 1.5707963267948966: all legal transfer selections clear actual body/cabin/rail bounds
+ FAIL  tests/unit/wide-ferry.test.ts > harbor-pier / -1.5707963267948966: all legal transfer selections clear actual body/cabin/rail bounds
+ FAIL  tests/unit/wide-ferry.test.ts > high-quay-pier / 1.5707963267948966: all legal transfer selections clear actual body/cabin/rail bounds
+ FAIL  tests/unit/wide-ferry.test.ts > high-quay-pier / -1.5707963267948966: all legal transfer selections clear actual body/cabin/rail bounds
+AssertionError: expected [ Array(20) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "board:0/1:28:alder obstacle",
++   "board:0/1:29:alder obstacle",
++   "board:0/1:28:alder obstacle",
++   "board:0/1:29:alder obstacle",
++   "board:0/1:28:alder obstacle",
++   "board:0/1:29:alder obstacle",
++   "board:0/2:28:clover obstacle",
++   "board:0/2:29:clover obstacle",
++   "board:0/2:28:clover obstacle",
++   "board:0/2:29:clover obstacle",
++   "board:0/2:28:clover obstacle",
++   "board:0/2:29:clover obstacle",
++   "board:0/3:18:alder obstacle",
++   "board:0/3:36:clover obstacle",
++   "board:0/3:18:alder obstacle",
++   "board:0/3:36:clover obstacle",
++   "board:0/3:18:alder obstacle",
++   "board:0/3:36:clover obstacle",
++   "board:0/5:18:alder obstacle",
++   "board:0/5:18:alder obstacle",
++ ]
+
+ ❯ tests/unit/wide-ferry.test.ts:194:22
+    192|             }
+    193|         }
+    194|     expect(failures).toEqual([]);
+       |                      ^
+    195|   },
+    196|   60000,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/9]⎯
+
+ FAIL  tests/unit/wide-ferry.test.ts > wide-berth-pier / 1.5707963267948966: all legal transfer selections clear actual body/cabin/rail bounds
+ FAIL  tests/unit/wide-ferry.test.ts > wide-berth-pier / -1.5707963267948966: all legal transfer selections clear actual body/cabin/rail bounds
+AssertionError: expected [ Array(20) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "board:0/1:28:alder obstacle",
++   "board:0/1:29:alder obstacle",
++   "board:0/2:28:clover obstacle",
++   "board:0/2:29:clover obstacle",
++   "board:0/3:18:alder obstacle",
++   "board:0/3:36:clover obstacle",
++   "board:0/5:18:alder obstacle",
++   "board:0/6:18:clover obstacle",
++   "board:0/7:26:clover obstacle",
++   "board:0/9:18:alder obstacle",
++   "board:0/10:18:clover obstacle",
++   "board:0/11:26:clover obstacle",
++   "board:0/17:18:alder obstacle",
++   "board:0/18:18:clover obstacle",
++   "board:0/19:26:clover obstacle",
++   "board:0/33:18:alder obstacle",
++   "board:0/34:18:clover obstacle",
++   "board:0/35:26:clover obstacle",
++   "board:0/61:11:alder obstacle",
++   "board:0/62:11:clover obstacle",
++ ]
+
+ ❯ tests/unit/wide-ferry.test.ts:194:22
+    192|             }
+    193|         }
+    194|     expect(failures).toEqual([]);
+       |                      ^
+    195|   },
+    196|   60000,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/9]⎯
+
+ FAIL  tests/unit/wide-ferry.test.ts > shell-landing-pier / 1.5707963267948966: all legal transfer selections clear actual body/cabin/rail bounds
+ FAIL  tests/unit/wide-ferry.test.ts > shell-landing-pier / -1.5707963267948966: all legal transfer selections clear actual body/cabin/rail bounds
+AssertionError: expected [ Array(20) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "board:0/1:28:alder obstacle",
++   "board:0/1:29:alder obstacle",
++   "board:0/1:28:alder obstacle",
++   "board:0/1:29:alder obstacle",
++   "board:0/2:28:clover obstacle",
++   "board:0/2:29:clover obstacle",
++   "board:0/2:28:clover obstacle",
++   "board:0/2:29:clover obstacle",
++   "board:0/3:18:alder obstacle",
++   "board:0/3:36:clover obstacle",
++   "board:0/3:18:alder obstacle",
++   "board:0/3:36:clover obstacle",
++   "board:0/5:18:alder obstacle",
++   "board:0/5:18:alder obstacle",
++   "board:0/6:18:clover obstacle",
++   "board:0/6:18:clover obstacle",
++   "board:0/7:26:clover obstacle",
++   "board:0/7:26:clover obstacle",
++   "board:0/9:18:alder obstacle",
++   "board:0/9:18:alder obstacle",
++ ]
+
+ ❯ tests/unit/wide-ferry.test.ts:194:22
+    192|             }
+    193|         }
+    194|     expect(failures).toEqual([]);
+       |                      ^
+    195|   },
+    196|   60000,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/9]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  9 failed | 5 passed (14)
+   Start at  22:37:32
+   Duration  20.04s (tests 98%, transform 1%, import 1%)
+
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

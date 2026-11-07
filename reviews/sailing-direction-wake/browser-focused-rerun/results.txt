@@ -1,0 +1,33 @@
+
+Running 2 tests using 1 worker
+
+(node:7332) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\e2e\sailing-direction-wake.spec.ts:221:1 › direction: normal, hidden, device Reduced, recovery and animation failures settle the same planned pose once (23.0s)
+  x  2 tests\e2e\sailing-direction-wake.spec.ts:325:1 › direction: released crests retain their release data as the next journey turns and tide moves their height (8.1s)
+
+
+  1) tests\e2e\sailing-direction-wake.spec.ts:325:1 › direction: released crests retain their release data as the next journey turns and tide moves their height 
+
+    Error: expect(received).toBeDefined()
+
+    Received: undefined
+
+      350 |     poseAfter = nextFrame.journey;
+      351 |   const surviving = after.points.find((p: any) => p.id === tracked.id);
+    > 352 |   expect(surviving).toBeDefined();
+          |                     ^
+      353 |   for (const field of [
+      354 |     'position',
+      355 |     'center',
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\sailing-direction-wake.spec.ts:352:21
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\sailing-direction-wake-dir-39076-and-tide-moves-their-height\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\sailing-direction-wake-dir-39076-and-tide-moves-their-height\error-context.md
+
+  1 failed
+    tests\e2e\sailing-direction-wake.spec.ts:325:1 › direction: released crests retain their release data as the next journey turns and tide moves their height 
+  1 passed (33.0s)

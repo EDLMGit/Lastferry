@@ -1,0 +1,17 @@
+Initial development run: npm run test:unit
+Node24 / Vitest5.0.5; default27 isolated workers while development Chromium probes were active.
+This retained console summary is not a clean pass or a proven diagnosis of host contention.
+
+Test Files 4 failed | 23 passed (27)
+Tests 5 failed | 183 passed (188)
+Duration80.30s
+
+All five failures were the existing5000ms timeout, with no failed geometry/rules assertion:
+tests/unit/clearance.test.ts:57 first-crossing full modeled ferry clears land and piers from all reachable headings, both berth sides and reverse departures (21534ms)
+tests/unit/clearance.test.ts:57 bellwater full modeled ferry clears land and piers from all reachable headings, both berth sides and reverse departures (44030ms)
+tests/unit/deck-volume.test.ts:59 modeled passengers avoid cabin and rails through each transfer phase at berth1.5707963267948966 (10835ms)
+tests/unit/paths.test.ts:157 first-crossing journeys retain their incoming tangent or nearest real berth with continuous steering (10440ms)
+tests/unit/water.test.ts:9 first-crossing decorative seabed represents coast, apron and genuinely deep open water without changing authored data (10182ms)
+
+Error: Test timed out in5000ms.
+No timeout, geometric sample, tolerance, test or runtime was weakened for the subsequent bounded-worker run. Its result is recorded separately.

@@ -1,0 +1,899 @@
+{
+  "schemaVersion": 1,
+  "levelId": "first-crossing",
+  "evidenceType": "reference-design-validation",
+  "implementedGameTested": false,
+  "reproducibleCommand": "node tools/verify-design.mjs --write-report",
+  "inputSha256": {
+    "data/first-crossing.level.json": "403a19ddd7840a52f5706490d6e2f5a35ddf1a38dd20715b602fcc572f6167ab",
+    "data/replays/full-boat-detour.json": "b88cb6c0a2935d2700526e8194fd57b97d436c1922da05a10d209ac1f48674a5",
+    "data/replays/harbor-first.json": "27bf293ba908464fb32097a6c92ec632f3611521094160abecb107780ea9e038",
+    "data/replays/last-safe-boarding.json": "73386dc35b4b495bcbaddbf8de50e768230b34f7598f67f8c871b3e19535ad31",
+    "data/replays/missed-sheep-deadline.json": "372f48fd32380d31189d461ff23ce39606033b3369278b245b4f7fe4ec6603b5",
+    "data/replays/wait-for-tide.json": "3dacc1cc212a57ecda08decac203b322d222d5a113ba60f2e4cafc9e01b59a9f"
+  },
+  "summary": {
+    "status": "passed",
+    "totalChecks": 32,
+    "passedChecks": 32,
+    "failedChecks": 0
+  },
+  "checks": [
+    {
+      "id": "schema-and-authored-identities",
+      "source": "docs/FIRST_COVE.md#level-data-schema",
+      "status": "passed",
+      "detail": "Six nodes, six two-way edges, two piers, two rabbits, one sheep; all starting passengers conserved."
+    },
+    {
+      "id": "graph-connectivity-and-two-routes",
+      "source": "docs/FIRST_COVE.md#routes",
+      "status": "passed"
+    },
+    {
+      "id": "safe-berths-and-shared-tide-elevations",
+      "source": "docs/GAMEPLAY_RULES.md#tide-and-pier-elevation",
+      "status": "passed"
+    },
+    {
+      "id": "mesh-exclusion-clearance",
+      "source": "docs/FIRST_COVE.md#world-layout-and-mesh-exclusions",
+      "status": "passed",
+      "detail": {
+        "minimumAuthoredCenterlineClearance": 0.9,
+        "required": 0.45,
+        "referenceBoatRadius": 0.3,
+        "scope": "Authored centerlines/polygons and a small point-radius proxy only. No actual visual or oriented collision hull was tested; its size is not capped by this proxy."
+      }
+    },
+    {
+      "id": "no-unmarked-route-crossings",
+      "source": "docs/FIRST_COVE.md#world-layout-and-mesh-exclusions",
+      "status": "passed"
+    },
+    {
+      "id": "draft-table-and-depth-equality",
+      "source": "docs/GAMEPLAY_RULES.md#load-and-draft",
+      "status": "passed"
+    },
+    {
+      "id": "full-load-blocks-cut-and-keeps-detour",
+      "source": "docs/FIRST_COVE.md#routes",
+      "status": "passed"
+    },
+    {
+      "id": "cannot-borrow-next-turn-depth",
+      "source": "docs/GAMEPLAY_RULES.md#atomic-action-order",
+      "status": "passed"
+    },
+    {
+      "id": "preview-does-not-commit-or-add-history",
+      "source": "docs/GAMEPLAY_RULES.md#navigation-and-previews",
+      "status": "passed"
+    },
+    {
+      "id": "nonempty-subsets-are-one-turn-actions",
+      "source": "docs/GAMEPLAY_RULES.md#actions",
+      "status": "passed"
+    },
+    {
+      "id": "delivered-passengers-cannot-be-reboarded",
+      "source": "docs/GAMEPLAY_RULES.md#start-win-and-loss",
+      "status": "passed"
+    },
+    {
+      "id": "invalid-action-matrix",
+      "source": "docs/GAMEPLAY_RULES.md#invalid-actions",
+      "status": "passed",
+      "detail": {
+        "cases": 18,
+        "allPreserveStateAndTurn": true
+      }
+    },
+    {
+      "id": "capacity-guard-synthetic-fixture",
+      "source": "docs/GAMEPLAY_RULES.md#invalid-actions",
+      "status": "passed",
+      "detail": "Synthetic extra rabbit; not a reachable first-cove state and not an additional shipped character."
+    },
+    {
+      "id": "unsafe-boarding-guard-synthetic-fixture",
+      "source": "docs/GAMEPLAY_RULES.md#invalid-actions",
+      "status": "passed",
+      "detail": "Synthetic bad berth; all shipped berths have base depth 3 and are independently checked."
+    },
+    {
+      "id": "missed-pier-floods-exactly-on-turn-eight",
+      "source": "docs/GAMEPLAY_RULES.md#atomic-action-order",
+      "status": "passed"
+    },
+    {
+      "id": "boarding-before-rise-saves-passenger",
+      "source": "docs/GAMEPLAY_RULES.md#atomic-action-order",
+      "status": "passed"
+    },
+    {
+      "id": "arriving-on-flood-turn-is-too-late",
+      "source": "docs/GAMEPLAY_RULES.md#atomic-action-order",
+      "status": "passed"
+    },
+    {
+      "id": "unloading-before-rise-can-strand-passenger",
+      "source": "docs/GAMEPLAY_RULES.md#atomic-action-order",
+      "status": "passed"
+    },
+    {
+      "id": "flooded-pier-rejects-boarding-and-unloading",
+      "source": "docs/GAMEPLAY_RULES.md#invalid-actions",
+      "status": "passed"
+    },
+    {
+      "id": "undo-restores-turn-three-before-first-rise",
+      "source": "docs/GAMEPLAY_RULES.md#undo-and-restart",
+      "status": "passed"
+    },
+    {
+      "id": "undo-restores-turn-seven-after-flood-loss",
+      "source": "docs/GAMEPLAY_RULES.md#undo-and-restart",
+      "status": "passed"
+    },
+    {
+      "id": "invalid-attempts-add-no-undo-snapshot",
+      "source": "docs/GAMEPLAY_RULES.md#undo-and-restart",
+      "status": "passed"
+    },
+    {
+      "id": "nothing-to-undo-at-start-and-restart-clears-history",
+      "source": "docs/GAMEPLAY_RULES.md#undo-and-restart",
+      "status": "passed"
+    },
+    {
+      "id": "no-hidden-deadline-after-passengers-are-safe",
+      "source": "docs/GAMEPLAY_RULES.md#start-win-and-loss",
+      "status": "passed"
+    },
+    {
+      "id": "reducer-does-not-mutate-frozen-inputs",
+      "source": "docs/GAMEPLAY_RULES.md#state-contract",
+      "status": "passed"
+    },
+    {
+      "id": "replay:full-boat-detour.json",
+      "source": "data/replays/full-boat-detour.json",
+      "status": "passed",
+      "detail": {
+        "finalStatus": "won",
+        "turns": 7,
+        "actions": 7
+      }
+    },
+    {
+      "id": "replay:harbor-first.json",
+      "source": "data/replays/harbor-first.json",
+      "status": "passed",
+      "detail": {
+        "finalStatus": "won",
+        "turns": 8,
+        "actions": 8
+      }
+    },
+    {
+      "id": "replay:last-safe-boarding.json",
+      "source": "data/replays/last-safe-boarding.json",
+      "status": "passed",
+      "detail": {
+        "finalStatus": "playing",
+        "turns": 8,
+        "actions": 8
+      }
+    },
+    {
+      "id": "replay:missed-sheep-deadline.json",
+      "source": "data/replays/missed-sheep-deadline.json",
+      "status": "passed",
+      "detail": {
+        "finalStatus": "lost",
+        "turns": 8,
+        "actions": 8
+      }
+    },
+    {
+      "id": "replay:wait-for-tide.json",
+      "source": "data/replays/wait-for-tide.json",
+      "status": "passed",
+      "detail": {
+        "finalStatus": "won",
+        "turns": 7,
+        "actions": 7
+      }
+    },
+    {
+      "id": "declared-witness-files-exist-and-win",
+      "source": "docs/FIRST_COVE.md#witness-action-sequences",
+      "status": "passed"
+    },
+    {
+      "id": "bounded-solvability-and-state-invariants",
+      "source": "docs/FIRST_COVE.md#finite-state-search-and-its-limits",
+      "status": "passed",
+      "detail": {
+        "shortestSolutionLength": 7,
+        "reachableCanonicalStates": 502,
+        "scope": "Bounded reference-state search, not a proof of implemented game behavior or subjective puzzle quality."
+      }
+    }
+  ],
+  "replays": [
+    {
+      "id": "full-boat-detour",
+      "source": "data/replays/full-boat-detour.json",
+      "purpose": "Canonical tutorial witness: a full boat cannot use the shallow cut at tide 0, so take the safe deep detour.",
+      "final": {
+        "turn": 7,
+        "action": {
+          "type": "unload",
+          "passengerIds": [
+            "rabbit-1",
+            "rabbit-2",
+            "sheep-1"
+          ]
+        },
+        "boatNodeId": "harbor",
+        "load": 0,
+        "draft": 1,
+        "tideLevel": 1,
+        "status": "won"
+      },
+      "trace": [
+        {
+          "turn": 0,
+          "action": null,
+          "boatNodeId": "cut",
+          "load": 2,
+          "draft": 2,
+          "tideLevel": 0,
+          "status": "playing"
+        },
+        {
+          "turn": 1,
+          "action": {
+            "type": "move",
+            "to": "sheep-pier"
+          },
+          "boatNodeId": "sheep-pier",
+          "load": 2,
+          "draft": 2,
+          "tideLevel": 0,
+          "status": "playing"
+        },
+        {
+          "turn": 2,
+          "action": {
+            "type": "board",
+            "passengerIds": [
+              "sheep-1"
+            ]
+          },
+          "boatNodeId": "sheep-pier",
+          "load": 4,
+          "draft": 3,
+          "tideLevel": 0,
+          "status": "playing"
+        },
+        {
+          "turn": 3,
+          "action": {
+            "type": "move",
+            "to": "outer-east"
+          },
+          "boatNodeId": "outer-east",
+          "load": 4,
+          "draft": 3,
+          "tideLevel": 0,
+          "status": "playing"
+        },
+        {
+          "turn": 4,
+          "action": {
+            "type": "move",
+            "to": "outer-south"
+          },
+          "boatNodeId": "outer-south",
+          "load": 4,
+          "draft": 3,
+          "tideLevel": 1,
+          "status": "playing"
+        },
+        {
+          "turn": 5,
+          "action": {
+            "type": "move",
+            "to": "outer-west"
+          },
+          "boatNodeId": "outer-west",
+          "load": 4,
+          "draft": 3,
+          "tideLevel": 1,
+          "status": "playing"
+        },
+        {
+          "turn": 6,
+          "action": {
+            "type": "move",
+            "to": "harbor"
+          },
+          "boatNodeId": "harbor",
+          "load": 4,
+          "draft": 3,
+          "tideLevel": 1,
+          "status": "playing"
+        },
+        {
+          "turn": 7,
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "rabbit-1",
+              "rabbit-2",
+              "sheep-1"
+            ]
+          },
+          "boatNodeId": "harbor",
+          "load": 0,
+          "draft": 1,
+          "tideLevel": 1,
+          "status": "won"
+        }
+      ]
+    },
+    {
+      "id": "harbor-first",
+      "source": "data/replays/harbor-first.json",
+      "purpose": "Valid alternative: deliver the rabbits first, then collect the sheep with a lighter boat.",
+      "final": {
+        "turn": 8,
+        "action": {
+          "type": "unload",
+          "passengerIds": [
+            "sheep-1"
+          ]
+        },
+        "boatNodeId": "harbor",
+        "load": 0,
+        "draft": 1,
+        "tideLevel": 2,
+        "status": "won"
+      },
+      "trace": [
+        {
+          "turn": 0,
+          "action": null,
+          "boatNodeId": "cut",
+          "load": 2,
+          "draft": 2,
+          "tideLevel": 0,
+          "status": "playing"
+        },
+        {
+          "turn": 1,
+          "action": {
+            "type": "move",
+            "to": "harbor"
+          },
+          "boatNodeId": "harbor",
+          "load": 2,
+          "draft": 2,
+          "tideLevel": 0,
+          "status": "playing"
+        },
+        {
+          "turn": 2,
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "rabbit-1",
+              "rabbit-2"
+            ]
+          },
+          "boatNodeId": "harbor",
+          "load": 0,
+          "draft": 1,
+          "tideLevel": 0,
+          "status": "playing"
+        },
+        {
+          "turn": 3,
+          "action": {
+            "type": "move",
+            "to": "cut"
+          },
+          "boatNodeId": "cut",
+          "load": 0,
+          "draft": 1,
+          "tideLevel": 0,
+          "status": "playing"
+        },
+        {
+          "turn": 4,
+          "action": {
+            "type": "move",
+            "to": "sheep-pier"
+          },
+          "boatNodeId": "sheep-pier",
+          "load": 0,
+          "draft": 1,
+          "tideLevel": 1,
+          "status": "playing"
+        },
+        {
+          "turn": 5,
+          "action": {
+            "type": "board",
+            "passengerIds": [
+              "sheep-1"
+            ]
+          },
+          "boatNodeId": "sheep-pier",
+          "load": 2,
+          "draft": 2,
+          "tideLevel": 1,
+          "status": "playing"
+        },
+        {
+          "turn": 6,
+          "action": {
+            "type": "move",
+            "to": "cut"
+          },
+          "boatNodeId": "cut",
+          "load": 2,
+          "draft": 2,
+          "tideLevel": 1,
+          "status": "playing"
+        },
+        {
+          "turn": 7,
+          "action": {
+            "type": "move",
+            "to": "harbor"
+          },
+          "boatNodeId": "harbor",
+          "load": 2,
+          "draft": 2,
+          "tideLevel": 1,
+          "status": "playing"
+        },
+        {
+          "turn": 8,
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "sheep-1"
+            ]
+          },
+          "boatNodeId": "harbor",
+          "load": 0,
+          "draft": 1,
+          "tideLevel": 2,
+          "status": "won"
+        }
+      ]
+    },
+    {
+      "id": "last-safe-boarding",
+      "source": "data/replays/last-safe-boarding.json",
+      "purpose": "Event-order boundary: boarding committed from turn 7 removes the sheep before the turn-8 rise; reaching the pier on turn 8 would be too late.",
+      "final": {
+        "turn": 8,
+        "action": {
+          "type": "board",
+          "passengerIds": [
+            "sheep-1"
+          ]
+        },
+        "boatNodeId": "sheep-pier",
+        "load": 4,
+        "draft": 3,
+        "tideLevel": 2,
+        "status": "playing"
+      },
+      "trace": [
+        {
+          "turn": 0,
+          "action": null,
+          "boatNodeId": "cut",
+          "load": 2,
+          "draft": 2,
+          "tideLevel": 0,
+          "status": "playing"
+        },
+        {
+          "turn": 1,
+          "action": {
+            "type": "move",
+            "to": "sheep-pier"
+          },
+          "boatNodeId": "sheep-pier",
+          "load": 2,
+          "draft": 2,
+          "tideLevel": 0,
+          "status": "playing"
+        },
+        {
+          "turn": 2,
+          "action": {
+            "type": "wait"
+          },
+          "boatNodeId": "sheep-pier",
+          "load": 2,
+          "draft": 2,
+          "tideLevel": 0,
+          "status": "playing"
+        },
+        {
+          "turn": 3,
+          "action": {
+            "type": "wait"
+          },
+          "boatNodeId": "sheep-pier",
+          "load": 2,
+          "draft": 2,
+          "tideLevel": 0,
+          "status": "playing"
+        },
+        {
+          "turn": 4,
+          "action": {
+            "type": "wait"
+          },
+          "boatNodeId": "sheep-pier",
+          "load": 2,
+          "draft": 2,
+          "tideLevel": 1,
+          "status": "playing"
+        },
+        {
+          "turn": 5,
+          "action": {
+            "type": "wait"
+          },
+          "boatNodeId": "sheep-pier",
+          "load": 2,
+          "draft": 2,
+          "tideLevel": 1,
+          "status": "playing"
+        },
+        {
+          "turn": 6,
+          "action": {
+            "type": "wait"
+          },
+          "boatNodeId": "sheep-pier",
+          "load": 2,
+          "draft": 2,
+          "tideLevel": 1,
+          "status": "playing"
+        },
+        {
+          "turn": 7,
+          "action": {
+            "type": "wait"
+          },
+          "boatNodeId": "sheep-pier",
+          "load": 2,
+          "draft": 2,
+          "tideLevel": 1,
+          "status": "playing"
+        },
+        {
+          "turn": 8,
+          "action": {
+            "type": "board",
+            "passengerIds": [
+              "sheep-1"
+            ]
+          },
+          "boatNodeId": "sheep-pier",
+          "load": 4,
+          "draft": 3,
+          "tideLevel": 2,
+          "status": "playing"
+        }
+      ]
+    },
+    {
+      "id": "missed-sheep-deadline",
+      "source": "data/replays/missed-sheep-deadline.json",
+      "purpose": "Failure boundary: at the end of turn 8 the second rise reaches the sheep's still-occupied pier.",
+      "final": {
+        "turn": 8,
+        "action": {
+          "type": "wait"
+        },
+        "boatNodeId": "cut",
+        "load": 2,
+        "draft": 2,
+        "tideLevel": 2,
+        "status": "lost"
+      },
+      "trace": [
+        {
+          "turn": 0,
+          "action": null,
+          "boatNodeId": "cut",
+          "load": 2,
+          "draft": 2,
+          "tideLevel": 0,
+          "status": "playing"
+        },
+        {
+          "turn": 1,
+          "action": {
+            "type": "wait"
+          },
+          "boatNodeId": "cut",
+          "load": 2,
+          "draft": 2,
+          "tideLevel": 0,
+          "status": "playing"
+        },
+        {
+          "turn": 2,
+          "action": {
+            "type": "wait"
+          },
+          "boatNodeId": "cut",
+          "load": 2,
+          "draft": 2,
+          "tideLevel": 0,
+          "status": "playing"
+        },
+        {
+          "turn": 3,
+          "action": {
+            "type": "wait"
+          },
+          "boatNodeId": "cut",
+          "load": 2,
+          "draft": 2,
+          "tideLevel": 0,
+          "status": "playing"
+        },
+        {
+          "turn": 4,
+          "action": {
+            "type": "wait"
+          },
+          "boatNodeId": "cut",
+          "load": 2,
+          "draft": 2,
+          "tideLevel": 1,
+          "status": "playing"
+        },
+        {
+          "turn": 5,
+          "action": {
+            "type": "wait"
+          },
+          "boatNodeId": "cut",
+          "load": 2,
+          "draft": 2,
+          "tideLevel": 1,
+          "status": "playing"
+        },
+        {
+          "turn": 6,
+          "action": {
+            "type": "wait"
+          },
+          "boatNodeId": "cut",
+          "load": 2,
+          "draft": 2,
+          "tideLevel": 1,
+          "status": "playing"
+        },
+        {
+          "turn": 7,
+          "action": {
+            "type": "wait"
+          },
+          "boatNodeId": "cut",
+          "load": 2,
+          "draft": 2,
+          "tideLevel": 1,
+          "status": "playing"
+        },
+        {
+          "turn": 8,
+          "action": {
+            "type": "wait"
+          },
+          "boatNodeId": "cut",
+          "load": 2,
+          "draft": 2,
+          "tideLevel": 2,
+          "status": "lost"
+        }
+      ]
+    },
+    {
+      "id": "wait-for-tide",
+      "source": "data/replays/wait-for-tide.json",
+      "purpose": "Equally valid tutorial solution: wait safely with everyone aboard until the shallow cut becomes deep enough.",
+      "final": {
+        "turn": 7,
+        "action": {
+          "type": "unload",
+          "passengerIds": [
+            "rabbit-1",
+            "rabbit-2",
+            "sheep-1"
+          ]
+        },
+        "boatNodeId": "harbor",
+        "load": 0,
+        "draft": 1,
+        "tideLevel": 1,
+        "status": "won"
+      },
+      "trace": [
+        {
+          "turn": 0,
+          "action": null,
+          "boatNodeId": "cut",
+          "load": 2,
+          "draft": 2,
+          "tideLevel": 0,
+          "status": "playing"
+        },
+        {
+          "turn": 1,
+          "action": {
+            "type": "move",
+            "to": "sheep-pier"
+          },
+          "boatNodeId": "sheep-pier",
+          "load": 2,
+          "draft": 2,
+          "tideLevel": 0,
+          "status": "playing"
+        },
+        {
+          "turn": 2,
+          "action": {
+            "type": "board",
+            "passengerIds": [
+              "sheep-1"
+            ]
+          },
+          "boatNodeId": "sheep-pier",
+          "load": 4,
+          "draft": 3,
+          "tideLevel": 0,
+          "status": "playing"
+        },
+        {
+          "turn": 3,
+          "action": {
+            "type": "wait"
+          },
+          "boatNodeId": "sheep-pier",
+          "load": 4,
+          "draft": 3,
+          "tideLevel": 0,
+          "status": "playing"
+        },
+        {
+          "turn": 4,
+          "action": {
+            "type": "wait"
+          },
+          "boatNodeId": "sheep-pier",
+          "load": 4,
+          "draft": 3,
+          "tideLevel": 1,
+          "status": "playing"
+        },
+        {
+          "turn": 5,
+          "action": {
+            "type": "move",
+            "to": "cut"
+          },
+          "boatNodeId": "cut",
+          "load": 4,
+          "draft": 3,
+          "tideLevel": 1,
+          "status": "playing"
+        },
+        {
+          "turn": 6,
+          "action": {
+            "type": "move",
+            "to": "harbor"
+          },
+          "boatNodeId": "harbor",
+          "load": 4,
+          "draft": 3,
+          "tideLevel": 1,
+          "status": "playing"
+        },
+        {
+          "turn": 7,
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "rabbit-1",
+              "rabbit-2",
+              "sheep-1"
+            ]
+          },
+          "boatNodeId": "harbor",
+          "load": 0,
+          "draft": 1,
+          "tideLevel": 1,
+          "status": "won"
+        }
+      ]
+    }
+  ],
+  "search": {
+    "kind": "bounded-breadth-first-search",
+    "maxActions": 12,
+    "reachableCanonicalStates": 502,
+    "processedStates": 502,
+    "validTransitions": 1585,
+    "rejectedCandidates": 4,
+    "terminalLosses": 101,
+    "terminalWins": 2,
+    "depthBoundaryStates": 0,
+    "exhaustedWithinBoundary": true,
+    "shortestSolutionLength": 7,
+    "shortestSolution": [
+      {
+        "type": "move",
+        "to": "harbor"
+      },
+      {
+        "type": "move",
+        "to": "cut"
+      },
+      {
+        "type": "move",
+        "to": "sheep-pier"
+      },
+      {
+        "type": "board",
+        "passengerIds": [
+          "sheep-1"
+        ]
+      },
+      {
+        "type": "move",
+        "to": "cut"
+      },
+      {
+        "type": "move",
+        "to": "harbor"
+      },
+      {
+        "type": "unload",
+        "passengerIds": [
+          "rabbit-1",
+          "rabbit-2",
+          "sheep-1"
+        ]
+      }
+    ],
+    "scope": "Reference rules only. Absolute turn counts at or after turn 8 share a clock phase; no undo/preview states are searched."
+  },
+  "limitations": [
+    "The reducer in tools/verify-design.mjs is a reference model, not a production game engine.",
+    "No implemented game, browser, input handler, UI, renderer, animation, camera, audio, or performance was tested.",
+    "Geometry clearance checks use authored XZ exclusion polygons and route centerlines only; actual meshes, hulls, labels, and camera framing require separate visual/runtime verification.",
+    "Bounded search uses the documented legal-action model and a finite equivalence after the last tide rise; it excludes undo histories and UI-only state.",
+    "Capacity and unsafe-berth guards use explicitly labeled synthetic fixtures because those failures are unreachable in the shipped first-cove data.",
+    "Witnesses demonstrate short tutorial routes; they do not establish enjoyment, difficulty, playtime, or replay value.",
+    "Future Codex work must implement and independently test the real game rather than importing this validator as its engine or treating this report as game-test evidence."
+  ]
+}

@@ -1,0 +1,74 @@
+
+> last-ferry@1.0.0 test:e2e
+> playwright test driftwood-yard.spec.ts
+
+
+Running 5 tests using 1 worker
+
+(node:30608) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\e2e\driftwood-yard.spec.ts:222:1 › earned Bellwater boundary, new scene and uninterrupted actual Driftwood rescue with audio (2.4m)
+(node:49328) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 2 tests\e2e\driftwood-yard.spec.ts:261:1 › portrait scene, actual rescue, Help and image failure fallback (1.1m)
+  x  3 tests\e2e\driftwood-yard.spec.ts:304:1 › legacy read-only Home, explicit fresh continuation, restored recap and native fit (9.6s)
+(node:47384) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 4 tests\e2e\driftwood-yard.spec.ts:366:1 › compact Bram controls, safe boundary and original last-safe loss warning (43.6s)
+  ok 5 tests\e2e\driftwood-yard.spec.ts:425:1 › fresh Home opening autoplay and reduced transfer regression (29.5s)
+
+
+  1) tests\e2e\driftwood-yard.spec.ts:222:1 › earned Bellwater boundary, new scene and uninterrupted actual Driftwood rescue with audio 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+    Call Log:
+    - Timeout 10000ms exceeded while waiting on the predicate
+
+      149 |         ),
+      150 |     )
+    > 151 |     .toBe(true);
+          |      ^
+      152 |   const fit = await page.evaluate(measureStory);
+      153 |   save(`${prefix}-delivery-fit`, fit);
+      154 |   expect(fit.failures).toEqual([]);
+        at driftRescue (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\driftwood-yard.spec.ts:151:6)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\driftwood-yard.spec.ts:250:5
+
+    Error Context: test-results\driftwood-yard-earned-Bell-38c45-Driftwood-rescue-with-audio\error-context.md
+
+    Error Context: test-results\driftwood-yard-earned-Bell-38c45-Driftwood-rescue-with-audio\error-context.md
+
+  2) tests\e2e\driftwood-yard.spec.ts:304:1 › legacy read-only Home, explicit fresh continuation, restored recap and native fit 
+
+    Error: Natural Tab navigation did not reach board; active=map-harbor
+
+       at ui.ts:95
+
+      93 |     await page.keyboard.press(backwards ? 'Shift+Tab' : 'Tab');
+      94 |   }
+    > 95 |   throw Error(`Natural Tab navigation did not reach ${id}; active=${await active(page)}`);
+         |         ^
+      96 | }
+      97 | export async function keyAct(page: Page, id: string) {
+      98 |   if ((id === 'board' || id === 'unload') && !(await page.locator(`#${id}`).isVisible())) {
+        at tabTo (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\ui.ts:95:9)
+        at keyAct (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\ui.ts:105:3)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\driftwood-yard.spec.ts:350:5
+
+    Error Context: test-results\driftwood-yard-legacy-read-3dbe5-stored-recap-and-native-fit\error-context.md
+
+    Error Context: test-results\driftwood-yard-legacy-read-3dbe5-stored-recap-and-native-fit\error-context.md
+
+  2 failed
+    tests\e2e\driftwood-yard.spec.ts:222:1 › earned Bellwater boundary, new scene and uninterrupted actual Driftwood rescue with audio 
+    tests\e2e\driftwood-yard.spec.ts:304:1 › legacy read-only Home, explicit fresh continuation, restored recap and native fit 
+  3 passed (5.0m)
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

@@ -1,0 +1,40 @@
+
+> last-ferry@1.0.0 test:e2e
+> playwright test wide-berth-production.spec.ts
+
+
+Running 1 test using 1 worker
+
+(node:37548) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\e2e\wide-berth-production.spec.ts:18:1 › production six-space boat rescue, actual six-option overflow and full-label fit (29.6s)
+
+
+  1) tests\e2e\wide-berth-production.spec.ts:18:1 › production six-space boat rescue, actual six-option overflow and full-label fit 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.requirement')
+    Expected substring: "boat has 6 spaces; this group needs 8"
+    Error: strict mode violation: locator('.requirement') resolved to 2 elements:
+        1) <p class="requirement">Boat needs depth 4. Passage has depth 4: enough d…</p> aka getByText('Boat needs depth 4. Passage')
+        2) <p class="requirement">The boat has 6 spaces; this group needs 8.</p> aka getByText('The boat has 6 spaces; this')
+
+    Call log:
+      - Expect "toContainText" locator('.requirement') with timeout 10000ms
+      - waiting for locator('.requirement')
+
+
+      44 |     await transfer(page, 'board', undefined, false);
+      45 |     await expect(page.locator('#commit')).toBeDisabled();
+    > 46 |     await expect(page.locator('.requirement')).toContainText(
+         |                                                ^
+      47 |       'boat has 6 spaces; this group needs 8',
+      48 |     );
+      49 |     await expect
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\wide-berth-production.spec.ts:46:48
+
+    Error Context: test-results\wide-berth-production-prod-f1fb8-overflow-and-full-label-fit\error-context.md
+
+  1 failed
+    tests\e2e\wide-berth-production.spec.ts:18:1 › production six-space boat rescue, actual six-option overflow and full-label fit 

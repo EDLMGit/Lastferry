@@ -1,0 +1,492 @@
+{
+  "generatedAt": "2026-10-24T11:38:25.067Z",
+  "comparisonBase": "0ee7d685071179b82ec2a599fac2f818251d0e54",
+  "scope": "All existing src/ and data/ files plus package/lock/index/TypeScript/Vite/Node build inputs. Only main.ts, effects.ts, world.ts and transitions.ts are authorized changed existing runtime files; wake.ts is the new bounded effect. This audit does not claim new visual/audio/device testing.",
+  "baselineExistingFilesCompared": 48,
+  "protectedExistingFilesCompared": 44,
+  "allProtectedContentUnchanged": true,
+  "allProtectedExactBytes": true,
+  "changedExistingFiles": [
+    "src/main.ts",
+    "src/scene/effects.ts",
+    "src/scene/transitions.ts",
+    "src/scene/world.ts"
+  ],
+  "unexpectedChangedExistingFiles": [],
+  "newRuntimeFile": {
+    "path": "src/scene/wake.ts",
+    "sha256": "2578c8b9df7cb2e26763bb7b9b76d6b607106b237f1f4b0dd907db355607cb26",
+    "withinAuthorizedScope": true
+  },
+  "acceptedWaterRestoration": [
+    {
+      "path": "src/scene/water-shader.ts",
+      "baselineSha256": "7e5f976c88546d3f38a18afdd1861ad955ae728ba87c0d278f54d2eff271d0ed",
+      "workingSha256": "7e5f976c88546d3f38a18afdd1861ad955ae728ba87c0d278f54d2eff271d0ed",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "src/scene/water.ts",
+      "baselineSha256": "8c189a3f1e641ea1e925e923de57b98faa0c39845b89e74a3b319a530f9f14ad",
+      "workingSha256": "8c189a3f1e641ea1e925e923de57b98faa0c39845b89e74a3b319a530f9f14ad",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    }
+  ],
+  "acceptedLighthouseBlocks": [
+    {
+      "name": "Constructor source texture, glow, full accepted beam shader/material/geometry and lighthouse bindings",
+      "baselineSha256": "3ae1b759a7aefcc7bdcc539c32a98e47606af4515cf03e83b157b921f5c55181",
+      "workingSha256": "3ae1b759a7aefcc7bdcc539c32a98e47606af4515cf03e83b157b921f5c55181",
+      "sameTextIgnoringCRLF": true,
+      "comparison": "UTF-8 method/block text after CRLF-to-LF normalization; no shader parsing or visual inference"
+    },
+    {
+      "name": "Reset lighthouse state after movement-history cleanup",
+      "baselineSha256": "7c12739ff75e9ba15f3574d8b1dc611ee4b824e1c754fdb9a0ff4451d451687f",
+      "workingSha256": "7c12739ff75e9ba15f3574d8b1dc611ee4b824e1c754fdb9a0ff4451d451687f",
+      "sameTextIgnoringCRLF": true,
+      "comparison": "UTF-8 method/block text after CRLF-to-LF normalization; no shader parsing or visual inference"
+    },
+    {
+      "name": "Visible-arrival start",
+      "baselineSha256": "4f4ecb6649461f749fb319fb110d8cf9d55eb2d6ca73f4ced71787e7a2a86f9b",
+      "workingSha256": "4f4ecb6649461f749fb319fb110d8cf9d55eb2d6ca73f4ced71787e7a2a86f9b",
+      "sameTextIgnoringCRLF": true,
+      "comparison": "UTF-8 method/block text after CRLF-to-LF normalization; no shader parsing or visual inference"
+    },
+    {
+      "name": "Settlement",
+      "baselineSha256": "a24c123eab0577333f60da801ba75069357415d48bf9fe94e37d7ab2dc5e14be",
+      "workingSha256": "a24c123eab0577333f60da801ba75069357415d48bf9fe94e37d7ab2dc5e14be",
+      "sameTextIgnoringCRLF": true,
+      "comparison": "UTF-8 method/block text after CRLF-to-LF normalization; no shader parsing or visual inference"
+    },
+    {
+      "name": "Light source application",
+      "baselineSha256": "724d4be729a5744946fd69ce5fa78ea6bdfca1de6f36ee394952362284afa9dd",
+      "workingSha256": "724d4be729a5744946fd69ce5fa78ea6bdfca1de6f36ee394952362284afa9dd",
+      "sameTextIgnoringCRLF": true,
+      "comparison": "UTF-8 method/block text after CRLF-to-LF normalization; no shader parsing or visual inference"
+    },
+    {
+      "name": "Update arrival envelope, reduced handling and authored sweep progression",
+      "baselineSha256": "f45cfe46f0549a58b9cab154de6cf2d4ee3ce2b786c2731993498468a0249d03",
+      "workingSha256": "f45cfe46f0549a58b9cab154de6cf2d4ee3ce2b786c2731993498468a0249d03",
+      "sameTextIgnoringCRLF": true,
+      "comparison": "UTF-8 method/block text after CRLF-to-LF normalization; no shader parsing or visual inference"
+    },
+    {
+      "name": "Arrival presentation metadata",
+      "baselineSha256": "5e331407609511417f42b22c3081b1b33f13ecbe79b6cc3307c3f191d857e7f5",
+      "workingSha256": "5e331407609511417f42b22c3081b1b33f13ecbe79b6cc3307c3f191d857e7f5",
+      "sameTextIgnoringCRLF": true,
+      "comparison": "UTF-8 method/block text after CRLF-to-LF normalization; no shader parsing or visual inference"
+    }
+  ],
+  "allAcceptedLighthouseBlocksUnchanged": true,
+  "captureSource": {
+    "beforeManifest": "reviews/water-motion/baseline-midphase/844x390/source.json",
+    "afterManifest": "reviews/water-motion/after-midphase/844x390/source.json",
+    "before": {
+      "recordedRuntimeHash": "d943620659412c6af9a5254cb69c7277da9cded6641eaebf4ed5a4031c717d5b",
+      "recomputedRuntimeHash": "d943620659412c6af9a5254cb69c7277da9cded6641eaebf4ed5a4031c717d5b",
+      "fileCount": 46
+    },
+    "after": {
+      "recordedRuntimeHash": "be1d42f21ba0b4f45687fda21c1db730254e5f68dfc7a0ccd7eba16956a8c62b",
+      "recomputedRuntimeHash": "be1d42f21ba0b4f45687fda21c1db730254e5f68dfc7a0ccd7eba16956a8c62b",
+      "fileCount": 47
+    },
+    "finalCapturedRuntimeStillMatchesWorkingBytes": true
+  },
+  "files": [
+    {
+      "path": ".nvmrc",
+      "baselineSha256": "68ca3fba3b7e864770cb61aeb306d4bd4354b68ab4dd38450860c5d823e42a53",
+      "workingSha256": "68ca3fba3b7e864770cb61aeb306d4bd4354b68ab4dd38450860c5d823e42a53",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "data/bellwater.level.json",
+      "baselineSha256": "a716b3cda50c7fda9d5429a2316576fe2d93aced2287ac281fec5ed8ed8b4de0",
+      "workingSha256": "a716b3cda50c7fda9d5429a2316576fe2d93aced2287ac281fec5ed8ed8b4de0",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "data/bellwater/witnesses.json",
+      "baselineSha256": "bccaa47b7c87579a4e661d35046d37c3d41684bf477a63afa852c349625f86c4",
+      "workingSha256": "bccaa47b7c87579a4e661d35046d37c3d41684bf477a63afa852c349625f86c4",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "data/experiments/holding-pier-solution.json",
+      "baselineSha256": "88179ae2c38883dce2a4de89d800f9e5b276a7cbc8a09ae81535e38bac1b952a",
+      "workingSha256": "88179ae2c38883dce2a4de89d800f9e5b276a7cbc8a09ae81535e38bac1b952a",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "data/first-crossing.level.json",
+      "baselineSha256": "403a19ddd7840a52f5706490d6e2f5a35ddf1a38dd20715b602fcc572f6167ab",
+      "workingSha256": "403a19ddd7840a52f5706490d6e2f5a35ddf1a38dd20715b602fcc572f6167ab",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "data/holding-pier.level.json",
+      "baselineSha256": "80d98e6c3a675eabb81dff75ef2df76b9ac90979d0ac1cbcc06a5603dc8fc81a",
+      "workingSha256": "80d98e6c3a675eabb81dff75ef2df76b9ac90979d0ac1cbcc06a5603dc8fc81a",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "data/replays/full-boat-detour.json",
+      "baselineSha256": "b88cb6c0a2935d2700526e8194fd57b97d436c1922da05a10d209ac1f48674a5",
+      "workingSha256": "b88cb6c0a2935d2700526e8194fd57b97d436c1922da05a10d209ac1f48674a5",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "data/replays/harbor-first.json",
+      "baselineSha256": "27bf293ba908464fb32097a6c92ec632f3611521094160abecb107780ea9e038",
+      "workingSha256": "27bf293ba908464fb32097a6c92ec632f3611521094160abecb107780ea9e038",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "data/replays/last-safe-boarding.json",
+      "baselineSha256": "73386dc35b4b495bcbaddbf8de50e768230b34f7598f67f8c871b3e19535ad31",
+      "workingSha256": "73386dc35b4b495bcbaddbf8de50e768230b34f7598f67f8c871b3e19535ad31",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "data/replays/missed-sheep-deadline.json",
+      "baselineSha256": "372f48fd32380d31189d461ff23ce39606033b3369278b245b4f7fe4ec6603b5",
+      "workingSha256": "372f48fd32380d31189d461ff23ce39606033b3369278b245b4f7fe4ec6603b5",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "data/replays/wait-for-tide.json",
+      "baselineSha256": "3dacc1cc212a57ecda08decac203b322d222d5a113ba60f2e4cafc9e01b59a9f",
+      "workingSha256": "3dacc1cc212a57ecda08decac203b322d222d5a113ba60f2e4cafc9e01b59a9f",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "index.html",
+      "baselineSha256": "73fed8f2910cacf1125237fa619e8966e55dff8d5ae248a9a611acd1202c1d78",
+      "workingSha256": "73fed8f2910cacf1125237fa619e8966e55dff8d5ae248a9a611acd1202c1d78",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "package-lock.json",
+      "baselineSha256": "fa75e13e3b5a563e3d99e14d514a205bb521344250c7479861e3e1507731a7f1",
+      "workingSha256": "fa75e13e3b5a563e3d99e14d514a205bb521344250c7479861e3e1507731a7f1",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "package.json",
+      "baselineSha256": "c8f57d8c320535e0a245aad65e96327c6ab6a952002fd5daf02318c95cce3929",
+      "workingSha256": "c8f57d8c320535e0a245aad65e96327c6ab6a952002fd5daf02318c95cce3929",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "src/audio/arrangement.ts",
+      "baselineSha256": "370bc490f7dd5cb12a106fd122d2687b27bb51e931f98f7e7770833f52d07313",
+      "workingSha256": "370bc490f7dd5cb12a106fd122d2687b27bb51e931f98f7e7770833f52d07313",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "src/audio/arrival.ts",
+      "baselineSha256": "2ab014b3dc8f64c507ba855edfa9acd4c2634d87c9ca6b92534043ec6f713f27",
+      "workingSha256": "2ab014b3dc8f64c507ba855edfa9acd4c2634d87c9ca6b92534043ec6f713f27",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "src/audio/atmosphere.ts",
+      "baselineSha256": "c9431f71b0fbc14cf49d92beee0b2615b8fbe5076be12beb10b26627eda2e9ce",
+      "workingSha256": "c9431f71b0fbc14cf49d92beee0b2615b8fbe5076be12beb10b26627eda2e9ce",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "src/audio/score.ts",
+      "baselineSha256": "a6188eebfa64b958130a2ff918e4f9f637f58872cf731b4e66d6fd48caefb1f0",
+      "workingSha256": "a6188eebfa64b958130a2ff918e4f9f637f58872cf731b4e66d6fd48caefb1f0",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "src/audio/sound.ts",
+      "baselineSha256": "436e0fc77e827cd8ddaefb1991709b5015ccc27123f94dfae6b855c47db3d6ee",
+      "workingSha256": "436e0fc77e827cd8ddaefb1991709b5015ccc27123f94dfae6b855c47db3d6ee",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "src/audio/wood.ts",
+      "baselineSha256": "c52cdc8e4d69a4a4c992a201eca8e0513225efd6b4260ce6025d5a66820eb777",
+      "workingSha256": "c52cdc8e4d69a4a4c992a201eca8e0513225efd6b4260ce6025d5a66820eb777",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "src/game/rescue-facts.ts",
+      "baselineSha256": "7b91d4dd8c81999370a6bd324a292d163addef294e0b8eefc4f744ec4baf63c8",
+      "workingSha256": "7b91d4dd8c81999370a6bd324a292d163addef294e0b8eefc4f744ec4baf63c8",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "src/game/rules.ts",
+      "baselineSha256": "aa37c820e121955416e964476de296bfd6b755ac569dcdc958b459884530a44b",
+      "workingSha256": "aa37c820e121955416e964476de296bfd6b755ac569dcdc958b459884530a44b",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "src/game/session.ts",
+      "baselineSha256": "96a670a82ceada27f7a0f750b45589b55e621256b97b9b7b26916221e4f3fde9",
+      "workingSha256": "96a670a82ceada27f7a0f750b45589b55e621256b97b9b7b26916221e4f3fde9",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "src/levels/level.ts",
+      "baselineSha256": "ad0f978d63a96157c043484081b83ec363a9c82f165c916ff726e678742bb9a9",
+      "workingSha256": "ad0f978d63a96157c043484081b83ec363a9c82f165c916ff726e678742bb9a9",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "src/main.ts",
+      "baselineSha256": "11ef55a0e8ac5f7644193c8031b380e0743ceb0685904936b499addd8d86309a",
+      "workingSha256": "fc1e5f721a7c3fd7b6318a139a5c9eb63282a2377224f06357cf7b5b121fbe5a",
+      "exactBytes": false,
+      "textEqualIgnoringCRLF": false,
+      "withinAuthorizedRuntimeEdit": true
+    },
+    {
+      "path": "src/scene/contact.ts",
+      "baselineSha256": "2df78646cb214a3f23d8ee82024d67c3ac6ea63d2ef1308b79898601ce3307fa",
+      "workingSha256": "2df78646cb214a3f23d8ee82024d67c3ac6ea63d2ef1308b79898601ce3307fa",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "src/scene/effects.ts",
+      "baselineSha256": "c3bcc533271db05bb646c7ce16c0be2eb446b2d5526fbcb9cbf9aaf4bb518c51",
+      "workingSha256": "25507964e4e3fea4dbaa18db9d439dc59038d3d85dbda2868495265562cc28ae",
+      "exactBytes": false,
+      "textEqualIgnoringCRLF": false,
+      "withinAuthorizedRuntimeEdit": true
+    },
+    {
+      "path": "src/scene/homecoming.ts",
+      "baselineSha256": "34a8c13d016a98b7f6b46ff2cec1d8b438af01837f940c543c9b181471e7cf33",
+      "workingSha256": "34a8c13d016a98b7f6b46ff2cec1d8b438af01837f940c543c9b181471e7cf33",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "src/scene/layout.ts",
+      "baselineSha256": "f336360510c4e45084d8972f0cf9f39013b4719209cac2bf7f2395d77656ae67",
+      "workingSha256": "f336360510c4e45084d8972f0cf9f39013b4719209cac2bf7f2395d77656ae67",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "src/scene/models.ts",
+      "baselineSha256": "64f14207059e1ff848acf20991292e70777fc6ad607a07e62519119ad78b8fa5",
+      "workingSha256": "64f14207059e1ff848acf20991292e70777fc6ad607a07e62519119ad78b8fa5",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "src/scene/motion.ts",
+      "baselineSha256": "70c0fdc7edd9aaba2b0d11ee6ed5ce109d0682188b2d96f0fac288d69d2ec118",
+      "workingSha256": "70c0fdc7edd9aaba2b0d11ee6ed5ce109d0682188b2d96f0fac288d69d2ec118",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "src/scene/paths.ts",
+      "baselineSha256": "cb907cdf1a03733e7714cb83d936fe5061c763522b6d76fb518124d8e692f39d",
+      "workingSha256": "cb907cdf1a03733e7714cb83d936fe5061c763522b6d76fb518124d8e692f39d",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "src/scene/scenery.ts",
+      "baselineSha256": "5ab1963591082baaebdffd061ac48b945ec922d58cae04071f73db22d1a43e7c",
+      "workingSha256": "5ab1963591082baaebdffd061ac48b945ec922d58cae04071f73db22d1a43e7c",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "src/scene/seabed.ts",
+      "baselineSha256": "67e7140cf48871d3d4f1d3f526e4c0092d745df33ea85cbc958bcb05a3adf7c1",
+      "workingSha256": "67e7140cf48871d3d4f1d3f526e4c0092d745df33ea85cbc958bcb05a3adf7c1",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "src/scene/shore.ts",
+      "baselineSha256": "c35393c1e9a11f3202b869c86ca174b585f3e59d3b13a7427c304c16d87da0eb",
+      "workingSha256": "c35393c1e9a11f3202b869c86ca174b585f3e59d3b13a7427c304c16d87da0eb",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "src/scene/transfer.ts",
+      "baselineSha256": "632c667c6beb64d22032c50863f12efb3211331db455c5dd426ca0209d2c8199",
+      "workingSha256": "632c667c6beb64d22032c50863f12efb3211331db455c5dd426ca0209d2c8199",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "src/scene/transitions.ts",
+      "baselineSha256": "8e5732e945bba3d417cb07a20a9d4ec390522bd074de92d275e1a342f086b20c",
+      "workingSha256": "09b2b8d68a50d6853befa7161a4e4993e45f7ba9868b79c491171026bcf5e447",
+      "exactBytes": false,
+      "textEqualIgnoringCRLF": false,
+      "withinAuthorizedRuntimeEdit": true
+    },
+    {
+      "path": "src/scene/water-shader.ts",
+      "baselineSha256": "7e5f976c88546d3f38a18afdd1861ad955ae728ba87c0d278f54d2eff271d0ed",
+      "workingSha256": "7e5f976c88546d3f38a18afdd1861ad955ae728ba87c0d278f54d2eff271d0ed",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "src/scene/water.ts",
+      "baselineSha256": "8c189a3f1e641ea1e925e923de57b98faa0c39845b89e74a3b319a530f9f14ad",
+      "workingSha256": "8c189a3f1e641ea1e925e923de57b98faa0c39845b89e74a3b319a530f9f14ad",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "src/scene/world.ts",
+      "baselineSha256": "198ada8fc484d39c2143284feffd562e5bbb898a075998242bba5a98a2efc94d",
+      "workingSha256": "476cc7a2c3c48fe1cc6b54065d02616020d0c039b65bc60ee777eb063c9ae6f4",
+      "exactBytes": false,
+      "textEqualIgnoringCRLF": false,
+      "withinAuthorizedRuntimeEdit": true
+    },
+    {
+      "path": "src/style.css",
+      "baselineSha256": "8ef4b2ce61f111bd9fd972ca6732ed282abfa51591cd41a1f51bf42f870db3c9",
+      "workingSha256": "8ef4b2ce61f111bd9fd972ca6732ed282abfa51591cd41a1f51bf42f870db3c9",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "src/ui/cove-layout.ts",
+      "baselineSha256": "938ad9acd566e185f20e509173266200b1eb05b533345bea73cd4a89ca044201",
+      "workingSha256": "938ad9acd566e185f20e509173266200b1eb05b533345bea73cd4a89ca044201",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "src/ui/location.ts",
+      "baselineSha256": "9d7e3d62e694026aa7191351f4b6d5a009f275d7bfad4456a6c1cc3c9d01585f",
+      "workingSha256": "9d7e3d62e694026aa7191351f4b6d5a009f275d7bfad4456a6c1cc3c9d01585f",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "src/ui/motion-preference.ts",
+      "baselineSha256": "af00e62d546893188ac5f47468182a790ead2c128f7be431358ad36ab0640cf8",
+      "workingSha256": "af00e62d546893188ac5f47468182a790ead2c128f7be431358ad36ab0640cf8",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "src/ui/placement.ts",
+      "baselineSha256": "d25ab3b37a2a41c2dece532d8dd07d896064f444cb5607309bc7fe5e6fc8f6ab",
+      "workingSha256": "d25ab3b37a2a41c2dece532d8dd07d896064f444cb5607309bc7fe5e6fc8f6ab",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "src/ui/presentation.ts",
+      "baselineSha256": "a5a77643084bc2749f3698ccec7619b98dd649ea4d34ff301d4b77c01c3bbfbb",
+      "workingSha256": "a5a77643084bc2749f3698ccec7619b98dd649ea4d34ff301d4b77c01c3bbfbb",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "tsconfig.json",
+      "baselineSha256": "cb94196408a1f7d0784d58d81ac7fb91f2203d1aa0fefb7dae1a3b19ccfba224",
+      "workingSha256": "cb94196408a1f7d0784d58d81ac7fb91f2203d1aa0fefb7dae1a3b19ccfba224",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    },
+    {
+      "path": "vite.config.ts",
+      "baselineSha256": "42d95c3568be6430b7d1fcc9e5168d3df4736d998cc6f01d20d0d3c554365f26",
+      "workingSha256": "42d95c3568be6430b7d1fcc9e5168d3df4736d998cc6f01d20d0d3c554365f26",
+      "exactBytes": true,
+      "textEqualIgnoringCRLF": true,
+      "withinAuthorizedRuntimeEdit": false
+    }
+  ]
+}

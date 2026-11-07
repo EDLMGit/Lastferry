@@ -1,0 +1,57 @@
+{
+  "clockExtraction": {
+    "status": "failed; inadmissible for phase matching",
+    "method": "End-clock to encoded video duration alignment did not match actual visible progress; discovered by native image inspection.",
+    "originalManifestPath": "reviews/water-motion/baseline/844x390/raw/invalid-clock-extraction/frames.json",
+    "originalManifestSha256": "1d0ca8c665ad4ec95f1576f73f501656e1583ecbd7d67378c35fb3b128ac701d",
+    "originalHelperPath": "reviews/water-motion/baseline/844x390/raw/invalid-clock-extraction/extract-water-motion-frames-initial.mjs",
+    "originalHelperSha256": "703acc5ff0f378575133a7e6e1a39718529ffc1372e23ce4d0e38db2f83da060",
+    "scope": "Decoded PNG time labels invalid; original actual full-interface videos and source/timing observations remain valid.",
+    "resolution": "Use same-rAF synchronous canvas/state captures separately from untouched natural full-interface recordings."
+  },
+  "multiPhaseProbe": {
+    "status": "incomplete; invalid overshoots excluded from comparison",
+    "cause": "Synchronous WebGL PNG readback stalled subsequent rAF progression in the same crossing. Single-target separate captures replace these phases.",
+    "invalid": [
+      {
+        "originalPath": "reviews/water-motion/baseline-phases/844x390/short-return-progress-50.png",
+        "archivedPath": "reviews/water-motion/baseline-phases/844x390/raw/invalid-phase-overshoot/short-return-progress-50.png",
+        "requested": 0.5,
+        "observed": 0.9964247420514714
+      },
+      {
+        "originalPath": "reviews/water-motion/baseline-phases/844x390/short-return-progress-78.png",
+        "archivedPath": "reviews/water-motion/baseline-phases/844x390/raw/invalid-phase-overshoot/short-return-progress-78.png",
+        "requested": 0.78,
+        "observed": 0.9964247420514714
+      },
+      {
+        "originalPath": "reviews/water-motion/baseline-phases/844x390/long-outward-progress-50.png",
+        "archivedPath": "reviews/water-motion/baseline-phases/844x390/raw/invalid-phase-overshoot/long-outward-progress-50.png",
+        "requested": 0.5,
+        "observed": 0.7222013843716107
+      },
+      {
+        "originalPath": "reviews/water-motion/baseline-phases/844x390/long-return-progress-50.png",
+        "archivedPath": "reviews/water-motion/baseline-phases/844x390/raw/invalid-phase-overshoot/long-return-progress-50.png",
+        "requested": 0.5,
+        "observed": 0.705246943433305
+      }
+    ],
+    "missing": [
+      {
+        "length": "short",
+        "turn": 2,
+        "target": 0.5
+      },
+      {
+        "length": "short",
+        "turn": 2,
+        "target": 0.78
+      }
+    ],
+    "originalPath": "reviews/water-motion/baseline-phases/844x390/raw/capture-original.json",
+    "originalSha256": "4962158a157abfaa04a25c626ea657ab9a0956904e453ee340fcb5c1f68f98d5"
+  },
+  "replacement": "reviews/water-motion/baseline-midphase/844x390/capture.json"
+}

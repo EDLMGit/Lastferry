@@ -1,0 +1,159 @@
+{
+  "kit": "Last Ferry cove icons",
+  "version": "0.1.0-candidate",
+  "status": "draft, not applied to runtime or accepted by the playtester",
+  "grid": 24,
+  "strokeWidth": 1.8,
+  "renderSizes": [
+    24,
+    28
+  ],
+  "provenance": "Original paths authored for this package; no imported icon library or raster assets. Art cues derived from src/scene/models.ts in GitHub8052cfc.",
+  "usage": "Inline SVG within a native labeled button, decorative aria-hidden=true. Set currentColor on button; optionally set --cove-icon-accent. For disabled/monochrome, set --cove-icon-accent:currentColor. Do not use CSS rotation to swap the Board/Unload semantics. SVGs carry no text; accessible names belong to the button. External img rendering does not inherit currentColor.",
+  "icons": [
+    {
+      "id": "ui.icon.board",
+      "file": "board.svg",
+      "symbol": "cove-board",
+      "label": "Board",
+      "meaning": "Arrow descends toward the open ferry deck. Keep the visible Board label for consequential transfer actions.",
+      "status": "candidate"
+    },
+    {
+      "id": "ui.icon.unload",
+      "file": "unload.svg",
+      "symbol": "cove-unload",
+      "label": "Unload",
+      "meaning": "Arrow rises away from the same ferry deck. This means unload selected animals, never discard or delete.",
+      "status": "candidate"
+    },
+    {
+      "id": "ui.icon.sail",
+      "file": "sail.svg",
+      "symbol": "cove-sail",
+      "label": "Sail",
+      "meaning": "Compact ferry with trailing travel marks. Labels retain destination and action consequences.",
+      "status": "candidate"
+    },
+    {
+      "id": "ui.icon.harbor-home",
+      "file": "harbor-home.svg",
+      "symbol": "cove-harbor-home",
+      "label": "Harbor \u00b7 Home",
+      "meaning": "The cove lighthouse identifies the rescue destination. It must not be used for Back to boat, a main menu or a free travel action.",
+      "status": "candidate"
+    },
+    {
+      "id": "ui.icon.undo",
+      "file": "undo.svg",
+      "symbol": "cove-undo",
+      "label": "Undo",
+      "meaning": "Return to the previous complete action. Kept distinct from Restart.",
+      "status": "candidate"
+    },
+    {
+      "id": "ui.icon.wait",
+      "file": "wait.svg",
+      "symbol": "cove-wait",
+      "label": "Wait",
+      "meaning": "An hourglass marks an explicit turn-spending wait. The icon is not a countdown of real time.",
+      "status": "candidate"
+    },
+    {
+      "id": "ui.icon.whole-cove",
+      "file": "whole-cove.svg",
+      "symbol": "cove-whole-cove",
+      "label": "Whole cove",
+      "meaning": "Three islands and curved passages identify the entire cove framing.",
+      "status": "candidate"
+    },
+    {
+      "id": "ui.icon.back-to-boat",
+      "file": "back-to-boat.svg",
+      "symbol": "cove-back-to-boat",
+      "label": "Back to boat",
+      "meaning": "Framing corners around the ferry recenter the camera only; this must not resemble Harbor Home.",
+      "status": "candidate"
+    },
+    {
+      "id": "ui.icon.menu",
+      "file": "menu.svg",
+      "symbol": "cove-menu",
+      "label": "Menu",
+      "meaning": "Two softly rounded slats for the Crossing menu.",
+      "status": "candidate"
+    },
+    {
+      "id": "ui.icon.settings",
+      "file": "settings.svg",
+      "symbol": "cove-settings",
+      "label": "Settings",
+      "meaning": "Two adjustable pins provide a familiar settings metaphor without ornate machinery.",
+      "status": "candidate"
+    },
+    {
+      "id": "ui.icon.close",
+      "file": "close.svg",
+      "symbol": "cove-close",
+      "label": "Close",
+      "meaning": "Dismiss the current surface without committing an action.",
+      "status": "candidate"
+    },
+    {
+      "id": "ui.icon.confirm",
+      "file": "confirm.svg",
+      "symbol": "cove-confirm",
+      "label": "Confirm",
+      "meaning": "Commit the currently previewed selection; keep explicit visible action text and consequences.",
+      "status": "candidate"
+    },
+    {
+      "id": "ui.icon.next-cove",
+      "file": "next-cove.svg",
+      "symbol": "cove-next-cove",
+      "label": "Next cove",
+      "meaning": "A curved onward path from an island identifies progression after arrival.",
+      "status": "candidate"
+    },
+    {
+      "id": "ui.icon.sound-on",
+      "file": "sound-on.svg",
+      "symbol": "cove-sound-on",
+      "label": "Mute sound",
+      "meaning": "Audio is currently playing; the action label is Mute sound.",
+      "status": "candidate"
+    },
+    {
+      "id": "ui.icon.sound-off",
+      "file": "sound-off.svg",
+      "symbol": "cove-sound-off",
+      "label": "Enable sound",
+      "meaning": "Audio is muted; the action label is Enable sound.",
+      "status": "candidate"
+    },
+    {
+      "id": "ui.icon.sound-retry",
+      "file": "sound-retry.svg",
+      "symbol": "cove-sound-retry",
+      "label": "Retry sound",
+      "meaning": "Sound was requested but is not running. The visible Retry label must remain; this is not mute.",
+      "status": "candidate"
+    },
+    {
+      "id": "ui.icon.fullscreen-enter",
+      "file": "fullscreen-enter.svg",
+      "symbol": "cove-fullscreen-enter",
+      "label": "Fullscreen",
+      "meaning": "Expand the common app root using the existing trusted fullscreen path.",
+      "status": "candidate"
+    },
+    {
+      "id": "ui.icon.fullscreen-exit",
+      "file": "fullscreen-exit.svg",
+      "symbol": "cove-fullscreen-exit",
+      "label": "Exit fullscreen",
+      "meaning": "Leave actual fullscreen. Never infer state from an optimistic toggle.",
+      "status": "candidate"
+    }
+  ]
+}

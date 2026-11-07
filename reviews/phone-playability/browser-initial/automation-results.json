@@ -1,0 +1,259 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "tests/e2e/phone-playability.spec.ts",
+      "--grep",
+      "phone layout 844|phone fullscreen: real"
+    ],
+    "configFile": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\playwright.config.ts",
+    "rootDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "snapshotDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5211",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "deviceScaleFactor": 1,
+          "headless": true,
+          "launchOptions": {
+            "args": [
+              "--use-angle=swiftshader",
+              "--enable-unsafe-swiftshader"
+            ]
+          },
+          "video": {
+            "mode": "on",
+            "size": {
+              "width": 1440,
+              "height": 900
+            }
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "reviews/phone-playability/browser-initial/automation-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "phone-playability.spec.ts",
+      "file": "phone-playability.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "phone layout 844x390: readable Play and deliberate complete Whole cove",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 41649,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at fullyVisible (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\ui.ts:93:22)\n    at press (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\phone-playability.spec.ts:48:3)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\phone-playability.spec.ts:209:9\n    at observed (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\phone-playability.spec.ts:143:5)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\phone-playability.spec.ts:188:7",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\ui.ts",
+                      "column": 22,
+                      "line": 93
+                    },
+                    "snippet": "\u001b[90m   at \u001b[39mui.ts:93\n\n  91 |   }\n  92 |   throw Error(`Natural Tab navigation did not reach ${id}; active=${await active(page)}`);\n> 93 | }\n     |  ^\n  94 | export async function keyAct(page: Page, id: string) {\n  95 |   if ((id === 'board' || id === 'unload') && !(await page.locator(`#${id}`).isVisible())) {\n  96 |     const current = await page.locator('.map-target[aria-current=\"location\"]').getAttribute('id');"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\ui.ts",
+                        "column": 22,
+                        "line": 93
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n\n   at ui.ts:93\n\n  91 |   }\n  92 |   throw Error(`Natural Tab navigation did not reach ${id}; active=${await active(page)}`);\n> 93 | }\n     |  ^\n  94 | export async function keyAct(page: Page, id: string) {\n  95 |   if ((id === 'board' || id === 'unload') && !(await page.locator(`#${id}`).isVisible())) {\n  96 |     const current = await page.locator('.map-target[aria-current=\"location\"]').getAttribute('id');\n    at fullyVisible (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\ui.ts:93:22)\n    at press (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\phone-playability.spec.ts:48:3)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\phone-playability.spec.ts:209:9\n    at observed (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\phone-playability.spec.ts:143:5)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\phone-playability.spec.ts:188:7"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T18:02:04.919Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\phone-playability-phone-la-cc57f-iberate-complete-Whole-cove\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\ui.ts",
+                    "column": 22,
+                    "line": 93
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "23439d4093445d5c5ec9-19d2e9b426ae86b45f5b",
+          "file": "phone-playability.spec.ts",
+          "line": 174,
+          "column": 3
+        },
+        {
+          "title": "phone fullscreen: real API result, root includes dialogs and external exit preserves subset",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6514,
+                  "error": {
+                    "message": "Error: locator.isChecked: Error: Not a checkbox or radio button\nCall log:\n\u001b[2m  - waiting for locator('#passenger-sheep-1')\u001b[22m\n",
+                    "stack": "Error: locator.isChecked: Error: Not a checkbox or radio button\nCall log:\n\u001b[2m  - waiting for locator('#passenger-sheep-1')\u001b[22m\n\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\phone-playability.spec.ts:574:67\n    at observed (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\phone-playability.spec.ts:143:5)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\phone-playability.spec.ts:553:5",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\phone-playability.spec.ts",
+                      "column": 67,
+                      "line": 574
+                    },
+                    "snippet": "  572 |         await press(page, 'unload');\n  573 |         await press(page, 'passenger-sheep-1');\n> 574 |         const selected = await page.locator('#passenger-sheep-1').isChecked();\n      |                                                                   ^\n  575 |         await page.evaluate(() => document.exitFullscreen());\n  576 |         await page.waitForTimeout(200);\n  577 |         expect(await page.evaluate(() => document.fullscreenElement)).toBeNull();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\phone-playability.spec.ts",
+                        "column": 67,
+                        "line": 574
+                      },
+                      "message": "Error: locator.isChecked: Error: Not a checkbox or radio button\nCall log:\n\u001b[2m  - waiting for locator('#passenger-sheep-1')\u001b[22m\n\n\n  572 |         await press(page, 'unload');\n  573 |         await press(page, 'passenger-sheep-1');\n> 574 |         const selected = await page.locator('#passenger-sheep-1').isChecked();\n      |                                                                   ^\n  575 |         await page.evaluate(() => document.exitFullscreen());\n  576 |         await page.waitForTimeout(200);\n  577 |         expect(await page.evaluate(() => document.fullscreenElement)).toBeNull();\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\phone-playability.spec.ts:574:67\n    at observed (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\phone-playability.spec.ts:143:5)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\phone-playability.spec.ts:553:5"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T18:02:52.606Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\phone-playability-phone-fu-03acf-ernal-exit-preserves-subset\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\phone-playability.spec.ts",
+                    "column": 67,
+                    "line": 574
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "23439d4093445d5c5ec9-1be0c4c4e5f92ef02f5b",
+          "file": "phone-playability.spec.ts",
+          "line": 540,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-24T18:01:53.522Z",
+    "duration": 67169.399,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

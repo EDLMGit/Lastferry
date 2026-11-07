@@ -1,0 +1,426 @@
+{
+  "description": "Developer witnesses for the production reducer. Do not display these solutions as in-game hints.",
+  "levelId": "bellwater",
+  "witnesses": [
+    {
+      "id": "shallow-outward-deep-return",
+      "actions": [
+        {
+          "type": "move",
+          "to": "shallows"
+        },
+        {
+          "type": "move",
+          "to": "low-pier"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["tansy", "lark"]
+        },
+        {
+          "type": "move",
+          "to": "east-buoy"
+        },
+        {
+          "type": "move",
+          "to": "west-buoy"
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "move",
+          "to": "bell-pier"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["bram"]
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": ["tansy", "lark", "bram"]
+        }
+      ],
+      "expected": {
+        "turn": 10,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "status": "won",
+        "aboard": [],
+        "delivered": ["tansy", "lark", "bram"]
+      }
+    },
+    {
+      "id": "deep-outward-shallow-return",
+      "actions": [
+        {
+          "type": "move",
+          "to": "west-buoy"
+        },
+        {
+          "type": "move",
+          "to": "east-buoy"
+        },
+        {
+          "type": "move",
+          "to": "low-pier"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["tansy", "lark"]
+        },
+        {
+          "type": "move",
+          "to": "shallows"
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "move",
+          "to": "bell-pier"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["bram"]
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": ["tansy", "lark", "bram"]
+        }
+      ],
+      "expected": {
+        "turn": 10,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "status": "won",
+        "aboard": [],
+        "delivered": ["tansy", "lark", "bram"]
+      }
+    },
+    {
+      "id": "wait-at-harbor",
+      "actions": [
+        {
+          "type": "wait"
+        },
+        {
+          "type": "move",
+          "to": "shallows"
+        },
+        {
+          "type": "move",
+          "to": "low-pier"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["tansy", "lark"]
+        },
+        {
+          "type": "move",
+          "to": "shallows"
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "move",
+          "to": "bell-pier"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["bram"]
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": ["tansy", "lark", "bram"]
+        }
+      ],
+      "expected": {
+        "turn": 10,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "status": "won",
+        "aboard": [],
+        "delivered": ["tansy", "lark", "bram"]
+      }
+    },
+    {
+      "id": "wait-at-shallows",
+      "actions": [
+        {
+          "type": "move",
+          "to": "shallows"
+        },
+        {
+          "type": "wait"
+        },
+        {
+          "type": "move",
+          "to": "low-pier"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["tansy", "lark"]
+        },
+        {
+          "type": "move",
+          "to": "shallows"
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "move",
+          "to": "bell-pier"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["bram"]
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": ["tansy", "lark", "bram"]
+        }
+      ],
+      "expected": {
+        "turn": 10,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "status": "won",
+        "aboard": [],
+        "delivered": ["tansy", "lark", "bram"]
+      }
+    },
+    {
+      "id": "wait-at-low-pier-before-boarding",
+      "actions": [
+        {
+          "type": "move",
+          "to": "shallows"
+        },
+        {
+          "type": "move",
+          "to": "low-pier"
+        },
+        {
+          "type": "wait"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["tansy", "lark"]
+        },
+        {
+          "type": "move",
+          "to": "shallows"
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "move",
+          "to": "bell-pier"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["bram"]
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": ["tansy", "lark", "bram"]
+        }
+      ],
+      "expected": {
+        "turn": 10,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "status": "won",
+        "aboard": [],
+        "delivered": ["tansy", "lark", "bram"]
+      }
+    },
+    {
+      "id": "wait-at-low-pier-after-boarding",
+      "actions": [
+        {
+          "type": "move",
+          "to": "shallows"
+        },
+        {
+          "type": "move",
+          "to": "low-pier"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["tansy", "lark"]
+        },
+        {
+          "type": "wait"
+        },
+        {
+          "type": "move",
+          "to": "shallows"
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "move",
+          "to": "bell-pier"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["bram"]
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": ["tansy", "lark", "bram"]
+        }
+      ],
+      "expected": {
+        "turn": 10,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "status": "won",
+        "aboard": [],
+        "delivered": ["tansy", "lark", "bram"]
+      }
+    },
+    {
+      "id": "tansy-then-lark",
+      "actions": [
+        {
+          "type": "move",
+          "to": "shallows"
+        },
+        {
+          "type": "move",
+          "to": "low-pier"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["tansy"]
+        },
+        {
+          "type": "board",
+          "passengerIds": ["lark"]
+        },
+        {
+          "type": "move",
+          "to": "shallows"
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "move",
+          "to": "bell-pier"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["bram"]
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": ["tansy", "lark", "bram"]
+        }
+      ],
+      "expected": {
+        "turn": 10,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "status": "won",
+        "aboard": [],
+        "delivered": ["tansy", "lark", "bram"]
+      }
+    },
+    {
+      "id": "lark-then-tansy",
+      "actions": [
+        {
+          "type": "move",
+          "to": "shallows"
+        },
+        {
+          "type": "move",
+          "to": "low-pier"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["lark"]
+        },
+        {
+          "type": "board",
+          "passengerIds": ["tansy"]
+        },
+        {
+          "type": "move",
+          "to": "shallows"
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "move",
+          "to": "bell-pier"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["bram"]
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": ["tansy", "lark", "bram"]
+        }
+      ],
+      "expected": {
+        "turn": 10,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "status": "won",
+        "aboard": [],
+        "delivered": ["tansy", "lark", "bram"]
+      }
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+import { test, expect } from '@playwright/test';
+import { mkdirSync, writeFileSync } from 'node:fs';
+import { reviewDir } from './evidence';
+import { act, active, dialogCycle, fullyVisible, idle, readable, ready, state, tabTo, undo } from './ui';
+
+for (const [width, height] of [[780, 320], [844, 390]]) {
+  test(`transfer controls remain reachable at ${width}x${height}`, async ({ browser, baseURL }) => {
+    const context = await browser.newContext({ baseURL, viewport: { width, height }, hasTouch: true, isMobile: true, deviceScaleFactor: 1 });
+    await context.addInitScript(() => localStorage.setItem('last-ferry-muted', 'true'));
+    const page = await context.newPage(), errors: string[] = [], evidence = `${reviewDir}/${width}x${height}`;
+    page.on('pageerror', error => errors.push(error.message));
+    mkdirSync(reviewDir, { recursive: true });
+    await ready(page, 'holding-pier');
+    const initial = await state(page);
+    expect(await page.locator('.game').evaluate(element => element.getBoundingClientRect().height)).toBe(height);
+    for (const id of ['status-toggle', 'map-harbor', 'map-stone', 'map-shallows', 'map-rabbit-pier', 'undo']) {
+      await fullyVisible(page, page.locator(`#${id}`));
+      await readable(page.locator(`#${id}`));
+    }
+    await page.screenshot({ path: `${evidence}-start.png` });
+    await page.locator('#status-toggle').tap();
+    await fullyVisible(page, page.locator('#cancel'));
+    await expect(page.locator('.forecast-detail')).toContainText('Rabbit Pier will flood');
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#status-toggle')).toBeFocused();
+    await tabTo(page, 'map-stone', true);
+    await page.keyboard.press('Enter');
+    await expect(page.locator('#local-heading')).toBeFocused();
+    await fullyVisible(page, page.locator('#unload'));
+    await readable(page.locator('#unload'));
+    await page.screenshot({ path: `${evidence}-current.png` });
+    await tabTo(page, 'unload');
+    await page.keyboard.press('Enter');
+    await dialogCycle(page);
+    for (const id of ['cancel', 'commit']) await fullyVisible(page, page.locator(`#${id}`));
+    await readable(page.locator('#commit'));
+    await page.screenshot({ path: `${evidence}-unload-preview.png` });
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#unload')).toBeFocused();
+    expect(await state(page)).toEqual(initial);
+    await act(page, 'unload', true);
+    expect(await state(page)).toMatchObject({ turn: 1, aboard: [], waitingByPier: { 'stone-pier': ['sheep-1'] } });
+    await tabTo(page, 'undo', true);
+    await page.keyboard.press('Enter');
+    await idle(page);
+    expect(await state(page)).toEqual(initial);
+    await act(page, 'unload', true);
+    await act(page, 'map-shallows', true);
+    await act(page, 'map-rabbit-pier', true);
+    const dry = await state(page);
+    await page.locator('#map-rabbit-pier').tap();
+    await fullyVisible(page, page.locator('#board'));
+    await page.locator('#board').tap();
+    await expect(page.locator('.consequence')).toContainText('Both are safe aboard.');
+    for (const id of ['passenger-rabbit-1', 'passenger-rabbit-2']) {
+      await page.locator(`#${id}`).scrollIntoViewIfNeeded();
+      await fullyVisible(page, page.locator(`#${id}`));
+      await readable(page.locator(`#${id}`));
+    }
+    await page.locator('#passenger-rabbit-2').tap();
+    await expect(page.locator('.consequence')).toContainText('Rue is still waiting at Rabbit Pier when it floods. This ends the crossing.');
+    await page.locator('#passenger-rabbit-2').tap();
+    await page.locator('.consequence').scrollIntoViewIfNeeded();
+    await fullyVisible(page, page.locator('.consequence'), false);
+    for (const id of ['cancel', 'commit']) await fullyVisible(page, page.locator(`#${id}`));
+    await page.screenshot({ path: `${evidence}-critical-boarding.png` });
+    await page.locator('#commit').tap();
+    await idle(page);
+    const afterRise = await state(page);
+    expect(afterRise).toMatchObject({ turn: 4, tideLevel: 1, status: 'playing', aboard: ['rabbit-1', 'rabbit-2'] });
+    await fullyVisible(page, page.locator('#status-toggle'));
+    await page.screenshot({ path: `${evidence}-after-rise.png` });
+    await undo(page, true);
+    expect(await state(page)).toEqual(dry);
+    await act(page, 'board', true);
+    expect(await state(page)).toEqual(afterRise);
+    await act(page, 'map-shallows', true);
+    await act(page, 'map-stone', true);
+    await act(page, 'board', true);
+    await act(page, 'map-harbor', true);
+    await act(page, 'unload', true);
+    expect(await state(page)).toMatchObject({ turn: 9, tideLevel: 2, status: 'won', delivered: ['rabbit-1', 'rabbit-2', 'sheep-1'] });
+    for (const id of ['terminal-undo', 'terminal-restart']) await fullyVisible(page, page.locator(`#${id}`));
+    await dialogCycle(page, 'terminal-undo');
+    await page.screenshot({ path: `${evidence}-success.png` });
+    await tabTo(page, 'terminal-undo');
+    await page.keyboard.press('Enter');
+    await idle(page);
+    expect(await state(page)).toMatchObject({ turn: 8, status: 'playing', aboard: ['rabbit-1', 'rabbit-2', 'sheep-1'] });
+    expect(await active(page)).toBe('undo');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    expect(errors).toEqual([]);
+    writeFileSync(`${evidence}-verification.json`, JSON.stringify({ viewport: [width, height], touchEmulation: true, initial, beforeTide: dry, afterTide: afterRise, afterTerminalUndo: await state(page), errors }, null, 2));
+    await context.close();
+  });
+}

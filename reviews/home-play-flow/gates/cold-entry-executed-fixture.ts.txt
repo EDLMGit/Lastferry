@@ -1,0 +1,1012 @@
+import { expect, test, type Page } from '@playwright/test';
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
+import { reviewDir, productionURL } from './evidence';
+import { act, activate, fullyVisible, idle, state, tabTo, undo, restart } from './ui';
+import { coldTouch, passive, rescueBellwater, journeyKey } from './story-support';
+
+test.use({
+  actionTimeout: 12000,
+  launchOptions: {
+    ignoreDefaultArgs: ['--autoplay-policy=no-user-gesture-required'],
+    args: [
+      '--use-angle=swiftshader',
+      '--enable-unsafe-swiftshader',
+      '--autoplay-policy=document-user-activation-required',
+    ],
+  },
+});
+test.setTimeout(240000);
+mkdirSync(`${reviewDir}/raw`, { recursive: true });
+const save = (name: string, value: unknown) =>
+  writeFileSync(`${reviewDir}/${name}.json`, JSON.stringify(value, null, 2));
+const checkpoint = (page: Page) => passive(page, (key) => localStorage.getItem(key), journeyKey);
+const timeline = (page: Page) =>
+  passive(page, () => (window as any).__LAST_FERRY__.getStoryStatus().timeline);
+const audio = (page: Page) => passive(page, () => (window as any).__LAST_FERRY__.getAudioStatus());
+const inspect = (page: Page) =>
+  passive(page, () => {
+    const g = (window as any).__LAST_FERRY__;
+    return {
+      state: g.getState(),
+      story: g.getStoryStatus(),
+      campaign: g.getCampaignStatus(),
+      audio: g.getAudioStatus(),
+      render: g.getRenderStatus(),
+      navigation: g.getNavigationStatus(),
+    };
+  });
+async function root(page: Page) {
+  await page.goto('/');
+  await expect(page.locator('#home-play')).toBeVisible();
+  await expect
+    .poll(() => passive(page, () => (window as any).__LAST_FERRY__?.getMetrics().frames ?? 0))
+    .toBeGreaterThan(3);
+}
+async function snap(page: Page, name: string) {
+  const observation = await inspect(page);
+  await page.screenshot({ path: `${reviewDir}/${name}.png` });
+  save(name, observation);
+}
+async function more(page: Page, id: string) {
+  if (!(await page.locator('#story-more').getAttribute('open'))) {
+    if (!(await page.locator(`#${id}`).isVisible()))
+      await page.locator('#story-more summary').click();
+  }
+  await activate(page, id);
+}
+const hash = (value: Buffer | string) => createHash('sha256').update(value).digest('hex');
+function source() {
+  const walk = (path: string): string[] =>
+    readdirSync(path, { withFileTypes: true }).flatMap((e) =>
+      e.isDirectory() ? walk(`${path}/${e.name}`) : [`${path}/${e.name}`],
+    );
+  const files = Object.fromEntries(
+    [
+      ...walk('src'),
+      ...walk('data'),
+      ...(existsSync('public') ? walk('public') : []),
+      'package.json',
+      'package-lock.json',
+      'index.html',
+      'vite.config.ts',
+    ]
+      .sort()
+      .map((path) => [path, hash(readFileSync(path))]),
+  );
+  return {
+    capturedAt: new Date().toISOString(),
+    head: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
+    status: execFileSync('git', ['status', '--short'], { encoding: 'utf8' }).trim(),
+    files,
+    sha256: hash(JSON.stringify(files)),
+    node: process.version,
+  };
+}
+test.beforeAll(() => {
+  save('source-manifest', source());
+  const fixture = readFileSync('tests/e2e/home-play-flow.spec.ts');
+  writeFileSync(`${reviewDir}/raw/executed-home-play-flow.spec.ts`, fixture);
+  save('executed-fixture', {
+    path: 'tests/e2e/home-play-flow.spec.ts',
+    sha256: hash(fixture),
+    copiedBeforeExecution: true,
+  });
+});
+test.afterAll(() => save('source-after', source()));
+
+async function recordRuntime(page: Page, name: string) {
+  const directory = `${reviewDir}/raw/${name}`;
+  mkdirSync(directory, { recursive: true });
+  await passive(page, () => {
+    const startAudio = () => {
+      const stream = (window as any).__LAST_FERRY__.captureAudioStream();
+      if (!stream || (window as any).__storyRecording) return;
+      const chunks: Blob[] = [],
+        recorder = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' });
+      const start = performance.timeOrigin + performance.now();
+      const stopped = new Promise<number[]>((resolve) => {
+        recorder.ondataavailable = (e) => chunks.push(e.data);
+        recorder.onstop = async () =>
+          resolve(Array.from(new Uint8Array(await new Blob(chunks).arrayBuffer())));
+      });
+      (window as any).__storyRecording = { recorder, stopped, start };
+      recorder.start();
+    };
+    document.addEventListener('click', startAudio, { capture: true, once: true });
+  });
+  const cdp = await page.context().newCDPSession(page),
+    frames: { path: string; timestamp: number; receipt: number }[] = [];
+  cdp.on('Page.screencastFrame', (event) => {
+    const path = `${directory}/frame-${String(frames.length).padStart(6, '0')}.jpg`;
+    writeFileSync(path, Buffer.from(event.data, 'base64'));
+    frames.push({ path, timestamp: event.metadata.timestamp!, receipt: Date.now() });
+    void cdp.send('Page.screencastFrameAck', { sessionId: event.sessionId });
+  });
+  await cdp.send('Page.startScreencast', {
+    format: 'jpeg',
+    quality: 87,
+    maxWidth: page.viewportSize()!.width,
+    maxHeight: page.viewportSize()!.height,
+    everyNthFrame: 2,
+  });
+  return async () => {
+    await cdp.send('Page.stopScreencast');
+    const audioBytes = await page.evaluate(async () => {
+      const capture = (window as any).__storyRecording;
+      capture.recorder.stop();
+      return capture.stopped as Promise<number[]>;
+    });
+    writeFileSync(`${directory}/runtime-audio.webm`, new Uint8Array(audioBytes));
+    const manifest = {
+      name,
+      viewport: page.viewportSize(),
+      audioStartEpochMs: await passive(page, () => (window as any).__storyRecording.start),
+      audio: `${directory}/runtime-audio.webm`,
+      frames,
+      method:
+        'Uninterrupted native viewport CDP screencast plus existing Sound.captureStream master output; timestamp alignment only, no level adjustment, normalization, substituted audio or gameplay state injection.',
+    };
+    save(`${name}-recording`, manifest);
+    await cdp.detach();
+    return manifest;
+  };
+}
+
+test('integrated cold-touch Home autoplay direct transfers and two actual rescues with runtime audio', async ({
+  browser,
+  baseURL,
+}) => {
+  const context = await browser.newContext({
+    baseURL,
+    viewport: { width: 780, height: 320 },
+    hasTouch: true,
+    isMobile: true,
+    deviceScaleFactor: 1,
+  });
+  const page = await context.newPage();
+  const errors: string[] = [],
+    observations: any[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  let stop: Awaited<ReturnType<typeof recordRuntime>> | undefined;
+  try {
+    await root(page);
+    expect(await checkpoint(page)).toBeNull();
+    expect((await audio(page)).contextState).toBe('not-created');
+    await snap(page, '780x320-home');
+    stop = await recordRuntime(page, 'actual-journey');
+    await page.waitForTimeout(2500);
+    await coldTouch(page, 'home-play');
+    const pending = await checkpoint(page);
+    for (const [index, shot] of ['tide', 'lantern', 'ferry'].entries()) {
+      await expect
+        .poll(
+          async () => {
+            const current = await timeline(page);
+            if (current.paused && current.interruptionGap > 1000 && !current.final) {
+              observations.push({
+                recordedInterruption: current,
+                checkpoint: await checkpoint(page),
+              });
+              await activate(page, 'story-pause', true);
+            }
+            return (await timeline(page)).shot;
+          },
+          { timeout: 10000, intervals: [100] },
+        )
+        .toBe(shot);
+      await expect
+        .poll(async () => (await timeline(page)).elapsed, { intervals: [100] })
+        .toBeGreaterThan(1500);
+      save(`780x320-opening-${index}`, await inspect(page));
+      observations.push(await inspect(page));
+      expect(await checkpoint(page)).toBe(pending);
+    }
+    await expect.poll(async () => (await timeline(page)).settled, { timeout: 10000 }).toBe(true);
+    await page.waitForTimeout(800);
+    expect((await timeline(page)).scene).toBe('opening');
+    expect(
+      observations.some(
+        (o) => o.audio?.scoreOutputRms > 0.001 && o.audio?.scoreEffectiveOutputRms > 0.0005,
+      ),
+    ).toBe(true);
+    await activate(page, 'story-continue', true);
+    const initial = await state(page);
+    expect(initial).toMatchObject({
+      turn: 0,
+      tideLevel: 0,
+      boatNodeId: 'stone',
+      aboard: ['sheep-1'],
+      delivered: [],
+      status: 'playing',
+    });
+    expect((await inspect(page)).render.historyLength).toBe(0);
+    await expect(page.locator('#unload')).toContainText('Let Moss ashore');
+    await expect(page.locator('#unload')).toContainText('Needs depth 2');
+    expect(await page.locator('#unload').getAttribute('aria-haspopup')).toBeNull();
+    await activate(page, 'unload', true);
+    await expect(page.locator('#dialog')).not.toBeVisible();
+    await idle(page);
+    expect(await state(page)).toMatchObject({
+      turn: 1,
+      tideLevel: 0,
+      aboard: [],
+      waitingByPier: { 'stone-pier': ['sheep-1'] },
+    });
+    await expect(page.locator('#transfer-receipt')).toContainText('Moss ashore');
+    await page.waitForTimeout(400);
+    await snap(page, '780x320-direct-receipt');
+    await undo(page, true);
+    expect(await state(page)).toEqual(initial);
+    await expect(page.locator('#transfer-receipt')).toBeHidden();
+    await act(page, 'unload', true);
+    await act(page, 'map-shallows', true);
+    await act(page, 'map-rabbit-pier', true);
+    const beforeTide = await state(page);
+    await activate(page, 'board', true);
+    const card = await page.locator('#dialog').boundingBox();
+    await activate(page, 'passenger-rabbit-2', true);
+    await expect(page.locator('#preview')).toContainText(/Rue/);
+    await expect(page.locator('#preview')).toHaveClass(/warning/);
+    expect(await state(page)).toEqual(beforeTide);
+    await activate(page, 'cancel', true);
+    await expect(page.locator('#transfer-receipt')).toBeHidden();
+    await activate(page, 'board', true);
+    await expect(page.locator('#commit')).toContainText('Board Pip and Rue');
+    await snap(page, '780x320-rabbit-chooser');
+    await fullyVisible(page, page.locator('#commit'));
+    await activate(page, 'commit', true);
+    await idle(page);
+    expect(await state(page)).toMatchObject({ turn: 4, tideLevel: 1, status: 'playing' });
+    await snap(page, '780x320-after-rise');
+    await undo(page, true);
+    expect(await state(page)).toEqual(beforeTide);
+    await act(page, 'board', true);
+    for (const id of ['map-shallows', 'map-stone', 'board', 'map-harbor'])
+      await act(page, id, true);
+    await activate(page, 'unload', true);
+    await expect
+      .poll(() =>
+        page
+          .locator('#preview img')
+          .evaluateAll((images) =>
+            images.every(
+              (i) => (i as HTMLImageElement).complete && (i as HTMLImageElement).naturalWidth > 0,
+            ),
+          ),
+      )
+      .toBe(true);
+    await snap(page, '780x320-bring-home');
+    await fullyVisible(page, page.locator('#preview .consequence'), false);
+    for (const id of ['passenger-rabbit-1', 'passenger-rabbit-2', 'passenger-sheep-1', 'commit'])
+      await fullyVisible(page, page.locator(`#${id}`));
+    await activate(page, 'commit', true);
+    await idle(page);
+    expect(await state(page)).toMatchObject({ turn: 9, status: 'won' });
+    await undo(page, true);
+    expect(await state(page)).toMatchObject({ turn: 8, status: 'playing', delivered: [] });
+    await act(page, 'unload', true);
+    const receiptClear = await page.evaluate(() => {
+      const e = document.getElementById('transfer-receipt')!;
+      if (e.hidden || getComputedStyle(e).visibility === 'hidden') return true;
+      const r = e.getBoundingClientRect(),
+        d = document.getElementById('dialog')!.getBoundingClientRect();
+      return r.right <= d.left || r.left >= d.right || r.bottom <= d.top || r.top >= d.bottom;
+    });
+    expect(receiptClear).toBe(true);
+    await snap(page, '780x320-arrival');
+    observations.push(await inspect(page));
+    await activate(page, 'continue-story', true);
+    await expect.poll(async () => (await timeline(page)).settled).toBe(true);
+    await snap(page, '780x320-harbor');
+    expect((await audio(page)).victoryTarget).toBe(observations.at(-1).audio.victoryTarget);
+    await activate(page, 'story-continue', true);
+    expect(await state(page)).toMatchObject({ turn: 0, boatNodeId: 'harbor', delivered: [] });
+    await rescueBellwater(page, true);
+    observations.push(await inspect(page));
+    await activate(page, 'continue-story', true);
+    await activate(page, 'journey-title', true);
+    await expect(page.locator('#home-play')).toHaveText(/Play a cove/);
+    await expect(page.locator('#home')).toContainText('Both available coves are safe.');
+    await page.waitForTimeout(700);
+    expect(errors).toEqual([]);
+  } finally {
+    if (!page.isClosed()) observations.push(await inspect(page));
+    if (stop) await stop();
+    save('actual-journey', { observations, errors, browser: browser.version() });
+    await context.close();
+  }
+});
+
+test('native Home and story fit, orientation, Options focus and inactive gameplay', async ({
+  browser,
+  baseURL,
+}) => {
+  const context = await browser.newContext({
+    baseURL,
+    viewport: { width: 390, height: 844 },
+    hasTouch: true,
+    deviceScaleFactor: 1,
+  });
+  const page = await context.newPage();
+  await root(page);
+  const world = await page.locator('#world canvas').elementHandle();
+  for (const [width, height] of [
+    [390, 844],
+    [320, 740],
+    [844, 390],
+    [780, 320],
+    [1440, 900],
+  ]) {
+    await page.setViewportSize({ width, height });
+    for (const id of ['home-play', 'home-options', 'home-practice', 'home-sound'])
+      await fullyVisible(page, page.locator(`#${id}`));
+    await snap(page, `${width}x${height}-home-fit`);
+    await page.mouse.click(width - 30, height / 2);
+    await page.keyboard.press('Escape');
+    expect((await state(page)).turn).toBe(0);
+    expect(await checkpoint(page)).toBeNull();
+    expect(await page.locator('#seascape').getAttribute('inert')).not.toBeNull();
+    await activate(page, 'home-options');
+    await fullyVisible(page, page.locator('#settings-back'));
+    await activate(page, 'settings-back');
+    await expect(page.locator('#home-options')).toBeFocused();
+    expect(await world!.evaluate((e) => e === document.querySelector('#world canvas'))).toBe(true);
+  }
+  await page.setViewportSize({ width: 390, height: 844 });
+  await activate(page, 'home-play');
+  await page.waitForTimeout(1700);
+  await activate(page, 'story-pause');
+  const paused = await timeline(page);
+  await page.waitForTimeout(700);
+  expect(await timeline(page)).toEqual(paused);
+  await snap(page, '390x844-story-paused');
+  await activate(page, 'story-pause');
+  await expect
+    .poll(async () => (await timeline(page)).elapsed)
+    .toBeGreaterThan(paused.elapsed + 200);
+  await more(page, 'story-read');
+  await activate(page, 'story-read-back');
+  await expect(page.locator('#story-read')).toBeFocused();
+  expect((await timeline(page)).paused).toBe(true);
+  await page.keyboard.press('Escape');
+  await activate(page, 'story-pause');
+  expect((await timeline(page)).shot).toBe('lantern');
+  await page.waitForTimeout(1700);
+  await snap(page, '390x844-lantern');
+  await more(page, 'story-settings');
+  await activate(page, 'settings-back');
+  expect((await timeline(page)).shot).toBe('lantern');
+  expect((await timeline(page)).paused).toBe(true);
+  await more(page, 'story-skip');
+  expect((await timeline(page)).recap).toBe(true);
+  await expect(page.locator('#story-more')).not.toHaveAttribute('open');
+  await snap(page, '390x844-recap');
+  for (const id of ['story-pause', 'story-sound', 'story-continue'])
+    await fullyVisible(page, page.locator(`#${id}`));
+  await activate(page, 'story-continue');
+  await act(page, 'unload');
+  await page.waitForTimeout(400);
+  await snap(page, '390x844-direct-receipt');
+  await activate(page, 'menu');
+  await activate(page, 'journey-return');
+  const prior = await state(page);
+  await activate(page, 'journey-return-cancel');
+  await activate(page, 'cancel');
+  expect(await state(page)).toEqual(prior);
+  await undo(page);
+  await activate(page, 'menu');
+  await activate(page, 'journey-return');
+  await activate(page, 'journey-return-confirm');
+  await expect(page.locator('#home')).toContainText('from cove start');
+  await expect(page.locator('#transfer-receipt')).toBeHidden();
+  await activate(page, 'home-play');
+  expect((await state(page)).turn).toBe(0);
+  await context.close();
+});
+test('first pointer and natural keyboard Play produce score output; mute and fresh final intent survive autoplay', async ({
+  browser,
+  baseURL,
+}) => {
+  const results: any[] = [];
+  for (const input of ['pointer', 'keyboard', 'muted'] as const) {
+    const context = await browser.newContext({ baseURL, viewport: { width: 390, height: 844 } });
+    if (input === 'muted')
+      await context.addInitScript(() => localStorage.setItem('last-ferry-muted', 'true'));
+    const page = await context.newPage();
+    await root(page);
+    expect((await audio(page)).contextState).toBe('not-created');
+    if (input === 'keyboard') {
+      await tabTo(page, 'home-play');
+      await page.keyboard.press('Enter');
+    } else await page.locator('#home-play').click();
+    await page.waitForTimeout(2400);
+    const observation = await audio(page);
+    results.push({ input, observation });
+    if (input === 'muted') {
+      expect(observation.muted).toBe(true);
+      expect(observation.contextState).toBe('not-created');
+      await activate(page, 'story-sound');
+      await expect
+        .poll(async () => (await audio(page)).scoreEffectiveOutputRms)
+        .toBeGreaterThan(0.001);
+      await activate(page, 'story-sound');
+      expect((await audio(page)).muted).toBe(true);
+    } else {
+      expect(observation.scoreEffectiveOutputRms).toBeGreaterThan(0.001);
+      expect(observation.contextCount).toBe(1);
+      expect(observation.schedulerCount).toBe(1);
+    }
+    if (input === 'pointer') {
+      const pending = await checkpoint(page);
+      await expect.poll(async () => (await timeline(page)).shot, { timeout: 9000 }).toBe('lantern');
+      await expect.poll(async () => (await timeline(page)).elapsed).toBeGreaterThan(4800);
+      const button = await page.locator('#story-continue').boundingBox();
+      await page.mouse.move(button!.x + button!.width / 2, button!.y + button!.height / 2);
+      await page.mouse.down();
+      await expect.poll(async () => (await timeline(page)).shot).toBe('ferry');
+      await page.mouse.up();
+      expect(await checkpoint(page)).toBe(pending);
+      await page.waitForTimeout(7200);
+      expect((await timeline(page)).scene).toBe('opening');
+      await activate(page, 'story-continue');
+      expect((await state(page)).turn).toBe(0);
+    } else if (input === 'keyboard') {
+      await expect.poll(async () => (await timeline(page)).shot, { timeout: 9000 }).toBe('lantern');
+      await expect.poll(async () => (await timeline(page)).elapsed).toBeGreaterThan(4800);
+      await tabTo(page, 'story-continue');
+      const pending = await checkpoint(page);
+      await page.keyboard.down('Space');
+      await expect.poll(async () => (await timeline(page)).shot).toBe('ferry');
+      await page.keyboard.up('Space');
+      expect(await checkpoint(page)).toBe(pending);
+      await page.keyboard.press('Enter');
+      expect((await state(page)).turn).toBe(0);
+    }
+    await context.close();
+  }
+  save('cold-score-entry', results);
+});
+
+test('checkpoint, invalid-byte recovery, replacement, practice isolation and unavailable storage', async ({
+  browser,
+  baseURL,
+}) => {
+  const opening = {
+    version: 1,
+    checkpoint: { kind: 'scene', id: 'opening' },
+    completed: [],
+    acknowledgedScenes: [],
+  };
+  for (const record of [JSON.stringify(opening), '{broken', JSON.stringify({ version: 99 })]) {
+    const context = await browser.newContext({ baseURL, viewport: { width: 320, height: 740 } });
+    await context.addInitScript(
+      ({ key, record }) => {
+        localStorage.setItem(key, record);
+        localStorage.setItem('last-ferry-muted', 'true');
+      },
+      { key: journeyKey, record },
+    );
+    const page = await context.newPage();
+    await root(page);
+    for (const id of ['home-play', 'home-options', 'home-practice', 'home-sound'])
+      await fullyVisible(page, page.locator(`#${id}`));
+    const saved = await checkpoint(page);
+    await activate(page, 'home-options');
+    await activate(page, 'settings-back');
+    await activate(page, 'home-practice');
+    await activate(page, 'journey-title');
+    expect(await checkpoint(page)).toBe(saved);
+    await activate(page, record === JSON.stringify(opening) ? 'home-new' : 'home-play');
+    await activate(page, 'journey-replace-cancel');
+    expect(await checkpoint(page)).toBe(saved);
+    expect((await audio(page)).muted).toBe(true);
+    if (record === JSON.stringify(opening)) {
+      await activate(page, 'home-play');
+      expect(await timeline(page)).toMatchObject({ recap: true, shot: 'ferry', settled: true });
+      expect(await checkpoint(page)).toBe(saved);
+      await more(page, 'story-replay-scene');
+      expect((await timeline(page)).shot).toBe('tide');
+    }
+    await page.goto('/?cove=first-crossing');
+    await idle(page);
+    expect(await checkpoint(page)).toBe(saved);
+    await act(page, 'map-sheep-pier');
+    await act(page, 'board');
+    expect((await state(page)).aboard).toHaveLength(3);
+    await undo(page);
+    expect((await state(page)).aboard).toHaveLength(2);
+    expect(await checkpoint(page)).toBe(saved);
+    await context.close();
+  }
+  const context = await browser.newContext({ baseURL });
+  await context.addInitScript(() => {
+    Object.defineProperty(window, 'localStorage', {
+      get() {
+        throw new Error('storage unavailable fixture');
+      },
+    });
+  });
+  const page = await context.newPage();
+  await root(page);
+  await expect(page.locator('#home')).toContainText('only for this visit');
+  await activate(page, 'home-play');
+  expect((await timeline(page)).scene).toBe('opening');
+  await context.close();
+});
+test('pending sound Retry and late completion after mute or hide use one owner', async ({
+  browser,
+  baseURL,
+}) => {
+  const records: any[] = [];
+  for (const action of ['retry', 'mute', 'hide'] as const) {
+    const context = await browser.newContext({
+      baseURL,
+      viewport: { width: 390, height: 844 },
+      hasTouch: true,
+    });
+    await context.addInitScript(() => {
+      const Native = window.AudioContext;
+      const nativeState = Object.getOwnPropertyDescriptor(
+        BaseAudioContext.prototype,
+        'state',
+      )!.get!;
+      const Controlled = function () {
+        const context = new Native(),
+          resume = context.resume.bind(context);
+        let blocked = true,
+          permitted = false,
+          requests = 0;
+        const pending: (() => void)[] = [];
+        Object.defineProperty(context, 'state', {
+          configurable: true,
+          get: () => (blocked ? 'suspended' : nativeState.call(context)),
+        });
+        context.resume = () => {
+          requests++;
+          return permitted
+            ? ((blocked = false), resume())
+            : new Promise<void>((done) => pending.push(done));
+        };
+        (window as any).__flowGate = {
+          permit: () => {
+            permitted = true;
+          },
+          resolve: async () => {
+            blocked = false;
+            await resume();
+            pending.splice(0).forEach((done) => done());
+          },
+          status: () => ({ requests, blocked, native: nativeState.call(context) }),
+        };
+        return context;
+      };
+      Controlled.prototype = Native.prototype;
+      Object.setPrototypeOf(Controlled, Native);
+      Object.defineProperty(window, 'AudioContext', { configurable: true, value: Controlled });
+    });
+    const page = await context.newPage();
+    await root(page);
+    await coldTouch(page, 'home-play');
+    await expect(page.locator('#story-sound')).toHaveAccessibleName('Retry sound');
+    expect(await passive(page, () => (window as any).__flowGate.status().requests)).toBe(1);
+    await page.waitForTimeout(2100);
+    const pending = await audio(page);
+    expect(pending.storyPlayed).toBe(0);
+    if (action === 'retry') {
+      await passive(page, () => (window as any).__flowGate.permit());
+      await coldTouch(page, 'story-sound');
+      await expect
+        .poll(async () => (await audio(page)).scoreEffectiveOutputRms)
+        .toBeGreaterThan(0.001);
+      await passive(page, async () => (window as any).__flowGate.resolve());
+      expect((await audio(page)).contextCount).toBe(1);
+    } else {
+      if (action === 'mute') {
+        await more(page, 'story-settings');
+        await activate(page, 'settings-mute');
+      } else
+        await passive(page, () => {
+          Object.defineProperty(document, 'hidden', { configurable: true, value: true });
+          document.dispatchEvent(new Event('visibilitychange'));
+        });
+      await passive(page, async () => (window as any).__flowGate.resolve());
+      await page.waitForTimeout(200);
+      const late = await audio(page);
+      expect(late.running).toBe(false);
+      expect(late.storySources).toBe(0);
+      expect(late.schedulerCount).toBe(0);
+      if (action === 'hide') {
+        await passive(page, () => {
+          Object.defineProperty(document, 'hidden', { configurable: true, value: false });
+          document.dispatchEvent(new Event('visibilitychange'));
+        });
+        expect((await timeline(page)).paused).toBe(true);
+      }
+    }
+    records.push({
+      action,
+      pending,
+      after: await inspect(page),
+      gate: await passive(page, () => (window as any).__flowGate.status()),
+    });
+    await context.close();
+  }
+  save('controlled-audio-intent', {
+    method:
+      'Real native AudioContext behind a controlled pending resume/state gate; hide is a controlled visibility notification, not physical Android evidence.',
+    records,
+  });
+});
+
+test('reduced motion, mixed and same-band delivery, repeat input, fullscreen and production root', async ({
+  browser,
+  baseURL,
+}) => {
+  const context = await browser.newContext({
+    baseURL,
+    viewport: { width: 844, height: 390 },
+    hasTouch: true,
+    reducedMotion: 'reduce',
+  });
+  const page = await context.newPage();
+  await root(page);
+  const homeBefore = await inspect(page);
+  expect(homeBefore.story.world.routesVisible.every((r: any) => !r.visible)).toBe(true);
+  expect(homeBefore.story.world.markersVisible.every((r: any) => !r.visible)).toBe(true);
+  await activate(page, 'home-options');
+  const nativeDialog = await page.locator('#dialog').elementHandle();
+  await activate(page, 'fullscreen');
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () =>
+          document.fullscreenElement?.id === 'app' ||
+          !!document.getElementById('fullscreen-feedback')?.textContent,
+      ),
+    )
+    .toBe(true);
+  const entered = await page.evaluate(() => document.fullscreenElement?.id === 'app');
+  if (entered) {
+    expect(
+      await nativeDialog!.evaluate(
+        (e) => e === document.querySelector('#dialog') && (e as HTMLDialogElement).open,
+      ),
+    ).toBe(true);
+    await activate(page, 'fullscreen');
+    await expect.poll(() => page.evaluate(() => document.fullscreenElement === null)).toBe(true);
+  } else await expect(page.locator('#fullscreen-feedback')).toBeVisible();
+  await activate(page, 'settings-back');
+  await activate(page, 'home-play');
+  expect(await timeline(page)).toMatchObject({
+    shot: 'tide',
+    settled: true,
+    paused: true,
+    captionOpacity: 1,
+  });
+  await activate(page, 'story-continue');
+  await activate(page, 'story-continue');
+  expect((await timeline(page)).shot).toBe('ferry');
+  await activate(page, 'story-continue');
+  await page.locator('#unload').dblclick();
+  await idle(page);
+  expect((await state(page)).turn).toBe(1);
+  await expect(page.locator('#transfer-receipt')).toHaveCSS('animation-name', 'none');
+  await undo(page);
+  expect((await state(page)).turn).toBe(0);
+  await page.waitForTimeout(550);
+  for (const id of [
+    'unload',
+    'map-shallows',
+    'map-rabbit-pier',
+    'board',
+    'map-shallows',
+    'map-stone',
+    'board',
+    'map-harbor',
+  ])
+    await act(page, id);
+  await activate(page, 'unload');
+  await activate(page, 'passenger-rabbit-2');
+  await activate(page, 'passenger-sheep-1');
+  await activate(page, 'commit');
+  await idle(page);
+  await expect(page.locator('#transfer-receipt')).toContainText('Pip home');
+  await expect(page.locator('#transfer-receipt')).not.toContainText('Needs depth');
+  await undo(page);
+  await page.waitForTimeout(550);
+  await activate(page, 'unload');
+  const anchor = await page.locator('#commit').boundingBox();
+  await activate(page, 'passenger-rabbit-1');
+  const after = await page.locator('#commit').boundingBox();
+  expect(Math.abs(after!.y + after!.height - anchor!.y - anchor!.height)).toBeLessThanOrEqual(1);
+  await expect(page.locator('#commit')).toContainText('Rue and Moss');
+  await activate(page, 'commit');
+  await idle(page);
+  expect((await state(page)).aboard).toEqual(['rabbit-1']);
+  await expect(page.locator('#unload')).toContainText('Bring Pip home');
+  expect(await page.locator('#unload').getAttribute('aria-haspopup')).toBeNull();
+  await act(page, 'unload');
+  expect((await state(page)).status).toBe('won');
+  await undo(page);
+  expect((await state(page)).aboard).toEqual(['rabbit-1']);
+  await undo(page);
+  await activate(page, 'unload');
+  await activate(page, 'passenger-sheep-1');
+  await activate(page, 'commit');
+  await idle(page);
+  await activate(page, 'unload');
+  await idle(page);
+  expect((await state(page)).status).toBe('won');
+  save('reduced-fullscreen-subsets', { entered, final: await inspect(page) });
+  await context.close();
+  const built = await browser.newContext({ viewport: { width: 320, height: 740 } });
+  const production = await built.newPage();
+  await production.goto(productionURL + '/');
+  await expect(production.locator('#home-play')).toBeVisible();
+  await activate(production, 'home-play');
+  await more(production, 'story-skip');
+  await activate(production, 'story-continue');
+  await activate(production, 'unload');
+  await idle(production);
+  await expect(production.locator('[data-testid=turn]')).toHaveText('01');
+  save('production-root', { url: production.url(), title: await production.title() });
+  await built.close();
+});
+async function previewFit(page: Page, name: string) {
+  const measure = () =>
+    page.evaluate(() => {
+      const failures: string[] = [];
+      for (const e of document.querySelectorAll<HTMLElement>(
+        '#preview .cove-choice-name, #preview .cove-choice-capacity, #preview .requirement, #preview .consequence, #commit .cove-label',
+      )) {
+        const range = document.createRange();
+        range.selectNodeContents(e);
+        for (const r of range.getClientRects()) {
+          if (r.left < 0 || r.top < 0 || r.right > innerWidth + 0.5 || r.bottom > innerHeight + 0.5)
+            failures.push(`${e.textContent}: viewport`);
+          for (let p: HTMLElement | null = e; p; p = p.parentElement) {
+            const b = p.getBoundingClientRect(),
+              s = getComputedStyle(p);
+            if (
+              /auto|scroll|clip|hidden/.test(s.overflowX) &&
+              (r.left < b.left - 0.5 || r.right > b.right + 0.5)
+            )
+              failures.push(`${e.textContent}: horizontal ${p.id}`);
+            if (
+              /auto|scroll|clip|hidden/.test(s.overflowY) &&
+              (r.top < b.top - 0.5 || r.bottom > b.bottom + 0.5)
+            )
+              failures.push(`${e.textContent}: vertical ${p.id}`);
+          }
+        }
+      }
+      return failures;
+    });
+  const initial = await measure();
+  await expect.poll(measure).toEqual([]);
+  save(name, {
+    failures: await measure(),
+    initialAfterResize: initial,
+    viewport: page.viewportSize(),
+  });
+}
+
+test('portrait real chooser loss/cancel and rescue with natural keyboard focus and full phone labels', async ({
+  browser,
+  baseURL,
+}) => {
+  const context = await browser.newContext({
+    baseURL,
+    viewport: { width: 390, height: 844 },
+    hasTouch: true,
+    reducedMotion: 'reduce',
+  });
+  const page = await context.newPage();
+  await root(page);
+  await tabTo(page, 'home-play');
+  await page.keyboard.press('Enter');
+  for (let i = 0; i < 3; i++) {
+    await tabTo(page, 'story-continue');
+    await page.keyboard.press('Enter');
+  }
+  await tabTo(page, 'unload');
+  await page.keyboard.press('Space');
+  await idle(page);
+  expect((await state(page)).turn).toBe(1);
+  const focus = await page.evaluate(() => ({
+    id: document.activeElement?.id,
+    visible: !!document.activeElement?.getClientRects().length,
+  }));
+  expect(focus.visible).toBe(true);
+  expect(focus.id).not.toBe('unload');
+  await tabTo(page, 'undo');
+  await page.keyboard.press('Enter');
+  await idle(page);
+  await act(page, 'unload', true);
+  await act(page, 'map-shallows', true);
+  await act(page, 'map-rabbit-pier', true);
+  const before = await state(page);
+  await activate(page, 'board', true);
+  await activate(page, 'passenger-rabbit-2', true);
+  await expect(page.locator('#preview')).toHaveClass(/warning/);
+  await page.keyboard.press('Escape');
+  expect(await state(page)).toEqual(before);
+  await activate(page, 'board', true);
+  await activate(page, 'passenger-rabbit-2', true);
+  await activate(page, 'commit', true);
+  await idle(page);
+  expect((await state(page)).status).toBe('lost');
+  await tabTo(page, 'terminal-undo');
+  await page.keyboard.press('Enter');
+  expect(await state(page)).toEqual(before);
+  await activate(page, 'board', true);
+  await previewFit(page, '390x844-rabbit-fit');
+  await snap(page, '390x844-rabbit-chooser');
+  await tabTo(page, 'commit');
+  await page.keyboard.press('Space');
+  await idle(page);
+  expect((await state(page)).tideLevel).toBe(1);
+  for (const id of ['map-shallows', 'map-stone', 'board', 'map-harbor']) await act(page, id, true);
+  await activate(page, 'unload', true);
+  for (const [width, height] of [
+    [390, 844],
+    [320, 740],
+    [844, 390],
+    [780, 320],
+  ]) {
+    await page.setViewportSize({ width, height });
+    await previewFit(page, `${width}x${height}-final-label-fit`);
+    await snap(page, `${width}x${height}-final-chooser`);
+  }
+  await page.setViewportSize({ width: 390, height: 844 });
+  await tabTo(page, 'commit');
+  await page.keyboard.press('Enter');
+  await idle(page);
+  expect((await state(page)).status).toBe('won');
+  await snap(page, '390x844-arrival');
+  await tabTo(page, 'terminal-undo');
+  await page.keyboard.press('Enter');
+  await idle(page);
+  expect((await state(page)).status).toBe('playing');
+  await context.close();
+});
+
+test('receipt cancellation, empty native choices and live Home barriers', async ({
+  browser,
+  baseURL,
+}) => {
+  const context = await browser.newContext({
+    baseURL,
+    viewport: { width: 390, height: 844 },
+    hasTouch: true,
+    reducedMotion: 'reduce',
+  });
+  const page = await context.newPage();
+  try {
+    await root(page);
+    for (const key of ['w', 'u', 'Escape', 'ArrowLeft', 'ArrowRight'])
+      await page.keyboard.press(key);
+    expect((await state(page)).turn).toBe(0);
+    expect(await checkpoint(page)).toBeNull();
+    await activate(page, 'home-play', true);
+    for (let i = 0; i < 3; i++) {
+      await tabTo(page, 'story-continue');
+      await page.keyboard.press('Enter');
+    }
+    await act(page, 'unload', true);
+    await expect(page.locator('#transfer-receipt')).toBeVisible();
+    await snap(page, '390x844-receipt-clear-labels');
+    const covered = await page.locator('#transfer-receipt').evaluate((receipt) => {
+      const r = receipt.getBoundingClientRect();
+      return [...document.querySelectorAll<HTMLElement>('.map-name')]
+        .filter((e) => e.closest('.map-stop')?.getAttribute('style')?.includes('opacity: 1'))
+        .some((e) => {
+          const b = e.getBoundingClientRect();
+          return r.left < b.right && r.right > b.left && r.top < b.bottom && r.bottom > b.top;
+        });
+    });
+    expect(covered).toBe(false);
+    await passive(page, () => {
+      Object.defineProperty(document, 'hidden', { configurable: true, value: true });
+      document.dispatchEvent(new Event('visibilitychange'));
+    });
+    await expect(page.locator('#transfer-receipt')).toBeHidden();
+    await passive(page, () => {
+      Object.defineProperty(document, 'hidden', { configurable: true, value: false });
+      document.dispatchEvent(new Event('visibilitychange'));
+    });
+    await expect(page.locator('#transfer-receipt')).toBeHidden();
+    await act(page, 'board', true);
+    await expect(page.locator('#transfer-receipt')).toContainText('Moss aboard');
+    await restart(page, true);
+    await expect(page.locator('#transfer-receipt')).toBeHidden();
+    expect((await state(page)).turn).toBe(0);
+    await activate(page, 'map-stone', true);
+    await expect(page.locator('#transfer-receipt')).toBeHidden();
+    const saved = await checkpoint(page);
+    await page.goto('/?cove=first-crossing');
+    await idle(page);
+    await act(page, 'map-sheep-pier', true);
+    await activate(page, 'unload', true);
+    for (const id of ['passenger-rabbit-1', 'passenger-rabbit-2']) await activate(page, id, true);
+    await expect(page.locator('#commit')).toBeDisabled();
+    expect((await state(page)).turn).toBe(1);
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#transfer-receipt')).toBeHidden();
+    expect(await checkpoint(page)).toBe(saved);
+    save('receipt-lifecycle', {
+      actual: await inspect(page),
+      hideMethod: 'controlled visibility notification',
+      emptySelection:
+        'native group with all passengers unselected; commit disabled; cancellation unchanged',
+    });
+  } finally {
+    await context.close();
+  }
+});
+
+test('strict cold entry begins without browser activation and produces score from trusted Play', async ({
+  browser,
+  baseURL,
+}) => {
+  const records: unknown[] = [];
+  for (const input of ['touch', 'pointer', 'keyboard']) {
+    const context = await browser.newContext({
+      baseURL,
+      viewport: { width: 390, height: 844 },
+      hasTouch: input === 'touch',
+      isMobile: input === 'touch',
+      deviceScaleFactor: 1,
+    });
+    const page = await context.newPage();
+    try {
+      await page.goto('/');
+      await expect
+        .poll(() =>
+          passive(
+            page,
+            () =>
+              !!document.getElementById('home-play') &&
+              ((window as any).__LAST_FERRY__?.getMetrics().frames ?? 0) > 3,
+          ),
+        )
+        .toBe(true);
+      expect(await checkpoint(page)).toBeNull();
+      const before = await passive(page, () => ({
+        active: navigator.userActivation.isActive,
+        everActive: navigator.userActivation.hasBeenActive,
+        audio: (window as any).__LAST_FERRY__.getAudioStatus(),
+      }));
+      expect(before.everActive).toBe(false);
+      expect(before.audio.contextState).toBe('not-created');
+      if (input === 'touch') await coldTouch(page, 'home-play');
+      else if (input === 'keyboard') {
+        await page.keyboard.press('Tab');
+        expect(await passive(page, () => document.activeElement?.id)).toBe('home-play');
+        await page.keyboard.press('Enter');
+      } else {
+        const point = await passive(page, () => {
+          const r = document.getElementById('home-play')!.getBoundingClientRect();
+          return { x: r.x + r.width / 2, y: r.y + r.height / 2 };
+        });
+        await page.mouse.click(point.x, point.y);
+      }
+      await expect
+        .poll(async () => (await audio(page)).scoreEffectiveOutputRms)
+        .toBeGreaterThan(0.001);
+      const after = await audio(page);
+      expect(after.contextCount).toBe(1);
+      expect(after.schedulerCount).toBe(1);
+      records.push({ input, before, after });
+    } finally {
+      await context.close();
+    }
+  }
+  save('strict-cold-entry', {
+    records,
+    method:
+      'All pre-input reads explicitly use CDP userGesture:false. navigator.userActivation.hasBeenActive is false before native touch/mouse Play or natural Tab/Enter.',
+  });
+});

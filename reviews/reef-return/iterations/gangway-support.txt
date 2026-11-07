@@ -1,0 +1,66 @@
+
+ RUN  v5.0.5 C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry
+
+------------·····stdout | tests/unit/wide-clearance.test.ts > Reef Return physical clearances > occupied real modeled hull clears land and piers at every reachable heading in both directions
+{"quay-pool/forward/pool-pier/mesh18":{"count":108,"position":[2.881828863635559,0,-0.3607942528409997],"angle":1.4587673643689087},"quay-pool/forward/pool-pier/mesh17":{"count":96,"position":[2.899721496788471,0,-0.3587813316112971],"angle":1.4587673643689083}}
+
+----x··········---
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/wide-clearance.test.ts > Reef Return physical clearances > occupied real modeled hull clears land and piers at every reachable heading in both directions
+AssertionError: expected [ …(30) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "quay-pool/forward from1.5707963267948966 sample429: pool-pier/mesh18",
++   "quay-pool/forward from1.5707963267948966 sample430: pool-pier/mesh18",
++   "quay-pool/forward from1.5707963267948966 sample431: pool-pier/mesh17",
++   "quay-pool/forward from1.5707963267948966 sample431: pool-pier/mesh18",
++   "quay-pool/forward from1.5707963267948966 sample432: pool-pier/mesh17",
++   "quay-pool/forward from1.5707963267948966 sample432: pool-pier/mesh18",
++   "quay-pool/forward from1.5707963267948966 sample433: pool-pier/mesh17",
++   "quay-pool/forward from1.5707963267948966 sample433: pool-pier/mesh18",
++   "quay-pool/forward from1.5707963267948966 sample434: pool-pier/mesh17",
++   "quay-pool/forward from1.5707963267948966 sample434: pool-pier/mesh18",
++   "quay-pool/forward from1.5707963267948966 sample435: pool-pier/mesh17",
++   "quay-pool/forward from1.5707963267948966 sample435: pool-pier/mesh18",
++   "quay-pool/forward from1.5707963267948966 sample436: pool-pier/mesh17",
++   "quay-pool/forward from1.5707963267948966 sample436: pool-pier/mesh18",
++   "quay-pool/forward from1.5707963267948966 sample437: pool-pier/mesh17",
++   "quay-pool/forward from1.5707963267948966 sample437: pool-pier/mesh18",
++   "quay-pool/forward from1.5707963267948966 sample438: pool-pier/mesh17",
++   "quay-pool/forward from1.5707963267948966 sample438: pool-pier/mesh18",
++   "quay-pool/forward from1.5707963267948966 sample439: pool-pier/mesh17",
++   "quay-pool/forward from1.5707963267948966 sample439: pool-pier/mesh18",
++   "quay-pool/forward from1.5707963267948966 sample440: pool-pier/mesh17",
++   "quay-pool/forward from1.5707963267948966 sample440: pool-pier/mesh18",
++   "quay-pool/forward from1.5707963267948966 sample441: pool-pier/mesh17",
++   "quay-pool/forward from1.5707963267948966 sample441: pool-pier/mesh18",
++   "quay-pool/forward from1.5707963267948966 sample442: pool-pier/mesh17",
++   "quay-pool/forward from1.5707963267948966 sample442: pool-pier/mesh18",
++   "quay-pool/forward from1.5707963267948966 sample443: pool-pier/mesh17",
++   "quay-pool/forward from1.5707963267948966 sample443: pool-pier/mesh18",
++   "quay-pool/forward from1.5707963267948966 sample444: pool-pier/mesh17",
++   "quay-pool/forward from1.5707963267948966 sample444: pool-pier/mesh18",
++ ]
+
+ ❯ tests/unit/wide-clearance.test.ts:208:20
+    206|     }
+    207|   if (failures.length) console.log(JSON.stringify(contacts));
+    208|   expect(failures).toEqual([]);
+       |                    ^
+    209|   expect(margins).toEqual([]);
+    210| }, 20000);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 15 passed | 19 skipped (35)
+   Start at  20:41:49
+   Duration  2.44s (tests 92%, import 4%, transform 4%)
+

@@ -1,0 +1,382 @@
+{
+  "levelId": "two-shelters",
+  "witnesses": [
+    {
+      "id": "low-rabbit-home-first",
+      "actions": [
+        {
+          "type": "unload",
+          "passengerIds": [
+            "hazel",
+            "bracken"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "reeds"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "mica"
+          ]
+        },
+        {
+          "type": "wait"
+        },
+        {
+          "type": "move",
+          "to": "low"
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "mica"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "low"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "hazel",
+            "bracken"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "hazel",
+            "bracken"
+          ]
+        }
+      ],
+      "description": "Use the low shelter, take Mica home first, then board both larger neighbors exactly before the second rise."
+    },
+    {
+      "id": "high-mixed-first",
+      "actions": [
+        {
+          "type": "move",
+          "to": "refuge"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "hazel",
+            "bracken"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "reeds"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "mica"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "refuge"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "hazel"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "mica",
+            "hazel"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "refuge"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "bracken"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "bracken"
+          ]
+        }
+      ],
+      "description": "Use the high refuge, combine Hazel with Mica on the first delivery, then return for Bracken after the second rise."
+    },
+    {
+      "id": "high-rabbit-home-first",
+      "actions": [
+        {
+          "type": "move",
+          "to": "refuge"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "hazel",
+            "bracken"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "reeds"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "mica"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "refuge"
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "mica"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "refuge"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "hazel",
+            "bracken"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "hazel",
+            "bracken"
+          ]
+        }
+      ],
+      "description": "The high refuge also permits delivering Mica before retrieving both larger neighbors."
+    },
+    {
+      "id": "low-separate-subsets",
+      "description": "Separate one-neighbor unloading actions use the same first-rise budget; useful actual-UI subset witness.",
+      "actions": [
+        {
+          "type": "unload",
+          "passengerIds": [
+            "hazel"
+          ]
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "bracken"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "reeds"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "mica"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "low"
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "mica"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "low"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "hazel",
+            "bracken"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "hazel",
+            "bracken"
+          ]
+        }
+      ]
+    }
+  ],
+  "losingAlternatives": [
+    {
+      "id": "low-greedy-retrieval",
+      "actions": [
+        {
+          "type": "unload",
+          "passengerIds": [
+            "hazel",
+            "bracken"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "reeds"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "mica"
+          ]
+        },
+        {
+          "type": "wait"
+        },
+        {
+          "type": "move",
+          "to": "low"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "hazel"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "mica",
+            "hazel"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "low"
+        }
+      ],
+      "description": "Taking Hazel with Mica creates a three-space load, but the extra boarding action prevents retrieving Bracken before the second rise."
+    },
+    {
+      "id": "deliver-original-group-first",
+      "actions": [
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "hazel",
+            "bracken"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "low"
+        },
+        {
+          "type": "move",
+          "to": "reeds"
+        }
+      ],
+      "description": "Delivering the starting complete group first reaches Mica on the flooding action, too late to board."
+    },
+    {
+      "id": "wait-for-loaded-shallows",
+      "description": "Waiting for deeper water floods Mica before a loaded approach can rescue them.",
+      "actions": [
+        {
+          "type": "wait"
+        },
+        {
+          "type": "wait"
+        },
+        {
+          "type": "wait"
+        },
+        {
+          "type": "wait"
+        }
+      ]
+    },
+    {
+      "id": "arrive-after-extra-wait",
+      "description": "An extra wait at High Refuge delays arrival at Reed Pier until the flooding action; arrival cannot also board Mica.",
+      "actions": [
+        {
+          "type": "move",
+          "to": "refuge"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "hazel",
+            "bracken"
+          ]
+        },
+        {
+          "type": "wait"
+        },
+        {
+          "type": "move",
+          "to": "reeds"
+        }
+      ]
+    }
+  ]
+}

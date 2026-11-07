@@ -1,0 +1,266 @@
+{
+  "levelId": "driftwood-yard",
+  "witnesses": [
+    {
+      "id": "stage-nell-collect-group",
+      "description": "Rescue Nell to the nearby high landing, save both rabbits at the rise, return for Nell and bring all three home together.",
+      "actions": [
+        {
+          "type": "move",
+          "to": "yard"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "nell"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "mooring"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "nell"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "bend"
+        },
+        {
+          "type": "move",
+          "to": "reeds"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "fern",
+            "oat"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "bend"
+        },
+        {
+          "type": "move",
+          "to": "mooring"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "nell"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "nell",
+            "fern",
+            "oat"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "stage-nell-deliver-rabbits-first",
+      "description": "Same critical rescue plan, then deliver the rabbits before collecting Nell. This is a different safe delivery order, not a second distinct critical rescue strategy.",
+      "actions": [
+        {
+          "type": "move",
+          "to": "yard"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "nell"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "mooring"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "nell"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "bend"
+        },
+        {
+          "type": "move",
+          "to": "reeds"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "fern",
+            "oat"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "bend"
+        },
+        {
+          "type": "move",
+          "to": "mooring"
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "fern",
+            "oat"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "mooring"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "nell"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "nell"
+          ]
+        }
+      ]
+    }
+  ],
+  "losingAlternatives": [
+    {
+      "id": "deliver-nell-immediately",
+      "description": "Going straight home with Nell uses the extra trip needed to board the rabbits before action7.",
+      "actions": [
+        {
+          "type": "move",
+          "to": "yard"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "nell"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "nell"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "mooring"
+        },
+        {
+          "type": "move",
+          "to": "bend"
+        },
+        {
+          "type": "move",
+          "to": "reeds"
+        }
+      ]
+    },
+    {
+      "id": "rabbits-first-wait-for-return-depth",
+      "description": "The loaded return is too shallow before the first rise; waiting for it leaves Nell on the low yard.",
+      "actions": [
+        {
+          "type": "move",
+          "to": "mooring"
+        },
+        {
+          "type": "move",
+          "to": "bend"
+        },
+        {
+          "type": "move",
+          "to": "reeds"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "fern",
+            "oat"
+          ]
+        },
+        {
+          "type": "wait"
+        },
+        {
+          "type": "wait"
+        },
+        {
+          "type": "wait"
+        }
+      ]
+    },
+    {
+      "id": "only-one-rabbit-at-last-safe-boarding",
+      "description": "Both rabbits must leave the low landing before it floods. A one-rabbit subset at action7 strands the other.",
+      "actions": [
+        {
+          "type": "move",
+          "to": "yard"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "nell"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "mooring"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "nell"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "bend"
+        },
+        {
+          "type": "move",
+          "to": "reeds"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "fern"
+          ]
+        }
+      ]
+    }
+  ]
+}

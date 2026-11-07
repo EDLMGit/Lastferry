@@ -1,0 +1,68 @@
+typecheck.log
+
+> last-ferry@1.0.0 typecheck
+> tsc --noEmit
+
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice
+
+
+build.log
+
+> last-ferry@1.0.0 build
+> npm run typecheck && vite build
+
+
+> last-ferry@1.0.0 typecheck
+> tsc --noEmit
+
+vite v8.3.4 building client environment for production...
+transforming...
+✓ 25 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.48 kB │ gzip:   0.31 kB
+dist/assets/index-COb4x2WZ.css    8.12 kB │ gzip:   2.58 kB
+dist/assets/index-BPEyX52R.js   662.10 kB │ gzip: 173.88 kB
+
+✓ built in 301ms
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice
+
+
+unit.log
+
+> last-ferry@1.0.0 test:unit
+> vitest run
+
+
+ RUN  v5.0.5 C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry
+
+
+ Test Files  6 passed (6)
+      Tests  62 passed (62)
+   Start at  11:49:33
+   Duration  2.45s (tests 76%, import 11%, transform 10%, worker 2%)
+
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice
+
+
+reference-design.log
+PASS: 32/32 reference design checks.
+Bounded BFS: 502 canonical states; shortest solution 7 actions; horizon 12.
+Evidence scope: authored reference model only. No implemented game/UI was tested.

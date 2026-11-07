@@ -1,0 +1,44 @@
+
+> last-ferry@1.0.0 test:e2e
+> playwright test wide-berth.spec.ts -g portrait staging|five-body six-space
+
+
+Running 2 tests using 1 worker
+
+(node:14764) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\e2e\wide-berth.spec.ts:366:1 › portrait staging strategy and current-depth shortcut with real full rescue (2.8m)
+  x  2 tests\e2e\wide-berth.spec.ts:425:1 › five-body six-space witness, six waiting choices, overcapacity and usable fallback (1.3m)
+
+
+  1) tests\e2e\wide-berth.spec.ts:425:1 › five-body six-space witness, six waiting choices, overcapacity and usable fallback 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.requirement')
+    Expected substring: "6/6 spaces"
+    Error: strict mode violation: locator('.requirement') resolved to 2 elements:
+        1) <p class="requirement">Boat needs depth 2. Passage has depth 4: enough d…</p> aka getByText('Boat needs depth 2. Passage')
+        2) <p class="requirement">Needs depth 1 → 4 · 6/6 spaces</p> aka getByText('Needs depth 1 → 4 · 6/6 spaces')
+
+    Call log:
+      - Expect "toContainText" locator('.requirement') with timeout 10000ms
+      - waiting for locator('.requirement')
+
+
+      481 |     await activate(page, 'passenger-clover', true);
+      482 |     await expect(page.locator('#commit')).toBeEnabled();
+    > 483 |     await expect(page.locator('.requirement')).toContainText('6/6 spaces');
+          |                                                ^
+      484 |     await page.route('**/*rabbit-tan*', (route) =>
+      485 |       route.request().resourceType() === 'image' ? route.abort() : route.continue(),
+      486 |     );
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\wide-berth.spec.ts:483:48
+
+    Error Context: test-results\wide-berth-five-body-six-s-d6f50-apacity-and-usable-fallback\error-context.md
+
+    Error Context: test-results\wide-berth-five-body-six-s-d6f50-apacity-and-usable-fallback\error-context.md
+
+  1 failed
+    tests\e2e\wide-berth.spec.ts:425:1 › five-body six-space witness, six waiting choices, overcapacity and usable fallback 
+  1 passed (4.2m)

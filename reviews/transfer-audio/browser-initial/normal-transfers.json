@@ -1,0 +1,1216 @@
+{
+  "trace": {
+    "path": "reviews/transfer-audio/browser-initial/raw/normal-transfers-trace.json",
+    "sha256": "884e2d617652f85b2df540eef4ed631e1f65053464ae7de13f7de86f8e6ca16e",
+    "note": "Original full trace retained byte-for-byte in ignored raw storage."
+  },
+  "samples": 175,
+  "commits": [
+    {
+      "state": {
+        "turn": 1,
+        "tideLevel": 0,
+        "boatNodeId": "stone",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [
+            "sheep-1"
+          ],
+          "rabbit-pier": [
+            "rabbit-1",
+            "rabbit-2"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "audio": {
+        "muted": false,
+        "activated": true,
+        "hidden": false,
+        "disposed": false,
+        "unavailable": false,
+        "error": null,
+        "contextState": "running",
+        "currentTime": 1.3813333333333333,
+        "contextCount": 1,
+        "schedulerActive": true,
+        "schedulerCount": 1,
+        "schedulerStarts": 1,
+        "sourceCount": 6,
+        "sourceNodesCreated": 6,
+        "peakOwnedSources": 6,
+        "graphNodeCount": 34,
+        "musicSources": 4,
+        "ambienceSources": 2,
+        "travelRequested": false,
+        "travelActive": false,
+        "arrivalActive": false,
+        "deliveryCount": 0,
+        "transferContacts": 0,
+        "transferPlayed": 0,
+        "transferSkipped": 0,
+        "transferSources": 0,
+        "peakTransferSources": 0,
+        "lastTransferContact": null,
+        "desiredArrangement": "ordinary",
+        "arrangement": "ordinary",
+        "pendingTerminal": false,
+        "accompanimentEnabled": true,
+        "companionSources": 0,
+        "companionNotes": 0,
+        "companionDeferrals": 0,
+        "droppedTones": 0,
+        "masterGain": 0.6499999761581421,
+        "phrase": "Between the lamps",
+        "bpm": 64,
+        "phraseSeconds": 75,
+        "cueDuration": 75,
+        "phaseSeconds": 1.3413333333333333,
+        "loopCount": 0,
+        "scheduledEvents": 1,
+        "skippedEvents": 0,
+        "rms": 0.013385331020334922,
+        "peak": 0.0322626456618309
+      },
+      "transition": {
+        "active": {
+          "id": 1,
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "sheep-1"
+            ]
+          },
+          "plan": {
+            "duration": 520,
+            "tideDuration": 520,
+            "recoveryDelay": 1520
+          },
+          "startedAt": 2376
+        },
+        "last": null,
+        "completionCounts": {
+          "complete": 0,
+          "recovery": 0,
+          "visibility": 0,
+          "cancelled": 0,
+          "error": 0
+        }
+      }
+    },
+    {
+      "state": {
+        "turn": 4,
+        "tideLevel": 1,
+        "boatNodeId": "rabbit-pier",
+        "aboard": [
+          "rabbit-1",
+          "rabbit-2"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [
+            "sheep-1"
+          ],
+          "rabbit-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "audio": {
+        "muted": false,
+        "activated": true,
+        "hidden": false,
+        "disposed": false,
+        "unavailable": false,
+        "error": null,
+        "contextState": "running",
+        "currentTime": 9.632,
+        "contextCount": 1,
+        "schedulerActive": true,
+        "schedulerCount": 1,
+        "schedulerStarts": 1,
+        "sourceCount": 11,
+        "sourceNodesCreated": 18,
+        "peakOwnedSources": 12,
+        "graphNodeCount": 54,
+        "musicSources": 9,
+        "ambienceSources": 2,
+        "travelRequested": false,
+        "travelActive": false,
+        "arrivalActive": false,
+        "deliveryCount": 0,
+        "transferContacts": 1,
+        "transferPlayed": 1,
+        "transferSkipped": 0,
+        "transferSources": 0,
+        "peakTransferSources": 1,
+        "lastTransferContact": {
+          "weight": "full",
+          "settle": true,
+          "compact": false,
+          "count": 1,
+          "time": 1.6506666666666667,
+          "played": true
+        },
+        "desiredArrangement": "ordinary",
+        "arrangement": "deadline",
+        "pendingTerminal": false,
+        "accompanimentEnabled": true,
+        "companionSources": 0,
+        "companionNotes": 2,
+        "companionDeferrals": 0,
+        "droppedTones": 0,
+        "masterGain": 0.6499999761581421,
+        "phrase": "Between the lamps",
+        "bpm": 64,
+        "phraseSeconds": 75,
+        "cueDuration": 75,
+        "phaseSeconds": 9.592,
+        "loopCount": 0,
+        "scheduledEvents": 5,
+        "skippedEvents": 0,
+        "rms": 0.012925484842620532,
+        "peak": 0.031137388199567795
+      },
+      "transition": {
+        "active": {
+          "id": 4,
+          "action": {
+            "type": "board",
+            "passengerIds": [
+              "rabbit-1",
+              "rabbit-2"
+            ]
+          },
+          "plan": {
+            "duration": 520,
+            "tideDuration": 520,
+            "recoveryDelay": 1520
+          },
+          "startedAt": 10578.90000000596
+        },
+        "last": {
+          "id": 3,
+          "action": {
+            "type": "move",
+            "to": "rabbit-pier"
+          },
+          "plan": {
+            "duration": 1335.372360160054,
+            "tideDuration": 550,
+            "recoveryDelay": 2335.372360160054
+          },
+          "startedAt": 6146.100000008941,
+          "finishedAt": 7524.70000000298,
+          "reason": "complete"
+        },
+        "completionCounts": {
+          "complete": 3,
+          "recovery": 0,
+          "visibility": 0,
+          "cancelled": 0,
+          "error": 0
+        }
+      }
+    },
+    {
+      "state": {
+        "turn": 4,
+        "tideLevel": 1,
+        "boatNodeId": "rabbit-pier",
+        "aboard": [
+          "rabbit-1",
+          "rabbit-2"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [
+            "sheep-1"
+          ],
+          "rabbit-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "audio": {
+        "muted": false,
+        "activated": true,
+        "hidden": false,
+        "disposed": false,
+        "unavailable": false,
+        "error": null,
+        "contextState": "running",
+        "currentTime": 11.861333333333333,
+        "contextCount": 1,
+        "schedulerActive": true,
+        "schedulerCount": 1,
+        "schedulerStarts": 1,
+        "sourceCount": 7,
+        "sourceNodesCreated": 21,
+        "peakOwnedSources": 12,
+        "graphNodeCount": 38,
+        "musicSources": 5,
+        "ambienceSources": 2,
+        "travelRequested": false,
+        "travelActive": false,
+        "arrivalActive": false,
+        "deliveryCount": 0,
+        "transferContacts": 3,
+        "transferPlayed": 3,
+        "transferSkipped": 0,
+        "transferSources": 0,
+        "peakTransferSources": 2,
+        "lastTransferContact": {
+          "weight": "light",
+          "settle": true,
+          "compact": false,
+          "count": 2,
+          "time": 10.072,
+          "played": true
+        },
+        "desiredArrangement": "ordinary",
+        "arrangement": "ordinary",
+        "pendingTerminal": false,
+        "accompanimentEnabled": true,
+        "companionSources": 0,
+        "companionNotes": 2,
+        "companionDeferrals": 0,
+        "droppedTones": 0,
+        "masterGain": 0.6499999761581421,
+        "phrase": "Between the lamps",
+        "bpm": 64,
+        "phraseSeconds": 75,
+        "cueDuration": 75,
+        "phaseSeconds": 11.821333333333333,
+        "loopCount": 0,
+        "scheduledEvents": 6,
+        "skippedEvents": 0,
+        "rms": 0.013529375108552401,
+        "peak": 0.03405522555112839
+      },
+      "transition": {
+        "active": {
+          "id": 5,
+          "action": {
+            "type": "board",
+            "passengerIds": [
+              "rabbit-1",
+              "rabbit-2"
+            ]
+          },
+          "plan": {
+            "duration": 520,
+            "tideDuration": 520,
+            "recoveryDelay": 1520
+          },
+          "startedAt": 12812.5
+        },
+        "last": {
+          "id": 4,
+          "action": {
+            "type": "board",
+            "passengerIds": [
+              "rabbit-1",
+              "rabbit-2"
+            ]
+          },
+          "plan": {
+            "duration": 520,
+            "tideDuration": 520,
+            "recoveryDelay": 1520
+          },
+          "startedAt": 10578.90000000596,
+          "finishedAt": 11249.70000000298,
+          "reason": "complete"
+        },
+        "completionCounts": {
+          "complete": 4,
+          "recovery": 0,
+          "visibility": 0,
+          "cancelled": 0,
+          "error": 0
+        }
+      }
+    },
+    {
+      "state": {
+        "turn": 7,
+        "tideLevel": 1,
+        "boatNodeId": "stone",
+        "aboard": [
+          "rabbit-1",
+          "rabbit-2",
+          "sheep-1"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [],
+          "rabbit-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "audio": {
+        "muted": false,
+        "activated": true,
+        "hidden": false,
+        "disposed": false,
+        "unavailable": false,
+        "error": null,
+        "contextState": "running",
+        "currentTime": 19.101333333333333,
+        "contextCount": 1,
+        "schedulerActive": true,
+        "schedulerCount": 1,
+        "schedulerStarts": 1,
+        "sourceCount": 7,
+        "sourceNodesCreated": 31,
+        "peakOwnedSources": 12,
+        "graphNodeCount": 38,
+        "musicSources": 5,
+        "ambienceSources": 2,
+        "travelRequested": false,
+        "travelActive": false,
+        "arrivalActive": false,
+        "deliveryCount": 0,
+        "transferContacts": 5,
+        "transferPlayed": 5,
+        "transferSkipped": 0,
+        "transferSources": 0,
+        "peakTransferSources": 2,
+        "lastTransferContact": {
+          "weight": "light",
+          "settle": true,
+          "compact": false,
+          "count": 2,
+          "time": 12.250666666666667,
+          "played": true
+        },
+        "desiredArrangement": "homeward",
+        "arrangement": "ordinary",
+        "pendingTerminal": false,
+        "accompanimentEnabled": true,
+        "companionSources": 0,
+        "companionNotes": 2,
+        "companionDeferrals": 0,
+        "droppedTones": 0,
+        "masterGain": 0.6499999761581421,
+        "phrase": "Between the lamps",
+        "bpm": 64,
+        "phraseSeconds": 75,
+        "cueDuration": 75,
+        "phaseSeconds": 19.061333333333334,
+        "loopCount": 0,
+        "scheduledEvents": 9,
+        "skippedEvents": 0,
+        "rms": 0.013554177690205869,
+        "peak": 0.03313562273979187
+      },
+      "transition": {
+        "active": {
+          "id": 8,
+          "action": {
+            "type": "board",
+            "passengerIds": [
+              "sheep-1"
+            ]
+          },
+          "plan": {
+            "duration": 520,
+            "tideDuration": 520,
+            "recoveryDelay": 1520
+          },
+          "startedAt": 20080.5
+        },
+        "last": {
+          "id": 7,
+          "action": {
+            "type": "move",
+            "to": "stone"
+          },
+          "plan": {
+            "duration": 1411.5466433563788,
+            "tideDuration": 550,
+            "recoveryDelay": 2411.546643356379
+          },
+          "startedAt": 17812.79999999702,
+          "finishedAt": 19274.40000000596,
+          "reason": "complete"
+        },
+        "completionCounts": {
+          "complete": 7,
+          "recovery": 0,
+          "visibility": 0,
+          "cancelled": 0,
+          "error": 0
+        }
+      }
+    },
+    {
+      "state": {
+        "turn": 8,
+        "tideLevel": 2,
+        "boatNodeId": "stone",
+        "aboard": [
+          "rabbit-2",
+          "sheep-1"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [
+            "rabbit-1"
+          ],
+          "rabbit-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "audio": {
+        "muted": false,
+        "activated": true,
+        "hidden": false,
+        "disposed": false,
+        "unavailable": false,
+        "error": null,
+        "contextState": "running",
+        "currentTime": 20.92,
+        "contextCount": 1,
+        "schedulerActive": true,
+        "schedulerCount": 1,
+        "schedulerStarts": 1,
+        "sourceCount": 9,
+        "sourceNodesCreated": 35,
+        "peakOwnedSources": 12,
+        "graphNodeCount": 46,
+        "musicSources": 6,
+        "ambienceSources": 2,
+        "travelRequested": false,
+        "travelActive": false,
+        "arrivalActive": false,
+        "deliveryCount": 0,
+        "transferContacts": 7,
+        "transferPlayed": 7,
+        "transferSkipped": 0,
+        "transferSources": 0,
+        "peakTransferSources": 2,
+        "lastTransferContact": {
+          "weight": "full",
+          "settle": true,
+          "compact": false,
+          "count": 1,
+          "time": 19.541333333333334,
+          "played": true
+        },
+        "desiredArrangement": "ordinary",
+        "arrangement": "homeward",
+        "pendingTerminal": false,
+        "accompanimentEnabled": true,
+        "companionSources": 0,
+        "companionNotes": 3,
+        "companionDeferrals": 0,
+        "droppedTones": 0,
+        "masterGain": 0.6499999761581421,
+        "phrase": "Between the lamps",
+        "bpm": 64,
+        "phraseSeconds": 75,
+        "cueDuration": 75,
+        "phaseSeconds": 20.880000000000003,
+        "loopCount": 0,
+        "scheduledEvents": 10,
+        "skippedEvents": 0,
+        "rms": 0.019903666275497903,
+        "peak": 0.05420540273189545
+      },
+      "transition": {
+        "active": {
+          "id": 9,
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "rabbit-1"
+            ]
+          },
+          "plan": {
+            "duration": 520,
+            "tideDuration": 520,
+            "recoveryDelay": 1520
+          },
+          "startedAt": 21880.20000000298
+        },
+        "last": {
+          "id": 8,
+          "action": {
+            "type": "board",
+            "passengerIds": [
+              "sheep-1"
+            ]
+          },
+          "plan": {
+            "duration": 520,
+            "tideDuration": 520,
+            "recoveryDelay": 1520
+          },
+          "startedAt": 20080.5,
+          "finishedAt": 20642.90000000596,
+          "reason": "complete"
+        },
+        "completionCounts": {
+          "complete": 8,
+          "recovery": 0,
+          "visibility": 0,
+          "cancelled": 0,
+          "error": 0
+        }
+      }
+    },
+    {
+      "state": {
+        "turn": 9,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "aboard": [
+          "rabbit-1",
+          "rabbit-2"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [],
+          "rabbit-pier": []
+        },
+        "delivered": [
+          "sheep-1"
+        ],
+        "status": "playing",
+        "lossReason": null
+      },
+      "audio": {
+        "muted": false,
+        "activated": true,
+        "hidden": false,
+        "disposed": false,
+        "unavailable": false,
+        "error": null,
+        "contextState": "running",
+        "currentTime": 27.36,
+        "contextCount": 1,
+        "schedulerActive": true,
+        "schedulerCount": 1,
+        "schedulerStarts": 1,
+        "sourceCount": 8,
+        "sourceNodesCreated": 45,
+        "peakOwnedSources": 13,
+        "graphNodeCount": 42,
+        "musicSources": 5,
+        "ambienceSources": 2,
+        "travelRequested": false,
+        "travelActive": false,
+        "arrivalActive": false,
+        "deliveryCount": 0,
+        "transferContacts": 9,
+        "transferPlayed": 9,
+        "transferSkipped": 0,
+        "transferSources": 0,
+        "peakTransferSources": 2,
+        "lastTransferContact": {
+          "weight": "light",
+          "settle": true,
+          "compact": false,
+          "count": 1,
+          "time": 21.21066666666667,
+          "played": true
+        },
+        "desiredArrangement": "homeward",
+        "arrangement": "homeward",
+        "pendingTerminal": false,
+        "accompanimentEnabled": true,
+        "companionSources": 1,
+        "companionNotes": 5,
+        "companionDeferrals": 0,
+        "droppedTones": 0,
+        "masterGain": 0.6499999761581421,
+        "phrase": "Between the lamps",
+        "bpm": 64,
+        "phraseSeconds": 75,
+        "cueDuration": 75,
+        "phaseSeconds": 27.32,
+        "loopCount": 0,
+        "scheduledEvents": 12,
+        "skippedEvents": 0,
+        "rms": 0.016545414220139713,
+        "peak": 0.041475988924503326
+      },
+      "transition": {
+        "active": {
+          "id": 11,
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "sheep-1"
+            ]
+          },
+          "plan": {
+            "duration": 520,
+            "tideDuration": 520,
+            "recoveryDelay": 1520
+          },
+          "startedAt": 28317.79999999702
+        },
+        "last": {
+          "id": 10,
+          "action": {
+            "type": "move",
+            "to": "harbor"
+          },
+          "plan": {
+            "duration": 1669.8086251415646,
+            "tideDuration": 550,
+            "recoveryDelay": 2669.8086251415643
+          },
+          "startedAt": 24257.29999999702,
+          "finishedAt": 25990.60000000894,
+          "reason": "complete"
+        },
+        "completionCounts": {
+          "complete": 10,
+          "recovery": 0,
+          "visibility": 0,
+          "cancelled": 0,
+          "error": 0
+        }
+      }
+    },
+    {
+      "state": {
+        "turn": 9,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [],
+          "rabbit-pier": []
+        },
+        "delivered": [
+          "rabbit-1",
+          "rabbit-2",
+          "sheep-1"
+        ],
+        "status": "won",
+        "lossReason": null
+      },
+      "audio": {
+        "muted": false,
+        "activated": true,
+        "hidden": false,
+        "disposed": false,
+        "unavailable": false,
+        "error": null,
+        "contextState": "running",
+        "currentTime": 31.050666666666668,
+        "contextCount": 1,
+        "schedulerActive": true,
+        "schedulerCount": 1,
+        "schedulerStarts": 1,
+        "sourceCount": 12,
+        "sourceNodesCreated": 52,
+        "peakOwnedSources": 13,
+        "graphNodeCount": 58,
+        "musicSources": 9,
+        "ambienceSources": 2,
+        "travelRequested": false,
+        "travelActive": false,
+        "arrivalActive": false,
+        "deliveryCount": 0,
+        "transferContacts": 10,
+        "transferPlayed": 10,
+        "transferSkipped": 0,
+        "transferSources": 0,
+        "peakTransferSources": 2,
+        "lastTransferContact": {
+          "weight": "full",
+          "settle": true,
+          "compact": false,
+          "count": 1,
+          "time": 27.661333333333335,
+          "played": true
+        },
+        "desiredArrangement": "won",
+        "arrangement": "homeward",
+        "pendingTerminal": true,
+        "accompanimentEnabled": true,
+        "companionSources": 1,
+        "companionNotes": 6,
+        "companionDeferrals": 0,
+        "droppedTones": 0,
+        "masterGain": 0.6499999761581421,
+        "phrase": "Between the lamps",
+        "bpm": 64,
+        "phraseSeconds": 75,
+        "cueDuration": 75,
+        "phaseSeconds": 31.01066666666667,
+        "loopCount": 0,
+        "scheduledEvents": 14,
+        "skippedEvents": 0,
+        "rms": 0.0095935276812321,
+        "peak": 0.021155424416065216
+      },
+      "transition": {
+        "active": {
+          "id": 12,
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "rabbit-1",
+              "rabbit-2",
+              "sheep-1"
+            ]
+          },
+          "plan": {
+            "duration": 900,
+            "tideDuration": 550,
+            "recoveryDelay": 1900
+          },
+          "startedAt": 32017.90000000596
+        },
+        "last": {
+          "id": 11,
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "sheep-1"
+            ]
+          },
+          "plan": {
+            "duration": 520,
+            "tideDuration": 520,
+            "recoveryDelay": 1520
+          },
+          "startedAt": 28317.79999999702,
+          "finishedAt": 28934.79999999702,
+          "reason": "complete"
+        },
+        "completionCounts": {
+          "complete": 11,
+          "recovery": 0,
+          "visibility": 0,
+          "cancelled": 0,
+          "error": 0
+        }
+      }
+    },
+    {
+      "state": {
+        "turn": 9,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [],
+          "rabbit-pier": []
+        },
+        "delivered": [
+          "rabbit-1",
+          "rabbit-2",
+          "sheep-1"
+        ],
+        "status": "won",
+        "lossReason": null
+      },
+      "audio": {
+        "muted": false,
+        "activated": true,
+        "hidden": false,
+        "disposed": false,
+        "unavailable": false,
+        "error": null,
+        "contextState": "running",
+        "currentTime": 33.952,
+        "contextCount": 1,
+        "schedulerActive": true,
+        "schedulerCount": 1,
+        "schedulerStarts": 1,
+        "sourceCount": 8,
+        "sourceNodesCreated": 60,
+        "peakOwnedSources": 16,
+        "graphNodeCount": 42,
+        "musicSources": 5,
+        "ambienceSources": 2,
+        "travelRequested": false,
+        "travelActive": false,
+        "arrivalActive": false,
+        "deliveryCount": 1,
+        "transferContacts": 12,
+        "transferPlayed": 12,
+        "transferSkipped": 0,
+        "transferSources": 0,
+        "peakTransferSources": 2,
+        "lastTransferContact": {
+          "weight": "full",
+          "settle": true,
+          "compact": false,
+          "count": 3,
+          "time": 31.52,
+          "played": true
+        },
+        "desiredArrangement": "won",
+        "arrangement": "homeward",
+        "pendingTerminal": true,
+        "accompanimentEnabled": true,
+        "companionSources": 1,
+        "companionNotes": 8,
+        "companionDeferrals": 0,
+        "droppedTones": 0,
+        "masterGain": 0.6499999761581421,
+        "phrase": "Between the lamps",
+        "bpm": 64,
+        "phraseSeconds": 75,
+        "cueDuration": 75,
+        "phaseSeconds": 33.912,
+        "loopCount": 0,
+        "scheduledEvents": 15,
+        "skippedEvents": 0,
+        "rms": 0.012928323085155857,
+        "peak": 0.02805422805249691
+      },
+      "transition": {
+        "active": {
+          "id": 13,
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "rabbit-1",
+              "rabbit-2",
+              "sheep-1"
+            ]
+          },
+          "plan": {
+            "duration": 900,
+            "tideDuration": 550,
+            "recoveryDelay": 1900
+          },
+          "startedAt": 34923.20000000298
+        },
+        "last": {
+          "id": 12,
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "rabbit-1",
+              "rabbit-2",
+              "sheep-1"
+            ]
+          },
+          "plan": {
+            "duration": 900,
+            "tideDuration": 550,
+            "recoveryDelay": 1900
+          },
+          "startedAt": 32017.90000000596,
+          "finishedAt": 32997.10000000894,
+          "reason": "complete"
+        },
+        "completionCounts": {
+          "complete": 12,
+          "recovery": 0,
+          "visibility": 0,
+          "cancelled": 0,
+          "error": 0
+        }
+      }
+    }
+  ],
+  "state": {
+    "turn": 9,
+    "tideLevel": 2,
+    "boatNodeId": "harbor",
+    "aboard": [],
+    "waitingByPier": {
+      "harbor-pier": [],
+      "stone-pier": [],
+      "rabbit-pier": []
+    },
+    "delivered": [
+      "rabbit-1",
+      "rabbit-2",
+      "sheep-1"
+    ],
+    "status": "won",
+    "lossReason": null
+  },
+  "audio": {
+    "muted": false,
+    "activated": true,
+    "hidden": false,
+    "disposed": false,
+    "unavailable": false,
+    "error": null,
+    "contextState": "running",
+    "currentTime": 41.552,
+    "contextCount": 1,
+    "schedulerActive": true,
+    "schedulerCount": 1,
+    "schedulerStarts": 1,
+    "sourceCount": 7,
+    "sourceNodesCreated": 72,
+    "peakOwnedSources": 16,
+    "graphNodeCount": 38,
+    "musicSources": 5,
+    "ambienceSources": 2,
+    "travelRequested": false,
+    "travelActive": false,
+    "arrivalActive": false,
+    "deliveryCount": 2,
+    "transferContacts": 14,
+    "transferPlayed": 14,
+    "transferSkipped": 0,
+    "transferSources": 0,
+    "peakTransferSources": 2,
+    "lastTransferContact": {
+      "weight": "full",
+      "settle": true,
+      "compact": false,
+      "count": 3,
+      "time": 34.42133333333334,
+      "played": true
+    },
+    "desiredArrangement": "won",
+    "arrangement": "won",
+    "pendingTerminal": false,
+    "accompanimentEnabled": true,
+    "companionSources": 0,
+    "companionNotes": 9,
+    "companionDeferrals": 0,
+    "droppedTones": 0,
+    "masterGain": 0.6499999761581421,
+    "phrase": "Between the lamps",
+    "bpm": 64,
+    "phraseSeconds": 75,
+    "cueDuration": 75,
+    "phaseSeconds": 41.512,
+    "loopCount": 0,
+    "scheduledEvents": 18,
+    "skippedEvents": 0,
+    "rms": 0.01382463778977143,
+    "peak": 0.03145945072174072
+  },
+  "contacts": {
+    "sequence": 8,
+    "last": {
+      "id": 8,
+      "action": "unload",
+      "passengerIds": [
+        "rabbit-1",
+        "rabbit-2",
+        "sheep-1"
+      ],
+      "reduced": false,
+      "pending": 0,
+      "records": [
+        {
+          "stage": "crossing",
+          "progress": 0.25577777777777455,
+          "outcome": "emitted"
+        },
+        {
+          "stage": "settling",
+          "progress": 0.515,
+          "outcome": "emitted"
+        }
+      ],
+      "completion": "complete"
+    },
+    "history": [
+      {
+        "id": 1,
+        "action": "unload",
+        "passengerIds": [
+          "sheep-1"
+        ],
+        "reduced": false,
+        "pending": 0,
+        "records": [
+          {
+            "stage": "crossing",
+            "progress": 0.40999999999999964,
+            "outcome": "stale"
+          },
+          {
+            "stage": "settling",
+            "progress": 0.5059615384615382,
+            "outcome": "emitted"
+          }
+        ],
+        "completion": "complete"
+      },
+      {
+        "id": 2,
+        "action": "board",
+        "passengerIds": [
+          "rabbit-1",
+          "rabbit-2"
+        ],
+        "reduced": false,
+        "pending": 0,
+        "records": [
+          {
+            "stage": "crossing",
+            "progress": 0.5807692307520378,
+            "outcome": "emitted"
+          },
+          {
+            "stage": "settling",
+            "progress": 0.8373076922904986,
+            "outcome": "emitted"
+          }
+        ],
+        "completion": "complete"
+      },
+      {
+        "id": 3,
+        "action": "board",
+        "passengerIds": [
+          "rabbit-1",
+          "rabbit-2"
+        ],
+        "reduced": false,
+        "pending": 0,
+        "records": [
+          {
+            "stage": "crossing",
+            "progress": 0.5586538461481163,
+            "outcome": "emitted"
+          },
+          {
+            "stage": "settling",
+            "progress": 0.7509615384558086,
+            "outcome": "emitted"
+          }
+        ],
+        "completion": "complete"
+      },
+      {
+        "id": 4,
+        "action": "board",
+        "passengerIds": [
+          "sheep-1"
+        ],
+        "reduced": false,
+        "pending": 0,
+        "records": [
+          {
+            "stage": "crossing",
+            "progress": 0.5361538461423851,
+            "outcome": "emitted"
+          },
+          {
+            "stage": "settling",
+            "progress": 0.8246153846039236,
+            "outcome": "emitted"
+          }
+        ],
+        "completion": "complete"
+      },
+      {
+        "id": 5,
+        "action": "unload",
+        "passengerIds": [
+          "rabbit-1"
+        ],
+        "reduced": false,
+        "pending": 0,
+        "records": [
+          {
+            "stage": "crossing",
+            "progress": 0.36403846154418995,
+            "outcome": "emitted"
+          },
+          {
+            "stage": "settling",
+            "progress": 0.5242307692365032,
+            "outcome": "emitted"
+          }
+        ],
+        "completion": "complete"
+      },
+      {
+        "id": 6,
+        "action": "unload",
+        "passengerIds": [
+          "sheep-1"
+        ],
+        "reduced": false,
+        "pending": 0,
+        "records": [
+          {
+            "stage": "crossing",
+            "progress": 0.3798076923019625,
+            "outcome": "stale"
+          },
+          {
+            "stage": "settling",
+            "progress": 0.5401923076865737,
+            "outcome": "emitted"
+          }
+        ],
+        "completion": "complete"
+      },
+      {
+        "id": 7,
+        "action": "unload",
+        "passengerIds": [
+          "rabbit-1",
+          "rabbit-2",
+          "sheep-1"
+        ],
+        "reduced": false,
+        "pending": 0,
+        "records": [
+          {
+            "stage": "crossing",
+            "progress": 0.27655555554562145,
+            "outcome": "emitted"
+          },
+          {
+            "stage": "settling",
+            "progress": 0.5172222222122865,
+            "outcome": "emitted"
+          }
+        ],
+        "completion": "complete"
+      },
+      {
+        "id": 8,
+        "action": "unload",
+        "passengerIds": [
+          "rabbit-1",
+          "rabbit-2",
+          "sheep-1"
+        ],
+        "reduced": false,
+        "pending": 0,
+        "records": [
+          {
+            "stage": "crossing",
+            "progress": 0.25577777777777455,
+            "outcome": "emitted"
+          },
+          {
+            "stage": "settling",
+            "progress": 0.515,
+            "outcome": "emitted"
+          }
+        ],
+        "completion": "complete"
+      }
+    ]
+  }
+}

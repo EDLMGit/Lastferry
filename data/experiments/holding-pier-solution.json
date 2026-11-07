@@ -1,0 +1,15 @@
+{
+  "description": "Developer witness; do not display as an in-game hint.",
+  "actions": [
+    { "type": "unload", "passengerIds": ["sheep-1"] },
+    { "type": "move", "to": "shallows" },
+    { "type": "move", "to": "rabbit-pier" },
+    { "type": "board", "passengerIds": ["rabbit-1", "rabbit-2"] },
+    { "type": "move", "to": "shallows" },
+    { "type": "move", "to": "stone" },
+    { "type": "board", "passengerIds": ["sheep-1"] },
+    { "type": "move", "to": "harbor" },
+    { "type": "unload", "passengerIds": ["sheep-1", "rabbit-1", "rabbit-2"] }
+  ],
+  "expected": { "turn": 9, "tideLevel": 2, "status": "won", "aboard": [] }
+}

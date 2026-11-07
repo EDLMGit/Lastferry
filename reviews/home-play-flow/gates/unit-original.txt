@@ -1,0 +1,112 @@
+
+> last-ferry@1.0.0 test:unit
+> vitest run
+
+
+ RUN  v5.0.5 C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry
+
+ ❯ tests/unit/audio.test.ts (60 tests | 1 failed) 496ms
+   ❯ continuous audio ownership and phase (60)
+     × one music output attenuates the dry score and existing wet return while effects stay independent 21ms
+ ❯ tests/unit/story-presentation.test.ts (11 tests | 1 failed) 22ms
+   ❯ bounded optional story motion (11)
+     × each shot holds until Next without touching the pending checkpoint 10ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/audio.test.ts > continuous audio ownership and phase > one music output attenuates the dry score and existing wet return while effects stay independent
+AssertionError: expected [ Node{ …(11) }, Node{ …(11) } ] to deeply equal [ Node{ …(11) } ]
+
+- Expected
++ Received
+
+@@ -103,6 +103,37 @@
+        "events": [],
+        "value": 1,
+      },
+      "type": "",
+    },
++   Node {
++     "Q": Parameter {
++       "events": [],
++       "value": 1,
++     },
++     "buffer": null,
++     "connections": Set {},
++     "detune": Parameter {
++       "events": [],
++       "value": 1,
++     },
++     "fftSize": 1024,
++     "frequency": Parameter {
++       "events": [],
++       "value": 1,
++     },
++     "gain": Parameter {
++       "events": [],
++       "value": 1,
++     },
++     "loop": false,
++     "pan": Parameter {
++       "events": [],
++       "value": 1,
++     },
++     "playbackRate": Parameter {
++       "events": [],
++       "value": 1,
++     },
++     "type": "",
++   },
+  ]
+
+ ❯ tests/unit/audio.test.ts:1012:37
+    1010|     expect([...music.connections]).toEqual([output, send]);
+    1011|     expect([...wet.connections]).toEqual([output]);
+    1012|     expect([...output.connections]).toEqual([master]);
+       |                                     ^
+    1013|     expect([...effects.connections]).toEqual([master]);
+    1014|     expect([...ambience.connections]).toEqual([master]);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/unit/story-presentation.test.ts > bounded optional story motion > each shot holds until Next without touching the pending checkpoint
+AssertionError: expected { scene: 'opening', …(11) } to match object { shot: 'tide', elapsed: 6000, …(2) }
+(8 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "elapsed": 6000,
++   "elapsed": 2000,
+    "final": false,
+-   "settled": true,
+-   "shot": "tide",
++   "settled": false,
++   "shot": "lantern",
+  }
+
+ ❯ tests/unit/story-presentation.test.ts:40:32
+     38|     presentation.start('opening', false, 0);
+     39|     for (let t = 100; t <= 8000; t += 100) presentation.update(t);
+     40|     expect(presentation.frame).toMatchObject({
+       |                                ^
+     41|       shot: 'tide',
+     42|       elapsed: 6000,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  2 failed | 31 passed (33)
+      Tests  2 failed | 295 passed (297)
+   Start at  10:55:36
+   Duration  3.94s (tests 64%, transform 19%, import 14%, worker 2%)
+
+    Isolate  33 workers spawned · ~365ms startup each (spawn + environment, per file)
+             at least ~439ms faster with isolate: false — reuses workers across files instead of one per file
+
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

@@ -1,0 +1,90 @@
+
+> last-ferry@1.0.0 test:e2e
+> playwright test wide-berth-production.spec.ts reef-return.spec.ts reef-return-practice.spec.ts repair-composition.spec.ts two-shelters-production.spec.ts play-readability-production.spec.ts
+
+
+Running 8 tests using 1 worker
+
+(node:21356) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\e2e\play-readability-production.spec.ts:7:1 › production UI rescue, tide and terminal Undo with no development API (27.6s)
+  ok 2 tests\e2e\reef-return-practice.spec.ts:5:1 › short landscape Practice keeps the pending launch through reef inspection, loss, Undo and direct replay (10.3s)
+  ok 3 tests\e2e\large-cove-rescue.ts:47:5 › reef-return · gather-before-reef · portrait normal motion (53.6s)
+  ok 4 tests\e2e\large-cove-rescue.ts:47:5 › reef-return · relay-through-shell-pool · short landscape production (48.8s)
+  x  5 tests\e2e\repair-composition.spec.ts:6:1 › matching phone views, revised launch and existing saved Wide Berth entrance (3.0m)
+(node:49768) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 6 tests\e2e\two-shelters-production.spec.ts:7:1 › production Two Shelters rescue and tide Undo without development globals (33.9s)
+  ok 7 tests\e2e\large-cove-rescue.ts:47:5 › wide-berth · light-through-beacon · portrait normal motion (1.1m)
+  ok 8 tests\e2e\large-cove-rescue.ts:47:5 › wide-berth · bring-the-quay-via-outer · short landscape production (1.2m)
+
+
+  1) tests\e2e\repair-composition.spec.ts:6:1 › matching phone views, revised launch and existing saved Wide Berth entrance 
+
+    Test timeout of 180000ms exceeded.
+
+    Error: browserContext.close: Test ended.
+    Browser logs:
+
+    <launching> C:\Users\ernes\Documents\last-ferry-codex-starter\.cache\ms-playwright\chromium_headless_shell-1248\chrome-headless-shell-win64\chrome-headless-shell.exe --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,AvoidCorsURLLoaderRestartOnRedirect,Translate,AutoDeElevate,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --use-angle=swiftshader --enable-unsafe-swiftshader --user-data-dir=C:\Users\ernes\AppData\Local\Packages\openai.codex_2p2nqsd0c76g0\AC\#!sandbox.{117c024c-ebcb-4515-bad4-f06ccb73b5ad}\Temp\playwright_chromiumdev_profile-zqKVBP --remote-debugging-pipe --no-startup-window
+    <launched> pid=45472
+    [pid=45472][err] [1104/232138.081:WARNING:components\leveldb_proto\internal\leveldb_database.cc:102] Unable to open C:\Users\ernes\AppData\Local\Packages\openai.codex_2p2nqsd0c76g0\AC\#!sandbox.{117c024c-ebcb-4515-bad4-f06ccb73b5ad}\Temp\playwright_chromiumdev_profile-zqKVBP\Default\shared_proto_db\metadata: IO error: C:\Users\ernes\AppData\Local\Packages\openai.codex_2p2nqsd0c76g0\AC\#!sandbox.{117c024c-ebcb-4515-bad4-f06ccb73b5ad}\Temp\playwright_chromiumdev_profile-zqKVBP\Default\shared_proto_db\metadata/000001.dbtmp: Could not rename file: Access denied. (ChromeMethodBFE: 14::RenameFile::5)
+    [pid=45472][err] [1104/232140.121:WARNING:components\leveldb_proto\internal\leveldb_database.cc:102] Unable to open C:\Users\ernes\AppData\Local\Packages\openai.codex_2p2nqsd0c76g0\AC\#!sandbox.{117c024c-ebcb-4515-bad4-f06ccb73b5ad}\Temp\playwright_chromiumdev_profile-zqKVBP\Default\shared_proto_db\metadata: IO error: C:\Users\ernes\AppData\Local\Packages\openai.codex_2p2nqsd0c76g0\AC\#!sandbox.{117c024c-ebcb-4515-bad4-f06ccb73b5ad}\Temp\playwright_chromiumdev_profile-zqKVBP\Default\shared_proto_db\metadata/000001.dbtmp: Could not rename file: Access denied. (ChromeMethodBFE: 14::RenameFile::5)
+    [pid=45472][err] [1104/232142.175:WARNING:components\leveldb_proto\internal\leveldb_database.cc:102] Unable to open C:\Users\ernes\AppData\Local\Packages\openai.codex_2p2nqsd0c76g0\AC\#!sandbox.{117c024c-ebcb-4515-bad4-f06ccb73b5ad}\Temp\playwright_chromiumdev_profile-zqKVBP\Default\shared_proto_db\metadata: IO error: C:\Users\ernes\AppData\Local\Packages\openai.codex_2p2nqsd0c76g0\AC\#!sandbox.{117c024c-ebcb-4515-bad4-f06ccb73b5ad}\Temp\playwright_chromiumdev_profile-zqKVBP\Default\shared_proto_db\metadata/000001.dbtmp: Could not rename file: Access denied. (ChromeMethodBFE: 14::RenameFile::5)
+    [pid=45472][err] [1104/232144.205:WARNING:components\leveldb_proto\internal\leveldb_database.cc:102] Unable to open C:\Users\ernes\AppData\Local\Packages\openai.codex_2p2nqsd0c76g0\AC\#!sandbox.{117c024c-ebcb-4515-bad4-f06ccb73b5ad}\Temp\playwright_chromiumdev_profile-zqKVBP\Default\shared_proto_db\metadata: IO error: C:\Users\ernes\AppData\Local\Packages\openai.codex_2p2nqsd0c76g0\AC\#!sandbox.{117c024c-ebcb-4515-bad4-f06ccb73b5ad}\Temp\playwright_chromiumdev_profile-zqKVBP\Default\shared_proto_db\metadata/000001.dbtmp: Could not rename file: Access denied. (ChromeMethodBFE: 14::RenameFile::5)
+    [pid=45472][err] [1104/232205.529:INFO:CONSOLE:16] "Uncaught SecurityError: Failed to read the 'sessionStorage' property from 'Window': Access is denied for this document.", source:  (16)
+    [pid=45472][err] [1104/232205.606:INFO:CONSOLE:935] "[vite] connecting...", source: http://127.0.0.1:5270/@vite/client (935)
+    [pid=45472][err] [1104/232205.625:INFO:CONSOLE:1048] "[vite] connected.", source: http://127.0.0.1:5270/@vite/client (1048)
+    [pid=45472][err] [1104/232212.635:INFO:CONSOLE:935] "[vite] connecting...", source: http://127.0.0.1:5270/@vite/client (935)
+    [pid=45472][err] [1104/232212.647:INFO:CONSOLE:1048] "[vite] connected.", source: http://127.0.0.1:5270/@vite/client (1048)
+    [pid=45472][err] [1104/232214.396:INFO:CONSOLE:935] "[vite] connecting...", source: http://127.0.0.1:5270/@vite/client (935)
+    [pid=45472][err] [1104/232214.416:INFO:CONSOLE:1048] "[vite] connected.", source: http://127.0.0.1:5270/@vite/client (1048)
+    [pid=45472][err] [1104/232215.757:INFO:CONSOLE:935] "[vite] connecting...", source: http://127.0.0.1:5270/@vite/client (935)
+    [pid=45472][err] [1104/232215.763:INFO:CONSOLE:1048] "[vite] connected.", source: http://127.0.0.1:5270/@vite/client (1048)
+    [pid=45472][err] [1104/232358.716:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:260] SharedImageManager::ProduceSkia: Trying to Produce a Skia representation from a non-existent mailbox.
+    [pid=45472][err] [1104/232358.904:INFO:CONSOLE:935] "[vite] connecting...", source: http://127.0.0.1:5270/@vite/client (935)
+    [pid=45472][err] [1104/232358.913:INFO:CONSOLE:1048] "[vite] connected.", source: http://127.0.0.1:5270/@vite/client (1048)
+    [pid=45472][err] [1104/232400.992:INFO:CONSOLE:935] "[vite] connecting...", source: http://127.0.0.1:5270/@vite/client (935)
+    [pid=45472][err] [1104/232401.012:INFO:CONSOLE:1048] "[vite] connected.", source: http://127.0.0.1:5270/@vite/client (1048)
+    [pid=45472][err] [1104/232403.807:INFO:CONSOLE:935] "[vite] connecting...", source: http://127.0.0.1:5270/@vite/client (935)
+    [pid=45472][err] [1104/232403.827:INFO:CONSOLE:1048] "[vite] connected.", source: http://127.0.0.1:5270/@vite/client (1048)
+    [pid=45472][err] [1104/232406.487:INFO:CONSOLE:935] "[vite] connecting...", source: http://127.0.0.1:5270/@vite/client (935)
+    [pid=45472][err] [1104/232406.500:INFO:CONSOLE:1048] "[vite] connected.", source: http://127.0.0.1:5270/@vite/client (1048)
+    [pid=45472][err] [1104/232409.879:INFO:CONSOLE:935] "[vite] connecting...", source: http://127.0.0.1:5270/@vite/client (935)
+    [pid=45472][err] [1104/232409.890:INFO:CONSOLE:1048] "[vite] connected.", source: http://127.0.0.1:5270/@vite/client (1048)
+    [pid=45472][err] [1104/232412.312:INFO:CONSOLE:935] "[vite] connecting...", source: http://127.0.0.1:5270/@vite/client (935)
+    [pid=45472][err] [1104/232412.323:INFO:CONSOLE:1048] "[vite] connected.", source: http://127.0.0.1:5270/@vite/client (1048)
+    [pid=45472][err] [1104/232413.650:INFO:CONSOLE:935] "[vite] connecting...", source: http://127.0.0.1:5270/@vite/client (935)
+    [pid=45472][err] [1104/232413.664:INFO:CONSOLE:1048] "[vite] connected.", source: http://127.0.0.1:5270/@vite/client (1048)
+    [pid=45472][err] [1104/232416.148:INFO:CONSOLE:935] "[vite] connecting...", source: http://127.0.0.1:5270/@vite/client (935)
+    [pid=45472][err] [1104/232416.171:INFO:CONSOLE:1048] "[vite] connected.", source: http://127.0.0.1:5270/@vite/client (1048)
+    [pid=45472][err] [1104/232418.587:INFO:CONSOLE:935] "[vite] connecting...", source: http://127.0.0.1:5270/@vite/client (935)
+    [pid=45472][err] [1104/232418.596:INFO:CONSOLE:1048] "[vite] connected.", source: http://127.0.0.1:5270/@vite/client (1048)
+    [pid=45472][err] [1104/232421.756:INFO:CONSOLE:935] "[vite] connecting...", source: http://127.0.0.1:5270/@vite/client (935)
+    [pid=45472][err] [1104/232421.765:INFO:CONSOLE:1048] "[vite] connected.", source: http://127.0.0.1:5270/@vite/client (1048)
+    [pid=45472][err] [1104/232424.967:INFO:CONSOLE:935] "[vite] connecting...", source: http://127.0.0.1:5270/@vite/client (935)
+    [pid=45472][err] [1104/232424.980:INFO:CONSOLE:1048] "[vite] connected.", source: http://127.0.0.1:5270/@vite/client (1048)
+    [pid=45472][err] [1104/232427.435:INFO:CONSOLE:935] "[vite] connecting...", source: http://127.0.0.1:5270/@vite/client (935)
+    [pid=45472][err] [1104/232427.454:INFO:CONSOLE:1048] "[vite] connected.", source: http://127.0.0.1:5270/@vite/client (1048)
+    [pid=45472][err] [1104/232428.792:INFO:CONSOLE:935] "[vite] connecting...", source: http://127.0.0.1:5270/@vite/client (935)
+    [pid=45472][err] [1104/232428.808:INFO:CONSOLE:1048] "[vite] connected.", source: http://127.0.0.1:5270/@vite/client (1048)
+    [pid=45472][err] [1104/232434.804:INFO:CONSOLE:935] "[vite] connecting...", source: http://127.0.0.1:5270/@vite/client (935)
+    [pid=45472][err] [1104/232434.819:INFO:CONSOLE:1048] "[vite] connected.", source: http://127.0.0.1:5270/@vite/client (1048)
+    [pid=45472][err] [1104/232438.451:INFO:CONSOLE:935] "[vite] connecting...", source: http://127.0.0.1:5270/@vite/client (935)
+    [pid=45472][err] [1104/232438.465:INFO:CONSOLE:1048] "[vite] connected.", source: http://127.0.0.1:5270/@vite/client (1048)
+    [pid=45472] <gracefully close start>
+
+      81 |       }
+      82 |     } finally {
+    > 83 |       await ctx.close();
+         |       ^
+      84 |     }
+      85 |   }
+      86 | });
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\repair-composition.spec.ts:83:7
+
+    Error Context: test-results\repair-composition-matchin-ab095-g-saved-Wide-Berth-entrance\error-context.md
+
+  1 failed
+    tests\e2e\repair-composition.spec.ts:6:1 › matching phone views, revised launch and existing saved Wide Berth entrance 
+  7 passed (8.4m)

@@ -1,0 +1,39 @@
+
+> last-ferry@1.0.0 test:unit
+> vitest run
+
+
+ RUN  v5.0.5 C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry
+
+ ❯ tests/unit/clearance.test.ts (6 tests | 1 failed) 12049ms
+   × bellwater: full modeled ferry clears land and piers from all reachable headings, both berth sides and reverse departures 6206ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/clearance.test.ts > bellwater: full modeled ferry clears land and piers from all reachable headings, both berth sides and reverse departures
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ tests/unit/clearance.test.ts:57:43
+     55|   return Math.hypot(p[0] - a[0] - t * x, p[1] - a[1] - t * z);
+     56| }
+     57| test.each([level, holdingPier, bellwater])(
+       |                                           ^
+     58|   '$id: full modeled ferry clears land and piers from all reachable he…
+     59|   (level) => {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 33 passed (34)
+      Tests  1 failed | 302 passed (303)
+   Start at  11:26:26
+   Duration  13.14s (tests 71%, import 14%, transform 13%, worker 2%)
+
+    Isolate  34 workers spawned · ~929ms startup each (spawn + environment, per file)
+             at least ~1.18s faster with isolate: false — reuses workers across files instead of one per file
+
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

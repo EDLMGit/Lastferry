@@ -1,0 +1,181 @@
+{
+  "levelId": "reef-return",
+  "witnesses": [
+    {
+      "id": "gather-before-reef",
+      "actions": [
+        {
+          "type": "unload",
+          "passengerIds": ["heather", "birch"]
+        },
+        {
+          "type": "move",
+          "to": "wrack"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["dot"]
+        },
+        {
+          "type": "move",
+          "to": "quay"
+        },
+        {
+          "type": "move",
+          "to": "pool"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["flick"]
+        },
+        {
+          "type": "move",
+          "to": "quay"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["birch", "heather"]
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": ["heather", "birch", "dot", "flick"]
+        }
+      ]
+    },
+    {
+      "id": "relay-through-shell-pool",
+      "actions": [
+        {
+          "type": "unload",
+          "passengerIds": ["heather"]
+        },
+        {
+          "type": "move",
+          "to": "wrack"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["dot"]
+        },
+        {
+          "type": "move",
+          "to": "quay"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["heather"]
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": ["heather", "birch", "dot"]
+        },
+        {
+          "type": "move",
+          "to": "pool"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["flick"]
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": ["flick"]
+        }
+      ]
+    }
+  ],
+  "losingAlternatives": [
+    {
+      "id": "wait-with-full-deck",
+      "actions": [
+        {
+          "type": "unload",
+          "passengerIds": ["heather", "birch"]
+        },
+        {
+          "type": "move",
+          "to": "wrack"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["dot"]
+        },
+        {
+          "type": "move",
+          "to": "quay"
+        },
+        {
+          "type": "move",
+          "to": "pool"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["flick"]
+        },
+        {
+          "type": "move",
+          "to": "quay"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["birch", "heather"]
+        },
+        {
+          "type": "wait"
+        }
+      ]
+    },
+    {
+      "id": "leave-shell-pool-for-later",
+      "actions": [
+        {
+          "type": "unload",
+          "passengerIds": ["heather"]
+        },
+        {
+          "type": "move",
+          "to": "wrack"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["dot"]
+        },
+        {
+          "type": "move",
+          "to": "quay"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["heather"]
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": ["heather", "birch", "dot"]
+        },
+        {
+          "type": "move",
+          "to": "pool"
+        },
+        {
+          "type": "wait"
+        }
+      ]
+    }
+  ]
+}

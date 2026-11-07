@@ -1,0 +1,51 @@
+{
+  "baseline": "45ab9768792ddd3a8dffb67da6c332f8fe2234ff",
+  "source": "Uncommitted visual-repair candidate, not user acceptance",
+  "originalFourSpaceFactoryUnchanged": true,
+  "actualModelBounds": {
+    "min": [
+      -1.1950000001490115,
+      -0.2250000038743019,
+      -1.7681266129016875
+    ],
+    "max": [
+      1.1950000001490115,
+      1.642736859550199,
+      2.3677592277526855
+    ]
+  },
+  "cabin": {
+    "width": 1.4,
+    "length": 0.95,
+    "height": 0.85,
+    "roofWidth": 1.58
+  },
+  "animals": "Original models and passengerScale unchanged; sheep/rabbit meshes at accepted full scale. Fixed ID seats and compact staggered shore banks, no membership reseating.",
+  "support": "Actual feet-mesh bounds checked against authored smoothed land/T landing/bridge/shaped wood deck. Prior broad-pier rectangle requirement and >2x size predicate removed; no body collision tolerance or route margin relaxed.",
+  "focusedResult": "15/15 tests pass, gates/ferry-fourth.txt, 17.81s; final full suite and native review by root are separate.",
+  "originalFailures": [
+    {
+      "log": "gates/ferry-first.txt",
+      "result": "9failed5passed",
+      "cause": "Rear sheep feet outside smoothed land; rotating sheep hit rail tip at gate",
+      "correction": "Actual back coasts extended; yaw transition moved to outer bridge portion"
+    },
+    {
+      "log": "gates/ferry-second.txt",
+      "result": "9failed6passed",
+      "cause": "Staggered front bank too narrow for tan rabbit ears and passing sheep; foot toe0.015past narrow crosshead",
+      "correction": "Front bank expanded from.55to.62; walking lane centered at\u2212.225 on.45crosshead"
+    },
+    {
+      "log": "gates/ferry-third.txt",
+      "result": "1failed14passed",
+      "cause": "Foredeck walking toes outside curved wood floor",
+      "correction": "Shaped bow shoulders extended.22, peak.175; gateZ1.85to1.72, rabbitrows.65/1.2to.6/1.1, railtipmovedaft; actual support passes without relaxed tolerances"
+    }
+  ],
+  "files": {
+    "src/scene/ferry-profile.ts": "e35d9e31d615d84f8bcdb26c61b215455ea5490571ad3fe0041fbeac59637298",
+    "src/scene/models.ts": "0715a3ce3c2e47ef7b0a83cccaa6b1c8c2427b2d0410b24f0365d9c6c8bf38fb",
+    "tests/unit/wide-ferry.test.ts": "fd2d0ef146b8e2d8ad14052f6572a9448f7d93fc9a1cf73b06fce294e3614942"
+  }
+}

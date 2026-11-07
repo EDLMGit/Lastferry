@@ -1,0 +1,4 @@
+import { defineConfig } from '@playwright/test';
+import { resolve } from 'node:path';
+import base from '../playwright.config';
+export default defineConfig({ ...base, testDir: resolve('tests/e2e'), webServer: [] });

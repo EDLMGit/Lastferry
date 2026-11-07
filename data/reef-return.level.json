@@ -1,0 +1,573 @@
+{
+  "id": "reef-return",
+  "title": "Reef Return",
+  "rules": {
+    "capacity": 6,
+    "draftBands": [
+      {
+        "maxLoad": 0,
+        "draft": 1
+      },
+      {
+        "maxLoad": 2,
+        "draft": 2
+      },
+      {
+        "maxLoad": 4,
+        "draft": 3
+      },
+      {
+        "maxLoad": 6,
+        "draft": 4
+      }
+    ],
+    "tide": {
+      "initialLevel": 0,
+      "rises": [
+        {
+          "afterTurn": 3,
+          "level": 1
+        },
+        {
+          "afterTurn": 9,
+          "level": 2
+        }
+      ]
+    },
+    "actionCost": 1,
+    "depthFormula": "baseDepth + tideLevel",
+    "pierDryWhen": "tideLevel < elevation",
+    "failureRule": "Required passenger stranded by a flooded pier, a turned current or a permanently impassable loaded return."
+  },
+  "names": {
+    "nodes": {
+      "harbor": "Harbor",
+      "quay": "Cairn Quay",
+      "wrack": "Wrack Pier",
+      "pool": "Shell Pool"
+    },
+    "passengers": {
+      "heather": "Heather",
+      "flick": "Flick",
+      "birch": "Birch",
+      "dot": "Dot"
+    }
+  },
+  "nodes": [
+    {
+      "id": "harbor",
+      "baseDepth": 4,
+      "pierId": "harbor-pier",
+      "positionXZ": [
+        -7.5,
+        -0.4
+      ]
+    },
+    {
+      "id": "quay",
+      "baseDepth": 4,
+      "pierId": "quay-pier",
+      "positionXZ": [
+        0,
+        -1.1
+      ]
+    },
+    {
+      "id": "wrack",
+      "baseDepth": 4,
+      "pierId": "wrack-pier",
+      "positionXZ": [
+        6.75,
+        0.65
+      ]
+    },
+    {
+      "id": "pool",
+      "baseDepth": 4,
+      "pierId": "pool-pier",
+      "positionXZ": [
+        3.25,
+        9.24
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "needle-reef",
+      "nodes": [
+        "quay",
+        "harbor"
+      ],
+      "baseDepth": 3,
+      "bidirectional": false,
+      "current": {
+        "name": "Needle Reef",
+        "phases": [
+          {
+            "tideLevel": 0,
+            "from": "harbor",
+            "to": "quay"
+          },
+          {
+            "tideLevel": 1,
+            "from": "quay",
+            "to": "harbor"
+          },
+          {
+            "tideLevel": 2,
+            "from": "harbor",
+            "to": "quay"
+          }
+        ]
+      },
+      "waypointsXZ": [
+        [
+          0,
+          -1.1
+        ],
+        [
+          -1.2,
+          -0.35
+        ],
+        [
+          -3.65,
+          0.35
+        ],
+        [
+          -5.9,
+          0.55
+        ],
+        [
+          -7.5,
+          -0.4
+        ]
+      ]
+    },
+    {
+      "id": "wrack-quay",
+      "nodes": [
+        "wrack",
+        "quay"
+      ],
+      "baseDepth": 2,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [
+          6.75,
+          0.65
+        ],
+        [
+          5.5,
+          1.05
+        ],
+        [
+          3.6,
+          0.12
+        ],
+        [
+          1.2,
+          -0.55
+        ],
+        [
+          0,
+          -1.1
+        ]
+      ]
+    },
+    {
+      "id": "quay-pool",
+      "nodes": [
+        "quay",
+        "pool"
+      ],
+      "baseDepth": 1,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [
+          0,
+          -1.1
+        ],
+        [
+          -1.1,
+          -0.35
+        ],
+        [
+          -1.82,
+          2.21
+        ],
+        [
+          -2.35,
+          4.8
+        ],
+        [
+          -1.33,
+          7.9
+        ],
+        [
+          1.5,
+          9.63
+        ],
+        [
+          3.25,
+          9.24
+        ]
+      ]
+    },
+    {
+      "id": "pool-harbor",
+      "nodes": [
+        "pool",
+        "harbor"
+      ],
+      "baseDepth": 1,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [
+          3.25,
+          9.24
+        ],
+        [
+          -1.1,
+          10.8
+        ],
+        [
+          -5.8,
+          8.8
+        ],
+        [
+          -8.4,
+          4.55
+        ],
+        [
+          -8.8,
+          1.1
+        ],
+        [
+          -7.5,
+          -0.4
+        ]
+      ]
+    }
+  ],
+  "piers": [
+    {
+      "id": "harbor-pier",
+      "nodeId": "harbor",
+      "elevation": 3,
+      "isDeliveryPier": true,
+      "islandId": "lighthouse-island",
+      "positionXZ": [
+        -7.5,
+        -1.9
+      ],
+      "landAnchorXZ": [
+        -7.5,
+        -3.71
+      ],
+      "width": 1.48
+    },
+    {
+      "id": "quay-pier",
+      "nodeId": "quay",
+      "elevation": 2,
+      "isDeliveryPier": false,
+      "islandId": "quay-island",
+      "positionXZ": [
+        0,
+        -2.6
+      ],
+      "landAnchorXZ": [
+        0,
+        -4.41
+      ],
+      "width": 1.55
+    },
+    {
+      "id": "wrack-pier",
+      "nodeId": "wrack",
+      "elevation": 1,
+      "isDeliveryPier": false,
+      "islandId": "wrack-island",
+      "positionXZ": [
+        6.75,
+        -0.99
+      ],
+      "landAnchorXZ": [
+        6.75,
+        -2.66
+      ],
+      "width": 1.38
+    },
+    {
+      "id": "pool-pier",
+      "nodeId": "pool",
+      "elevation": 2,
+      "isDeliveryPier": false,
+      "islandId": "pool-island",
+      "positionXZ": [
+        3.25,
+        7.74
+      ],
+      "landAnchorXZ": [
+        3.25,
+        5.93
+      ],
+      "width": 1.4
+    }
+  ],
+  "passengers": [
+    {
+      "id": "heather",
+      "species": "sheep",
+      "slots": 2,
+      "appearance": "sheep-wool"
+    },
+    {
+      "id": "flick",
+      "species": "rabbit",
+      "slots": 1,
+      "appearance": "rabbit-tan"
+    },
+    {
+      "id": "birch",
+      "species": "beaver",
+      "slots": 2,
+      "appearance": "beaver-brown"
+    },
+    {
+      "id": "dot",
+      "species": "rabbit",
+      "slots": 1,
+      "appearance": "rabbit-cream"
+    }
+  ],
+  "start": {
+    "boatNodeId": "quay",
+    "aboard": [
+      "heather",
+      "birch"
+    ],
+    "waitingByPier": {
+      "harbor-pier": [],
+      "quay-pier": [],
+      "wrack-pier": [
+        "dot"
+      ],
+      "pool-pier": [
+        "flick"
+      ]
+    }
+  },
+  "objective": {
+    "deliveryPierId": "harbor-pier",
+    "requiredPassengerIds": [
+      "heather",
+      "flick",
+      "birch",
+      "dot"
+    ]
+  },
+  "validation": {
+    "searchDepthLimit": 20,
+    "witnessReplays": [
+      "data/reef-return/witnesses.json"
+    ]
+  },
+  "world": {
+    "plane": "XZ",
+    "north": "negative Z",
+    "waterYPerTideLevel": 0.18,
+    "referenceBoatRadius": 0.3,
+    "requiredRouteClearance": 0.45,
+    "clearanceScope": "Six-space ferry along all four passages and approaches.",
+    "presentationNote": "The deep Needle Reef and the shallow Shell Pool route lead to Harbor.",
+    "suggestedCamera": {
+      "projection": "orthographic",
+      "positionXYZ": [
+        0,
+        34,
+        24
+      ],
+      "targetXYZ": [
+        0,
+        0,
+        -1
+      ],
+      "verticalSpan": 14
+    },
+    "islands": [
+      {
+        "id": "lighthouse-island",
+        "elevation": 3,
+        "footprintXZ": [
+          [
+            -10.7,
+            -6.1
+          ],
+          [
+            -9.6,
+            -6.75
+          ],
+          [
+            -7.35,
+            -6.82
+          ],
+          [
+            -5.85,
+            -6
+          ],
+          [
+            -5.45,
+            -4.58
+          ],
+          [
+            -6.15,
+            -3.12
+          ],
+          [
+            -8.3,
+            -3.03
+          ],
+          [
+            -9.85,
+            -3.4
+          ],
+          [
+            -10.8,
+            -5.05
+          ]
+        ]
+      },
+      {
+        "id": "quay-island",
+        "elevation": 2,
+        "footprintXZ": [
+          [
+            -2.3,
+            -5.4
+          ],
+          [
+            -1.85,
+            -6.78
+          ],
+          [
+            -0.52,
+            -7.1
+          ],
+          [
+            1.2,
+            -6.91
+          ],
+          [
+            2.2,
+            -6.05
+          ],
+          [
+            1.85,
+            -4.35
+          ],
+          [
+            0.8,
+            -3.78
+          ],
+          [
+            -1.1,
+            -3.76
+          ],
+          [
+            -2,
+            -4.38
+          ]
+        ]
+      },
+      {
+        "id": "wrack-island",
+        "elevation": 1,
+        "footprintXZ": [
+          [
+            4.5,
+            -3.15
+          ],
+          [
+            5.25,
+            -4.4
+          ],
+          [
+            7.1,
+            -4.83
+          ],
+          [
+            9.2,
+            -4.4
+          ],
+          [
+            9.6,
+            -3.85
+          ],
+          [
+            8.23,
+            -2.87
+          ],
+          [
+            7.8,
+            -2.02
+          ],
+          [
+            5.6,
+            -2.08
+          ],
+          [
+            4.95,
+            -2.5
+          ]
+        ]
+      },
+      {
+        "id": "pool-island",
+        "elevation": 2,
+        "footprintXZ": [
+          [
+            1.25,
+            5.29
+          ],
+          [
+            0.95,
+            4.09
+          ],
+          [
+            1.75,
+            3.52
+          ],
+          [
+            2.88,
+            3.79
+          ],
+          [
+            3.75,
+            3.49
+          ],
+          [
+            5.15,
+            3.42
+          ],
+          [
+            5.8,
+            4.29
+          ],
+          [
+            5.15,
+            5.39
+          ],
+          [
+            4.4,
+            6.54
+          ],
+          [
+            2.25,
+            6.52
+          ]
+        ]
+      }
+    ]
+  }
+}

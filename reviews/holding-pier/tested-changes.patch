@@ -1,0 +1,984 @@
+diff --git a/docs/ASSET_LEDGER.md b/docs/ASSET_LEDGER.md
+index 48d317b..a1b7e50 100644
+--- a/docs/ASSET_LEDGER.md
++++ b/docs/ASSET_LEDGER.md
+@@ -16,3 +16,5 @@ All runtime geometry is original code authored for this project by Codex on 2026
+ The supplied images in `references/` remain generated concept references only. `first-crossing.png` was inspected for direction; it is never loaded by the runtime. Gameplay evidence lives separately under `reviews/m1/`.
+ 
+ M1.1 refines the same original animal meshes: taller silhouettes, wider separated rabbit ears, cream/tan coats and a darker sheep face. Named passenger anchors under the ferry's animated hull now carry aboard animals through draft, bob, tide and travel. The phone camera fits actual scene bounds without changing authored gameplay coordinates. No acquired or generated bitmap assets were added. Fresh refinement evidence is under `reviews/m1-1/`.
++
++Holding Pier experiment (2026-10-21): reuses these same procedural production meshes and generated sound cues. Three islands and piers come from `data/holding-pier.level.json`; the safe holding pier uses grey stone boards and the rabbit shoreline is lowered to elevation 1. The shallow-water shader now derives its highlighted corridor from authored shallow edges instead of fixed First Crossing coordinates. No downloaded assets, concept-image backgrounds or new licensed materials were added.
+diff --git a/docs/GAMEPLAY_RULES.md b/docs/GAMEPLAY_RULES.md
+index e06efdb..583cd31 100644
+--- a/docs/GAMEPLAY_RULES.md
++++ b/docs/GAMEPLAY_RULES.md
+@@ -145,3 +145,7 @@ Restart reconstructs the authored starting state, clears history and UI selectio
+ Run `node tools/verify-design.mjs --write-report` from the repository root. It checks the authored reference reducer, replays, geometry exclusions, and bounded reachability, then writes `docs/validation/design-validation.json`.
+ 
+ The script is **not** a production engine or a test of a playable implementation. Do not import it as the game's reducer. Implement and independently test the actual game against these rules, especially event order, input locking, previews, snapshot restoration, terminal states, and the real rendered water paths.
++
++## Holding Pier experiment
++
++The later user-requested experiment uses `data/holding-pier.level.json` and is documented in `HOLDING_PIER.md`. It retains the common action, load/draft, depth, tide-order and Undo rules above; its different layout, starting occupants and low pier elevation are intentional. Original First Crossing values and witness files remain unchanged. In the experiment, routine safe movement commits with one deliberate activation, while a separate free Preview remains available. Transfers, Wait, invalid moves and immediately losing moves retain the explicit preview flow. This interaction experiment supersedes the baseline's mandatory move confirmation only within Holding Pier.
+diff --git a/src/game/rules.ts b/src/game/rules.ts
+index 139557a..4cfd49d 100644
+--- a/src/game/rules.ts
++++ b/src/game/rules.ts
+@@ -1,4 +1,5 @@
+-import { level } from '../levels/level';
++import { level, type Level } from '../levels/level';
++export type { Level } from '../levels/level';
+ export type Action =
+   | { type: 'move'; to: string }
+   | { type: 'board' | 'unload'; passengerIds: string[] }
+@@ -13,7 +14,6 @@ export type State = {
+   status: 'playing' | 'won' | 'lost';
+   lossReason: null | { code: 'PASSENGER_STRANDED'; pierId: string; passengerIds: string[] };
+ };
+-export type Level = typeof level;
+ export const copy = <T>(v: T): T => structuredClone(v);
+ export function initial(l: Level = level): State {
+   return {
+@@ -43,7 +43,7 @@ export function validate(s: State, a: Action, l = level): string | null {
+       node = l.nodes.find((n) => n.id === a.to);
+     if (!edge || !node) return 'Choose an adjacent waypoint. Each passage is one turn.';
+     if (edge.baseDepth + s.tideLevel < draft(s, l))
+-      return `Too shallow: depth ${edge.baseDepth + s.tideLevel} is below draft ${draft(s, l)}. Take the outer route or wait for the tide.`;
++      return `Too shallow: depth ${edge.baseDepth + s.tideLevel} is below draft ${draft(s, l)}. A lighter load needs less depth. Tide changes after an action.`;
+     if (node.baseDepth + s.tideLevel < draft(s, l)) return 'The destination berth is too shallow.';
+     return null;
+   }
+@@ -104,20 +104,20 @@ export function reduce(s: State, a: Action, l = level): State {
+     n.status = 'won';
+   return n;
+ }
+-export function preview(s: State, a: Action) {
+-  const error = validate(s, a);
+-  return { error, state: error ? copy(s) : reduce(s, a) };
++export function preview(s: State, a: Action, l = level) {
++  const error = validate(s, a, l);
++  return { error, state: error ? copy(s) : reduce(s, a, l) };
+ }
+-export function legalActions(s: State): Action[] {
+-  const p = pierAt(s),
++export function legalActions(s: State, l = level): Action[] {
++  const p = pierAt(s, l),
+     actions: Action[] = [
+       { type: 'wait' },
+-      ...level.nodes.map((n) => ({ type: 'move' as const, to: n.id })),
++      ...l.nodes.map((n) => ({ type: 'move' as const, to: n.id })),
+     ];
+   for (const type of ['board', 'unload'] as const) {
+     const ids = type === 'board' ? (p ? s.waitingByPier[p.id] : []) : s.aboard;
+     for (let mask = 1; mask < 1 << ids.length; mask++)
+       actions.push({ type, passengerIds: ids.filter((_, i) => mask & (1 << i)) });
+   }
+-  return actions.filter((a) => !validate(s, a));
++  return actions.filter((a) => !validate(s, a, l));
+ }
+diff --git a/src/game/session.ts b/src/game/session.ts
+index f7fd023..ee695c1 100644
+--- a/src/game/session.ts
++++ b/src/game/session.ts
+@@ -1,12 +1,16 @@
+ import { copy, initial, reduce, type State, type Action } from './rules';
++import { level as baseline, type Level } from '../levels/level';
+ /** Presentation lock is independent of turn resolution. No queued inputs. */
+ export class Session {
+-  state: State = initial();
++  state: State;
+   history: State[] = [];
+   busy = false;
++  constructor(public level: Level = baseline) {
++    this.state = initial(level);
++  }
+   commit(a: Action): { before: State; after: State } | null {
+     if (this.busy) return null;
+-    const next = reduce(this.state, a);
++    const next = reduce(this.state, a, this.level);
+     if (next === this.state) return null;
+     const before = copy(this.state);
+     this.history.push(before);
+@@ -24,7 +28,7 @@ export class Session {
+   }
+   restart() {
+     if (this.busy) return false;
+-    this.state = initial();
++    this.state = initial(this.level);
+     this.history = [];
+     return true;
+   }
+diff --git a/src/levels/level.ts b/src/levels/level.ts
+index 29b42f4..98c5b33 100644
+--- a/src/levels/level.ts
++++ b/src/levels/level.ts
+@@ -1,5 +1,24 @@
+ import data from '../../data/first-crossing.level.json';
+-export const level = data;
++import holdingData from '../../data/holding-pier.level.json';
++// Shared authored schema; the original JSON remains the baseline and default
++// for rule callers. A session owns its level, never a mutable global selection.
++export type Level = Pick<
++  typeof data,
++  | 'id'
++  | 'title'
++  | 'rules'
++  | 'world'
++  | 'nodes'
++  | 'edges'
++  | 'piers'
++  | 'passengers'
++  | 'objective'
++  | 'validation'
++> & {
++  start: { boatNodeId: string; aboard: string[]; waitingByPier: Record<string, string[]> };
++};
++export const level: Level = data;
++export const holdingPier: Level = holdingData;
+ export const nodeNames: Record<string, string> = {
+   harbor: 'Lighthouse harbor',
+   cut: 'Shallow cut',
+@@ -7,6 +26,9 @@ export const nodeNames: Record<string, string> = {
+   'outer-east': 'East buoy',
+   'outer-south': 'South buoy',
+   'outer-west': 'West buoy',
++  stone: 'Stone Pier',
++  shallows: 'Shallows',
++  'rabbit-pier': 'Rabbit Pier',
+ };
+ export const passengerNames: Record<string, string> = {
+   'rabbit-1': 'Pip · rabbit',
+diff --git a/src/main.ts b/src/main.ts
+index e4cd648..923e1f9 100644
+--- a/src/main.ts
++++ b/src/main.ts
+@@ -1,5 +1,5 @@
+ import './style.css';
+-import { level, nodeNames, passengerNames } from './levels/level';
++import { level as baseline, holdingPier, nodeNames, passengerNames } from './levels/level';
+ import {
+   copy,
+   draft,
+@@ -9,16 +9,29 @@ import {
+   pierAt,
+   preview,
+   type Action,
++  type State,
+ } from './game/rules';
+ import { Session } from './game/session';
+ import { World } from './scene/world';
+ import { Sound } from './audio/sound';
+ 
++const experiment = new URLSearchParams(location.search).get('cove') === 'holding-pier';
++const level = experiment ? holdingPier : baseline;
++const shallowBase = Math.min(...level.edges.map((e) => e.baseDepth));
++const vulnerablePier = level.piers
++  .filter((p) => !p.isDeliveryPier)
++  .sort((a, b) => a.elevation - b.elevation)[0];
++const floodTurn = level.rules.tide.rises.find(
++  (r) => r.level >= vulnerablePier.elevation,
++)!.afterTurn;
++const vulnerableName = nodeNames[vulnerablePier.nodeId];
++const name = (id: string) => passengerNames[id].split(' ·')[0];
+ const app = document.querySelector<HTMLDivElement>('#app')!;
+-app.innerHTML = `<main class="game"><section id="seascape" aria-label="The first cove"><div id="world"></div><header class="masthead"><span class="eyebrow">LAST FERRY <span class="dash">—</span> CHAPTER 01</span><h1>The First Crossing</h1><p>A little boat. A way home.</p></header><div id="map-labels" aria-hidden="true"><span class="island-label refuge">THE LIGHTHOUSE</span><span class="island-label sheep">MOSS'S PIER</span><span class="sea-label">THE OUTER PASSAGE</span></div><div class="map-key"><span>··· One passage · one turn</span><span>◇ Shallows <b id="shallow-depth">2</b> / deep <b id="deep-depth">3</b></span></div><nav class="tools" aria-label="Crossing controls"><button id="undo" aria-label="Undo last turn" title="Undo the last turn">↶ <span>Undo</span></button><button id="restart" aria-label="Restart crossing">↺ <span>Restart</span></button><button id="sound" aria-label="Mute sound"></button></nav><p class="portrait-note">For a wider view, turn your phone sideways. All controls are available below.</p></section><aside class="panel" aria-label="Ferry controls"><div id="hud"></div><div id="controls"></div><div id="preview" aria-live="polite" aria-atomic="true"></div><div id="forecast"></div><p class="panel-foot">Take your time. The sea only moves when you do.</p></aside><div id="announcement" class="sr-only" role="status" aria-live="polite"></div></main>`;
+-const session = new Session(),
++app.innerHTML = `<main class="game ${experiment ? 'experiment' : ''}"><section id="seascape" aria-label="${level.title}"><div id="world"></div><header class="masthead"><span class="eyebrow">LAST FERRY <span class="dash">—</span> ${experiment ? 'PLAYABLE EXPERIMENT' : 'CHAPTER 01'}</span><h1>${experiment ? 'The Holding Pier' : 'The First Crossing'}</h1><p>A little boat. A way home.</p></header><div id="map-labels" aria-hidden="true">${experiment ? '<span class="pier-tag" data-pier="harbor-pier">HARBOR · SAFE</span><span class="pier-tag" data-pier="stone-pier">STONE PIER · SAFE</span><span class="pier-tag low" data-pier="rabbit-pier">RABBIT PIER · LOW</span>' : '<span class="island-label refuge">THE LIGHTHOUSE</span><span class="island-label sheep">MOSS’S PIER</span><span class="sea-label">THE OUTER PASSAGE</span>'}</div><div class="map-key"><span>··· One passage · one turn</span><span>◇ Shallows <b id="shallow-depth"></b> / deep <b id="deep-depth"></b></span></div><nav class="tools" aria-label="Crossing controls"><button id="undo" aria-label="Undo last turn" title="Undo the last turn">↶ <span>Undo</span></button><button id="restart" aria-label="Restart crossing">↺ <span>Restart</span></button><button id="sound" aria-label="Mute sound"></button></nav><p class="portrait-note">For a wider view, turn your phone sideways. All controls are available below.</p></section><aside class="panel" aria-label="Ferry controls"><div id="hud"></div><div id="controls"></div><div id="preview" aria-live="polite" aria-atomic="true"></div><div id="forecast"></div><p class="panel-foot">Take your time. The sea only moves when you do.</p><label class="cove-picker">Choose cove <select id="cove-picker"><option value="first-crossing" ${!experiment ? 'selected' : ''}>First Crossing · baseline</option><option value="holding-pier" ${experiment ? 'selected' : ''}>The Holding Pier · experiment</option></select></label></aside><div id="announcement" class="sr-only" role="status" aria-live="polite"></div></main>`;
++const session = new Session(level),
+   sound = new Sound(),
+-  world = new World(document.querySelector('#world')!, session.state);
++  world = new World(document.querySelector('#world')!, session.state, level);
++const $ = (id: string) => document.getElementById(id)!;
+ let selected: Action | null = null,
+   forecastOpen = false,
+   fallback: ReturnType<typeof setTimeout> | undefined;
+@@ -31,7 +44,6 @@ document.addEventListener('keydown', (e) => {
+ document.addEventListener('pointerdown', () => {
+   keyboardInput = false;
+ });
+-const $ = (id: string) => document.getElementById(id)!;
+ function focusAvailable(preferred?: string) {
+   const target = (preferred ? $(preferred) : null) as HTMLButtonElement | null;
+   if (target && !target.disabled && target.getClientRects().length) {
+@@ -54,7 +66,7 @@ const actionTitle = (a: Action) =>
+     ? `Sail to ${nodeNames[a.to]}`
+     : a.type === 'wait'
+       ? 'Wait one turn'
+-      : `${a.type === 'board' ? 'Board' : 'Unload'} ${a.passengerIds.length === 3 ? 'everyone' : a.passengerIds.map((id) => passengerNames[id].split(' ·')[0]).join(' & ')}`;
++      : `${a.type === 'board' ? 'Board' : 'Unload'} ${a.passengerIds.length === 3 ? 'everyone' : a.passengerIds.map(name).join(' & ')}`;
+ function select(a: Action) {
+   if (session.busy || session.state.status !== 'playing') return;
+   previewReturnId = (document.activeElement as HTMLElement)?.id ?? '';
+@@ -64,7 +76,7 @@ function select(a: Action) {
+   if (keyboardInput) $('cancel').focus();
+ }
+ function finish() {
+-  const recoverFocus =
++  const recover =
+     recoverAfterCommit &&
+     (!document.activeElement ||
+       document.activeElement === document.body ||
+@@ -72,21 +84,22 @@ function finish() {
+   clearTimeout(fallback);
+   session.finish();
+   render();
+-  if (recoverFocus) {
++  if (recover) {
+     document.querySelector('.panel')!.scrollTop = 0;
+     focusAvailable();
+   }
+   recoverAfterCommit = false;
++  const s = session.state;
+   $('announcement').textContent =
+-    session.state.status === 'won'
++    s.status === 'won'
+       ? 'Everyone is home. All three passengers are safe.'
+-      : session.state.status === 'lost'
+-        ? 'The tide reached a waiting passenger. Undo a turn.'
+-        : `Turn ${session.state.turn}. Tide ${session.state.tideLevel}. At ${nodeNames[session.state.boatNodeId]}.`;
++      : s.status === 'lost'
++        ? `${vulnerableName} flooded with passengers waiting. Undo a turn.`
++        : `Turn ${s.turn}. Tide ${s.tideLevel}. At ${nodeNames[s.boatNodeId]}.`;
+ }
+-function commit() {
+-  if (!selected) return;
+-  const a = copy(selected),
++function execute(action: Action | null) {
++  if (!action) return;
++  const a = copy(action),
+     transaction = session.commit(a);
+   if (!transaction) return;
+   recoverAfterCommit = keyboardInput;
+@@ -109,60 +122,79 @@ function commit() {
+     finish();
+   }
+ }
++function activateMove(to: string) {
++  if (session.busy || session.state.status !== 'playing') return;
++  const a: Action = { type: 'move', to },
++    proposed = preview(session.state, a, level);
++  // Routine travel commits once. Dangerous/invalid moves open a free explanation.
++  if (experiment && !proposed.error && proposed.state.status !== 'lost') execute(a);
++  else select(a);
++}
++function channelConsequence(s: State) {
++  const blocked = draft(s, level) > shallowBase + s.tideLevel;
++  return `${blocked ? '⊘' : '◇'} ${experiment ? 'Shallow channel' : 'Shallow cut'} ${blocked ? 'blocked' : 'open'}: depth ${shallowBase + s.tideLevel}, draft ${draft(s, level)}.`;
++}
+ function render() {
+   const focused = (document.activeElement as HTMLElement)?.id,
+     s = session.state,
+-    p = pierAt(s),
++    p = pierAt(s, level),
+     busy = session.busy;
+   document.querySelector('.panel')!.classList.toggle('selecting', !!selected);
+   const nextRise = level.rules.tide.rises.find((r) => r.afterTurn > s.turn),
+-    filled = load(s);
++    filled = load(s, level);
++  const riseNote = nextRise?.afterTurn === s.turn + 1 ? ` · tide rises to ${nextRise.level}` : '';
++  const waitingAtRisk = s.waitingByPier[vulnerablePier.id].length;
++  const danger =
++    s.tideLevel >= vulnerablePier.elevation
++      ? `${vulnerableName} is flooded · ${waitingAtRisk} waiting.`
++      : `${vulnerableName} floods after turn ${floodTurn} · ${floodTurn - s.turn} turn${floodTurn - s.turn === 1 ? '' : 's'} left.`;
+   $('hud').innerHTML =
+-    `<div class="panel-kicker">YOUR CROSSING <span class="chapter-mark">01 / 01</span></div><div class="counters"><div><small>TURN</small><strong data-testid="turn">${String(s.turn).padStart(2, '0')}</strong></div><div><small>TIDE</small><strong data-testid="tide">${s.tideLevel}<span> / 2</span></strong></div><div><small>SAFE HOME</small><strong>${s.delivered.length}<span> / 3</span></strong></div></div><div class="cargo"><div><strong>${filled} / 4 spaces</strong><span>Draft <b>${draft(s)}</b></span></div><div class="slots" aria-label="${filled} of four passenger spaces occupied">${Array.from({ length: 4 }, (_, i) => `<i class="${i < filled ? 'filled' : ''}"></i>`).join('')}</div><p>${s.aboard.length ? s.aboard.map((id) => `${id.startsWith('rabbit') ? '♧' : '☁'} ${passengerNames[id].split(' ·')[0]}`).join(' · ') : 'An empty boat, riding light.'}</p></div>`;
++    `<div class="panel-kicker">${experiment ? 'THE HOLDING PIER' : 'YOUR CROSSING'} <span class="chapter-mark">${experiment ? 'EXPERIMENT' : '01 / 01'}</span></div><div class="counters"><div><small>TURN</small><strong data-testid="turn">${String(s.turn).padStart(2, '0')}</strong></div><div><small>TIDE</small><strong data-testid="tide">${s.tideLevel}<span> / 2</span></strong></div><div><small>SAFE HOME</small><strong>${s.delivered.length}<span> / 3</span></strong></div></div><div class="cargo"><div><strong>${filled} / 4 spaces</strong><span>Draft <b>${draft(s, level)}</b></span></div><div class="slots" aria-label="${filled} of four passenger spaces occupied">${Array.from({ length: 4 }, (_, i) => `<i class="${i < filled ? 'filled' : ''}"></i>`).join('')}</div><p>${s.aboard.length ? s.aboard.map((id) => `${id.startsWith('rabbit') ? '♧' : '☁'} ${name(id)}`).join(' · ') : 'An empty boat, riding light.'}</p></div>${experiment ? `<div class="voyage-note"><strong>${danger}</strong><p>Stone Pier & Harbor stay dry through both rises.</p><p>Draft: empty = 1 · 1–2 spaces = 2 · 3–4 = 3</p></div>` : ''}`;
+   $('controls').innerHTML =
+     s.status === 'won'
+       ? `<div class="ending"><span class="ending-icon">☀</span><span class="eyebrow">THE LIGHTHOUSE IS LIT</span><h2>Everyone home.</h2><p>Pip, Rue, and Moss are safe. A small crossing, a good evening.</p><p class="ending-small">All 3 passengers delivered · ${s.turn} turns<br>Undo to revisit the crossing, or start again.</p></div>`
+       : s.status === 'lost'
+-        ? `<div class="ending loss"><span class="eyebrow">THE WATER HAS RISEN</span><h2>A turn too late.</h2><p>The tide reached a waiting passenger. Undo a turn and try another way.</p></div>`
+-        : `<div class="location"><span class="eyebrow">${busy ? 'UNDER WAY' : 'NOW AT'}</span><h2>${nodeNames[s.boatNodeId]}</h2></div><p class="instruction">${s.boatNodeId === 'cut' && s.turn === 0 ? 'Moss is waiting at the low pier. Bring all three passengers to the lighthouse.' : 'Choose a passage or an action. Preview first, then confirm.'}</p><div class="action-list">${level.nodes
+-            .filter((n) => edgeTo(s, n.id))
++        ? `<div class="ending loss"><span class="eyebrow">THE WATER HAS RISEN</span><h2>A turn too late.</h2><p>${vulnerableName} flooded with ${s.lossReason?.passengerIds.map(name).join(' and ')} still waiting. Undo a turn and try another way.</p></div>`
++        : `<div class="location"><span class="eyebrow">${busy ? 'UNDER WAY' : 'NOW AT'}</span><h2>${nodeNames[s.boatNodeId]}</h2></div><p class="instruction">${experiment ? 'Bring everyone to Harbor. Sail costs 1 turn; Preview is free.' : s.boatNodeId === 'cut' && s.turn === 0 ? 'Moss is waiting at the low pier. Bring all three passengers to the lighthouse.' : 'Choose a passage or an action. Preview first, then confirm.'}</p><div class="action-list">${level.nodes
++            .filter((n) => edgeTo(s, n.id, level))
+             .map((n) => {
+-              const e = edgeTo(s, n.id)!,
++              const e = edgeTo(s, n.id, level)!,
+                 depth = e.baseDepth + s.tideLevel,
+-                blocked = depth < draft(s);
+-              return `<button class="action route ${selected?.type === 'move' && selected.to === n.id ? 'selected' : ''}" id="route-${n.id}" ${busy ? 'disabled' : ''}><span><b>${blocked ? '⊘' : '↗'} ${nodeNames[n.id]}</b><small>${blocked ? 'Too shallow' : 'One passage'} · depth ${depth}</small></span><span class="chevron">›</span></button>`;
++                blocked = depth < draft(s, level),
++                willLose = preview(s, { type: 'move', to: n.id }, level).state.status === 'lost';
++              return `${experiment ? '<div class="route-row">' : ''}<button class="action route ${selected?.type === 'move' && selected.to === n.id ? 'selected' : ''}" id="route-${n.id}" ${busy ? 'disabled' : ''}><span><b>${blocked ? '⊘' : '↗'} ${nodeNames[n.id]}</b><small>${experiment ? `${blocked ? 'Blocked' : willLose ? '⚠ Preview loss' : 'Sail · 1 turn'} · depth ${depth} / draft ${draft(s, level)}${riseNote}` : `${blocked ? 'Too shallow' : 'One passage'} · depth ${depth}`}</small></span><span class="chevron">›</span></button>${experiment ? `<button id="inspect-${n.id}" class="inspect-route" aria-label="Preview passage to ${nodeNames[n.id]}" ${busy ? 'disabled' : ''}>Preview</button></div>` : ''}`;
+             })
+             .join(
+               '',
+-            )}${p && s.tideLevel < p.elevation && s.waitingByPier[p.id].length ? `<button class="action" id="board" ${busy ? 'disabled' : ''}><span><b>＋ Board passengers</b><small>${s.waitingByPier[p.id].map((id) => passengerNames[id]).join(', ')}</small></span><span>›</span></button>` : ''}${p && s.tideLevel < p.elevation && s.aboard.length ? `<button class="action" id="unload" ${busy ? 'disabled' : ''}><span><b>⇥ ${p.isDeliveryPier ? 'Deliver passengers' : 'Unload at this pier'}</b><small>Choose who leaves the ferry</small></span><span>›</span></button>` : ''}<button class="action quiet" id="wait" ${busy ? 'disabled' : ''}><span><b>≈ Wait one turn</b><small>${nextRise ? `${nextRise.afterTurn - s.turn} turn${nextRise.afterTurn - s.turn === 1 ? '' : 's'} until tide ${nextRise.level}` : 'High tide · no further rises'}</small></span><span>›</span></button></div>`;
++            )}${p && s.tideLevel < p.elevation && s.waitingByPier[p.id].length ? `<button class="action" id="board" ${busy ? 'disabled' : ''}><span><b>＋ Board passengers</b><small>${s.waitingByPier[p.id].map((id) => passengerNames[id]).join(', ')}${experiment ? ` · 1 turn${riseNote}` : ''}</small></span><span>›</span></button>` : ''}${p && s.tideLevel < p.elevation && s.aboard.length ? `<button class="action" id="unload" ${busy ? 'disabled' : ''}><span><b>⇥ ${p.isDeliveryPier ? 'Deliver passengers' : 'Unload at this pier'}</b><small>${experiment ? `1 turn · ${p.isDeliveryPier ? 'Safe home' : `Wait here; board again later · elevation ${p.elevation}`}${riseNote}` : 'Choose who leaves the ferry'}</small></span><span>›</span></button>` : ''}<button class="action quiet" id="wait" ${busy ? 'disabled' : ''}><span><b>≈ Wait one turn</b><small>${nextRise ? `${nextRise.afterTurn - s.turn} turn${nextRise.afterTurn - s.turn === 1 ? '' : 's'} until tide ${nextRise.level}` : 'High tide · no further rises'}</small></span><span>›</span></button></div>`;
+   for (const n of level.nodes) {
+-    const b = $(`route-${n.id}`);
+-    if (b) b.onclick = () => select({ type: 'move', to: n.id });
++    if ($(`route-${n.id}`)) $(`route-${n.id}`).onclick = () => activateMove(n.id);
++    if ($(`inspect-${n.id}`))
++      $(`inspect-${n.id}`).onclick = () => select({ type: 'move', to: n.id });
+   }
+   if ($('board'))
+     $('board').onclick = () => select({ type: 'board', passengerIds: [...s.waitingByPier[p!.id]] });
+   if ($('unload'))
+     $('unload').onclick = () => select({ type: 'unload', passengerIds: [...s.aboard] });
+   if ($('wait')) $('wait').onclick = () => select({ type: 'wait' });
+-  const pr = selected ? preview(s, selected) : null;
++  const pr = selected ? preview(s, selected, level) : null,
++    next = pr?.state;
+   let subset = '';
+   if (selected && (selected.type === 'board' || selected.type === 'unload')) {
+     const a = selected,
+       ids = a.type === 'board' ? s.waitingByPier[p!.id] : s.aboard;
+     subset = `<div class="passenger-options" role="group" aria-label="Passenger selection">${ids.map((id) => `<button id="passenger-${id}" aria-pressed="${a.passengerIds.includes(id)}">${id.startsWith('rabbit') ? '♧' : '☁'} ${passengerNames[id]} · ${level.passengers.find((p) => p.id === id)!.slots}</button>`).join('')}</div>`;
+   }
+-  const next = pr?.state;
+-  const cutBlocked = next && draft(next) > 2 + next.tideLevel;
+   $('preview').innerHTML = busy
+     ? `<div id="transition-status" class="preview busy" role="status" tabindex="-1"><span class="eyebrow">A MOMENT ON THE WATER</span><p>Finishing this turn…</p></div>`
+     : selected && pr
+-      ? `<div class="preview ${pr.error || next?.status === 'lost' ? 'warning' : ''}"><div class="preview-head"><span class="eyebrow">ACTION PREVIEW · FREE</span><button id="cancel" aria-label="Close preview">×</button></div><h3>${actionTitle(selected)}</h3>${subset}<p>${pr.error ?? `Turn ${next!.turn} · tide ${next!.tideLevel} · ${load(next!)} / 4 spaces · draft ${draft(next!)}`}</p>${!pr.error ? `<p class="consequence">${next!.status === 'lost' ? '⚠ The rise will reach a waiting passenger. This action ends the crossing.' : next!.status === 'won' ? 'All three passengers will be safe at the lighthouse.' : `${cutBlocked ? '⊘ Shallow cut blocked' : '◇ Shallow cut open'}: depth ${2 + next!.tideLevel}, draft ${draft(next!)}.${next!.tideLevel > s.tideLevel ? ' The tide rises after this action.' : ''}`}</p>` : ''}<button id="commit" class="commit" ${pr.error ? 'disabled' : ''}>${pr.error ? 'Action unavailable' : `Confirm · ${actionTitle(selected)}`} <span>${pr.error ? '' : '→'}</span></button></div>`
++      ? `<div class="preview ${pr.error || next?.status === 'lost' ? 'warning' : ''}"><div class="preview-head"><span class="eyebrow">ACTION PREVIEW · FREE</span><button id="cancel" aria-label="Close preview">×</button></div><h3>${actionTitle(selected)}</h3>${subset}<p>${pr.error ?? `Turn ${next!.turn} · tide ${next!.tideLevel} · ${load(next!, level)} / 4 spaces · draft ${draft(next!, level)}`}</p>${!pr.error ? `<p class="consequence">${next!.status === 'lost' ? `⚠ ${vulnerableName} floods with passengers waiting. This action ends the crossing.` : next!.status === 'won' ? 'All three passengers will be safe at the lighthouse.' : `${channelConsequence(next!)}${next!.tideLevel > s.tideLevel ? ' The tide rises after this action.' : ''}`}</p>` : ''}<button id="commit" class="commit" ${pr.error ? 'disabled' : ''}>${pr.error ? 'Action unavailable' : `Confirm · ${actionTitle(selected)}`} <span>${pr.error ? '' : '→'}</span></button></div>`
+       : '';
+   if ($('cancel')) $('cancel').onclick = closePreview;
+-  if ($('commit')) $('commit').onclick = commit;
++  if ($('commit')) $('commit').onclick = () => execute(selected);
+   if (selected && (selected.type === 'board' || selected.type === 'unload')) {
+     const a = selected;
+-    for (const id of a.type === 'board' ? s.waitingByPier[p!.id] : s.aboard) {
++    for (const id of a.type === 'board' ? s.waitingByPier[p!.id] : s.aboard)
+       if ($(`passenger-${id}`))
+         $(`passenger-${id}`).onclick = () => {
+           selected = {
+@@ -173,16 +205,16 @@ function render() {
+           };
+           render();
+         };
+-    }
+   }
+   $('forecast').innerHTML =
+-    `<button id="forecast-toggle" aria-expanded="${forecastOpen}" class="forecast-button">≈ Next-tide forecast <span>${forecastOpen ? '−' : '+'}</span></button>${forecastOpen ? `<div class="forecast-detail"><strong>${nextRise ? `Tide ${nextRise.level} after turn ${nextRise.afterTurn}` : 'High tide has settled'}</strong><p>Shallows: ${2 + (nextRise?.level ?? s.tideLevel)} · deep: ${3 + (nextRise?.level ?? s.tideLevel)}.<br>${(nextRise?.level ?? s.tideLevel) >= 2 ? 'Sheep pier flooded. Harbor stays dry.' : 'Both piers stay dry. Sheep pier floods after turn 8.'}</p><p>Looking ahead is free. Use Wait to spend a turn.</p></div>` : `<p class="deadline">Sheep pier floods after turn <b>8</b>.</p>`}`;
++    `<button id="forecast-toggle" aria-expanded="${forecastOpen}" class="forecast-button">≈ Next-tide forecast <span>${forecastOpen ? '−' : '+'}</span></button>${forecastOpen ? `<div class="forecast-detail"><strong>${nextRise ? `Tide ${nextRise.level} after turn ${nextRise.afterTurn}` : 'High tide has settled'}</strong><p>Shallows: ${shallowBase + (nextRise?.level ?? s.tideLevel)} · deep: ${3 + (nextRise?.level ?? s.tideLevel)}.</p><p>${level.piers.map((p) => `${nodeNames[p.nodeId]}: ${(nextRise?.level ?? s.tideLevel) >= p.elevation ? 'flooded' : 'dry'} (elevation ${p.elevation})`).join('<br>')}</p><p>Looking ahead is free. Use Wait to spend a turn.</p></div>` : `<p class="deadline">${vulnerableName} floods after turn <b>${floodTurn}</b>.</p>`}`;
+   $('forecast-toggle').onclick = () => {
+     forecastOpen = !forecastOpen;
+     render();
+   };
+   ($('undo') as HTMLButtonElement).disabled = busy || !session.history.length;
+   ($('restart') as HTMLButtonElement).disabled = busy;
++  ($('cove-picker') as HTMLSelectElement).disabled = busy;
+   $('undo').onclick = () => {
+     if (session.undo()) {
+       selected = null;
+@@ -209,15 +241,30 @@ function render() {
+     sound.toggle();
+     render();
+   };
+-  $('shallow-depth').textContent = String(2 + s.tideLevel);
++  $('shallow-depth').textContent = String(shallowBase + s.tideLevel);
+   $('deep-depth').textContent = String(3 + s.tideLevel);
+   world.indicate(s, selected?.type === 'move' ? selected.to : undefined);
+   world.setForecast(forecastOpen, nextRise?.level ?? s.tideLevel);
++  if (experiment) positionLabels();
+   if (focused && $(focused) && !($(focused) as HTMLButtonElement).disabled)
+     $(focused).focus({ preventScroll: true });
+   if (s.status !== 'playing') document.querySelector('.panel')!.scrollTop = 0;
+ }
+-world.onSelect = (id) => select({ type: 'move', to: id });
++world.onSelect = activateMove;
++($('cove-picker') as HTMLSelectElement).onchange = (event) => {
++  location.search = `?cove=${(event.target as HTMLSelectElement).value}`;
++};
++function positionLabels() {
++  for (const label of document.querySelectorAll<HTMLElement>('[data-pier]')) {
++    const pier = level.piers.find((p) => p.id === label.dataset.pier)!;
++    label.hidden = pier.isDeliveryPier && session.state.delivered.length > 0;
++    const point = world.project([pier.positionXZ[0], pier.positionXZ[1] - 1.9]);
++    label.style.left = `${point.x}px`;
++    label.style.top = `${point.y + world.host.offsetTop}px`;
++  }
++}
++new ResizeObserver(positionLabels).observe(world.host);
++positionLabels();
+ document.addEventListener('visibilitychange', () => {
+   if (document.hidden && session.busy) {
+     world.cancel();
+@@ -232,11 +279,11 @@ document.addEventListener('keydown', (e) => {
+   }
+ });
+ render();
+-if (import.meta.env.DEV) {
++if (import.meta.env.DEV)
+   Object.assign(window, {
+     __LAST_FERRY__: {
+       getState: () => copy(session.state),
+-      getLegalActions: () => copy(legalActions(session.state)),
++      getLegalActions: () => copy(legalActions(session.state, level)),
+       getRenderStatus: () => ({
+         pendingAnimation: session.busy,
+         historyLength: session.history.length,
+@@ -249,4 +296,3 @@ if (import.meta.env.DEV) {
+       getMetrics: () => world.metrics(),
+     },
+   });
+-}
+diff --git a/src/scene/world.ts b/src/scene/world.ts
+index f40f441..a7b43cc 100644
+--- a/src/scene/world.ts
++++ b/src/scene/world.ts
+@@ -1,5 +1,5 @@
+ import * as T from 'three';
+-import { level } from '../levels/level';
++import { level as baseline, type Level } from '../levels/level';
+ import { draft, edgeTo, type State, type Action } from '../game/rules';
+ import { animal, ball, box, cylinder, ferry, lighthouse, mat, mesh, palette, pine } from './models';
+ import { sampleJourney } from './motion';
+@@ -38,6 +38,7 @@ export class World {
+   constructor(
+     public host: HTMLElement,
+     state: State,
++    public level: Level = baseline,
+   ) {
+     this.state = state;
+     this.renderer = new T.WebGLRenderer({ antialias: true, alpha: false });
+@@ -50,7 +51,7 @@ export class World {
+     host.append(this.renderer.domElement);
+     this.renderer.domElement.setAttribute(
+       'aria-label',
+-      'Three-dimensional first cove. Use the labeled waypoint controls to navigate.',
++      `${this.level.title}. Use the labeled waypoint controls to navigate.`,
+     );
+     this.scene.background = new T.Color('#245f70');
+     this.scene.add(new T.HemisphereLight('#fff1dc', '#5f8c9a', 1.8));
+@@ -69,12 +70,28 @@ export class World {
+     sun.shadow.normalBias = 0.035;
+     sun.shadow.bias = -0.0003;
+     this.scene.add(sun);
++    const shallowSegments = this.level.edges
++      .filter((e) => e.baseDepth < 3)
++      .flatMap((e) =>
++        e.waypointsXZ
++          .slice(1)
++          .map(
++            (b, i) =>
++              new T.Vector4(...([...e.waypointsXZ[i], ...b] as [number, number, number, number])),
++          ),
++      );
++    const shallowCount = shallowSegments.length;
++    while (shallowSegments.length < 16) shallowSegments.push(new T.Vector4());
+     const waterMat = new T.ShaderMaterial({
+-      uniforms: { time: { value: 0 } },
++      uniforms: {
++        time: { value: 0 },
++        shallowSegments: { value: shallowSegments },
++        shallowCount: { value: shallowCount },
++      },
+       vertexShader: `varying vec3 world; void main(){world=(modelMatrix*vec4(position,1.)).xyz;gl_Position=projectionMatrix*viewMatrix*vec4(world,1.);}`,
+-      fragmentShader: `varying vec3 world;uniform float time;
++      fragmentShader: `varying vec3 world;uniform float time;uniform vec4 shallowSegments[16];uniform int shallowCount;
+     float line(vec2 p,vec2 a,vec2 b){vec2 ab=b-a;return length(p-a-clamp(dot(p-a,ab)/dot(ab,ab),0.,1.)*ab);}
+-    void main(){vec2 p=world.xz;float d=min(min(line(p,vec2(-6.,0.),vec2(-3.,.2)),line(p,vec2(-3.,.2),vec2(0.,-1.))),min(line(p,vec2(0.,-1.),vec2(3.,.2)),line(p,vec2(3.,.2),vec2(6.,0.))));
++    void main(){vec2 p=world.xz;float d=100.;for(int i=0;i<16;i++){if(i>=shallowCount)break;vec4 s=shallowSegments[i];d=min(d,line(p,s.xy,s.zw));}
+     float bank=exp(-d*d/.9)*.7;float n=sin(p.x*1.8+p.y*2.3)*sin(p.y*3.1-p.x*.7);vec3 c=mix(vec3(.12,.31,.38),vec3(.32,.65,.62),clamp(bank+n*.045,0.,1.));float ripple=smoothstep(.94,1.,sin(p.x*16.+p.y*24.+sin(p.x*2.)*2.+time*.7)*sin(p.y*11.-p.x*3.+time*.3));c+=ripple*.10;gl_FragColor=vec4(c,1.);}`,
+     });
+     this.water = new T.Mesh(new T.PlaneGeometry(200, 200), waterMat);
+@@ -88,15 +105,15 @@ export class World {
+     this.shadow.position.y = 0.008;
+     this.shadow.receiveShadow = true;
+     this.scene.add(this.shadow);
+-    for (const island of level.world.islands) this.island(island);
+-    for (const p of level.piers) {
++    for (const island of this.level.world.islands) this.island(island);
++    for (const p of this.level.piers) {
+       const [x, z] = p.positionXZ,
+         end = p.landAnchorXZ[1],
+         y = p.elevation * 0.18 - 0.06;
+       for (let i = 0; i < 9; i++)
+         box(
+           this.scene,
+-          i % 2 ? '#c09560' : '#b78b58',
++          p.id === 'stone-pier' ? (i % 2 ? '#a9b6ac' : '#899d97') : i % 2 ? '#c09560' : '#b78b58',
+           [p.width, 0.09, 0.14],
+           [x, y, z + ((end - z) * i) / 8],
+           0.015,
+@@ -112,7 +129,12 @@ export class World {
+     }
+     lighthouse(this.scene, -6.15, 0.54, -3.25);
+     const house = new T.Group();
+-    house.position.set(6.3, 0.36, -3.25);
++    house.position.set(
++      6.3,
++      (this.level.piers.find((p) => p.id !== 'harbor-pier' && p.id !== 'stone-pier')?.elevation ??
++        2) * 0.18,
++      -3.25,
++    );
+     this.scene.add(house);
+     box(house, '#c78155', [1.35, 0.9, 1.05], [0, 0.45, 0], 0.08);
+     for (const x of [-0.42, 0.42]) box(house, '#f9d084', [0.24, 0.29, 0.03], [x, 0.52, 0.54]);
+@@ -135,13 +157,13 @@ export class World {
+       for (const y of [0.42, 0.62]) box(house, '#edc28c', [0.27, 0.025, 0.045], [x, y, 0.56]);
+     box(house, '#ead5a6', [0.026, 0.32, 0.04], [-0.42, 0.52, 0.56]);
+     box(house, '#93816a', [0.19, 0.6, 0.2], [0.43, 1.35, -0.25]);
+-    for (const e of level.edges) {
++    for (const e of this.level.edges) {
+       const pts = e.waypointsXZ.map((p) => V(p, 0.035));
+       const geom = new T.BufferGeometry().setFromPoints(pts);
+       const line = new T.Line(
+         geom,
+         new T.LineDashedMaterial({
+-          color: e.baseDepth === 2 ? '#b4d9c4' : '#89b8ba',
++          color: e.baseDepth < 3 ? '#b4d9c4' : '#89b8ba',
+           dashSize: 0.09,
+           gapSize: 0.16,
+           transparent: true,
+@@ -152,7 +174,7 @@ export class World {
+       this.scene.add(line);
+       this.routes.set(e.id, line);
+     }
+-    for (const n of level.nodes) {
++    for (const n of this.level.nodes) {
+       const g = new T.Group();
+       g.position.copy(V(n.positionXZ, 0.05));
+       this.scene.add(g);
+@@ -165,7 +187,7 @@ export class World {
+       }
+     }
+     // Sparse broken foam accents hugging the three authored footprints.
+-    for (const island of level.world.islands) {
++    for (const island of this.level.world.islands) {
+       const points = island.footprintXZ;
+       const cx = points.reduce((n, p) => n + p[0], 0) / points.length,
+         cz = points.reduce((n, p) => n + p[1], 0) / points.length;
+@@ -192,7 +214,7 @@ export class World {
+     this.makeForecast();
+     this.boatRoot.add(this.hull);
+     this.scene.add(this.boatRoot);
+-    for (const p of level.passengers) {
++    for (const p of this.level.passengers) {
+       const anchor = new T.Object3D();
+       anchor.name = `deck-anchor-${p.id}`;
+       anchor.position.set(
+@@ -221,7 +243,7 @@ export class World {
+       const bounds = host.getBoundingClientRect();
+       let closest: string | undefined,
+         dist = 32;
+-      for (const n of level.nodes) {
++      for (const n of this.level.nodes) {
+         const p = this.project(n.positionXZ);
+         const d = Math.hypot(p.x - (ev.clientX - bounds.left), p.y - (ev.clientY - bounds.top));
+         if (d < dist) {
+@@ -240,7 +262,7 @@ export class World {
+     });
+     requestAnimationFrame((t) => this.tick(t));
+   }
+-  island(island: (typeof level.world.islands)[number]) {
++  island(island: Level['world']['islands'][number]) {
+     const points = island.footprintXZ,
+       cx = points.reduce((a, p) => a + p[0], 0) / points.length,
+       cz = points.reduce((a, p) => a + p[1], 0) / points.length;
+@@ -343,7 +365,7 @@ export class World {
+       }
+   }
+   makeForecast() {
+-    for (const island of level.world.islands) {
++    for (const island of this.level.world.islands) {
+       const pts = island.footprintXZ.map((p) => V(p, 0.195));
+       pts.push(pts[0].clone());
+       const line = new T.Line(
+@@ -381,9 +403,9 @@ export class World {
+     this.camera.near = 0.1;
+     this.camera.far = 100;
+     this.camera.position.set(7, 34, 23);
+-    if (smallLandscape) this.camera.position.set(0, 34, 24);
++    if (smallLandscape || this.level.id === 'holding-pier') this.camera.position.set(0, 34, 24);
+     this.camera.lookAt(0, 0, 0.05);
+-    if (smallLandscape) {
++    if (smallLandscape || this.level.id === 'holding-pier') {
+       // Fit the actual tall lighthouse and the complete possible ferry envelope,
+       // rather than relying on a water-plane span that clips the lantern roof.
+       this.scene.updateMatrixWorld(true);
+@@ -407,7 +429,7 @@ export class World {
+           continue;
+         corners(new T.Box3().setFromObject(object));
+       }
+-      for (const node of level.nodes)
++      for (const node of this.level.nodes)
+         corners(
+           new T.Box3(
+             V([node.positionXZ[0] - 1.25, node.positionXZ[1] - 1.25], 0),
+@@ -430,25 +452,35 @@ export class World {
+       return this.passengerAnchors.get(id)!.getWorldPosition(new T.Vector3());
+     }
+     if (s.delivered.includes(id)) {
+-      const i = level.passengers.findIndex((p) => p.id === id);
+-      return new T.Vector3(-6.45 + i * 0.42, 0.57, -2.05 - i * 0.21);
++      const i = this.level.passengers.findIndex((p) => p.id === id);
++      const p = this.level.piers.find((p) => p.id === this.level.objective.deliveryPierId)!;
++      return new T.Vector3(
++        p.landAnchorXZ[0] - 0.45 + i * 0.42,
++        p.elevation * 0.18 + 0.03,
++        p.landAnchorXZ[1] + 0.05 - i * 0.21,
++      );
+     }
+-    const p = level.piers.find((p) => s.waitingByPier[p.id].includes(id))!;
++    const p = this.level.piers.find((p) => s.waitingByPier[p.id].includes(id))!;
+     const i = s.waitingByPier[p.id].indexOf(id);
+     return new T.Vector3(
+-      p.positionXZ[0] + (i % 2) * 0.23,
++      p.positionXZ[0] +
++        (this.level.id === 'holding-pier' && s.waitingByPier[p.id].length > 1
++          ? i % 2
++            ? 0.21
++            : -0.21
++          : (i % 2) * 0.23),
+       p.elevation * 0.18 - 0.005,
+       p.positionXZ[1] - 0.12 - Math.floor(i / 2) * 0.3,
+     );
+   }
+   draftY(s: State) {
+-    return 0.03 - (draft(s) - 1) * 0.075;
++    return 0.03 - (draft(s, this.level) - 1) * 0.075;
+   }
+   sync(s: State) {
+     this.state = s;
+     this.water.position.y = s.tideLevel * 0.18;
+     this.shadow.position.y = this.water.position.y + 0.008;
+-    const n = level.nodes.find((n) => n.id === s.boatNodeId)!;
++    const n = this.level.nodes.find((n) => n.id === s.boatNodeId)!;
+     this.boatRoot.position.copy(V(n.positionXZ, s.tideLevel * 0.18));
+     this.boatRoot.rotation.y = Math.PI / 2;
+     this.hull.position.y = this.draftY(s);
+@@ -466,12 +498,12 @@ export class World {
+   }
+   indicate(s: State, selected?: string) {
+     for (const [id, g] of this.markers) {
+-      const e = edgeTo(s, id);
++      const e = edgeTo(s, id, this.level);
+       g.visible = id !== s.boatNodeId;
+       const color =
+         id === selected
+           ? '#ffe09a'
+-          : e && e.baseDepth + s.tideLevel < draft(s)
++          : e && e.baseDepth + s.tideLevel < draft(s, this.level)
+             ? '#d19272'
+             : '#cce2d6';
+       (g.children[0] as T.Mesh).material = mat(color);
+@@ -479,11 +511,11 @@ export class World {
+       g.position.y = s.tideLevel * 0.18 + 0.04;
+     }
+     for (const [id, line] of this.routes) {
+-      const e = level.edges.find((e) => e.id === id)!;
++      const e = this.level.edges.find((e) => e.id === id)!;
+       line.position.y = s.tideLevel * 0.18;
+       const m = line.material as T.LineDashedMaterial;
+       m.opacity = e.nodes.includes(s.boatNodeId) ? 0.85 : 0.3;
+-      m.color.set(e.baseDepth + s.tideLevel < draft(s) ? '#dca180' : '#a6d3cc');
++      m.color.set(e.baseDepth + s.tideLevel < draft(s, this.level) ? '#dca180' : '#a6d3cc');
+     }
+   }
+   animate(before: State, after: State, action: Action, done: () => void) {
+@@ -496,7 +528,7 @@ export class World {
+       if (before.aboard.includes(id) && !after.aboard.includes(id)) this.scene.attach(g);
+     let path: T.Vector3[] = [];
+     if (action.type === 'move') {
+-      const edge = edgeTo(before, action.to)!;
++      const edge = edgeTo(before, action.to, this.level)!;
+       const points =
+         edge.nodes[0] === before.boatNodeId ? edge.waypointsXZ : [...edge.waypointsXZ].reverse();
+       path = points.map((p) => V(p, before.tideLevel * 0.18));
+@@ -556,7 +588,7 @@ export class World {
+           // Already aboard: local feet stay on the deck anchor throughout draft,
+           // tide, travel and bobbing. The parent transform does all the work.
+         } else if (tr.before.aboard.includes(id) !== tr.after.aboard.includes(id)) {
+-          const pier = level.piers.find((p) => p.nodeId === tr.before.boatNodeId)!;
++          const pier = this.level.piers.find((p) => p.nodeId === tr.before.boatNodeId)!;
+           const offset = id === 'rabbit-1' ? -0.07 : id === 'rabbit-2' ? 0.07 : 0;
+           const bridge = new T.Vector3(
+             pier.positionXZ[0] + offset,
+@@ -639,7 +671,7 @@ export class World {
+       canvas: { width: this.host.clientWidth, height: this.host.clientHeight },
+       lighthouse: rectangle(this.scene.getObjectByName('lighthouse')!),
+       passengers: [...this.animals].map(([id, g]) => ({ id, ...rectangle(g) })),
+-      nodes: level.nodes.map((n) => ({ id: n.id, ...this.project(n.positionXZ) })),
++      nodes: this.level.nodes.map((n) => ({ id: n.id, ...this.project(n.positionXZ) })),
+     };
+   }
+ }
+diff --git a/src/style.css b/src/style.css
+index 352a16f..2176abe 100644
+--- a/src/style.css
++++ b/src/style.css
+@@ -757,3 +757,141 @@ p {
+     margin-top: 10px;
+   }
+ }
++/* The experiment keeps the same miniature and adds only its decision cues. */
++.route-row {
++  display: grid;
++  grid-template-columns: minmax(0, 1fr) 58px;
++  gap: 4px;
++}
++.inspect-route {
++  border: 1px solid #c5cdb7;
++  border-radius: 7px;
++  background: #ece8d7;
++  font-size: 10px;
++  min-width: 44px;
++}
++.voyage-note {
++  font-size: 11px;
++  line-height: 1.6;
++  color: #5b4938;
++  background: #eee1c8;
++  border-left: 3px solid #aa6844;
++  padding: 9px 10px;
++  margin: -10px 0 18px;
++}
++.voyage-note p {
++  font-size: 10px;
++  color: #53695b;
++  margin-top: 3px;
++}
++.cove-picker {
++  display: grid;
++  gap: 5px;
++  margin-top: 18px;
++  color: #53695b;
++  font-size: 11px;
++}
++.cove-picker select {
++  font: inherit;
++  color: #29434a;
++  background: #fffaee;
++  border: 1px solid #b7c4ae;
++  border-radius: 5px;
++  min-height: 44px;
++  width: 100%;
++  padding: 7px;
++}
++select:focus-visible {
++  outline: 3px solid #af5d36;
++  outline-offset: 2px;
++}
++.pier-tag {
++  position: absolute;
++  transform: translate(-50%, -100%);
++  pointer-events: none;
++  font-size: 9px;
++  font-weight: 700;
++  letter-spacing: 0.5px;
++  padding: 5px 7px;
++  border-radius: 5px;
++  background: #e9edd7ed;
++  color: #254b49;
++  box-shadow: 0 2px 5px #163d4c40;
++  white-space: nowrap;
++}
++.pier-tag.low {
++  background: #f4dfb9ed;
++  color: #704729;
++}
++@media (max-height: 480px) and (min-width: 701px) {
++  .experiment .counters {
++    margin: 6px 0;
++  }
++  .experiment .cargo {
++    padding: 7px 10px;
++    margin-bottom: 8px;
++  }
++  .experiment .voyage-note {
++    font-size: 10px;
++    padding: 5px 7px;
++    margin: 0 0 7px;
++    line-height: 1.45;
++  }
++  .experiment .voyage-note p {
++    font-size: 9px;
++    margin: 0;
++  }
++  .experiment .voyage-note p:last-child {
++    display: none;
++  }
++  .experiment .instruction {
++    font-size: 9px;
++    line-height: 1.4;
++  }
++  .experiment .action small {
++    margin-left: 0;
++    line-height: 1.4;
++  }
++  .experiment .route-row {
++    grid-template-columns: minmax(0, 1fr) 49px;
++  }
++  .experiment .inspect-route {
++    font-size: 9px;
++  }
++  .experiment .selecting .voyage-note p {
++    display: none;
++  }
++  .experiment .selecting .voyage-note {
++    margin-bottom: 4px;
++  }
++  .experiment .selecting .preview p {
++    line-height: 1.45;
++  }
++  .experiment .pier-tag {
++    font-size: 7px;
++    padding: 3px 4px;
++    letter-spacing: 0;
++  }
++}
++@media (max-height: 480px) and (min-width: 701px) {
++  .experiment .panel-kicker {
++    display: none;
++  }
++  .experiment .slots {
++    display: none;
++  }
++  .experiment .cargo p {
++    margin-top: 6px;
++  }
++  .experiment .location .eyebrow {
++    display: none;
++  }
++  .experiment .location h2 {
++    margin: 4px 0 6px;
++  }
++}
++/* Keep the chosen action and its confirmation together at every viewport. */
++.experiment .selecting .action-list,
++.experiment .selecting .instruction {
++  display: none;
++}
+diff --git a/tests/unit/clearance.test.ts b/tests/unit/clearance.test.ts
+index 203807a..bdf0772 100644
+--- a/tests/unit/clearance.test.ts
++++ b/tests/unit/clearance.test.ts
+@@ -2,7 +2,7 @@ import { test, expect } from 'vitest';
+ import { Mesh, Vector3 } from 'three';
+ import { ferry } from '../../src/scene/models';
+ import { sampleJourney } from '../../src/scene/motion';
+-import { level } from '../../src/levels/level';
++import { level, holdingPier } from '../../src/levels/level';
+ type P = [number, number];
+ const cross = (a: P, b: P, c: P) => (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]);
+ function convex(points: P[]) {
+@@ -44,52 +44,55 @@ function overlaps(a: P[], b: P[]) {
+     )
+   );
+ }
+-test('actual modeled ferry footprint clears all land and pier decks along both directions and yaw turns', () => {
+-  const model = ferry();
+-  model.updateMatrixWorld(true);
+-  const points: P[] = [];
+-  model.traverse((o) => {
+-    if (o instanceof Mesh) {
+-      const position = o.geometry.getAttribute('position');
+-      for (let i = 0; i < position.count; i++) {
+-        const v = new Vector3().fromBufferAttribute(position, i).applyMatrix4(o.matrixWorld);
+-        points.push([v.x, v.z]);
++test.each([level, holdingPier])(
++  '$id: actual modeled ferry footprint clears all land and pier decks along both directions and yaw turns',
++  (level) => {
++    const model = ferry();
++    model.updateMatrixWorld(true);
++    const points: P[] = [];
++    model.traverse((o) => {
++      if (o instanceof Mesh) {
++        const position = o.geometry.getAttribute('position');
++        for (let i = 0; i < position.count; i++) {
++          const v = new Vector3().fromBufferAttribute(position, i).applyMatrix4(o.matrixWorld);
++          points.push([v.x, v.z]);
++        }
+       }
+-    }
+-  });
+-  const footprint = convex(points),
+-    exclusions = [
+-      ...level.world.islands.map((i) => ({ id: i.id, polygon: i.footprintXZ as P[] })),
+-      ...level.piers.map((p) => ({
+-        id: p.id,
+-        polygon: [
+-          [p.positionXZ[0] - p.width / 2, p.landAnchorXZ[1]],
+-          [p.positionXZ[0] + p.width / 2, p.landAnchorXZ[1]],
+-          [p.positionXZ[0] + p.width / 2, p.positionXZ[1]],
+-          [p.positionXZ[0] - p.width / 2, p.positionXZ[1]],
+-        ] as P[],
+-      })),
+-    ];
+-  const failures: string[] = [];
+-  for (const edge of level.edges)
+-    for (const reverse of [false, true]) {
+-      const path = (reverse ? [...edge.waypointsXZ].reverse() : edge.waypointsXZ).map(
+-        (p) => new Vector3(p[0], 0, p[1]),
+-      );
+-      for (let frame = 0; frame <= 100; frame++) {
+-        const pose = sampleJourney(path, frame / 100);
+-        const hull = footprint.map(([x, z]) => {
+-          const v = new Vector3(x, 0, z)
+-            .applyAxisAngle(new Vector3(0, 1, 0), pose.angle)
+-            .add(pose.position);
+-          return [v.x, v.z] as P;
+-        });
+-        for (const exclusion of exclusions)
+-          if (overlaps(hull, exclusion.polygon))
+-            failures.push(
+-              `${edge.id}/${reverse ? 'reverse' : 'forward'} frame ${frame}: ${exclusion.id}`,
+-            );
++    });
++    const footprint = convex(points),
++      exclusions = [
++        ...level.world.islands.map((i) => ({ id: i.id, polygon: i.footprintXZ as P[] })),
++        ...level.piers.map((p) => ({
++          id: p.id,
++          polygon: [
++            [p.positionXZ[0] - p.width / 2, p.landAnchorXZ[1]],
++            [p.positionXZ[0] + p.width / 2, p.landAnchorXZ[1]],
++            [p.positionXZ[0] + p.width / 2, p.positionXZ[1]],
++            [p.positionXZ[0] - p.width / 2, p.positionXZ[1]],
++          ] as P[],
++        })),
++      ];
++    const failures: string[] = [];
++    for (const edge of level.edges)
++      for (const reverse of [false, true]) {
++        const path = (reverse ? [...edge.waypointsXZ].reverse() : edge.waypointsXZ).map(
++          (p) => new Vector3(p[0], 0, p[1]),
++        );
++        for (let frame = 0; frame <= 100; frame++) {
++          const pose = sampleJourney(path, frame / 100);
++          const hull = footprint.map(([x, z]) => {
++            const v = new Vector3(x, 0, z)
++              .applyAxisAngle(new Vector3(0, 1, 0), pose.angle)
++              .add(pose.position);
++            return [v.x, v.z] as P;
++          });
++          for (const exclusion of exclusions)
++            if (overlaps(hull, exclusion.polygon))
++              failures.push(
++                `${edge.id}/${reverse ? 'reverse' : 'forward'} frame ${frame}: ${exclusion.id}`,
++              );
++        }
+       }
+-    }
+-  expect(failures).toEqual([]);
+-});
++    expect(failures).toEqual([]);
++  },
++);
+diff --git a/tools/snapshot-evidence.mjs b/tools/snapshot-evidence.mjs
+index 2ac4d1a..a8fbb2f 100644
+--- a/tools/snapshot-evidence.mjs
++++ b/tools/snapshot-evidence.mjs
+@@ -45,6 +45,7 @@ const paths = [
+   'docs/ART_DIRECTION.md',
+   'docs/TECHNICAL_PLAN.md',
+   'docs/ASSET_LEDGER.md',
++  ...(existsSync(new URL('docs/HOLDING_PIER.md', root)) ? ['docs/HOLDING_PIER.md'] : []),
+   'tools/snapshot-evidence.mjs',
+ ].sort();
+ const files = Object.fromEntries(paths.map((p) => [p, digest(readFileSync(new URL(p, root)))]));
+@@ -124,6 +125,7 @@ if (!process.argv.includes('--finalize')) {
+           'phone-rescue',
+           'boarding-unloading',
+           'boarding-unloading-closeup',
++          'uninterrupted-rescue',
+         ]
+           .map((name) => `${reviewDir}/raw/${name}.webm`)
+           .filter((path) => existsSync(new URL(path, root)))

@@ -1,0 +1,301 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "wide-visual-repair.spec.ts"
+    ],
+    "configFile": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\playwright.config.ts",
+    "rootDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "snapshotDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5270",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "deviceScaleFactor": 1,
+          "headless": true,
+          "launchOptions": {
+            "args": [
+              "--use-angle=swiftshader",
+              "--enable-unsafe-swiftshader"
+            ]
+          },
+          "video": {
+            "mode": "on",
+            "size": {
+              "width": 1440,
+              "height": 900
+            }
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "reviews/wide-berth-visual-repair/final/automation-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "wide-visual-repair.spec.ts",
+      "file": "wide-visual-repair.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "released visual matrix with actual full loads, compact shores and marker focus",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 600000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 158229,
+                  "error": {
+                    "message": "TimeoutError: locator.tap: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#map-shell-landing')\u001b[22m\n\u001b[2m    - locator resolved to <button data-risk=\"safe\" class=\"map-target\" aria-expanded=\"false\" id=\"map-shell-landing\" data-status=\"available\" aria-controls=\"local-context\" data-destination=\"shell-landing\" title=\"adjacent passage available\" aria-label=\"Select Shell Landing; adjacent passage available\">…</button>\u001b[22m\n\u001b[2m  - attempting tap action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <button id=\"unload\" class=\"cove-button\" aria-haspopup=\"dialog\">…</button> from <nav id=\"dock-actions\" data-layout=\"column\" aria-label=\"Passenger actions at High Quay\">…</nav> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying tap action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <button id=\"unload\" class=\"cove-button\" aria-haspopup=\"dialog\">…</button> from <nav id=\"dock-actions\" data-layout=\"column\" aria-label=\"Passenger actions at High Quay\">…</nav> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying tap action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    24 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <button id=\"unload\" class=\"cove-button\" aria-haspopup=\"dialog\">…</button> from <nav id=\"dock-actions\" data-layout=\"column\" aria-label=\"Passenger actions at High Quay\">…</nav> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying tap action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n",
+                    "stack": "TimeoutError: locator.tap: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#map-shell-landing')\u001b[22m\n\u001b[2m    - locator resolved to <button data-risk=\"safe\" class=\"map-target\" aria-expanded=\"false\" id=\"map-shell-landing\" data-status=\"available\" aria-controls=\"local-context\" data-destination=\"shell-landing\" title=\"adjacent passage available\" aria-label=\"Select Shell Landing; adjacent passage available\">…</button>\u001b[22m\n\u001b[2m  - attempting tap action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <button id=\"unload\" class=\"cove-button\" aria-haspopup=\"dialog\">…</button> from <nav id=\"dock-actions\" data-layout=\"column\" aria-label=\"Passenger actions at High Quay\">…</nav> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying tap action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <button id=\"unload\" class=\"cove-button\" aria-haspopup=\"dialog\">…</button> from <nav id=\"dock-actions\" data-layout=\"column\" aria-label=\"Passenger actions at High Quay\">…</nav> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying tap action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    24 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <button id=\"unload\" class=\"cove-button\" aria-haspopup=\"dialog\">…</button> from <nav id=\"dock-actions\" data-layout=\"column\" aria-label=\"Passenger actions at High Quay\">…</nav> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying tap action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n    at activate (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\ui.ts:39:43)\n    at selectPlace (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\ui.ts:56:3)\n    at startMove (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\ui.ts:60:3)\n    at act (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\ui.ts:64:30)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\wide-visual-repair.spec.ts:121:35",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\ui.ts",
+                      "column": 43,
+                      "line": 39
+                    },
+                    "snippet": "\u001b[90m   at \u001b[39mui.ts:39\n\n  37 |     await activate(page, current, touch);\n  38 |   }\n> 39 |   if (touch) await page.locator(`#${id}`).tap();\n     |                                           ^\n  40 |   else await page.locator(`#${id}`).click();\n  41 | }\n  42 | export async function wholeCove(page: Page, touch = false) {"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\ui.ts",
+                        "column": 43,
+                        "line": 39
+                      },
+                      "message": "TimeoutError: locator.tap: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#map-shell-landing')\u001b[22m\n\u001b[2m    - locator resolved to <button data-risk=\"safe\" class=\"map-target\" aria-expanded=\"false\" id=\"map-shell-landing\" data-status=\"available\" aria-controls=\"local-context\" data-destination=\"shell-landing\" title=\"adjacent passage available\" aria-label=\"Select Shell Landing; adjacent passage available\">…</button>\u001b[22m\n\u001b[2m  - attempting tap action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <button id=\"unload\" class=\"cove-button\" aria-haspopup=\"dialog\">…</button> from <nav id=\"dock-actions\" data-layout=\"column\" aria-label=\"Passenger actions at High Quay\">…</nav> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying tap action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <button id=\"unload\" class=\"cove-button\" aria-haspopup=\"dialog\">…</button> from <nav id=\"dock-actions\" data-layout=\"column\" aria-label=\"Passenger actions at High Quay\">…</nav> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying tap action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    24 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <button id=\"unload\" class=\"cove-button\" aria-haspopup=\"dialog\">…</button> from <nav id=\"dock-actions\" data-layout=\"column\" aria-label=\"Passenger actions at High Quay\">…</nav> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying tap action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n   at ui.ts:39\n\n  37 |     await activate(page, current, touch);\n  38 |   }\n> 39 |   if (touch) await page.locator(`#${id}`).tap();\n     |                                           ^\n  40 |   else await page.locator(`#${id}`).click();\n  41 | }\n  42 | export async function wholeCove(page: Page, touch = false) {\n    at activate (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\ui.ts:39:43)\n    at selectPlace (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\ui.ts:56:3)\n    at startMove (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\ui.ts:60:3)\n    at act (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\ui.ts:64:30)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\wide-visual-repair.spec.ts:121:35"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T21:51:14.423Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\wide-visual-repair-release-071e8-act-shores-and-marker-focus\\error-context.md"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\wide-visual-repair-release-071e8-act-shores-and-marker-focus\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\ui.ts",
+                    "column": 43,
+                    "line": 39
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "0cc22f79ca176775f9ad-7e54086ab9b292ef35c1",
+          "file": "wide-visual-repair.spec.ts",
+          "line": 99,
+          "column": 1
+        },
+        {
+          "title": "released overview aspect matrix and natural marker focus",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 600000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 30207,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T21:53:56.871Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "0cc22f79ca176775f9ad-da140aa21781bda495f6",
+          "file": "wide-visual-repair.spec.ts",
+          "line": 145,
+          "column": 1
+        },
+        {
+          "title": "short landscape staging keeps the next passage touch target free",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 600000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 21071,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"map-shell-landing\"\u001b[39m\nReceived: \u001b[31mundefined\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"map-shell-landing\"\u001b[39m\nReceived: \u001b[31mundefined\u001b[39m\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\wide-visual-repair.spec.ts:220:5",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\wide-visual-repair.spec.ts",
+                      "column": 5,
+                      "line": 220
+                    },
+                    "snippet": "  218 |       y: r!.y + r!.height / 2,\n  219 |     }),\n> 220 |   ).toBe('map-shell-landing');\n      |     ^\n  221 |   await act(page, 'map-shell-landing', true);\n  222 |   expect((await state(page)).boatNodeId).toBe('shell-landing');\n  223 |   await ctx.close();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\wide-visual-repair.spec.ts",
+                        "column": 5,
+                        "line": 220
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"map-shell-landing\"\u001b[39m\nReceived: \u001b[31mundefined\u001b[39m\n\n  218 |       y: r!.y + r!.height / 2,\n  219 |     }),\n> 220 |   ).toBe('map-shell-landing');\n      |     ^\n  221 |   await act(page, 'map-shell-landing', true);\n  222 |   expect((await state(page)).boatNodeId).toBe('shell-landing');\n  223 |   await ctx.close();\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\wide-visual-repair.spec.ts:220:5"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T21:54:27.523Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\wide-visual-repair-short-l-a5745-t-passage-touch-target-free\\error-context.md"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\wide-visual-repair-short-l-a5745-t-passage-touch-target-free\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\wide-visual-repair.spec.ts",
+                    "column": 5,
+                    "line": 220
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "0cc22f79ca176775f9ad-0d27b8b031678124ad69",
+          "file": "wide-visual-repair.spec.ts",
+          "line": 193,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-31T21:51:13.728Z",
+    "duration": 221597.766,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}
