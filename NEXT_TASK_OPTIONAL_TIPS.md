@@ -1,5 +1,8 @@
 # OPTIONAL_TIPS_01 — let the player do the planning
 
+> **Completed and reviewed, 10 November 2026.** Runtime `f23e9b087e80316c3884ed5fa83cce25cf6508a0` implements this task and is published privately as Sites version 17. The current assignment is [JOURNEY_SIX_COVES_01](NEXT_TASK_JOURNEY_SIX_COVES.md). Preserve the Tips implementation; the original brief below records the completed scope.
+
+
 ## Current assignment
 
 The player accepted the repaired ferry, docks and increasing puzzle complexity on 7 November 2026. Accepted runtime: `8fc0d35f772af73adf06a9dff112b749cbad233a`, published to the existing private Site as **version 16**. Preserve newer/unrelated work. Read this task, `AGENTS.md` and the active `docs/PROJECT_STATE.md` before editing.

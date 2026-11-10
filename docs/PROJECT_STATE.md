@@ -1,6 +1,22 @@
 # Last Ferry — Project state
 
-## Current handoff — Optional tips
+## Active task — six connected coves · 10 November 2026
+
+Follow root [NEXT_TASK_JOURNEY_SIX_COVES.md](../NEXT_TASK_JOURNEY_SIX_COVES.md), **JOURNEY_SIX_COVES_01**. Optional Tips is complete and reviewed at `f23e9b087e80316c3884ed5fa83cce25cf6508a0`. The player previously accepted the repaired ferry/docks and increasing Wide/Reef complexity. Preserve those results.
+
+The next implementation connects existing accepted content: Holding → Bellwater → Driftwood → Two Shelters → existing launch → Wide → Reef. It moves the launch after the last four-space cove, adds two short authored illustrated entries and explicitly handles older saves. No new puzzle, species, mechanic or rebalance is commissioned. The current published runtime still has the original four-cove Journey and seven Practice entries; six-cove integration is not yet implemented. The twelve-cove target remains unfinished, with later chapters provisional.
+
+Save policy: preserve original bytes, earned identities and seen scenes; apply compatibility only on explicit Continue, with a brief explanation of changed resume points. Resume the first genuinely uncompleted cove in the new order. An already-earned Wide rescue stays earned while missing Two Shelters and Reef remain uncompleted. Home/Options/Practice are read-only. The named task contains the exact legacy cases; do not use the old strict-prefix contract to prohibit this authorized integration.
+
+## Current publication — Sites version 17
+
+The existing owner-private Site published the reviewed optional-tips game on 10 November 2026 at **21:21 Europe/Madrid** (20:21 UTC): game `f23e9b087e80316c3884ed5fa83cce25cf6508a0`, hosting source `a55d2401906cb1403a73953c14606c87e14f8ef4`. [Play](https://last-ferry-playtest.abumech.chatgpt.site) · [Publication receipt](../reviews/optional-tips/deployment-confirmation.json). The game and hosting SHAs belong to different repositories; this task/continuity update changes no deployed runtime.
+
+Independent review found no blocker, passed a fresh 66-case focused unit run and Node 24 production build/typecheck, and inspected four exact-source native phone Off/On images. The publication audit recomputed 281 scoped files: 280 exact Git blobs and the retained Vite preview-host allowance only. Codex's six browser cases and 79-family validation are retained evidence, not claimed as fresh reruns. No fresh browser rescue, physical-phone performance, spoken screen-reader or acoustic approval was performed for publication. Earlier limits and original failures remain in [the review](../reviews/optional-tips/REVIEW.md).
+
+## Previous implementation handoff — Optional tips, 10 November 2026
+
+The original implementation record below predates the publication and next assignment above.
 
 **OPTIONAL_TIPS_01**, root [NEXT_TASK_OPTIONAL_TIPS.md](../NEXT_TASK_OPTIONAL_TIPS.md), is the current assignment. The player reports that the repaired Wide Berth and Reef Return now feel good and that complexity is increasing well. Record the shared ferry/docks and these puzzles as positively accepted; the earlier rejection below describes superseded builds. Preserve this result. No new level, campaign reorder, art redesign or rebalance is commissioned.
 
@@ -12,7 +28,7 @@ Focused verification passes: production build/TypeScript, 66 relevant unit cases
 
 Journey remains Holding → Bellwater → Driftwood → Wide. Practice retains those four plus First Crossing, Two Shelters and Reef Return. The twelve-cove target and future ordering remain provisional; expansion stays paused for this focused pass.
 
-## Current publication — Sites version 16
+## Prior publication — Sites version 16
 
 On 7 November 2026 at 16:56:30 UTC, the existing owner-private Site successfully published the accepted repair: game `8fc0d35f772af73adf06a9dff112b749cbad233a`, hosting source `80d7db9c78e7751e67bf577982daf72f810f2a52`. [Play](https://last-ferry-playtest.abumech.chatgpt.site) · [Publication receipt](../reviews/existing-coves-repair/deployment-confirmation.json). The two SHAs identify different repositories. The optional-tips implementation is not deployed.
 

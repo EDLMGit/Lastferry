@@ -1,6 +1,15 @@
 # Last Ferry — fresh-chat handoff
 
-## Current update — 7 November 2026
+## Current update — 10 November 2026
+
+Optional Tips is implemented, reviewed and published as **private Site version 17**, game `f23e9b087e80316c3884ed5fa83cce25cf6508a0`, hosting source `a55d2401906cb1403a73953c14606c87e14f8ef4`. [Receipt](../reviews/optional-tips/deployment-confirmation.json). The accepted boat/docks and Wide/Reef complexity remain protected. A fresh focused 66-unit run, build/typecheck and exact-source phone-image review found no blocker; physical-device and listening limits remain separate.
+
+Current root task: [NEXT_TASK_JOURNEY_SIX_COVES.md](../NEXT_TASK_JOURNEY_SIX_COVES.md), **JOURNEY_SIX_COVES_01**. Connect the six accepted puzzles as Holding → Bellwater → Driftwood → Two Shelters → launch → Wide → Reef. Add two compact illustrated entries and explicit legacy-save continuation, preserving original bytes, earned rescues and scene acknowledgments. All seven Practice entries remain. No new cove, rebalance, species or ferry redesign. The six-cove route is not yet implemented in the published game.
+
+Use the active [project state](PROJECT_STATE.md) and root task. Read older updates below as history, especially earlier rejections and tasks already completed. Keep PR #1 draft and GitHub main unchanged; the next Codex implementation is reviewed before publication.
+
+
+## Historical update — 7 November 2026
 
 The repair requested in the historical snapshot below is **completed and positively accepted**. Accepted game `8fc0d35f772af73adf06a9dff112b749cbad233a` repairs the existing Wide Berth and Reef Return and their shared ferry/docks. The player says everything feels good and complexity is increasing well. Do not repeat the rejected-art task or add another successor level.
 

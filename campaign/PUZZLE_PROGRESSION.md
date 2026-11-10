@@ -1,11 +1,17 @@
 # Puzzle progression — selected campaign direction
 
+## Current task — connect six accepted puzzles · 10 November 2026
+
+[JOURNEY_SIX_COVES_01](../NEXT_TASK_JOURNEY_SIX_COVES.md) connects Holding → Bellwater → Driftwood → Two Shelters → launch → Wide → Reef. The first four use the small ferry; the last two use the accepted larger ferry. Preserve all existing level data, rules and witnesses. No new difficulty design is required in this pass. Optional Tips is already implemented and published at game `f23e9b087e80316c3884ed5fa83cce25cf6508a0`, private Site version 17.
+
+The current runtime still has a four-cove Journey and seven Practice entries. This assignment makes Two Shelters and Reef part of the Journey without inventing another puzzle. First Crossing stays Practice. Preserve earned completion by identity through explicit continuation; a legacy Wide completion remains earned even while the newly inserted Two Shelters is uncompleted. The root task defines the save cases. Later coves 7–12 remain provisional; the old numbered roadmap below is historical and must not override the six-cove integration.
+
 ## Existing coves accepted · 7 November 2026
 
 The prepared ferry's working variant serves Wide and Reef. It supports the same rule bands for every legal subset while preserving individual animal scale. Six-space seats, docks, launch art and gallery now depict the repaired family.
 
 The former Wide puzzle started empty at Harbor. Its 13- and 14-action deliveries and its safe-quay waiting loop were valid under the rejected contract. The first Reef puzzle had a three-edge layout and two nine-action witnesses with the same route. Those records explain the 4 November correction. The accepted decision and witness sets are listed below.
-The four-cove Journey runs Holding → Bellwater → Driftwood → Wide. First Crossing, Two Shelters and Reef Return are also available through Practice. Two Shelters received positive player feedback. The earlier six-space puzzles and their presentation were rejected; both existing coves have since been reworked at their original IDs. On 7 November the player accepted the repaired ferry/docks and increasing puzzle complexity. Accepted game `8fc0d35f772af73adf06a9dff112b749cbad233a` is published as private Site version 16. Preserve these puzzles. The next task makes predictive tips optional, Off by default, while preserving raw planning facts, actual outcomes and Undo. [Current task](../NEXT_TASK_OPTIONAL_TIPS.md) · [Project state](../docs/PROJECT_STATE.md)
+The four-cove Journey runs Holding → Bellwater → Driftwood → Wide. First Crossing, Two Shelters and Reef Return are also available through Practice. Two Shelters received positive player feedback. The earlier six-space puzzles and their presentation were rejected; both existing coves have since been reworked at their original IDs. On 7 November the player accepted the repaired ferry/docks and increasing puzzle complexity. Accepted game `8fc0d35f772af73adf06a9dff112b749cbad233a` is published as private Site version 16. Preserve these puzzles. The subsequent Tips task implemented default-Off predictive help; it is reviewed and published in version 17. The current assignment connects these accepted coves into the Journey. [Current task](../NEXT_TASK_JOURNEY_SIX_COVES.md) · [Project state](../docs/PROJECT_STATE.md)
 
 | Existing encounter | Planning decision | Why waiting or shuttling cannot remove it |
 | --- | --- | --- |

@@ -1,12 +1,26 @@
 # Last Ferry — The Long Tide
 
-## Current playable slice · 7 November 2026
+## Current direction · 10 November 2026
 
-The Journey follows Holding Pier, Bellwater Cove, Driftwood Yard and Wide Berth. After Driftwood, Nell launches the six-space ferry. The same shared family appears in the game, the launch illustration and the developer gallery. Existing saved scene boundaries, chapter IDs and completed rescues continue to describe the same places. Practice offers those four plus First Crossing, Two Shelters and Reef Return.
+The repaired six-space ferry, docks and Wide/Reef complexity received positive player feedback. Optional Tips is implemented and reviewed at `f23e9b087e80316c3884ed5fa83cce25cf6508a0`, published privately as version 17. The actual runtime Journey still has Holding, Bellwater, Driftwood and Wide; all seven Practice entries remain available.
 
-**Wide Berth** introduces the current at Beacon Reef. A safe place to wait is valuable, but the number of remaining trips home matters. **Reef Return** revisits that idea with an ordinary shallow entrance to Harbor as well as a deep tidal route. An early staging decision changes which side the ferry should use to reach the last waiting neighbor. The four-space Two Shelters puzzle received positive gameplay feedback. On 7 November the player accepted the repaired six-space boat, landings and both puzzles, saying the result feels good and complexity is increasing well. [Playable progression and proof](PUZZLE_PROGRESSION.md)
+**Current task: [JOURNEY_SIX_COVES_01](../NEXT_TASK_JOURNEY_SIX_COVES.md).** Connect existing accepted content as the first six coves of the twelve-cove target. This is authorized integration of existing puzzles, not an instruction to author a new encounter.
 
-The private Site now carries accepted game `8fc0d35f772af73adf06a9dff112b749cbad233a`, version 16. Both repairs keep their existing level identities. The current task is [OPTIONAL_TIPS_01](../NEXT_TASK_OPTIONAL_TIPS.md): predictive guidance Off by default, preserving factual information, actual outcomes and Undo. Expansion and rebalancing remain out of scope. [Publication and project state](../docs/PROJECT_STATE.md)
+| Position after integration | Cove / story role |
+| --- | --- |
+| 1 | Holding Pier — the first neighbors, small ferry and familiar shore |
+| 2 | Bellwater — loaded return and changing shore heights |
+| 3 | Driftwood Yard — Nell and purposeful temporary staging |
+| 4 | Two Shelters — choosing a temporary refuge with the small ferry |
+| Boundary | Existing A wider deck launch — Nell's prepared larger ferry |
+| 5 | Wide Berth — accepted mixed-load and current-window planning |
+| 6 | Reef Return — accepted delivery/approach composition beyond the headland |
+
+First Crossing stays independent Practice. Add compact illustrated entries for Two Shelters and Reef using the actual starting casts and established story language. Preserve all accepted puzzle data, art and Tips. This sequence has distinct rescued neighbors; do not move a rescued character back into danger.
+
+Older saves retain their earned identities and seen scenes. Deliberate Continue fills the first genuinely uncompleted cove in the revised order, with a clear explanation and the original record preserved. An old Wide completion does not imply Two Shelters completion and need not be replayed. See the task for the bounded compatibility policy.
+
+The new sequence supersedes the earlier C4 replacement/Wide-demotion proposal and the old C5-deer/C6-launch/C7-first-current schedule. A newcomer and later combinations may still serve the remaining six coves, but their exact order and puzzle designs are not commissioned here. The full story still aims toward the communal supper and “We saved you a place”; the six-cove endpoint must be honest about currently available content. [Project state](../docs/PROJECT_STATE.md) · [Playable progression](PUZZLE_PROGRESSION.md)
 
 ## Direction history and future proposals
 
