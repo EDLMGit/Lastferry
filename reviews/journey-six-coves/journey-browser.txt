@@ -1,0 +1,67 @@
+
+> last-ferry@1.0.0 test:e2e
+> playwright test --config .cache/journey-six.config.ts journey-six-coves.spec.ts
+
+
+Running 3 tests using 1 worker
+
+(node:30676) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\e2e\journey-six-coves.spec.ts:79:1 › fresh root Journey earns six rescues and the four-to-six-space launch (43.5s)
+  x  2 tests\e2e\journey-six-coves.spec.ts:120:3 › legacy Wide rescue to both authored scenes and actual continuation 390x844 (55.2s)
+(node:9088) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  3 tests\e2e\journey-six-coves.spec.ts:120:3 › legacy Wide rescue to both authored scenes and actual continuation 780x320 (54.6s)
+
+
+  1) tests\e2e\journey-six-coves.spec.ts:120:3 › legacy Wide rescue to both authored scenes and actual continuation 390x844 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+       at journey-six-support.ts:114
+
+      112 |   const beat = await capture('action');
+      113 |   expect(beat.before.elapsed).toBeLessThan(5400);
+    > 114 |   expect(beat.after.settled).toBe(false);
+          |                              ^
+      115 |   await expect.poll(async () => (await timeline(page)).settled, { timeout: 12000 }).toBe(true);
+      116 |   const end = await capture('end');
+      117 |   expect(end.before.elapsed).toBe(end.before.duration);
+        at inspectScene (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\journey-six-support.ts:114:30)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\journey-six-coves.spec.ts:149:7
+
+    Error Context: test-results\journey-six-evidence\journey-six-coves-legacy-W-0a0c8-actual-continuation-390x844\error-context.md
+
+  2) tests\e2e\journey-six-coves.spec.ts:120:3 › legacy Wide rescue to both authored scenes and actual continuation 780x320 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+       at journey-six-support.ts:114
+
+      112 |   const beat = await capture('action');
+      113 |   expect(beat.before.elapsed).toBeLessThan(5400);
+    > 114 |   expect(beat.after.settled).toBe(false);
+          |                              ^
+      115 |   await expect.poll(async () => (await timeline(page)).settled, { timeout: 12000 }).toBe(true);
+      116 |   const end = await capture('end');
+      117 |   expect(end.before.elapsed).toBe(end.before.duration);
+        at inspectScene (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\journey-six-support.ts:114:30)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\journey-six-coves.spec.ts:149:7
+
+    Error Context: test-results\journey-six-evidence\journey-six-coves-legacy-W-5c32b-actual-continuation-780x320\error-context.md
+
+  2 failed
+    tests\e2e\journey-six-coves.spec.ts:120:3 › legacy Wide rescue to both authored scenes and actual continuation 390x844 
+    tests\e2e\journey-six-coves.spec.ts:120:3 › legacy Wide rescue to both authored scenes and actual continuation 780x320 
+  1 passed (2.7m)
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+npm notice To update run: npm install -g npm@12.2.2
+npm notice

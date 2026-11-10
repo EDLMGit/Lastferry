@@ -1,5 +1,11 @@
 # Last Ferry asset provenance and history
 
+## Six-cove Journey
+
+The existing `story.illustrations` family has two original seven-second Canvas2D compositions. Among the reeds uses the small ferry, two beavers, a cream rabbit and a reed landing. Lights beyond the reef uses the larger occupied ferry and two separately grounded lights. Both have dedicated portrait and landscape staging. The gallery draws eight endpoints from the same production painter and registry.
+
+`ui.story-presentation` adds both handoffs and the six-cove endpoint. `ui.home-composition` identifies the next missing rescue for older saves. `audio.story-effects` supplies existing ferry-water and lantern-contact sounds at the authored scene beats. The inventory retains all 79 IDs. [Runtime scenes and phone evidence](../reviews/journey-six-coves/REVIEW.md) · [Inventory](../assets/catalog.json)
+
 ## Optional tips
 
 The existing shared dialog family now includes a remembered Tips Off/On preference. Its native controls, painted material and icons retain their sources. The developer gallery identifies its predictive warning specimen as Tips On. The catalog retains all 79 IDs and updates only `ui.dialogs` with the preference source and current evidence. [Review](../reviews/optional-tips/REVIEW.md)

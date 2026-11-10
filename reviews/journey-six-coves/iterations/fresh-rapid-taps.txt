@@ -1,0 +1,48 @@
+
+> last-ferry@1.0.0 test:e2e
+> playwright test --config .cache/journey-six.config.ts journey-six-coves.spec.ts --grep fresh root
+
+
+Running 1 test using 1 worker
+
+(node:18008) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\e2e\journey-six-coves.spec.ts:79:1 › fresh root Journey earns six rescues and the four-to-six-space launch (2.1s)
+
+
+  1) tests\e2e\journey-six-coves.spec.ts:79:1 › fresh root Journey earns six rescues and the four-to-six-space launch 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 2
+    + Received  + 2
+
+      Object {
+    -   "id": "holding-pier",
+    -   "kind": "cove",
+    +   "id": "opening",
+    +   "kind": "scene",
+      }
+
+       at journey-six-support.ts:52
+
+      50 |   expect(await state(page)).toEqual(initial(level));
+      51 |   expect(await campaign(page)).toMatchObject({ active: true, entry: 'journey', level: id });
+    > 52 |   expect((await campaign(page)).progress.record.checkpoint).toEqual({ kind: 'cove', id });
+         |                                                             ^
+      53 |   expect(await passive(page, () => (window as any).__LAST_FERRY__.getRenderStatus().historyLength)).toBe(0);
+      54 |   await expect(page.locator('#undo')).toBeDisabled();
+      55 |   await expect(page.locator('#load-toggle')).toContainText('/' + level.rules.capacity);
+        at startCheck (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\journey-six-support.ts:52:61)
+        at rescue (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\journey-six-support.ts:60:3)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\journey-six-coves.spec.ts:100:20
+
+    Error Context: test-results\journey-six-evidence\journey-six-coves-fresh-ro-8714d-he-four-to-six-space-launch\error-context.md
+
+  1 failed
+    tests\e2e\journey-six-coves.spec.ts:79:1 › fresh root Journey earns six rescues and the four-to-six-space launch 
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+npm notice To update run: npm install -g npm@12.2.2
+npm notice

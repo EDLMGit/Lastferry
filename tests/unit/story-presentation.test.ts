@@ -319,3 +319,29 @@ test('launch remains a finite shared-owner scene, paused or skipped without ackn
   presentation.update(50000);
   expect(presentation.frame.scene).toBeNull();
 });
+
+test.each([
+  ['among-the-reeds', ['ferry-water']],
+  ['lights-beyond-the-reef', ['ferry-water', 'lantern-contact']],
+] as const)('%s plays its finite cues once across Pause, then holds the final handoff', (scene, expectedCues) => {
+  const heard: string[] = [];
+  const presentation = new StoryPresentation(vi.fn(), vi.fn(), (_, cue) => heard.push(cue.kind));
+  presentation.start(scene, false, 0);
+  for (let t = 50; t <= 1600; t += 50) presentation.update(t);
+  expect(heard).toEqual(['ferry-water']);
+  presentation.pause();
+  presentation.update(12500);
+  expect(presentation.frame.elapsed).toBe(1600);
+  presentation.resume(false, 13000);
+  for (let t = 13050; t <= 22000; t += 50) presentation.update(t);
+  expect(heard).toEqual(expectedCues);
+  expect(presentation.frame).toMatchObject({ scene, final: true, settled: true, elapsed: 7000 });
+  expect(presentation.next(false)).toBe(false);
+  presentation.start(scene, true, 23000);
+  expect(presentation.frame).toMatchObject({ scene, captionVisible: true, elapsed: 7000 });
+  presentation.start(scene, false, 24000);
+  presentation.cancel();
+  presentation.update(24900);
+  expect(presentation.frame.scene).toBeNull();
+  expect(heard).toEqual(expectedCues);
+});

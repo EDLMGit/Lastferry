@@ -9,11 +9,11 @@ const sourceRevision = process.env.LAST_FERRY_LAUNCH_SOURCE_REV;
 const sourceBytes = (path: string) =>
   sourceRevision ? execFileSync('git', ['show', `${sourceRevision}:${path}`]) : readFileSync(path);
 
-const completion = {
+const pendingLaunch = {
   version: 1,
-  checkpoint: { kind: 'complete' },
-  completed: ['holding-pier', 'bellwater', 'driftwood-yard'],
-  acknowledgedScenes: ['opening', 'another-bell', 'driftwood-light'],
+  checkpoint: { kind: 'scene', id: 'a-wider-deck' },
+  completed: ['holding-pier', 'bellwater', 'driftwood-yard', 'two-shelters'],
+  acknowledgedScenes: ['opening', 'another-bell', 'driftwood-light', 'among-the-reeds'],
 };
 
 for (const size of [
@@ -41,12 +41,16 @@ for (const size of [
       ].map((p) => [p, createHash('sha256').update(sourceBytes(p)).digest('hex')]),
     );
     await page.addInitScript(
-      ({ key, completion }) => localStorage.setItem(key, JSON.stringify(completion)),
-      { key: journeyKey, completion },
+      ({ key, pendingLaunch }) => localStorage.setItem(key, JSON.stringify(pendingLaunch)),
+      { key: journeyKey, pendingLaunch },
     );
     await page.goto('/');
     await coldTouch(page, 'home-play');
+    await expect(page.locator('#story-continue')).toHaveText('Continue to Wide Berth');
+    await page.locator('#story-more > summary').tap();
+    await coldTouch(page, 'story-replay-scene');
     await coldTouch(page, 'story-pause');
+    await page.locator('#story-more > summary').tap();
     const status = () => passive(page, () => (window as any).__LAST_FERRY__.getStoryStatus());
     const observations: unknown[] = [];
     const first = await status();
@@ -86,7 +90,7 @@ for (const size of [
       JSON.stringify(
         {
           method:
-            'Actual root Home continuation from exact historical3 completion fixture; trusted Pause/Resume holds each real elapsed beat for native frame inspection. No scene-time injection. These held-frame captures complement the separate uninterrupted integrated recording; they are not continuous-motion evidence.',
+            'Actual root Home continuation after the Two Shelters rescue. Replay scene starts the restored launch from its beginning. Trusted Pause/Resume holds each real elapsed beat for native frame inspection.',
           source,
           sourceRevision: sourceRevision ?? 'current working tree',
           baseURL,

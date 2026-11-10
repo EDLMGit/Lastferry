@@ -2,6 +2,7 @@ import { describe, expect, test } from 'vitest';
 import {
   JourneyProgress,
   JOURNEY_STORAGE_KEY,
+  JOURNEY_LEGACY_BACKUP_KEY,
   acceptCove,
   acknowledgeScene,
   checkpointCove,
@@ -41,10 +42,28 @@ function checkpoints() {
   const second = acknowledgeScene(transition, 'another-bell');
   const yardEntry = acceptCove(second, 'bellwater', 'won');
   const third = acknowledgeScene(yardEntry, 'driftwood-light');
-  const launchEntry = acceptCove(third, 'driftwood-yard', 'won');
-  const fourth = acknowledgeScene(launchEntry, 'a-wider-deck');
-  const complete = acceptCove(fourth, 'wide-berth', 'won');
-  return { opening, holding, transition, second, yardEntry, third, launchEntry, fourth, complete };
+  const sheltersEntry = acceptCove(third, 'driftwood-yard', 'won');
+  const fourth = acknowledgeScene(sheltersEntry, 'among-the-reeds');
+  const launchEntry = acceptCove(fourth, 'two-shelters', 'won');
+  const fifth = acknowledgeScene(launchEntry, 'a-wider-deck');
+  const reefEntry = acceptCove(fifth, 'wide-berth', 'won');
+  const sixth = acknowledgeScene(reefEntry, 'lights-beyond-the-reef');
+  const complete = acceptCove(sixth, 'reef-return', 'won');
+  return {
+    opening,
+    holding,
+    transition,
+    second,
+    yardEntry,
+    third,
+    sheltersEntry,
+    fourth,
+    launchEntry,
+    fifth,
+    reefEntry,
+    sixth,
+    complete,
+  };
 }
 
 function memory(raw: string | null = null) {
@@ -84,16 +103,19 @@ describe('authored story registry', () => {
       });
     }
   });
-  test('four authored story puzzles are registered, with First Crossing practice separate', () => {
+  test('six authored story puzzles are registered, with First Crossing practice separate', () => {
     expect(storyCoves.map(({ id, order }) => [id, order])).toEqual([
       ['holding-pier', 0],
       ['bellwater', 1],
       ['driftwood-yard', 2],
-      ['wide-berth', 3],
+      ['two-shelters', 3],
+      ['wide-berth', 4],
+      ['reef-return', 5],
     ]);
     expect(storyCove('holding-pier')?.level).toBe(holdingPier);
     expect(storyCove('bellwater')?.level).toBe(bellwater);
     expect(storyCove('driftwood-yard')?.level).toBe(driftwoodYard);
+    expect(storyCove('two-shelters')?.level).toBe(twoShelters);
     expect(storyCove('wide-berth')?.level).toBe(wideBerth);
     expect(storyCove('first-crossing')).toBeUndefined();
     expect(practiceCoves).toEqual([
@@ -106,7 +128,8 @@ describe('authored story registry', () => {
       reefReturn,
     ]);
     expect(practiceCove('reef-return')).toBe(reefReturn);
-    expect(storyCove('reef-return')).toBeUndefined();
+    expect(storyCove('reef-return')?.level).toBe(reefReturn);
+    expect(storyCoves.map(({ level }) => level.rules.capacity)).toEqual([4, 4, 4, 4, 6, 6]);
     expect(practiceCove('first-crossing')).toBe(firstCrossing);
     expect(practiceCove('future-cove')).toBeUndefined();
     expect(storyCove('future-cove')).toBeUndefined();
@@ -120,7 +143,9 @@ describe('authored story registry', () => {
       'opening',
       'another-bell',
       'driftwood-light',
+      'among-the-reeds',
       'a-wider-deck',
+      'lights-beyond-the-reef',
     ]);
     expect(storyScenes.opening.shots.map((shot) => shot.caption)).toEqual([
       'Your first evening at the helm.\nA high tide ahead.',
@@ -138,7 +163,7 @@ describe('authored story registry', () => {
 });
 
 describe('journey checkpoint transactions', () => {
-  test('all nine checkpoints round-trip with coherent accepted completions and scene acknowledgments', () => {
+  test('all thirteen checkpoints round-trip with coherent accepted completions and scene acknowledgments', () => {
     const records = Object.values(checkpoints());
     expect(records.map(checkpointCove)).toEqual([
       'holding-pier',
@@ -147,9 +172,13 @@ describe('journey checkpoint transactions', () => {
       'bellwater',
       'driftwood-yard',
       'driftwood-yard',
+      'two-shelters',
+      'two-shelters',
       'wide-berth',
       'wide-berth',
-      'wide-berth',
+      'reef-return',
+      'reef-return',
+      'reef-return',
     ]);
     for (const record of records) {
       expect(validateJourney(record)).toEqual({ valid: true, record });
@@ -175,7 +204,7 @@ describe('journey checkpoint transactions', () => {
     });
     expect(records[6]).toEqual({
       version: 1,
-      checkpoint: { kind: 'scene', id: 'a-wider-deck' },
+      checkpoint: { kind: 'scene', id: 'among-the-reeds' },
       completed: ['holding-pier', 'bellwater', 'driftwood-yard'],
       acknowledgedScenes: ['opening', 'another-bell', 'driftwood-light'],
     });
@@ -347,12 +376,17 @@ describe('validated local journey storage', () => {
     expect(backing.writes.length).toBe(3);
     expect(endpoint.acknowledge('driftwood-light')).toBe(true);
     expect(endpoint.accept('driftwood-yard', 'won')).toBe(true);
-    expect(endpoint.snapshot.record).toEqual(checkpoints().launchEntry);
+    expect(endpoint.snapshot.record).toEqual(checkpoints().sheltersEntry);
     expect(backing.writes.length).toBe(5);
+    expect(endpoint.acknowledge('among-the-reeds')).toBe(true);
+    expect(endpoint.accept('two-shelters', 'won')).toBe(true);
+    expect(endpoint.snapshot.record).toEqual(checkpoints().launchEntry);
     expect(endpoint.acknowledge('a-wider-deck')).toBe(true);
     expect(endpoint.accept('wide-berth', 'won')).toBe(true);
+    expect(endpoint.acknowledge('lights-beyond-the-reef')).toBe(true);
+    expect(endpoint.accept('reef-return', 'won')).toBe(true);
     expect(endpoint.snapshot.record).toEqual(checkpoints().complete);
-    expect(backing.writes.length).toBe(7);
+    expect(backing.writes.length).toBe(11);
   });
 
   test('snapshots cannot mutate stored progress behind validation', () => {
@@ -393,8 +427,12 @@ describe('validated local journey storage', () => {
       expect(progress.accept('bellwater', 'won')).toBe(true);
       expect(progress.acknowledge('driftwood-light')).toBe(true);
       expect(progress.accept('driftwood-yard', 'won')).toBe(true);
+      expect(progress.acknowledge('among-the-reeds')).toBe(true);
+      expect(progress.accept('two-shelters', 'won')).toBe(true);
       expect(progress.acknowledge('a-wider-deck')).toBe(true);
       expect(progress.accept('wide-berth', 'won')).toBe(true);
+      expect(progress.acknowledge('lights-beyond-the-reef')).toBe(true);
+      expect(progress.accept('reef-return', 'won')).toBe(true);
       expect(progress.snapshot.record).toEqual(checkpoints().complete);
       expect(backing.values.get(JOURNEY_STORAGE_KEY)).toBeUndefined();
       expect(backing.values.get('last-ferry.sound')).toBe('muted');
@@ -447,6 +485,7 @@ describe('narrow two-cove completion compatibility', () => {
     expect(progress.continueAvailableContent()).toBe(false);
     expect(progress.snapshot.record).toEqual(checkpoints().yardEntry);
     expect(backing.writes).toEqual([
+      [JOURNEY_LEGACY_BACKUP_KEY, raw],
       [JOURNEY_STORAGE_KEY, JSON.stringify(checkpoints().yardEntry)],
     ]);
     const restored = new JourneyProgress(() => backing.storage);
@@ -455,7 +494,7 @@ describe('narrow two-cove completion compatibility', () => {
     expect(restored.acknowledge('driftwood-light')).toBe(true);
     expect(restored.snapshot.record).toEqual(checkpoints().third);
     expect(restored.accept('driftwood-yard', 'won')).toBe(true);
-    expect(restored.snapshot.record).toEqual(checkpoints().launchEntry);
+    expect(restored.snapshot.record).toEqual(checkpoints().sheltersEntry);
     expect(restored.accept('driftwood-yard', 'won')).toBe(false);
     expect(restored.continueAvailableContent()).toBe(false);
   });
@@ -506,7 +545,7 @@ describe('both exact historical boundaries and current completed world', () => {
     completed: ['holding-pier', 'bellwater', 'driftwood-yard'],
     acknowledgedScenes: ['opening', 'another-bell', 'driftwood-light'],
   };
-  test('three-cove completion remains byte-preserving, then begins launch exactly once', () => {
+  test('three-cove completion begins Two Shelters, then the unseen launch exactly once', () => {
     const raw = JSON.stringify(third, null, 2),
       backing = memory(raw),
       progress = new JourneyProgress(() => backing.storage);
@@ -514,23 +553,26 @@ describe('both exact historical boundaries and current completed world', () => {
     expect(progress.snapshot.record).toEqual(third);
     expect(backing.writes).toEqual([]);
     expect(checkpointCove(third)).toBe('driftwood-yard');
-    expect(legacyContinuationScene(third)).toBe('a-wider-deck');
+    expect(legacyContinuationScene(third)).toBe('among-the-reeds');
     expect(progress.acknowledge('a-wider-deck')).toBe(false);
     expect(progress.accept('wide-berth', 'won')).toBe(false);
     expect(progress.continueAvailableContent()).toBe(true);
-    expect(progress.snapshot.record).toEqual(checkpoints().launchEntry);
+    expect(progress.snapshot.record).toEqual(checkpoints().sheltersEntry);
     expect(progress.continueAvailableContent()).toBe(false);
-    expect(backing.writes).toHaveLength(1);
+    expect(backing.writes).toHaveLength(2);
+    expect(backing.values.get(JOURNEY_LEGACY_BACKUP_KEY)).toBe(raw);
     const restored = new JourneyProgress(() => backing.storage);
-    expect(restored.snapshot.record).toEqual(checkpoints().launchEntry);
+    expect(restored.snapshot.record).toEqual(checkpoints().sheltersEntry);
     expect(restored.continueAvailableContent()).toBe(false);
+    expect(restored.acknowledge('among-the-reeds')).toBe(true);
+    expect(restored.accept('two-shelters', 'won')).toBe(true);
     expect(restored.acknowledge('a-wider-deck')).toBe(true);
     expect(restored.acknowledge('a-wider-deck')).toBe(false);
-    expect(restored.snapshot.record).toEqual(checkpoints().fourth);
+    expect(restored.snapshot.record).toEqual(checkpoints().fifth);
     expect(restored.accept('wide-berth', 'won')).toBe(true);
-    expect(restored.snapshot.record).toEqual(checkpoints().complete);
+    expect(restored.snapshot.record).toEqual(checkpoints().reefEntry);
     expect(legacyContinuationScene(restored.snapshot.record)).toBeNull();
-    expect(checkpointCove(restored.snapshot.record!)).toBe('wide-berth');
+    expect(checkpointCove(restored.snapshot.record!)).toBe('reef-return');
     expect(restored.continueAvailableContent()).toBe(false);
   });
   test.each([
@@ -561,13 +603,15 @@ describe('both exact historical boundaries and current completed world', () => {
         },
       }));
     expect(progress.continueAvailableContent()).toBe(true);
-    expect(progress.snapshot.record).toEqual(checkpoints().launchEntry);
+    expect(progress.snapshot.record).toEqual(checkpoints().sheltersEntry);
     expect(progress.snapshot.persistent).toBe(false);
     expect(progress.snapshot.issue).toContain('will not survive closing');
     expect(backing.values.get(JOURNEY_STORAGE_KEY)).toBe(raw);
+    expect(progress.acknowledge('among-the-reeds')).toBe(true);
+    expect(progress.accept('two-shelters', 'won')).toBe(true);
     expect(progress.acknowledge('a-wider-deck')).toBe(true);
     expect(progress.accept('wide-berth', 'won')).toBe(true);
-    expect(progress.snapshot.record).toEqual(checkpoints().complete);
+    expect(progress.snapshot.record).toEqual(checkpoints().reefEntry);
     expect(backing.values.get('last-ferry.sound')).toBe('muted');
     expect(backing.values.get('last-ferry.motion')).toBe('reduced');
   });
@@ -575,7 +619,9 @@ describe('both exact historical boundaries and current completed world', () => {
     expect(scenePredecessor('opening')).toBe(holdingPier);
     expect(scenePredecessor('another-bell')).toBe(holdingPier);
     expect(scenePredecessor('driftwood-light')).toBe(bellwater);
-    expect(scenePredecessor('a-wider-deck')).toBe(driftwoodYard);
+    expect(scenePredecessor('among-the-reeds')).toBe(driftwoodYard);
+    expect(scenePredecessor('a-wider-deck')).toBe(twoShelters);
+    expect(scenePredecessor('lights-beyond-the-reef')).toBe(wideBerth);
     expect(
       checkpointCove({
         ...third,
@@ -585,5 +631,167 @@ describe('both exact historical boundaries and current completed world', () => {
     ).toBe('bellwater');
     expect(checkpointCove(third)).toBe('driftwood-yard');
     expect(validateJourney(checkpoints().complete).valid).toBe(true);
+  });
+});
+
+describe('the previous route through Wide Berth', () => {
+  const beforeLaunch: JourneyRecord = {
+    version: 1,
+    checkpoint: { kind: 'scene', id: 'a-wider-deck' },
+    completed: ['holding-pier', 'bellwater', 'driftwood-yard'],
+    acknowledgedScenes: ['opening', 'another-bell', 'driftwood-light'],
+  };
+  const activeWide: JourneyRecord = {
+    ...beforeLaunch,
+    checkpoint: { kind: 'cove', id: 'wide-berth' },
+    acknowledgedScenes: [...beforeLaunch.acknowledgedScenes, 'a-wider-deck'],
+  };
+  const completedWide: JourneyRecord = {
+    ...activeWide,
+    checkpoint: { kind: 'complete' },
+    completed: [...activeWide.completed, 'wide-berth'],
+  };
+  const route = checkpoints();
+
+  test.each([
+    ['pending launch', beforeLaunch, route.launchEntry],
+    ['active Wide', activeWide, route.fifth],
+    ['completed Wide', completedWide, route.reefEntry],
+  ] as const)(
+    '%s keeps earned identities across Continue, reload and the new rescue',
+    (_, original, afterShelters) => {
+      const raw = '\n' + JSON.stringify(original, null, 2) + '\n';
+      const backing = memory(raw);
+      const old = new JourneyProgress(() => backing.storage);
+      expect(old.snapshot).toMatchObject({ kind: 'valid', raw, record: original });
+      expect(old.acknowledge('a-wider-deck')).toBe(false);
+      expect(old.accept('wide-berth', 'won')).toBe(false);
+      expect(backing.writes).toEqual([]);
+      expect(old.continueAvailableContent()).toBe(true);
+      expect(old.continueAvailableContent()).toBe(false);
+      expect(backing.writes[0]).toEqual([JOURNEY_LEGACY_BACKUP_KEY, raw]);
+      expect(old.snapshot.record).toMatchObject({
+        checkpoint: { kind: 'scene', id: 'among-the-reeds' },
+        completed: original.completed,
+        acknowledgedScenes: original.acknowledgedScenes,
+      });
+      const resumed = new JourneyProgress(() => backing.storage);
+      expect(resumed.snapshot.record).toEqual(old.snapshot.record);
+      expect(resumed.continueAvailableContent()).toBe(false);
+      expect(resumed.acknowledge('among-the-reeds')).toBe(true);
+      const playing = new JourneyProgress(() => backing.storage);
+      expect(playing.snapshot.record).toEqual(resumed.snapshot.record);
+      expect(playing.accept('two-shelters', 'playing')).toBe(false);
+      expect(playing.accept('two-shelters', 'won')).toBe(true);
+      expect(playing.snapshot.record).toEqual(afterShelters);
+      expect(new JourneyProgress(() => backing.storage).snapshot.record).toEqual(afterShelters);
+      expect(backing.values.get(JOURNEY_LEGACY_BACKUP_KEY)).toBe(raw);
+    },
+  );
+
+  test.each(['backup throws', 'backup silently fails', 'primary throws', 'primary silently fails'])(
+    '%s leaves original storage intact and the entire continuation playable in memory',
+    (failure) => {
+      const raw = JSON.stringify(activeWide, null, 2);
+      const backing = memory(raw);
+      const progress = new JourneyProgress(() => ({
+        getItem: backing.storage.getItem,
+        setItem(key, value) {
+          const failingKey = failure.startsWith('backup')
+            ? JOURNEY_LEGACY_BACKUP_KEY
+            : JOURNEY_STORAGE_KEY;
+          if (key === failingKey) {
+            if (failure.endsWith('throws')) throw new Error('Storage unavailable');
+            return;
+          }
+          backing.storage.setItem(key, value);
+        },
+      }));
+      expect(progress.continueAvailableContent()).toBe(true);
+      expect(progress.snapshot.persistent).toBe(false);
+      expect(progress.snapshot.issue).toContain('will not survive closing');
+      expect(progress.acknowledge('among-the-reeds')).toBe(true);
+      expect(progress.accept('two-shelters', 'won')).toBe(true);
+      expect(progress.snapshot.record).toEqual(route.fifth);
+      expect(backing.values.get(JOURNEY_STORAGE_KEY)).toBe(raw);
+      expect(new JourneyProgress(() => backing.storage).snapshot.record).toEqual(activeWide);
+    },
+  );
+
+  test('a different prior backup or newer live checkpoint cannot be overwritten', () => {
+    const raw = JSON.stringify(completedWide, null, 2);
+    const backing = memory(raw);
+    backing.values.set(JOURNEY_LEGACY_BACKUP_KEY, JSON.stringify(activeWide));
+    const progress = new JourneyProgress(() => backing.storage);
+    expect(progress.continueAvailableContent()).toBe(true);
+    expect(backing.values.get(JOURNEY_LEGACY_BACKUP_KEY)).toBe(JSON.stringify(activeWide));
+    expect(backing.values.get(JOURNEY_LEGACY_BACKUP_KEY + '.2')).toBe(raw);
+
+    backing.values.set(JOURNEY_STORAGE_KEY, raw);
+    const outstanding = new JourneyProgress(() => backing.storage);
+    const newer = JSON.stringify(route.sixth);
+    backing.values.set(JOURNEY_STORAGE_KEY, newer);
+    expect(outstanding.continueAvailableContent()).toBe(true);
+    expect(outstanding.snapshot.persistent).toBe(false);
+    expect(backing.values.get(JOURNEY_STORAGE_KEY)).toBe(newer);
+  });
+
+  test('early scene and cove checkpoints keep their exact place and original bytes', () => {
+    for (const record of [
+      route.opening,
+      route.holding,
+      route.transition,
+      route.second,
+      route.yardEntry,
+      route.third,
+    ]) {
+      const raw = JSON.stringify(record, null, 2);
+      const backing = memory(raw);
+      const progress = new JourneyProgress(() => backing.storage);
+      expect(progress.snapshot.record).toEqual(record);
+      expect(progress.continueAvailableContent()).toBe(false);
+      expect(backing.writes).toEqual([]);
+      expect(backing.values.get(JOURNEY_STORAGE_KEY)).toBe(raw);
+    }
+  });
+
+  test('a live checkpoint changed while its backup is written wins over a stale Continue', () => {
+    const raw = JSON.stringify(completedWide);
+    const newer = JSON.stringify(route.sixth);
+    const backing = memory(raw);
+    const progress = new JourneyProgress(() => ({
+      getItem: backing.storage.getItem,
+      setItem(key, value) {
+        backing.storage.setItem(key, value);
+        if (key === JOURNEY_LEGACY_BACKUP_KEY) backing.values.set(JOURNEY_STORAGE_KEY, newer);
+      },
+    }));
+    expect(progress.continueAvailableContent()).toBe(true);
+    expect(progress.snapshot.persistent).toBe(false);
+    expect(progress.snapshot.record?.checkpoint).toEqual({ kind: 'scene', id: 'among-the-reeds' });
+    expect(backing.values.get(JOURNEY_STORAGE_KEY)).toBe(newer);
+    expect(backing.writes).toEqual([[JOURNEY_LEGACY_BACKUP_KEY, raw]]);
+  });
+
+  test.each([
+    { ...activeWide, completed: [...activeWide.completed, 'reef-return'] },
+    { ...completedWide, acknowledgedScenes: beforeLaunch.acknowledgedScenes },
+    { ...route.sheltersEntry, completed: completedWide.completed },
+    {
+      ...route.fourth,
+      completed: [...activeWide.completed, 'reef-return'],
+      acknowledgedScenes: route.fifth.acknowledgedScenes,
+    },
+    {
+      ...route.sheltersEntry,
+      acknowledgedScenes: [...beforeLaunch.acknowledgedScenes, 'lights-beyond-the-reef'],
+    },
+    { ...beforeLaunch, checkpoint: { kind: 'scene', id: 'a-wider-deck', turn: 3 } },
+  ])('rejects invented earned rescues, acknowledgments or checkpoints', (record) => {
+    const backing = memory(JSON.stringify(record));
+    const progress = new JourneyProgress(() => backing.storage);
+    expect(progress.snapshot.kind).toBe('invalid');
+    expect(progress.continueAvailableContent()).toBe(false);
+    expect(backing.writes).toEqual([]);
   });
 });

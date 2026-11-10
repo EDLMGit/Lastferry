@@ -1,6 +1,7 @@
 import { storyCoves, storyScenes, type CoveId, type SceneId } from './registry';
 
 export const JOURNEY_STORAGE_KEY = 'last-ferry.journey.v1';
+export const JOURNEY_LEGACY_BACKUP_KEY = JOURNEY_STORAGE_KEY + '.before-six-coves';
 export const checkpointCopy = 'Progress is saved between coves. An unfinished cove starts again.';
 export const unavailableCopy =
   'Progress cannot be saved on this device. You can keep playing, but this journey will not survive closing.';
@@ -55,38 +56,52 @@ function sameItems(value: unknown, expected: readonly string[]): boolean {
   );
 }
 
-const historicalCompletions = [
-  {
-    completed: ['holding-pier', 'bellwater'],
-    scenes: ['opening', 'another-bell'],
-    next: 'driftwood-light',
-  },
-  {
-    completed: ['holding-pier', 'bellwater', 'driftwood-yard'],
-    scenes: ['opening', 'another-bell', 'driftwood-light'],
-    next: 'a-wider-deck',
-  },
-] as const;
+const earlyCoves = ['holding-pier', 'bellwater'];
+const earlyScenes = ['opening', 'another-bell'];
+const throughDriftwood = [...earlyCoves, 'driftwood-yard'];
+const throughYardScene = [...earlyScenes, 'driftwood-light'];
 
 export function legacyContinuationScene(value: unknown): SceneId | null {
   if (
     !keys(value, ['version', 'checkpoint', 'completed', 'acknowledgedScenes']) ||
-    value.version !== 1 ||
-    !keys(value.checkpoint, ['kind']) ||
-    value.checkpoint.kind !== 'complete'
+    value.version !== 1
   )
     return null;
-  return (
-    historicalCompletions.find(
-      (boundary) =>
-        sameItems(value.completed, boundary.completed) &&
-        sameItems(value.acknowledgedScenes, boundary.scenes),
-    )?.next ?? null
-  );
+  const checkpoint = value.checkpoint;
+  const complete = keys(checkpoint, ['kind']) && checkpoint.kind === 'complete';
+  const named = keys(checkpoint, ['kind', 'id']);
+  const pendingLaunch = named && checkpoint.kind === 'scene' && checkpoint.id === 'a-wider-deck';
+  const activeWide = named && checkpoint.kind === 'cove' && checkpoint.id === 'wide-berth';
+  if (
+    complete &&
+    sameItems(value.completed, earlyCoves) &&
+    sameItems(value.acknowledgedScenes, earlyScenes)
+  ) {
+    return 'driftwood-light';
+  }
+  const rescuedThree = sameItems(value.completed, throughDriftwood);
+  if (
+    (complete || pendingLaunch) &&
+    rescuedThree &&
+    sameItems(value.acknowledgedScenes, throughYardScene)
+  ) {
+    return 'among-the-reeds';
+  }
+  const rescuedFour = sameItems(value.completed, [...throughDriftwood, 'wide-berth']);
+  if (
+    ((activeWide && rescuedThree) || (complete && rescuedFour)) &&
+    sameItems(value.acknowledgedScenes, [...throughYardScene, 'a-wider-deck'])
+  ) {
+    return 'among-the-reeds';
+  }
+  return null;
 }
 
 export function isLegacyCompletion(value: unknown): value is JourneyRecord {
-  return legacyContinuationScene(value) !== null;
+  return (
+    legacyContinuationScene(value) !== null &&
+    (value as JourneyRecord).checkpoint.kind === 'complete'
+  );
 }
 
 export function newJourney(): JourneyRecord {
@@ -99,7 +114,7 @@ export function newJourney(): JourneyRecord {
 }
 
 export function validateJourney(value: unknown): JourneyValidation {
-  if (isLegacyCompletion(value)) return { valid: true, record: copy(value) };
+  if (legacyContinuationScene(value)) return { valid: true, record: copy(value as JourneyRecord) };
   if (value !== null && typeof value === 'object' && 'version' in value && value.version !== 1) {
     return {
       valid: false,
@@ -138,21 +153,24 @@ export function validateJourney(value: unknown): JourneyValidation {
   }
   for (let i = 0; i < storyCoves.length; i++) {
     const cove = storyCoves[i];
-    const previous = storyCoves.slice(0, i);
-    if (
-      !keys(checkpoint, ['kind', 'id']) ||
-      !sameItems(
-        value.completed,
-        previous.map((entry) => entry.id),
-      )
-    )
-      continue;
+    if (!keys(checkpoint, ['kind', 'id'])) continue;
     const pending = checkpoint.kind === 'scene' && checkpoint.id === cove.entryScene;
     const playing = checkpoint.kind === 'cove' && checkpoint.id === cove.id;
-    const acknowledged = (pending ? previous : storyCoves.slice(0, i + 1)).map(
-      (entry) => entry.entryScene,
-    );
-    if ((pending || playing) && sameItems(value.acknowledgedScenes, acknowledged)) {
+    if (!pending && !playing) continue;
+    const completed = storyCoves.slice(0, i).map((entry) => entry.id);
+    const acknowledged = storyCoves.slice(0, playing ? i + 1 : i).map((entry) => entry.entryScene);
+    if (
+      sameItems(value.completed, completed) &&
+      sameItems(value.acknowledgedScenes, acknowledged)
+    ) {
+      return { valid: true, record: copy(value as JourneyRecord) };
+    }
+    if (
+      cove.id === 'two-shelters' &&
+      sameItems(value.acknowledgedScenes, [...acknowledged, 'a-wider-deck']) &&
+      (sameItems(value.completed, completed) ||
+        sameItems(value.completed, [...completed, 'wide-berth']))
+    ) {
       return { valid: true, record: copy(value as JourneyRecord) };
     }
   }
@@ -178,6 +196,7 @@ export function parseJourney(raw: string): JourneyValidation {
 export function acknowledgeScene(record: JourneyRecord, id: SceneId): JourneyRecord {
   if (
     !validateJourney(record).valid ||
+    legacyContinuationScene(record) ||
     record.checkpoint.kind !== 'scene' ||
     record.checkpoint.id !== id
   )
@@ -185,24 +204,35 @@ export function acknowledgeScene(record: JourneyRecord, id: SceneId): JourneyRec
   return {
     ...copy(record),
     checkpoint: { kind: 'cove', id: storyScenes[id].destination },
-    acknowledgedScenes: [...record.acknowledgedScenes, id],
+    acknowledgedScenes: storyCoves
+      .map((cove) => cove.entryScene)
+      .filter((scene) => scene === id || record.acknowledgedScenes.includes(scene)),
   };
 }
 
 export function acceptCove(record: JourneyRecord, id: CoveId, status: string): JourneyRecord {
   if (
     !validateJourney(record).valid ||
+    legacyContinuationScene(record) ||
     status !== 'won' ||
     record.checkpoint.kind !== 'cove' ||
     record.checkpoint.id !== id
   )
     return record;
-  const index = storyCoves.findIndex((cove) => cove.id === id);
-  const next = storyCoves[index + 1];
+  const completed = storyCoves
+    .map((cove) => cove.id)
+    .filter((coveId) => coveId === id || record.completed.includes(coveId));
+  const next = storyCoves.find((cove) => !completed.includes(cove.id));
+  let checkpoint: JourneyCheckpoint = { kind: 'complete' };
+  if (next) {
+    checkpoint = record.acknowledgedScenes.includes(next.entryScene)
+      ? { kind: 'cove', id: next.id }
+      : { kind: 'scene', id: next.entryScene };
+  }
   return {
     ...copy(record),
-    completed: [...record.completed, id],
-    checkpoint: next ? { kind: 'scene', id: next.entryScene } : { kind: 'complete' },
+    completed,
+    checkpoint,
   };
 }
 
@@ -250,8 +280,8 @@ export class JourneyProgress {
   continueAvailableContent(): boolean {
     const record = this.current.record;
     const nextScene = legacyContinuationScene(record);
-    if (!record || !nextScene) return false;
-    this.save({ ...copy(record), checkpoint: { kind: 'scene', id: nextScene } });
+    if (!record || !nextScene || this.current.raw === null) return false;
+    this.save({ ...copy(record), checkpoint: { kind: 'scene', id: nextScene } }, this.current.raw);
     return true;
   }
 
@@ -273,12 +303,31 @@ export class JourneyProgress {
     return true;
   }
 
-  private save(record: JourneyRecord) {
+  private save(record: JourneyRecord, previousRoute?: string) {
     const raw = JSON.stringify(record);
     let persistent = this.current.persistent;
     try {
       if (!this.storage) throw new Error('Storage unavailable');
+      if (previousRoute !== undefined) {
+        if (this.storage.getItem(JOURNEY_STORAGE_KEY) !== previousRoute)
+          throw new Error('Checkpoint changed');
+        let key = JOURNEY_LEGACY_BACKUP_KEY;
+        let saved = this.storage.getItem(key);
+        for (let slot = 2; saved !== null && saved !== previousRoute; slot++) {
+          key = JOURNEY_LEGACY_BACKUP_KEY + '.' + slot;
+          saved = this.storage.getItem(key);
+        }
+        if (saved === null) {
+          this.storage.setItem(key, previousRoute);
+          if (this.storage.getItem(key) !== previousRoute) throw new Error('Backup unavailable');
+        }
+        if (this.storage.getItem(JOURNEY_STORAGE_KEY) !== previousRoute)
+          throw new Error('Checkpoint changed during backup');
+      }
       this.storage.setItem(JOURNEY_STORAGE_KEY, raw);
+      if (previousRoute !== undefined && this.storage.getItem(JOURNEY_STORAGE_KEY) !== raw) {
+        throw new Error('Checkpoint unavailable');
+      }
     } catch {
       persistent = false;
       this.storage = null;

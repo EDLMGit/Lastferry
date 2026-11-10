@@ -1,10 +1,10 @@
 # Puzzle progression — selected campaign direction
 
-## Current task — connect six accepted puzzles · 10 November 2026
+## Implemented six-cove progression
 
 [JOURNEY_SIX_COVES_01](../NEXT_TASK_JOURNEY_SIX_COVES.md) connects Holding → Bellwater → Driftwood → Two Shelters → launch → Wide → Reef. The first four use the small ferry; the last two use the accepted larger ferry. Preserve all existing level data, rules and witnesses. No new difficulty design is required in this pass. Optional Tips is already implemented and published at game `f23e9b087e80316c3884ed5fa83cce25cf6508a0`, private Site version 17.
 
-The current runtime still has a four-cove Journey and seven Practice entries. This assignment makes Two Shelters and Reef part of the Journey without inventing another puzzle. First Crossing stays Practice. Preserve earned completion by identity through explicit continuation; a legacy Wide completion remains earned even while the newly inserted Two Shelters is uncompleted. The root task defines the save cases. Later coves 7–12 remain provisional; the old numbered roadmap below is historical and must not override the six-cove integration.
+Two Shelters is the fourth Journey cove, Wide Berth the fifth and Reef Return the sixth. All seven Practice entries remain available. Explicit continuation from an old save resumes the first missing rescue by identity. The already-seen launch and any earlier Wide rescue keep their credit. The roadmap below records earlier planning for the twelve-cove target.
 
 ## Existing coves accepted · 7 November 2026
 
@@ -15,8 +15,8 @@ The four-cove Journey runs Holding → Bellwater → Driftwood → Wide. First C
 
 | Existing encounter | Planning decision | Why waiting or shuttling cannot remove it |
 | --- | --- | --- |
-| **Wide Berth**, Journey chapter 4 and Practice | Split eight spaces across two homeward opportunities. Decide which two spaces go first and whether to approach the second landing inshore or by Outer Buoy. | High Quay is safe. Beacon Reef reverses and the final trip holds six. Outer Buoy stays on the offshore side. |
-| **Reef Return**, Practice | Decide at the first unloading whether the boat can gather both rabbits through the shoal or must take a heavier group home first, then approach the remaining pickup from Harbor. | The four neighbors can fit on one boat. That loaded boat cannot use the shallow alternative at high tide, and the outer landings flood. A split delivery uses the alternate route for a light return. |
+| **Wide Berth**, Journey chapter 5 and Practice | Split eight spaces across two homeward opportunities. Decide which two spaces go first and whether to approach the second landing inshore or by Outer Buoy. | High Quay is safe. Beacon Reef reverses and the final trip holds six. |
+| **Reef Return**, Journey chapter 6 and Practice | Decide at the first unloading whether to gather both rabbits through the shoal or deliver the heavier group first. | The four neighbors fit on the boat. That loaded boat cannot use the shallow alternative at high tide, and the outer landings flood. |
 
 These puzzles share the larger ferry, existing movement rules and visible tide schedule. Wide asks how many spaces to reserve for each crossing. Reef asks which landing to approach from which side *after* an earlier loading choice. Both decisions use automatic seats and full in-session Undo. The production witnesses and alternative-plan checks belong in the developer reviews. [Wide decision](../reviews/existing-coves-repair/WIDE_DESIGN.md) · [Reef decision](../reviews/existing-coves-repair/REEF_DESIGN.md)
 

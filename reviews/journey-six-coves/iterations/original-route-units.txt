@@ -1,0 +1,2002 @@
+
+> last-ferry@1.0.0 test:unit
+> vitest run tests/unit/story-progress.test.ts tests/unit/two-shelters-practice.test.ts --maxWorkers=1 --reporter=dot
+
+
+ RUN  v5.0.5 C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry
+
+·xxx·················x·xxx··x·········x·······xxx····x····
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 13 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/story-progress.test.ts > authored story registry > four authored story puzzles are registered, with First Crossing practice separate
+AssertionError: expected [ [ 'holding-pier', +0 ], …(5) ] to deeply equal [ [ 'holding-pier', +0 ], …(3) ]
+
+- Expected
++ Received
+
+@@ -10,9 +10,17 @@
+    [
+      "driftwood-yard",
+      2,
+    ],
+    [
++     "two-shelters",
++     3,
++   ],
++   [
+      "wide-berth",
+-     3,
++     4,
++   ],
++   [
++     "reef-return",
++     5,
+    ],
+  ]
+
+ ❯ tests/unit/story-progress.test.ts:88:60
+     86|   });
+     87|   test('four authored story puzzles are registered, with First Crossin…
+     88|     expect(storyCoves.map(({ id, order }) => [id, order])).toEqual([
+       |                                                            ^
+     89|       ['holding-pier', 0],
+     90|       ['bellwater', 1],
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/13]⎯
+
+ FAIL  tests/unit/story-progress.test.ts > authored story registry > all opening copy and the connective beat remain available without sound or motion
+AssertionError: expected [ 'opening', 'another-bell', …(4) ] to deeply equal [ 'opening', 'another-bell', …(2) ]
+
+- Expected
++ Received
+
+  [
+    "opening",
+    "another-bell",
+    "driftwood-light",
++   "among-the-reeds",
+    "a-wider-deck",
++   "lights-beyond-the-reef",
+  ]
+
+ ❯ tests/unit/story-progress.test.ts:119:38
+    117|
+    118|   test('all opening copy and the connective beat remain available with…
+    119|     expect(Object.keys(storyScenes)).toEqual([
+       |                                      ^
+    120|       'opening',
+    121|       'another-bell',
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/13]⎯
+
+ FAIL  tests/unit/story-progress.test.ts > journey checkpoint transactions > all nine checkpoints round-trip with coherent accepted completions and scene acknowledgments
+AssertionError: expected [ Array(9) ] to deeply equal [ Array(9) ]
+
+- Expected
++ Received
+
+@@ -3,9 +3,9 @@
+    "holding-pier",
+    "bellwater",
+    "bellwater",
+    "driftwood-yard",
+    "driftwood-yard",
+-   "wide-berth",
+-   "wide-berth",
+-   "wide-berth",
++   "two-shelters",
++   "two-shelters",
++   "two-shelters",
+  ]
+
+ ❯ tests/unit/story-progress.test.ts:143:41
+    141|   test('all nine checkpoints round-trip with coherent accepted complet…
+    142|     const records = Object.values(checkpoints());
+    143|     expect(records.map(checkpointCove)).toEqual([
+       |                                         ^
+    144|       'holding-pier',
+    145|       'holding-pier',
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/13]⎯
+
+ FAIL  tests/unit/story-progress.test.ts > validated local journey storage > accepting departure stores completion and pending destination in one write and survives reload
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/unit/story-progress.test.ts:352:50
+    350|     expect(endpoint.snapshot.record).toEqual(checkpoints().launchEntry…
+    351|     expect(backing.writes.length).toBe(5);
+    352|     expect(endpoint.acknowledge('a-wider-deck')).toBe(true);
+       |                                                  ^
+    353|     expect(endpoint.accept('wide-berth', 'won')).toBe(true);
+    354|     expect(endpoint.snapshot.record).toEqual(checkpoints().complete);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/13]⎯
+
+ FAIL  tests/unit/story-progress.test.ts > validated local journey storage > unavailable storage at access stays playable in memory with truthful notice
+ FAIL  tests/unit/story-progress.test.ts > validated local journey storage > unavailable storage at read stays playable in memory with truthful notice
+ FAIL  tests/unit/story-progress.test.ts > validated local journey storage > unavailable storage at write stays playable in memory with truthful notice
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/unit/story-progress.test.ts:396:52
+    394|       expect(progress.acknowledge('driftwood-light')).toBe(true);
+    395|       expect(progress.accept('driftwood-yard', 'won')).toBe(true);
+    396|       expect(progress.acknowledge('a-wider-deck')).toBe(true);
+       |                                                    ^
+    397|       expect(progress.accept('wide-berth', 'won')).toBe(true);
+    398|       expect(progress.snapshot.record).toEqual(checkpoints().complete);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/13]⎯
+
+ FAIL  tests/unit/story-progress.test.ts > narrow two-cove completion compatibility > reading exact historical completion is byte-preserving until deliberate continuation
+AssertionError: expected [ [ …(2) ], …(1) ] to deeply equal [ [ 'last-ferry.journey.v1', …(1) ] ]
+
+- Expected
++ Received
+
+  [
+    [
++     "last-ferry.journey.v1.before-six-coves",
++     "{
++   \"version\": 1,
++   \"checkpoint\": {
++     \"kind\": \"complete\"
++   },
++   \"completed\": [
++     \"holding-pier\",
++     \"bellwater\"
++   ],
++   \"acknowledgedScenes\": [
++     \"opening\",
++     \"another-bell\"
++   ]
++ }",
++   ],
++   [
+      "last-ferry.journey.v1",
+      "{\"version\":1,\"checkpoint\":{\"kind\":\"scene\",\"id\":\"driftwood-light\"},\"completed\":[\"holding-pier\",\"bellwater\"],\"acknowledgedScenes\":[\"opening\",\"another-bell\"]}",
+    ],
+  ]
+
+ ❯ tests/unit/story-progress.test.ts:449:28
+    447|     expect(progress.continueAvailableContent()).toBe(false);
+    448|     expect(progress.snapshot.record).toEqual(checkpoints().yardEntry);
+    449|     expect(backing.writes).toEqual([
+       |                            ^
+    450|       [JOURNEY_STORAGE_KEY, JSON.stringify(checkpoints().yardEntry)],
+    451|     ]);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/13]⎯
+
+ FAIL  tests/unit/story-progress.test.ts > both exact historical boundaries and current completed world > three-cove completion remains byte-preserving, then begins launch exactly once
+AssertionError: expected 'among-the-reeds' to be 'a-wider-deck' // Object.is equality
+
+Expected: "a-wider-deck"
+Received: "among-the-reeds"
+
+ ❯ tests/unit/story-progress.test.ts:517:44
+    515|     expect(backing.writes).toEqual([]);
+    516|     expect(checkpointCove(third)).toBe('driftwood-yard');
+    517|     expect(legacyContinuationScene(third)).toBe('a-wider-deck');
+       |                                            ^
+    518|     expect(progress.acknowledge('a-wider-deck')).toBe(false);
+    519|     expect(progress.accept('wide-berth', 'won')).toBe(false);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/13]⎯
+
+ FAIL  tests/unit/story-progress.test.ts > both exact historical boundaries and current completed world > failed three-cove continuation write preserves bytes and remains usable in memory
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/unit/story-progress.test.ts:568:50
+    566|     expect(progress.snapshot.issue).toContain('will not survive closin…
+    567|     expect(backing.values.get(JOURNEY_STORAGE_KEY)).toBe(raw);
+    568|     expect(progress.acknowledge('a-wider-deck')).toBe(true);
+       |                                                  ^
+    569|     expect(progress.accept('wide-berth', 'won')).toBe(true);
+    570|     expect(progress.snapshot.record).toEqual(checkpoints().complete);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/13]⎯
+
+ FAIL  tests/unit/story-progress.test.ts > both exact historical boundaries and current completed world > each scene uses its actual predecessor and old complete worlds never display a new rescue
+AssertionError: expected { id: 'two-shelters', …(11) } to be { id: 'driftwood-yard', …(11) } // Object.is equality
+
+- Expected
++ Received
+
+@@ -1,224 +1,219 @@
+  {
+    "edges": [
+      {
+-       "baseDepth": 2,
++       "baseDepth": 3,
+        "bidirectional": true,
+-       "id": "harbor-yard",
++       "id": "harbor-low",
+        "nodes": [
+          "harbor",
+-         "yard",
++         "low",
+        ],
+        "waypointsXZ": [
+          [
+-           -5.6,
+-           0.5,
++           -6.5,
++           1.2,
+          ],
+          [
+-           -3.1,
+-           0.6,
++           -5,
++           3.8,
+          ],
+          [
+-           -1.9,
+-           -1.5,
++           -2.6,
++           5.2,
+          ],
+          [
+            0,
+-           -2,
++           4,
+          ],
+        ],
+      },
+      {
+-       "baseDepth": 2,
++       "baseDepth": 3,
+        "bidirectional": true,
+-       "id": "yard-mooring",
++       "id": "harbor-refuge",
+        "nodes": [
+-         "yard",
+-         "mooring",
++         "harbor",
++         "refuge",
+        ],
+        "waypointsXZ": [
+          [
+-           0,
+-           -2,
++           -6.5,
++           1.2,
+          ],
+          [
+-           1,
+-           -1.5,
++           -3.8,
++           0.2,
+          ],
+          [
+-           1,
+-           0.7,
++           -3.8,
++           -2.2,
+          ],
+          [
+-           3.8,
+-           0.7,
++           0,
++           -2.8,
+          ],
+        ],
+      },
+      {
+        "baseDepth": 3,
+        "bidirectional": true,
+-       "id": "harbor-mooring",
++       "id": "low-refuge",
+        "nodes": [
+-         "harbor",
+-         "mooring",
++         "low",
++         "refuge",
+        ],
+        "waypointsXZ": [
+          [
+-           -5.6,
+-           0.5,
++           0,
++           4,
+          ],
+          [
+-           -3,
+-           2,
++           -2.2,
++           4,
+          ],
+          [
+-           -1,
+-           2.4,
++           -2.7,
++           1.8,
+          ],
+          [
+-           1,
+-           2.2,
++           -2.5,
++           -1.2,
+          ],
+          [
+-           3.8,
+-           0.7,
++           0,
++           -2.8,
+          ],
+        ],
+      },
+      {
+        "baseDepth": 1,
+        "bidirectional": true,
+-       "id": "mooring-bend",
++       "id": "low-reeds",
+        "nodes": [
+-         "mooring",
+-         "bend",
++         "low",
++         "reeds",
+        ],
+        "waypointsXZ": [
+          [
+-           3.8,
+-           0.7,
++           0,
++           4,
+          ],
+          [
+-           4.7,
+-           2.2,
++           2.5,
++           4.5,
+          ],
+          [
+-           3.8,
+-           4.7,
++           5.8,
++           0,
+          ],
+        ],
+      },
+      {
+        "baseDepth": 1,
+        "bidirectional": true,
+-       "id": "bend-reeds",
++       "id": "refuge-reeds",
+        "nodes": [
+-         "bend",
++         "refuge",
+          "reeds",
+        ],
+        "waypointsXZ": [
+          [
+-           3.8,
+-           4.7,
++           0,
++           -2.8,
+          ],
+          [
+-           5.8,
+-           5.3,
++           3.4,
++           -1.6,
+          ],
+          [
+-           7,
+-           4.1,
++           3.3,
++           0,
++         ],
++         [
++           5.8,
++           0,
+          ],
+        ],
+      },
+    ],
+-   "id": "driftwood-yard",
++   "id": "two-shelters",
+    "names": {
+      "nodes": {
+-       "bend": "Shallow Bend",
+        "harbor": "Harbor",
+-       "mooring": "High Mooring",
+-       "reeds": "Reed Landing",
+-       "yard": "Driftwood Yard",
++       "low": "Low Landing",
++       "reeds": "Reed Pier",
++       "refuge": "High Refuge",
+      },
+      "passengers": {
+-       "fern": "Fern",
+-       "nell": "Nell",
+-       "oat": "Oat",
++       "bracken": "Bracken",
++       "hazel": "Hazel",
++       "mica": "Mica",
+      },
+    },
+    "nodes": [
+      {
+        "baseDepth": 3,
+        "id": "harbor",
+        "pierId": "harbor-pier",
+        "positionXZ": [
+-         -5.6,
+-         0.5,
++         -6.5,
++         1.2,
+        ],
+      },
+      {
+        "baseDepth": 3,
+-       "id": "yard",
+-       "pierId": "yard-pier",
++       "id": "refuge",
++       "pierId": "refuge-pier",
+        "positionXZ": [
+          0,
+-         -2,
++         -2.8,
+        ],
+      },
+      {
+        "baseDepth": 3,
+-       "id": "mooring",
+-       "pierId": "mooring-pier",
+-       "positionXZ": [
+-         3.8,
+-         0.7,
+-       ],
+-     },
+-     {
+-       "baseDepth": 3,
+-       "id": "bend",
++       "id": "low",
++       "pierId": "low-pier",
+        "positionXZ": [
+-         3.8,
+-         4.7,
++         0,
++         4,
+        ],
+      },
+      {
+        "baseDepth": 3,
+        "id": "reeds",
+        "pierId": "reeds-pier",
+        "positionXZ": [
+-         7,
+-         4.1,
++         5.8,
++         0,
+        ],
+      },
+    ],
+    "objective": {
+      "deliveryPierId": "harbor-pier",
+      "requiredPassengerIds": [
+-       "nell",
+-       "fern",
+-       "oat",
++       "hazel",
++       "bracken",
++       "mica",
+      ],
+    },
+    "passengers": [
+      {
+        "appearance": "beaver-brown",
+-       "id": "nell",
++       "id": "hazel",
+        "slots": 2,
+        "species": "beaver",
+      },
+      {
+-       "appearance": "rabbit-cream",
+-       "id": "fern",
+-       "slots": 1,
+-       "species": "rabbit",
++       "appearance": "beaver-brown",
++       "id": "bracken",
++       "slots": 2,
++       "species": "beaver",
+      },
+      {
+-       "appearance": "rabbit-tan",
+-       "id": "oat",
++       "appearance": "rabbit-cream",
++       "id": "mica",
+        "slots": 1,
+        "species": "rabbit",
+      },
+    ],
+    "piers": [
+@@ -226,67 +221,67 @@
+        "elevation": 3,
+        "id": "harbor-pier",
+        "isDeliveryPier": true,
+        "islandId": "lighthouse-island",
+        "landAnchorXZ": [
+-         -5.6,
+-         -1.6,
++         -6.5,
++         -1.3,
+        ],
+        "nodeId": "harbor",
+        "positionXZ": [
+-         -5.6,
+-         -0.4,
++         -6.5,
++         -0.10000000000000009,
+        ],
+-       "width": 0.8,
++       "width": 1.4,
+      },
+      {
+-       "elevation": 1,
+-       "id": "yard-pier",
++       "elevation": 3,
++       "id": "refuge-pier",
+        "isDeliveryPier": false,
+-       "islandId": "yard-island",
++       "islandId": "refuge-island",
+        "landAnchorXZ": [
+          0,
+-         -4.1,
++         -5.3,
+        ],
+-       "nodeId": "yard",
++       "nodeId": "refuge",
+        "positionXZ": [
+          0,
+-         -2.9,
++         -4.1,
+        ],
+-       "width": 0.9,
++       "width": 1.4,
+      },
+      {
+-       "elevation": 3,
+-       "id": "mooring-pier",
++       "elevation": 2,
++       "id": "low-pier",
+        "isDeliveryPier": false,
+-       "islandId": "mooring-island",
++       "islandId": "low-island",
+        "landAnchorXZ": [
+-         3.8,
+-         -1.8,
++         0,
++         1.5,
+        ],
+-       "nodeId": "mooring",
++       "nodeId": "low",
+        "positionXZ": [
+-         3.8,
+-         -0.6,
++         0,
++         2.7,
+        ],
+-       "width": 0.9,
++       "width": 1.4,
+      },
+      {
+        "elevation": 1,
+        "id": "reeds-pier",
+        "isDeliveryPier": false,
+        "islandId": "reed-island",
+        "landAnchorXZ": [
+-         7,
+-         2,
++         5.8,
++         -2.5,
+        ],
+        "nodeId": "reeds",
+        "positionXZ": [
+-         7,
+-         3.2,
++         5.8,
++         -1.3,
+        ],
+-       "width": 0.9,
++       "width": 1.4,
+      },
+    ],
+    "rules": {
+      "actionCost": 1,
+      "capacity": 4,
+@@ -309,169 +304,169 @@
+      "pierDryWhen": "tideLevel < elevation",
+      "tide": {
+        "initialLevel": 0,
+        "rises": [
+          {
+-           "afterTurn": 7,
++           "afterTurn": 4,
+            "level": 1,
+          },
+          {
+-           "afterTurn": 11,
++           "afterTurn": 9,
+            "level": 2,
+          },
+        ],
+      },
+    },
+    "start": {
+-     "aboard": [],
+-     "boatNodeId": "harbor",
++     "aboard": [
++       "hazel",
++       "bracken",
++     ],
++     "boatNodeId": "low",
+      "waitingByPier": {
+        "harbor-pier": [],
+-       "mooring-pier": [],
++       "low-pier": [],
+        "reeds-pier": [
+-         "fern",
+-         "oat",
+-       ],
+-       "yard-pier": [
+-         "nell",
++         "mica",
+        ],
++       "refuge-pier": [],
+      },
+    },
+-   "title": "Driftwood Yard",
++   "title": "Two Shelters",
+    "validation": {
+      "searchDepthLimit": 24,
+      "witnessReplays": [
+-       "data/driftwood-yard/witnesses.json",
++       "data/two-shelters/witnesses.json",
+      ],
+    },
+    "world": {
+-     "clearanceScope": "Actual full ferry geometry checked both directions, berth headings and reverse departures.",
++     "clearanceScope": "Actual four-space ferry geometry, both directions and berth headings, including compact shore and pier support.",
+      "islands": [
+        {
+          "elevation": 3,
+          "footprintXZ": [
+            [
+-             -7.6,
+-             -4,
++             -8.2,
++             -3.3,
+            ],
+            [
+-             -4.3,
+-             -4,
++             -5.5,
++             -3.4,
+            ],
+            [
+-             -3.6,
+-             -2.7,
++             -4.8,
++             -2.05,
+            ],
+            [
+-             -4.2,
+-             -1.4,
++             -5.35,
++             -0.8,
+            ],
+            [
+-             -7,
+-             -1.4,
++             -7.6,
++             -0.75,
+            ],
+            [
+-             -7.9,
+-             -2.7,
++             -8.3,
++             -2,
+            ],
+          ],
+          "id": "lighthouse-island",
+        },
+        {
+-         "elevation": 1,
++         "elevation": 3,
+          "footprintXZ": [
+            [
+              -1.6,
+-             -6,
++             -7.05,
+            ],
+            [
+-             1.2,
+-             -6.1,
++             0.65,
++             -7.15,
+            ],
+            [
+-             1.8,
+-             -5,
++             1.6,
++             -6.4,
+            ],
+            [
+              1.3,
+-             -3.9,
++             -5.1,
+            ],
+            [
+-             -1.1,
+-             -3.9,
++             -0.9,
++             -5,
+            ],
+            [
+-             -1.9,
+-             -4.9,
++             -1.7,
++             -6,
+            ],
+          ],
+-         "id": "yard-island",
++         "id": "refuge-island",
+        },
+        {
+-         "elevation": 3,
++         "elevation": 2,
+          "footprintXZ": [
+            [
+-             2.4,
+-             -3.7,
++             -1.7,
++             -0.2,
+            ],
+            [
+-             4.9,
+-             -3.7,
++             1,
++             -0.3,
+            ],
+            [
+-             5.5,
+-             -2.5,
++             1.7,
++             0.75,
+            ],
+            [
+-             5,
+-             -1.2,
++             1.15,
++             2,
+            ],
+            [
+-             2.7,
+-             -1.2,
++             -1.1,
++             2.05,
+            ],
+            [
+-             2,
+-             -2.4,
++             -1.8,
++             0.8,
+            ],
+          ],
+-         "id": "mooring-island",
++         "id": "low-island",
+        },
+        {
+          "elevation": 1,
+          "footprintXZ": [
+            [
+-             6.1,
+-             0.1,
++             4.5,
++             -4.1,
+            ],
+            [
+-             8.3,
+-             0.2,
++             6.45,
++             -4.2,
+            ],
+            [
+-             8.9,
+-             1.2,
++             7.35,
++             -3.3,
+            ],
+            [
+-             8.4,
+-             2.2,
++             6.9,
++             -2.3,
+            ],
+            [
+-             6.2,
+-             2.3,
++             4.95,
++             -2.25,
+            ],
+            [
+-             5.6,
+-             1.3,
++             4.15,
++             -3.1,
+            ],
+          ],
+          "id": "reed-island",
+        },
+      ],
+      "north": "negative Z",
+      "plane": "XZ",
+-     "presentationNote": "A working yard behind the inner triangle, raised stone mooring to the east and low reeds beyond the shallow bend.",
++     "presentationNote": "Four compact landings: home lighthouse west, high rocky refuge north, lower timber cottage shelter foreground, reed rabbits east. The two pale shallow channels have deeper stopping pockets.",
+      "referenceBoatRadius": 0.3,
+      "requiredRouteClearance": 0.45,
+      "suggestedCamera": {
+        "positionXYZ": [
+          0,
+@@ -480,12 +475,12 @@
+        ],
+        "projection": "orthographic",
+        "targetXYZ": [
+          0,
+          0,
+-         -0.7,
++         -0.3,
+        ],
+-       "verticalSpan": 13,
++       "verticalSpan": 12,
+      },
+      "waterYPerTideLevel": 0.18,
+    },
+  }
+
+ ❯ tests/unit/story-progress.test.ts:578:46
+    576|     expect(scenePredecessor('another-bell')).toBe(holdingPier);
+    577|     expect(scenePredecessor('driftwood-light')).toBe(bellwater);
+    578|     expect(scenePredecessor('a-wider-deck')).toBe(driftwoodYard);
+       |                                              ^
+    579|     expect(
+    580|       checkpointCove({
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/13]⎯
+
+ FAIL  tests/unit/two-shelters-practice.test.ts > Two Shelters independent Practice boundary > the candidate is playable without acquiring a campaign slot or launch
+AssertionError: expected { id: 'two-shelters', …(3) } to be undefined
+
+- Expected:
+undefined
+
++ Received:
+{
+  "entryScene": "among-the-reeds",
+  "id": "two-shelters",
+  "level": {
+    "edges": [
+      {
+        "baseDepth": 3,
+        "bidirectional": true,
+        "id": "harbor-low",
+        "nodes": [
+          "harbor",
+          "low",
+        ],
+        "waypointsXZ": [
+          [
+            -6.5,
+            1.2,
+          ],
+          [
+            -5,
+            3.8,
+          ],
+          [
+            -2.6,
+            5.2,
+          ],
+          [
+            0,
+            4,
+          ],
+        ],
+      },
+      {
+        "baseDepth": 3,
+        "bidirectional": true,
+        "id": "harbor-refuge",
+        "nodes": [
+          "harbor",
+          "refuge",
+        ],
+        "waypointsXZ": [
+          [
+            -6.5,
+            1.2,
+          ],
+          [
+            -3.8,
+            0.2,
+          ],
+          [
+            -3.8,
+            -2.2,
+          ],
+          [
+            0,
+            -2.8,
+          ],
+        ],
+      },
+      {
+        "baseDepth": 3,
+        "bidirectional": true,
+        "id": "low-refuge",
+        "nodes": [
+          "low",
+          "refuge",
+        ],
+        "waypointsXZ": [
+          [
+            0,
+            4,
+          ],
+          [
+            -2.2,
+            4,
+          ],
+          [
+            -2.7,
+            1.8,
+          ],
+          [
+            -2.5,
+            -1.2,
+          ],
+          [
+            0,
+            -2.8,
+          ],
+        ],
+      },
+      {
+        "baseDepth": 1,
+        "bidirectional": true,
+        "id": "low-reeds",
+        "nodes": [
+          "low",
+          "reeds",
+        ],
+        "waypointsXZ": [
+          [
+            0,
+            4,
+          ],
+          [
+            2.5,
+            4.5,
+          ],
+          [
+            5.8,
+            0,
+          ],
+        ],
+      },
+      {
+        "baseDepth": 1,
+        "bidirectional": true,
+        "id": "refuge-reeds",
+        "nodes": [
+          "refuge",
+          "reeds",
+        ],
+        "waypointsXZ": [
+          [
+            0,
+            -2.8,
+          ],
+          [
+            3.4,
+            -1.6,
+          ],
+          [
+            3.3,
+            0,
+          ],
+          [
+            5.8,
+            0,
+          ],
+        ],
+      },
+    ],
+    "id": "two-shelters",
+    "names": {
+      "nodes": {
+        "harbor": "Harbor",
+        "low": "Low Landing",
+        "reeds": "Reed Pier",
+        "refuge": "High Refuge",
+      },
+      "passengers": {
+        "bracken": "Bracken",
+        "hazel": "Hazel",
+        "mica": "Mica",
+      },
+    },
+    "nodes": [
+      {
+        "baseDepth": 3,
+        "id": "harbor",
+        "pierId": "harbor-pier",
+        "positionXZ": [
+          -6.5,
+          1.2,
+        ],
+      },
+      {
+        "baseDepth": 3,
+        "id": "refuge",
+        "pierId": "refuge-pier",
+        "positionXZ": [
+          0,
+          -2.8,
+        ],
+      },
+      {
+        "baseDepth": 3,
+        "id": "low",
+        "pierId": "low-pier",
+        "positionXZ": [
+          0,
+          4,
+        ],
+      },
+      {
+        "baseDepth": 3,
+        "id": "reeds",
+        "pierId": "reeds-pier",
+        "positionXZ": [
+          5.8,
+          0,
+        ],
+      },
+    ],
+    "objective": {
+      "deliveryPierId": "harbor-pier",
+      "requiredPassengerIds": [
+        "hazel",
+        "bracken",
+        "mica",
+      ],
+    },
+    "passengers": [
+      {
+        "appearance": "beaver-brown",
+        "id": "hazel",
+        "slots": 2,
+        "species": "beaver",
+      },
+      {
+        "appearance": "beaver-brown",
+        "id": "bracken",
+        "slots": 2,
+        "species": "beaver",
+      },
+      {
+        "appearance": "rabbit-cream",
+        "id": "mica",
+        "slots": 1,
+        "species": "rabbit",
+      },
+    ],
+    "piers": [
+      {
+        "elevation": 3,
+        "id": "harbor-pier",
+        "isDeliveryPier": true,
+        "islandId": "lighthouse-island",
+        "landAnchorXZ": [
+          -6.5,
+          -1.3,
+        ],
+        "nodeId": "harbor",
+        "positionXZ": [
+          -6.5,
+          -0.10000000000000009,
+        ],
+        "width": 1.4,
+      },
+      {
+        "elevation": 3,
+        "id": "refuge-pier",
+        "isDeliveryPier": false,
+        "islandId": "refuge-island",
+        "landAnchorXZ": [
+          0,
+          -5.3,
+        ],
+        "nodeId": "refuge",
+        "positionXZ": [
+          0,
+          -4.1,
+        ],
+        "width": 1.4,
+      },
+      {
+        "elevation": 2,
+        "id": "low-pier",
+        "isDeliveryPier": false,
+        "islandId": "low-island",
+        "landAnchorXZ": [
+          0,
+          1.5,
+        ],
+        "nodeId": "low",
+        "positionXZ": [
+          0,
+          2.7,
+        ],
+        "width": 1.4,
+      },
+      {
+        "elevation": 1,
+        "id": "reeds-pier",
+        "isDeliveryPier": false,
+        "islandId": "reed-island",
+        "landAnchorXZ": [
+          5.8,
+          -2.5,
+        ],
+        "nodeId": "reeds",
+        "positionXZ": [
+          5.8,
+          -1.3,
+        ],
+        "width": 1.4,
+      },
+    ],
+    "rules": {
+      "actionCost": 1,
+      "capacity": 4,
+      "depthFormula": "baseDepth + tideLevel",
+      "draftBands": [
+        {
+          "draft": 1,
+          "maxLoad": 0,
+        },
+        {
+          "draft": 2,
+          "maxLoad": 2,
+        },
+        {
+          "draft": 3,
+          "maxLoad": 4,
+        },
+      ],
+      "failureRule": "required passenger waiting at a flooded pier",
+      "pierDryWhen": "tideLevel < elevation",
+      "tide": {
+        "initialLevel": 0,
+        "rises": [
+          {
+            "afterTurn": 4,
+            "level": 1,
+          },
+          {
+            "afterTurn": 9,
+            "level": 2,
+          },
+        ],
+      },
+    },
+    "start": {
+      "aboard": [
+        "hazel",
+        "bracken",
+      ],
+      "boatNodeId": "low",
+      "waitingByPier": {
+        "harbor-pier": [],
+        "low-pier": [],
+        "reeds-pier": [
+          "mica",
+        ],
+        "refuge-pier": [],
+      },
+    },
+    "title": "Two Shelters",
+    "validation": {
+      "searchDepthLimit": 24,
+      "witnessReplays": [
+        "data/two-shelters/witnesses.json",
+      ],
+    },
+    "world": {
+      "clearanceScope": "Actual four-space ferry geometry, both directions and berth headings, including compact shore and pier support.",
+      "islands": [
+        {
+          "elevation": 3,
+          "footprintXZ": [
+            [
+              -8.2,
+              -3.3,
+            ],
+            [
+              -5.5,
+              -3.4,
+            ],
+            [
+              -4.8,
+              -2.05,
+            ],
+            [
+              -5.35,
+              -0.8,
+            ],
+            [
+              -7.6,
+              -0.75,
+            ],
+            [
+              -8.3,
+              -2,
+            ],
+          ],
+          "id": "lighthouse-island",
+        },
+        {
+          "elevation": 3,
+          "footprintXZ": [
+            [
+              -1.6,
+              -7.05,
+            ],
+            [
+              0.65,
+              -7.15,
+            ],
+            [
+              1.6,
+              -6.4,
+            ],
+            [
+              1.3,
+              -5.1,
+            ],
+            [
+              -0.9,
+              -5,
+            ],
+            [
+              -1.7,
+              -6,
+            ],
+          ],
+          "id": "refuge-island",
+        },
+        {
+          "elevation": 2,
+          "footprintXZ": [
+            [
+              -1.7,
+              -0.2,
+            ],
+            [
+              1,
+              -0.3,
+            ],
+            [
+              1.7,
+              0.75,
+            ],
+            [
+              1.15,
+              2,
+            ],
+            [
+              -1.1,
+              2.05,
+            ],
+            [
+              -1.8,
+              0.8,
+            ],
+          ],
+          "id": "low-island",
+        },
+        {
+          "elevation": 1,
+          "footprintXZ": [
+            [
+              4.5,
+              -4.1,
+            ],
+            [
+              6.45,
+              -4.2,
+            ],
+            [
+              7.35,
+              -3.3,
+            ],
+            [
+              6.9,
+              -2.3,
+            ],
+            [
+              4.95,
+              -2.25,
+            ],
+            [
+              4.15,
+              -3.1,
+            ],
+          ],
+          "id": "reed-island",
+        },
+      ],
+      "north": "negative Z",
+      "plane": "XZ",
+      "presentationNote": "Four compact landings: home lighthouse west, high rocky refuge north, lower timber cottage shelter foreground, reed rabbits east. The two pale shallow channels have deeper stopping pockets.",
+      "referenceBoatRadius": 0.3,
+      "requiredRouteClearance": 0.45,
+      "suggestedCamera": {
+        "positionXYZ": [
+          0,
+          34,
+          24,
+        ],
+        "projection": "orthographic",
+        "targetXYZ": [
+          0,
+          0,
+          -0.3,
+        ],
+        "verticalSpan": 12,
+      },
+      "waterYPerTideLevel": 0.18,
+    },
+  },
+  "order": 3,
+}
+
+ ❯ tests/unit/two-shelters-practice.test.ts:47:37
+     45|     expect(practiceCove(candidate.id)).toBe(candidate);
+     46|     expect(practiceCoves.filter((entry) => entry.id === candidate.id))…
+     47|     expect(storyCove(candidate.id)).toBeUndefined();
+       |                                     ^
+     48|     expect(storyCoves.map(({ id, entryScene }) => [id, entryScene])).t…
+     49|       ['holding-pier', 'opening'],
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/13]⎯
+
+ FAIL  tests/unit/two-shelters-practice.test.ts > Reef Return independent Practice boundary > the candidate is playable without acquiring a campaign slot or launch
+AssertionError: expected { id: 'reef-return', …(3) } to be undefined
+
+- Expected:
+undefined
+
++ Received:
+{
+  "entryScene": "lights-beyond-the-reef",
+  "id": "reef-return",
+  "level": {
+    "edges": [
+      {
+        "baseDepth": 3,
+        "bidirectional": false,
+        "current": {
+          "name": "Needle Reef",
+          "phases": [
+            {
+              "from": "harbor",
+              "tideLevel": 0,
+              "to": "quay",
+            },
+            {
+              "from": "quay",
+              "tideLevel": 1,
+              "to": "harbor",
+            },
+            {
+              "from": "harbor",
+              "tideLevel": 2,
+              "to": "quay",
+            },
+          ],
+        },
+        "id": "needle-reef",
+        "nodes": [
+          "quay",
+          "harbor",
+        ],
+        "waypointsXZ": [
+          [
+            0,
+            -1.1,
+          ],
+          [
+            -1.2,
+            -0.35,
+          ],
+          [
+            -3.65,
+            0.35,
+          ],
+          [
+            -5.9,
+            0.55,
+          ],
+          [
+            -7.5,
+            -0.4,
+          ],
+        ],
+      },
+      {
+        "baseDepth": 2,
+        "bidirectional": true,
+        "id": "wrack-quay",
+        "nodes": [
+          "wrack",
+          "quay",
+        ],
+        "waypointsXZ": [
+          [
+            6.75,
+            0.65,
+          ],
+          [
+            5.5,
+            1.05,
+          ],
+          [
+            3.6,
+            0.12,
+          ],
+          [
+            1.2,
+            -0.55,
+          ],
+          [
+            0,
+            -1.1,
+          ],
+        ],
+      },
+      {
+        "baseDepth": 1,
+        "bidirectional": true,
+        "id": "quay-pool",
+        "nodes": [
+          "quay",
+          "pool",
+        ],
+        "waypointsXZ": [
+          [
+            0,
+            -1.1,
+          ],
+          [
+            -1.1,
+            -0.35,
+          ],
+          [
+            -1.82,
+            2.21,
+          ],
+          [
+            -2.35,
+            4.8,
+          ],
+          [
+            -1.33,
+            7.9,
+          ],
+          [
+            1.5,
+            9.63,
+          ],
+          [
+            3.25,
+            9.24,
+          ],
+        ],
+      },
+      {
+        "baseDepth": 1,
+        "bidirectional": true,
+        "id": "pool-harbor",
+        "nodes": [
+          "pool",
+          "harbor",
+        ],
+        "waypointsXZ": [
+          [
+            3.25,
+            9.24,
+          ],
+          [
+            -1.1,
+            10.8,
+          ],
+          [
+            -5.8,
+            8.8,
+          ],
+          [
+            -8.4,
+            4.55,
+          ],
+          [
+            -8.8,
+            1.1,
+          ],
+          [
+            -7.5,
+            -0.4,
+          ],
+        ],
+      },
+    ],
+    "id": "reef-return",
+    "names": {
+      "nodes": {
+        "harbor": "Harbor",
+        "pool": "Shell Pool",
+        "quay": "Cairn Quay",
+        "wrack": "Wrack Pier",
+      },
+      "passengers": {
+        "birch": "Birch",
+        "dot": "Dot",
+        "flick": "Flick",
+        "heather": "Heather",
+      },
+    },
+    "nodes": [
+      {
+        "baseDepth": 4,
+        "id": "harbor",
+        "pierId": "harbor-pier",
+        "positionXZ": [
+          -7.5,
+          -0.4,
+        ],
+      },
+      {
+        "baseDepth": 4,
+        "id": "quay",
+        "pierId": "quay-pier",
+        "positionXZ": [
+          0,
+          -1.1,
+        ],
+      },
+      {
+        "baseDepth": 4,
+        "id": "wrack",
+        "pierId": "wrack-pier",
+        "positionXZ": [
+          6.75,
+          0.65,
+        ],
+      },
+      {
+        "baseDepth": 4,
+        "id": "pool",
+        "pierId": "pool-pier",
+        "positionXZ": [
+          3.25,
+          9.24,
+        ],
+      },
+    ],
+    "objective": {
+      "deliveryPierId": "harbor-pier",
+      "requiredPassengerIds": [
+        "heather",
+        "flick",
+        "birch",
+        "dot",
+      ],
+    },
+    "passengers": [
+      {
+        "appearance": "sheep-wool",
+        "id": "heather",
+        "slots": 2,
+        "species": "sheep",
+      },
+      {
+        "appearance": "rabbit-tan",
+        "id": "flick",
+        "slots": 1,
+        "species": "rabbit",
+      },
+      {
+        "appearance": "beaver-brown",
+        "id": "birch",
+        "slots": 2,
+        "species": "beaver",
+      },
+      {
+        "appearance": "rabbit-cream",
+        "id": "dot",
+        "slots": 1,
+        "species": "rabbit",
+      },
+    ],
+    "piers": [
+      {
+        "elevation": 3,
+        "id": "harbor-pier",
+        "isDeliveryPier": true,
+        "islandId": "lighthouse-island",
+        "landAnchorXZ": [
+          -7.5,
+          -3.71,
+        ],
+        "nodeId": "harbor",
+        "positionXZ": [
+          -7.5,
+          -1.9,
+        ],
+        "width": 1.48,
+      },
+      {
+        "elevation": 2,
+        "id": "quay-pier",
+        "isDeliveryPier": false,
+        "islandId": "quay-island",
+        "landAnchorXZ": [
+          0,
+          -4.41,
+        ],
+        "nodeId": "quay",
+        "positionXZ": [
+          0,
+          -2.6,
+        ],
+        "width": 1.55,
+      },
+      {
+        "elevation": 1,
+        "id": "wrack-pier",
+        "isDeliveryPier": false,
+        "islandId": "wrack-island",
+        "landAnchorXZ": [
+          6.75,
+          -2.66,
+        ],
+        "nodeId": "wrack",
+        "positionXZ": [
+          6.75,
+          -0.99,
+        ],
+        "width": 1.38,
+      },
+      {
+        "elevation": 2,
+        "id": "pool-pier",
+        "isDeliveryPier": false,
+        "islandId": "pool-island",
+        "landAnchorXZ": [
+          3.25,
+          5.93,
+        ],
+        "nodeId": "pool",
+        "positionXZ": [
+          3.25,
+          7.74,
+        ],
+        "width": 1.4,
+      },
+    ],
+    "rules": {
+      "actionCost": 1,
+      "capacity": 6,
+      "depthFormula": "baseDepth + tideLevel",
+      "draftBands": [
+        {
+          "draft": 1,
+          "maxLoad": 0,
+        },
+        {
+          "draft": 2,
+          "maxLoad": 2,
+        },
+        {
+          "draft": 3,
+          "maxLoad": 4,
+        },
+        {
+          "draft": 4,
+          "maxLoad": 6,
+        },
+      ],
+      "failureRule": "Required passenger stranded by a flooded pier, a turned current or a permanently impassable loaded return.",
+      "pierDryWhen": "tideLevel < elevation",
+      "tide": {
+        "initialLevel": 0,
+        "rises": [
+          {
+            "afterTurn": 3,
+            "level": 1,
+          },
+          {
+            "afterTurn": 9,
+            "level": 2,
+          },
+        ],
+      },
+    },
+    "start": {
+      "aboard": [
+        "heather",
+        "birch",
+      ],
+      "boatNodeId": "quay",
+      "waitingByPier": {
+        "harbor-pier": [],
+        "pool-pier": [
+          "flick",
+        ],
+        "quay-pier": [],
+        "wrack-pier": [
+          "dot",
+        ],
+      },
+    },
+    "title": "Reef Return",
+    "validation": {
+      "searchDepthLimit": 20,
+      "witnessReplays": [
+        "data/reef-return/witnesses.json",
+      ],
+    },
+    "world": {
+      "clearanceScope": "Six-space ferry along all four passages and approaches.",
+      "islands": [
+        {
+          "elevation": 3,
+          "footprintXZ": [
+            [
+              -10.7,
+              -6.1,
+            ],
+            [
+              -9.6,
+              -6.75,
+            ],
+            [
+              -7.35,
+              -6.82,
+            ],
+            [
+              -5.85,
+              -6,
+            ],
+            [
+              -5.45,
+              -4.58,
+            ],
+            [
+              -6.15,
+              -3.12,
+            ],
+            [
+              -8.3,
+              -3.03,
+            ],
+            [
+              -9.85,
+              -3.4,
+            ],
+            [
+              -10.8,
+              -5.05,
+            ],
+          ],
+          "id": "lighthouse-island",
+        },
+        {
+          "elevation": 2,
+          "footprintXZ": [
+            [
+              -2.3,
+              -5.4,
+            ],
+            [
+              -1.85,
+              -6.78,
+            ],
+            [
+              -0.52,
+              -7.1,
+            ],
+            [
+              1.2,
+              -6.91,
+            ],
+            [
+              2.2,
+              -6.05,
+            ],
+            [
+              1.85,
+              -4.35,
+            ],
+            [
+              0.8,
+              -3.78,
+            ],
+            [
+              -1.1,
+              -3.76,
+            ],
+            [
+              -2,
+              -4.38,
+            ],
+          ],
+          "id": "quay-island",
+        },
+        {
+          "elevation": 1,
+          "footprintXZ": [
+            [
+              4.5,
+              -3.15,
+            ],
+            [
+              5.25,
+              -4.4,
+            ],
+            [
+              7.1,
+              -4.83,
+            ],
+            [
+              9.2,
+              -4.4,
+            ],
+            [
+              9.6,
+              -3.85,
+            ],
+            [
+              8.23,
+              -2.87,
+            ],
+            [
+              7.8,
+              -2.02,
+            ],
+            [
+              5.6,
+              -2.08,
+            ],
+            [
+              4.95,
+              -2.5,
+            ],
+          ],
+          "id": "wrack-island",
+        },
+        {
+          "elevation": 2,
+          "footprintXZ": [
+            [
+              1.25,
+              5.29,
+            ],
+            [
+              0.95,
+              4.09,
+            ],
+            [
+              1.75,
+              3.52,
+            ],
+            [
+              2.88,
+              3.79,
+            ],
+            [
+              3.75,
+              3.49,
+            ],
+            [
+              5.15,
+              3.42,
+            ],
+            [
+              5.8,
+              4.29,
+            ],
+            [
+              5.15,
+              5.39,
+            ],
+            [
+              4.4,
+              6.54,
+            ],
+            [
+              2.25,
+              6.52,
+            ],
+          ],
+          "id": "pool-island",
+        },
+      ],
+      "north": "negative Z",
+      "plane": "XZ",
+      "presentationNote": "The deep Needle Reef and the shallow Shell Pool route lead to Harbor.",
+      "referenceBoatRadius": 0.3,
+      "requiredRouteClearance": 0.45,
+      "suggestedCamera": {
+        "positionXYZ": [
+          0,
+          34,
+          24,
+        ],
+        "projection": "orthographic",
+        "targetXYZ": [
+          0,
+          0,
+          -1,
+        ],
+        "verticalSpan": 14,
+      },
+      "waterYPerTideLevel": 0.18,
+    },
+  },
+  "order": 5,
+}
+
+ ❯ tests/unit/two-shelters-practice.test.ts:47:37
+     45|     expect(practiceCove(candidate.id)).toBe(candidate);
+     46|     expect(practiceCoves.filter((entry) => entry.id === candidate.id))…
+     47|     expect(storyCove(candidate.id)).toBeUndefined();
+       |                                     ^
+     48|     expect(storyCoves.map(({ id, entryScene }) => [id, entryScene])).t…
+     49|       ['holding-pier', 'opening'],
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/13]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  13 failed | 45 passed (58)
+   Start at  21:43:44
+   Duration  728ms (transform 41%, import 30%, tests 23%, worker 6%)
+
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+npm notice To update run: npm install -g npm@12.2.2
+npm notice

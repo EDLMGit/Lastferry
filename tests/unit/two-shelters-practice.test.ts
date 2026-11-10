@@ -41,15 +41,17 @@ const records: Record<string, JourneyRecord> = {
 };
 
 describe.each([twoShelters, reefReturn])('$title independent Practice boundary', (candidate) => {
-  test('the candidate is playable without acquiring a campaign slot or launch', () => {
+  test('Practice and the Journey refer to the same authored level and ferry profile', () => {
     expect(practiceCove(candidate.id)).toBe(candidate);
     expect(practiceCoves.filter((entry) => entry.id === candidate.id)).toHaveLength(1);
-    expect(storyCove(candidate.id)).toBeUndefined();
+    expect(storyCove(candidate.id)?.level).toBe(candidate);
     expect(storyCoves.map(({ id, entryScene }) => [id, entryScene])).toEqual([
       ['holding-pier', 'opening'],
       ['bellwater', 'another-bell'],
       ['driftwood-yard', 'driftwood-light'],
+      ['two-shelters', 'among-the-reeds'],
       ['wide-berth', 'a-wider-deck'],
+      ['reef-return', 'lights-beyond-the-reef'],
     ]);
     expect(storyScenes['a-wider-deck'].destination).toBe('wide-berth');
     expect(twoShelters.rules.capacity).toBe(4);

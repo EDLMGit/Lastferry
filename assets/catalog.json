@@ -5470,7 +5470,7 @@
       "sources": [
         {
           "path": "src/campaign/registry.ts",
-          "symbol": "storyScenes variable-length shots, exact captions, descriptions, durations, cues, optional narration IDs and final handoff labels; unchanged cove registry"
+          "symbol": "Six-cove Journey order, per-shot descriptions, captions, timing, cues and handoff labels"
         },
         {
           "path": "src/campaign/presentation.ts",
@@ -5497,11 +5497,15 @@
           "symbol": "Shared production painter endpoints and registry captions; design specimens only"
         }
       ],
-      "meaning": "Introduce the first evening through three illustrated pictures, connect the two existing rescues and retain honest cove-boundary checkpoints without spending puzzle actions.",
+      "meaning": "Connect six coastal rescues through authored pictures, explicit handoffs and cove-boundary checkpoints.",
       "variants": [
         "journey entrance",
         "opening: tide/lantern/ferry",
         "another-bell: Harbor",
+        "driftwood-light",
+        "among-the-reeds",
+        "a-wider-deck",
+        "lights-beyond-the-reef",
         "transcript",
         "practice chooser",
         "checkpoint replacement/return",
@@ -5555,6 +5559,10 @@
         {
           "path": "reviews/play-readability/harbor-second/capture.json",
           "role": "12actual native held frames across2048x930,390x844,780x320and320x740 with exact source hashes, timing,44px/control/caption fit and4explicit handoffs."
+        },
+        {
+          "path": "reviews/journey-six-coves/REVIEW.md",
+          "role": "Six-cove Journey, native phone compositions, explicit handoffs and actual rescued-neighbor evidence"
         }
       ],
       "consumers": [
@@ -5563,7 +5571,7 @@
       ],
       "gallery": {
         "section": "story",
-        "preview": "Four static actual-painter endpoints with shared captions/descriptions and immediate primary labels. Gallery does not simulate progression, autoplay audio or substitute for gameplay evidence. The gallery links to actual Holding/Driftwood practice and this pass evidence; gallery specimens remain design evidence."
+        "preview": "Eight endpoints from the production painter, with titles, captions and handoff labels from the Journey registry. Actual phone playback is in the six-cove review."
       },
       "typeSpecific": {
         "render/placement sources": "src/campaign/story-view.ts and story.css own one Canvas2D view with real HTML copy; registry and presentation own content and current-shot time; main alone owns checkpoint acknowledgment.",
@@ -5582,7 +5590,7 @@
       "sources": [
         {
           "path": "src/campaign/story-painter.ts",
-          "symbol": "createCoveStoryPainter and harborComposition: existing six-variant painter plus bounded Harbor foreground"
+          "symbol": "createCoveStoryPainter, reedsShot and reefShot; eight original illustrated variants"
         },
         {
           "path": "LAST_FERRY_STORY_PRODUCTION_PACKAGE/reference/scene-painter.js",
@@ -5612,10 +5620,12 @@
         "ferry",
         "harbor",
         "driftwood",
-        "launch"
+        "reeds",
+        "launch",
+        "reef"
       ],
-      "visualSignature": "Soft teal water, dusk lavender/peach, tan Rue left and cream Pip right, woolly Moss, yellow ferry/red cabin and restrained warm lantern/lighthouse light. Three approved opening compositions plus one new protected-Harbor picture. Driftwood adds warm brown Nell, broad flat tail, timber rail and a visibly lifted lantern. Launch shows the full wider yellow hull/red cabin, safe Nell releasing a mooring and two safe helpers, then glide and settle. The repaired launch uses common quay/waterline/boat/feet anchors, supported landing, visible Nell/cabin separation and the compact larger ferry silhouette. Harbor now groups the empty ferry, high stone landing, Rue’s placed lantern, Pip and Moss inside one coherently scaled foreground box, with authored portrait/short-landscape arrangements and independently extended background.",
-      "reuseAndOwnership": "One current Canvas2D surface in the story view; painter receives illustration/time and bounded DPR1–2. Shared paths/characters/shore/light helpers are reused across six variants. It owns no frame loop, puzzle state, audio or progress. Driftwood uses the same painter and player; accepted opening art remains unchanged; Harbor now uses a bounded original composition. Launch reuses the same finite painter/player/audio owners.",
+      "visualSignature": "Soft teal water, dusk lavender/peach, tan Rue left and cream Pip right, woolly Moss, yellow ferry/red cabin and restrained warm lantern/lighthouse light. Three approved opening compositions plus one new protected-Harbor picture. Driftwood adds warm brown Nell, broad flat tail, timber rail and a visibly lifted lantern. Launch shows the full wider yellow hull/red cabin, safe Nell releasing a mooring and two safe helpers, then glide and settle. The repaired launch uses common quay/waterline/boat/feet anchors, supported landing, visible Nell/cabin separation and the compact larger ferry silhouette. Harbor now groups the empty ferry, high stone landing, Rue’s placed lantern, Pip and Moss inside one coherently scaled foreground box, with authored portrait/short-landscape arrangements and independently extended background. Among the reeds frames the two brown beavers on the small ferry and Mica on her reed landing. Lights beyond the reef groups the larger occupied deck with two separate rabbit landings and their answering lights.",
+      "reuseAndOwnership": "One current Canvas2D surface in the story view; painter receives illustration/time and bounded DPR1–2. Shared paths/characters/shore/light helpers are reused across eight variants. It owns no frame loop, puzzle state, audio or progress. Driftwood uses the same painter and player; accepted opening art remains unchanged; Harbor now uses a bounded original composition. Launch reuses the same finite painter/player/audio owners.",
       "behaviorToPreserve": "Opening finite actions retain supplied art and 6/6/7-second endpoints. Harbor is five seconds. Milliseconds convert explicitly to painter seconds. Resize recomposes portrait/landscape; settled endpoints redraw only when needed. No rabbits board during the prelude and the Harbor ferry remains empty.",
       "provenance": "original-package-canvas-art",
       "acceptance": {
@@ -5667,6 +5677,10 @@
         {
           "path": "reviews/existing-coves-repair/REVIEW.md",
           "role": "Actual revised game and sources. Eight-second launch with revised deep-sided hull, swept bow, side gate and rounded red pilothouse."
+        },
+        {
+          "path": "reviews/journey-six-coves/REVIEW.md",
+          "role": "Six-cove Journey, native phone compositions, explicit handoffs and actual rescued-neighbor evidence"
         }
       ],
       "consumers": [
@@ -5675,7 +5689,7 @@
       ],
       "gallery": {
         "section": "story",
-        "preview": "Six semantic illustration endpoints rendered from the production painter; captions from the single runtime registry. Static developer specimens are design evidence, not actual scene playback. The gallery links to actual Holding/Driftwood practice and this pass evidence; gallery specimens remain design evidence."
+        "preview": "Eight endpoints from the production painter, with titles, captions and handoff labels from the Journey registry. Actual phone playback is in the six-cove review."
       },
       "typeSpecific": {
         "authoritative geometry inputs": "Original code-native Canvas paths and coordinate recipes in scene-painter.js, adapted to story-painter.ts. Width/height/DPR and explicit illustration/time are the only drawing inputs; gameplay geometry is separate.",
@@ -5714,6 +5728,10 @@
         {
           "path": "src/campaign/registry.ts",
           "symbol": "Stable story cue IDs, visible-event offsets and Harbor contact strength"
+        },
+        {
+          "path": "src/campaign/registry.ts",
+          "symbol": "among-the-reeds.ferry.water, lights-beyond-the-reef.ferry.water and lights-beyond-the-reef.lantern.contact"
         }
       ],
       "meaning": "Restrained finite sound tied to illustrated water, lantern handling and ferry approach, independently cancellable from accepted gameplay effects.",
@@ -5744,6 +5762,10 @@
         {
           "path": "reviews/story-production/REVIEW.md",
           "role": "Runtime unchanged-level audio capture, cue observations, decoding and explicit listening limitations"
+        },
+        {
+          "path": "reviews/journey-six-coves/REVIEW.md",
+          "role": "Six-cove Journey, native phone compositions, explicit handoffs and actual rescued-neighbor evidence"
         }
       ],
       "consumers": [
@@ -5785,6 +5807,10 @@
         {
           "path": "docs/HOME_COMPOSITION.md",
           "symbol": "Authored reusable composition recipe and dependencies"
+        },
+        {
+          "path": "src/campaign/progress.ts",
+          "symbol": "legacyContinuationScene and JourneyProgress.continueAvailableContent"
         }
       ],
       "meaning": "Welcoming root entrance around the actual retained cove; save state is read without spending actions or changing checkpoints.",
@@ -5796,7 +5822,9 @@
         "visit-only progress",
         "portrait",
         "short landscape",
-        "Reduced Motion"
+        "Reduced Motion",
+        "legacy route continuation",
+        "six coves safe"
       ],
       "visualSignature": "Living accepted teal cove with full warm lighthouse and yellow/red ferry, real cream serif title, warm Play capsule and quieter rounded utility controls.",
       "reuseAndOwnership": "One retained World; measured art rectangle excludes Home menu/title, fits lighthouse/ferry subject bounds. No new renderer, model, screenshot background, generated art, puzzle position or fake won state.",
@@ -5815,6 +5843,10 @@
         {
           "path": "reviews/home-play-flow/REVIEW.md",
           "role": "Actual runtime phone frames, verification and limitations"
+        },
+        {
+          "path": "reviews/journey-six-coves/REVIEW.md",
+          "role": "Six-cove Journey, native phone compositions, explicit handoffs and actual rescued-neighbor evidence"
         }
       ],
       "consumers": [
@@ -5830,7 +5862,7 @@
         "render/placement sources": "src/main.ts showHome/updateViewport, src/campaign/home.css, World.setHomePresentation; authored recipe docs/HOME_COMPOSITION.md",
         "semantic role/accessible name": "Last Ferry home section and Home navigation; native Play/Continue, Options, Practice, Sound, New journey controls",
         "icon and label mappings": "Warm text Play/Continue; quiet Options with settings icon; existing Sound Enable/Retry/Mute icon and intent mapping",
-        "interaction states": "Fresh, cove checkpoint, scene checkpoint, complete, invalid and unavailable storage; Home is read-only until an explicit action",
+        "interaction states": "Home reads the saved checkpoint. Continue can offer the missing inner-coast rescue while retaining an earned launch or Wide rescue. Only deliberate continuation backs up and converts an affected save.",
         "nearby placement and viewport contract": "Measured title/menu bounds determine portrait middle or landscape right art region inside safe viewport; full lighthouse and ferry subject fit",
         "focus/cancel/fullscreen preservation": "Inert covered seascape plus blocked() input gate; one native dialog and #app fullscreen root; secondary views restore Home opener focus without rebuilding World"
       },
@@ -6337,5 +6369,17 @@
     "source": "src/scene/models.ts",
     "report": "reviews/existing-coves-repair/REVIEW.md",
     "siteVersion": 15
+  },
+  "journeySixCoves": {
+    "task": "JOURNEY_SIX_COVES_01",
+    "reviewedRuntime": "f23e9b087e80316c3884ed5fa83cce25cf6508a0",
+    "updatedExisting": [
+      "story.illustrations",
+      "ui.story-presentation",
+      "ui.home-composition",
+      "audio.story-effects"
+    ],
+    "provenance": "Original project Canvas2D compositions, existing Sound owner and finite cue types. Existing model, portrait and puzzle assets are reused.",
+    "acceptance": "Implemented for phone review. Human visual and listening acceptance is pending."
   }
 }

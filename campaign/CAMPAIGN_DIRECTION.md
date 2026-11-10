@@ -2,9 +2,9 @@
 
 ## Current direction · 10 November 2026
 
-The repaired six-space ferry, docks and Wide/Reef complexity received positive player feedback. Optional Tips is implemented and reviewed at `f23e9b087e80316c3884ed5fa83cce25cf6508a0`, published privately as version 17. The actual runtime Journey still has Holding, Bellwater, Driftwood and Wide; all seven Practice entries remain available.
+The repaired six-space ferry, docks and Wide/Reef complexity received positive player feedback. The private Site serves the reviewed Tips build `f23e9b087e80316c3884ed5fa83cce25cf6508a0`, version 17. The development branch connects six rescues and offers seven independent Practice entries.
 
-**Current task: [JOURNEY_SIX_COVES_01](../NEXT_TASK_JOURNEY_SIX_COVES.md).** Connect existing accepted content as the first six coves of the twelve-cove target. This is authorized integration of existing puzzles, not an instruction to author a new encounter.
+[JOURNEY_SIX_COVES_01](../NEXT_TASK_JOURNEY_SIX_COVES.md) connects the first six existing coves of the twelve-cove target.
 
 | Position after integration | Cove / story role |
 | --- | --- |
@@ -16,7 +16,7 @@ The repaired six-space ferry, docks and Wide/Reef complexity received positive p
 | 5 | Wide Berth — accepted mixed-load and current-window planning |
 | 6 | Reef Return — accepted delivery/approach composition beyond the headland |
 
-First Crossing stays independent Practice. Add compact illustrated entries for Two Shelters and Reef using the actual starting casts and established story language. Preserve all accepted puzzle data, art and Tips. This sequence has distinct rescued neighbors; do not move a rescued character back into danger.
+First Crossing stays independent Practice. Among the reeds introduces Hazel and Bracken aboard the small ferry as Mica looks up. Lights beyond the reef shows Heather and Birch aboard the larger ferry as Flick and Dot answer one another from shore. Earlier rescued neighbors remain safe.
 
 Older saves retain their earned identities and seen scenes. Deliberate Continue fills the first genuinely uncompleted cove in the revised order, with a clear explanation and the original record preserved. An old Wide completion does not imply Two Shelters completion and need not be replayed. See the task for the bounded compatibility policy.
 

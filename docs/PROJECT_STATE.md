@@ -1,12 +1,14 @@
 # Last Ferry — Project state
 
-## Active task — six connected coves · 10 November 2026
+## Current handoff — six connected coves
 
 Follow root [NEXT_TASK_JOURNEY_SIX_COVES.md](../NEXT_TASK_JOURNEY_SIX_COVES.md), **JOURNEY_SIX_COVES_01**. Optional Tips is complete and reviewed at `f23e9b087e80316c3884ed5fa83cce25cf6508a0`. The player previously accepted the repaired ferry/docks and increasing Wide/Reef complexity. Preserve those results.
 
-The next implementation connects existing accepted content: Holding → Bellwater → Driftwood → Two Shelters → existing launch → Wide → Reef. It moves the launch after the last four-space cove, adds two short authored illustrated entries and explicitly handles older saves. No new puzzle, species, mechanic or rebalance is commissioned. The current published runtime still has the original four-cove Journey and seven Practice entries; six-cove integration is not yet implemented. The twelve-cove target remains unfinished, with later chapters provisional.
+The implementation now connects Holding → Bellwater → Driftwood → Two Shelters → A wider deck → Wide Berth → Reef Return. Two new seven-second illustrations introduce the aboard and waiting neighbors. The existing eight-second launch follows the fourth small-ferry rescue. Accepting Reef Return completes the six available coves. First Crossing and all seven Practice entrances remain independent. [Six-cove review and evidence](../reviews/journey-six-coves/REVIEW.md)
 
-Save policy: preserve original bytes, earned identities and seen scenes; apply compatibility only on explicit Continue, with a brief explanation of changed resume points. Resume the first genuinely uncompleted cove in the new order. An already-earned Wide rescue stays earned while missing Two Shelters and Reef remain uncompleted. Home/Options/Practice are read-only. The named task contains the exact legacy cases; do not use the old strict-prefix contract to prohibit this authorized integration.
+On Home, Continue explains the changed route for returning players. It backs up an affected version-1 record byte for byte before saving its new scene checkpoint. Earlier scene and cove checkpoints reopen in place. Rescuing Two Shelters leads to the unseen launch, directly to Wide if the launch is acknowledged, or directly to Reef if Wide is already safe. A failed backup or write keeps the earlier stored checkpoint and offers visit-only play.
+
+Verification passed the production build, 125 focused unit cases, the 79-family asset inventory and 11 production save cases. A fresh player rescued all six coves. A separate returning-player run undid tides and wins in both added Journey coves. The review retains native 390×844 and 780×320 scene frames, the uninterrupted 85-second returning-player recording with runtime sound, original capture failures and the checks that resolved them. The reviewed version 17 publication below remains current.
 
 ## Current publication — Sites version 17
 

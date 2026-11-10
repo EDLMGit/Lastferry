@@ -9,9 +9,17 @@ import {
   type Level,
 } from '../levels/level';
 
-export type CoveId = 'holding-pier' | 'bellwater' | 'driftwood-yard' | 'wide-berth';
-export type SceneId = 'opening' | 'another-bell' | 'driftwood-light' | 'a-wider-deck';
-export type IllustrationId = 'tide' | 'lantern' | 'ferry' | 'harbor' | 'driftwood' | 'launch';
+export type CoveId =
+  'holding-pier' | 'bellwater' | 'driftwood-yard' | 'two-shelters' | 'wide-berth' | 'reef-return';
+export type SceneId =
+  | 'opening'
+  | 'another-bell'
+  | 'driftwood-light'
+  | 'among-the-reeds'
+  | 'a-wider-deck'
+  | 'lights-beyond-the-reef';
+export type IllustrationId =
+  'tide' | 'lantern' | 'ferry' | 'harbor' | 'driftwood' | 'reeds' | 'launch' | 'reef';
 export type StoryCue = {
   id: string;
   atMs: number;
@@ -125,6 +133,26 @@ export const storyScenes: Record<SceneId, StoryScene> = {
     destination: 'driftwood-yard',
     continueLabel: 'Continue to Driftwood',
   },
+  'among-the-reeds': {
+    id: 'among-the-reeds',
+    title: 'Among the reeds',
+    shots: [
+      {
+        id: 'reeds',
+        illustration: 'reeds',
+        durationMs: 7000,
+        captionCueMs: 1050,
+        caption: 'Hazel and Bracken are aboard.\nMica looks up from the reeds.',
+        description:
+          'The small yellow ferry carries the two brown beavers. As it draws closer, cream rabbit Mica steps clear of the reeds and lifts a paw. A beaver answers from the open deck.',
+        cues: [
+          { id: 'among-the-reeds.ferry.water', atMs: 900, kind: 'ferry-water', strength: 0.6 },
+        ],
+      },
+    ],
+    destination: 'two-shelters',
+    continueLabel: 'Continue to Two Shelters',
+  },
   'a-wider-deck': {
     id: 'a-wider-deck',
     title: 'A wider deck',
@@ -145,6 +173,37 @@ export const storyScenes: Record<SceneId, StoryScene> = {
     destination: 'wide-berth',
     continueLabel: 'Continue to Wide Berth',
   },
+  'lights-beyond-the-reef': {
+    id: 'lights-beyond-the-reef',
+    title: 'Lights beyond the reef',
+    shots: [
+      {
+        id: 'reef',
+        illustration: 'reef',
+        durationMs: 7000,
+        captionCueMs: 1050,
+        caption: 'Heather and Birch are aboard.\nBeyond the reef, Dot answers Flick’s light.',
+        description:
+          'Heather the sheep and Birch the beaver share the larger ferry. Beyond the low reef, tan Flick lifts a lantern from Shell Pool. Cream Dot raises a second light at Wrack Pier.',
+        cues: [
+          {
+            id: 'lights-beyond-the-reef.ferry.water',
+            atMs: 750,
+            kind: 'ferry-water',
+            strength: 0.55,
+          },
+          {
+            id: 'lights-beyond-the-reef.lantern.contact',
+            atMs: 3650,
+            kind: 'lantern-contact',
+            strength: 0.55,
+          },
+        ],
+      },
+    ],
+    destination: 'reef-return',
+    continueLabel: 'Continue to Reef Return',
+  },
 };
 
 export type StoryCove = {
@@ -158,7 +217,9 @@ export const storyCoves: readonly StoryCove[] = [
   { id: 'holding-pier', level: holdingPier, order: 0, entryScene: 'opening' },
   { id: 'bellwater', level: bellwater, order: 1, entryScene: 'another-bell' },
   { id: 'driftwood-yard', level: driftwoodYard, order: 2, entryScene: 'driftwood-light' },
-  { id: 'wide-berth', level: wideBerth, order: 3, entryScene: 'a-wider-deck' },
+  { id: 'two-shelters', level: twoShelters, order: 3, entryScene: 'among-the-reeds' },
+  { id: 'wide-berth', level: wideBerth, order: 4, entryScene: 'a-wider-deck' },
+  { id: 'reef-return', level: reefReturn, order: 5, entryScene: 'lights-beyond-the-reef' },
 ];
 
 export const practiceCoves = [

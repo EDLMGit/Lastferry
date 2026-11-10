@@ -62,9 +62,10 @@ import {
 } from './campaign/registry';
 import {
   JourneyProgress,
-  isLegacyCompletion,
+  acceptCove,
   legacyContinuationScene,
   checkpointCove,
+  type JourneyRecord,
 } from './campaign/progress';
 import { StoryPresentation, restoredHarbor } from './campaign/presentation';
 import { StoryView } from './campaign/story-view';
@@ -257,6 +258,24 @@ function setHomeVisible(active: boolean) {
   world.setHomePresentation(active);
 }
 
+function homeCheckpointNotice(record: JourneyRecord, newEntry: SceneId | null) {
+  if (newEntry === 'among-the-reeds') {
+    if (record.completed.includes('wide-berth')) return 'Two Shelters is next. Wide Berth is already safe.';
+    if (record.acknowledgedScenes.includes('a-wider-deck')) return 'Visit Two Shelters first, then resume Wide Berth.';
+    return 'Two Shelters now comes before Nell’s launch.';
+  }
+  if (newEntry) return `${storyScenes[newEntry].title} · new story waiting.`;
+  const checkpoint = record.checkpoint;
+  if (checkpoint.kind === 'complete') return 'Six coves are safe.';
+  if (checkpoint.kind === 'scene') return `${storyScenes[checkpoint.id].title} · saved story.`;
+  return `${storyCoves.find((entry) => entry.id === checkpoint.id)!.level.title} · from cove start.`;
+}
+
+function continueSavedJourney() {
+  const freshEntry = journey?.continueAvailableContent();
+  resumeJourney(!freshEntry);
+}
+
 function showHome(focusId?: string) {
   clearReceipt();
 
@@ -282,8 +301,8 @@ function showHome(focusId?: string) {
 
   const checkpoint = snapshot?.record?.checkpoint;
 
-  const legacy = !!snapshot?.record && isLegacyCompletion(snapshot.record);
-  const complete = checkpoint?.kind === 'complete' && !legacy;
+  const newEntry = legacyContinuationScene(snapshot?.record);
+  const complete = checkpoint?.kind === 'complete' && !newEntry;
 
   const invalid = snapshot?.kind === 'invalid';
 
@@ -295,15 +314,7 @@ function showHome(focusId?: string) {
         ? 'New journey'
         : 'Play';
 
-  const notice = legacy
-    ? `${storyScenes[legacyContinuationScene(snapshot!.record)!].title} · new story waiting.`
-    : checkpoint?.kind === 'cove'
-      ? `${storyCoves.find((entry) => entry.id === checkpoint.id)!.level.title} · from cove start.`
-      : checkpoint?.kind === 'scene'
-        ? `${storyScenes[checkpoint.id].title} · saved story.`
-        : complete
-          ? 'Four coves are safe.'
-          : '';
+  const notice = snapshot?.record ? homeCheckpointNotice(snapshot.record, newEntry) : '';
 
   homeSurface.innerHTML = `<header id="home-title"><h1>Last Ferry</h1><p>The Long Tide</p></header><nav id="home-menu" aria-label="Home"><p class="home-notice">${notice}${snapshot && !snapshot.persistent ? ' Progress lasts only for this visit.' : ''}${invalid ? ` ${snapshot.issue}` : ''}</p><button id="home-play">${label}</button><div class="home-secondary"><button id="home-options">Options</button><button id="home-practice">Practice</button></div><div class="home-secondary"><button id="home-sound"></button>${checkpoint ? '<button id="home-new">New journey</button>' : ''}</div></nav>`;
 
@@ -321,10 +332,8 @@ function showHome(focusId?: string) {
   $('home-play').onclick = (event) => {
     if (event.detail > 1) return;
 
-    if (legacy) {
-      if (journey?.continueAvailableContent()) resumeJourney(false);
-    } else if (complete) showJourney('practice', 'practice-first-crossing');
-    else if (checkpoint) resumeJourney();
+    if (complete) showJourney('practice', 'practice-first-crossing');
+    else if (checkpoint) continueSavedJourney();
     else fresh();
   };
 
@@ -580,7 +589,9 @@ function mountCove(next: typeof level) {
 function renderJourneyDialog() {
   storyView = null;
   const snapshot = journey?.snapshot;
-  const checkpointNotice = 'Progress is saved between coves. An unfinished cove starts again.';
+  const checkpointNotice = snapshot?.persistent === false
+    ? 'Journey progress lasts for this visit only.'
+    : 'Progress is saved between coves. An unfinished cove starts again.';
   const notice =
     snapshot && !snapshot.persistent
       ? '<p role="status">Progress is only kept for this visit. It will not survive closing.</p>'
@@ -621,8 +632,8 @@ function renderJourneyDialog() {
     actions =
       '<button id="journey-return-cancel">Keep playing</button><button id="journey-return-confirm">Return home</button>';
   } else {
-    heading = 'Four coves are safe.';
-    body = '<p>The next part of the journey is still being made.</p>' + notice;
+    heading = 'Six coves are safe.';
+    body = '<p>You’ve reached the end of the available coast. You can revisit any crossing in Practice.</p>' + notice;
     actions =
       '<button id="journey-title">Return Home</button><button id="journey-practice">Practice</button><button id="journey-settings">Options</button>';
   }
@@ -643,7 +654,7 @@ function renderJourneyDialog() {
   on('journey-new', () =>
     snapshot?.kind === 'empty' ? beginJourney() : showJourney('replace', 'journey-replace-cancel'),
   );
-  on('journey-continue', () => resumeJourney());
+  on('journey-continue', continueSavedJourney);
   on('journey-replace-confirm', beginJourney);
   on('journey-replace-cancel', () => showJourney('journey', 'journey-new'));
   on('journey-practice', () => showJourney('practice', 'practice-first-crossing'));
@@ -694,6 +705,13 @@ function renderIllustratedStory(transcript: boolean) {
       button.textContent ?? '',
       button.id === 'story-continue' ? 'warm' : 'quiet',
     );
+  if (journey?.snapshot.persistent === false) {
+    const notice = document.createElement('p');
+    notice.className = 'story-storage-notice';
+    notice.setAttribute('role', 'status');
+    notice.textContent = 'Journey progress lasts for this visit only.';
+    $('story-continue').parentElement!.append(notice);
+  }
   storyView = new StoryView($('story-canvas') as HTMLCanvasElement);
   storyUiKey = '';
   $('story-continue').onclick = (event) => {
@@ -1307,9 +1325,12 @@ function renderDialog() {
       $('settings').closest('.menu-actions')!.after(returnButton);
       returnButton.onclick = () => showJourney('return-title', 'journey-return-cancel');
       const policy = document.createElement('p');
-      policy.textContent = campaignPlay
-        ? 'Progress is saved between coves. An unfinished cove starts again. Continue story after arrival to accept a rescue.'
-        : 'Practice does not change your journey.';
+      policy.textContent = 'Practice does not change your journey.';
+      if (campaignPlay) {
+        policy.textContent = journey?.snapshot.persistent
+          ? 'Progress is saved between coves. An unfinished cove starts again. Continue story after arrival to accept a rescue.'
+          : 'Journey progress lasts for this visit only. Continue story after arrival to accept a rescue.';
+      }
       returnButton.after(policy);
     }
     const fullscreen = document.createElement('button');
@@ -1382,8 +1403,16 @@ function renderDialog() {
       nextControl.onclick = acceptStoryCove;
       const policy = document.createElement('p');
       policy.className = 'checkpoint-policy';
-      policy.textContent =
-        'Continue story accepts this rescue. Until then, Undo remains available; reloading restarts this cove.';
+      const progress = journey!.snapshot;
+      const record = progress.record!;
+      if (record.checkpoint.kind === 'cove') {
+        const next = acceptCove(record, record.checkpoint.id, s.status);
+        const handoff = next.checkpoint.kind === 'complete'
+          ? 'Continue story completes this coast.'
+          : `Next crossing: ${storyCoves.find((entry) => entry.id === checkpointCove(next))!.level.title}.`;
+        const checkpoint = progress.persistent ? 'Reloading restarts this cove.' : 'Progress lasts for this visit only.';
+        policy.textContent = `${handoff} Undo stays available until you continue. ${checkpoint}`;
+      }
       document.querySelector('.ending')!.append(policy);
     }
   }

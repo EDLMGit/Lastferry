@@ -1,4 +1,6 @@
-export type StoryIllustration = 'tide' | 'lantern' | 'ferry' | 'harbor' | 'driftwood' | 'launch';
+import type { IllustrationId } from './registry';
+
+export type StoryIllustration = IllustrationId;
 type Paint = string | CanvasGradient;
 type RabbitPose = {
   lift?: number;
@@ -64,6 +66,8 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
     harbor: 5,
     driftwood: 7,
     launch: 8,
+    reeds: 7,
+    reef: 7,
   };
   const grains = Array.from({ length: 560 }, (_, i) => ({
     x: ((i * 173 + 43) % 997) / 997,
@@ -291,7 +295,7 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
     s: number,
     t: number,
     u: number,
-    occupied = true,
+    occupied: boolean | (() => void) = true,
     moving = true,
   ) {
     ctx.save();
@@ -371,16 +375,11 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
       '#deb98a',
       2,
     );
-    if (occupied) sheep(43, -10, 0.85, Math.sin(ease((t - 0.8) / 1.8) * Math.PI) * -0.16);
-    line(
-      [
-        [80, -6],
-        [80, -41],
-      ],
-      '#52654e',
-      3,
-    );
-    lantern(80, -42, 0.78, 1);
+    if (typeof occupied === 'function') occupied();
+    else if (occupied) sheep(43, -10, 0.85, Math.sin(ease((t - 0.8) / 1.8) * Math.PI) * -0.16);
+    const lampPost = typeof occupied === 'function' ? 92 : 80;
+    line([[lampPost, -6], [lampPost, -41]], '#52654e', 3);
+    lantern(lampPost, -42, 0.78, 1);
     line(
       [
         [-93, -20],
@@ -1088,7 +1087,7 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
     ellipse(23, -20, 5.5, 5.5, '#b28b64');
     ctx.restore();
   }
-  function readyFerry(x: number, y: number, scale: number) {
+  function readyFerry(x: number, y: number, scale: number, passengers?: () => void) {
     ctx.save();
     ctx.translate(x, y);
     ctx.scale(scale, scale);
@@ -1114,6 +1113,7 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
     path('M -34 -60 L -19 -59 L -18 -43 L -33 -43 Z', '#396972');
     path('M 0 -61 L 10 -58 L 11 -38 L 1 -36 Z', '#78a5a0');
     line([[-67, -60], [-62, -59]], '#9dc3b6', 2.2);
+    passengers?.();
     line([[-16, -8], [-16, -25]], '#876d50', 2.5);
     line([[35, 10], [35, -6], [71, -12], [103, -27]], '#e1c597', 2.7);
     line([[71, 3], [71, -12]], '#8b765b', 2.5);
@@ -1123,6 +1123,141 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
       ellipse(fx, fy, 3.2, 4.1, '#c5964d', -0.1);
     }
     ctx.restore();
+  }
+  function connectionLayout() {
+    const portrait = W < 600;
+    const left = portrait ? 0 : W * 0.4;
+    return {
+      portrait,
+      center: (W + left) / 2,
+      scale: Math.min((W - left - 12) / 320, H / 216, 2.3),
+    };
+  }
+  function aboardBeaver(x: number, y: number, size: number, paw: number, turn: number) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(-size, size);
+    launchBeaver(0, 0, 1, paw, turn);
+    ctx.restore();
+  }
+  function approachWake(x: number, y: number, progress: number) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.globalAlpha = 0.6 * Math.sin(Math.PI * progress);
+    path('M -90 21 Q -108 27 -132 26 M -101 27 Q -128 36 -149 32', null, '#dce5c9', 1.8);
+    ctx.restore();
+  }
+  function reedsShot(seconds: number) {
+    const t = Math.min(seconds, 5.8);
+    const { portrait, center, scale } = connectionLayout();
+    const approach = ease((t - 0.25) / 4.0);
+    const step = ease((t - 1.25) / 1.85);
+    const greeting = ease((t - 2.65) / 1.3);
+    const answer = ease((t - 3.75) / 1.5);
+    const bankY = H * (portrait ? 0.55 : 0.575);
+    backdrop(t, 1);
+    foregroundWater(H * 0.47, t, { x: center + 76 * scale, strength: 0.24 });
+    ctx.save();
+    ctx.translate(center, bankY);
+    ctx.scale(scale, scale);
+    ellipse(110, 24, 80, 6, 'rgba(25,69,68,.20)');
+    path('M 22 7 Q 36 -4 54 -5 Q 84 -18 110 -10 Q 144 -18 185 -7 L 195 8 Q 180 25 155 21 Q 124 28 86 24 Q 48 26 22 13 Z', '#697f6b');
+    path('M 22 7 Q 36 -4 54 -5 Q 84 -18 110 -10 Q 144 -18 185 -7 L 191 3 Q 170 8 150 7 Q 105 17 70 10 Q 42 15 22 7 Z', '#a7ab7e');
+    path('M 25 13 Q 52 22 75 20 M 93 24 Q 121 26 146 22', null, '#c9c8a0', 1.5);
+    reeds(139, -2, 0.82, t, false);
+    reeds(69, -7, 0.57, -t, false);
+    const rabbitX = mix(126, 86, step);
+    rabbit(rabbitX, 3, 0.83, 'cream', {
+      step,
+      head: mix(0.13, -0.16, greeting),
+      lift: greeting,
+    });
+    reeds(145, 9, 0.73, t, false);
+    path('M 47 13 Q 65 9 75 11 M 100 13 Q 107 7 115 9', null, '#c0bc92', 1.3);
+    const boatX = mix(-51, -11, approach);
+    const boatY = Math.min((H - bankY) / scale - 45, (portrait ? 113 : 58) - 5 * approach);
+    approachWake(boatX, boatY, approach);
+    boat(boatX, boatY, 1, t, approach, () => {
+      aboardBeaver(58, -13, 0.53, 0.06, greeting);
+      aboardBeaver(18, -7, 0.6, answer, answer);
+    }, false);
+    ctx.restore();
+    finish(t);
+  }
+  function wrackLanding(x: number, y: number, scale: number) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(scale, scale);
+    ellipse(1, 15, 53, 5, 'rgba(36,71,68,.18)');
+    path('M -56 5 Q -40 -11 -12 -8 Q 15 -17 39 -6 L 57 2 L 49 13 Q 5 22 -43 14 Z', '#63857f');
+    path('M -56 5 Q -40 -11 -12 -8 Q 15 -17 39 -6 L 57 2 Q 16 9 -36 9 Z', '#afaf8f');
+    path('M -47 4 Q -41 2 -33 2 L -16 -5 L -14 -3 L -30 5 L -26 9 L -31 10 Z', '#876f58');
+    line([[-44, 5], [-34, 4], [-25, 0]], '#c5aa81', 1.4);
+    ctx.restore();
+  }
+  function shellLanding(x: number, y: number, scale: number) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(scale, scale);
+    ellipse(3, 20, 48, 4, 'rgba(35,71,69,.22)');
+    path('M -51 1 L -38 -9 Q -15 -14 7 -10 L 31 -17 L 53 -3 L 48 12 L 30 20 L -30 16 Z', '#6c8980');
+    path('M -51 1 L -38 -9 Q -11 -13 7 -10 L 31 -17 L 53 -3 Q 21 10 -31 7 Z', '#bdba98');
+    ellipse(27, -4, 10, 3.6, '#7fa5a0', -0.08);
+    for (const [sx, sy] of [[18, 4], [29, 2], [41, -3]]) {
+      path(`M ${sx} ${sy} q -5 -1 -4 -4 q 1 -3 3 -2 q 3 -3 5 0 q 2 2 -4 6 Z`, '#ded2ae');
+      line([[sx, sy - 1], [sx + 1, sy - 4]], '#a79e85', 0.8);
+    }
+    ctx.restore();
+  }
+  function reefRocks(x: number, y: number, scale: number) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(scale, scale);
+    ellipse(0, 3, 42, 6, '#80a69a');
+    path('M -35 1 L -21 -9 L -11 -7 L -5 -16 L 8 -13 L 20 -3 L 33 1 L 21 5 L -22 4 Z', '#496f70');
+    path('M -21 -9 L -11 -7 L -5 -16 L 8 -13 L 0 -8 L -4 -2 L -18 0 Z', '#8f9e92');
+    path('M -42 4 Q -33 8 -19 7 M 15 6 Q 28 7 38 3', null, '#d0d6b8', 1.3);
+    ctx.restore();
+  }
+  function reefShot(seconds: number) {
+    const t = Math.min(seconds, 6);
+    const { portrait, center, scale } = connectionLayout();
+    const approach = ease((t - 0.15) / 4.45);
+    const firstLight = ease((t - 1.15) / 1.85);
+    const answeringLight = ease((t - 3.05) / 2.1);
+    const ground = H * (portrait ? 0.53 : 0.5);
+    backdrop(t);
+    foregroundWater(H * 0.43, t, { x: center + 82 * scale, strength: 0.2 + firstLight * 0.22 });
+    ctx.save();
+    ctx.translate(center, ground);
+    ctx.scale(scale, scale);
+    const dotX = portrait ? -72 : 32;
+    const flickX = portrait ? 93 : 129;
+    const shellY = portrait ? -21 : 1;
+    const wrackY = portrait ? 0 : -15;
+    shellLanding(flickX, shellY, 0.86);
+    rabbit(flickX - 2, shellY, 0.64, 'tan', {
+      lift: firstLight, head: -0.07 * firstLight, lantern: true, warmth: firstLight,
+    });
+    wrackLanding(dotX, wrackY, 0.95);
+    ctx.save();
+    ctx.translate(dotX, wrackY);
+    ctx.scale(-1, 1);
+    rabbit(0, 0, 0.72, 'cream', {
+      lift: answeringLight, head: -0.14 * answeringLight, lantern: true, warmth: answeringLight,
+    });
+    ctx.restore();
+    reefRocks(portrait ? 29 : 75, portrait ? 44 : 32, 0.79);
+    reefRocks(portrait ? 113 : 130, portrait ? 68 : 57, 0.54);
+    const boatX = mix(portrait ? -31 : -75, portrait ? 8 : -46, approach);
+    const boatY = Math.min((H - ground) / scale - (portrait ? 59 : 50), (portrait ? 151 : 88) - 5 * approach);
+    approachWake(boatX, boatY + 18, approach);
+    readyFerry(boatX, boatY, portrait ? 1.08 : 0.94, () => {
+      aboardBeaver(77, -16, 0.60, 0.1, firstLight);
+      sheep(28, -7, 0.78, -0.13 * Math.sin(answeringLight * Math.PI));
+    });
+    ctx.restore();
+    finish(t);
   }
   function launchShot(t: number) {
     const portrait = W < 480,
@@ -1306,6 +1441,8 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
         harbor: harborShot,
         driftwood: driftwoodShot,
         launch: launchShot,
+        reeds: reedsShot,
+        reef: reefShot,
       })[illustration](t);
     },
   };

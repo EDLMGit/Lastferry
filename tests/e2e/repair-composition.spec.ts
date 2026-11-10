@@ -33,11 +33,11 @@ test('matching phone views, revised launch and existing saved Wide Berth entranc
         await page.locator('#gallery-wide-ferry').scrollIntoViewIfNeeded();
         await page.locator('#gallery-wide-ferry').screenshot({ path: dir + '/gallery.png' });
       } else {
-        const previous = ['holding-pier', 'bellwater', 'driftwood-yard'];
+        const previous = ['holding-pier', 'bellwater', 'driftwood-yard', 'two-shelters'];
         const saved = JSON.stringify({
           version: 1,
           completed: previous,
-          acknowledgedScenes: ['opening', 'another-bell', 'driftwood-light'],
+          acknowledgedScenes: ['opening', 'another-bell', 'driftwood-light', 'among-the-reeds'],
           checkpoint: { kind: 'scene', id: 'a-wider-deck' },
         });
         await page.evaluate(({ key, saved }) => localStorage.setItem(key, saved), {
@@ -66,11 +66,16 @@ test('matching phone views, revised launch and existing saved Wide Berth entranc
         const freshWide = await passive(page, () => (window as any).__LAST_FERRY__.getState());
         expect(freshWide).toMatchObject({ turn: 0, boatNodeId: 'wide-berth', aboard: [] });
         expect(await passive(page, (key) => JSON.parse(localStorage.getItem(key)!), journeyKey)).toEqual(atWide);
-        const completed = JSON.stringify({ ...atWide, completed: [...previous, 'wide-berth'], checkpoint: { kind: 'complete' } }, null, 2);
+        const completed = JSON.stringify({
+          ...atWide,
+          completed: [...previous, 'wide-berth', 'reef-return'],
+          acknowledgedScenes: [...atWide.acknowledgedScenes, 'lights-beyond-the-reef'],
+          checkpoint: { kind: 'complete' },
+        }, null, 2);
         await page.evaluate(({ key, completed }) => localStorage.setItem(key, completed), { key: journeyKey, completed });
         await page.goto('/');
         await expect(page.locator('#home-play')).toHaveText('Play a cove');
-        await expect(page.getByText('Four coves are safe.', { exact:true })).toBeVisible();
+        await expect(page.getByText('Six coves are safe.', { exact:true })).toBeVisible();
         expect(await passive(page, key => localStorage.getItem(key), journeyKey)).toBe(completed);
         report(dir, prefix + '-checkpoint', {
           saved: JSON.parse(saved),
