@@ -1,3 +1,7 @@
+# Optional tips
+
+OPTIONAL_TIPS_01 starts from the clean fast-forward to `e8e0c8d360c29246b8d9a8fd202950ebfba55329`. The shared Settings now has a separate remembered Tips preference, default Off. The preference affects predictive presentation and the pre-action warning flow. Actual losses, legal-action validation and Undo retain their existing rules. Build/TypeScript, 66 relevant unit cases, 79-family validation and all six distinct focused browser cases pass. The first browser batch was 5/6; the corrected Settings check and two matched-camera recaptures passed 3/3. Native 390×844 and 780×320 Off/On examples, original failures and device limitations are in the review. The accepted repair remains published as private Site version 16; this pass is not deployed. [Current review](reviews/optional-tips/REVIEW.md)
+
 # Existing coves repair
 
 Started from corrective documentation commit `a07be60999505fce3dd3dea76cd948f50903aa78` on `m1-first-crossing`, compared with reviewed runtime `5085b894cd611dfdcd4ffe55d3bc7296d830ce09`. The two existing IDs now host the repaired boat, landings and puzzles. Wide Berth has verified 12- and 14-action rescues. Reef Return has 10- and 11-action rescues with different return routes. The production build, 460 unit cases, 79-family validation and eight focused browser cases passed. The final browser run passed seven cases and the eighth passed individually with its original timeout. The original version 15 receipt remains the publication record. [Current review](reviews/existing-coves-repair/REVIEW.md)

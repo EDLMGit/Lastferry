@@ -47,7 +47,7 @@ root.innerHTML = `<header><p>Last Ferry · developer tools</p><h1>Cove asset gal
     ['Moss', 2, true, 'sheep-wool'],
   ],
   true,
-)}<p class="gallery-warning">Pip boards, then the tide rises. Rue is still waiting at Rabbit Pier when it floods. This ends the crossing.</p></article>
+)}<p>Tips On · predictive warning specimen</p><p class="gallery-warning">Pip boards, then the tide rises. Rue is still waiting at Rabbit Pier when it floods. This ends the crossing.</p></article>
 <article id="gallery-text-stress" class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow gallery-text-stress"><p>Bounded stress specimen · 320px panel, 20px text (125%)</p><h3>Longer names</h3>${choices(
   [
     ['Alexandria', 1, true, 'rabbit-cream'],

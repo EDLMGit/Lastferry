@@ -1,5 +1,9 @@
 # Last Ferry asset provenance and history
 
+## Optional tips
+
+The existing shared dialog family now includes a remembered Tips Off/On preference. Its native controls, painted material and icons retain their sources. The developer gallery identifies its predictive warning specimen as Tips On. The catalog retains all 79 IDs and updates only `ui.dialogs` with the preference source and current evidence. [Review](../reviews/optional-tips/REVIEW.md)
+
 ## Existing coves repair
 
 Wide Berth and Reef Return share the rebuilt six-space hull, wheelhouse, fixed automatic seats, side gate and shore connections. The shape and visible freeboard were compared with the actual four-space ferry in matched phone Play views. The launch uses a newly drawn side profile of the same boat. The gallery renders the production ferry and its real seating anchors. Beacon Reef and Needle Reef reuse the directional passage indicator and water shelves. All geometry, paint and placement work is original project code. The catalog keeps the original 79 family IDs. [Review](../reviews/existing-coves-repair/REVIEW.md) · [Inventory](../assets/catalog.json)

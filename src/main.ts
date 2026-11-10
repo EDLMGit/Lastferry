@@ -49,6 +49,7 @@ import { locationFacts } from './ui/location';
 import { endpointTargets, clearCurrentEndpoint } from './ui/cove-layout';
 import { placeDriftwoodLabels } from './ui/driftwood-labels';
 import { MotionPreference, type MotionMode } from './ui/motion-preference';
+import { TipsPreference } from './ui/tips-preference';
 import { PanGesture } from './ui/pan-gesture';
 import { visibleViewport, insetRectangle } from './ui/viewport';
 import { FullscreenSupport } from './ui/fullscreen';
@@ -136,6 +137,7 @@ let session = new Session(level);
 const sound = new Sound();
 let world = new World($('world'), session.state, level);
 const motion = new MotionPreference(matchMedia('(prefers-reduced-motion: reduce)'));
+const tips = new TipsPreference();
 sound.reconcileState(session.state, level);
 const dialog = $('dialog') as HTMLDialogElement;
 dialog.classList.add('cove-panel', 'cove-surface');
@@ -609,7 +611,7 @@ function renderJourneyDialog() {
         .join('') + '<button id="journey-title">Back to title</button>';
   } else if (mode === 'replace') {
     heading = 'Start a new journey?';
-    body = '<p>This replaces the saved journey. Sound and Motion settings stay as they are.</p>';
+    body = '<p>This replaces the saved journey. Sound, Motion and Tips settings stay as they are.</p>';
     actions =
       '<button id="journey-replace-cancel">Keep current journey</button><button id="journey-replace-confirm">Replace journey</button>';
   } else if (mode === 'return-title') {
@@ -1238,8 +1240,8 @@ function renderDialog() {
   if (mode === 'action' && selected) {
     const a = selected,
       proposed = preview(s, a, level),
-      text = previewCopy(s, a, level),
-      transfer = a.type === 'board' || a.type === 'unload' ? transferFacts(s, a, level) : null;
+      text = previewCopy(s, a, level, tips.enabled),
+      transfer = a.type === 'board' || a.type === 'unload' ? transferFacts(s, a, level, tips.enabled) : null;
 
     const ids = a.type === 'board' ? s.waitingByPier[p!.id] : a.type === 'unload' ? s.aboard : [];
     const choices =
@@ -1247,7 +1249,7 @@ function renderDialog() {
         ? `<div class="passenger-options${level.id === 'reef-return' && ids.length === 4 ? ' reef-manifest' : ''}" role="group" aria-label="Passenger selection">${ids.map((id) => `<button id="passenger-${id}" class="cove-choice" aria-pressed="${a.passengerIds.includes(id)}">${passengerChoiceContent(passengerNames[id].split(' ·')[0], level.passengers.find((p) => p.id === id)!.slots, resolvePassengerAppearance(level, id)?.portraitKey ?? null)}</button>`).join('')}</div>`
         : '';
     $('dialog-content').innerHTML =
-      `${header(transfer ? (a.type === 'board' ? 'Board passengers' : p?.isDeliveryPier ? 'Bring passengers home' : 'Let passengers ashore') : actionLabel(s, a, level), `${nodeNames[a.type === 'move' ? a.to : s.boatNodeId]} · inspection is free`)}<div id="preview" class="dialog-body ${proposed.error || proposed.state.status === 'lost' ? 'warning' : ''}" aria-live="polite" aria-atomic="true">${choices}<p class="requirement">${text.error ?? (transfer ? `${transfer.depth} · ${transfer.load}` : text.requirement)}</p>${(transfer ? transfer.detail : text.consequence) ? `<p class="consequence">${transfer ? transfer.detail : text.consequence}</p>` : ''}${!proposed.error && !transfer ? `<p class="preview-result">After this action: Boat ${load(proposed.state, level)}/${level.rules.capacity} spaces · tide ${proposed.state.tideLevel}${s.tideLevel !== proposed.state.tideLevel ? ` (now ${s.tideLevel})` : ''}</p>` : ''}</div><footer class="dialog-footer"><button id="commit" ${proposed.error ? 'disabled' : ''}>${proposed.error ? 'Action unavailable' : transfer ? `${transfer.label} · 1 action` : 'Confirm · 1 action'}</button></footer>`;
+      `${header(transfer ? (a.type === 'board' ? 'Board passengers' : p?.isDeliveryPier ? 'Bring passengers home' : 'Let passengers ashore') : actionLabel(s, a, level), `${nodeNames[a.type === 'move' ? a.to : s.boatNodeId]} · inspection is free`)}<div id="preview" class="dialog-body ${proposed.error || (tips.enabled && proposed.state.status === 'lost') ? 'warning' : ''}" aria-live="polite" aria-atomic="true">${choices}<p class="requirement">${text.error ?? (transfer ? `${transfer.depth} · ${transfer.load}` : text.requirement)}</p>${(transfer ? transfer.detail : text.consequence) ? `<p class="consequence">${transfer ? transfer.detail : text.consequence}</p>` : ''}${!proposed.error && !transfer ? `<p class="preview-result">After this action: Boat ${load(proposed.state, level)}/${level.rules.capacity} spaces · tide ${proposed.state.tideLevel}${s.tideLevel !== proposed.state.tideLevel ? ` (now ${s.tideLevel})` : ''}</p>` : ''}</div><footer class="dialog-footer"><button id="commit" ${proposed.error ? 'disabled' : ''}>${proposed.error ? 'Action unavailable' : transfer ? `${transfer.label} · 1 action` : 'Confirm · 1 action'}</button></footer>`;
 
     if (a.type === 'board' || a.type === 'unload')
       for (const id of ids)
@@ -1292,7 +1294,7 @@ function renderDialog() {
       )
       .join('; ');
     $('dialog-content').innerHTML =
-      `${header('Crossing menu')}<div class="dialog-body menu-body">${s.status === 'won' ? '<button id="return-arrival">Return to arrival</button>' : ''}<div class="menu-actions"><button id="restart">Restart crossing</button><button id="settings">Settings</button></div><label class="cove-picker">Choose cove<select id="cove-picker">${practiceCoves.map((l) => `<option value="${l.id}" ${l.id === level.id ? 'selected' : ''}>${l.title}${l.id === baseline.id ? ' · baseline' : ''}</option>`).join('')}</select></label><details id="help-details"><summary>How to play · actions and depth</summary><p>${actionCostCopy(level)}</p><p>Select a named place, island, pier or landmark to see its options for free. Choose Sail to travel one passage. Select the ferry for its current place. A named single-passenger action acts directly. For several passengers, choose names in the nearby chooser, then use its named action. Select your current place for free transfer details. The chooser shows selected depth and meaningful consequences; a losing action warns before you commit.</p><p>Boat depth needed: ${draftBandsCopy(level)}. ${passengerCosts}. A passage must be at least as deep as the boat needs.</p><p>Boarding and unloading happen before the tide rises. Use the status button for the tide and pier forecast. Undo earlier actions or restart to recover from a losing plan.</p><p>Tab and Shift+Tab move between controls; Enter or Space activates them. Escape closes a dialog first; press it again to close the location card. Selection never spends an action.</p></details></div>`;
+      `${header('Crossing menu')}<div class="dialog-body menu-body">${s.status === 'won' ? '<button id="return-arrival">Return to arrival</button>' : ''}<div class="menu-actions"><button id="restart">Restart crossing</button><button id="settings">Settings</button></div><label class="cove-picker">Choose cove<select id="cove-picker">${practiceCoves.map((l) => `<option value="${l.id}" ${l.id === level.id ? 'selected' : ''}>${l.title}${l.id === baseline.id ? ' · baseline' : ''}</option>`).join('')}</select></label><details id="help-details"><summary>How to play · actions and depth</summary><p>${actionCostCopy(level)}</p><p>Select a named place, island, pier or landmark to see its options for free. Choose Sail to travel one passage. Select the ferry for its current place. A named single-passenger action acts directly. For several passengers, choose names in the nearby chooser, then use its named action. Select your current place for free transfer details. The chooser shows the selected load and depth. Tips in Settings adds predicted outcomes and warnings before losing actions. Tips starts Off. Route depths, currents, pier deadlines and the forecast are always available.</p><p>Boat depth needed: ${draftBandsCopy(level)}. ${passengerCosts}. A passage must be at least as deep as the boat needs.</p><p>Boarding and unloading happen before the tide rises. Use the status button for the tide and pier forecast. Undo earlier actions or restart to recover from a losing plan.</p><p>Tab and Shift+Tab move between controls; Enter or Space activates them. Escape closes a dialog first; press it again to close the location card. Selection never spends an action.</p></details></div>`;
 
     $('restart').onclick = restart;
 
@@ -1328,7 +1330,7 @@ function renderDialog() {
       };
   } else if (mode === 'settings') {
     $('dialog-content').innerHTML =
-      `${header('Settings', undefined, 'Back to ' + (settingsParent === 'terminal' ? 'arrival' : 'menu'))}<div class="dialog-body settings-body"><div class="settings-row"><span>Sound</span><div class="settings-sound-controls"><button id="settings-sound"></button><button id="settings-mute" data-sound-intent="mute" hidden>Mute sound</button></div></div><p id="audio-status" role="status"></p><label class="settings-row" for="motion-preference">Motion<select id="motion-preference"><option value="device">Follow device</option><option value="reduced">Reduced</option></select></label><p id="motion-status"></p></div><footer class="dialog-footer"><button id="settings-back">Back</button></footer>`;
+      `${header('Settings', undefined, 'Back to ' + (settingsParent === 'terminal' ? 'arrival' : 'menu'))}<div class="dialog-body settings-body"><div class="settings-row"><span>Sound</span><div class="settings-sound-controls"><button id="settings-sound"></button><button id="settings-mute" data-sound-intent="mute" hidden>Mute sound</button></div></div><p id="audio-status" role="status"></p><label class="settings-row" for="motion-preference">Motion<select id="motion-preference"><option value="device">Follow device</option><option value="reduced">Reduced</option></select></label><p id="motion-status"></p><label class="settings-row" for="tips-preference">Tips<select id="tips-preference" aria-describedby="tips-description"><option value="off">Off</option><option value="on">On</option></select></label><p id="tips-description">Show predicted outcomes and extra guidance.</p></div><footer class="dialog-footer"><button id="settings-back">Back</button></footer>`;
     $('settings-sound').onclick = toggleSound;
     $('settings-mute').onclick = (event) =>
       explicitSound(event.currentTarget as HTMLElement, 'mute');
@@ -1338,6 +1340,16 @@ function renderDialog() {
     renderFullscreen();
     ($('motion-preference') as HTMLSelectElement).onchange = (event) =>
       motion.setMode((event.target as HTMLSelectElement).value as MotionMode);
+    const tipsControl = $('tips-preference') as HTMLSelectElement;
+    tipsControl.value = tips.enabled ? 'on' : 'off';
+    tipsControl.onchange = () => {
+      tips.setEnabled(tipsControl.value === 'on');
+      $('announcement').textContent = '';
+      $('local-context').replaceChildren();
+      $('local-context').removeAttribute('data-status');
+      cardPlacement = null;
+      render();
+    };
     $('settings-back').onclick = backFromSettings;
     if (journeySurface()) $('cancel').setAttribute('aria-label', 'Back to journey');
     renderSound();
@@ -1570,7 +1582,7 @@ function renderMap() {
     '<svg id="map-leaders" aria-hidden="true"></svg>' +
     level.nodes
       .map((n) => {
-        const facts = locationFacts(s, n.id, level);
+        const facts = locationFacts(s, n.id, level, tips.enabled);
         const [status, symbol, description] = {
           current: ['current', '•', 'current location'],
           remote: ['nonadjacent', '◇', 'no direct passage'],
@@ -1596,7 +1608,7 @@ function renderLocation() {
     $('selection-leader').innerHTML = '';
     return;
   }
-  const facts = locationFacts(session.state, locationSelection!, level);
+  const facts = locationFacts(session.state, locationSelection!, level, tips.enabled);
   card.dataset.location = facts.id;
   card.dataset.status = facts.status;
   const paragraph = (text: string, className = '') =>
@@ -1611,7 +1623,7 @@ function renderLocation() {
         [facts.board, facts.unload]
           .filter((action) => action !== null)
           .map((action) => {
-            const info = transferFacts(session.state, action!, level);
+            const info = transferFacts(session.state, action!, level, tips.enabled);
             return paragraph(`${info.label} · 1 action. ${info.depth}. ${info.detail}`);
           })
           .join('')
@@ -1625,7 +1637,7 @@ function renderLocation() {
       ? `<details class="route-details"><summary>Routes and deadlines · free</summary>${level.nodes
           .filter((n) => edgeTo(session.state, n.id, level))
           .map((n) => {
-            const next = locationFacts(session.state, n.id, level);
+            const next = locationFacts(session.state, n.id, level, tips.enabled);
             return `<button data-inspect-route="${n.id}">Inspect ${next.name}</button><p>${next.passage} ${next.safety}</p>`;
           })
           .join('')}</details>`
@@ -1677,7 +1689,7 @@ function renderLocation() {
   if ($('sail')) $('sail').onclick = (event) => {
     event.stopPropagation();
     if (blocked() || event.detail > 1 || locationSelection !== facts.id) return;
-    const current = locationFacts(session.state, facts.id, level);
+    const current = locationFacts(session.state, facts.id, level, tips.enabled);
     if (!current.move || !current.canSail) return;
     if (current.wouldLose !== facts.wouldLose || current.consequence !== facts.consequence) {
       renderLocation();
@@ -1694,7 +1706,7 @@ function renderLocation() {
 }
 function renderDock() {
   const dock = $('dock-actions'),
-    facts = locationFacts(session.state, session.state.boatNodeId, level),
+    facts = locationFacts(session.state, session.state.boatNodeId, level, tips.enabled),
     visible =
       !journeySurface() &&
       (!locationSelection || locationSelection === session.state.boatNodeId) &&
@@ -1718,7 +1730,7 @@ function renderDock() {
 
     const action = { type, passengerIds: [...ids] };
 
-    const info = transferFacts(session.state, action, level);
+    const info = transferFacts(session.state, action, level, tips.enabled);
 
     const direct = ids.length === 1 && info.direct;
 
@@ -1747,7 +1759,7 @@ function renderDock() {
 
       if (blocked() || event.detail > 1) return;
 
-      const current = transferFacts(session.state, action, level);
+      const current = transferFacts(session.state, action, level, tips.enabled);
 
       if (direct && current.direct) {
         returnId = type;
@@ -2048,7 +2060,7 @@ function playObstacles() {
     .map((element) => element.getBoundingClientRect());
 }
 function factsWidth() {
-  return locationSelection && locationFacts(session.state, locationSelection, level).wouldLose ? 320 : 292;
+  return locationSelection && locationFacts(session.state, locationSelection, level, tips.enabled).wouldLose ? 320 : 292;
 }
 function toggleStatus(open: boolean) {
   $('crossing-details').hidden = !open;

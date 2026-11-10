@@ -4,16 +4,16 @@ import { currentNotice, passengerList, previewCopy } from './presentation';
 
 export type Transfer = Extract<Action, { type: 'board' | 'unload' }>;
 
-export function transferFacts(before: State, action: Transfer, level: Level) {
+export function transferFacts(before: State, action: Transfer, level: Level, tips = true) {
   const proposed = preview(before, action, level);
   const who = passengerList(action.passengerIds, level) || 'passengers';
   const home = !!pierAt(before, level)?.isDeliveryPier;
   const label =
     action.type === 'board' ? `Board ${who}` : home ? `Bring ${who} home` : `Let ${who} ashore`;
   const depth = `Needs depth ${draft(before, level)} → ${draft(proposed.state, level)}`;
-  const text = previewCopy(before, action, level);
+  const text = previewCopy(before, action, level, tips);
   let detail = text.consequence;
-  if (action.type === 'board' && !proposed.error && proposed.state.status === 'playing') {
+  if (tips && action.type === 'board' && !proposed.error && proposed.state.status === 'playing') {
     const next = proposed.state;
     detail = next.tideLevel > before.tideLevel ? 'The tide rises after this action.' : '';
     const boundary = currentNotice(before, level)?.boundary;
@@ -31,7 +31,7 @@ export function transferFacts(before: State, action: Transfer, level: Level) {
     load: `${load(proposed.state, level)}/${level.rules.capacity} spaces`,
     detail,
     error: proposed.error,
-    direct: action.passengerIds.length === 1 && !proposed.error && proposed.state.status !== 'lost',
+    direct: action.passengerIds.length === 1 && !proposed.error && (!tips || proposed.state.status !== 'lost'),
   };
 }
 

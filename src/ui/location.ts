@@ -41,7 +41,7 @@ export type LocationFacts = {
   transferNote: string;
 };
 
-export function locationFacts(s: State, nodeId: string, l: Level): LocationFacts {
+export function locationFacts(s: State, nodeId: string, l: Level, tips = true): LocationFacts {
   const current = nodeId === s.boatNodeId,
     edge = edgeTo(s, nodeId, l),
     flow = edge && passageFlow(edge, s.tideLevel),
@@ -53,9 +53,9 @@ export function locationFacts(s: State, nodeId: string, l: Level): LocationFacts
     delivered = [...s.delivered],
     move: Move | null = !current && edge ? { type: 'move', to: nodeId } : null,
     proposed = move ? preview(s, move, l) : null,
-    text = move ? previewCopy(s, move, l) : null,
+    text = move ? previewCopy(s, move, l, tips) : null,
     canSail = !!proposed && !proposed.error,
-    wouldLose = canSail && proposed!.state.status === 'lost',
+    wouldLose = tips && canSail && proposed!.state.status === 'lost',
     actions = current ? legalActions(s, l) : [],
     transfer = (type: 'board' | 'unload') =>
       actions

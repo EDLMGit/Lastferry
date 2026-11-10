@@ -1,0 +1,371 @@
+diff --git a/assets/catalog.json b/assets/catalog.json
+index 12e969d..e102eea 100644
+--- a/assets/catalog.json
++++ b/assets/catalog.json
+@@ -2956,7 +2956,7 @@
+         },
+         {
+           "path": "src/ui/presentation.ts",
+-          "symbol": "previewCopy future winning consequence"
++          "symbol": "previewCopy optional predictions, factual forecasts and actual outcome copy"
+         },
+         {
+           "path": "src/ui/play-controls.css",
+@@ -2965,6 +2965,10 @@
+         {
+           "path": "src/ui/presentation.ts",
+           "symbol": "currentNotice and passage forecast"
++        },
++        {
++          "path": "src/ui/tips-preference.ts",
++          "symbol": "TipsPreference, independent remembered setting with in-session fallback"
+         }
+       ],
+       "variants": [
+@@ -3083,9 +3087,13 @@
+         {
+           "path": "reviews/existing-coves-repair/REVIEW.md",
+           "role": "Actual revised game and sources. Forecast lists every remaining tide phase, reef depth and flood. Previews explain a final trip with too little space or a boat too deep to get home."
++        },
++        {
++          "path": "reviews/optional-tips/REVIEW.md",
++          "role": "Shared Settings, native matched Tips Off and On phone views and actual loss recovery"
+         }
+       ],
+-      "meaning": "Local preview, forecast, Menu, Settings and completion retain native semantics; projected future action is explicit and every full passenger label/cost remains readable.",
++      "meaning": "Shared native dialogs retain full passenger names and space costs. Tips defaults Off, with optional predictive help in Settings. Factual route and tide inspection and actual loss explanations remain available.",
+       "consumers": [
+         "src/main.ts",
+         "src/campaign/presentation.ts"
+@@ -3096,9 +3104,9 @@
+       },
+       "typeSpecific": {
+         "render/placement sources": "src/main.ts: renderDialog / renderLocation; src/ui/placement.ts: placeLocalCard / placeActionCard; src/ui/cove-layout.ts: endpointTargets; src/ui/fullscreen.ts: FullscreenSupport.changed; src/style.css: dialog / .dialog-body / .dialog-footer / .terminal-actions; src/ui/cove-ui.ts: shared icon and control rendering helpers; src/ui/cove-ui.css: shared cove interface surfaces; cove-panel-package/material/cove-panel-material.css: .cove-surface / .cove-surface--compact / .cove-surface--arrival / focus state; src/ui/presentation.ts: previewCopy future winning consequence",
+-        "semantic role/accessible name": "Local preview, forecast, Menu, Settings and completion retain native semantics; projected future action is explicit and every full passenger label/cost remains readable.",
++        "semantic role/accessible name": "Shared native dialogs retain full passenger names and space costs. Tips defaults Off, with optional predictive help in Settings. Factual route and tide inspection and actual loss explanations remain available.",
+         "icon and label mappings": "Native visible words remain authoritative; SVG adds redundant semantic visual cue.",
+-        "interaction states": "passenger subset; tide forecast; crossing menu; settings; won; lost; support-details fallback",
++        "interaction states": "passenger subset; tide forecast; crossing menu; settings; won; lost; support-details fallback; Tips Off and On independent of Journey and Undo",
+         "nearby placement and viewport contract": "Existing measured safe viewport/anchor and fixed subset-sheet height stay; native reading order and stable footer across toggles; nested overflow and per-line text fit checked separately from outer control visibility.",
+         "focus/cancel/fullscreen preservation": "Native buttons/aria-pressed; Escape cancels; same dialog promoted on fullscreen with DOM, focus, subset and scroll retained.",
+         "size/hit target/layout behavior": "Independent visible control rectangles replace the removed full-width HUD exclusion. Safe viewport remains stable when information expands; nearby actions and receipts avoid actual controls, selected endpoints and figures. At least44px native hit targets; critical text wraps."
+@@ -3111,6 +3119,12 @@
+       "existingCovesRepair": {
+         "notes": "Forecast lists every remaining tide phase, reef depth and flood. Previews explain a final trip with too little space or a boat too deep to get home.",
+         "humanReview": "pending"
++      },
++      "optionalTips": {
++        "default": "Off",
++        "storage": "last-ferry-tips",
++        "evidence": "reviews/optional-tips/REVIEW.md",
++        "humanReview": "pending"
+       }
+     },
+     {
+diff --git a/src/dev/asset-gallery.ts b/src/dev/asset-gallery.ts
+index 98aa20a..4e4c52f 100644
+--- a/src/dev/asset-gallery.ts
++++ b/src/dev/asset-gallery.ts
+@@ -47,7 +47,7 @@ root.innerHTML = `<header><p>Last Ferry · developer tools</p><h1>Cove asset gal
+     ['Moss', 2, true, 'sheep-wool'],
+   ],
+   true,
+-)}<p class="gallery-warning">Pip boards, then the tide rises. Rue is still waiting at Rabbit Pier when it floods. This ends the crossing.</p></article>
++)}<p>Tips On · predictive warning specimen</p><p class="gallery-warning">Pip boards, then the tide rises. Rue is still waiting at Rabbit Pier when it floods. This ends the crossing.</p></article>
+ <article id="gallery-text-stress" class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow gallery-text-stress"><p>Bounded stress specimen · 320px panel, 20px text (125%)</p><h3>Longer names</h3>${choices(
+   [
+     ['Alexandria', 1, true, 'rabbit-cream'],
+diff --git a/src/main.ts b/src/main.ts
+index 7cc23d1..984eb18 100644
+--- a/src/main.ts
++++ b/src/main.ts
+@@ -49,6 +49,7 @@ import { locationFacts } from './ui/location';
+ import { endpointTargets, clearCurrentEndpoint } from './ui/cove-layout';
+ import { placeDriftwoodLabels } from './ui/driftwood-labels';
+ import { MotionPreference, type MotionMode } from './ui/motion-preference';
++import { TipsPreference } from './ui/tips-preference';
+ import { PanGesture } from './ui/pan-gesture';
+ import { visibleViewport, insetRectangle } from './ui/viewport';
+ import { FullscreenSupport } from './ui/fullscreen';
+@@ -136,6 +137,7 @@ let session = new Session(level);
+ const sound = new Sound();
+ let world = new World($('world'), session.state, level);
+ const motion = new MotionPreference(matchMedia('(prefers-reduced-motion: reduce)'));
++const tips = new TipsPreference();
+ sound.reconcileState(session.state, level);
+ const dialog = $('dialog') as HTMLDialogElement;
+ dialog.classList.add('cove-panel', 'cove-surface');
+@@ -609,7 +611,7 @@ function renderJourneyDialog() {
+         .join('') + '<button id="journey-title">Back to title</button>';
+   } else if (mode === 'replace') {
+     heading = 'Start a new journey?';
+-    body = '<p>This replaces the saved journey. Sound and Motion settings stay as they are.</p>';
++    body = '<p>This replaces the saved journey. Sound, Motion and Tips settings stay as they are.</p>';
+     actions =
+       '<button id="journey-replace-cancel">Keep current journey</button><button id="journey-replace-confirm">Replace journey</button>';
+   } else if (mode === 'return-title') {
+@@ -1238,8 +1240,8 @@ function renderDialog() {
+   if (mode === 'action' && selected) {
+     const a = selected,
+       proposed = preview(s, a, level),
+-      text = previewCopy(s, a, level),
+-      transfer = a.type === 'board' || a.type === 'unload' ? transferFacts(s, a, level) : null;
++      text = previewCopy(s, a, level, tips.enabled),
++      transfer = a.type === 'board' || a.type === 'unload' ? transferFacts(s, a, level, tips.enabled) : null;
+ 
+     const ids = a.type === 'board' ? s.waitingByPier[p!.id] : a.type === 'unload' ? s.aboard : [];
+     const choices =
+@@ -1247,7 +1249,7 @@ function renderDialog() {
+         ? `<div class="passenger-options${level.id === 'reef-return' && ids.length === 4 ? ' reef-manifest' : ''}" role="group" aria-label="Passenger selection">${ids.map((id) => `<button id="passenger-${id}" class="cove-choice" aria-pressed="${a.passengerIds.includes(id)}">${passengerChoiceContent(passengerNames[id].split(' ·')[0], level.passengers.find((p) => p.id === id)!.slots, resolvePassengerAppearance(level, id)?.portraitKey ?? null)}</button>`).join('')}</div>`
+         : '';
+     $('dialog-content').innerHTML =
+-      `${header(transfer ? (a.type === 'board' ? 'Board passengers' : p?.isDeliveryPier ? 'Bring passengers home' : 'Let passengers ashore') : actionLabel(s, a, level), `${nodeNames[a.type === 'move' ? a.to : s.boatNodeId]} · inspection is free`)}<div id="preview" class="dialog-body ${proposed.error || proposed.state.status === 'lost' ? 'warning' : ''}" aria-live="polite" aria-atomic="true">${choices}<p class="requirement">${text.error ?? (transfer ? `${transfer.depth} · ${transfer.load}` : text.requirement)}</p>${(transfer ? transfer.detail : text.consequence) ? `<p class="consequence">${transfer ? transfer.detail : text.consequence}</p>` : ''}${!proposed.error && !transfer ? `<p class="preview-result">After this action: Boat ${load(proposed.state, level)}/${level.rules.capacity} spaces · tide ${proposed.state.tideLevel}${s.tideLevel !== proposed.state.tideLevel ? ` (now ${s.tideLevel})` : ''}</p>` : ''}</div><footer class="dialog-footer"><button id="commit" ${proposed.error ? 'disabled' : ''}>${proposed.error ? 'Action unavailable' : transfer ? `${transfer.label} · 1 action` : 'Confirm · 1 action'}</button></footer>`;
++      `${header(transfer ? (a.type === 'board' ? 'Board passengers' : p?.isDeliveryPier ? 'Bring passengers home' : 'Let passengers ashore') : actionLabel(s, a, level), `${nodeNames[a.type === 'move' ? a.to : s.boatNodeId]} · inspection is free`)}<div id="preview" class="dialog-body ${proposed.error || (tips.enabled && proposed.state.status === 'lost') ? 'warning' : ''}" aria-live="polite" aria-atomic="true">${choices}<p class="requirement">${text.error ?? (transfer ? `${transfer.depth} · ${transfer.load}` : text.requirement)}</p>${(transfer ? transfer.detail : text.consequence) ? `<p class="consequence">${transfer ? transfer.detail : text.consequence}</p>` : ''}${!proposed.error && !transfer ? `<p class="preview-result">After this action: Boat ${load(proposed.state, level)}/${level.rules.capacity} spaces · tide ${proposed.state.tideLevel}${s.tideLevel !== proposed.state.tideLevel ? ` (now ${s.tideLevel})` : ''}</p>` : ''}</div><footer class="dialog-footer"><button id="commit" ${proposed.error ? 'disabled' : ''}>${proposed.error ? 'Action unavailable' : transfer ? `${transfer.label} · 1 action` : 'Confirm · 1 action'}</button></footer>`;
+ 
+     if (a.type === 'board' || a.type === 'unload')
+       for (const id of ids)
+@@ -1292,7 +1294,7 @@ function renderDialog() {
+       )
+       .join('; ');
+     $('dialog-content').innerHTML =
+-      `${header('Crossing menu')}<div class="dialog-body menu-body">${s.status === 'won' ? '<button id="return-arrival">Return to arrival</button>' : ''}<div class="menu-actions"><button id="restart">Restart crossing</button><button id="settings">Settings</button></div><label class="cove-picker">Choose cove<select id="cove-picker">${practiceCoves.map((l) => `<option value="${l.id}" ${l.id === level.id ? 'selected' : ''}>${l.title}${l.id === baseline.id ? ' · baseline' : ''}</option>`).join('')}</select></label><details id="help-details"><summary>How to play · actions and depth</summary><p>${actionCostCopy(level)}</p><p>Select a named place, island, pier or landmark to see its options for free. Choose Sail to travel one passage. Select the ferry for its current place. A named single-passenger action acts directly. For several passengers, choose names in the nearby chooser, then use its named action. Select your current place for free transfer details. The chooser shows selected depth and meaningful consequences; a losing action warns before you commit.</p><p>Boat depth needed: ${draftBandsCopy(level)}. ${passengerCosts}. A passage must be at least as deep as the boat needs.</p><p>Boarding and unloading happen before the tide rises. Use the status button for the tide and pier forecast. Undo earlier actions or restart to recover from a losing plan.</p><p>Tab and Shift+Tab move between controls; Enter or Space activates them. Escape closes a dialog first; press it again to close the location card. Selection never spends an action.</p></details></div>`;
++      `${header('Crossing menu')}<div class="dialog-body menu-body">${s.status === 'won' ? '<button id="return-arrival">Return to arrival</button>' : ''}<div class="menu-actions"><button id="restart">Restart crossing</button><button id="settings">Settings</button></div><label class="cove-picker">Choose cove<select id="cove-picker">${practiceCoves.map((l) => `<option value="${l.id}" ${l.id === level.id ? 'selected' : ''}>${l.title}${l.id === baseline.id ? ' · baseline' : ''}</option>`).join('')}</select></label><details id="help-details"><summary>How to play · actions and depth</summary><p>${actionCostCopy(level)}</p><p>Select a named place, island, pier or landmark to see its options for free. Choose Sail to travel one passage. Select the ferry for its current place. A named single-passenger action acts directly. For several passengers, choose names in the nearby chooser, then use its named action. Select your current place for free transfer details. The chooser shows the selected load and depth. Tips in Settings adds predicted outcomes and warnings before losing actions. Tips starts Off. Route depths, currents, pier deadlines and the forecast are always available.</p><p>Boat depth needed: ${draftBandsCopy(level)}. ${passengerCosts}. A passage must be at least as deep as the boat needs.</p><p>Boarding and unloading happen before the tide rises. Use the status button for the tide and pier forecast. Undo earlier actions or restart to recover from a losing plan.</p><p>Tab and Shift+Tab move between controls; Enter or Space activates them. Escape closes a dialog first; press it again to close the location card. Selection never spends an action.</p></details></div>`;
+ 
+     $('restart').onclick = restart;
+ 
+@@ -1328,7 +1330,7 @@ function renderDialog() {
+       };
+   } else if (mode === 'settings') {
+     $('dialog-content').innerHTML =
+-      `${header('Settings', undefined, 'Back to ' + (settingsParent === 'terminal' ? 'arrival' : 'menu'))}<div class="dialog-body settings-body"><div class="settings-row"><span>Sound</span><div class="settings-sound-controls"><button id="settings-sound"></button><button id="settings-mute" data-sound-intent="mute" hidden>Mute sound</button></div></div><p id="audio-status" role="status"></p><label class="settings-row" for="motion-preference">Motion<select id="motion-preference"><option value="device">Follow device</option><option value="reduced">Reduced</option></select></label><p id="motion-status"></p></div><footer class="dialog-footer"><button id="settings-back">Back</button></footer>`;
++      `${header('Settings', undefined, 'Back to ' + (settingsParent === 'terminal' ? 'arrival' : 'menu'))}<div class="dialog-body settings-body"><div class="settings-row"><span>Sound</span><div class="settings-sound-controls"><button id="settings-sound"></button><button id="settings-mute" data-sound-intent="mute" hidden>Mute sound</button></div></div><p id="audio-status" role="status"></p><label class="settings-row" for="motion-preference">Motion<select id="motion-preference"><option value="device">Follow device</option><option value="reduced">Reduced</option></select></label><p id="motion-status"></p><label class="settings-row" for="tips-preference">Tips<select id="tips-preference" aria-describedby="tips-description"><option value="off">Off</option><option value="on">On</option></select></label><p id="tips-description">Show predicted outcomes and extra guidance.</p></div><footer class="dialog-footer"><button id="settings-back">Back</button></footer>`;
+     $('settings-sound').onclick = toggleSound;
+     $('settings-mute').onclick = (event) =>
+       explicitSound(event.currentTarget as HTMLElement, 'mute');
+@@ -1338,6 +1340,16 @@ function renderDialog() {
+     renderFullscreen();
+     ($('motion-preference') as HTMLSelectElement).onchange = (event) =>
+       motion.setMode((event.target as HTMLSelectElement).value as MotionMode);
++    const tipsControl = $('tips-preference') as HTMLSelectElement;
++    tipsControl.value = tips.enabled ? 'on' : 'off';
++    tipsControl.onchange = () => {
++      tips.setEnabled(tipsControl.value === 'on');
++      $('announcement').textContent = '';
++      $('local-context').replaceChildren();
++      $('local-context').removeAttribute('data-status');
++      cardPlacement = null;
++      render();
++    };
+     $('settings-back').onclick = backFromSettings;
+     if (journeySurface()) $('cancel').setAttribute('aria-label', 'Back to journey');
+     renderSound();
+@@ -1570,7 +1582,7 @@ function renderMap() {
+     '<svg id="map-leaders" aria-hidden="true"></svg>' +
+     level.nodes
+       .map((n) => {
+-        const facts = locationFacts(s, n.id, level);
++        const facts = locationFacts(s, n.id, level, tips.enabled);
+         const [status, symbol, description] = {
+           current: ['current', '•', 'current location'],
+           remote: ['nonadjacent', '◇', 'no direct passage'],
+@@ -1596,7 +1608,7 @@ function renderLocation() {
+     $('selection-leader').innerHTML = '';
+     return;
+   }
+-  const facts = locationFacts(session.state, locationSelection!, level);
++  const facts = locationFacts(session.state, locationSelection!, level, tips.enabled);
+   card.dataset.location = facts.id;
+   card.dataset.status = facts.status;
+   const paragraph = (text: string, className = '') =>
+@@ -1611,7 +1623,7 @@ function renderLocation() {
+         [facts.board, facts.unload]
+           .filter((action) => action !== null)
+           .map((action) => {
+-            const info = transferFacts(session.state, action!, level);
++            const info = transferFacts(session.state, action!, level, tips.enabled);
+             return paragraph(`${info.label} · 1 action. ${info.depth}. ${info.detail}`);
+           })
+           .join('')
+@@ -1625,7 +1637,7 @@ function renderLocation() {
+       ? `<details class="route-details"><summary>Routes and deadlines · free</summary>${level.nodes
+           .filter((n) => edgeTo(session.state, n.id, level))
+           .map((n) => {
+-            const next = locationFacts(session.state, n.id, level);
++            const next = locationFacts(session.state, n.id, level, tips.enabled);
+             return `<button data-inspect-route="${n.id}">Inspect ${next.name}</button><p>${next.passage} ${next.safety}</p>`;
+           })
+           .join('')}</details>`
+@@ -1677,7 +1689,7 @@ function renderLocation() {
+   if ($('sail')) $('sail').onclick = (event) => {
+     event.stopPropagation();
+     if (blocked() || event.detail > 1 || locationSelection !== facts.id) return;
+-    const current = locationFacts(session.state, facts.id, level);
++    const current = locationFacts(session.state, facts.id, level, tips.enabled);
+     if (!current.move || !current.canSail) return;
+     if (current.wouldLose !== facts.wouldLose || current.consequence !== facts.consequence) {
+       renderLocation();
+@@ -1694,7 +1706,7 @@ function renderLocation() {
+ }
+ function renderDock() {
+   const dock = $('dock-actions'),
+-    facts = locationFacts(session.state, session.state.boatNodeId, level),
++    facts = locationFacts(session.state, session.state.boatNodeId, level, tips.enabled),
+     visible =
+       !journeySurface() &&
+       (!locationSelection || locationSelection === session.state.boatNodeId) &&
+@@ -1718,7 +1730,7 @@ function renderDock() {
+ 
+     const action = { type, passengerIds: [...ids] };
+ 
+-    const info = transferFacts(session.state, action, level);
++    const info = transferFacts(session.state, action, level, tips.enabled);
+ 
+     const direct = ids.length === 1 && info.direct;
+ 
+@@ -1747,7 +1759,7 @@ function renderDock() {
+ 
+       if (blocked() || event.detail > 1) return;
+ 
+-      const current = transferFacts(session.state, action, level);
++      const current = transferFacts(session.state, action, level, tips.enabled);
+ 
+       if (direct && current.direct) {
+         returnId = type;
+@@ -2048,7 +2060,7 @@ function playObstacles() {
+     .map((element) => element.getBoundingClientRect());
+ }
+ function factsWidth() {
+-  return locationSelection && locationFacts(session.state, locationSelection, level).wouldLose ? 320 : 292;
++  return locationSelection && locationFacts(session.state, locationSelection, level, tips.enabled).wouldLose ? 320 : 292;
+ }
+ function toggleStatus(open: boolean) {
+   $('crossing-details').hidden = !open;
+diff --git a/src/ui/location.ts b/src/ui/location.ts
+index 4743c4f..58b4478 100644
+--- a/src/ui/location.ts
++++ b/src/ui/location.ts
+@@ -41,7 +41,7 @@ export type LocationFacts = {
+   transferNote: string;
+ };
+ 
+-export function locationFacts(s: State, nodeId: string, l: Level): LocationFacts {
++export function locationFacts(s: State, nodeId: string, l: Level, tips = true): LocationFacts {
+   const current = nodeId === s.boatNodeId,
+     edge = edgeTo(s, nodeId, l),
+     flow = edge && passageFlow(edge, s.tideLevel),
+@@ -53,9 +53,9 @@ export function locationFacts(s: State, nodeId: string, l: Level): LocationFacts
+     delivered = [...s.delivered],
+     move: Move | null = !current && edge ? { type: 'move', to: nodeId } : null,
+     proposed = move ? preview(s, move, l) : null,
+-    text = move ? previewCopy(s, move, l) : null,
++    text = move ? previewCopy(s, move, l, tips) : null,
+     canSail = !!proposed && !proposed.error,
+-    wouldLose = canSail && proposed!.state.status === 'lost',
++    wouldLose = tips && canSail && proposed!.state.status === 'lost',
+     actions = current ? legalActions(s, l) : [],
+     transfer = (type: 'board' | 'unload') =>
+       actions
+diff --git a/src/ui/presentation.ts b/src/ui/presentation.ts
+index 281d39e..9cd36e3 100644
+--- a/src/ui/presentation.ts
++++ b/src/ui/presentation.ts
+@@ -226,6 +226,7 @@ export function previewCopy(
+   s: State,
+   a: Action,
+   l: Level,
++  tips = true,
+ ): { summary: string; consequence: string; error: string | null; requirement: string } {
+   const proposed = preview(s, a, l),
+     n = proposed.state,
+@@ -253,6 +254,18 @@ export function previewCopy(
+       : a.type === 'move'
+         ? passageCopy(s, a.to, l)
+         : `Boat needs depth ${draft(n, l)}.`;
++  if (!tips) {
++    const actionFact = a.type === 'board'
++      ? `${passengerList(a.passengerIds, l)} will board.`
++      : a.type === 'unload'
++        ? `${passengerList(a.passengerIds, l)} will ${pier!.isDeliveryPier ? 'disembark' : 'wait'} at ${stop(pier!.nodeId, l)}.`
++        : a.type === 'move'
++          ? `One passage to ${stop(a.to, l)}.`
++          : `The boat stays at ${stop(s.boatNodeId, l)}.`;
++    const tideFact = rise ? 'The tide rises after this action.' : '';
++    const currentFact = rise ? currentNotice(s, l)?.boundary ?? '' : '';
++    return { summary, requirement, error: null, consequence: [actionFact, tideFact, currentFact].filter(Boolean).join(' ') };
++  }
+   let consequence: string;
+   if (n.status === 'lost') {
+     const loss = n.lossReason!;
+diff --git a/src/ui/tips-preference.ts b/src/ui/tips-preference.ts
+new file mode 100644
+index 0000000..35f219c
+--- /dev/null
++++ b/src/ui/tips-preference.ts
+@@ -0,0 +1,34 @@
++type TipsStorage = Pick<Storage, 'getItem' | 'setItem'>;
++
++export const tipsStorageKey = 'last-ferry-tips';
++
++function availableStorage(): TipsStorage | undefined {
++  try {
++    return globalThis.localStorage;
++  } catch {
++    return undefined;
++  }
++}
++
++export class TipsPreference {
++  private current = false;
++
++  constructor(private readonly storage: TipsStorage | undefined = availableStorage()) {
++    try {
++      this.current = storage?.getItem(tipsStorageKey) === 'true';
++    } catch {
++      this.current = false;
++    }
++  }
++
++  get enabled(): boolean {
++    return this.current;
++  }
++
++  setEnabled(enabled: boolean): void {
++    this.current = enabled;
++    try {
++      this.storage?.setItem(tipsStorageKey, String(enabled));
++    } catch {}
++  }
++}
+diff --git a/src/ui/transfer.ts b/src/ui/transfer.ts
+index 5a48cd8..c76c364 100644
+--- a/src/ui/transfer.ts
++++ b/src/ui/transfer.ts
+@@ -4,16 +4,16 @@ import { currentNotice, passengerList, previewCopy } from './presentation';
+ 
+ export type Transfer = Extract<Action, { type: 'board' | 'unload' }>;
+ 
+-export function transferFacts(before: State, action: Transfer, level: Level) {
++export function transferFacts(before: State, action: Transfer, level: Level, tips = true) {
+   const proposed = preview(before, action, level);
+   const who = passengerList(action.passengerIds, level) || 'passengers';
+   const home = !!pierAt(before, level)?.isDeliveryPier;
+   const label =
+     action.type === 'board' ? `Board ${who}` : home ? `Bring ${who} home` : `Let ${who} ashore`;
+   const depth = `Needs depth ${draft(before, level)} → ${draft(proposed.state, level)}`;
+-  const text = previewCopy(before, action, level);
++  const text = previewCopy(before, action, level, tips);
+   let detail = text.consequence;
+-  if (action.type === 'board' && !proposed.error && proposed.state.status === 'playing') {
++  if (tips && action.type === 'board' && !proposed.error && proposed.state.status === 'playing') {
+     const next = proposed.state;
+     detail = next.tideLevel > before.tideLevel ? 'The tide rises after this action.' : '';
+     const boundary = currentNotice(before, level)?.boundary;
+@@ -31,7 +31,7 @@ export function transferFacts(before: State, action: Transfer, level: Level) {
+     load: `${load(proposed.state, level)}/${level.rules.capacity} spaces`,
+     detail,
+     error: proposed.error,
+-    direct: action.passengerIds.length === 1 && !proposed.error && proposed.state.status !== 'lost',
++    direct: action.passengerIds.length === 1 && !proposed.error && (!tips || proposed.state.status !== 'lost'),
+   };
+ }
+ 

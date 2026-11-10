@@ -2956,7 +2956,7 @@
         },
         {
           "path": "src/ui/presentation.ts",
-          "symbol": "previewCopy future winning consequence"
+          "symbol": "previewCopy optional predictions, factual forecasts and actual outcome copy"
         },
         {
           "path": "src/ui/play-controls.css",
@@ -2965,6 +2965,10 @@
         {
           "path": "src/ui/presentation.ts",
           "symbol": "currentNotice and passage forecast"
+        },
+        {
+          "path": "src/ui/tips-preference.ts",
+          "symbol": "TipsPreference, independent remembered setting with in-session fallback"
         }
       ],
       "variants": [
@@ -3083,9 +3087,13 @@
         {
           "path": "reviews/existing-coves-repair/REVIEW.md",
           "role": "Actual revised game and sources. Forecast lists every remaining tide phase, reef depth and flood. Previews explain a final trip with too little space or a boat too deep to get home."
+        },
+        {
+          "path": "reviews/optional-tips/REVIEW.md",
+          "role": "Shared Settings, native matched Tips Off and On phone views and actual loss recovery"
         }
       ],
-      "meaning": "Local preview, forecast, Menu, Settings and completion retain native semantics; projected future action is explicit and every full passenger label/cost remains readable.",
+      "meaning": "Shared native dialogs retain full passenger names and space costs. Tips defaults Off, with optional predictive help in Settings. Factual route and tide inspection and actual loss explanations remain available.",
       "consumers": [
         "src/main.ts",
         "src/campaign/presentation.ts"
@@ -3096,9 +3104,9 @@
       },
       "typeSpecific": {
         "render/placement sources": "src/main.ts: renderDialog / renderLocation; src/ui/placement.ts: placeLocalCard / placeActionCard; src/ui/cove-layout.ts: endpointTargets; src/ui/fullscreen.ts: FullscreenSupport.changed; src/style.css: dialog / .dialog-body / .dialog-footer / .terminal-actions; src/ui/cove-ui.ts: shared icon and control rendering helpers; src/ui/cove-ui.css: shared cove interface surfaces; cove-panel-package/material/cove-panel-material.css: .cove-surface / .cove-surface--compact / .cove-surface--arrival / focus state; src/ui/presentation.ts: previewCopy future winning consequence",
-        "semantic role/accessible name": "Local preview, forecast, Menu, Settings and completion retain native semantics; projected future action is explicit and every full passenger label/cost remains readable.",
+        "semantic role/accessible name": "Shared native dialogs retain full passenger names and space costs. Tips defaults Off, with optional predictive help in Settings. Factual route and tide inspection and actual loss explanations remain available.",
         "icon and label mappings": "Native visible words remain authoritative; SVG adds redundant semantic visual cue.",
-        "interaction states": "passenger subset; tide forecast; crossing menu; settings; won; lost; support-details fallback",
+        "interaction states": "passenger subset; tide forecast; crossing menu; settings; won; lost; support-details fallback; Tips Off and On independent of Journey and Undo",
         "nearby placement and viewport contract": "Existing measured safe viewport/anchor and fixed subset-sheet height stay; native reading order and stable footer across toggles; nested overflow and per-line text fit checked separately from outer control visibility.",
         "focus/cancel/fullscreen preservation": "Native buttons/aria-pressed; Escape cancels; same dialog promoted on fullscreen with DOM, focus, subset and scroll retained.",
         "size/hit target/layout behavior": "Independent visible control rectangles replace the removed full-width HUD exclusion. Safe viewport remains stable when information expands; nearby actions and receipts avoid actual controls, selected endpoints and figures. At least44px native hit targets; critical text wraps."
@@ -3110,6 +3118,12 @@
       },
       "existingCovesRepair": {
         "notes": "Forecast lists every remaining tide phase, reef depth and flood. Previews explain a final trip with too little space or a boat too deep to get home.",
+        "humanReview": "pending"
+      },
+      "optionalTips": {
+        "default": "Off",
+        "storage": "last-ferry-tips",
+        "evidence": "reviews/optional-tips/REVIEW.md",
         "humanReview": "pending"
       }
     },

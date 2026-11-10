@@ -1,16 +1,20 @@
 # Last Ferry — Project state
 
-## Active task — Optional tips · 7 November 2026
+## Current handoff — Optional tips
 
 **OPTIONAL_TIPS_01**, root [NEXT_TASK_OPTIONAL_TIPS.md](../NEXT_TASK_OPTIONAL_TIPS.md), is the current assignment. The player reports that the repaired Wide Berth and Reef Return now feel good and that complexity is increasing well. Record the shared ferry/docks and these puzzles as positively accepted; the earlier rejection below describes superseded builds. Preserve this result. No new level, campaign reorder, art redesign or rebalance is commissioned.
 
-Accepted runtime: `8fc0d35f772af73adf06a9dff112b749cbad233a`. The next change makes predictive advice optional, **Off by default**, with a remembered preference in shared Settings. Current facts, factual schedules, true illegal-action reasons, actual outcomes and complete Undo remain. Hiding forecasts or objective information is not the assignment. No optional-tips implementation is included in the published baseline.
+Accepted runtime: `8fc0d35f772af73adf06a9dff112b749cbad233a`. The optional-tips implementation starts from a clean fast-forward to continuity commit `e8e0c8d360c29246b8d9a8fd202950ebfba55329`. Shared Home/play Settings offers Tips, **Off by default** for fresh players and existing players without the independent preference. Local storage failure leaves a working in-session choice.
+
+Tips Off removes predictive outcome prose, map risk signals, outgoing-load comparisons and loss-only single-passenger confirmation. Tips On restores the existing guidance. Current and selected load/draft, route legality, factual schedules and deadlines remain available. Actual outcomes and complete Undo are independent of the setting. The preference is excluded from Journey saves and Undo history. [Review, matched native phone examples and verification](../reviews/optional-tips/REVIEW.md)
+
+Focused verification passes: production build/TypeScript, 66 relevant unit cases, 79 asset families and six distinct browser cases. The initial browser batch passed 5/6; the final 3/3 recheck corrects a root-Practice reload assumption and recaptures both Reef phone sizes with matched Play framing. Both preferences complete actual Wide/Reef rescues and preserve identical state, losses and Undo. Keyboard, preference persistence, blocked storage and byte-identical Journey saves are checked. Original failures remain in the review. Phone evidence is native-size Chromium touch emulation, not physical-device approval.
 
 Journey remains Holding → Bellwater → Driftwood → Wide. Practice retains those four plus First Crossing, Two Shelters and Reef Return. The twelve-cove target and future ordering remain provisional; expansion stays paused for this focused pass.
 
 ## Current publication — Sites version 16
 
-On 7 November 2026 at 16:56:30 UTC, the existing owner-private Site successfully published the accepted repair: game `8fc0d35f772af73adf06a9dff112b749cbad233a`, hosting source `80d7db9c78e7751e67bf577982daf72f810f2a52`. [Play](https://last-ferry-playtest.abumech.chatgpt.site) · [Publication receipt](../reviews/existing-coves-repair/deployment-confirmation.json). The two SHAs identify different repositories. This continuity/task update does not change the deployed game.
+On 7 November 2026 at 16:56:30 UTC, the existing owner-private Site successfully published the accepted repair: game `8fc0d35f772af73adf06a9dff112b749cbad233a`, hosting source `80d7db9c78e7751e67bf577982daf72f810f2a52`. [Play](https://last-ferry-playtest.abumech.chatgpt.site) · [Publication receipt](../reviews/existing-coves-repair/deployment-confirmation.json). The two SHAs identify different repositories. The optional-tips implementation is not deployed.
 
 Review independently read exact source, inspected three native phone frames, replayed four winning and six losing production-rule cases, and passed a fresh Node 24 production build/typecheck. The hosting source audit matched 267 of 268 scoped Git blobs exactly; the sole declared adaptation allows the hosting preview hostname in Vite, with no gameplay change. Codex's reported 460 units, asset validation and browser evidence are retained, not relabelled as fresh reruns. The player's visual/difficulty acceptance is positive; physical-device performance, acoustic approval and inherited timing/layout limits remain separate.
 

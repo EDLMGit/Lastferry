@@ -1,0 +1,16 @@
+Summarized observation from the actual tool transcript, not a raw log file.
+
+Command
+npm.cmd run test:unit -- tests/unit/optional-tips.test.ts --maxWorkers=1 --reporter=verbose
+
+Original result
+Exit code 1. One failed file. 11 tests passed and 1 failed out of 12.
+
+Failure
+optional conclusions with factual inspection > a genuinely blocked harbor passage is factual in both modes
+The new assertion expected /current/i in locationFacts(...).limitation.
+Actual returned text was "Needle Reef flows only from Harbor to Cairn Quay."
+
+Correction
+Changed the test to verify the actual factual flow direction. No runtime code was changed for this failure.
+The subsequent invocation of the same command passed all 12 cases.

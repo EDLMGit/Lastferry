@@ -226,6 +226,7 @@ export function previewCopy(
   s: State,
   a: Action,
   l: Level,
+  tips = true,
 ): { summary: string; consequence: string; error: string | null; requirement: string } {
   const proposed = preview(s, a, l),
     n = proposed.state,
@@ -253,6 +254,18 @@ export function previewCopy(
       : a.type === 'move'
         ? passageCopy(s, a.to, l)
         : `Boat needs depth ${draft(n, l)}.`;
+  if (!tips) {
+    const actionFact = a.type === 'board'
+      ? `${passengerList(a.passengerIds, l)} will board.`
+      : a.type === 'unload'
+        ? `${passengerList(a.passengerIds, l)} will ${pier!.isDeliveryPier ? 'disembark' : 'wait'} at ${stop(pier!.nodeId, l)}.`
+        : a.type === 'move'
+          ? `One passage to ${stop(a.to, l)}.`
+          : `The boat stays at ${stop(s.boatNodeId, l)}.`;
+    const tideFact = rise ? 'The tide rises after this action.' : '';
+    const currentFact = rise ? currentNotice(s, l)?.boundary ?? '' : '';
+    return { summary, requirement, error: null, consequence: [actionFact, tideFact, currentFact].filter(Boolean).join(' ') };
+  }
   let consequence: string;
   if (n.status === 'lost') {
     const loss = n.lossReason!;
