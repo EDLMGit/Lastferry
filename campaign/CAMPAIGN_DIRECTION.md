@@ -4,7 +4,7 @@
 
 The repaired six-space ferry, docks and Wide/Reef complexity received positive player feedback. The six-cove Journey is implemented and reviewed at `1b7b4f05e576614f061ca4949bf5aca705dc5e0e`, published for Android playtesting. It connects six rescues and retains seven independent Practice entries. [Current publication and review](../docs/PROJECT_STATE.md)
 
-[JOURNEY_SIX_COVES_01](../NEXT_TASK_JOURNEY_SIX_COVES.md) is complete. The next product check is how the connected six-cove sequence, two new illustrated entries and launch boundary feel on the player's phone. No seventh cove or new mechanic is assigned by this review handoff; the remaining arc stays provisional.
+[JOURNEY_SIX_COVES_01](../NEXT_TASK_JOURNEY_SIX_COVES.md) is complete. The player's Android playtest reports that the story aligns and looks decent. The next assignment is [MOBILE_MAP_READABILITY_01](../NEXT_TASK_MOBILE_MAP_READABILITY.md): repair crowded labels/leader lines, detached local controls and camera scale across the existing coves. Preserve the accepted story, art and puzzle progression. No seventh cove, new mechanic or rebalance is assigned; expansion stays paused for this phone repair and comparison.
 
 | Journey position | Cove / story role |
 | --- | --- |

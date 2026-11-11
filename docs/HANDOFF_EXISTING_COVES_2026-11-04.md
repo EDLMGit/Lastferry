@@ -1,6 +1,14 @@
 # Last Ferry — fresh-chat handoff
 
-## Current update — 11 November 2026
+## Current task — Android map readability · 11 November 2026
+
+The player's physical Android Journey playtest is positive about story alignment and presentation. The new blocker is understanding the map: island-name leaders compete with routes, names/actions can move far from their owners, and Play versus Whole cove offers an awkward size tradeoff.
+
+Implement root [NEXT_TASK_MOBILE_MAP_READABILITY.md](../NEXT_TASK_MOBILE_MAP_READABILITY.md), **MOBILE_MAP_READABILITY_01**. Read [the research/source audit and original Android screenshots](MOBILE_MAP_READABILITY_RESEARCH.md). Repair shared labels, targets, action ownership, responsive framing/scale and compact phone controls. Preserve accepted puzzles/difficulty, boats/docks, story, audio, Tips Off, complete Undo, Journey order and saves. No new level or mechanic is assigned.
+
+Published game remains `1b7b4f05e576614f061ca4949bf5aca705dc5e0e`, private Site **version 18**, hosting source `805ade05e2d5b9eba2287ce77d55cd60911dcaea`. This update adds the next task and references only. Keep PR #1 draft and `main` unchanged; the implementation is reviewed before publication. Physical-device visual feedback now exists, but performance/listening/accessibility approval remains scoped and unverified.
+
+## Completed publication update — 11 November 2026
 
 The six-cove Journey is implemented, reviewed and published as **private Site version 18**, game `1b7b4f05e576614f061ca4949bf5aca705dc5e0e`, hosting source `805ade05e2d5b9eba2287ce77d55cd60911dcaea`. [Root Journey](https://last-ferry-playtest.abumech.chatgpt.site/) · [Receipt](../reviews/journey-six-coves/deployment-confirmation.json). The current root task is completed; do not repeat it.
 

@@ -1,6 +1,18 @@
 # Last Ferry — Project state
 
-## Current review — six-cove Journey ready for phone playtest · 11 November 2026
+## Current task — mobile map readability · 11 November 2026
+
+**MOBILE_MAP_READABILITY_01**, root [NEXT_TASK_MOBILE_MAP_READABILITY.md](../NEXT_TASK_MOBILE_MAP_READABILITY.md), is now the active assignment. The player has tested the six-cove Journey on a physical Android phone and reports that the story aligns and looks decent. Preserve that presentation. Their current issue is crowded map information, name leaders that compete with routes, actions detached from their locations, and Play/Whole cove scales that alternate between cropping and tiny subjects.
+
+[Three original Android images and source-backed research](MOBILE_MAP_READABILITY_RESEARCH.md) establish the repair targets. Source review found unbounded label/action fallback placement, a forced phone close-up ratio, and different camera/overlay occupancy policies. The current task addresses these together across the existing coves. It permits bounded label/detail changes, camera/zoom adjustment and compact controls while preserving all puzzle choices and factual information. It does not commission a new level, mechanic, boat/dock redesign, difficulty change or story pass.
+
+The baseline remains game `1b7b4f05e576614f061ca4949bf5aca705dc5e0e`, live as private Site version **18**, hosting source `805ade05e2d5b9eba2287ce77d55cd60911dcaea`. The prior continuity commit is `a47a306943f2485cab74b096ba44d764c84f666c`. This task/reference update changes no runtime and performs no deployment. Preserve newer work and all earlier receipts.
+
+The six-cove route, original Practice entrances, accepted ferry/docks and Wide/Reef difficulty, Tips Off, Sound/Motion intent, complete Undo and explicit save conversion remain protected. Expansion toward twelve coves waits for the phone map repair and its player comparison. The user's positive story feedback does not establish performance, acoustic or complete accessibility approval.
+
+## Completed review — six-cove Journey · 11 November 2026
+
+The review below preceded the Android feedback and current task above.
 
 **JOURNEY_SIX_COVES_01 is implemented and reviewed** at `1b7b4f05e576614f061ca4949bf5aca705dc5e0e`. The root [task](../NEXT_TASK_JOURNEY_SIX_COVES.md) is now a completed brief. The actual Journey is Holding → Bellwater → Driftwood → Two Shelters → Nell's existing launch → Wide → Reef. Four-space capacity continues through Two Shelters; the final two coves use the accepted six-space ferry. All seven Practice entrances remain independent. No puzzle data or rules changed.
 

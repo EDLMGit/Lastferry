@@ -2,7 +2,9 @@
 
 ## Objective
 
-`JOURNEY_SIX_COVES_01` is implemented and reviewed at `1b7b4f05e576614f061ca4949bf5aca705dc5e0e`, published privately as Sites version 18. Its root brief `NEXT_TASK_JOURNEY_SIX_COVES.md` records completed work. The six existing coves now form one Journey; preserve accepted puzzles, artwork, optional Tips, explicit save conversion and earned history. The next product check is the player's Android Journey experience and the pacing of the first six coves. This review handoff does not assign a seventh cove or another redesign. Follow the user's next scoped instruction and the active `docs/PROJECT_STATE.md`; older campaign/task packages do not override them. Make routine implementation decisions independently and record observed changes in `STATUS.md`.
+Implement the current root task `NEXT_TASK_MOBILE_MAP_READABILITY.md` (**MOBILE_MAP_READABILITY_01**). The player has tested the six-cove Journey on Android and says its story aligns and looks decent, but map names/leaders, displaced actions and camera extremes make phone play crowded and confusing. Repair the shared map/camera/control presentation across the existing coves. Read the task, its three supplied Android references and `docs/MOBILE_MAP_READABILITY_RESEARCH.md` before editing.
+
+Reviewed runtime `1b7b4f05e576614f061ca4949bf5aca705dc5e0e` remains published privately as Sites version 18. Preserve accepted puzzles/difficulty, boats/docks/art, story, audio, Tips Off, complete Undo and Journey/Practice save behavior. No new cove, mechanic or campaign change is assigned. Make routine implementation choices independently, preserve newer/unrelated work and record observed progress in `STATUS.md`. Older task packages do not override this scope.
 
 ## Read and preserve the project decisions
 
@@ -38,4 +40,4 @@ Prefer actionable findings with reproduction and consequences. Separate verified
 
 ## Completion
 
-For the next scoped task, maintain `STATUS.md` and active project state and prepare focused evidence. Keep PR #1 draft and GitHub `main` unchanged. Do not reinterpret a completed brief or historical roadmap as an instruction to add levels or rebalance accepted puzzles. Follow the current publication instruction and preserve earlier milestone records as history.
+Complete MOBILE_MAP_READABILITY_01, maintain `STATUS.md` and active project state, and prepare the focused matched phone evidence. Commit and push to `m1-first-crossing`; keep PR #1 draft and GitHub `main` unchanged. Do not automatically deploy this repair. Retain previous publication receipts and completed tasks as history.

@@ -1,6 +1,6 @@
 # JOURNEY_SIX_COVES_01 — connect the accepted coast
 
-> **Completed and reviewed, 11 November 2026.** Runtime `1b7b4f05e576614f061ca4949bf5aca705dc5e0e` implements this task and is published on the existing private Site as version 18. The brief below records completed scope. The next product check is the full six-cove Android Journey, its story/upgrade pacing and physical-device feel; no seventh-cove assignment is issued here. See [current project state](docs/PROJECT_STATE.md) and [publication receipt](reviews/journey-six-coves/deployment-confirmation.json).
+> **Completed and reviewed, 11 November 2026.** Runtime `1b7b4f05e576614f061ca4949bf5aca705dc5e0e` implements this task and is published on the existing private Site as version 18. The brief below records completed scope. The player has since tested on Android and reports positive story alignment/presentation. The active follow-up is [MOBILE_MAP_READABILITY_01](NEXT_TASK_MOBILE_MAP_READABILITY.md), addressing crowded map information and camera scale; no seventh-cove assignment is issued here. See [current project state](docs/PROJECT_STATE.md) and [publication receipt](reviews/journey-six-coves/deployment-confirmation.json).
 
 
 ## Goal and baseline
