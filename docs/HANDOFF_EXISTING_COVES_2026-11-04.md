@@ -1,6 +1,17 @@
 # Last Ferry — fresh-chat handoff
 
-## Current update — 10 November 2026
+## Current update — 11 November 2026
+
+The six-cove Journey is implemented, reviewed and published as **private Site version 18**, game `1b7b4f05e576614f061ca4949bf5aca705dc5e0e`, hosting source `805ade05e2d5b9eba2287ce77d55cd60911dcaea`. [Root Journey](https://last-ferry-playtest.abumech.chatgpt.site/) · [Receipt](../reviews/journey-six-coves/deployment-confirmation.json). The current root task is completed; do not repeat it.
+
+Holding → Bellwater → Driftwood → Two Shelters → launch → Wide → Reef is now the actual route. All seven Practice entrances remain independent. Earlier earned rescues and seen scenes survive explicit Continue; affected old saves are backed up before conversion. Puzzles, boat/dock art and Tips behavior are preserved.
+
+Independent review found no blocker, passed 125 focused units and a fresh production build/typecheck, and inspected six native phone scene frames. Codex's 14 distinct browser cases remain recorded evidence with original failures retained. No new physical-phone, spoken screen-reader or acoustic testing was performed.
+
+The next product check is the player's Android Journey, including the two new scenes, the launch boundary and the full first-half difficulty progression. New cove seven is not commissioned by this handoff. Follow the user's next scoped feedback and the active [project state](PROJECT_STATE.md); retain the unfinished twelve-cove target and all earlier history. Keep PR #1 draft and main unchanged.
+
+
+## Historical update — 10 November 2026
 
 Optional Tips is implemented, reviewed and published as **private Site version 17**, game `f23e9b087e80316c3884ed5fa83cce25cf6508a0`, hosting source `a55d2401906cb1403a73953c14606c87e14f8ef4`. [Receipt](../reviews/optional-tips/deployment-confirmation.json). The accepted boat/docks and Wide/Reef complexity remain protected. A fresh focused 66-unit run, build/typecheck and exact-source phone-image review found no blocker; physical-device and listening limits remain separate.
 

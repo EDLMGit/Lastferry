@@ -1,5 +1,8 @@
 # JOURNEY_SIX_COVES_01 — connect the accepted coast
 
+> **Completed and reviewed, 11 November 2026.** Runtime `1b7b4f05e576614f061ca4949bf5aca705dc5e0e` implements this task and is published on the existing private Site as version 18. The brief below records completed scope. The next product check is the full six-cove Android Journey, its story/upgrade pacing and physical-device feel; no seventh-cove assignment is issued here. See [current project state](docs/PROJECT_STATE.md) and [publication receipt](reviews/journey-six-coves/deployment-confirmation.json).
+
+
 ## Goal and baseline
 
 Turn the six accepted puzzles into the first connected half of the twelve-cove Journey. Use reviewed runtime `f23e9b087e80316c3884ed5fa83cce25cf6508a0`, now published privately as Sites version 17, preserving newer/unrelated work. The ferry, docks, difficulty and Tips Off behavior are the baseline.

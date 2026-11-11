@@ -1,12 +1,12 @@
 # Last Ferry — The Long Tide
 
-## Current direction · 10 November 2026
+## Current direction · 11 November 2026
 
-The repaired six-space ferry, docks and Wide/Reef complexity received positive player feedback. The private Site serves the reviewed Tips build `f23e9b087e80316c3884ed5fa83cce25cf6508a0`, version 17. The development branch connects six rescues and offers seven independent Practice entries.
+The repaired six-space ferry, docks and Wide/Reef complexity received positive player feedback. The six-cove Journey is implemented and reviewed at `1b7b4f05e576614f061ca4949bf5aca705dc5e0e`, published for Android playtesting. It connects six rescues and retains seven independent Practice entries. [Current publication and review](../docs/PROJECT_STATE.md)
 
-[JOURNEY_SIX_COVES_01](../NEXT_TASK_JOURNEY_SIX_COVES.md) connects the first six existing coves of the twelve-cove target.
+[JOURNEY_SIX_COVES_01](../NEXT_TASK_JOURNEY_SIX_COVES.md) is complete. The next product check is how the connected six-cove sequence, two new illustrated entries and launch boundary feel on the player's phone. No seventh cove or new mechanic is assigned by this review handoff; the remaining arc stays provisional.
 
-| Position after integration | Cove / story role |
+| Journey position | Cove / story role |
 | --- | --- |
 | 1 | Holding Pier — the first neighbors, small ferry and familiar shore |
 | 2 | Bellwater — loaded return and changing shore heights |

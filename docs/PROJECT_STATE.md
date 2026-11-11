@@ -1,6 +1,26 @@
 # Last Ferry — Project state
 
-## Current handoff — six connected coves
+## Current review — six-cove Journey ready for phone playtest · 11 November 2026
+
+**JOURNEY_SIX_COVES_01 is implemented and reviewed** at `1b7b4f05e576614f061ca4949bf5aca705dc5e0e`. The root [task](../NEXT_TASK_JOURNEY_SIX_COVES.md) is now a completed brief. The actual Journey is Holding → Bellwater → Driftwood → Two Shelters → Nell's existing launch → Wide → Reef. Four-space capacity continues through Two Shelters; the final two coves use the accepted six-space ferry. All seven Practice entrances remain independent. No puzzle data or rules changed.
+
+Source review found no blocker in the explicit Continue conversion, original-byte backup, earned Wide/launch preservation, reload or failure fallback. Early checkpoints resume unchanged; advanced legacy shapes requiring conversion receive the backup when Continue is chosen. Winning stays undoable until explicit acceptance. The endpoint describes six currently available coves, not the unfinished twelve-cove story.
+
+Independent review passed a fresh **125/125 focused unit cases** in six files and a fresh Node 24 production build/typecheck. Six exact-source phone frames were inspected across Two Shelters portrait and Reef short landscape. The illustrations show clear grouped characters, appropriate boat sizes, readable captions and staged visual actions. These observations support publication for playtesting; they do not establish physical-device smoothness, listening quality or whole-Journey satisfaction.
+
+Codex's **14 distinct browser cases** remain source-linked evidence with original failures and passing reruns retained: 11 production save cases and three Journey cases. The fresh-player sequence completed all six coves; the normal-motion portrait legacy run completed Two Shelters and Reef with tide/terminal Undo. The short-landscape run covered Two Shelters and Reef's scene/entry lifecycle, not a separate complete Reef rescue. No new browser or physical-device run was performed by this publication review. [Implementation review and original failures](../reviews/journey-six-coves/REVIEW.md)
+
+The next product check is the user's Android root Journey: whether both new entries read naturally, the launch after Two Shelters feels earned, and the six-cove difficulty progression sustains interest with Tips Off. Preserve this build while collecting that feedback. The remaining six-cove arc, newcomer and final supper remain future design; this handoff does not commission a new map, species or rebalancing pass. Earlier positive feedback on the repaired ferry/docks and Wide/Reef puzzles remains valid; acceptance of the connected Journey and new compositions is separate.
+
+## Current publication — Sites version 18
+
+Published successfully on **11 November 2026 at 08:25 Europe/Madrid** (07:25 UTC) to the same owner-private Site: game `1b7b4f05e576614f061ca4949bf5aca705dc5e0e`, hosting source `805ade05e2d5b9eba2287ce77d55cd60911dcaea`. [Play the root Journey](https://last-ferry-playtest.abumech.chatgpt.site/) · [Publication receipt](../reviews/journey-six-coves/deployment-confirmation.json). The game and hosting SHAs identify different repositories. This continuity update changes no deployed code.
+
+The publication source audit recomputed 285 scoped files: 284 exact Git blobs plus the unchanged Vite preview-host allowance. Dependencies were unchanged. The 79-family asset validation and recorded browser results were retained, not relabelled as fresh checks. Physical Android performance, spoken screen-reader output, speaker playback and inherited timing/layout limitations remain unverified in this review; the existing bundle-size advisory remains.
+
+## Previous implementation handoff — six connected coves
+
+The original handoff below predates the review and version 18 publication above.
 
 Follow root [NEXT_TASK_JOURNEY_SIX_COVES.md](../NEXT_TASK_JOURNEY_SIX_COVES.md), **JOURNEY_SIX_COVES_01**. Optional Tips is complete and reviewed at `f23e9b087e80316c3884ed5fa83cce25cf6508a0`. The player previously accepted the repaired ferry/docks and increasing Wide/Reef complexity. Preserve those results.
 
@@ -10,7 +30,7 @@ On Home, Continue explains the changed route for returning players. It backs up 
 
 Verification passed the production build, 125 focused unit cases, the 79-family asset inventory and 11 production save cases. A fresh player rescued all six coves. A separate returning-player run undid tides and wins in both added Journey coves. The review retains native 390×844 and 780×320 scene frames, the uninterrupted 85-second returning-player recording with runtime sound, original capture failures and the checks that resolved them. The reviewed version 17 publication below remains current.
 
-## Current publication — Sites version 17
+## Prior publication — Sites version 17
 
 The existing owner-private Site published the reviewed optional-tips game on 10 November 2026 at **21:21 Europe/Madrid** (20:21 UTC): game `f23e9b087e80316c3884ed5fa83cce25cf6508a0`, hosting source `a55d2401906cb1403a73953c14606c87e14f8ef4`. [Play](https://last-ferry-playtest.abumech.chatgpt.site) · [Publication receipt](../reviews/optional-tips/deployment-confirmation.json). The game and hosting SHAs belong to different repositories; this task/continuity update changes no deployed runtime.
 

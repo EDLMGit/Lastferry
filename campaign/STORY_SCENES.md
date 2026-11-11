@@ -1,6 +1,8 @@
 # Last Ferry — story scenes for The Long Tide
 
-## Implemented six-cove Journey
+## Reviewed six-cove Journey · 11 November 2026
+
+The integration at `1b7b4f05e576614f061ca4949bf5aca705dc5e0e` is published for Android playtesting. Source and six native phone frames support the composition and lifecycle review. Physical playback, listening and the player's acceptance of the new scenes and pacing remain separate. [Current publication and review](../docs/PROJECT_STATE.md)
 
 The root Journey connects Holding Pier, Bellwater, Driftwood Yard, Two Shelters, Wide Berth and Reef Return. Each cove has its own entry in the illustrated player. Launch remains the existing eight-second protected-boathouse picture and now follows Two Shelters. [Task](../NEXT_TASK_JOURNEY_SIX_COVES.md) · [Six-cove review](../reviews/journey-six-coves/REVIEW.md)
 

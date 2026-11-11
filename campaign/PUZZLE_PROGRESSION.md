@@ -1,12 +1,12 @@
 # Puzzle progression — selected campaign direction
 
-## Implemented six-cove progression
+## Reviewed six-cove progression · 11 November 2026
 
-[JOURNEY_SIX_COVES_01](../NEXT_TASK_JOURNEY_SIX_COVES.md) connects Holding → Bellwater → Driftwood → Two Shelters → launch → Wide → Reef. The first four use the small ferry; the last two use the accepted larger ferry. Preserve all existing level data, rules and witnesses. No new difficulty design is required in this pass. Optional Tips is already implemented and published at game `f23e9b087e80316c3884ed5fa83cce25cf6508a0`, private Site version 17.
+[JOURNEY_SIX_COVES_01](../NEXT_TASK_JOURNEY_SIX_COVES.md) connects Holding → Bellwater → Driftwood → Two Shelters → launch → Wide → Reef. The first four use the small ferry; the last two use the accepted larger ferry. Preserve all existing level data, rules and witnesses. The integration is complete at `1b7b4f05e576614f061ca4949bf5aca705dc5e0e`; optional Tips remains Off by default. Publication and verification are recorded in [project state](../docs/PROJECT_STATE.md). The next check is whole-Journey player feedback; a new puzzle or rebalance is not assigned here.
 
 Two Shelters is the fourth Journey cove, Wide Berth the fifth and Reef Return the sixth. All seven Practice entries remain available. Explicit continuation from an old save resumes the first missing rescue by identity. The already-seen launch and any earlier Wide rescue keep their credit. The roadmap below records earlier planning for the twelve-cove target.
 
-## Existing coves accepted · 7 November 2026
+## Historical acceptance of the existing-cove repair · 7 November 2026
 
 The prepared ferry's working variant serves Wide and Reef. It supports the same rule bands for every legal subset while preserving individual animal scale. Six-space seats, docks, launch art and gallery now depict the repaired family.
 

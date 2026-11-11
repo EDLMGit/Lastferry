@@ -2,7 +2,7 @@
 
 ## Objective
 
-Implement the current root task in `NEXT_TASK_JOURNEY_SIX_COVES.md` (`JOURNEY_SIX_COVES_01`). Connect the six accepted existing puzzles into Holding → Bellwater → Driftwood → Two Shelters → launch → Wide → Reef. Preserve accepted levels/art, optional Tips and honest earned progress. This task explicitly authorizes the required route/save integration and two brief illustrated connections, not another puzzle or redesign. Read the active section of `docs/PROJECT_STATE.md`; historical `FIRST_TASK.md` and older campaign/task packages do not override the current scope. Make routine implementation decisions independently and update `STATUS.md` with observed progress and material decisions.
+`JOURNEY_SIX_COVES_01` is implemented and reviewed at `1b7b4f05e576614f061ca4949bf5aca705dc5e0e`, published privately as Sites version 18. Its root brief `NEXT_TASK_JOURNEY_SIX_COVES.md` records completed work. The six existing coves now form one Journey; preserve accepted puzzles, artwork, optional Tips, explicit save conversion and earned history. The next product check is the player's Android Journey experience and the pacing of the first six coves. This review handoff does not assign a seventh cove or another redesign. Follow the user's next scoped instruction and the active `docs/PROJECT_STATE.md`; older campaign/task packages do not override them. Make routine implementation decisions independently and record observed changes in `STATUS.md`.
 
 ## Read and preserve the project decisions
 
@@ -38,4 +38,4 @@ Prefer actionable findings with reproduction and consequences. Separate verified
 
 ## Completion
 
-Complete the current named task, maintain `STATUS.md` and the active project state, and prepare its focused review evidence. Keep PR #1 draft and GitHub `main` unchanged. Do not add new levels, rebalance accepted puzzles or automatically deploy this Journey integration. Preserve earlier milestone records as history.
+For the next scoped task, maintain `STATUS.md` and active project state and prepare focused evidence. Keep PR #1 draft and GitHub `main` unchanged. Do not reinterpret a completed brief or historical roadmap as an instruction to add levels or rebalance accepted puzzles. Follow the current publication instruction and preserve earlier milestone records as history.
