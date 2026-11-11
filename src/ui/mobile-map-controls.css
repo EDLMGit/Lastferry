@@ -1,0 +1,89 @@
+#app .forecast-short {
+  display: none;
+}
+#app #dock-actions {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  gap: 0 4px;
+}
+#app #dock-actions[data-layout='column'] {
+  grid-template-columns: auto;
+  gap: 3px;
+}
+#app #dock-actions .dock-owner {
+  grid-column: 1 / -1;
+  justify-self: start;
+  align-self: end;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: #10313ce8;
+  color: #f4ead7;
+  font-size: 14px;
+  line-height: 1.2;
+}
+#app #dock-actions[data-placement='edge'] {
+  padding: 3px;
+  border: 1px solid var(--cove-border, #d2bd91);
+  border-radius: 12px;
+  background: #153d46;
+}
+#app #dock-actions[hidden] {
+  display: none;
+}
+#app #place-index summary {
+  padding: 12px 3px;
+  min-height: 44px;
+  cursor: pointer;
+}
+#app #place-index > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0 0 8px;
+}
+#app #place-index button {
+  min-height: 44px;
+}
+#app #local-context[data-placement='edge'] {
+  border-inline-start: 3px solid #d4bd91;
+}
+#app #location-facts {
+  min-height: 0;
+}
+@media (max-height: 460px), (max-width: 580px) {
+  #app .tools .cove-button, #app #load-toggle, #app #status-toggle,
+  #app #dock-actions button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  #app .tools {
+    gap: 4px;
+  }
+  #app #undo, #app #menu, #app #sound-toggle {
+    width: 44px;
+    padding: 4px;
+  }
+  #app .tools #undo .cove-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  #app #load-toggle, #app #status-toggle {
+    padding: 5px 8px;
+    font-size: 14px;
+  }
+  #app #status-toggle .status-symbol {
+    display: none;
+  }
+  #app #status-toggle:has(.forecast-short) .forecast-lines {
+    display: none;
+  }
+  #app .forecast-short, #app .forecast-short span, #app .forecast-short strong {
+    display: block;
+    font-size: 14px;
+    line-height: 1.2;
+  }
+}

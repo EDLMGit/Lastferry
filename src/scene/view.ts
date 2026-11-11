@@ -29,9 +29,11 @@ export function unobscuredOverview(
   subjects: ViewBounds[],
   usable: ViewRectangle,
   obstacles: ViewRectangle[],
+  maximumScale = Infinity,
+  preferredCenter?: ViewPoint,
 ) {
   const center = { x: (bounds.minX + bounds.maxX) / 2, y: (bounds.minY + bounds.maxY) / 2 };
-  const initialScale = overviewScale(bounds, usable);
+  const initialScale = Math.min(maximumScale, overviewScale(bounds, usable));
   const midpoint = { x: (usable.left + usable.right) / 2, y: (usable.top + usable.bottom) / 2 };
   const blocked = obstacles.filter(
     (rect) =>
@@ -55,8 +57,10 @@ export function unobscuredOverview(
       maximumX = usable.right - envelope.right;
     const minimumY = usable.top - envelope.top,
       maximumY = usable.bottom - envelope.bottom;
-    const xs = new Set([0, minimumX, maximumX]),
-      ys = new Set([0, minimumY, maximumY]);
+    const desiredX = preferredCenter ? Math.max(minimumX, Math.min(maximumX, (center.x - preferredCenter.x) * scale)) : 0;
+    const desiredY = preferredCenter ? Math.max(minimumY, Math.min(maximumY, (preferredCenter.y - center.y) * scale)) : 0;
+    const xs = new Set([desiredX, minimumX, maximumX]),
+      ys = new Set([desiredY, minimumY, maximumY]);
     for (const subject of protectedRects)
       for (const obstacle of blocked) {
         xs.add(Math.max(minimumX, Math.min(maximumX, obstacle.left - subject.right - 8)));
@@ -88,7 +92,7 @@ export function unobscuredOverview(
                 Math.min(subject.bottom + dy + 6, obstacle.bottom) -
                   Math.max(subject.top + dy - 6, obstacle.top),
               );
-        const displacement = dx * dx + dy * dy;
+        const displacement = (dx - desiredX) ** 2 + (dy - desiredY) ** 2;
         if (
           overlap < candidate.overlap - 1e-7 ||
           (Math.abs(overlap - candidate.overlap) < 1e-7 && displacement < candidate.displacement)
@@ -106,11 +110,57 @@ export function unobscuredOverview(
   return best;
 }
 
-export function phonePlayScale(bounds: ViewBounds, usable: ViewRectangle) {
-  return Math.max(
-    overviewScale(bounds, usable) * 1.4,
-    Math.min(44, (usable.right - usable.left) / 6.8, (usable.bottom - usable.top) / 4.9),
-  );
+export function neighborhoodFrame(
+  landing: ViewBounds,
+  boat: ViewBounds,
+  adjacent: ViewBounds[],
+  usable: ViewRectangle,
+  obstacles: ViewRectangle[],
+  coveCenter?: ViewPoint,
+) {
+  const extend = (a: ViewBounds, b: ViewBounds): ViewBounds => ({
+    minX: Math.min(a.minX, b.minX), maxX: Math.max(a.maxX, b.maxX),
+    minY: Math.min(a.minY, b.minY), maxY: Math.max(a.maxY, b.maxY),
+  });
+  const padded = {
+    left: usable.left + 16, right: usable.right - 16,
+    top: usable.top + 16, bottom: usable.bottom - 16,
+  };
+  let bounds = extend(landing, boat);
+  const neighbors = [...adjacent].sort((a, b) =>
+    overviewScale(extend(bounds, b), padded) - overviewScale(extend(bounds, a), padded));
+  const subjects = [boat];
+  const contexts = [bounds];
+  for (const [index, neighbor] of neighbors.entries()) {
+    const context = extend(bounds, neighbor);
+    if (index === 0 || overviewScale(context, padded) >= 27) {
+      bounds = context;
+      contexts.push(context);
+      subjects.push(neighbor);
+    }
+  }
+  let frame = unobscuredOverview(bounds, subjects, padded, obstacles, 40, coveCenter);
+  while (frame.overlap > 0 && contexts.length > 2) {
+    contexts.pop();
+    subjects.pop();
+    frame = unobscuredOverview(contexts.at(-1)!, subjects, padded, obstacles, 40, coveCenter);
+  }
+  return frame;
+}
+
+export function adjustedScale(normal: number, whole: number, step: number) {
+  const near = Math.max(normal * 1.35, 52);
+  if (step < 0) return normal + (normal - whole) * Math.max(-2, step) / 2;
+  return normal + (near - normal) * Math.min(2, step) / 2;
+}
+
+export function nextZoomStep(normal: number, whole: number, step: number, direction: -1 | 1) {
+  const current = adjustedScale(normal, whole, step);
+  for (let next = step + direction; next >= -2 && next <= 2; next += direction) {
+    if (next === -1 && normal - whole < 2) continue;
+    if ((adjustedScale(normal, whole, next) - current) * direction >= 1) return next;
+  }
+  return null;
 }
 
 export function clampViewFocus(

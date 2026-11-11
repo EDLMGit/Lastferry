@@ -2656,39 +2656,23 @@
       "sources": [
         {
           "path": "src/main.ts",
-          "symbol": "Independent visible control obstacles, safe viewport and overlay placement, native one-action Sail/focus ownership; Two Shelters side-first labels with nearest local fallback and dock reservation"
-        },
-        {
-          "path": "src/style.css",
-          "symbol": ".map-target / .map-hit / .map-symbol / .map-name / .map-home"
-        },
-        {
-          "path": "src/ui/cove-ui.ts",
-          "symbol": "shared icon and control rendering helpers"
-        },
-        {
-          "path": "src/ui/cove-ui.css",
-          "symbol": "shared cove interface surfaces"
+          "symbol": "renderMap, positionMap, playObstacles and the free place index"
         },
         {
           "path": "src/ui/cove-layout.ts",
-          "symbol": "clearCurrentEndpoint and endpointTargets"
+          "symbol": "endpointTargets, placeCoveTargets and placeCoveNames"
         },
         {
-          "path": "src/ui/play-controls.css",
-          "symbol": "Standalone corner utilities, compact load/depth and deadline capsules, optional details and nearby Sail toolbar"
+          "path": "src/ui/cove-ui.css",
+          "symbol": "Map target, focus, Harbor, name and overview styles"
         },
         {
           "path": "src/scene/view.ts",
-          "symbol": "Stable Whole-cove composition around measured individual controls; complete cove fit and unchanged Play/pan ownership"
+          "symbol": "neighborhoodFrame and unobscuredOverview"
         },
         {
           "path": "src/scene/world.ts",
-          "symbol": "Stable Whole-cove composition around measured individual controls; complete cove fit and unchanged Play/pan ownership"
-        },
-        {
-          "path": "src/ui/placement.ts",
-          "symbol": "placeLocalCard optional separation parameter retains 8px default; candidate dock uses 2px around unchanged rectangles"
+          "symbol": "World Play and Whole cove camera, free scale and pan"
         },
         {
           "path": "src/ui/location.ts",
@@ -2703,24 +2687,31 @@
         "selected",
         "Home role"
       ],
-      "visualSignature": "Small 28px visual marker with larger stationary hit region and freestanding label.",
+      "visualSignature": "A compact ring and local name identify each landing. Whole cove uses quieter name styling. Play frames the ferry with nearby passages and measures the visible corner controls.",
       "reuseAndOwnership": "Name plus marker is one semantic button and one Tab stop for each real node.",
-      "behaviorToPreserve": "Free selection and exact endpoint identity remain. A compact nearby Sail activation commits one revalidated edge/action. Blocked and no-direct-passage states never detour. Legal immediate loss is stated inline before Sail anyway; no second sailing dialog. Two Shelters alone reserves nearby dock actions before names and prefers unobstructed side placements, falling back near the exact marker. Older-cove placement, native hit areas, endpoint identity and free inspection remain unchanged. The candidate uses the actual safe viewport rather than an additional inset, and its current marker avoids other island silhouettes while preserving a leader to the boat. Candidate dock placement permits 2px separation around the unchanged visual and hit rectangles; the shared helper retains 8px by default for every existing caller. The candidate current marker/name is hidden during busy presentation while input is locked, preventing overlap with moving passengers; idle, cancellation and Undo restore it.",
+      "behaviorToPreserve": "Visible markers stay at their canonical endpoints or within a small bounded offset. Free inspection names every place. Selecting never spends an action. Sail uses a single legal passage and preserves Tips and Undo.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "existing-family-reused-two-shelters-practice-awaiting-human-playtest",
-        "reviewedBaseline": "2e4f99268da4691b315fe8467d9e539cda15e927",
-        "basis": "Original shared marker family reused for the independent Practice candidate. Native phone composition is inspected separately; the candidate is not approved campaign content.",
+        "state": "integrated-mobile-map-awaiting-android-comparison",
+        "reviewedBaseline": "1b7b4f05e576614f061ca4949bf5aca705dc5e0e",
+        "basis": "A compact ring and local name identify each landing. Whole cove uses quieter name styling. Play frames the ferry with nearby passages and measures the visible corner controls.",
         "history": [
           {
-            "state": "integrated-play-readability-awaiting-human-review",
-            "reviewedBaseline": "7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695",
-            "basis": "Existing family reused for the scoped readable-play correction. Earlier accepted material, identity and behavior remain; new composition and perceptual readability require their own actual evidence and user review. Published version13 still contains the reviewed baseline.",
+            "state": "existing-family-reused-two-shelters-practice-awaiting-human-playtest",
+            "reviewedBaseline": "2e4f99268da4691b315fe8467d9e539cda15e927",
+            "basis": "Original shared marker family reused for the independent Practice candidate. Native phone composition is inspected separately; the candidate is not approved campaign content.",
             "history": [
               {
-                "state": "original-accepted-variants-preserved-wide-berth-visual-repair-awaiting-human-review",
-                "reviewedBaseline": "45ab9768792ddd3a8dffb67da6c332f8fe2234ff",
-                "basis": "Prior Wide Berth functional verification did not establish visual acceptance. Existing original variants remain preserved; this scoped correction needs its own actual visual observations and user playtest."
+                "state": "integrated-play-readability-awaiting-human-review",
+                "reviewedBaseline": "7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695",
+                "basis": "Existing family reused for the scoped readable-play correction. Earlier accepted material, identity and behavior remain; new composition and perceptual readability require their own actual evidence and user review. Published version13 still contains the reviewed baseline.",
+                "history": [
+                  {
+                    "state": "original-accepted-variants-preserved-wide-berth-visual-repair-awaiting-human-review",
+                    "reviewedBaseline": "45ab9768792ddd3a8dffb67da6c332f8fe2234ff",
+                    "basis": "Prior Wide Berth functional verification did not establish visual acceptance. Existing original variants remain preserved; this scoped correction needs its own actual visual observations and user playtest."
+                  }
+                ]
               }
             ]
           }
@@ -2758,22 +2749,26 @@
         {
           "path": "reviews/reef-return/REVIEW.md",
           "role": "Against-current and cut-off passage feedback with free inspection"
+        },
+        {
+          "path": "reviews/mobile-map-readability/REVIEW.md",
+          "role": "Matched actual Play and Whole cove phone views and uninterrupted interaction."
         }
       ],
-      "meaning": "Freestanding names and selectable marker buttons. Preserve real status shape/text, free selection, collision/occlusion avoidance and no forced pan on selecting.",
+      "meaning": "A compact ring and local name identify each landing. Whole cove uses quieter name styling. Play frames the ferry with nearby passages and measures the visible corner controls.",
       "consumers": [
         "src/main.ts"
       ],
       "gallery": {
-        "section": "two-shelters",
-        "preview": "Shared native choices and an actual Two Shelters Practice link; the developer specimen is design evidence, not gameplay."
+        "section": "readability",
+        "preview": "Phone comparison and links to actual Two Shelters and Wide Berth Practice."
       },
       "typeSpecific": {
-        "render/placement sources": "src/main.ts: renderMap; src/style.css: .map-target / .map-hit / .map-symbol / .map-name / .map-home",
+        "render/placement sources": "src/main.ts, src/ui/cove-layout.ts and src/ui/cove-ui.css",
         "semantic role/accessible name": "Freestanding names and selectable marker buttons. Preserve real status shape/text, free selection, collision/occlusion avoidance and no forced pan on selecting.",
         "icon and label mappings": "Native visible words remain authoritative; SVG adds redundant semantic visual cue.",
         "interaction states": "current; remote; too shallow; loss risk; selected; Home role",
-        "nearby placement and viewport contract": "Placement uses independent measured visible controls with full safe canvas bounds. Local context is the non-committing keyboard focus owner, replacing the removed heading; same selection gesture cannot activate the newly appeared Sail. Candidate-only ordered side preferences retain the nearest-marker fallback when obstructed; dock reservation is made before label layout to keep the local action beside the boat. Existing safe-area bounds remain authoritative; candidate controls use the available edge space and current-ring placement includes other land silhouettes as obstacles.",
+        "nearby placement and viewport contract": "A compact ring and local name identify each landing. Whole cove uses quieter name styling. Play frames the ferry with nearby passages and measures the visible corner controls.",
         "focus/cancel/fullscreen preservation": "Native buttons/aria-pressed; Escape cancels; same dialog promoted on fullscreen with DOM, focus, subset and scroll retained.",
         "size/hit target/layout behavior": "Independent visible control rectangles replace the removed full-width HUD exclusion. Safe viewport remains stable when information expands; nearby actions and receipts avoid actual controls, selected endpoints and figures. At least44px native hit targets; critical text wraps."
       },
@@ -4354,17 +4349,25 @@
         {
           "path": "src/main.ts",
           "symbol": "Independent visible control obstacles, safe viewport and overlay placement, native one-action Sail/focus ownership"
+        },
+        {
+          "path": "src/ui/view-controls.css",
+          "symbol": "Scale disclosure and compact recenter button"
+        },
+        {
+          "path": "src/ui/mobile-map-controls.css",
+          "symbol": "Short-window utilities and simultaneous event forecast"
         }
       ],
       "integrationTarget": "src/ui/cove-ui.css",
-      "meaning": "Small familiar utilities; 48px stable target, 24px glyph. Undo, Wait, Menu and Sound are separate corner controls; Wait remains one action while free view/settings controls remain separate.",
+      "meaning": "Separate corner controls retain their touch areas. A compact zoom disclosure adjusts scale. The factual short forecast groups a simultaneous occupied-pier flood and reef reversal.",
       "variants": [
         "quiet",
         "focus",
         "pressed",
         "disabled"
       ],
-      "visualSignature": "Rounded matte surface, shallow lower edge and restrained top highlight; tokens in the same shared CSS",
+      "visualSignature": "Separate corner controls retain their touch areas. A compact zoom disclosure adjusts scale. The factual short forecast groups a simultaneous occupied-pier flood and reef reversal.",
       "reuseAndOwnership": "Shared component appearance; existing game layout and native controls retain interaction ownership",
       "behaviorToPreserve": "Stable measured bounds, no new continuous animation, no tap-through, no changed confirmation semantics; Reduced Motion removes decorative transitions",
       "accessibility": {
@@ -4374,13 +4377,20 @@
       },
       "provenance": "original-package-vector-and-css",
       "acceptance": {
-        "state": "integrated-play-readability-awaiting-human-review",
-        "reviewedBaseline": "7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695",
-        "basis": "Existing family reused for the scoped readable-play correction. Earlier accepted material, identity and behavior remain; new composition and perceptual readability require their own actual evidence and user review. Published version13 still contains the reviewed baseline.",
+        "state": "integrated-mobile-map-awaiting-android-comparison",
+        "reviewedBaseline": "1b7b4f05e576614f061ca4949bf5aca705dc5e0e",
+        "basis": "Separate corner controls retain their touch areas. A compact zoom disclosure adjusts scale. The factual short forecast groups a simultaneous occupied-pier flood and reef reversal.",
         "history": [
           {
-            "state": "awaiting-human-playtest",
-            "basis": "Integrated and contributor-verified in actual game; not yet human-accepted"
+            "state": "integrated-play-readability-awaiting-human-review",
+            "reviewedBaseline": "7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695",
+            "basis": "Existing family reused for the scoped readable-play correction. Earlier accepted material, identity and behavior remain; new composition and perceptual readability require their own actual evidence and user review. Published version13 still contains the reviewed baseline.",
+            "history": [
+              {
+                "state": "awaiting-human-playtest",
+                "basis": "Integrated and contributor-verified in actual game; not yet human-accepted"
+              }
+            ]
           }
         ]
       },
@@ -4400,23 +4410,27 @@
         {
           "path": "reviews/play-readability/REVIEW.md",
           "role": "PLAY_READABILITY_01 actual native UI/water/Harbor evidence, exact source identity, focused results and retained limitations; human visual acceptance is separate."
+        },
+        {
+          "path": "reviews/mobile-map-readability/REVIEW.md",
+          "role": "Matched actual Play and Whole cove phone views and uninterrupted interaction."
         }
       ],
       "consumers": [
         "src/main.ts"
       ],
       "gallery": {
-        "section": "interface",
-        "preview": "Actual shared CSS/component states; design evidence separate from gameplay The gallery links to actual Holding/Driftwood practice and this pass evidence; gallery specimens remain design evidence."
+        "section": "readability",
+        "preview": "Phone comparison and links to actual Two Shelters and Wide Berth Practice."
       },
       "typeSpecific": {
         "component/selector sources": "src/ui/cove-ui.css: .cove-button.cove-button--icon; src/ui/cove-ui.ts: shared icon and control rendering helpers",
         "token and elevation roles": "Rounded matte surface, shallow lower edge and restrained top highlight; tokens in the same shared CSS",
         "interaction states": "quiet; focus; pressed; disabled",
-        "size/hit target/layout behavior": "Independent visible control rectangles replace the removed full-width HUD exclusion. Safe viewport remains stable when information expands; nearby actions and receipts avoid actual controls, selected endpoints and figures. At least44px native hit targets; critical text wraps.",
+        "size/hit target/layout behavior": "Separate corner controls retain their touch areas. A compact zoom disclosure adjusts scale. The factual short forecast groups a simultaneous occupied-pier flood and reef reversal.",
         "text/icon contract": "Native button owns label and accessible name; inline decorative SVG has no focus or pointer target.",
         "focus and disabled/warning semantics": "Focus keyline; selected/disabled/warning have shape and text as well as color.",
-        "mobile and reduced-motion evidence": "reviews/cove-ui-assets/REVIEW.md native phone gameplay. contrast.json records169checks/9actualstages and13SettingsReduced control transition durations0s; no physical-device certification."
+        "mobile and reduced-motion evidence": "reviews/mobile-map-readability/REVIEW.md"
       }
     },
     {
@@ -4440,10 +4454,18 @@
         {
           "path": "src/main.ts",
           "symbol": "Independent visible control obstacles, safe viewport and overlay placement, native one-action Sail/focus ownership"
+        },
+        {
+          "path": "src/ui/owned-control.ts",
+          "symbol": "besideOwner and atScreenEdge"
+        },
+        {
+          "path": "src/ui/mobile-map-controls.css",
+          "symbol": "Owned screen-edge dock and local inspection states"
         }
       ],
       "integrationTarget": "src/ui/cove-ui.css",
-      "meaning": "Board / Let ashore / Bring home / Sail / Wait / Undo / confirmation; retain visible action labels. Nearby Sail shows its one-action cost with optional free Details. Direct safe single-passenger transfers and named group commitment retain the existing flow.",
+      "meaning": "Sail names the selected stop. Passenger controls sit against the ferry when space permits. The compact screen-edge fallback names the current landing above its controls.",
       "variants": [
         "foam",
         "warm",
@@ -4452,7 +4474,7 @@
         "pressed",
         "disabled"
       ],
-      "visualSignature": "Rounded matte surface, shallow lower edge and restrained top highlight; tokens in the same shared CSS",
+      "visualSignature": "Sail names the selected stop. Passenger controls sit against the ferry when space permits. The compact screen-edge fallback names the current landing above its controls.",
       "reuseAndOwnership": "Shared component appearance; existing game layout and native controls retain interaction ownership",
       "behaviorToPreserve": "Stable measured bounds, no new continuous animation, no tap-through, no changed confirmation semantics; Reduced Motion removes decorative transitions",
       "accessibility": {
@@ -4462,13 +4484,20 @@
       },
       "provenance": "original-package-vector-and-css",
       "acceptance": {
-        "state": "integrated-play-readability-awaiting-human-review",
-        "reviewedBaseline": "7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695",
-        "basis": "Existing family reused for the scoped readable-play correction. Earlier accepted material, identity and behavior remain; new composition and perceptual readability require their own actual evidence and user review. Published version13 still contains the reviewed baseline.",
+        "state": "integrated-mobile-map-awaiting-android-comparison",
+        "reviewedBaseline": "1b7b4f05e576614f061ca4949bf5aca705dc5e0e",
+        "basis": "Sail names the selected stop. Passenger controls sit against the ferry when space permits. The compact screen-edge fallback names the current landing above its controls.",
         "history": [
           {
-            "state": "awaiting-human-playtest",
-            "basis": "Integrated and contributor-verified in actual game; not yet human-accepted"
+            "state": "integrated-play-readability-awaiting-human-review",
+            "reviewedBaseline": "7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695",
+            "basis": "Existing family reused for the scoped readable-play correction. Earlier accepted material, identity and behavior remain; new composition and perceptual readability require their own actual evidence and user review. Published version13 still contains the reviewed baseline.",
+            "history": [
+              {
+                "state": "awaiting-human-playtest",
+                "basis": "Integrated and contributor-verified in actual game; not yet human-accepted"
+              }
+            ]
           }
         ]
       },
@@ -4492,23 +4521,27 @@
         {
           "path": "reviews/play-readability/REVIEW.md",
           "role": "PLAY_READABILITY_01 actual native UI/water/Harbor evidence, exact source identity, focused results and retained limitations; human visual acceptance is separate."
+        },
+        {
+          "path": "reviews/mobile-map-readability/REVIEW.md",
+          "role": "Matched actual Play and Whole cove phone views and uninterrupted interaction."
         }
       ],
       "consumers": [
         "src/main.ts"
       ],
       "gallery": {
-        "section": "interface",
-        "preview": "Actual shared CSS/component states; design evidence separate from gameplay The gallery links to actual Holding/Driftwood practice and this pass evidence; gallery specimens remain design evidence."
+        "section": "readability",
+        "preview": "Phone comparison and links to actual Two Shelters and Wide Berth Practice."
       },
       "typeSpecific": {
         "component/selector sources": "src/ui/cove-ui.css: .cove-button; src/ui/cove-ui.ts: shared icon and control rendering helpers",
         "token and elevation roles": "Rounded matte surface, shallow lower edge and restrained top highlight; tokens in the same shared CSS",
         "interaction states": "foam; warm; quiet; focus; pressed; disabled",
-        "size/hit target/layout behavior": "Independent visible control rectangles replace the removed full-width HUD exclusion. Safe viewport remains stable when information expands; nearby actions and receipts avoid actual controls, selected endpoints and figures. At least44px native hit targets; critical text wraps.",
+        "size/hit target/layout behavior": "Sail names the selected stop. Passenger controls sit against the ferry when space permits. The compact screen-edge fallback names the current landing above its controls.",
         "text/icon contract": "Native button owns label and accessible name; inline decorative SVG has no focus or pointer target.",
         "focus and disabled/warning semantics": "Focus keyline; selected/disabled/warning have shape and text as well as color.",
-        "mobile and reduced-motion evidence": "reviews/cove-ui-assets/REVIEW.md native phone gameplay. contrast.json records169checks/9actualstages and13SettingsReduced control transition durations0s; no physical-device certification."
+        "mobile and reduced-motion evidence": "reviews/mobile-map-readability/REVIEW.md"
       }
     },
     {
@@ -4767,23 +4800,27 @@
       "status": "integrated",
       "sources": [
         {
-          "path": "src/ui/cove-ui.css",
-          "symbol": ".cove-name"
-        },
-        {
           "path": "src/ui/cove-ui.ts",
           "symbol": "shared icon and control rendering helpers"
+        },
+        {
+          "path": "src/ui/cove-layout.ts",
+          "symbol": "placeCoveNames"
+        },
+        {
+          "path": "src/ui/cove-ui.css",
+          "symbol": "Map name and Whole cove typography"
         }
       ],
       "integrationTarget": "src/ui/cove-ui.css",
-      "meaning": "Short dark text backing attached to existing single name/marker semantic selection target.",
+      "meaning": "Locally anchored name text shares one canonical 44–48px stop target. A secondary name can yield to figures, controls or another label. Free inspection always supplies its full name.",
       "variants": [
         "ordinary",
         "selected",
         "current",
         "risk"
       ],
-      "visualSignature": "Rounded matte surface, shallow lower edge and restrained top highlight; tokens in the same shared CSS",
+      "visualSignature": "Locally anchored name text shares one canonical 44–48px stop target. A secondary name can yield to figures, controls or another label. Free inspection always supplies its full name.",
       "reuseAndOwnership": "Shared component appearance; existing game layout and native controls retain interaction ownership",
       "behaviorToPreserve": "Stable measured bounds, no new continuous animation, no tap-through, no changed confirmation semantics; Reduced Motion removes decorative transitions",
       "accessibility": {
@@ -4793,9 +4830,16 @@
       },
       "provenance": "original-package-vector-and-css",
       "acceptance": {
-        "state": "original-accepted-variants-preserved-wide-berth-visual-repair-awaiting-human-review",
-        "reviewedBaseline": "45ab9768792ddd3a8dffb67da6c332f8fe2234ff",
-        "basis": "Prior Wide Berth functional verification did not establish visual acceptance. Existing original variants remain preserved; this scoped correction needs its own actual visual observations and user playtest."
+        "state": "integrated-mobile-map-awaiting-android-comparison",
+        "reviewedBaseline": "1b7b4f05e576614f061ca4949bf5aca705dc5e0e",
+        "basis": "Locally anchored name text shares one canonical 44–48px stop target. A secondary name can yield to figures, controls or another label. Free inspection always supplies its full name.",
+        "history": [
+          {
+            "state": "original-accepted-variants-preserved-wide-berth-visual-repair-awaiting-human-review",
+            "reviewedBaseline": "45ab9768792ddd3a8dffb67da6c332f8fe2234ff",
+            "basis": "Prior Wide Berth functional verification did not establish visual acceptance. Existing original variants remain preserved; this scoped correction needs its own actual visual observations and user playtest."
+          }
+        ]
       },
       "evidence": [
         {
@@ -4813,23 +4857,27 @@
         {
           "path": "reviews/wide-berth-visual-repair/REVIEW.md",
           "role": "Current corrective implementation and actual source-indexed phone comparisons; prior45ab976presentation was rejected, human acceptance of this repair remains pending."
+        },
+        {
+          "path": "reviews/mobile-map-readability/REVIEW.md",
+          "role": "Matched actual Play and Whole cove phone views and uninterrupted interaction."
         }
       ],
       "consumers": [
         "src/main.ts"
       ],
       "gallery": {
-        "section": "interface",
-        "preview": "Actual shared CSS/component states; design evidence separate from gameplay"
+        "section": "readability",
+        "preview": "Phone comparison and links to actual Two Shelters and Wide Berth Practice."
       },
       "typeSpecific": {
         "component/selector sources": "src/ui/cove-ui.css: .cove-name; src/ui/cove-ui.ts: shared icon and control rendering helpers",
         "token and elevation roles": "Rounded matte surface, shallow lower edge and restrained top highlight; tokens in the same shared CSS",
         "interaction states": "ordinary; selected; current; risk",
-        "size/hit target/layout behavior": "Existing measured phone placement; 48px main target and constrained 44px floor. Outer hit bounds remain stable under press.",
+        "size/hit target/layout behavior": "Locally anchored name text shares one canonical 44–48px stop target. A secondary name can yield to figures, controls or another label. Free inspection always supplies its full name.",
         "text/icon contract": "Native button owns label and accessible name; inline decorative SVG has no focus or pointer target.",
         "focus and disabled/warning semantics": "Focus keyline; selected/disabled/warning have shape and text as well as color.",
-        "mobile and reduced-motion evidence": "reviews/cove-ui-assets/REVIEW.md native phone gameplay. contrast.json records169checks/9actualstages and13SettingsReduced control transition durations0s; no physical-device certification."
+        "mobile and reduced-motion evidence": "reviews/mobile-map-readability/REVIEW.md"
       }
     },
     {

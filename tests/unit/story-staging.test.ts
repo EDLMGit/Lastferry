@@ -84,6 +84,8 @@ function fixture(home = false) {
     viewLocation: null,
     viewFocus: null,
     viewScale: 1,
+    neighborhoodFrames: new Map(),
+    zoomStep: 0,
     storyFraming: true,
     storyJob: null,
     storyRestore: null,

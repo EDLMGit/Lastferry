@@ -96,6 +96,9 @@ const shelterResidents: [string, number, boolean, PortraitKey | null][] =
   ]);
 shelterSection.innerHTML = `<h2>Two Shelters</h2><p>Hazel and Bracken share the four-space ferry. Mica waits at the reeds.</p><article class="panel-specimen panel-specimen--narrow"><h3>Passenger choices</h3>${choices(shelterResidents)}<p>The portrait choices use the production level and appearance resolver at 44px.</p></article><p><a href="/?cove=two-shelters">Two Shelters Practice</a> · <a href="/">Play the Journey</a> · ${sourceLink('reviews/journey-six-coves/REVIEW.md', 'Entry scene and actual rescue')}</p>`;
 root.querySelector('#readability-heading')!.closest('section')!.after(shelterSection);
+const mobileMap = document.createElement('p');
+mobileMap.innerHTML = `<a href="/?cove=two-shelters">Inspect Two Shelters</a> · <a href="/?cove=wide-berth">Inspect Wide Berth</a> · ${sourceLink('reviews/mobile-map-readability/REVIEW.md', 'Matched phone map views and control placement')}`;
+root.querySelector('#readability-heading')!.after(mobileMap);
 const reefSection = document.createElement('section');
 reefSection.id = 'reef-return';
 reefSection.className = shelterSection.className;

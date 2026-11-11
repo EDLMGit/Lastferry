@@ -23,6 +23,8 @@ export function currentNotice(s: State, l: Level, edge = l.edges.find((entry) =>
     : 'It stays this way.';
   return {
     flow,
+    name,
+    turnsIn: remaining,
     direction,
     next,
     compact: `${name} to ${toward}${remaining === null ? ' only' : ` · turns in ${countActions(remaining)}`}`,

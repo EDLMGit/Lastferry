@@ -30,7 +30,9 @@ import {
   overviewScale,
   unobscuredOverview,
   panViewFocus,
-  phonePlayScale,
+  adjustedScale,
+  neighborhoodFrame,
+  nextZoomStep,
   usableViewRectangle,
   viewFrame,
   type ViewBounds,
@@ -141,6 +143,11 @@ export class World {
   viewBounds: ViewBounds | null = null;
   viewFocus: ViewPoint | null = null;
   viewScale = 1;
+  zoomStep = 0;
+  normalScale = 1;
+  wholeScale = 1;
+  planningFrame: ReturnType<typeof unobscuredOverview> | null = null;
+  neighborhoodFrames = new Map<string, ReturnType<typeof neighborhoodFrame>>();
   private storyFraming = false;
   private homePresentation = false;
   private storyJob: StoryStage | null = null;
@@ -789,6 +796,8 @@ export class World {
     )
       return;
     this.measuredUsable = { ...rectangle };
+    this.neighborhoodFrames.clear();
+    this.planningFrame = null;
     this.reframeView();
   }
   setOverviewObstacles(rectangles: ViewRectangle[]) {
@@ -801,6 +810,8 @@ export class World {
       );
     if (same) return;
     this.overviewObstacles = rectangles.map((rect) => ({ ...rect }));
+    this.neighborhoodFrames.clear();
+    this.planningFrame = null;
     this.reframeView();
   }
   setHomePresentation(active: boolean) {
@@ -970,6 +981,7 @@ export class World {
   }
   setViewMode(mode: 'play' | 'overview') {
     this.viewMode = mode;
+    this.zoomStep = 0;
     this.viewPanned = false;
     this.viewLocation = null;
     this.viewFocus = null;
@@ -978,6 +990,19 @@ export class World {
   }
   backToBoat() {
     this.setViewMode('play');
+  }
+  adjustZoom(direction: -1 | 1) {
+    if (this.transition || this.homecoming.active || this.storyFraming) return;
+    const step = nextZoomStep(this.normalScale, this.wholeScale, this.viewMode === 'overview' ? -2 : this.zoomStep, direction);
+    if (step === null) return;
+    if (step === -2) {
+      this.setViewMode('overview');
+      return;
+    }
+    this.zoomStep = step;
+    this.viewMode = 'play';
+    this.reframeView();
+    this.onViewChange();
   }
   panByPixels(deltaX: number, deltaY: number) {
     if (this.viewMode === 'overview') return;
@@ -1008,12 +1033,16 @@ export class World {
     this.reframeView();
   }
   viewStatus() {
+    const step = this.viewMode === 'overview' ? -2 : this.zoomStep;
     return {
       mode: this.viewMode,
       panned: this.viewPanned,
       focused: this.viewLocation,
       revision: this.cameraRevision,
       scale: this.viewScale,
+      zoomStep: step,
+      canZoomIn: nextZoomStep(this.normalScale, this.wholeScale, step, 1) !== null,
+      canZoomOut: nextZoomStep(this.normalScale, this.wholeScale, step, -1) !== null,
       usable: this.usableRectangle(),
       bounds: this.viewBounds ? { ...this.viewBounds } : null,
       focus: this.viewFocus ? { ...this.viewFocus } : null,
@@ -1026,70 +1055,27 @@ export class World {
     point.applyMatrix4(this.camera.matrixWorldInverse);
     return { x: point.x, y: point.y + 0.8 };
   }
-  private wideDockFrame(state: State, heading: number, usable: ViewRectangle, scale: number) {
-    const node = this.level.nodes.find((node) => node.id === state.boatNodeId)!;
-    const center = V(node.positionXZ).applyMatrix4(this.camera.matrixWorldInverse);
-    const ordinary = { focus: { x: center.x, y: center.y + 0.8 }, scale };
-    const pier = this.level.piers.find((pier) => pier.nodeId === state.boatNodeId);
-    if (!pier || !this.layoutAnimalBounds.size) return ordinary;
-    const ids = new Set([
-      ...state.aboard,
-      ...state.waitingByPier[pier.id],
-      ...(pier.isDeliveryPier ? state.delivered : []),
-    ]);
-    if (!ids.size) return ordinary;
-    const subjects = new T.Box3();
-    const include = (bounds: T.Box3, transform: T.Matrix4) => {
-      const matrix = this.camera.matrixWorldInverse.clone().multiply(transform);
-      for (const x of [bounds.min.x, bounds.max.x])
-        for (const y of [bounds.min.y, bounds.max.y])
-          for (const z of [bounds.min.z, bounds.max.z])
-            subjects.expandByPoint(new T.Vector3(x, y, z).applyMatrix4(matrix));
-    };
-    for (const height of [hullDraftY(4) - 0.02, 0.36 + hullDraftY(1) + 0.06]) {
-      const hull = new T.Matrix4()
-        .makeRotationY(heading)
-        .setPosition(node.positionXZ[0], height, node.positionXZ[1]);
-      include(this.layoutHullBounds, hull);
-      for (const id of ids) {
-        const passenger = this.level.passengers.find((passenger) => passenger.id === id)!;
-        const seat = deckSeat(this.level, id);
-        const transform = hull
-          .clone()
-          .multiply(new T.Matrix4().makeTranslation(seat.x, seat.y, seat.z));
-        transform.scale(new T.Vector3(...passengerScale(passenger.species)));
-        include(this.layoutAnimalBounds.get(id)!, transform);
-      }
-    }
-    for (const id of ids) {
-      const passenger = this.level.passengers.find((passenger) => passenger.id === id)!;
-      const shore = shoreSeat(this.level, id, pier, !!pier.isDeliveryPier);
-      const transform = new T.Matrix4().makeTranslation(shore.x, shore.y + 0.05, shore.z);
-      transform.scale(new T.Vector3(...passengerScale(passenger.species)));
-      include(this.layoutAnimalBounds.get(id)!, transform);
-    }
-    const bounds = {
-      minX: subjects.min.x,
-      maxX: subjects.max.x,
-      minY: subjects.min.y,
-      maxY: subjects.max.y,
-    };
-    const padded = {
-      left: usable.left + 8,
-      right: usable.right - 8,
-      top: usable.top + 8,
-      bottom: usable.bottom - 8,
-    };
-    const dockScale = Math.min(scale, overviewScale(bounds, padded));
-    const focus = { x: (bounds.minX + bounds.maxX) / 2, y: (bounds.minY + bounds.maxY) / 2 };
-    if (this.level.id === 'reef-return' && node.id === 'wrack') {
-      const spareX = ((padded.right - padded.left) / dockScale - (bounds.maxX - bounds.minX)) / 2;
-      const spareY = ((padded.bottom - padded.top) / dockScale - (bounds.maxY - bounds.minY)) / 2;
-      const portrait = this.host.clientHeight > this.host.clientWidth;
-      focus.x -= Math.min(portrait ? 1.55 : 1.85, Math.max(0, spareX - 0.3));
-      focus.y += portrait ? -Math.min(1.8, Math.max(0, spareY - 0.3)) : Math.min(0.72, Math.max(0, spareY - 0.3));
-    }
-    return { focus, scale: dockScale };
+  private neighborhood(id: string, usable: ViewRectangle) {
+    const cached = this.neighborhoodFrames.get(id);
+    if (cached) return cached;
+    const node = this.level.nodes.find((entry) => entry.id === id)!;
+    const [x, z] = node.positionXZ;
+    const envelope = this.ferryEnvelope;
+    const boat = this.projectedStoryBounds(new T.Box3(
+      new T.Vector3(x - envelope.radius, envelope.bottom, z - envelope.radius),
+      new T.Vector3(x + envelope.radius, envelope.top, z + envelope.radius),
+    ));
+    const landing = this.projectedStoryBounds(this.layoutStaticBounds.get(id)!);
+    const adjacent = this.level.edges.filter(edge => edge.nodes.includes(id))
+      .map(edge => {
+        const other = edge.nodes[0] === id ? edge.nodes[1] : edge.nodes[0];
+        return this.projectedStoryBounds(this.layoutStaticBounds.get(other)!);
+      });
+    const cove = this.viewBounds!;
+    const coveCenter = { x: (cove.minX + cove.maxX) / 2, y: (cove.minY + cove.maxY) / 2 };
+    const result = neighborhoodFrame(landing, boat, adjacent, usable, this.overviewObstacles, coveCenter);
+    this.neighborhoodFrames.set(id, result);
+    return result;
   }
   private viewChanged() {
     this.camera.updateProjectionMatrix();
@@ -1105,63 +1091,44 @@ export class World {
     let usable = this.usableRectangle();
     const phone = width <= 1000 && height <= 1000;
     const overview = overviewScale(this.viewBounds, usable);
-    this.viewScale =
-      this.viewMode === 'play' && phone ? phonePlayScale(this.viewBounds, usable) : overview;
+    this.viewScale = overview;
+    if (!this.storyFraming && !this.planningFrame) {
+      this.planningFrame = unobscuredOverview(
+        this.viewBounds, this.overviewSubjects.map(box => this.projectedStoryBounds(box)),
+        usable, this.overviewObstacles,
+      );
+    }
     let focus = this.viewFocus;
     let harborFrame = false;
     let localFrame = false;
-    if (this.viewMode === 'overview' && !this.viewPanned)
+    const automatic = !this.viewPanned && !this.viewLocation;
+    if (this.viewMode === 'overview' || (!phone && automatic)) {
       focus = {
         x: (this.viewBounds.minX + this.viewBounds.maxX) / 2,
         y: (this.viewBounds.minY + this.viewBounds.maxY) / 2,
       };
-    else if (!this.viewPanned && !this.viewLocation) focus = this.activeViewFocus();
-    if (!phone && this.viewMode === 'play' && !this.viewPanned && !this.viewLocation)
-      focus = {
-        x: (this.viewBounds.minX + this.viewBounds.maxX) / 2,
-        y: (this.viewBounds.minY + this.viewBounds.maxY) / 2,
-      };
-    if (
-      this.profile.id === 'six-space' &&
-      phone &&
-      this.viewMode === 'play' &&
-      !this.storyFraming &&
-      !this.viewPanned &&
-      !this.viewLocation
-    ) {
-      localFrame = true;
-      const journey = this.transition?.journey;
-      if (journey && this.transition?.path) {
-        const before = this.wideDockFrame(
-          this.transition.before,
-          journey.fromAngle,
-          usable,
-          this.viewScale,
-        );
-        const after = this.wideDockFrame(
-          this.transition.after,
-          journey.toAngle,
-          usable,
-          this.viewScale,
-        );
-        const offset = (state: State, frame: typeof before) => {
-          const node = this.level.nodes.find((node) => node.id === state.boatNodeId)!;
-          const point = V(node.positionXZ).applyMatrix4(this.camera.matrixWorldInverse);
-          return { x: frame.focus.x - point.x, y: frame.focus.y - point.y - 0.8 };
+    }
+    if (!this.storyFraming) {
+      const after = this.neighborhood(this.state.boatNodeId, usable);
+      const journey = this.transition?.path && this.transition;
+      const before = journey ? this.neighborhood(journey.before.boatNodeId, usable) : after;
+      const progress = journey ? smooth(this.journeyFrame?.progress ?? 0) : 1;
+      const normal = phone ? T.MathUtils.lerp(before.scale, after.scale, progress) : overview;
+      this.wholeScale = this.planningFrame!.scale;
+      const wholeFitsNeighborhood = normal - this.wholeScale < 1;
+      this.normalScale = wholeFitsNeighborhood ? this.wholeScale : normal;
+      this.viewScale = adjustedScale(this.normalScale, this.wholeScale, this.zoomStep);
+      if (automatic && this.viewMode === 'play' && (phone || this.zoomStep > 0)) {
+        localFrame = true;
+        focus = wholeFitsNeighborhood ? { ...this.planningFrame!.focus } : {
+          x: T.MathUtils.lerp(before.focus.x, after.focus.x, progress),
+          y: T.MathUtils.lerp(before.focus.y, after.focus.y, progress),
         };
-        const from = offset(this.transition.before, before),
-          to = offset(this.transition.after, after);
-        const progress = smooth(this.journeyFrame?.progress ?? 0),
-          moving = this.activeViewFocus();
-        focus = {
-          x: moving.x + T.MathUtils.lerp(from.x, to.x, progress),
-          y: moving.y + T.MathUtils.lerp(from.y, to.y, progress),
-        };
-        this.viewScale = T.MathUtils.lerp(before.scale, after.scale, progress);
-      } else {
-        const frame = this.wideDockFrame(this.state, this.poses.heading, usable, this.viewScale);
-        focus = frame.focus;
-        this.viewScale = frame.scale;
+        if (this.zoomStep > 0) {
+          const boat = this.activeViewFocus();
+          focus.x = T.MathUtils.lerp(focus.x, boat.x, this.zoomStep / 3);
+          focus.y = T.MathUtils.lerp(focus.y, boat.y, this.zoomStep / 3);
+        }
       }
     }
     if (
@@ -1243,12 +1210,7 @@ export class World {
     const automaticOverview =
       this.viewMode === 'overview' && !this.viewPanned && !this.storyFraming;
     if (automaticOverview) {
-      const result = unobscuredOverview(
-        this.viewBounds,
-        this.overviewSubjects.map((box) => this.projectedStoryBounds(box)),
-        usable,
-        this.overviewObstacles,
-      );
+      const result = this.planningFrame!;
       focus = result.focus;
       this.viewScale = result.scale;
       this.overviewAvoidance = { overlap: result.overlap, displacement: result.displacement };
@@ -1275,6 +1237,8 @@ export class World {
     }
   }
   resize() {
+    this.neighborhoodFrames.clear();
+    this.planningFrame = null;
     const w = this.host.clientWidth,
       h = this.host.clientHeight;
     if (!w || !h) return;

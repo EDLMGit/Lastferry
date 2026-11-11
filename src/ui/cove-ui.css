@@ -263,6 +263,37 @@
   padding: 3px 6px;
   border-radius: 7px;
 }
+#app .map-name .cove-name {
+  border: 0;
+  padding: 2px 5px;
+  border-radius: 4px;
+  background: #153843ec;
+  box-shadow: none;
+}
+#app #map-labels[data-density='overview'] .map-name .cove-name {
+  font-size: 13px;
+}
+@media (max-height: 480px), (max-width: 600px) {
+  #app .map-name .cove-name {
+    font-size: 14px;
+  }
+  #app .map-name .map-home {
+    display: none;
+  }
+}
+.view-controls[data-focused-place]::before {
+  content: 'Map focus · ' attr(data-focused-place);
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 3px);
+  white-space: nowrap;
+  padding: 3px 6px;
+  border-radius: 4px;
+  color: var(--cove-ivory);
+  background: #153843f2;
+  font-size: 14px;
+  pointer-events: none;
+}
 .cove-kit .cove-objective {
   color: var(--cove-warm-top);
 }

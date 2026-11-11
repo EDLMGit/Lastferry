@@ -1,58 +1,33 @@
 import { describe, expect, it } from 'vitest';
-import { endpointTargets, clearCurrentEndpoint } from '../../src/ui/cove-layout';
+import { endpointTargets, placeCoveTargets } from '../../src/ui/cove-layout';
 import { overlaps } from '../../src/ui/placement';
 
 describe('endpoint target layout', () => {
-  it('keeps the current hit and focus area outside the boat in narrow and wide views', () => {
-    for (const bounds of [
-      { left: 8, right: 382, top: 142, bottom: 730 },
-      { left: 8, right: 772, top: 70, bottom: 260 },
-    ]) {
-      const boat = { left: 120, right: 260, top: bounds.top + 30, bottom: bounds.bottom - 30 };
-      const original = { id: 'harbor', x: 190, y: (boat.top + boat.bottom) / 2 };
-      const moved = clearCurrentEndpoint(original, boat, bounds);
-      const hit = endpointTargets([moved])[0];
-      expect(overlaps(hit.bounds, boat, 6)).toBe(false);
-      expect(hit.size).toBeGreaterThanOrEqual(44);
-      expect(moved.id).toBe(original.id);
-      expect(clearCurrentEndpoint(original, boat, bounds)).toEqual(moved);
-      expect(original.x).toBe(190);
-    }
-  });
-  it('keeps the crowded Reed Landing cue clear of the real Shallow Bend return target', () => {
-    const points = [
-      { id: 'harbor', x: 281.54668777059334, y: 175.36167748273215 },
-      { id: 'yard', x: 381.0532905399925, y: 143.923975326556 },
-      { id: 'mooring', x: 448.57562813351325, y: 177.87669365522623 },
-      { id: 'bend', x: 448.57562813351325, y: 228.17701710510812 },
-      { id: 'reeds', x: 505.43654400174137, y: 220.6319685876258 },
+  it('keeps a cue on its real endpoint when the ferry or controls occupy every local position', () => {
+    const viewport = { left: 0, top: 0, right: 780, bottom: 320 };
+    const points = [{ id: 'high-quay', x: 490, y: 170 }, { id: 'harbor', x: 355, y: 175 }];
+    const obstacles = [
+      { left: 420, right: 570, top: 100, bottom: 240 },
+      { left: 200, right: 490, top: 120, bottom: 240 },
     ];
-    const original = structuredClone(points);
-    const boat = {
-      left: 489.23905376771336,
-      right: 522.6418971558663,
-      top: 195.13264401612832,
-      bottom: 231.02695351926786,
-    };
-    const bounds = { left: 8, right: 772, top: 70, bottom: 256 };
-    const otherHits = endpointTargets(points.slice(0, -1)).map((target) => target.bounds);
-    const moved = clearCurrentEndpoint(points[4], boat, bounds, otherHits);
-    const targets = endpointTargets([...points.slice(0, -1), moved]);
-    const current = targets[4];
-    expect(moved.id).toBe('reeds');
-    expect(overlaps(current.bounds, boat, 6)).toBe(false);
-    expect(current.bounds.left).toBeGreaterThanOrEqual(bounds.left);
-    expect(current.bounds.right).toBeLessThanOrEqual(bounds.right);
-    expect(current.bounds.top).toBeGreaterThanOrEqual(bounds.top);
-    expect(current.bounds.bottom).toBeLessThanOrEqual(bounds.bottom);
-    for (const [index, target] of targets.slice(0, -1).entries()) {
-      expect(target.x).toBe(points[index].x);
-      expect(target.y).toBe(points[index].y);
+    const first = placeCoveTargets(points, viewport, obstacles, [obstacles[0]]);
+    for (const [index, target] of first.entries()) {
+      expect(Math.hypot(target.x - points[index].x, target.y - points[index].y)).toBeLessThanOrEqual(26);
       expect(target.size).toBeGreaterThanOrEqual(44);
-      expect(overlaps(current.bounds, target.bounds, 4), target.id).toBe(false);
     }
-    expect(clearCurrentEndpoint(points[4], boat, bounds, [...otherHits].reverse())).toEqual(moved);
-    expect(points).toEqual(original);
+    expect(first[0].onFigure).toBe(true);
+    expect(placeCoveTargets(points, viewport, obstacles, [obstacles[0]])).toEqual(first);
+    const offscreen = placeCoveTargets([{ id: 'harbor', x: -4, y: 160 }], viewport, [], []);
+    expect(offscreen[0]).toMatchObject({ onscreen: false, x: -4, y: 160 });
+  });
+  it('protects passengers and leaves an unobstructed neighboring endpoint in place', () => {
+    const points = [{ id: 'reeds', x: 520, y: 210 }, { id: 'bend', x: 452, y: 214 }];
+    const faces = [{ left: 506, top: 181, right: 533, bottom: 212 }];
+    const viewport = { left: 0, top: 0, right: 780, bottom: 320 };
+    const [reeds, bend] = placeCoveTargets(points, viewport, [], faces);
+    expect(reeds.onFigure).toBe(false);
+    expect(overlaps(reeds.bounds, bend.bounds, 0)).toBe(false);
+    expect(bend).toMatchObject(points[1]);
   });
   const bellwater = [
     { id: 'harbor', x: 158.29772, y: 208.87447 },

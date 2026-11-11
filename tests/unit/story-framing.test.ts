@@ -14,9 +14,6 @@ import { initial } from '../../src/game/rules';
 import { holdingPier } from '../../src/levels/level';
 import { ferryProfile } from '../../src/scene/ferry-profile';
 import {
-  clampViewFocus,
-  phonePlayScale,
-  overviewScale,
   viewFrame,
   type ViewRectangle,
 } from '../../src/scene/view';
@@ -52,6 +49,18 @@ function fixture(width: number, height: number, usable: ViewRectangle) {
       ['rabbit-1', remote],
     ]),
     state: initial(holdingPier),
+    level: holdingPier,
+    neighborhoodFrames: new Map(),
+    zoomStep: 0,
+    overviewObstacles: [],
+    overviewSubjects: [],
+    layoutStaticBounds: new Map(holdingPier.nodes.map(node => [
+      node.id, new Box3(
+        new Vector3(node.positionXZ[0] - 1, 0, node.positionXZ[1] - 1),
+        new Vector3(node.positionXZ[0] + 1, 1.2, node.positionXZ[1] + 1),
+      ),
+    ])),
+    ferryEnvelope: { radius: 1.2, top: 1.4, bottom: -0.1 },
     profile: ferryProfile(holdingPier),
     viewBounds: { minX: -10, maxX: 10, minY: -5, maxY: 7 },
     measuredUsable: null,
@@ -115,19 +124,15 @@ test.each([
   },
 );
 
-test('normal play keeps its original full-network calculation until story framing is explicitly enabled', () => {
+test('leaving a story restores the same local play frame and scale', () => {
   const usable = { left: 12, right: 832, top: 80, bottom: 330 };
   const { world } = fixture(844, 390, usable);
-  const scale = phonePlayScale(world.viewBounds!, usable);
-  const boat = world.boatRoot.position.clone();
-  boat.y = 0;
-  boat.applyMatrix4(world.camera.matrixWorldInverse);
-  const focus = clampViewFocus({ x: boat.x, y: boat.y + 0.8 }, world.viewBounds!, usable, scale);
-  expect(world.canonicalFrame).toEqual(viewFrame(844, 390, usable, scale, focus));
-  expect(world.viewScale).toBe(scale);
-  expect(scale).toBeGreaterThan(overviewScale(world.viewBounds!, usable));
+  const frame = viewFrame(844, 390, usable, world.viewScale, world.viewFocus!);
+  expect(world.canonicalFrame).toEqual(frame);
+  world.setStoryFraming(true);
+  expect(world.canonicalFrame).not.toEqual(frame);
   world.setStoryFraming(false);
-  expect(world.canonicalFrame).toEqual(viewFrame(844, 390, usable, scale, focus));
+  expect(world.canonicalFrame).toEqual(frame);
 });
 
 test('arrival camera callbacks cannot zoom beyond a story composition', () => {

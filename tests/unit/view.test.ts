@@ -4,7 +4,9 @@ import {
   overviewScale,
   unobscuredOverview,
   panViewFocus,
-  phonePlayScale,
+  neighborhoodFrame,
+  adjustedScale,
+  nextZoomStep,
   usableViewRectangle,
   viewFrame,
 } from '../../src/scene/view';
@@ -87,24 +89,41 @@ test('Overview keeps its frame when subjects and persistent controls are unchang
   expect(full.overlap).toBeGreaterThan(0);
 });
 
-test('Play magnifies the same ferry without reducing portrait to a whole-network postage stamp', () => {
-  for (const [width, height] of [
-    [844, 390],
-    [780, 320],
-    [390, 844],
-    [360, 740],
-  ]) {
-    const usable = usableViewRectangle(width, height, {
-      left: 12,
-      top: 96,
-      right: width - 12,
-      bottom: height - 64,
-    });
-    const overview = overviewScale(network, usable);
-    const play = phonePlayScale(network, usable);
-    expect(play).toBeGreaterThanOrEqual(overview * 1.4);
-    expect(1.5 * play).toBeGreaterThan(40);
+test('phone Play fits the local landing, boat and at least one adjacent destination at usable scale', () => {
+  const landing = { minX: -2, maxX: 2, minY: -1, maxY: 2 };
+  const boat = { minX: -1.4, maxX: 1.4, minY: -2, maxY: 0 };
+  const neighbors = [{ x: 4, y: -1 }, { x: -8, y: -2 }, { x: 10, y: 5 }]
+    .map(({ x, y }) => ({ minX: x - 1, maxX: x + 1, minY: y - 0.6, maxY: y + 1.5 }));
+  for (const [width, height] of [[844, 390], [780, 320], [390, 844], [360, 740]]) {
+    const usable = usableViewRectangle(width, height, { left: 8, right: width - 8, top: 8, bottom: height - 8 });
+    const controls = [{ left: width - 205, right: width - 8, top: 8, bottom: 54 }];
+    const view = neighborhoodFrame(landing, boat, neighbors, usable, controls);
+    const frame = viewFrame(width, height, usable, view.scale, view.focus);
+    expect(view.overlap).toBe(0);
+    for (const subject of [boat, landing]) {
+      expect(subject.minX).toBeGreaterThan(frame.left);
+      expect(subject.maxX).toBeLessThan(frame.right);
+      expect(subject.minY).toBeGreaterThan(frame.bottom);
+      expect(subject.maxY).toBeLessThan(frame.top);
+    }
+    expect(neighbors.some(p => p.minX > frame.left && p.maxX < frame.right && p.maxY < frame.top && p.minY > frame.bottom)).toBe(true);
+    expect((boat.maxX - boat.minX) * view.scale).toBeGreaterThan(44);
   }
+});
+
+test('tap scale has bounded intermediate choices between a wide neighborhood and close detail', () => {
+  const scales = [-3, -2, -1, 0, 1, 2, 3].map(step => adjustedScale(35, 21, step));
+  expect(scales[0]).toBe(scales[1]);
+  expect(scales[6]).toBe(scales[5]);
+  expect(scales[2]).toBeGreaterThan(scales[1]);
+  expect(scales[2]).toBeLessThan(scales[3]);
+  expect(scales[3]).toBe(35);
+  expect(scales[4]).toBeGreaterThan(scales[3]);
+  expect(scales[4]).toBeLessThan(scales[5]);
+  expect(nextZoomStep(32, 32, 0, -1)).toBeNull();
+  expect(nextZoomStep(32, 32, -2, 1)).toBe(1);
+  expect(nextZoomStep(32, 30.5, 0, -1)).toBe(-2);
+  expect(nextZoomStep(32, 30.5, -2, 1)).toBe(0);
 });
 
 test('panning follows the dragged water and cannot escape the finite cove bounds', () => {
@@ -121,7 +140,7 @@ test('panning follows the dragged water and cannot escape the finite cove bounds
 test('the usable rectangle clamps transient browser-bar measurements without invalid projection sizes', () => {
   const usable = usableViewRectangle(360, 280, { left: -100, top: 800, right: 999, bottom: 100 });
   expect(usable).toEqual({ left: 8, right: 352, top: 216, bottom: 264 });
-  const scale = phonePlayScale(network, usable);
+  const scale = neighborhoodFrame(network, network, [], usable, []).scale;
   const frame = viewFrame(360, 280, usable, scale, { x: 0.5, y: 0.5 });
   expect(Object.values(frame).every(Number.isFinite)).toBe(true);
   expect(frame.right).toBeGreaterThan(frame.left);

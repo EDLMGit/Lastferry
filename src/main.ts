@@ -1,6 +1,10 @@
 import './style.css';
 import './ui/cove-ui.css';
 import './ui/play-controls.css';
+import './ui/view-controls.css';
+import './ui/mobile-map-controls.css';
+import { besideOwner, atScreenEdge } from './ui/owned-control';
+import { occupiedPierDeadline } from './game/rescue-facts';
 import {
   controlContent,
   iconMarkup,
@@ -46,8 +50,8 @@ import {
 import { waterPresets, type WaterTuning } from './scene/water';
 import { placeActionCard, placeLocalCard, overlaps, type Rectangle } from './ui/placement';
 import { locationFacts } from './ui/location';
-import { endpointTargets, clearCurrentEndpoint } from './ui/cove-layout';
-import { placeDriftwoodLabels } from './ui/driftwood-labels';
+import { placeCoveTargets, placeCoveNames } from './ui/cove-layout';
+import { samplePath } from './scene/paths';
 import { MotionPreference, type MotionMode } from './ui/motion-preference';
 import { TipsPreference } from './ui/tips-preference';
 import { PanGesture } from './ui/pan-gesture';
@@ -124,11 +128,13 @@ function clearReceipt() {
 const $ = (id: string) => document.getElementById(id)!;
 for (const [id, icon, label] of [
   ['undo', 'undo', 'Undo'],
-  ['wait', 'wait', 'Wait · 1 action'],
+  ['wait', 'wait', 'Wait'],
   ['menu', 'menu', 'Menu'],
 ] as const)
   setControl($(id), icon, label);
 setControl($('menu'), 'menu', 'Menu', 'quiet', true);
+$('wait').setAttribute('aria-label', 'Wait · 1 action');
+$('wait').title = 'Wait · 1 action';
 $('menu').title = 'Menu';
 setControl($('load-toggle'), null, '0/4 · Depth 1', 'quiet');
 setControl($('close-status'), 'close', 'Close status', 'quiet');
@@ -150,8 +156,11 @@ const viewControls = document.createElement('nav');
 viewControls.className = 'view-controls';
 viewControls.setAttribute('aria-label', 'Cove view');
 viewControls.innerHTML =
-  '<button id="view-toggle" aria-pressed="false">Whole cove</button><button id="back-to-boat" hidden>Back to boat</button>';
+  '<button id="view-toggle" aria-pressed="false">Whole cove</button><button id="view-zoom" aria-label="Adjust map zoom" aria-expanded="false" aria-controls="zoom-tools">Zoom</button><button id="back-to-boat" hidden>Back to boat</button><div id="zoom-tools" role="group" aria-label="Map zoom" hidden><button id="zoom-out" aria-label="Zoom out">−</button><output id="zoom-level" aria-live="polite"></output><button id="zoom-in" aria-label="Zoom in">+</button></div>';
 $('seascape').append(viewControls);
+setControl($('view-zoom'), null, 'Zoom');
+setControl($('zoom-in'), null, '+');
+setControl($('zoom-out'), null, '−');
 setControl($('back-to-boat'), 'back-to-boat', 'Back to boat');
 $('seascape').querySelector('.portrait-note')?.remove();
 const viewNotice = document.createElement('p');
@@ -197,8 +206,7 @@ let lastPointer: { x: number; y: number; control: Element | null } | null = null
 let cardPlacement: Rectangle | null = null;
 let protectedBounds: Rectangle[] = [];
 let labelLayout = new Map<string, Rectangle>();
-let labelLayoutKey = '';
-let currentMarkerOffset: { key: string; x: number; y: number } | null = null;
+let labelAnchors = new Map<string, number>();
 const labelDimensions = new Map<string, { element: HTMLElement; width: number; height: number }>();
 let labelDimensionsKey = '';
 let dockPlacement: Rectangle | null = null;
@@ -572,7 +580,7 @@ function mountCove(next: typeof level) {
   actionAnchor = null;
   actionPlacement = null;
   labelDimensions.clear();
-  labelLayoutKey = '';
+  labelAnchors.clear();
   labelDimensionsKey = '';
   closingFence = null;
   $('map-labels').replaceChildren();
@@ -935,10 +943,14 @@ function renderView() {
     label = view.mode === 'overview' ? 'Play view' : 'Whole cove',
     pressed = String(view.mode === 'overview'),
     back = $('back-to-boat'),
-    hideBack = view.mode !== 'overview' && !view.panned && !view.focused;
+    hideBack = view.mode !== 'overview' && view.zoomStep === 0 && !view.panned && !view.focused;
   setControl(toggle, view.mode === 'overview' ? 'back-to-boat' : 'whole-cove', label);
   if (toggle.getAttribute('aria-pressed') !== pressed) toggle.setAttribute('aria-pressed', pressed);
   if (back.hidden !== hideBack) back.hidden = hideBack;
+  $('zoom-in').setAttribute('aria-disabled', String(!view.canZoomIn));
+  $('zoom-out').setAttribute('aria-disabled', String(!view.canZoomOut));
+  const scaleLabel = ['Whole cove', 'Wide', 'Normal', 'Close', 'Closest'][view.zoomStep + 2];
+  if ($('zoom-level').textContent !== scaleLabel) $('zoom-level').textContent = scaleLabel;
 }
 function scheduleLayout() {
   if (layoutRequest || layoutFlushing) return;
@@ -950,9 +962,9 @@ function flushLayout() {
   layoutRequest = 0;
   layoutFlushing = true;
   try {
+    renderView();
     updateViewport();
     positionMap();
-    renderView();
 
     positionReceipt();
   } finally {
@@ -978,7 +990,7 @@ function updateViewport() {
     right: inset('right'),
     bottom: inset('bottom'),
   });
-  usableBounds = insetRectangle(safeBounds, { left: 10, right: 10, top: 10, bottom: 10 });
+  usableBounds = safeBounds;
 
   if (app.classList.contains('home-screen')) {
     const menu = $('home-menu').getBoundingClientRect();
@@ -1025,13 +1037,10 @@ function updateViewport() {
     bottom: usableBounds.bottom - canvas.top,
   });
   if (!journeySurface()) {
-    const key = [level.id, width, height, canvas.left, canvas.top, ...Object.values(safeBounds), world.viewStatus().mode].join(':');
+    const key = [level.id, width, height, canvas.left, canvas.top, ...Object.values(safeBounds), session.state.boatNodeId, world.viewMode].join(':');
     if (overviewObstaclesKey !== key) {
       overviewObstaclesKey = key;
-      const rectangles = [...document.querySelectorAll<HTMLElement>('.tools button, #load-toggle, #status-toggle, .view-controls button')]
-        .filter((element) => !element.hidden && element.getClientRects().length > 0 && getComputedStyle(element).visibility !== 'hidden')
-        .map((element) => element.getBoundingClientRect())
-        .filter((rect) => rect.width > 0 && rect.height > 0)
+      const rectangles = playObstacles(true)
         .map((rect) => ({ left: rect.left - canvas.left, right: rect.right - canvas.left, top: rect.top - canvas.top, bottom: rect.bottom - canvas.top }));
       world.setOverviewObstacles(rectangles);
     }
@@ -1598,9 +1607,10 @@ function bindTarget(button: HTMLElement, id: string) {
     if (!blocked()) {
       if (keyboardInput) world.frameLocation(id);
       highlight(id);
+      if (keyboardInput) scheduleLayout();
     }
   };
-  button.onblur = restoreHighlight;
+  button.onblur = () => { restoreHighlight(); scheduleLayout(); };
 }
 function renderMap() {
   const departure = currentPassageDeparture();
@@ -1608,7 +1618,6 @@ function renderMap() {
   labelDimensions.clear();
   $('map-labels').hidden = s.status === 'won';
   $('map-labels').innerHTML =
-    '<svg id="map-leaders" aria-hidden="true"></svg>' +
     level.nodes
       .map((n) => {
         const facts = locationFacts(s, n.id, level, tips.enabled);
@@ -1620,7 +1629,7 @@ function renderMap() {
           loss: ['available', '!', 'adjacent, ' + facts.consequence],
           safe: ['available', '', 'adjacent passage available'],
         }[departure && facts.wouldLose ? 'safe' : facts.status];
-        return `<div id="stop-${n.id}" class="map-stop" data-adjacent="${facts.relation === 'adjacent'}"><button id="map-${n.id}" class="map-target" data-status="${status}" data-risk="${!departure && facts.wouldLose ? 'loss' : 'safe'}" data-destination="${n.id}" aria-expanded="${locationSelection === n.id}" aria-controls="local-context" ${facts.current ? 'aria-current="location"' : ''} aria-label="Select ${facts.name}; ${description}${facts.home ? '; Home, delivery destination' : ''}" title="${description}" ${session.busy || s.status !== 'playing' ? 'disabled' : ''}><span class="map-hit"><span class="map-symbol" aria-hidden="true">${symbol}</span></span><span class="map-name"><b class="cove-name cove-surface cove-surface--compact">${facts.home ? iconMarkup('harbor-home') : ''}${facts.name}${facts.home ? '<span class="map-home cove-objective"> · Home</span>' : ''}</b></span></button></div>`;
+        return `<div id="stop-${n.id}" class="map-stop" data-adjacent="${facts.relation === 'adjacent'}"><button id="map-${n.id}" class="map-target" data-status="${status}" data-risk="${!departure && facts.wouldLose ? 'loss' : 'safe'}" data-destination="${n.id}" aria-expanded="${locationSelection === n.id}" aria-controls="local-context" ${facts.current ? 'aria-current="location"' : ''} aria-label="Select ${facts.name}; ${description}${facts.home ? '; Home, delivery destination' : ''}" title="${description}" ${session.busy || s.status !== 'playing' ? 'disabled' : ''}><span class="map-hit"><span class="map-symbol" aria-hidden="true">${facts.home ? iconMarkup('harbor-home') : symbol}</span></span><span class="map-name"><b class="cove-name cove-surface cove-surface--compact">${facts.name}${facts.home ? '<span class="map-home cove-objective"> · Home</span>' : ''}</b></span></button></div>`;
       })
       .join('');
   for (const node of level.nodes) bindTarget($(`map-${node.id}`), node.id);
@@ -1662,7 +1671,7 @@ function renderLocation() {
         paragraph(facts.safety) +
         paragraph(facts.consequence, facts.wouldLose ? 'location-warning' : '');
   const routes =
-    level.id === 'wide-berth' && facts.current && facts.id === 'high-quay'
+    facts.current
       ? `<details class="route-details"><summary>Routes and deadlines · free</summary>${level.nodes
           .filter((n) => edgeTo(session.state, n.id, level))
           .map((n) => {
@@ -1688,7 +1697,7 @@ function renderLocation() {
       : floodWarning || (facts.wouldLose ? facts.consequence : flow ? `${flow.direction} ${flow.next}` : facts.consequence);
   const actions = !facts.current && facts.move
     ? '<button id="sail" data-risk="' + (facts.wouldLose ? 'loss' : 'safe') + '" ' + (facts.canSail ? '' : 'disabled') + '>Sail · 1 action</button>'
-    : facts.current ? '<span class="current-place">You are here</span>' : '';
+    : `<span class="current-place">${facts.current ? 'At ' : ''}${facts.name}</span>`;
   card.setAttribute('aria-label', facts.name + ' · free inspection');
   card.innerHTML = '<div class="location-toolbar">' + actions + '<button id="location-details" aria-expanded="' + locationDetails + '" aria-controls="location-facts">Details</button><button id="close-location" aria-label="Close location card">×</button></div>' + paragraph(reason, facts.wouldLose ? 'location-warning' : 'location-reason') + '<div id="location-facts" ' + (locationDetails ? '' : 'hidden') + '>' + details + routes + '</div>';
   for (const button of card.querySelectorAll<HTMLButtonElement>('[data-inspect-route]')) {
@@ -1704,7 +1713,7 @@ function renderLocation() {
   };
   setControl($('close-location'), 'close', 'Close location card', 'quiet', true);
   if ($('sail')) {
-    setControl($('sail'), 'sail', facts.wouldLose ? 'Sail anyway · 1 action' : 'Sail · 1 action', 'action');
+    setControl($('sail'), 'sail', (facts.wouldLose ? 'Sail anyway to ' : 'Sail to ') + facts.name, 'action');
     $('sail').setAttribute('aria-label', (facts.wouldLose ? 'Sail anyway to ' : 'Sail to ') + facts.name + ' · 1 action');
   }
   $('close-location').onclick = (event) => {
@@ -1749,8 +1758,13 @@ function renderDock() {
   dock.inert = !visible;
   if (!visible) return;
   dock.setAttribute('aria-label', `Passenger actions at ${facts.name}`);
+  dock.dataset.owner = facts.name;
 
   dock.replaceChildren();
+  const owner = document.createElement('span');
+  owner.className = 'dock-owner';
+  owner.textContent = 'At ' + facts.name;
+  dock.append(owner);
 
   for (const type of ['board', 'unload'] as const) {
     const ids = type === 'board' ? facts.boardOptions : facts.aboard;
@@ -1818,15 +1832,42 @@ function render() {
   $('load-toggle').setAttribute('aria-label', `${load(s, level)} of ${level.rules.capacity} spaces · boat needs depth ${draft(s, level)} · crossing status`);
   $('readout').innerHTML =
     `<strong id="boat-summary">Depth ${draft(s, level)} · ${load(s, level)}/${level.rules.capacity} spaces</strong><span><b data-testid="turn">${String(s.turn).padStart(2, '0')}</b> actions · Tide <b data-testid="tide">${s.tideLevel}</b> · <b id="progress">${objective.progress}</b></span>`;
+  if (!$('place-index')) {
+    const index = document.createElement('details');
+    index.id = 'place-index';
+    index.innerHTML = '<summary>Inspect a place</summary><div></div>';
+    $('readout').after(index);
+  }
+  const index = $('place-index');
+  if (index.dataset.cove !== level.id) {
+    index.dataset.cove = level.id;
+    const list = index.querySelector('div')!;
+    list.replaceChildren();
+    for (const node of level.nodes) {
+      const control = document.createElement('button');
+      setControl(control, null, nodeNames[node.id], 'quiet');
+      control.dataset.inspectPlace = node.id;
+      control.onclick = () => {
+        toggleStatus(false);
+        selectLocation(node.id);
+      };
+      list.append(control);
+    }
+  }
   const forecast = forecastCopy(s, level);
   const current = s.status === 'playing' ? forecast.current : null;
   const headline = departure && current ? current.underway : facts.urgent ? facts.headline : current?.compact ?? forecast.headline;
   const showDeadline = facts.urgent && !departure;
+  const due = occupiedPierDeadline(s, level);
+  const sharedEvent = showDeadline && due && current && current.turnsIn === due.actions;
+  const concise = sharedEvent
+    ? `<strong>In ${due.actions} action${due.actions === 1 ? '' : 's'}</strong><span>${nodeNames[due.pier.nodeId]} floods · ${current.name} turns</span>`
+    : '';
   $('status-toggle').innerHTML =
-    `<span class="status-symbol" aria-hidden="true">${showDeadline ? '!' : '≈'}</span><span><strong id="status-headline">${headline}</strong>${showDeadline && current ? `<span class="reef-outlook">${current.compact}</span>` : ''}</span>`;
+    `<span class="status-symbol" aria-hidden="true">${showDeadline ? '!' : '≈'}</span><span class="forecast-lines"><strong id="status-headline">${headline}</strong>${showDeadline && current ? `<span class="reef-outlook">${current.compact}</span>` : ''}</span>${concise ? `<span class="forecast-short" aria-hidden="true">${concise}</span>` : ''}`;
   $('status-toggle').setAttribute('aria-label', current
     ? departure ? `${current.direction} ${current.underway}.` : `${facts.urgent ? facts.headline + ' ' : ''}${current.direction} ${current.next} Open reef and tide forecast.`
-    : 'Open tide and pier forecast');
+    : `${headline} Open tide and pier forecast.`);
   $('status-toggle').classList.toggle('urgent', showDeadline);
   $('status-toggle').hidden = s.status === 'won';
   $('selection-hint').hidden = s.status === 'won' || !!locationSelection;
@@ -2083,8 +2124,10 @@ function positionDialog() {
     }
   }
 }
-function playObstacles() {
-  return [...document.querySelectorAll<HTMLElement>('.tools button, #load-toggle, #crossing-details, #status-toggle, .view-controls button')]
+function playObstacles(persistentOnly = false) {
+  return [...document.querySelectorAll<HTMLElement>(persistentOnly
+    ? '.tools button, #load-toggle, #status-toggle, .view-controls > button'
+    : '.tools button, #load-toggle, #crossing-details, #status-toggle, .view-controls > button, #zoom-tools')]
     .filter((element) => !element.hidden && !element.closest('[hidden]') && element.getClientRects().length > 0 && getComputedStyle(element).visibility !== 'hidden')
     .map((element) => element.getBoundingClientRect());
 }
@@ -2100,321 +2143,155 @@ function toggleStatus(open: boolean) {
 $('load-toggle').onclick = () => toggleStatus(!!$('crossing-details').hidden);
 $('close-status').onclick = () => { toggleStatus(false); $('load-toggle').focus({ preventScroll: true }); };
 
+function positionOwnedControls(
+  bounds: Rectangle, chrome: Rectangle[], figures: Rectangle[],
+  markers: { id: string; bounds: Rectangle }[], stage: Rectangle,
+  boat: Rectangle, lighthouse: Rectangle,
+) {
+  const placed: Rectangle[] = [];
+  const stops = markers.map(marker => marker.bounds);
+  const subjects = [...figures, lighthouse, ...stops];
+  const size = (element: HTMLElement) => ({ width: element.offsetWidth, height: element.offsetHeight });
+  function position(element: HTMLElement, box: Rectangle) {
+    element.style.left = box.left + 'px';
+    element.style.top = box.top + 'px';
+    placed.push(box);
+  }
+  const local = $('local-context');
+  cardPlacement = null;
+  protectedBounds = [];
+  if (locationSelection && !local.hidden) {
+    const marker = markers.find(m => m.id === locationSelection)!;
+    const inset = 4;
+    const width = Math.min(locationDetails ? 324 : factsWidth(), bounds.right - bounds.left - inset * 2);
+    local.style.width = width + 'px';
+    const midpoint = (bounds.top + bounds.bottom) / 2;
+    const above = Math.max(bounds.top, ...chrome.filter(r => r.bottom < midpoint).map(r => r.bottom + inset));
+    const below = Math.min(bounds.bottom, ...chrome.filter(r => r.top > midpoint).map(r => r.top - inset));
+    local.style.setProperty('--local-max-height', Math.max(96, below - above) + 'px');
+    const origin = selectionOrigin && {
+      left: selectionOrigin.x - stage.left - 7, right: selectionOrigin.x - stage.left + 7,
+      top: selectionOrigin.y - stage.top - 7, bottom: selectionOrigin.y - stage.top + 7,
+    };
+    protectedBounds = [...figures, ...chrome];
+    const nearby = besideOwner(size(local), marker.bounds, bounds, [...subjects, ...chrome, ...(origin ? [origin] : [])]);
+    local.dataset.placement = nearby ? 'local' : 'edge';
+    cardPlacement = nearby ?? atScreenEdge(size(local), bounds, chrome, subjects);
+    position(local, cardPlacement);
+  }
+  $('selection-leader').replaceChildren();
+  const dock = $('dock-actions');
+  dockPlacement = null;
+  if (!dock.hidden) {
+    const visible = overlaps(boat, bounds, 0);
+    dock.style.visibility = visible ? 'visible' : 'hidden';
+    if (visible) {
+      const obstacles = [...chrome, ...placed];
+      dock.dataset.placement = 'local';
+      dock.dataset.layout = 'row';
+      let nearby = besideOwner(size(dock), boat, bounds, [...obstacles, ...subjects]);
+      if (!nearby && dock.children.length > 2) {
+        dock.dataset.layout = 'column';
+        nearby = besideOwner(size(dock), boat, bounds, [...obstacles, ...subjects]);
+      }
+      if (!nearby) {
+        dock.dataset.placement = 'edge';
+        dock.dataset.layout = 'row';
+      }
+      dockPlacement = nearby ?? atScreenEdge(size(dock), bounds, obstacles, subjects);
+      position(dock, dockPlacement);
+    }
+  }
+  return placed;
+}
+
 function positionMap() {
   if (session.state.status === 'won') {
     labelLayout.clear();
-    labelLayoutKey = '';
+    labelAnchors.clear();
     cardPlacement = null;
     dockPlacement = null;
     protectedBounds = [];
     positionDialog();
     return;
   }
-  const canvas = world.host.getBoundingClientRect(),
-    stage = $('seascape').getBoundingClientRect();
+  const canvas = world.host.getBoundingClientRect(), stage = $('seascape').getBoundingClientRect();
   const frame = world.layoutFrameStatus();
-  const atLocal = (r: Rectangle): Rectangle => ({
-    left: r.left + canvas.left - stage.left,
-    right: r.right + canvas.left - stage.left,
-    top: r.top + canvas.top - stage.top,
-    bottom: r.bottom + canvas.top - stage.top,
+  const ox = canvas.left - stage.left, oy = canvas.top - stage.top;
+  const atLocal = (r: Rectangle) => ({
+    left: r.left + ox, right: r.right + ox, top: r.top + oy, bottom: r.bottom + oy,
   });
-  const toLocal = (r: Rectangle): Rectangle => ({
-    left: r.left - stage.left,
-    right: r.right - stage.left,
-    top: r.top - stage.top,
-    bottom: r.bottom - stage.top,
+  const toLocal = (r: Rectangle) => ({
+    left: r.left - stage.left, right: r.right - stage.left, top: r.top - stage.top, bottom: r.bottom - stage.top,
   });
-  const figures = [frame.boat, ...frame.passengers].map(atLocal);
-  const departure = currentPassageDeparture();
-  const chrome = playObstacles().map(toLocal);
-  const closeLabels = level.id === 'two-shelters' || level.id === 'reef-return';
-  const reserveDock = closeLabels || level.id === 'wide-berth';
-  const bounds = toLocal(closeLabels ? safeBounds : insetRectangle(safeBounds, { left: 8, right: 8, top: 8, bottom: 8 }));
-  const markerKey = [
-    level.id,
-    canvas.width,
-    canvas.height,
-    world.layoutRevision,
-    session.state.turn,
-    session.state.boatNodeId,
-    session.busy,
-  ].join(':');
-  const currentBoat = atLocal(frame.boat);
-  const endpoints = level.nodes.map((node) => {
-    const point = world.project(node.positionXZ);
-    return {
-      id: node.id,
-      x: point.x + canvas.left - stage.left,
-      y: point.y + canvas.top - stage.top,
-    };
-  });
-  const otherTargets = endpointTargets(
-    endpoints.filter((endpoint) => endpoint.id !== session.state.boatNodeId),
-  );
-  const markers = endpointTargets(
-    endpoints.map((endpoint) => {
-      if (endpoint.id !== session.state.boatNodeId || session.busy) return endpoint;
-      if (currentMarkerOffset?.key !== markerKey) {
-        const clear = clearCurrentEndpoint(
-          endpoint,
-          currentBoat,
-          bounds,
-          [...chrome, ...otherTargets.map((target) => target.bounds), ...(closeLabels ? frame.places.map(atLocal) : [])],
-        );
-        currentMarkerOffset = { key: markerKey, x: clear.x - endpoint.x, y: clear.y - endpoint.y };
-      }
-      return {
-        ...endpoint,
-        x: endpoint.x + currentMarkerOffset.x,
-        y: endpoint.y + currentMarkerOffset.y,
-      };
-    }),
-  );
-  const placed: Rectangle[] = [];
-  const leaders: string[] = [];
-  for (const marker of markers) {
-    const inside = marker.x >= bounds.left && marker.x <= bounds.right && marker.y >= bounds.top && marker.y <= bounds.bottom;
-    if (!inside || !chrome.some((obstacle) => overlaps(marker.bounds, obstacle, 2))) continue;
-    const origin = { x: marker.x, y: marker.y };
-    const clear = placeLocalCard(marker.size, marker.size, bounds,
-      [...chrome, ...figures, ...markers.filter((other) => other.id !== marker.id).map((other) => other.bounds)],
-      [[marker.bounds.left, marker.bounds.top]], [marker.bounds.left, marker.bounds.top]);
-    if (!clear) continue;
-    marker.bounds = clear;
-    marker.x = (clear.left + clear.right) / 2;
-    marker.y = (clear.top + clear.bottom) / 2;
-    leaders.push(`<line x1="${marker.x}" y1="${marker.y}" x2="${origin.x}" y2="${origin.y}" />`);
-  }
-  if (!session.busy) {
-    const current = markers.find((marker) => marker.id === session.state.boatNodeId)!;
-    const contactX = Math.max(currentBoat.left, Math.min(currentBoat.right, current.x));
-    const contactY = Math.max(currentBoat.top, Math.min(currentBoat.bottom, current.y));
-    leaders.push(`<line x1="${current.x}" y1="${current.y}" x2="${contactX}" y2="${contactY}" />`);
-  }
-  cardPlacement = null;
-  if (locationSelection && !$('local-context').hidden) {
-    const local = $('local-context'),
-      marker = markers.find((m) => m.id === locationSelection)!;
-    const cardBounds = { ...bounds };
-    if (locationDetails && level.rules.capacity === 6 && canvas.width > canvas.height && canvas.height <= 460) {
-      const middle = (bounds.top + bounds.bottom) / 2;
-      const top = Math.max(bounds.top, ...chrome.filter(r => r.bottom < middle).map(r => r.bottom + 8));
-      const bottom = Math.min(bounds.bottom, ...chrome.filter(r => r.top > middle).map(r => r.top - 8));
-      if (bottom - top >= 100) Object.assign(cardBounds, { top, bottom });
-    }
-    local.style.width = Math.min(locationDetails ? 330 : factsWidth(), cardBounds.right - cardBounds.left) + 'px';
-    local.style.setProperty('--local-max-height', Math.max(80, cardBounds.bottom - cardBounds.top) + 'px');
-    protectedBounds = [...figures, ...chrome];
-    const avoid = [
-      ...figures, ...chrome,
-      atLocal(frame.lighthouse), ...(frame.bell ? [atLocal(frame.bell)] : []),
-      ...markers.map((m) => m.bounds),
-      ...(selectionOrigin ? [{ left: selectionOrigin.x - stage.left - 12, right: selectionOrigin.x - stage.left + 12, top: selectionOrigin.y - stage.top - 12, bottom: selectionOrigin.y - stage.top + 12 }] : []),
-    ];
-    const nearby = placeActionCard(local.offsetWidth, local.offsetHeight, cardBounds, marker.bounds, {
-      portrait: canvas.width < canvas.height,
-      avoid,
-    });
-    const preferred: [number, number][] = [[nearby.left, nearby.top]];
-    const anchor: [number, number] = [marker.x - local.offsetWidth / 2, marker.y];
-    const clear = placeLocalCard(local.offsetWidth, local.offsetHeight, cardBounds, avoid, preferred, anchor);
-    const clearOfControls = !clear && level.rules.capacity === 6
-      ? placeLocalCard(local.offsetWidth, local.offsetHeight, cardBounds, chrome, preferred, anchor)
-      : null;
-    const choice = clear ?? clearOfControls ?? nearby;
-    cardPlacement = choice;
-    placed.push(choice);
-    local.style.left = choice.left + 'px';
-    local.style.top = choice.top + 'px';
-    const x = Math.max(choice.left, Math.min(choice.right, marker.x)),
-      y = Math.max(choice.top, Math.min(choice.bottom, marker.y));
-    $('selection-leader').innerHTML =
-      '<line x1="' + marker.x + '" y1="' + marker.y + '" x2="' + x + '" y2="' + y + '" />';
-  } else if (!dialog.open) {
-    protectedBounds = [];
-    $('selection-leader').innerHTML = '';
-  }
-  const layoutKey = [canvas.width, canvas.height, world.layoutRevision, session.state.turn].join(
-    ':',
-  );
-  if (labelLayoutKey !== layoutKey) {
-    labelLayoutKey = layoutKey;
-    labelLayout.clear();
-  }
-  const dimensionsKey = [
-    canvas.width,
-    canvas.height,
-    innerWidth,
-    innerHeight,
-    devicePixelRatio,
-  ].join(':');
+  const boat = atLocal(frame.boat), lighthouse = atLocal(frame.lighthouse);
+  const figures = [boat, ...frame.passengers.map(atLocal)];
+  const chrome = playObstacles().map(toLocal), bounds = toLocal(safeBounds);
+  const endpoints = frame.nodes.map(node => ({ id: node.id, x: node.x + ox, y: node.y + oy }));
+  const markers = placeCoveTargets(endpoints, bounds, chrome, figures);
+  const placed = positionOwnedControls(bounds, chrome, figures, markers, stage, boat, lighthouse);
+  const nav = $('map-labels');
+  const density = world.viewStatus().mode === 'overview' ? 'overview' : 'play';
+  if (nav.dataset.density !== density) nav.dataset.density = density;
+  const dimensionsKey = [canvas.width, canvas.height, density, devicePixelRatio].join(':');
   if (labelDimensionsKey !== dimensionsKey) {
     labelDimensions.clear();
     labelDimensionsKey = dimensionsKey;
   }
-  const labels = level.nodes.flatMap((node) => {
-    const group = $('stop-' + node.id);
+  const departure = currentPassageDeparture();
+  const focused = keyboardInput ? (document.activeElement as HTMLElement)?.dataset.destination : undefined;
+  const current = session.state.boatNodeId;
+  const priority = (id: string) => id === focused ? 0 : id === locationSelection ? 1 :
+    id === current ? 2 : id === homeNodeId ? 3 : edgeTo(session.state, id, level) ? 4 : 5;
+  const labels = markers.flatMap(marker => {
+    const group = $('stop-' + marker.id);
     if (!group) return [];
-    const name = group.querySelector<HTMLElement>('.map-name')!;
-    let dimensions = labelDimensions.get(node.id);
-    if (dimensions?.element !== name) {
-      dimensions = { element: name, width: name.offsetWidth, height: name.offsetHeight };
-      labelDimensions.set(node.id, dimensions);
-    }
-    return [{ id: node.id, group, name, width: dimensions.width, height: dimensions.height }];
-  });
-  const hint = $('selection-hint'),
-    hintBounds = hint.hidden ? null : toLocal(hint.getBoundingClientRect());
-  dockPlacement = null;
-  const dock = $('dock-actions');
-  const placeDock = (avoid: Rectangle[]) => {
-    if (dock.hidden) return null;
-    const boat = atLocal(frame.boat),
-      visible =
-        boat.right > bounds.left &&
-        boat.left < bounds.right &&
-        boat.bottom > bounds.top &&
-        boat.top < bounds.bottom;
-    dock.style.visibility = visible || keyboardInput ? 'visible' : 'hidden';
-    const landmarks = level.rules.capacity === 6 ? frame.places.map(atLocal) : [atLocal(frame.lighthouse), ...(frame.bell ? [atLocal(frame.bell)] : [])];
-    const avoidSets = [[...avoid, ...landmarks], avoid];
-    const layouts = level.rules.capacity === 6 && dock.children.length > 1 ? ['row', 'column'] : ['row'];
-    const currentMarker = level.rules.capacity === 6 ? markers.find(m => m.id === session.state.boatNodeId) : null;
-    let nearby: ReturnType<typeof placeActionCard> | null = null;
-    let clear: Rectangle | null = null;
-    for (const obstacles of avoidSets) {
-      for (const layout of layouts) {
-        dock.dataset.layout = layout;
-        if (dock.offsetWidth > bounds.right - bounds.left) dock.dataset.layout = 'column';
-        nearby = placeActionCard(dock.offsetWidth, dock.offsetHeight, bounds, boat, { avoid: obstacles });
-        clear = placeLocalCard(
-          dock.offsetWidth,
-          dock.offsetHeight,
-          bounds,
-          obstacles,
-          [[nearby.left, nearby.top]],
-          currentMarker
-            ? [currentMarker.x < (bounds.left + bounds.right) / 2 ? currentMarker.bounds.right + 8 : currentMarker.bounds.left - dock.offsetWidth - 8, currentMarker.y - dock.offsetHeight / 2]
-            : [boat.left, boat.top],
-          closeLabels ? 2 : 8,
-        );
-        if (clear && level.rules.capacity === 6 && obstacles !== avoid) {
-          const gap = Math.hypot(Math.max(0, boat.left - clear.right, clear.left - boat.right),
-            Math.max(0, boat.top - clear.bottom, clear.top - boat.bottom));
-          if (gap > 56) clear = null;
-        }
-        if (clear) break;
-      }
-      if (clear) break;
-    }
-    const choice = clear ? { ...clear, layout: 'floating' as const } : nearby!;
-    dockPlacement = choice;
-    dock.style.left = choice.left + 'px';
-    dock.style.top = choice.top + 'px';
-    placed.push(choice);
-    return choice;
-  };
-  const reservedDock =
-    reserveDock
-      ? placeDock([...chrome, ...figures, ...placed, ...markers.map((m) => m.bounds)])
-      : null;
-  const nameObstacles = reservedDock
-    ? [
-        ...markers,
-        {
-          id: 'dock-controls',
-          x: (reservedDock.left + reservedDock.right) / 2,
-          y: (reservedDock.top + reservedDock.bottom) / 2,
-          bounds: reservedDock,
-        },
-      ]
-    : markers;
-  const driftwoodNames =
-    level.id === 'driftwood-yard' || level.id === 'wide-berth'
-      ? placeDriftwoodLabels(
-          labels.filter(({ id }) => {
-            const marker = markers.find((m) => m.id === id)!;
-            return (
-              marker.x >= bounds.left &&
-              marker.x <= bounds.right &&
-              marker.y >= bounds.top &&
-              marker.y <= bounds.bottom
-            );
-          }),
-          nameObstacles,
-          bounds,
-          [
-            ...chrome,
-            ...figures,
-            ...placed,
-            ...(level.id === 'wide-berth' ? frame.places.map(atLocal) : []),
-            ...(hintBounds ? [hintBounds] : []),
-          ],
-          labelLayout,
-        )
-      : null;
-  for (const { id, group, name, width: w, height: h } of labels) {
-    const marker = markers.find((m) => m.id === id)!;
-    const visible =
-      !(departure && id === departure.boatNodeId) &&
-      !(closeLabels && session.busy && id === session.state.boatNodeId) &&
-      marker.x >= bounds.left &&
-      marker.x <= bounds.right &&
-      marker.y >= bounds.top &&
-      marker.y <= bounds.bottom;
-    group.style.opacity = visible ? '1' : '0';
-    group.style.pointerEvents = visible ? '' : 'none';
+    const visible = marker.onscreen && marker.id !== departure?.boatNodeId &&
+      !(session.busy && selected?.type === 'move' && marker.id === current);
     group.classList.toggle('offscreen', !visible);
+    group.classList.toggle('on-figure', marker.onFigure);
+    const faceCue = { left: marker.x - 11, right: marker.x + 11, top: marker.y - 11, bottom: marker.y + 11 };
+    group.classList.toggle('over-passenger', figures.slice(1).some(figure => overlaps(figure, faceCue, 0)));
     group.style.setProperty('--target-size', marker.size + 'px');
     group.style.left = marker.bounds.left + 'px';
     group.style.top = marker.bounds.top + 'px';
-    if (!visible) continue;
-    const place = atLocal(frame.places.find((place) => place.id === id)!);
-    const preferred: [number, number][] =
-      closeLabels
-        ? [
-            [marker.bounds.right + 8, marker.y - h / 2],
-            [marker.bounds.left - w - 8, marker.y - h / 2],
-            [marker.x - w / 2, marker.bounds.bottom + 8],
-            [marker.x - w / 2, place.top - h - 6],
-          ]
-        : [
-            [marker.x - w / 2, place.top - h - 6],
-            [marker.x - w / 2, marker.bounds.bottom + 8],
-            [place.right + 8, place.top],
-            [place.left - w - 8, place.top],
-          ];
-    const candidates = preferred.map(([x, y]) => {
-      const left = Math.max(bounds.left, Math.min(bounds.right - w, x));
-      const top = Math.max(bounds.top, Math.min(bounds.bottom - h, y));
-      return { left, top, right: left + w, bottom: top + h };
-    });
-    const avoid = [...chrome, ...figures, ...placed, ...(hintBounds ? [hintBounds] : [])];
-    const score = (choice: Rectangle) =>
-      avoid.filter((r) => overlaps(choice, r, 2)).length * 200 +
-      Math.hypot(choice.left - preferred[0][0], choice.top - preferred[0][1]);
-    const preferredChoice = closeLabels
-      ? candidates.find((candidate) => ![...avoid, ...markers.map((m) => m.bounds)].some((r) => overlaps(candidate, r)))
-      : undefined;
-    const existing = closeLabels ? undefined : driftwoodNames?.get(id) ?? labelLayout.get(id);
-    const choice = preferredChoice ?? (existing && !avoid.some((r) => overlaps(existing, r, 2))
-      ? existing
-      : placeLocalCard(w, h, bounds, [...avoid, ...markers.map((m) => m.bounds)], preferred, [marker.x - w / 2, marker.y])
-        ?? candidates.sort((a, b) => score(a) - score(b))[0]);
-    labelLayout.set(id, choice);
-    name.style.left = choice.left - marker.bounds.left + 'px';
-    name.style.top = choice.top - marker.bounds.top + 'px';
-    placed.push(choice, marker.bounds);
-    const x = Math.max(choice.left, Math.min(choice.right, marker.x)),
-      y = Math.max(choice.top, Math.min(choice.bottom, marker.y));
-    if (Math.hypot(x - marker.x, y - marker.y) > 20)
-      leaders.push(
-        '<line x1="' + marker.x + '" y1="' + marker.y + '" x2="' + x + '" y2="' + y + '" />',
-      );
+    const name = group.querySelector<HTMLElement>('.map-name')!;
+    let dimensions = labelDimensions.get(marker.id);
+    if (dimensions?.element !== name) {
+      dimensions = { element: name, width: name.offsetWidth, height: name.offsetHeight };
+      labelDimensions.set(marker.id, dimensions);
+    }
+    return visible ? [{ id: marker.id, group, marker, name, ...dimensions }] : [];
+  }).sort((a, b) => priority(a.id) - priority(b.id));
+  const passages: Rectangle[] = [];
+  const activeEdge = edgeTo(session.state, emphasis ?? locationSelection ?? '', level)?.id;
+  for (const edge of level.edges) {
+    if (!edge.current && edge.id !== activeEdge) continue;
+    const path = world.paths.get(edge.id)!;
+    for (const fraction of [0.25, 0.35, 0.45, 0.55, 0.65, 0.75]) {
+      const { position } = samplePath(path, path.length * fraction);
+      const point = world.project([position.x, position.z]);
+      passages.push({ left: point.x + ox - 5, right: point.x + ox + 5,
+        top: point.y + oy - 4, bottom: point.y + oy + 4 });
+    }
   }
-  if ($('map-leaders')) $('map-leaders').innerHTML = leaders.join('');
-  if (!reserveDock) placeDock([...chrome, ...figures, ...placed]);
+  const dockNamesCurrent = dockPlacement && $('dock-actions').dataset.placement === 'local';
+  const names = labels.filter(({ id }) =>
+    id !== current || !dockNamesCurrent || focused === current || locationSelection === current);
+  const result = placeCoveNames(names, markers.filter(m => m.onscreen), bounds,
+    [...chrome, ...figures, lighthouse, ...placed, ...(frame.bell ? [atLocal(frame.bell)] : [])],
+    labelAnchors, passages);
+  labelLayout = result.placed;
+  labelAnchors = result.anchors;
+  for (const { id, group, marker, name } of labels) {
+    const rect = labelLayout.get(id);
+    group.dataset.labelVisible = String(!!rect);
+    if (!rect) continue;
+    name.style.left = rect.left - marker.bounds.left + 'px';
+    name.style.top = rect.top - marker.bounds.top + 'px';
+  }
+  if (focused && !labelLayout.has(focused)) viewControls.dataset.focusedPlace = nodeNames[focused];
+  else delete viewControls.dataset.focusedPlace;
   positionDialog();
 }
 function bindWorld() {
@@ -2445,14 +2322,50 @@ function bindWorld() {
   };
 }
 bindWorld();
+function closeZoom(restoreFocus = false) {
+  if ($('zoom-tools').hidden) return;
+  $('zoom-tools').hidden = true;
+  $('view-zoom').setAttribute('aria-expanded', 'false');
+  if (restoreFocus) $('view-zoom').focus({ preventScroll: true });
+  scheduleLayout();
+}
+$('view-zoom').onclick = () => {
+  if (blocked()) return;
+  if (!$('zoom-tools').hidden) return closeZoom();
+  $('view-zoom').setAttribute('aria-expanded', 'true');
+  $('zoom-tools').hidden = false;
+  $('zoom-out').focus({ preventScroll: true });
+  scheduleLayout();
+};
+for (const [id, step] of [['zoom-in', 1], ['zoom-out', -1]] as const) {
+  $(id).onclick = () => {
+    if (blocked() || $(id).getAttribute('aria-disabled') === 'true') return;
+    world.adjustZoom(step);
+    scheduleLayout();
+  };
+}
+viewControls.addEventListener('keydown', event => {
+  if (event.key !== 'Escape' || $('zoom-tools').hidden) return;
+  event.preventDefault();
+  event.stopPropagation();
+  closeZoom(true);
+});
+viewControls.addEventListener('focusout', event => {
+  if (!viewControls.contains(event.relatedTarget as Node | null)) closeZoom();
+});
+document.addEventListener('pointerdown', event => {
+  if (!viewControls.contains(event.target as Node)) closeZoom();
+}, true);
 $('view-toggle').onclick = () => {
   if (dialog.open) return;
+  closeZoom();
   if (world.viewStatus().mode === 'overview') clearLocation();
   world.setViewMode(world.viewStatus().mode === 'overview' ? 'play' : 'overview');
   scheduleLayout();
 };
 $('back-to-boat').onclick = () => {
   if (dialog.open) return;
+  closeZoom();
   clearLocation();
   world.backToBoat();
   $('view-toggle').focus({ preventScroll: true });
@@ -2527,7 +2440,7 @@ layoutObserver.observe(viewControls);
 layoutObserver.observe($('status-toggle'));
 const refreshLabelFonts = () => {
   labelDimensions.clear();
-  labelLayoutKey = '';
+  labelAnchors.clear();
   scheduleLayout();
 };
 document.fonts.addEventListener('loadingdone', refreshLabelFonts);
@@ -2614,8 +2527,6 @@ document.addEventListener(
   (e) => {
     if (['Tab', 'Enter', ' ', 'Escape'].includes(e.key)) {
       keyboardInput = true;
-      if (e.key === 'Tab' && !$('dock-actions').hidden)
-        $('dock-actions').style.visibility = 'visible';
       if (!e.repeat) {
         viewFence = null;
 

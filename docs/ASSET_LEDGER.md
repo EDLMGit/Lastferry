@@ -1,5 +1,9 @@
 # Last Ferry asset provenance and history
 
+## Mobile map readability
+
+Four existing interface families changed: `ui.map-markers`, `ui.component.location-name`, `ui.component.action-capsule` and `ui.component.round-utility`. Each keeps its original project assets. Shared TypeScript positions names and controls locally, composes the camera and handles scale. The stylesheet retains native targets while changing visible name size, owner captions and short-window controls. The evidence links in the inventory and developer gallery open the actual game comparisons. The Android reference JPEGs remain player-supplied review material. [Review](../reviews/mobile-map-readability/REVIEW.md) · [Inventory](../assets/catalog.json)
+
 ## Six-cove Journey
 
 The existing `story.illustrations` family has two original seven-second Canvas2D compositions. Among the reeds uses the small ferry, two beavers, a cream rabbit and a reed landing. Lights beyond the reef uses the larger occupied ferry and two separately grounded lights. Both have dedicated portrait and landscape staging. The gallery draws eight endpoints from the same production painter and registry.

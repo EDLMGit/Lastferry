@@ -1,3 +1,9 @@
+# Mobile map readability
+
+MOBILE_MAP_READABILITY_01 starts at task commit `3891ec0ad97a854f267f42d8b1ee6f3e2da9982b`. The shared camera frames the ferry with nearby landings. Each stop has a bounded marker and a locally anchored name. Named passenger controls sit beside the ferry or in an explicitly owned edge group. Zoom, Whole cove and a free place index support inspection across all seven coves. The private Site serves version 18. [Review and matched phone evidence](reviews/mobile-map-readability/REVIEW.md)
+
+Final checks passed the production build/typecheck, 102 focused units, the 79-family inventory, seven map browser cases and three production lifecycle cases. Two Shelters and Wide Berth both completed through the real controls. The review retains the original zoom and Driftwood failures alongside the corrected captures. [Uninterrupted interaction and rescue](reviews/mobile-map-readability/interaction/shelters-interaction.mp4)
+
 # Six-cove Journey
 
 JOURNEY_SIX_COVES_01 starts at `4de9b4431f4edbbb9d818252a509c2a2ff82e941`, above published version 17/game `f23e9b087e80316c3884ed5fa83cce25cf6508a0`. The root Journey now runs Holding → Bellwater → Driftwood → Two Shelters → A wider deck → Wide Berth → Reef Return. The two new illustrated connections use the existing finite player and Sound owner. A six-cove rescue from fresh Home has passed through the actual controls. The version-1 continuation handles earned Wide and seen launch separately, backs up the original bytes on deliberate Continue and supports visit-only progress when storage fails. [Current review and native evidence](reviews/journey-six-coves/REVIEW.md)

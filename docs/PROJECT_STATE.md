@@ -6,9 +6,13 @@
 
 [Three original Android images and source-backed research](MOBILE_MAP_READABILITY_RESEARCH.md) establish the repair targets. Source review found unbounded label/action fallback placement, a forced phone close-up ratio, and different camera/overlay occupancy policies. The current task addresses these together across the existing coves. It permits bounded label/detail changes, camera/zoom adjustment and compact controls while preserving all puzzle choices and factual information. It does not commission a new level, mechanic, boat/dock redesign, difficulty change or story pass.
 
-The baseline remains game `1b7b4f05e576614f061ca4949bf5aca705dc5e0e`, live as private Site version **18**, hosting source `805ade05e2d5b9eba2287ce77d55cd60911dcaea`. The prior continuity commit is `a47a306943f2485cab74b096ba44d764c84f666c`. This task/reference update changes no runtime and performs no deployment. Preserve newer work and all earlier receipts.
+The baseline remains game `1b7b4f05e576614f061ca4949bf5aca705dc5e0e`, live as private Site version **18**, hosting source `805ade05e2d5b9eba2287ce77d55cd60911dcaea`. The branch fast-forwarded through continuity commit `a47a306943f2485cab74b096ba44d764c84f666c` to the phone task and references at `3891ec0ad97a854f267f42d8b1ee6f3e2da9982b`.
 
 The six-cove route, original Practice entrances, accepted ferry/docks and Wide/Reef difficulty, Tips Off, Sound/Motion intent, complete Undo and explicit save conversion remain protected. Expansion toward twelve coves waits for the phone map repair and its player comparison. The user's positive story feedback does not establish performance, acoustic or complete accessibility approval.
+
+The branch now carries a shared phone presentation for every cove. Names stay with their endpoints, local actions name their owner, and an optional place index makes every stop freely inspectable. Normal Play considers nearby landings and measured controls. Whole cove and a compact Zoom control provide additional scales. The next review compares matched native emulated-phone frames to the accepted game before another Android publication. [Implementation review and evidence](../reviews/mobile-map-readability/REVIEW.md)
+
+The final 7/7 map cases and 3/3 production lifecycle cases passed, including actual Two Shelters and Wide rescues, a reef reversal, natural keyboard focus, rotation and real browser fullscreen. Build/TypeScript, 102 focused unit cases and all 79 asset families passed. A no-op/reversed zoom step and a missing Driftwood Harbor name were reproduced and corrected. Android visual acceptance remains with the player.
 
 ## Completed review — six-cove Journey · 11 November 2026
 
