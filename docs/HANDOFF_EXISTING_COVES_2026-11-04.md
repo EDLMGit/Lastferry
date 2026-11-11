@@ -1,6 +1,16 @@
 # Last Ferry — fresh-chat handoff
 
-## Current task — Android map readability · 11 November 2026
+## Current publication — Android map repair · 11 November 2026
+
+Mobile readability is implemented, independently reviewed and published as **Sites version 19**, game `f0ffe2c12f1cc0e42ad7ef10a4b57dd29097c731`, hosting source `1ea40b815911a0fc1131350ee34125ae3508396e`. [Play](https://last-ferry-playtest.abumech.chatgpt.site/) · [Receipt](../reviews/mobile-map-readability/deployment-confirmation.json) · [Publication review](../reviews/mobile-map-readability/PUBLICATION_REVIEW.md)
+
+Names remain local, Board/Let ashore and Sail identify their owners, and the camera/adjustable stepped Zoom provide wider context. Current puzzles, art, story, audio, Tips Off and saves remain protected. The next check is the user's physical Android comparison, especially whether the default view is comfortable and animals remain recognizable. No new content task is assigned.
+
+The Site remains custom/private and now includes one named external viewer, explicitly requested by the user. Preserve that access on future publications and use the shared-Site workflow; it is no longer owner-only. Recipient contact details are intentionally not recorded in this public repository.
+
+Fresh build/typecheck passed and all seven output files match the committed game artifacts. The focused independent unit run passed 101/102; one catalog assertion only reported review files omitted from the hosting checkout. Original failure details and reused full-repository validation are recorded in the publication review. No fresh device/audio/browser approval is claimed. PR #1 stays draft and main unchanged.
+
+## Completed assignment — Android map readability · 11 November 2026
 
 The player's physical Android Journey playtest is positive about story alignment and presentation. The new blocker is understanding the map: island-name leaders compete with routes, names/actions can move far from their owners, and Play versus Whole cove offers an awkward size tradeoff.
 

@@ -1,5 +1,7 @@
 # MOBILE_MAP_READABILITY_01 — make the phone cove easy to read
 
+> **Completed, reviewed and published, 11 November 2026.** Game `f0ffe2c12f1cc0e42ad7ef10a4b57dd29097c731` is live as Sites version 19. The original assignment below is historical. The user has requested the next Android comparison and named viewer access, which Sites confirmed. See [publication review](reviews/mobile-map-readability/PUBLICATION_REVIEW.md), [receipt](reviews/mobile-map-readability/deployment-confirmation.json) and [current state](docs/PROJECT_STATE.md). Do not repeat this task or add another level from the historical roadmap.
+
 ## Goal and baseline
 
 Repair the existing map presentation after the player's physical Android playtest. The story now aligns and looks decent to them. The problem is associating islands, names, markers and actions while the camera alternates between a crowded close view and a tiny Whole cove.

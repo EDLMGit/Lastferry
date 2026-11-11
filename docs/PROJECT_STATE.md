@@ -1,6 +1,20 @@
 # Last Ferry — Project state
 
-## Current task — mobile map readability · 11 November 2026
+## Current review and publication — mobile map readability · 11 November 2026
+
+**MOBILE_MAP_READABILITY_01 is complete and reviewed** at game `f0ffe2c12f1cc0e42ad7ef10a4b57dd29097c731`. The requested publication succeeded as **Sites version 19** on 11 November 2026 at **23:14 Europe/Madrid** (22:14 UTC), hosting source `1ea40b815911a0fc1131350ee34125ae3508396e`. [Play](https://last-ferry-playtest.abumech.chatgpt.site/) · [Publication receipt](../reviews/mobile-map-readability/deployment-confirmation.json) · [Independent publication review](../reviews/mobile-map-readability/PUBLICATION_REVIEW.md)
+
+Local name placement replaces the long leader-line fallback. Passenger actions name their landing, Sail names its destination, and free Crossing status inspection retains every stop. Normal Play considers neighboring geometry and actual controls. Zoom offers bounded stepped adjustment with tap controls; it is not continuous pinch zoom. Two-finger handling prevents accidental action commitment. Puzzle data/rules/witnesses, campaign saves, audio, story and accepted art remain unchanged.
+
+Source and native-image review found no publication blocker. A fresh Node 24 build/typecheck passed; all seven output files match the implementation's committed build hashes. Of 299 scoped source/build/test/asset files, 298 match Git exactly and the retained Vite preview-host allowance is the sole declared adaptation. Four repaired phone frames and two matched baselines were inspected. Wider framing improves association but reduces animal size; actual Android readability remains the next product check.
+
+The fresh 102-case focused run passed **101**, with one asset-catalog assertion failing because the deployment checkout omits 29 review/provenance/media paths. All 206 reported errors were missing review references; no other catalog or runtime assertion failed. The original run is retained, and Codex's complete-repository 102-unit pass, 79-family validation, 28 scale sweeps and ten browser cases remain source-linked evidence rather than fresh reruns. No fresh browser rescue, physical-device, spoken screen-reader or acoustic verification was performed during publication. [Implementation report](../reviews/mobile-map-readability/REVIEW.md)
+
+The user explicitly requested named viewer access. Sites confirmed **custom access with the owner and one external viewer**, preserving all existing access. Contact details remain in Sites and are omitted from public GitHub documentation. This Site is no longer owner-only: future publication uses the shared-Site save/deploy flow, preserving the allowlist. Do not make it public.
+
+The next step is the player's phone comparison; no new level, mechanic or redesign is assigned. Earlier positive story and repaired-puzzle feedback remains valid. The completed brief below records its original scope.
+
+## Completed assignment — mobile map readability · 11 November 2026
 
 **MOBILE_MAP_READABILITY_01**, root [NEXT_TASK_MOBILE_MAP_READABILITY.md](../NEXT_TASK_MOBILE_MAP_READABILITY.md), is now the active assignment. The player has tested the six-cove Journey on a physical Android phone and reports that the story aligns and looks decent. Preserve that presentation. Their current issue is crowded map information, name leaders that compete with routes, actions detached from their locations, and Play/Whole cove scales that alternate between cropping and tiny subjects.
 
@@ -28,7 +42,7 @@ Codex's **14 distinct browser cases** remain source-linked evidence with origina
 
 The next product check is the user's Android root Journey: whether both new entries read naturally, the launch after Two Shelters feels earned, and the six-cove difficulty progression sustains interest with Tips Off. Preserve this build while collecting that feedback. The remaining six-cove arc, newcomer and final supper remain future design; this handoff does not commission a new map, species or rebalancing pass. Earlier positive feedback on the repaired ferry/docks and Wide/Reef puzzles remains valid; acceptance of the connected Journey and new compositions is separate.
 
-## Current publication — Sites version 18
+## Prior publication — Sites version 18
 
 Published successfully on **11 November 2026 at 08:25 Europe/Madrid** (07:25 UTC) to the same owner-private Site: game `1b7b4f05e576614f061ca4949bf5aca705dc5e0e`, hosting source `805ade05e2d5b9eba2287ce77d55cd60911dcaea`. [Play the root Journey](https://last-ferry-playtest.abumech.chatgpt.site/) · [Publication receipt](../reviews/journey-six-coves/deployment-confirmation.json). The game and hosting SHAs identify different repositories. This continuity update changes no deployed code.
 

@@ -2,9 +2,9 @@
 
 ## Objective
 
-Implement the current root task `NEXT_TASK_MOBILE_MAP_READABILITY.md` (**MOBILE_MAP_READABILITY_01**). The player has tested the six-cove Journey on Android and says its story aligns and looks decent, but map names/leaders, displaced actions and camera extremes make phone play crowded and confusing. Repair the shared map/camera/control presentation across the existing coves. Read the task, its three supplied Android references and `docs/MOBILE_MAP_READABILITY_RESEARCH.md` before editing.
+MOBILE_MAP_READABILITY_01 is implemented and reviewed at `f0ffe2c12f1cc0e42ad7ef10a4b57dd29097c731`, published as Sites version **19** on 11 November 2026. Its root brief records completed work. The next product check is the requested Android comparison of local names/action ownership, normal framing and adjustable zoom. Preserve the six-cove Journey, seven Practice entrances, accepted puzzles/difficulty, boats/docks/art, story, audio, Tips Off and complete Undo. Do not repeat the completed brief or start a new cove without the next scoped instruction.
 
-Reviewed runtime `1b7b4f05e576614f061ca4949bf5aca705dc5e0e` remains published privately as Sites version 18. Preserve accepted puzzles/difficulty, boats/docks/art, story, audio, Tips Off, complete Undo and Journey/Practice save behavior. No new cove, mechanic or campaign change is assigned. Make routine implementation choices independently, preserve newer/unrelated work and record observed progress in `STATUS.md`. Older task packages do not override this scope.
+Read the active `docs/PROJECT_STATE.md` and latest publication receipt. The existing Site is now shared privately with a named external viewer at the user's request. Preserve its custom audience; it is no longer owner-only, so future publication must use the supported shared-Site flow. Do not copy recipient contact details into this public repository. Preserve newer/unrelated work and record observed changes in `STATUS.md`.
 
 ## Read and preserve the project decisions
 
@@ -40,4 +40,4 @@ Prefer actionable findings with reproduction and consequences. Separate verified
 
 ## Completion
 
-Complete MOBILE_MAP_READABILITY_01, maintain `STATUS.md` and active project state, and prepare the focused matched phone evidence. Commit and push to `m1-first-crossing`; keep PR #1 draft and GitHub `main` unchanged. Do not automatically deploy this repair. Retain previous publication receipts and completed tasks as history.
+For the next scoped task, maintain `STATUS.md`, the active project state and focused evidence. Keep PR #1 draft and GitHub `main` unchanged. Follow the user's current publication instruction, preserve the Site's custom named-viewer access, and retain all earlier tasks and publication receipts as history.
