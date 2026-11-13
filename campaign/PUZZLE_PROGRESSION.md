@@ -1,10 +1,32 @@
 # Puzzle progression — selected campaign direction
 
-## Reviewed six-cove progression · 11 November 2026
+## Current progression and next candidate · 13 November 2026
 
-[JOURNEY_SIX_COVES_01](../NEXT_TASK_JOURNEY_SIX_COVES.md) connects Holding → Bellwater → Driftwood → Two Shelters → launch → Wide → Reef. The first four use the small ferry; the last two use the accepted larger ferry. Preserve all existing level data, rules and witnesses. The integration is complete at `1b7b4f05e576614f061ca4949bf5aca705dc5e0e`; optional Tips remains Off by default. Publication and verification are recorded in [project state](../docs/PROJECT_STATE.md). The player's Android story feedback is now positive; the active [mobile map readability task](../NEXT_TASK_MOBILE_MAP_READABILITY.md) repairs presentation without changing these puzzles. A new puzzle or rebalance is not assigned.
+The accepted Journey is **Holding → Bellwater → Driftwood → Two Shelters → launch → Wide → Reef**. The first four use the small ferry; the last two use the accepted six-space ferry. All seven existing Practice entrances remain. The player's latest mobile feedback permits continued development; preserve these puzzles, rules, witnesses, presentation and default-Off Tips. [Current state](../docs/PROJECT_STATE.md)
 
-Two Shelters is the fourth Journey cove, Wide Berth the fifth and Reef Return the sixth. All seven Practice entries remain available. Explicit continuation from an old save resumes the first missing rescue by identity. The already-seen launch and any earlier Wide rescue keep their credit. The roadmap below records earlier planning for the twelve-cove target.
+### Intended C7 — Orchard Landing
+
+Root [ORCHARD_LANDING_01](../NEXT_TASK_ORCHARD_LANDING.md) commissions one complete **Practice candidate**, not a Journey reorder or save migration. Orin is a new deer with an indivisible cost of three spaces on the existing six-space ferry.
+
+**Design question:** What must the light ferry finish—and where must it be—before committing to Orin's load?
+
+Favor a tide opening that is useful only if earlier positioning and load choices prepare for it. Codex authors the compact map, supporting cast, schedules and values. This idea is not yet a proven puzzle. No exact graph or move sequence is mandated. Simply adding a required Wait or another errand does not establish a new insight.
+
+The existing draft bands already make Orin alone (3 spaces) require depth 3, Orin plus a rabbit (4) require depth 3, and Orin plus a two-space neighbor (5) require depth 4. Use those facts without new weight statistics or a packing mechanic. Preserve automatic seats. The candidate may use at most the existing one scheduled-current passage; there is no second current or new water rule in this task.
+
+The design report must identify the actual consequential choice and distinguish it from these accepted puzzles:
+
+| Existing cove | Established decision |
+| --- | --- |
+| Driftwood Yard | Stage the heavier neighbor at the useful refuge, collect the smaller pair and retrieve through the deepened route. |
+| Wide Berth | Put exactly two spaces through the first homeward opportunity so six can fit on the final crossing. |
+| Reef Return | Choose between gathering both rabbits before a full delivery and delivering a heavy group early to approach the final rabbit from Harbor. |
+
+A renamed or deer-reskinned version of one of those decisions does not satisfy C7. Keep the map and cast compact; do not treat solution length or body count as difficulty evidence.
+
+Prove a rescue through the production reducer and meaningful alternative decisions with recoverable consequences. Check immediate full boarding, ordinary shuttles, safe-pier waiting and deep bypasses where relevant. Valid alternative plans are welcome; routine behavior must not bypass the entire claimed insight. Orin's third space must change a relevant choice, not only the label. Exhaustive claims need corresponding reachability evidence and honest limits. The existing design reports remain useful comparisons: [Wide](../reviews/existing-coves-repair/WIDE_DESIGN.md) and [Reef](../reviews/existing-coves-repair/REEF_DESIGN.md).
+
+The candidate's gameplay model/portrait and transfer fit are part of this pass. Its illustrated entry and completed-six save continuation follow acceptance. The six-cove Journey and all original save bytes stay unchanged during Practice. C8–C12 remain provisional story/difficulty roles in [campaign direction](CAMPAIGN_DIRECTION.md), not further level assignments.
 
 ## Historical acceptance of the existing-cove repair · 7 November 2026
 

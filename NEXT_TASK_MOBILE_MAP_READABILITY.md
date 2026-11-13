@@ -1,6 +1,6 @@
 # MOBILE_MAP_READABILITY_01 — make the phone cove easy to read
 
-> **Completed, reviewed and published, 11 November 2026.** Game `f0ffe2c12f1cc0e42ad7ef10a4b57dd29097c731` is live as Sites version 19. The original assignment below is historical. The user has requested the next Android comparison and named viewer access, which Sites confirmed. See [publication review](reviews/mobile-map-readability/PUBLICATION_REVIEW.md), [receipt](reviews/mobile-map-readability/deployment-confirmation.json) and [current state](docs/PROJECT_STATE.md). Do not repeat this task or add another level from the historical roadmap.
+> **Completed, reviewed, published and positively playtested.** Game `f0ffe2c12f1cc0e42ad7ef10a4b57dd29097c731` is live as Sites version 19. On 13 November 2026 the player said the mobile pass feels good and authorized continued development. The original assignment below is historical. See [publication review](reviews/mobile-map-readability/PUBLICATION_REVIEW.md), [receipt](reviews/mobile-map-readability/deployment-confirmation.json) and [current state](docs/PROJECT_STATE.md). Do not repeat this repair; follow root [ORCHARD_LANDING_01](NEXT_TASK_ORCHARD_LANDING.md) for the next scoped candidate.
 
 ## Goal and baseline
 

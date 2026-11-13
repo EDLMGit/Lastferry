@@ -2,9 +2,11 @@
 
 ## Objective
 
-MOBILE_MAP_READABILITY_01 is implemented and reviewed at `f0ffe2c12f1cc0e42ad7ef10a4b57dd29097c731`, published as Sites version **19** on 11 November 2026. Its root brief records completed work. The next product check is the requested Android comparison of local names/action ownership, normal framing and adjustable zoom. Preserve the six-cove Journey, seven Practice entrances, accepted puzzles/difficulty, boats/docks/art, story, audio, Tips Off and complete Undo. Do not repeat the completed brief or start a new cove without the next scoped instruction.
+**ORCHARD_LANDING_01** is the current assignment: read root [NEXT_TASK_ORCHARD_LANDING.md](NEXT_TASK_ORCHARD_LANDING.md). Build one compact independent Practice candidate for intended cove seven, introducing Orin, a three-space deer, on the accepted six-space ferry. Author and prove a distinct preparation/load decision within existing rules. Exact geometry, values and implementation remain Codex decisions.
 
-Read the active `docs/PROJECT_STATE.md` and latest publication receipt. The existing Site is now shared privately with a named external viewer at the user's request. Preserve its custom audience; it is no longer owner-only, so future publication must use the supported shared-Site flow. Do not copy recipient contact details into this public repository. Preserve newer/unrelated work and record observed changes in `STATUS.md`.
+The player accepted the mobile readability pass for continued development on 13 November 2026. Accepted runtime is `f0ffe2c12f1cc0e42ad7ef10a4b57dd29097c731`, live as Sites version **19**. Preserve the six-cove Journey, all seven existing Practice entrances, accepted puzzles/difficulty, boats/docks/art, story, audio, mobile framing/Zoom, Tips Off and complete Undo. Add Orchard to Practice only; its illustrated scene and Journey/save extension follow candidate acceptance.
+
+Read the active `docs/PROJECT_STATE.md` and latest publication receipt. The existing Site is shared privately with a named external viewer at the user's request. Preserve its custom audience; future publication must use the supported shared-Site flow. Do not copy recipient contact details into this public repository. This task does not deploy. Preserve newer/unrelated work and record observed changes in `STATUS.md`.
 
 ## Read and preserve the project decisions
 

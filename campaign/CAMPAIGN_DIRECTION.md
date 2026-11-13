@@ -1,26 +1,45 @@
 # Last Ferry — The Long Tide
 
-## Current direction · 11 November 2026
+## Current direction · 13 November 2026
 
-The repaired six-space ferry, docks and Wide/Reef complexity received positive player feedback. The six-cove Journey is implemented and reviewed at `1b7b4f05e576614f061ca4949bf5aca705dc5e0e`, published for Android playtesting. It connects six rescues and retains seven independent Practice entries. [Current publication and review](../docs/PROJECT_STATE.md)
+The player has positively accepted the repaired six-space ferry/docks, Wide/Reef complexity, connected story and mobile map presentation for continued development. Accepted runtime is `f0ffe2c12f1cc0e42ad7ef10a4b57dd29097c731`, live as Sites version 19. Preserve its calm visual/audio language and readable phone controls. [Current task and publication](../docs/PROJECT_STATE.md)
 
-[JOURNEY_SIX_COVES_01](../NEXT_TASK_JOURNEY_SIX_COVES.md) is complete. The player's Android playtest reports that the story aligns and looks decent. [MOBILE_MAP_READABILITY_01](../NEXT_TASK_MOBILE_MAP_READABILITY.md) is now implemented and reviewed at `f0ffe2c12f1cc0e42ad7ef10a4b57dd29097c731`, published as Sites version 19 for the requested Android comparison. Preserve its local names/action ownership, adjustable framing, accepted story, art and puzzle progression. No seventh cove, new mechanic or rebalance is assigned; expansion waits for the phone feedback.
+The **implemented Journey remains six coves**:
 
 | Journey position | Cove / story role |
 | --- | --- |
-| 1 | Holding Pier — the first neighbors, small ferry and familiar shore |
+| 1 | Holding Pier — the first neighbors and small ferry |
 | 2 | Bellwater — loaded return and changing shore heights |
 | 3 | Driftwood Yard — Nell and purposeful temporary staging |
-| 4 | Two Shelters — choosing a temporary refuge with the small ferry |
+| 4 | Two Shelters — choosing a refuge with the small ferry |
 | Boundary | Existing A wider deck launch — Nell's prepared larger ferry |
-| 5 | Wide Berth — accepted mixed-load and current-window planning |
-| 6 | Reef Return — accepted delivery/approach composition beyond the headland |
+| 5 | Wide Berth — accepted load split and homeward opportunities |
+| 6 | Reef Return — accepted delivery/approach composition |
 
-First Crossing stays independent Practice. Among the reeds introduces Hazel and Bracken aboard the small ferry as Mica looks up. Lights beyond the reef shows Heather and Birch aboard the larger ferry as Flick and Dot answer one another from shore. Earlier rescued neighbors remain safe.
+First Crossing stays independent Practice. Among the reeds introduces Hazel, Bracken and Mica; Lights beyond the reef introduces Heather, Birch, Flick and Dot. Previously rescued neighbors remain safe. Existing save conversions preserve earned identities and acknowledged scenes.
 
-Older saves retain their earned identities and seen scenes. Deliberate Continue fills the first genuinely uncompleted cove in the revised order, with a clear explanation and the original record preserved. An old Wide completion does not imply Two Shelters completion and need not be replayed. See the task for the bounded compatibility policy.
+### Next commission: Orchard Landing candidate
 
-The new sequence supersedes the earlier C4 replacement/Wide-demotion proposal and the old C5-deer/C6-launch/C7-first-current schedule. A newcomer and later combinations may still serve the remaining six coves, but their exact order and puzzle designs are not commissioned here. The full story still aims toward the communal supper and “We saved you a place”; the six-cove endpoint must be honest about currently available content. [Project state](../docs/PROJECT_STATE.md) · [Playable progression](PUZZLE_PROGRESSION.md)
+Follow root [ORCHARD_LANDING_01](../NEXT_TASK_ORCHARD_LANDING.md). Build one compact independent Practice candidate for intended **C7**, introducing **Orin, a three-space deer**, on the already accepted six-space ferry. His indivisible cost should make preparation, pickup order and the boat's position across a tide opportunity matter. The map, exact rules data and witness are not yet authored or proven.
+
+Complete the puzzle, actual deer/portrait identity and automatic boarding fit before attaching it to the Journey. The candidate must feel like the next inhabited part of this same coast. Do not enlarge the ferry, multiply the cast to manufacture difficulty, or introduce another rule system. Preserve the existing six Journey coves and seven Practice entrances; add Orchard only to Practice in this pass.
+
+After player acceptance, integrate this same cove with a compact orchard entry using the current illustrated player and explicit continuation for completed-six saves. Retain their original-byte backup and earned rescue history. No scene, save migration or automatic deployment is part of the candidate task.
+
+### Remaining story roles — provisional, not additional assignments
+
+| Intended cove | Story purpose | Difficulty purpose |
+| --- | --- | --- |
+| **7 — Orchard Landing** | Meet Orin beyond the familiar headland. | Make a three-space commitment and earlier preparation matter within known rules. Candidate commissioned; puzzle unproven. |
+| **8 — title open** | Carry the lesson farther along the channel. | A distinct combination of load, route and tide dependencies; choose it after C7 playtesting. |
+| **9 — Drowned Orchard** | Recognize the orchard under changed water, with a different waiting group. Orin remains safe. | Reinterpret familiar landmarks and established rules rather than repeat Orin's rescue. |
+| **10 — Lantern Reach** | See the welcome at the refuge taking shape. | A short, elegant breather that retains a real decision. |
+| **11 — Far Shore** | Retrieve the hardest remaining group. | Peak synthesis of known rules, full information and no late exception. |
+| **12 — Last Ferry** | Finish the final visible rescue and return for the communal supper. | A gentler last crossing and emotional release; no surprise additional objective. |
+
+The target remains twelve authored coves, ending with **“We saved you a place.”** These later roles guide continuity, not finished puzzle specifications or a measured playtime promise. Greater challenge comes from meaningful dependencies, not a monotonic increase in animal count, map area or moves.
+
+This direction supersedes the historical C5-four-space-deer/C6-launch/C7-first-current schedule. Launch already follows Two Shelters, and currents already matter in Wide and Reef. Do not reteach them as new or move accepted content to match the older table. [Puzzle progression](PUZZLE_PROGRESSION.md) · [Story treatment](STORY_SCENES.md)
 
 ## Direction history and future proposals
 

@@ -1,3 +1,13 @@
+# Current assignment — Orchard Landing candidate · 13 November 2026
+
+The player reports that the published mobile pass feels good and authorizes continued development. Accepted game `f0ffe2c12f1cc0e42ad7ef10a4b57dd29097c731` remains live as Sites version 19. This update changes task/continuity documents only.
+
+[ORCHARD_LANDING_01](NEXT_TASK_ORCHARD_LANDING.md) commissions intended cove seven as one compact Practice candidate: Orin, a three-space deer, on the accepted six-space ferry, with a distinct preparation/load decision using known rules. The implementation, puzzle proof and character acceptance are pending. Exact map values and implementation are Codex decisions.
+
+Preserve the six-cove Journey, save bytes, earlier puzzles, boats/docks, story, audio, nearby map controls, Zoom and Tips Off. Add Orchard to Practice only. Its illustrated entry and completed-six continuation follow player acceptance. No automatic deployment; preserve the Site's custom private audience. [Current project state](docs/PROJECT_STATE.md)
+
+## Historical implementation handoffs
+
 # Mobile map readability
 
 MOBILE_MAP_READABILITY_01 starts at task commit `3891ec0ad97a854f267f42d8b1ee6f3e2da9982b`. The shared camera frames the ferry with nearby landings. Each stop has a bounded marker and a locally anchored name. Named passenger controls sit beside the ferry or in an explicitly owned edge group. Zoom, Whole cove and a free place index support inspection across all seven coves. The private Site serves version 18. [Review and matched phone evidence](reviews/mobile-map-readability/REVIEW.md)

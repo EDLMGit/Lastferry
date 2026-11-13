@@ -1,6 +1,18 @@
 # Last Ferry — Project state
 
-## Current review and publication — mobile map readability · 11 November 2026
+## Current assignment — Orchard Landing candidate · 13 November 2026
+
+The player's latest feedback after the mobile publication is **“Overall feels good, we can continue for now.”** Record the map presentation as positively accepted for continued development. Earlier positive feedback on the connected story, repaired ferry/docks and Wide/Reef complexity remains valid. This does not certify every physical-device performance, listening or accessibility condition.
+
+**ORCHARD_LANDING_01**, root [NEXT_TASK_ORCHARD_LANDING.md](../NEXT_TASK_ORCHARD_LANDING.md), is the next assignment. Build one complete Practice candidate for intended cove seven: Orchard Landing with **Orin, a three-space deer**, using the accepted six-space ferry and existing depth/tide/current rules. Its design question is what the light ferry must finish, and where it must be, before committing to Orin's load. This is an unproven design target; Codex must author and verify a genuinely distinct puzzle before polishing its compact scenery.
+
+The candidate includes Orin's stable 3D/portrait identity and deliberate automatic seating/transfer support. Current rendering helpers special-case two-space bodies; do not let a three-space deer silently inherit a rabbit seat or sheep fallback. Preserve accepted existing models and phone presentation. No new ferry, second current, packing mechanic, global timer or overhaul is commissioned.
+
+Keep the **six-cove Journey and its save format unchanged**. All seven existing Practice entrances remain, and Orchard adds one candidate entrance. Its short illustrated entry and explicit completed-six continuation are deferred until the puzzle/character playtest. The intended story premise and provisional second-half roles are recorded in the campaign documents; they do not commission coves eight through twelve.
+
+The accepted game remains `f0ffe2c12f1cc0e42ad7ef10a4b57dd29097c731`; preceding continuity head `47023ecc8594a9d3181421a64010f8d89955fd55`. This assignment changes documentation only. **Sites version 19** remains live at the same URL, hosting source `1ea40b815911a0fc1131350ee34125ae3508396e`, with its custom private audience. No new deployment is requested. Preserve the [publication receipt](../reviews/mobile-map-readability/deployment-confirmation.json) and all earlier history.
+
+## Previous review and publication — mobile map readability · 11 November 2026
 
 **MOBILE_MAP_READABILITY_01 is complete and reviewed** at game `f0ffe2c12f1cc0e42ad7ef10a4b57dd29097c731`. The requested publication succeeded as **Sites version 19** on 11 November 2026 at **23:14 Europe/Madrid** (22:14 UTC), hosting source `1ea40b815911a0fc1131350ee34125ae3508396e`. [Play](https://last-ferry-playtest.abumech.chatgpt.site/) · [Publication receipt](../reviews/mobile-map-readability/deployment-confirmation.json) · [Independent publication review](../reviews/mobile-map-readability/PUBLICATION_REVIEW.md)
 
@@ -12,11 +24,11 @@ The fresh 102-case focused run passed **101**, with one asset-catalog assertion 
 
 The user explicitly requested named viewer access. Sites confirmed **custom access with the owner and one external viewer**, preserving all existing access. Contact details remain in Sites and are omitted from public GitHub documentation. This Site is no longer owner-only: future publication uses the shared-Site save/deploy flow, preserving the allowlist. Do not make it public.
 
-The next step is the player's phone comparison; no new level, mechanic or redesign is assigned. Earlier positive story and repaired-puzzle feedback remains valid. The completed brief below records its original scope.
+This publication preceded the player's positive phone feedback and next assignment above. The completed brief below records its original scope.
 
 ## Completed assignment — mobile map readability · 11 November 2026
 
-**MOBILE_MAP_READABILITY_01**, root [NEXT_TASK_MOBILE_MAP_READABILITY.md](../NEXT_TASK_MOBILE_MAP_READABILITY.md), is now the active assignment. The player has tested the six-cove Journey on a physical Android phone and reports that the story aligns and looks decent. Preserve that presentation. Their current issue is crowded map information, name leaders that compete with routes, actions detached from their locations, and Play/Whole cove scales that alternate between cropping and tiny subjects.
+**MOBILE_MAP_READABILITY_01**, root [NEXT_TASK_MOBILE_MAP_READABILITY.md](../NEXT_TASK_MOBILE_MAP_READABILITY.md), was the assignment recorded below. The player has tested the six-cove Journey on a physical Android phone and reports that the story aligns and looks decent. Preserve that presentation. Their current issue is crowded map information, name leaders that compete with routes, actions detached from their locations, and Play/Whole cove scales that alternate between cropping and tiny subjects.
 
 [Three original Android images and source-backed research](MOBILE_MAP_READABILITY_RESEARCH.md) establish the repair targets. Source review found unbounded label/action fallback placement, a forced phone close-up ratio, and different camera/overlay occupancy policies. The current task addresses these together across the existing coves. It permits bounded label/detail changes, camera/zoom adjustment and compact controls while preserving all puzzle choices and factual information. It does not commission a new level, mechanic, boat/dock redesign, difficulty change or story pass.
 

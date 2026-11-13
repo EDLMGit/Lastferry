@@ -1,8 +1,24 @@
 # Last Ferry — story scenes for The Long Tide
 
+## Next story beat — Orin at the orchard · 13 November 2026
+
+The accepted six-cove presentation remains unchanged. [ORCHARD_LANDING_01](../NEXT_TASK_ORCHARD_LANDING.md) commissions the intended seventh cove as a Practice candidate with a real deer model and portrait. **Its illustrated entry is documented here for continuity, not implemented in this pass.** Judge the puzzle and Orin's phone-scale identity before extending Journey saves or producing the scene.
+
+Proposed caption:
+
+> Orin knows every path through the orchard. Tonight, he needs the ferry.
+
+When commissioned after acceptance, use the existing illustrated player and show a recognizable orchard landing, one clear Orin acknowledgment, and a settled handoff consistent with the actual authored starting positions. His rounded face and short antlers should match the gameplay/portrait identity. Keep the landing supported at the water; do not repeat a tall floating platform or distant tiny characters.
+
+The accepted six-space ferry is already in service. Do not replay Nell's launch, claim Orin cannot fit any smaller boat, or present currents as newly introduced. A three-space cost is familiar capacity vocabulary, not a power or narrative inventory.
+
+Preserve immediate Continue, existing caption treatment, Skip without acknowledgment, Reduced Motion, Sound intent and explicit campaign acceptance. No new cinematic framework, narration service or score is required. A later Journey append must explicitly continue an old completed-six save with its earned rescues and original-byte backup preserved.
+
+The later Drowned Orchard returns to recognizable landmarks with a **different waiting group**; Orin stays rescued. An orchard bough can recur at the final communal supper as a visual memory, without becoming a cargo objective. The intended closing line remains **“We saved you a place.”**
+
 ## Reviewed six-cove Journey · 11 November 2026
 
-The integration at `1b7b4f05e576614f061ca4949bf5aca705dc5e0e` is published for Android playtesting. Source and six native phone frames support the composition and lifecycle review. The player has since tested on Android and reports that the story aligns and looks decent. Preserve these scenes while [mobile map readability](../NEXT_TASK_MOBILE_MAP_READABILITY.md) is repaired. This feedback does not establish acoustic or performance approval. [Current publication and review](../docs/PROJECT_STATE.md)
+The integration at `1b7b4f05e576614f061ca4949bf5aca705dc5e0e` is published for Android playtesting. Source and six native phone frames support the composition and lifecycle review. The player has since tested on Android and reports that the story aligns and looks decent. The mobile repair is now accepted for continued development; preserve these scenes under the current candidate task. This feedback does not establish acoustic or performance approval. [Current publication and review](../docs/PROJECT_STATE.md)
 
 The root Journey connects Holding Pier, Bellwater, Driftwood Yard, Two Shelters, Wide Berth and Reef Return. Each cove has its own entry in the illustrated player. Launch remains the existing eight-second protected-boathouse picture and now follows Two Shelters. [Task](../NEXT_TASK_JOURNEY_SIX_COVES.md) · [Six-cove review](../reviews/journey-six-coves/REVIEW.md)
 
