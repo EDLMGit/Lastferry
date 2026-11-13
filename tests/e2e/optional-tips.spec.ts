@@ -216,7 +216,7 @@ test('shared Tips keyboard access, persistence and blocked storage', async ({ br
       await expect(page.locator('#tips-preference')).toHaveValue('on');
       await page.keyboard.press('Escape');
       await activate(page, 'home-practice', true);
-      await expect(page.locator('[id^=practice-]')).toHaveCount(7);
+      await expect(page.locator('[id^=practice-]')).toHaveCount(8);
       await activate(page, 'practice-reef-return', true);
       await expect(page.locator('#unload')).toBeVisible();
       await settings(page);

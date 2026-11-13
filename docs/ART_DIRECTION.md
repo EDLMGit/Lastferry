@@ -1,5 +1,9 @@
 # Last Ferry — Art Direction
 
+## Orin and the orchard
+
+Orin’s four hooves, cream muzzle, spotted chestnut coat and short forked antlers define his silhouette. The compact body uses the same world scale as the sheep. Keep the branches behind the waiting place and leave open water around the brow. The 44px choice portrait comes from the same deer model. [Model and portrait provenance](../assets/portraits/deer-manifest.json)
+
 ## The six-space family boat
 
 Keep the fuller wheelhouse, tapered honey-yellow hull, visible band of freeboard, small dark fenders and warm cambered roof readable together in ordinary phone Play. Passengers use a side opening. A shore approach leads along a narrow timber finger or fitted stone landing to the short brow. It should be possible to see where the boat ends and the dock begins. Recheck the loaded waterline, walking support and both berth headings whenever the profile changes. [Actual small-ferry and repaired-cove comparisons](../reviews/existing-coves-repair/REVIEW.md)

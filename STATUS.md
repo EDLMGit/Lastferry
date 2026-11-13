@@ -1,10 +1,10 @@
-# Current assignment — Orchard Landing candidate · 13 November 2026
+# Orchard Landing Practice candidate · 13 November 2026
 
-The player reports that the published mobile pass feels good and authorizes continued development. Accepted game `f0ffe2c12f1cc0e42ad7ef10a4b57dd29097c731` remains live as Sites version 19. This update changes task/continuity documents only.
+Orchard Landing is playable via Home → Practice or [directly on the local server](http://127.0.0.1:5270/?cove=orchard-landing). All six Journey coves, the saved endpoint and the seven earlier Practice entries retain their identities. Published game `f0ffe2c12f1cc0e42ad7ef10a4b57dd29097c731` remains live as Sites version 19.
 
-[ORCHARD_LANDING_01](NEXT_TASK_ORCHARD_LANDING.md) commissions intended cove seven as one compact Practice candidate: Orin, a three-space deer, on the accepted six-space ferry, with a distinct preparation/load decision using known rules. The implementation, puzzle proof and character acceptance are pending. Exact map values and implementation are Codex decisions.
+The ferry starts beside Orin on the dry orchard landing. The production rules admit both pickup orders for the two smaller neighbors. Returning to the orchard in the middle tide makes the final six-space outward passage possible. Orin’s model, static portrait, automatic seat and shore transfers are integrated. [Design proof](reviews/orchard-landing/DESIGN.md) · [Verification and actual frames](reviews/orchard-landing/REVIEW.md)
 
-Preserve the six-cove Journey, save bytes, earlier puzzles, boats/docks, story, audio, nearby map controls, Zoom and Tips Off. Add Orchard to Practice only. Its illustrated entry and completed-six continuation follow player acceptance. No automatic deployment; preserve the Site's custom private audience. [Current project state](docs/PROJECT_STATE.md)
+Orchard’s difficulty and character readability await human playtesting. Its illustrated entry and completed-six continuation come after acceptance. [Current project state](docs/PROJECT_STATE.md)
 
 ## Historical implementation handoffs
 

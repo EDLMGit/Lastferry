@@ -4,6 +4,80 @@ import type { Level } from '../levels/level';
 import type { IslandStyle } from './layout';
 import { createReedBeds, islandCenter } from './shore';
 
+export function orchardTree(parent: T.Object3D, position: [number, number, number]) {
+  const tree = new T.Group();
+  tree.name = 'orchard-apple-tree';
+  tree.position.set(...position);
+  parent.add(tree);
+  const branches = [
+    { from: [0, -0.02, 0], to: [-0.10, 0.58, 0.01], foot: 0.16, tip: 0.11 },
+    { from: [-0.10, 0.55, 0.01], to: [-0.47, 0.96, 0.04], foot: 0.11, tip: 0.062 },
+    { from: [-0.08, 0.44, 0.01], to: [0.33, 0.81, 0.13], foot: 0.09, tip: 0.049 },
+    { from: [-0.10, 0.56, 0.01], to: [0.06, 1.26, -0.14], foot: 0.09, tip: 0.046 },
+  ];
+  for (const branch of branches) {
+    const base = new T.Vector3().fromArray(branch.from);
+    const tip = new T.Vector3().fromArray(branch.to);
+    const length = tip.distanceTo(base);
+    const middle = base.clone().lerp(tip, 0.5);
+    const wood = cylinder(tree, '#795f49', branch.tip, branch.foot, length, middle.toArray(), 8);
+    wood.quaternion.setFromUnitVectors(new T.Vector3(0, 1, 0), tip.sub(base).normalize());
+  }
+  for (const [x, y, z, size, color] of [
+    [-0.47, 1.10, 0.04, 0.55, '#748b57'],
+    [-0.14, 1.29, -0.13, 0.64, '#87995f'],
+    [0.34, 1.12, 0.10, 0.54, '#96a465'],
+    [0.02, 1.40, 0.09, 0.43, '#a4ad71'],
+  ] as const) {
+    const crown = mesh(new T.IcosahedronGeometry(1, 1), color, tree, x, y, z);
+    crown.rotation.y = y * 2;
+    crown.scale.set(size, size * 0.61, size * 0.80);
+  }
+  for (const [x, y, z, color] of [
+    [-0.60, 0.99, 0.38, '#bb6249'],
+    [-0.36, 1.10, 0.46, '#d09a51'],
+    [-0.03, 1.30, 0.43, '#bf6748'],
+    [0.26, 0.96, 0.45, '#bc5740'],
+    [0.52, 1.08, 0.40, '#d39351'],
+  ] as const) {
+    ball(tree, color, [x, y, z], [0.094, 0.105, 0.092]);
+  }
+  return tree;
+}
+
+export function decorateOrchardIsland(
+  group: T.Group, island: Level['world']['islands'][number], style: IslandStyle,
+) {
+  if (style === 'refuge') return decorateWideIsland(group, island, style);
+  const { x, y: z } = islandCenter(island);
+  const y = island.elevation * 0.18;
+  if (style === 'quay') {
+    const crate = new T.Group();
+    crate.name = 'cider-quay-fruit-crate';
+    crate.position.set(x + 1.26, y, z - 0.72);
+    crate.rotation.y = 0.21;
+    group.add(crate);
+    box(crate, '#906d4b', [0.65, 0.065, 0.48], [0, 0.03, 0], 0.012);
+    for (const side of [-1, 1]) {
+      for (const height of [0.105, 0.224]) {
+        box(crate, '#bf965e', [0.65, 0.094, 0.043], [0, height, side * 0.217], 0.009);
+        box(crate, '#ad8256', [0.043, 0.094, 0.43], [side * 0.303, height, 0], 0.009);
+      }
+    }
+    for (const [dx, dz] of [[-0.17, 0.06], [0.02, -0.06], [0.17, 0.06]]) {
+      ball(crate, dx === 0.17 ? '#d39e55' : '#b96649', [dx, 0.238, dz], [0.09, 0.086, 0.082]);
+    }
+    return group;
+  }
+  if (style === 'spit') {
+    const reeds = createReedBeds(island);
+    reeds.scale.set(0.59, 1, 0.48);
+    reeds.position.set(x * 0.41, 0, z * 0.52 - 0.61);
+    group.add(reeds);
+  }
+  return group;
+}
+
 export function decorateWideIsland(
   group: T.Group,
   island: Level['world']['islands'][number],

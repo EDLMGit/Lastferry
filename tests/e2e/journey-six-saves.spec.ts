@@ -73,7 +73,7 @@ for (const fixture of fixtures) {
       await expect(page.locator('#tips-preference')).toHaveValue('off');
       await activate(page, 'settings-back', true);
       await activate(page, 'home-practice', true);
-      await expect(page.locator('button[data-practice]')).toHaveCount(7);
+      await expect(page.locator('button[data-practice]')).toHaveCount(8);
       await activate(page, 'practice-two-shelters', true);
       await expect(page.locator('#seascape')).toHaveAttribute('aria-label', 'Two Shelters');
       await page.reload();

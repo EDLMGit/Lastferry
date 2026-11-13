@@ -243,6 +243,47 @@ export function animal(species: string, variant = 0) {
     }
     ball(g, '#ba7b6b', [0, 0.38, 0.16], [0.025, 0.018, 0.02]);
     ball(g, wool, [0, 0.18, -0.13], [0.065, 0.065, 0.065]);
+  } else if (species === 'deer') {
+    const coat = '#b86f43', flank = '#c88955', cream = '#f3d8a6', hoof = '#594439';
+    for (const side of [-1, 1]) {
+      for (const fore of [-1, 1]) {
+        const x = side * 0.118, z = fore * 0.155;
+        ball(g, coat, [x, 0.17, z], [0.052, 0.135, 0.054]);
+        ball(g, hoof, [x, 0.04, z + 0.012], [0.052, 0.04, 0.069]).name = 'deer-hoof';
+      }
+    }
+    ball(g, coat, [0, 0.332, -0.025], [0.195, 0.173, 0.25]);
+    ball(g, flank, [0, 0.374, -0.115], [0.186, 0.148, 0.16]);
+    const tail = ball(g, cream, [0, 0.409, -0.242], [0.062, 0.091, 0.065]);
+    tail.rotation.x = -0.55;
+    const neck = ball(g, coat, [0, 0.478, 0.12], [0.134, 0.202, 0.139]);
+    neck.rotation.x = 0.24;
+    ball(g, cream, [0, 0.475, 0.222], [0.088, 0.157, 0.053]);
+    ball(g, flank, [0, 0.637, 0.157], [0.164, 0.153, 0.159]);
+    ball(g, cream, [0, 0.592, 0.272], [0.111, 0.080, 0.098]);
+    ball(g, '#483b34', [0, 0.622, 0.352], [0.064, 0.042, 0.035]);
+    for (const side of [-1, 1]) {
+      const ear = ball(g, coat, [side * 0.165, 0.73, 0.128], [0.064, 0.115, 0.055]);
+      ear.rotation.z = -side * 0.88;
+      const inner = ball(g, '#dfad86', [side * 0.166, 0.735, 0.158], [0.04, 0.081, 0.029]);
+      inner.rotation.z = ear.rotation.z;
+      ball(g, '#303736', [side * 0.11, 0.661, 0.267], [0.029, 0.034, 0.02]);
+      ball(g, '#fff0cf', [side * 0.107, 0.673, 0.283], [0.008, 0.008, 0.005]);
+      for (const [y, z] of [[0.398, -0.14], [0.417, -0.048], [0.36, -0.095]])
+        ball(g, cream, [side * 0.168, y, z], [0.019, 0.023, 0.029]);
+      const antler = new T.Group();
+      antler.name = 'deer-antler';
+      g.add(antler);
+      const base = new T.Vector3(side * 0.087, 0.753, 0.128);
+      const fork = new T.Vector3(side * 0.131, 0.837, 0.104);
+      const tips = [new T.Vector3(side * 0.19, 0.915, 0.069), new T.Vector3(side * 0.119, 0.903, 0.148)];
+      for (const [from, to, bottom, top] of [[base, fork, 0.031, 0.028], ...tips.map(tip => [fork, tip, 0.027, 0.017])] as [T.Vector3,T.Vector3,number,number][]) {
+        const direction = to.clone().sub(from);
+        const segment = cylinder(antler, '#765236', top, bottom, direction.length(), from.clone().lerp(to, 0.5).toArray(), 8);
+        segment.quaternion.setFromUnitVectors(new T.Vector3(0, 1, 0), direction.normalize());
+        ball(antler, '#765236', to.toArray(), [top, top, top]);
+      }
+    }
   } else if (species === 'beaver') {
     const fur = '#8e6848',
       muzzle = '#c3a47a',

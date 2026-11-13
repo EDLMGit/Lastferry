@@ -1,0 +1,125 @@
+{
+  "levelId": "orchard-landing",
+  "witnesses": [
+    {
+      "id": "return-to-the-orchard",
+      "actions": [
+        {
+          "type": "move",
+          "to": "quay"
+        },
+        {
+          "type": "move",
+          "to": "steps"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["sorrel"]
+        },
+        {
+          "type": "move",
+          "to": "quay"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["pomme"]
+        },
+        {
+          "type": "move",
+          "to": "orchard"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["orin"]
+        },
+        {
+          "type": "move",
+          "to": "quay"
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": ["orin", "pomme", "sorrel"]
+        }
+      ]
+    }
+  ],
+  "losingAlternatives": [
+    {
+      "id": "board-the-deer-first",
+      "actions": [
+        {
+          "type": "board",
+          "passengerIds": ["orin"]
+        },
+        {
+          "type": "unload",
+          "passengerIds": ["orin"]
+        },
+        {
+          "type": "move",
+          "to": "quay"
+        },
+        {
+          "type": "move",
+          "to": "steps"
+        }
+      ]
+    },
+    {
+      "id": "turn-home-with-the-smaller-passengers",
+      "actions": [
+        {
+          "type": "move",
+          "to": "quay"
+        },
+        {
+          "type": "move",
+          "to": "steps"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["sorrel"]
+        },
+        {
+          "type": "move",
+          "to": "quay"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["pomme"]
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": ["sorrel", "pomme"]
+        }
+      ]
+    },
+    {
+      "id": "wait-for-a-deeper-channel",
+      "actions": [
+        {
+          "type": "wait"
+        },
+        {
+          "type": "wait"
+        },
+        {
+          "type": "move",
+          "to": "quay"
+        },
+        {
+          "type": "move",
+          "to": "steps"
+        }
+      ]
+    }
+  ]
+}

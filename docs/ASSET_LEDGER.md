@@ -1,5 +1,11 @@
 # Last Ferry asset provenance and history
 
+## Orchard Landing
+
+`model.deer` is the original production mesh for Orin. The single existing `ui.passenger-portraits` family gains `deer-chestnut`, an offline SVG projection rasterized to a 256px transparent PNG. The family record identifies the source for each of the five portraits. [Generation record](../assets/portraits/deer-manifest.json) · [Family manifest](../assets/portraits/family-manifest.json)
+
+The fruiting tree extends `scenery.garden-kit`. The `model.ferry` and `motion.transfer` entries record the deer’s automatic seat and shore approach on the accepted six-space boat. All 79 previous catalog IDs remain. The eight Practice entrances and the production gallery share the same inventory. Orchard’s visual and puzzle acceptance await playtesting. [Inventory](../assets/catalog.json) · [Review](../reviews/orchard-landing/REVIEW.md)
+
 ## Mobile map readability
 
 Four existing interface families changed: `ui.map-markers`, `ui.component.location-name`, `ui.component.action-capsule` and `ui.component.round-utility`. Each keeps its original project assets. Shared TypeScript positions names and controls locally, composes the camera and handles scale. The stylesheet retains native targets while changing visible name size, owner captions and short-window controls. The evidence links in the inventory and developer gallery open the actual game comparisons. The Android reference JPEGs remain player-supplied review material. [Review](../reviews/mobile-map-readability/REVIEW.md) · [Inventory](../assets/catalog.json)

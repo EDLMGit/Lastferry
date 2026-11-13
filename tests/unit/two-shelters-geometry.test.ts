@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 import { Box3, DoubleSide, Group, Matrix4, Mesh, MeshBasicMaterial, Raycaster, Vector3 } from 'three';
-import { twoShelters as level } from '../../src/levels/level';
+import { orchardLanding, twoShelters as level } from '../../src/levels/level';
 import { getLevelPaths, samplePath } from '../../src/scene/paths';
 import { createPassageBathymetry } from '../../src/scene/seabed';
 import { CoastalWater } from '../../src/scene/water';
@@ -29,7 +29,7 @@ function intersection(a: Vector3, b: Vector3, c: Vector3, d: Vector3) {
     ? a.clone().lerp(b, t) : null;
 }
 
-test('Two Shelters canonical curved courses meet only at their named shared endpoint', () => {
+test.each([level, orchardLanding])('$title canonical curved courses meet only at their named shared endpoint', (level) => {
   const paths = getLevelPaths(level), failures: string[] = [];
   for (let i = 0; i < level.edges.length; i++) for (let j = i + 1; j < level.edges.length; j++) {
     const a = level.edges[i], b = level.edges[j];

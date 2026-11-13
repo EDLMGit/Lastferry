@@ -55,6 +55,8 @@ import {
   wideWaterfront,
   decorateWideIsland,
   decorateReefIsland,
+  decorateOrchardIsland,
+  orchardTree,
 } from './scenery';
 import { createPier, createShelterGangway, updateShelterGangway } from './pier';
 import { getLevelPaths, type CanonicalPath } from './paths';
@@ -305,7 +307,9 @@ export class World {
         if (node) this.registerPlace(node, 'landmark', model.group);
       } else {
         const model =
-          landmark.kind === 'cottage'
+          landmark.kind === 'orchard'
+            ? orchardTree(this.scene, [x, y, z])
+            : landmark.kind === 'cottage'
             ? cottage(this.scene, [x, y, z])
             : landmark.kind === 'yard'
               ? driftwoodYard(this.scene, [x, y, z])
@@ -446,6 +450,7 @@ export class World {
       cz = points.reduce((a, p) => a + p[1], 0) / points.length;
     const height = island.elevation * 0.18;
     const style = this.layout.islandStyles[island.id] ?? 'garden';
+    if (this.level.id === 'orchard-landing') return decorateOrchardIsland(group, island, style);
     if (this.level.id === 'reef-return') return decorateReefIsland(group, island, style);
     if (this.level.id === 'wide-berth') {
       return decorateWideIsland(group, island, style);

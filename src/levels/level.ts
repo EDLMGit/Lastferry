@@ -5,6 +5,7 @@ import driftwoodData from '../../data/driftwood-yard.level.json' with { type: 'j
 import wideData from '../../data/wide-berth.level.json' with { type: 'json' };
 import sheltersData from '../../data/two-shelters.level.json' with { type: 'json' };
 import reefData from '../../data/reef-return.level.json' with { type: 'json' };
+import orchardData from '../../data/orchard-landing.level.json' with { type: 'json' };
 export type CurrentPhase = { tideLevel: number; from: string; to: string };
 export type Passage = (typeof data.edges)[number] & {
   current?: { name: string; phases: CurrentPhase[] };
@@ -43,6 +44,7 @@ export function checkCurrents(l: Level): Level {
   return l;
 }
 export const reefReturn = checkCurrents(reefData);
+export const orchardLanding = checkCurrents(orchardData);
 export const nodeNames: Record<string, string> = {
   harbor: 'Harbor',
   cut: 'Shallow Cut',

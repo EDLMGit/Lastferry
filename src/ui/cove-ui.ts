@@ -2,6 +2,7 @@ import type { PortraitKey } from '../game/passenger-appearance';
 import creamPortrait from '../../cove-portrait-package/portraits/rabbit-cream.png';
 import tanPortrait from '../../cove-portrait-package/portraits/rabbit-tan.png';
 import beaverPortrait from '../../assets/portraits/beaver-brown.png';
+import deerPortrait from '../../assets/portraits/deer-chestnut.png';
 import woolPortrait from '../../cove-portrait-package/portraits/sheep-wool.png';
 
 export const portraitSources: Record<PortraitKey, string> = {
@@ -9,6 +10,7 @@ export const portraitSources: Record<PortraitKey, string> = {
   'rabbit-tan': tanPortrait,
   'sheep-wool': woolPortrait,
   'beaver-brown': beaverPortrait,
+  'deer-chestnut': deerPortrait,
 };
 
 const originals = import.meta.glob<string>(

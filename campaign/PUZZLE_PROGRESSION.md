@@ -10,7 +10,7 @@ Root [ORCHARD_LANDING_01](../NEXT_TASK_ORCHARD_LANDING.md) commissions one compl
 
 **Design question:** What must the light ferry finish—and where must it be—before committing to Orin's load?
 
-Favor a tide opening that is useful only if earlier positioning and load choices prepare for it. Codex authors the compact map, supporting cast, schedules and values. This idea is not yet a proven puzzle. No exact graph or move sequence is mandated. Simply adding a required Wait or another errand does not establish a new insight.
+The authored Practice cove has four landings. Pomona Reach starts at depth two and runs outward from the orchard. It runs back toward Orin after action four, then outward for good after action seven. The ferry can pick up Sorrel and Pomme in either order. Its position when the current turns determines whether it can return with Orin. [Reducer proof and alternatives](../reviews/orchard-landing/DESIGN.md)
 
 The existing draft bands already make Orin alone (3 spaces) require depth 3, Orin plus a rabbit (4) require depth 3, and Orin plus a two-space neighbor (5) require depth 4. Use those facts without new weight statistics or a packing mechanic. Preserve automatic seats. The candidate may use at most the existing one scheduled-current passage; there is no second current or new water rule in this task.
 

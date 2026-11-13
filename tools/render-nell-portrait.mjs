@@ -20,7 +20,7 @@ if (expectedCommit && expectedCommit !== sourceCommit) {
   throw new Error(`Expected source ${expectedCommit}; repository HEAD is ${sourceCommit}.`);
 }
 const sourceWorkingTreeChanges = git('status', '--porcelain', '--',
-  'src/scene/models.ts', 'src/scene/world.ts', 'package.json', 'package-lock.json');
+  'src/scene/models.ts', 'src/scene/ferry-profile.ts', 'tools/render-nell-portrait.mjs', 'package.json', 'package-lock.json');
 const size = 256;
 const projectRequire = createRequire(join(repo, 'package.json'));
 const threeEntry = projectRequire.resolve('three');
@@ -29,6 +29,8 @@ const T = await import(pathToFileURL(join(threeRoot, 'build/three.module.js')).h
 const { SVGRenderer } = await import(pathToFileURL(join(threeRoot, 'examples/jsm/renderers/SVGRenderer.js')).href);
 const modelPath = join(repo, 'src/scene/models.ts');
 const { animal } = await import(pathToFileURL(modelPath).href);
+const profilePath = join(repo, 'src/scene/ferry-profile.ts');
+const { passengerScale } = await import(pathToFileURL(profilePath).href);
 const sha = (data) => createHash('sha256').update(data).digest('hex');
 const escape = (value) => String(value).replace(/[&"<>]/g, (c) => ({'&':'&amp;','"':'&quot;','<':'&lt;','>':'&gt;'}[c]));
 
@@ -45,7 +47,10 @@ class Element {
 const priorDocument = globalThis.document;
 globalThis.document = { createElementNS: (_namespace, tag) => new Element(tag) };
 
-const variants = [{key:'beaver-brown', species:'beaver', variant:0, scale:[1.15,1.5,1.15], framingFloorModelY:0}];
+const key = arg('--appearance', 'beaver-brown');
+const species = {'beaver-brown':'beaver','deer-chestnut':'deer'}[key];
+if (!species) throw new Error('Choose beaver-brown or deer-chestnut.');
+const variants = [{key, species, variant:0, scale:passengerScale(species), framingFloorModelY:0}];
 const rasterizer = arg('--sharp-module', null);
 const sharp = rasterizer ? createRequire(import.meta.url)(rasterizer) : null;
 const { chromium } = await import('@playwright/test');
@@ -58,14 +63,14 @@ const manifest = {
   packageLockSha256:sha(await readFile(join(repo, 'package-lock.json'))),
   modelSource:'src/scene/models.ts',
   modelSourceSha256:sha(await readFile(modelPath)),
-  worldScaleSource:'src/scene/world.ts — passenger group scale',
-  worldSourceSha256:sha(await readFile(join(repo, 'src/scene/world.ts'))),
+  worldScaleSource:'src/scene/ferry-profile.ts — passengerScale',
+  scaleSourceSha256:sha(await readFile(profilePath)),
   threeVersion:JSON.parse(await readFile(join(threeRoot, 'package.json'), 'utf8')).version,
   generator:'tools/render-nell-portrait.mjs',
   generatorSha256:sha(await readFile(fileURLToPath(import.meta.url))),
   rendering:'Offline official SVGRenderer geometric projection; simplified diffuse shading, not WebGL/ACES or shadow equivalence.',
   output:{width:size,height:size,background:'transparent',colorSpace:'sRGB',runtimeRecommendation:'Use raster derivatives as ordinary images; keep geometric SVG as generated source/evidence.'},
-  camera:{projection:'orthographic',offset:[2.7,1.8,5],fit:'projected full beaver including broad flat tail, square field and 8% total padding',lookAt:'world-scaled bounding-box center before off-center orthographic framing'},
+  camera:{projection:'orthographic',offset:[2.7,1.8,5],fit:'full projected figure, square field and 8% total padding',lookAt:'world-scaled bounding-box center before off-center orthographic framing'},
   lighting:{ambientLinearRGB:[.43,.45,.44],key:{color:'#fff1dc',intensity:.75,position:[-3,5,4]},fill:{color:'#aed5d1',intensity:.26,position:[4,1,2]}},
   rasterizer:sharp ? {name:'sharp',versions:sharp.versions,width:size,height:size,filter:'lanczos3',inputPixels:768,outputFormat:'PNG RGBA'} : {name:'Chromium SVG rasterization',version:browser.version(),width:size,height:size,outputFormat:'PNG RGBA',background:'transparent'},
   entries:[],
@@ -150,5 +155,5 @@ try {
   if (priorDocument === undefined) delete globalThis.document;
   else globalThis.document = priorDocument;
 }
-await writeFile(join(output,'generation-manifest.json'),JSON.stringify(manifest,null,2)+'\n');
+await writeFile(join(output,key === 'deer-chestnut' ? 'deer-manifest.json' : 'generation-manifest.json'),JSON.stringify(manifest,null,2)+'\n');
 console.log(JSON.stringify({output,variants:manifest.entries.map(v=>({key:v.key,files:v.files.map(f=>({path:f.path,bytes:f.bytes}))})),webgl:false},null,2));

@@ -64,7 +64,7 @@ async function readonlyHome(page: Page, raw: string) {
   await expect(page.locator('#tips-preference')).toHaveValue('off');
   await activate(page, 'settings-back', true);
   await activate(page, 'home-practice', true);
-  await expect(page.locator('[data-practice]')).toHaveCount(7);
+  await expect(page.locator('[data-practice]')).toHaveCount(8);
   await activate(page, 'practice-two-shelters', true);
   await idle(page);
   expect((await campaign(page)).active).toBe(false);

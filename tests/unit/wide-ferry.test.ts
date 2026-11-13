@@ -4,6 +4,7 @@ import { animal, ferry } from '../../src/scene/models';
 import {
   wideBerth,
   reefReturn,
+  orchardLanding,
   level as firstCrossing,
   holdingPier,
   bellwater,
@@ -29,7 +30,7 @@ import { settlingProgress, transitionPlan } from '../../src/scene/transitions';
 import { FerryWake, wakeContactReach } from '../../src/scene/wake';
 import { isWalkableAt } from '../../src/scene/pier';
 
-describe.each([wideBerth, reefReturn])('$title seating and transfers', (level) => {
+describe.each([wideBerth, reefReturn, orchardLanding])('$title seating and transfers', (level) => {
 const localBoxes = new Map(
   level.passengers.map((passenger) => {
     const figure = animal(passenger.species, passenger.appearance === 'rabbit-tan' ? 1 : 0);
@@ -82,7 +83,7 @@ test('active-level profiles preserve all four original boats and provide a physi
   expect(hullBounds.max.y).toBeGreaterThan(wideFerryProfile.deckY + 0.04);
   expect(model.getObjectByName('passenger-deck')).toBeTruthy();
   expect(model.children.some((object) => object.name === 'wide-cabin-obstacle')).toBe(true);
-  expect(legal).toHaveLength(level.id === 'wide-berth' ? 59 : 16);
+  expect(legal).toHaveLength(level === wideBerth ? 59 : level === reefReturn ? 16 : 8);
   expect(ferry().name).toBe('ferry-hull-and-deck');
 });
 
@@ -93,7 +94,7 @@ test('every capacity-legal roster uses stable automatic real-body seating withou
     .filter((o) => o.name.includes('obstacle') || o.name === 'wide-cabin-roof')
     .map((o) => new Box3().setFromObject(o));
   const failures: string[] = [];
-  const fullParty = level.id === 'wide-berth' ? 5 : 4;
+  const fullParty = level === wideBerth ? 5 : level === reefReturn ? 4 : 3;
   expect(legal.some((mask) => idsFor(mask).length === fullParty && loadFor(mask) === 6)).toBe(true);
   for (const mask of legal) {
     const ids = idsFor(mask),

@@ -31,6 +31,7 @@ import {
   wideBerth,
   twoShelters,
   reefReturn,
+  orchardLanding,
   level as firstCrossing,
 } from '../../src/levels/level';
 import narration from '../../LAST_FERRY_STORY_PRODUCTION_PACKAGE/audio/narration-script.json';
@@ -126,7 +127,10 @@ describe('authored story registry', () => {
       wideBerth,
       twoShelters,
       reefReturn,
+      orchardLanding,
     ]);
+    expect(practiceCove('orchard-landing')).toBe(orchardLanding);
+    expect(storyCove('orchard-landing')).toBeUndefined();
     expect(practiceCove('reef-return')).toBe(reefReturn);
     expect(storyCove('reef-return')?.level).toBe(reefReturn);
     expect(storyCoves.map(({ level }) => level.rules.capacity)).toEqual([4, 4, 4, 4, 6, 6]);

@@ -20,7 +20,7 @@ First Crossing stays independent Practice. Among the reeds introduces Hazel, Bra
 
 ### Next commission: Orchard Landing candidate
 
-Follow root [ORCHARD_LANDING_01](../NEXT_TASK_ORCHARD_LANDING.md). Build one compact independent Practice candidate for intended **C7**, introducing **Orin, a three-space deer**, on the already accepted six-space ferry. His indivisible cost should make preparation, pickup order and the boat's position across a tide opportunity matter. The map, exact rules data and witness are not yet authored or proven.
+**Orchard Landing** is playable independently in Practice, pending its C7 playtest. Orin uses three spaces on the accepted six-space ferry. Sorrel and Pomme wait on two flood-prone landings beyond Pomona Reach. The current gives the empty ferry an outward journey and one opportunity to come back for Orin. [Level](../data/orchard-landing.level.json) · [Design and witnesses](../reviews/orchard-landing/DESIGN.md)
 
 Complete the puzzle, actual deer/portrait identity and automatic boarding fit before attaching it to the Journey. The candidate must feel like the next inhabited part of this same coast. Do not enlarge the ferry, multiply the cast to manufacture difficulty, or introduce another rule system. Preserve the existing six Journey coves and seven Practice entrances; add Orchard only to Practice in this pass.
 
@@ -30,7 +30,7 @@ After player acceptance, integrate this same cove with a compact orchard entry u
 
 | Intended cove | Story purpose | Difficulty purpose |
 | --- | --- | --- |
-| **7 — Orchard Landing** | Meet Orin beyond the familiar headland. | Make a three-space commitment and earlier preparation matter within known rules. Candidate commissioned; puzzle unproven. |
+| **7 — Orchard Landing** | Meet Orin beyond the familiar headland. | Position the ferry for the three-space pickup. Practice candidate implemented and awaiting human review. |
 | **8 — title open** | Carry the lesson farther along the channel. | A distinct combination of load, route and tide dependencies; choose it after C7 playtesting. |
 | **9 — Drowned Orchard** | Recognize the orchard under changed water, with a different waiting group. Orin remains safe. | Reinterpret familiar landmarks and established rules rather than repeat Orin's rescue. |
 | **10 — Lantern Reach** | See the welcome at the refuge taking shape. | A short, elegant breather that retains a real decision. |

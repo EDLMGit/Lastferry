@@ -49,7 +49,8 @@
       "evidencePaths": [
         "cove-portrait-package/README.md",
         "cove-portrait-package/portraits/generation-manifest.json",
-        "reviews/passenger-portraits/generation-audit.json"
+        "reviews/passenger-portraits/generation-audit.json",
+        "assets/portraits/family-manifest.json"
       ]
     },
     "original-package-canvas-art": {
@@ -272,7 +273,8 @@
         "Six-space displacement launch, side gate, four load bands",
         "fixed identity seating for every legal two-sheep/four-rabbit subset",
         "up to five bodies occupying six spaces",
-        "Two Shelters original four-space ferry with automatically arranged two-beaver/rabbit legal subsets"
+        "Two Shelters original four-space ferry with automatically arranged two-beaver/rabbit legal subsets",
+        "Accepted six-space hull with the three-body Orchard manifest"
       ],
       "visualSignature": "Original four-space ferry and a deeper golden six-space hull with a raised forepeak, cream sheer line, compact red pilothouse and two side fenders.",
       "reuseAndOwnership": "One reusable geometry family per cove. Named deck-anchor-{passengerId} children belong to the animated hull. Shared matte materials; scoped water-contact hull material.",
@@ -339,6 +341,10 @@
         {
           "path": "reviews/existing-coves-repair/REVIEW.md",
           "role": "Actual revised game and sources. Rounded displacement hull, raised forepeak, red wheelhouse and side entry for both six-space coves."
+        },
+        {
+          "path": "reviews/orchard-landing/REVIEW.md",
+          "role": "Candidate playtest, geometry, phone frames and actual rescue"
         }
       ],
       "meaning": "Yellow ferry with red cabin. Keep shaped bow, deck positions, passenger attachment, heading history and current pick/framing envelope.",
@@ -1052,12 +1058,21 @@
         {
           "path": "src/scene/world.ts",
           "symbol": "World.island"
+        },
+        {
+          "path": "src/scene/scenery.ts",
+          "symbol": "orchardTree; decorateOrchardIsland"
+        },
+        {
+          "path": "src/scene/layout.ts",
+          "symbol": "Orchard landmark placement"
         }
       ],
       "variants": [
         "garden",
         "reduced sparse dressing for reeds/rocky",
-        "crag placement"
+        "crag placement",
+        "Low fruiting boughs at Orchard Landing"
       ],
       "visualSignature": "Quiet green shrubs, cream flowers, sand path stones and warm small crates.",
       "reuseAndOwnership": "Inline original geometry currently grouped by island style.",
@@ -1071,6 +1086,10 @@
         {
           "path": "reviews/phone-audio-fullscreen/REVIEW.md",
           "role": "Current build identity and preservation; not an isolated visual test of every family"
+        },
+        {
+          "path": "reviews/orchard-landing/REVIEW.md",
+          "role": "Candidate playtest, geometry, phone frames and actual rescue"
         }
       ],
       "meaning": "Shrubs, flowers, stepping stones and crates. No independent interactions; do not add all variants to every island.",
@@ -1078,8 +1097,8 @@
         "src/scene/world.ts"
       ],
       "gallery": {
-        "section": "inventory",
-        "preview": "Source links and attributed existing evidence; no isolated rendering claimed"
+        "section": "gallery-orchard",
+        "preview": "Practice link opens the planted landing."
       },
       "typeSpecific": {
         "factory/source symbol": "src/scene/world.ts: World.island",
@@ -2005,12 +2024,17 @@
         {
           "path": "src/scene/ferry-profile.ts",
           "symbol": "wideTransferPath"
+        },
+        {
+          "path": "src/scene/ferry-profile.ts",
+          "symbol": "Three-space passenger seat, approach and transfer path"
         }
       ],
       "variants": [
         "board",
         "unload",
-        "compact Reduced"
+        "compact Reduced",
+        "Orin on the six-space ferry, including the deer, sheep and rabbit manifest"
       ],
       "visualSignature": "Grounded gangplank travel and proper deck attachment.",
       "reuseAndOwnership": "Shared paths/timeline for real changed passenger subset; crossing/settling contacts drive sound.",
@@ -2073,6 +2097,10 @@
         {
           "path": "reviews/existing-coves-repair/REVIEW.md",
           "role": "Actual revised game and sources. Shared adult and rabbit seats and transfer paths at the revised hull and landing."
+        },
+        {
+          "path": "reviews/orchard-landing/REVIEW.md",
+          "role": "Candidate playtest, geometry, phone frames and actual rescue"
         }
       ],
       "meaning": "Passenger boarding and unloading presentation. One canonical action, cancellable transient presentation, both berth headings; new icon does not immediately transfer.",
@@ -5339,6 +5367,10 @@
         {
           "path": "data/reef-return.level.json",
           "symbol": "explicit appearance for all four passengers"
+        },
+        {
+          "path": "assets/portraits/deer-manifest.json",
+          "symbol": "Source, camera, renderer and output identities for deer-chestnut"
         }
       ],
       "originalModelSource": "src/scene/models.ts",
@@ -5389,6 +5421,17 @@
           "alpha": "straight",
           "sha256": "248a3568b1483c8745c12431a41b57fc2cdb969ac0ad9e1c0accc2505a7ffdc5",
           "bytes": 35678
+        },
+        {
+          "variant": "deer-chestnut",
+          "path": "assets/portraits/deer-chestnut.png",
+          "width": 256,
+          "height": 256,
+          "format": "PNG",
+          "colorSpace": "sRGB",
+          "alpha": "straight",
+          "sha256": "dd3bef91225cc476f2ae9a437953179ae0525ee738e3840e01426902dfeb7885",
+          "bytes": 32110
         }
       ],
       "meaning": "Recognize the miniature animal beside live names and capacity; explicit appearance identities remain stable independently of offered order and full species placement ordinals.",
@@ -5396,9 +5439,10 @@
         "rabbit-cream",
         "rabbit-tan",
         "sheep-wool",
-        "beaver-brown"
+        "beaver-brown",
+        "deer-chestnut"
       ],
-      "visualSignature": "Cream/tan upright-ear rabbits, dark-faced wool sheep, and warm brown beaver with lighter muzzle/chest, round ears and broad flat darker tail; transparent256px originals displayed44px beside live text.",
+      "visualSignature": "Transparent 256px portraits of cream and tan rabbits, a wool sheep, a brown beaver and a chestnut deer with short forked antlers. Displayed beside each passenger’s name and space cost.",
       "reuseAndOwnership": "Four canonical PNGs; existing three outputs remain byte-exact. Nell extends the existing family through the same original-model SVG derivation, rasterized offline by installedChromium; no production dependency. Names/costs/input remain native.",
       "behaviorToPreserve": "Full species ordinal remains intact for world deck/pose; Rue/Lark staytan when offeredalone. Preserve modelproportions/geometry/colors, live names/costs, stable44pxslot/footer, focus/subsets/Undo, allacceptedgameplay/world/audio. Unknownappearance uses text-preserving reservedslot.",
       "provenance": "original-model-derived-ui-image",
@@ -5484,13 +5528,17 @@
         {
           "path": "reviews/reef-return/REVIEW.md",
           "role": "Existing cream, tan, brown and wool portraits at mobile chooser size"
+        },
+        {
+          "path": "reviews/orchard-landing/REVIEW.md",
+          "role": "Candidate playtest, geometry, phone frames and actual rescue"
         }
       ],
       "typeSpecific": {
         "original model and shared identity sources": "src/scene/models.ts original animal geometry; resolvePassengerAppearance/full speciesOrdinal and passengerModelVariant separate explicit coat identity from placement.",
-        "camera/crop, world proportions and shading recipe": "Original generation-manifest.json: orthographic offset[1.8,1,5], projected head/upper-chest square with8%totalpadding, rabbit floor.23/sheep.15; rabbit scale[1.25,1.65,1.25],sheep[1.15,1.5,1.15]. Ambient linearRGB[.43,.45,.44], warmkey#fff1dc.75 at[-3,5,4],tealfill#aed5d1.26 at[4,1,2]. Offline diffuse SVG shading differs from liveWebGL/ACES/shadows. Nell uses full-model/tail framing, scale[1.15,1.5,1.15], cameraoffset[2.7,1.8,5], same original diffuse ambient/key/fill colors.",
-        "derived output format/dimensions/variants and alpha/color semantics": "Four256x256 straight-alpha sRGB PNGs. Three unchanged supplied images plus original full-body beaver-brown; editable SVG intermediates retained; no baked labels or background.",
-        "generation command/environment and source/output provenance": "Node24.15.0 with existingThree0.186.1 freshly reproduces every suppliedSVG byte; no PNG regeneration because all suppliedmodel/generator/SVG/PNG hashes remain exact. Supplied PNGrasterization Node24.22.1/Sharp0.35.5/Lanczos3 768->256 and completeversions retained. Exact command/source/output audit reviews/passenger-portraits/generation-audit.json; no production rasterizer dependency. Nell: node tools/render-nell-portrait.mjs; Node24, installedThreeSVGRenderer and installedChromium transparent rasterization; exact versions/hashes in assets/portraits/generation-manifest.json. Family record lists both generation paths.",
+        "camera/crop, world proportions and shading recipe": "Original generation-manifest.json: orthographic offset[1.8,1,5], projected head/upper-chest square with8%totalpadding, rabbit floor.23/sheep.15; rabbit scale[1.25,1.65,1.25],sheep[1.15,1.5,1.15]. Ambient linearRGB[.43,.45,.44], warmkey#fff1dc.75 at[-3,5,4],tealfill#aed5d1.26 at[4,1,2]. Offline diffuse SVG shading differs from liveWebGL/ACES/shadows. Nell uses full-model/tail framing, scale[1.15,1.5,1.15], cameraoffset[2.7,1.8,5], same original diffuse ambient/key/fill colors. The Orchard entry records its own orthographic crop and bounds in deer-manifest.json.",
+        "derived output format/dimensions/variants and alpha/color semantics": "Five 256×256 sRGB straight-alpha PNGs. The source manifest for each derivative records its SVG and raster output.",
+        "generation command/environment and source/output provenance": "Node24.15.0 with existingThree0.186.1 freshly reproduces every suppliedSVG byte; no PNG regeneration because all suppliedmodel/generator/SVG/PNG hashes remain exact. Supplied PNGrasterization Node24.22.1/Sharp0.35.5/Lanczos3 768->256 and completeversions retained. Exact command/source/output audit reviews/passenger-portraits/generation-audit.json; no production rasterizer dependency. Nell: node tools/render-nell-portrait.mjs; Node24, installedThreeSVGRenderer and installedChromium transparent rasterization; exact versions/hashes in assets/portraits/generation-manifest.json. Family record lists both generation paths. Orin uses node tools/render-nell-portrait.mjs --appearance deer-chestnut. See assets/portraits/deer-manifest.json for exact hashes, crop and rendering environment.",
         "actual consumers, displayed size and semantic purpose": "Board/Letashore/Bringhome in src/main.ts use passengerChoiceContent with explicit resolved appearance; src/dev/asset-gallery.ts shares the original URLs/helper at44CSSpx plus source-size256px specimens. Identity recognition supports live name and capacity; it creates no gameplay difference. Two Shelters adds only named level instances using the same beaver-brown and rabbit-cream outputs; no new generator output or portrait family.",
         "native-control ownership and text-preserving load/failure behavior": "One nativebutton perpassenger, stableID/aria-pressed/order/focus. Emptyalt/non-draggable decorative PNG has reserved44px slot and no independentpointer/focus behavior. Pending/error leaves quietreservedslot; full labels, costs, selection, Close/Confirm remain live. Same dialog survives fullscreen; no newcanvas/context/loop.",
         "small-screen evidence and human acceptance boundary": "Actual source-tied Driftwood phone evidence is retained with the task review; developer gallery and fullsize PNG inspection are design evidence. New beaver art/hardware listening/physicalAndroid approval remains pending."
@@ -5501,8 +5549,8 @@
         "src/dev/asset-gallery.ts"
       ],
       "gallery": {
-        "section": "two-shelters",
-        "preview": "Four shared44px choices and source-size images; real static beaver model; named Driftwood companions with stable cream/tan mapping and text-preserving fallback. Two Shelters reuses this family with Hazel, Bracken and Mica; the candidate section links actual gameplay and retains separate design specimens."
+        "section": "gallery-orchard",
+        "preview": "Orin, Pomme and Sorrel use the same real portrait choices as Practice."
       },
       "reefReturnUse": {
         "description": "Existing cream, tan, brown and wool portraits at mobile chooser size",
@@ -6167,6 +6215,65 @@
       "existingCovesRepair": {
         "notes": "Beacon Reef separates Harbor from the pickup network. Outer Buoy leads around the pickup shores.",
         "humanReview": "pending"
+      }
+    },
+    {
+      "id": "model.deer",
+      "name": "Orin the orchard deer",
+      "kind": "procedural-model",
+      "status": "integrated",
+      "sources": [
+        {
+          "path": "src/scene/models.ts",
+          "symbol": "animal('deer')"
+        },
+        {
+          "path": "src/game/passenger-appearance.ts",
+          "symbol": "deer-chestnut"
+        },
+        {
+          "path": "data/orchard-landing.level.json",
+          "symbol": "passengers.orin"
+        }
+      ],
+      "variants": [
+        "deer-chestnut"
+      ],
+      "visualSignature": "Warm spotted coat, cream muzzle, alert ears, four dark hooves and paired short forked antlers.",
+      "meaning": "Orin, a three-space neighbor at Orchard Landing.",
+      "reuseAndOwnership": "The production model and the offline portrait share the project animal factory.",
+      "behaviorToPreserve": "Feet contact their support throughout automatic boarding and disembarking. Cost comes from the level.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "candidate-awaiting-human-playtest"
+      },
+      "evidence": [
+        {
+          "path": "reviews/orchard-landing/REVIEW.md",
+          "role": "Candidate playtest, geometry, phone frames and actual rescue"
+        },
+        {
+          "path": "assets/portraits/deer-manifest.json",
+          "role": "Independent hashes for the derivative, editable model and renderer"
+        }
+      ],
+      "consumers": [
+        "src/scene/world.ts",
+        "tools/render-nell-portrait.mjs"
+      ],
+      "gallery": {
+        "section": "gallery-orchard",
+        "preview": "Orin, Pomme and Sorrel use the same real portrait choices as Practice."
+      },
+      "typeSpecific": {
+        "factory/source symbol": "src/scene/models.ts: animal(species, variant)",
+        "semantic unit/axis/pivot convention or authoritative source": "animal(species,variant) local feet-contact origin, Y up; World applies species scale and canonical deck/shore positions.",
+        "named attachment points when relevant": "animal() returns one Group with local geometry, no separate rig or head attachment API. World passengerAnchors and canonical passenger IDs attach each instance beneath the hull.",
+        "material references": "Original chestnut and ochre coat, pale muzzle and spots, dark hooves and antlers.",
+        "actual variant parameters": "deer-chestnut, model variant 0. Four deer-hoof meshes and two forked deer-antler groups.",
+        "consumers and scale/placement owner": "World applies1.15/1.5/1.15 scale and canonical deck/shore transforms; same scale used by portrait exporter.",
+        "pick/framing role": "World uses geometry for framing and scene selection; gameplay identities remain canonical nodes/passengers.",
+        "disposal owner": "World.dispose traverses shared geometry/material/texture sets and disposes each once; CoastalWater owns its separate resources."
       }
     }
   ],

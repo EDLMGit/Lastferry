@@ -1,6 +1,7 @@
 import type { Level } from '../levels/level';
 
-export type PortraitKey = 'rabbit-cream' | 'rabbit-tan' | 'sheep-wool' | 'beaver-brown';
+const portraitKeys = ['rabbit-cream', 'rabbit-tan', 'sheep-wool', 'beaver-brown', 'deer-chestnut'] as const;
+export type PortraitKey = typeof portraitKeys[number];
 
 export type PassengerAppearance = {
   species: string;
@@ -17,12 +18,13 @@ export function resolvePassengerAppearance(level: Level, id: string): PassengerA
   const explicit = (passenger as { appearance?: string }).appearance;
   const portraitKey: PortraitKey | null = explicit && validPortrait(explicit) ? explicit : passenger.species === 'rabbit'
     ? speciesOrdinal === 0 ? 'rabbit-cream' : 'rabbit-tan'
-    : passenger.species === 'sheep' ? 'sheep-wool' : passenger.species === 'beaver' ? 'beaver-brown' : null;
+    : passenger.species === 'sheep' ? 'sheep-wool' : passenger.species === 'beaver' ? 'beaver-brown'
+    : passenger.species === 'deer' ? 'deer-chestnut' : null;
   return { species: passenger.species, speciesOrdinal, portraitKey };
 }
 
 function validPortrait(value: string): value is PortraitKey {
-  return ['rabbit-cream', 'rabbit-tan', 'sheep-wool', 'beaver-brown'].includes(value);
+  return portraitKeys.some(key => key === value);
 }
 
 export function passengerModelVariant(level: Level, id: string): number {

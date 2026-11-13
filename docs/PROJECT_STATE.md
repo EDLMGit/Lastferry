@@ -1,16 +1,16 @@
 # Last Ferry — Project state
 
-## Current assignment — Orchard Landing candidate · 13 November 2026
+## Orchard Landing Practice candidate · 13 November 2026
 
 The player's latest feedback after the mobile publication is **“Overall feels good, we can continue for now.”** Record the map presentation as positively accepted for continued development. Earlier positive feedback on the connected story, repaired ferry/docks and Wide/Reef complexity remains valid. This does not certify every physical-device performance, listening or accessibility condition.
 
-**ORCHARD_LANDING_01**, root [NEXT_TASK_ORCHARD_LANDING.md](../NEXT_TASK_ORCHARD_LANDING.md), is the next assignment. Build one complete Practice candidate for intended cove seven: Orchard Landing with **Orin, a three-space deer**, using the accepted six-space ferry and existing depth/tide/current rules. Its design question is what the light ferry must finish, and where it must be, before committing to Orin's load. This is an unproven design target; Codex must author and verify a genuinely distinct puzzle before polishing its compact scenery.
+**ORCHARD_LANDING_01** adds an eighth Practice entrance for intended cove seven. The empty ferry starts beside **Orin, a three-space deer**. It must cross Pomona Reach light, collect Sorrel and Pomme and make the middle tide’s passage back to the orchard. Both smaller-neighbor pickup orders can win. [Design](../reviews/orchard-landing/DESIGN.md) · [Implementation and playtest evidence](../reviews/orchard-landing/REVIEW.md)
 
-The candidate includes Orin's stable 3D/portrait identity and deliberate automatic seating/transfer support. Current rendering helpers special-case two-space bodies; do not let a three-space deer silently inherit a rabbit seat or sheep fallback. Preserve accepted existing models and phone presentation. No new ferry, second current, packing mechanic, global timer or overhaul is commissioned.
+Orin has a chestnut gameplay model, a matching static portrait and automatic seats on the existing ferry and landings. Human review of his phone-scale readability and the puzzle is pending.
 
 Keep the **six-cove Journey and its save format unchanged**. All seven existing Practice entrances remain, and Orchard adds one candidate entrance. Its short illustrated entry and explicit completed-six continuation are deferred until the puzzle/character playtest. The intended story premise and provisional second-half roles are recorded in the campaign documents; they do not commission coves eight through twelve.
 
-The accepted game remains `f0ffe2c12f1cc0e42ad7ef10a4b57dd29097c731`; preceding continuity head `47023ecc8594a9d3181421a64010f8d89955fd55`. This assignment changes documentation only. **Sites version 19** remains live at the same URL, hosting source `1ea40b815911a0fc1131350ee34125ae3508396e`, with its custom private audience. No new deployment is requested. Preserve the [publication receipt](../reviews/mobile-map-readability/deployment-confirmation.json) and all earlier history.
+Development fast-forwarded through task commit `66ccfd4f6000a72b0bb8e147751a252057eabac7`, above continuity head `47023ecc8594a9d3181421a64010f8d89955fd55`. **Sites version 19** still serves accepted game `f0ffe2c12f1cc0e42ad7ef10a4b57dd29097c731`, hosting source `1ea40b815911a0fc1131350ee34125ae3508396e`, with its custom private audience. Orchard is available from the implementation branch and local build. [Publication receipt](../reviews/mobile-map-readability/deployment-confirmation.json)
 
 ## Previous review and publication — mobile map readability · 11 November 2026
 

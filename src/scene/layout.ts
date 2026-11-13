@@ -1,7 +1,7 @@
 export type IslandStyle =
   'garden' | 'crag' | 'reeds' | 'rocky' | 'refuge' | 'working' | 'quay' | 'spit';
 type Landmark = {
-  kind: 'lighthouse' | 'cottage' | 'bell' | 'yard' | 'waterfront';
+  kind: 'lighthouse' | 'cottage' | 'bell' | 'yard' | 'waterfront' | 'orchard';
   islandId: string;
   positionXZ: [number, number];
 };
@@ -21,6 +21,22 @@ export type SceneLayout = {
   };
 };
 const layouts: Record<string, SceneLayout> = {
+  'orchard-landing': {
+    landmarks: [
+      { kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-9.18, -5.24] },
+      { kind: 'orchard', islandId: 'orchard-island', positionXZ: [9.05, -7.86] },
+    ],
+    islandStyles: {
+      'lighthouse-island': 'refuge',
+      'orchard-island': 'working',
+      'quay-island': 'quay',
+      'steps-island': 'spit',
+    },
+    stonePiers: ['quay-pier', 'steps-pier'],
+    centeredWaitingPairs: true,
+    cameraPosition: [3.4, 21, 32],
+    landscapeCameraPosition: [3.4, 20, 32],
+  },
   'reef-return': {
     landmarks: [
       { kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-8.78, -5.61] },

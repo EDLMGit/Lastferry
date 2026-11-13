@@ -1,0 +1,561 @@
+{
+  "id": "orchard-landing",
+  "title": "Orchard Landing",
+  "rules": {
+    "capacity": 6,
+    "draftBands": [
+      {
+        "maxLoad": 0,
+        "draft": 1
+      },
+      {
+        "maxLoad": 2,
+        "draft": 2
+      },
+      {
+        "maxLoad": 4,
+        "draft": 3
+      },
+      {
+        "maxLoad": 6,
+        "draft": 4
+      }
+    ],
+    "tide": {
+      "initialLevel": 0,
+      "rises": [
+        {
+          "afterTurn": 4,
+          "level": 1
+        },
+        {
+          "afterTurn": 7,
+          "level": 2
+        }
+      ]
+    },
+    "actionCost": 1,
+    "depthFormula": "baseDepth + tideLevel",
+    "pierDryWhen": "tideLevel < elevation",
+    "failureRule": "Required passenger stranded by a flooded pier, a turned current or a permanently impassable loaded return."
+  },
+  "names": {
+    "nodes": {
+      "harbor": "Harbor",
+      "quay": "Cider Quay",
+      "orchard": "Orchard Landing",
+      "steps": "Spring Steps"
+    },
+    "passengers": {
+      "orin": "Orin",
+      "pomme": "Pomme",
+      "sorrel": "Sorrel"
+    }
+  },
+  "nodes": [
+    {
+      "id": "harbor",
+      "positionXZ": [
+        -7.85,
+        0.1
+      ],
+      "baseDepth": 4,
+      "pierId": "harbor-pier"
+    },
+    {
+      "id": "quay",
+      "positionXZ": [
+        -0.45,
+        0.38
+      ],
+      "baseDepth": 4,
+      "pierId": "quay-pier"
+    },
+    {
+      "id": "orchard",
+      "positionXZ": [
+        7.55,
+        -2.15
+      ],
+      "baseDepth": 4,
+      "pierId": "orchard-pier"
+    },
+    {
+      "id": "steps",
+      "positionXZ": [
+        -0.7,
+        9.35
+      ],
+      "baseDepth": 4,
+      "pierId": "steps-pier"
+    }
+  ],
+  "edges": [
+    {
+      "id": "harbor-quay",
+      "nodes": [
+        "harbor",
+        "quay"
+      ],
+      "baseDepth": 2,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [
+          -7.85,
+          0.1
+        ],
+        [
+          -5.95,
+          0.62
+        ],
+        [
+          -4.12,
+          1.15
+        ],
+        [
+          -2.15,
+          0.89
+        ],
+        [
+          -0.45,
+          0.38
+        ]
+      ]
+    },
+    {
+      "id": "quay-steps",
+      "nodes": [
+        "quay",
+        "steps"
+      ],
+      "baseDepth": 2,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [
+          -0.45,
+          0.38
+        ],
+        [
+          -1.9,
+          1.73
+        ],
+        [
+          -4.81,
+          3.05
+        ],
+        [
+          -5.49,
+          5.62
+        ],
+        [
+          -4.88,
+          7.72
+        ],
+        [
+          -2.93,
+          10.36
+        ],
+        [
+          -0.7,
+          9.35
+        ]
+      ]
+    },
+    {
+      "id": "orchard-quay",
+      "nodes": [
+        "orchard",
+        "quay"
+      ],
+      "baseDepth": 2,
+      "bidirectional": false,
+      "waypointsXZ": [
+        [
+          7.55,
+          -2.15
+        ],
+        [
+          6.22,
+          -1.72
+        ],
+        [
+          4.63,
+          -0.47
+        ],
+        [
+          2.83,
+          0.32
+        ],
+        [
+          1.01,
+          1.24
+        ],
+        [
+          -0.45,
+          0.38
+        ]
+      ],
+      "current": {
+        "name": "Pomona Reach",
+        "phases": [
+          {
+            "tideLevel": 0,
+            "from": "orchard",
+            "to": "quay"
+          },
+          {
+            "tideLevel": 1,
+            "from": "quay",
+            "to": "orchard"
+          },
+          {
+            "tideLevel": 2,
+            "from": "orchard",
+            "to": "quay"
+          }
+        ]
+      }
+    }
+  ],
+  "piers": [
+    {
+      "id": "harbor-pier",
+      "nodeId": "harbor",
+      "elevation": 3,
+      "isDeliveryPier": true,
+      "islandId": "lighthouse-island",
+      "positionXZ": [
+        -7.85,
+        -1.43
+      ],
+      "landAnchorXZ": [
+        -7.85,
+        -3.22
+      ],
+      "width": 1.49
+    },
+    {
+      "id": "quay-pier",
+      "nodeId": "quay",
+      "elevation": 2,
+      "isDeliveryPier": false,
+      "islandId": "quay-island",
+      "positionXZ": [
+        -0.45,
+        -1.15
+      ],
+      "landAnchorXZ": [
+        -0.45,
+        -2.94
+      ],
+      "width": 1.52
+    },
+    {
+      "id": "orchard-pier",
+      "nodeId": "orchard",
+      "elevation": 3,
+      "isDeliveryPier": false,
+      "islandId": "orchard-island",
+      "positionXZ": [
+        7.55,
+        -3.68
+      ],
+      "landAnchorXZ": [
+        7.55,
+        -5.47
+      ],
+      "width": 1.51
+    },
+    {
+      "id": "steps-pier",
+      "nodeId": "steps",
+      "elevation": 1,
+      "isDeliveryPier": false,
+      "islandId": "steps-island",
+      "positionXZ": [
+        -0.7,
+        7.82
+      ],
+      "landAnchorXZ": [
+        -0.7,
+        6.03
+      ],
+      "width": 1.47
+    }
+  ],
+  "passengers": [
+    {
+      "id": "orin",
+      "species": "deer",
+      "slots": 3,
+      "appearance": "deer-chestnut"
+    },
+    {
+      "id": "pomme",
+      "species": "sheep",
+      "slots": 2,
+      "appearance": "sheep-wool"
+    },
+    {
+      "id": "sorrel",
+      "species": "rabbit",
+      "slots": 1,
+      "appearance": "rabbit-tan"
+    }
+  ],
+  "start": {
+    "boatNodeId": "orchard",
+    "aboard": [],
+    "waitingByPier": {
+      "harbor-pier": [],
+      "orchard-pier": [
+        "orin"
+      ],
+      "quay-pier": [
+        "pomme"
+      ],
+      "steps-pier": [
+        "sorrel"
+      ]
+    }
+  },
+  "objective": {
+    "deliveryPierId": "harbor-pier",
+    "requiredPassengerIds": [
+      "orin",
+      "pomme",
+      "sorrel"
+    ]
+  },
+  "validation": {
+    "searchDepthLimit": 14,
+    "witnessReplays": [
+      "data/orchard-landing/witnesses.json"
+    ]
+  },
+  "world": {
+    "plane": "XZ",
+    "north": "negative Z",
+    "waterYPerTideLevel": 0.18,
+    "referenceBoatRadius": 0.3,
+    "requiredRouteClearance": 0.45,
+    "clearanceScope": "Six-space ferry between three outer landings and Cider Quay.",
+    "presentationNote": "A low stone quay joins the orchard reach, the spring steps and the homeward water.",
+    "suggestedCamera": {
+      "projection": "orthographic",
+      "positionXYZ": [
+        3.4,
+        21,
+        32
+      ],
+      "targetXYZ": [
+        0,
+        0,
+        0.05
+      ],
+      "verticalSpan": 14
+    },
+    "islands": [
+      {
+        "id": "lighthouse-island",
+        "elevation": 3,
+        "footprintXZ": [
+          [
+            -10.97,
+            -5.45
+          ],
+          [
+            -10.45,
+            -6.12
+          ],
+          [
+            -9.33,
+            -6.42
+          ],
+          [
+            -7.5,
+            -6.33
+          ],
+          [
+            -6.33,
+            -5.85
+          ],
+          [
+            -5.67,
+            -4.91
+          ],
+          [
+            -5.64,
+            -3.95
+          ],
+          [
+            -6.36,
+            -2.95
+          ],
+          [
+            -7.34,
+            -2.54
+          ],
+          [
+            -8.95,
+            -2.6
+          ],
+          [
+            -10.34,
+            -3.21
+          ],
+          [
+            -11.05,
+            -4.43
+          ]
+        ]
+      },
+      {
+        "id": "quay-island",
+        "elevation": 2,
+        "footprintXZ": [
+          [
+            -2.98,
+            -4.37
+          ],
+          [
+            -2.73,
+            -5.21
+          ],
+          [
+            -1.58,
+            -5.71
+          ],
+          [
+            0.41,
+            -5.59
+          ],
+          [
+            1.7,
+            -5.04
+          ],
+          [
+            1.95,
+            -4.04
+          ],
+          [
+            1.17,
+            -2.75
+          ],
+          [
+            0.42,
+            -2.27
+          ],
+          [
+            -1.68,
+            -2.23
+          ],
+          [
+            -2.54,
+            -2.66
+          ]
+        ]
+      },
+      {
+        "id": "orchard-island",
+        "elevation": 3,
+        "footprintXZ": [
+          [
+            4.65,
+            -6.8
+          ],
+          [
+            5.08,
+            -8.11
+          ],
+          [
+            6.1,
+            -8.84
+          ],
+          [
+            7.79,
+            -9.1
+          ],
+          [
+            9.27,
+            -8.6
+          ],
+          [
+            10.13,
+            -7.62
+          ],
+          [
+            9.94,
+            -6.52
+          ],
+          [
+            9.37,
+            -5.58
+          ],
+          [
+            8.52,
+            -4.79
+          ],
+          [
+            6.61,
+            -4.76
+          ],
+          [
+            5.53,
+            -5.5
+          ]
+        ]
+      },
+      {
+        "id": "steps-island",
+        "elevation": 1,
+        "footprintXZ": [
+          [
+            -2.69,
+            3.81
+          ],
+          [
+            -1.97,
+            3.5
+          ],
+          [
+            -1.11,
+            3.67
+          ],
+          [
+            0.08,
+            3.54
+          ],
+          [
+            1.11,
+            4.02
+          ],
+          [
+            1.38,
+            4.83
+          ],
+          [
+            0.84,
+            6.26
+          ],
+          [
+            0.13,
+            6.7
+          ],
+          [
+            -1.86,
+            6.69
+          ],
+          [
+            -2.59,
+            5.9
+          ],
+          [
+            -2.74,
+            4.73
+          ]
+        ]
+      }
+    ]
+  }
+}

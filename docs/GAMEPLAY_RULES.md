@@ -16,7 +16,7 @@ There is no additional move limit, real-time countdown, fuel meter, score target
 
 ## Load and draft
 
-First Crossing, Holding, Bellwater, Driftwood and Two Shelters use the **four-space ferry**. Wide Berth and Reef Return select the **six-space ferry** through their level data. A rabbit uses one space. Sheep and beavers use two spaces each. Occupied slots are the entire load calculation. There is no separate mass, cargo grid, animal mood, or inventory system.
+First Crossing, Holding, Bellwater, Driftwood and Two Shelters use the **four-space ferry**. Wide Berth, Reef Return and Orchard Landing select the **six-space ferry** through their level data. A rabbit uses one space, sheep and beavers use two each, and Orin the deer uses three. Only the sum of the aboard passengers’ occupied slots determines draft. Each passenger is indivisible.
 
 | Occupied slots | Boat draft | Example                          |
 | -------------- | ---------: | -------------------------------- |

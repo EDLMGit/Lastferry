@@ -87,6 +87,10 @@ export function deckSeat(level: Level, id: string): Vector3 {
           : [0.22, 0.26, 0.3]
         : [0, 0.26, 0.69]) as [number, number, number]),
     );
+  if (level.id === 'orchard-landing') {
+    const [x, z] = passenger.slots === 3 ? [-0.24, 1.43] : passenger.slots === 2 ? [-0.48, -0.525] : [0.55, 1.045];
+    return new Vector3(x, wideFerryProfile.deckY, z);
+  }
   const bank = level.passengers.filter((p) => p.slots === passenger.slots);
   const stable = bank.sort((a, b) => a.id.localeCompare(b.id)).findIndex((p) => p.id === id);
   return new Vector3(
@@ -102,6 +106,10 @@ export function shoreSeat(
   delivered = false,
 ): Vector3 {
   const passenger = level.passengers.find((p) => p.id === id)!;
+  if (level.id === 'orchard-landing') {
+    const [x, z] = passenger.slots === 3 ? [0.8, -0.6] : passenger.slots === 2 ? [-0.75, -0.62] : [-0.65, 0.18];
+    return new Vector3(pier.positionXZ[0] + x, pier.elevation * 0.18 - 0.005, pier.landAnchorXZ[1] + z);
+  }
   if (level.id === 'reef-return') {
     const peers = level.passengers.filter((p) => p.slots === passenger.slots)
       .sort((a, b) => a.id.localeCompare(b.id));
@@ -162,14 +170,17 @@ export function wideTransferPath(
         hullMatrix.clone().invert(),
       ).x,
     ) || 1;
-  const gate = new Vector3(side * profile.gateX, profile.deckY, profile.gateZ).applyMatrix4(
+  const gateZ = profile.gateZ;
+  const gate = new Vector3(side * profile.gateX, profile.deckY, gateZ).applyMatrix4(
     hullMatrix,
   );
-  const bridge = new Vector3(gate.x, pierY, pier.positionXZ[1] - 0.25);
+  const pierOverlap = level.id === 'orchard-landing' ? 0.52 : 0.25;
+  const bridge = new Vector3(gate.x, pierY, pier.positionXZ[1] - pierOverlap);
   const shore = new Vector3(pier.positionXZ[0], pierY, bridge.z);
   const shoreAisle = new Vector3(pier.positionXZ[0], pierY, board ? from.z : destination.z);
-  const entryX = level.passengers.find((p) => p.id === id)!.slots === 2 ? seat.x : 0;
-  const transverse = new Vector3(entryX, profile.deckY, profile.gateZ).applyMatrix4(hullMatrix);
+  const large = level.passengers.find((p) => p.id === id)!.slots >= 2;
+  const entryX = large || level.id === 'orchard-landing' ? seat.x : 0;
+  const transverse = new Vector3(entryX, profile.deckY, gateZ).applyMatrix4(hullMatrix);
   const aisle = new Vector3(entryX, profile.deckY, seat.z).applyMatrix4(hullMatrix);
   const points = board
     ? [from, shoreAisle, shore, bridge, gate, transverse, aisle, destination]
@@ -179,7 +190,6 @@ export function wideTransferPath(
   const at = (index: number) => distances.slice(0, index).reduce((a, b) => a + b, 0) / total;
   const start = at(board ? 5 : 1);
   const end = at(board ? 6 : 2);
-  const large = level.passengers.find((p) => p.id === id)!.slots === 2;
   const approach = large ? Math.min(0.23 / total, (end - start) * 0.28) : 0;
   const turning = Math.min((large ? 0.27 : 0.075) / total, (end - start - approach) * 0.7);
   const turnAt = board ? start + approach + turning : end - approach - turning;

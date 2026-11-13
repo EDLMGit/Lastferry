@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { resolvePassengerAppearance } from '../../src/game/passenger-appearance';
 import { initial, reduce, type Action } from '../../src/game/rules';
-import { bellwater, holdingPier, level, type Level } from '../../src/levels/level';
+import { bellwater, holdingPier, level, orchardLanding, type Level } from '../../src/levels/level';
 import { World } from '../../src/scene/world';
 
 describe('passenger appearance identity', () => {
@@ -15,6 +15,8 @@ describe('passenger appearance identity', () => {
     [bellwater, 'tansy', 'rabbit', 0, 'rabbit-cream'],
     [bellwater, 'lark', 'rabbit', 1, 'rabbit-tan'],
     [bellwater, 'bram', 'sheep', 0, 'sheep-wool'],
+    [orchardLanding, 'orin', 'deer', 0, 'deer-chestnut'],
+    [orchardLanding, 'sorrel', 'rabbit', 0, 'rabbit-tan'],
   ] as const)('%s / %s keeps its full-level appearance', (cove, id, species, speciesOrdinal, portraitKey) => {
     const before = structuredClone(cove);
     expect(resolvePassengerAppearance(cove, id)).toEqual({ species, speciesOrdinal, portraitKey });

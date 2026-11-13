@@ -147,6 +147,7 @@
 .cove-kit .cove-choice,
 #app .cove-choice {
   display: grid;
+  container-type: inline-size;
   grid-template-columns: 44px minmax(0, 1fr);
   align-items: center;
   gap: 4px 7px;
@@ -206,6 +207,11 @@
   border-radius: 6px;
   background: #173e46;
   color: var(--cove-ink);
+}
+@container (max-width: 140px) {
+  .cove-kit .cove-choice-copy {
+    column-gap: 2px;
+  }
 }
 .cove-kit .cove-choice-check .cove-glyph {
   visibility: hidden;
