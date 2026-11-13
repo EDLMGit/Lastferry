@@ -20,9 +20,9 @@ First Crossing stays independent Practice. Among the reeds introduces Hazel, Bra
 
 ### Current correction: Orchard Landing difficulty
 
-**Orchard Landing** is playable independently in Practice at `fb5806a7a129984290c54a9f54e08d5171d0d3d3`. The player likes Orin but finds its difficulty below Wide/Reef. Preserve the newcomer and repair this existing cove under [ORCHARD_DIFFICULTY_01](../NEXT_TASK_ORCHARD_DIFFICULTY.md). Do not append it to the Journey yet.
+**Orchard Landing** remains a Practice candidate for C7. The player accepted Orin’s character direction and requested a stronger puzzle after playing the first version. In the revision, the depth of the one outward flow determines an earlier Harbor delivery. [Design and replayable witnesses](../reviews/orchard-difficulty/DESIGN.md)
 
-The [independent review](../reviews/orchard-difficulty-review/REVIEW.md) shows that both shorter-neighbor orders merge into one collection loop. A three-space newcomer should contribute to a linked preparation and later load/route decision, not only an obvious opening restriction. Correct the Orchard rabbit's reused Sorrel identity; Wide's rescued Sorrel stays safe and unchanged.
+The earlier [independent review](../reviews/orchard-difficulty-review/REVIEW.md) found that both smaller-neighbor orders merged into one collection loop. Orchard now asks the player to choose between an early delivery and carrying that neighbor to Orin. Pomme is the orchard sheep and Medlar is the tan rabbit. Sorrel remains safe after Wide Berth.
 
 [Difficulty and mastery direction](../docs/DIFFICULTY_AND_MASTERY.md) now defines the progression and later optional three-lantern rating. Rescue earns the story; efficiency and a clean no-Undo attempt earn additional recognition. Keep Undo unrestricted. The reward feature is not part of this repair.
 
@@ -32,7 +32,7 @@ After accepting the revised puzzle, connect the same cove with its compact orcha
 
 | Intended cove | Story purpose | Difficulty purpose |
 | --- | --- | --- |
-| **7 — Orchard Landing** | Meet Orin beyond the familiar headland. | Repair the Practice candidate so Orin's cost connects preparation with later load/route decisions. Character accepted; difficulty not yet accepted. |
+| **7 — Orchard Landing** | Meet Orin beyond the familiar headland. | The load on Orin’s return determines whom to bring home first. Character accepted. Revised Practice difficulty awaits playtest. |
 | **8 — title open** | Carry the lesson farther along the channel. | A distinct combination of load, route and tide dependencies; choose it after C7 playtesting. |
 | **9 — Drowned Orchard** | Recognize the orchard under changed water, with a different waiting group. Orin remains safe. | Reinterpret familiar landmarks and established rules rather than repeat Orin's rescue. |
 | **10 — Lantern Reach** | See the welcome at the refuge taking shape. | Compact, quiet consolidation with a real inference and an elegant efficient solution. |

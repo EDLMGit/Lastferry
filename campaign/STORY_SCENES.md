@@ -2,7 +2,7 @@
 
 ## Next story beat — Orin at the orchard · 13 November 2026
 
-**Latest review:** Orin's character direction has positive player feedback; the candidate puzzle does not yet meet the intended difficulty. [ORCHARD_DIFFICULTY_01](../NEXT_TASK_ORCHARD_DIFFICULTY.md) repairs that existing Practice cove before scene production or Journey integration. Give Orchard's supporting rabbit a distinct stable name/identity: Wide already rescues Sorrel, whose cream appearance and safety must remain intact. The revised illustration will follow the repaired level's real starting positions.
+Orin’s character direction has positive player feedback. **Medlar** is the orchard’s tan rabbit. **Sorrel** is the cream rabbit rescued in Wide Berth. The Orchard entry awaits the repaired Practice puzzle’s playtest and will follow the accepted starting positions. [Candidate task](../NEXT_TASK_ORCHARD_DIFFICULTY.md)
 
 The accepted six-cove presentation remains unchanged. [ORCHARD_LANDING_01](../NEXT_TASK_ORCHARD_LANDING.md) commissions the intended seventh cove as a Practice candidate with a real deer model and portrait. **Its illustrated entry is documented here for continuity, not implemented in this pass.** Judge the puzzle and Orin's phone-scale identity before extending Journey saves or producing the scene.
 

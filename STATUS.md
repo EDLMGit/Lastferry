@@ -1,12 +1,14 @@
-# Current correction — Orchard difficulty · 13 November 2026
+# Orchard difficulty repair · 13 November 2026
 
-The player accepts Orin's character direction but finds Orchard easier than the accepted preceding coves. Root [ORCHARD_DIFFICULTY_01](NEXT_TASK_ORCHARD_DIFFICULTY.md) now repairs the existing candidate; it does not add another level.
+Orchard Landing is ready for a second difficulty playtest. Pomme and Medlar wait together at Spring Steps. Both can travel to Cider Quay, but their early Harbor delivery commits the player to a companion for Orin on the only outward current. The dry orchard gives time to inspect a wrong load. Undo can recover the staging decision several actions earlier. [Developer witnesses, proof and target](reviews/orchard-difficulty/DESIGN.md)
 
-The independent production-rule audit verified exact source hashes and all seven cove graphs. Orchard has two shortest ten-action sequences that merge at action five, with much of the challenge resolved at the safe orchard. [Review and reproducible results](reviews/orchard-difficulty-review/REVIEW.md)
+The previous ten-action solutions merged at action five. The repaired cove admits a 12-action route via quay staging and a 13-action route that revisits Spring Steps. The proposed efficient target covers both. [Earlier audit](reviews/orchard-difficulty-review/REVIEW.md) · [Actual phone play and verification](reviews/orchard-difficulty/REVIEW.md)
 
-[Difficulty and three-lantern mastery](docs/DIFFICULTY_AND_MASTERY.md) defines the twelve-cove reasoning curve and a later optional rescue/efficiency/no-Undo reward. No reward UI or scoring is implemented by this documentation update.
+The build, TypeScript, 80-family catalog and focused rule checks passed. At 390×844 and 780×320 the player completed the staged rescue. The alternate 13-action route also passed on the minified release. Keyboard Undo recovered the early partition after an actual loss. The geometry sweeps for Wide Harbor and Two Shelters each passed at their original timeouts when run separately after recording. [Original results and retries](reviews/orchard-difficulty/REVIEW.md#focused-verification) · [Actual rescue with sound](reviews/orchard-difficulty/390x844/rescue.mp4)
 
-Start the repair from game `fb5806a7a129984290c54a9f54e08d5171d0d3d3`, preserving the accepted art, six-cove Journey, other puzzles, phone controls and saves. Orchard remains Practice. Site version 19 and its custom private audience are unchanged. No deployment.
+[Difficulty and three-lantern mastery](docs/DIFFICULTY_AND_MASTERY.md) records the twelve-cove direction and future reward concept. The target is developer evidence. Play still has unrestricted Undo.
+
+The branch advanced from `fb5806a7a129984290c54a9f54e08d5171d0d3d3` through task commit `fc1be94e124ac02ab4562f1083707943d7b4a313`. Orin’s art remains accepted. The six-cove Journey, other Practice coves and save history retain their existing identities. Site version 19 still serves `f0ffe2c` to its custom private audience.
 
 ## Earlier implementation handoffs
 

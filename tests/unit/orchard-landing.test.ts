@@ -12,13 +12,14 @@ import {
   type State,
 } from '../../src/game/rules';
 import { Session } from '../../src/game/session';
-import { orchardLanding as level, type Level } from '../../src/levels/level';
+import { orchardLanding as level, wideBerth, type Level } from '../../src/levels/level';
 
 const sail = (to: string): Action => ({ type: 'move', to });
-const board = (...passengerIds: string[]): Action => ({ type: 'board', passengerIds });
 const unload = (...passengerIds: string[]): Action => ({ type: 'unload', passengerIds });
 const wait: Action = { type: 'wait' };
 const rescue = plans.witnesses[0].actions as Action[];
+const returnToSteps = plans.witnesses[1].actions as Action[];
+const wrongDelivery = plans.losingAlternatives[0].actions as Action[];
 const roster = [...level.objective.requiredPassengerIds].sort();
 
 function replay(actions: Action[], session = new Session(level)) {
@@ -70,157 +71,116 @@ function firstWin(l: Level, allow: AllowAction = () => true, start = initial(l))
   return null;
 }
 
-describe('Orchard Landing preparation, positioning and indivisible load', () => {
-  test('winning witness crosses both reversals and restores every complete snapshot', () => {
-    const session = replay(rescue);
+describe('Orchard Landing delivery and escort', () => {
+  test('staging at the quay saves one action over returning for the rabbit at the steps', () => {
+    expect(firstWin(level)).toBe(12);
+    expect(firstWin(level, (s, a) => !(a.type === 'unload' && s.boatNodeId !== 'harbor'))).toBe(13);
+    for (const [actions, turn] of [[rescue, 12], [returnToSteps, 13]] as const) {
+      const session = replay(actions);
+      expect(session.state).toMatchObject({ status: 'won', turn, tideLevel: 2 });
+      while (session.history.length) {
+        const snapshot = structuredClone(session.history.at(-1));
+        expect(session.undo()).toBe(true);
+        expect(session.state).toEqual(snapshot);
+      }
+      expect(session.state).toEqual(initial(level));
+    }
+  });
+
+  test('all rescues deliver Pomme first, carry Medlar inward alone and return with Orin and Medlar', () => {
+    const firstDelivery: AllowAction = (s, a) =>
+      !(s.boatNodeId === 'harbor' && s.delivered.length === 0 &&
+        a.type === 'unload' && a.passengerIds.length === 1 && a.passengerIds.includes('pomme'));
+    const entersWithEscort: AllowAction = (s, a) =>
+      !(a.type === 'move' && a.to === 'orchard' && s.aboard.length === 1 && s.aboard.includes('medlar'));
+    const leavesWithPair: AllowAction = (s, a) =>
+      !(a.type === 'move' && s.boatNodeId === 'orchard' && s.aboard.length === 2 &&
+        s.aboard.includes('orin') && s.aboard.includes('medlar'));
+    for (const allow of [firstDelivery, entersWithEscort, leavesWithPair])
+      expect(firstWin(level, allow)).toBeNull();
+  });
+
+  test('both unload choices at the quay are legal, but delivering the rabbit dooms the later escort', () => {
+    const session = replay(rescue.slice(0, 2));
+    const decision = structuredClone(session.state);
+    expect(passageError(decision, 'harbor', level)).toMatch(/depth 2 is below draft 3/);
+    for (const passenger of ['medlar', 'pomme']) {
+      const next = preview(decision, unload(passenger), level);
+      expect(next.error).toBeNull();
+      expect(next.state.status).toBe('playing');
+      expect(firstWin(level, undefined, next.state)).toBe(passenger === 'medlar' ? 12 : null);
+    }
+    replay(wrongDelivery.slice(2, 9), session);
     expect(session.state).toMatchObject({
-      status: 'won',
-      turn: 10,
-      tideLevel: 2,
-      boatNodeId: 'harbor',
+      turn: 9, boatNodeId: 'orchard', status: 'playing', delivered: ['medlar'],
+      tideLevel: 1, aboard: ['pomme', 'orin'],
     });
-    expect(session.history[4]).toMatchObject({
-      tideLevel: 1,
-      boatNodeId: 'quay',
-      aboard: ['sorrel'],
-    });
-    expect(session.history[7]).toMatchObject({ tideLevel: 2, boatNodeId: 'orchard' });
-    expect(load(session.history[7], level)).toBe(6);
-    expect(draft(session.history[7], level)).toBe(4);
-    while (session.history.length) {
-      const snapshot = structuredClone(session.history.at(-1));
-      expect(session.undo()).toBe(true);
-      expect(session.state).toEqual(snapshot);
-    }
-    expect(session.state).toEqual(initial(level));
+    expect(draft(session.state, level)).toBe(4);
+    expect(passageError(session.state, 'quay', level)).toMatch(/depth 3 is below draft 4/);
+    replay(wrongDelivery.slice(9), session);
+    expect(session.state.lossReason).toMatchObject({ code: 'RETURN_CUT_OFF', edgeId: 'orchard-quay' });
+    while (session.state.turn > decision.turn) expect(session.undo()).toBe(true);
+    expect(session.state).toEqual(decision);
+    expect(replay(rescue.slice(2), session).state.status).toBe('won');
   });
 
-  test('both low-water pickup orders work, as does one early wait with a crossing exactly on the last inward action', () => {
-    expect(
-      replay([
-        sail('quay'),
-        board('pomme'),
-        sail('steps'),
-        board('sorrel'),
-        sail('quay'),
-        ...rescue.slice(5),
-      ]).state.status,
-    ).toBe('won');
-    const justInTime = replay([wait, ...rescue.slice(0, 6)]);
-    expect(justInTime.state).toMatchObject({
-      tideLevel: 2,
-      boatNodeId: 'orchard',
-      aboard: ['sorrel', 'pomme'],
-    });
-    expect(replay(rescue.slice(6), justInTime).state.status).toBe('won');
+  test('the last outward crossing is possible with four slots, including on its last action', () => {
+    const atOrchard = replay(rescue.slice(0, 9));
+    expect(atOrchard.state.tideLevel).toBe(1);
+    expect(load(atOrchard.state, level)).toBe(4);
+    expect(draft(atOrchard.state, level)).toBe(3);
+    replay([wait, wait, sail('quay')], atOrchard);
+    expect(atOrchard.state).toMatchObject({ turn: 12, boatNodeId: 'quay', status: 'playing', tideLevel: 2 });
+    expect(replay([wait, wait, sail('harbor'), unload('medlar', 'orin')], atOrchard).state.status).toBe('won');
+    expect(firstWin(level, undefined, replay([wait]).state)).toBe(13);
+    expect(firstWin(level, undefined, replay([wait, wait]).state)).toBeNull();
   });
 
-  test('all legal routes require a light departure, preparing both smaller neighbors, and crossing inward before the last reversal', () => {
-    expect(firstWin(level)).toBe(10);
-    expect(
-      firstWin(
-        level,
-        (s, a) => !(a.type === 'move' && s.boatNodeId === 'orchard' && load(s, level) === 0),
-      ),
-    ).toBeNull();
-    expect(
-      firstWin(
-        level,
-        (s, a) =>
-          !(
-            a.type === 'move' &&
-            a.to === 'orchard' &&
-            s.aboard.includes('pomme') &&
-            s.aboard.includes('sorrel')
-          ),
-      ),
-    ).toBeNull();
-    expect(
-      firstWin(
-        level,
-        (s, a) => !(a.type === 'move' && s.boatNodeId === 'orchard' && load(s, level) === 6),
-      ),
-    ).toBeNull();
-    expect(
-      firstWin(level, (s, a) => !(a.type === 'move' && a.to === 'harbor' && load(s, level) > 4)),
-    ).toBeNull();
-    expect(
-      firstWin(
-        level,
-        (s, a) => !(a.type === 'move' && (a.to === 'orchard' || s.boatNodeId === 'orchard')),
-      ),
-    ).toBeNull();
+  test('the same rabbit-first delivery wins when only Orin changes from three spaces to two', () => {
+    const lighter = structuredClone(level);
+    lighter.passengers.find(p => p.id === 'orin')!.slots = 2;
+    const session = replay(wrongDelivery.slice(0, 9), new Session(lighter));
+    expect(load(session.state, lighter)).toBe(4);
+    expect(draft(session.state, lighter)).toBe(3);
+    expect(passageError(session.state, 'quay', lighter)).toBeNull();
+    expect(replay([sail('quay'), sail('harbor'), unload('orin', 'pomme')], session).state.status).toBe('won');
+    expect(firstWin(lighter)).toBe(12);
   });
 
-  test('early deer, a small homeward delivery and prolonged waiting have actual failures; Undo can recover', () => {
-    const firstDeer = replay([board('orin')]).state;
-    expect(load(firstDeer, level)).toBe(3);
-    expect(draft(firstDeer, level)).toBe(3);
-    expect(passageError(firstDeer, 'quay', level)).toMatch(/depth 2 is below draft 3/);
-    expect(firstWin(level, undefined, firstDeer)).toBeNull();
-    const [deer, delivery, linger] = plans.losingAlternatives.map((plan) =>
-      replay(plan.actions as Action[]),
-    );
-    expect(deer.state.lossReason).toEqual({
-      code: 'PASSENGER_STRANDED',
-      pierId: 'steps-pier',
-      passengerIds: ['sorrel'],
-    });
-    expect(delivery.state.lossReason).toMatchObject({
-      code: 'RETURN_CUT_OFF',
-      passengerIds: ['orin'],
-    });
-    expect(linger.state.lossReason).toEqual(deer.state.lossReason);
-    expect(delivery.undo()).toBe(true);
-    expect(delivery.undo()).toBe(true);
-    expect(replay(rescue.slice(5), delivery).state.status).toBe('won');
+  test('the opening Harbor depth requires a partition, and the final direction prevents waiting for deeper water', () => {
+    const bothFirst: AllowAction = (s, a) =>
+      !(s.boatNodeId === 'harbor' && s.delivered.length === 0 &&
+        a.type === 'unload' && a.passengerIds.length < 2);
+    expect(firstWin(level, bothFirst)).toBeNull();
+    const widerHarbor = structuredClone(level);
+    widerHarbor.edges.find(edge => edge.id === 'harbor-quay')!.baseDepth++;
+    expect(firstWin(widerHarbor, bothFirst)).toBe(12);
+    const stillWater = structuredClone(level);
+    const reach = stillWater.edges.find(edge => edge.current)!;
+    delete reach.current;
+    reach.bidirectional = true;
+    const stranded = replay(wrongDelivery.slice(0, 9), new Session(stillWater));
+    expect(firstWin(stillWater, undefined, stranded.state)).toBe(15);
   });
 
-  test('changing only Orin to two spaces allows taking him first and never returning to the orchard', () => {
-    const light = structuredClone(level);
-    light.passengers.find((p) => p.id === 'orin')!.slots = 2;
-    const noReentry: AllowAction = (_, action) =>
-      !(action.type === 'move' && action.to === 'orchard');
-    expect(firstWin(level, noReentry)).toBeNull();
-    expect(firstWin(light, noReentry)).toBe(9);
-    const session = replay([board('orin')], new Session(light));
-    expect(passageError(session.state, 'quay', light)).toBeNull();
-    replay(
-      [
-        sail('quay'),
-        sail('steps'),
-        board('sorrel'),
-        sail('quay'),
-        board('pomme'),
-        wait,
-        sail('harbor'),
-        unload(...roster),
-      ],
-      session,
-    );
-    expect(session.state.status).toBe('won');
-  });
-
-  test('each available selection retains its exact IDs, slot arithmetic and draft, including partial delivery and Undo', () => {
-    const allAboard = replay(rescue.slice(0, -1));
-    const atHome = structuredClone(allAboard.state);
-    const choices = legalActions(atHome, level).filter(
-      (action): action is Action & { type: 'unload'; passengerIds: string[] } =>
-        action.type === 'unload',
-    );
-    expect(choices).toHaveLength(7);
+  test('the final Harbor subsets keep exact passenger identities and costs through delivery and Undo', () => {
+    const session = replay(rescue.slice(0, -1));
+    const home = structuredClone(session.state);
+    const choices = legalActions(home, level).filter(
+      (a): a is Action & { type: 'unload'; passengerIds: string[] } => a.type === 'unload');
+    expect(choices).toHaveLength(3);
     for (const choice of choices) {
-      expect(allAboard.commit(choice)).toBeTruthy();
-      allAboard.finish();
-      const s = allAboard.state;
-      const remaining = level.passengers.filter((p) => !choice.passengerIds.includes(p.id));
-      const slots = remaining.reduce((sum, p) => sum + p.slots, 0);
-      expect([...s.aboard].sort()).toEqual(remaining.map((p) => p.id).sort());
-      expect([...s.delivered].sort()).toEqual([...choice.passengerIds].sort());
-      expect(load(s, level)).toBe(slots);
-      expect(draft(s, level)).toBe([1, 2, 2, 3, 3, 4, 4][slots]);
-      expect(allAboard.undo()).toBe(true);
-      expect(allAboard.state).toEqual(atHome);
+      replay([choice], session);
+      expect(session.state.delivered).toEqual(['pomme', ...choice.passengerIds]);
+      const remaining = level.passengers.filter(p => home.aboard.includes(p.id) && !choice.passengerIds.includes(p.id));
+      expect([...session.state.aboard].sort()).toEqual(remaining.map(p => p.id).sort());
+      expect(load(session.state, level)).toBe(remaining.reduce((total, p) => total + p.slots, 0));
+      expect(session.undo()).toBe(true);
+      expect(session.state).toEqual(home);
     }
+    expect(level.names?.passengers?.medlar).toBe('Medlar');
+    expect(level.passengers.find(p => p.id === 'medlar')?.appearance).toBe('rabbit-tan');
+    expect(wideBerth.names?.passengers?.sorrel).toBe('Sorrel');
+    expect(wideBerth.passengers.find(p => p.id === 'sorrel')?.appearance).toBe('rabbit-cream');
   });
 });

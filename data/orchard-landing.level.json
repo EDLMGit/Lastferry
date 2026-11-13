@@ -25,11 +25,11 @@
       "initialLevel": 0,
       "rises": [
         {
-          "afterTurn": 4,
+          "afterTurn": 9,
           "level": 1
         },
         {
-          "afterTurn": 7,
+          "afterTurn": 12,
           "level": 2
         }
       ]
@@ -49,7 +49,7 @@
     "passengers": {
       "orin": "Orin",
       "pomme": "Pomme",
-      "sorrel": "Sorrel"
+      "medlar": "Medlar"
     }
   },
   "nodes": [
@@ -128,7 +128,7 @@
         "quay",
         "steps"
       ],
-      "baseDepth": 2,
+      "baseDepth": 3,
       "bidirectional": true,
       "waypointsXZ": [
         [
@@ -200,18 +200,18 @@
         "phases": [
           {
             "tideLevel": 0,
-            "from": "orchard",
-            "to": "quay"
-          },
-          {
-            "tideLevel": 1,
             "from": "quay",
             "to": "orchard"
           },
           {
-            "tideLevel": 2,
+            "tideLevel": 1,
             "from": "orchard",
             "to": "quay"
+          },
+          {
+            "tideLevel": 2,
+            "from": "quay",
+            "to": "orchard"
           }
         ]
       }
@@ -237,7 +237,7 @@
     {
       "id": "quay-pier",
       "nodeId": "quay",
-      "elevation": 2,
+      "elevation": 1,
       "isDeliveryPier": false,
       "islandId": "quay-island",
       "positionXZ": [
@@ -297,25 +297,24 @@
       "appearance": "sheep-wool"
     },
     {
-      "id": "sorrel",
+      "id": "medlar",
       "species": "rabbit",
       "slots": 1,
       "appearance": "rabbit-tan"
     }
   ],
   "start": {
-    "boatNodeId": "orchard",
+    "boatNodeId": "steps",
     "aboard": [],
     "waitingByPier": {
       "harbor-pier": [],
       "orchard-pier": [
         "orin"
       ],
-      "quay-pier": [
-        "pomme"
-      ],
+      "quay-pier": [],
       "steps-pier": [
-        "sorrel"
+        "pomme",
+        "medlar"
       ]
     }
   },
@@ -324,7 +323,7 @@
     "requiredPassengerIds": [
       "orin",
       "pomme",
-      "sorrel"
+      "medlar"
     ]
   },
   "validation": {
@@ -412,7 +411,7 @@
       },
       {
         "id": "quay-island",
-        "elevation": 2,
+        "elevation": 1,
         "footprintXZ": [
           [
             -2.98,

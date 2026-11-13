@@ -59,7 +59,7 @@ The first six are accepted and remain unchanged during Orchard's repair. Later r
 | 4 — Two Shelters | Choose the refuge as part of the retrieval plan. |
 | 5 — Wide Berth | Allocate passengers across limited homeward opportunities. |
 | 6 — Reef Return | Make an early load decision that changes the later approach and delivery plan. |
-| 7 — Orchard Landing, repair now | Make Orin's indivisible three spaces participate in a chain of preparation and later load/route decisions. An obvious opening prohibition alone is insufficient. |
+| 7 — Orchard Landing, Practice playtest | Work backward from the only outward current. The early Harbor delivery determines which neighbor can fit beside Orin in depth-three water. |
 | 8 — title open | Extend the planning horizon: preserve one opportunity while fulfilling another, using familiar rules. |
 | 9 — Drowned Orchard | Reinterpret recognizable geometry for a new waiting group and changed conditions. Earlier rescued neighbors stay safe. |
 | 10 — Lantern Reach | A compact, quiet consolidation with a real inference and an elegant efficient solution; scenery can relax without making every decision automatic. |
@@ -99,6 +99,8 @@ Use an **authored and verified target**, not a number automatically equated with
 A target may deliberately allow several meaningful strategies. The current accepted reports include 12- and 14-action Wide rescues and 10- and 11-action Reef rescues. Choosing the strict minimum would make some accepted longer approaches earn only the rescue lantern. That may be appropriate for an explicitly optimized route, but it must be a deliberate decision.
 
 Do not publish a target until its cove and revision are accepted. Document the minimum, candidate target, a qualifying witness and the strategies it includes or excludes. Do not manufacture inefficiency or arbitrary waiting to make the second lantern seem valuable.
+
+**Orchard development target: 13 actions, pending playtest.** Moving both smaller neighbors to Cider Quay and leaving Medlar there gives a 12-action rescue. Taking Pomme first and returning to Spring Steps for Medlar takes 13. A strict 12 would exclude that second route even when the player correctly plans the final load. Later deliveries still count as rescues. This target lives in the design record only. [Witnesses, constraints and slack](../reviews/orchard-difficulty/DESIGN.md)
 
 ### Minimal presentation
 

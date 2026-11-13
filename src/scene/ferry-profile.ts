@@ -88,7 +88,7 @@ export function deckSeat(level: Level, id: string): Vector3 {
         : [0, 0.26, 0.69]) as [number, number, number]),
     );
   if (level.id === 'orchard-landing') {
-    const [x, z] = passenger.slots === 3 ? [-0.24, 1.43] : passenger.slots === 2 ? [-0.48, -0.525] : [0.55, 1.045];
+    const [x, z] = passenger.slots === 3 ? [-0.24, 1.43] : passenger.slots === 2 ? [-0.48, -0.525] : [0.52, -0.26];
     return new Vector3(x, wideFerryProfile.deckY, z);
   }
   const bank = level.passengers.filter((p) => p.slots === passenger.slots);
@@ -107,7 +107,7 @@ export function shoreSeat(
 ): Vector3 {
   const passenger = level.passengers.find((p) => p.id === id)!;
   if (level.id === 'orchard-landing') {
-    const [x, z] = passenger.slots === 3 ? [0.8, -0.6] : passenger.slots === 2 ? [-0.75, -0.62] : [-0.65, 0.18];
+    const [x, z] = passenger.slots === 3 ? [0.8, -0.6] : passenger.slots === 2 ? [-0.75, -0.62] : [0.62, 0.18];
     return new Vector3(pier.positionXZ[0] + x, pier.elevation * 0.18 - 0.005, pier.landAnchorXZ[1] + z);
   }
   if (level.id === 'reef-return') {

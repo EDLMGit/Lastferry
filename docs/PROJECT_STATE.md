@@ -1,16 +1,16 @@
 # Last Ferry — Project state
 
-## Current correction — Orchard difficulty · 13 November 2026
+## Orchard Landing difficulty playtest · 13 November 2026
 
-The player likes Orin's new character but reports **a downgrade in difficulty**, and asks for a more deliberate mathematical progression across twelve coves with a minimal star system where Undo affects mastery. Accept the character direction; **do not accept this puzzle as the seventh Journey step yet**. Earlier mobile, story, ferry/dock and Wide/Reef acceptance remains valid.
+The player liked Orin and found his first puzzle easier than Wide Berth and Reef Return. The repaired Practice candidate is ready for a second difficulty playtest. Its placement as Journey cove seven awaits that judgment. The twelve-cove plan and proposed mastery system remain in development.
 
-The next assignment is root [ORCHARD_DIFFICULTY_01](../NEXT_TASK_ORCHARD_DIFFICULTY.md): repair the existing `orchard-landing` Practice candidate at implementation `fb5806a7a129984290c54a9f54e08d5171d0d3d3`. Preserve its accepted art and the six-cove Journey. No new level, scene, campaign migration or deployment is commissioned.
+The revised `orchard-landing` Practice candidate starts with the empty ferry beside Pomme and Medlar at Spring Steps. Orin waits at Orchard Landing. Only one outward flow on Pomona Reach can bring him home. Its depth determines whom the player must deliver early and whom they can return for. The existing six-cove Journey and save format retain their previous endpoint. [Revised design](../reviews/orchard-difficulty/DESIGN.md) · [Phone review and recording](../reviews/orchard-difficulty/REVIEW.md)
 
-The [independent review](../reviews/orchard-difficulty-review/REVIEW.md) enumerated the actual production rules and verified source hashes. Orchard's two shortest ten-action sequences merge after five actions; after returning to the orchard at six, all five immediate legal actions preserve a win. Its three equal-depth passages and one final six-space group make the new weight mainly an opening prohibition. Counts establish structure, not human difficulty. The review also identifies Orchard's repeated/recolored Sorrel identity and inspects two committed native phone frames. Codex's 520-unit/browser results remain reported implementation evidence, not fresh full-suite reruns.
+In the earlier implementation at `fb5806a`, the two ten-action sequences merged after five actions. All five immediate choices on turn six preserved a win. The new Practice rescue has a 12-action minimum and a candidate target of 13, which admits a second pickup plan. Medlar is the orchard’s tan rabbit. Sorrel remains Wide Berth’s cream rabbit. [Earlier independent review](../reviews/orchard-difficulty-review/REVIEW.md)
 
-[Difficulty and mastery direction](DIFFICULTY_AND_MASTERY.md) defines a stronger dependency-based progression and a later **three-lantern** rating: rescue; within an authored efficient-action target; within that target without Undo. Undo remains unlimited, story progress depends only on rescue, and the calm ending is shared. The target and successful-Undo count have separate roles. **The rating is a design decision only; repair Orchard before implementing it.**
+[Difficulty and mastery direction](DIFFICULTY_AND_MASTERY.md) records the proposed three lanterns for rescue, efficiency and efficiency without Undo. Orchard’s target is recorded for designers. Undo remains unlimited, story progress depends only on rescue, and all players share the calm ending.
 
-The accepted game on Sites remains version **19**, `f0ffe2c12f1cc0e42ad7ef10a4b57dd29097c731`, hosting source `1ea40b815911a0fc1131350ee34125ae3508396e`, with its custom private audience. Preserve the [receipt](../reviews/mobile-map-readability/deployment-confirmation.json). This review/task update changes no game runtime or deployed content.
+The accepted game on Sites remains version **19**, `f0ffe2c12f1cc0e42ad7ef10a4b57dd29097c731`, hosting source `1ea40b815911a0fc1131350ee34125ae3508396e`, with its custom private audience. The Orchard repair is on the implementation branch awaiting playtest. [Publication receipt](../reviews/mobile-map-readability/deployment-confirmation.json)
 
 ## Previous implementation — Orchard Landing candidate · 13 November 2026
 

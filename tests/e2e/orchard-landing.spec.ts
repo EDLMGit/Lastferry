@@ -2,14 +2,15 @@ import { expect, test, type Page } from '@playwright/test';
 import { createHash } from 'node:crypto';
 import { readFileSync, readdirSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
-import { initial, preview, type State } from '../../src/game/rules';
-import { nodeName, orchardLanding } from '../../src/levels/level';
-import { action, coveData } from './optional-tips-support';
+import { initial, pierAt, preview, type Action, type State } from '../../src/game/rules';
+import { nodeName, orchardLanding, passengerName } from '../../src/levels/level';
+import { action } from './optional-tips-support';
 import { checkTurn, directory, localView, recordRescue, report, snapshot, transferStart } from './large-cove-support';
-import { activate, fullyVisible, idle, keyAct, ready, state, tabTo, undo, wholeCove } from './ui';
+import { activate, fullyVisible, idle, keyAct, ready, selectPlace, state, tabTo, undo, wholeCove } from './ui';
 import { route, scenes } from './journey-six-support';
 import { journeyKey } from './story-support';
 import { productionURL } from './evidence';
+import witnesses from '../../data/orchard-landing/witnesses.json' with { type: 'json' };
 
 const candidate = 'orchard-landing';
 test.use({ hasTouch: true, isMobile: true, deviceScaleFactor: 1, video: 'off' });
@@ -30,7 +31,13 @@ let capturedSource: string;
 test.beforeEach(({ browser }) => {
   const source = runtimeSource();
   capturedSource = source.sha256;
-  report(directory('source'), source.sha256, { ...source, head: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(), os: process.platform, node: process.version, browser: browser.version(), when: new Date().toISOString() });
+  report(directory('source'), source.sha256, {
+    ...source,
+    head: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
+    os: process.platform, node: process.version, browser: browser.version(),
+    captureTestSha256: createHash('sha256').update(readFileSync('tests/e2e/orchard-landing.spec.ts')).digest('hex'),
+    when: new Date().toISOString(),
+  });
 });
 test.afterEach(() => expect(runtimeSource().sha256).toBe(capturedSource));
 
@@ -65,6 +72,56 @@ async function saveFixture(page: Page, complete: boolean) {
   ], journeyKey)).toEqual([original, null, null]);
 }
 
+async function transfer(page: Page, next: Extract<Action, { passengerIds: string[] }>, before: State, onChoice?: () => Promise<void>) {
+  await localView(page);
+  const proposed = preview(before, next, orchardLanding);
+  expect(proposed.error).toBeNull();
+  await transferStart(page, next, async () => {
+    const options = next.type === 'unload' ? before.aboard : before.waitingByPier[pierAt(before, orchardLanding)!.id];
+    for (const id of options) {
+      const choice = page.locator('#passenger-' + id);
+      const passenger = orchardLanding.passengers.find(p => p.id === id)!;
+      await expect(choice).toHaveAccessibleName(new RegExp(passengerName(id, orchardLanding) + '.*' + passenger.slots + ' space'));
+      await expect(choice).toHaveAttribute('aria-pressed', String(next.passengerIds.includes(id)));
+      await expect(choice.locator('img')).toHaveAttribute('data-portrait-state', 'loaded');
+      await fullyVisible(page, choice);
+      const lines = await choice.locator('.cove-choice-name').evaluate(el => {
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        return range.getClientRects().length;
+      });
+      expect(lines, passengerName(id, orchardLanding)).toBe(1);
+    }
+    expect(await state(page)).toEqual(before);
+    await onChoice?.();
+  });
+  await idle(page);
+  await checkTurn(page, proposed.state, true);
+  return proposed.state;
+}
+
+async function keyTransfer(page: Page, next: Extract<Action, { passengerIds: string[] }>) {
+  if (!(await page.locator('#' + next.type).isVisible())) {
+    const current = page.locator('.map-target[aria-current="location"]');
+    await tabTo(page, (await current.getAttribute('id'))!);
+    await page.keyboard.press('Enter');
+  }
+  await tabTo(page, next.type);
+  await page.keyboard.press('Enter');
+  if (await page.locator('#dialog[open][data-mode=action]').count()) {
+    for (const choice of await page.locator('.passenger-options button').all()) {
+      const id = (await choice.getAttribute('id'))!;
+      if ((await choice.getAttribute('aria-pressed') === 'true') !== next.passengerIds.includes(id.slice('passenger-'.length))) {
+        await tabTo(page, id);
+        await page.keyboard.press('Space');
+      }
+    }
+    await tabTo(page, 'commit');
+    await page.keyboard.press('Enter');
+  }
+  await idle(page);
+}
+
 for (const [width, height] of [[390, 844], [780, 320]]) {
   test(`actual Orchard rescue ${width}x${height}`, async ({ page }) => {
     test.setTimeout(600000);
@@ -72,7 +129,7 @@ for (const [width, height] of [[390, 844], [780, 320]]) {
     await page.setViewportSize({ width, height });
     await page.emulateMedia({ reducedMotion: portrait ? 'no-preference' : 'reduce' });
     const saveIntact = await saveFixture(page, !portrait);
-    const { actions } = coveData(candidate);
+    const actions = witnesses.witnesses[0].actions as Action[];
     const dir = directory(`${width}x${height}`);
     const errors: string[] = [];
     page.on('pageerror', error => errors.push(error.message));
@@ -87,55 +144,68 @@ for (const [width, height] of [[390, 844], [780, 320]]) {
     }
     await settledFrame(page, dir, 'start-whole');
     await localView(page);
-    await activate(page, 'load-toggle', true);
-    await activate(page, 'close-status', true);
+    const current = orchardLanding.edges.find(edge => edge.current)!;
+    await activate(page, 'status-toggle', true);
+    const rows = page.locator('.current-schedule li');
+    await expect(rows).toHaveCount(orchardLanding.rules.tide.rises.length);
+    for (const [index, rise] of orchardLanding.rules.tide.rises.entries()) {
+      const phase = current.current!.phases.find(item => item.tideLevel === rise.level)!;
+      await expect(rows.nth(index)).toContainText(
+        'After action ' + rise.afterTurn + ' · ' + nodeName(phase.from, orchardLanding)
+          + ' → ' + nodeName(phase.to, orchardLanding) + ' · depth ' + (current.baseDepth + rise.level),
+      );
+    }
+    await activate(page, 'cancel', true);
+    expect(await state(page)).toEqual(initial(orchardLanding));
     await expect.poll(() => page.evaluate(() => (window as any).__LAST_FERRY__.getAudioStatus().running)).toBe(true);
     const finish = portrait && process.env.LAST_FERRY_ORCHARD_RECORD
       ? await recordRescue(page, dir, 'rescue') : undefined;
     const states: State[] = [];
-    const orin = orchardLanding.passengers.find(p => p.species === 'deer')!.id;
     let tideUndo = false;
+    let subset = false;
     let mixed = false;
     try {
       for (const next of actions) {
         const before = await state(page) as State;
         const proposed = preview(before, next, orchardLanding);
-        if (proposed.state.status === 'won' && next.type === 'unload') {
-          await transferStart(page, next, async () => {
-            const choice = page.locator('#passenger-' + orin);
-            await expect(choice).toHaveAccessibleName(/Orin.*3 spaces/);
-            await expect(choice.locator('img')).toHaveAttribute('data-portrait-state', 'loaded');
-            for (const label of await page.locator('.cove-choice-name').all()) {
-              const lines = await label.evaluate(el => {
-                const range = document.createRange();
-                range.selectNodeContents(el);
-                return range.getClientRects().length;
-              });
-              expect(lines, await label.textContent() ?? '').toBe(1);
+        const transferring = next.type === 'unload' || next.type === 'board';
+        if (transferring) {
+          await transfer(page, next, before, async () => {
+            if (before.turn === 0) await snapshot(page, dir, 'opening-board');
+            if (!subset && next.type === 'unload' && next.passengerIds.length < before.aboard.length) {
+              await snapshot(page, dir, 'subset-choices');
+              subset = true;
             }
-            if (!portrait) {
-              await choice.tap();
-              await expect(choice).toHaveAttribute('aria-pressed', 'false');
-              expect(await state(page)).toEqual(before);
-              await choice.tap();
-              await expect(choice).toHaveAttribute('aria-pressed', 'true');
-            }
-            await snapshot(page, dir, 'delivery-choices');
+            if (proposed.state.status === 'won') await snapshot(page, dir, 'delivery-choices');
           });
+        } else if (next.type === 'move') {
+          await selectPlace(page, next.to, true);
+          await expect(page.locator('#sail')).toHaveAccessibleName('Sail to ' + nodeName(next.to, orchardLanding) + ' · 1 action');
+          await fullyVisible(page, page.locator('#sail'));
+          expect(await state(page)).toEqual(before);
+          await activate(page, 'sail', true);
           await idle(page);
           await checkTurn(page, proposed.state, true);
-        } else await action(page, next, orchardLanding);
-        states.push(await state(page));
-        if (!portrait && !tideUndo && proposed.state.tideLevel > before.tideLevel) {
+        } else {
+          await action(page, next, orchardLanding);
+        }
+        const after = await state(page) as State;
+        states.push(after);
+        if (after.turn === 1) await settledFrame(page, dir, 'steps-pair-aboard');
+        if (!portrait && !tideUndo && after.tideLevel > before.tideLevel) {
           await undo(page, true);
           expect(await state(page)).toEqual(before);
           await action(page, next, orchardLanding);
           tideUndo = true;
         }
-        if (!mixed && proposed.state.aboard.includes(orin) && proposed.state.aboard.length > 1) {
+        if (!mixed && after.aboard.length === 2 && after.aboard.includes('orin')) {
           await localView(page);
           await settledFrame(page, dir, 'orin-aboard');
           mixed = true;
+        }
+        if (next.type === 'move' && before.boatNodeId === 'orchard' && after.aboard.includes('orin')) {
+          await localView(page);
+          await settledFrame(page, dir, 'return-crossed');
         }
       }
       expect(states.at(-1)?.status).toBe('won');
@@ -148,50 +218,76 @@ for (const [width, height] of [[390, 844], [780, 320]]) {
       if (finish) await finish();
     }
     expect(mixed).toBe(true);
+    expect(subset).toBe(true);
     if (!portrait) expect(tideUndo).toBe(true);
     await undo(page, true);
     expect(await state(page)).toEqual(states.at(-2));
-    if (!portrait) {
-      await action(page, { type: 'unload', passengerIds: [orin] }, orchardLanding);
-      expect((await state(page)).delivered).toEqual([orin]);
-      await undo(page, true);
-      expect(await state(page)).toEqual(states.at(-2));
-    }
     await saveIntact();
     expect(errors).toEqual([]);
-    report(dir, 'rescued', { viewport: [width, height], states, tideUndo, terminalUndo: true, errors });
+    report(dir, 'rescued', { viewport: [width, height], source: capturedSource, states, subset, tideUndo, terminalUndo: true, errors });
   });
 }
 
-test('boarding Orin immediately loses the shallow opportunity; Undo recovers the departure', async ({ page }) => {
+test('a legal early load choice strands a later rescue; keyboard Undo returns to the choice', async ({ page }) => {
   await page.setViewportSize({ width: 780, height: 320 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await ready(page, candidate);
-  const original = await state(page);
-  await keyAct(page, 'board');
-  const first = await state(page);
-  expect(first.aboard).toEqual(['orin']);
-  await wholeCove(page);
-  const reach = orchardLanding.edges.find(edge => edge.current)!;
-  const next = reach.nodes.find(node => node !== first.boatNodeId)!;
-  await tabTo(page, 'map-' + next);
-  await page.keyboard.press('Enter');
-  await expect(page.locator('#sail')).toBeDisabled();
-  await expect(page.locator('#local-context')).toContainText(/too shallow/i);
-  expect(await state(page)).toEqual(first);
-  await page.keyboard.press('Escape');
-  const prior = [original];
-  while ((await state(page)).status === 'playing') {
-    prior.push(await state(page));
-    expect(prior.length).toBeLessThanOrEqual(orchardLanding.rules.tide.rises.at(-1)!.afterTurn);
-    await keyAct(page, 'wait');
+  const dir = directory('recovery');
+  const timeline: State[] = [await state(page)];
+  const wrong = witnesses.losingAlternatives[0].actions as Action[];
+  const winning = witnesses.witnesses[0].actions as Action[];
+  const choice = wrong.findIndex((step, index) => JSON.stringify(step) !== JSON.stringify(winning[index]));
+  expect(choice).toBeGreaterThanOrEqual(0);
+  for (const next of wrong) {
+    const before = timeline.at(-1)!;
+    const prediction = preview(before, next, orchardLanding);
+    expect(prediction.error).toBeNull();
+    if (next.type === 'board' || next.type === 'unload') {
+      await keyTransfer(page, next);
+    } else if (next.type === 'move') {
+      await wholeCove(page);
+      await keyAct(page, 'map-' + next.to);
+    } else {
+      await keyAct(page, 'wait');
+    }
+    await checkTurn(page, prediction.state, true);
+    timeline.push(await state(page));
+    if (next.type === 'board' && next.passengerIds.includes('orin')) {
+      const loaded = await state(page);
+      expect(loaded.aboard.slice().sort()).toEqual(['orin', 'pomme']);
+      await wholeCove(page);
+      await tabTo(page, 'map-quay');
+      await page.keyboard.press('Enter');
+      await expect(page.locator('#sail')).toBeDisabled();
+      const context = page.locator('#local-context');
+      await expect(context).toContainText(/too shallow/i);
+      if (!(await page.locator('#location-facts').isVisible())) {
+        await tabTo(page, 'location-details');
+        await page.keyboard.press('Enter');
+      }
+      await expect(context).toContainText('Boat needs depth 4. Passage has depth 3');
+      await snapshot(page, dir, 'wrong-escort');
+      await page.keyboard.press('Escape');
+      expect(await state(page)).toEqual(loaded);
+    }
   }
-  await expect(page.locator('#dialog')).toHaveAttribute('data-outcome', 'lost');
-  await expect(page.locator('.ending')).toContainText('Sorrel');
-  for (const previous of prior.reverse()) {
-    await undo(page, true);
-    expect(await state(page)).toEqual(previous);
+  expect(timeline[choice + 1].status).toBe('playing');
+  expect(timeline.at(-1)?.status).toBe('lost');
+  await snapshot(page, dir, 'outcome');
+  expect(wrong.length - choice).toBeGreaterThanOrEqual(2);
+  for (let i = wrong.length - 1; i >= choice; i--) {
+    const id = i === wrong.length - 1 ? 'terminal-undo' : 'undo';
+    await tabTo(page, id);
+    await page.keyboard.press('Enter');
+    await idle(page);
+    expect(await state(page)).toEqual(timeline[i]);
   }
+  const restored = await state(page);
+  await localView(page);
+  await settledFrame(page, dir, 'decision-restored');
+  for (const next of winning.slice(choice)) await action(page, next, orchardLanding);
+  expect((await state(page)).status).toBe('won');
+  report(dir, 'wrong-plan', { source: capturedSource, wrong, choice, rollbackCount: wrong.length - choice, timeline, restored, recovered: await state(page) });
 });
 
 test('production Practice entrance and desktop composition', async ({ page }) => {
@@ -209,4 +305,18 @@ test('production Practice entrance and desktop composition', async ({ page }) =>
   await keyAct(page, 'undo');
   await expect(page.locator('[data-testid=turn]')).toHaveText('00');
   await saveIntact();
+});
+
+test('a separate return to Spring Steps rescues Medlar before the current turns', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await ready(page, candidate);
+  const witness = witnesses.witnesses.find(entry => entry.id === 'return-to-spring-steps')!;
+  const states: State[] = [];
+  for (const next of witness.actions as Action[]) states.push(await action(page, next, orchardLanding));
+  expect(states[0].waitingByPier['steps-pier']).toEqual(['medlar']);
+  expect(states[6].boatNodeId).toBe('steps');
+  expect(states[6].aboard).toEqual(['medlar']);
+  expect(states.at(-1)?.status).toBe('won');
+  report(directory('recovery'), 'steps-return', { source: capturedSource, witness: witness.id, states });
 });

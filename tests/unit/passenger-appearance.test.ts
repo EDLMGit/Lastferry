@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { resolvePassengerAppearance } from '../../src/game/passenger-appearance';
 import { initial, reduce, type Action } from '../../src/game/rules';
-import { bellwater, holdingPier, level, orchardLanding, type Level } from '../../src/levels/level';
+import { bellwater, holdingPier, level, orchardLanding, passengerName, wideBerth, type Level } from '../../src/levels/level';
 import { World } from '../../src/scene/world';
 
 describe('passenger appearance identity', () => {
@@ -16,12 +16,20 @@ describe('passenger appearance identity', () => {
     [bellwater, 'lark', 'rabbit', 1, 'rabbit-tan'],
     [bellwater, 'bram', 'sheep', 0, 'sheep-wool'],
     [orchardLanding, 'orin', 'deer', 0, 'deer-chestnut'],
-    [orchardLanding, 'sorrel', 'rabbit', 0, 'rabbit-tan'],
+    [orchardLanding, 'medlar', 'rabbit', 0, 'rabbit-tan'],
   ] as const)('%s / %s keeps its full-level appearance', (cove, id, species, speciesOrdinal, portraitKey) => {
     const before = structuredClone(cove);
     expect(resolvePassengerAppearance(cove, id)).toEqual({ species, speciesOrdinal, portraitKey });
     expect(World.prototype.speciesIndex.call({ level: cove } as World, id)).toBe(speciesOrdinal);
     expect(cove).toEqual(before);
+  });
+
+  test('the Orchard rabbit has a separate identity from Wide’s rescued Sorrel', () => {
+    expect(passengerName('medlar', orchardLanding)).toBe('Medlar');
+    expect(passengerName('sorrel', wideBerth)).toBe('Sorrel');
+    expect(resolvePassengerAppearance(orchardLanding, 'sorrel')).toBeNull();
+    expect(resolvePassengerAppearance(wideBerth, 'medlar')).toBeNull();
+    expect(resolvePassengerAppearance(wideBerth, 'sorrel')?.portraitKey).toBe('rabbit-cream');
   });
 
   test.each([

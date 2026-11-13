@@ -2,27 +2,35 @@
   "levelId": "orchard-landing",
   "witnesses": [
     {
-      "id": "return-to-the-orchard",
+      "id": "stage-the-orchard-escort",
       "actions": [
         {
-          "type": "move",
-          "to": "quay"
-        },
-        {
-          "type": "move",
-          "to": "steps"
-        },
-        {
           "type": "board",
-          "passengerIds": ["sorrel"]
+          "passengerIds": ["pomme", "medlar"]
         },
         {
           "type": "move",
           "to": "quay"
         },
         {
-          "type": "board",
+          "type": "unload",
+          "passengerIds": ["medlar"]
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
           "passengerIds": ["pomme"]
+        },
+        {
+          "type": "move",
+          "to": "quay"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["medlar"]
         },
         {
           "type": "move",
@@ -42,47 +50,91 @@
         },
         {
           "type": "unload",
-          "passengerIds": ["orin", "pomme", "sorrel"]
+          "passengerIds": ["medlar", "orin"]
+        }
+      ]
+    },
+    {
+      "id": "return-to-spring-steps",
+      "actions": [
+        {
+          "type": "board",
+          "passengerIds": ["pomme"]
+        },
+        {
+          "type": "move",
+          "to": "quay"
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": ["pomme"]
+        },
+        {
+          "type": "move",
+          "to": "quay"
+        },
+        {
+          "type": "move",
+          "to": "steps"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["medlar"]
+        },
+        {
+          "type": "move",
+          "to": "quay"
+        },
+        {
+          "type": "move",
+          "to": "orchard"
+        },
+        {
+          "type": "board",
+          "passengerIds": ["orin"]
+        },
+        {
+          "type": "move",
+          "to": "quay"
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": ["medlar", "orin"]
         }
       ]
     }
   ],
   "losingAlternatives": [
     {
-      "id": "board-the-deer-first",
+      "id": "deliver-the-rabbit-and-escort-the-sheep",
       "actions": [
         {
           "type": "board",
-          "passengerIds": ["orin"]
+          "passengerIds": ["pomme", "medlar"]
+        },
+        {
+          "type": "move",
+          "to": "quay"
         },
         {
           "type": "unload",
-          "passengerIds": ["orin"]
+          "passengerIds": ["pomme"]
         },
         {
           "type": "move",
-          "to": "quay"
+          "to": "harbor"
         },
         {
-          "type": "move",
-          "to": "steps"
-        }
-      ]
-    },
-    {
-      "id": "turn-home-with-the-smaller-passengers",
-      "actions": [
-        {
-          "type": "move",
-          "to": "quay"
-        },
-        {
-          "type": "move",
-          "to": "steps"
-        },
-        {
-          "type": "board",
-          "passengerIds": ["sorrel"]
+          "type": "unload",
+          "passengerIds": ["medlar"]
         },
         {
           "type": "move",
@@ -94,17 +146,12 @@
         },
         {
           "type": "move",
-          "to": "harbor"
+          "to": "orchard"
         },
         {
-          "type": "unload",
-          "passengerIds": ["sorrel", "pomme"]
-        }
-      ]
-    },
-    {
-      "id": "wait-for-a-deeper-channel",
-      "actions": [
+          "type": "board",
+          "passengerIds": ["orin"]
+        },
         {
           "type": "wait"
         },
@@ -112,12 +159,7 @@
           "type": "wait"
         },
         {
-          "type": "move",
-          "to": "quay"
-        },
-        {
-          "type": "move",
-          "to": "steps"
+          "type": "wait"
         }
       ]
     }

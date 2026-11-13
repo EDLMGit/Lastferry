@@ -2,9 +2,9 @@
 
 ## Current difficulty correction · 13 November 2026
 
-The accepted Journey remains **Holding → Bellwater → Driftwood → Two Shelters → launch → Wide → Reef**. Orchard is an eighth independent Practice entrance intended for C7. The player accepts Orin's character direction but finds his current puzzle easier than its predecessors.
+The accepted Journey remains **Holding → Bellwater → Driftwood → Two Shelters → launch → Wide → Reef**. The repaired Orchard is its intended seventh cove and remains the eighth independent Practice entrance for playtesting. The player accepted Orin’s character direction and found the first Orchard puzzle easier than its predecessors.
 
-Follow [ORCHARD_DIFFICULTY_01](../NEXT_TASK_ORCHARD_DIFFICULTY.md) and the canonical [difficulty/mastery contract](../docs/DIFFICULTY_AND_MASTERY.md). Repair Orchard in place, preserving all other accepted coves. The prior requirement for a distinct preparation move was insufficient: a meaningful sequence of dependent decisions must ask more of a player who knows the first six coves.
+The first version required a light departure. The revised puzzle asks the player to reason backward from Orin’s outward crossing to the first Harbor delivery. [Repair design](../reviews/orchard-difficulty/DESIGN.md) · [Difficulty and mastery](../docs/DIFFICULTY_AND_MASTERY.md)
 
 ### Source-backed diagnosis
 
@@ -12,13 +12,13 @@ The independent production graph confirms two shortest ten-action Orchard sequen
 
 This is structural evidence consistent with the player's report, not a computed human difficulty rating. Reef and Orchard both have ten-action optima; their decisions differ. Sequence counts also include symmetric or interchangeable choices.
 
-### Required repair outcome
+### Repaired Practice puzzle
 
-Connect an early load or position choice to a later retrieval/crossing obligation. Orin's third space must remain consequential beyond the first departure check. Establish the inference and its dependent decisions, then author the compact topology, roster and tide/current schedule to make it real. Preserve six-space capacity, one scheduled-current passage at most, full information, default-Off Tips and unrestricted Undo.
+On the only outward flow, Orin and Medlar occupy four spaces and need depth three. Orin and Pomme would occupy five and need depth four. Low water permits a Harbor trip for either small neighbor, yet sending Medlar there first leaves Pomme as the wrong companion for Orin. Pomme and Medlar can travel together as far as Cider Quay. Choosing whether to stage Medlar there or return to Spring Steps changes the pickup route and its time margin.
 
-Do not satisfy the task with extra waits, a lower action budget, more bodies or a larger map. Allow meaningful alternative strategies without demanding them. Counterfactual checks and production reachability should establish which constraints matter; phone playtesting decides whether the reasoning is readable and satisfying.
+The same three neighbors and four landings support both plans. The current turns after action nine and again after twelve. The Harbor approach begins at depth two, while the channel to Spring Steps starts at depth three. Inspection exposes the forecast and the route facts with Tips Off.
 
-Keep a developer record of the proved minimum and a justified candidate efficient target. The later three-lantern concept distinguishes ordinary rescue, efficiency and no-Undo execution. It is not a runtime action cap and is not implemented in this repair.
+The proposed target of 13 admits the 12-action staging route and the 13-action separate pickup. The future three-lantern concept remains a design proposal. Human testing will decide whether this puzzle earns its C7 place.
 
 The accepted preceding decisions remain:
 

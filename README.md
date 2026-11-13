@@ -2,7 +2,7 @@
 
 **[Play the Journey locally](http://127.0.0.1:5270/)**. The available coast connects six rescues. The direct [Wide Berth](http://127.0.0.1:5270/?cove=wide-berth) and [Reef Return](http://127.0.0.1:5270/?cove=reef-return) links open independent Practice.
 
-[Play Orchard Landing](http://127.0.0.1:5270/?cove=orchard-landing) from a local server or choose it from Home → Practice. Orin, Pomme and Sorrel are waiting on three shores. The ferry has six spaces. Practice keeps your Journey checkpoint.
+[Play Orchard Landing](http://127.0.0.1:5270/?cove=orchard-landing) from a local server or choose it from Home → Practice. Bring Orin, Pomme and Medlar home on the six-space ferry. Practice keeps your Journey checkpoint.
 
 Play starts the illustrated opening. Take the helm enters Holding Pier. After each rescue, Continue story accepts that crossing and takes you onward to Bellwater, Driftwood Yard, then Two Shelters. Hazel and Bracken ride the small ferry while Mica waits by the reeds. After Two Shelters, Nell launches her prepared six-space ferry for Wide Berth. Heather and Birch are aboard for the final available crossing, Reef Return, where Dot and Flick answer with lights. [Campaign direction](campaign/CAMPAIGN_DIRECTION.md) · [Story and captions](campaign/STORY_SCENES.md) · [Verification and actual phone scenes](reviews/journey-six-coves/REVIEW.md)
 

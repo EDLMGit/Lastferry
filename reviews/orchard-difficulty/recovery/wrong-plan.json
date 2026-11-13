@@ -1,0 +1,377 @@
+{
+  "source": "55e2419df496fb5e06722b83e8325c82b89538b6682d9ff2656650615da3b929",
+  "wrong": [
+    {
+      "type": "board",
+      "passengerIds": [
+        "pomme",
+        "medlar"
+      ]
+    },
+    {
+      "type": "move",
+      "to": "quay"
+    },
+    {
+      "type": "unload",
+      "passengerIds": [
+        "pomme"
+      ]
+    },
+    {
+      "type": "move",
+      "to": "harbor"
+    },
+    {
+      "type": "unload",
+      "passengerIds": [
+        "medlar"
+      ]
+    },
+    {
+      "type": "move",
+      "to": "quay"
+    },
+    {
+      "type": "board",
+      "passengerIds": [
+        "pomme"
+      ]
+    },
+    {
+      "type": "move",
+      "to": "orchard"
+    },
+    {
+      "type": "board",
+      "passengerIds": [
+        "orin"
+      ]
+    },
+    {
+      "type": "wait"
+    },
+    {
+      "type": "wait"
+    },
+    {
+      "type": "wait"
+    }
+  ],
+  "choice": 2,
+  "rollbackCount": 10,
+  "timeline": [
+    {
+      "turn": 0,
+      "tideLevel": 0,
+      "boatNodeId": "steps",
+      "aboard": [],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "orchard-pier": [
+          "orin"
+        ],
+        "quay-pier": [],
+        "steps-pier": [
+          "pomme",
+          "medlar"
+        ]
+      },
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 1,
+      "tideLevel": 0,
+      "boatNodeId": "steps",
+      "aboard": [
+        "pomme",
+        "medlar"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "orchard-pier": [
+          "orin"
+        ],
+        "quay-pier": [],
+        "steps-pier": []
+      },
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 2,
+      "tideLevel": 0,
+      "boatNodeId": "quay",
+      "aboard": [
+        "pomme",
+        "medlar"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "orchard-pier": [
+          "orin"
+        ],
+        "quay-pier": [],
+        "steps-pier": []
+      },
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 3,
+      "tideLevel": 0,
+      "boatNodeId": "quay",
+      "aboard": [
+        "medlar"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "orchard-pier": [
+          "orin"
+        ],
+        "quay-pier": [
+          "pomme"
+        ],
+        "steps-pier": []
+      },
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 4,
+      "tideLevel": 0,
+      "boatNodeId": "harbor",
+      "aboard": [
+        "medlar"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "orchard-pier": [
+          "orin"
+        ],
+        "quay-pier": [
+          "pomme"
+        ],
+        "steps-pier": []
+      },
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 5,
+      "tideLevel": 0,
+      "boatNodeId": "harbor",
+      "aboard": [],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "orchard-pier": [
+          "orin"
+        ],
+        "quay-pier": [
+          "pomme"
+        ],
+        "steps-pier": []
+      },
+      "delivered": [
+        "medlar"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 6,
+      "tideLevel": 0,
+      "boatNodeId": "quay",
+      "aboard": [],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "orchard-pier": [
+          "orin"
+        ],
+        "quay-pier": [
+          "pomme"
+        ],
+        "steps-pier": []
+      },
+      "delivered": [
+        "medlar"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 7,
+      "tideLevel": 0,
+      "boatNodeId": "quay",
+      "aboard": [
+        "pomme"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "orchard-pier": [
+          "orin"
+        ],
+        "quay-pier": [],
+        "steps-pier": []
+      },
+      "delivered": [
+        "medlar"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 8,
+      "tideLevel": 0,
+      "boatNodeId": "orchard",
+      "aboard": [
+        "pomme"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "orchard-pier": [
+          "orin"
+        ],
+        "quay-pier": [],
+        "steps-pier": []
+      },
+      "delivered": [
+        "medlar"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 9,
+      "tideLevel": 1,
+      "boatNodeId": "orchard",
+      "aboard": [
+        "pomme",
+        "orin"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "orchard-pier": [],
+        "quay-pier": [],
+        "steps-pier": []
+      },
+      "delivered": [
+        "medlar"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 10,
+      "tideLevel": 1,
+      "boatNodeId": "orchard",
+      "aboard": [
+        "pomme",
+        "orin"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "orchard-pier": [],
+        "quay-pier": [],
+        "steps-pier": []
+      },
+      "delivered": [
+        "medlar"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 11,
+      "tideLevel": 1,
+      "boatNodeId": "orchard",
+      "aboard": [
+        "pomme",
+        "orin"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "orchard-pier": [],
+        "quay-pier": [],
+        "steps-pier": []
+      },
+      "delivered": [
+        "medlar"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 12,
+      "tideLevel": 2,
+      "boatNodeId": "orchard",
+      "aboard": [
+        "pomme",
+        "orin"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "orchard-pier": [],
+        "quay-pier": [],
+        "steps-pier": []
+      },
+      "delivered": [
+        "medlar"
+      ],
+      "status": "lost",
+      "lossReason": {
+        "code": "RETURN_CUT_OFF",
+        "edgeId": "orchard-quay",
+        "passengerIds": [
+          "orin",
+          "pomme"
+        ]
+      }
+    }
+  ],
+  "restored": {
+    "turn": 2,
+    "tideLevel": 0,
+    "boatNodeId": "quay",
+    "aboard": [
+      "pomme",
+      "medlar"
+    ],
+    "waitingByPier": {
+      "harbor-pier": [],
+      "orchard-pier": [
+        "orin"
+      ],
+      "quay-pier": [],
+      "steps-pier": []
+    },
+    "delivered": [],
+    "status": "playing",
+    "lossReason": null
+  },
+  "recovered": {
+    "turn": 12,
+    "tideLevel": 2,
+    "boatNodeId": "harbor",
+    "aboard": [],
+    "waitingByPier": {
+      "harbor-pier": [],
+      "orchard-pier": [],
+      "quay-pier": [],
+      "steps-pier": []
+    },
+    "delivered": [
+      "pomme",
+      "medlar",
+      "orin"
+    ],
+    "status": "won",
+    "lossReason": null
+  }
+}

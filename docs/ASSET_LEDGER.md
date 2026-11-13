@@ -2,6 +2,8 @@
 
 ## Orchard Landing
 
+The difficulty repair assigns the existing tan rabbit appearance to Medlar in Orchard. Sorrel retains her cream appearance and stable identity in Wide Berth. The gallery reads the named choices from level data. The catalog records the player’s acceptance of Orin’s character direction at `fb5806a`. Orchard seats Medlar opposite Pomme ashore and nearer midships on deck so the pairings used in the new puzzle read clearly. The `model.ferry` and `motion.transfer` families link this evidence. All 80 asset families retain their existing IDs and artwork. [Native phone review](../reviews/orchard-difficulty/REVIEW.md)
+
 `model.deer` is the original production mesh for Orin. The single existing `ui.passenger-portraits` family gains `deer-chestnut`, an offline SVG projection rasterized to a 256px transparent PNG. The family record identifies the source for each of the five portraits. [Generation record](../assets/portraits/deer-manifest.json) · [Family manifest](../assets/portraits/family-manifest.json)
 
 The fruiting tree extends `scenery.garden-kit`. The `model.ferry` and `motion.transfer` entries record the deer’s automatic seat and shore approach on the accepted six-space boat. All 79 previous catalog IDs remain. The eight Practice entrances and the production gallery share the same inventory. Orchard’s visual and puzzle acceptance await playtesting. [Inventory](../assets/catalog.json) · [Review](../reviews/orchard-landing/REVIEW.md)
