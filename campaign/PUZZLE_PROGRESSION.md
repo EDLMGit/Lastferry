@@ -1,32 +1,35 @@
 # Puzzle progression — selected campaign direction
 
-## Current progression and next candidate · 13 November 2026
+## Current difficulty correction · 13 November 2026
 
-The accepted Journey is **Holding → Bellwater → Driftwood → Two Shelters → launch → Wide → Reef**. The first four use the small ferry; the last two use the accepted six-space ferry. All seven existing Practice entrances remain. The player's latest mobile feedback permits continued development; preserve these puzzles, rules, witnesses, presentation and default-Off Tips. [Current state](../docs/PROJECT_STATE.md)
+The accepted Journey remains **Holding → Bellwater → Driftwood → Two Shelters → launch → Wide → Reef**. Orchard is an eighth independent Practice entrance intended for C7. The player accepts Orin's character direction but finds his current puzzle easier than its predecessors.
 
-### Intended C7 — Orchard Landing
+Follow [ORCHARD_DIFFICULTY_01](../NEXT_TASK_ORCHARD_DIFFICULTY.md) and the canonical [difficulty/mastery contract](../docs/DIFFICULTY_AND_MASTERY.md). Repair Orchard in place, preserving all other accepted coves. The prior requirement for a distinct preparation move was insufficient: a meaningful sequence of dependent decisions must ask more of a player who knows the first six coves.
 
-Root [ORCHARD_LANDING_01](../NEXT_TASK_ORCHARD_LANDING.md) commissions one complete **Practice candidate**, not a Journey reorder or save migration. Orin is a new deer with an indivisible cost of three spaces on the existing six-space ferry.
+### Source-backed diagnosis
 
-**Design question:** What must the light ferry finish—and where must it be—before committing to Orin's load?
+The independent production graph confirms two shortest ten-action Orchard sequences. They differ only in the order of the smaller pickups and merge at turn five. All three routes share base depth two, all passengers fit one final load, and no temporary unloading is needed. Orin's third space blocks the opening departure but does not produce a later load-partition decision. At the safe orchard on turn six, all five legal immediate actions preserve a winning continuation. [Review, source hashes and reproducible analysis](../reviews/orchard-difficulty-review/REVIEW.md)
 
-The authored Practice cove has four landings. Pomona Reach starts at depth two and runs outward from the orchard. It runs back toward Orin after action four, then outward for good after action seven. The ferry can pick up Sorrel and Pomme in either order. Its position when the current turns determines whether it can return with Orin. [Reducer proof and alternatives](../reviews/orchard-landing/DESIGN.md)
+This is structural evidence consistent with the player's report, not a computed human difficulty rating. Reef and Orchard both have ten-action optima; their decisions differ. Sequence counts also include symmetric or interchangeable choices.
 
-The existing draft bands already make Orin alone (3 spaces) require depth 3, Orin plus a rabbit (4) require depth 3, and Orin plus a two-space neighbor (5) require depth 4. Use those facts without new weight statistics or a packing mechanic. Preserve automatic seats. The candidate may use at most the existing one scheduled-current passage; there is no second current or new water rule in this task.
+### Required repair outcome
 
-The design report must identify the actual consequential choice and distinguish it from these accepted puzzles:
+Connect an early load or position choice to a later retrieval/crossing obligation. Orin's third space must remain consequential beyond the first departure check. Establish the inference and its dependent decisions, then author the compact topology, roster and tide/current schedule to make it real. Preserve six-space capacity, one scheduled-current passage at most, full information, default-Off Tips and unrestricted Undo.
 
-| Existing cove | Established decision |
+Do not satisfy the task with extra waits, a lower action budget, more bodies or a larger map. Allow meaningful alternative strategies without demanding them. Counterfactual checks and production reachability should establish which constraints matter; phone playtesting decides whether the reasoning is readable and satisfying.
+
+Keep a developer record of the proved minimum and a justified candidate efficient target. The later three-lantern concept distinguishes ordinary rescue, efficiency and no-Undo execution. It is not a runtime action cap and is not implemented in this repair.
+
+The accepted preceding decisions remain:
+
+| Cove | Established decision |
 | --- | --- |
-| Driftwood Yard | Stage the heavier neighbor at the useful refuge, collect the smaller pair and retrieve through the deepened route. |
-| Wide Berth | Put exactly two spaces through the first homeward opportunity so six can fit on the final crossing. |
-| Reef Return | Choose between gathering both rabbits before a full delivery and delivering a heavy group early to approach the final rabbit from Harbor. |
+| Driftwood Yard | Stage the heavier neighbor, collect the smaller pair and retrieve through a deepened route. |
+| Two Shelters | Choose a refuge and retrieval order together. |
+| Wide Berth | Allocate eight spaces across homeward opportunities, with two spaces first and six last. |
+| Reef Return | Choose early loading/staging that changes whether to gather everyone or deliver a heavy group and approach the last rabbit from Harbor. |
 
-A renamed or deer-reskinned version of one of those decisions does not satisfy C7. Keep the map and cast compact; do not treat solution length or body count as difficulty evidence.
-
-Prove a rescue through the production reducer and meaningful alternative decisions with recoverable consequences. Check immediate full boarding, ordinary shuttles, safe-pier waiting and deep bypasses where relevant. Valid alternative plans are welcome; routine behavior must not bypass the entire claimed insight. Orin's third space must change a relevant choice, not only the label. Exhaustive claims need corresponding reachability evidence and honest limits. The existing design reports remain useful comparisons: [Wide](../reviews/existing-coves-repair/WIDE_DESIGN.md) and [Reef](../reviews/existing-coves-repair/REEF_DESIGN.md).
-
-The candidate's gameplay model/portrait and transfer fit are part of this pass. Its illustrated entry and completed-six save continuation follow acceptance. The six-cove Journey and all original save bytes stay unchanged during Practice. C8–C12 remain provisional story/difficulty roles in [campaign direction](CAMPAIGN_DIRECTION.md), not further level assignments.
+The twelve-cove reasoning/pacing table now lives in [difficulty and mastery](../docs/DIFFICULTY_AND_MASTERY.md). C8–C12 remain uncommissioned. Orchard's illustrated entry and Journey/save continuation wait for a successful repair playtest.
 
 ## Historical acceptance of the existing-cove repair · 7 November 2026
 

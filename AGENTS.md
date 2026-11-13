@@ -2,11 +2,13 @@
 
 ## Objective
 
-**ORCHARD_LANDING_01** is the current assignment: read root [NEXT_TASK_ORCHARD_LANDING.md](NEXT_TASK_ORCHARD_LANDING.md). Build one compact independent Practice candidate for intended cove seven, introducing Orin, a three-space deer, on the accepted six-space ferry. Author and prove a distinct preparation/load decision within existing rules. Exact geometry, values and implementation remain Codex decisions.
+**ORCHARD_DIFFICULTY_01** is the current assignment: read root [NEXT_TASK_ORCHARD_DIFFICULTY.md](NEXT_TASK_ORCHARD_DIFFICULTY.md), [difficulty and mastery direction](docs/DIFFICULTY_AND_MASTERY.md), and [independent review](reviews/orchard-difficulty-review/REVIEW.md). Repair the existing Orchard Landing candidate in place. The player likes Orin but finds the puzzle a difficulty downgrade. A new character and a required collection loop do not yet establish the intended seventh-cove challenge.
 
-The player accepted the mobile readability pass for continued development on 13 November 2026. Accepted runtime is `f0ffe2c12f1cc0e42ad7ef10a4b57dd29097c731`, live as Sites version **19**. Preserve the six-cove Journey, all seven existing Practice entrances, accepted puzzles/difficulty, boats/docks/art, story, audio, mobile framing/Zoom, Tips Off and complete Undo. Add Orchard to Practice only; its illustrated scene and Journey/save extension follow candidate acceptance.
+Start from `fb5806a7a129984290c54a9f54e08d5171d0d3d3` plus this task/continuity update. Preserve newer/unrelated work. Keep Orin's accepted art, the six-space ferry, mobile presentation, audio, Tips Off and complete Undo. Author a more consequential chain of load/position and later retrieval/crossing decisions with the existing rules. Correct Orchard's supporting-rabbit identity collision without changing Wide's Sorrel.
 
-Read the active `docs/PROJECT_STATE.md` and latest publication receipt. The existing Site is shared privately with a named external viewer at the user's request. Preserve its custom audience; future publication must use the supported shared-Site flow. Do not copy recipient contact details into this public repository. This task does not deploy. Preserve newer/unrelated work and record observed changes in `STATUS.md`.
+The six-cove Journey, all other puzzles, save format and eight Practice entrances remain. No new cove, Journey integration, illustrated scene or reward implementation is commissioned in this repair. The three-lantern concept is documented for a later task. Exact map values and implementation remain Codex decisions.
+
+Read the active `docs/PROJECT_STATE.md` and latest publication receipt. The Site remains version 19 with its custom private audience. Preserve that audience and all publication history; future publication uses the supported shared-Site flow. Do not copy recipient contact details into this public repository. **Do not deploy this task.**
 
 ## Read and preserve the project decisions
 

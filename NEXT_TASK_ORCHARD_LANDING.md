@@ -1,5 +1,7 @@
 # ORCHARD_LANDING_01 — meet Orin and prepare the crossing
 
+> **Implemented at `fb5806a7a129984290c54a9f54e08d5171d0d3d3`.** The player likes Orin but finds the puzzle a difficulty downgrade. Preserve the accepted character and follow root [ORCHARD_DIFFICULTY_01](NEXT_TASK_ORCHARD_DIFFICULTY.md) to repair the existing candidate. This earlier brief is historical; it does not commission another cove or Journey integration. [Independent review](reviews/orchard-difficulty-review/REVIEW.md)
+
 ## Outcome and baseline
 
 Build one complete, compact Practice candidate for the intended seventh Journey cove: **Orchard Landing**, `?cove=orchard-landing`. Introduce **Orin, a gentle deer who occupies three spaces**, aboard the already accepted six-space ferry. Give the player a consequential new planning decision using the existing rules.

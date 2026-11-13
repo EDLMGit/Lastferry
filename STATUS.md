@@ -1,3 +1,15 @@
+# Current correction — Orchard difficulty · 13 November 2026
+
+The player accepts Orin's character direction but finds Orchard easier than the accepted preceding coves. Root [ORCHARD_DIFFICULTY_01](NEXT_TASK_ORCHARD_DIFFICULTY.md) now repairs the existing candidate; it does not add another level.
+
+The independent production-rule audit verified exact source hashes and all seven cove graphs. Orchard has two shortest ten-action sequences that merge at action five, with much of the challenge resolved at the safe orchard. [Review and reproducible results](reviews/orchard-difficulty-review/REVIEW.md)
+
+[Difficulty and three-lantern mastery](docs/DIFFICULTY_AND_MASTERY.md) defines the twelve-cove reasoning curve and a later optional rescue/efficiency/no-Undo reward. No reward UI or scoring is implemented by this documentation update.
+
+Start the repair from game `fb5806a7a129984290c54a9f54e08d5171d0d3d3`, preserving the accepted art, six-cove Journey, other puzzles, phone controls and saves. Orchard remains Practice. Site version 19 and its custom private audience are unchanged. No deployment.
+
+## Earlier implementation handoffs
+
 # Orchard Landing Practice candidate · 13 November 2026
 
 Orchard Landing is playable via Home → Practice or [directly on the local server](http://127.0.0.1:5270/?cove=orchard-landing). All six Journey coves, the saved endpoint and the seven earlier Practice entries retain their identities. Published game `f0ffe2c12f1cc0e42ad7ef10a4b57dd29097c731` remains live as Sites version 19.

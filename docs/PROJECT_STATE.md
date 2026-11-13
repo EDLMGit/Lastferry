@@ -1,6 +1,18 @@
 # Last Ferry — Project state
 
-## Orchard Landing Practice candidate · 13 November 2026
+## Current correction — Orchard difficulty · 13 November 2026
+
+The player likes Orin's new character but reports **a downgrade in difficulty**, and asks for a more deliberate mathematical progression across twelve coves with a minimal star system where Undo affects mastery. Accept the character direction; **do not accept this puzzle as the seventh Journey step yet**. Earlier mobile, story, ferry/dock and Wide/Reef acceptance remains valid.
+
+The next assignment is root [ORCHARD_DIFFICULTY_01](../NEXT_TASK_ORCHARD_DIFFICULTY.md): repair the existing `orchard-landing` Practice candidate at implementation `fb5806a7a129984290c54a9f54e08d5171d0d3d3`. Preserve its accepted art and the six-cove Journey. No new level, scene, campaign migration or deployment is commissioned.
+
+The [independent review](../reviews/orchard-difficulty-review/REVIEW.md) enumerated the actual production rules and verified source hashes. Orchard's two shortest ten-action sequences merge after five actions; after returning to the orchard at six, all five immediate legal actions preserve a win. Its three equal-depth passages and one final six-space group make the new weight mainly an opening prohibition. Counts establish structure, not human difficulty. The review also identifies Orchard's repeated/recolored Sorrel identity and inspects two committed native phone frames. Codex's 520-unit/browser results remain reported implementation evidence, not fresh full-suite reruns.
+
+[Difficulty and mastery direction](DIFFICULTY_AND_MASTERY.md) defines a stronger dependency-based progression and a later **three-lantern** rating: rescue; within an authored efficient-action target; within that target without Undo. Undo remains unlimited, story progress depends only on rescue, and the calm ending is shared. The target and successful-Undo count have separate roles. **The rating is a design decision only; repair Orchard before implementing it.**
+
+The accepted game on Sites remains version **19**, `f0ffe2c12f1cc0e42ad7ef10a4b57dd29097c731`, hosting source `1ea40b815911a0fc1131350ee34125ae3508396e`, with its custom private audience. Preserve the [receipt](../reviews/mobile-map-readability/deployment-confirmation.json). This review/task update changes no game runtime or deployed content.
+
+## Previous implementation — Orchard Landing candidate · 13 November 2026
 
 The player's latest feedback after the mobile publication is **“Overall feels good, we can continue for now.”** Record the map presentation as positively accepted for continued development. Earlier positive feedback on the connected story, repaired ferry/docks and Wide/Reef complexity remains valid. This does not certify every physical-device performance, listening or accessibility condition.
 

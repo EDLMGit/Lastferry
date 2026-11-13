@@ -18,22 +18,24 @@ The **implemented Journey remains six coves**:
 
 First Crossing stays independent Practice. Among the reeds introduces Hazel, Bracken and Mica; Lights beyond the reef introduces Heather, Birch, Flick and Dot. Previously rescued neighbors remain safe. Existing save conversions preserve earned identities and acknowledged scenes.
 
-### Next commission: Orchard Landing candidate
+### Current correction: Orchard Landing difficulty
 
-**Orchard Landing** is playable independently in Practice, pending its C7 playtest. Orin uses three spaces on the accepted six-space ferry. Sorrel and Pomme wait on two flood-prone landings beyond Pomona Reach. The current gives the empty ferry an outward journey and one opportunity to come back for Orin. [Level](../data/orchard-landing.level.json) · [Design and witnesses](../reviews/orchard-landing/DESIGN.md)
+**Orchard Landing** is playable independently in Practice at `fb5806a7a129984290c54a9f54e08d5171d0d3d3`. The player likes Orin but finds its difficulty below Wide/Reef. Preserve the newcomer and repair this existing cove under [ORCHARD_DIFFICULTY_01](../NEXT_TASK_ORCHARD_DIFFICULTY.md). Do not append it to the Journey yet.
 
-Complete the puzzle, actual deer/portrait identity and automatic boarding fit before attaching it to the Journey. The candidate must feel like the next inhabited part of this same coast. Do not enlarge the ferry, multiply the cast to manufacture difficulty, or introduce another rule system. Preserve the existing six Journey coves and seven Practice entrances; add Orchard only to Practice in this pass.
+The [independent review](../reviews/orchard-difficulty-review/REVIEW.md) shows that both shorter-neighbor orders merge into one collection loop. A three-space newcomer should contribute to a linked preparation and later load/route decision, not only an obvious opening restriction. Correct the Orchard rabbit's reused Sorrel identity; Wide's rescued Sorrel stays safe and unchanged.
 
-After player acceptance, integrate this same cove with a compact orchard entry using the current illustrated player and explicit continuation for completed-six saves. Retain their original-byte backup and earned rescue history. No scene, save migration or automatic deployment is part of the candidate task.
+[Difficulty and mastery direction](../docs/DIFFICULTY_AND_MASTERY.md) now defines the progression and later optional three-lantern rating. Rescue earns the story; efficiency and a clean no-Undo attempt earn additional recognition. Keep Undo unrestricted. The reward feature is not part of this repair.
+
+After accepting the revised puzzle, connect the same cove with its compact orchard entry and explicit completed-six save continuation. Keep the six-cove Journey and existing save bytes intact until that integration is assigned. No new cove, scene or automatic publication is commissioned now.
 
 ### Remaining story roles — provisional, not additional assignments
 
 | Intended cove | Story purpose | Difficulty purpose |
 | --- | --- | --- |
-| **7 — Orchard Landing** | Meet Orin beyond the familiar headland. | Position the ferry for the three-space pickup. Practice candidate implemented and awaiting human review. |
+| **7 — Orchard Landing** | Meet Orin beyond the familiar headland. | Repair the Practice candidate so Orin's cost connects preparation with later load/route decisions. Character accepted; difficulty not yet accepted. |
 | **8 — title open** | Carry the lesson farther along the channel. | A distinct combination of load, route and tide dependencies; choose it after C7 playtesting. |
 | **9 — Drowned Orchard** | Recognize the orchard under changed water, with a different waiting group. Orin remains safe. | Reinterpret familiar landmarks and established rules rather than repeat Orin's rescue. |
-| **10 — Lantern Reach** | See the welcome at the refuge taking shape. | A short, elegant breather that retains a real decision. |
+| **10 — Lantern Reach** | See the welcome at the refuge taking shape. | Compact, quiet consolidation with a real inference and an elegant efficient solution. |
 | **11 — Far Shore** | Retrieve the hardest remaining group. | Peak synthesis of known rules, full information and no late exception. |
 | **12 — Last Ferry** | Finish the final visible rescue and return for the communal supper. | A gentler last crossing and emotional release; no surprise additional objective. |
 
