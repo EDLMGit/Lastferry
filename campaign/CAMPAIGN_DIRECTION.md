@@ -1,8 +1,8 @@
 # Last Ferry — The Long Tide
 
-## Current direction · 13 November 2026
+## Current direction · 14 November 2026
 
-The player has positively accepted the repaired six-space ferry/docks, Wide/Reef complexity, connected story and mobile map presentation for continued development. Accepted runtime is `f0ffe2c12f1cc0e42ad7ef10a4b57dd29097c731`, live as Sites version 19. Preserve its calm visual/audio language and readable phone controls. [Current task and publication](../docs/PROJECT_STATE.md)
+The player has positively accepted the repaired six-space ferry/docks, Wide/Reef complexity, connected story, mobile map presentation and now the Orchard repair at `9933303178da04cac93ddc820ef55e181286d983`. Preserve this calm visual/audio language and readable phone controls. Published runtime remains `f0ffe2c12f1cc0e42ad7ef10a4b57dd29097c731`, Sites version 19. [Current task and publication](../docs/PROJECT_STATE.md)
 
 The **implemented Journey remains six coves**:
 
@@ -18,22 +18,20 @@ The **implemented Journey remains six coves**:
 
 First Crossing stays independent Practice. Among the reeds introduces Hazel, Bracken and Mica; Lights beyond the reef introduces Heather, Birch, Flick and Dot. Previously rescued neighbors remain safe. Existing save conversions preserve earned identities and acknowledged scenes.
 
-### Current correction: Orchard Landing difficulty
+### Current assignment: optional three-lantern mastery
 
-**Orchard Landing** remains a Practice candidate for C7. The player accepted Orin’s character direction and requested a stronger puzzle after playing the first version. In the revision, the depth of the one outward flow determines an earlier Harbor delivery. [Design and replayable witnesses](../reviews/orchard-difficulty/DESIGN.md)
+**Orchard Landing is accepted as the intended C7 puzzle**, while remaining Practice-only. The repair connects its early Harbor delivery to Orin's only outward crossing. Pomme is the orchard sheep and Medlar is its tan rabbit; Wide's Sorrel remains safely rescued. [Accepted design](../reviews/orchard-difficulty/DESIGN.md) · [Review](../reviews/three-lanterns-preparation/REVIEW.md)
 
-The earlier [independent review](../reviews/orchard-difficulty-review/REVIEW.md) found that both smaller-neighbor orders merged into one collection loop. Orchard now asks the player to choose between an early delivery and carrying that neighbor to Orin. Pomme is the orchard sheep and Medlar is the tan rabbit. Sorrel remains safe after Wide Berth.
+[THREE_LANTERNS_01](../NEXT_TASK_THREE_LANTERNS.md) now implements the [existing reward contract](../docs/DIFFICULTY_AND_MASTERY.md). Rescue earns story progress; efficiency and an efficient attempt without Undo earn optional recognition. Keep unrestricted Undo and the same ending for everyone. No new cove or story scene is part of this feature.
 
-[Difficulty and mastery direction](../docs/DIFFICULTY_AND_MASTERY.md) now defines the progression and later optional three-lantern rating. Rescue earns the story; efficiency and a clean no-Undo attempt earn additional recognition. Keep Undo unrestricted. The reward feature is not part of this repair.
-
-After accepting the revised puzzle, connect the same cove with its compact orchard entry and explicit completed-six save continuation. Keep the six-cove Journey and existing save bytes intact until that integration is assigned. No new cove, scene or automatic publication is commissioned now.
+After lantern review, separately connect Orchard's compact entry and explicit completed-six save continuation. The ferry actually starts empty beside Pomme and Medlar at Spring Steps; Orin waits at Orchard Landing. The illustration must lead into that arrangement. Keep the six-cove Journey unchanged until the integration is assigned. Publication remains separate.
 
 ### Remaining story roles — provisional, not additional assignments
 
 | Intended cove | Story purpose | Difficulty purpose |
 | --- | --- | --- |
-| **7 — Orchard Landing** | Meet Orin beyond the familiar headland. | The load on Orin’s return determines whom to bring home first. Character accepted. Revised Practice difficulty awaits playtest. |
-| **8 — title open** | Carry the lesson farther along the channel. | A distinct combination of load, route and tide dependencies; choose it after C7 playtesting. |
+| **7 — Orchard Landing** | Meet Orin beyond the familiar headland. | The load on Orin’s return determines whom to bring home first. Character and revised Practice puzzle accepted; story/save integration remains separate. |
+| **8 — title open** | Carry the lesson farther along the channel. | Extend the planning horizon with a distinct combination of familiar load, route and tide dependencies; commission after lantern review and C7 integration. |
 | **9 — Drowned Orchard** | Recognize the orchard under changed water, with a different waiting group. Orin remains safe. | Reinterpret familiar landmarks and established rules rather than repeat Orin's rescue. |
 | **10 — Lantern Reach** | See the welcome at the refuge taking shape. | Compact, quiet consolidation with a real inference and an elegant efficient solution. |
 | **11 — Far Shore** | Retrieve the hardest remaining group. | Peak synthesis of known rules, full information and no late exception. |

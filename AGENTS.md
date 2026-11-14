@@ -2,13 +2,13 @@
 
 ## Objective
 
-**ORCHARD_DIFFICULTY_01** is the current assignment: read root [NEXT_TASK_ORCHARD_DIFFICULTY.md](NEXT_TASK_ORCHARD_DIFFICULTY.md), [difficulty and mastery direction](docs/DIFFICULTY_AND_MASTERY.md), and [independent review](reviews/orchard-difficulty-review/REVIEW.md). Repair the existing Orchard Landing candidate in place. The player likes Orin but finds the puzzle a difficulty downgrade. A new character and a required collection loop do not yet establish the intended seventh-cove challenge.
+**THREE_LANTERNS_01** is the current assignment: read root [NEXT_TASK_THREE_LANTERNS.md](NEXT_TASK_THREE_LANTERNS.md), [difficulty and mastery direction](docs/DIFFICULTY_AND_MASTERY.md), and [preparation review / verified targets](reviews/three-lanterns-preparation/REVIEW.md). The player has accepted the Orchard repair. Implement the existing optional three-lantern system while preserving all accepted puzzles.
 
-Start from `fb5806a7a129984290c54a9f54e08d5171d0d3d3` plus this task/continuity update. Preserve newer/unrelated work. Keep Orin's accepted art, the six-space ferry, mobile presentation, audio, Tips Off and complete Undo. Author a more consequential chain of load/position and later retrieval/crossing decisions with the existing rules. Correct Orchard's supporting-rabbit identity collision without changing Wide's Sorrel.
+Start from accepted runtime `9933303178da04cac93ddc820ef55e181286d983` plus this task/continuity update. Preserve newer/unrelated work. All eight current Practice coves are eligible; the six matching Journey coves share their results. Orchard remains Practice-only and First Crossing remains independent training. Do not add coves, integrate Orchard's story, rebalance data or change the strict Journey save schema in this task.
 
-The six-cove Journey, all other puzzles, save format and eight Practice entrances remain. No new cove, Journey integration, illustrated scene or reward implementation is commissioned in this repair. The three-lantern concept is documented for a later task. Exact map values and implementation remain Codex decisions.
+Keep unrestricted Undo. Use final-route actions and successful attempt-level Undos; a win stays provisional until the player actually continues, leaves or restarts. Opening the cove picker or Settings does not accept it. Store real accepted bests separately from Journey. Older rescues remain completed and unrated until a scored replay. The named task specifies the compact UI and verification; choose implementation details independently.
 
-Read the active `docs/PROJECT_STATE.md` and latest publication receipt. The Site remains version 19 with its custom private audience. Preserve that audience and all publication history; future publication uses the supported shared-Site flow. Do not copy recipient contact details into this public repository. **Do not deploy this task.**
+Read active `docs/PROJECT_STATE.md` and preserve the latest publication receipt. The Site remains version 19 with its custom private audience. Preserve that audience and all publication history; future publication uses the supported shared-Site flow. Do not copy recipient contact details into this public repository. **Do not deploy this task.**
 
 ## Read and preserve the project decisions
 

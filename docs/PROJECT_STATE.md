@@ -1,6 +1,18 @@
 # Last Ferry — Project state
 
-## Orchard Landing difficulty playtest · 13 November 2026
+## Orchard accepted; three-lantern implementation · 14 November 2026
+
+The player reports **“Feels good now, lets continue”** after the Orchard repair at `9933303178da04cac93ddc820ef55e181286d983`. Record human acceptance of its current feel and puzzle direction. Preserve this runtime; the feedback does not certify physical-device performance, listening or every inherited timing/layout limit.
+
+A fresh independent production-rule audit reproduced Orchard's 12-action minimum, 13-action Spring Steps alternative and Orin-cost counterfactual. Its early Harbor delivery now determines the load that can leave with Orin before Pomona Reach reverses. Native portrait/landscape stills were inspected. [Preparation review](../reviews/three-lanterns-preparation/REVIEW.md) · [Repair evidence](../reviews/orchard-difficulty/REVIEW.md)
+
+**THREE_LANTERNS_01 is the current assignment.** Implement the optional rescued / efficient / efficient-without-Undo result on existing completion and Practice surfaces. All eight Practice coves are eligible; the six matching Journey coves share bests. Unlimited Undo, the ordinary HUD, accepted puzzles and strict Journey schema remain. Results stay provisional until actual continuation/departure, and bests use separate revisioned storage. Historical rescues remain completed and unrated until replay. [Root task](../NEXT_TASK_THREE_LANTERNS.md) · [Canonical contract](DIFFICULTY_AND_MASTERY.md) · [Eight verified action targets](../reviews/three-lanterns-preparation/TARGETS.md)
+
+The Journey still runs Holding → Bellwater → Driftwood → Two Shelters → Nell's launch → Wide → Reef. Orchard remains Practice-only. Its illustrated entry and explicit completed-six continuation come in a separate task after lantern review. No C8, new mechanic, rebalance or deployment is commissioned now.
+
+**Publication unchanged:** Site version **19**, game `f0ffe2c12f1cc0e42ad7ef10a4b57dd29097c731`, hosting source `1ea40b815911a0fc1131350ee34125ae3508396e`, existing custom private audience. Preserve publication history and audience. [Receipt](../reviews/mobile-map-readability/deployment-confirmation.json)
+
+## Previous implementation — Orchard difficulty playtest · 13 November 2026
 
 The player liked Orin and found his first puzzle easier than Wide Berth and Reef Return. The repaired Practice candidate is ready for a second difficulty playtest. Its placement as Journey cove seven awaits that judgment. The twelve-cove plan and proposed mastery system remain in development.
 

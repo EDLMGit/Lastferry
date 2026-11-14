@@ -1,5 +1,7 @@
 # ORCHARD_DIFFICULTY_01 — strengthen the existing seventh-cove candidate
 
+> **Completed and accepted · 14 November 2026.** Implementation `9933303178da04cac93ddc820ef55e181286d983` passed the scoped independent review and the player reports that it feels good. The current assignment is root [NEXT_TASK_THREE_LANTERNS.md](NEXT_TASK_THREE_LANTERNS.md). The original repair brief below remains historical; it does not authorize further rebalancing.
+
 ## Outcome and source
 
 Repair **Orchard Landing in place** at `?cove=orchard-landing`. The player likes Orin but finds this puzzle easier than Wide Berth and Reef Return. Preserve the new character and accepted presentation; make the planning worthy of the intended seventh cove.

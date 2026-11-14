@@ -1,35 +1,32 @@
 # Puzzle progression — selected campaign direction
 
-## Current difficulty correction · 13 November 2026
+## Current accepted progression · 14 November 2026
 
-The accepted Journey remains **Holding → Bellwater → Driftwood → Two Shelters → launch → Wide → Reef**. The repaired Orchard is its intended seventh cove and remains the eighth independent Practice entrance for playtesting. The player accepted Orin’s character direction and found the first Orchard puzzle easier than its predecessors.
+The implemented Journey remains **Holding → Bellwater → Driftwood → Two Shelters → launch → Wide → Reef**. The player has now accepted repaired Orchard Landing at `9933303178da04cac93ddc820ef55e181286d983` as the intended seventh-cove puzzle. It is still the eighth independent Practice entrance; its story/save continuation is not implemented.
 
-The first version required a light departure. The revised puzzle asks the player to reason backward from Orin’s outward crossing to the first Harbor delivery. [Repair design](../reviews/orchard-difficulty/DESIGN.md) · [Difficulty and mastery](../docs/DIFFICULTY_AND_MASTERY.md)
+### Accepted Orchard reasoning
 
-### Source-backed diagnosis
+On the only outward flow, Orin and Medlar occupy four spaces and need depth three. Orin and Pomme occupy five and need depth four, which arrives after the channel has reversed. The first Harbor delivery therefore determines whether the later return can work. Stage Medlar at Cider Quay for twelve actions, or return to Spring Steps for him in thirteen. The efficient target is **13**, recognizing both deliberate plans.
 
-The independent production graph confirms two shortest ten-action Orchard sequences. They differ only in the order of the smaller pickups and merge at turn five. All three routes share base depth two, all passengers fit one final load, and no temporary unloading is needed. Orin's third space blocks the opening departure but does not produce a later load-partition decision. At the safe orchard on turn six, all five legal immediate actions preserve a winning continuation. [Review, source hashes and reproducible analysis](../reviews/orchard-difficulty-review/REVIEW.md)
-
-This is structural evidence consistent with the player's report, not a computed human difficulty rating. Reef and Orchard both have ten-action optima; their decisions differ. Sequence counts also include symmetric or interchangeable choices.
-
-### Repaired Practice puzzle
-
-On the only outward flow, Orin and Medlar occupy four spaces and need depth three. Orin and Pomme would occupy five and need depth four. Low water permits a Harbor trip for either small neighbor, yet sending Medlar there first leaves Pomme as the wrong companion for Orin. Pomme and Medlar can travel together as far as Cider Quay. Choosing whether to stage Medlar there or return to Spring Steps changes the pickup route and its time margin.
-
-The same three neighbors and four landings support both plans. The current turns after action nine and again after twelve. The Harbor approach begins at depth two, while the channel to Spring Steps starts at depth three. Inspection exposes the forecast and the route facts with Tips Off.
-
-The proposed target of 13 admits the 12-action staging route and the 13-action separate pickup. The future three-lantern concept remains a design proposal. Human testing will decide whether this puzzle earns its C7 place.
-
-The accepted preceding decisions remain:
+Independent production-rule enumeration and the Orin-two-space counterfactual confirm the dependency. This is evidence for the intended decision, not a numerical rating of human difficulty. The player has separately accepted its feel. [Repair design](../reviews/orchard-difficulty/DESIGN.md) · [Acceptance review](../reviews/three-lanterns-preparation/REVIEW.md)
 
 | Cove | Established decision |
 | --- | --- |
+| Holding Pier | Use temporary landing and load/depth knowledge. |
+| Bellwater | Plan the loaded return around changing shore heights. |
 | Driftwood Yard | Stage the heavier neighbor, collect the smaller pair and retrieve through a deepened route. |
 | Two Shelters | Choose a refuge and retrieval order together. |
 | Wide Berth | Allocate eight spaces across homeward opportunities, with two spaces first and six last. |
-| Reef Return | Choose early loading/staging that changes whether to gather everyone or deliver a heavy group and approach the last rabbit from Harbor. |
+| Reef Return | Let early loading/delivery change the later approach. |
+| Orchard Landing — accepted Practice | Work backward from Orin's return load to the first delivery and smaller-neighbor retrieval. |
 
-The twelve-cove reasoning/pacing table now lives in [difficulty and mastery](../docs/DIFFICULTY_AND_MASTERY.md). C8–C12 remain uncommissioned. Orchard's illustrated entry and Journey/save continuation wait for a successful repair playtest.
+### Current task and next gate
+
+[THREE_LANTERNS_01](../NEXT_TASK_THREE_LANTERNS.md) implements optional mastery on these unchanged puzzles and independent First Crossing. The [verified target table](../reviews/three-lanterns-preparation/TARGETS.md) distinguishes shortest solutions from authored efficiency targets. No reward gates story; Undo stays unlimited.
+
+After reviewing the feature, connect Orchard's truthful scene and old completed-six saves under a separate task. Then specify C8's distinct longer planning dependency. C8–C12 remain uncommissioned design roles in [difficulty and mastery](../docs/DIFFICULTY_AND_MASTERY.md). Do not add animals, moves or map size simply to claim greater challenge.
+
+The earlier Orchard's ten-action pickup orders merged at turn five. That rejected structure and its diagnostic evidence remain in the [earlier review](../reviews/orchard-difficulty-review/REVIEW.md); it no longer describes the accepted puzzle.
 
 ## Historical acceptance of the existing-cove repair · 7 November 2026
 

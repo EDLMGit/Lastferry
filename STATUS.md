@@ -1,3 +1,15 @@
+# Orchard accepted; lantern implementation next · 14 November 2026
+
+The player accepts the repaired Orchard at `9933303178da04cac93ddc820ef55e181286d983`. Independent production-rule analysis reproduces its 12-action minimum and 13-action retrieval alternative; **13** is now the accepted efficiency target. The repair and its presentation remain intact. [Acceptance and preparation review](reviews/three-lanterns-preparation/REVIEW.md)
+
+**Current task:** [THREE_LANTERNS_01](NEXT_TASK_THREE_LANTERNS.md), optional rescue / efficiency / efficient-without-Undo awards for all eight existing Practice entrances and matching six Journey coves. The authored targets were checked against all eight production-rule graphs and twenty-four committed winning witnesses. [Targets and reproducible audit](reviews/three-lanterns-preparation/TARGETS.md)
+
+This is a task/design/evidence update, not the implemented reward feature. Journey order and saves remain unchanged; Orchard stays Practice-only. Its entry scene and completed-six continuation follow under a separate task after feature review. No new cove or deployment is commissioned.
+
+Site version **19** still serves game `f0ffe2c12f1cc0e42ad7ef10a4b57dd29097c731` with its existing custom private audience. Physical-device, listening and inherited timing limitations are not closed by this feedback.
+
+## Previous implementation handoff
+
 # Orchard difficulty repair · 13 November 2026
 
 Orchard Landing is ready for a second difficulty playtest. Pomme and Medlar wait together at Spring Steps. Both can travel to Cider Quay, but their early Harbor delivery commits the player to a companion for Orin on the only outward current. The dry orchard gives time to inspect a wrong load. Undo can recover the staging decision several actions earlier. [Developer witnesses, proof and target](reviews/orchard-difficulty/DESIGN.md)

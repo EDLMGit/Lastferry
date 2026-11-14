@@ -1,8 +1,8 @@
 # Last Ferry — difficulty and three-lantern mastery
 
-**Design decision · 13 November 2026.** The player accepts Orin's character direction but finds Orchard Landing a step down from Wide Berth and Reef Return. The accepted mobile presentation remains. This document sets the progression and reward contract; the lantern feature is **not implemented or commissioned in the current repair**.
+**Current decision · 14 November 2026.** The player has accepted the Orchard repair at `9933303178da04cac93ddc820ef55e181286d983`. Preserve its new planning dependency and accepted presentation. The three-lantern feature is now commissioned by [THREE_LANTERNS_01](../NEXT_TASK_THREE_LANTERNS.md); it is not yet implemented.
 
-Current assignment: [ORCHARD_DIFFICULTY_01](../NEXT_TASK_ORCHARD_DIFFICULTY.md). Source baseline: `fb5806a7a129984290c54a9f54e08d5171d0d3d3`. [Independent structural review](../reviews/orchard-difficulty-review/REVIEW.md)
+This updates the 13 November direction after the successful repair playtest. The six-cove Journey stays unchanged; accepted Orchard remains Practice-only until a separate story/save-continuation task. [Preparation review](../reviews/three-lanterns-preparation/REVIEW.md) · [Verified targets](../reviews/three-lanterns-preparation/TARGETS.md) · [Earlier structural diagnosis](../reviews/orchard-difficulty-review/REVIEW.md)
 
 ## 1. What challenge means here
 
@@ -49,7 +49,7 @@ Readability is part of fairness: all required facts stay inspectable with Tips O
 
 ## 3. Twelve-cove progression
 
-The first six are accepted and remain unchanged during Orchard's repair. Later rows are design roles, not permission to build more levels now.
+The first six and repaired Orchard are accepted and remain unchanged during the lantern task. Orchard's Journey integration and later rows require separate assignments; they do not authorize building more levels now.
 
 | Cove | Intended increase or pacing role |
 | --- | --- |
@@ -59,7 +59,7 @@ The first six are accepted and remain unchanged during Orchard's repair. Later r
 | 4 — Two Shelters | Choose the refuge as part of the retrieval plan. |
 | 5 — Wide Berth | Allocate passengers across limited homeward opportunities. |
 | 6 — Reef Return | Make an early load decision that changes the later approach and delivery plan. |
-| 7 — Orchard Landing, Practice playtest | Work backward from the only outward current. The early Harbor delivery determines which neighbor can fit beside Orin in depth-three water. |
+| 7 — Orchard Landing, accepted Practice | Work backward from the only outward current. The early Harbor delivery determines which neighbor can fit beside Orin in depth-three water. |
 | 8 — title open | Extend the planning horizon: preserve one opportunity while fulfilling another, using familiar rules. |
 | 9 — Drowned Orchard | Reinterpret recognizable geometry for a new waiting group and changed conditions. Earlier rescued neighbors stay safe. |
 | 10 — Lantern Reach | A compact, quiet consolidation with a real inference and an elegant efficient solution; scenery can relax without making every decision automatic. |
@@ -86,7 +86,7 @@ The conditions are cumulative. For a hypothetical target of 14 actions:
 | 14 actions, three successful Undos | 2 |
 | 14 actions, no Undo | 3 |
 
-Every ordinary rescue advances the story and receives the same calm homecoming. The supper and final ending do not require lantern totals. Across the eventual twelve coves, 36 lanterns provide an optional personal mastery goal; the UI must still distinguish currently implemented coves from future content. Undo stays available without a limit, charge or confirmation dialog.
+Every ordinary rescue advances the story and receives the same calm homecoming. The supper and final ending do not require lantern totals. Across the eventual twelve Journey coves, 36 lanterns can provide an optional personal mastery goal. Do not show an aggregate total in this first implementation; First Crossing's independent training award is outside that future total. Undo stays available without a limit, charge or confirmation dialog.
 
 The third lantern recognizes a clean execution on this attempt. It is not a claim of first-try understanding. Learn with Undo, restart and execute the learned plan: that is a valid way to earn it. An accidental committed action corrected with Undo would also affect this optional award; reliable direct phone controls therefore remain important.
 
@@ -100,7 +100,20 @@ A target may deliberately allow several meaningful strategies. The current accep
 
 Do not publish a target until its cove and revision are accepted. Document the minimum, candidate target, a qualifying witness and the strategies it includes or excludes. Do not manufacture inefficiency or arbitrary waiting to make the second lantern seem valuable.
 
-**Orchard development target: 13 actions, pending playtest.** Moving both smaller neighbors to Cider Quay and leaving Medlar there gives a 12-action rescue. Taking Pomme first and returning to Spring Steps for Medlar takes 13. A strict 12 would exclude that second route even when the player correctly plans the final load. Later deliveries still count as rescues. This target lives in the design record only. [Witnesses, constraints and slack](../reviews/orchard-difficulty/DESIGN.md)
+**Accepted efficient targets · 14 November 2026.** Fresh production-rule enumeration reproduced all eight minimums and replayed all twenty-four committed winning witnesses. The targets below are authored decisions based on that evidence.
+
+| Cove | Proved minimum | Efficient target |
+| --- | ---: | ---: |
+| First Crossing — independent Practice | 7 | **8** |
+| Holding Pier | 9 | **9** |
+| Bellwater | 10 | **10** |
+| Driftwood Yard | 12 | **12** |
+| Two Shelters | 11 | **12** |
+| Wide Berth | 12 | **14** |
+| Reef Return | 10 | **11** |
+| Orchard Landing | 12 | **13** |
+
+Orchard's 13 includes its 12-action Cider Quay staging and 13-action Spring Steps retrieval. Wide and Reef likewise retain distinct longer accepted strategies. Driftwood's fifteen-action order adds a home trip after the same critical rescue plan: it earns full rescue/story credit but does not meet the twelve-action efficiency target. [Exact audit, witnesses and rationale](../reviews/three-lanterns-preparation/TARGETS.md) · [Orchard proof](../reviews/orchard-difficulty/DESIGN.md)
 
 ### Minimal presentation
 
@@ -108,29 +121,30 @@ Keep the ordinary map HUD unchanged. Put three restrained lanterns on the existi
 
 The result can say “14 actions · 2 Undos.” The target and requirements are freely inspectable before play through a compact disclosure. Continue remains primary; replay stays secondary. No live “star lost” alert or persistent score bar competes with the water, animals and routes.
 
-## 5. Future implementation contract
+## 5. Implementation contract
 
-This section resolves behavior so a later contained task can implement it without inventing new game rules.
+[THREE_LANTERNS_01](../NEXT_TASK_THREE_LANTERNS.md) implements this contract. These outcomes preserve the current puzzle and save boundaries.
 
 - Count actions from the final winning state's existing turn count. Undo removes discarded turns normally; do not charge additional tide turns or include abandoned branches in that efficiency count.
 - Track successful Undos as attempt metadata **outside the rewindable puzzle State**. An unavailable, busy or rejected input does not count.
 - Starting or restarting a cove starts a fresh attempt. Settings, hiding, rotation, fullscreen and animation recovery do not reset attempt metadata.
-- The winning card displays a provisional result. The existing explicit Continue/leave/replay action accepts it; do not add another save button.
+- The winning card displays a provisional result. Actual Continue story, cove navigation, confirmed Home or a successful completed Restart accepts it once. Practice “Choose a cove” only opens a menu and does not accept. Neither do Settings, dialog cancellation, Escape or visibility/fullscreen lifecycle. Do not add another save button or pagehide acceptance.
 - Terminal Undo before acceptance withdraws the provisional result, increments Undo use, and leaves the win fully reversible. A later delivery recomputes the result. Previously accepted best results never decrease.
-- Preserve one actual best run's result. Do not combine the fewest actions from one attempt with zero Undos from another to invent a better award.
+- Preserve one actual best run's result. Prefer more lanterns, then fewer final actions, then fewer successful Undos; retain the old entry on an exact tie. Do not combine the fewest actions from one attempt with zero Undos from another to invent a better award.
 - Keep results in a separate versioned store keyed by cove identity and puzzle/scoring revision. The strict Journey schema, original-byte backups and explicit campaign continuation remain unchanged.
-- A Practice replay of an accepted matching revision can improve its best result without writing Journey progress. Unaccepted candidates do not establish permanent campaign ratings.
-- Older saves contain no action or Undo history. Never infer two or three lanterns from completion alone. Existing earned rescues remain recognized.
-- A storage failure leaves a usable in-session result and does not block play. The game currently resumes at cove boundaries; any future mid-puzzle resume must carry the attempt metadata too.
-- No anti-cheat service is needed for this personal local mastery record. A genuine puzzle rebalance changes the rating revision; a cosmetic change does not.
+- All eight current Practice entries are eligible. Matching Journey/Practice revisions share bests without Practice writing Journey progress. Orchard is now accepted but stays Practice-only; its best can carry into a later matching Journey revision. First Crossing stays independent training. New Journey preserves mastery.
+- Older saves contain no action or Undo history. Keep their rescues completed and their mastery unrated until a scored replay; create no synthetic result or invented metrics. Restored Harbor worlds used for Home/story presentation are not playable attempts and cannot earn awards.
+- A mastery-storage failure leaves a usable in-session result/best and does not block play or campaign continuation. Validate data without rewriting Journey bytes. The game currently resumes at cove boundaries; any future mid-puzzle resume must carry the attempt metadata too.
+- No anti-cheat service is needed for this personal local mastery record. A genuine puzzle rebalance or scoring-target change changes its rating revision; a cosmetic change does not.
 
-The current `Session` rewinds its State, and Journey validation accepts an exact record shape. [Session at review baseline](https://github.com/EDLMGit/Lastferry/blob/fb5806a7a129984290c54a9f54e08d5171d0d3d3/src/game/session.ts) · [Journey validation](https://github.com/EDLMGit/Lastferry/blob/fb5806a7a129984290c54a9f54e08d5171d0d3d3/src/campaign/progress.ts)
+The current `Session` rewinds its State, and Journey validation accepts an exact record shape. [Session at review baseline](https://github.com/EDLMGit/Lastferry/blob/9933303178da04cac93ddc820ef55e181286d983/src/game/session.ts) · [Journey validation](https://github.com/EDLMGit/Lastferry/blob/9933303178da04cac93ddc820ef55e181286d983/src/campaign/progress.ts)
 
 ## 6. Implementation order
 
-1. Repair **existing Orchard Landing** and demonstrate a stronger actual decision structure. Keep Orin and the accepted visual language.
-2. Playtest that repair before approving it as C7.
-3. Implement the contained lantern feature with justified targets for accepted coves, and separately connect the accepted Orchard/story/save continuation under an explicit task.
-4. Commission C8 only after these foundations are accepted.
+1. **Complete:** repair existing Orchard Landing and demonstrate its connected load/crossing decision.
+2. **Complete:** player accepts the repair at `9933303178da04cac93ddc820ef55e181286d983` on 14 November.
+3. **Current:** implement and review THREE_LANTERNS_01 for the eight accepted Practice entries and matching six Journey coves.
+4. **Separate next task:** connect accepted Orchard with its truthful illustrated entry and explicit completed-six save continuation. Preserve matching earned mastery.
+5. Commission C8 only after these foundations are accepted. Its new dependency must extend the planning horizon, not merely increase bodies or moves.
 
-The current pass does not implement rewards, create another level, reorder the Journey or deploy. Preserve the source-linked review and historical publication records.
+The current lantern task creates no level, changes no puzzle or Journey order, and does not deploy. Preserve the source-linked review and historical publication records.

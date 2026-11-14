@@ -1,10 +1,10 @@
 # Last Ferry — story scenes for The Long Tide
 
-## Next story beat — Orin at the orchard · 13 November 2026
+## Deferred next story beat — Orin at the orchard · 14 November 2026
 
-Orin’s character direction has positive player feedback. **Medlar** is the orchard’s tan rabbit. **Sorrel** is the cream rabbit rescued in Wide Berth. The Orchard entry awaits the repaired Practice puzzle’s playtest and will follow the accepted starting positions. [Candidate task](../NEXT_TASK_ORCHARD_DIFFICULTY.md)
+The player has accepted Orin and the repaired Orchard puzzle at `9933303178da04cac93ddc820ef55e181286d983`. **Medlar** is the orchard's tan rabbit; **Sorrel** remains the cream rabbit rescued in Wide Berth. The ferry starts empty beside Pomme and Medlar at Spring Steps; Orin waits at Orchard Landing. The future scene must hand off truthfully into these positions. [Accepted design](../reviews/orchard-difficulty/DESIGN.md)
 
-The accepted six-cove presentation remains unchanged. [ORCHARD_LANDING_01](../NEXT_TASK_ORCHARD_LANDING.md) commissions the intended seventh cove as a Practice candidate with a real deer model and portrait. **Its illustrated entry is documented here for continuity, not implemented in this pass.** Judge the puzzle and Orin's phone-scale identity before extending Journey saves or producing the scene.
+The accepted six-cove presentation remains unchanged. [THREE_LANTERNS_01](../NEXT_TASK_THREE_LANTERNS.md) is the current assignment. **Orchard's illustrated entry is documented here for continuity and is not commissioned by the reward task.** After lantern review, a separate task will append the scene/cove with explicit historical-save continuation.
 
 Proposed caption:
 
