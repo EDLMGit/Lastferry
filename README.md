@@ -10,7 +10,7 @@ Play starts the illustrated opening. Take the helm enters Holding Pier. After ea
 
 First Crossing is the independent tutorial cove. Its original four-space ferry starts with Pip and Rue aboard, and Moss waits for pickup.
 
-The [private phone Site](https://last-ferry-playtest.abumech.chatgpt.site) serves version **17**, game `f23e9b087e80316c3884ed5fa83cce25cf6508a0`. The six-cove Journey is available in the local review build. [Publication receipt](reviews/optional-tips/deployment-confirmation.json)
+The [private phone Site](https://last-ferry-playtest.abumech.chatgpt.site) serves version **19**, game `f0ffe2c12f1cc0e42ad7ef10a4b57dd29097c731`. The Orchard and three-lantern updates are available in the local review build. [Publication receipt](reviews/mobile-map-readability/deployment-confirmation.json)
 
 ## Run
 
@@ -34,6 +34,10 @@ Normal-motion opening shots advance after their finite 6 / 6 / 7-second actions,
 New journey asks before replacing existing progress, and Return home explains the cove-start consequence before leaving a crossing. Settings and Practice do not replace the saved journey. Invalid/unsupported saves are retained until explicit replacement. If local storage is unavailable, play continues in memory with a notice that progress cannot survive closing. Sound, Motion and Tips are independent preferences. Continue preserves the original bytes of an affected old save and resumes the first missing cove. An earned Wide rescue and its acknowledged launch carry forward even when Two Shelters is still waiting.
 
 ## Play
+
+Every rescue earns a lantern. Finishing within the cove’s authored action target earns a second. Meeting that target without a successful Undo during the attempt earns all three. Inspect the requirements in Practice or the crossing menu. Undo stays unlimited, and the final route’s actions determine efficiency. Restart begins a fresh attempt.
+
+The arrival result stays provisional until you continue, leave the cove or restart. Terminal Undo withdraws it and redelivery computes it again. Opening the cove picker, Settings or a Home confirmation leaves it provisional. Accepted bests belong to actual individual rescues and persist separately from Journey checkpoints. Practice can improve the same cove’s best, and New journey keeps those bests. Older rescues stay completed and unrated until replay. [Lantern review](reviews/three-lanterns/REVIEW.md)
 
 Select a stop marker, island, pier or landmark to inspect it for free. Select the ferry for its current landing. Names stay beside their places when space permits. Crossing status → **Inspect a place** lists every destination, including offscreen ones. Hover and keyboard focus emphasize the place and its connecting passage. Double rings, dashed edges and obstruction symbols distinguish the current, remote and blocked stops. Harbor carries the lighthouse symbol.
 

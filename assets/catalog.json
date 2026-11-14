@@ -6285,6 +6285,73 @@
         "pick/framing role": "World uses geometry for framing and scene selection; gameplay identities remain canonical nodes/passengers.",
         "disposal owner": "World.dispose traverses shared geometry/material/texture sets and disposes each once; CoastalWater owns its separate resources."
       }
+    },
+    {
+      "id": "ui.mastery-lanterns",
+      "name": "Three cumulative mastery lanterns",
+      "kind": "dom-component-family",
+      "status": "integrated",
+      "sources": [
+        {
+          "path": "assets/ui/mastery-lantern.svg",
+          "symbol": "Original upright rounded lantern frame, filled glass and flame paths"
+        },
+        {
+          "path": "src/ui/lanterns.ts",
+          "symbol": "lanterns, masteryResultMarkup, masteryBadgeMarkup, masteryCriteriaMarkup"
+        },
+        {
+          "path": "src/ui/lanterns.css",
+          "symbol": "Compact result, hollow/filled glyph states, Practice badge and native disclosure"
+        }
+      ],
+      "meaning": "Optional rescued, efficient and efficient-without-Undo achievements for one real attempt; accepted bests are distinct from the current provisional rescue.",
+      "variants": [
+        "one, two or three earned lanterns",
+        "provisional current rescue",
+        "different accepted best",
+        "compact rated Practice marker",
+        "unrated and historically rescued Practice markers",
+        "current-cove and all-cove target disclosure"
+      ],
+      "visualSignature": "Small rounded upright lanterns use the warm cove palette. Filled glass and a flame distinguish earned lanterns from hollow frames in monochrome as well as color.",
+      "reuseAndOwnership": "Original local vector and shared DOM helpers reuse the existing cove reading panel and rounded native controls. Results are supplied by the sole mastery owner, and no symbol acts as a separate control.",
+      "behaviorToPreserve": "Text exposes the earned count, actual final actions and successful Undos. Practice badges never invent statistics for historical rescues. Disclosure and viewing do not acknowledge results or spend actions.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "integrated-awaiting-human-review",
+        "basis": "New original vector and result composition require native phone inspection and user review. Existing world lanterns and music are retained."
+      },
+      "evidence": [
+        {
+          "path": "NEXT_TASK_THREE_LANTERNS.md",
+          "role": "Current cumulative result, departure acceptance and compact phone presentation contract"
+        },
+        {
+          "path": "docs/ASSET_LEDGER.md",
+          "role": "Authored SVG/component provenance and preserved earlier families"
+        },
+        {
+          "path": "src/dev/asset-gallery.ts",
+          "role": "Shared production helpers in labeled design specimens"
+        }
+      ],
+      "consumers": [
+        "src/main.ts",
+        "src/dev/asset-gallery.ts"
+      ],
+      "gallery": {
+        "section": "mastery-lanterns",
+        "preview": "One/two/three earned glyphs, a provisional result beside a different actual best, two unrated markers and the native criteria disclosure. Samples are design evidence."
+      },
+      "typeSpecific": {
+        "render/placement sources": "One editable SVG assets/ui/mastery-lantern.svg, repeated by src/ui/lanterns.ts; src/ui/lanterns.css sizes glyphs and text inside existing panels and buttons.",
+        "semantic role/accessible name": "Current section labeled This rescue with visible N of 3 lanterns and actual actions/Undos. Practice badge has a complete Best accessible equivalent; no separate tab stop.",
+        "icon and label mappings": "Three ordered hollow frames filled cumulatively. Current rescue and best rescue use distinct text. Legacy completed coves read Rescued · not yet rated.",
+        "interaction states": "Static earned/unearned glyphs. Native details/summary reveals all three conditions and authored target without scoring a run. No new animation or audio.",
+        "nearby placement and viewport contract": "Result inside existing arrival card; badge within full-name native Practice button; at least 14px supporting copy and adaptive wrapping. Existing measured dialog and safe viewport own placement.",
+        "focus/cancel/fullscreen preservation": "Symbols are decorative and unfocusable. Native details preserves keyboard semantics and remains under the existing fullscreen app root. No event interception or acceptance callbacks in these presentation helpers."
+      }
     }
   ],
   "seedSource": "cove-ui-package/asset-catalog.seed.json",

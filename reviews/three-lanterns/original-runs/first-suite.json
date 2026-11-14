@@ -1,0 +1,372 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "-c",
+      ".cache/lantern-playwright.config.ts",
+      "three-lanterns.spec.ts",
+      "--workers=1"
+    ],
+    "configFile": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\.cache\\lantern-playwright.config.ts",
+    "rootDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "snapshotDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5294",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "deviceScaleFactor": 1,
+          "headless": true,
+          "launchOptions": {
+            "args": [
+              "--use-angle=swiftshader",
+              "--enable-unsafe-swiftshader"
+            ]
+          },
+          "video": {
+            "mode": "on",
+            "size": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "trace": "retain-on-failure"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "reviews/three-lanterns/automation-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "three-lanterns.spec.ts",
+      "file": "three-lanterns.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Orchard three lanterns remain provisional through menus and become two after terminal Undo",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 420000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 44522,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:42:33.236Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "344ee9c6e1603b85bec6-db352d721ffa9d71b31e",
+          "file": "three-lanterns.spec.ts",
+          "line": 23,
+          "column": 1
+        },
+        {
+          "title": "Journey accepts at continuation and a worse Practice replay keeps the real best",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 300000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 40676,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#seascape')\nExpected: \u001b[32m\"Bellwater\"\u001b[39m\nReceived: \u001b[31m\"Bellwater\u001b[7m Cove\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('#seascape') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('#seascape')\u001b[22m\n\u001b[2m    23 × locator resolved to <section id=\"seascape\" aria-busy=\"false\" aria-label=\"Bellwater Cove\">…</section>\u001b[22m\n\u001b[2m       - unexpected value \"Bellwater Cove\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#seascape')\nExpected: \u001b[32m\"Bellwater\"\u001b[39m\nReceived: \u001b[31m\"Bellwater\u001b[7m Cove\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('#seascape') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('#seascape')\u001b[22m\n\u001b[2m    23 × locator resolved to <section id=\"seascape\" aria-busy=\"false\" aria-label=\"Bellwater Cove\">…</section>\u001b[22m\n\u001b[2m       - unexpected value \"Bellwater Cove\"\u001b[22m\n\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\three-lanterns.spec.ts:124:43",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\three-lanterns.spec.ts",
+                      "column": 43,
+                      "line": 124
+                    },
+                    "snippet": "  122 |   await frame(page, '780x320', 'current-two-best-three');\n  123 |   await activate(page, 'next-cove', true);\n> 124 |   await expect(page.locator('#seascape')).toHaveAttribute('aria-label', 'Bellwater');\n      |                                           ^\n  125 |   expect((await storage(page)).mastery).toBe(accepted.mastery);\n  126 |   await home(page);\n  127 |   await activate(page, 'home-new', true);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\three-lanterns.spec.ts",
+                        "column": 43,
+                        "line": 124
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#seascape')\nExpected: \u001b[32m\"Bellwater\"\u001b[39m\nReceived: \u001b[31m\"Bellwater\u001b[7m Cove\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('#seascape') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('#seascape')\u001b[22m\n\u001b[2m    23 × locator resolved to <section id=\"seascape\" aria-busy=\"false\" aria-label=\"Bellwater Cove\">…</section>\u001b[22m\n\u001b[2m       - unexpected value \"Bellwater Cove\"\u001b[22m\n\n\n  122 |   await frame(page, '780x320', 'current-two-best-three');\n  123 |   await activate(page, 'next-cove', true);\n> 124 |   await expect(page.locator('#seascape')).toHaveAttribute('aria-label', 'Bellwater');\n      |                                           ^\n  125 |   expect((await storage(page)).mastery).toBe(accepted.mastery);\n  126 |   await home(page);\n  127 |   await activate(page, 'home-new', true);\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\three-lanterns.spec.ts:124:43"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:43:17.849Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\three-lanterns-Journey-acc-aae20--replay-keeps-the-real-best\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\three-lanterns-Journey-acc-aae20--replay-keeps-the-real-best\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\three-lanterns.spec.ts",
+                    "column": 43,
+                    "line": 124
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "344ee9c6e1603b85bec6-8b18f113164624319688",
+          "file": "three-lanterns.spec.ts",
+          "line": 86,
+          "column": 1
+        },
+        {
+          "title": "320px Practice keeps legacy rescue truth and accepts only confirmed Home departure",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 15422,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:44:00.568Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "344ee9c6e1603b85bec6-ba72f45dd7f9b801b260",
+          "file": "three-lanterns.spec.ts",
+          "line": 136,
+          "column": 1
+        },
+        {
+          "title": "unavailable mastery persistence keeps a live best and Journey continuation usable",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10716,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:44:16.097Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "344ee9c6e1603b85bec6-7fabfe6947cf98bc42c5",
+          "file": "three-lanterns.spec.ts",
+          "line": 175,
+          "column": 1
+        },
+        {
+          "title": "corrupt scores and restored historical scenery award nothing or rewrite Journey",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11191,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:44:26.834Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "344ee9c6e1603b85bec6-1e0f3ba971d8df87d46c",
+          "file": "three-lanterns.spec.ts",
+          "line": 197,
+          "column": 1
+        },
+        {
+          "title": "minified release completes the thirteen-action Orchard route and persists on cove navigation",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 15140,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T10:44:38.041Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "344ee9c6e1603b85bec6-c730b403e072ca1a10a8",
+          "file": "three-lanterns.spec.ts",
+          "line": 216,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-14T10:42:32.703Z",
+    "duration": 141320.484,
+    "expected": 5,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

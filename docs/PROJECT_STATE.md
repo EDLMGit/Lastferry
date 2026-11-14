@@ -1,12 +1,12 @@
 # Last Ferry — Project state
 
-## Orchard accepted; three-lantern implementation · 14 November 2026
+## Three lanterns ready for review · 14 November 2026
 
 The player reports **“Feels good now, lets continue”** after the Orchard repair at `9933303178da04cac93ddc820ef55e181286d983`. Record human acceptance of its current feel and puzzle direction. Preserve this runtime; the feedback does not certify physical-device performance, listening or every inherited timing/layout limit.
 
 A fresh independent production-rule audit reproduced Orchard's 12-action minimum, 13-action Spring Steps alternative and Orin-cost counterfactual. Its early Harbor delivery now determines the load that can leave with Orin before Pomona Reach reverses. Native portrait/landscape stills were inspected. [Preparation review](../reviews/three-lanterns-preparation/REVIEW.md) · [Repair evidence](../reviews/orchard-difficulty/REVIEW.md)
 
-**THREE_LANTERNS_01 is the current assignment.** Implement the optional rescued / efficient / efficient-without-Undo result on existing completion and Practice surfaces. All eight Practice coves are eligible; the six matching Journey coves share bests. Unlimited Undo, the ordinary HUD, accepted puzzles and strict Journey schema remain. Results stay provisional until actual continuation/departure, and bests use separate revisioned storage. Historical rescues remain completed and unrated until replay. [Root task](../NEXT_TASK_THREE_LANTERNS.md) · [Canonical contract](DIFFICULTY_AND_MASTERY.md) · [Eight verified action targets](../reviews/three-lanterns-preparation/TARGETS.md)
+**THREE_LANTERNS_01** adds the optional rescue, efficient rescue and efficient rescue without Undo results to arrival and Practice. All eight Practice coves are eligible, and the six matching Journey coves share bests. A won result remains provisional through Settings and menus. Continuing, changing cove, confirming Home or successfully restarting accepts it. Terminal Undo removes the provisional result while retaining the attempt’s successful Undo count. Bests live in separate revisioned storage and remain available in memory when persistence fails. Historical rescues stay completed and unrated until replay. [Review and actual play](../reviews/three-lanterns/REVIEW.md) · [Canonical contract](DIFFICULTY_AND_MASTERY.md) · [Eight verified action targets](../reviews/three-lanterns-preparation/TARGETS.md)
 
 The Journey still runs Holding → Bellwater → Driftwood → Two Shelters → Nell's launch → Wide → Reef. Orchard remains Practice-only. Its illustrated entry and explicit completed-six continuation come in a separate task after lantern review. No C8, new mechanic, rebalance or deployment is commissioned now.
 

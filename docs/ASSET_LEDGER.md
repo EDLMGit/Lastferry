@@ -1,5 +1,9 @@
 # Last Ferry asset provenance and history
 
+## Three lanterns
+
+The original `ui.mastery-lanterns` family adds a small upright SVG lantern with a rounded handle, metal frame and warm filled glass. Earned lanterns contain a flame and filled glass; unearned lanterns retain the hollow frame. The glyph, compact result, Practice badge and native target disclosure share `src/ui/lanterns.ts` and `src/ui/lanterns.css`. The result's live text supplies the accessible count and run statistics. The developer gallery uses the same helpers for bounded design specimens. All 80 earlier family IDs remain. Actual phone results and the new family's visual acceptance are recorded separately. [Source](../assets/ui/mastery-lantern.svg) · [Review](../reviews/three-lanterns/REVIEW.md)
+
 ## Orchard Landing
 
 The difficulty repair assigns the existing tan rabbit appearance to Medlar in Orchard. Sorrel retains her cream appearance and stable identity in Wide Berth. The gallery reads the named choices from level data. The catalog records the player’s acceptance of Orin’s character direction at `fb5806a`. Orchard seats Medlar opposite Pomme ashore and nearer midships on deck so the pairings used in the new puzzle read clearly. The `model.ferry` and `motion.transfer` families link this evidence. All 80 asset families retain their existing IDs and artwork. [Native phone review](../reviews/orchard-difficulty/REVIEW.md)

@@ -1,10 +1,12 @@
-# Orchard accepted; lantern implementation next · 14 November 2026
+# Three lanterns · 14 November 2026
 
 The player accepts the repaired Orchard at `9933303178da04cac93ddc820ef55e181286d983`. Independent production-rule analysis reproduces its 12-action minimum and 13-action retrieval alternative; **13** is now the accepted efficiency target. The repair and its presentation remain intact. [Acceptance and preparation review](reviews/three-lanterns-preparation/REVIEW.md)
 
-**Current task:** [THREE_LANTERNS_01](NEXT_TASK_THREE_LANTERNS.md), optional rescue / efficiency / efficient-without-Undo awards for all eight existing Practice entrances and matching six Journey coves. The authored targets were checked against all eight production-rule graphs and twenty-four committed winning witnesses. [Targets and reproducible audit](reviews/three-lanterns-preparation/TARGETS.md)
+**THREE_LANTERNS_01** implements optional rescue, efficiency and efficient-without-Undo awards for all eight Practice entrances and the matching six Journey coves. The authored targets follow the independent audit of all eight production-rule graphs and twenty-four committed witnesses. [Targets and reproducible audit](reviews/three-lanterns-preparation/TARGETS.md)
 
-This is a task/design/evidence update, not the implemented reward feature. Journey order and saves remain unchanged; Orchard stays Practice-only. Its entry scene and completed-six continuation follow under a separate task after feature review. No new cove or deployment is commissioned.
+Results stay provisional through menus and Settings. Actual continuation, cove navigation, confirmed Home or a completed Restart accepts them. Terminal Undo recomputes the next delivery’s result with its attempt history. Whole accepted best runs use separate versioned storage. The existing six-cove Journey and its saves retain their order and schema. Orchard stays Practice-only. [Implementation and verification](reviews/three-lanterns/REVIEW.md)
+
+The final build, TypeScript, 81-family asset validation, 123 relevant unit checks and seven focused browser cases passed. The original Practice-isolation regression also passed. Actual touch play verified all three outcomes, terminal Undo/redelivery, accepted best persistence and the minified release. Native 390×844, 780×320 and 320×740 frames were inspected. Original layout/test failures remain in the review. [Uninterrupted rescue to acceptance with runtime audio](reviews/three-lanterns/390x844/rescue.mp4)
 
 Site version **19** still serves game `f0ffe2c12f1cc0e42ad7ef10a4b57dd29097c731` with its existing custom private audience. Physical-device, listening and inherited timing limitations are not closed by this feedback.
 

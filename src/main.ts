@@ -39,6 +39,8 @@ import {
   passengerList,
 } from './ui/presentation';
 import { Session } from './game/session';
+import { MasteryStore, masteryTargets } from './game/mastery';
+import { masteryResultMarkup, masteryBadgeMarkup, masteryCriteriaMarkup } from './ui/lanterns';
 import { World } from './scene/world';
 import { Sound } from './audio/sound';
 import {
@@ -80,7 +82,8 @@ import './campaign/home.css';
 import { transferFacts, transferReceipt } from './ui/transfer';
 
 const cove = new URLSearchParams(location.search).get('cove');
-const journey = cove === null ? new JourneyProgress() : null;
+let journey = cove === null ? new JourneyProgress() : null;
+const mastery = new MasteryStore();
 let campaignPlay = false;
 let level = practiceCoves.find((entry) => entry.id === cove) ?? holdingPier;
 let experiment = level.id === 'holding-pier';
@@ -284,6 +287,27 @@ function continueSavedJourney() {
   resumeJourney(!freshEntry);
 }
 
+function keepMastery(from = session) {
+  const result = from.takeResult();
+  if (!result) return;
+  mastery.accept(result);
+  if (mastery.issue) notifyView(mastery.issue);
+}
+
+function masteryNotice() {
+  return mastery.issue ? `<p class="mastery-notice" role="status">${mastery.issue}</p>` : '';
+}
+
+function visitPractice(next: typeof level) {
+  if (session.busy) return;
+  startPlayable(next, false);
+  if (new URLSearchParams(location.search).has('cove')) {
+    const address = new URL(location.href);
+    address.searchParams.set('cove', next.id);
+    history.replaceState(null, '', address);
+  }
+}
+
 function showHome(focusId?: string) {
   clearReceipt();
 
@@ -324,7 +348,7 @@ function showHome(focusId?: string) {
 
   const notice = snapshot?.record ? homeCheckpointNotice(snapshot.record, newEntry) : '';
 
-  homeSurface.innerHTML = `<header id="home-title"><h1>Last Ferry</h1><p>The Long Tide</p></header><nav id="home-menu" aria-label="Home"><p class="home-notice">${notice}${snapshot && !snapshot.persistent ? ' Progress lasts only for this visit.' : ''}${invalid ? ` ${snapshot.issue}` : ''}</p><button id="home-play">${label}</button><div class="home-secondary"><button id="home-options">Options</button><button id="home-practice">Practice</button></div><div class="home-secondary"><button id="home-sound"></button>${checkpoint ? '<button id="home-new">New journey</button>' : ''}</div></nav>`;
+  homeSurface.innerHTML = `<header id="home-title"><h1>Last Ferry</h1><p>The Long Tide</p></header><nav id="home-menu" aria-label="Home"><p class="home-notice">${notice}${snapshot && !snapshot.persistent ? ' Progress lasts only for this visit.' : ''}${invalid ? ` ${snapshot.issue}` : ''}</p><button id="home-play">${label}</button><div class="home-secondary"><button id="home-options">Options</button><button id="home-practice">Practice</button></div><div class="home-secondary"><button id="home-sound"></button>${checkpoint ? '<button id="home-new">New journey</button>' : ''}</div>${masteryNotice()}</nav>`;
 
   for (const button of homeSurface.querySelectorAll<HTMLButtonElement>('button'))
     setControl(
@@ -391,12 +415,16 @@ function showJourney(next: JourneyMode, focusId: string) {
   flushLayout();
 }
 function returnToJourneyTitle() {
+  if (session.busy) return;
+  const departing = session;
   storyPresentation.cancel();
   storyId = null;
   campaignPlay = false;
 
   if (!app.classList.contains('home-screen')) mountCove(holdingPier);
-
+  keepMastery(departing);
+  journey ??= new JourneyProgress();
+  history.replaceState(null, '', location.pathname);
   showHome(mode === 'practice' ? 'home-practice' : undefined);
 }
 function beginJourney() {
@@ -438,6 +466,8 @@ function resumeJourney(restored = true) {
   startPlayable(storyCoves.find((entry) => entry.id === checkpoint.id)!.level, true);
 }
 function startPlayable(next: typeof level, story: boolean) {
+  if (session.busy) return;
+  const departing = session;
   storyPresentation.cancel();
   storyView = null;
   world.clearStory();
@@ -451,6 +481,7 @@ function startPlayable(next: typeof level, story: boolean) {
   setHomeVisible(false);
 
   mountCove(next);
+  keepMastery(departing);
   world.setReducedMotion(motion.reduced);
   if (!keyboardInput && lastPointer)
     viewFence = { x: lastPointer.x, y: lastPointer.y, until: performance.now() + 180 };
@@ -472,6 +503,7 @@ function acceptStoryCove() {
   if (!campaignPlay || session.busy || session.state.status !== 'won') return;
   const entry = storyCoves.find((candidate) => candidate.id === level.id);
   if (!entry || !journey?.accept(entry.id, session.state.status)) return;
+  keepMastery();
   resumeJourney(false);
 }
 function renderStoryStatus() {
@@ -620,23 +652,24 @@ function renderJourneyDialog() {
     return;
   } else if (mode === 'practice') {
     heading = 'Practice coves';
-    body = '<p>Independent crossings. Practice does not change your journey.</p>';
+    body = '<p>Independent crossings. Practice does not change your journey.</p>' +
+      masteryCriteriaMarkup() + masteryNotice();
     actions =
       practiceCoves
         .map(
           (entry) =>
-            `<button data-practice="${entry.id}" id="practice-${entry.id}">${entry.title}${entry.id === baseline.id ? ' · practice' : ''}</button>`,
+            `<button class="cove-button cove-button--quiet practice-row" data-practice="${entry.id}" id="practice-${entry.id}"><span class="practice-title">${entry.title}</span>${masteryBadgeMarkup(mastery.best(entry.id), journey?.snapshot.record?.completed.some(id => id === entry.id))}</button>`,
         )
         .join('') + '<button id="journey-title">Back to title</button>';
   } else if (mode === 'replace') {
     heading = 'Start a new journey?';
-    body = '<p>This replaces the saved journey. Sound, Motion and Tips settings stay as they are.</p>';
+    body = '<p>This replaces the saved journey. Your best rescues and Sound, Motion and Tips settings are kept.</p>';
     actions =
       '<button id="journey-replace-cancel">Keep current journey</button><button id="journey-replace-confirm">Replace journey</button>';
   } else if (mode === 'return-title') {
     heading = 'Return home?';
 
-    body = `<p>This crossing will start again from its beginning. Its moves and Undo history are only kept while you play.</p><p>${checkpointNotice}</p>`;
+    body = `<p>This crossing will start again from its beginning. Its moves and Undo history are only kept while you play.</p>${session.result ? '<p>Returning home keeps this rescue’s lantern result.</p>' : ''}<p>${checkpointNotice}</p>`;
     actions =
       '<button id="journey-return-cancel">Keep playing</button><button id="journey-return-confirm">Return home</button>';
   } else {
@@ -648,7 +681,7 @@ function renderJourneyDialog() {
   $('dialog-content').innerHTML =
     `<header class="dialog-head${mode === 'story' ? ' sr-only' : ''}"><h2 id="dialog-title">${heading}</h2></header><div class="dialog-body journey-copy">${body}</div><footer class="dialog-footer journey-actions">${actions}</footer>`;
   dialog.classList.toggle('story-caption', mode === 'story');
-  for (const button of dialog.querySelectorAll<HTMLButtonElement>('button'))
+  for (const button of dialog.querySelectorAll<HTMLButtonElement>('button:not([data-practice])'))
     setControl(
       button,
       null,
@@ -669,9 +702,7 @@ function renderJourneyDialog() {
   on('journey-settings', () => openSettings(mode as JourneyMode));
   on('journey-title', returnToJourneyTitle);
 
-  on('journey-return-confirm', () =>
-    journey ? returnToJourneyTitle() : location.assign(location.pathname),
-  );
+  on('journey-return-confirm', returnToJourneyTitle);
 
   on('journey-return-cancel', () => {
     app.classList.remove('journey-screen');
@@ -684,10 +715,7 @@ function renderJourneyDialog() {
   });
   for (const button of dialog.querySelectorAll<HTMLButtonElement>('[data-practice]'))
     button.onclick = () =>
-      startPlayable(
-        practiceCoves.find((entry) => entry.id === button.dataset.practice)!,
-        false,
-      );
+      visitPractice(practiceCoves.find((entry) => entry.id === button.dataset.practice)!);
   renderStoryStatus();
 }
 
@@ -713,11 +741,14 @@ function renderIllustratedStory(transcript: boolean) {
       button.textContent ?? '',
       button.id === 'story-continue' ? 'warm' : 'quiet',
     );
-  if (journey?.snapshot.persistent === false) {
+  if (journey?.snapshot.persistent === false || mastery.issue) {
     const notice = document.createElement('p');
     notice.className = 'story-storage-notice';
     notice.setAttribute('role', 'status');
-    notice.textContent = 'Journey progress lasts for this visit only.';
+    notice.textContent = [
+      journey?.snapshot.persistent === false ? 'Journey progress lasts for this visit only.' : '',
+      mastery.issue ?? '',
+    ].filter(Boolean).join(' ');
     $('story-continue').parentElement!.append(notice);
   }
   storyView = new StoryView($('story-canvas') as HTMLCanvasElement);
@@ -1324,6 +1355,9 @@ function renderDialog() {
       `${header('Crossing menu')}<div class="dialog-body menu-body">${s.status === 'won' ? '<button id="return-arrival">Return to arrival</button>' : ''}<div class="menu-actions"><button id="restart">Restart crossing</button><button id="settings">Settings</button></div><label class="cove-picker">Choose cove<select id="cove-picker">${practiceCoves.map((l) => `<option value="${l.id}" ${l.id === level.id ? 'selected' : ''}>${l.title}${l.id === baseline.id ? ' · baseline' : ''}</option>`).join('')}</select></label><details id="help-details"><summary>How to play · actions and depth</summary><p>${actionCostCopy(level)}</p><p>Select a named place, island, pier or landmark to see its options for free. Choose Sail to travel one passage. Select the ferry for its current place. A named single-passenger action acts directly. For several passengers, choose names in the nearby chooser, then use its named action. Select your current place for free transfer details. The chooser shows the selected load and depth. Tips in Settings adds predicted outcomes and warnings before losing actions. Tips starts Off. Route depths, currents, pier deadlines and the forecast are always available.</p><p>Boat depth needed: ${draftBandsCopy(level)}. ${passengerCosts}. A passage must be at least as deep as the boat needs.</p><p>Boarding and unloading happen before the tide rises. Use the status button for the tide and pier forecast. Undo earlier actions or restart to recover from a losing plan.</p><p>Tab and Shift+Tab move between controls; Enter or Space activates them. Escape closes a dialog first; press it again to close the location card. Selection never spends an action.</p></details></div>`;
 
     $('restart').onclick = restart;
+    document.querySelector('.menu-body')!.insertAdjacentHTML(
+      'beforeend', masteryCriteriaMarkup(masteryTargets[level.id].target, level.title) + masteryNotice(),
+    );
 
     {
       const returnButton = document.createElement('button');
@@ -1334,11 +1368,11 @@ function renderDialog() {
       $('settings').closest('.menu-actions')!.after(returnButton);
       returnButton.onclick = () => showJourney('return-title', 'journey-return-cancel');
       const policy = document.createElement('p');
-      policy.textContent = 'Practice does not change your journey.';
+      policy.textContent = 'Practice does not change your journey. Continuing, leaving or restarting after a rescue keeps its lantern result.';
       if (campaignPlay) {
         policy.textContent = journey?.snapshot.persistent
-          ? 'Progress is saved between coves. An unfinished cove starts again. Continue story after arrival to accept a rescue.'
-          : 'Journey progress lasts for this visit only. Continue story after arrival to accept a rescue.';
+          ? 'Progress is saved between coves. An unfinished cove starts again. Continue story after arrival to advance. Continuing, leaving or restarting keeps the lantern result.'
+          : 'Journey progress lasts for this visit only. Continue story after arrival to advance. Continuing, leaving or restarting keeps the lantern result.';
       }
       returnButton.after(policy);
     }
@@ -1356,7 +1390,8 @@ function renderDialog() {
     if (campaignPlay) $('cove-picker').closest('label')!.remove();
     if ($('cove-picker'))
       ($('cove-picker') as HTMLSelectElement).onchange = (e) => {
-        location.search = `?cove=${(e.target as HTMLSelectElement).value}`;
+        const next = practiceCoves.find(entry => entry.id === (e.target as HTMLSelectElement).value);
+        if (next) visitPractice(next);
       };
   } else if (mode === 'settings') {
     $('dialog-content').innerHTML =
@@ -1398,13 +1433,19 @@ function renderDialog() {
     $('dialog-content').innerHTML =
       `${header(won ? (isBellwater ? 'Bellwater is safe.' : 'Everyone home.') : lossTitle)}<div class="dialog-body ending ${won ? '' : 'loss'}"><p>${won ? `${level.objective.requiredPassengerIds.length} passengers safe at Harbor · ${s.turn} actions.` : f.headline}</p>${won ? '' : `<p>${f.detail}</p>`}</div><footer class="dialog-footer terminal-actions">${won ? `<button id="${next ? 'next-cove' : 'choose-cove'}">${next ? 'Next cove' : 'Choose a cove'}</button><button id="terminal-settings">Settings</button>` : ''}<button id="terminal-undo">↶ Undo last action</button><button id="terminal-restart">Restart</button></footer>`;
     if (next)
-      $('next-cove').onclick = () => {
-        location.search = '?cove=bellwater';
-      };
+      $('next-cove').onclick = () => visitPractice(practiceCoves.find(entry => entry.id === 'bellwater')!);
     else if (won) $('choose-cove').onclick = () => switchDialog('menu', 'cove-picker');
     if (won) $('terminal-settings').onclick = () => openSettings('terminal');
     $('terminal-undo').onclick = undo;
     $('terminal-restart').onclick = restart;
+    if (won && session.result) {
+      document.querySelector('.ending')!.insertAdjacentHTML(
+        'beforeend',
+        masteryResultMarkup(session.result, mastery.best(level.id)) +
+        '<p class="checkpoint-policy">Continuing, leaving or restarting keeps this result. Until then, Undo can change it.</p>' +
+        masteryNotice(),
+      );
+    }
     if (won && campaignPlay) {
       const nextControl = $('next-cove') ?? $('choose-cove');
       nextControl.id = 'continue-story';
@@ -1922,7 +1963,9 @@ function restart() {
   clearReceipt();
 
   if (dialog.open) closeDialog(false);
+  const result = session.result;
   if (session.restart()) {
+    if (result) mastery.accept(result);
     world.poses.reset();
     locationSelection = null;
     selectionOrigin = null;
@@ -1933,6 +1976,7 @@ function restart() {
     world.backToBoat();
     render();
     focusAvailable('menu');
+    if (result && mastery.issue) notifyView(mastery.issue);
   }
 }
 
@@ -2435,6 +2479,7 @@ function bindCanvas() {
 bindCanvas();
 const layoutObserver = new ResizeObserver(scheduleLayout);
 layoutObserver.observe(world.host);
+layoutObserver.observe(dialog);
 for (const control of document.querySelectorAll<HTMLElement>('.tools button, #load-toggle, #crossing-details, #local-context')) layoutObserver.observe(control);
 layoutObserver.observe(viewControls);
 layoutObserver.observe($('status-toggle'));
@@ -2709,6 +2754,13 @@ if (journey) showHome();
 if (import.meta.env.DEV)
   Object.assign(window, {
     __LAST_FERRY__: {
+      getMasteryStatus: () => ({
+        successfulUndos: session.successfulUndos,
+        current: session.result,
+        best: mastery.best(level.id),
+        persistent: mastery.persistent,
+        issue: mastery.issue,
+      }),
       getState: () => copy(session.state),
       getCampaignStatus: () =>
         copy({

@@ -21,6 +21,7 @@ import type { PortraitKey } from '../game/passenger-appearance';
 import { storyScenes } from '../campaign/registry';
 import { checkpointCopy } from '../campaign/progress';
 import { createCoveStoryPainter } from '../campaign/story-painter';
+import { lanterns, masteryBadgeMarkup, masteryCriteriaMarkup, masteryResultMarkup } from '../ui/lanterns';
 
 const root = document.querySelector<HTMLElement>('#gallery')!;
 const text = escapeLabel;
@@ -86,6 +87,13 @@ root.innerHTML = `<header><p>Last Ferry · developer tools</p><h1>Cove asset gal
   )}</div><div class="cove-panel cove-surface gallery-panel"><h3>Story effects and optional narration</h3><p>Finite tide wash, lantern contact and ferry water share the existing Sound owner. This gallery does not autoplay sound. Actual runtime audio, cancellation checks and listening limitations belong in the review report.</p><p>${sourceLink('src/audio/story-effects.ts', 'Story envelope definitions')} · ${sourceLink('src/audio/atmosphere.ts', 'Sound ownership and routing')} · ${sourceLink('LAST_FERRY_STORY_PRODUCTION_PACKAGE/audio/narration-script.json', 'Narration script: recordings absent')}</p><p>Four narration IDs are optional asset slots only. There is no delivered voice, live TTS or unavailable narration control.</p></div></section>
 <section class="cove-panel cove-surface gallery-panel"><h2>Original 24px glyphs</h2><div class="icon-grid">${iconNames.map((name) => `<div>${iconMarkup(name)}<span>${name}</span></div>`).join('')}</div></section><section><h2>Canonical inventory</h2><label>Filter by family, kind or meaning <input id="filter" type="search" /></label><p id="count" role="status"></p><div id="inventory"></div></section>`;
 const shelterSection = document.createElement('section');
+const masterySection = document.createElement('section');
+masterySection.id = 'mastery-lanterns';
+masterySection.className = 'cove-panel cove-surface gallery-panel';
+const masteryExample = { coveId: 'orchard-landing', revision: 1, actions: 12, successfulUndos: 1, lanterns: 2 as const };
+const masteryBest = { ...masteryExample, successfulUndos: 0, lanterns: 3 as const };
+masterySection.innerHTML = `<h2>Three lanterns</h2><p>Shared live components at phone scale. The examples below are design specimens.</p><div class="panel-specimens"><article class="panel-specimen panel-specimen--narrow">${masteryResultMarkup(masteryExample, masteryBest)}${masteryCriteriaMarkup(13)}</article><article class="panel-specimen panel-specimen--narrow"><h3>Practice markers</h3><button class="cove-button cove-button--quiet mastery-practice-specimen"><span class="practice-title">Orchard Landing</span>${masteryBadgeMarkup(masteryBest)}</button><p>${masteryBadgeMarkup(null, true)}</p><p>${masteryBadgeMarkup(null)}</p><p>${lanterns(1)} ${lanterns(2)} ${lanterns(3)}</p></article></div><p>${sourceLink('assets/ui/mastery-lantern.svg', 'Editable lantern glyph')} · ${sourceLink('reviews/three-lanterns/REVIEW.md', 'Actual results and phone evidence')}</p>`;
+root.querySelector('#gallery-orchard')!.after(masterySection);
 shelterSection.id = 'two-shelters';
 shelterSection.className = 'cove-panel cove-surface gallery-panel';
 const shelterResidents: [string, number, boolean, PortraitKey | null][] =

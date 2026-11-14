@@ -1,6 +1,6 @@
 # Last Ferry — difficulty and three-lantern mastery
 
-**Current decision · 14 November 2026.** The player has accepted the Orchard repair at `9933303178da04cac93ddc820ef55e181286d983`. Preserve its new planning dependency and accepted presentation. The three-lantern feature is now commissioned by [THREE_LANTERNS_01](../NEXT_TASK_THREE_LANTERNS.md); it is not yet implemented.
+**Current implementation · 14 November 2026.** The player accepted the Orchard repair at `9933303178da04cac93ddc820ef55e181286d983`. [THREE_LANTERNS_01](../NEXT_TASK_THREE_LANTERNS.md) now adds cumulative rescue, efficiency and efficient-without-Undo results. The eight authored targets and all puzzle data retain their accepted values. [Feature review](../reviews/three-lanterns/REVIEW.md)
 
 This updates the 13 November direction after the successful repair playtest. The six-cove Journey stays unchanged; accepted Orchard remains Practice-only until a separate story/save-continuation task. [Preparation review](../reviews/three-lanterns-preparation/REVIEW.md) · [Verified targets](../reviews/three-lanterns-preparation/TARGETS.md) · [Earlier structural diagnosis](../reviews/orchard-difficulty-review/REVIEW.md)
 
@@ -137,13 +137,13 @@ The result can say “14 actions · 2 Undos.” The target and requirements are 
 - A mastery-storage failure leaves a usable in-session result/best and does not block play or campaign continuation. Validate data without rewriting Journey bytes. The game currently resumes at cove boundaries; any future mid-puzzle resume must carry the attempt metadata too.
 - No anti-cheat service is needed for this personal local mastery record. A genuine puzzle rebalance or scoring-target change changes its rating revision; a cosmetic change does not.
 
-The current `Session` rewinds its State, and Journey validation accepts an exact record shape. [Session at review baseline](https://github.com/EDLMGit/Lastferry/blob/9933303178da04cac93ddc820ef55e181286d983/src/game/session.ts) · [Journey validation](https://github.com/EDLMGit/Lastferry/blob/9933303178da04cac93ddc820ef55e181286d983/src/campaign/progress.ts)
+The Session keeps successful Undo history outside its rewindable State. A result becomes available after a real committed win finishes presenting. Actual departure consumes that result once. The separate `last-ferry.mastery.v1` record stores whole best runs under stable cove/revision keys. Each current target uses revision 1. Unknown revisions remain stored and stay unrated in the current UI. A failed read or write keeps new accepted bests available for the visit and displays a storage notice. Journey retains its exact record shape. [Scoring and storage](../src/game/mastery.ts) · [Session](../src/game/session.ts)
 
 ## 6. Implementation order
 
 1. **Complete:** repair existing Orchard Landing and demonstrate its connected load/crossing decision.
 2. **Complete:** player accepts the repair at `9933303178da04cac93ddc820ef55e181286d983` on 14 November.
-3. **Current:** implement and review THREE_LANTERNS_01 for the eight accepted Practice entries and matching six Journey coves.
+3. **Implemented, awaiting review:** THREE_LANTERNS_01 for the eight accepted Practice entries and matching six Journey coves.
 4. **Separate next task:** connect accepted Orchard with its truthful illustrated entry and explicit completed-six save continuation. Preserve matching earned mastery.
 5. Commission C8 only after these foundations are accepted. Its new dependency must extend the planning horizon, not merely increase bodies or moves.
 
