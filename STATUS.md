@@ -1,3 +1,15 @@
+# Seven-cove Journey published for Android · 14 November 2026 UTC
+
+Reviewed game **`9c7a05785a021538c996f5dcd4b03415d1a35080`** is live as **Site version 20** with the existing custom private audience unchanged. [Play](https://last-ferry-playtest.abumech.chatgpt.site) · [Exact publication receipt](reviews/orchard-journey/deployment-confirmation.json) · [Independent publication review](reviews/orchard-journey/PUBLICATION_REVIEW.md)
+
+Fresh scoped review passed 149 core checks, dependency installation, production build and TypeScript. The release bundle matches Codex's recorded bundle exactly. Old-six continuation, original-byte backups, Practice mastery and unrestricted Undo are preserved. Orchard retains target 13 / revision 1. The seven-cove Journey and eight Practice entrances are now published; the final five planned coves remain unavailable.
+
+The next checkpoint is the user's Android playtest before C8 is commissioned. Physical-device performance, listening, spoken screen-reader use and human scene pacing remain open. The managed review browser has WebGL disabled, so no fresh browser gameplay pass is claimed. Source/build audits and the repaired missing test-fixture setup failure are recorded in the review.
+
+This update records review/publication and continuity only. No gameplay change, new level or rebalance is included. PR1 stays draft; GitHub main is unchanged. Earlier tasks, reports and publication receipts remain historical evidence.
+
+## Previous implementation handoff
+
 # Orchard Journey integration · 14 November 2026
 
 ORCHARD_JOURNEY_01 appends Orchard as Journey cove seven, after Reef. The existing eight Practice entrances remain. Its brief illustrated entry keeps the actual starting arrangement: Orin at Orchard Landing; empty ferry, Pomme and Medlar at Spring Steps. The new entry uses the existing player and Sound owner.

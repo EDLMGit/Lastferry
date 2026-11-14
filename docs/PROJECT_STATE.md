@@ -1,6 +1,18 @@
 # Last Ferry — Project state
 
-## Orchard Journey integration · 14 November 2026
+## Reviewed and published — Android checkpoint · 14 November 2026 UTC
+
+**ORCHARD_JOURNEY_01 is complete.** Runtime `9c7a05785a021538c996f5dcd4b03415d1a35080` was independently reviewed and published to the existing private Site as **version 20**. Hosting source: `ffc5eebfd8520735b231ffe6fedf1b3a54757f9a`. The existing custom access policy, owner and one authorized external viewer are unchanged. [Play](https://last-ferry-playtest.abumech.chatgpt.site) · [Receipt](../reviews/orchard-journey/deployment-confirmation.json) · [Publication review](../reviews/orchard-journey/PUBLICATION_REVIEW.md)
+
+The seven-cove Journey and all eight Practice entrances are now available on the Site. An exact completed-six save continues deliberately into Orchard with its original raw bytes backed up. Orchard's accepted puzzle, target **13**, mastery revision **1**, earlier bests and complete Undo remain intact. The endpoint truthfully reports seven available coves; five later planned coves remain unplayable.
+
+The independent review freshly passed **149/149 core checks**, including old-save continuation, storage races/failures, scene lifecycle, Practice best preservation and terminal Undo. All twenty protected puzzle/rule/witness inputs match the accepted Orchard audit. Nine committed native scene/handoff/endpoint frames were inspected. A fresh Node24 install, build and TypeScript check passed; the produced main bundle exactly matches the implementation report. The source audit records 262 exact Git blobs plus the existing preview-host configuration adaptation. Original failure and repair details are retained.
+
+Codex's five integration browser cases and 81-family inventory remain separately reported evidence. Fresh managed-browser gameplay could not be checked because WebGL is disabled in that review environment. The live URL opens the expected private sign-in gate. Physical Android performance, speaker playback, spoken screen-reader use and human scene pacing remain open; the recording's 3.55-second delivered-frame gap is not interpreted as an Android stall.
+
+**Next checkpoint:** the user plays this exact seven-cove build on Android. Use Continue in the same Site/browser to exercise historical progress, or deliberately start a New journey for the full arc. Review mobile readability, Orchard's narrative handoff and challenge, and whether rescue/efficiency/no-Undo lanterns feel clear and rewarding. Do not commission C8 until that feedback is assessed. No new level, rebalance or runtime change accompanies this publication. PR1 remains draft; GitHub main is unchanged.
+
+## Previous implementation — Orchard Journey integration · 14 November 2026
 
 **ORCHARD_JOURNEY_01** appends accepted Orchard Landing as the seventh Journey cove after Reef Return. The root route is Holding → Bellwater → Driftwood → Two Shelters → Nell’s existing launch → Wide → Reef → Orchard. All eight independent Practice entrances remain. The other five planned coves are not yet playable. [Focused review](../reviews/orchard-journey/REVIEW.md)
 

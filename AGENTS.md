@@ -2,13 +2,13 @@
 
 ## Objective
 
-**ORCHARD_JOURNEY_01** is the current assignment: read root [NEXT_TASK_ORCHARD_JOURNEY.md](NEXT_TASK_ORCHARD_JOURNEY.md), active [project state](docs/PROJECT_STATE.md), [Orchard story direction](campaign/STORY_SCENES.md), and [independent lantern review](reviews/three-lanterns/INDEPENDENT_REVIEW.md).
+**Current checkpoint: Android playtest of the reviewed seven-cove Journey.** ORCHARD_JOURNEY_01 is implemented at `9c7a05785a021538c996f5dcd4b03415d1a35080`, independently reviewed and published to the existing private Site as **version 20**. Read [active project state](docs/PROJECT_STATE.md), [publication review](reviews/orchard-journey/PUBLICATION_REVIEW.md) and [receipt](reviews/orchard-journey/deployment-confirmation.json). The earlier named task is complete; do not repeat its implementation.
 
-Start from reviewed runtime `14f128619267e2da81b4108ece2de4da07b50359` plus this task/continuity update, preserving newer/unrelated work. The repaired Orchard puzzle is player-accepted; the lantern implementation has no blocker in the scoped source/core/native-image review. Append Orchard as Journey cove seven, add its brief truthful illustrated entry and support explicit continuation from exact completed-six saves. Keep earlier checkpoints, original-byte backups and Practice isolation.
+The Journey runs Holding Pier → Bellwater → Driftwood Yard → Two Shelters → Nell's launch → Wide Berth → Reef Return → Orchard Landing. All eight Practice entrances remain. Five later planned coves are not playable. Collect the user's Android feedback on continuation, the Orchard encounter and puzzle, lantern acceptance, readability and smoothness before commissioning C8. No new implementation task is authorized by this checkpoint alone.
 
-Preserve every accepted puzzle, Orchard target 13 / mastery revision 1, existing bests, unrestricted Undo and provisional victory acceptance. The new scene must end with the ferry empty at Spring Steps beside waiting Pomme/Medlar while Orin waits at Orchard Landing. Choose the composition and implementation independently within the named task. Do not add C8, a mechanic, narration, a new story framework or an ending that claims the twelve-cove campaign is finished.
+Preserve all accepted puzzles, Orchard target 13 / mastery revision 1, Practice bests, unrestricted Undo, provisional victory acceptance, original-byte backups and Practice isolation. Preserve the established visual/audio style and mobile controls. Do not add C8, rebalance Orchard or claim the twelve-cove campaign is complete without a new scoped task.
 
-The Site remains version 19 with its custom private audience. Preserve that audience and publication history; future publication uses the supported shared-Site flow. Do not copy recipient contact details into this public repository. **Do not deploy this task.**
+The Site now serves game `9c7a05785a021538c996f5dcd4b03415d1a35080` from hosting source `ffc5eebfd8520735b231ffe6fedf1b3a54757f9a`. Its custom private audience is unchanged. Preserve publication history and the existing audience; future publication uses the supported shared-Site flow. Never copy recipient contact details into this public repository. Physical-phone, listening and spoken screen-reader acceptance remain open.
 
 ## Read and preserve the project decisions
 
