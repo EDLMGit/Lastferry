@@ -1,6 +1,20 @@
 # Last Ferry — Project state
 
-## Lanterns reviewed; Orchard Journey commissioned · 14 November 2026
+## Orchard Journey integration · 14 November 2026
+
+**ORCHARD_JOURNEY_01** appends accepted Orchard Landing as the seventh Journey cove after Reef Return. The root route is Holding → Bellwater → Driftwood → Two Shelters → Nell’s existing launch → Wide → Reef → Orchard. All eight independent Practice entrances remain. The other five planned coves are not yet playable. [Focused review](../reviews/orchard-journey/REVIEW.md)
+
+The new illustrated encounter introduces Orin at the orchard across the reach. The empty six-space ferry approaches Spring Steps beside waiting Pomme and tan Medlar. The scene spends no actions and moves no passenger; explicit Continue enters the accepted puzzle’s exact initial state. The established story player, captions, immediate continuation, Pause, Skip, recap and shared Sound owner remain.
+
+Exact completed-six saves stay untouched while viewing Home, Settings or Practice. Deliberate Continue preserves their original raw bytes in a non-overwriting Orchard backup and makes the new entry pending. Earlier checkpoints and two/three/four-cove compatibility retain their earned history and existing backups. Reloaded pending scenes show a settled recap. Storage failure preserves usable visit-only continuation with the existing notice.
+
+Orchard’s puzzle and both witnesses remain unchanged. Target **13**, mastery identity **orchard-landing@1**, Practice-earned bests, unrestricted Undo and provisional victory acceptance remain intact. A Practice best does not grant Journey completion. Every rescue advances the story, regardless of lantern count. Source baseline is reviewed `14f128619267e2da81b4108ece2de4da07b50359`, safely fast-forwarded through task/review commit `007bbabf24d5c859e6786b1b679a77fd5b5799cf`.
+
+The focused build/typecheck, 81-family inventory, 154 unit checks and five browser cases passed. Real controls completed a Reef-to-Orchard production route and an Orchard Journey rescue with tide/terminal Undo, accepted best preservation and seven-cove reload. Native portrait/short-landscape scene frames, original failures and capture limitations are retained in the review.
+
+**Publication unchanged:** Site version **19**, game `f0ffe2c12f1cc0e42ad7ef10a4b57dd29097c731`, hosting source `1ea40b815911a0fc1131350ee34125ae3508396e`, existing custom private audience. This integration is not deployed. Human phone, listening and spoken screen-reader approval remain separate from automated/emulated verification. [Publication receipt](../reviews/mobile-map-readability/deployment-confirmation.json)
+
+## Previous assignment — lantern review and Orchard commission · 14 November 2026
 
 Reviewed implementation `14f128619267e2da81b4108ece2de4da07b50359` adds the three-lantern system. No blocker was found in a fresh source/lifecycle review, 44 committed mastery tests, eight supplemental storage-check groups and inspection of four committed native phone frames. All twenty protected rule/loader/level/witness blobs match the accepted Orchard baseline. Broader build/browser results remain the implementation report's checks. Human physical-phone, listening and spoken screen-reader acceptance remain open. [Independent review and fresh evidence](../reviews/three-lanterns/INDEPENDENT_REVIEW.md)
 

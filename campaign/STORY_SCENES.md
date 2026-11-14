@@ -1,20 +1,22 @@
 # Last Ferry — story scenes for The Long Tide
 
-## Current story assignment — Orin at the orchard · 14 November 2026
+## Implemented Orchard encounter — review pending · 14 November 2026
 
-The player has accepted Orin and the repaired Orchard puzzle at `9933303178da04cac93ddc820ef55e181286d983`. **Medlar** is the orchard's tan rabbit; **Sorrel** remains the cream rabbit rescued in Wide Berth. The ferry starts empty beside Pomme and Medlar at Spring Steps; Orin waits at Orchard Landing. The future scene must hand off truthfully into these positions. [Accepted design](../reviews/orchard-difficulty/DESIGN.md)
+The player has accepted Orin and the repaired Orchard puzzle at `9933303178da04cac93ddc820ef55e181286d983`. **Medlar** is the orchard's tan rabbit; **Sorrel** remains the cream rabbit rescued in Wide Berth. The ferry starts empty beside Pomme and Medlar at Spring Steps; Orin waits at Orchard Landing. The illustrated scene hands off into these exact positions. [Accepted design](../reviews/orchard-difficulty/DESIGN.md)
 
-The accepted six-cove presentation remains unchanged. After review of the lantern feature at `14f128619267e2da81b4108ece2de4da07b50359`, [ORCHARD_JOURNEY_01](../NEXT_TASK_ORCHARD_JOURNEY.md) now commissions this illustrated entry and the seventh-cove append with explicit historical-save continuation. Preserve the existing painter/player and choose a compact phone-readable composition.
+The accepted first six entries remain unchanged. [ORCHARD_JOURNEY_01](../NEXT_TASK_ORCHARD_JOURNEY.md) appends `orchard-paths` / illustration `orchard` as the seventh entry in the existing Canvas player. The single seven-second composition introduces Orin at a fruit tree while the empty six-space ferry approaches Spring Steps. Orin lifts his head and raises one forehoof in greeting; Pomme and Medlar remain ashore across the open reach. Nobody boards or becomes rescued. [Implementation and native frames](../reviews/orchard-journey/REVIEW.md)
 
 Authored caption for this entry:
 
 > Orin knows every path through the orchard. Tonight, he needs the ferry.
 
-Use the existing illustrated player and show a recognizable orchard landing, one clear Orin acknowledgment, and a settled handoff consistent with the actual authored starting positions. Choose a single bounded composition or a brief two-beat scene so Orin and the starting relationships remain readable on a phone. His rounded face and short antlers should match the gameplay/portrait identity. Keep the landing supported at the water; do not repeat a tall floating platform or distant tiny characters.
+Orin’s rounded chestnut face, cream muzzle, short antlers and spotted coat follow his accepted model/portrait. Separate supported landings establish the reach, and a fruit-tree crown identifies the orchard. Portrait and short landscape recompose this bounded foreground group, keeping the caption outside its meaningful action. The complete caption appears at the existing 1.05-second cue. A restrained existing ferry-water effect at 0.75 seconds supports approach through the same Sound owner; there is no narration or new music.
 
 The accepted six-space ferry is already in service. Do not replay Nell's launch, claim Orin cannot fit any smaller boat, or present currents as newly introduced. A three-space cost is familiar capacity vocabulary, not a power or narrative inventory.
 
-Preserve immediate Continue/Next, autoplay/Pause, existing caption treatment, Skip without acknowledgment, Reduced Motion, Sound intent and explicit campaign acceptance. Use existing finite cues; no new cinematic framework, narration service or score is required. The current append must explicitly continue an old completed-six save with its earned rescues and original-byte backup preserved. A restored entry uses the safe Reef background and cannot manufacture Orchard completion or mastery.
+**Continue to Orchard Landing** is available immediately and alone acknowledges `orchard-paths`. Autoplay/Pause, Replay, Read story, Skip without acknowledgment, Reduced Motion and Sound intent retain their shared behavior. The held endpoint has an empty ferry beside Pomme and tan Medlar at Spring Steps, with Orin at Orchard Landing. Immediate Continue starts action zero with the authored tide, no passengers aboard and a fresh attempt.
+
+A completed-six save extends only on explicit Home Continue, preserving original raw bytes in a non-overwriting `.before-orchard` backup. The new scene plays from its beginning. Later pending-scene restoration shows its settled recap, with safely rescued Reef neighbors in the predecessor world and no invented Orchard completion or mastery. After the actual Orchard rescue, terminal Undo and lanterns remain provisional until explicit Continue story accepts the seventh rescue. The interim endpoint describes seven currently available coves; the remaining five are not playable.
 
 The later Drowned Orchard returns to recognizable landmarks with a **different waiting group**; Orin stays rescued. An orchard bough can recur at the final communal supper as a visual memory, without becoming a cargo objective. The intended closing line remains **“We saved you a place.”**
 
@@ -43,7 +45,7 @@ The historical 1 November twelve-cove proposal keeps Nell's rescue at C3, propos
 
 ## Shared presentation contract
 
-The opening, Harbor connection, Driftwood entry, reed landing, launch and reef lights use a close illustrated Canvas2D layer inside the actual application's dialog/fullscreen surface. A small variable-length scene definition supplies artwork, complete caption groups, duration, cue positions and optional narration IDs; the finite controller owns shot position and its cancellable run. The existing application alone acknowledges scenes and writes checkpoints. Gameplay remains the accepted interactive 3D world. The standalone reference wrapper and prototype navigation are not shipped as a replacement game or iframe.
+The opening, Harbor connection, Driftwood entry, reed landing, launch, reef lights and Orchard encounter use a close illustrated Canvas2D layer inside the actual application's dialog/fullscreen surface. A small variable-length scene definition supplies artwork, complete caption groups, duration, cue positions and optional narration IDs; the finite controller owns shot position and its cancellable run. The existing application alone acknowledges scenes and writes checkpoints. Gameplay remains the accepted interactive 3D world. The standalone reference wrapper and prototype navigation are not shipped as a replacement game or iframe.
 
 The reference's lavender/peach dusk, teal water, cream/tan animals, yellow ferry/red cabin and warm lights are retained. Rue is tan on the left and Pip cream on the right in the opening. Portrait uses an attached deep teal reading area under recomposed artwork; landscape uses the quiet space beside the focal action. Narrative captions use Georgia with a serif fallback and remain readable HTML. Controls use the accepted cove interface language and native semantics.
 

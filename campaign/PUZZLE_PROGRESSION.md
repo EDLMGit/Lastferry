@@ -2,7 +2,7 @@
 
 ## Current accepted progression · 14 November 2026
 
-The implemented Journey remains **Holding → Bellwater → Driftwood → Two Shelters → launch → Wide → Reef**. The player has now accepted repaired Orchard Landing at `9933303178da04cac93ddc820ef55e181286d983` as the intended seventh-cove puzzle. It is still the eighth independent Practice entrance; its story/save continuation is not implemented.
+The implemented Journey is **Holding → Bellwater → Driftwood → Two Shelters → launch → Wide → Reef → Orchard**. The player accepted repaired Orchard Landing at `9933303178da04cac93ddc820ef55e181286d983`. Its puzzle remains the eighth independent Practice entrance and now also serves as Journey cove seven, with an illustrated entry and explicit completed-six continuation.
 
 ### Accepted Orchard reasoning
 
@@ -18,7 +18,7 @@ Independent production-rule enumeration and the Orin-two-space counterfactual co
 | Two Shelters | Choose a refuge and retrieval order together. |
 | Wide Berth | Allocate eight spaces across homeward opportunities, with two spaces first and six last. |
 | Reef Return | Let early loading/delivery change the later approach. |
-| Orchard Landing — accepted Practice | Work backward from Orin's return load to the first delivery and smaller-neighbor retrieval. |
+| Orchard Landing — Journey seven and Practice | Work backward from Orin's return load to the first delivery and smaller-neighbor retrieval. |
 
 ### Current task and next gate
 

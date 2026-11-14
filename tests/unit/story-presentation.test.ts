@@ -323,6 +323,7 @@ test('launch remains a finite shared-owner scene, paused or skipped without ackn
 test.each([
   ['among-the-reeds', ['ferry-water']],
   ['lights-beyond-the-reef', ['ferry-water', 'lantern-contact']],
+  ['orchard-paths', ['ferry-water']],
 ] as const)('%s plays its finite cues once across Pause, then holds the final handoff', (scene, expectedCues) => {
   const heard: string[] = [];
   const presentation = new StoryPresentation(vi.fn(), vi.fn(), (_, cue) => heard.push(cue.kind));

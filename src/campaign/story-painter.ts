@@ -68,6 +68,7 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
     launch: 8,
     reeds: 7,
     reef: 7,
+    orchard: 7,
   };
   const grains = Array.from({ length: 560 }, (_, i) => ({
     x: ((i * 173 + 43) % 997) / 997,
@@ -1259,6 +1260,120 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
     ctx.restore();
     finish(t);
   }
+  function orchardTree(x: number, y: number, s: number) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(s, s);
+    ellipse(2, 4, 40, 6, 'rgba(28,64,58,.17)');
+    path('M -6 3 Q -4 -24 -14 -49 L -8 -53 L 1 -34 L 15 -62 L 20 -58 L 8 -27 L 8 3 Z', '#796850', '#b39c70', 1.2);
+    for (const [px, py, rx, ry, color] of [
+      [-19, -64, 32, 27, '#6c8c74'], [17, -70, 34, 30, '#77957a'],
+      [41, -52, 27, 24, '#638674'], [-42, -46, 27, 24, '#819879'],
+      [3, -45, 38, 29, '#859d79'],
+    ] as const) ellipse(px, py, rx, ry, color, -0.12);
+    path('M -47 -52 Q -35 -66 -21 -64 M -5 -79 Q 17 -90 32 -72 M 13 -47 Q 30 -54 42 -42', null, '#b1b792', 1.8);
+    for (const [px, py] of [[-37, -44], [-13, -65], [22, -70], [35, -41], [3, -35]]) {
+      ellipse(px, py, 4.8, 5.4, '#bb7255');
+      ellipse(px - 1.4, py - 1.2, 1.4, 2.3, '#e1a77b');
+      line([[px, py - 4], [px + 1.5, py - 8]], '#4e6655', 1.1);
+    }
+    ctx.restore();
+  }
+  function orchardDeer(x: number, y: number, s: number, look: number, greeting: number) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(s, s);
+    ellipse(4, 3, 36, 6, 'rgba(30,61,52,.21)');
+    for (const [lx, ly] of [[24, -28], [5, -29]]) {
+      path(`M ${lx - 5} ${ly} Q ${lx - 7} -6 ${lx - 4} 0 L ${lx + 4} 0 L ${lx + 6} ${ly} Z`, '#905d39');
+      ellipse(lx, 0, 6.6, 4.2, '#4f4937');
+    }
+    ellipse(12, -40, 28, 37, '#b67e4c', -0.13);
+    ellipse(27, -40, 16, 30, '#98623c', -0.11);
+    ellipse(35, -54, 8, 13, '#e4cd9a', 0.47);
+    path('M -15 -43 Q -20 -27 -22 -3 L -15 0 Q -10 -23 -6 -41 Z', '#bc8550');
+    ellipse(-19, -1, 6.9, 4.1, '#514936');
+    const hoofX = mix(-4, -27, greeting), hoofY = mix(-2, -48, greeting);
+    line([[0, -47], [mix(-2, -21, greeting), mix(-23, -36, greeting)], [hoofX, hoofY]], '#c38b54', 10);
+    ellipse(hoofX, hoofY, 7, 5, '#574a36', -0.35 * greeting);
+    path('M -10 -63 Q -16 -51 -8 -33 Q 4 -23 11 -41 L 8 -68 Z', '#d8bb84');
+    for (const [px, py, rr] of [[16, -61, 3.5], [28, -51, 4], [18, -42, 3.1], [31, -35, 3.1]])
+      ellipse(px, py, rr, rr * 1.25, '#ebd6a2', -0.2);
+    ctx.save();
+    ctx.translate(-7, -78 + 6 * (1 - look));
+    ctx.rotate(mix(-0.22, 0.045, look));
+    for (const [sx, sy, tilt] of [[-21, -18, -0.64], [21, -18, 0.64]]) {
+      ellipse(sx, sy, 8.5, 17, '#bc8757', tilt);
+      ellipse(sx, sy, 4.6, 11, '#dfb78a', tilt);
+    }
+    line([[-12, -30], [-16, -50], [-22, -62]], '#7b6543', 5);
+    line([[-17, -52], [-8, -61]], '#8b7350', 4);
+    line([[12, -31], [15, -51], [24, -63]], '#7b6543', 5);
+    line([[15, -51], [7, -60]], '#927b54', 4);
+    ellipse(0, -6, 22, 28, '#ba8251', 0.05);
+    ellipse(5, 5, 17, 17, '#dbc18c', 0.07);
+    ellipse(-7, 8, 12, 11, '#e5cc98', -0.12);
+    ellipse(-13, 5, 6.2, 5.4, '#514b36');
+    ellipse(-12, -11, 4.3, 6.0, '#544d35');
+    ellipse(12, -9, 4.2, 6.0, '#544d35');
+    ellipse(-13, -13, 1.3, 2, '#f4e4bc');
+    ellipse(11, -11, 1.3, 2, '#f4e4bc');
+    path('M -10 17 Q -3 21 4 17', null, '#8f7650', 1.2);
+    path('M -14 -27 Q -3 -35 10 -26', null, '#d4a66d', 2);
+    ctx.restore();
+    ctx.restore();
+  }
+  function orchardShot(seconds: number) {
+    const t = Math.min(seconds, 6.1);
+    const portrait = W < 600;
+    const scale = portrait
+      ? Math.min((W - 28) / 350, (H - 64) / 365, 1.4)
+      : Math.min((W * 0.6 - 24) / 400, (H - 34) / 235, 1.9);
+    const center = W * (portrait ? 0.5 : 0.705);
+    const ground = H * (portrait ? 0.47 : 0.53);
+    const approach = ease((t - 0.2) / 4.3);
+    const look = ease((t - 1.2) / 1.6);
+    const greeting = ease((t - 2.45) / 0.9) * (1 - ease((t - 4.25) / 1.15));
+    const orchardX = portrait ? 76 : 131;
+    const orchardY = portrait ? -35 : 12;
+    const springX = portrait ? -101 : -119;
+    const springY = portrait ? 57 : 27;
+    backdrop(t, 1);
+    foregroundWater(H * 0.47, t, { x: center + 53 * scale, strength: 0.2 });
+    ctx.save();
+    ctx.translate(center, ground);
+    ctx.scale(scale, scale);
+    ctx.save();
+    ctx.translate(orchardX, orchardY);
+    ellipse(6, 20, 85, 8, 'rgba(29,66,61,.19)');
+    path('M -53 -1 Q -38 -19 -10 -18 Q 31 -30 73 -15 L 95 -2 L 85 16 Q 58 32 14 28 L -48 20 Z', '#647b65');
+    path('M -53 -1 Q -38 -19 -10 -18 Q 31 -30 73 -15 L 95 -2 Q 68 7 26 8 Q -16 10 -53 -1 Z', '#a3aa78');
+    path('M -48 20 Q -16 29 14 28 M 34 28 Q 63 27 82 17', null, '#d1c59a', 1.6);
+    orchardTree(47, -18, portrait ? 0.88 : 0.80);
+    path('M -53 2 L -21 0 L -14 12 L -57 16 Z', '#acaa89', '#d7c9a3', 1.3);
+    line([[-47, 9], [-23, 7]], '#828e75', 1.2);
+    orchardDeer(-14, 4, portrait ? 0.88 : 0.81, look, greeting);
+    ctx.restore();
+    ctx.save();
+    ctx.translate(springX, springY);
+    ellipse(4, 30, 72, 6, 'rgba(29,66,61,.19)');
+    path('M -73 -3 Q -65 -22 -33 -21 Q 2 -27 38 -15 L 57 3 L 49 19 Q 24 33 -19 32 L -66 22 Z', '#738875');
+    path('M -73 -3 Q -65 -22 -33 -21 Q 2 -27 38 -15 L 57 3 Q 18 13 -21 10 L -73 6 Z', '#b3b292');
+    for (let i = 0; i < 3; i++) {
+      const sx = 26 + i * 7, sy = 12 + i * 8;
+      path(`M ${sx - 17} ${sy} L ${sx + 25} ${sy - 3} L ${sx + 29} ${sy + 5} L ${sx - 17} ${sy + 8} Z`, '#b0ad8e', '#d3c8a2', 1);
+      line([[sx - 14, sy + 8], [sx + 27, sy + 5]], '#7c8d7a', 1.5);
+    }
+    sheep(-24, 2, portrait ? 0.95 : 0.91, -0.05 * look);
+    rabbit(22, 3, portrait ? 0.72 : 0.63, 'tan', { head: -0.1 * look });
+    ctx.restore();
+    const boatX = mix(portrait ? -10 : -49, portrait ? 34 : -5, approach);
+    const boatY = (portrait ? 155 : 89) - 5 * approach;
+    approachWake(boatX, boatY + 22, approach);
+    readyFerry(boatX, boatY, portrait ? 1.02 : 0.84);
+    ctx.restore();
+    finish(t);
+  }
   function launchShot(t: number) {
     const portrait = W < 480,
       short = H < 300,
@@ -1443,6 +1558,7 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
         launch: launchShot,
         reeds: reedsShot,
         reef: reefShot,
+        orchard: orchardShot,
       })[illustration](t);
     },
   };

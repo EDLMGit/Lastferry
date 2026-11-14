@@ -1,0 +1,683 @@
+{
+  "base": "007bbabf24d5c859e6786b1b679a77fd5b5799cf",
+  "node": "v24.15.0",
+  "platform": "win32",
+  "build": {
+    "passed": true,
+    "command": "npm run build",
+    "includesTypecheck": true,
+    "release": [
+      {
+        "path": "assets/index-Cp2hoGGG.js",
+        "sha256": "29413607bdfd41770c485cb79773a79e7987c795dd84ed070bfaf6e308e4db34"
+      },
+      {
+        "path": "assets/index-OXeb4GMi.css",
+        "sha256": "8c5d5ba18c24ba706b170a60592c32adbc5b29896e476218db6599b36b1c480b"
+      }
+    ]
+  },
+  "units": {
+    "command": "npm run test:unit -- tests/unit/story-progress.test.ts tests/unit/orchard-progress.test.ts tests/unit/story-presentation.test.ts tests/unit/mastery.test.ts tests/unit/asset-catalog.test.ts --maxWorkers=1 --reporter=json --outputFile=.cache/orchard-journey-units.json",
+    "passed": 154,
+    "failed": 0,
+    "files": [
+      {
+        "file": "asset-catalog.test.ts",
+        "assertions": [
+          {
+            "name": "canonical asset catalog keeps actual local sources, provenance, type detail and gallery evidence for each family",
+            "status": "passed"
+          },
+          {
+            "name": "canonical asset catalog rejects duplicate identities, absent sources, missing detail and unresolved retirements",
+            "status": "passed"
+          },
+          {
+            "name": "canonical asset catalog checks generated image dimensions, alpha semantics and derived-output provenance",
+            "status": "passed"
+          },
+          {
+            "name": "canonical asset catalog rejects missing or duplicated generated variants and unsafe output sources",
+            "status": "passed"
+          },
+          {
+            "name": "canonical asset catalog requires bounded generated image outputs instead of reference-only labels",
+            "status": "passed"
+          }
+        ]
+      },
+      {
+        "file": "mastery.test.ts",
+        "assertions": [
+          {
+            "name": "authored lantern scoring first-crossing / full-boat-detour earns its authored result through Session",
+            "status": "passed"
+          },
+          {
+            "name": "authored lantern scoring first-crossing / wait-for-tide earns its authored result through Session",
+            "status": "passed"
+          },
+          {
+            "name": "authored lantern scoring first-crossing / harbor-first earns its authored result through Session",
+            "status": "passed"
+          },
+          {
+            "name": "authored lantern scoring holding-pier / canonical earns its authored result through Session",
+            "status": "passed"
+          },
+          {
+            "name": "authored lantern scoring bellwater / shallow-outward-deep-return earns its authored result through Session",
+            "status": "passed"
+          },
+          {
+            "name": "authored lantern scoring bellwater / deep-outward-shallow-return earns its authored result through Session",
+            "status": "passed"
+          },
+          {
+            "name": "authored lantern scoring bellwater / wait-at-harbor earns its authored result through Session",
+            "status": "passed"
+          },
+          {
+            "name": "authored lantern scoring bellwater / wait-at-shallows earns its authored result through Session",
+            "status": "passed"
+          },
+          {
+            "name": "authored lantern scoring bellwater / wait-at-low-pier-before-boarding earns its authored result through Session",
+            "status": "passed"
+          },
+          {
+            "name": "authored lantern scoring bellwater / wait-at-low-pier-after-boarding earns its authored result through Session",
+            "status": "passed"
+          },
+          {
+            "name": "authored lantern scoring bellwater / tansy-then-lark earns its authored result through Session",
+            "status": "passed"
+          },
+          {
+            "name": "authored lantern scoring bellwater / lark-then-tansy earns its authored result through Session",
+            "status": "passed"
+          },
+          {
+            "name": "authored lantern scoring driftwood-yard / stage-nell-collect-group earns its authored result through Session",
+            "status": "passed"
+          },
+          {
+            "name": "authored lantern scoring driftwood-yard / stage-nell-deliver-rabbits-first earns its authored result through Session",
+            "status": "passed"
+          },
+          {
+            "name": "authored lantern scoring two-shelters / low-rabbit-home-first earns its authored result through Session",
+            "status": "passed"
+          },
+          {
+            "name": "authored lantern scoring two-shelters / high-mixed-first earns its authored result through Session",
+            "status": "passed"
+          },
+          {
+            "name": "authored lantern scoring two-shelters / high-rabbit-home-first earns its authored result through Session",
+            "status": "passed"
+          },
+          {
+            "name": "authored lantern scoring two-shelters / low-separate-subsets earns its authored result through Session",
+            "status": "passed"
+          },
+          {
+            "name": "authored lantern scoring wide-berth / light-through-beacon earns its authored result through Session",
+            "status": "passed"
+          },
+          {
+            "name": "authored lantern scoring wide-berth / bring-the-quay-via-outer earns its authored result through Session",
+            "status": "passed"
+          },
+          {
+            "name": "authored lantern scoring reef-return / gather-before-reef earns its authored result through Session",
+            "status": "passed"
+          },
+          {
+            "name": "authored lantern scoring reef-return / relay-through-shell-pool earns its authored result through Session",
+            "status": "passed"
+          },
+          {
+            "name": "authored lantern scoring orchard-landing / stage-the-orchard-escort earns its authored result through Session",
+            "status": "passed"
+          },
+          {
+            "name": "authored lantern scoring orchard-landing / return-to-spring-steps earns its authored result through Session",
+            "status": "passed"
+          },
+          {
+            "name": "authored lantern scoring ordinary, tide and terminal rewinds count separately from final route actions",
+            "status": "passed"
+          },
+          {
+            "name": "authored lantern scoring a provisional three can be withdrawn, redelivered as two and accepted only once",
+            "status": "passed"
+          },
+          {
+            "name": "authored lantern scoring rejected inputs and animation finish do not reset history, successful restart does",
+            "status": "passed"
+          },
+          {
+            "name": "authored lantern scoring cosmetic restored Harbor states and initial mounts cannot earn a result",
+            "status": "passed"
+          },
+          {
+            "name": "authored lantern scoring loss recovery keeps Undo history, and a new cove starts its own attempt",
+            "status": "passed"
+          },
+          {
+            "name": "separate accepted mastery records one actual best run survives poorer replays and ties without mixing its statistics",
+            "status": "passed"
+          },
+          {
+            "name": "separate accepted mastery records a second store cannot overwrite a better result accepted by another owner",
+            "status": "passed"
+          },
+          {
+            "name": "separate accepted mastery records results are copies and a matching future Journey cove uses the same stable key",
+            "status": "passed"
+          },
+          {
+            "name": "separate accepted mastery records older scoring revisions are retained but never displayed or accepted as current",
+            "status": "passed"
+          },
+          {
+            "name": "separate accepted mastery records unusable stored results keep play and current-visit bests available: {",
+            "status": "passed"
+          },
+          {
+            "name": "separate accepted mastery records unusable stored results keep play and current-visit bests available: {\"version\":2,\"results\":{}}",
+            "status": "passed"
+          },
+          {
+            "name": "separate accepted mastery records unusable stored results keep play and current-visit bests available: {\"version\":1,\"results\":[]}",
+            "status": "passed"
+          },
+          {
+            "name": "separate accepted mastery records unusable stored results keep play and current-visit bests available: {\"version\":1,\"results\":{\"first-crossing@1\":{\"coveId\":\"first-crossing\",\"revision\":1,\"action",
+            "status": "passed"
+          },
+          {
+            "name": "separate accepted mastery records unusable stored results keep play and current-visit bests available: {\"version\":1,\"results\":{\"first-crossing@1\":{\"coveId\":\"first-crossing\",\"revision\":1,\"action",
+            "status": "passed"
+          },
+          {
+            "name": "separate accepted mastery records unusable stored results keep play and current-visit bests available: {\"version\":1,\"results\":{\"first-crossing@1\":{\"coveId\":\"first-crossing\",\"revision\":1,\"action",
+            "status": "passed"
+          },
+          {
+            "name": "separate accepted mastery records unusable stored results keep play and current-visit bests available: {\"version\":1,\"results\":{\"first-crossing@1\":{\"coveId\":\"first-crossing\",\"revision\":1,\"action",
+            "status": "passed"
+          },
+          {
+            "name": "separate accepted mastery records unusable stored results keep play and current-visit bests available: {\"version\":1,\"results\":{\"first-crossing@1\":{\"coveId\":\"unknown\",\"revision\":1,\"actions\":8,\"s",
+            "status": "passed"
+          },
+          {
+            "name": "separate accepted mastery records unusable stored results keep play and current-visit bests available: {\"version\":1,\"results\":{\"holding-pier@1\":{\"coveId\":\"first-crossing\",\"revision\":1,\"actions\"",
+            "status": "passed"
+          },
+          {
+            "name": "separate accepted mastery records blocked access, failed writes and silent writes retain honest current-visit results",
+            "status": "passed"
+          },
+          {
+            "name": "separate accepted mastery records legacy Journey rescues earn no synthetic rating and New Journey preserves bests",
+            "status": "passed"
+          }
+        ]
+      },
+      {
+        "file": "orchard-progress.test.ts",
+        "assertions": [
+          {
+            "name": "exact completed-six continuation into Orchard read preserves original bytes and earned rescues until one explicit continuation",
+            "status": "passed"
+          },
+          {
+            "name": "exact completed-six continuation into Orchard earlier valid boundaries remain in place without a backup or conversion write",
+            "status": "passed"
+          },
+          {
+            "name": "exact completed-six continuation into Orchard existing backup slots and earlier migrations are never overwritten",
+            "status": "passed"
+          },
+          {
+            "name": "exact completed-six continuation into Orchard backup throws keeps old bytes and a playable in-memory continuation",
+            "status": "passed"
+          },
+          {
+            "name": "exact completed-six continuation into Orchard backup silent keeps old bytes and a playable in-memory continuation",
+            "status": "passed"
+          },
+          {
+            "name": "exact completed-six continuation into Orchard primary throws keeps old bytes and a playable in-memory continuation",
+            "status": "passed"
+          },
+          {
+            "name": "exact completed-six continuation into Orchard primary silent keeps old bytes and a playable in-memory continuation",
+            "status": "passed"
+          },
+          {
+            "name": "exact completed-six continuation into Orchard a newer live checkpoint appearing before backup is retained",
+            "status": "passed"
+          },
+          {
+            "name": "exact completed-six continuation into Orchard a newer live checkpoint appearing during backup is retained",
+            "status": "passed"
+          },
+          {
+            "name": "exact completed-six continuation into Orchard malformed and invented completion cannot trigger conversion: {\"version\":1,\"checkpoint\":{\"kind\":\"complete\"},\"completed\":[\"holding-pier\",\"bellwater\",\"driftwood-yard\",\"two-shelters\",\"wide-berth\"],\"acknowledgedScenes\":[\"opening\",\"another-bell\",\"driftwood-light\",\"among-the-reeds\",\"a-wider-deck\"]}",
+            "status": "passed"
+          },
+          {
+            "name": "exact completed-six continuation into Orchard malformed and invented completion cannot trigger conversion: {\"version\":1,\"checkpoint\":{\"kind\":\"complete\"},\"completed\":[\"holding-pier\",\"bellwater\",\"driftwood-yard\",\"two-shelters\",\"wide-berth\",\"orchard-landing\"],\"acknowledgedScenes\":[\"opening\",\"another-bell\",\"driftwood-light\",\"among-the-reeds\",\"a-wider-deck\",\"lights-beyond-the-reef\"]}",
+            "status": "passed"
+          },
+          {
+            "name": "exact completed-six continuation into Orchard malformed and invented completion cannot trigger conversion: {\"version\":1,\"checkpoint\":{\"kind\":\"complete\"},\"completed\":[\"holding-pier\",\"bellwater\",\"driftwood-yard\",\"two-shelters\",\"wide-berth\",\"reef-return\"],\"acknowledgedScenes\":[\"opening\",\"another-bell\",\"driftwood-light\",\"among-the-reeds\",\"a-wider-deck\",\"orchard-paths\"]}",
+            "status": "passed"
+          },
+          {
+            "name": "exact completed-six continuation into Orchard malformed and invented completion cannot trigger conversion: {\"version\":1,\"checkpoint\":{\"kind\":\"complete\"},\"completed\":[\"reef-return\",\"wide-berth\",\"two-shelters\",\"driftwood-yard\",\"bellwater\",\"holding-pier\"],\"acknowledgedScenes\":[\"opening\",\"another-bell\",\"driftwood-light\",\"among-the-reeds\",\"a-wider-deck\",\"lights-beyond-the-reef\"]}",
+            "status": "passed"
+          },
+          {
+            "name": "exact completed-six continuation into Orchard malformed and invented completion cannot trigger conversion: {\"version\":1,\"checkpoint\":{\"kind\":\"complete\"},\"completed\":[\"holding-pier\",\"bellwater\",\"driftwood-yard\",\"two-shelters\",\"wide-berth\",\"reef-return\"],\"acknowledgedScenes\":[\"lights-beyond-the-reef\",\"a-wider-deck\",\"among-the-reeds\",\"driftwood-light\",\"another-bell\",\"opening\"]}",
+            "status": "passed"
+          },
+          {
+            "name": "exact completed-six continuation into Orchard malformed and invented completion cannot trigger conversion: {\"version\":1,\"checkpoint\":{\"kind\":\"complete\"},\"completed\":[\"holding-pier\",\"bellwater\",\"driftwood-yard\",\"two-shelters\",\"wide-berth\",\"reef-return\"],\"acknowledgedScenes\":[\"opening\",\"another-bell\",\"driftwood-light\",\"among-the-reeds\",\"a-wider-deck\",\"lights-beyond-the-reef\",\"orchard-paths\"]}",
+            "status": "passed"
+          },
+          {
+            "name": "exact completed-six continuation into Orchard malformed and invented completion cannot trigger conversion: {\"version\":1,\"checkpoint\":{\"kind\":\"complete\"},\"completed\":[\"holding-pier\",\"bellwater\",\"driftwood-yard\",\"two-shelters\",\"wide-berth\",\"reef-return\",\"orchard-landing\"],\"acknowledgedScenes\":[\"opening\",\"another-bell\",\"driftwood-light\",\"among-the-reeds\",\"a-wider-deck\",\"lights-beyond-the-reef\"]}",
+            "status": "passed"
+          },
+          {
+            "name": "exact completed-six continuation into Orchard malformed and invented completion cannot trigger conversion: {\"version\":1,\"checkpoint\":{\"kind\":\"complete\"},\"completed\":[\"holding-pier\",\"bellwater\",\"driftwood-yard\",\"two-shelters\",\"wide-berth\",\"reef-return\",\"future-cove\"],\"acknowledgedScenes\":[\"opening\",\"another-bell\",\"driftwood-light\",\"among-the-reeds\",\"a-wider-deck\",\"lights-beyond-the-reef\"]}",
+            "status": "passed"
+          },
+          {
+            "name": "exact completed-six continuation into Orchard malformed and invented completion cannot trigger conversion: {\"version\":1,\"checkpoint\":{\"kind\":\"complete\",\"id\":\"reef-return\"},\"completed\":[\"holding-pier\",\"bellwater\",\"driftwood-yard\",\"two-shelters\",\"wide-berth\",\"reef-return\"],\"acknowledgedScenes\":[\"opening\",\"another-bell\",\"driftwood-light\",\"among-the-reeds\",\"a-wider-deck\",\"lights-beyond-the-reef\"]}",
+            "status": "passed"
+          },
+          {
+            "name": "exact completed-six continuation into Orchard malformed and invented completion cannot trigger conversion: {\"version\":1,\"checkpoint\":{\"kind\":\"complete\"},\"completed\":[\"holding-pier\",\"bellwater\",\"driftwood-yard\",\"two-shelters\",\"wide-berth\",\"reef-return\"],\"acknowledgedScenes\":[\"opening\",\"another-bell\",\"driftwood-light\",\"among-the-reeds\",\"a-wider-deck\",\"lights-beyond-the-reef\"],\"extra\":true}",
+            "status": "passed"
+          },
+          {
+            "name": "exact completed-six continuation into Orchard malformed and invented completion cannot trigger conversion: {\"version\":2,\"checkpoint\":{\"kind\":\"complete\"},\"completed\":[\"holding-pier\",\"bellwater\",\"driftwood-yard\",\"two-shelters\",\"wide-berth\",\"reef-return\"],\"acknowledgedScenes\":[\"opening\",\"another-bell\",\"driftwood-light\",\"among-the-reeds\",\"a-wider-deck\",\"lights-beyond-the-reef\"]}",
+            "status": "passed"
+          },
+          {
+            "name": "exact completed-six continuation into Orchard accepted Practice mastery survives extension and worse replay without granting completion",
+            "status": "passed"
+          },
+          {
+            "name": "exact completed-six continuation into Orchard fresh Reef acceptance produces pending Orchard without a legacy migration or score write",
+            "status": "passed"
+          }
+        ]
+      },
+      {
+        "file": "story-presentation.test.ts",
+        "assertions": [
+          {
+            "name": "bounded optional story motion restored connective scenery depicts the safe Harbor without altering a puzzle or inventing Undo history",
+            "status": "passed"
+          },
+          {
+            "name": "bounded optional story motion normal playback advances exactly once per shot and holds the final scene without acknowledgment",
+            "status": "passed"
+          },
+          {
+            "name": "bounded optional story motion pause at 1500ms preserves elapsed and consumed cues through resume",
+            "status": "passed"
+          },
+          {
+            "name": "bounded optional story motion pause at 2000ms preserves elapsed and consumed cues through resume",
+            "status": "passed"
+          },
+          {
+            "name": "bounded optional story motion paused Next and Replay preserve user intent; resume at a settled endpoint advances only once",
+            "status": "passed"
+          },
+          {
+            "name": "bounded optional story motion caption reveals the complete current phrase after its brief visual lead and remains held",
+            "status": "passed"
+          },
+          {
+            "name": "bounded optional story motion Skip reaches the final readable endpoint but leaves the scene pending",
+            "status": "passed"
+          },
+          {
+            "name": "bounded optional story motion Reduced Motion starts at each still endpoint, while restore chooses the final recap",
+            "status": "passed"
+          },
+          {
+            "name": "bounded optional story motion opening reading/settings/hide settlement affects only the current shot and never replays itself",
+            "status": "passed"
+          },
+          {
+            "name": "bounded optional story motion Replay invalidates the old run, restarts only its shot, and whole replay returns to tide",
+            "status": "passed"
+          },
+          {
+            "name": "bounded optional story motion large stalled intervals settle safely without bursting missed cues",
+            "status": "passed"
+          },
+          {
+            "name": "bounded optional story motion missed or normally consumed cue cannot return on a later frame",
+            "status": "passed"
+          },
+          {
+            "name": "bounded optional story motion cancellation has no late frame, cue or continuation work",
+            "status": "passed"
+          },
+          {
+            "name": "bounded optional story motion backwards timestamps cannot reverse visual progress",
+            "status": "passed"
+          },
+          {
+            "name": "Driftwood entry holds an explicit handoff and preserves pause, still and recap policies",
+            "status": "passed"
+          },
+          {
+            "name": "launch remains a finite shared-owner scene, paused or skipped without acknowledgment",
+            "status": "passed"
+          },
+          {
+            "name": "among-the-reeds plays its finite cues once across Pause, then holds the final handoff",
+            "status": "passed"
+          },
+          {
+            "name": "lights-beyond-the-reef plays its finite cues once across Pause, then holds the final handoff",
+            "status": "passed"
+          },
+          {
+            "name": "orchard-paths plays its finite cues once across Pause, then holds the final handoff",
+            "status": "passed"
+          }
+        ]
+      },
+      {
+        "file": "story-progress.test.ts",
+        "assertions": [
+          {
+            "name": "authored story registry optional narration slots match the supplied exact script without claiming recordings",
+            "status": "passed"
+          },
+          {
+            "name": "authored story registry seven authored story puzzles are registered, with First Crossing practice separate",
+            "status": "passed"
+          },
+          {
+            "name": "authored story registry all opening copy and the connective beat remain available without sound or motion",
+            "status": "passed"
+          },
+          {
+            "name": "journey checkpoint transactions all fifteen checkpoints round-trip with coherent accepted completions and scene acknowledgments",
+            "status": "passed"
+          },
+          {
+            "name": "journey checkpoint transactions wrong or repeated scene and cove completions never skip a puzzle or repeat acknowledgment",
+            "status": "passed"
+          },
+          {
+            "name": "journey checkpoint transactions transitions are pure and cannot serialize puzzle or presentation state",
+            "status": "passed"
+          },
+          {
+            "name": "journey checkpoint transactions actual Holding win, tide Undo, terminal Undo and restart do not advance a checkpoint",
+            "status": "passed"
+          },
+          {
+            "name": "validated local journey storage malformed save is retained without silent reset or write",
+            "status": "passed"
+          },
+          {
+            "name": "validated local journey storage null save is retained without silent reset or write",
+            "status": "passed"
+          },
+          {
+            "name": "validated local journey storage array save is retained without silent reset or write",
+            "status": "passed"
+          },
+          {
+            "name": "validated local journey storage unsupported save is retained without silent reset or write",
+            "status": "passed"
+          },
+          {
+            "name": "validated local journey storage future version save is retained without silent reset or write",
+            "status": "passed"
+          },
+          {
+            "name": "validated local journey storage unknown scene save is retained without silent reset or write",
+            "status": "passed"
+          },
+          {
+            "name": "validated local journey storage unknown cove save is retained without silent reset or write",
+            "status": "passed"
+          },
+          {
+            "name": "validated local journey storage early cove save is retained without silent reset or write",
+            "status": "passed"
+          },
+          {
+            "name": "validated local journey storage duplicate completion save is retained without silent reset or write",
+            "status": "passed"
+          },
+          {
+            "name": "validated local journey storage wrong acknowledgment order save is retained without silent reset or write",
+            "status": "passed"
+          },
+          {
+            "name": "validated local journey storage unaccepted endpoint save is retained without silent reset or write",
+            "status": "passed"
+          },
+          {
+            "name": "validated local journey storage oversized save is retained without silent reset or write",
+            "status": "passed"
+          },
+          {
+            "name": "validated local journey storage a canceled replacement is read-only; explicit replacement writes only the journey key",
+            "status": "passed"
+          },
+          {
+            "name": "validated local journey storage invalid data is replaced only by the explicit replacement operation",
+            "status": "passed"
+          },
+          {
+            "name": "validated local journey storage accepting departure stores completion and pending destination in one write and survives reload",
+            "status": "passed"
+          },
+          {
+            "name": "validated local journey storage snapshots cannot mutate stored progress behind validation",
+            "status": "passed"
+          },
+          {
+            "name": "validated local journey storage unavailable storage at access stays playable in memory with truthful notice",
+            "status": "passed"
+          },
+          {
+            "name": "validated local journey storage unavailable storage at read stays playable in memory with truthful notice",
+            "status": "passed"
+          },
+          {
+            "name": "validated local journey storage unavailable storage at write stays playable in memory with truthful notice",
+            "status": "passed"
+          },
+          {
+            "name": "validated local journey storage failed replacement preserves the original storage bytes while the new in-memory journey works",
+            "status": "passed"
+          },
+          {
+            "name": "validated local journey storage invalid relationships passed to pure operations cannot become accepted progress",
+            "status": "passed"
+          },
+          {
+            "name": "narrow two-cove completion compatibility reading exact historical completion is byte-preserving until deliberate continuation",
+            "status": "passed"
+          },
+          {
+            "name": "narrow two-cove completion compatibility rejects altered historical records without permissive prefix migration: {\"version\":1,\"checkpoint\":{\"kind\":\"complete\"},\"completed\":[\"holding-pier\",\"bellwater\"],\"acknowledgedScenes\":[\"opening\",\"another-bell\"],\"extra\":true}",
+            "status": "passed"
+          },
+          {
+            "name": "narrow two-cove completion compatibility rejects altered historical records without permissive prefix migration: {\"version\":2,\"checkpoint\":{\"kind\":\"complete\"},\"completed\":[\"holding-pier\",\"bellwater\"],\"acknowledgedScenes\":[\"opening\",\"another-bell\"]}",
+            "status": "passed"
+          },
+          {
+            "name": "narrow two-cove completion compatibility rejects altered historical records without permissive prefix migration: {\"version\":1,\"checkpoint\":{\"kind\":\"complete\",\"id\":\"bellwater\"},\"completed\":[\"holding-pier\",\"bellwater\"],\"acknowledgedScenes\":[\"opening\",\"another-bell\"]}",
+            "status": "passed"
+          },
+          {
+            "name": "narrow two-cove completion compatibility rejects altered historical records without permissive prefix migration: {\"version\":1,\"checkpoint\":{\"kind\":\"complete\"},\"completed\":[\"holding-pier\"],\"acknowledgedScenes\":[\"opening\"]}",
+            "status": "passed"
+          },
+          {
+            "name": "narrow two-cove completion compatibility rejects altered historical records without permissive prefix migration: {\"version\":1,\"checkpoint\":{\"kind\":\"complete\"},\"completed\":[\"bellwater\",\"holding-pier\"],\"acknowledgedScenes\":[\"opening\",\"another-bell\"]}",
+            "status": "passed"
+          },
+          {
+            "name": "narrow two-cove completion compatibility rejects altered historical records without permissive prefix migration: {\"version\":1,\"checkpoint\":{\"kind\":\"complete\"},\"completed\":[\"holding-pier\",\"bellwater\"],\"acknowledgedScenes\":[\"another-bell\",\"opening\"]}",
+            "status": "passed"
+          },
+          {
+            "name": "narrow two-cove completion compatibility rejects altered historical records without permissive prefix migration: {\"version\":1,\"checkpoint\":{\"kind\":\"complete\"},\"completed\":[\"holding-pier\",\"bellwater\"],\"acknowledgedScenes\":[\"opening\"]}",
+            "status": "passed"
+          },
+          {
+            "name": "narrow two-cove completion compatibility rejects altered historical records without permissive prefix migration: {\"version\":1,\"checkpoint\":{\"kind\":\"complete\"},\"completed\":[\"holding-pier\",\"unknown\"],\"acknowledgedScenes\":[\"opening\",\"another-bell\"]}",
+            "status": "passed"
+          },
+          {
+            "name": "narrow two-cove completion compatibility failed compatibility write preserves old bytes but continues honestly in memory",
+            "status": "passed"
+          },
+          {
+            "name": "both exact historical boundaries and current completed world three-cove completion begins Two Shelters, then the unseen launch exactly once",
+            "status": "passed"
+          },
+          {
+            "name": "both exact historical boundaries and current completed world rejects altered three-cove shapes without rewriting: {\"version\":1,\"checkpoint\":{\"kind\":\"complete\"},\"completed\":[\"holding-pier\",\"bellwater\",\"driftwood-yard\"],\"acknowledgedScenes\":[\"opening\",\"another-bell\",\"driftwood-light\"],\"extra\":true}",
+            "status": "passed"
+          },
+          {
+            "name": "both exact historical boundaries and current completed world rejects altered three-cove shapes without rewriting: {\"version\":2,\"checkpoint\":{\"kind\":\"complete\"},\"completed\":[\"holding-pier\",\"bellwater\",\"driftwood-yard\"],\"acknowledgedScenes\":[\"opening\",\"another-bell\",\"driftwood-light\"]}",
+            "status": "passed"
+          },
+          {
+            "name": "both exact historical boundaries and current completed world rejects altered three-cove shapes without rewriting: {\"version\":1,\"checkpoint\":{\"kind\":\"complete\",\"id\":\"driftwood-yard\"},\"completed\":[\"holding-pier\",\"bellwater\",\"driftwood-yard\"],\"acknowledgedScenes\":[\"opening\",\"another-bell\",\"driftwood-light\"]}",
+            "status": "passed"
+          },
+          {
+            "name": "both exact historical boundaries and current completed world rejects altered three-cove shapes without rewriting: {\"version\":1,\"checkpoint\":{\"kind\":\"complete\"},\"completed\":[\"holding-pier\",\"driftwood-yard\",\"bellwater\"],\"acknowledgedScenes\":[\"opening\",\"another-bell\",\"driftwood-light\"]}",
+            "status": "passed"
+          },
+          {
+            "name": "both exact historical boundaries and current completed world rejects altered three-cove shapes without rewriting: {\"version\":1,\"checkpoint\":{\"kind\":\"complete\"},\"completed\":[\"holding-pier\",\"bellwater\",\"driftwood-yard\"],\"acknowledgedScenes\":[\"opening\",\"driftwood-light\",\"another-bell\"]}",
+            "status": "passed"
+          },
+          {
+            "name": "both exact historical boundaries and current completed world rejects altered three-cove shapes without rewriting: {\"version\":1,\"checkpoint\":{\"kind\":\"complete\"},\"completed\":[\"holding-pier\",\"bellwater\",\"wide-berth\"],\"acknowledgedScenes\":[\"opening\",\"another-bell\",\"driftwood-light\"]}",
+            "status": "passed"
+          },
+          {
+            "name": "both exact historical boundaries and current completed world rejects altered three-cove shapes without rewriting: {\"version\":1,\"checkpoint\":{\"kind\":\"complete\"},\"completed\":[\"holding-pier\",\"bellwater\",\"driftwood-yard\"],\"acknowledgedScenes\":[\"opening\",\"another-bell\"]}",
+            "status": "passed"
+          },
+          {
+            "name": "both exact historical boundaries and current completed world failed three-cove continuation write preserves bytes and remains usable in memory",
+            "status": "passed"
+          },
+          {
+            "name": "both exact historical boundaries and current completed world each scene uses its actual predecessor and old complete worlds never display a new rescue",
+            "status": "passed"
+          },
+          {
+            "name": "the previous route through Wide Berth pending launch keeps earned identities across Continue, reload and the new rescue",
+            "status": "passed"
+          },
+          {
+            "name": "the previous route through Wide Berth active Wide keeps earned identities across Continue, reload and the new rescue",
+            "status": "passed"
+          },
+          {
+            "name": "the previous route through Wide Berth completed Wide keeps earned identities across Continue, reload and the new rescue",
+            "status": "passed"
+          },
+          {
+            "name": "the previous route through Wide Berth backup throws leaves original storage intact and the entire continuation playable in memory",
+            "status": "passed"
+          },
+          {
+            "name": "the previous route through Wide Berth backup silently fails leaves original storage intact and the entire continuation playable in memory",
+            "status": "passed"
+          },
+          {
+            "name": "the previous route through Wide Berth primary throws leaves original storage intact and the entire continuation playable in memory",
+            "status": "passed"
+          },
+          {
+            "name": "the previous route through Wide Berth primary silently fails leaves original storage intact and the entire continuation playable in memory",
+            "status": "passed"
+          },
+          {
+            "name": "the previous route through Wide Berth a different prior backup or newer live checkpoint cannot be overwritten",
+            "status": "passed"
+          },
+          {
+            "name": "the previous route through Wide Berth early scene and cove checkpoints keep their exact place and original bytes",
+            "status": "passed"
+          },
+          {
+            "name": "the previous route through Wide Berth a live checkpoint changed while its backup is written wins over a stale Continue",
+            "status": "passed"
+          },
+          {
+            "name": "the previous route through Wide Berth rejects invented earned rescues, acknowledgments or checkpoints",
+            "status": "passed"
+          },
+          {
+            "name": "the previous route through Wide Berth rejects invented earned rescues, acknowledgments or checkpoints",
+            "status": "passed"
+          },
+          {
+            "name": "the previous route through Wide Berth rejects invented earned rescues, acknowledgments or checkpoints",
+            "status": "passed"
+          },
+          {
+            "name": "the previous route through Wide Berth rejects invented earned rescues, acknowledgments or checkpoints",
+            "status": "passed"
+          },
+          {
+            "name": "the previous route through Wide Berth rejects invented earned rescues, acknowledgments or checkpoints",
+            "status": "passed"
+          },
+          {
+            "name": "the previous route through Wide Berth rejects invented earned rescues, acknowledgments or checkpoints",
+            "status": "passed"
+          }
+        ]
+      }
+    ]
+  },
+  "assets": {
+    "command": "npm run check:assets",
+    "families": 81,
+    "allPreviousIDsPreserved": true,
+    "changedFamily": "story.illustrations",
+    "addedFamilies": []
+  },
+  "protectedPathsUnchanged": [
+    "data",
+    "src/game",
+    "src/levels",
+    "src/scene",
+    "src/audio",
+    "src/ui"
+  ]
+}

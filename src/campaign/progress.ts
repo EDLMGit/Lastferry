@@ -2,6 +2,7 @@ import { storyCoves, storyScenes, type CoveId, type SceneId } from './registry';
 
 export const JOURNEY_STORAGE_KEY = 'last-ferry.journey.v1';
 export const JOURNEY_LEGACY_BACKUP_KEY = JOURNEY_STORAGE_KEY + '.before-six-coves';
+export const JOURNEY_ORCHARD_BACKUP_KEY = JOURNEY_STORAGE_KEY + '.before-orchard';
 export const checkpointCopy = 'Progress is saved between coves. An unfinished cove starts again.';
 export const unavailableCopy =
   'Progress cannot be saved on this device. You can keep playing, but this journey will not survive closing.';
@@ -60,6 +61,8 @@ const earlyCoves = ['holding-pier', 'bellwater'];
 const earlyScenes = ['opening', 'another-bell'];
 const throughDriftwood = [...earlyCoves, 'driftwood-yard'];
 const throughYardScene = [...earlyScenes, 'driftwood-light'];
+const throughReef = [...throughDriftwood, 'two-shelters', 'wide-berth', 'reef-return'];
+const throughReefScene = [...throughYardScene, 'among-the-reeds', 'a-wider-deck', 'lights-beyond-the-reef'];
 
 export function legacyContinuationScene(value: unknown): SceneId | null {
   if (
@@ -72,6 +75,13 @@ export function legacyContinuationScene(value: unknown): SceneId | null {
   const named = keys(checkpoint, ['kind', 'id']);
   const pendingLaunch = named && checkpoint.kind === 'scene' && checkpoint.id === 'a-wider-deck';
   const activeWide = named && checkpoint.kind === 'cove' && checkpoint.id === 'wide-berth';
+  if (
+    complete &&
+    sameItems(value.completed, throughReef) &&
+    sameItems(value.acknowledgedScenes, throughReefScene)
+  ) {
+    return 'orchard-paths';
+  }
   if (
     complete &&
     sameItems(value.completed, earlyCoves) &&
@@ -281,7 +291,11 @@ export class JourneyProgress {
     const record = this.current.record;
     const nextScene = legacyContinuationScene(record);
     if (!record || !nextScene || this.current.raw === null) return false;
-    this.save({ ...copy(record), checkpoint: { kind: 'scene', id: nextScene } }, this.current.raw);
+    this.save(
+      { ...copy(record), checkpoint: { kind: 'scene', id: nextScene } },
+      this.current.raw,
+      nextScene === 'orchard-paths' ? JOURNEY_ORCHARD_BACKUP_KEY : JOURNEY_LEGACY_BACKUP_KEY,
+    );
     return true;
   }
 
@@ -303,7 +317,7 @@ export class JourneyProgress {
     return true;
   }
 
-  private save(record: JourneyRecord, previousRoute?: string) {
+  private save(record: JourneyRecord, previousRoute?: string, backupKey = JOURNEY_LEGACY_BACKUP_KEY) {
     const raw = JSON.stringify(record);
     let persistent = this.current.persistent;
     try {
@@ -311,10 +325,10 @@ export class JourneyProgress {
       if (previousRoute !== undefined) {
         if (this.storage.getItem(JOURNEY_STORAGE_KEY) !== previousRoute)
           throw new Error('Checkpoint changed');
-        let key = JOURNEY_LEGACY_BACKUP_KEY;
+        let key = backupKey;
         let saved = this.storage.getItem(key);
         for (let slot = 2; saved !== null && saved !== previousRoute; slot++) {
-          key = JOURNEY_LEGACY_BACKUP_KEY + '.' + slot;
+          key = backupKey + '.' + slot;
           saved = this.storage.getItem(key);
         }
         if (saved === null) {

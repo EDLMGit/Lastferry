@@ -11,16 +11,17 @@ import {
 } from '../levels/level';
 
 export type CoveId =
-  'holding-pier' | 'bellwater' | 'driftwood-yard' | 'two-shelters' | 'wide-berth' | 'reef-return';
+  'holding-pier' | 'bellwater' | 'driftwood-yard' | 'two-shelters' | 'wide-berth' | 'reef-return' | 'orchard-landing';
 export type SceneId =
   | 'opening'
   | 'another-bell'
   | 'driftwood-light'
   | 'among-the-reeds'
   | 'a-wider-deck'
-  | 'lights-beyond-the-reef';
+  | 'lights-beyond-the-reef'
+  | 'orchard-paths';
 export type IllustrationId =
-  'tide' | 'lantern' | 'ferry' | 'harbor' | 'driftwood' | 'reeds' | 'launch' | 'reef';
+  'tide' | 'lantern' | 'ferry' | 'harbor' | 'driftwood' | 'reeds' | 'launch' | 'reef' | 'orchard';
 export type StoryCue = {
   id: string;
   atMs: number;
@@ -205,6 +206,22 @@ export const storyScenes: Record<SceneId, StoryScene> = {
     destination: 'reef-return',
     continueLabel: 'Continue to Reef Return',
   },
+  'orchard-paths': {
+    id: 'orchard-paths',
+    title: 'Paths through the orchard',
+    shots: [{
+      id: 'orchard',
+      illustration: 'orchard',
+      durationMs: 7000,
+      captionCueMs: 1050,
+      caption: 'Orin knows every path through the orchard.\nTonight, he needs the ferry.',
+      description:
+        'The empty six-space yellow ferry approaches and settles beside Spring Steps, where Pomme the sheep and tan rabbit Medlar wait ashore. Across the open reach, chestnut Orin lifts his head and raises one forehoof in greeting beside a fruit tree at Orchard Landing. His short antlers, cream muzzle and spotted coat catch the evening light. Everyone stays on their own landing; nobody boards.',
+      cues: [{ id: 'orchard-paths.approach.water', atMs: 750, kind: 'ferry-water', strength: 0.55 }],
+    }],
+    destination: 'orchard-landing',
+    continueLabel: 'Continue to Orchard Landing',
+  },
 };
 
 export type StoryCove = {
@@ -221,6 +238,7 @@ export const storyCoves: readonly StoryCove[] = [
   { id: 'two-shelters', level: twoShelters, order: 3, entryScene: 'among-the-reeds' },
   { id: 'wide-berth', level: wideBerth, order: 4, entryScene: 'a-wider-deck' },
   { id: 'reef-return', level: reefReturn, order: 5, entryScene: 'lights-beyond-the-reef' },
+  { id: 'orchard-landing', level: orchardLanding, order: 6, entryScene: 'orchard-paths' },
 ];
 
 export const practiceCoves = [

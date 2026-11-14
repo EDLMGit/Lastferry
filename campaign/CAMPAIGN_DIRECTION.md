@@ -4,7 +4,7 @@
 
 The player has positively accepted the repaired six-space ferry/docks, Wide/Reef complexity, connected story, mobile map presentation and now the Orchard repair at `9933303178da04cac93ddc820ef55e181286d983`. Preserve this calm visual/audio language and readable phone controls. Published runtime remains `f0ffe2c12f1cc0e42ad7ef10a4b57dd29097c731`, Sites version 19. [Current task and publication](../docs/PROJECT_STATE.md)
 
-The **implemented Journey remains six coves**:
+The **implemented Journey now has seven coves**:
 
 | Journey position | Cove / story role |
 | --- | --- |
@@ -15,14 +15,15 @@ The **implemented Journey remains six coves**:
 | Boundary | Existing A wider deck launch — Nell's prepared larger ferry |
 | 5 | Wide Berth — accepted load split and homeward opportunities |
 | 6 | Reef Return — accepted delivery/approach composition |
+| 7 | Orchard Landing — Orin and the accepted preparation/return-load decision |
 
 First Crossing stays independent Practice. Among the reeds introduces Hazel, Bracken and Mica; Lights beyond the reef introduces Heather, Birch, Flick and Dot. Previously rescued neighbors remain safe. Existing save conversions preserve earned identities and acknowledged scenes.
 
-### Current assignment: Orchard joins the Journey
+### Implemented integration: Orchard joins the Journey
 
 **Orchard Landing is player-accepted as the intended C7 puzzle.** The repaired first delivery determines which neighbor can accompany Orin on the only outward crossing. Pomme is the orchard sheep and Medlar is its tan rabbit; Wide's Sorrel remains safely rescued. [Accepted design](../reviews/orchard-difficulty/DESIGN.md)
 
-The three-lantern implementation at `14f128619267e2da81b4108ece2de4da07b50359` is reviewed within the documented scope. [ORCHARD_JOURNEY_01](../NEXT_TASK_ORCHARD_JOURNEY.md) now commissions Orchard's short entry and explicit continuation for exact completed-six saves. The current runtime still has six Journey coves; the assigned integration will append the existing seventh puzzle.
+The three-lantern implementation at `14f128619267e2da81b4108ece2de4da07b50359` is reviewed within the documented scope. [ORCHARD_JOURNEY_01](../NEXT_TASK_ORCHARD_JOURNEY.md) adds Orchard's short entry and explicit continuation for exact completed-six saves. The integration appends the existing seventh puzzle. Its current implementation and focused evidence are recorded in [the Orchard Journey review](../reviews/orchard-journey/REVIEW.md).
 
 The ferry actually starts empty beside Pomme and Medlar at Spring Steps; Orin waits across the reach at Orchard Landing. Show one readable new encounter and a truthful settled handoff. The existing six-space ferry, currents and lantern rewards need no new tutorial. The narrative caption is “Orin knows every path through the orchard. Tonight, he needs the ferry.”
 
@@ -32,7 +33,7 @@ Keep earned Practice mastery under the same `orchard-landing@1` identity. Rescue
 
 | Intended cove | Story purpose | Difficulty purpose |
 | --- | --- | --- |
-| **7 — Orchard Landing** | Meet Orin beyond the familiar headland. | The load on Orin’s return determines whom to bring home first. Character and puzzle accepted; current task integrates its story and completed-six continuation. |
+| **7 — Orchard Landing, implemented** | Meet Orin beyond the familiar headland. | The load on Orin’s return determines whom to bring home first. Character and puzzle accepted; new story presentation awaits review. |
 | **8 — title open** | Carry the lesson farther along the channel. | Extend the planning horizon with a distinct combination of familiar load, route and tide dependencies; commission after C7 integration review and phone playtesting. |
 | **9 — Drowned Orchard** | Recognize the orchard under changed water, with a different waiting group. Orin remains safe. | Reinterpret familiar landmarks and established rules rather than repeat Orin's rescue. |
 | **10 — Lantern Reach** | See the welcome at the refuge taking shape. | Compact, quiet consolidation with a real inference and an elegant efficient solution. |

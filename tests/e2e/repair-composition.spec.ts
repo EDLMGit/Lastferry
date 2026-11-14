@@ -74,8 +74,8 @@ test('matching phone views, revised launch and existing saved Wide Berth entranc
         }, null, 2);
         await page.evaluate(({ key, completed }) => localStorage.setItem(key, completed), { key: journeyKey, completed });
         await page.goto('/');
-        await expect(page.locator('#home-play')).toHaveText('Play a cove');
-        await expect(page.getByText('Six coves are safe.', { exact:true })).toBeVisible();
+        await expect(page.locator('#home-play')).toHaveText('Continue');
+        await expect(page.getByText('Six coves are safe. Orchard Landing is next.', { exact:true })).toBeVisible();
         expect(await passive(page, key => localStorage.getItem(key), journeyKey)).toBe(completed);
         report(dir, prefix + '-checkpoint', {
           saved: JSON.parse(saved),

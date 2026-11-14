@@ -1,3 +1,15 @@
+# Orchard Journey integration · 14 November 2026
+
+ORCHARD_JOURNEY_01 appends Orchard as Journey cove seven, after Reef. The existing eight Practice entrances remain. Its brief illustrated entry keeps the actual starting arrangement: Orin at Orchard Landing; empty ferry, Pomme and Medlar at Spring Steps. The new entry uses the existing player and Sound owner.
+
+Exact completed-six saves extend only on deliberate Continue, with original-byte backup and prior history preserved. Earlier supported saves and independent Practice retain their contracts. Orchard’s accepted puzzle, 13-action target, revision-one mastery, complete Undo and provisional victory remain. [Implementation and evidence](reviews/orchard-journey/REVIEW.md)
+
+The production build/TypeScript, all 81 asset families and 154 focused unit checks passed. Four development browser cases and the minified Reef-to-Orchard integration passed. Native 390×844, 780×320 and 320×740 scenes, playable handoffs and the accepted endpoint were inspected. Original compile/setup failures and recording timing limitations remain explicit in the review. [Uninterrupted scene, rescue and acceptance with runtime audio](reviews/orchard-journey/390x844/scene-to-rescue.mp4)
+
+The branch safely fast-forwarded from reviewed `14f128619267e2da81b4108ece2de4da07b50359` to task/review `007bbabf24d5c859e6786b1b679a77fd5b5799cf`. No puzzle rebalance, C8 or deployment is included. Site version 19 remains published with its existing custom private audience.
+
+## Previous handoffs
+
 # Lanterns reviewed; Orchard Journey next · 14 November 2026
 
 Three-lantern implementation `14f128619267e2da81b4108ece2de4da07b50359` has no blocker in the scoped review. Fresh execution passed 44 mastery tests and eight supplemental storage-check groups. Twenty protected rule/loader/level/witness blobs remain identical to the accepted Orchard baseline. Four committed native phone images were inspected. [Independent review and evidence](reviews/three-lanterns/INDEPENDENT_REVIEW.md)

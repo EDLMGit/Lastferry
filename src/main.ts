@@ -270,6 +270,7 @@ function setHomeVisible(active: boolean) {
 }
 
 function homeCheckpointNotice(record: JourneyRecord, newEntry: SceneId | null) {
+  if (newEntry === 'orchard-paths') return 'Six coves are safe. Orchard Landing is next.';
   if (newEntry === 'among-the-reeds') {
     if (record.completed.includes('wide-berth')) return 'Two Shelters is next. Wide Berth is already safe.';
     if (record.acknowledgedScenes.includes('a-wider-deck')) return 'Visit Two Shelters first, then resume Wide Berth.';
@@ -277,7 +278,7 @@ function homeCheckpointNotice(record: JourneyRecord, newEntry: SceneId | null) {
   }
   if (newEntry) return `${storyScenes[newEntry].title} · new story waiting.`;
   const checkpoint = record.checkpoint;
-  if (checkpoint.kind === 'complete') return 'Six coves are safe.';
+  if (checkpoint.kind === 'complete') return 'Seven coves are safe.';
   if (checkpoint.kind === 'scene') return `${storyScenes[checkpoint.id].title} · saved story.`;
   return `${storyCoves.find((entry) => entry.id === checkpoint.id)!.level.title} · from cove start.`;
 }
@@ -673,8 +674,8 @@ function renderJourneyDialog() {
     actions =
       '<button id="journey-return-cancel">Keep playing</button><button id="journey-return-confirm">Return home</button>';
   } else {
-    heading = 'Six coves are safe.';
-    body = '<p>You’ve reached the end of the available coast. You can revisit any crossing in Practice.</p>' + notice;
+    heading = 'Seven coves are safe.';
+    body = '<p>You’ve rescued the seven available coves. The rest of the coast is still to come. You can revisit any crossing in Practice.</p>' + notice;
     actions =
       '<button id="journey-title">Return Home</button><button id="journey-practice">Practice</button><button id="journey-settings">Options</button>';
   }
@@ -1458,7 +1459,7 @@ function renderDialog() {
       if (record.checkpoint.kind === 'cove') {
         const next = acceptCove(record, record.checkpoint.id, s.status);
         const handoff = next.checkpoint.kind === 'complete'
-          ? 'Continue story completes this coast.'
+          ? 'Continue story records this rescue.'
           : `Next crossing: ${storyCoves.find((entry) => entry.id === checkpointCove(next))!.level.title}.`;
         const checkpoint = progress.persistent ? 'Reloading restarts this cove.' : 'Progress lasts for this visit only.';
         policy.textContent = `${handoff} Undo stays available until you continue. ${checkpoint}`;

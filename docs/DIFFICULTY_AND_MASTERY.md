@@ -2,7 +2,7 @@
 
 **Reviewed implementation · 14 November 2026.** The player accepted the Orchard repair at `9933303178da04cac93ddc820ef55e181286d983`. The three-lantern feature at `14f128619267e2da81b4108ece2de4da07b50359` has no blocker in the scoped source/core/native-image review. The eight authored targets and all puzzle data retain their accepted values. [Independent review](../reviews/three-lanterns/INDEPENDENT_REVIEW.md) · [Implementation verification](../reviews/three-lanterns/REVIEW.md)
 
-This updates the 13 November direction after the successful repair playtest. [ORCHARD_JOURNEY_01](../NEXT_TASK_ORCHARD_JOURNEY.md) now commissions the accepted cove's story/save continuation. Until that implementation, the runtime Journey remains six coves and Orchard remains Practice-only. [Preparation review](../reviews/three-lanterns-preparation/REVIEW.md) · [Verified targets](../reviews/three-lanterns-preparation/TARGETS.md) · [Earlier structural diagnosis](../reviews/orchard-difficulty-review/REVIEW.md)
+This updates the 13 November direction after the successful repair playtest. [ORCHARD_JOURNEY_01](../NEXT_TASK_ORCHARD_JOURNEY.md) implements the accepted cove's story/save continuation. Journey now has seven playable coves; all eight Practice entrances remain. Orchard shares target 13 and mastery revision 1 across both entrances. [Preparation review](../reviews/three-lanterns-preparation/REVIEW.md) · [Verified targets](../reviews/three-lanterns-preparation/TARGETS.md) · [Earlier structural diagnosis](../reviews/orchard-difficulty-review/REVIEW.md)
 
 ## 1. What challenge means here
 
@@ -59,7 +59,7 @@ The first six and repaired Orchard are accepted. The current integration task ap
 | 4 — Two Shelters | Choose the refuge as part of the retrieval plan. |
 | 5 — Wide Berth | Allocate passengers across limited homeward opportunities. |
 | 6 — Reef Return | Make an early load decision that changes the later approach and delivery plan. |
-| 7 — Orchard Landing, accepted Practice | Work backward from the only outward current. The early Harbor delivery determines which neighbor can fit beside Orin in depth-three water. |
+| 7 — Orchard Landing, Journey and Practice | Work backward from the only outward current. The early Harbor delivery determines which neighbor can fit beside Orin in depth-three water. |
 | 8 — title open | Extend the planning horizon: preserve one opportunity while fulfilling another, using familiar rules. |
 | 9 — Drowned Orchard | Reinterpret recognizable geometry for a new waiting group and changed conditions. Earlier rescued neighbors stay safe. |
 | 10 — Lantern Reach | A compact, quiet consolidation with a real inference and an elegant efficient solution; scenery can relax without making every decision automatic. |
@@ -144,7 +144,7 @@ The Session keeps successful Undo history outside its rewindable State. A result
 1. **Complete:** repair existing Orchard Landing and demonstrate its connected load/crossing decision.
 2. **Complete:** player accepts the repair at `9933303178da04cac93ddc820ef55e181286d983`.
 3. **Implemented and scoped review complete:** THREE_LANTERNS_01 at `14f128619267e2da81b4108ece2de4da07b50359`; physical-phone/listening/spoken-screen-reader approval remains open.
-4. **Current:** ORCHARD_JOURNEY_01 connects the accepted puzzle with its truthful illustrated entry and explicit completed-six save continuation. Keep its scoring revision and earned mastery.
+4. **Implemented; review pending:** ORCHARD_JOURNEY_01 connects the accepted puzzle with its truthful illustrated entry and explicit completed-six save continuation. Keep its scoring revision and earned mastery.
 5. Review the seven-cove flow and arrange Android playtesting, then commission C8's distinct planning dependency. Additional bodies, moves or map area alone do not establish the next challenge.
 
 The current task adds no puzzle, rebalances no target and does not deploy. Preserve the source-linked reviews and historical publication records.

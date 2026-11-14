@@ -104,13 +104,15 @@ test('fresh root Journey earns six rescues and the four-to-six-space launch', as
       results.push(await rescue(page, id, false));
       await activate(page, 'continue-story', true);
     }
-    await expect(page.locator('#dialog')).toContainText('Six coves are safe.');
-    expect(await record(page)).toMatchObject({ checkpoint: { kind: 'complete' }, completed: route, acknowledgedScenes: scenes });
-    await snapshot(page, directory('fresh'), 'available-coast-complete');
+    await expect(page.locator('#story-continue')).toHaveText('Continue to Orchard Landing');
+    expect(await record(page)).toMatchObject({ checkpoint: { kind: 'scene', id: 'orchard-paths' }, completed: route, acknowledgedScenes: scenes });
+    await snapshot(page, directory('fresh'), 'first-six-accepted-orchard-pending');
     report(directory('fresh'), 'rescues', { results, record: await record(page), source: captureSource });
     await page.reload();
-    await expect(page.locator('#home-play')).toHaveText('Play a cove');
-    await expect(page.locator('.home-notice')).toContainText('Six coves are safe');
+    await expect(page.locator('#home-play')).toHaveText('Continue');
+    await activate(page, 'home-play', true);
+    expect(await timeline(page)).toMatchObject({ scene: 'orchard-paths', settled: true, recap: true });
+    expect((await record(page)).completed).toEqual(route);
   } finally {
     await context.close();
   }
@@ -175,7 +177,7 @@ for (const [width, height] of [[390, 844], [780, 320]]) {
         reef = await rescue(page, 'reef-return', true);
         await snapshot(page, dir, size + '-reef-rescued');
         await activate(page, 'continue-story', true);
-        await expect(page.locator('#dialog')).toContainText('Six coves are safe.');
+        await expect(page.locator('#story-continue')).toHaveText('Continue to Orchard Landing');
         expect((await record(page)).completed).toEqual(route);
         await page.waitForTimeout(700);
       }
