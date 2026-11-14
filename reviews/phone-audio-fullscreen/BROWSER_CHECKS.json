@@ -1,0 +1,109 @@
+{
+  "recordedAt": "2026-10-24T22:44:46.336Z",
+  "baseline": "291fb4fa24d02dbab84dfe6eca2abc5c29b6d411",
+  "runs": [
+    {
+      "path": "browser-initial",
+      "total": 19,
+      "passed": 1,
+      "failed": 18,
+      "sourceHash": "9ea2be2c7de23edfb9e6bd6beafcf5b23169b7993e8f95b12ac8bb6743a3bc2c",
+      "interpretation": "Preparatory fixture failures: one passive-read calibration assertion was polluted by Playwright userGesture:true;15 scenarios aborted on command-line introspection without --enable-automation;2 rapid sequences scheduled before target handlers and saw only the first click. Strict previous fullscreen case passed. No game audio conclusion from aborted cases."
+    },
+    {
+      "path": "browser-policy-calibration",
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "sourceHash": "7c32a14adad4c6475909949b448c33bcb20769d1eec7927016e6bc79e8da7e05",
+      "interpretation": "Raw CDP userGesture:false fixes the cold read. Unmodified native resume remained pending before actual trusted touch. This independent minimal fixture does not execute game code."
+    },
+    {
+      "path": "browser-smoke",
+      "total": 6,
+      "passed": 4,
+      "failed": 2,
+      "sourceHash": "bff425b3b6b9014077c0e28c24b7d137e65a338867cfdfee6ad3ac42aecbb9b6",
+      "interpretation": "Both native cold coves, pending resolve/Mute and held-Space intent pass. Mouse timing180.7ms and touch622.5ms exceed unchanged180ms; correct3trusted-event order and later states retained."
+    },
+    {
+      "path": "browser-remaining",
+      "total": 13,
+      "passed": 13,
+      "failed": 0,
+      "sourceHash": "bff425b3b6b9014077c0e28c24b7d137e65a338867cfdfee6ad3ac42aecbb9b6",
+      "interpretation": "Twelve remaining new cases plus fresh strict existing fullscreen test pass."
+    },
+    {
+      "path": "browser-rapid-native",
+      "total": 2,
+      "passed": 1,
+      "failed": 1,
+      "sourceHash": "cd8e8c5b965d753c108609d96958fab19757fb3829520aede03608d1de69c8f3",
+      "interpretation": "Mouse active fence passes112.6ms with actual3trusted events. Native touch synthesizeTapGesture produced0clicks, so it did not test the fence. Valid raw touch driver restored afterward; no false pass."
+    },
+    {
+      "path": "browser-cold-pan",
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "sourceHash": "6260558f33f893e3764fe59868def18c6bc453ea4c91ced82d5eebd80a350678",
+      "interpretation": "Actual first touch drag,0clicks, preserved puzzle state, panned view and running sustained audio pass."
+    },
+    {
+      "path": "browser-cold-pan-history",
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "sourceHash": "d01b2d45871890df6c0267327ed1fc15eeede2dcb9c07f30bd52d220574815b4",
+      "interpretation": "One affected rerun adds an explicit game-history equality assertion to the already passed cold-pan case; history0→0, state unchanged. Not an extra distinct case."
+    }
+  ],
+  "distinctNewCasesPassed": 18,
+  "existingStrictFullscreenPassed": true,
+  "existingMouseFence": {
+    "passed": true,
+    "gapMs": 112.60000002384186,
+    "thresholdMs": 180
+  },
+  "existingTouchFence": {
+    "status": "Not verified within active180ms window",
+    "validRawDriverGapMs": 622.5,
+    "nativeGestureFollowup": "No trusted clicks; invalid timing precondition, not a game action failure",
+    "thresholdMs": 180
+  },
+  "historicalHeading": "The prior1.425683rad/99.9ms delivered-frame failure remains open; planner/camera behavior was not changed or rerun in this audio/fullscreen task.",
+  "runtimeReuse": {
+    "finalSourceHash": "d01b2d45871890df6c0267327ed1fc15eeede2dcb9c07f30bd52d220574815b4",
+    "smoke": true,
+    "remaining": true,
+    "rapid": true
+  },
+  "coldOutput": {
+    "holding-pier": {
+      "audioClockAdvance": 2.0613333333333332,
+      "nonzeroRmsSamples": 19,
+      "totalSamples": 20,
+      "peak": 0.05000636726617813,
+      "maximumSources": 7,
+      "contextCount": 1,
+      "schedulerCount": 1
+    },
+    "first-crossing": {
+      "audioClockAdvance": 2.888,
+      "nonzeroRmsSamples": 19,
+      "totalSamples": 20,
+      "peak": 0.06471884250640869,
+      "maximumSources": 7,
+      "contextCount": 1,
+      "schedulerCount": 1
+    }
+  },
+  "realFullscreen": "Actual document.fullscreenElement app, root/dialog containment, trusted request activation, visible dialog button center hits, actual Exit/reentry, external exit and portrait subset retention. Headless emulated viewport stayed844x390; no browser-bar or Android-size claim.",
+  "policyCoverage": "Interaction-required autoplay policy is calibrated with unmodified native AudioContext. Header fullscreen=() uses actual Chromium effective policy on intercepted HTML. Rejection/unavailability and clipboard fallback are explicitly mocked.",
+  "limits": [
+    "No physical Android or speaker listening result.",
+    "Controlled pending-resume cases gate reported state to prevent native source-start auto-unlock from bypassing the simulated request; they are not real browser-policy reproduction.",
+    "One rapid-touch active-fence precondition remains unverified; original failures and unchanged thresholds are retained."
+  ]
+}

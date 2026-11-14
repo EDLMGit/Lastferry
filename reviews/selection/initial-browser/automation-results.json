@@ -1,0 +1,714 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--grep",
+      "(^selection |contextual:|Bellwater natural keyboard:|Bellwater (844|780)x390 touch:|production bundle:|Holding Pier: unloading Undo|atmosphere: longest crossings|environment: reduced motion|home refinement: hidden winning|rapid phone Confirm)"
+    ],
+    "configFile": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\playwright.config.ts",
+    "rootDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "snapshotDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5187",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "deviceScaleFactor": 1,
+          "headless": true,
+          "launchOptions": {
+            "args": [
+              "--use-angle=swiftshader",
+              "--enable-unsafe-swiftshader"
+            ]
+          },
+          "video": {
+            "mode": "on",
+            "size": {
+              "width": 1440,
+              "height": 900
+            }
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "reviews/selection/initial-browser/automation-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "atmosphere.spec.ts",
+      "file": "atmosphere.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "atmosphere: longest crossings finish normally, tide rises in the final phase and visibility interrupts once",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 3154,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\atmosphere.spec.ts:112:24",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\atmosphere.spec.ts",
+                      "column": 24,
+                      "line": 112
+                    },
+                    "snippet": "  110 |     await page.locator(`#${id}`).click();\n  111 |     const active = (await transition(page)).active;\n> 112 |     expect(active).not.toBeNull();\n      |                        ^\n  113 |     expect(active.plan.duration).toBeGreaterThan(2000);\n  114 |     expect(active.plan.recoveryDelay).toBe(active.plan.duration + 1000);\n  115 |     const turn = (await state(page)).turn;"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\atmosphere.spec.ts",
+                        "column": 24,
+                        "line": 112
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBeNull\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mnull\u001b[39m\n\n  110 |     await page.locator(`#${id}`).click();\n  111 |     const active = (await transition(page)).active;\n> 112 |     expect(active).not.toBeNull();\n      |                        ^\n  113 |     expect(active.plan.duration).toBeGreaterThan(2000);\n  114 |     expect(active.plan.recoveryDelay).toBe(active.plan.duration + 1000);\n  115 |     const turn = (await state(page)).turn;\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\atmosphere.spec.ts:112:24"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T17:23:57.027Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\atmosphere-atmosphere-long-068d2--visibility-interrupts-once\\video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\atmosphere-atmosphere-long-068d2--visibility-interrupts-once\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\atmosphere.spec.ts",
+                    "column": 24,
+                    "line": 112
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "d2e4a1f3f23ed683d1ce-cd73a48e261b9c0fdb29",
+          "file": "atmosphere.spec.ts",
+          "line": 104,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "bellwater.spec.ts",
+      "file": "bellwater.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Bellwater natural keyboard: deep outward, shallow return, both tide Undo and terminal Undo",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 27003,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T17:24:02.110Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\bellwater-Bellwater-natura-d6221-tide-Undo-and-terminal-Undo\\video.webm"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "34e1ff0389d6d218611a-4d3dcb2d6bd09d8918e6",
+          "file": "bellwater.spec.ts",
+          "line": 247,
+          "column": 1
+        },
+        {
+          "title": "Bellwater 844x390 touch: six stops, actual subset loss, safe boundaries, complete Undo and rescue",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 36913,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T17:24:29.204Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "34e1ff0389d6d218611a-e77116d137bc8aeea7c6",
+          "file": "bellwater.spec.ts",
+          "line": 302,
+          "column": 3
+        },
+        {
+          "title": "Bellwater 780x390 touch: six stops, actual subset loss, safe boundaries, complete Undo and rescue",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 35535,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T17:25:06.133Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "34e1ff0389d6d218611a-caf04a81e40bbdd8adc9",
+          "file": "bellwater.spec.ts",
+          "line": 302,
+          "column": 3
+        }
+      ]
+    },
+    {
+      "title": "environment.spec.ts",
+      "file": "environment.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "environment: reduced motion keeps calm water, no wake and stable warm arrival",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 180276,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 180000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 180000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 180000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\ui.ts",
+                        "column": 37,
+                        "line": 25
+                      },
+                      "message": "Error: locator.click: Test timeout of 180000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#board')\u001b[22m\n\n\n   at ui.ts:25\n\n  23 |   }\n  24 |   if (touch) await page.locator(`#${id}`).tap();\n> 25 |   else await page.locator(`#${id}`).click();\n     |                                     ^\n  26 | }\n  27 | export async function selectPlace(page: Page, id: string, touch = false) {\n  28 |   await activate(page, id.startsWith('map-') ? id : `map-${id}`, touch);\n    at activate (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\ui.ts:25:37)\n    at act (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\ui.ts:38:5)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\environment.spec.ts:364:5"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T17:25:41.715Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\environment-environment-re-3d875-ake-and-stable-warm-arrival\\video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\environment-environment-re-3d875-ake-and-stable-warm-arrival\\error-context.md"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "2a84b67ca6571daf27b7-cd4e5e590a3741746d08",
+          "file": "environment.spec.ts",
+          "line": 354,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "holding-pier.spec.ts",
+      "file": "holding-pier.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Holding Pier: unloading Undo, tide Undo, losing alternatives and baseline selector",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 16909,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T17:28:43.564Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\holding-pier-Holding-Pier--c0b78-tives-and-baseline-selector\\video.webm"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ee66ed31473feca4a4ca-9cee24f0ee12e444b734",
+          "file": "holding-pier.spec.ts",
+          "line": 108,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "home-refinement.spec.ts",
+      "file": "home-refinement.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "home refinement: hidden winning unload reconciles without replaying an unseen delivery",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 17696,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T17:29:00.599Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\home-refinement-home-refin-c99bd-eplaying-an-unseen-delivery\\video.webm"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "43b914ca5d22c4753737-358539ee0f5b57b038bc",
+          "file": "home-refinement.spec.ts",
+          "line": 390,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "navigation.spec.ts",
+      "file": "navigation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "desktop-contextual: selection, explicit sailing, modal safety and tide-boundary subsets",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 39151,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T17:29:18.335Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5d2868f7d23420c27cca-475701d98d314637369c",
+          "file": "navigation.spec.ts",
+          "line": 46,
+          "column": 3
+        },
+        {
+          "title": "phone-contextual: selection, explicit sailing, modal safety and tide-boundary subsets",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 29897,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T17:29:57.496Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5d2868f7d23420c27cca-0283f900fc17c613580e",
+          "file": "navigation.spec.ts",
+          "line": 46,
+          "column": 3
+        },
+        {
+          "title": "phone-narrow-contextual: selection, explicit sailing, modal safety and tide-boundary subsets",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 28157,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T17:30:27.405Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5d2868f7d23420c27cca-fa447258c84df43a4255",
+          "file": "navigation.spec.ts",
+          "line": 46,
+          "column": 3
+        }
+      ]
+    },
+    {
+      "title": "production.spec.ts",
+      "file": "production.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "production bundle: real rescue without debug globals or external assets",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 14061,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T17:30:55.603Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\production-production-bund-2b345--globals-or-external-assets\\video.webm"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ed69554c53210704c98c-9803c16ade72c886155b",
+          "file": "production.spec.ts",
+          "line": 4,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "responsive.spec.ts",
+      "file": "responsive.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "rapid phone Confirm normal: trusted touch spacing, one commit and no background dialog",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4700,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T17:31:09.693Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e0223b006feb3d306446-10ff8de96a628f362bac",
+          "file": "responsive.spec.ts",
+          "line": 198,
+          "column": 3
+        },
+        {
+          "title": "rapid phone Confirm reduced: trusted touch spacing, one commit and no background dialog",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3048,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T17:31:14.407Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e0223b006feb3d306446-f1784ca5a925df41c9df",
+          "file": "responsive.spec.ts",
+          "line": 198,
+          "column": 3
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-22T17:23:56.241Z",
+    "duration": 441679.961,
+    "expected": 11,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

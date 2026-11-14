@@ -1,0 +1,42 @@
+
+> last-ferry@1.0.0 test:e2e
+> playwright test home-play-flow.spec.ts --grep integrated cold
+
+
+Running 1 test using 1 worker
+
+(node:25436) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\e2e\home-play-flow.spec.ts:157:1 › integrated cold-touch Home autoplay direct transfers and two actual rescues with runtime audio (3.8m)
+
+
+  1) tests\e2e\home-play-flow.spec.ts:157:1 › integrated cold-touch Home autoplay direct transfers and two actual rescues with runtime audio 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+    Call Log:
+    - Timeout 10000ms exceeded while waiting on the predicate
+
+      279 |           ),
+      280 |       )
+    > 281 |       .toBe(true);
+          |        ^
+      282 |     await snap(page, '780x320-bring-home');
+      283 |     await fullyVisible(page, page.locator('#preview .consequence'), false);
+      284 |     for (const id of ['passenger-rabbit-1', 'passenger-rabbit-2', 'passenger-sheep-1', 'commit'])
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\home-play-flow.spec.ts:281:8
+
+    Error Context: test-results\home-play-flow-integrated--440d2--rescues-with-runtime-audio\error-context.md
+
+    Error Context: test-results\home-play-flow-integrated--440d2--rescues-with-runtime-audio\error-context.md
+
+  1 failed
+    tests\e2e\home-play-flow.spec.ts:157:1 › integrated cold-touch Home autoplay direct transfers and two actual rescues with runtime audio 
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

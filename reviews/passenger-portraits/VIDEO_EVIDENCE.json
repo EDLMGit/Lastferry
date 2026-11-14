@@ -1,0 +1,287 @@
+{
+  "source": {
+    "head": "23a644aba24e6479b9d82a106a745d15c3f8c7dc",
+    "runtimeHash": "cffea82a6bef375e586f646c4e4d231b703f90514b4818e9d9d613b259af2378",
+    "sourceManifest": "after/source.json",
+    "runtimeUnchanged": true
+  },
+  "original": {
+    "path": "after/raw/page@2e5a5aa15e7a1e94eddf6657a897f5c6.webm",
+    "available": "Local ignored original",
+    "sha256": "7d90952b9a281050d5d3a34a23fc5b28a5356b54f6c09e3a4bba610f49a7dfe9",
+    "bytes": 5580638,
+    "codec": "vp9",
+    "width": 844,
+    "height": 390,
+    "fps": "25/1",
+    "durationSeconds": 38.48,
+    "audioTracks": 0
+  },
+  "derivative": {
+    "path": "gameplay-844.webp",
+    "sha256": "71e6463d36ca2fc2d86a5c5ed929f27610b2fb5bc7781963769b31085777e6e2",
+    "bytes": 3005720,
+    "format": "Animated WebP",
+    "sampleFps": 8,
+    "width": 844,
+    "height": 390,
+    "frames": 298,
+    "durationMs": 38500,
+    "minFrameMs": 125,
+    "maxFrameMs": 375,
+    "method": "Entire uninterrupted original at native dimensions. No cuts, crop or speed change. 8fps sampling and identical-frame coalescing preserve wall timing; endpoint rounding is recorded below. The derivative is 20ms longer than the source (38.48s → 38.5s).",
+    "command": "ffmpeg -nostdin -y -loglevel error -i <original> -vf fps=8 -c:v libwebp_anim -quality 65 -compression_level 4 -loop 0 -threads 1 gameplay-844.webp",
+    "validation": "Complete original decoded by ffmpeg without errors; every animated WebP frame decoded by Pillow.",
+    "endpointRounding": {
+      "sourceDurationMs": 38480,
+      "derivativeDurationMs": 38500,
+      "derivativeMinusSourceMs": 20
+    }
+  },
+  "coverage": "Actual UI single sheep preview/unload, sailing, both rabbits and losing subset/full warning, safe boarding/tide rise, tide Undo/reboarding, return/board Moss, Harbor all-three preview before Confirm and scrolled future consequences, 0/1/2/3 subset changes, cancel/reopen, delivery, arrival, terminal Undo/redelivery.",
+  "actions": [
+    {
+      "seconds": 3.487,
+      "id": "unload",
+      "turn": 0,
+      "tide": 0,
+      "status": "playing"
+    },
+    {
+      "seconds": 4.983,
+      "id": "commit",
+      "turn": 1,
+      "tide": 0,
+      "status": "playing"
+    },
+    {
+      "seconds": 6.233,
+      "id": "map-shallows",
+      "turn": 1,
+      "tide": 0,
+      "status": "playing"
+    },
+    {
+      "seconds": 6.457,
+      "id": "sail",
+      "turn": 2,
+      "tide": 0,
+      "status": "playing"
+    },
+    {
+      "seconds": 8.701,
+      "id": "map-rabbit-pier",
+      "turn": 2,
+      "tide": 0,
+      "status": "playing"
+    },
+    {
+      "seconds": 8.888,
+      "id": "sail",
+      "turn": 3,
+      "tide": 0,
+      "status": "playing"
+    },
+    {
+      "seconds": 10.992,
+      "id": "board",
+      "turn": 3,
+      "tide": 0,
+      "status": "playing"
+    },
+    {
+      "seconds": 12.336,
+      "id": "passenger-rabbit-2",
+      "turn": 3,
+      "tide": 0,
+      "status": "playing"
+    },
+    {
+      "seconds": 14.844,
+      "id": "passenger-rabbit-2",
+      "turn": 3,
+      "tide": 0,
+      "status": "playing"
+    },
+    {
+      "seconds": 15.072,
+      "id": "commit",
+      "turn": 4,
+      "tide": 1,
+      "status": "playing"
+    },
+    {
+      "seconds": 16.207,
+      "id": "undo",
+      "turn": 3,
+      "tide": 0,
+      "status": "playing"
+    },
+    {
+      "seconds": 16.449,
+      "id": "board",
+      "turn": 3,
+      "tide": 0,
+      "status": "playing"
+    },
+    {
+      "seconds": 16.742,
+      "id": "commit",
+      "turn": 4,
+      "tide": 1,
+      "status": "playing"
+    },
+    {
+      "seconds": 17.776,
+      "id": "map-shallows",
+      "turn": 4,
+      "tide": 1,
+      "status": "playing"
+    },
+    {
+      "seconds": 17.906,
+      "id": "sail",
+      "turn": 5,
+      "tide": 1,
+      "status": "playing"
+    },
+    {
+      "seconds": 20.146,
+      "id": "map-stone",
+      "turn": 5,
+      "tide": 1,
+      "status": "playing"
+    },
+    {
+      "seconds": 20.376,
+      "id": "sail",
+      "turn": 6,
+      "tide": 1,
+      "status": "playing"
+    },
+    {
+      "seconds": 22.975,
+      "id": "board",
+      "turn": 6,
+      "tide": 1,
+      "status": "playing"
+    },
+    {
+      "seconds": 23.214,
+      "id": "commit",
+      "turn": 7,
+      "tide": 1,
+      "status": "playing"
+    },
+    {
+      "seconds": 24.36,
+      "id": "map-harbor",
+      "turn": 7,
+      "tide": 1,
+      "status": "playing"
+    },
+    {
+      "seconds": 24.556,
+      "id": "sail",
+      "turn": 8,
+      "tide": 2,
+      "status": "playing"
+    },
+    {
+      "seconds": 27.183,
+      "id": "unload",
+      "turn": 8,
+      "tide": 2,
+      "status": "playing"
+    },
+    {
+      "seconds": 29.772,
+      "id": "passenger-rabbit-2",
+      "turn": 8,
+      "tide": 2,
+      "status": "playing"
+    },
+    {
+      "seconds": 30.118,
+      "id": "passenger-sheep-1",
+      "turn": 8,
+      "tide": 2,
+      "status": "playing"
+    },
+    {
+      "seconds": 30.524,
+      "id": "passenger-rabbit-1",
+      "turn": 8,
+      "tide": 2,
+      "status": "playing"
+    },
+    {
+      "seconds": 30.878,
+      "id": "passenger-rabbit-1",
+      "turn": 8,
+      "tide": 2,
+      "status": "playing"
+    },
+    {
+      "seconds": 31.283,
+      "id": "passenger-sheep-1",
+      "turn": 8,
+      "tide": 2,
+      "status": "playing"
+    },
+    {
+      "seconds": 31.805,
+      "id": "passenger-rabbit-2",
+      "turn": 8,
+      "tide": 2,
+      "status": "playing"
+    },
+    {
+      "seconds": 32.255,
+      "id": "cancel",
+      "turn": 8,
+      "tide": 2,
+      "status": "playing"
+    },
+    {
+      "seconds": 32.576,
+      "id": "unload",
+      "turn": 8,
+      "tide": 2,
+      "status": "playing"
+    },
+    {
+      "seconds": 32.738,
+      "id": "commit",
+      "turn": 9,
+      "tide": 2,
+      "status": "won"
+    },
+    {
+      "seconds": 36.904,
+      "id": "terminal-undo",
+      "turn": 8,
+      "tide": 2,
+      "status": "playing"
+    },
+    {
+      "seconds": 37.221,
+      "id": "unload",
+      "turn": 8,
+      "tide": 2,
+      "status": "playing"
+    },
+    {
+      "seconds": 37.381,
+      "id": "commit",
+      "turn": 9,
+      "tide": 2,
+      "status": "won"
+    }
+  ],
+  "timingNote": "Action offsets are relative to the capture run start, approximately the page recording start. No audio synchronization is claimed.",
+  "limitations": [
+    "Chromium156.0.8078.4 / SwiftShader / DPR1 Windows; emulated phone touch and ordinary wheel scrolling, not physical Android.",
+    "Silent visual evidence; no new acoustic approval."
+  ]
+}

@@ -1,0 +1,2666 @@
+{
+  "schemaVersion": 1,
+  "auditSourceCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b",
+  "provenanceProfiles": {
+    "original-project-code": {
+      "author": "Original project code authored through Codex; exact individual attribution not independently expanded here",
+      "rights": "Follow project rights; do not invent a new distribution license",
+      "evidence": "docs/ASSET_LEDGER.md; source Git history",
+      "runtimeDownloads": "No third-party models, images, fonts, recorded audio or generated bitmap assets loaded by current game"
+    },
+    "system-font-stack": {
+      "source": "Installed user/browser system fonts; CSS fallback stack",
+      "rights": "No font file redistributed",
+      "evidence": "src/style.css"
+    },
+    "original-package-vector-and-css": {
+      "author": "Original SVG paths and component CSS authored for this Last Ferry package",
+      "rights": "Retain with project sources; no new project license is asserted",
+      "evidence": "cove-ui-package/ui/icons/manifest.json; cove-ui-package/STYLE_GUIDE.md",
+      "imports": "No external icon set, raster texture or font file"
+    },
+    "supplied-concept-reference": {
+      "author": "Supplied generated concept references in the existing repository",
+      "rights": "Retain existing provenance; no public-domain or new distribution-license claim",
+      "evidence": "references/README.md; docs/ASSET_LEDGER.md"
+    }
+  },
+  "boundedExtensionRule": "Update the canonical inventory in the same change that adds, replaces or retires an asset family. Instance placement belongs in level data. Do not duplicate every passenger/rock instance as an asset entry; do not invent a runtime content manager or editor.",
+  "perTypeRequirements": {
+    "procedural-model": [
+      "factory/source symbol",
+      "semantic unit/axis/pivot convention or authoritative source",
+      "named attachment points when relevant",
+      "material references",
+      "actual variant parameters",
+      "consumers and scale/placement owner",
+      "pick/framing role",
+      "disposal owner"
+    ],
+    "procedural-geometry": [
+      "authoritative geometry inputs",
+      "style/elevation parameters",
+      "mechanical versus decorative boundary",
+      "material/texture dependencies",
+      "generation and disposal owner"
+    ],
+    "material-palette": [
+      "exact tokens/semantic roles",
+      "color space and material type if applicable",
+      "roughness/alpha/blending behavior",
+      "shared versus scoped ownership",
+      "allowed component roles; measured UI contrast when used for text"
+    ],
+    "shader-material": [
+      "entry point/uniform inputs",
+      "color/data texture semantics",
+      "transparency/depth/render order",
+      "bounded allocation/pass needs",
+      "animation and reduced-motion behavior",
+      "reset/disposal"
+    ],
+    "generated-data-texture": [
+      "generator/seed/data source",
+      "dimensions/channels/data meaning",
+      "color space/filtering",
+      "generation frequency",
+      "consumers and disposal"
+    ],
+    "effect": [
+      "trigger/state owner",
+      "lifetime/capacity",
+      "world versus attached coordinates",
+      "blend/depth behavior",
+      "picking/framing exclusion",
+      "Reduced/Undo/reset/hide lifecycle"
+    ],
+    "motion-recipe": [
+      "trigger",
+      "duration source",
+      "canonical start/end transform ownership",
+      "variant/species parameters",
+      "Reduced/cancellation/recovery",
+      "associated audio events"
+    ],
+    "procedural-audio": [
+      "score/generator and seed",
+      "voices/buffers/envelope owner",
+      "event/timeline trigger",
+      "routing and relative mix owner",
+      "looping or finite duration",
+      "mute/hide/Undo/disposal behavior",
+      "listening evidence separate from generated-output evidence"
+    ],
+    "generated-audio-buffer": [
+      "generator/seed",
+      "channels/sample-rate rule/duration",
+      "buffer ownership/reuse",
+      "consumers and disposal"
+    ],
+    "lighting-recipe": [
+      "light types/source parameters",
+      "per-cove overrides",
+      "shadow and material response",
+      "dynamic event owner",
+      "scene exposure/palette dependencies"
+    ],
+    "gameplay-indicator": [
+      "canonical semantic fact",
+      "shape/text/color encoding",
+      "variants",
+      "free inspection versus action commitment",
+      "source geometry and update owner",
+      "accessibility and picking"
+    ],
+    "css-component-family": [
+      "component/selector sources",
+      "token and elevation roles",
+      "interaction states",
+      "size/hit target/layout behavior",
+      "text/icon contract",
+      "focus and disabled/warning semantics",
+      "mobile and reduced-motion evidence"
+    ],
+    "dom-component-family": [
+      "render/placement sources",
+      "semantic role/accessible name",
+      "icon and label mappings",
+      "interaction states",
+      "nearby placement and viewport contract",
+      "focus/cancel/fullscreen preservation"
+    ],
+    "svg-icon": [
+      "24x24 viewBox and optical size",
+      "meaning and visible/accessible label rule",
+      "one-color fallback",
+      "state variants and permitted rotation",
+      "native owner hit area",
+      "source/sprite generation ownership"
+    ],
+    "system-font-family": [
+      "CSS stack and roles",
+      "weights/sizes",
+      "fallback behavior",
+      "whether any font file is redistributed"
+    ],
+    "reference": [
+      "origin/provenance",
+      "intended reference role",
+      "explicit non-runtime status",
+      "never authoritative gameplay data"
+    ],
+    "inline-svg-and-glyph": [
+      "existing source/renderer",
+      "glyph and transfer semantics",
+      "world-relative rotation ownership",
+      "replacement IDs when retired",
+      "native button name and event owner"
+    ],
+    "reference-image": [
+      "exact path and provenance",
+      "reference-only status",
+      "purpose and prohibited runtime/evidence substitution"
+    ]
+  },
+  "catalogVersion": "0.1.0-candidate",
+  "purpose": "Audited integration seed. Current runtime sources are real; proposed UI candidates are not applied to the game yet. Resolve paths from the repository root after extracting this package.",
+  "canonicalDestination": "assets/catalog.json",
+  "acceptedBaseline": {
+    "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b",
+    "sitesVersion": 10,
+    "siteSourceCommit": "f9ada70cbd093bf52c105f2287558381b3b7c83c",
+    "userFeedback": "Everything seems to work great now",
+    "date": "2026-10-25"
+  },
+  "statusDefinitions": {
+    "existing-runtime": "Used in the accepted baseline",
+    "candidate": "New editable source, awaiting actual game integration",
+    "integrated": "Used and verified in the game; human acceptance is separate",
+    "retired": "Kept for provenance; names its replacement",
+    "reference-only": "Art direction evidence, not loaded by gameplay"
+  },
+  "entries": [
+    {
+      "id": "model.ferry",
+      "name": "Yellow ferry with red cabin",
+      "kind": "procedural-model",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/scene/models.ts",
+          "symbol": "ferry"
+        },
+        {
+          "path": "src/scene/world.ts",
+          "symbol": "World.boatRoot / hull / passengerAnchors"
+        }
+      ],
+      "variants": [
+        "empty and loaded draft",
+        "both safe berth headings"
+      ],
+      "visualSignature": "Curved yellow hull, warm red cabin, planked open deck, cream trim, dark fenders.",
+      "reuseAndOwnership": "One reusable geometry family per cove. Named deck-anchor-{passengerId} children belong to the animated hull. Shared matte materials; scoped water-contact hull material.",
+      "behaviorToPreserve": "Keep shaped bow, deck positions, passenger attachment, heading history and current pick/framing envelope.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "model.rabbit",
+      "name": "Rabbit passenger family",
+      "kind": "procedural-model",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/scene/models.ts",
+          "symbol": "animal(species, variant)"
+        },
+        {
+          "path": "src/scene/world.ts",
+          "symbol": "World.speciesIndex / passengerAnchors"
+        }
+      ],
+      "variants": [
+        "cream coat",
+        "tan coat; changed ear splay"
+      ],
+      "visualSignature": "Separated tall ears, compact body, tiny dark face and pink inner ears.",
+      "reuseAndOwnership": "Shared factory; names and gameplay identities come from level passengers. World scales rabbits 1.25 / 1.65 / 1.25.",
+      "behaviorToPreserve": "Coat and pose variation imply no abilities. Keep feet/contact, aboard attachment and canonical settled pose.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "model.sheep",
+      "name": "Sheep passenger family",
+      "kind": "procedural-model",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/scene/models.ts",
+          "symbol": "animal(species, variant)"
+        }
+      ],
+      "variants": [
+        "one cream wool family; instantiated with each level identity"
+      ],
+      "visualSignature": "Clustered cream wool, dark face/ears, four modest legs.",
+      "reuseAndOwnership": "Same factory per sheep identity. World scale 1.15 / 1.5 / 1.15.",
+      "behaviorToPreserve": "Keep larger passenger silhouette and true capacity semantics; presentation never determines passenger weight.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "model.lighthouse",
+      "name": "Harbor lighthouse and lamp",
+      "kind": "procedural-model",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/scene/models.ts",
+          "symbol": "lighthouse"
+        },
+        {
+          "path": "src/scene/world.ts",
+          "symbol": "World.home; landmark construction"
+        }
+      ],
+      "variants": [
+        "ordinary steady illumination",
+        "won light response"
+      ],
+      "visualSignature": "Tapered cream tower, red roof, warm lens/core, thin gallery rail.",
+      "reuseAndOwnership": "One authored family, placed by sceneLayout. Returned group/lens/lamp/anchor/core/tower/gallery/roof are shared by effects and water reflection.",
+      "behaviorToPreserve": "Roof and rails occlude light; retain local illumination, home role from objective.deliveryPierId, and conservative framing.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "model.cottage",
+      "name": "Warm coastal cottage",
+      "kind": "procedural-model",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/scene/scenery.ts",
+          "symbol": "cottage"
+        }
+      ],
+      "variants": [
+        "First Crossing sheep island",
+        "Holding Pier rabbit island"
+      ],
+      "visualSignature": "Ochre wall, dark warm roof, pale window trim and amber windows.",
+      "reuseAndOwnership": "Reusable factory; placement in sceneLayout, not encoded in model.",
+      "behaviorToPreserve": "Keep silhouettes away from passenger/control anchors.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "model.bell",
+      "name": "Bell Pier timber bell",
+      "kind": "procedural-model",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/scene/scenery.ts",
+          "symbol": "bellLandmark"
+        }
+      ],
+      "variants": [
+        "Bellwater bell island"
+      ],
+      "visualSignature": "Bronze lathed bell under thick timber frame and small roof.",
+      "reuseAndOwnership": "Reusable original factory, currently Bellwater landmark.",
+      "behaviorToPreserve": "Decorative landmark selection resolves to its authored pier; no separate bell action.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "model.pier-kit",
+      "name": "Boarded piers, piles, gangplank and lantern",
+      "kind": "procedural-model",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/scene/world.ts",
+          "symbol": "World.constructor: for (const p of this.level.piers)"
+        },
+        {
+          "path": "src/scene/layout.ts",
+          "symbol": "SceneLayout.stonePiers"
+        }
+      ],
+      "variants": [
+        "wood boards",
+        "grey stone boards",
+        "water-contact vulnerable/home piles"
+      ],
+      "visualSignature": "Substantial rounded boards, four piles with pale caps, small warm mooring lantern.",
+      "reuseAndOwnership": "Generated from pier width, landAnchorXZ, elevation and positionXZ; no independent mesh file.",
+      "behaviorToPreserve": "Keep geometry-derived berth/gangplank positions, flood water height and land contact; both ferry headings support transfer.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "model.waypoint-buoy",
+      "name": "Small open-water marker buoy",
+      "kind": "procedural-model",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/scene/world.ts",
+          "symbol": "World.constructor: non-pier marker buoy"
+        }
+      ],
+      "variants": [
+        "eligible non-pier nodes, excluding cut"
+      ],
+      "visualSignature": "Small amber tapered float with ivory stem.",
+      "reuseAndOwnership": "Instances generated from level nodes.",
+      "behaviorToPreserve": "Buoy decor must not create extra destinations or routes.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "scenery.pine",
+      "name": "Coastal pine family",
+      "kind": "procedural-model",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/scene/models.ts",
+          "symbol": "pine"
+        },
+        {
+          "path": "src/scene/world.ts",
+          "symbol": "World.island"
+        }
+      ],
+      "variants": [
+        "several authored scales"
+      ],
+      "visualSignature": "Brown trunk and four staggered muted green conical crowns.",
+      "reuseAndOwnership": "Reusable factory and palette; placed by island style.",
+      "behaviorToPreserve": "Keep route, animal and control visibility.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "scenery.rocks",
+      "name": "Shore rocks and crag",
+      "kind": "procedural-model",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/scene/shore.ts",
+          "symbol": "shoreRockPlacements / createShoreRocks"
+        },
+        {
+          "path": "src/scene/world.ts",
+          "symbol": "World.island: crag branch"
+        }
+      ],
+      "variants": [
+        "garden",
+        "crag",
+        "reeds",
+        "rocky"
+      ],
+      "visualSignature": "Rounded/faceted grey-green coastal stones in grouped sizes.",
+      "reuseAndOwnership": "Instanced shoreline rock geometry per island; crag dressing is separate.",
+      "behaviorToPreserve": "Fit validated island footprints; tide contacts track real height.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "scenery.reeds",
+      "name": "Reed beds and low-shore accents",
+      "kind": "procedural-model",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/scene/shore.ts",
+          "symbol": "createReedBeds"
+        },
+        {
+          "path": "src/scene/world.ts",
+          "symbol": "World.island: reeds branch"
+        }
+      ],
+      "variants": [
+        "reed stems",
+        "seed heads",
+        "low sand accents"
+      ],
+      "visualSignature": "Sparse muted stems, brown seed heads and broad sand accents.",
+      "reuseAndOwnership": "Instanced stems and heads per authored reeds island.",
+      "behaviorToPreserve": "Preserve uncluttered low-pier silhouette and flooding visibility.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "scenery.garden-kit",
+      "name": "Shrubs, flowers, stepping stones and crates",
+      "kind": "procedural-model",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/scene/world.ts",
+          "symbol": "World.island"
+        }
+      ],
+      "variants": [
+        "garden",
+        "reduced sparse dressing for reeds/rocky",
+        "crag placement"
+      ],
+      "visualSignature": "Quiet green shrubs, cream flowers, sand path stones and warm small crates.",
+      "reuseAndOwnership": "Inline original geometry currently grouped by island style.",
+      "behaviorToPreserve": "No independent interactions; do not add all variants to every island.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "terrain.coast",
+      "name": "Rounded island coast",
+      "kind": "procedural-geometry",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/scene/shore.ts",
+          "symbol": "buildCoastGeometry / Shores"
+        },
+        {
+          "path": "src/scene/layout.ts",
+          "symbol": "IslandStyle / sceneLayout"
+        },
+        {
+          "path": "data/first-crossing.level.json",
+          "symbol": "world.islands"
+        },
+        {
+          "path": "data/holding-pier.level.json",
+          "symbol": "world.islands"
+        },
+        {
+          "path": "data/bellwater.level.json",
+          "symbol": "world.islands"
+        }
+      ],
+      "variants": [
+        "garden",
+        "crag",
+        "reeds",
+        "rocky",
+        "authored elevations and tide states"
+      ],
+      "visualSignature": "Rounded terraces with broad sand/stone/grass vertex color fields.",
+      "reuseAndOwnership": "Per-level authored footprints, generated coast lofts, shared vertex-color material per Shores.",
+      "behaviorToPreserve": "Terrain visual fields never replace canonical channel depth or flood rules.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "material.miniature-palette",
+      "name": "Shared matte miniature palette",
+      "kind": "material-palette",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/scene/models.ts",
+          "symbol": "palette / mat"
+        }
+      ],
+      "variants": [
+        "wool #fff1d7",
+        "hull #e5ad37",
+        "red #b94e3f",
+        "wood #ac784b",
+        "dark #263d43",
+        "sand #e5d4a8",
+        "grass #91a578",
+        "stone #84938a"
+      ],
+      "visualSignature": "Soft matte painted color with roughness 0.88.",
+      "reuseAndOwnership": "mat caches MeshStandardMaterial by color; dedicated wetness/lighthouse effects clone scoped materials.",
+      "behaviorToPreserve": "UI may borrow colors/material cues; this pass need not recolor the accepted 3D scene.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "lighting.cove",
+      "name": "Shared warm cove lighting",
+      "kind": "lighting-recipe",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/scene/world.ts",
+          "symbol": "World.constructor: HemisphereLight / DirectionalLight / shadow plane"
+        },
+        {
+          "path": "src/scene/layout.ts",
+          "symbol": "SceneLayout.light / sceneLayout"
+        }
+      ],
+      "variants": [
+        "default First Crossing/Holding",
+        "Bellwater background, sky, ground and sun colors"
+      ],
+      "visualSignature": "Warm late-day miniature light, gentle local contact shadow and blue-green background.",
+      "reuseAndOwnership": "One hemisphere light, directional shadow source and shadow receiver per World; no imported HDRI.",
+      "behaviorToPreserve": "Keep accepted scene exposure, material response and water lighting. UI restyling does not change global lighting.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "material.wet-contact",
+      "name": "Water-height contact and wetness",
+      "kind": "shader-material",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/scene/contact.ts",
+          "symbol": "contactMaterial"
+        },
+        {
+          "path": "src/scene/shore.ts",
+          "symbol": "Shores.constructor wetness material"
+        },
+        {
+          "path": "src/scene/world.ts",
+          "symbol": "World.contactMeshes"
+        }
+      ],
+      "variants": [
+        "hull",
+        "pile",
+        "coastal terrain"
+      ],
+      "visualSignature": "Subtle darkening/contact at real animated water level.",
+      "reuseAndOwnership": "Scoped material patches reference shared water-height uniform.",
+      "behaviorToPreserve": "Undo, tide and draft remain aligned; do not introduce fake wave geometry.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "texture.coastal-mask",
+      "name": "Coast and land data field",
+      "kind": "generated-data-texture",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/scene/water.ts",
+          "symbol": "coastalMask"
+        }
+      ],
+      "variants": [
+        "one field per level"
+      ],
+      "visualSignature": "Non-display RGBA data for banks, coast, height and land mask.",
+      "reuseAndOwnership": "256x256 RGBA unsigned-byte texture; linear filtering, NoColorSpace. Shared with water/wake masking.",
+      "behaviorToPreserve": "Generated once from actual level geometry, disposed with CoastalWater.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "texture.seabed",
+      "name": "Submerged albedo and height field",
+      "kind": "generated-data-texture",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/scene/seabed.ts",
+          "symbol": "createSeabedField / seabedHeightRange"
+        }
+      ],
+      "variants": [
+        "sand",
+        "connected stone forms",
+        "subdued ground"
+      ],
+      "visualSignature": "Broad connected sand/stone detail beneath water.",
+      "reuseAndOwnership": "256x256 RGBA generated field; paired with coast field, 524288 bytes combined.",
+      "behaviorToPreserve": "Decorative substrate independent of mechanical passage depths; retain disposal.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "shader.water",
+      "name": "Luminous coastal water",
+      "kind": "shader-material",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/scene/water.ts",
+          "symbol": "CoastalWater / waterPresets"
+        },
+        {
+          "path": "src/scene/water-shader.ts",
+          "symbol": "waterVertexShader / waterFragmentShader"
+        }
+      ],
+      "variants": [
+        "luminous is runtime default",
+        "restrained is existing tuning preset"
+      ],
+      "visualSignature": "Deep #123e55, coastal #3e7e88, pearl #bbd8e2, amber #ffbf62 in luminous preset.",
+      "reuseAndOwnership": "One plane/render treatment, analytic normals, coast/substrate textures and local lamp reflection; no reflection render target.",
+      "behaviorToPreserve": "Freeze decorative motion under Reduced; view and water height update with accepted camera/tide. Do not treat restrained as an extra shipped level style.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "effect.wake",
+      "name": "Independently released ferry crests",
+      "kind": "effect",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/scene/wake.ts",
+          "symbol": "FerryWake / wakeLimits"
+        },
+        {
+          "path": "src/scene/effects.ts",
+          "symbol": "CrossingEffects.movement"
+        }
+      ],
+      "variants": [
+        "active displacement emission",
+        "finite docking fade",
+        "cleared recovery/reduced state"
+      ],
+      "visualSignature": "Open pearl #d3e7df crests over muted teal #3b8889.",
+      "reuseAndOwnership": "One dynamic mesh; fixed 12-event pool, 1800ms lifetime, independent saved world pose and age.",
+      "behaviorToPreserve": "Pure yaw/bob/draft emit no wake; subsequent boat movement does not drag previous crests; reset/Undo/hide clear.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "effect.shore-contact",
+      "name": "Sparse shore waterline accents",
+      "kind": "effect",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/scene/shore.ts",
+          "symbol": "Shores.contacts / update"
+        }
+      ],
+      "variants": [
+        "tide/animated water heights"
+      ],
+      "visualSignature": "Sparse broken pale grey-green contact, not complete route-like rings.",
+      "reuseAndOwnership": "Preallocated line buffer updates at changed water height.",
+      "behaviorToPreserve": "No floating accent around fully flooded ground.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "effect.forecast",
+      "name": "Tide forecast contours",
+      "kind": "gameplay-indicator",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/scene/shore.ts",
+          "symbol": "Shores.forecast / preview"
+        },
+        {
+          "path": "src/scene/world.ts",
+          "symbol": "World.setForecast"
+        }
+      ],
+      "variants": [
+        "tide 0",
+        "tide 1",
+        "tide 2"
+      ],
+      "visualSignature": "Thin warm amber real shoreline contours.",
+      "reuseAndOwnership": "Cached groups generated from level islands and actual tide heights.",
+      "behaviorToPreserve": "Inspection only; show canonical forecast and hide on exit/reset.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "effect.harbor-glow",
+      "name": "Lantern glow and local arrival warmth",
+      "kind": "effect",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/scene/effects.ts",
+          "symbol": "CrossingEffects.constructor / applyLight / reset"
+        },
+        {
+          "path": "src/scene/water.ts",
+          "symbol": "CoastalWater.setHarbor"
+        }
+      ],
+      "variants": [
+        "ordinary glow",
+        "brief delivery strengthening",
+        "settled won glow"
+      ],
+      "visualSignature": "Small warm source sprite, local lens/light warmth and broken water reflection.",
+      "reuseAndOwnership": "Locally generated 32x32 radial RGBA texture; sprite excluded from framing.",
+      "behaviorToPreserve": "Arrival ownership stays tied to visible delivery; Undo/reset restore ordinary state.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "effect.harbor-sweep",
+      "name": "Soft lighthouse victory shaft",
+      "kind": "effect",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/scene/effects.ts",
+          "symbol": "CrossingEffects.sweep / update"
+        }
+      ],
+      "variants": [
+        "slow won sweep",
+        "static Reduced"
+      ],
+      "visualSignature": "Soft view-faded amber shaft #ffdda3, with no hard far rim.",
+      "reuseAndOwnership": "One open cone proxy with additive shader, depth test on and depth writes off; excluded from picking/framing.",
+      "behaviorToPreserve": "20-second authored turn while won; no extra bloom/pass or gameplay input delay.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "indicator.routes",
+      "name": "Canonical rounded navigation courses",
+      "kind": "gameplay-indicator",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/scene/paths.ts",
+          "symbol": "getLevelPaths"
+        },
+        {
+          "path": "src/scene/world.ts",
+          "symbol": "World.routes / indicate"
+        }
+      ],
+      "variants": [
+        "ordinary shallow/deep",
+        "highlighted",
+        "blocked"
+      ],
+      "visualSignature": "Quiet curved dashed seafoam routes; same course used by ferry.",
+      "reuseAndOwnership": "One cached canonical course per level edge.",
+      "behaviorToPreserve": "No decorative shortcuts or new junctions; selection and move use same geometry.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "indicator.world-stops",
+      "name": "Scene stop rings and relation marks",
+      "kind": "gameplay-indicator",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/scene/world.ts",
+          "symbol": "World.markers / indicate"
+        }
+      ],
+      "variants": [
+        "stop-ring",
+        "selection-ring",
+        "current-ring",
+        "blocked-cross",
+        "nonadjacent-diamond"
+      ],
+      "visualSignature": "Warm ring, cream current ring, caution cross, remote diamond.",
+      "reuseAndOwnership": "Groups correspond to real level node IDs.",
+      "behaviorToPreserve": "Status shapes remain derived from current load/depth/relation; no color-only distinction.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "motion.transfer",
+      "name": "Passenger boarding and unloading presentation",
+      "kind": "motion-recipe",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/scene/deck-transfer.ts",
+          "symbol": "sampleDeckTransfer / transferHeading"
+        },
+        {
+          "path": "src/scene/transfer.ts",
+          "symbol": "TransferTimeline"
+        },
+        {
+          "path": "src/scene/world.ts",
+          "symbol": "World.transferHistory / tick"
+        }
+      ],
+      "variants": [
+        "board",
+        "unload",
+        "compact Reduced"
+      ],
+      "visualSignature": "Grounded gangplank travel and proper deck attachment.",
+      "reuseAndOwnership": "Shared paths/timeline for real changed passenger subset; crossing/settling contacts drive sound.",
+      "behaviorToPreserve": "One canonical action, cancellable transient presentation, both berth headings; new icon does not immediately transfer.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "motion.homecoming",
+      "name": "Finite animal acknowledgment and arrival framing",
+      "kind": "motion-recipe",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/scene/homecoming.ts",
+          "symbol": "acknowledgmentPose / HomecomingTimeline"
+        },
+        {
+          "path": "src/scene/world.ts",
+          "symbol": "World.beginHomecoming / fitHomecomingCamera / updateHomecoming"
+        }
+      ],
+      "variants": [
+        "rabbit hop",
+        "grounded sheep bob",
+        "Reduced static",
+        "short-phone fixed camera"
+      ],
+      "visualSignature": "One small staggered response settling within 1300ms and conditional gentle camera approach.",
+      "reuseAndOwnership": "State-owned finite timeline, shared accepted models.",
+      "behaviorToPreserve": "No replay when closing/opening menu or enabling normal motion; restore canonical poses on Undo.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "audio.score",
+      "name": "Between the lamps",
+      "kind": "procedural-audio",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/audio/score.ts",
+          "symbol": "score / phraseEvents"
+        },
+        {
+          "path": "src/audio/atmosphere.ts",
+          "symbol": "Sound.graph / tone / pump"
+        }
+      ],
+      "variants": [
+        "ten harmony cells",
+        "21 motif notes/rests"
+      ],
+      "visualSignature": "Original calm continuous 75-second phrase, 64 BPM, 80 beats.",
+      "reuseAndOwnership": "Synthesized oscillators/periodic waves under one context and scheduler, not an encoded track file.",
+      "behaviorToPreserve": "Preserve composition, accepted gains, completed-gesture startup and explicit Enable/Retry/Mute.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "audio.accompaniment",
+      "name": "State-aware restrained accompaniment",
+      "kind": "procedural-audio",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/audio/arrangement.ts",
+          "symbol": "arrangementForState / companionCells / companionNote"
+        },
+        {
+          "path": "src/audio/atmosphere.ts",
+          "symbol": "Sound.pumpCompanion"
+        }
+      ],
+      "variants": [
+        "ordinary",
+        "deadline",
+        "homeward",
+        "won",
+        "lost"
+      ],
+      "visualSignature": "Sparse compatible notes supporting the accepted harmonic score.",
+      "reuseAndOwnership": "Uses existing graph and music reverb.",
+      "behaviorToPreserve": "Derived from canonical game state; no timer spending puzzle turns.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "audio.ambience-travel",
+      "name": "Air/water bed and soft travel texture",
+      "kind": "procedural-audio",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/audio/score.ts",
+          "symbol": "makeNoise"
+        },
+        {
+          "path": "src/audio/atmosphere.ts",
+          "symbol": "Sound.noiseVoice / startBed / ensureTravel / startTravel / stopTravel"
+        }
+      ],
+      "variants": [
+        "ambient bed",
+        "moving travel layer"
+      ],
+      "visualSignature": "Quiet filtered noise under the score.",
+      "reuseAndOwnership": "Deterministic 8-second mono reusable noise buffer, owned voices.",
+      "behaviorToPreserve": "Mute/hide/disposal cancel correctly; travel starts/stops with current presentation.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "audio.transfer-wood",
+      "name": "Wood contact family",
+      "kind": "procedural-audio",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/audio/wood.ts",
+          "symbol": "makeWoodContact / TransferContact"
+        },
+        {
+          "path": "src/audio/atmosphere.ts",
+          "symbol": "Sound.transferContact"
+        },
+        {
+          "path": "src/scene/transfer.ts",
+          "symbol": "TransferTimeline"
+        }
+      ],
+      "variants": [
+        "light 225Hz / 0.22s",
+        "full 165Hz / 0.27s",
+        "settling",
+        "compact Reduced"
+      ],
+      "visualSignature": "Full but restrained wooden body and soft transient.",
+      "reuseAndOwnership": "Generated short mono buffers cached by light/full weight; bounded owned sources.",
+      "behaviorToPreserve": "Follow visible crossing/settling marks; unchanged loudness/timing; stale contacts cannot replay.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "audio.arrival",
+      "name": "Harmony-aware arrival cue and won music reduction",
+      "kind": "procedural-audio",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/audio/arrival.ts",
+          "symbol": "arrivalPhrase"
+        },
+        {
+          "path": "src/audio/atmosphere.ts",
+          "symbol": "Sound.delivery / arrivalVoice / setVictoryMix"
+        }
+      ],
+      "variants": [
+        "opening",
+        "answer",
+        "settle",
+        "music duck/restore"
+      ],
+      "visualSignature": "Gentle audible three-stage resolution compatible with phrase position.",
+      "reuseAndOwnership": "Existing pad/pluck palette and shared reverb, fully cancellable tails.",
+      "behaviorToPreserve": "One visible-arrival cue; dry and wet music remain quieter while won; Undo/restart/cove exit restore.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "audio.reverb",
+      "name": "Shared room/air impulse",
+      "kind": "generated-audio-buffer",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/audio/score.ts",
+          "symbol": "makeReverb"
+        },
+        {
+          "path": "src/audio/atmosphere.ts",
+          "symbol": "Sound.graph"
+        }
+      ],
+      "variants": [
+        "one 3.6-second stereo impulse"
+      ],
+      "visualSignature": "Soft long tail joining score and arrival.",
+      "reuseAndOwnership": "Locally generated deterministic reusable impulse; no recorded source.",
+      "behaviorToPreserve": "Preserve dry/wet victory duck and mute ownership.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "ui.surfaces",
+      "name": "Current teal surfaces and controls",
+      "kind": "css-component-family",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/style.css",
+          "symbol": ":root / button / .hud / #local-context / dialog / .dialog-footer"
+        }
+      ],
+      "variants": [
+        "ordinary",
+        "hover/pressed as implemented",
+        "disabled",
+        "focus-visible",
+        "warning",
+        "terminal"
+      ],
+      "visualSignature": "Dark teal panel #103a45f5, surface #194d58, ivory #fff3d9, foam #a9dcd0, amber #f6cf8a, sand border #d8be91.",
+      "reuseAndOwnership": "Existing shared DOM/CSS styling; new rounded raised family should consolidate rather than duplicate.",
+      "behaviorToPreserve": "Keep 16px primary text, 48px main actions/44px minima, measured placement and readable text opacity.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "ui.typography",
+      "name": "System typography",
+      "kind": "system-font-family",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/style.css",
+          "symbol": ":root / h1 / #local-heading"
+        }
+      ],
+      "variants": [
+        "Segoe UI / Arial / sans-serif body",
+        "Georgia / serif title"
+      ],
+      "visualSignature": "Plain readable action text and soft serif cove title.",
+      "reuseAndOwnership": "System installed fonts only; no external font file or network request.",
+      "behaviorToPreserve": "Do not bake essential text into icons or textures; labels remain localizable DOM text.",
+      "provenance": "system-font-stack",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "ui.map-markers",
+      "name": "Freestanding names and selectable marker buttons",
+      "kind": "dom-component-family",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/main.ts",
+          "symbol": "renderMap"
+        },
+        {
+          "path": "src/style.css",
+          "symbol": ".map-target / .map-hit / .map-symbol / .map-name / .map-home"
+        }
+      ],
+      "variants": [
+        "current",
+        "remote",
+        "too shallow",
+        "loss risk",
+        "selected",
+        "Home role"
+      ],
+      "visualSignature": "Small 28px visual marker with larger stationary hit region and freestanding label.",
+      "reuseAndOwnership": "Name plus marker is one semantic button and one Tab stop for each real node.",
+      "behaviorToPreserve": "Preserve real status shape/text, free selection, collision/occlusion avoidance and no forced pan on selecting.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "ui.dock-icons",
+      "name": "Current directional transfer SVG and Home glyph",
+      "kind": "inline-svg-and-glyph",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/main.ts",
+          "symbol": "renderDock / positionMap dock-arrow rotation"
+        },
+        {
+          "path": "src/style.css",
+          "symbol": ".dock-arrow / .dock-home"
+        }
+      ],
+      "variants": [
+        "board arrow",
+        "unload arrow rotated opposite",
+        "Unicode home glyph"
+      ],
+      "visualSignature": "Current arrow is one 24x24 stroked SVG; Home uses U+2302.",
+      "reuseAndOwnership": "Actual screen-space pier-to-ferry angle rotates arrow; labels Board, Let ashore, Bring home carry meaning.",
+      "behaviorToPreserve": "Replacement icons must preserve unambiguous direction and action labels; fixed home icon must not become a main-menu metaphor.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "ui.utility-icons",
+      "name": "Current utility symbols and labels",
+      "kind": "dom-component-family",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/main.ts",
+          "symbol": "app.innerHTML / renderSound / renderFullscreen / renderDialog"
+        },
+        {
+          "path": "src/style.css",
+          "symbol": ".tools / .view-controls / .settings-sound-controls"
+        }
+      ],
+      "variants": [
+        "Undo U+21B6",
+        "sound U+266A/U+266B plus Sound/Retry text",
+        "Menu",
+        "Wait",
+        "Whole cove",
+        "Back to boat",
+        "Fullscreen",
+        "Settings"
+      ],
+      "visualSignature": "Mixed system text/symbol family currently visible.",
+      "reuseAndOwnership": "Good target for original consistent code-native icon family using shared rendering.",
+      "behaviorToPreserve": "Sound requested/running/muted intent, fullscreen actual state, undo/restart and free-view semantics must remain distinct.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "ui.dialogs",
+      "name": "Local preview, forecast, Menu, Settings and completion",
+      "kind": "dom-component-family",
+      "status": "existing-runtime",
+      "sources": [
+        {
+          "path": "src/main.ts",
+          "symbol": "renderDialog / renderLocation"
+        },
+        {
+          "path": "src/ui/placement.ts",
+          "symbol": "placeLocalCard / placeActionCard"
+        },
+        {
+          "path": "src/ui/cove-layout.ts",
+          "symbol": "endpointTargets"
+        },
+        {
+          "path": "src/ui/fullscreen.ts",
+          "symbol": "FullscreenSupport.changed"
+        },
+        {
+          "path": "src/style.css",
+          "symbol": "dialog / .dialog-body / .dialog-footer / .terminal-actions"
+        }
+      ],
+      "variants": [
+        "passenger subset",
+        "tide forecast",
+        "crossing menu",
+        "settings",
+        "won",
+        "lost",
+        "support-details fallback"
+      ],
+      "visualSignature": "Compact dark teal translucent card with stable nearby placement.",
+      "reuseAndOwnership": "Same native dialog preserves focus/subset/scroll during fullscreen promotion.",
+      "behaviorToPreserve": "Keep mobile anchors, cancellation/focus, 780x320 reachability, modal input safety and explicit cost/consequence labels.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "part-of-accepted-baseline",
+        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+      },
+      "evidence": [
+        {
+          "path": "reviews/phone-audio-fullscreen/REVIEW.md",
+          "role": "Current build identity and preservation; not an isolated visual test of every family"
+        }
+      ]
+    },
+    {
+      "id": "ui.icon.board",
+      "name": "Board",
+      "kind": "svg-icon",
+      "status": "candidate",
+      "sources": [
+        {
+          "path": "cove-ui-package/ui/icons/board.svg",
+          "symbol": "SVG root / cove-board"
+        }
+      ],
+      "integrationTarget": "src/ui/icons/board.svg",
+      "meaning": "Arrow descends toward the open ferry deck. Keep the visible Board label for consequential transfer actions.",
+      "visibleLabel": "Board",
+      "variants": [
+        "one-color",
+        "optional soft accent"
+      ],
+      "visualSignature": "24x24 grid; 1.8px round-cap/round-join strokes; glyph size 24 or 28 CSS px",
+      "reuseAndOwnership": "Shared inline SVG inside a stable native button; button owns events and name; generate any sprite from this source",
+      "behaviorToPreserve": "No independent pointer events, text, focus or autoplay animation. Transfer pictogram stays upright; never inherit world-relative .dock-arrow rotation.",
+      "accessibility": {
+        "decorative": true,
+        "focusable": false,
+        "hitAreaOwnedBy": "native button",
+        "phoneTarget": "48px preferred; preserve existing constrained 44px minimum",
+        "labels": "Retain visible labels for decisions, sound retry and view meaning"
+      },
+      "provenance": "original-package-vector-and-css",
+      "acceptance": {
+        "state": "not-yet-playtested"
+      },
+      "evidence": [
+        {
+          "path": "cove-ui-package/UI_STYLEBOARD.svg",
+          "role": "Vector design specimen, not actual gameplay"
+        }
+      ]
+    },
+    {
+      "id": "ui.icon.unload",
+      "name": "Unload",
+      "kind": "svg-icon",
+      "status": "candidate",
+      "sources": [
+        {
+          "path": "cove-ui-package/ui/icons/unload.svg",
+          "symbol": "SVG root / cove-unload"
+        }
+      ],
+      "integrationTarget": "src/ui/icons/unload.svg",
+      "meaning": "Arrow rises away from the same ferry deck. This means unload selected animals, never discard or delete.",
+      "visibleLabel": "Unload",
+      "variants": [
+        "one-color",
+        "optional soft accent"
+      ],
+      "visualSignature": "24x24 grid; 1.8px round-cap/round-join strokes; glyph size 24 or 28 CSS px",
+      "reuseAndOwnership": "Shared inline SVG inside a stable native button; button owns events and name; generate any sprite from this source",
+      "behaviorToPreserve": "No independent pointer events, text, focus or autoplay animation. Transfer pictogram stays upright; never inherit world-relative .dock-arrow rotation.",
+      "accessibility": {
+        "decorative": true,
+        "focusable": false,
+        "hitAreaOwnedBy": "native button",
+        "phoneTarget": "48px preferred; preserve existing constrained 44px minimum",
+        "labels": "Retain visible labels for decisions, sound retry and view meaning"
+      },
+      "provenance": "original-package-vector-and-css",
+      "acceptance": {
+        "state": "not-yet-playtested"
+      },
+      "evidence": [
+        {
+          "path": "cove-ui-package/UI_STYLEBOARD.svg",
+          "role": "Vector design specimen, not actual gameplay"
+        }
+      ]
+    },
+    {
+      "id": "ui.icon.sail",
+      "name": "Sail",
+      "kind": "svg-icon",
+      "status": "candidate",
+      "sources": [
+        {
+          "path": "cove-ui-package/ui/icons/sail.svg",
+          "symbol": "SVG root / cove-sail"
+        }
+      ],
+      "integrationTarget": "src/ui/icons/sail.svg",
+      "meaning": "Compact ferry with trailing travel marks. Labels retain destination and action consequences.",
+      "visibleLabel": "Sail",
+      "variants": [
+        "one-color",
+        "optional soft accent"
+      ],
+      "visualSignature": "24x24 grid; 1.8px round-cap/round-join strokes; glyph size 24 or 28 CSS px",
+      "reuseAndOwnership": "Shared inline SVG inside a stable native button; button owns events and name; generate any sprite from this source",
+      "behaviorToPreserve": "No independent pointer events, text, focus or autoplay animation. Transfer pictogram stays upright; never inherit world-relative .dock-arrow rotation.",
+      "accessibility": {
+        "decorative": true,
+        "focusable": false,
+        "hitAreaOwnedBy": "native button",
+        "phoneTarget": "48px preferred; preserve existing constrained 44px minimum",
+        "labels": "Retain visible labels for decisions, sound retry and view meaning"
+      },
+      "provenance": "original-package-vector-and-css",
+      "acceptance": {
+        "state": "not-yet-playtested"
+      },
+      "evidence": [
+        {
+          "path": "cove-ui-package/UI_STYLEBOARD.svg",
+          "role": "Vector design specimen, not actual gameplay"
+        }
+      ]
+    },
+    {
+      "id": "ui.icon.harbor-home",
+      "name": "Harbor · Home",
+      "kind": "svg-icon",
+      "status": "candidate",
+      "sources": [
+        {
+          "path": "cove-ui-package/ui/icons/harbor-home.svg",
+          "symbol": "SVG root / cove-harbor-home"
+        }
+      ],
+      "integrationTarget": "src/ui/icons/harbor-home.svg",
+      "meaning": "The cove lighthouse identifies the rescue destination. It must not be used for Back to boat, a main menu or a free travel action.",
+      "visibleLabel": "Harbor · Home",
+      "variants": [
+        "one-color",
+        "optional soft accent"
+      ],
+      "visualSignature": "24x24 grid; 1.8px round-cap/round-join strokes; glyph size 24 or 28 CSS px",
+      "reuseAndOwnership": "Shared inline SVG inside a stable native button; button owns events and name; generate any sprite from this source",
+      "behaviorToPreserve": "No independent pointer events, text, focus or autoplay animation. Transfer pictogram stays upright; never inherit world-relative .dock-arrow rotation.",
+      "accessibility": {
+        "decorative": true,
+        "focusable": false,
+        "hitAreaOwnedBy": "native button",
+        "phoneTarget": "48px preferred; preserve existing constrained 44px minimum",
+        "labels": "Retain visible labels for decisions, sound retry and view meaning"
+      },
+      "provenance": "original-package-vector-and-css",
+      "acceptance": {
+        "state": "not-yet-playtested"
+      },
+      "evidence": [
+        {
+          "path": "cove-ui-package/UI_STYLEBOARD.svg",
+          "role": "Vector design specimen, not actual gameplay"
+        }
+      ]
+    },
+    {
+      "id": "ui.icon.undo",
+      "name": "Undo",
+      "kind": "svg-icon",
+      "status": "candidate",
+      "sources": [
+        {
+          "path": "cove-ui-package/ui/icons/undo.svg",
+          "symbol": "SVG root / cove-undo"
+        }
+      ],
+      "integrationTarget": "src/ui/icons/undo.svg",
+      "meaning": "Return to the previous complete action. Kept distinct from Restart.",
+      "visibleLabel": "Undo",
+      "variants": [
+        "one-color",
+        "optional soft accent"
+      ],
+      "visualSignature": "24x24 grid; 1.8px round-cap/round-join strokes; glyph size 24 or 28 CSS px",
+      "reuseAndOwnership": "Shared inline SVG inside a stable native button; button owns events and name; generate any sprite from this source",
+      "behaviorToPreserve": "No independent pointer events, text, focus or autoplay animation. Transfer pictogram stays upright; never inherit world-relative .dock-arrow rotation.",
+      "accessibility": {
+        "decorative": true,
+        "focusable": false,
+        "hitAreaOwnedBy": "native button",
+        "phoneTarget": "48px preferred; preserve existing constrained 44px minimum",
+        "labels": "Retain visible labels for decisions, sound retry and view meaning"
+      },
+      "provenance": "original-package-vector-and-css",
+      "acceptance": {
+        "state": "not-yet-playtested"
+      },
+      "evidence": [
+        {
+          "path": "cove-ui-package/UI_STYLEBOARD.svg",
+          "role": "Vector design specimen, not actual gameplay"
+        }
+      ]
+    },
+    {
+      "id": "ui.icon.wait",
+      "name": "Wait",
+      "kind": "svg-icon",
+      "status": "candidate",
+      "sources": [
+        {
+          "path": "cove-ui-package/ui/icons/wait.svg",
+          "symbol": "SVG root / cove-wait"
+        }
+      ],
+      "integrationTarget": "src/ui/icons/wait.svg",
+      "meaning": "An hourglass marks an explicit turn-spending wait. The icon is not a countdown of real time.",
+      "visibleLabel": "Wait",
+      "variants": [
+        "one-color",
+        "optional soft accent"
+      ],
+      "visualSignature": "24x24 grid; 1.8px round-cap/round-join strokes; glyph size 24 or 28 CSS px",
+      "reuseAndOwnership": "Shared inline SVG inside a stable native button; button owns events and name; generate any sprite from this source",
+      "behaviorToPreserve": "No independent pointer events, text, focus or autoplay animation. Transfer pictogram stays upright; never inherit world-relative .dock-arrow rotation.",
+      "accessibility": {
+        "decorative": true,
+        "focusable": false,
+        "hitAreaOwnedBy": "native button",
+        "phoneTarget": "48px preferred; preserve existing constrained 44px minimum",
+        "labels": "Retain visible labels for decisions, sound retry and view meaning"
+      },
+      "provenance": "original-package-vector-and-css",
+      "acceptance": {
+        "state": "not-yet-playtested"
+      },
+      "evidence": [
+        {
+          "path": "cove-ui-package/UI_STYLEBOARD.svg",
+          "role": "Vector design specimen, not actual gameplay"
+        }
+      ]
+    },
+    {
+      "id": "ui.icon.whole-cove",
+      "name": "Whole cove",
+      "kind": "svg-icon",
+      "status": "candidate",
+      "sources": [
+        {
+          "path": "cove-ui-package/ui/icons/whole-cove.svg",
+          "symbol": "SVG root / cove-whole-cove"
+        }
+      ],
+      "integrationTarget": "src/ui/icons/whole-cove.svg",
+      "meaning": "Three islands and curved passages identify the entire cove framing.",
+      "visibleLabel": "Whole cove",
+      "variants": [
+        "one-color",
+        "optional soft accent"
+      ],
+      "visualSignature": "24x24 grid; 1.8px round-cap/round-join strokes; glyph size 24 or 28 CSS px",
+      "reuseAndOwnership": "Shared inline SVG inside a stable native button; button owns events and name; generate any sprite from this source",
+      "behaviorToPreserve": "No independent pointer events, text, focus or autoplay animation. Transfer pictogram stays upright; never inherit world-relative .dock-arrow rotation.",
+      "accessibility": {
+        "decorative": true,
+        "focusable": false,
+        "hitAreaOwnedBy": "native button",
+        "phoneTarget": "48px preferred; preserve existing constrained 44px minimum",
+        "labels": "Retain visible labels for decisions, sound retry and view meaning"
+      },
+      "provenance": "original-package-vector-and-css",
+      "acceptance": {
+        "state": "not-yet-playtested"
+      },
+      "evidence": [
+        {
+          "path": "cove-ui-package/UI_STYLEBOARD.svg",
+          "role": "Vector design specimen, not actual gameplay"
+        }
+      ]
+    },
+    {
+      "id": "ui.icon.back-to-boat",
+      "name": "Back to boat",
+      "kind": "svg-icon",
+      "status": "candidate",
+      "sources": [
+        {
+          "path": "cove-ui-package/ui/icons/back-to-boat.svg",
+          "symbol": "SVG root / cove-back-to-boat"
+        }
+      ],
+      "integrationTarget": "src/ui/icons/back-to-boat.svg",
+      "meaning": "Framing corners around the ferry recenter the camera only; this must not resemble Harbor Home.",
+      "visibleLabel": "Back to boat",
+      "variants": [
+        "one-color",
+        "optional soft accent"
+      ],
+      "visualSignature": "24x24 grid; 1.8px round-cap/round-join strokes; glyph size 24 or 28 CSS px",
+      "reuseAndOwnership": "Shared inline SVG inside a stable native button; button owns events and name; generate any sprite from this source",
+      "behaviorToPreserve": "No independent pointer events, text, focus or autoplay animation. Transfer pictogram stays upright; never inherit world-relative .dock-arrow rotation.",
+      "accessibility": {
+        "decorative": true,
+        "focusable": false,
+        "hitAreaOwnedBy": "native button",
+        "phoneTarget": "48px preferred; preserve existing constrained 44px minimum",
+        "labels": "Retain visible labels for decisions, sound retry and view meaning"
+      },
+      "provenance": "original-package-vector-and-css",
+      "acceptance": {
+        "state": "not-yet-playtested"
+      },
+      "evidence": [
+        {
+          "path": "cove-ui-package/UI_STYLEBOARD.svg",
+          "role": "Vector design specimen, not actual gameplay"
+        }
+      ]
+    },
+    {
+      "id": "ui.icon.menu",
+      "name": "Menu",
+      "kind": "svg-icon",
+      "status": "candidate",
+      "sources": [
+        {
+          "path": "cove-ui-package/ui/icons/menu.svg",
+          "symbol": "SVG root / cove-menu"
+        }
+      ],
+      "integrationTarget": "src/ui/icons/menu.svg",
+      "meaning": "Two softly rounded slats for the Crossing menu.",
+      "visibleLabel": "Menu",
+      "variants": [
+        "one-color",
+        "optional soft accent"
+      ],
+      "visualSignature": "24x24 grid; 1.8px round-cap/round-join strokes; glyph size 24 or 28 CSS px",
+      "reuseAndOwnership": "Shared inline SVG inside a stable native button; button owns events and name; generate any sprite from this source",
+      "behaviorToPreserve": "No independent pointer events, text, focus or autoplay animation. Transfer pictogram stays upright; never inherit world-relative .dock-arrow rotation.",
+      "accessibility": {
+        "decorative": true,
+        "focusable": false,
+        "hitAreaOwnedBy": "native button",
+        "phoneTarget": "48px preferred; preserve existing constrained 44px minimum",
+        "labels": "Retain visible labels for decisions, sound retry and view meaning"
+      },
+      "provenance": "original-package-vector-and-css",
+      "acceptance": {
+        "state": "not-yet-playtested"
+      },
+      "evidence": [
+        {
+          "path": "cove-ui-package/UI_STYLEBOARD.svg",
+          "role": "Vector design specimen, not actual gameplay"
+        }
+      ]
+    },
+    {
+      "id": "ui.icon.settings",
+      "name": "Settings",
+      "kind": "svg-icon",
+      "status": "candidate",
+      "sources": [
+        {
+          "path": "cove-ui-package/ui/icons/settings.svg",
+          "symbol": "SVG root / cove-settings"
+        }
+      ],
+      "integrationTarget": "src/ui/icons/settings.svg",
+      "meaning": "Two adjustable pins provide a familiar settings metaphor without ornate machinery.",
+      "visibleLabel": "Settings",
+      "variants": [
+        "one-color",
+        "optional soft accent"
+      ],
+      "visualSignature": "24x24 grid; 1.8px round-cap/round-join strokes; glyph size 24 or 28 CSS px",
+      "reuseAndOwnership": "Shared inline SVG inside a stable native button; button owns events and name; generate any sprite from this source",
+      "behaviorToPreserve": "No independent pointer events, text, focus or autoplay animation. Transfer pictogram stays upright; never inherit world-relative .dock-arrow rotation.",
+      "accessibility": {
+        "decorative": true,
+        "focusable": false,
+        "hitAreaOwnedBy": "native button",
+        "phoneTarget": "48px preferred; preserve existing constrained 44px minimum",
+        "labels": "Retain visible labels for decisions, sound retry and view meaning"
+      },
+      "provenance": "original-package-vector-and-css",
+      "acceptance": {
+        "state": "not-yet-playtested"
+      },
+      "evidence": [
+        {
+          "path": "cove-ui-package/UI_STYLEBOARD.svg",
+          "role": "Vector design specimen, not actual gameplay"
+        }
+      ]
+    },
+    {
+      "id": "ui.icon.close",
+      "name": "Close",
+      "kind": "svg-icon",
+      "status": "candidate",
+      "sources": [
+        {
+          "path": "cove-ui-package/ui/icons/close.svg",
+          "symbol": "SVG root / cove-close"
+        }
+      ],
+      "integrationTarget": "src/ui/icons/close.svg",
+      "meaning": "Dismiss the current surface without committing an action.",
+      "visibleLabel": "Close",
+      "variants": [
+        "one-color",
+        "optional soft accent"
+      ],
+      "visualSignature": "24x24 grid; 1.8px round-cap/round-join strokes; glyph size 24 or 28 CSS px",
+      "reuseAndOwnership": "Shared inline SVG inside a stable native button; button owns events and name; generate any sprite from this source",
+      "behaviorToPreserve": "No independent pointer events, text, focus or autoplay animation. Transfer pictogram stays upright; never inherit world-relative .dock-arrow rotation.",
+      "accessibility": {
+        "decorative": true,
+        "focusable": false,
+        "hitAreaOwnedBy": "native button",
+        "phoneTarget": "48px preferred; preserve existing constrained 44px minimum",
+        "labels": "Retain visible labels for decisions, sound retry and view meaning"
+      },
+      "provenance": "original-package-vector-and-css",
+      "acceptance": {
+        "state": "not-yet-playtested"
+      },
+      "evidence": [
+        {
+          "path": "cove-ui-package/UI_STYLEBOARD.svg",
+          "role": "Vector design specimen, not actual gameplay"
+        }
+      ]
+    },
+    {
+      "id": "ui.icon.confirm",
+      "name": "Confirm",
+      "kind": "svg-icon",
+      "status": "candidate",
+      "sources": [
+        {
+          "path": "cove-ui-package/ui/icons/confirm.svg",
+          "symbol": "SVG root / cove-confirm"
+        }
+      ],
+      "integrationTarget": "src/ui/icons/confirm.svg",
+      "meaning": "Commit the currently previewed selection; keep explicit visible action text and consequences.",
+      "visibleLabel": "Confirm",
+      "variants": [
+        "one-color",
+        "optional soft accent"
+      ],
+      "visualSignature": "24x24 grid; 1.8px round-cap/round-join strokes; glyph size 24 or 28 CSS px",
+      "reuseAndOwnership": "Shared inline SVG inside a stable native button; button owns events and name; generate any sprite from this source",
+      "behaviorToPreserve": "No independent pointer events, text, focus or autoplay animation. Transfer pictogram stays upright; never inherit world-relative .dock-arrow rotation.",
+      "accessibility": {
+        "decorative": true,
+        "focusable": false,
+        "hitAreaOwnedBy": "native button",
+        "phoneTarget": "48px preferred; preserve existing constrained 44px minimum",
+        "labels": "Retain visible labels for decisions, sound retry and view meaning"
+      },
+      "provenance": "original-package-vector-and-css",
+      "acceptance": {
+        "state": "not-yet-playtested"
+      },
+      "evidence": [
+        {
+          "path": "cove-ui-package/UI_STYLEBOARD.svg",
+          "role": "Vector design specimen, not actual gameplay"
+        }
+      ]
+    },
+    {
+      "id": "ui.icon.next-cove",
+      "name": "Next cove",
+      "kind": "svg-icon",
+      "status": "candidate",
+      "sources": [
+        {
+          "path": "cove-ui-package/ui/icons/next-cove.svg",
+          "symbol": "SVG root / cove-next-cove"
+        }
+      ],
+      "integrationTarget": "src/ui/icons/next-cove.svg",
+      "meaning": "A curved onward path from an island identifies progression after arrival.",
+      "visibleLabel": "Next cove",
+      "variants": [
+        "one-color",
+        "optional soft accent"
+      ],
+      "visualSignature": "24x24 grid; 1.8px round-cap/round-join strokes; glyph size 24 or 28 CSS px",
+      "reuseAndOwnership": "Shared inline SVG inside a stable native button; button owns events and name; generate any sprite from this source",
+      "behaviorToPreserve": "No independent pointer events, text, focus or autoplay animation. Transfer pictogram stays upright; never inherit world-relative .dock-arrow rotation.",
+      "accessibility": {
+        "decorative": true,
+        "focusable": false,
+        "hitAreaOwnedBy": "native button",
+        "phoneTarget": "48px preferred; preserve existing constrained 44px minimum",
+        "labels": "Retain visible labels for decisions, sound retry and view meaning"
+      },
+      "provenance": "original-package-vector-and-css",
+      "acceptance": {
+        "state": "not-yet-playtested"
+      },
+      "evidence": [
+        {
+          "path": "cove-ui-package/UI_STYLEBOARD.svg",
+          "role": "Vector design specimen, not actual gameplay"
+        }
+      ]
+    },
+    {
+      "id": "ui.icon.sound-on",
+      "name": "Mute sound",
+      "kind": "svg-icon",
+      "status": "candidate",
+      "sources": [
+        {
+          "path": "cove-ui-package/ui/icons/sound-on.svg",
+          "symbol": "SVG root / cove-sound-on"
+        }
+      ],
+      "integrationTarget": "src/ui/icons/sound-on.svg",
+      "meaning": "Audio is currently playing; the action label is Mute sound.",
+      "visibleLabel": "Mute sound",
+      "variants": [
+        "one-color",
+        "optional soft accent"
+      ],
+      "visualSignature": "24x24 grid; 1.8px round-cap/round-join strokes; glyph size 24 or 28 CSS px",
+      "reuseAndOwnership": "Shared inline SVG inside a stable native button; button owns events and name; generate any sprite from this source",
+      "behaviorToPreserve": "No independent pointer events, text, focus or autoplay animation. Transfer pictogram stays upright; never inherit world-relative .dock-arrow rotation.",
+      "accessibility": {
+        "decorative": true,
+        "focusable": false,
+        "hitAreaOwnedBy": "native button",
+        "phoneTarget": "48px preferred; preserve existing constrained 44px minimum",
+        "labels": "Retain visible labels for decisions, sound retry and view meaning"
+      },
+      "provenance": "original-package-vector-and-css",
+      "acceptance": {
+        "state": "not-yet-playtested"
+      },
+      "evidence": [
+        {
+          "path": "cove-ui-package/UI_STYLEBOARD.svg",
+          "role": "Vector design specimen, not actual gameplay"
+        }
+      ]
+    },
+    {
+      "id": "ui.icon.sound-off",
+      "name": "Enable sound",
+      "kind": "svg-icon",
+      "status": "candidate",
+      "sources": [
+        {
+          "path": "cove-ui-package/ui/icons/sound-off.svg",
+          "symbol": "SVG root / cove-sound-off"
+        }
+      ],
+      "integrationTarget": "src/ui/icons/sound-off.svg",
+      "meaning": "Audio is muted; the action label is Enable sound.",
+      "visibleLabel": "Enable sound",
+      "variants": [
+        "one-color",
+        "optional soft accent"
+      ],
+      "visualSignature": "24x24 grid; 1.8px round-cap/round-join strokes; glyph size 24 or 28 CSS px",
+      "reuseAndOwnership": "Shared inline SVG inside a stable native button; button owns events and name; generate any sprite from this source",
+      "behaviorToPreserve": "No independent pointer events, text, focus or autoplay animation. Transfer pictogram stays upright; never inherit world-relative .dock-arrow rotation.",
+      "accessibility": {
+        "decorative": true,
+        "focusable": false,
+        "hitAreaOwnedBy": "native button",
+        "phoneTarget": "48px preferred; preserve existing constrained 44px minimum",
+        "labels": "Retain visible labels for decisions, sound retry and view meaning"
+      },
+      "provenance": "original-package-vector-and-css",
+      "acceptance": {
+        "state": "not-yet-playtested"
+      },
+      "evidence": [
+        {
+          "path": "cove-ui-package/UI_STYLEBOARD.svg",
+          "role": "Vector design specimen, not actual gameplay"
+        }
+      ]
+    },
+    {
+      "id": "ui.icon.sound-retry",
+      "name": "Retry sound",
+      "kind": "svg-icon",
+      "status": "candidate",
+      "sources": [
+        {
+          "path": "cove-ui-package/ui/icons/sound-retry.svg",
+          "symbol": "SVG root / cove-sound-retry"
+        }
+      ],
+      "integrationTarget": "src/ui/icons/sound-retry.svg",
+      "meaning": "Sound was requested but is not running. The visible Retry label must remain; this is not mute.",
+      "visibleLabel": "Retry sound",
+      "variants": [
+        "one-color",
+        "optional soft accent"
+      ],
+      "visualSignature": "24x24 grid; 1.8px round-cap/round-join strokes; glyph size 24 or 28 CSS px",
+      "reuseAndOwnership": "Shared inline SVG inside a stable native button; button owns events and name; generate any sprite from this source",
+      "behaviorToPreserve": "No independent pointer events, text, focus or autoplay animation. Transfer pictogram stays upright; never inherit world-relative .dock-arrow rotation.",
+      "accessibility": {
+        "decorative": true,
+        "focusable": false,
+        "hitAreaOwnedBy": "native button",
+        "phoneTarget": "48px preferred; preserve existing constrained 44px minimum",
+        "labels": "Retain visible labels for decisions, sound retry and view meaning"
+      },
+      "provenance": "original-package-vector-and-css",
+      "acceptance": {
+        "state": "not-yet-playtested"
+      },
+      "evidence": [
+        {
+          "path": "cove-ui-package/UI_STYLEBOARD.svg",
+          "role": "Vector design specimen, not actual gameplay"
+        }
+      ]
+    },
+    {
+      "id": "ui.icon.fullscreen-enter",
+      "name": "Fullscreen",
+      "kind": "svg-icon",
+      "status": "candidate",
+      "sources": [
+        {
+          "path": "cove-ui-package/ui/icons/fullscreen-enter.svg",
+          "symbol": "SVG root / cove-fullscreen-enter"
+        }
+      ],
+      "integrationTarget": "src/ui/icons/fullscreen-enter.svg",
+      "meaning": "Expand the common app root using the existing trusted fullscreen path.",
+      "visibleLabel": "Fullscreen",
+      "variants": [
+        "one-color",
+        "optional soft accent"
+      ],
+      "visualSignature": "24x24 grid; 1.8px round-cap/round-join strokes; glyph size 24 or 28 CSS px",
+      "reuseAndOwnership": "Shared inline SVG inside a stable native button; button owns events and name; generate any sprite from this source",
+      "behaviorToPreserve": "No independent pointer events, text, focus or autoplay animation. Transfer pictogram stays upright; never inherit world-relative .dock-arrow rotation.",
+      "accessibility": {
+        "decorative": true,
+        "focusable": false,
+        "hitAreaOwnedBy": "native button",
+        "phoneTarget": "48px preferred; preserve existing constrained 44px minimum",
+        "labels": "Retain visible labels for decisions, sound retry and view meaning"
+      },
+      "provenance": "original-package-vector-and-css",
+      "acceptance": {
+        "state": "not-yet-playtested"
+      },
+      "evidence": [
+        {
+          "path": "cove-ui-package/UI_STYLEBOARD.svg",
+          "role": "Vector design specimen, not actual gameplay"
+        }
+      ]
+    },
+    {
+      "id": "ui.icon.fullscreen-exit",
+      "name": "Exit fullscreen",
+      "kind": "svg-icon",
+      "status": "candidate",
+      "sources": [
+        {
+          "path": "cove-ui-package/ui/icons/fullscreen-exit.svg",
+          "symbol": "SVG root / cove-fullscreen-exit"
+        }
+      ],
+      "integrationTarget": "src/ui/icons/fullscreen-exit.svg",
+      "meaning": "Leave actual fullscreen. Never infer state from an optimistic toggle.",
+      "visibleLabel": "Exit fullscreen",
+      "variants": [
+        "one-color",
+        "optional soft accent"
+      ],
+      "visualSignature": "24x24 grid; 1.8px round-cap/round-join strokes; glyph size 24 or 28 CSS px",
+      "reuseAndOwnership": "Shared inline SVG inside a stable native button; button owns events and name; generate any sprite from this source",
+      "behaviorToPreserve": "No independent pointer events, text, focus or autoplay animation. Transfer pictogram stays upright; never inherit world-relative .dock-arrow rotation.",
+      "accessibility": {
+        "decorative": true,
+        "focusable": false,
+        "hitAreaOwnedBy": "native button",
+        "phoneTarget": "48px preferred; preserve existing constrained 44px minimum",
+        "labels": "Retain visible labels for decisions, sound retry and view meaning"
+      },
+      "provenance": "original-package-vector-and-css",
+      "acceptance": {
+        "state": "not-yet-playtested"
+      },
+      "evidence": [
+        {
+          "path": "cove-ui-package/UI_STYLEBOARD.svg",
+          "role": "Vector design specimen, not actual gameplay"
+        }
+      ]
+    },
+    {
+      "id": "ui.component.round-utility",
+      "name": "Round utility control",
+      "kind": "css-component-family",
+      "status": "candidate",
+      "sources": [
+        {
+          "path": "cove-ui-package/ui/cove-ui.css",
+          "symbol": ".cove-button.cove-button--icon"
+        }
+      ],
+      "integrationTarget": "src/ui/cove-ui.css",
+      "meaning": "Small familiar utilities; 48px stable target, 24px glyph.",
+      "variants": [
+        "quiet",
+        "focus",
+        "pressed",
+        "disabled"
+      ],
+      "visualSignature": "Rounded matte surface, shallow lower edge and restrained top highlight; tokens in the same shared CSS",
+      "reuseAndOwnership": "Shared component appearance; existing game layout and native controls retain interaction ownership",
+      "behaviorToPreserve": "Stable measured bounds, no new continuous animation, no tap-through, no changed confirmation semantics; Reduced Motion removes decorative transitions",
+      "accessibility": {
+        "essentialText": "about 16px on phones",
+        "contrast": "Verify actual composited normal text >=4.5:1 and meaningful icons/states >=3:1",
+        "focus": "Warm outline with dark keyline"
+      },
+      "provenance": "original-package-vector-and-css",
+      "acceptance": {
+        "state": "not-yet-playtested"
+      },
+      "evidence": [
+        {
+          "path": "cove-ui-package/UI_STYLEBOARD.svg",
+          "role": "Proposed material and component specimen"
+        }
+      ]
+    },
+    {
+      "id": "ui.component.action-capsule",
+      "name": "Labeled action capsule",
+      "kind": "css-component-family",
+      "status": "candidate",
+      "sources": [
+        {
+          "path": "cove-ui-package/ui/cove-ui.css",
+          "symbol": ".cove-button"
+        }
+      ],
+      "integrationTarget": "src/ui/cove-ui.css",
+      "meaning": "Board / Let ashore / Bring home / Sail / Wait / Undo / confirmation; retain visible action labels.",
+      "variants": [
+        "foam",
+        "warm",
+        "quiet",
+        "focus",
+        "pressed",
+        "disabled"
+      ],
+      "visualSignature": "Rounded matte surface, shallow lower edge and restrained top highlight; tokens in the same shared CSS",
+      "reuseAndOwnership": "Shared component appearance; existing game layout and native controls retain interaction ownership",
+      "behaviorToPreserve": "Stable measured bounds, no new continuous animation, no tap-through, no changed confirmation semantics; Reduced Motion removes decorative transitions",
+      "accessibility": {
+        "essentialText": "about 16px on phones",
+        "contrast": "Verify actual composited normal text >=4.5:1 and meaningful icons/states >=3:1",
+        "focus": "Warm outline with dark keyline"
+      },
+      "provenance": "original-package-vector-and-css",
+      "acceptance": {
+        "state": "not-yet-playtested"
+      },
+      "evidence": [
+        {
+          "path": "cove-ui-package/UI_STYLEBOARD.svg",
+          "role": "Proposed material and component specimen"
+        }
+      ]
+    },
+    {
+      "id": "ui.component.panel",
+      "name": "Quiet cove panel",
+      "kind": "css-component-family",
+      "status": "candidate",
+      "sources": [
+        {
+          "path": "cove-ui-package/ui/cove-ui.css",
+          "symbol": ".cove-panel"
+        }
+      ],
+      "integrationTarget": "src/ui/cove-ui.css",
+      "meaning": "One rounded frame and a substantial dark text backing. Existing native dialog and measured positioning own behavior.",
+      "variants": [
+        "location",
+        "subset",
+        "forecast",
+        "menu",
+        "settings",
+        "arrival"
+      ],
+      "visualSignature": "Rounded matte surface, shallow lower edge and restrained top highlight; tokens in the same shared CSS",
+      "reuseAndOwnership": "Shared component appearance; existing game layout and native controls retain interaction ownership",
+      "behaviorToPreserve": "Stable measured bounds, no new continuous animation, no tap-through, no changed confirmation semantics; Reduced Motion removes decorative transitions",
+      "accessibility": {
+        "essentialText": "about 16px on phones",
+        "contrast": "Verify actual composited normal text >=4.5:1 and meaningful icons/states >=3:1",
+        "focus": "Warm outline with dark keyline"
+      },
+      "provenance": "original-package-vector-and-css",
+      "acceptance": {
+        "state": "not-yet-playtested"
+      },
+      "evidence": [
+        {
+          "path": "cove-ui-package/UI_STYLEBOARD.svg",
+          "role": "Proposed material and component specimen"
+        }
+      ]
+    },
+    {
+      "id": "ui.component.passenger-choice",
+      "name": "Inset passenger choice",
+      "kind": "css-component-family",
+      "status": "candidate",
+      "sources": [
+        {
+          "path": "cove-ui-package/ui/cove-ui.css",
+          "symbol": ".cove-choice"
+        }
+      ],
+      "integrationTarget": "src/ui/cove-ui.css",
+      "meaning": "Preserve existing choice button and aria-pressed state; show a check, name and space cost. Checkbox in the specimen demonstrates appearance only; a DOM conversion requires focus-trap changes.",
+      "variants": [
+        "selected",
+        "unselected",
+        "focus",
+        "unavailable"
+      ],
+      "visualSignature": "Rounded matte surface, shallow lower edge and restrained top highlight; tokens in the same shared CSS",
+      "reuseAndOwnership": "Shared component appearance; existing game layout and native controls retain interaction ownership",
+      "behaviorToPreserve": "Stable measured bounds, no new continuous animation, no tap-through, no changed confirmation semantics; Reduced Motion removes decorative transitions",
+      "accessibility": {
+        "essentialText": "about 16px on phones",
+        "contrast": "Verify actual composited normal text >=4.5:1 and meaningful icons/states >=3:1",
+        "focus": "Warm outline with dark keyline"
+      },
+      "provenance": "original-package-vector-and-css",
+      "acceptance": {
+        "state": "not-yet-playtested"
+      },
+      "evidence": [
+        {
+          "path": "cove-ui-package/UI_STYLEBOARD.svg",
+          "role": "Proposed material and component specimen"
+        }
+      ]
+    },
+    {
+      "id": "ui.component.location-name",
+      "name": "Freestanding location name",
+      "kind": "css-component-family",
+      "status": "candidate",
+      "sources": [
+        {
+          "path": "cove-ui-package/ui/cove-ui.css",
+          "symbol": ".cove-name"
+        }
+      ],
+      "integrationTarget": "src/ui/cove-ui.css",
+      "meaning": "Short dark text backing attached to existing single name/marker semantic selection target.",
+      "variants": [
+        "ordinary",
+        "selected",
+        "current",
+        "risk"
+      ],
+      "visualSignature": "Rounded matte surface, shallow lower edge and restrained top highlight; tokens in the same shared CSS",
+      "reuseAndOwnership": "Shared component appearance; existing game layout and native controls retain interaction ownership",
+      "behaviorToPreserve": "Stable measured bounds, no new continuous animation, no tap-through, no changed confirmation semantics; Reduced Motion removes decorative transitions",
+      "accessibility": {
+        "essentialText": "about 16px on phones",
+        "contrast": "Verify actual composited normal text >=4.5:1 and meaningful icons/states >=3:1",
+        "focus": "Warm outline with dark keyline"
+      },
+      "provenance": "original-package-vector-and-css",
+      "acceptance": {
+        "state": "not-yet-playtested"
+      },
+      "evidence": [
+        {
+          "path": "cove-ui-package/UI_STYLEBOARD.svg",
+          "role": "Proposed material and component specimen"
+        }
+      ]
+    },
+    {
+      "id": "ui.component.harbor-mark",
+      "name": "Harbor Home mark",
+      "kind": "css-component-family",
+      "status": "candidate",
+      "sources": [
+        {
+          "path": "cove-ui-package/ui/cove-ui.css",
+          "symbol": ".cove-objective"
+        }
+      ],
+      "integrationTarget": "src/ui/cove-ui.css",
+      "meaning": "Lighthouse symbol and Home identity, distinct from camera framing and Menu.",
+      "variants": [
+        "ordinary",
+        "selected",
+        "arrival"
+      ],
+      "visualSignature": "Rounded matte surface, shallow lower edge and restrained top highlight; tokens in the same shared CSS",
+      "reuseAndOwnership": "Shared component appearance; existing game layout and native controls retain interaction ownership",
+      "behaviorToPreserve": "Stable measured bounds, no new continuous animation, no tap-through, no changed confirmation semantics; Reduced Motion removes decorative transitions",
+      "accessibility": {
+        "essentialText": "about 16px on phones",
+        "contrast": "Verify actual composited normal text >=4.5:1 and meaningful icons/states >=3:1",
+        "focus": "Warm outline with dark keyline"
+      },
+      "provenance": "original-package-vector-and-css",
+      "acceptance": {
+        "state": "not-yet-playtested"
+      },
+      "evidence": [
+        {
+          "path": "cove-ui-package/UI_STYLEBOARD.svg",
+          "role": "Proposed material and component specimen"
+        }
+      ]
+    },
+    {
+      "id": "material.cove-ui-tokens",
+      "name": "Cove interface material tokens",
+      "kind": "material-palette",
+      "status": "candidate",
+      "sources": [
+        {
+          "path": "cove-ui-package/ui/cove-ui.css",
+          "symbol": ".cove-kit custom properties"
+        }
+      ],
+      "integrationTarget": "src/ui/cove-ui.css",
+      "variants": [
+        "dark quiet surfaces",
+        "seafoam action",
+        "warm objective",
+        "warning",
+        "focus"
+      ],
+      "visualSignature": "Deep teal and cream retained from current UI; softened foam and lantern action faces derived from the miniature palette",
+      "reuseAndOwnership": "One semantic token set shared across components; world materials keep existing source",
+      "behaviorToPreserve": "Do not recolor the accepted world or use opacity-only states; validate actual composites",
+      "provenance": "original-package-vector-and-css",
+      "acceptance": {
+        "state": "not-yet-playtested"
+      },
+      "evidence": [
+        {
+          "path": "cove-ui-package/STYLE_GUIDE.md",
+          "role": "Candidate roles and extension rules"
+        }
+      ]
+    },
+    {
+      "id": "reference.first-crossing-png",
+      "name": "first-crossing.png",
+      "kind": "reference-image",
+      "status": "reference-only",
+      "sources": [
+        {
+          "path": "references/first-crossing.png",
+          "symbol": "reference file"
+        }
+      ],
+      "meaning": "Primary original concept direction; never runtime background",
+      "variants": [],
+      "visualSignature": "Existing supplied art direction reference",
+      "reuseAndOwnership": "Reference only; no runtime load",
+      "behaviorToPreserve": "Never substitute this image for playable geometry or evidence of actual gameplay",
+      "provenance": "supplied-concept-reference",
+      "acceptance": {
+        "state": "reference-only"
+      }
+    },
+    {
+      "id": "reference.original-concept-png",
+      "name": "original-concept.png",
+      "kind": "reference-image",
+      "status": "reference-only",
+      "sources": [
+        {
+          "path": "references/original-concept.png",
+          "symbol": "reference file"
+        }
+      ],
+      "meaning": "Supporting generated concept mood",
+      "variants": [],
+      "visualSignature": "Existing supplied art direction reference",
+      "reuseAndOwnership": "Reference only; no runtime load",
+      "behaviorToPreserve": "Never substitute this image for playable geometry or evidence of actual gameplay",
+      "provenance": "supplied-concept-reference",
+      "acceptance": {
+        "state": "reference-only"
+      }
+    },
+    {
+      "id": "reference.drowned-orchard-png",
+      "name": "drowned-orchard.png",
+      "kind": "reference-image",
+      "status": "reference-only",
+      "sources": [
+        {
+          "path": "references/drowned-orchard.png",
+          "symbol": "reference file"
+        }
+      ],
+      "meaning": "Future chapter mood; not implemented level or asset",
+      "variants": [],
+      "visualSignature": "Existing supplied art direction reference",
+      "reuseAndOwnership": "Reference only; no runtime load",
+      "behaviorToPreserve": "Never substitute this image for playable geometry or evidence of actual gameplay",
+      "provenance": "supplied-concept-reference",
+      "acceptance": {
+        "state": "reference-only"
+      }
+    },
+    {
+      "id": "reference.sanctuary-ending-png",
+      "name": "sanctuary-ending.png",
+      "kind": "reference-image",
+      "status": "reference-only",
+      "sources": [
+        {
+          "path": "references/sanctuary-ending.png",
+          "symbol": "reference file"
+        }
+      ],
+      "meaning": "Future ending mood; not current sanctuary asset",
+      "variants": [],
+      "visualSignature": "Existing supplied art direction reference",
+      "reuseAndOwnership": "Reference only; no runtime load",
+      "behaviorToPreserve": "Never substitute this image for playable geometry or evidence of actual gameplay",
+      "provenance": "supplied-concept-reference",
+      "acceptance": {
+        "state": "reference-only"
+      }
+    },
+    {
+      "id": "reference.first-cove-layout-svg",
+      "name": "first-cove-layout.svg",
+      "kind": "reference-image",
+      "status": "reference-only",
+      "sources": [
+        {
+          "path": "references/first-cove-layout.svg",
+          "symbol": "reference file"
+        }
+      ],
+      "meaning": "Authored geometry schematic, not an art target",
+      "variants": [],
+      "visualSignature": "Existing supplied art direction reference",
+      "reuseAndOwnership": "Reference only; no runtime load",
+      "behaviorToPreserve": "Never substitute this image for playable geometry or evidence of actual gameplay",
+      "provenance": "supplied-concept-reference",
+      "acceptance": {
+        "state": "reference-only"
+      }
+    },
+    {
+      "id": "reference.first-cove-layout-png",
+      "name": "first-cove-layout.png",
+      "kind": "reference-image",
+      "status": "reference-only",
+      "sources": [
+        {
+          "path": "references/first-cove-layout.png",
+          "symbol": "reference file"
+        }
+      ],
+      "meaning": "Raster schematic companion, not gameplay capture",
+      "variants": [],
+      "visualSignature": "Existing supplied art direction reference",
+      "reuseAndOwnership": "Reference only; no runtime load",
+      "behaviorToPreserve": "Never substitute this image for playable geometry or evidence of actual gameplay",
+      "provenance": "supplied-concept-reference",
+      "acceptance": {
+        "state": "reference-only"
+      }
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+
+Running 2 tests using 1 worker
+
+(node:4340) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\e2e\phone-playability.spec.ts:174:3 › phone layout 844x390: readable Play and deliberate complete Whole cove (41.6s)
+(node:32404) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  2 tests\e2e\phone-playability.spec.ts:540:1 › phone fullscreen: real API result, root includes dialogs and external exit preserves subset (6.5s)
+
+
+  1) tests\e2e\phone-playability.spec.ts:174:3 › phone layout 844x390: readable Play and deliberate complete Whole cove 
+
+    Error: expect(received).not.toBeNull()
+
+    Received: null
+
+       at ui.ts:93
+
+      91 |   }
+      92 |   throw Error(`Natural Tab navigation did not reach ${id}; active=${await active(page)}`);
+    > 93 | }
+         |  ^
+      94 | export async function keyAct(page: Page, id: string) {
+      95 |   if ((id === 'board' || id === 'unload') && !(await page.locator(`#${id}`).isVisible())) {
+      96 |     const current = await page.locator('.map-target[aria-current="location"]').getAttribute('id');
+        at fullyVisible (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\ui.ts:93:22)
+        at press (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-playability.spec.ts:48:3)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-playability.spec.ts:209:9
+        at observed (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-playability.spec.ts:143:5)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-playability.spec.ts:188:7
+
+    Error Context: test-results\phone-playability-phone-la-cc57f-iberate-complete-Whole-cove\error-context.md
+
+  2) tests\e2e\phone-playability.spec.ts:540:1 › phone fullscreen: real API result, root includes dialogs and external exit preserves subset 
+
+    Error: locator.isChecked: Error: Not a checkbox or radio button
+    Call log:
+      - waiting for locator('#passenger-sheep-1')
+
+
+      572 |         await press(page, 'unload');
+      573 |         await press(page, 'passenger-sheep-1');
+    > 574 |         const selected = await page.locator('#passenger-sheep-1').isChecked();
+          |                                                                   ^
+      575 |         await page.evaluate(() => document.exitFullscreen());
+      576 |         await page.waitForTimeout(200);
+      577 |         expect(await page.evaluate(() => document.fullscreenElement)).toBeNull();
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-playability.spec.ts:574:67
+        at observed (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-playability.spec.ts:143:5)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-playability.spec.ts:553:5
+
+    Error Context: test-results\phone-playability-phone-fu-03acf-ernal-exit-preserves-subset\error-context.md
+
+  2 failed
+    tests\e2e\phone-playability.spec.ts:174:3 › phone layout 844x390: readable Play and deliberate complete Whole cove 
+    tests\e2e\phone-playability.spec.ts:540:1 › phone fullscreen: real API result, root includes dialogs and external exit preserves subset 

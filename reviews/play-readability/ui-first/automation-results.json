@@ -1,0 +1,178 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "-c",
+      ".cache/readability.config.ts",
+      "play-readability.spec.ts"
+    ],
+    "configFile": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\.cache\\readability.config.ts",
+    "rootDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/test-results/play-readability",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 240000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\play-readability",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "snapshotDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 240000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5270",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "deviceScaleFactor": 1,
+          "headless": true,
+          "launchOptions": {
+            "executablePath": "C:/Users/ernes/AppData/Local/ms-playwright/chromium-1217/chrome-win64/chrome.exe",
+            "args": [
+              "--use-angle=swiftshader",
+              "--enable-unsafe-swiftshader"
+            ]
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "reviews/play-readability/ui-first/automation-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "play-readability.spec.ts",
+      "file": "play-readability.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "native collapsed controls and free nearby inspection",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 3,
+                  "error": {
+                    "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> C:/Users/ernes/AppData/Local/ms-playwright/chromium-1217/chrome-win64/chrome.exe --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,AvoidCorsURLLoaderRestartOnRedirect,Translate,AutoDeElevate,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --use-angle=swiftshader --enable-unsafe-swiftshader --user-data-dir=C:\\Users\\ernes\\AppData\\Local\\Packages\\sandbox.{2a174bac-202a-4a5e-bfce-5b40790e53ec}\\AC\\Temp\\playwright_chromiumdev_profile-pqx6XM --remote-debugging-pipe --no-startup-window\n<launched> pid=20224\nCall log:\n\u001b[2m  - <launching> C:/Users/ernes/AppData/Local/ms-playwright/chromium-1217/chrome-win64/chrome.exe --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,AvoidCorsURLLoaderRestartOnRedirect,Translate,AutoDeElevate,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --use-angle=swiftshader --enable-unsafe-swiftshader --user-data-dir=C:\\Users\\ernes\\AppData\\Local\\Packages\\sandbox.{2a174bac-202a-4a5e-bfce-5b40790e53ec}\\AC\\Temp\\playwright_chromiumdev_profile-pqx6XM --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=20224\u001b[22m\n\u001b[2m  - [pid=20224] <gracefully close start>\u001b[22m\n\u001b[2m  - [pid=20224] <kill>\u001b[22m\n\u001b[2m  - [pid=20224] <will force kill>\u001b[22m\n\u001b[2m  - [pid=20224] <process did exit: exitCode=3221225506, signal=null>\u001b[22m\n\u001b[2m  - [pid=20224] starting temporary directories cleanup\u001b[22m\n\u001b[2m  - [pid=20224] finished temporary directories cleanup\u001b[22m\n\u001b[2m  - [pid=20224] <gracefully close end>\u001b[22m\n",
+                    "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> C:/Users/ernes/AppData/Local/ms-playwright/chromium-1217/chrome-win64/chrome.exe --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,AvoidCorsURLLoaderRestartOnRedirect,Translate,AutoDeElevate,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --use-angle=swiftshader --enable-unsafe-swiftshader --user-data-dir=C:\\Users\\ernes\\AppData\\Local\\Packages\\sandbox.{2a174bac-202a-4a5e-bfce-5b40790e53ec}\\AC\\Temp\\playwright_chromiumdev_profile-pqx6XM --remote-debugging-pipe --no-startup-window\n<launched> pid=20224\nCall log:\n\u001b[2m  - <launching> C:/Users/ernes/AppData/Local/ms-playwright/chromium-1217/chrome-win64/chrome.exe --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,AvoidCorsURLLoaderRestartOnRedirect,Translate,AutoDeElevate,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --use-angle=swiftshader --enable-unsafe-swiftshader --user-data-dir=C:\\Users\\ernes\\AppData\\Local\\Packages\\sandbox.{2a174bac-202a-4a5e-bfce-5b40790e53ec}\\AC\\Temp\\playwright_chromiumdev_profile-pqx6XM --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=20224\u001b[22m\n\u001b[2m  - [pid=20224] <gracefully close start>\u001b[22m\n\u001b[2m  - [pid=20224] <kill>\u001b[22m\n\u001b[2m  - [pid=20224] <will force kill>\u001b[22m\n\u001b[2m  - [pid=20224] <process did exit: exitCode=3221225506, signal=null>\u001b[22m\n\u001b[2m  - [pid=20224] starting temporary directories cleanup\u001b[22m\n\u001b[2m  - [pid=20224] finished temporary directories cleanup\u001b[22m\n\u001b[2m  - [pid=20224] <gracefully close end>\u001b[22m\n"
+                  },
+                  "errors": [
+                    {
+                      "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> C:/Users/ernes/AppData/Local/ms-playwright/chromium-1217/chrome-win64/chrome.exe --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,AvoidCorsURLLoaderRestartOnRedirect,Translate,AutoDeElevate,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --use-angle=swiftshader --enable-unsafe-swiftshader --user-data-dir=C:\\Users\\ernes\\AppData\\Local\\Packages\\sandbox.{2a174bac-202a-4a5e-bfce-5b40790e53ec}\\AC\\Temp\\playwright_chromiumdev_profile-pqx6XM --remote-debugging-pipe --no-startup-window\n<launched> pid=20224\nCall log:\n\u001b[2m  - <launching> C:/Users/ernes/AppData/Local/ms-playwright/chromium-1217/chrome-win64/chrome.exe --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,AvoidCorsURLLoaderRestartOnRedirect,Translate,AutoDeElevate,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --use-angle=swiftshader --enable-unsafe-swiftshader --user-data-dir=C:\\Users\\ernes\\AppData\\Local\\Packages\\sandbox.{2a174bac-202a-4a5e-bfce-5b40790e53ec}\\AC\\Temp\\playwright_chromiumdev_profile-pqx6XM --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=20224\u001b[22m\n\u001b[2m  - [pid=20224] <gracefully close start>\u001b[22m\n\u001b[2m  - [pid=20224] <kill>\u001b[22m\n\u001b[2m  - [pid=20224] <will force kill>\u001b[22m\n\u001b[2m  - [pid=20224] <process did exit: exitCode=3221225506, signal=null>\u001b[22m\n\u001b[2m  - [pid=20224] starting temporary directories cleanup\u001b[22m\n\u001b[2m  - [pid=20224] finished temporary directories cleanup\u001b[22m\n\u001b[2m  - [pid=20224] <gracefully close end>\u001b[22m\n"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T09:10:32.849Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\play-readability\\play-readability-native-co-f841b--and-free-nearby-inspection\\error-context.md"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\play-readability\\play-readability-native-co-f841b--and-free-nearby-inspection\\error-context.md"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "ceace6d1cce36bac2301-19716ab0db86643f61ea",
+          "file": "play-readability.spec.ts",
+          "line": 24,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-01T09:10:30.449Z",
+    "duration": 4194.5869999999995,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

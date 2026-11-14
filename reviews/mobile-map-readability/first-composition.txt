@@ -1,0 +1,33 @@
+
+Running 5 tests using 1 worker
+
+(node:33548) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\e2e\mobile-map.spec.ts:207:3 › matched composition reed-pier (5.2s)
+  ok 2 tests\e2e\mobile-map.spec.ts:207:3 › matched composition wide-whole (3.0s)
+  ok 3 tests\e2e\mobile-map.spec.ts:207:3 › matched composition harbor-quay (13.0s)
+  ok 4 tests\e2e\mobile-map.spec.ts:207:3 › matched composition reef-loaded (11.5s)
+  x  5 tests\e2e\mobile-map.spec.ts:236:1 › free whole-cove inspection across remaining Practice coves and desktop (40.9s)
+
+
+  1) tests\e2e\mobile-map.spec.ts:236:1 › free whole-cove inspection across remaining Practice coves and desktop 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "6c602593acdfd81cc8f618558ddd40a3c22da95dbcb7f591c9bfd4b05056eb26"
+    Received: "85f6c8a2350a1e2870b4fd7df98c4d9b051a1a38a23517d1cf3ac3c1f6d6e35c"
+
+      61 | });
+      62 | test.afterEach(() => {
+    > 63 |   if (!accepted) expect(runtimeIdentity().identity).toBe(source);
+         |                                                     ^
+      64 | });
+      65 |
+      66 | async function inspect(page: Page) {
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\mobile-map.spec.ts:63:53
+
+    Error Context: .cache\mobile-map-results\mobile-map-free-whole-cove-9b69a--Practice-coves-and-desktop\error-context.md
+
+  1 failed
+    tests\e2e\mobile-map.spec.ts:236:1 › free whole-cove inspection across remaining Practice coves and desktop 
+  4 passed (1.3m)

@@ -1,0 +1,60 @@
+
+> last-ferry@1.0.0 test:unit
+> vitest run
+
+
+ RUN  v5.0.5 C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry
+
+ ❯ tests/unit/asset-catalog.test.ts (5 tests | 1 failed) 2105ms
+   ❯ canonical asset catalog (5)
+     × keeps actual local sources, provenance, type detail and gallery evidence for each family 481ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/asset-catalog.test.ts > canonical asset catalog > keeps actual local sources, provenance, type detail and gallery evidence for each family
+AssertionError: expected [ …(18) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "model.ferry: missing or outside repository: reviews/two-shelters-prototype/final/390x844-turn2-play.png",
++   "model.ferry: missing or outside repository: reviews/two-shelters-prototype/final/780x320-turn6-play.png",
++   "model.rabbit: missing or outside repository: reviews/two-shelters-prototype/final/390x844-turn2-play.png",
++   "model.rabbit: missing or outside repository: reviews/two-shelters-prototype/final/780x320-turn6-play.png",
++   "model.pier-kit: missing or outside repository: reviews/two-shelters-prototype/final/390x844-turn2-play.png",
++   "model.pier-kit: missing or outside repository: reviews/two-shelters-prototype/final/780x320-turn6-play.png",
++   "terrain.coast: missing or outside repository: reviews/two-shelters-prototype/final/390x844-turn2-play.png",
++   "terrain.coast: missing or outside repository: reviews/two-shelters-prototype/final/780x320-turn6-play.png",
++   "indicator.routes: missing or outside repository: reviews/two-shelters-prototype/final/390x844-turn2-play.png",
++   "indicator.routes: missing or outside repository: reviews/two-shelters-prototype/final/780x320-turn6-play.png",
++   "motion.transfer: missing or outside repository: reviews/two-shelters-prototype/final/390x844-turn2-play.png",
++   "motion.transfer: missing or outside repository: reviews/two-shelters-prototype/final/780x320-turn6-play.png",
++   "ui.map-markers: missing or outside repository: reviews/two-shelters-prototype/final/390x844-turn2-play.png",
++   "ui.map-markers: missing or outside repository: reviews/two-shelters-prototype/final/780x320-turn6-play.png",
++   "ui.passenger-portraits: missing or outside repository: reviews/two-shelters-prototype/final/390x844-turn2-play.png",
++   "ui.passenger-portraits: missing or outside repository: reviews/two-shelters-prototype/final/780x320-turn6-play.png",
++   "model.beaver: missing or outside repository: reviews/two-shelters-prototype/final/390x844-turn2-play.png",
++   "model.beaver: missing or outside repository: reviews/two-shelters-prototype/final/780x320-turn6-play.png",
++ ]
+
+ ❯ tests/unit/asset-catalog.test.ts:11:46
+      9| describe('canonical asset catalog', () => {
+     10|   it('keeps actual local sources, provenance, type detail and gallery …
+     11|     expect(validateCatalog(catalog(), root)).toEqual([]);
+       |                                              ^
+     12|   });
+     13|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 44 passed (45)
+      Tests  1 failed | 427 passed (428)
+   Start at  16:13:00
+   Duration  19.57s (tests 90%, import 5%, transform 4%, worker 1%)
+
+    Isolate  45 workers spawned · ~699ms startup each (spawn + environment, per file)
+             at least ~1.40s faster with isolate: false — reuses workers across files instead of one per file
+

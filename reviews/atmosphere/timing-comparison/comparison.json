@@ -1,0 +1,4313 @@
+{
+  "source": {
+    "head": "7346b91c23331b7c1e8ad4b147c8fa4006767a89",
+    "runtimeHashes": {
+      "data/bellwater.level.json": "a716b3cda50c7fda9d5429a2316576fe2d93aced2287ac281fec5ed8ed8b4de0",
+      "data/bellwater/witnesses.json": "bccaa47b7c87579a4e661d35046d37c3d41684bf477a63afa852c349625f86c4",
+      "data/experiments/holding-pier-solution.json": "88179ae2c38883dce2a4de89d800f9e5b276a7cbc8a09ae81535e38bac1b952a",
+      "data/first-crossing.level.json": "403a19ddd7840a52f5706490d6e2f5a35ddf1a38dd20715b602fcc572f6167ab",
+      "data/holding-pier.level.json": "80d98e6c3a675eabb81dff75ef2df76b9ac90979d0ac1cbcc06a5603dc8fc81a",
+      "data/replays/full-boat-detour.json": "b88cb6c0a2935d2700526e8194fd57b97d436c1922da05a10d209ac1f48674a5",
+      "data/replays/harbor-first.json": "27bf293ba908464fb32097a6c92ec632f3611521094160abecb107780ea9e038",
+      "data/replays/last-safe-boarding.json": "73386dc35b4b495bcbaddbf8de50e768230b34f7598f67f8c871b3e19535ad31",
+      "data/replays/missed-sheep-deadline.json": "372f48fd32380d31189d461ff23ce39606033b3369278b245b4f7fe4ec6603b5",
+      "data/replays/wait-for-tide.json": "3dacc1cc212a57ecda08decac203b322d222d5a113ba60f2e4cafc9e01b59a9f",
+      "index.html": "73fed8f2910cacf1125237fa619e8966e55dff8d5ae248a9a611acd1202c1d78",
+      "package-lock.json": "fa75e13e3b5a563e3d99e14d514a205bb521344250c7479861e3e1507731a7f1",
+      "package.json": "c8f57d8c320535e0a245aad65e96327c6ab6a952002fd5daf02318c95cce3929",
+      "src/audio/atmosphere.ts": "98ea33040944c843878131dbd2c7a2f8f0fc01496195d96e8ba87915838e7aa6",
+      "src/audio/score.ts": "a6188eebfa64b958130a2ff918e4f9f637f58872cf731b4e66d6fd48caefb1f0",
+      "src/audio/sound.ts": "2173581a6ba0b08f7742a2c155085c1640b098c583dc2aff7baac7977c2cee2a",
+      "src/game/rules.ts": "aa37c820e121955416e964476de296bfd6b755ac569dcdc958b459884530a44b",
+      "src/game/session.ts": "96a670a82ceada27f7a0f750b45589b55e621256b97b9b7b26916221e4f3fde9",
+      "src/levels/level.ts": "ad0f978d63a96157c043484081b83ec363a9c82f165c916ff726e678742bb9a9",
+      "src/main.ts": "6c926163cb169f7100a810bd0478f71b2e9e9fdd137b6c07278a7e7c1bbaa515",
+      "src/scene/effects.ts": "7278c17462dbfc96b660c985826cfa5db86a5037847cb9e1ef1eb6a92c17bd76",
+      "src/scene/layout.ts": "0443fb8a1dc8bc96e8b7964686f2763ea3d44c54f400386c74e00eefa0ec7bb3",
+      "src/scene/models.ts": "b58807cb7b63dc2d10ce0625107b1033268f4f0582dfc4e7d3119dc8c4aff7da",
+      "src/scene/motion.ts": "70c0fdc7edd9aaba2b0d11ee6ed5ce109d0682188b2d96f0fac288d69d2ec118",
+      "src/scene/paths.ts": "cb907cdf1a03733e7714cb83d936fe5061c763522b6d76fb518124d8e692f39d",
+      "src/scene/scenery.ts": "5ab1963591082baaebdffd061ac48b945ec922d58cae04071f73db22d1a43e7c",
+      "src/scene/seabed.ts": "41495884533fdf34c82cd55216daeb6b2375539a67bf9f368dc7e7b94f191f65",
+      "src/scene/shore.ts": "58ada788c250ecbbd6c68fe02a522ab70e73ce0506ab37f225ab46f42f221913",
+      "src/scene/transitions.ts": "5436cb9c2b92ee8efc5108ae17f9ef37cef12c89b2a7b5b691d5f7068430c2b3",
+      "src/scene/water-shader.ts": "e35f9abb2525badf56ee9dfc093468ccb028a2177425976ec8aa126f038c0076",
+      "src/scene/water.ts": "9881acb23e5c748ee38ce6b2c30e87987b219ca9b696ec0eb734b979dfa44d70",
+      "src/scene/world.ts": "3b7b2365744a7ae78cca297e3a8fa0487eae9f2b0c1ac535f4915596114fff24",
+      "src/style.css": "ceef445279b00a7c9392ab0c5e9deb941f5d809cbc77e22ccdd482669d169923",
+      "src/ui/placement.ts": "8883a36d3c7b9ab475e078658ec48675f8fd98f02917a8632748ab78b008c87e",
+      "src/ui/presentation.ts": "623f11c1648f7afb6434fb08d86670e88b0386e03ab75eca9a390d987ea9fca7",
+      "vite.config.ts": "42d95c3568be6430b7d1fcc9e5168d3df4736d998cc6f01d20d0d3c554365f26"
+    },
+    "runtimeHash": "aa4a590f44d75894f70feec7e1da37f58aaa225e79e27bd58317c396aa987d3d"
+  },
+  "generatedAt": "2026-10-22T12:58:40.406Z",
+  "sourceUnchangedAcrossExecution": true,
+  "environment": {
+    "browser": "156.0.8078.4",
+    "viewport": [
+      1440,
+      900
+    ],
+    "dpr": 1,
+    "motion": "normal",
+    "renderer": "Chromium SwiftShader"
+  },
+  "results": [
+    {
+      "candidate": "slower",
+      "length": "short",
+      "cove": "holding-pier",
+      "filename": "reviews/atmosphere/timing-comparison/raw/slower-short.webm",
+      "crossings": [
+        {
+          "action": {
+            "type": "move",
+            "to": "rabbit-pier"
+          },
+          "wallMs": 1890,
+          "id": 3,
+          "plan": {
+            "duration": 1473.6132430286293,
+            "tideDuration": 550,
+            "recoveryDelay": 2473.6132430286293
+          },
+          "startedAt": 4638.29999999702,
+          "finishedAt": 6213.0999999940395,
+          "reason": "complete"
+        }
+      ],
+      "samples": [
+        {
+          "time": 4779.1,
+          "boatWorldPosition": [
+            3.0759577250604164,
+            0,
+            1.981010568734896
+          ],
+          "boatHeading": 1.5707963267948966,
+          "active": {
+            "edgeId": "shallows-rabbit",
+            "reverse": false,
+            "progress": 0.09249373989259987,
+            "distance": 0.07829543087643044,
+            "pathLength": 3.824088286857528,
+            "duration": 1473.6132430286293,
+            "elapsed": 136.3000000029806,
+            "tideDuration": 550,
+            "tideProgress": 0.24781818182360107,
+            "tangent": [
+              0.9701425001453319,
+              0,
+              -0.242535625036333
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "rabbit-pier"
+            },
+            "plan": {
+              "duration": 1473.6132430286293,
+              "tideDuration": 550,
+              "recoveryDelay": 2473.6132430286293
+            },
+            "startedAt": 4638.29999999702
+          }
+        },
+        {
+          "time": 4879.1,
+          "boatWorldPosition": [
+            3.3023787322493474,
+            0,
+            1.9244053169376631
+          ],
+          "boatHeading": 1.5707963267948966,
+          "active": {
+            "edgeId": "shallows-rabbit",
+            "reverse": false,
+            "progress": 0.16035415067071962,
+            "distance": 0.3116848630011052,
+            "pathLength": 3.824088286857528,
+            "duration": 1473.6132430286293,
+            "elapsed": 236.3000000029806,
+            "tideDuration": 550,
+            "tideProgress": 0.4296363636417829,
+            "tangent": [
+              0.9701425001453323,
+              0,
+              -0.24253562503633147
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "rabbit-pier"
+            },
+            "plan": {
+              "duration": 1473.6132430286293,
+              "tideDuration": 550,
+              "recoveryDelay": 2473.6132430286293
+            },
+            "startedAt": 4638.29999999702
+          }
+        },
+        {
+          "time": 4995.8,
+          "boatWorldPosition": [
+            3.6620461370631068,
+            0,
+            1.8344884657342233
+          ],
+          "boatHeading": 1.6650653032129934,
+          "active": {
+            "edgeId": "shallows-rabbit",
+            "reverse": false,
+            "progress": 0.23954725004878524,
+            "distance": 0.6824215380358344,
+            "pathLength": 3.824088286857528,
+            "duration": 1473.6132430286293,
+            "elapsed": 353.0000000029804,
+            "tideDuration": 550,
+            "tideProgress": 0.6418181818236007,
+            "tangent": [
+              0.9701425001453321,
+              0,
+              -0.24253562503633233
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "rabbit-pier"
+            },
+            "plan": {
+              "duration": 1473.6132430286293,
+              "tideDuration": 550,
+              "recoveryDelay": 2473.6132430286293
+            },
+            "startedAt": 4638.29999999702
+          }
+        },
+        {
+          "time": 5095.8,
+          "boatWorldPosition": [
+            3.9728560819081795,
+            0,
+            1.7567859795229552
+          ],
+          "boatHeading": 1.815774989921764,
+          "active": {
+            "edgeId": "shallows-rabbit",
+            "reverse": false,
+            "progress": 0.307407660826905,
+            "distance": 1.0027970960579926,
+            "pathLength": 3.824088286857528,
+            "duration": 1473.6132430286293,
+            "elapsed": 453.0000000029804,
+            "tideDuration": 550,
+            "tideProgress": 0.8236363636417826,
+            "tangent": [
+              0.9701425001453311,
+              0,
+              -0.242535625036336
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "rabbit-pier"
+            },
+            "plan": {
+              "duration": 1473.6132430286293,
+              "tideDuration": 550,
+              "recoveryDelay": 2473.6132430286293
+            },
+            "startedAt": 4638.29999999702
+          }
+        },
+        {
+          "time": 5162.5,
+          "boatWorldPosition": [
+            4.180166315119842,
+            0,
+            1.7049584212200395
+          ],
+          "boatHeading": 1.8157749899217608,
+          "active": {
+            "edgeId": "shallows-rabbit",
+            "reverse": false,
+            "progress": 0.35267055481591075,
+            "distance": 1.2164875932587713,
+            "pathLength": 3.824088286857528,
+            "duration": 1473.6132430286293,
+            "elapsed": 519.7000000029802,
+            "tideDuration": 550,
+            "tideProgress": 0.9449090909145095,
+            "tangent": [
+              0.9701425001453319,
+              0,
+              -0.242535625036333
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "rabbit-pier"
+            },
+            "plan": {
+              "duration": 1473.6132430286293,
+              "tideDuration": 550,
+              "recoveryDelay": 2473.6132430286293
+            },
+            "startedAt": 4638.29999999702
+          }
+        },
+        {
+          "time": 5212.5,
+          "boatWorldPosition": [
+            4.335571287542378,
+            0,
+            1.6661071781144055
+          ],
+          "boatHeading": 1.8157749899217608,
+          "active": {
+            "edgeId": "shallows-rabbit",
+            "reverse": false,
+            "progress": 0.38660076020497064,
+            "distance": 1.3766753722698504,
+            "pathLength": 3.824088286857528,
+            "duration": 1473.6132430286293,
+            "elapsed": 569.7000000029802,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.9701425001453319,
+              0,
+              -0.242535625036333
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "rabbit-pier"
+            },
+            "plan": {
+              "duration": 1473.6132430286293,
+              "tideDuration": 550,
+              "recoveryDelay": 2473.6132430286293
+            },
+            "startedAt": 4638.29999999702
+          }
+        },
+        {
+          "time": 5429.1,
+          "boatWorldPosition": [
+            4.97663827980149,
+            0,
+            1.4162120500580129
+          ],
+          "boatHeading": 2.2116474108150186,
+          "active": {
+            "edgeId": "shallows-rabbit",
+            "reverse": false,
+            "progress": 0.5335864099503783,
+            "distance": 2.070608830945847,
+            "pathLength": 3.824088286857528,
+            "duration": 1473.6132430286293,
+            "elapsed": 786.3000000029806,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.801587203952008,
+              0,
+              -0.5978778758746656
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "rabbit-pier"
+            },
+            "plan": {
+              "duration": 1473.6132430286293,
+              "tideDuration": 550,
+              "recoveryDelay": 2473.6132430286293
+            },
+            "startedAt": 4638.29999999702
+          }
+        },
+        {
+          "time": 5529.2,
+          "boatWorldPosition": [
+            5.203050219508717,
+            0,
+            1.1906273318372609
+          ],
+          "boatHeading": 2.490912410776738,
+          "active": {
+            "edgeId": "shallows-rabbit",
+            "reverse": false,
+            "progress": 0.6015146811392758,
+            "distance": 2.3913047645260246,
+            "pathLength": 3.824088286857528,
+            "duration": 1473.6132430286293,
+            "elapsed": 886.40000000298,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.6057277959577948,
+              0,
+              -0.79567194069171
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "rabbit-pier"
+            },
+            "plan": {
+              "duration": 1473.6132430286293,
+              "tideDuration": 550,
+              "recoveryDelay": 2473.6132430286293
+            },
+            "startedAt": 4638.29999999702
+          }
+        },
+        {
+          "time": 5645.8,
+          "boatWorldPosition": [
+            5.412447339808608,
+            0,
+            0.8813289902870879
+          ],
+          "boatHeading": 2.553590050042228,
+          "active": {
+            "edgeId": "shallows-rabbit",
+            "reverse": false,
+            "progress": 0.6806399201065636,
+            "distance": 2.7648626651798622,
+            "pathLength": 3.824088286857528,
+            "duration": 1473.6132430286293,
+            "elapsed": 1003.0000000029804,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.5547001962252273,
+              0,
+              -0.8320502943378449
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "rabbit-pier"
+            },
+            "plan": {
+              "duration": 1473.6132430286293,
+              "tideDuration": 550,
+              "recoveryDelay": 2473.6132430286293
+            },
+            "startedAt": 4638.29999999702
+          }
+        },
+        {
+          "time": 5745.8,
+          "boatWorldPosition": [
+            5.590159724709267,
+            0,
+            0.6147604129360998
+          ],
+          "boatHeading": 2.099284770602522,
+          "active": {
+            "edgeId": "shallows-rabbit",
+            "reverse": false,
+            "progress": 0.7485003308846834,
+            "distance": 3.0852382232020203,
+            "pathLength": 3.824088286857528,
+            "duration": 1473.6132430286293,
+            "elapsed": 1103.0000000029804,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.5547001962252273,
+              0,
+              -0.8320502943378449
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "rabbit-pier"
+            },
+            "plan": {
+              "duration": 1473.6132430286293,
+              "tideDuration": 550,
+              "recoveryDelay": 2473.6132430286293
+            },
+            "startedAt": 4638.29999999702
+          }
+        },
+        {
+          "time": 5845.8,
+          "boatWorldPosition": [
+            5.76785375326601,
+            0,
+            0.3482193701009852
+          ],
+          "boatHeading": 1.5707963267948966,
+          "active": {
+            "edgeId": "shallows-rabbit",
+            "reverse": false,
+            "progress": 0.8163607416628031,
+            "distance": 3.4055806888545703,
+            "pathLength": 3.824088286857528,
+            "duration": 1473.6132430286293,
+            "elapsed": 1203.0000000029804,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.5547001962252317,
+              0,
+              -0.832050294337842
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "rabbit-pier"
+            },
+            "plan": {
+              "duration": 1473.6132430286293,
+              "tideDuration": 550,
+              "recoveryDelay": 2473.6132430286293
+            },
+            "startedAt": 4638.29999999702
+          }
+        },
+        {
+          "time": 5929.1,
+          "boatWorldPosition": [
+            5.9008496315295815,
+            0,
+            0.1487255527056278
+          ],
+          "boatHeading": 1.5707963267948966,
+          "active": {
+            "edgeId": "shallows-rabbit",
+            "reverse": false,
+            "progress": 0.8728884638409771,
+            "distance": 3.6453424181069076,
+            "pathLength": 3.824088286857528,
+            "duration": 1473.6132430286293,
+            "elapsed": 1286.3000000029806,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.5547001962252354,
+              0,
+              -0.8320502943378395
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "rabbit-pier"
+            },
+            "plan": {
+              "duration": 1473.6132430286293,
+              "tideDuration": 550,
+              "recoveryDelay": 2473.6132430286293
+            },
+            "startedAt": 4638.29999999702
+          }
+        },
+        {
+          "time": 6079.1,
+          "boatWorldPosition": [
+            5.998900780488618,
+            0,
+            0.0016488292670732707
+          ],
+          "boatHeading": 1.5707963267948966,
+          "active": {
+            "edgeId": "shallows-rabbit",
+            "reverse": false,
+            "progress": 0.9746790800081566,
+            "distance": 3.8221066407018887,
+            "pathLength": 3.824088286857528,
+            "duration": 1473.6132430286293,
+            "elapsed": 1436.3000000029806,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.5547001962252239,
+              0,
+              -0.8320502943378472
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "rabbit-pier"
+            },
+            "plan": {
+              "duration": 1473.6132430286293,
+              "tideDuration": 550,
+              "recoveryDelay": 2473.6132430286293
+            },
+            "startedAt": 4638.29999999702
+          }
+        }
+      ],
+      "originalSpeed": true,
+      "audio": "Silent screen recording; actual runtime master mix recorded separately"
+    },
+    {
+      "candidate": "slower",
+      "length": "long",
+      "cove": "bellwater",
+      "filename": "reviews/atmosphere/timing-comparison/raw/slower-long.webm",
+      "crossings": [
+        {
+          "action": {
+            "type": "move",
+            "to": "east-buoy"
+          },
+          "wallMs": 2520,
+          "id": 2,
+          "plan": {
+            "duration": 2267.305938938353,
+            "tideDuration": 550,
+            "recoveryDelay": 3267.305938938353
+          },
+          "startedAt": 3436.7999999970198,
+          "finishedAt": 5726.899999991059,
+          "reason": "complete"
+        },
+        {
+          "action": {
+            "type": "move",
+            "to": "west-buoy"
+          },
+          "wallMs": 2638,
+          "id": 3,
+          "plan": {
+            "duration": 2267.305938938353,
+            "tideDuration": 550,
+            "recoveryDelay": 3267.305938938353
+          },
+          "startedAt": 5961.899999991059,
+          "finishedAt": 8314.70000000298,
+          "reason": "complete"
+        }
+      ],
+      "samples": [
+        {
+          "time": 3515.7,
+          "boatWorldPosition": [
+            -4.491769606508955,
+            0,
+            3.9016460786982092
+          ],
+          "boatHeading": 1.5707963267948966,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.030829540382058075,
+            "distance": 0.0083933874030777,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 69.90000000298005,
+            "tideDuration": 550,
+            "tideProgress": 0.12709090909632736,
+            "tangent": [
+              0.9805806756909198,
+              0,
+              0.19611613513818574
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 3436.7999999970198
+          }
+        },
+        {
+          "time": 3615.7,
+          "boatWorldPosition": [
+            -4.396741822347602,
+            0,
+            3.9206516355304797
+          ],
+          "boatHeading": 1.5707963267948966,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.07493474836595466,
+            "distance": 0.10530309255752113,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 169.90000000298005,
+            "tideDuration": 550,
+            "tideProgress": 0.3089090909145092,
+            "tangent": [
+              0.9805806756909207,
+              0,
+              0.19611613513818138
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 3436.7999999970198
+          }
+        },
+        {
+          "time": 3815.7,
+          "boatWorldPosition": [
+            -3.7425156192366575,
+            0,
+            4.051496876152669
+          ],
+          "boatHeading": 1.4467887161915869,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.16314516433374784,
+            "distance": 0.7724855277508063,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 369.90000000298005,
+            "tideDuration": 550,
+            "tideProgress": 0.6725454545508728,
+            "tangent": [
+              0.980580675690919,
+              0,
+              0.19611613513818987
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 3436.7999999970198
+          }
+        },
+        {
+          "time": 3832.4,
+          "boatWorldPosition": [
+            -3.664591477799628,
+            0,
+            4.067081704440074
+          ],
+          "boatHeading": 1.408608472143801,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.1705107340670587,
+            "distance": 0.8519528713042815,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 386.6000000029803,
+            "tideDuration": 550,
+            "tideProgress": 0.7029090909145097,
+            "tangent": [
+              0.9805806756909216,
+              0,
+              0.19611613513817724
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 3436.7999999970198
+          }
+        },
+        {
+          "time": 3915.7,
+          "boatWorldPosition": [
+            -3.2613159575517523,
+            0,
+            4.1477368084896495
+          ],
+          "boatHeading": 1.373400766945014,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.20725037231764443,
+            "distance": 1.2632148207239218,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 469.90000000298005,
+            "tideDuration": 550,
+            "tideProgress": 0.8543636363690547,
+            "tangent": [
+              0.9805806756909198,
+              0,
+              0.19611613513818596
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 3436.7999999970198
+          }
+        },
+        {
+          "time": 4015.7,
+          "boatWorldPosition": [
+            -2.7746145222646095,
+            0,
+            4.245077095547078
+          ],
+          "boatHeading": 1.3734007669450166,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.25135558030154104,
+            "distance": 1.759554843888474,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 569.90000000298,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.9805806756909203,
+              0,
+              0.19611613513818335
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 3436.7999999970198
+          }
+        },
+        {
+          "time": 4115.7,
+          "boatWorldPosition": [
+            -2.2879130869774666,
+            0,
+            4.3424173826045065
+          ],
+          "boatHeading": 1.3734007669450172,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.2954607882854376,
+            "distance": 2.2558948670530254,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 669.90000000298,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.9805806756909204,
+              0,
+              0.19611613513818268
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 3436.7999999970198
+          }
+        },
+        {
+          "time": 4232.4,
+          "boatWorldPosition": [
+            -1.7199325119973707,
+            0,
+            4.456013497600525
+          ],
+          "boatHeading": 1.3734007669450141,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.34693156600264485,
+            "distance": 2.835123674086057,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 786.6000000029799,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.9805806756909198,
+              0,
+              0.19611613513818574
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 3436.7999999970198
+          }
+        },
+        {
+          "time": 4332.3,
+          "boatWorldPosition": [
+            -1.2337177781455113,
+            0,
+            4.553256444370897
+          ],
+          "boatHeading": 1.373400766945022,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.3909926687785578,
+            "distance": 3.330967357227447,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 886.5000000029804,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.9805806756909213,
+              0,
+              0.19611613513817813
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 3436.7999999970198
+          }
+        },
+        {
+          "time": 4432.4,
+          "boatWorldPosition": [
+            -0.746529641423084,
+            0,
+            4.650694071715383
+          ],
+          "boatHeading": 1.3754318438647384,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.435141981970438,
+            "distance": 3.8278037204151603,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 986.6000000029799,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.9809769797916965,
+              0,
+              0.19412409721299767
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 3436.7999999970198
+          }
+        },
+        {
+          "time": 4549,
+          "boatWorldPosition": [
+            -0.17354580897008445,
+            0,
+            4.7292036942365625
+          ],
+          "boatHeading": 1.4988262091017526,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.48656865447966163,
+            "distance": 4.40653618742503,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 1103.2000000029802,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.9974112687728633,
+              0,
+              0.07190800320483813
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 3436.7999999970198
+          }
+        },
+        {
+          "time": 4699,
+          "boatWorldPosition": [
+            0.5700446999008297,
+            0,
+            4.720580445350084
+          ],
+          "boatHeading": 1.665314466742116,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.5527264664555065,
+            "distance": 5.151046222171859,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 1253.2000000029802,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.9955364850626911,
+              0,
+              -0.09437747034659409
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 3436.7999999970198
+          }
+        },
+        {
+          "time": 4799,
+          "boatWorldPosition": [
+            1.0624348426770522,
+            0,
+            4.658342020976392
+          ],
+          "boatHeading": 1.7033478590915714,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.5968316744394031,
+            "distance": 5.647386245336411,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 1353.2000000029802,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.9912279006826346,
+              0,
+              -0.13216372009101868
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 3436.7999999970198
+          }
+        },
+        {
+          "time": 4899,
+          "boatWorldPosition": [
+            1.5544209218632221,
+            0,
+            4.592743877084904
+          ],
+          "boatHeading": 1.7033478590915752,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.6409368824232997,
+            "distance": 6.143726268500963,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 1453.2000000029802,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.9912279006826341,
+              0,
+              -0.13216372009102242
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 3436.7999999970198
+          }
+        },
+        {
+          "time": 4999,
+          "boatWorldPosition": [
+            2.0464070010493924,
+            0,
+            4.527145733193414
+          ],
+          "boatHeading": 1.703347859091578,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.6850420904071963,
+            "distance": 6.640066291665516,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 1553.2000000029802,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.9912279006826337,
+              0,
+              -0.13216372009102528
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 3436.7999999970198
+          }
+        },
+        {
+          "time": 5132.3,
+          "boatWorldPosition": [
+            2.7022244446045534,
+            0,
+            4.439703407386059
+          ],
+          "boatHeading": 1.7033478590915683,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.7438343326497305,
+            "distance": 7.301687542543863,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 1686.5000000029804,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.991227900682635,
+              0,
+              -0.1321637200910156
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 3436.7999999970198
+          }
+        },
+        {
+          "time": 5215.7,
+          "boatWorldPosition": [
+            3.1125408346458157,
+            0,
+            4.384994555380557
+          ],
+          "boatHeading": 1.7033478590915718,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.7806180761083001,
+            "distance": 7.715635121863097,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 1769.90000000298,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.9912279006826346,
+              0,
+              -0.13216372009101912
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 3436.7999999970198
+          }
+        },
+        {
+          "time": 5282.4,
+          "boatWorldPosition": [
+            3.440695549448273,
+            0,
+            4.341240593406897
+          ],
+          "boatHeading": 1.703347859091569,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.810036249833559,
+            "distance": 8.046693917299006,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 1836.6000000029799,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.9912279006826349,
+              0,
+              -0.13216372009101626
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 3436.7999999970198
+          }
+        },
+        {
+          "time": 5332.3,
+          "boatWorldPosition": [
+            3.683078314196328,
+            0,
+            4.308922891440489
+          ],
+          "boatHeading": 1.6713624973105583,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.8320447486175238,
+            "distance": 8.291221704078547,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 1886.5000000029804,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.9912279006826342,
+              0,
+              -0.13216372009102134
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 3436.7999999970198
+          }
+        },
+        {
+          "time": 5432.3,
+          "boatWorldPosition": [
+            4.1043101432552405,
+            0,
+            4.252758647565968
+          ],
+          "boatHeading": 1.5707963267948966,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.8761499566014203,
+            "distance": 8.716181321103875,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 1986.5000000029804,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.9912279006826353,
+              0,
+              -0.13216372009101274
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 3436.7999999970198
+          }
+        },
+        {
+          "time": 5532.3,
+          "boatWorldPosition": [
+            4.3761858370264335,
+            0,
+            4.216508555063142
+          ],
+          "boatHeading": 1.5707963267948966,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.9202551645853169,
+            "distance": 8.990463041366148,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 2086.5000000029804,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.9912279006826341,
+              0,
+              -0.13216372009102242
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 3436.7999999970198
+          }
+        },
+        {
+          "time": 6115.6,
+          "boatWorldPosition": [
+            4.435596423696278,
+            0,
+            4.208587143507163
+          ],
+          "boatHeading": 1.5707963267948966,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.06298223700231893,
+            "distance": 0.06497353056685487,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 142.8000000029806,
+            "tideDuration": 550,
+            "tideProgress": 0.2596363636417829,
+            "tangent": [
+              -0.9912279006826352,
+              0,
+              0.13216372009101396
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 5961.899999991059
+          }
+        },
+        {
+          "time": 6215.7,
+          "boatWorldPosition": [
+            4.227179102787038,
+            0,
+            4.236376119628395
+          ],
+          "boatHeading": 1.5707963267948966,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.10713155019419918,
+            "distance": 0.2752352884993225,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 242.90000000298005,
+            "tideDuration": 550,
+            "tideProgress": 0.44163636364178194,
+            "tangent": [
+              -0.9912279006826342,
+              0,
+              0.13216372009102098
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 5961.899999991059
+          }
+        },
+        {
+          "time": 6232.3,
+          "boatWorldPosition": [
+            4.176260846621702,
+            0,
+            4.24316522045044
+          ],
+          "boatHeading": 1.5707963267948966,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.11445301471952617,
+            "distance": 0.32660415748522514,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 259.5000000029804,
+            "tideDuration": 550,
+            "tideProgress": 0.47181818182360075,
+            "tangent": [
+              -0.991227900682634,
+              0,
+              0.13216372009102276
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 5961.899999991059
+          }
+        },
+        {
+          "time": 6415.6,
+          "boatWorldPosition": [
+            3.3811944526020867,
+            0,
+            4.349174072986388
+          ],
+          "boatHeading": -1.4382447944982184,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.1952978609540087,
+            "distance": 1.128706674446331,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 442.8000000029806,
+            "tideDuration": 550,
+            "tideProgress": 0.8050909090963284,
+            "tangent": [
+              -0.9912279006826341,
+              0,
+              0.13216372009102187
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 5961.899999991059
+          }
+        },
+        {
+          "time": 6515.6,
+          "boatWorldPosition": [
+            2.889208373415918,
+            0,
+            4.414772216877878
+          ],
+          "boatHeading": -1.4382447944982193,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.2394030689379053,
+            "distance": 1.625046697610883,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 542.8000000029806,
+            "tideDuration": 550,
+            "tideProgress": 0.9869090909145102,
+            "tangent": [
+              -0.9912279006826342,
+              0,
+              0.13216372009102098
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 5961.899999991059
+          }
+        },
+        {
+          "time": 6632.2,
+          "boatWorldPosition": [
+            2.315552605084849,
+            0,
+            4.491259652655353
+          ],
+          "boatHeading": -1.4382447944982273,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.2908297414471285,
+            "distance": 2.203779164620748,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 659.40000000298,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              -0.9912279006826353,
+              0,
+              0.13216372009101307
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 5961.899999991059
+          }
+        },
+        {
+          "time": 6748.9,
+          "boatWorldPosition": [
+            1.7414048506745914,
+            0,
+            4.567812686576721
+          ],
+          "boatHeading": -1.4382447944982193,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.34230051916433574,
+            "distance": 2.7830079716537797,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 776.1000000029799,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              -0.9912279006826342,
+              0,
+              0.13216372009102098
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 5961.899999991059
+          }
+        },
+        {
+          "time": 6848.9,
+          "boatWorldPosition": [
+            1.2494187714884222,
+            0,
+            4.63341083046821
+          ],
+          "boatHeading": -1.4382447944982282,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.3864057271482323,
+            "distance": 3.2793479948183313,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 876.1000000029799,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              -0.9912279006826354,
+              0,
+              0.13216372009101218
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 5961.899999991059
+          }
+        },
+        {
+          "time": 6932.3,
+          "boatWorldPosition": [
+            0.8391023814471539,
+            0,
+            4.688119682473713
+          ],
+          "boatHeading": -1.43824479449823,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.4231894706068023,
+            "distance": 3.6932955741375695,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 959.5000000029804,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              -0.9912279006826357,
+              0,
+              0.13216372009101043
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 5961.899999991059
+          }
+        },
+        {
+          "time": 7032.2,
+          "boatWorldPosition": [
+            0.3458053343552847,
+            0,
+            4.7362774486315615
+          ],
+          "boatHeading": -1.5260500860535382,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.46725057338271486,
+            "distance": 4.189139257278955,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 1059.40000000298,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              -0.9989990539964936,
+              0,
+              0.04473131022126354
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 5961.899999991059
+          }
+        },
+        {
+          "time": 7132.2,
+          "boatWorldPosition": [
+            -0.15024817676451444,
+            0,
+            4.73087438149674
+          ],
+          "boatHeading": -1.637523527488809,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.5113557813666114,
+            "distance": 4.685479280443508,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 1159.40000000298,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              -0.9977745662598646,
+              0,
+              -0.06667769435830113
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 5961.899999991059
+          }
+        },
+        {
+          "time": 7248.9,
+          "boatWorldPosition": [
+            -0.7240983134081168,
+            0,
+            4.655105826724911
+          ],
+          "boatHeading": -1.7634381281910052,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.5628265590838186,
+            "distance": 5.264708087476539,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 1276.1000000029799,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              -0.9815018812471368,
+              0,
+              -0.1914524930846588
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 5961.899999991059
+          }
+        },
+        {
+          "time": 7365.6,
+          "boatWorldPosition": [
+            -1.2920930455107758,
+            0,
+            4.541581390897845
+          ],
+          "boatHeading": -1.7681918866447779,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.6142973368010263,
+            "distance": 5.843936894509575,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 1392.8000000029806,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              -0.98058067569092,
+              0,
+              -0.19611613513818477
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 5961.899999991059
+          }
+        },
+        {
+          "time": 7465.6,
+          "boatWorldPosition": [
+            -1.77879448079792,
+            0,
+            4.444241103840415
+          ],
+          "boatHeading": -1.7681918866447788,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.6584025447849229,
+            "distance": 6.340276917674127,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 1492.8000000029806,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              -0.9805806756909199,
+              0,
+              -0.19611613513818565
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 5961.899999991059
+          }
+        },
+        {
+          "time": 7598.9,
+          "boatWorldPosition": [
+            -2.427567494035679,
+            0,
+            4.314486501192864
+          ],
+          "boatHeading": -1.7681918866447743,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.7171947870274568,
+            "distance": 7.001898168552471,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 1626.1000000029799,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              -0.9805806756909207,
+              0,
+              -0.1961161351381813
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 5961.899999991059
+          }
+        },
+        {
+          "time": 7682.2,
+          "boatWorldPosition": [
+            -2.832989789629869,
+            0,
+            4.233402042074026
+          ],
+          "boatHeading": -1.7681918866447788,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.7539344252780427,
+            "distance": 7.415349407848543,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 1709.40000000298,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              -0.9805806756909199,
+              0,
+              -0.19611613513818565
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 5961.899999991059
+          }
+        },
+        {
+          "time": 7798.9,
+          "boatWorldPosition": [
+            -3.400970364609964,
+            0,
+            4.119805927078007
+          ],
+          "boatHeading": -1.7681918866447708,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.8054052029952499,
+            "distance": 7.9945782148815745,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 1826.1000000029799,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              -0.9805806756909214,
+              0,
+              -0.1961161351381778
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 5961.899999991059
+          }
+        },
+        {
+          "time": 7898.9,
+          "boatWorldPosition": [
+            -3.8707782689098282,
+            0,
+            4.025844346218034
+          ],
+          "boatHeading": 0.636801873057247,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.8495104109791465,
+            "distance": 8.473690149214603,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 1926.1000000029799,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              -0.9805806756909212,
+              0,
+              -0.1961161351381787
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 5961.899999991059
+          }
+        },
+        {
+          "time": 7998.9,
+          "boatWorldPosition": [
+            -4.234993545172007,
+            0,
+            3.9530012909655983
+          ],
+          "boatHeading": 1.5707963267948966,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.8936156189630431,
+            "distance": 8.84511830937649,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 2026.1000000029799,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              -0.9805806756909194,
+              0,
+              -0.19611613513818738
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 5961.899999991059
+          }
+        },
+        {
+          "time": 8098.9,
+          "boatWorldPosition": [
+            -4.438261489097413,
+            0,
+            3.9123477021805173
+          ],
+          "boatHeading": 1.5707963267948966,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.9377208269469397,
+            "distance": 9.052411751889196,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 2126.10000000298,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              -0.98058067569092,
+              0,
+              -0.19611613513818477
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 5961.899999991059
+          }
+        },
+        {
+          "time": 8215.5,
+          "boatWorldPosition": [
+            -4.499620447956656,
+            0,
+            3.9000759104086686
+          ],
+          "boatHeading": 1.5707963267948966,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.9891474994561633,
+            "distance": 9.1149858576006,
+            "pathLength": 9.115372926255686,
+            "duration": 2267.305938938353,
+            "elapsed": 2242.7000000029802,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              -0.9805806756909199,
+              0,
+              -0.19611613513818565
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2267.305938938353,
+              "tideDuration": 550,
+              "recoveryDelay": 3267.305938938353
+            },
+            "startedAt": 5961.899999991059
+          }
+        }
+      ],
+      "originalSpeed": true,
+      "audio": "Silent screen recording; actual runtime master mix recorded separately"
+    },
+    {
+      "candidate": "restrained",
+      "length": "short",
+      "cove": "holding-pier",
+      "filename": "reviews/atmosphere/timing-comparison/raw/restrained-short.webm",
+      "crossings": [
+        {
+          "action": {
+            "type": "move",
+            "to": "rabbit-pier"
+          },
+          "wallMs": 1650,
+          "id": 3,
+          "plan": {
+            "duration": 1335.372360160054,
+            "tideDuration": 550,
+            "recoveryDelay": 2335.372360160054
+          },
+          "startedAt": 4977.20000000298,
+          "finishedAt": 6410.100000008941,
+          "reason": "complete"
+        }
+      ],
+      "samples": [
+        {
+          "time": 5055.6,
+          "boatWorldPosition": [
+            3.0051756096624107,
+            0,
+            1.9987060975843973
+          ],
+          "boatHeading": 1.5707963267948966,
+          "active": {
+            "edgeId": "shallows-rabbit",
+            "reverse": false,
+            "progress": 0.035570602933077365,
+            "distance": 0.005334896328771845,
+            "pathLength": 3.824088286857528,
+            "duration": 1335.372360160054,
+            "elapsed": 47.49999999105967,
+            "tideDuration": 550,
+            "tideProgress": 0.08636363634738121,
+            "tangent": [
+              0.9701425001453324,
+              0,
+              -0.24253562503633105
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "rabbit-pier"
+            },
+            "plan": {
+              "duration": 1335.372360160054,
+              "tideDuration": 550,
+              "recoveryDelay": 2335.372360160054
+            },
+            "startedAt": 4977.20000000298
+          }
+        },
+        {
+          "time": 5139,
+          "boatWorldPosition": [
+            3.0886767721555515,
+            0,
+            1.9778308069611121
+          ],
+          "boatHeading": 1.5707963267948966,
+          "active": {
+            "edgeId": "shallows-rabbit",
+            "reverse": false,
+            "progress": 0.09802509314733007,
+            "distance": 0.0914059245340425,
+            "pathLength": 3.824088286857528,
+            "duration": 1335.372360160054,
+            "elapsed": 130.8999999910593,
+            "tideDuration": 550,
+            "tideProgress": 0.2379999999837442,
+            "tangent": [
+              0.9701425001453319,
+              0,
+              -0.242535625036333
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "rabbit-pier"
+            },
+            "plan": {
+              "duration": 1335.372360160054,
+              "tideDuration": 550,
+              "recoveryDelay": 2335.372360160054
+            },
+            "startedAt": 4977.20000000298
+          }
+        },
+        {
+          "time": 5239,
+          "boatWorldPosition": [
+            3.3574458013057,
+            0,
+            1.910638549673575
+          ],
+          "boatHeading": 1.5707963267948966,
+          "active": {
+            "edgeId": "shallows-rabbit",
+            "reverse": false,
+            "progress": 0.17291057302053509,
+            "distance": 0.36844669855423606,
+            "pathLength": 3.824088286857528,
+            "duration": 1335.372360160054,
+            "elapsed": 230.8999999910593,
+            "tideDuration": 550,
+            "tideProgress": 0.419818181801926,
+            "tangent": [
+              0.9701425001453319,
+              0,
+              -0.242535625036333
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "rabbit-pier"
+            },
+            "plan": {
+              "duration": 1335.372360160054,
+              "tideDuration": 550,
+              "recoveryDelay": 2335.372360160054
+            },
+            "startedAt": 4977.20000000298
+          }
+        },
+        {
+          "time": 5405.6,
+          "boatWorldPosition": [
+            3.9282552698247297,
+            0,
+            1.7679361825438178
+          ],
+          "boatHeading": 1.811482876312083,
+          "active": {
+            "edgeId": "shallows-rabbit",
+            "reverse": false,
+            "progress": 0.2976697824892949,
+            "distance": 0.9568236312558955,
+            "pathLength": 3.824088286857528,
+            "duration": 1335.372360160054,
+            "elapsed": 397.49999999105967,
+            "tideDuration": 550,
+            "tideProgress": 0.7227272727110176,
+            "tangent": [
+              0.9701425001453321,
+              0,
+              -0.24253562503633233
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "rabbit-pier"
+            },
+            "plan": {
+              "duration": 1335.372360160054,
+              "tideDuration": 550,
+              "recoveryDelay": 2335.372360160054
+            },
+            "startedAt": 4977.20000000298
+          }
+        },
+        {
+          "time": 5522.3,
+          "boatWorldPosition": [
+            4.328519605389039,
+            0,
+            1.6678700986527402
+          ],
+          "boatHeading": 1.8157749899217608,
+          "active": {
+            "edgeId": "shallows-rabbit",
+            "reverse": false,
+            "progress": 0.385061137501325,
+            "distance": 1.3694066646807257,
+            "pathLength": 3.824088286857528,
+            "duration": 1335.372360160054,
+            "elapsed": 514.1999999910595,
+            "tideDuration": 550,
+            "tideProgress": 0.9349090908928355,
+            "tangent": [
+              0.9701425001453319,
+              0,
+              -0.242535625036333
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "rabbit-pier"
+            },
+            "plan": {
+              "duration": 1335.372360160054,
+              "tideDuration": 550,
+              "recoveryDelay": 2335.372360160054
+            },
+            "startedAt": 4977.20000000298
+          }
+        },
+        {
+          "time": 5639,
+          "boatWorldPosition": [
+            4.725465554944643,
+            0,
+            1.5566791712009576
+          ],
+          "boatHeading": 1.952859377497386,
+          "active": {
+            "edgeId": "shallows-rabbit",
+            "reverse": false,
+            "progress": 0.47245249251335514,
+            "distance": 1.7819896981055554,
+            "pathLength": 3.824088286857528,
+            "duration": 1335.372360160054,
+            "elapsed": 630.8999999910593,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.9278974321039563,
+              0,
+              -0.37283556093120185
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "rabbit-pier"
+            },
+            "plan": {
+              "duration": 1335.372360160054,
+              "tideDuration": 550,
+              "recoveryDelay": 2335.372360160054
+            },
+            "startedAt": 4977.20000000298
+          }
+        },
+        {
+          "time": 5755.7,
+          "boatWorldPosition": [
+            5.071666713401437,
+            0,
+            1.3367337783902884
+          ],
+          "boatHeading": 2.3235494376483716,
+          "active": {
+            "edgeId": "shallows-rabbit",
+            "reverse": false,
+            "progress": 0.5598438475253852,
+            "distance": 2.1945727315303856,
+            "pathLength": 3.824088286857528,
+            "duration": 1335.372360160054,
+            "elapsed": 747.5999999910591,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.7298094712163262,
+              0,
+              -0.6836505947652984
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "rabbit-pier"
+            },
+            "plan": {
+              "duration": 1335.372360160054,
+              "tideDuration": 550,
+              "recoveryDelay": 2335.372360160054
+            },
+            "startedAt": 4977.20000000298
+          }
+        },
+        {
+          "time": 5855.6,
+          "boatWorldPosition": [
+            5.292020880465772,
+            0,
+            1.061968679301341
+          ],
+          "boatHeading": 2.5535900500422306,
+          "active": {
+            "edgeId": "shallows-rabbit",
+            "reverse": false,
+            "progress": 0.6346544419187174,
+            "distance": 2.5477607781382763,
+            "pathLength": 3.824088286857528,
+            "duration": 1335.372360160054,
+            "elapsed": 847.4999999910597,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.554700196225225,
+              0,
+              -0.8320502943378464
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "rabbit-pier"
+            },
+            "plan": {
+              "duration": 1335.372360160054,
+              "tideDuration": 550,
+              "recoveryDelay": 2335.372360160054
+            },
+            "startedAt": 4977.20000000298
+          }
+        },
+        {
+          "time": 5972.3,
+          "boatWorldPosition": [
+            5.520880770065727,
+            0,
+            0.7186788449014104
+          ],
+          "boatHeading": 2.402522679321508,
+          "active": {
+            "edgeId": "shallows-rabbit",
+            "reverse": false,
+            "progress": 0.7220457969307476,
+            "distance": 2.960343811563106,
+            "pathLength": 3.824088286857528,
+            "duration": 1335.372360160054,
+            "elapsed": 964.1999999910595,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.5547001962252273,
+              0,
+              -0.8320502943378449
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "rabbit-pier"
+            },
+            "plan": {
+              "duration": 1335.372360160054,
+              "tideDuration": 550,
+              "recoveryDelay": 2335.372360160054
+            },
+            "startedAt": 4977.20000000298
+          }
+        },
+        {
+          "time": 6089,
+          "boatWorldPosition": [
+            5.7497406596656795,
+            0,
+            0.37538901050148044
+          ],
+          "boatHeading": 1.5708094560888528,
+          "active": {
+            "edgeId": "shallows-rabbit",
+            "reverse": false,
+            "progress": 0.8094371519427777,
+            "distance": 3.3729268449879357,
+            "pathLength": 3.824088286857528,
+            "duration": 1335.372360160054,
+            "elapsed": 1080.8999999910593,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.554700196225232,
+              0,
+              -0.8320502943378417
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "rabbit-pier"
+            },
+            "plan": {
+              "duration": 1335.372360160054,
+              "tideDuration": 550,
+              "recoveryDelay": 2335.372360160054
+            },
+            "startedAt": 4977.20000000298
+          }
+        },
+        {
+          "time": 6189,
+          "boatWorldPosition": [
+            5.9218929995108365,
+            0,
+            0.11716050073374691
+          ],
+          "boatHeading": 1.5707963267948966,
+          "active": {
+            "edgeId": "shallows-rabbit",
+            "reverse": false,
+            "progress": 0.8843226318159827,
+            "distance": 3.6832788892393418,
+            "pathLength": 3.824088286857528,
+            "duration": 1335.372360160054,
+            "elapsed": 1180.8999999910593,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.5547001962252298,
+              0,
+              -0.8320502943378432
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "rabbit-pier"
+            },
+            "plan": {
+              "duration": 1335.372360160054,
+              "tideDuration": 550,
+              "recoveryDelay": 2335.372360160054
+            },
+            "startedAt": 4977.20000000298
+          }
+        },
+        {
+          "time": 6305.6,
+          "boatWorldPosition": [
+            5.998468674418621,
+            0,
+            0.0022969883720675432
+          ],
+          "boatHeading": 1.5707963267948966,
+          "active": {
+            "edgeId": "shallows-rabbit",
+            "reverse": false,
+            "progress": 0.97163910134814,
+            "distance": 3.8213276504059834,
+            "pathLength": 3.824088286857528,
+            "duration": 1335.372360160054,
+            "elapsed": 1297.4999999910597,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.5547001962252239,
+              0,
+              -0.8320502943378472
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "rabbit-pier"
+            },
+            "plan": {
+              "duration": 1335.372360160054,
+              "tideDuration": 550,
+              "recoveryDelay": 2335.372360160054
+            },
+            "startedAt": 4977.20000000298
+          }
+        }
+      ],
+      "originalSpeed": true,
+      "audio": "Silent screen recording; actual runtime master mix recorded separately"
+    },
+    {
+      "candidate": "restrained",
+      "length": "long",
+      "cove": "bellwater",
+      "filename": "reviews/atmosphere/timing-comparison/raw/restrained-long.webm",
+      "crossings": [
+        {
+          "action": {
+            "type": "move",
+            "to": "east-buoy"
+          },
+          "wallMs": 2527,
+          "id": 2,
+          "plan": {
+            "duration": 2076.1522096757963,
+            "tideDuration": 550,
+            "recoveryDelay": 3076.1522096757963
+          },
+          "startedAt": 3320,
+          "finishedAt": 5425.0999999940395,
+          "reason": "complete"
+        },
+        {
+          "action": {
+            "type": "move",
+            "to": "west-buoy"
+          },
+          "wallMs": 2419,
+          "id": 3,
+          "plan": {
+            "duration": 2076.1522096757963,
+            "tideDuration": 550,
+            "recoveryDelay": 3076.1522096757963
+          },
+          "startedAt": 5691.5,
+          "finishedAt": 7847.70000000298,
+          "reason": "complete"
+        }
+      ],
+      "samples": [
+        {
+          "time": 3350.2,
+          "boatWorldPosition": [
+            -4.499299505274311,
+            0,
+            3.900140098945138
+          ],
+          "boatHeading": 1.5707963267948966,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.013341989027059504,
+            "distance": 0.0007143672550909977,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 27.699999999999818,
+            "tideDuration": 550,
+            "tideProgress": 0.050363636363636034,
+            "tangent": [
+              0.9805806756909198,
+              0,
+              0.19611613513818574
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 3320
+          }
+        },
+        {
+          "time": 3466.9,
+          "boatWorldPosition": [
+            -4.415977578587775,
+            0,
+            3.916804484282445
+          ],
+          "boatHeading": 1.5707963267948966,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.06955174063203633,
+            "distance": 0.08568639327205006,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 144.4000000000001,
+            "tideDuration": 550,
+            "tideProgress": 0.2625454545454547,
+            "tangent": [
+              0.9805806756909204,
+              0,
+              0.19611613513818268
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 3320
+          }
+        },
+        {
+          "time": 3583.5,
+          "boatWorldPosition": [
+            -4.093603922682098,
+            0,
+            3.98127921546358
+          ],
+          "boatHeading": 1.5707963267948966,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.12571332621164455,
+            "distance": 0.4144443056983091,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 261,
+            "tideDuration": 550,
+            "tideProgress": 0.47454545454545455,
+            "tangent": [
+              0.9805806756909212,
+              0,
+              0.19611613513817855
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 3320
+          }
+        },
+        {
+          "time": 3683.5,
+          "boatWorldPosition": [
+            -3.628339251152633,
+            0,
+            4.074332149769473
+          ],
+          "boatHeading": 1.3943023279468267,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.1738793515800907,
+            "distance": 0.8889230335211248,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 361,
+            "tideDuration": 550,
+            "tideProgress": 0.6563636363636364,
+            "tangent": [
+              0.9805806756909213,
+              0,
+              0.1961161351381779
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 3320
+          }
+        },
+        {
+          "time": 3783.5,
+          "boatWorldPosition": [
+            -3.0980529254045197,
+            0,
+            4.180389414919096
+          ],
+          "boatHeading": 1.3734007669450201,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.2220453769485369,
+            "distance": 1.429711098077335,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 461,
+            "tideDuration": 550,
+            "tideProgress": 0.8381818181818181,
+            "tangent": [
+              0.980580675690921,
+              0,
+              0.19611613513817985
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 3320
+          }
+        },
+        {
+          "time": 3983.5,
+          "boatWorldPosition": [
+            -2.035027729493013,
+            0,
+            4.392994454101397
+          ],
+          "boatHeading": 1.3734007669450146,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.31837742768542926,
+            "distance": 2.5137883415560482,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 661,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.9805806756909199,
+              0,
+              0.1961161351381853
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 3320
+          }
+        },
+        {
+          "time": 4083.5,
+          "boatWorldPosition": [
+            -1.5035151315372601,
+            0,
+            4.499296973692547
+          ],
+          "boatHeading": 1.373400766945021,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.3665434530538754,
+            "distance": 3.055826963295404,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 761,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.9805806756909212,
+              0,
+              0.196116135138179
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 3320
+          }
+        },
+        {
+          "time": 4216.8,
+          "boatWorldPosition": [
+            -0.7950088384622392,
+            0,
+            4.640998232307552
+          ],
+          "boatHeading": 1.373400766945021,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.4307487648700143,
+            "distance": 3.778364446073968,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 894.3000000000002,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.9805806756909212,
+              0,
+              0.196116135138179
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 3320
+          }
+        },
+        {
+          "time": 4316.8,
+          "boatWorldPosition": [
+            -0.2593911623482044,
+            0,
+            4.722195686289537
+          ],
+          "boatHeading": 1.4795193084705427,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.47891479023846045,
+            "distance": 4.3204030678133245,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 994.3000000000002,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.9958371444012004,
+              0,
+              0.09115032545670254
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 3320
+          }
+        },
+        {
+          "time": 4416.8,
+          "boatWorldPosition": [
+            0.2820578411855169,
+            0,
+            4.738637165733885
+          ],
+          "boatHeading": 1.601294836452694,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.5270808156069067,
+            "distance": 4.862441689552682,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 1094.3000000000002,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.9995349565030396,
+              0,
+              -0.030493781800013938
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 3320
+          }
+        },
+        {
+          "time": 4516.8,
+          "boatWorldPosition": [
+            0.821659703610893,
+            0,
+            4.6904453728518805
+          ],
+          "boatHeading": 1.7033478590915638,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.5752468409753528,
+            "distance": 5.404480311292038,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 1194.3000000000002,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.9912279006826356,
+              0,
+              -0.1321637200910112
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 3320
+          }
+        },
+        {
+          "time": 4616.8,
+          "boatWorldPosition": [
+            1.3589435087265063,
+            0,
+            4.618807532169799
+          ],
+          "boatHeading": 1.7033478590915738,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.623412866343799,
+            "distance": 5.946518933031395,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 1294.3000000000002,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.9912279006826342,
+              0,
+              -0.13216372009102112
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 3320
+          }
+        },
+        {
+          "time": 4683.4,
+          "boatWorldPosition": [
+            1.716774522933501,
+            0,
+            4.571096730275533
+          ],
+          "boatHeading": 1.70334785909157,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.655491439239184,
+            "distance": 6.307516655109804,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 1360.8999999999996,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.9912279006826348,
+              0,
+              -0.13216372009101737
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 3320
+          }
+        },
+        {
+          "time": 4716.8,
+          "boatWorldPosition": [
+            1.8962273138421168,
+            0,
+            4.547169691487717
+          ],
+          "boatHeading": 1.703347859091571,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.6715788917122452,
+            "distance": 6.488557554770751,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 1394.3000000000002,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.9912279006826347,
+              0,
+              -0.13216372009101826
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 3320
+          }
+        },
+        {
+          "time": 4816.8,
+          "boatWorldPosition": [
+            2.4335111189577288,
+            0,
+            4.475531850805636
+          ],
+          "boatHeading": 1.703347859091574,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.7197449170806914,
+            "distance": 7.030596176510109,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 1494.3000000000002,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.9912279006826342,
+              0,
+              -0.13216372009102134
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 3320
+          }
+        },
+        {
+          "time": 4933.4,
+          "boatWorldPosition": [
+            3.0599840357225263,
+            0,
+            4.392002128570329
+          ],
+          "boatHeading": 1.7033478590915714,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.7759065026602994,
+            "distance": 7.662613209458195,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 1610.8999999999996,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.9912279006826346,
+              0,
+              -0.13216372009101868
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 3320
+          }
+        },
+        {
+          "time": 5033.4,
+          "boatWorldPosition": [
+            3.596438594573448,
+            0,
+            4.320474854056873
+          ],
+          "boatHeading": 1.6941676262744991,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.8240725280287455,
+            "distance": 8.203815246327293,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 1710.8999999999996,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.9912279006826351,
+              0,
+              -0.1321637200910145
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 3320
+          }
+        },
+        {
+          "time": 5116.8,
+          "boatWorldPosition": [
+            4.00308624642812,
+            0,
+            4.2662551671429165
+          ],
+          "boatHeading": 1.5740421067198973,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.8642429931860299,
+            "distance": 8.614061620117441,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 1794.3000000000002,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.9912279006826346,
+              0,
+              -0.13216372009101848
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 3320
+          }
+        },
+        {
+          "time": 5200.1,
+          "boatWorldPosition": [
+            4.2977468314551235,
+            0,
+            4.226967089139317
+          ],
+          "boatHeading": 1.5707963267948966,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.9043652923179457,
+            "distance": 8.911329871771859,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 1877.6000000000004,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.9912279006826353,
+              0,
+              -0.13216372009101274
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 3320
+          }
+        },
+        {
+          "time": 5233.4,
+          "boatWorldPosition": [
+            4.376819221112165,
+            0,
+            4.216424103851711
+          ],
+          "boatHeading": 1.5707963267948966,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.920404578765638,
+            "distance": 8.991102030730042,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 1910.8999999999996,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.9912279006826341,
+              0,
+              -0.1321637200910222
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 3320
+          }
+        },
+        {
+          "time": 5316.8,
+          "boatWorldPosition": [
+            4.483029344503873,
+            0,
+            4.20226275406615
+          ],
+          "boatHeading": 1.5707963267948966,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": false,
+            "progress": 0.9605750439229223,
+            "distance": 9.098252085040018,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 1994.3000000000002,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              0.9912279006826346,
+              0,
+              -0.13216372009101848
+            ]
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 3320
+          }
+        },
+        {
+          "time": 5833.4,
+          "boatWorldPosition": [
+            4.432176796041051,
+            0,
+            4.209043093861193
+          ],
+          "boatHeading": 1.5707963267948966,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.06415714578933468,
+            "distance": 0.06842342100362689,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 133.1999999970194,
+            "tideDuration": 550,
+            "tideProgress": 0.24218181817639892,
+            "tangent": [
+              -0.9912279006826351,
+              0,
+              0.13216372009101482
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 5691.5
+          }
+        },
+        {
+          "time": 5933.4,
+          "boatWorldPosition": [
+            4.191545586538338,
+            0,
+            4.241127255128222
+          ],
+          "boatHeading": 1.5707963267948966,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.11232317115778086,
+            "distance": 0.31118415174677533,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 233.1999999970194,
+            "tideDuration": 550,
+            "tideProgress": 0.4239999999945807,
+            "tangent": [
+              -0.9912279006826337,
+              0,
+              0.1321637200910254
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 5691.5
+          }
+        },
+        {
+          "time": 6033.4,
+          "boatWorldPosition": [
+            3.7621544719928592,
+            0,
+            4.298379403734285
+          ],
+          "boatHeading": -0.09246375497912895,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.16048919652622703,
+            "distance": 0.7443752617324492,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 333.1999999970194,
+            "tideDuration": 550,
+            "tideProgress": 0.6058181818127626,
+            "tangent": [
+              -0.9912279006826348,
+              0,
+              0.13216372009101746
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 5691.5
+          }
+        },
+        {
+          "time": 6133.4,
+          "boatWorldPosition": [
+            3.232195367508295,
+            0,
+            4.369040617665561
+          ],
+          "boatHeading": -1.4382447944982273,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.20865522189467323,
+            "distance": 1.279024361217638,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 433.1999999970194,
+            "tideDuration": 550,
+            "tideProgress": 0.7876363636309444,
+            "tangent": [
+              -0.9912279006826353,
+              0,
+              0.13216372009101307
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 5691.5
+          }
+        },
+        {
+          "time": 6233.5,
+          "boatWorldPosition": [
+            2.694374278587566,
+            0,
+            4.440750096188324
+          ],
+          "boatHeading": -1.4382447944982237,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.25686941328848806,
+            "distance": 1.8216050215787363,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 533.2999999970198,
+            "tideDuration": 550,
+            "tideProgress": 0.9696363636309451,
+            "tangent": [
+              -0.9912279006826349,
+              0,
+              0.1321637200910166
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 5691.5
+          }
+        },
+        {
+          "time": 6333.4,
+          "boatWorldPosition": [
+            2.157627757277075,
+            0,
+            4.512316299029723
+          ],
+          "boatHeading": -1.4382447944982237,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.3049872726315656,
+            "distance": 2.363101604696351,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 633.1999999970194,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              -0.9912279006826349,
+              0,
+              0.1321637200910166
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 5691.5
+          }
+        },
+        {
+          "time": 6433.4,
+          "boatWorldPosition": [
+            1.6203439521614642,
+            0,
+            4.583954139711804
+          ],
+          "boatHeading": -1.4382447944982228,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.3531532980000118,
+            "distance": 2.9051402264357074,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 733.1999999970194,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              -0.9912279006826348,
+              0,
+              0.13216372009101746
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 5691.5
+          }
+        },
+        {
+          "time": 6533.4,
+          "boatWorldPosition": [
+            1.083060147045853,
+            0,
+            4.655591980393886
+          ],
+          "boatHeading": -1.438244794498221,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.40131932336845794,
+            "distance": 3.447178848175064,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 833.1999999970194,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              -0.9912279006826344,
+              0,
+              0.13216372009101923
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 5691.5
+          }
+        },
+        {
+          "time": 6616.7,
+          "boatWorldPosition": [
+            0.6353354315794724,
+            0,
+            4.713928446157516
+          ],
+          "boatHeading": -1.461907393927202,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.4414416225003737,
+            "distance": 3.8986970200839495,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 916.4999999970196,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              -0.9940774554889877,
+              0,
+              0.10867388135398323
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 5691.5
+          }
+        },
+        {
+          "time": 6716.7,
+          "boatWorldPosition": [
+            0.09427720186035463,
+            0,
+            4.7404424176481195
+          ],
+          "boatHeading": -1.582428507585334,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.4896076478688199,
+            "distance": 4.440735641823306,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 1016.4999999970196,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              -0.9999323469478656,
+              0,
+              -0.011631918471743283
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 5691.5
+          }
+        },
+        {
+          "time": 6816.7,
+          "boatWorldPosition": [
+            -0.4460049747120492,
+            0,
+            4.701206981409398
+          ],
+          "boatHeading": -1.703915412742381,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.5377736732372661,
+            "distance": 4.982774263562663,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 1116.4999999970196,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              -0.9911527310390721,
+              0,
+              -0.13272627378853358
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 5691.5
+          }
+        },
+        {
+          "time": 6916.7,
+          "boatWorldPosition": [
+            -0.9791662089328357,
+            0,
+            4.604166758213432
+          ],
+          "boatHeading": -1.7681918866447779,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.5859396986057123,
+            "distance": 5.52481288530202,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 1216.4999999970196,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              -0.98058067569092,
+              0,
+              -0.19611613513818477
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 5691.5
+          }
+        },
+        {
+          "time": 6933.4,
+          "boatWorldPosition": [
+            -1.0679288127914455,
+            0,
+            4.586414237441711
+          ],
+          "boatHeading": -1.768191886644777,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.5939834248422426,
+            "distance": 5.615333335132491,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 1233.1999999970194,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              -0.9805806756909202,
+              0,
+              -0.1961161351381839
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 5691.5
+          }
+        },
+        {
+          "time": 7033.4,
+          "boatWorldPosition": [
+            -1.5994414107472004,
+            0,
+            4.480111717850559
+          ],
+          "boatHeading": -1.7681918866447797,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.6421494502106889,
+            "distance": 6.157371956871849,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 1333.1999999970194,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              -0.9805806756909197,
+              0,
+              -0.19611613513818651
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 5691.5
+          }
+        },
+        {
+          "time": 7216.7,
+          "boatWorldPosition": [
+            -2.5737040028000964,
+            0,
+            4.285259199439981
+          ],
+          "boatHeading": -1.7681918866447797,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.7304377747110508,
+            "distance": 7.150928750520089,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 1516.4999999970196,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              -0.9805806756909197,
+              0,
+              -0.19611613513818651
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 5691.5
+          }
+        },
+        {
+          "time": 7333.3,
+          "boatWorldPosition": [
+            -3.193447692016507,
+            0,
+            4.161310461596699
+          ],
+          "boatHeading": -1.7681918866447797,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.7865993602906592,
+            "distance": 7.782945783468182,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 1633.09999999702,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              -0.9805806756909197,
+              0,
+              -0.19611613513818651
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 5691.5
+          }
+        },
+        {
+          "time": 7433.4,
+          "boatWorldPosition": [
+            -3.7211265926272348,
+            0,
+            4.055774681474554
+          ],
+          "boatHeading": -0.7163922310998512,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.8348135516844736,
+            "distance": 8.32107478569324,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 1733.1999999970194,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              -0.9805806756909197,
+              0,
+              -0.19611613513818651
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 5691.5
+          }
+        },
+        {
+          "time": 7533.3,
+          "boatWorldPosition": [
+            -4.160651778325622,
+            0,
+            3.9678696443348755
+          ],
+          "boatHeading": 1.5707963267948966,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.8829314110275516,
+            "distance": 8.769304285411554,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 1833.09999999702,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              -0.9805806756909199,
+              0,
+              -0.19611613513818565
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 5691.5
+          }
+        },
+        {
+          "time": 7633.4,
+          "boatWorldPosition": [
+            -4.418296498325691,
+            0,
+            3.916340700334862
+          ],
+          "boatHeading": 1.5707963267948966,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.931145602421366,
+            "distance": 9.032051376382453,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 1933.1999999970194,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              -0.9805806756909203,
+              0,
+              -0.19611613513818302
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 5691.5
+          }
+        },
+        {
+          "time": 7733.3,
+          "boatWorldPosition": [
+            -4.497423063156011,
+            0,
+            3.900515387368798
+          ],
+          "boatHeading": 1.5707963267948966,
+          "active": {
+            "edgeId": "west-east",
+            "reverse": true,
+            "progress": 0.979263461764444,
+            "distance": 9.112744956005127,
+            "pathLength": 9.115372926255686,
+            "duration": 2076.1522096757963,
+            "elapsed": 2033.09999999702,
+            "tideDuration": 550,
+            "tideProgress": 1,
+            "tangent": [
+              -0.9805806756909199,
+              0,
+              -0.19611613513818565
+            ]
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2076.1522096757963,
+              "tideDuration": 550,
+              "recoveryDelay": 3076.1522096757963
+            },
+            "startedAt": 5691.5
+          }
+        }
+      ],
+      "originalSpeed": true,
+      "audio": "Silent screen recording; actual runtime master mix recorded separately"
+    }
+  ],
+  "errors": [],
+  "originalSampleData": {
+    "path": "reviews/atmosphere/timing-comparison/raw/comparison-full.json",
+    "sha256": "8dccf3f3b00a3fa475b0d2d22c9c4109a1efa6e4eba92be6af4a55149ef021ea",
+    "bytes": 16680464,
+    "availability": "Ignored local full trace; repeated static route buffers omitted from versioned timing samples."
+  }
+}

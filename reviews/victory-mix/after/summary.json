@@ -1,0 +1,717 @@
+{
+  "outcome": "passed",
+  "source": {
+    "head": "c5f4ae110973aa352d15028ba9d8c857a4270f6b",
+    "runtimeHash": "21c67c9892fee01b2009c011125bef14d7402cc99e4444e40f103e79b71b2de8",
+    "kind": "working tree",
+    "unchangedDuringCapture": true,
+    "files": 44,
+    "manifest": "after/source.json",
+    "manifestSha256": "0fa7599a261231eae629d773f250f43f03ba9d9d93872cae2ae4437e1cb2b903"
+  },
+  "command": [
+    "C:\\Program Files\\nodejs\\node.exe",
+    "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tools\\capture-victory-mix.mjs",
+    "--base=http://127.0.0.1:5199",
+    "--output=reviews/victory-mix/after"
+  ],
+  "environment": {
+    "browser": "156.0.8078.4",
+    "node": "v24.15.0",
+    "platform": "win32",
+    "viewport": {
+      "width": 844,
+      "height": 390
+    },
+    "dpr": 1,
+    "input": "emulated touch",
+    "renderer": "SwiftShader",
+    "base": "http://127.0.0.1:5199"
+  },
+  "originalCapture": {
+    "path": "reviews/victory-mix/after/raw/capture.json",
+    "sha256": "9daa44051fa8c33f4383c5cdb196525e5b8f2cc046a47a695103e2c19fb1359b"
+  },
+  "media": {
+    "runtime": {
+      "path": "reviews/victory-mix/after/raw/holding-runtime-audio.webm",
+      "sha256": "0045319a1cb1b7487f7b3b499ee129b476f6dd21cffd8296333d394ddfcdf483",
+      "bytes": 7410380,
+      "wallSeconds": 85.94590000000596,
+      "mimeType": "video/webm;codecs=vp9,opus",
+      "trace": {
+        "path": "reviews/victory-mix/after/raw/runtime-samples.json",
+        "sha256": "9a93dfbafd96b4375566540852b47306c74342696221cb21ba8351d975a0a13f"
+      },
+      "graph": {
+        "path": "reviews/victory-mix/after/raw/audio-graph.json",
+        "sha256": "9f41951d0c3409042ac347b6eba6c0198a13cf21d965b0033d3937dad2b47021"
+      }
+    },
+    "fullInterface": {
+      "path": "reviews/victory-mix/after/raw/holding-full-interface-silent.webm",
+      "sha256": "ff8581311e44769a9bc718c4c7e36ccda15988c790702975c31f891b4f3249c2",
+      "audio": false
+    },
+    "decode": {
+      "runtimeFfmpegExit": 0,
+      "fullInterfaceFfmpegExit": 0,
+      "audio": "Opus 48000 Hz stereo",
+      "video": "VP9 844x390"
+    },
+    "nativeScreenshotInspection": [
+      "after/phone-start.png",
+      "after/phone-success.png"
+    ]
+  },
+  "firstCommittedWonBeforeArrival": {
+    "label": "committed-won-before-visible-arrival",
+    "wallSeconds": 19.982900000005962,
+    "audioTime": 20.010666666666665,
+    "state": {
+      "turn": 9,
+      "status": "won"
+    },
+    "arrangement": "homeward",
+    "pendingTerminal": true,
+    "deliveryCount": 0,
+    "arrivalEventCount": 0,
+    "arrivalSources": 0,
+    "voices": {
+      "played": 0,
+      "skipped": 0,
+      "reclaimed": 0
+    },
+    "victorySettled": false,
+    "targets": {
+      "arrangement": 0.72,
+      "victory": 1,
+      "effectiveMusic": 0.72
+    },
+    "gains": {
+      "master": 0.6499999761581421,
+      "arrangement": 0.7200000286102295,
+      "ambience": 0.10999999940395355,
+      "effects": 0.3400000035762787,
+      "send": 0.30000001192092896,
+      "wetReturn": 0.3400000035762787,
+      "victoryOutput": 1,
+      "effectiveDry": 0.7200000286102295
+    },
+    "lastVictoryMixChange": null
+  },
+  "firstVisibleArrival": {
+    "label": "first-visible-arrival",
+    "wallSeconds": 20.68909999999404,
+    "audioTime": 20.72,
+    "state": {
+      "turn": 9,
+      "status": "won"
+    },
+    "arrangement": "homeward",
+    "pendingTerminal": false,
+    "deliveryCount": 1,
+    "arrivalEventCount": 1,
+    "arrivalSources": 3,
+    "voices": {
+      "played": 3,
+      "skipped": 0,
+      "reclaimed": 0
+    },
+    "victorySettled": true,
+    "targets": {
+      "arrangement": 0.72,
+      "victory": 0.5,
+      "effectiveMusic": 0.36
+    },
+    "gains": {
+      "master": 0.6499999761581421,
+      "arrangement": 0.7200000286102295,
+      "ambience": 0.10999999940395355,
+      "effects": 0.3400000035762787,
+      "send": 0.30000001192092896,
+      "wetReturn": 0.3400000035762787,
+      "victoryOutput": 0.5043442249298096,
+      "effectiveDry": 0.3631278563788669
+    },
+    "lastVictoryMixChange": {
+      "time": 20.701333333333334,
+      "target": 0.5,
+      "duration": 0.2
+    }
+  },
+  "gainRoles": {
+    "master": "GainNode-1",
+    "music": "GainNode-2",
+    "ambience": "GainNode-3",
+    "effects": "GainNode-4",
+    "send": "GainNode-6",
+    "wet": "GainNode-7",
+    "victoryOutput": "GainNode-5"
+  },
+  "initialRouting": [
+    {
+      "from": "GainNode-2",
+      "to": "GainNode-5",
+      "at": 0
+    },
+    {
+      "from": "GainNode-2",
+      "to": "GainNode-6",
+      "at": 0
+    },
+    {
+      "from": "GainNode-6",
+      "to": "ConvolverNode-8",
+      "at": 0
+    },
+    {
+      "from": "ConvolverNode-8",
+      "to": "GainNode-7",
+      "at": 0
+    },
+    {
+      "from": "GainNode-7",
+      "to": "GainNode-5",
+      "at": 0
+    },
+    {
+      "from": "GainNode-5",
+      "to": "GainNode-1",
+      "at": 0
+    },
+    {
+      "from": "GainNode-3",
+      "to": "GainNode-1",
+      "at": 0
+    },
+    {
+      "from": "GainNode-4",
+      "to": "GainNode-1",
+      "at": 0
+    },
+    {
+      "from": "GainNode-1",
+      "to": "AnalyserNode-9",
+      "at": 0
+    },
+    {
+      "from": "AnalyserNode-9",
+      "to": "AudioDestinationNode-10",
+      "at": 0
+    }
+  ],
+  "firstArrivalAutomation": [
+    {
+      "id": "GainNode-5",
+      "operation": "cancelAndHoldAtTime",
+      "values": [
+        20.701333333333334
+      ],
+      "at": 20.701333333333334,
+      "currentValue": 1
+    },
+    {
+      "id": "GainNode-5",
+      "operation": "linearRampToValueAtTime",
+      "values": [
+        0.5,
+        20.901333333333334
+      ],
+      "at": 20.701333333333334,
+      "currentValue": 1
+    },
+    {
+      "id": "GainNode-2",
+      "operation": "cancelAndHoldAtTime",
+      "values": [
+        21.501333333333335
+      ],
+      "at": 21.501333333333335,
+      "currentValue": 0.7200000286102295
+    },
+    {
+      "id": "GainNode-2",
+      "operation": "linearRampToValueAtTime",
+      "values": [
+        0.62,
+        22.301333333333336
+      ],
+      "at": 21.501333333333335,
+      "currentValue": 0.7200000286102295
+    }
+  ],
+  "arrivals": [
+    {
+      "label": "ordinary-arrival-after",
+      "wallSeconds": 20.9085,
+      "audioTime": 20.941333333333333,
+      "state": {
+        "turn": 9,
+        "status": "won"
+      },
+      "arrangement": "homeward",
+      "pendingTerminal": false,
+      "deliveryCount": 1,
+      "arrivalEventCount": 1,
+      "arrivalSources": 3,
+      "voices": {
+        "played": 3,
+        "skipped": 0,
+        "reclaimed": 0
+      },
+      "victorySettled": true,
+      "targets": {
+        "arrangement": 0.72,
+        "victory": 0.5,
+        "effectiveMusic": 0.36
+      },
+      "gains": {
+        "master": 0.6499999761581421,
+        "arrangement": 0.7200000286102295,
+        "ambience": 0.10999999940395355,
+        "effects": 0.3400000035762787,
+        "send": 0.30000001192092896,
+        "wetReturn": 0.3400000035762787,
+        "victoryOutput": 0.5,
+        "effectiveDry": 0.36000001430511475
+      },
+      "lastVictoryMixChange": {
+        "time": 20.701333333333334,
+        "target": 0.5,
+        "duration": 0.2
+      },
+      "triggerAudioTime": 20.701333333333334,
+      "triggerPhase": 20.661333333333335,
+      "approximateRecordingSeconds": 20.669333333333334,
+      "notes": [
+        {
+          "stage": "opening",
+          "offset": 0,
+          "duration": 1.55,
+          "attack": 0.06,
+          "peak": 0.11,
+          "palette": "pad",
+          "note": 59
+        },
+        {
+          "stage": "answer",
+          "offset": 0.48,
+          "duration": 1.9,
+          "attack": 0.035,
+          "peak": 0.15,
+          "palette": "pluck",
+          "note": 69
+        },
+        {
+          "stage": "settle",
+          "offset": 1.1,
+          "duration": 2.25,
+          "attack": 0.14,
+          "peak": 0.072,
+          "palette": "pad",
+          "note": 66
+        }
+      ]
+    },
+    {
+      "label": "dense-arrival-after",
+      "wallSeconds": 47.257299999982116,
+      "audioTime": 47.29066666666667,
+      "state": {
+        "turn": 9,
+        "status": "won"
+      },
+      "arrangement": "homeward",
+      "pendingTerminal": false,
+      "deliveryCount": 2,
+      "arrivalEventCount": 2,
+      "arrivalSources": 3,
+      "voices": {
+        "played": 6,
+        "skipped": 0,
+        "reclaimed": 0
+      },
+      "victorySettled": true,
+      "targets": {
+        "arrangement": 0.72,
+        "victory": 0.5,
+        "effectiveMusic": 0.36
+      },
+      "gains": {
+        "master": 0.6499999761581421,
+        "arrangement": 0.7200000286102295,
+        "ambience": 0.10999999940395355,
+        "effects": 0.3400000035762787,
+        "send": 0.30000001192092896,
+        "wetReturn": 0.3400000035762787,
+        "victoryOutput": 0.5,
+        "effectiveDry": 0.36000001430511475
+      },
+      "lastVictoryMixChange": {
+        "time": 47,
+        "target": 0.5,
+        "duration": 0.2
+      },
+      "triggerAudioTime": 47,
+      "triggerPhase": 46.96,
+      "approximateRecordingSeconds": 46.968,
+      "notes": [
+        {
+          "stage": "opening",
+          "offset": 0,
+          "duration": 1.55,
+          "attack": 0.06,
+          "peak": 0.11,
+          "palette": "pad",
+          "note": 62
+        },
+        {
+          "stage": "answer",
+          "offset": 0.48,
+          "duration": 1.9,
+          "attack": 0.035,
+          "peak": 0.15,
+          "palette": "pluck",
+          "note": 67
+        },
+        {
+          "stage": "settle",
+          "offset": 1.1,
+          "duration": 2.25,
+          "attack": 0.14,
+          "peak": 0.072,
+          "palette": "pad",
+          "note": 66
+        }
+      ]
+    },
+    {
+      "label": "phrase-return-arrival-after",
+      "wallSeconds": 74.83759999999404,
+      "audioTime": 74.872,
+      "state": {
+        "turn": 9,
+        "status": "won"
+      },
+      "arrangement": "homeward",
+      "pendingTerminal": false,
+      "deliveryCount": 3,
+      "arrivalEventCount": 3,
+      "arrivalSources": 3,
+      "voices": {
+        "played": 9,
+        "skipped": 0,
+        "reclaimed": 0
+      },
+      "victorySettled": true,
+      "targets": {
+        "arrangement": 0.72,
+        "victory": 0.5,
+        "effectiveMusic": 0.36
+      },
+      "gains": {
+        "master": 0.6499999761581421,
+        "arrangement": 0.7200000286102295,
+        "ambience": 0.10999999940395355,
+        "effects": 0.3400000035762787,
+        "send": 0.30000001192092896,
+        "wetReturn": 0.3400000035762787,
+        "victoryOutput": 0.5,
+        "effectiveDry": 0.36000001430511475
+      },
+      "lastVictoryMixChange": {
+        "time": 74.62133333333334,
+        "target": 0.5,
+        "duration": 0.2
+      },
+      "triggerAudioTime": 74.62133333333334,
+      "triggerPhase": 74.58133333333333,
+      "approximateRecordingSeconds": 74.58933333333334,
+      "notes": [
+        {
+          "stage": "opening",
+          "offset": 0,
+          "duration": 1.55,
+          "attack": 0.06,
+          "peak": 0.11,
+          "palette": "pad",
+          "note": 62
+        },
+        {
+          "stage": "answer",
+          "offset": 0.48,
+          "duration": 1.9,
+          "attack": 0.035,
+          "peak": 0.15,
+          "palette": "pluck",
+          "note": 69
+        },
+        {
+          "stage": "settle",
+          "offset": 1.1,
+          "duration": 2.25,
+          "attack": 0.14,
+          "peak": 0.072,
+          "palette": "pad",
+          "note": 66
+        }
+      ]
+    }
+  ],
+  "settledHolds": [
+    {
+      "label": "ordinary-arrival-held-11s",
+      "wallSeconds": 32.62219999998808,
+      "audioTime": 32.650666666666666,
+      "state": {
+        "turn": 9,
+        "status": "won"
+      },
+      "arrangement": "won",
+      "pendingTerminal": false,
+      "deliveryCount": 1,
+      "arrivalEventCount": 1,
+      "arrivalSources": 0,
+      "voices": {
+        "played": 3,
+        "skipped": 0,
+        "reclaimed": 0
+      },
+      "victorySettled": true,
+      "targets": {
+        "arrangement": 0.62,
+        "victory": 0.5,
+        "effectiveMusic": 0.31
+      },
+      "gains": {
+        "master": 0.6499999761581421,
+        "arrangement": 0.6200000047683716,
+        "ambience": 0.10999999940395355,
+        "effects": 0.3400000035762787,
+        "send": 0.30000001192092896,
+        "wetReturn": 0.3400000035762787,
+        "victoryOutput": 0.5,
+        "effectiveDry": 0.3100000023841858
+      },
+      "lastVictoryMixChange": {
+        "time": 20.701333333333334,
+        "target": 0.5,
+        "duration": 0.2
+      },
+      "secondsAfterArrival": 11.949333333333332
+    },
+    {
+      "label": "dense-arrival-held-11s",
+      "wallSeconds": 58.26529999998212,
+      "audioTime": 58.30133333333333,
+      "state": {
+        "turn": 9,
+        "status": "won"
+      },
+      "arrangement": "won",
+      "pendingTerminal": false,
+      "deliveryCount": 2,
+      "arrivalEventCount": 2,
+      "arrivalSources": 0,
+      "voices": {
+        "played": 6,
+        "skipped": 0,
+        "reclaimed": 0
+      },
+      "victorySettled": true,
+      "targets": {
+        "arrangement": 0.62,
+        "victory": 0.5,
+        "effectiveMusic": 0.31
+      },
+      "gains": {
+        "master": 0.6499999761581421,
+        "arrangement": 0.6200000047683716,
+        "ambience": 0.10999999940395355,
+        "effects": 0.3400000035762787,
+        "send": 0.30000001192092896,
+        "wetReturn": 0.3400000035762787,
+        "victoryOutput": 0.5,
+        "effectiveDry": 0.3100000023841858
+      },
+      "lastVictoryMixChange": {
+        "time": 47,
+        "target": 0.5,
+        "duration": 0.2
+      },
+      "secondsAfterArrival": 11.301333333333332
+    },
+    {
+      "label": "phrase-return-arrival-held-11s",
+      "wallSeconds": 85.85819999998807,
+      "audioTime": 85.89066666666666,
+      "state": {
+        "turn": 9,
+        "status": "won"
+      },
+      "arrangement": "won",
+      "pendingTerminal": false,
+      "deliveryCount": 3,
+      "arrivalEventCount": 3,
+      "arrivalSources": 0,
+      "voices": {
+        "played": 9,
+        "skipped": 0,
+        "reclaimed": 0
+      },
+      "victorySettled": true,
+      "targets": {
+        "arrangement": 0.62,
+        "victory": 0.5,
+        "effectiveMusic": 0.31
+      },
+      "gains": {
+        "master": 0.6499999761581421,
+        "arrangement": 0.6200000047683716,
+        "ambience": 0.10999999940395355,
+        "effects": 0.3400000035762787,
+        "send": 0.30000001192092896,
+        "wetReturn": 0.3400000035762787,
+        "victoryOutput": 0.5,
+        "effectiveDry": 0.3100000023841858
+      },
+      "lastVictoryMixChange": {
+        "time": 74.62133333333334,
+        "target": 0.5,
+        "duration": 0.2
+      },
+      "secondsAfterArrival": 11.269333333333321
+    }
+  ],
+  "restorations": [
+    {
+      "label": "dense-arrival-undo-restored",
+      "wallSeconds": 33.90479999998212,
+      "audioTime": 33.94133333333333,
+      "state": {
+        "turn": 8,
+        "status": "playing"
+      },
+      "arrangement": "homeward",
+      "pendingTerminal": false,
+      "deliveryCount": 1,
+      "arrivalEventCount": 1,
+      "arrivalSources": 0,
+      "voices": {
+        "played": 3,
+        "skipped": 0,
+        "reclaimed": 0
+      },
+      "victorySettled": false,
+      "targets": {
+        "arrangement": 0.72,
+        "victory": 1,
+        "effectiveMusic": 0.72
+      },
+      "gains": {
+        "master": 0.6499999761581421,
+        "arrangement": 0.7200000286102295,
+        "ambience": 0.10999999940395355,
+        "effects": 0.3400000035762787,
+        "send": 0.30000001192092896,
+        "wetReturn": 0.3400000035762787,
+        "victoryOutput": 1,
+        "effectiveDry": 0.7200000286102295
+      },
+      "lastVictoryMixChange": {
+        "time": 32.85066666666667,
+        "target": 1,
+        "duration": 0.7
+      }
+    },
+    {
+      "label": "phrase-return-arrival-undo-restored",
+      "wallSeconds": 59.65029999998212,
+      "audioTime": 59.68,
+      "state": {
+        "turn": 8,
+        "status": "playing"
+      },
+      "arrangement": "homeward",
+      "pendingTerminal": false,
+      "deliveryCount": 2,
+      "arrivalEventCount": 2,
+      "arrivalSources": 0,
+      "voices": {
+        "played": 6,
+        "skipped": 0,
+        "reclaimed": 0
+      },
+      "victorySettled": false,
+      "targets": {
+        "arrangement": 0.72,
+        "victory": 1,
+        "effectiveMusic": 0.72
+      },
+      "gains": {
+        "master": 0.6499999761581421,
+        "arrangement": 0.7200000286102295,
+        "ambience": 0.10999999940395355,
+        "effects": 0.3400000035762787,
+        "send": 0.30000001192092896,
+        "wetReturn": 0.3400000035762787,
+        "victoryOutput": 1,
+        "effectiveDry": 0.7200000286102295
+      },
+      "lastVictoryMixChange": {
+        "time": 58.6,
+        "target": 1,
+        "duration": 0.7
+      }
+    },
+    {
+      "label": "next-cove",
+      "wallSeconds": 0,
+      "audioTime": 1.88,
+      "state": {
+        "turn": 0,
+        "status": "playing"
+      },
+      "arrangement": "ordinary",
+      "pendingTerminal": false,
+      "deliveryCount": 0,
+      "arrivalEventCount": 0,
+      "arrivalSources": 0,
+      "voices": {
+        "played": 0,
+        "skipped": 0,
+        "reclaimed": 0
+      },
+      "victorySettled": false,
+      "targets": {
+        "arrangement": 0.72,
+        "victory": 1,
+        "effectiveMusic": 0.72
+      },
+      "gains": {
+        "master": 0.6499999761581421,
+        "arrangement": 0.7200000286102295,
+        "ambience": 0.10999999940395355,
+        "effects": 0.3400000035762787,
+        "send": 0.30000001192092896,
+        "wetReturn": 0.3400000035762787,
+        "victoryOutput": 1,
+        "effectiveDry": 0.7200000286102295
+      },
+      "lastVictoryMixChange": null
+    }
+  ],
+  "totals": {
+    "deliveryCount": 3,
+    "arrivalVoicesPlayed": 9,
+    "arrivalVoicesSkipped": 0,
+    "arrivalVoicesReclaimed": 0,
+    "transferPlayed": 7,
+    "contextCount": 1,
+    "schedulerCount": 1,
+    "peakOwnedSources": 16,
+    "droppedTones": 0
+  },
+  "errors": []
+}

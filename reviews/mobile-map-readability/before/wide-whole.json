@@ -1,0 +1,310 @@
+{
+  "witness": "bring-the-quay-via-outer",
+  "actions": [],
+  "viewport": [
+    780,
+    320,
+    1
+  ],
+  "visualViewport": [
+    780,
+    320
+  ],
+  "scrollWidth": 780,
+  "state": {
+    "turn": 0,
+    "tideLevel": 0,
+    "boatNodeId": "wide-berth",
+    "aboard": [],
+    "waitingByPier": {
+      "harbor-pier": [],
+      "high-quay-pier": [],
+      "wide-berth-pier": [
+        "alder",
+        "clover",
+        "poppy",
+        "wren"
+      ],
+      "shell-landing-pier": [
+        "sorrel",
+        "finch"
+      ]
+    },
+    "delivered": [],
+    "status": "playing",
+    "lossReason": null
+  },
+  "camera": {
+    "mode": "overview",
+    "panned": false,
+    "focused": null,
+    "revision": 3,
+    "scale": 18.530116223162466,
+    "usable": {
+      "left": 26,
+      "right": 754,
+      "top": 26,
+      "bottom": 294
+    },
+    "bounds": {
+      "minX": -10.648844872234774,
+      "maxX": 14.906027787163055,
+      "minY": -5.932532635492817,
+      "maxY": 8.530409570180053
+    },
+    "focus": {
+      "x": 4.520483664820812,
+      "y": 1.2989384673436182
+    },
+    "overviewAvoidance": {
+      "overlap": 0,
+      "displacement": 1964.4432825576378
+    }
+  },
+  "boat": {
+    "left": 391.72004279209506,
+    "right": 466.5592318442415,
+    "top": 74.95525566846064,
+    "bottom": 133.50402479712588,
+    "width": 74.83918905214642,
+    "height": 58.54876912866524
+  },
+  "stops": [
+    {
+      "id": "harbor",
+      "endpoint": {
+        "x": 186.56344973897995,
+        "y": 176.21804781514132
+      },
+      "marker": {
+        "x": 162.5625,
+        "y": 152.203125,
+        "w": 48,
+        "h": 48
+      },
+      "name": {
+        "x": 47.15625,
+        "y": 209.984375,
+        "w": 152.6875,
+        "h": 44
+      },
+      "accessible": "Select Harbor; no direct passage; Home, delivery destination"
+    },
+    {
+      "id": "high-quay",
+      "endpoint": {
+        "x": 306.3329540333256,
+        "y": 182.9533615633731
+      },
+      "marker": {
+        "x": 282.328125,
+        "y": 158.953125,
+        "w": 48,
+        "h": 48
+      },
+      "name": {
+        "x": 268.15625,
+        "y": 216.953125,
+        "w": 95.21875,
+        "h": 44
+      },
+      "accessible": "Select High Quay; adjacent passage available"
+    },
+    {
+      "id": "wide-berth",
+      "endpoint": {
+        "x": 427.7143796687219,
+        "y": 116.90766733806497
+      },
+      "marker": {
+        "x": 403.703125,
+        "y": 143.5,
+        "w": 48,
+        "h": 48
+      },
+      "name": {
+        "x": 507.4375,
+        "y": 100.703125,
+        "w": 99.8125,
+        "h": 44
+      },
+      "accessible": "Select Wide Berth; current location"
+    },
+    {
+      "id": "shell-landing",
+      "endpoint": {
+        "x": 492.35559738309166,
+        "y": 230.83504224141362
+      },
+      "marker": {
+        "x": 468.34375,
+        "y": 206.828125,
+        "w": 48,
+        "h": 48
+      },
+      "name": {
+        "x": 570.625,
+        "y": 205.84375,
+        "w": 115.59375,
+        "h": 44
+      },
+      "accessible": "Select Shell Landing; no direct passage"
+    },
+    {
+      "id": "outer-buoy",
+      "endpoint": {
+        "x": 234.1540576328979,
+        "y": 236.009957510417
+      },
+      "marker": {
+        "x": 210.140625,
+        "y": 212,
+        "w": 48,
+        "h": 48
+      },
+      "name": {
+        "x": 252.0625,
+        "y": 38.734375,
+        "w": 100.625,
+        "h": 44
+      },
+      "accessible": "Select Outer Buoy; no direct passage"
+    }
+  ],
+  "dock": {
+    "x": 281.71875,
+    "y": 100.953125,
+    "w": 99.8125,
+    "h": 48
+  },
+  "dockText": "\nBoard",
+  "card": null,
+  "forecast": "!Wide Berth floods in 4 actions.Beacon Reef to Harbor · turns in 4 actions",
+  "nav": {
+    "currentNode": "wide-berth",
+    "selectedDestination": null,
+    "emphasizedDestination": null,
+    "routes": [
+      {
+        "id": "harbor-high-quay",
+        "nodes": [
+          "harbor",
+          "high-quay"
+        ],
+        "flowFrom": "high-quay",
+        "highlighted": false,
+        "dashSize": 0.09,
+        "gapSize": 0.16
+      },
+      {
+        "id": "high-quay-wide-berth",
+        "nodes": [
+          "high-quay",
+          "wide-berth"
+        ],
+        "highlighted": false,
+        "dashSize": 0.09,
+        "gapSize": 0.16
+      },
+      {
+        "id": "high-quay-shell-landing",
+        "nodes": [
+          "high-quay",
+          "shell-landing"
+        ],
+        "highlighted": false,
+        "dashSize": 0.09,
+        "gapSize": 0.16
+      },
+      {
+        "id": "high-quay-outer-buoy",
+        "nodes": [
+          "high-quay",
+          "outer-buoy"
+        ],
+        "highlighted": false,
+        "dashSize": 0.09,
+        "gapSize": 0.16
+      },
+      {
+        "id": "outer-buoy-shell-landing",
+        "nodes": [
+          "outer-buoy",
+          "shell-landing"
+        ],
+        "highlighted": false,
+        "dashSize": 0.09,
+        "gapSize": 0.16
+      }
+    ],
+    "markers": [
+      {
+        "id": "harbor",
+        "worldPosition": [
+          -6.5,
+          0.04,
+          0
+        ],
+        "visible": true,
+        "status": "nonadjacent",
+        "selected": false,
+        "shape": "diamond"
+      },
+      {
+        "id": "high-quay",
+        "worldPosition": [
+          0,
+          0.04,
+          0
+        ],
+        "visible": true,
+        "status": "available",
+        "selected": false,
+        "shape": "open ring"
+      },
+      {
+        "id": "wide-berth",
+        "worldPosition": [
+          5.8,
+          0.04,
+          -7.4
+        ],
+        "visible": true,
+        "status": "current",
+        "selected": false,
+        "shape": "double ring"
+      },
+      {
+        "id": "shell-landing",
+        "worldPosition": [
+          10.5,
+          0.04,
+          3.8
+        ],
+        "visible": true,
+        "status": "nonadjacent",
+        "selected": false,
+        "shape": "diamond"
+      },
+      {
+        "id": "outer-buoy",
+        "worldPosition": [
+          -3.3,
+          0.04,
+          5.8
+        ],
+        "visible": true,
+        "status": "nonadjacent",
+        "selected": false,
+        "shape": "diamond"
+      }
+    ]
+  },
+  "tips": null,
+  "saved": "{\n  \"version\": 1,\n  \"completed\": [\n    \"holding-pier\",\n    \"bellwater\",\n    \"driftwood-yard\"\n  ],\n  \"acknowledgedScenes\": [\n    \"opening\",\n    \"another-bell\",\n    \"driftwood-light\"\n  ],\n  \"checkpoint\": {\n    \"kind\": \"scene\",\n    \"id\": \"a-wider-deck\"\n  }\n}",
+  "motion": {
+    "mode": "device",
+    "reduced": true
+  },
+  "fullscreen": false
+}

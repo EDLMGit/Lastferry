@@ -1,0 +1,32 @@
+
+Running 2 tests using 1 worker
+
+(node:32112) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\e2e\mobile-map.spec.ts:335:3 › actual rescues › Two Shelters continuous pan zoom inspect sail rotate recenter and rescue (3.7s)
+(node:29836) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 2 tests\e2e\mobile-map.spec.ts:433:3 › actual rescues › Wide Berth occupied departure, ferry subsets, reef reversal and whole rescue (36.9s)
+
+
+  1) tests\e2e\mobile-map.spec.ts:335:3 › actual rescues › Two Shelters continuous pan zoom inspect sail rotate recenter and rescue 
+
+    Error: expect(received).not.toBeCloseTo(expected, precision)
+
+    Expected: not 32.15119515184571
+
+
+      366 |       await settle(page);
+      367 |       const adjusted = await inspect(page);
+    > 368 |       expect(adjusted.camera.scale).not.toBeCloseTo(panned.camera.scale, 3);
+          |                                         ^
+      369 |       expect(adjusted.state).toEqual(original);
+      370 |       events.push({ pan: panned.camera, adjusted: adjusted.camera });
+      371 |       const first = page.locator('#map-refuge .map-hit');
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\mobile-map.spec.ts:368:41
+
+    Error Context: .cache\mobile-map-results\mobile-map-actual-rescues--f90aa--rotate-recenter-and-rescue\error-context.md
+
+  1 failed
+    tests\e2e\mobile-map.spec.ts:335:3 › actual rescues › Two Shelters continuous pan zoom inspect sail rotate recenter and rescue 
+  1 passed (43.6s)

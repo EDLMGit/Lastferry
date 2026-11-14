@@ -1,0 +1,59 @@
+{
+  "method": "Native-size inspection of nine ordered decoded 844x390 runtime frames spanning one complete natural sweep; additional known-angle comparison stills inspected separately. This is rendered temporal evidence, not a state-only animation claim or acoustic listening.",
+  "manifest": "native-temporal-frames.json",
+  "frames_inspected": [
+    "rotation-001.png",
+    "rotation-006.png",
+    "rotation-011.png",
+    "rotation-016.png",
+    "rotation-021.png",
+    "rotation-026.png",
+    "rotation-031.png",
+    "rotation-036.png",
+    "rotation-041.png"
+  ],
+  "observations": [
+    "Visible portions have rounded silhouette falloff and a dissolving far end; no coherent flat wedge boundary was observed.",
+    "Source lens stays luminous while the shaft becomes foreshortened or is occluded behind the roof/tower.",
+    "No hollow ring, UV seam, overlapping-face glare burst or distracting independent variation was observed at the sampled phases.",
+    "Opaque lighthouse roof and rails retain occlusion; the cove background remains visible through the shaft.",
+    "All decoded images are unscaled native 844x390. Runtime canvas recording omits DOM controls; the separately retained whole-interface original shows the actual ending throughout the natural sweep."
+  ],
+  "limitations": "Sampled native frames do not establish physical Android motion quality, native GPU performance, other-engine behavior or audio perception. Raw originals and decoded frames remain local ignored evidence.",
+  "wholeInterfaceInspection": {
+    "method": "Four unscaled native844x390frames extracted at35,40,45and50seconds from the separate whole-interface silent original, confirming the actual completion card remains visible during the natural sweep. No phase control in this window.",
+    "recording": "reviews/lighthouse-light/after/844x390/raw/holding-pier-lighthouse-full-interface-silent.webm",
+    "frames": [
+      {
+        "path": "reviews/lighthouse-light/after/844x390/raw/interface-temporal/ending-035.png",
+        "recordingSecond": 35,
+        "width": 844,
+        "height": 390,
+        "sha256": "047d665a7ae1e9c8ae9bc2f8ef12a0e06791f0d74894872363aad419164a24e0"
+      },
+      {
+        "path": "reviews/lighthouse-light/after/844x390/raw/interface-temporal/ending-040.png",
+        "recordingSecond": 40,
+        "width": 844,
+        "height": 390,
+        "sha256": "4a8dc05530a6701351b32a4c682aaa6eab2a58aeb9fab1f4fd42cca8e093dfaf"
+      },
+      {
+        "path": "reviews/lighthouse-light/after/844x390/raw/interface-temporal/ending-045.png",
+        "recordingSecond": 45,
+        "width": 844,
+        "height": 390,
+        "sha256": "8bd80b11d00ba64de544d7106aa8f1d64fc355bdad51c726115000f52b2573bb"
+      },
+      {
+        "path": "reviews/lighthouse-light/after/844x390/raw/interface-temporal/ending-050.png",
+        "recordingSecond": 50,
+        "width": 844,
+        "height": 390,
+        "sha256": "7b1aa177a9df2d7d5b949c6f5c9741ab5c2f12523c4f14434a7fef6c3505ccb9"
+      }
+    ],
+    "command": "ffmpeg -v error -threads 1 -ss <seconds> -i <whole-interface-silent.webm> -frames:v 1 -update 1 <PNG>",
+    "observed": "Completion card, controls and landmark stay readable; beam changes orientation with source anchored and no sampled glare or solid edge."
+  }
+}

@@ -1,0 +1,12 @@
+import { defineConfig } from '@playwright/test';
+import { resolve } from 'node:path';
+import base from '../playwright.config';
+
+const output = resolve(process.env.LAST_FERRY_REVIEW_DIR ?? 'reviews/water-motion/browser');
+export default defineConfig({
+  ...base,
+  testDir: resolve('tests/e2e'),
+  webServer: [],
+  outputDir: resolve(output, 'raw'),
+  reporter: [['list'], ['json', { outputFile: resolve(output, 'automation-results.json') }]],
+});

@@ -1,0 +1,58 @@
+
+ RUN  v5.0.5 C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry
+
+ ❯ tests/unit/wide-ferry.test.ts (6 tests | 1 failed) 2615ms
+   × six neighbors fit waiting and delivered on the real broad piers with stable identity positions 6ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/wide-ferry.test.ts > six neighbors fit waiting and delivered on the real broad piers with stable identity positions
+AssertionError: expected [ 'harbor-pier:0 beyond pier', …(23) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "harbor-pier:0 beyond pier",
++   "harbor-pier:1 beyond pier",
++   "harbor-pier:2 beyond pier",
++   "harbor-pier:3 beyond pier",
++   "harbor-pier:4 beyond pier",
++   "harbor-pier:5 beyond pier",
++   "high-quay-pier:0 beyond pier",
++   "high-quay-pier:1 beyond pier",
++   "high-quay-pier:2 beyond pier",
++   "high-quay-pier:3 beyond pier",
++   "high-quay-pier:4 beyond pier",
++   "high-quay-pier:5 beyond pier",
++   "wide-berth-pier:0 beyond pier",
++   "wide-berth-pier:1 beyond pier",
++   "wide-berth-pier:2 beyond pier",
++   "wide-berth-pier:3 beyond pier",
++   "wide-berth-pier:4 beyond pier",
++   "wide-berth-pier:5 beyond pier",
++   "shell-landing-pier:0 beyond pier",
++   "shell-landing-pier:1 beyond pier",
++   "shell-landing-pier:2 beyond pier",
++   "shell-landing-pier:3 beyond pier",
++   "shell-landing-pier:4 beyond pier",
++   "shell-landing-pier:5 beyond pier",
++ ]
+
+ ❯ tests/unit/wide-ferry.test.ts:56:19
+     54|   }
+     55|  }
+     56|  expect(failures).toEqual([]);
+       |                   ^
+     57| });
+     58|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 5 passed (6)
+   Start at  19:23:11
+   Duration  2.91s (tests 95%, import 2%, transform 2%)
+

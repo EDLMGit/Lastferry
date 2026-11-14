@@ -1,0 +1,133 @@
+export type IslandStyle =
+  'garden' | 'crag' | 'reeds' | 'rocky' | 'refuge' | 'working' | 'quay' | 'spit';
+type Landmark = {
+  kind: 'lighthouse' | 'cottage' | 'bell' | 'yard' | 'waterfront' | 'orchard';
+  islandId: string;
+  positionXZ: [number, number];
+};
+export type SceneLayout = {
+  landmarks: Landmark[];
+  islandStyles: Record<string, IslandStyle>;
+  stonePiers: string[];
+  centeredWaitingPairs: boolean;
+  cameraPosition: [number, number, number];
+  landscapeCameraPosition?: [number, number, number];
+  light?: {
+    background: string;
+    sky: string;
+    ground: string;
+    sun: string;
+    sunPosition: [number, number, number];
+  };
+};
+const layouts: Record<string, SceneLayout> = {
+  'orchard-landing': {
+    landmarks: [
+      { kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-9.18, -5.24] },
+      { kind: 'orchard', islandId: 'orchard-island', positionXZ: [9.05, -7.86] },
+    ],
+    islandStyles: {
+      'lighthouse-island': 'refuge',
+      'orchard-island': 'working',
+      'quay-island': 'quay',
+      'steps-island': 'spit',
+    },
+    stonePiers: ['quay-pier', 'steps-pier'],
+    centeredWaitingPairs: true,
+    cameraPosition: [3.4, 21, 32],
+    landscapeCameraPosition: [3.4, 20, 32],
+  },
+  'reef-return': {
+    landmarks: [
+      { kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-8.78, -5.61] },
+      { kind: 'cottage', islandId: 'quay-island', positionXZ: [-0.56, -6.02] },
+    ],
+    islandStyles: { 'lighthouse-island': 'refuge', 'quay-island': 'quay', 'wrack-island': 'working', 'pool-island': 'spit' },
+    stonePiers: ['quay-pier'],
+    centeredWaitingPairs: true,
+    cameraPosition: [3.4, 21, 32],
+    landscapeCameraPosition: [3.4, 20, 32],
+  },
+  'two-shelters': {
+    landmarks: [
+      { kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-6.5, -2.1] },
+      { kind: 'cottage', islandId: 'low-island', positionXZ: [0, 0.65] },
+      { kind: 'bell', islandId: 'refuge-island', positionXZ: [0, -6.05] },
+    ],
+    islandStyles: { 'refuge-island': 'rocky', 'reed-island': 'reeds' },
+    stonePiers: ['refuge-pier'],
+    centeredWaitingPairs: true,
+    cameraPosition: [0, 34, 24],
+    landscapeCameraPosition: [0, 30, 30],
+  },
+  'wide-berth': {
+    landmarks: [
+      { kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-8.75, -5.1] },
+      { kind: 'waterfront', islandId: 'wide-island', positionXZ: [7.65, -12.3] },
+    ],
+    islandStyles: {
+      'lighthouse-island': 'refuge',
+      'quay-island': 'quay',
+      'wide-island': 'working',
+      'shell-island': 'spit',
+    },
+    stonePiers: ['high-quay-pier'],
+    centeredWaitingPairs: true,
+    cameraPosition: [3.4, 21, 32],
+    landscapeCameraPosition: [3.4, 20, 32],
+  },
+  'driftwood-yard': {
+    landmarks: [
+      { kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-6.15, -3.25] },
+      { kind: 'yard', islandId: 'yard-island', positionXZ: [0, -4.9] },
+    ],
+    islandStyles: { 'yard-island': 'rocky', 'mooring-island': 'rocky', 'reed-island': 'reeds' },
+    stonePiers: ['mooring-pier'],
+    centeredWaitingPairs: true,
+    cameraPosition: [0, 34, 24],
+    landscapeCameraPosition: [0, 30, 30],
+  },
+  'first-crossing': {
+    landmarks: [
+      { kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-6.15, -3.25] },
+      { kind: 'cottage', islandId: 'sheep-island', positionXZ: [6.3, -3.25] },
+    ],
+    islandStyles: { 'central-rock': 'crag' },
+    stonePiers: [],
+    centeredWaitingPairs: false,
+    cameraPosition: [0, 34, 24],
+    landscapeCameraPosition: [0, 30, 30],
+  },
+  'holding-pier': {
+    landmarks: [
+      { kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-6.15, -3.25] },
+      { kind: 'cottage', islandId: 'rabbit-island', positionXZ: [6.3, -3.25] },
+    ],
+    islandStyles: { 'stone-island': 'rocky' },
+    stonePiers: ['stone-pier'],
+    centeredWaitingPairs: true,
+    cameraPosition: [0, 34, 24],
+    landscapeCameraPosition: [0, 30, 30],
+  },
+  bellwater: {
+    landmarks: [
+      { kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-5.75, -2.8] },
+      { kind: 'bell', islandId: 'bell-island', positionXZ: [0.45, -4.95] },
+    ],
+    islandStyles: { 'low-island': 'reeds', 'bell-island': 'rocky' },
+    stonePiers: ['bell-pier'],
+    centeredWaitingPairs: true,
+    cameraPosition: [0, 34, 24],
+    landscapeCameraPosition: [0, 30, 30],
+    light: {
+      background: '#2a6372',
+      sky: '#f2f1db',
+      ground: '#668c93',
+      sun: '#ffe7bd',
+      sunPosition: [-7, 17, 5],
+    },
+  },
+};
+export function sceneLayout(levelId: string) {
+  return layouts[levelId] ?? layouts['first-crossing'];
+}

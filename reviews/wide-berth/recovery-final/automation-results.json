@@ -1,0 +1,199 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "wide-berth.spec.ts",
+      "--grep",
+      "launch repeated handoff"
+    ],
+    "configFile": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\playwright.config.ts",
+    "rootDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "snapshotDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5270",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "deviceScaleFactor": 1,
+          "headless": true,
+          "launchOptions": {
+            "args": [
+              "--use-angle=swiftshader",
+              "--enable-unsafe-swiftshader"
+            ]
+          },
+          "video": {
+            "mode": "on",
+            "size": {
+              "width": 1440,
+              "height": 900
+            }
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "reviews/wide-berth/recovery-final/automation-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "wide-berth.spec.ts",
+      "file": "wide-berth.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "launch repeated handoff, real Restart and cove-change recovery preserve campaign bytes",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 300000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 56134,
+                  "error": {
+                    "message": "Error: TypeError: Cannot read properties of undefined (reading 'getState')\n    at <anonymous>:4:14\n    at <anonymous>:16:3",
+                    "stack": "Error: TypeError: Cannot read properties of undefined (reading 'getState')\n    at <anonymous>:4:14\n    at <anonymous>:16:3\n    at <anonymous>:4:14\n    at <anonymous>:16:3\n    at passive (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\story-support.ts:198:11)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\wide-berth.spec.ts:744:36\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\wide-berth.spec.ts:744:5",
+                    "location": {
+                      "file": "<anonymous>",
+                      "column": 14,
+                      "line": 4
+                    }
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<anonymous>",
+                        "column": 14,
+                        "line": 4
+                      },
+                      "message": "Error: TypeError: Cannot read properties of undefined (reading 'getState')\n    at <anonymous>:4:14\n    at <anonymous>:16:3\n    at <anonymous>:4:14\n    at <anonymous>:16:3\n    at passive (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\story-support.ts:198:11)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\wide-berth.spec.ts:744:36\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\wide-berth.spec.ts:744:5"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T19:15:47.355Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\wide-berth-launch-repeated-63012-ery-preserve-campaign-bytes\\error-context.md"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\wide-berth-launch-repeated-63012-ery-preserve-campaign-bytes\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<anonymous>",
+                    "column": 14,
+                    "line": 4
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "749affe70e9d664edb6d-b9fade3509cef9115bce",
+          "file": "wide-berth.spec.ts",
+          "line": 685,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-31T19:15:45.729Z",
+    "duration": 59002.719,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

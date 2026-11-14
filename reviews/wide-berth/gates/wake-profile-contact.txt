@@ -1,0 +1,45 @@
+
+ RUN  v5.0.5 C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry
+
+ ❯ tests/unit/wide-ferry.test.ts (7 tests | 1 failed) 5991ms
+   × wide releases touch the correct outside of actual rendered hull geometry across forward, backing and turning directions 37ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/wide-ferry.test.ts > wide releases touch the correct outside of actual rendered hull geometry across forward, backing and turning directions
+AssertionError: expected [ …(6) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "4:-1.4085637644431357,-1.408563764443136",
++   "12:-1.456969064104462,1.4569690641044617",
++   "13:-1.420066056782426,2.1252790439462363",
++   "19:1.420066056782426,2.1252790439462377",
++   "20:1.4569690641044617,1.4569690641044621",
++   "28:1.4085637644431361,-1.4085637644431355",
++ ]
+
+ ❯ tests/unit/wide-ferry.test.ts:226:19
+    224|   if(inside)failures.push(`${step}:${point}`);
+    225|  }
+    226|  expect(failures).toEqual([]);
+       |                   ^
+    227| });
+    228|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 14 passed (15)
+   Start at  19:30:38
+   Duration  6.30s (tests 97%, import 2%, transform 1%)
+
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

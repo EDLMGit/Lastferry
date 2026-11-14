@@ -1,0 +1,74 @@
+
+> last-ferry@1.0.0 test:e2e
+> playwright test reef-return.spec.ts reef-return-practice.spec.ts two-shelters-production.spec.ts wide-berth-production.spec.ts
+
+
+Running 6 tests using 1 worker
+
+(node:41080) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\e2e\reef-return-practice.spec.ts:5:1 › short landscape Practice keeps the pending launch through reef inspection, loss, Undo and direct replay (7.3s)
+  x  2 tests\e2e\reef-return.spec.ts:22:1 › portrait greedy pickup, blocked loaded return and six-step recovery (3.0m)
+(node:42268) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 3 tests\e2e\reef-return.spec.ts:137:3 › short landscape production rescue, missed window and Undo (25.8s)
+  ok 4 tests\e2e\reef-return.spec.ts:137:3 › portrait rescue, forecast, mixed loading and uninterrupted runtime sound (41.7s)
+  ok 5 tests\e2e\two-shelters-production.spec.ts:7:1 › production Two Shelters rescue and tide Undo without development globals (31.6s)
+  ok 6 tests\e2e\wide-berth-production.spec.ts:18:1 › production six-space boat rescue, actual six-option overflow and full-label fit (1.2m)
+
+
+  1) tests\e2e\reef-return.spec.ts:22:1 › portrait greedy pickup, blocked loaded return and six-step recovery 
+
+    Test timeout of 180000ms exceeded.
+
+    Error: locator.tap: Test ended.
+    Call log:
+      - waiting for locator('#map-harbor')
+        - locator resolved to <button id="map-harbor" data-risk="loss" class="map-target" aria-expanded="false" data-status="available" data-destination="harbor" aria-controls="local-context" title="adjacent, This action will cut Birch and Dot off from Harbor. The ferry can only cross back for them after the homeward current ends." aria-label="Select Harbor; adjacent, This action will cut Birch and Dot off from Harbor. The ferry can only cross back for them after the homeward current ends.; Home, delivery destination">…</button>
+      - attempting tap action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - element is outside of the viewport
+        - retrying tap action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - element is outside of the viewport
+        - retrying tap action
+          - waiting 100ms
+        275 × waiting for element to be visible, enabled and stable
+            - element is visible, enabled and stable
+            - scrolling into view if needed
+            - done scrolling
+            - element is outside of the viewport
+          - retrying tap action
+            - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+
+
+       at ui.ts:39
+
+      37 |     await activate(page, current, touch);
+      38 |   }
+    > 39 |   if (touch) await page.locator(`#${id}`).tap();
+         |                                           ^
+      40 |   else await page.locator(`#${id}`).click();
+      41 | }
+      42 | export async function wholeCove(page: Page, touch = false) {
+        at activate (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\ui.ts:39:43)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\reef-return.spec.ts:29:3
+
+    Error Context: test-results\reef-return-portrait-greed-cd84b-eturn-and-six-step-recovery\error-context.md
+
+  1 failed
+    tests\e2e\reef-return.spec.ts:22:1 › portrait greedy pickup, blocked loaded return and six-step recovery 
+  5 passed (6.1m)
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

@@ -1,0 +1,3366 @@
+diff --git a/NEXT_TASK.md b/NEXT_TASK.md
+index 0ba048a..3e89733 100644
+--- a/NEXT_TASK.md
++++ b/NEXT_TASK.md
+@@ -1,70 +1,162 @@
+-# Last Ferry — full-width cove and contextual controls
++# Last Ferry — Bellwater Cove
+ 
+-Continue on `m1-first-crossing` from the reviewed navigation pass, commit `95f4ca4b49c65e37414d02c6186774ebf275808c`, or preserve any newer user work on that branch. PR #1 stays draft; main stays unchanged. Follow the existing authorized Git workflow and repository instructions.
++## Current task and working agreement
++
++Continue on `m1-first-crossing` from the reviewed contextual-interface commit `e9c81d620df5fca0983965e80c348260fb3518e9`, preserving any newer user work. Follow AGENTS.md and the existing authorized Git workflow. PR #1 remains draft; main remains unchanged.
++
++This is the current task after the contextual-interface pass. It explicitly advances beyond the original M1 stopping point. Complete the bounded fixes, one new authored cove, its modest environmental identity, and the verification/handoff described here. Do not stop after the first fix to request another task.
+ 
+ ## Product decision
+ 
+-The navigation pass is accepted. Holding Pier is our introductory puzzle. Its challenge, authored values and solution should remain unchanged in this task.
++Keep Holding Pier as the introductory puzzle and preserve its solution. Build **Bellwater Cove**, a second main puzzle with a different planning problem, using the existing rules and controls.
++
++The next larger milestone after Bellwater is a shared environment pass across the two main coves: water, shallows, shore contact, lighting and restrained arrival detail. Do not undertake that broader visual overhaul in this task. Bellwater still needs enough authored scenery to feel like a new place and explain its routes.
++
++We are testing puzzle variety before adding another mechanic. Bellwater's difficulty and enjoyment are hypotheses for the user's playtest; neither its action count nor a solver proves them.
++
++## A. Resolve the bounded responsive issue first
++
++An independent review reproduced a local-action-card defect at intermediate landscape heights.
++
++**Reproduction at 844 × 500:** open `/?cove=holding-pier`, let Moss ashore, then try to use the map's Sail to Shallows button. The stretched `#local-context` section covers the button and intercepts its pointer input. At 1024 × 600, the same card stretches into the forecast area.
++
++**Cause:** compact landscape CSS applies through 600 px height, setting local context to bottom anchoring with no centering transform. `positionMap()` in `src/main.ts` switches to compact positioning only through 480 px, so it supplies desktop inline top/left values between 481 and 600 px. These rules conflict.
++
++Use a consistent layout condition and clear stale inline positioning when compact layout owns the card. Keep the card at its intended content height and prevent overlap with route targets or forecast. A review-browser-only change from the JavaScript 480 px condition to 600 px restored the nine-action Holding Pier rescue at both sizes; this is a candidate direction, not a committed fix or a complete regression result.
++
++Retain a focused regression that performs the real unloading and sailing actions at 844 × 500, checks local controls/forecast at 1024 × 600, and exercises a resize across the breakpoint. Preserve the existing 1440 × 900, 844 × 390 and 780 × 390 layouts and the baseline cove.
++
++Before content work, run the relevant current interaction checks. The independent Linux/Chromium 141 review also encountered input/capture timeouts in the broad suite, whereas the contributor reported a full pass in Chromium 156. In particular, recheck rapid Confirm taps on the baseline phone boarding card and loss → Undo → safe boarding under reduced motion. Investigate any reproducible failure; do not weaken state assertions, add arbitrary sleeps or silently relabel the independent full run as passed. A timeout alone is not proof of a gameplay defect.
++
++Repeated Confirm input must commit exactly one action and must not activate a newly exposed background control or open an unintended dialog. Check normal animation and reduced motion, recording input spacing so delayed automation is not misclassified as a rapid double tap. The independent no-recording follow-up passed both production rescues but timed out in all three longer contextual scenarios; it does not establish that recording was the cause or that the full browser suite passed.
++
++## B. Author Bellwater's exact puzzle
++
++Level ID: `bellwater`. Display title: **Bellwater Cove**.
++
++The ferry starts empty at Harbor. Two rabbits, **Tansy** and **Lark**, wait at Low Pier. A sheep, **Bram**, waits at Bell Pier. Reuse the existing rabbit/sheep models. These are new neighbors, so the introductory passengers do not become inexplicably stranded again.
++
++Use stable level-local passenger IDs. Add only the small amount of level-owned naming metadata needed for the new residents and locations; preserve Pip, Rue and Moss in the existing coves. Status, action labels, subset warnings, accessible names, forecasts and endings must use the active level's names.
++
++### Rules retained
++
++- Capacity 4. Each rabbit uses 1 slot; the sheep uses 2.
++- Draft: empty = 1; load 1–2 = 2; load 3–4 = 3.
++- Every accepted move across one edge, Board selection, Unload selection or Wait costs one action.
++- Tide starts at 0, rises to 1 after action 4, then to 2 after action 8. It does not rise further.
++- Route/basin depth is base depth plus tide. Equality supports the boat.
++- A pier is dry when tide is strictly below its elevation.
++- Apply the complete action, then advance the turn/tide and evaluate flooding. Arrival does not include boarding.
++- Preserve free inspection, actual selected-subset previews, one-activation safe sailing, dangerous-action confirmation, passenger conservation and complete Undo.
++- Win only after all three required passengers are delivered at Harbor. No new move cap, timer, score requirement or mandatory Wait.
++
++### Nodes and piers
++
++Every stopping basin has base depth 3.
++
++| Stop | Pier elevation | Starting passengers / role |
++| --- | ---: | --- |
++| Harbor | 3 | Empty; safe delivery destination; ferry starts here |
++| Shallows | None | Short-route waypoint |
++| Low Pier | 1 | Tansy and Lark; boarding can complete on action 4 before the rise |
++| West Buoy | None | Outer-route waypoint |
++| East Buoy | None | Outer-route waypoint |
++| Bell Pier | 2 | Bram; boarding can complete on action 8 before the rise |
++
++### Connections
++
++All six edges are bidirectional. These are the entire route graph; do not add a shortcut during geometry work.
++
++| Edge | Base depth |
++| --- | ---: |
++| Harbor ↔ Shallows | 1 |
++| Shallows ↔ Low Pier | 1 |
++| Harbor ↔ West Buoy | 3 |
++| West Buoy ↔ East Buoy | 3 |
++| East Buoy ↔ Low Pier | 3 |
++| Harbor ↔ Bell Pier | 2 |
++
++The two-edge shallow route and three-edge deep route form a loop between Harbor and Low Pier. Bell Pier branches directly from Harbor. There are six stopping nodes, six edges and three islands.
++
++### Intended discovery
++
++The return route can differ from the outward route because the water changes. The player must also consider both pickup deadlines and the cost of delivering passengers when passing through Harbor. Communicate the rules and consequences clearly, while leaving the plan for the player to discover.
++
++Do not add a walkthrough, recommended move, forced highlight sequence or compulsory Wait step. Keep the legitimate alternatives below.
++
++## C. Implementation witnesses — keep these out of player-facing instructions
+ 
+-Remove the permanent right sidebar. Give the cove the full play area, retain the successful named map controls, and move the sidebar's remaining functions into contextual buttons and compact dialogs. The player should spend most of a normal turn looking at the miniature cove.
++Two representative ten-action rescues:
+ 
+-Read the current source and review evidence before changing the UI. This is a complete interaction migration, including the functions that currently exist only in the sidebar. A hidden sidebar or a permanently open floating replacement does not satisfy the task.
++| Action | Shallow outward / deep return | Deep outward / shallow return |
++| ---: | --- | --- |
++| 1 | Harbor → Shallows | Harbor → West Buoy |
++| 2 | Shallows → Low Pier | West Buoy → East Buoy |
++| 3 | Board both rabbits | East Buoy → Low Pier |
++| 4 | Low Pier → East Buoy; tide rises | Board both rabbits; tide rises |
++| 5 | East Buoy → West Buoy | Low Pier → Shallows |
++| 6 | West Buoy → Harbor | Shallows → Harbor |
++| 7 | Harbor → Bell Pier | Harbor → Bell Pier |
++| 8 | Board Bram; tide rises after boarding | Board Bram; tide rises after boarding |
++| 9 | Bell Pier → Harbor | Bell Pier → Harbor |
++| 10 | Deliver everyone | Deliver everyone |
+ 
+-## 1. Main play screen
++A third valid family takes the shallow route both ways. One Wait before the first shallow return step allows the tide to reach 1. Valid placements include Harbor before departure, Shallows, or Low Pier before or after boarding both rabbits. Boarding the two rabbits separately on actions 3 and 4 also works. Preserve both rabbit-selection orders and these valid alternatives. Longer harmless play after everyone is aboard remains legal.
+ 
+-- Use the full viewport width for the scene. Reframe the camera and reposition map labels for the available space. Keep the lighthouse, ferry, useful piers, passengers and passages legible at desktop and landscape-phone sizes. Keep labels off important scenery where possible; do not change authored world coordinates to solve UI layout.
+-- Retain named map controls and their meaningful current, available, too-shallow, nonadjacent and flood-warning states. A safe adjacent sailing action remains one activation and one committed action.
+-- Keep a separate, visible Inspect affordance for adjacent destinations so a player can inspect a safe route without sailing. It must work with touch and keyboard; hover alone is insufficient. Blocked destinations open a free explanation. Focus/hover/inspection must continue to highlight the actual passage.
+-- Show a compact objective and progress: “Bring all three passengers to Harbor” and Home 0/3, adapting to each cove's actual state.
+-- Keep the boat's load/required depth and the urgent deadline visible without opening a dialog. For example, “Depth 2 · 2/4 spaces” and “Rabbit Pier floods in 4 actions.” Derive this information from state and replace obsolete danger emphasis when the passengers are safe.
+-- Keep Undo and Wait directly accessible with clear labels. Wait must show its one-action cost and open its actual consequence before commitment. Put Restart, Sound, detailed help and cove selection in a small Menu dialog. The deadline/status control can open the tide and pier forecast.
++Meaningful unsuccessful or blocked plans:
+ 
+-## 2. Local passenger actions
++- Go to Bell Pier first: the rabbits cannot be boarded before the first rise.
++- Use the deep outer route in both directions: reach Harbor on action 7, then Bell Pier on action 8, too late to board Bram.
++- Deliver any rabbit before boarding Bram: the transfer consumes the remaining boarding window.
++- At Low Pier on action 3 after boarding both rabbits, attempt the shallow return: current depth 1 cannot support draft 2. Inspection must explain the blockage freely; a future rise cannot validate the current move.
+ 
+-Place the available passenger actions near the ferry/current pier. A compact bottom action strip is acceptable on short phone screens if it keeps the scene legible. Use concrete action labels such as “Let Moss ashore,” “Board Pip and Rue” and “Bring passengers home.”
++The rules prototype was evaluated with the exact checked-out production reducer at the reviewed commit. Complete legal-action reachability found 121 canonical states, shortest rescue 10, and eight shortest action sequences grouped into the route/timing families above. There were zero wins without shallow-route use, zero wins when first sailing toward Bell Pier, and zero wins with delivery before sheep boarding. Wins exist without Wait.
+ 
+-Activating a passenger action opens one card containing selection, consequence and confirmation. Avoid a chain of separate action-picker and confirmation dialogs. If boarding and unloading are both available, expose both without recommending the puzzle solution.
++These are design checks, not evidence of a playable Bellwater implementation. Counts depend on canonicalization and should not become brittle UI gates. Preserve the actual witness behavior and constraints. The prototype's coordinates and inherited scenery were provisional; author and validate coherent production geometry rather than copying them.
+ 
+-Clicking the current pier or ferry should expose or focus its local actions without spending a turn or offering an invalid move. Remove stale instructions that tell the player to use the former side panel.
++## D. Make Bellwater a distinct place
+ 
+-## 3. Contextual dialogs
++Create a new inlet composition instead of repeating the current straight row of islands:
+ 
+-Use one compact dialog at a time for passenger transfer, passage inspection, Wait, forecast, Menu or terminal feedback. Keep as much useful scene visible as the task permits. On phones, a bounded bottom sheet is acceptable. The normal play screen must not retain an empty panel-sized area.
++- A low sandy/reed-edged shore for the rabbits.
++- A higher rocky pickup shore with a small recognizable bell landmark for Bram.
++- The safe Harbor/lighthouse destination.
++- A legible shallow channel and a visibly deeper outer route.
++- A modest change in coast shape, local planting and light/palette, within the existing miniature style.
+ 
+-The transfer dialog contains:
++Use existing geometry/material techniques and reusable assets. The bell is a landmark, not a new gameplay system. Keep decorative routes, water highlights and scenery from implying connections or access that the level data does not provide.
+ 
+-1. The selected action and passenger choices, including supported subsets.
+-2. Resulting boat load/depth and the relevant route or pier consequence.
+-3. The actual action/tide order where it matters.
+-4. A single clear confirmation and an accessible Cancel/close action.
++Author island footprints, pier positions, camera framing and route waypoints together. Verify actual ferry clearance in both directions along every route. Do not change topology/depths or squeeze paths through land to fit existing decoration.
+ 
+-Continue to derive all consequences from the actual selected preview. Selecting only one rabbit at the critical boundary must name the rabbit left to flood. Selecting both must explain that they board before the rise and are safe aboard. Do not hardcode copy to the successful solution.
++The current renderer hardcodes some lighthouse/house positions and special-cases existing pier IDs. Move only the necessary scenery anchors, names and layout settings into level-owned data or a small explicit scene configuration. Make the six-stop framing and label placement work in Bellwater while preserving both older coves. No generic level editor or broad rendering-framework rewrite is needed.
+ 
+-Inspection and cancellation remain free. Use a brief “Inspection · no action spent” label once rather than repeating it throughout the card. An immediately losing sailing action must retain its explicit warning and confirmation. Ordinary safe sailing must not gain a mandatory dialog.
++Retain the shared water implementation for this milestone, adding the authored shallow/shore treatment the new puzzle needs. The following shared environment milestone will address repetitive ripples, shoreline/water contact across tides and overall atmosphere across the two main coves.
+ 
+-While a dialog is open, prevent background gameplay input and click-through. Supply dialog semantics, predictable initial focus, a usable Tab/Shift+Tab cycle, Escape/Cancel, and focus restoration to its trigger or a valid successor if that trigger disappeared after committing. Prevent double actions during transitions and repeated touch input. Essential consequences and the confirmation must remain fully visible at both 844 × 390 and 780 × 390. Preserve at least 14 px essential text and 44 px interactive targets.
++## E. Provide a small playable sequence
+ 
+-Success and failure use compact result cards with clear recovery controls. Terminal Undo must continue to work and must not be blocked behind an inaccessible modal.
++Make Holding Pier the normal default/new-game entry now that it is the accepted introduction. Keep First Crossing available explicitly through its existing query route and Menu as the baseline cove.
+ 
+-## 4. Scope and implementation
++On Holding Pier success, add an accessible **Next cove** action that opens Bellwater. Preserve terminal Undo/Restart. Add Bellwater to Menu and make `/?cove=bellwater` open it directly.
+ 
+-Preserve both coves, their current entry routes/selection, topology, passenger costs, capacity and draft bands, tide timing, reducer event order, preview semantics and complete Undo. Do not add a new cove, tune difficulty, introduce another mechanic, redesign the characters or change dependencies as part of this pass.
++A brief transition line is enough: “Further along the coast, two piers still have their lights on.” Show the new cove title and fresh residents. Do not build a campaign map, unlock tree, save system or dialogue framework. Bellwater's completion should acknowledge that its neighbors are safe without pretending the whole game's story is finished.
+ 
+-Replace the sidebar flow rather than leaving a second parallel UI path. Organize UI code as needed to keep state, presentation and dialog interaction coherent. Keep the deterministic simulation independent of layout and animation. Avoid speculative UI frameworks or infrastructure.
++Update baseline-specific tests to request `?cove=first-crossing` explicitly where necessary; keep their original gameplay assertions. Add a small test of default Holding Pier → success → Next cove → Bellwater initial state.
+ 
+-## 5. Acceptance and verification
++## F. Verification and handoff
+ 
+-The result should demonstrate the following through the real interface:
++Run build/typecheck and the relevant unit/browser checks against the actual implementation. At minimum establish:
+ 
+-- The full-width initial cove shows the objective, depth/load, urgent deadline and named destinations. Local passenger actions are discoverable without opening a general menu.
+-- Safe map sailing still commits exactly once. Safe and blocked routes can be inspected for free with mouse, keyboard and emulated touch.
+-- Both coves can be completed. Holding Pier retains its nine-action rescue, meaningful losing alternatives and full Undo across unloading, tide rise and terminal state.
+-- Passenger subset changes update the real preview. Both the complete safe boarding message and complete one-rabbit loss message fit, together with confirmation, at the two phone sizes.
+-- Dialog opening, switching and cancellation do not change game state. Keyboard focus behaves correctly and background clicks/touches cannot commit actions through an open or closing dialog.
+-- Wait, forecast, rules, Restart, Sound and cove selection remain reachable. The current boat/pier interaction and any instructions match the new layout.
++1. The responsive fix restores actual mouse/touch actions and keeps local controls clear at 844 × 500 and 1024 × 600, including resizing. Existing desktop and 390 px-high layouts still work.
++2. Holding Pier and First Crossing retain their rescues, input protection, free inspection, subset consequences and complete Undo. Resolve any reproduced baseline interaction failure before proceeding.
++3. Bellwater's representative route families win through the real reducer. Its failed alternatives fail for the intended reasons; Wait is not compulsory.
++4. An actual-UI Bellwater rescue works with mouse, natural keyboard and emulated touch. Check one valid route through production without debug controls.
++5. Boarding on actions 4 and 8 is safe before the respective rise. Invalid shallow inspection costs no time. Subset previews identify the actual passenger left behind. Undo restores passengers, tide, boat, delivered state and outcome through both rises and terminal state.
++6. All six destinations, passage highlights, local passenger actions and important warnings are legible at 1440 × 900, 844 × 390 and 780 × 390. Essential consequences and confirmation fit without clipping; retain 14 px essential text and 44 px targets.
++7. Scene and ferry clearance checks use the new authored geometry, and level-specific naming/scenery does not break the older coves.
++8. Default entry, Menu selection and the Next cove action load the intended level and reset state correctly.
+ 
+-Run build/typecheck, the unit suite and browser checks relevant to this migration. Update affected tests to use the new actual controls and add focused coverage for modal focus and background-input behavior. Keep the existing state, consequence and clipping assertions meaningful; do not weaken them to accommodate the new structure. Stop once the relevant risks are covered.
++Capture representative actual gameplay: new cove start, blocked shallow return, critical boarding at a rise, changed water/passenger state and completion. Include both phone widths for initial framing and the most constrained preview. Inspect images at native size. Keep an uninterrupted recording locally if supported; no external hosting is required.
+ 
+-Capture the actual game at 1440 × 900, 844 × 390 and 780 × 390: initial cove, route inspection, critical boarding, one-rabbit warning, after the tide rise and success. Inspect layout at native size. Retain a short uninterrupted recording locally if supported; no external hosting is required.
++Update the rule/level documentation, STATUS and a compact review report. Record exact source identity, actual commands/results, environment and remaining uncertainty. Do not treat reference-model results as actual UI evidence or claim fresh checks that were not rerun. Follow the existing normal push/draft-PR handoff workflow and report the final commit. Main stays unchanged.
+ 
+-Update STATUS and the review report with source identity, actual commands/results, representative screenshots and any remaining issue. Use the existing authorized branch/PR handoff workflow. Keep PR #1 draft and main unchanged. Report the final commit and distinguish fresh evidence from any reused evidence. Finish this interface milestone before beginning the next cove.
++Finish Bellwater before adding further levels or mechanics. The user will playtest it; the next direction after that is the planned shared environment pass.
+diff --git a/docs/ASSET_LEDGER.md b/docs/ASSET_LEDGER.md
+index a1b7e50..31b8f35 100644
+--- a/docs/ASSET_LEDGER.md
++++ b/docs/ASSET_LEDGER.md
+@@ -2,19 +2,21 @@
+ 
+ All runtime geometry is original code authored for this project by Codex on 2026-10-20. No third-party models, images, fonts, audio recordings, or generated bitmap assets are loaded by the game. Project code remains subject to the project's chosen rights; this ledger does not assert a new distribution license.
+ 
+-| Family | Reproducible source | Treatment / provenance |
+-| --- | --- | --- |
+-| Yellow ferry and red cabin | `src/scene/models.ts`, `ferry()` | Curved extruded and beveled hull, open planked deck, rails, fenders, life ring, windows, chimney and flag. Original project geometry. |
+-| Two rabbits and sheep | `src/scene/models.ts`, `animal()` | Shared animal families with distinct rabbit coats/poses, wool clusters, limbs, ears and facial details. Original project geometry. |
+-| Lighthouse, cottage, piers and vegetation | `src/scene/models.ts`, `src/scene/world.ts` | Tapered lighthouse with lantern/balcony, cottage roof, boards, moorings, lanterns, shrubs, flowers, pines, crates. Original project geometry. |
+-| Terrain and navigation | `src/scene/world.ts`, authoritative `data/first-crossing.level.json` | Rounded terraces inside authored polygons, faceted rocks, water shader, foam, route lines and buoy markers. The water is a stylized shader, not a fluid simulation. |
+-| Motion | `src/scene/motion.ts`, `src/scene/world.ts` | Polyline traversal with checked yaw; gangway passenger paths, hull draft, tide and arrival acknowledgment. |
+-| Sound | `src/audio/sound.ts` | Original Web Audio oscillators: quiet motor-like notes, boarding/docking notes and arrival arpeggio. No recorded samples. |
+-| Interface | `src/style.css`, `src/main.ts` | System Arial/Helvetica/Georgia fonts, DOM text and symbols. No downloaded fonts. |
+-| Library geometry helpers | npm `three`, `three/addons/geometries/RoundedBoxGeometry.js` | Three.js MIT-licensed library code. License retained at `node_modules/three/LICENSE` after installation. Exact versions in `package-lock.json`. |
++| Family                                    | Reproducible source                                                  | Treatment / provenance                                                                                                                                              |
++| ----------------------------------------- | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
++| Yellow ferry and red cabin                | `src/scene/models.ts`, `ferry()`                                     | Curved extruded and beveled hull, open planked deck, rails, fenders, life ring, windows, chimney and flag. Original project geometry.                               |
++| Two rabbits and sheep                     | `src/scene/models.ts`, `animal()`                                    | Shared animal families with distinct rabbit coats/poses, wool clusters, limbs, ears and facial details. Original project geometry.                                  |
++| Lighthouse, cottage, piers and vegetation | `src/scene/models.ts`, `src/scene/world.ts`                          | Tapered lighthouse with lantern/balcony, cottage roof, boards, moorings, lanterns, shrubs, flowers, pines, crates. Original project geometry.                       |
++| Terrain and navigation                    | `src/scene/world.ts`, authoritative `data/first-crossing.level.json` | Rounded terraces inside authored polygons, faceted rocks, water shader, foam, route lines and buoy markers. The water is a stylized shader, not a fluid simulation. |
++| Motion                                    | `src/scene/motion.ts`, `src/scene/world.ts`                          | Polyline traversal with checked yaw; gangway passenger paths, hull draft, tide and arrival acknowledgment.                                                          |
++| Sound                                     | `src/audio/sound.ts`                                                 | Original Web Audio oscillators: quiet motor-like notes, boarding/docking notes and arrival arpeggio. No recorded samples.                                           |
++| Interface                                 | `src/style.css`, `src/main.ts`                                       | System Arial/Helvetica/Georgia fonts, DOM text and symbols. No downloaded fonts.                                                                                    |
++| Library geometry helpers                  | npm `three`, `three/addons/geometries/RoundedBoxGeometry.js`         | Three.js MIT-licensed library code. License retained at `node_modules/three/LICENSE` after installation. Exact versions in `package-lock.json`.                     |
+ 
+ The supplied images in `references/` remain generated concept references only. `first-crossing.png` was inspected for direction; it is never loaded by the runtime. Gameplay evidence lives separately under `reviews/m1/`.
+ 
+ M1.1 refines the same original animal meshes: taller silhouettes, wider separated rabbit ears, cream/tan coats and a darker sheep face. Named passenger anchors under the ferry's animated hull now carry aboard animals through draft, bob, tide and travel. The phone camera fits actual scene bounds without changing authored gameplay coordinates. No acquired or generated bitmap assets were added. Fresh refinement evidence is under `reviews/m1-1/`.
+ 
+ Holding Pier experiment (2026-10-21): reuses these same procedural production meshes and generated sound cues. Three islands and piers come from `data/holding-pier.level.json`; the safe holding pier uses grey stone boards and the rabbit shoreline is lowered to elevation 1. The shallow-water shader now derives its highlighted corridor from authored shallow edges instead of fixed First Crossing coordinates. No downloaded assets, concept-image backgrounds or new licensed materials were added.
++
++Bellwater Cove (2026-10-22): `data/bellwater.level.json` authors a triangular inlet and its six passages. `src/scene/layout.ts` owns the necessary scenery anchors, pier materials, camera and modest local lighting choices, retaining the older coves' settings. `src/scene/scenery.ts` extracts the unchanged cottage and adds original code-built reed clumps and a bronze bell under a timber frame. Low Pier has sandy reed edges; Bell Pier has a rocky pickup shore. Tansy, Lark and Bram reuse the existing rabbit/sheep meshes and deck anchors through species ordering. No external or generated bitmap asset was added. Shared water remains the existing shader; the broader water/shore treatment is deferred to the next milestone. Fresh gameplay evidence is under `reviews/bellwater/`.
+diff --git a/docs/GAMEPLAY_RULES.md b/docs/GAMEPLAY_RULES.md
+index 21ba0ab..e48a6c5 100644
+--- a/docs/GAMEPLAY_RULES.md
++++ b/docs/GAMEPLAY_RULES.md
+@@ -1,6 +1,6 @@
+ # Last Ferry: M1 gameplay rules
+ 
+-**Status: implementation contract for the first playable cove.** This package contains an authored design and a reference validator. It does not contain a playable game. The eventual game must implement these rules independently and test its own behavior.
++**Status: gameplay contract.** The playable application implements these rules independently of the reference validator. First Crossing's exact values remain below; later coves own their layouts and starting arrangements in separate level JSON files.
+ 
+ The first cove is a short, forgiving introduction to loading, route depth, and changing tides. Its three successful witness routes require seven, seven, and eight committed actions. These counts do not establish playtime, difficulty, or replay value.
+ 
+@@ -18,11 +18,11 @@ There is no additional move limit, real-time countdown, fuel meter, score target
+ 
+ The ferry has **four passenger slots**. A rabbit uses one slot; a sheep uses two. Occupied slots are the entire load calculation. There is no separate mass, cargo grid, animal mood, or inventory system.
+ 
+-| Occupied slots | Boat draft | Example |
+-| --- | ---: | --- |
+-| 0 | 1 | Empty ferry |
+-| 1–2 | 2 | One sheep, or two rabbits |
+-| 3–4 | 3 | One sheep and one or two rabbits |
++| Occupied slots | Boat draft | Example                          |
++| -------------- | ---------: | -------------------------------- |
++| 0              |          1 | Empty ferry                      |
++| 1–2            |          2 | One sheep, or two rabbits        |
++| 3–4            |          3 | One sheep and one or two rabbits |
+ 
+ A route is usable when its current depth is **greater than or equal to** the boat's draft. Equality is safe. A maximum-load boat has draft 3; it is afloat at every authored stopping node even at the initial tide.
+ 
+@@ -32,12 +32,12 @@ The rules use integer depth units. A renderer may group depths of 3 or more into
+ 
+ Every valid action below costs exactly **one turn**. A selection is a set of distinct passenger IDs, not a count or a species name.
+ 
+-| Action | Payload | Preconditions | Immediate effect |
+-| --- | --- | --- | --- |
+-| Move | `{ "type": "move", "to": "node-id" }` | Destination is a different adjacent node; the connecting edge and destination basin support the current draft at the current tide. | Move to that node along the edge's authored waypoints. |
+-| Board | `{ "type": "board", "passengerIds": ["id", "..."] }` | At a dry pier; selected nonempty subset waits at that exact pier; resulting load is at most 4; the berth supports the resulting draft. | Transfer the whole selection from the pier to the boat. |
+-| Unload | `{ "type": "unload", "passengerIds": ["id", "..."] }` | At a dry pier; selected nonempty subset is aboard. | At the harbor, mark selected passengers delivered. At another pier, make them waiting passengers there. |
+-| Wait | `{ "type": "wait" }` | Puzzle is playing. | Leave boat and passenger locations unchanged. |
++| Action | Payload                                               | Preconditions                                                                                                                          | Immediate effect                                                                                        |
++| ------ | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
++| Move   | `{ "type": "move", "to": "node-id" }`                 | Destination is a different adjacent node; the connecting edge and destination basin support the current draft at the current tide.     | Move to that node along the edge's authored waypoints.                                                  |
++| Board  | `{ "type": "board", "passengerIds": ["id", "..."] }`  | At a dry pier; selected nonempty subset waits at that exact pier; resulting load is at most 4; the berth supports the resulting draft. | Transfer the whole selection from the pier to the boat.                                                 |
++| Unload | `{ "type": "unload", "passengerIds": ["id", "..."] }` | At a dry pier; selected nonempty subset is aboard.                                                                                     | At the harbor, mark selected passengers delivered. At another pier, make them waiting passengers there. |
++| Wait   | `{ "type": "wait" }`                                  | Puzzle is playing.                                                                                                                     | Leave boat and passenger locations unchanged.                                                           |
+ 
+ Boarding three selected passengers together costs one turn, just as boarding one passenger does. Unloading a selected subset also costs one turn. Boarding and unloading cannot be combined into one action.
+ 
+@@ -54,10 +54,10 @@ pierIsDry = tideLevel < pier.elevation
+ ```
+ 
+ | Completed committed turns | Tide level | Shallow routes, base 2 | Deep routes/basins, base 3 | Sheep pier, elevation 2 | Harbor, elevation 3 |
+-| --- | ---: | ---: | ---: | --- | --- |
+-| 0–3 | 0 | 2 | 3 | Dry | Dry |
+-| 4–7 | 1 | 3 | 4 | Dry | Dry |
+-| 8 and later | 2 | 4 | 5 | Flooded | Dry |
++| ------------------------- | ---------: | ---------------------: | -------------------------: | ----------------------- | ------------------- |
++| 0–3                       |          0 |                      2 |                          3 | Dry                     | Dry                 |
++| 4–7                       |          1 |                      3 |                          4 | Dry                     | Dry                 |
++| 8 and later               |          2 |                      4 |                          5 | Flooded                 | Dry                 |
+ 
+ The rises happen **after committed turns 4 and 8**. A pier is flooded at equality with its elevation. The low island and its pier both have elevation 2; the lighthouse refuge and harbor pier both have elevation 3. No independent flood timer or visual water-height measurement decides whether an animal is safe.
+ 
+@@ -94,24 +94,24 @@ During the eventual game's short presentation transitions, lock **Commit, Undo,
+ 
+ Invalid attempts change no passenger locations, turn, tide, outcome, or Undo history. They are distinguishable from a valid action that subsequently produces a flood loss.
+ 
+-| Rejection | Condition |
+-| --- | --- |
+-| `TERMINAL_STATE` | Attempting a gameplay action after win or loss. Undo and Restart are separate commands. |
+-| `MALFORMED_ACTION` | Missing/wrong payload shape or unexpected payload fields. |
+-| `UNKNOWN_ACTION` | Action type is absent or not Move, Board, Unload, or Wait. |
+-| `UNKNOWN_NODE` | Move destination does not exist. |
+-| `SAME_NODE` | Move destination is the current node. |
+-| `NOT_ADJACENT` | No authored edge connects current and destination nodes. |
+-| `INSUFFICIENT_DEPTH` | Edge depth at the current tide is below current draft. |
+-| `UNSAFE_BERTH` | Destination basin is too shallow, or proposed boarding would exceed berth depth. Shipped basins prevent these cases, but retain the guard. |
+-| `EMPTY_OR_MALFORMED_SELECTION` | Passenger selection is absent, empty, not an array, or contains non-string IDs. |
+-| `DUPLICATE_PASSENGER` | A selection contains the same passenger more than once. |
+-| `UNKNOWN_PASSENGER` | A selected passenger ID does not exist. |
+-| `NO_PIER` | Boarding or unloading is attempted at a node without a pier. |
+-| `PIER_FLOODED` | Boarding or unloading is attempted at an already-flooded pier. |
+-| `NOT_WAITING_HERE` | A selected boarding passenger is aboard, delivered, or waiting elsewhere. |
+-| `NOT_ABOARD` | A selected unloading passenger is not on the boat. |
+-| `CAPACITY_EXCEEDED` | Proposed boarding would exceed four occupied slots. |
++| Rejection                      | Condition                                                                                                                                  |
++| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
++| `TERMINAL_STATE`               | Attempting a gameplay action after win or loss. Undo and Restart are separate commands.                                                    |
++| `MALFORMED_ACTION`             | Missing/wrong payload shape or unexpected payload fields.                                                                                  |
++| `UNKNOWN_ACTION`               | Action type is absent or not Move, Board, Unload, or Wait.                                                                                 |
++| `UNKNOWN_NODE`                 | Move destination does not exist.                                                                                                           |
++| `SAME_NODE`                    | Move destination is the current node.                                                                                                      |
++| `NOT_ADJACENT`                 | No authored edge connects current and destination nodes.                                                                                   |
++| `INSUFFICIENT_DEPTH`           | Edge depth at the current tide is below current draft.                                                                                     |
++| `UNSAFE_BERTH`                 | Destination basin is too shallow, or proposed boarding would exceed berth depth. Shipped basins prevent these cases, but retain the guard. |
++| `EMPTY_OR_MALFORMED_SELECTION` | Passenger selection is absent, empty, not an array, or contains non-string IDs.                                                            |
++| `DUPLICATE_PASSENGER`          | A selection contains the same passenger more than once.                                                                                    |
++| `UNKNOWN_PASSENGER`            | A selected passenger ID does not exist.                                                                                                    |
++| `NO_PIER`                      | Boarding or unloading is attempted at a node without a pier.                                                                               |
++| `PIER_FLOODED`                 | Boarding or unloading is attempted at an already-flooded pier.                                                                             |
++| `NOT_WAITING_HERE`             | A selected boarding passenger is aboard, delivered, or waiting elsewhere.                                                                  |
++| `NOT_ABOARD`                   | A selected unloading passenger is not on the boat.                                                                                         |
++| `CAPACITY_EXCEEDED`            | Proposed boarding would exceed four occupied slots.                                                                                        |
+ 
+ The three shipped passengers occupy exactly four slots in total, so capacity overflow is unreachable in this cove. The reference guard test explicitly adds a synthetic extra rabbit; it is not shipped level content. The unsafe-berth guard likewise uses a deliberately altered synthetic berth.
+ 
+@@ -119,16 +119,16 @@ The three shipped passengers occupy exactly four slots in total, so capacity ove
+ 
+ Use stable IDs from the level data and preserve each passenger in exactly one location. Do not infer occupancy or success from meshes, animation callbacks, or array indexes used to display passengers.
+ 
+-| State field | Meaning |
+-| --- | --- |
+-| `turn` | Number of successfully committed gameplay actions; starts at 0. |
+-| `tideLevel` | Tide determined by the authored schedule and `turn`; starts at 0. |
+-| `boatNodeId` | Current stopping node. A transition may animate between nodes, but the rule transaction is atomic. |
+-| `aboard` | Distinct passenger IDs currently on the ferry. |
+-| `waitingByPier` | Object mapping every pier ID to distinct waiting passenger IDs. |
+-| `delivered` | Distinct IDs unloaded at the harbor; these passengers cannot return. |
+-| `status` | `playing`, `won`, or `lost`. |
+-| `lossReason` | `null`, or `PASSENGER_STRANDED` with the affected pier and passenger IDs. |
++| State field     | Meaning                                                                                            |
++| --------------- | -------------------------------------------------------------------------------------------------- |
++| `turn`          | Number of successfully committed gameplay actions; starts at 0.                                    |
++| `tideLevel`     | Tide determined by the authored schedule and `turn`; starts at 0.                                  |
++| `boatNodeId`    | Current stopping node. A transition may animate between nodes, but the rule transaction is atomic. |
++| `aboard`        | Distinct passenger IDs currently on the ferry.                                                     |
++| `waitingByPier` | Object mapping every pier ID to distinct waiting passenger IDs.                                    |
++| `delivered`     | Distinct IDs unloaded at the harbor; these passengers cannot return.                               |
++| `status`        | `playing`, `won`, or `lost`.                                                                       |
++| `lossReason`    | `null`, or `PASSENGER_STRANDED` with the affected pier and passenger IDs.                          |
+ 
+ Load, draft, route depth, and pier dryness are derived values. If an implementation caches them, invalidate/recompute those caches from the restored state during Undo.
+ 
+@@ -148,9 +148,18 @@ The script is **not** a production engine or a test of a playable implementation
+ 
+ ## Holding Pier experiment
+ 
+-The later user-requested experiment uses `data/holding-pier.level.json` and is documented in `HOLDING_PIER.md`. It retains the common action, load/draft, depth, tide-order and Undo rules above; its different layout, starting occupants and low pier elevation are intentional. Original First Crossing values and witness files remain unchanged. In the experiment, routine safe movement commits with one deliberate activation, while a separate free Preview remains available. Transfers, Wait, invalid moves and immediately losing moves retain the explicit preview flow. This interaction experiment supersedes the baseline's mandatory move confirmation only within Holding Pier.
+-
++The accepted introduction uses `data/holding-pier.level.json` and is documented in `HOLDING_PIER.md`. It retains the common action, load/draft, depth, tide-order and Undo rules above; its different layout, starting occupants and low pier elevation are intentional. Original First Crossing values and witness files remain unchanged.
+ 
+ ## Full-width contextual interface
+ 
+-The later full-width interface task in `NEXT_TASK.md` unifies safe sailing in both coves: one deliberate activation commits one adjacent safe passage. Each adjacent map destination has a separate free Inspect control. Invalid or immediately losing passages open a consequence card; a losing action still requires explicit confirmation. Transfers and Wait retain preview and confirmation. This replaces the original baseline mandatory travel-confirmation policy above; it does not change validation, action cost, event order, readonly preview behavior or Undo. Both authored level files and their solutions are unchanged.
++The contextual interface unifies safe sailing across coves: one deliberate activation commits one adjacent safe passage. Each adjacent map destination has a separate free Inspect control. Invalid or immediately losing passages open a consequence card; a losing action still requires explicit confirmation. Transfers and Wait retain preview and confirmation. This replaces the original baseline mandatory travel-confirmation policy above; it does not change validation, action cost, event order, readonly preview behavior or Undo.
++
++## Bellwater Cove
++
++`data/bellwater.level.json` owns Bellwater's six-stop loop and branch, three islands, names and starting state. The ferry starts empty at Harbor; Tansy and Lark wait at elevation-1 Low Pier, Bram at elevation-2 Bell Pier. All basins have base depth 3. Harbor–Shallows–Low Pier uses two base-depth-1 edges. Harbor–West Buoy–East Buoy–Low Pier uses three base-depth-3 edges. Harbor–Bell Pier is one base-depth-2 edge. Every edge is bidirectional; no other connections exist.
++
++Capacity, passenger costs, draft bands, action costs, tide rises after actions 4 and 8, action-before-rise order and complete Undo are unchanged. Low Pier floods at the first rise; Bell Pier at the second. Boarding on actions 4 and 8 resolves before those rises. Current depth validates travel: a loaded boat at Low Pier on action 3 cannot sail into the depth-1 shallow channel, even though a future rise will deepen it. Arrival does not include boarding or unloading.
++
++Bellwater has no mandatory Wait, action cap or score requirement. Both asymmetric route families, shallow travel both ways with a well-timed Wait, and separate rabbit boarding remain valid. Once everyone is aboard, harmless longer play stays legal. Developer witnesses and unsuccessful alternatives are documented in `BELLWATER.md` and `data/bellwater/witnesses.json`; the player interface provides rules and consequences without prescribing a plan.
++
++The normal entry is Holding Pier. Its success offers Next cove into a fresh Bellwater state. Both coves and the explicit First Crossing baseline remain available in Menu and query routes. This small sequence adds no persistence, unlocks or new rules.
+diff --git a/src/levels/level.ts b/src/levels/level.ts
+index 92dff8c..2dfd8c2 100644
+--- a/src/levels/level.ts
++++ b/src/levels/level.ts
+@@ -1,5 +1,6 @@
+ import data from '../../data/first-crossing.level.json';
+ import holdingData from '../../data/holding-pier.level.json';
++import bellwaterData from '../../data/bellwater.level.json';
+ export type Level = Pick<
+   typeof data,
+   | 'id'
+@@ -14,9 +15,11 @@ export type Level = Pick<
+   | 'validation'
+ > & {
+   start: { boatNodeId: string; aboard: string[]; waitingByPier: Record<string, string[]> };
++  names?: { nodes?: Record<string, string>; passengers?: Record<string, string> };
+ };
+ export const level: Level = data;
+ export const holdingPier: Level = holdingData;
++export const bellwater: Level = bellwaterData;
+ export const nodeNames: Record<string, string> = {
+   harbor: 'Harbor',
+   cut: 'Shallow Cut',
+@@ -33,3 +36,22 @@ export const passengerNames: Record<string, string> = {
+   'rabbit-2': 'Rue · rabbit',
+   'sheep-1': 'Moss · sheep',
+ };
++export function nodeName(id: string, l: Level = level): string {
++  return l.names?.nodes?.[id] ?? nodeNames[id] ?? id;
++}
++export function passengerName(id: string, l: Level = level): string {
++  return l.names?.passengers?.[id] ?? passengerNames[id]?.split(' ·')[0] ?? id;
++}
++export function passengerLabel(id: string, l: Level = level): string {
++  const species = l.passengers.find((p) => p.id === id)?.species;
++  return `${passengerName(id, l)}${species ? ` · ${species}` : ''}`;
++}
++export function levelNames(l: Level): {
++  nodeNames: Record<string, string>;
++  passengerNames: Record<string, string>;
++} {
++  return {
++    nodeNames: Object.fromEntries(l.nodes.map((n) => [n.id, nodeName(n.id, l)])),
++    passengerNames: Object.fromEntries(l.passengers.map((p) => [p.id, passengerLabel(p.id, l)])),
++  };
++}
+diff --git a/src/main.ts b/src/main.ts
+index ffb4089..4bb743d 100644
+--- a/src/main.ts
++++ b/src/main.ts
+@@ -1,5 +1,5 @@
+ import './style.css';
+-import { level as baseline, holdingPier, nodeNames, passengerNames } from './levels/level';
++import { level as baseline, holdingPier, bellwater, levelNames } from './levels/level';
+ import {
+   copy,
+   draft,
+@@ -18,15 +18,20 @@ import {
+   statusCopy,
+   forecastCopy,
+   previewCopy,
++  passengerList,
+ } from './ui/presentation';
+ import { Session } from './game/session';
+ import { World } from './scene/world';
+ import { Sound } from './audio/sound';
+ 
+-const experiment = new URLSearchParams(location.search).get('cove') === 'holding-pier';
+-const level = experiment ? holdingPier : baseline;
++const cove = new URLSearchParams(location.search).get('cove');
++const level = cove === 'first-crossing' ? baseline : cove === 'bellwater' ? bellwater : holdingPier;
++const experiment = level.id === 'holding-pier';
++const isBellwater = level.id === 'bellwater';
++const { nodeNames, passengerNames } = levelNames(level);
++const title = level.id === baseline.id ? 'The First Crossing' : level.title;
+ const app = document.querySelector<HTMLDivElement>('#app')!;
+-app.innerHTML = `<main class="game ${experiment ? 'holding' : 'baseline'}"><section id="seascape" aria-label="${level.title}" aria-busy="false"><div id="world"></div><header class="hud"><div class="identity"><h1>${experiment ? 'The Holding Pier' : 'The First Crossing'}</h1><p id="objective"></p></div><div id="readout" aria-label="Crossing progress"></div><nav class="tools" aria-label="Crossing controls"><button id="undo">↶ Undo</button><button id="wait">Wait <span>· 1 action</span></button><button id="menu">Menu</button></nav></header><nav id="map-labels" aria-label="Map stops"></nav><section id="local-context" aria-labelledby="local-heading"></section><button id="status-toggle" aria-haspopup="dialog" aria-label="Open tide and pier forecast"></button><p id="transition-status" role="status" tabindex="-1" hidden>Finishing this action…</p><p class="portrait-note">Turn sideways for a wider view.</p></section><div id="announcement" class="sr-only" role="status" aria-live="polite"></div></main><dialog id="dialog" aria-labelledby="dialog-title"><div id="dialog-content"></div></dialog>`;
++app.innerHTML = `<main class="game ${experiment ? 'holding' : isBellwater ? 'bellwater' : 'baseline'}"><section id="seascape" aria-label="${level.title}" aria-busy="false"><div id="world"></div><header class="hud"><div class="identity"><h1>${title}</h1><p id="objective"></p></div><div id="readout" aria-label="Crossing progress"></div><nav class="tools" aria-label="Crossing controls"><button id="undo">↶ Undo</button><button id="wait">Wait <span>· 1 action</span></button><button id="menu">Menu</button></nav></header><nav id="map-labels" aria-label="Map stops"></nav><section id="local-context" aria-labelledby="local-heading"></section><button id="status-toggle" aria-haspopup="dialog" aria-label="Open tide and pier forecast"></button><p id="transition-status" role="status" tabindex="-1" hidden>Finishing this action…</p><p class="portrait-note">Turn sideways for a wider view.</p></section><div id="announcement" class="sr-only" role="status" aria-live="polite"></div></main><dialog id="dialog" aria-labelledby="dialog-title"><div id="dialog-content"></div></dialog>`;
+ const $ = (id: string) => document.getElementById(id)!;
+ const session = new Session(level),
+   sound = new Sound(),
+@@ -123,8 +128,17 @@ function renderDialog() {
+           };
+           renderDialog();
+         };
+-    $('commit').onclick = () => {
+-      if (mode === 'action' && selected && !session.busy) execute(selected);
++    $('commit').onclick = (e) => {
++      if (mode === 'action' && selected && !session.busy) {
++        if (e.isTrusted && e.detail > 0)
++          closingFence = {
++            rect: $('commit').getBoundingClientRect(),
++            until: performance.now() + 180,
++            x: e.clientX,
++            y: e.clientY,
++          };
++        execute(selected);
++      }
+     };
+   } else if (mode === 'forecast') {
+     const f = forecastCopy(s, level);
+@@ -135,8 +149,9 @@ function renderDialog() {
+       level.rules.tide.rises.find((r) => r.afterTurn > s.turn)?.level ?? s.tideLevel,
+     );
+   } else if (mode === 'menu') {
++    const sheep = level.passengers.find((p) => p.species === 'sheep')!;
+     $('dialog-content').innerHTML =
+-      `${header('Crossing menu')}<div class="dialog-body menu-body"><div class="menu-actions"><button id="restart">Restart crossing</button><button id="sound" aria-pressed="${sound.muted}" aria-label="${sound.muted ? 'Unmute sound' : 'Mute sound'}">Sound ${sound.muted ? 'off' : 'on'}</button></div><label class="cove-picker">Choose cove<select id="cove-picker"><option value="first-crossing" ${!experiment ? 'selected' : ''}>First Crossing · baseline</option><option value="holding-pier" ${experiment ? 'selected' : ''}>The Holding Pier</option></select></label><details id="help-details"><summary>How to play · actions and depth</summary><p>${actionCostCopy(level)}</p><p>Use a named destination to sail one passage. Its separate Inspect button is free. Board or let passengers ashore at the current pier; select their names in the card, then confirm.</p><p>Boat depth needed: empty = 1; 1–2 spaces = 2; 3–4 spaces = 3. Each rabbit uses 1 space; Moss uses 2. A passage must be at least as deep as the boat needs.</p><p>Boarding and unloading happen before the tide rises. Use the status button for the tide and pier forecast. Undo earlier actions or restart to recover from a losing plan.</p><p>Tab and Shift+Tab move between controls; Enter or Space activates them. Escape closes a card.</p></details></div>`;
++      `${header('Crossing menu')}<div class="dialog-body menu-body"><div class="menu-actions"><button id="restart">Restart crossing</button><button id="sound" aria-pressed="${sound.muted}" aria-label="${sound.muted ? 'Unmute sound' : 'Mute sound'}">Sound ${sound.muted ? 'off' : 'on'}</button></div><label class="cove-picker">Choose cove<select id="cove-picker">${[baseline, holdingPier, bellwater].map((l) => `<option value="${l.id}" ${l.id === level.id ? 'selected' : ''}>${l.title}${l.id === baseline.id ? ' · baseline' : ''}</option>`).join('')}</select></label><details id="help-details"><summary>How to play · actions and depth</summary><p>${actionCostCopy(level)}</p><p>Use a named destination to sail one passage. Its separate Inspect button is free. Board or let passengers ashore at the current pier; select their names in the card, then confirm.</p><p>Boat depth needed: empty = 1; 1–2 spaces = 2; 3–4 spaces = 3. Each rabbit uses 1 space; ${passengerList([sheep.id], level)} uses ${sheep.slots}. A passage must be at least as deep as the boat needs.</p><p>Boarding and unloading happen before the tide rises. Use the status button for the tide and pier forecast. Undo earlier actions or restart to recover from a losing plan.</p><p>Tab and Shift+Tab move between controls; Enter or Space activates them. Escape closes a card.</p></details></div>`;
+     $('restart').onclick = restart;
+     $('sound').onclick = () => {
+       sound.toggle();
+@@ -147,9 +162,14 @@ function renderDialog() {
+     };
+   } else {
+     const f = statusCopy(s, level),
+-      won = s.status === 'won';
++      won = s.status === 'won',
++      next = won && experiment;
+     $('dialog-content').innerHTML =
+-      `${header(won ? 'Everyone home.' : 'A turn too late.')}<div class="dialog-body ending ${won ? '' : 'loss'}"><p>${won ? `${level.objective.requiredPassengerIds.length} passengers delivered in ${s.turn} actions. All are safe at ${nodeNames[level.piers.find((p) => p.id === level.objective.deliveryPierId)!.nodeId]}.` : f.headline}</p><p>${won ? 'Undo to revisit the crossing, or restart.' : 'Undo earlier moves, or restart to try a different plan.'}</p></div><footer class="dialog-footer terminal-actions"><button id="terminal-undo">↶ Undo last action</button><button id="terminal-restart">Restart</button></footer>`;
++      `${header(won ? (isBellwater ? 'Bellwater is safe.' : 'Everyone home.') : 'A turn too late.')}<div class="dialog-body ending ${won ? '' : 'loss'}"><p>${won ? (isBellwater ? `${passengerList(s.delivered, level)} are safe at Harbor. ${s.turn} actions completed.` : `${level.objective.requiredPassengerIds.length} passengers delivered in ${s.turn} actions. All are safe at ${nodeNames[level.piers.find((p) => p.id === level.objective.deliveryPierId)!.nodeId]}.`) : f.headline}</p><p>${next ? 'Further along the coast, two piers still have their lights on.' : won ? 'Undo to revisit the crossing, or restart.' : 'Undo earlier moves, or restart to try a different plan.'}</p></div><footer class="dialog-footer terminal-actions">${next ? '<button id="next-cove">Next cove</button>' : ''}<button id="terminal-undo">↶ Undo last action</button><button id="terminal-restart">Restart</button></footer>`;
++    if (next)
++      $('next-cove').onclick = () => {
++        location.search = '?cove=bellwater';
++      };
+     $('terminal-undo').onclick = undo;
+     $('terminal-restart').onclick = restart;
+   }
+@@ -343,7 +363,7 @@ function positionDialog() {
+ }
+ function positionMap() {
+   const host = world.host,
+-    small = matchMedia('(max-height: 480px)').matches;
++    small = matchMedia('(max-height: 600px) and (min-width: 701px)').matches;
+   for (const n of level.nodes) {
+     const group = $(`stop-${n.id}`);
+     if (!group) continue;
+@@ -359,7 +379,7 @@ function positionMap() {
+           ? 0.7
+           : 1.4;
+     const point = world.project([n.positionXZ[0], n.positionXZ[1] + offset]);
+-    if (!experiment && small) {
++    if (!experiment && !isBellwater && small) {
+       if (n.id === 'harbor' || n.id === 'outer-west') point.x -= 145;
+       if (n.id === 'sheep-pier' || n.id === 'outer-east') point.x += 145;
+     }
+@@ -373,31 +393,89 @@ function positionMap() {
+     }
+     if (!experiment && n.id === 'outer-south' && n.id === session.state.boatNodeId) point.y -= 65;
+     const half = group.offsetWidth / 2;
+-    group.style.left = `${Math.max(half + 8, Math.min(host.clientWidth - half - 8, point.x))}px`;
+-    group.style.top = `${Math.max(host.offsetTop + group.offsetHeight / 2 + 4, Math.min(host.offsetTop + host.clientHeight - group.offsetHeight / 2 - 4, point.y + host.offsetTop))}px`;
++    if (isBellwater && small) {
++      const row = {
++        harbor: 0.51,
++        shallows: 0.85,
++        'low-pier': 0.51,
++        'west-buoy': 0.85,
++        'east-buoy': 0.85,
++        'bell-pier': 0.11,
++      }[n.id];
++      point.x =
++        n.id === 'shallows'
++          ? host.clientWidth / 2
++          : n.id === 'harbor' || n.id === 'west-buoy'
++            ? half + 8
++            : host.clientWidth - half - 8;
++      point.y = host.clientHeight * (row ?? 0.5);
++    }
++    const x = Math.max(half + 8, Math.min(host.clientWidth - half - 8, point.x));
++    let bottom = host.offsetTop + host.clientHeight - group.offsetHeight / 2 - 4;
++    if (isBellwater) {
++      const forecast = $('status-toggle').getBoundingClientRect();
++      if (x + half > forecast.left && x - half < forecast.right)
++        bottom = Math.min(bottom, forecast.top - group.offsetHeight / 2 - 8);
++    }
++    group.style.left = `${x}px`;
++    group.style.top = `${Math.max(host.offsetTop + group.offsetHeight / 2 + 4, Math.min(bottom, point.y + host.offsetTop))}px`;
+   }
+   if ($('map-leaders'))
+     $('map-leaders').innerHTML =
+       !experiment && small
+         ? level.nodes
+-            .filter((n) => ['harbor', 'sheep-pier', 'outer-west', 'outer-east'].includes(n.id))
++            .filter(
++              (n) =>
++                isBellwater || ['harbor', 'sheep-pier', 'outer-west', 'outer-east'].includes(n.id),
++            )
+             .map((n) => {
+               const point = world.project(n.positionXZ),
+                 group = $(`stop-${n.id}`),
+                 rect = group.getBoundingClientRect();
+-              const targetX = n.id === 'harbor' || n.id === 'outer-west' ? rect.right : rect.left;
++              const targetX = isBellwater
++                ? n.id === 'shallows'
++                  ? rect.left + rect.width / 2
++                  : n.id === 'harbor' || n.id === 'west-buoy'
++                    ? rect.right
++                    : rect.left
++                : n.id === 'harbor' || n.id === 'outer-west'
++                  ? rect.right
++                  : rect.left;
+               return `<line x1="${point.x}" y1="${point.y + host.offsetTop}" x2="${targetX}" y2="${rect.top + rect.height / 2}" />`;
+             })
+             .join('')
+         : '';
+   if (!small && innerWidth > 700) {
+-    const point = world.project(
+-      level.nodes.find((n) => n.id === session.state.boatNodeId)!.positionXZ,
+-    );
++    const boat = world.frameStatus().boat;
+     const local = $('local-context'),
+-      half = local.offsetWidth / 2;
+-    local.style.left = `${Math.max(half + 16, Math.min(host.clientWidth - half - 16, point.x))}px`;
+-    local.style.top = `${Math.min(host.offsetTop + host.clientHeight - local.offsetHeight - 10, point.y + host.offsetTop + 58)}px`;
++      width = local.offsetWidth,
++      height = local.offsetHeight,
++      obstacles = [
++        ...document.querySelectorAll<HTMLElement>('.map-stop, .hud, #status-toggle'),
++      ].map((e) => e.getBoundingClientRect()),
++      centerX = (boat.left + boat.right) / 2,
++      centerY = (boat.top + boat.bottom) / 2 + host.offsetTop;
++    const candidates = [
++      [centerX - width / 2, boat.bottom + host.offsetTop + 10],
++      [boat.left - width - 12, centerY - height / 2],
++      [boat.right + 12, centerY - height / 2],
++      [centerX - width / 2, boat.top + host.offsetTop - height - 12],
++    ].map(([x, y]) => ({
++      x: Math.max(16, Math.min(host.clientWidth - width - 16, x)),
++      y: Math.max(host.offsetTop + 8, Math.min(host.offsetTop + host.clientHeight - height - 8, y)),
++    }));
++    const chosen =
++      candidates.find((p) =>
++        obstacles.every(
++          (r) =>
++            p.x + width + 8 <= r.left ||
++            p.x - 8 >= r.right ||
++            p.y + height + 8 <= r.top ||
++            p.y - 8 >= r.bottom,
++        ),
++      ) ?? candidates[0];
++    local.style.left = `${chosen.x + width / 2}px`;
++    local.style.top = `${chosen.y}px`;
+   } else {
+     $('local-context').style.removeProperty('left');
+     $('local-context').style.removeProperty('top');
+diff --git a/src/scene/world.ts b/src/scene/world.ts
+index 81e7913..a5d0d07 100644
+--- a/src/scene/world.ts
++++ b/src/scene/world.ts
+@@ -3,6 +3,8 @@ import { level as baseline, type Level } from '../levels/level';
+ import { draft, edgeTo, type State, type Action } from '../game/rules';
+ import { animal, ball, box, cylinder, ferry, lighthouse, mat, mesh, palette, pine } from './models';
+ import { sampleJourney } from './motion';
++import { sceneLayout, type SceneLayout } from './layout';
++import { bellLandmark, cottage, reedClump } from './scenery';
+ const V = (p: number[], y = 0) => new T.Vector3(p[0], y, p[1]);
+ const smooth = (t: number) => t * t * (3 - 2 * t);
+ export class World {
+@@ -21,6 +23,7 @@ export class World {
+   water: T.Mesh;
+   shadow: T.Mesh;
+   state: State;
++  layout: SceneLayout;
+   reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+   transition: null | {
+     before: State;
+@@ -44,6 +47,7 @@ export class World {
+     public level: Level = baseline,
+   ) {
+     this.state = state;
++    this.layout = sceneLayout(this.level.id);
+     this.renderer = new T.WebGLRenderer({ antialias: true, alpha: false });
+     this.renderer.setPixelRatio(Math.min(devicePixelRatio, 1.7));
+     this.renderer.shadowMap.enabled = true;
+@@ -56,10 +60,11 @@ export class World {
+       'aria-label',
+       `${this.level.title}. Use the labeled waypoint controls to navigate.`,
+     );
+-    this.scene.background = new T.Color('#245f70');
+-    this.scene.add(new T.HemisphereLight('#fff1dc', '#5f8c9a', 1.8));
+-    const sun = new T.DirectionalLight('#ffe0af', 2.8);
+-    sun.position.set(-8, 16, 7);
++    const light = this.layout.light;
++    this.scene.background = new T.Color(light?.background ?? '#245f70');
++    this.scene.add(new T.HemisphereLight(light?.sky ?? '#fff1dc', light?.ground ?? '#5f8c9a', 1.8));
++    const sun = new T.DirectionalLight(light?.sun ?? '#ffe0af', 2.8);
++    sun.position.set(...(light?.sunPosition ?? [-8, 16, 7]));
+     sun.castShadow = true;
+     sun.shadow.mapSize.set(2048, 2048);
+     Object.assign(sun.shadow.camera, {
+@@ -116,7 +121,13 @@ export class World {
+       for (let i = 0; i < 9; i++)
+         box(
+           this.scene,
+-          p.id === 'stone-pier' ? (i % 2 ? '#a9b6ac' : '#899d97') : i % 2 ? '#c09560' : '#b78b58',
++          this.layout.stonePiers.includes(p.id)
++            ? i % 2
++              ? '#a9b6ac'
++              : '#899d97'
++            : i % 2
++              ? '#c09560'
++              : '#b78b58',
+           [p.width, 0.09, 0.14],
+           [x, y, z + ((end - z) * i) / 8],
+           0.015,
+@@ -130,36 +141,14 @@ export class World {
+       cylinder(this.scene, '#655b43', 0.025, 0.025, 0.65, [x + 0.36, y + 0.33, z - 0.1], 7);
+       box(this.scene, '#f5cb77', [0.13, 0.19, 0.13], [x + 0.36, y + 0.68, z - 0.1]);
+     }
+-    lighthouse(this.scene, -6.15, 0.54, -3.25);
+-    const house = new T.Group();
+-    house.position.set(
+-      6.3,
+-      (this.level.piers.find((p) => p.id !== 'harbor-pier' && p.id !== 'stone-pier')?.elevation ??
+-        2) * 0.18,
+-      -3.25,
+-    );
+-    this.scene.add(house);
+-    box(house, '#c78155', [1.35, 0.9, 1.05], [0, 0.45, 0], 0.08);
+-    for (const x of [-0.42, 0.42]) box(house, '#f9d084', [0.24, 0.29, 0.03], [x, 0.52, 0.54]);
+-    box(house, '#754f3b', [0.27, 0.56, 0.05], [0, 0.29, 0.55]);
+-    const roof = new T.Shape();
+-    roof.moveTo(-0.82, 0);
+-    roof.lineTo(0, 0.58);
+-    roof.lineTo(0.82, 0);
+-    roof.closePath();
+-    const roofGeo = new T.ExtrudeGeometry(roof, {
+-      depth: 1.28,
+-      bevelEnabled: true,
+-      bevelSize: 0.03,
+-      bevelThickness: 0.03,
+-      bevelSegments: 2,
+-      steps: 1,
+-    });
+-    mesh(roofGeo, palette.red, house, 0, 0.9, -0.64);
+-    for (const x of [-0.42, 0.42])
+-      for (const y of [0.42, 0.62]) box(house, '#edc28c', [0.27, 0.025, 0.045], [x, y, 0.56]);
+-    box(house, '#ead5a6', [0.026, 0.32, 0.04], [-0.42, 0.52, 0.56]);
+-    box(house, '#93816a', [0.19, 0.6, 0.2], [0.43, 1.35, -0.25]);
++    for (const landmark of this.layout.landmarks) {
++      const island = this.level.world.islands.find((island) => island.id === landmark.islandId)!;
++      const [x, z] = landmark.positionXZ;
++      const y = island.elevation * 0.18;
++      if (landmark.kind === 'lighthouse') lighthouse(this.scene, x, y, z);
++      else if (landmark.kind === 'cottage') cottage(this.scene, [x, y, z]);
++      else bellLandmark(this.scene, [x, y, z]);
++    }
+     for (const e of this.level.edges) {
+       const pts = e.waypointsXZ.map((p) => V(p, 0.035));
+       const geom = new T.BufferGeometry().setFromPoints(pts);
+@@ -244,16 +233,17 @@ export class World {
+     for (const p of this.level.passengers) {
+       const anchor = new T.Object3D();
+       anchor.name = `deck-anchor-${p.id}`;
++      const index = this.speciesIndex(p.id);
+       anchor.position.set(
+-        ...((p.id === 'rabbit-1'
+-          ? [-0.22, 0.26, -0.02]
+-          : p.id === 'rabbit-2'
+-            ? [0.22, 0.26, 0.3]
+-            : [0, 0.26, 0.69]) as [number, number, number]),
++        ...((p.species === 'rabbit'
++          ? index === 0
++            ? [-0.22, 0.26, -0.02]
++            : [0.22, 0.26, 0.3]
++          : [0, 0.26, 0.69]) as [number, number, number]),
+       );
+       this.hull.add(anchor);
+       this.passengerAnchors.set(p.id, anchor);
+-      const g = animal(p.species, p.id === 'rabbit-2' ? 1 : 0);
++      const g = animal(p.species, index);
+       g.name = p.id;
+       g.scale.set(
+         p.species === 'rabbit' ? 1.25 : 1.15,
+@@ -338,11 +328,18 @@ export class World {
+       cx = points.reduce((a, p) => a + p[0], 0) / points.length,
+       cz = points.reduce((a, p) => a + p[1], 0) / points.length;
+     const height = island.elevation * 0.18;
++    const style = this.layout.islandStyles[island.id] ?? 'garden';
++    const colors =
++      style === 'reeds'
++        ? ['#e5d6ad', '#b8b79b', '#e7d6ac', '#c5bd91']
++        : style === 'rocky'
++          ? ['#bdbaa3', '#788d88', '#abb3a1', '#909e86']
++          : ['#d9c79b', '#86958a', '#e0cfa7', palette.grass];
+     for (const [scale, y, color] of [
+-      [0.98, -0.15, '#d9c79b'],
+-      [0.94, 0.02, '#86958a'],
+-      [0.89, height - 0.18, '#e0cfa7'],
+-      [0.83, height - 0.17, palette.grass],
++      [0.98, -0.15, colors[0]],
++      [0.94, 0.02, colors[1]],
++      [0.89, height - 0.18, colors[2]],
++      [0.83, height - 0.17, colors[3]],
+     ] as [number, number, string][]) {
+       const shape = new T.Shape();
+       const ps = points.map(
+@@ -369,6 +366,7 @@ export class World {
+       mesh(geo, color, this.scene, 0, y, 0);
+     }
+     for (let i = 0; i < points.length; i++) {
++      if (style === 'reeds' && i % 2 === 1) continue;
+       const a = points[i],
+         b = points[(i + 1) % points.length];
+       const x = cx + ((a[0] + b[0]) / 2 - cx) * 0.77,
+@@ -382,9 +380,10 @@ export class World {
+         z,
+       );
+       r.scale.set(0.85, 0.7 + (i % 3) * 0.23, 0.75);
++      if (style === 'reeds') r.scale.multiplyScalar(0.55);
+       r.rotation.set(i * 0.8, i * 0.9, 0.2);
+     }
+-    if (island.id === 'central-rock') {
++    if (style === 'crag') {
+       const rock = mesh(
+         new T.DodecahedronGeometry(0.85, 0),
+         '#87988d',
+@@ -397,6 +396,39 @@ export class World {
+       rock.rotation.y = 0.4;
+       pine(this.scene, 0.7, height, 2.5, 1.05);
+       pine(this.scene, -1.1, height, 2.7, 0.55);
++    } else if (style === 'reeds') {
++      for (let i = 0; i < points.length; i++) {
++        const a = points[i],
++          b = points[(i + 1) % points.length];
++        for (let j = 0; j < 3; j++) {
++          const t = (j + 0.5) / 3;
++          const x = cx + (a[0] + (b[0] - a[0]) * t - cx) * 0.84;
++          const z = cz + (a[1] + (b[1] - a[1]) * t - cz) * 0.84;
++          if (Math.abs(x - cx) < 0.5 && z > cz) continue;
++          reedClump(this.scene, x, height + 0.015, z, i + j * 0.7);
++        }
++      }
++      for (const x of [-0.8, 0.9])
++        ball(this.scene, '#d9ca9f', [cx + x, height + 0.02, cz], [0.6, 0.075, 0.34]);
++    } else if (style === 'rocky') {
++      pine(this.scene, cx - 1.05, height, cz - 0.35, 0.68);
++      pine(this.scene, cx + 1.02, height, cz - 0.3, 0.43);
++      for (const [x, z, scale] of [
++        [-1.04, 0.14, 0.56],
++        [1.12, 0.27, 0.43],
++        [-0.65, -0.55, 0.45],
++      ]) {
++        const rock = mesh(
++          new T.DodecahedronGeometry(scale, 0),
++          '#8b9c94',
++          this.scene,
++          cx + x,
++          height + scale * 0.27,
++          cz + z,
++        );
++        rock.scale.set(1, 0.72, 0.85);
++        rock.rotation.y = x;
++      }
+     } else {
+       pine(this.scene, cx - 1.05, height, cz - 0.28, 0.85);
+       pine(this.scene, cx + 0.92, height, cz - 0.55, 0.65);
+@@ -409,15 +441,15 @@ export class World {
+           0.05,
+         );
+     }
+-    for (let i = 0; i < 25; i++) {
++    for (let i = 0; i < (style === 'reeds' || style === 'rocky' ? 10 : 25); i++) {
+       const a = i * 2.399,
+         r = 0.48 + (i % 5) * 0.17,
+         x = cx + Math.cos(a) * r * 1.3,
+         z = cz + Math.sin(a) * r * 0.7;
+-      if (island.id !== 'central-rock' && Math.abs(x - cx) < 0.68) continue;
++      if (style !== 'crag' && Math.abs(x - cx) < 0.68) continue;
+       ball(this.scene, i % 4 ? '#91a273' : '#f0e8c8', [x, height + 0.11, z], [0.045, 0.09, 0.045]);
+     }
+-    if (island.id !== 'central-rock')
++    if (style === 'garden')
+       for (const side of [-1, 1]) {
+         const x = cx + side * 1.05,
+           z = cz + 0.25;
+@@ -472,10 +504,12 @@ export class World {
+     this.camera.bottom = -span / 2;
+     this.camera.near = 0.1;
+     this.camera.far = 100;
+-    const baselineLandscape =
+-      this.level.id === 'first-crossing' &&
+-      matchMedia('(max-height: 480px) and (min-width: 701px)').matches;
+-    this.camera.position.set(0, baselineLandscape ? 30 : 34, baselineLandscape ? 30 : 24);
++    const smallLandscape = matchMedia('(max-height: 480px) and (min-width: 701px)').matches;
++    this.camera.position.set(
++      ...(smallLandscape && this.layout.landscapeCameraPosition
++        ? this.layout.landscapeCameraPosition
++        : this.layout.cameraPosition),
++    );
+     this.camera.lookAt(0, 0, 0.05);
+     {
+       this.scene.updateMatrixWorld(true);
+@@ -517,6 +551,12 @@ export class World {
+     }
+     this.camera.updateProjectionMatrix();
+   }
++  speciesIndex(id: string) {
++    const passenger = this.level.passengers.find((passenger) => passenger.id === id)!;
++    return this.level.passengers
++      .filter((p) => p.species === passenger.species)
++      .findIndex((p) => p.id === id);
++  }
+   passengerPos(id: string, s: State) {
+     if (s.aboard.includes(id)) {
+       return this.passengerAnchors.get(id)!.getWorldPosition(new T.Vector3());
+@@ -534,7 +574,7 @@ export class World {
+     const i = s.waitingByPier[p.id].indexOf(id);
+     return new T.Vector3(
+       p.positionXZ[0] +
+-        (this.level.id === 'holding-pier' && s.waitingByPier[p.id].length > 1
++        (this.layout.centeredWaitingPairs && s.waitingByPier[p.id].length > 1
+           ? i % 2
+             ? 0.21
+             : -0.21
+@@ -694,7 +734,9 @@ export class World {
+         if (tr.before.aboard.includes(id) && tr.after.aboard.includes(id)) continue;
+         if (tr.before.aboard.includes(id) !== tr.after.aboard.includes(id)) {
+           const pier = this.level.piers.find((p) => p.nodeId === tr.before.boatNodeId)!;
+-          const offset = id === 'rabbit-1' ? -0.07 : id === 'rabbit-2' ? 0.07 : 0;
++          const passenger = this.level.passengers.find((passenger) => passenger.id === id)!;
++          const offset =
++            passenger.species === 'rabbit' ? (this.speciesIndex(id) ? 0.07 : -0.07) : 0;
+           const bridge = new T.Vector3(
+             pier.positionXZ[0] + offset,
+             pier.elevation * 0.18 - 0.005,
+@@ -805,6 +847,9 @@ export class World {
+       canvas: { width: this.host.clientWidth, height: this.host.clientHeight },
+       boat: rectangle(this.boatRoot),
+       lighthouse: rectangle(this.scene.getObjectByName('lighthouse')!),
++      bell: this.scene.getObjectByName('bell-landmark')
++        ? rectangle(this.scene.getObjectByName('bell-landmark')!)
++        : null,
+       passengers: [...this.animals].map(([id, g]) => ({ id, ...rectangle(g) })),
+       nodes: this.level.nodes.map((n) => ({ id: n.id, ...this.project(n.positionXZ) })),
+     };
+diff --git a/src/style.css b/src/style.css
+index db83aca..6219b62 100644
+--- a/src/style.css
++++ b/src/style.css
+@@ -180,6 +180,7 @@ h1 {
+ }
+ #local-context {
+   position: absolute;
++  width: max-content;
+   transform: translateX(-50%);
+   max-width: 440px;
+   padding: 8px;
+@@ -376,6 +377,7 @@ dialog::backdrop {
+   flex: 1;
+ }
+ #commit,
++#next-cove,
+ #terminal-undo {
+   background: #284e50;
+   color: #fff3d7;
+diff --git a/src/ui/presentation.ts b/src/ui/presentation.ts
+index ffd5eca..ff15888 100644
+--- a/src/ui/presentation.ts
++++ b/src/ui/presentation.ts
+@@ -1,23 +1,22 @@
+ import { draft, edgeTo, pierAt, preview, type Action, type State } from '../game/rules';
+-import { nodeNames, passengerNames, type Level } from '../levels/level';
++import { level as baseline, nodeName, passengerName, type Level } from '../levels/level';
+ 
+-const stop = (id: string) => nodeNames[id] ?? id;
+-const shortName = (id: string) => passengerNames[id]?.split(' ·')[0] ?? id;
++const stop = (id: string, l: Level) => nodeName(id, l);
+ const verb = (ids: string[], singular: string, plural: string) =>
+   ids.length === 1 ? singular : plural;
+ const countActions = (n: number) => `${n} action${n === 1 ? '' : 's'}`;
+ 
+-export function passengerList(ids: string[]): string {
+-  const names = ids.map(shortName);
++export function passengerList(ids: string[], l: Level = baseline): string {
++  const names = ids.map((id) => passengerName(id, l));
+   if (names.length < 2) return names[0] ?? '';
+   if (names.length === 2) return names.join(' and ');
+   return `${names.slice(0, -1).join(', ')} and ${names.at(-1)}`;
+ }
+ 
+ export function actionLabel(s: State, a: Action, l: Level): string {
+-  if (a.type === 'move') return `Sail to ${stop(a.to)}`;
++  if (a.type === 'move') return `Sail to ${stop(a.to, l)}`;
+   if (a.type === 'wait') return 'Wait';
+-  const who = passengerList(a.passengerIds) || 'passengers';
++  const who = passengerList(a.passengerIds, l) || 'passengers';
+   if (a.type === 'board') return `Board ${who}`;
+   return pierAt(s, l)?.isDeliveryPier ? `Deliver ${who}` : `Let ${who} ashore`;
+ }
+@@ -29,16 +28,19 @@ export function objectiveCopy(s: State, l: Level): { headline: string; progress:
+       ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'][
+         total
+       ] ?? total,
+-    destination = stop(l.piers.find((p) => p.id === l.objective.deliveryPierId)!.nodeId),
++    destination = stop(l.piers.find((p) => p.id === l.objective.deliveryPierId)!.nodeId, l),
+     home = required.filter((id) => s.delivered.includes(id)).length;
+   return {
+-    headline: `Bring ${total === 1 ? 'one passenger' : `all ${count} passengers`} to ${destination}`,
++    headline:
++      l.id === 'bellwater'
++        ? `Bring ${passengerList(required, l)} to ${destination}`
++        : `Bring ${total === 1 ? 'one passenger' : `all ${count} passengers`} to ${destination}`,
+     progress: `Home ${home}/${total}`,
+   };
+ }
+ 
+ export function passageCopy(s: State, to: string, l: Level): string {
+-  if (to === s.boatNodeId) return `You are at ${stop(to)}.`;
++  if (to === s.boatNodeId) return `You are at ${stop(to, l)}.`;
+   const edge = edgeTo(s, to, l);
+   if (!edge) return 'No direct passage. Sail to an adjacent stop first.';
+   const need = draft(s, l),
+@@ -52,10 +54,10 @@ export function actionCostCopy(l: Level): string {
+ 
+ export function pierSafetyCopy(s: State, pierId: string, l: Level): string {
+   const pier = l.piers.find((p) => p.id === pierId)!;
+-  if (s.tideLevel >= pier.elevation) return `${stop(pier.nodeId)} is flooded.`;
++  if (s.tideLevel >= pier.elevation) return `${stop(pier.nodeId, l)} is flooded.`;
+   const flood = l.rules.tide.rises.find((r) => r.afterTurn > s.turn && r.level >= pier.elevation);
+-  if (flood) return `${stop(pier.nodeId)} floods in ${countActions(flood.afterTurn - s.turn)}.`;
+-  return `${stop(pier.nodeId)} stays safe through all tide rises.`;
++  if (flood) return `${stop(pier.nodeId, l)} floods in ${countActions(flood.afterTurn - s.turn)}.`;
++  return `${stop(pier.nodeId, l)} stays safe through all tide rises.`;
+ }
+ 
+ function tideCopy(s: State, l: Level): string {
+@@ -75,7 +77,7 @@ function waitingFacts(s: State, l: Level): string[] {
+     );
+     const safe = s.tideLevel < p.elevation && !futureFlood;
+     return [
+-      `${passengerList(ids)} ${verb(ids, 'waits', 'wait')}${safe ? ' safely' : ''} at ${stop(p.nodeId)}.`,
++      `${passengerList(ids, l)} ${verb(ids, 'waits', 'wait')}${safe ? ' safely' : ''} at ${stop(p.nodeId, l)}.`,
+     ];
+   });
+ }
+@@ -88,7 +90,7 @@ export function statusCopy(
+     const loss = s.lossReason!,
+       pier = l.piers.find((p) => p.id === loss.pierId)!;
+     return {
+-      headline: `${stop(pier.nodeId)} flooded with ${passengerList(loss.passengerIds)} still waiting.`,
++      headline: `${stop(pier.nodeId, l)} flooded with ${passengerList(loss.passengerIds, l)} still waiting.`,
+       detail: 'Undo earlier moves, or restart to try a different plan.',
+       urgent: true,
+     };
+@@ -109,25 +111,25 @@ export function statusCopy(
+     })
+     .sort((a, b) => a.rise.afterTurn - b.rise.afterTurn)[0];
+   const aboard = s.aboard.length
+-      ? `${passengerList(s.aboard)} ${verb(s.aboard, 'is', 'are')} safe aboard.`
++      ? `${passengerList(s.aboard, l)} ${verb(s.aboard, 'is', 'are')} safe aboard.`
+       : '',
+     waiting = waitingFacts(s, l),
+     nextRise = l.rules.tide.rises.find((r) => r.afterTurn > s.turn),
+     immediateTide = nextRise?.afterTurn === s.turn + 1 ? tideCopy(s, l) : '';
+   if (threatened)
+     return {
+-      headline: `${stop(threatened.pier.nodeId)} floods in ${countActions(threatened.rise.afterTurn - s.turn)}.`,
++      headline: `${stop(threatened.pier.nodeId, l)} floods in ${countActions(threatened.rise.afterTurn - s.turn)}.`,
+       detail: [
+         immediateTide,
+         aboard,
+-        ...waiting.filter((f) => !f.includes(stop(threatened.pier.nodeId))),
++        ...waiting.filter((f) => !f.includes(stop(threatened.pier.nodeId, l))),
+       ]
+         .filter(Boolean)
+         .join(' '),
+       urgent: true,
+     };
+   const delivered = s.delivered.length
+-    ? `${passengerList(s.delivered)} ${verb(s.delivered, 'is', 'are')} safe at ${stop(l.piers.find((p) => p.id === l.objective.deliveryPierId)!.nodeId)}.`
++    ? `${passengerList(s.delivered, l)} ${verb(s.delivered, 'is', 'are')} safe at ${stop(l.piers.find((p) => p.id === l.objective.deliveryPierId)!.nodeId, l)}.`
+     : '';
+   return {
+     headline: aboard || delivered || waiting.shift() || 'The boat is empty.',
+@@ -146,11 +148,11 @@ export function forecastCopy(s: State, l: Level): { headline: string; detail: st
+     detail: l.piers
+       .map((p) => {
+         const ids = s.waitingByPier[p.id] ?? [],
+-          title = stop(p.nodeId);
++          title = stop(p.nodeId, l);
+         if (s.tideLevel >= p.elevation)
+-          return `${title} is flooded${ids.length ? `; ${passengerList(ids)} ${verb(ids, 'is', 'are')} waiting there` : ' and empty'}.`;
++          return `${title} is flooded${ids.length ? `; ${passengerList(ids, l)} ${verb(ids, 'is', 'are')} waiting there` : ' and empty'}.`;
+         if (futureTide >= p.elevation)
+-          return `${title} will flood at the next rise; ${ids.length ? `${passengerList(ids)} ${verb(ids, 'is', 'are')} waiting there` : 'nobody is waiting there'}.`;
++          return `${title} will flood at the next rise; ${ids.length ? `${passengerList(ids, l)} ${verb(ids, 'is', 'are')} waiting there` : 'nobody is waiting there'}.`;
+         return `${title} ${next ? 'stays dry at the next rise' : 'is dry'}.`;
+       })
+       .join(' '),
+@@ -192,15 +194,15 @@ export function previewCopy(
+       flooded = l.piers.find((p) => p.id === loss.pierId)!;
+     const order =
+       a.type === 'board'
+-        ? `${passengerList(a.passengerIds)} ${verb(a.passengerIds, 'boards', 'board')}${rise ? ', then the tide rises' : ''}. `
++        ? `${passengerList(a.passengerIds, l)} ${verb(a.passengerIds, 'boards', 'board')}${rise ? ', then the tide rises' : ''}. `
+         : rise
+           ? 'The tide rises after this action. '
+           : '';
+-    consequence = `${order}${passengerList(loss.passengerIds)} ${verb(loss.passengerIds, 'is', 'are')} still waiting at ${stop(flooded.nodeId)} when it floods. This ends the crossing.`;
++    consequence = `${order}${passengerList(loss.passengerIds, l)} ${verb(loss.passengerIds, 'is', 'are')} still waiting at ${stop(flooded.nodeId, l)} when it floods. This ends the crossing.`;
+   } else if (n.status === 'won') {
+-    consequence = `Everyone is safely home at ${stop(l.piers.find((p) => p.id === l.objective.deliveryPierId)!.nodeId)}.`;
++    consequence = `Everyone is safely home at ${stop(l.piers.find((p) => p.id === l.objective.deliveryPierId)!.nodeId, l)}.`;
+   } else if (a.type === 'board') {
+-    const who = passengerList(a.passengerIds),
++    const who = passengerList(a.passengerIds, l),
+       safety =
+         a.passengerIds.length === 2
+           ? 'Both are'
+@@ -212,14 +214,14 @@ export function previewCopy(
+       : `${who} will be aboard.`;
+   } else if (a.type === 'unload') {
+     consequence = pier!.isDeliveryPier
+-      ? `${passengerList(a.passengerIds)} will be safe at ${stop(pier!.nodeId)}.`
+-      : `${passengerList(a.passengerIds)} will wait at ${stop(pier!.nodeId)}. ${pierSafetyCopy(n, pier!.id, l)}`;
++      ? `${passengerList(a.passengerIds, l)} will be safe at ${stop(pier!.nodeId, l)}.`
++      : `${passengerList(a.passengerIds, l)} will wait at ${stop(pier!.nodeId, l)}. ${pierSafetyCopy(n, pier!.id, l)}`;
+     if (rise) consequence += ' The tide rises after this action.';
+   } else {
+     consequence =
+       a.type === 'move'
+-        ? `One passage to ${stop(a.to)}.`
+-        : `The boat stays at ${stop(s.boatNodeId)}.`;
++        ? `One passage to ${stop(a.to, l)}.`
++        : `The boat stays at ${stop(s.boatNodeId, l)}.`;
+     if (rise) consequence += ' The tide rises after this action.';
+   }
+   if ((a.type === 'board' || a.type === 'unload') && n.status === 'playing') {
+@@ -229,7 +231,7 @@ export function previewCopy(
+     });
+     if (blocked) {
+       const edge = edgeTo(n, blocked.id, l)!;
+-      consequence += ` Passage to ${stop(blocked.id)} has depth ${edge.baseDepth + n.tideLevel}: too shallow.`;
++      consequence += ` Passage to ${stop(blocked.id, l)} has depth ${edge.baseDepth + n.tideLevel}: too shallow.`;
+     }
+   }
+   return { summary, consequence, requirement, error: null };
+diff --git a/tests/e2e/checkpoint.spec.ts b/tests/e2e/checkpoint.spec.ts
+index eb37809..3f593c5 100644
+--- a/tests/e2e/checkpoint.spec.ts
++++ b/tests/e2e/checkpoint.spec.ts
+@@ -5,7 +5,7 @@ test('A: first in-engine checkpoint', async ({ page }) => {
+   page.on('console', (m) => {
+     if (m.type() === 'error') console.log(m.text());
+   });
+-  await page.goto('/');
++  await page.goto('/?cove=first-crossing');
+   await expect(page.locator('canvas')).toBeVisible();
+   await page.waitForFunction(() => ((window as any).__LAST_FERRY__?.getMetrics().frames ?? 0) > 5);
+   await page.screenshot({ path: `${reviewDir}/checkpoint-a.png` });
+diff --git a/tests/e2e/fallback.spec.ts b/tests/e2e/fallback.spec.ts
+index 2b7c968..b0a5d29 100644
+--- a/tests/e2e/fallback.spec.ts
++++ b/tests/e2e/fallback.spec.ts
+@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
+ test('fallback completes a stalled presentation without another gameplay action', async ({
+   page,
+ }) => {
+-  await page.goto('/');
++  await page.goto('/?cove=first-crossing');
+   await page.waitForFunction(() => (window as any).__LAST_FERRY__);
+   await page.evaluate(() => {
+     window.requestAnimationFrame = () => 0;
+diff --git a/tests/e2e/production.spec.ts b/tests/e2e/production.spec.ts
+index 4cea6e0..d8a4de7 100644
+--- a/tests/e2e/production.spec.ts
++++ b/tests/e2e/production.spec.ts
+@@ -10,7 +10,7 @@ test('production bundle: real rescue without debug globals or external assets',
+   page.on('request', (r) => {
+     if (!r.url().startsWith(productionURL)) external.push(r.url());
+   });
+-  await page.goto(productionURL);
++  await page.goto(`${productionURL}/?cove=first-crossing`);
+   await expect(page.locator('canvas')).toBeVisible();
+   expect(await page.evaluate(() => typeof (window as any).__LAST_FERRY__)).toBe('undefined');
+   await act(page, 'map-sheep-pier');
+diff --git a/tests/unit/clearance.test.ts b/tests/unit/clearance.test.ts
+index bdf0772..1355f6e 100644
+--- a/tests/unit/clearance.test.ts
++++ b/tests/unit/clearance.test.ts
+@@ -2,7 +2,7 @@ import { test, expect } from 'vitest';
+ import { Mesh, Vector3 } from 'three';
+ import { ferry } from '../../src/scene/models';
+ import { sampleJourney } from '../../src/scene/motion';
+-import { level, holdingPier } from '../../src/levels/level';
++import { level, holdingPier, bellwater } from '../../src/levels/level';
+ type P = [number, number];
+ const cross = (a: P, b: P, c: P) => (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]);
+ function convex(points: P[]) {
+@@ -44,7 +44,7 @@ function overlaps(a: P[], b: P[]) {
+     )
+   );
+ }
+-test.each([level, holdingPier])(
++test.each([level, holdingPier, bellwater])(
+   '$id: actual modeled ferry footprint clears all land and pier decks along both directions and yaw turns',
+   (level) => {
+     const model = ferry();
+@@ -73,13 +73,14 @@ test.each([level, holdingPier])(
+         })),
+       ];
+     const failures: string[] = [];
++    const samples = level.id === 'bellwater' ? 1000 : 100;
+     for (const edge of level.edges)
+       for (const reverse of [false, true]) {
+         const path = (reverse ? [...edge.waypointsXZ].reverse() : edge.waypointsXZ).map(
+           (p) => new Vector3(p[0], 0, p[1]),
+         );
+-        for (let frame = 0; frame <= 100; frame++) {
+-          const pose = sampleJourney(path, frame / 100);
++        for (let frame = 0; frame <= samples; frame++) {
++          const pose = sampleJourney(path, frame / samples);
+           const hull = footprint.map(([x, z]) => {
+             const v = new Vector3(x, 0, z)
+               .applyAxisAngle(new Vector3(0, 1, 0), pose.angle)
+diff --git a/tests/unit/presentation.test.ts b/tests/unit/presentation.test.ts
+index cb0a0d0..e4f14b5 100644
+--- a/tests/unit/presentation.test.ts
++++ b/tests/unit/presentation.test.ts
+@@ -1,6 +1,15 @@
+ import { describe, expect, test } from 'vitest';
+ import { initial, reduce, type Action, type State } from '../../src/game/rules';
+-import { holdingPier, level as baseline, type Level } from '../../src/levels/level';
++import {
++  bellwater,
++  holdingPier,
++  level as baseline,
++  levelNames,
++  nodeName,
++  passengerLabel,
++  passengerName,
++  type Level,
++} from '../../src/levels/level';
+ import {
+   actionCostCopy,
+   actionLabel,
+@@ -25,6 +34,82 @@ const atRabbits = () =>
+   ]);
+ 
+ describe('plain action and consequence presentation', () => {
++  test('uses level-owned names and keeps the original residents and fallbacks', () => {
++    expect(levelNames(bellwater)).toEqual({
++      nodeNames: {
++        harbor: 'Harbor',
++        shallows: 'Shallows',
++        'low-pier': 'Low Pier',
++        'west-buoy': 'West Buoy',
++        'east-buoy': 'East Buoy',
++        'bell-pier': 'Bell Pier',
++      },
++      passengerNames: { tansy: 'Tansy · rabbit', lark: 'Lark · rabbit', bram: 'Bram · sheep' },
++    });
++    expect(passengerList(['tansy', 'lark', 'bram'], bellwater)).toBe('Tansy, Lark and Bram');
++    expect(passengerLabel('sheep-1', holdingPier)).toBe('Moss · sheep');
++    expect(passengerName('rabbit-1', baseline)).toBe('Pip');
++    expect(passengerName('unknown', bellwater)).toBe('unknown');
++    expect(nodeName('unknown', bellwater)).toBe('unknown');
++    const renamed = structuredClone(holdingPier);
++    renamed.names = { nodes: { stone: 'Quiet Pier' }, passengers: { 'sheep-1': 'Fern' } };
++    expect(
++      actionLabel(initial(renamed), { type: 'unload', passengerIds: ['sheep-1'] }, renamed),
++    ).toBe('Let Fern ashore');
++    expect(passageCopy(initial(renamed), 'stone', renamed)).toBe('You are at Quiet Pier.');
++    expect(passengerName('sheep-1', holdingPier)).toBe('Moss');
++  });
++
++  test('Bellwater deadlines, forecasts and transfer previews use its residents and stops', () => {
++    const start = initial(bellwater);
++    expect(objectiveCopy(start, bellwater)).toEqual({
++      headline: 'Bring Tansy, Lark and Bram to Harbor',
++      progress: 'Home 0/3',
++    });
++    expect(statusCopy(start, bellwater).headline).toBe('Low Pier floods in 4 actions.');
++    expect(statusCopy(start, bellwater).detail).toContain('Bram waits at Bell Pier.');
++    const atLow = run(
++      [
++        { type: 'move', to: 'west-buoy' },
++        { type: 'move', to: 'east-buoy' },
++        { type: 'move', to: 'low-pier' },
++      ],
++      bellwater,
++    );
++    expect(actionLabel(atLow, { type: 'board', passengerIds: ['tansy', 'lark'] }, bellwater)).toBe(
++      'Board Tansy and Lark',
++    );
++    expect(
++      previewCopy(atLow, { type: 'board', passengerIds: ['tansy'] }, bellwater).consequence,
++    ).toBe(
++      'Tansy boards, then the tide rises. Lark is still waiting at Low Pier when it floods. This ends the crossing.',
++    );
++    const rescued = reduce(atLow, { type: 'board', passengerIds: ['tansy', 'lark'] }, bellwater);
++    expect(statusCopy(rescued, bellwater).headline).toBe('Bell Pier floods in 4 actions.');
++    expect(statusCopy(rescued, bellwater).detail).toContain('Tansy and Lark are safe aboard.');
++    expect(forecastCopy(rescued, bellwater).detail).toContain('Low Pier is flooded and empty.');
++    expect(forecastCopy(rescued, bellwater).detail).toContain(
++      'Bell Pier will flood at the next rise; Bram is waiting there.',
++    );
++    const home = run(
++      [
++        { type: 'move', to: 'west-buoy' },
++        { type: 'move', to: 'east-buoy' },
++        { type: 'move', to: 'low-pier' },
++        { type: 'board', passengerIds: ['tansy', 'lark'] },
++        { type: 'move', to: 'shallows' },
++        { type: 'move', to: 'harbor' },
++      ],
++      bellwater,
++    );
++    expect(actionLabel(home, { type: 'unload', passengerIds: ['tansy'] }, bellwater)).toBe(
++      'Deliver Tansy',
++    );
++    expect(
++      previewCopy(home, { type: 'unload', passengerIds: ['tansy'] }, bellwater).consequence,
++    ).toBe('Tansy will be safe at Harbor.');
++  });
++
+   test('derives the objective and required-passenger progress from each cove', () => {
+     for (const l of [holdingPier, baseline]) {
+       const s = initial(l);
+diff --git a/tools/snapshot-evidence.mjs b/tools/snapshot-evidence.mjs
+index fa54249..9cf5f4d 100644
+--- a/tools/snapshot-evidence.mjs
++++ b/tools/snapshot-evidence.mjs
+@@ -47,6 +47,7 @@ const paths = [
+   'docs/TECHNICAL_PLAN.md',
+   'docs/ASSET_LEDGER.md',
+   ...(existsSync(new URL('docs/HOLDING_PIER.md', root)) ? ['docs/HOLDING_PIER.md'] : []),
++  ...(existsSync(new URL('docs/BELLWATER.md', root)) ? ['docs/BELLWATER.md'] : []),
+   'tools/snapshot-evidence.mjs',
+ ].sort();
+ const files = Object.fromEntries(paths.map((p) => [p, digest(readFileSync(new URL(p, root)))]));
+@@ -86,14 +87,14 @@ if (!process.argv.includes('--finalize')) {
+         path,
+         captureTime: statSync(p).mtime.toISOString(),
+         sha256: digest(b),
+-        sourceIdentity: name.startsWith('baseline-') ? option('--base') : stored.source,
++        sourceIdentity: stored.source,
+         viewport: [b.readUInt32BE(16), b.readUInt32BE(20)],
+         input:
+           /^(desktop|phone)-(loading|loaded)\./.test(name) ||
+           name.includes('keyboard-success') ||
+           name.startsWith('baseline-')
+             ? 'Keyboard: Tab, Shift+Tab, Enter and Escape'
+-            : name.startsWith('phone-')
++            : name.startsWith('phone-') || name.startsWith('bellwater-phone-')
+               ? 'Chromium emulated touch'
+               : name === 'portrait.png'
+                 ? 'Mouse, portrait and reduced motion'
+@@ -127,6 +128,7 @@ if (!process.argv.includes('--finalize')) {
+           'boarding-unloading',
+           'boarding-unloading-closeup',
+           'uninterrupted-rescue',
++          'bellwater-uninterrupted',
+         ]
+           .map((name) => `${reviewDir}/raw/${name}.webm`)
+           .filter((path) => existsSync(new URL(path, root)))
+diff --git a/data/bellwater.level.json b/data/bellwater.level.json
+new file mode 100644
+index 0000000..24bbb32
+--- /dev/null
++++ b/data/bellwater.level.json
+@@ -0,0 +1,215 @@
++{
++  "id": "bellwater",
++  "title": "Bellwater Cove",
++  "rules": {
++    "capacity": 4,
++    "draftBands": [
++      { "maxLoad": 0, "draft": 1 },
++      { "maxLoad": 2, "draft": 2 },
++      { "maxLoad": 4, "draft": 3 }
++    ],
++    "tide": {
++      "initialLevel": 0,
++      "rises": [
++        { "afterTurn": 4, "level": 1 },
++        { "afterTurn": 8, "level": 2 }
++      ]
++    },
++    "actionCost": 1,
++    "depthFormula": "baseDepth + tideLevel",
++    "pierDryWhen": "tideLevel < elevation",
++    "failureRule": "required passenger waiting at a flooded pier"
++  },
++  "names": {
++    "nodes": {
++      "harbor": "Harbor",
++      "shallows": "Shallows",
++      "low-pier": "Low Pier",
++      "west-buoy": "West Buoy",
++      "east-buoy": "East Buoy",
++      "bell-pier": "Bell Pier"
++    },
++    "passengers": { "tansy": "Tansy", "lark": "Lark", "bram": "Bram" }
++  },
++  "world": {
++    "plane": "XZ",
++    "north": "negative Z",
++    "waterYPerTideLevel": 0.18,
++    "referenceBoatRadius": 0.3,
++    "requiredRouteClearance": 0.45,
++    "clearanceScope": "Actual ferry geometry is checked independently along both directions of each route.",
++    "presentationNote": "A triangular inlet: safe lighthouse harbor to the west, low reed shore to the east and the rocky bell shore behind the inner channel. The outer buoy route remains visibly separate from the shallow channel.",
++    "suggestedCamera": {
++      "projection": "orthographic",
++      "positionXYZ": [0, 34, 24],
++      "targetXYZ": [0, 0, -0.7],
++      "verticalSpan": 13
++    },
++    "islands": [
++      {
++        "id": "lighthouse-island",
++        "elevation": 3,
++        "footprintXZ": [
++          [-7.6, -4],
++          [-4.3, -4],
++          [-3.6, -2.7],
++          [-4.2, -1.4],
++          [-7, -1.4],
++          [-7.9, -2.7]
++        ]
++      },
++      {
++        "id": "low-island",
++        "elevation": 1,
++        "footprintXZ": [
++          [3.8, -3],
++          [6.8, -2.8],
++          [7.7, -1.5],
++          [7.2, -0.6],
++          [5.4, -0.5],
++          [3.9, -1],
++          [3.5, -2]
++        ]
++      },
++      {
++        "id": "bell-island",
++        "elevation": 2,
++        "footprintXZ": [
++          [-1.3, -6.1],
++          [1.8, -6],
++          [2.4, -4.8],
++          [1.6, -3.9],
++          [-0.9, -3.9],
++          [-1.8, -5]
++        ]
++      }
++    ]
++  },
++  "nodes": [
++    { "id": "harbor", "positionXZ": [-5.6, 0.5], "baseDepth": 3, "pierId": "harbor-pier" },
++    { "id": "shallows", "positionXZ": [0, 1.3], "baseDepth": 3 },
++    { "id": "low-pier", "positionXZ": [5.6, 1.3], "baseDepth": 3, "pierId": "low-pier" },
++    { "id": "west-buoy", "positionXZ": [-4.5, 3.9], "baseDepth": 3 },
++    { "id": "east-buoy", "positionXZ": [4.5, 4.2], "baseDepth": 3 },
++    { "id": "bell-pier", "positionXZ": [0.4, -2], "baseDepth": 3, "pierId": "bell-pier" }
++  ],
++  "edges": [
++    {
++      "id": "harbor-shallows",
++      "nodes": ["harbor", "shallows"],
++      "baseDepth": 1,
++      "bidirectional": true,
++      "waypointsXZ": [
++        [-5.6, 0.5],
++        [-2.7, 1.2],
++        [0, 1.3]
++      ]
++    },
++    {
++      "id": "shallows-low",
++      "nodes": ["shallows", "low-pier"],
++      "baseDepth": 1,
++      "bidirectional": true,
++      "waypointsXZ": [
++        [0, 1.3],
++        [3, 1.8],
++        [5.6, 1.3]
++      ]
++    },
++    {
++      "id": "harbor-west",
++      "nodes": ["harbor", "west-buoy"],
++      "baseDepth": 3,
++      "bidirectional": true,
++      "waypointsXZ": [
++        [-5.6, 0.5],
++        [-6, 2],
++        [-4.5, 3.9]
++      ]
++    },
++    {
++      "id": "west-east",
++      "nodes": ["west-buoy", "east-buoy"],
++      "baseDepth": 3,
++      "bidirectional": true,
++      "waypointsXZ": [
++        [-4.5, 3.9],
++        [0, 4.8],
++        [4.5, 4.2]
++      ]
++    },
++    {
++      "id": "east-low",
++      "nodes": ["east-buoy", "low-pier"],
++      "baseDepth": 3,
++      "bidirectional": true,
++      "waypointsXZ": [
++        [4.5, 4.2],
++        [6.3, 3.1],
++        [5.6, 1.3]
++      ]
++    },
++    {
++      "id": "harbor-bell",
++      "nodes": ["harbor", "bell-pier"],
++      "baseDepth": 2,
++      "bidirectional": true,
++      "waypointsXZ": [
++        [-5.6, 0.5],
++        [-3.3, 1.3],
++        [-2, -1.3],
++        [0.4, -2]
++      ]
++    }
++  ],
++  "piers": [
++    {
++      "id": "harbor-pier",
++      "nodeId": "harbor",
++      "islandId": "lighthouse-island",
++      "elevation": 3,
++      "positionXZ": [-5.6, -0.4],
++      "landAnchorXZ": [-5.6, -1.6],
++      "width": 0.7,
++      "isDeliveryPier": true
++    },
++    {
++      "id": "low-pier",
++      "nodeId": "low-pier",
++      "islandId": "low-island",
++      "elevation": 1,
++      "positionXZ": [5.6, 0.4],
++      "landAnchorXZ": [5.6, -0.8],
++      "width": 0.9,
++      "isDeliveryPier": false
++    },
++    {
++      "id": "bell-pier",
++      "nodeId": "bell-pier",
++      "islandId": "bell-island",
++      "elevation": 2,
++      "positionXZ": [0.4, -2.9],
++      "landAnchorXZ": [0.4, -4.1],
++      "width": 0.8,
++      "isDeliveryPier": false
++    }
++  ],
++  "passengers": [
++    { "id": "tansy", "species": "rabbit", "slots": 1 },
++    { "id": "lark", "species": "rabbit", "slots": 1 },
++    { "id": "bram", "species": "sheep", "slots": 2 }
++  ],
++  "start": {
++    "boatNodeId": "harbor",
++    "aboard": [],
++    "waitingByPier": { "harbor-pier": [], "low-pier": ["tansy", "lark"], "bell-pier": ["bram"] }
++  },
++  "objective": {
++    "deliveryPierId": "harbor-pier",
++    "requiredPassengerIds": ["tansy", "lark", "bram"]
++  },
++  "validation": {
++    "searchDepthLimit": 0,
++    "witnessReplays": ["data/bellwater/witnesses.json"]
++  }
++}
+diff --git a/data/bellwater/witnesses.json b/data/bellwater/witnesses.json
+new file mode 100644
+index 0000000..a34e9be
+--- /dev/null
++++ b/data/bellwater/witnesses.json
+@@ -0,0 +1,426 @@
++{
++  "description": "Developer witnesses for the production reducer. Do not display these solutions as in-game hints.",
++  "levelId": "bellwater",
++  "witnesses": [
++    {
++      "id": "shallow-outward-deep-return",
++      "actions": [
++        {
++          "type": "move",
++          "to": "shallows"
++        },
++        {
++          "type": "move",
++          "to": "low-pier"
++        },
++        {
++          "type": "board",
++          "passengerIds": ["tansy", "lark"]
++        },
++        {
++          "type": "move",
++          "to": "east-buoy"
++        },
++        {
++          "type": "move",
++          "to": "west-buoy"
++        },
++        {
++          "type": "move",
++          "to": "harbor"
++        },
++        {
++          "type": "move",
++          "to": "bell-pier"
++        },
++        {
++          "type": "board",
++          "passengerIds": ["bram"]
++        },
++        {
++          "type": "move",
++          "to": "harbor"
++        },
++        {
++          "type": "unload",
++          "passengerIds": ["tansy", "lark", "bram"]
++        }
++      ],
++      "expected": {
++        "turn": 10,
++        "tideLevel": 2,
++        "boatNodeId": "harbor",
++        "status": "won",
++        "aboard": [],
++        "delivered": ["tansy", "lark", "bram"]
++      }
++    },
++    {
++      "id": "deep-outward-shallow-return",
++      "actions": [
++        {
++          "type": "move",
++          "to": "west-buoy"
++        },
++        {
++          "type": "move",
++          "to": "east-buoy"
++        },
++        {
++          "type": "move",
++          "to": "low-pier"
++        },
++        {
++          "type": "board",
++          "passengerIds": ["tansy", "lark"]
++        },
++        {
++          "type": "move",
++          "to": "shallows"
++        },
++        {
++          "type": "move",
++          "to": "harbor"
++        },
++        {
++          "type": "move",
++          "to": "bell-pier"
++        },
++        {
++          "type": "board",
++          "passengerIds": ["bram"]
++        },
++        {
++          "type": "move",
++          "to": "harbor"
++        },
++        {
++          "type": "unload",
++          "passengerIds": ["tansy", "lark", "bram"]
++        }
++      ],
++      "expected": {
++        "turn": 10,
++        "tideLevel": 2,
++        "boatNodeId": "harbor",
++        "status": "won",
++        "aboard": [],
++        "delivered": ["tansy", "lark", "bram"]
++      }
++    },
++    {
++      "id": "wait-at-harbor",
++      "actions": [
++        {
++          "type": "wait"
++        },
++        {
++          "type": "move",
++          "to": "shallows"
++        },
++        {
++          "type": "move",
++          "to": "low-pier"
++        },
++        {
++          "type": "board",
++          "passengerIds": ["tansy", "lark"]
++        },
++        {
++          "type": "move",
++          "to": "shallows"
++        },
++        {
++          "type": "move",
++          "to": "harbor"
++        },
++        {
++          "type": "move",
++          "to": "bell-pier"
++        },
++        {
++          "type": "board",
++          "passengerIds": ["bram"]
++        },
++        {
++          "type": "move",
++          "to": "harbor"
++        },
++        {
++          "type": "unload",
++          "passengerIds": ["tansy", "lark", "bram"]
++        }
++      ],
++      "expected": {
++        "turn": 10,
++        "tideLevel": 2,
++        "boatNodeId": "harbor",
++        "status": "won",
++        "aboard": [],
++        "delivered": ["tansy", "lark", "bram"]
++      }
++    },
++    {
++      "id": "wait-at-shallows",
++      "actions": [
++        {
++          "type": "move",
++          "to": "shallows"
++        },
++        {
++          "type": "wait"
++        },
++        {
++          "type": "move",
++          "to": "low-pier"
++        },
++        {
++          "type": "board",
++          "passengerIds": ["tansy", "lark"]
++        },
++        {
++          "type": "move",
++          "to": "shallows"
++        },
++        {
++          "type": "move",
++          "to": "harbor"
++        },
++        {
++          "type": "move",
++          "to": "bell-pier"
++        },
++        {
++          "type": "board",
++          "passengerIds": ["bram"]
++        },
++        {
++          "type": "move",
++          "to": "harbor"
++        },
++        {
++          "type": "unload",
++          "passengerIds": ["tansy", "lark", "bram"]
++        }
++      ],
++      "expected": {
++        "turn": 10,
++        "tideLevel": 2,
++        "boatNodeId": "harbor",
++        "status": "won",
++        "aboard": [],
++        "delivered": ["tansy", "lark", "bram"]
++      }
++    },
++    {
++      "id": "wait-at-low-pier-before-boarding",
++      "actions": [
++        {
++          "type": "move",
++          "to": "shallows"
++        },
++        {
++          "type": "move",
++          "to": "low-pier"
++        },
++        {
++          "type": "wait"
++        },
++        {
++          "type": "board",
++          "passengerIds": ["tansy", "lark"]
++        },
++        {
++          "type": "move",
++          "to": "shallows"
++        },
++        {
++          "type": "move",
++          "to": "harbor"
++        },
++        {
++          "type": "move",
++          "to": "bell-pier"
++        },
++        {
++          "type": "board",
++          "passengerIds": ["bram"]
++        },
++        {
++          "type": "move",
++          "to": "harbor"
++        },
++        {
++          "type": "unload",
++          "passengerIds": ["tansy", "lark", "bram"]
++        }
++      ],
++      "expected": {
++        "turn": 10,
++        "tideLevel": 2,
++        "boatNodeId": "harbor",
++        "status": "won",
++        "aboard": [],
++        "delivered": ["tansy", "lark", "bram"]
++      }
++    },
++    {
++      "id": "wait-at-low-pier-after-boarding",
++      "actions": [
++        {
++          "type": "move",
++          "to": "shallows"
++        },
++        {
++          "type": "move",
++          "to": "low-pier"
++        },
++        {
++          "type": "board",
++          "passengerIds": ["tansy", "lark"]
++        },
++        {
++          "type": "wait"
++        },
++        {
++          "type": "move",
++          "to": "shallows"
++        },
++        {
++          "type": "move",
++          "to": "harbor"
++        },
++        {
++          "type": "move",
++          "to": "bell-pier"
++        },
++        {
++          "type": "board",
++          "passengerIds": ["bram"]
++        },
++        {
++          "type": "move",
++          "to": "harbor"
++        },
++        {
++          "type": "unload",
++          "passengerIds": ["tansy", "lark", "bram"]
++        }
++      ],
++      "expected": {
++        "turn": 10,
++        "tideLevel": 2,
++        "boatNodeId": "harbor",
++        "status": "won",
++        "aboard": [],
++        "delivered": ["tansy", "lark", "bram"]
++      }
++    },
++    {
++      "id": "tansy-then-lark",
++      "actions": [
++        {
++          "type": "move",
++          "to": "shallows"
++        },
++        {
++          "type": "move",
++          "to": "low-pier"
++        },
++        {
++          "type": "board",
++          "passengerIds": ["tansy"]
++        },
++        {
++          "type": "board",
++          "passengerIds": ["lark"]
++        },
++        {
++          "type": "move",
++          "to": "shallows"
++        },
++        {
++          "type": "move",
++          "to": "harbor"
++        },
++        {
++          "type": "move",
++          "to": "bell-pier"
++        },
++        {
++          "type": "board",
++          "passengerIds": ["bram"]
++        },
++        {
++          "type": "move",
++          "to": "harbor"
++        },
++        {
++          "type": "unload",
++          "passengerIds": ["tansy", "lark", "bram"]
++        }
++      ],
++      "expected": {
++        "turn": 10,
++        "tideLevel": 2,
++        "boatNodeId": "harbor",
++        "status": "won",
++        "aboard": [],
++        "delivered": ["tansy", "lark", "bram"]
++      }
++    },
++    {
++      "id": "lark-then-tansy",
++      "actions": [
++        {
++          "type": "move",
++          "to": "shallows"
++        },
++        {
++          "type": "move",
++          "to": "low-pier"
++        },
++        {
++          "type": "board",
++          "passengerIds": ["lark"]
++        },
++        {
++          "type": "board",
++          "passengerIds": ["tansy"]
++        },
++        {
++          "type": "move",
++          "to": "shallows"
++        },
++        {
++          "type": "move",
++          "to": "harbor"
++        },
++        {
++          "type": "move",
++          "to": "bell-pier"
++        },
++        {
++          "type": "board",
++          "passengerIds": ["bram"]
++        },
++        {
++          "type": "move",
++          "to": "harbor"
++        },
++        {
++          "type": "unload",
++          "passengerIds": ["tansy", "lark", "bram"]
++        }
++      ],
++      "expected": {
++        "turn": 10,
++        "tideLevel": 2,
++        "boatNodeId": "harbor",
++        "status": "won",
++        "aboard": [],
++        "delivered": ["tansy", "lark", "bram"]
++      }
++    }
++  ]
++}
+diff --git a/docs/BELLWATER.md b/docs/BELLWATER.md
+new file mode 100644
+index 0000000..24f97d3
+--- /dev/null
++++ b/docs/BELLWATER.md
+@@ -0,0 +1,62 @@
++# Bellwater Cove — developer notes
++
++Bellwater is the second authored puzzle after the accepted Holding Pier introduction. The task is `NEXT_TASK.md`; exact values and geometry are in `data/bellwater.level.json`. These notes contain solutions for development and review. They are not player instructions.
++
++## Decision to test
++
++The player chooses which route to take in each direction as the water changes, then decides whether to deliver the rabbits when passing Harbor or continue to the second pickup. Free inspection explains current depth and each action's immediate consequence. The two pickup deadlines remain visible. Difficulty and satisfaction require the user's playtest; solver counts and turn counts do not establish either.
++
++Tansy and Lark are new rabbits at Low Pier; Bram is a new sheep at Bell Pier. Pip, Rue and Moss remain in the two earlier coves. Naming is small level-owned metadata; species and slot costs retain their existing models and rules.
++
++## Exact network
++
++All six basins have base depth 3. Harbor is elevation 3, Low Pier elevation 1, Bell Pier elevation 2. Shallows, West Buoy and East Buoy are stopping buoys without piers. Each edge below is bidirectional and costs one action:
++
++| Connection          | Base depth |
++| ------------------- | ---------: |
++| Harbor–Shallows     |          1 |
++| Shallows–Low Pier   |          1 |
++| Harbor–West Buoy    |          3 |
++| West Buoy–East Buoy |          3 |
++| East Buoy–Low Pier  |          3 |
++| Harbor–Bell Pier    |          2 |
++
++Capacity 4, rabbit 1 slot, sheep 2 slots. Empty draft 1; load 1–2 draft 2; load 3–4 draft 3. Each accepted sailing, boarding, unloading or waiting action costs one. Tide rises after actions 4 and 8. Apply the action before the rise and flood check; validate movement at the current tide. Inspection and Undo cost no action. No mandatory Wait or upper action limit exists.
++
++## Representative ten-action rescues
++
++| Action | Shallow outward / deep return    | Deep outward / shallow return    |
++| -----: | -------------------------------- | -------------------------------- |
++|      1 | Harbor → Shallows                | Harbor → West Buoy               |
++|      2 | Shallows → Low Pier              | West Buoy → East Buoy            |
++|      3 | Board Tansy and Lark             | East Buoy → Low Pier             |
++|      4 | Low Pier → East Buoy; tide rises | Board Tansy and Lark; tide rises |
++|      5 | East Buoy → West Buoy            | Low Pier → Shallows              |
++|      6 | West Buoy → Harbor               | Shallows → Harbor                |
++|      7 | Harbor → Bell Pier               | Harbor → Bell Pier               |
++|      8 | Board Bram; tide rises           | Board Bram; tide rises           |
++|      9 | Bell Pier → Harbor               | Bell Pier → Harbor               |
++|     10 | Deliver everyone                 | Deliver everyone                 |
++
++The shallow route works both ways with one Wait at Harbor before departure, Shallows, or Low Pier before or after boarding both rabbits. Boarding Tansy and Lark separately on actions 3 and 4 also works, in either order. The eight shortest witnesses are retained in `data/bellwater/witnesses.json`. Tests replay them through the production reducer and preserve longer harmless play after the second pickup.
++
++## Meaningful failed or blocked plans
++
++- Bell Pier first misses the rabbits' first-rise pickup deadline.
++- Deep outer route both ways reaches Harbor on action 7 and Bell Pier on action 8; arrival does not board Bram, who is still waiting when the pier floods.
++- Delivering even one rabbit before boarding Bram consumes the remaining pickup window.
++- After boarding both rabbits on action 3, shallow return is blocked: boat needs depth 2, current passage has depth 1. Inspection is free and cannot advance the tide.
++
++The canonical search checks actual route and timing constraints. It does not gate UI on a particular visited-state count. A valid rescue must use the shallow route, cannot start toward Bell Pier and cannot deliver anyone before boarding Bram. At least one rescue requires no Wait.
++
++## Authored place and clearance
++
++The triangular inlet has a safe western lighthouse shore, a low sandy reed shore to the east, and a rocky bell shore behind the inner channel. The bell is a landmark. Shared water remains unchanged; its shallow treatment follows the authored edges. Route geometry, island footprints and piers are authored together in the level JSON, with only necessary scenery anchors and camera choices in `src/scene/layout.ts`.
++
++Clearance checks sample the actual modeled ferry footprint and production journey transform in both directions along every edge, including endpoint turns and pier approaches. They supplement visual playthroughs; they do not claim continuous collision physics or native-device performance.
++
++## Entry and review
++
++No query starts Holding Pier. Its successful ending offers Next cove with a brief coast transition, then opens `/?cove=bellwater` at turn 0, empty at Harbor. Menu also selects Bellwater or either earlier cove. `/?cove=first-crossing` preserves the baseline. Undo and Restart remain available at endings; Bellwater's ending acknowledges its neighbors without claiming the whole story is finished.
++
++See `reviews/bellwater/REVIEW.md` for executed checks, source identity, actual gameplay captures and remaining verification limits. The broader shared water/shore/lighting pass is a later milestone.
+diff --git a/src/scene/layout.ts b/src/scene/layout.ts
+new file mode 100644
+index 0000000..d90c7e3
+--- /dev/null
++++ b/src/scene/layout.ts
+@@ -0,0 +1,65 @@
++export type IslandStyle = 'garden' | 'crag' | 'reeds' | 'rocky';
++type Landmark = {
++  kind: 'lighthouse' | 'cottage' | 'bell';
++  islandId: string;
++  positionXZ: [number, number];
++};
++export type SceneLayout = {
++  landmarks: Landmark[];
++  islandStyles: Record<string, IslandStyle>;
++  stonePiers: string[];
++  centeredWaitingPairs: boolean;
++  cameraPosition: [number, number, number];
++  landscapeCameraPosition?: [number, number, number];
++  light?: {
++    background: string;
++    sky: string;
++    ground: string;
++    sun: string;
++    sunPosition: [number, number, number];
++  };
++};
++const layouts: Record<string, SceneLayout> = {
++  'first-crossing': {
++    landmarks: [
++      { kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-6.15, -3.25] },
++      { kind: 'cottage', islandId: 'sheep-island', positionXZ: [6.3, -3.25] },
++    ],
++    islandStyles: { 'central-rock': 'crag' },
++    stonePiers: [],
++    centeredWaitingPairs: false,
++    cameraPosition: [0, 34, 24],
++    landscapeCameraPosition: [0, 30, 30],
++  },
++  'holding-pier': {
++    landmarks: [
++      { kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-6.15, -3.25] },
++      { kind: 'cottage', islandId: 'rabbit-island', positionXZ: [6.3, -3.25] },
++    ],
++    islandStyles: {},
++    stonePiers: ['stone-pier'],
++    centeredWaitingPairs: true,
++    cameraPosition: [0, 34, 24],
++  },
++  bellwater: {
++    landmarks: [
++      { kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-5.75, -2.8] },
++      { kind: 'bell', islandId: 'bell-island', positionXZ: [0.45, -4.95] },
++    ],
++    islandStyles: { 'low-island': 'reeds', 'bell-island': 'rocky' },
++    stonePiers: ['bell-pier'],
++    centeredWaitingPairs: true,
++    cameraPosition: [0, 34, 24],
++    landscapeCameraPosition: [0, 30, 30],
++    light: {
++      background: '#2a6372',
++      sky: '#f2f1db',
++      ground: '#668c93',
++      sun: '#ffe7bd',
++      sunPosition: [-7, 17, 5],
++    },
++  },
++};
++export function sceneLayout(levelId: string) {
++  return layouts[levelId] ?? layouts['first-crossing'];
++}
+diff --git a/src/scene/scenery.ts b/src/scene/scenery.ts
+new file mode 100644
+index 0000000..a55e367
+--- /dev/null
++++ b/src/scene/scenery.ts
+@@ -0,0 +1,91 @@
++import * as T from 'three';
++import { ball, box, cylinder, mesh, palette } from './models';
++
++export function cottage(parent: T.Object3D, position: [number, number, number]) {
++  const house = new T.Group();
++  house.name = 'cottage';
++  house.position.set(...position);
++  parent.add(house);
++  box(house, '#c78155', [1.35, 0.9, 1.05], [0, 0.45, 0], 0.08);
++  for (const x of [-0.42, 0.42]) box(house, '#f9d084', [0.24, 0.29, 0.03], [x, 0.52, 0.54]);
++  box(house, '#754f3b', [0.27, 0.56, 0.05], [0, 0.29, 0.55]);
++  const roof = new T.Shape();
++  roof.moveTo(-0.82, 0);
++  roof.lineTo(0, 0.58);
++  roof.lineTo(0.82, 0);
++  roof.closePath();
++  const roofGeo = new T.ExtrudeGeometry(roof, {
++    depth: 1.28,
++    bevelEnabled: true,
++    bevelSize: 0.03,
++    bevelThickness: 0.03,
++    bevelSegments: 2,
++    steps: 1,
++  });
++  mesh(roofGeo, palette.red, house, 0, 0.9, -0.64);
++  for (const x of [-0.42, 0.42])
++    for (const y of [0.42, 0.62]) box(house, '#edc28c', [0.27, 0.025, 0.045], [x, y, 0.56]);
++  box(house, '#ead5a6', [0.026, 0.32, 0.04], [-0.42, 0.52, 0.56]);
++  box(house, '#93816a', [0.19, 0.6, 0.2], [0.43, 1.35, -0.25]);
++  return house;
++}
++
++export function bellLandmark(parent: T.Object3D, position: [number, number, number]) {
++  const g = new T.Group();
++  g.name = 'bell-landmark';
++  g.position.set(...position);
++  parent.add(g);
++  cylinder(g, '#83918b', 0.62, 0.7, 0.18, [0, 0.09, 0], 10);
++  for (const x of [-0.45, 0.45]) {
++    box(g, '#6e5e47', [0.13, 1.45, 0.15], [x, 0.84, 0], 0.035);
++    box(g, '#b4a075', [0.18, 0.1, 0.2], [x, 1.43, 0], 0.02);
++  }
++  box(g, '#786448', [1.14, 0.16, 0.2], [0, 1.58, 0], 0.04);
++  const roof = mesh(new T.ConeGeometry(0.83, 0.28, 4), '#936e4e', g, 0, 1.79, 0);
++  roof.rotation.y = Math.PI / 4;
++  roof.scale.z = 0.5;
++  cylinder(g, '#5a5848', 0.025, 0.025, 0.22, [0, 1.38, 0], 8);
++  const profile = [
++    [0.3, 0],
++    [0.31, 0.075],
++    [0.23, 0.12],
++    [0.18, 0.37],
++    [0.12, 0.47],
++    [0.035, 0.5],
++  ].map(([x, y]) => new T.Vector2(x, y));
++  mesh(new T.LatheGeometry(profile, 20), '#bd9a4e', g, 0, 0.8, 0);
++  cylinder(g, '#665535', 0.255, 0.255, 0.018, [0, 0.805, 0], 20);
++  cylinder(g, '#6d5b3e', 0.025, 0.025, 0.32, [0, 0.79, 0], 8);
++  ball(g, '#d0ab62', [0, 0.63, 0], [0.075, 0.085, 0.075]);
++  return g;
++}
++
++export function reedClump(parent: T.Object3D, x: number, y: number, z: number, phase: number) {
++  const g = new T.Group();
++  g.position.set(x, y, z);
++  parent.add(g);
++  for (let i = 0; i < 5; i++) {
++    const angle = phase + i * 2.4;
++    const height = 0.25 + (i % 3) * 0.08;
++    const stem = cylinder(
++      g,
++      i % 2 ? '#8d9660' : '#647f5e',
++      0.009,
++      0.018,
++      height,
++      [Math.cos(angle) * 0.065, height / 2, Math.sin(angle) * 0.045],
++      5,
++    );
++    stem.rotation.z = Math.sin(angle) * 0.15;
++    if (i % 2 === 0)
++      cylinder(
++        g,
++        '#927252',
++        0.027,
++        0.027,
++        0.09,
++        [Math.cos(angle) * 0.07, height, Math.sin(angle) * 0.045],
++        6,
++      );
++  }
++}
+diff --git a/tests/e2e/bellwater.spec.ts b/tests/e2e/bellwater.spec.ts
+new file mode 100644
+index 0000000..65dd16c
+--- /dev/null
++++ b/tests/e2e/bellwater.spec.ts
+@@ -0,0 +1,489 @@
++import { test, expect, type Page } from '@playwright/test';
++import { mkdirSync, writeFileSync } from 'node:fs';
++import { reviewDir, productionURL } from './evidence';
++import {
++  activate,
++  act,
++  ready,
++  state,
++  rendered,
++  navigation,
++  idle,
++  undo,
++  keyAct,
++  tabTo,
++  fullyVisible,
++  readable,
++  dialogCycle,
++} from './ui';
++
++const residents = ['tansy', 'lark', 'bram'];
++const stops = ['harbor', 'shallows', 'low-pier', 'west-buoy', 'east-buoy', 'bell-pier'];
++const outerOutward = ['map-west-buoy', 'map-east-buoy', 'map-low-pier'];
++const homeward = ['map-shallows', 'map-harbor', 'map-bell-pier'];
++
++async function bellReady(page: Page) {
++  mkdirSync(`${reviewDir}/raw`, { recursive: true });
++  await ready(page, 'bellwater');
++  await expect(page.locator('h1')).toHaveText('Bellwater Cove');
++  expect(await state(page)).toMatchObject({
++    turn: 0,
++    tideLevel: 0,
++    boatNodeId: 'harbor',
++    aboard: [],
++    delivered: [],
++    status: 'playing',
++  });
++}
++async function capture(page: Page, label: string, scene: string) {
++  await page.screenshot({ path: `${reviewDir}/bellwater-${label}-${scene}.png` });
++}
++async function readableMap(page: Page) {
++  for (const id of stops) {
++    const button = page.locator(`#map-${id}`);
++    await fullyVisible(page, button);
++    await readable(button.locator('b'));
++    await readable(button.locator('.map-state'));
++  }
++  for (const button of await page
++    .locator('.inspect-route, #local-actions button, #undo, #wait, #menu, #status-toggle')
++    .all()) {
++    await fullyVisible(page, button);
++    await readable(button);
++  }
++  const groups = await page.locator('.map-stop, #local-context, #status-toggle').all();
++  const visible = [];
++  for (const group of groups) {
++    if (!(await group.isVisible())) continue;
++    const bounds = await group.boundingBox();
++    if (bounds) visible.push({ id: await group.getAttribute('id'), ...bounds });
++  }
++  for (let i = 0; i < visible.length; i++)
++    for (let j = i + 1; j < visible.length; j++) {
++      const a = visible[i],
++        b = visible[j];
++      const width = Math.min(a.x + a.width, b.x + b.width) - Math.max(a.x, b.x);
++      const height = Math.min(a.y + a.height, b.y + b.height) - Math.max(a.y, b.y);
++      expect(
++        width <= 0.5 || height <= 0.5,
++        JSON.stringify({ viewport: page.viewportSize(), first: a, second: b, width, height }),
++      ).toBe(true);
++    }
++  const frame = await page.evaluate(() => (window as any).__LAST_FERRY__.getFrameStatus());
++  expect(frame.lighthouse.top).toBeGreaterThanOrEqual(8);
++  expect(frame.lighthouse.bottom).toBeLessThan(frame.canvas.height - 8);
++  expect(frame.bell).not.toBeNull();
++  expect(frame.bell.top).toBeGreaterThanOrEqual(8);
++  expect(frame.bell.bottom).toBeLessThan(frame.canvas.height - 8);
++  expect(frame.bell.left).toBeGreaterThanOrEqual(8);
++  expect(frame.bell.right).toBeLessThan(frame.canvas.width - 8);
++  for (const node of frame.nodes) {
++    expect(node.x).toBeGreaterThan(0);
++    expect(node.x).toBeLessThan(frame.canvas.width);
++    expect(node.y).toBeGreaterThan(0);
++    expect(node.y).toBeLessThan(frame.canvas.height);
++  }
++  for (const passenger of frame.passengers) expect(passenger.height).toBeGreaterThan(22);
++  return frame;
++}
++async function previewFits(page: Page) {
++  for (const selector of ['#commit', '.requirement', '.consequence'])
++    await fullyVisible(page, page.locator(selector), selector === '#commit');
++  for (const paragraph of await page.locator('#dialog p').all()) await readable(paragraph);
++  for (const button of await page.locator('.passenger-options button').all()) {
++    await fullyVisible(page, button);
++    await readable(button);
++  }
++}
++async function won(page: Page) {
++  const final = await state(page);
++  expect(final).toMatchObject({
++    turn: 10,
++    tideLevel: 2,
++    boatNodeId: 'harbor',
++    status: 'won',
++    aboard: [],
++    lossReason: null,
++  });
++  expect([...final.delivered].sort()).toEqual([...residents].sort());
++  expect(Object.values(final.waitingByPier).flat()).toEqual([]);
++  await expect(page.locator('#dialog-title')).toHaveText('Bellwater is safe.');
++  await fullyVisible(page, page.locator('#terminal-undo'));
++  await fullyVisible(page, page.locator('#terminal-restart'));
++  return final;
++}
++async function restored(page: Page, prior: any, priorRender: any, touch = false) {
++  await undo(page, touch);
++  expect(await state(page)).toEqual(prior);
++  const view = await rendered(page);
++  expect(view.boatPosition).toEqual(priorRender.boatPosition);
++  expect(view.waterY).toBe(priorRender.waterY);
++  expect(view.passengers.map((passenger: any) => [passenger.id, passenger.parent])).toEqual(
++    priorRender.passengers.map((passenger: any) => [passenger.id, passenger.parent]),
++  );
++}
++
++test('Bellwater mouse: uninterrupted shallow outward, blocked return, deep return and ten-action rescue', async ({
++  page,
++}) => {
++  await bellReady(page);
++  const errors: string[] = [];
++  page.on('pageerror', (error) => errors.push(error.message));
++  const initial = await state(page),
++    frame = await readableMap(page),
++    trace = [initial];
++  await capture(page, 'desktop', 'start');
++  for (const id of ['map-shallows', 'map-low-pier', 'board']) {
++    await act(page, id);
++    trace.push(await state(page));
++    if (id === 'map-low-pier') await readableMap(page);
++  }
++  const blocked = await state(page),
++    history = (await rendered(page)).historyLength;
++  await activate(page, 'inspect-shallows');
++  await expect(page.locator('.requirement')).toHaveText(
++    'Boat needs depth 2. Passage has depth 1: too shallow.',
++  );
++  await expect(page.locator('#commit')).toBeDisabled();
++  expect(await state(page)).toEqual(blocked);
++  expect((await rendered(page)).historyLength).toBe(history);
++  const highlight = await navigation(page);
++  expect(highlight.selectedDestination).toBe('shallows');
++  expect(highlight.routes.filter((route: any) => route.highlighted)).toHaveLength(1);
++  expect(highlight.routes.find((route: any) => route.highlighted).nodes.sort()).toEqual([
++    'low-pier',
++    'shallows',
++  ]);
++  await capture(page, 'desktop', 'blocked-return');
++  await activate(page, 'cancel');
++  for (const id of ['map-east-buoy', 'map-west-buoy', 'map-harbor', 'map-bell-pier']) {
++    await act(page, id);
++    trace.push(await state(page));
++    if ((await state(page)).turn === 4) {
++      await readableMap(page);
++      await capture(page, 'desktop', 'after-rise');
++    }
++  }
++  await readableMap(page);
++  await activate(page, 'board');
++  await expect(page.locator('.requirement')).toHaveText('After boarding: boat needs depth 3.');
++  await expect(page.locator('.consequence')).toContainText(
++    'Bram boards, then the tide rises. Bram is safe aboard.',
++  );
++  await previewFits(page);
++  await capture(page, 'desktop', 'critical-boarding');
++  await activate(page, 'commit');
++  await idle(page);
++  trace.push(await state(page));
++  expect(await state(page)).toMatchObject({ turn: 8, tideLevel: 2, status: 'playing' });
++  await capture(page, 'desktop', 'after-second-rise');
++  for (const id of ['map-harbor', 'unload']) {
++    await act(page, id);
++    trace.push(await state(page));
++  }
++  const final = await won(page);
++  expect(trace.map((step) => step.turn)).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
++  expect(errors).toEqual([]);
++  await capture(page, 'desktop', 'success');
++  writeFileSync(
++    `${reviewDir}/bellwater-mouse-witness.json`,
++    JSON.stringify(
++      {
++        initial,
++        frame,
++        trace,
++        final,
++        errors,
++        browser: await page.evaluate(() => navigator.userAgent),
++      },
++      null,
++      2,
++    ),
++  );
++  const video = page.video();
++  await page.close();
++  await video?.saveAs(`${reviewDir}/raw/bellwater-uninterrupted.webm`);
++});
++
++test('Bellwater natural keyboard: deep outward, shallow return, both tide Undo and terminal Undo', async ({
++  page,
++}) => {
++  await bellReady(page);
++  const original = await state(page);
++  await tabTo(page, 'inspect-shallows');
++  await page.keyboard.press('Enter');
++  await dialogCycle(page);
++  await page.keyboard.press('Escape');
++  await expect(page.locator('#inspect-shallows')).toBeFocused();
++  await page.keyboard.press('Shift+Tab');
++  await expect(page.locator('#map-shallows')).toBeFocused();
++  expect(await state(page)).toEqual(original);
++  for (const id of outerOutward) await keyAct(page, id);
++  await readableMap(page);
++  const beforeFirst = await state(page),
++    firstView = await rendered(page);
++  await keyAct(page, 'board');
++  expect(await state(page)).toMatchObject({
++    turn: 4,
++    tideLevel: 1,
++    aboard: ['tansy', 'lark'],
++    status: 'playing',
++  });
++  await tabTo(page, 'undo', true);
++  await page.keyboard.press('Enter');
++  expect(await state(page)).toEqual(beforeFirst);
++  expect((await rendered(page)).waterY).toBe(firstView.waterY);
++  await keyAct(page, 'board');
++  await readableMap(page);
++  for (const id of homeward) await keyAct(page, id);
++  await readableMap(page);
++  const beforeSecond = await state(page),
++    secondView = await rendered(page);
++  await keyAct(page, 'board');
++  expect(await state(page)).toMatchObject({ turn: 8, tideLevel: 2, status: 'playing' });
++  await tabTo(page, 'undo', true);
++  await page.keyboard.press('Enter');
++  expect(await state(page)).toEqual(beforeSecond);
++  expect((await rendered(page)).waterY).toBe(secondView.waterY);
++  await keyAct(page, 'board');
++  await keyAct(page, 'map-harbor');
++  const beforeDelivery = await state(page);
++  await keyAct(page, 'unload');
++  await won(page);
++  await expect(page.locator('#terminal-undo')).toBeFocused();
++  await page.keyboard.press('Enter');
++  expect(await state(page)).toEqual(beforeDelivery);
++  await keyAct(page, 'unload');
++  await won(page);
++});
++
++for (const width of [844, 780]) {
++  test(`Bellwater ${width}x390 touch: six stops, actual subset loss, safe boundaries, complete Undo and rescue`, async ({
++    browser,
++  }) => {
++    const context = await browser.newContext({
++      viewport: { width, height: 390 },
++      deviceScaleFactor: 1,
++      hasTouch: true,
++      isMobile: true,
++    });
++    const page = await context.newPage(),
++      errors: string[] = [];
++    page.on('pageerror', (error) => errors.push(error.message));
++    await bellReady(page);
++    const frame = await readableMap(page),
++      label = `phone-${width}`;
++    await capture(page, label, 'start');
++    const initial = await state(page);
++    await activate(page, 'inspect-west-buoy', true);
++    await dialogCycle(page);
++    expect(await state(page)).toEqual(initial);
++    const inspected = await navigation(page);
++    expect(inspected.selectedDestination).toBe('west-buoy');
++    expect(inspected.routes.filter((route: any) => route.highlighted)).toHaveLength(1);
++    await page.keyboard.press('Escape');
++    await expect(page.locator('#inspect-west-buoy')).toBeFocused();
++    for (const id of outerOutward) await act(page, id, true);
++    await readableMap(page);
++    const beforeFirst = await state(page),
++      firstView = await rendered(page);
++    await activate(page, 'board', true);
++    await expect(page.locator('.consequence')).toContainText(
++      'Tansy and Lark board, then the tide rises. Both are safe aboard.',
++    );
++    await previewFits(page);
++    await capture(page, label, 'critical-boarding');
++    await activate(page, 'passenger-lark', true);
++    await expect(page.locator('.consequence')).toContainText(
++      'Tansy boards, then the tide rises. Lark is still waiting at Low Pier when it floods. This ends the crossing.',
++    );
++    await previewFits(page);
++    await capture(page, label, 'subset-warning');
++    await activate(page, 'commit', true);
++    await idle(page);
++    expect(await state(page)).toMatchObject({
++      turn: 4,
++      tideLevel: 1,
++      status: 'lost',
++      lossReason: { passengerIds: ['lark'] },
++    });
++    await restored(page, beforeFirst, firstView, true);
++    await act(page, 'board', true);
++    expect(await state(page)).toMatchObject({
++      turn: 4,
++      tideLevel: 1,
++      status: 'playing',
++      aboard: ['tansy', 'lark'],
++    });
++    await restored(page, beforeFirst, firstView, true);
++    await act(page, 'board', true);
++    await readableMap(page);
++    await capture(page, label, 'after-rise');
++    for (const id of homeward) await act(page, id, true);
++    await readableMap(page);
++    const beforeSecond = await state(page),
++      secondView = await rendered(page);
++    await activate(page, 'board', true);
++    await expect(page.locator('.consequence')).toContainText(
++      'Bram boards, then the tide rises. Bram is safe aboard.',
++    );
++    await expect(page.locator('.requirement')).toHaveText('After boarding: boat needs depth 3.');
++    await previewFits(page);
++    await capture(page, label, 'sheep-boarding');
++    await activate(page, 'commit', true);
++    await idle(page);
++    expect(await state(page)).toMatchObject({ turn: 8, tideLevel: 2, status: 'playing' });
++    await restored(page, beforeSecond, secondView, true);
++    await act(page, 'board', true);
++    await act(page, 'map-harbor', true);
++    const beforeDelivery = await state(page),
++      deliveryView = await rendered(page);
++    await act(page, 'unload', true);
++    const final = await won(page);
++    await capture(page, label, 'success');
++    await restored(page, beforeDelivery, deliveryView, true);
++    expect(errors).toEqual([]);
++    writeFileSync(
++      `${reviewDir}/bellwater-${label}-witness.json`,
++      JSON.stringify(
++        {
++          viewport: [width, 390],
++          input: 'emulated touch',
++          frame,
++          beforeFirst,
++          beforeSecond,
++          final,
++          errors,
++          browser: browser.version(),
++        },
++        null,
++        2,
++      ),
++    );
++    await context.close();
++  });
++}
++
++test('default Holding entry, accessible Next cove and Menu selection reset Bellwater and baseline', async ({
++  page,
++}) => {
++  mkdirSync(reviewDir, { recursive: true });
++  await page.goto('/');
++  await page.waitForFunction(() => (window as any).__LAST_FERRY__?.getMetrics().frames > 4);
++  await expect(page.locator('h1')).toHaveText('The Holding Pier');
++  expect(await state(page)).toMatchObject({ turn: 0, boatNodeId: 'stone', aboard: ['sheep-1'] });
++  for (const id of [
++    'unload',
++    'map-shallows',
++    'map-rabbit-pier',
++    'board',
++    'map-shallows',
++    'map-stone',
++    'board',
++    'map-harbor',
++    'unload',
++  ])
++    await act(page, id);
++  await fullyVisible(page, page.locator('#next-cove'));
++  await tabTo(page, 'next-cove');
++  await page.keyboard.press('Enter');
++  await expect(page).toHaveURL(/cove=bellwater/);
++  await page.waitForFunction(() => (window as any).__LAST_FERRY__?.getMetrics().frames > 4);
++  await expect(page.locator('h1')).toHaveText('Bellwater Cove');
++  expect(await state(page)).toMatchObject({
++    turn: 0,
++    tideLevel: 0,
++    boatNodeId: 'harbor',
++    aboard: [],
++    delivered: [],
++    status: 'playing',
++  });
++  expect(
++    Object.values((await state(page)).waitingByPier)
++      .flat()
++      .sort(),
++  ).toEqual([...residents].sort());
++  await activate(page, 'menu');
++  await page.locator('#cove-picker').selectOption('first-crossing');
++  await expect(page).toHaveURL(/cove=first-crossing/);
++  await page.waitForFunction(() => (window as any).__LAST_FERRY__?.getState().boatNodeId === 'cut');
++  await expect(page.locator('h1')).toHaveText('The First Crossing');
++  expect(await state(page)).toMatchObject({ turn: 0, aboard: ['rabbit-1', 'rabbit-2'] });
++  await activate(page, 'menu');
++  await page.locator('#cove-picker').selectOption('bellwater');
++  await expect(page).toHaveURL(/cove=bellwater/);
++  await page.waitForFunction(
++    () => (window as any).__LAST_FERRY__?.getState().boatNodeId === 'harbor',
++  );
++  expect((await state(page)).turn).toBe(0);
++  await expect(page.locator('#status-headline')).toContainText('Low Pier');
++});
++
++for (const plan of ['Bell Pier first', 'deep route both ways', 'early rabbit delivery']) {
++  test(`Bellwater unsuccessful plan: ${plan} has its actual deadline consequence and Undo`, async ({
++    page,
++  }) => {
++    await page.emulateMedia({ reducedMotion: 'reduce' });
++    await bellReady(page);
++    const setup =
++      plan === 'Bell Pier first'
++        ? ['map-bell-pier', 'board', 'map-harbor']
++        : [
++            ...outerOutward,
++            'board',
++            ...(plan === 'deep route both ways'
++              ? ['map-east-buoy', 'map-west-buoy', 'map-harbor']
++              : ['map-shallows', 'map-harbor', 'unload']),
++          ];
++    for (const id of setup) await act(page, id);
++    const before = await state(page),
++      beforeRender = await rendered(page);
++    const lossTarget = plan === 'Bell Pier first' ? 'map-west-buoy' : 'map-bell-pier';
++    await activate(page, lossTarget);
++    await expect(page.locator('.consequence')).toContainText('This ends the crossing.');
++    await expect(page.locator('.consequence')).toContainText(
++      plan === 'Bell Pier first' ? 'Tansy and Lark' : 'Bram',
++    );
++    expect(await state(page)).toEqual(before);
++    await activate(page, 'commit');
++    await idle(page);
++    expect(await state(page)).toMatchObject({
++      status: 'lost',
++      turn: plan === 'Bell Pier first' ? 4 : 8,
++      tideLevel: plan === 'Bell Pier first' ? 1 : 2,
++    });
++    await restored(page, before, beforeRender);
++  });
++}
++
++test('Bellwater production: real ten-action rescue without debug controls or external assets', async ({
++  page,
++}) => {
++  const errors: string[] = [],
++    external: string[] = [];
++  page.on('pageerror', (error) => errors.push(error.message));
++  page.on('request', (request) => {
++    if (!request.url().startsWith(productionURL)) external.push(request.url());
++  });
++  await page.goto(`${productionURL}/?cove=bellwater`);
++  await expect(page.locator('canvas')).toBeVisible();
++  expect(await page.evaluate(() => typeof (window as any).__LAST_FERRY__)).toBe('undefined');
++  for (const id of [
++    'map-shallows',
++    'map-low-pier',
++    'board',
++    'map-east-buoy',
++    'map-west-buoy',
++    'map-harbor',
++    'map-bell-pier',
++    'board',
++    'map-harbor',
++    'unload',
++  ])
++    await act(page, id);
++  await expect(page.locator('#dialog-title')).toHaveText('Bellwater is safe.');
++  await expect(page.getByTestId('turn')).toHaveText('10');
++  await expect(page.locator('#progress')).toHaveText('Home 3/3');
++  expect(errors).toEqual([]);
++  expect(external).toEqual([]);
++});
+diff --git a/tests/e2e/responsive.spec.ts b/tests/e2e/responsive.spec.ts
+new file mode 100644
+index 0000000..88dd641
+--- /dev/null
++++ b/tests/e2e/responsive.spec.ts
+@@ -0,0 +1,300 @@
++import { test, expect, type Locator, type Page } from '@playwright/test';
++import { mkdirSync, writeFileSync } from 'node:fs';
++import { reviewDir } from './evidence';
++import { activate, act, ready, state, rendered, idle, undo, fullyVisible, readable } from './ui';
++
++async function noOverlap(first: Locator, second: Locator) {
++  const a = await first.boundingBox(),
++    b = await second.boundingBox();
++  expect(a).not.toBeNull();
++  expect(b).not.toBeNull();
++  const width = Math.min(a!.x + a!.width, b!.x + b!.width) - Math.max(a!.x, b!.x);
++  const height = Math.min(a!.y + a!.height, b!.y + b!.height) - Math.max(a!.y, b!.y);
++  const viewport = first.page().viewportSize()!;
++  const detail = {
++    first: first.toString(),
++    second: second.toString(),
++    firstBounds: a,
++    secondBounds: b,
++    width,
++    height,
++    viewport,
++  };
++  if (width > 0.5 && height > 0.5) {
++    await first.page().screenshot({
++      path: `${reviewDir}/responsive-overlap-${viewport.width}x${viewport.height}.png`,
++    });
++    writeFileSync(
++      `${reviewDir}/responsive-overlap-${viewport.width}x${viewport.height}.json`,
++      JSON.stringify(detail, null, 2),
++    );
++  }
++  expect(width <= 0.5 || height <= 0.5, JSON.stringify(detail)).toBe(true);
++}
++
++async function localLayout(page: Page) {
++  const local = page.locator('#local-context');
++  await fullyVisible(page, local, false);
++  await fullyVisible(page, page.locator('#status-toggle'));
++  await readable(page.locator('#local-heading'));
++  const measurements = await local.evaluate((element) => {
++    const rect = element.getBoundingClientRect(),
++      style = getComputedStyle(element);
++    const children = [...element.children].map((child) => child.getBoundingClientRect());
++    const contentHeight =
++      Math.max(...children.map((child) => child.bottom)) -
++      Math.min(...children.map((child) => child.top));
++    const extra = ['paddingTop', 'paddingBottom', 'borderTopWidth', 'borderBottomWidth'].reduce(
++      (sum, property) =>
++        sum + Number.parseFloat(style[property as keyof CSSStyleDeclaration] as string),
++      0,
++    );
++    return {
++      width: innerWidth,
++      height: innerHeight,
++      cardHeight: rect.height,
++      naturalHeight: contentHeight + extra,
++      inlineTop: (element as HTMLElement).style.top,
++      inlineLeft: (element as HTMLElement).style.left,
++    };
++  });
++  expect(measurements.cardHeight).toBeLessThanOrEqual(measurements.naturalHeight + 1);
++  expect(measurements.cardHeight).toBeLessThanOrEqual(120);
++  if (measurements.width > 700 && measurements.height <= 600) {
++    expect(measurements.inlineTop).toBe('');
++    expect(measurements.inlineLeft).toBe('');
++  }
++  await noOverlap(local, page.locator('#status-toggle'));
++  for (const route of await page.locator('#map-labels button').all()) {
++    await fullyVisible(page, route);
++    await noOverlap(local, route);
++  }
++  for (const button of await page.locator('#local-actions button').all()) {
++    await fullyVisible(page, button);
++    await readable(button);
++  }
++  return measurements;
++}
++
++async function resize(page: Page, width: number, height: number) {
++  const frames = await page.evaluate(() => (window as any).__LAST_FERRY__.getMetrics().frames);
++  await page.setViewportSize({ width, height });
++  await page.waitForFunction(
++    (prior) => (window as any).__LAST_FERRY__.getMetrics().frames > prior + 1,
++    frames,
++  );
++}
++
++for (const [width, height] of [
++  [844, 500],
++  [1024, 600],
++] as const) {
++  for (const touch of [false, true]) {
++    const input = touch ? 'touch' : 'mouse';
++    test(`responsive ${width}x${height} ${input}: local card, forecast, breakpoint resize and nine-action rescue`, async ({
++      browser,
++    }) => {
++      const context = await browser.newContext({
++        viewport: { width, height },
++        deviceScaleFactor: 1,
++        hasTouch: touch,
++        isMobile: touch,
++      });
++      const page = await context.newPage();
++      mkdirSync(reviewDir, { recursive: true });
++      await ready(page, 'holding-pier');
++      const layouts = [await localLayout(page)],
++        original = await state(page);
++      await activate(page, 'status-toggle', touch);
++      await expect(page.locator('.forecast-detail')).toContainText('Rabbit Pier');
++      expect(await state(page)).toEqual(original);
++      await activate(page, 'cancel', touch);
++      await act(page, 'unload', touch);
++      expect(await state(page)).toMatchObject({
++        turn: 1,
++        boatNodeId: 'stone',
++        aboard: [],
++        waitingByPier: { 'stone-pier': ['sheep-1'] },
++      });
++      layouts.push(await localLayout(page));
++      await page.screenshot({
++        path: `${reviewDir}/responsive-${width}x${height}-${input}-unloaded.png`,
++      });
++      const afterUnloading = await state(page);
++      await act(page, 'map-shallows', touch);
++      expect(await state(page)).toMatchObject({ turn: 2, boatNodeId: 'shallows' });
++      await expect(page.locator('#dialog')).not.toBeVisible();
++      await undo(page, touch);
++      expect(await state(page)).toEqual(afterUnloading);
++      for (const [nextWidth, nextHeight] of [
++        [844, 480],
++        [844, 481],
++        [1024, 600],
++        [1024, 601],
++        [1440, 900],
++        [1024, 601],
++        [1024, 600],
++        [844, 481],
++        [844, 480],
++        [844, 390],
++        [780, 390],
++        [width, height],
++      ]) {
++        await resize(page, nextWidth, nextHeight);
++        layouts.push(await localLayout(page));
++        expect(await state(page)).toEqual(afterUnloading);
++      }
++      const route = page.locator('#map-shallows');
++      expect(
++        await route.evaluate((element) => {
++          const rect = element.getBoundingClientRect();
++          return document
++            .elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2)
++            ?.closest('button')?.id;
++        }),
++      ).toBe('map-shallows');
++      await act(page, 'map-shallows', touch);
++      expect(await state(page)).toMatchObject({ turn: 2, boatNodeId: 'shallows' });
++      await expect(page.locator('#dialog')).not.toBeVisible();
++      for (const id of [
++        'map-rabbit-pier',
++        'board',
++        'map-shallows',
++        'map-stone',
++        'board',
++        'map-harbor',
++        'unload',
++      ])
++        await act(page, id, touch);
++      expect(await state(page)).toMatchObject({
++        turn: 9,
++        tideLevel: 2,
++        status: 'won',
++        aboard: [],
++        delivered: ['rabbit-1', 'rabbit-2', 'sheep-1'],
++      });
++      await fullyVisible(page, page.locator('#terminal-undo'));
++      writeFileSync(
++        `${reviewDir}/responsive-${width}x${height}-${input}.json`,
++        JSON.stringify(
++          {
++            input,
++            touchEmulation: touch,
++            browser: browser.version(),
++            userAgent: await page.evaluate(() => navigator.userAgent),
++            layouts,
++            initialState: original,
++            afterUnloading,
++            finalState: await state(page),
++          },
++          null,
++          2,
++        ),
++      );
++      await context.close();
++    });
++  }
++}
++
++for (const reduced of [false, true]) {
++  test(`rapid phone Confirm ${reduced ? 'reduced' : 'normal'}: trusted touch spacing, one commit and no background dialog`, async ({
++    browser,
++  }) => {
++    const context = await browser.newContext({
++      viewport: { width: 844, height: 390 },
++      deviceScaleFactor: 1,
++      hasTouch: true,
++      isMobile: true,
++      reducedMotion: reduced ? 'reduce' : 'no-preference',
++    });
++    const page = await context.newPage();
++    mkdirSync(reviewDir, { recursive: true });
++    await ready(page, 'first-crossing');
++    await act(page, 'map-sheep-pier', true);
++    await activate(page, 'board', true);
++    await fullyVisible(page, page.locator('#commit'));
++    const before = await state(page),
++      beforeRender = await rendered(page),
++      bounds = await page.locator('#commit').boundingBox();
++    await page.evaluate(() => {
++      const w = window as any;
++      w.__phaseAInput = [];
++      const record = (event: Event) => {
++        const pointer = event as PointerEvent,
++          target = event.target as Element;
++        w.__phaseAInput.push({
++          type: event.type,
++          at: event.timeStamp,
++          observedAt: performance.now(),
++          trusted: event.isTrusted,
++          target: target.closest('[id]')?.id ?? '',
++          pointerType: pointer.pointerType ?? '',
++          x: pointer.clientX,
++          y: pointer.clientY,
++          turn: w.__LAST_FERRY__.getState().turn,
++          history: w.__LAST_FERRY__.getRenderStatus().historyLength,
++          dialog: document.getElementById('dialog')?.hasAttribute('open'),
++        });
++      };
++      for (const type of ['pointerdown', 'pointerup', 'click'])
++        window.addEventListener(type, record, true);
++    });
++    const x = bounds!.x + bounds!.width / 2,
++      y = bounds!.y + bounds!.height / 2;
++    await page.touchscreen.tap(x, y);
++    if (reduced) await idle(page);
++    await page.touchscreen.tap(x, y);
++    await idle(page);
++    const events = await page.evaluate(() => (window as any).__phaseAInput);
++    const down = events.filter((event: any) => event.type === 'pointerdown'),
++      up = events.filter((event: any) => event.type === 'pointerup');
++    expect(down).toHaveLength(2);
++    expect(up).toHaveLength(2);
++    const spacing = down[1].at - up[0].at;
++    const after = await state(page),
++      afterRender = await rendered(page);
++    writeFileSync(
++      `${reviewDir}/rapid-confirm-${reduced ? 'reduced' : 'normal'}.json`,
++      JSON.stringify(
++        {
++          reducedMotion: reduced,
++          recording: false,
++          input: 'emulated touch',
++          browser: browser.version(),
++          userAgent: await page.evaluate(() => navigator.userAgent),
++          viewport: [844, 390],
++          firstReleaseToSecondPressMs: spacing,
++          events,
++          before,
++          after,
++          historyBefore: beforeRender.historyLength,
++          historyAfter: afterRender.historyLength,
++        },
++        null,
++        2,
++      ),
++    );
++    expect(events.every((event: any) => event.trusted)).toBe(true);
++    expect(down[0]).toMatchObject({ target: 'commit', pointerType: 'touch', turn: 1 });
++    expect(
++      spacing,
++      'The observed touch sequence must be rapid rather than delayed automation',
++    ).toBeGreaterThanOrEqual(0);
++    expect(
++      spacing,
++      'The observed touch sequence must be rapid rather than delayed automation',
++    ).toBeLessThanOrEqual(180);
++    expect(after).toMatchObject({
++      turn: 2,
++      tideLevel: 0,
++      status: 'playing',
++      boatNodeId: 'sheep-pier',
++      aboard: ['rabbit-1', 'rabbit-2', 'sheep-1'],
++      waitingByPier: { 'sheep-pier': [] },
++      delivered: [],
++    });
++    expect(afterRender.historyLength).toBe(beforeRender.historyLength + 1);
++    await expect(page.locator('#dialog')).not.toBeVisible();
++    await context.close();
++  });
++}
+diff --git a/tests/unit/bellwater.test.ts b/tests/unit/bellwater.test.ts
+new file mode 100644
+index 0000000..acb3134
+--- /dev/null
++++ b/tests/unit/bellwater.test.ts
+@@ -0,0 +1,312 @@
++import { mkdirSync, writeFileSync } from 'node:fs';
++import { describe, expect, test } from 'vitest';
++import witnessData from '../../data/bellwater/witnesses.json';
++import { bellwater as level, holdingPier } from '../../src/levels/level';
++import {
++  draft,
++  initial,
++  legalActions,
++  load,
++  preview,
++  reduce,
++  validate,
++  type Action,
++  type State,
++} from '../../src/game/rules';
++import { Session } from '../../src/game/session';
++import { previewCopy } from '../../src/ui/presentation';
++
++const sorted = (ids: string[]) => [...ids].sort();
++const move = (to: string): Action => ({ type: 'move', to });
++const wait: Action = { type: 'wait' };
++const board = (...passengerIds: string[]): Action => ({ type: 'board', passengerIds });
++const unload = (...passengerIds: string[]): Action => ({ type: 'unload', passengerIds });
++const witnesses = witnessData.witnesses.map((w) => ({ ...w, actions: w.actions as Action[] }));
++const deepOut = [move('west-buoy'), move('east-buoy'), move('low-pier')];
++const shallowOut = [move('shallows'), move('low-pier')];
++
++function conserved(s: State) {
++  const ids = [...s.aboard, ...s.delivered, ...Object.values(s.waitingByPier).flat()];
++  expect(sorted(ids)).toEqual(level.passengers.map((p) => p.id).sort());
++  expect(new Set(ids).size).toBe(ids.length);
++  expect(load(s, level)).toBeLessThanOrEqual(level.rules.capacity);
++}
++
++function run(actions: Action[], start = initial(level)): State {
++  return actions.reduce((s, a) => {
++    const before = structuredClone(s);
++    expect(validate(s, a, level)).toBeNull();
++    const proposed = preview(s, a, level);
++    expect(s).toEqual(before);
++    const after = reduce(s, a, level);
++    expect(after).toEqual(proposed.state);
++    conserved(after);
++    return after;
++  }, start);
++}
++
++describe('Bellwater Cove uses the production reducer', () => {
++  test('authored graph, occupants, depths and tide schedule match the puzzle contract', () => {
++    expect(level.rules).toEqual(holdingPier.rules);
++    expect(level.nodes).toHaveLength(6);
++    expect(level.edges).toHaveLength(6);
++    expect(level.world.islands).toHaveLength(3);
++    expect(level.piers).toHaveLength(3);
++    expect(level.nodes.every((n) => n.baseDepth === 3)).toBe(true);
++    expect(level.edges.every((e) => e.bidirectional)).toBe(true);
++    expect(
++      Object.fromEntries(level.edges.map((e) => [sorted(e.nodes).join('/'), e.baseDepth])),
++    ).toEqual({
++      'harbor/shallows': 1,
++      'low-pier/shallows': 1,
++      'harbor/west-buoy': 3,
++      'east-buoy/west-buoy': 3,
++      'east-buoy/low-pier': 3,
++      'bell-pier/harbor': 2,
++    });
++    expect(Object.fromEntries(level.piers.map((p) => [p.id, p.elevation]))).toEqual({
++      'harbor-pier': 3,
++      'low-pier': 1,
++      'bell-pier': 2,
++    });
++    expect(initial(level)).toMatchObject({
++      boatNodeId: 'harbor',
++      aboard: [],
++      waitingByPier: { 'harbor-pier': [], 'low-pier': ['tansy', 'lark'], 'bell-pier': ['bram'] },
++      delivered: [],
++      turn: 0,
++      tideLevel: 0,
++    });
++  });
++
++  for (const witness of witnesses)
++    test(`ten-action witness: ${witness.id}`, () => {
++      const s = run(witness.actions);
++      expect(s).toMatchObject(witness.expected);
++      expect(sorted(s.delivered)).toEqual(sorted(level.objective.requiredPassengerIds));
++    });
++
++  test('boarding completes before both tide boundaries and complete Undo restores every snapshot', () => {
++    const game = new Session(level),
++      witness = witnesses.find((w) => w.id === 'deep-outward-shallow-return')!,
++      snapshots = [structuredClone(game.state)];
++    for (const a of witness.actions) {
++      const before = structuredClone(game.state),
++        proposed = preview(game.state, a, level);
++      expect(game.state).toEqual(before);
++      expect(game.commit(a)?.after).toEqual(proposed.state);
++      game.finish();
++      conserved(game.state);
++      snapshots.push(structuredClone(game.state));
++      if (game.state.turn === 4)
++        expect(game.state).toMatchObject({
++          tideLevel: 1,
++          status: 'playing',
++          aboard: ['tansy', 'lark'],
++          waitingByPier: { 'low-pier': [] },
++        });
++      if (game.state.turn === 8)
++        expect(game.state).toMatchObject({
++          tideLevel: 2,
++          status: 'playing',
++          aboard: ['tansy', 'lark', 'bram'],
++          waitingByPier: { 'bell-pier': [] },
++        });
++    }
++    expect(game.state.status).toBe('won');
++    for (let i = snapshots.length - 2; i >= 0; i--) {
++      expect(game.undo()).toBe(true);
++      expect(game.state).toEqual(snapshots[i]);
++      conserved(game.state);
++    }
++    expect(game.restart()).toBe(true);
++    expect(game.state).toEqual(initial(level));
++  });
++
++  test('the shallow return is blocked at action three and inspection does not become a paid wait', () => {
++    const s = run([...shallowOut, board('tansy', 'lark')]),
++      before = structuredClone(s),
++      a = move('shallows');
++    expect(s).toMatchObject({ turn: 3, tideLevel: 0 });
++    expect(draft(s, level)).toBe(2);
++    expect(preview(s, a, level).error).toContain('Too shallow');
++    expect(previewCopy(s, a, level).error).toBe(
++      'Boat needs depth 2. Passage has depth 1: too shallow.',
++    );
++    expect(reduce(s, a, level)).toBe(s);
++    expect(s).toEqual(before);
++    const risen = run([wait], s);
++    expect(risen).toMatchObject({ turn: 4, tideLevel: 1, status: 'playing' });
++    expect(validate(risen, a, level)).toBeNull();
++    expect(run([a], risen).boatNodeId).toBe('shallows');
++  });
++
++  test('Bell first, deep both ways and early rabbit delivery miss their real boarding deadlines', () => {
++    const bellFirst = run([move('bell-pier'), board('bram'), move('harbor'), move('west-buoy')]);
++    expect(bellFirst).toMatchObject({
++      turn: 4,
++      status: 'lost',
++      lossReason: { pierId: 'low-pier', passengerIds: ['tansy', 'lark'] },
++    });
++    const deepBoth = run([
++      ...deepOut,
++      board('tansy', 'lark'),
++      move('east-buoy'),
++      move('west-buoy'),
++      move('harbor'),
++      move('bell-pier'),
++    ]);
++    expect(deepBoth).toMatchObject({
++      turn: 8,
++      boatNodeId: 'bell-pier',
++      status: 'lost',
++      lossReason: { pierId: 'bell-pier', passengerIds: ['bram'] },
++    });
++    const homeAtSix = run(witnesses[0].actions.slice(0, 6));
++    for (const ids of [['tansy'], ['lark'], ['tansy', 'lark']]) {
++      const failed = run([unload(...ids), move('bell-pier')], homeAtSix);
++      expect(failed).toMatchObject({
++        turn: 8,
++        status: 'lost',
++        delivered: ids,
++        lossReason: { pierId: 'bell-pier', passengerIds: ['bram'] },
++      });
++    }
++  });
++
++  test('critical subsets name the actual stranded rabbit and loss Undo permits safe boarding', () => {
++    const game = new Session(level);
++    for (const a of deepOut) {
++      expect(game.commit(a)).not.toBeNull();
++      game.finish();
++    }
++    const before = structuredClone(game.state);
++    for (const [aboard, waiting] of [
++      ['tansy', 'lark'],
++      ['lark', 'tansy'],
++    ]) {
++      const text = previewCopy(before, board(aboard), level);
++      expect(text.consequence).toContain(
++        `${waiting === 'lark' ? 'Lark' : 'Tansy'} is still waiting at Low Pier when it floods.`,
++      );
++      expect(game.commit(board(aboard))?.after.status).toBe('lost');
++      game.finish();
++      expect(game.undo()).toBe(true);
++      expect(game.state).toEqual(before);
++    }
++    expect(previewCopy(before, board('tansy', 'lark'), level).consequence).toBe(
++      'Tansy and Lark board, then the tide rises. Both are safe aboard.',
++    );
++    expect(game.commit(board('tansy', 'lark'))?.after.status).toBe('playing');
++    game.finish();
++    conserved(game.state);
++  });
++
++  test('there is no compulsory Wait or late move cap after everyone is aboard', () => {
++    const witness = witnesses[0];
++    expect(witness.actions.some((a) => a.type === 'wait')).toBe(false);
++    const home = run(witness.actions.slice(0, -1));
++    expect(home).toMatchObject({ turn: 9, status: 'playing', aboard: ['tansy', 'lark', 'bram'] });
++    const late = run([...Array<Action>(5).fill(wait), unload('tansy', 'lark', 'bram')], home);
++    expect(late).toMatchObject({ turn: 15, tideLevel: 2, status: 'won' });
++  });
++
++  test('complete canonical reachability retains the route and pickup constraints', () => {
++    const queue = [
++        {
++          s: initial(level),
++          usedShallow: false,
++          waited: false,
++          firstMove: '',
++          boardedBram: false,
++          earlyDelivery: false,
++        },
++      ],
++      seen = new Set<string>();
++    let wins = 0,
++      noShallowWins = 0,
++      bellFirstWins = 0,
++      earlyDeliveryWins = 0,
++      noWaitWins = 0,
++      waitedWins = 0,
++      shortest = Infinity;
++    const lastRise = Math.max(0, ...level.rules.tide.rises.map((r) => r.afterTurn));
++    for (let i = 0; i < queue.length; i++) {
++      const entry = queue[i],
++        { s, ...flags } = entry;
++      const key = JSON.stringify([
++        Math.min(s.turn, lastRise),
++        s.tideLevel,
++        s.boatNodeId,
++        sorted(s.aboard),
++        Object.entries(s.waitingByPier)
++          .sort(([a], [b]) => a.localeCompare(b))
++          .map(([id, ids]) => [id, sorted(ids)]),
++        sorted(s.delivered),
++        s.status,
++        flags,
++      ]);
++      if (seen.has(key)) continue;
++      seen.add(key);
++      conserved(s);
++      if (s.status === 'won') {
++        wins++;
++        shortest = Math.min(shortest, s.turn);
++        if (!flags.usedShallow) noShallowWins++;
++        if (flags.firstMove === 'bell-pier') bellFirstWins++;
++        if (flags.earlyDelivery) earlyDeliveryWins++;
++        if (flags.waited) waitedWins++;
++        else noWaitWins++;
++        continue;
++      }
++      if (s.status === 'lost') continue;
++      for (const a of legalActions(s, level))
++        queue.push({
++          s: reduce(s, a, level),
++          usedShallow:
++            flags.usedShallow ||
++            (a.type === 'move' &&
++              level.edges.some(
++                (e) =>
++                  e.baseDepth === 1 && e.nodes.includes(s.boatNodeId) && e.nodes.includes(a.to),
++              )),
++          waited: flags.waited || a.type === 'wait',
++          firstMove: flags.firstMove || (a.type === 'move' ? a.to : ''),
++          boardedBram: flags.boardedBram || (a.type === 'board' && a.passengerIds.includes('bram')),
++          earlyDelivery:
++            flags.earlyDelivery ||
++            (a.type === 'unload' &&
++              s.boatNodeId === 'harbor' &&
++              !flags.boardedBram &&
++              a.passengerIds.some((id) => ['tansy', 'lark'].includes(id))),
++        });
++    }
++    const report = {
++      canonicalStates: seen.size,
++      winningStates: wins,
++      shortestActions: shortest,
++      noShallowWins,
++      bellFirstWins,
++      earlyDeliveryWins,
++      noWaitWins,
++      waitedWins,
++      method:
++        'Production reducer and legalActions, sorted passenger identities and pier keys, turn capped only after the final rise, monotonic path-history flags, no search horizon.',
++    };
++    console.log(JSON.stringify({ cove: level.id, ...report }));
++    expect(wins).toBeGreaterThan(0);
++    expect(shortest).toBe(10);
++    expect(noShallowWins).toBe(0);
++    expect(bellFirstWins).toBe(0);
++    expect(earlyDeliveryWins).toBe(0);
++    expect(noWaitWins).toBeGreaterThan(0);
++    expect(waitedWins).toBeGreaterThan(0);
++    if (process.env.LAST_FERRY_REVIEW_DIR) {
++      mkdirSync(process.env.LAST_FERRY_REVIEW_DIR, { recursive: true });
++      writeFileSync(
++        `${process.env.LAST_FERRY_REVIEW_DIR}/bellwater-reachability.json`,
++        JSON.stringify(report, null, 2),
++      );
++    }
++  });
++});

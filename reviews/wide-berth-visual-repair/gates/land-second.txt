@@ -1,0 +1,50 @@
+
+ RUN  v5.0.5 C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry
+
+ ❯ tests/unit/wide-clearance.test.ts (3 tests | 1 failed) 1221ms
+   × compact waiting groups and actual transfer bodies clear each rendered shore prop 98ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/wide-clearance.test.ts > compact waiting groups and actual transfer bodies clear each rendered shore prop
+AssertionError: expected [ …(16) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "harbor-pier/sorrel/waiting/CylinderGeometry",
++   "harbor-pier/sorrel/delivered/CylinderGeometry",
++   "harbor-pier/sorrel/transfer-1.5707963267948966/0/CylinderGeometry",
++   "harbor-pier/sorrel/transfer-1.5707963267948966/1/CylinderGeometry",
++   "harbor-pier/sorrel/transfer1.5707963267948966/0/CylinderGeometry",
++   "harbor-pier/sorrel/transfer1.5707963267948966/1/CylinderGeometry",
++   "high-quay-pier/wren/waiting/shore-rocks-quay-island/1",
++   "high-quay-pier/wren/delivered/shore-rocks-quay-island/1",
++   "high-quay-pier/wren/transfer-1.5707963267948966/0/shore-rocks-quay-island/1",
++   "high-quay-pier/wren/transfer-1.5707963267948966/1/shore-rocks-quay-island/1",
++   "high-quay-pier/wren/transfer1.5707963267948966/0/shore-rocks-quay-island/1",
++   "high-quay-pier/wren/transfer1.5707963267948966/1/shore-rocks-quay-island/1",
++   "shell-landing-pier/wren/waiting/shore-rocks-shell-island/1",
++   "shell-landing-pier/wren/delivered/shore-rocks-shell-island/1",
++   "shell-landing-pier/wren/transfer-1.5707963267948966/0/shore-rocks-shell-island/1",
++   "shell-landing-pier/wren/transfer1.5707963267948966/0/shore-rocks-shell-island/1",
++ ]
+
+ ❯ tests/unit/wide-clearance.test.ts:270:20
+    268|     }
+    269|   }
+    270|   expect(failures).toEqual([]);
+       |                    ^
+    271| });
+    272|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 2 passed (3)
+   Start at  22:45:38
+   Duration  2.00s (tests 76%, transform 17%, import 7%, worker 1%)
+

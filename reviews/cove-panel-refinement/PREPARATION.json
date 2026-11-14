@@ -1,0 +1,133 @@
+{
+  "baseline": "a4325353cf11cd4edba8d5384b58fe138e4772e3",
+  "isolation": {
+    "directory": ".cache/cove-panel-baseline",
+    "command": "git archive --format=zip --output=.cache/cove-panel-baseline.zip a4325353cf11cd4edba8d5384b58fe138e4772e3 src data cove-ui-package index.html package.json package-lock.json tsconfig.json vite.config.ts",
+    "dependencyReuse": "Baseline lockfile and dependency declarations are identical. Node resolves the unchanged parent node_modules. Optional junction creation was denied; no junction is required."
+  },
+  "setup": [
+    {
+      "attempt": "Start current5240",
+      "result": "Port already in use because root started the same current server; HTTP200 confirmed. No existing process stopped."
+    }
+  ],
+  "originalExploratoryFailure": {
+    "path": "development/initial-fit/capture-manifest.json",
+    "fit": "All Harbor full-label/overflow checks and subset preview state/target assertions passed at780x320.",
+    "failure": "Error: expect(received).toMatchObject(expected)\n\n- Expected  - 2\n+ Received  + 2\n\n  Object {\n-   \"status\": \"won\",\n-   \"turn\": 9,\n+   \"status\": \"playing\",\n+   \"turn\": 0,\n  }\n    at captureRawStack (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\node_modules\\playwright-core\\lib\\coreBundle.js:9282:17)\n    at callMatcherAsStep (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\node_modules\\playwright\\lib\\matchers\\expect.js:13316:57)\n    at Object.toMatchObject (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\node_modules\\playwright\\lib\\matchers\\expect.js:13308:23)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tools\\capture-cove-panel.mjs:129:29",
+    "actions": [
+      {
+        "id": "commit",
+        "at": 1792934303840,
+        "state": {
+          "turn": 9,
+          "tideLevel": 2,
+          "boatNodeId": "harbor",
+          "aboard": [],
+          "waitingByPier": {
+            "harbor-pier": [],
+            "stone-pier": [],
+            "rabbit-pier": []
+          },
+          "delivered": [
+            "rabbit-1",
+            "rabbit-2",
+            "sheep-1"
+          ],
+          "status": "won",
+          "lossReason": null
+        }
+      },
+      {
+        "id": "terminal-undo",
+        "at": 1792934308227,
+        "state": {
+          "turn": 8,
+          "tideLevel": 2,
+          "boatNodeId": "harbor",
+          "aboard": [
+            "rabbit-1",
+            "rabbit-2",
+            "sheep-1"
+          ],
+          "waitingByPier": {
+            "harbor-pier": [],
+            "stone-pier": [],
+            "rabbit-pier": []
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        }
+      },
+      {
+        "id": "unload",
+        "at": 1792934308463,
+        "state": {
+          "turn": 8,
+          "tideLevel": 2,
+          "boatNodeId": "harbor",
+          "aboard": [
+            "rabbit-1",
+            "rabbit-2",
+            "sheep-1"
+          ],
+          "waitingByPier": {
+            "harbor-pier": [],
+            "stone-pier": [],
+            "rabbit-pier": []
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        }
+      },
+      {
+        "id": "commit",
+        "at": 1792934308630,
+        "state": {
+          "turn": 9,
+          "tideLevel": 2,
+          "boatNodeId": "harbor",
+          "aboard": [],
+          "waitingByPier": {
+            "harbor-pier": [],
+            "stone-pier": [],
+            "rabbit-pier": []
+          },
+          "delivered": [
+            "rabbit-1",
+            "rabbit-2",
+            "sheep-1"
+          ],
+          "status": "won",
+          "lossReason": null
+        }
+      }
+    ],
+    "recordedRuntimePathsChangedAfterRun": [],
+    "catalogWriteAt": "2026-10-25T13:18:29.8869534Z",
+    "assessment": "Final redelivery was committed at13:18:28.630Z, then the page unexpectedly reset toturn0 while a developer catalog write occurred. A Vite reload from the gallery graph is a plausible cause, not proven because the original run did not trace navigation. Retained as an inconclusive concurrent-development run, not a gameplay pass or confirmed input defect."
+  },
+  "frozenTracedRepeat": {
+    "source": "development/traced-fit/source.json",
+    "result": "passed",
+    "navigations": [
+      {
+        "at": 1792934412114,
+        "url": "http://127.0.0.1:5240/?cove=holding-pier"
+      }
+    ],
+    "viteMessages": [
+      {
+        "at": 1792934412182,
+        "text": "[vite] connecting..."
+      },
+      {
+        "at": 1792934412193,
+        "text": "[vite] connected."
+      }
+    ],
+    "note": "Passed after all runtime/catalog/gallery sources were frozen. Added read-only synchronous input/navigation observation and ordinary vertical wheel scrolling; no added action delays or changed game state."
+  }
+}

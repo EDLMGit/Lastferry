@@ -1,0 +1,83 @@
+{
+  "viewport": [
+    844,
+    390
+  ],
+  "touchEmulation": true,
+  "initial": {
+    "turn": 0,
+    "tideLevel": 0,
+    "boatNodeId": "stone",
+    "aboard": [
+      "sheep-1"
+    ],
+    "waitingByPier": {
+      "harbor-pier": [],
+      "stone-pier": [],
+      "rabbit-pier": [
+        "rabbit-1",
+        "rabbit-2"
+      ]
+    },
+    "delivered": [],
+    "status": "playing",
+    "lossReason": null
+  },
+  "beforeTide": {
+    "turn": 3,
+    "tideLevel": 0,
+    "boatNodeId": "rabbit-pier",
+    "aboard": [],
+    "waitingByPier": {
+      "harbor-pier": [],
+      "stone-pier": [
+        "sheep-1"
+      ],
+      "rabbit-pier": [
+        "rabbit-1",
+        "rabbit-2"
+      ]
+    },
+    "delivered": [],
+    "status": "playing",
+    "lossReason": null
+  },
+  "afterTide": {
+    "turn": 4,
+    "tideLevel": 1,
+    "boatNodeId": "rabbit-pier",
+    "aboard": [
+      "rabbit-1",
+      "rabbit-2"
+    ],
+    "waitingByPier": {
+      "harbor-pier": [],
+      "stone-pier": [
+        "sheep-1"
+      ],
+      "rabbit-pier": []
+    },
+    "delivered": [],
+    "status": "playing",
+    "lossReason": null
+  },
+  "afterTerminalUndo": {
+    "turn": 8,
+    "tideLevel": 2,
+    "boatNodeId": "harbor",
+    "aboard": [
+      "rabbit-1",
+      "rabbit-2",
+      "sheep-1"
+    ],
+    "waitingByPier": {
+      "harbor-pier": [],
+      "stone-pier": [],
+      "rabbit-pier": []
+    },
+    "delivered": [],
+    "status": "playing",
+    "lossReason": null
+  },
+  "errors": []
+}

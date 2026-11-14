@@ -1,0 +1,48 @@
+{
+  "source": {
+    "data/orchard-landing.level.json": "f914b014ca903f4df0c3183d893c6b45f21fb7d9442aead2d8b31254ab5f3814",
+    "src/scene/ferry-profile.ts": "4f496212fa5a2d4de44177f956452fab02a1f69c528140724ceaaa6526be2523",
+    "src/scene/models.ts": "c63e8405769358875b42b6cafa727a24287a68bb8efc827e5140835245b04ac5",
+    "tests/unit/wide-ferry.test.ts": "d2e38895736eaeb94e262353483a768baa1e1d6abace041da96c4a2dc9fdb3a0",
+    "tests/unit/wide-clearance.test.ts": "129bf2bfe8c24b13f495286d2d594f9b9b15b453300b170ffc1c344fe587015e"
+  },
+  "command": "npm run test:unit -- tests/unit/wide-ferry.test.ts tests/unit/wide-clearance.test.ts -t Orchard --maxWorkers=1",
+  "passed": 16,
+  "failed": 0,
+  "tests": [
+    "Orchard Landing physical clearances occupied real modeled hull clears land and piers at every reachable heading in both directions",
+    "Orchard Landing physical clearances distinct authored shores retain valid center-fan top support without filled water notches",
+    "Orchard Landing physical clearances compact waiting groups and actual transfer bodies clear each rendered shore prop",
+    "Orchard Landing physical clearances landmark foundations and trunks stand on the actual smoothed shore top",
+    "Orchard Landing seating and transfers active-level profiles preserve all four original boats and provide a physical six-space deck",
+    "Orchard Landing seating and transfers every capacity-legal roster uses stable automatic real-body seating without cabin, rail or passenger overlap",
+    "Orchard Landing seating and transfers the whole roster has supported compact land and quay positions with stable identity and no body overlap",
+    "Orchard Landing seating and transfers actual foot bounds remain supported by land, fitted landing, gangway and deck during every authored walking path",
+    "Orchard Landing seating and transfers harbor-pier / 1.5707963267948966: all legal transfer selections clear actual body/cabin/rail bounds",
+    "Orchard Landing seating and transfers harbor-pier / -1.5707963267948966: all legal transfer selections clear actual body/cabin/rail bounds",
+    "Orchard Landing seating and transfers quay-pier / 1.5707963267948966: all legal transfer selections clear actual body/cabin/rail bounds",
+    "Orchard Landing seating and transfers quay-pier / -1.5707963267948966: all legal transfer selections clear actual body/cabin/rail bounds",
+    "Orchard Landing seating and transfers orchard-pier / 1.5707963267948966: all legal transfer selections clear actual body/cabin/rail bounds",
+    "Orchard Landing seating and transfers orchard-pier / -1.5707963267948966: all legal transfer selections clear actual body/cabin/rail bounds",
+    "Orchard Landing seating and transfers steps-pier / 1.5707963267948966: all legal transfer selections clear actual body/cabin/rail bounds",
+    "Orchard Landing seating and transfers steps-pier / -1.5707963267948966: all legal transfer selections clear actual body/cabin/rail bounds"
+  ],
+  "completeFiles": {
+    "passed": 50,
+    "failed": 1,
+    "firstFailures": [
+      {
+        "name": "Wide Berth seating and transfers harbor-pier / 1.5707963267948966: all legal transfer selections clear actual body/cabin/rail bounds",
+        "milliseconds": 70119.59520000001,
+        "error": "Error: Test timed out in 60000ms."
+      }
+    ]
+  },
+  "isolatedRetry": [
+    {
+      "name": "Wide Berth seating and transfers harbor-pier / 1.5707963267948966: all legal transfer selections clear actual body/cabin/rail bounds",
+      "milliseconds": 8029.987999999999,
+      "result": "passed"
+    }
+  ]
+}

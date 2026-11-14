@@ -1,0 +1,220 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "tests/e2e/atmosphere.spec.ts",
+      "tests/e2e/environment.spec.ts",
+      "--grep",
+      "longest crossings|visible curved courses"
+    ],
+    "configFile": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\playwright.config.ts",
+    "rootDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "snapshotDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5180",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "deviceScaleFactor": 1,
+          "headless": true,
+          "launchOptions": {
+            "args": [
+              "--use-angle=swiftshader",
+              "--enable-unsafe-swiftshader"
+            ]
+          },
+          "video": {
+            "mode": "on",
+            "size": {
+              "width": 1440,
+              "height": 900
+            }
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "reviews/atmosphere/affected/automation-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "atmosphere.spec.ts",
+      "file": "atmosphere.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "atmosphere: longest crossings finish normally, tide rises in the final phase and visibility interrupts once",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 30769,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T13:30:42.561Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\atmosphere-atmosphere-long-068d2--visibility-interrupts-once\\video.webm"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d2e4a1f3f23ed683d1ce-cd73a48e261b9c0fdb29",
+          "file": "atmosphere.spec.ts",
+          "line": 102,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "environment.spec.ts",
+      "file": "environment.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "environment: visible curved courses carry the ferry, tangent and fading wake both ways",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 64534,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T13:31:13.483Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\environment-environment-vi-fc3f9-t-and-fading-wake-both-ways\\video.webm"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2a84b67ca6571daf27b7-3bb8939db103a49b7e9b",
+          "file": "environment.spec.ts",
+          "line": 142,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-22T13:30:42.034Z",
+    "duration": 96108.583,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

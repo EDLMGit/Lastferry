@@ -1,0 +1,293 @@
+{
+  "state": {
+    "turn": 1,
+    "tideLevel": 0,
+    "boatNodeId": "stone",
+    "aboard": [],
+    "waitingByPier": {
+      "harbor-pier": [],
+      "stone-pier": [
+        "sheep-1"
+      ],
+      "rabbit-pier": [
+        "rabbit-1",
+        "rabbit-2"
+      ]
+    },
+    "delivered": [],
+    "status": "playing",
+    "lossReason": null
+  },
+  "view": {
+    "mode": "play",
+    "panned": false,
+    "focused": null,
+    "revision": 2,
+    "scale": 44,
+    "usable": {
+      "left": 26,
+      "right": 364,
+      "top": 26,
+      "bottom": 818
+    },
+    "bounds": {
+      "minX": -8.079083442687988,
+      "maxX": 7.9327778816223145,
+      "minY": -2.7840891544780373,
+      "maxY": 5.6870843468493675
+    },
+    "focus": {
+      "x": 0,
+      "y": 1.451497596185665
+    },
+    "overviewAvoidance": {
+      "overlap": 0,
+      "displacement": 0
+    }
+  },
+  "render": {
+    "profile": {
+      "id": "four-space",
+      "capacity": 4,
+      "deckY": 0.26,
+      "beam": 1.06,
+      "bow": 1.04,
+      "stern": 0.89,
+      "gateX": 0.51,
+      "gateZ": 0.28,
+      "wake": {
+        "fore": 0.76,
+        "aft": 0.76,
+        "lateral": 0.48
+      },
+      "berthHold": 0.45,
+      "berthTurn": 0.55
+    },
+    "pendingAnimation": false,
+    "historyLength": 1,
+    "poseHistoryLength": 1,
+    "passengers": [
+      {
+        "id": "rabbit-1",
+        "position": [
+          5.79,
+          0.175,
+          -1.02
+        ],
+        "parent": "",
+        "deckLocalFoot": [
+          0.02000000000000135,
+          0.15278285006082057,
+          5.79
+        ]
+      },
+      {
+        "id": "rabbit-2",
+        "position": [
+          6.21,
+          0.175,
+          -1.02
+        ],
+        "parent": "",
+        "deckLocalFoot": [
+          0.02000000000000135,
+          0.15278285006082057,
+          6.21
+        ]
+      },
+      {
+        "id": "sheep-1",
+        "position": [
+          0,
+          0.535,
+          -2.02
+        ],
+        "parent": "",
+        "deckLocalFoot": [
+          1.02,
+          0.5127828500608206,
+          -2.2648549702353194e-16
+        ]
+      }
+    ],
+    "boatPosition": [
+      0,
+      0,
+      -1
+    ],
+    "waterY": 0,
+    "hullY": 0.022217149939179424
+  },
+  "navigation": {
+    "currentNode": "stone",
+    "selectedDestination": null,
+    "emphasizedDestination": "stone",
+    "routes": [
+      {
+        "id": "harbor-stone",
+        "nodes": [
+          "harbor",
+          "stone"
+        ],
+        "highlighted": false,
+        "dashSize": 0.09,
+        "gapSize": 0.16
+      },
+      {
+        "id": "stone-shallows",
+        "nodes": [
+          "stone",
+          "shallows"
+        ],
+        "highlighted": false,
+        "dashSize": 0.09,
+        "gapSize": 0.16
+      },
+      {
+        "id": "shallows-rabbit",
+        "nodes": [
+          "shallows",
+          "rabbit-pier"
+        ],
+        "highlighted": false,
+        "dashSize": 0.09,
+        "gapSize": 0.16
+      }
+    ],
+    "markers": [
+      {
+        "id": "harbor",
+        "worldPosition": [
+          -6,
+          0.04,
+          0
+        ],
+        "status": "available",
+        "selected": false,
+        "shape": "open ring"
+      },
+      {
+        "id": "stone",
+        "worldPosition": [
+          0,
+          0.04,
+          -1
+        ],
+        "status": "current",
+        "selected": false,
+        "shape": "double ring"
+      },
+      {
+        "id": "shallows",
+        "worldPosition": [
+          3,
+          0.04,
+          2
+        ],
+        "status": "available",
+        "selected": false,
+        "shape": "open ring"
+      },
+      {
+        "id": "rabbit-pier",
+        "worldPosition": [
+          6,
+          0.04,
+          0
+        ],
+        "status": "nonadjacent",
+        "selected": false,
+        "shape": "diamond"
+      }
+    ]
+  },
+  "audio": {
+    "scoreOutputRms": 0.019064219823425155,
+    "scoreOutputPeak": 0.045836448669433594,
+    "scoreRoute": "music dry + reverb -> victory gain -> master",
+    "scoreEffectiveOutputRms": 0.01239174243069993,
+    "state": "running",
+    "requested": true,
+    "running": true,
+    "retryPending": false,
+    "muted": false,
+    "activated": true,
+    "hidden": false,
+    "disposed": false,
+    "unavailable": false,
+    "error": null,
+    "contextState": "running",
+    "currentTime": 1.592,
+    "contextCount": 1,
+    "schedulerActive": true,
+    "schedulerCount": 1,
+    "schedulerStarts": 1,
+    "sourceCount": 6,
+    "sourceNodesCreated": 7,
+    "peakOwnedSources": 7,
+    "graphNodeCount": 36,
+    "musicSources": 4,
+    "ambienceSources": 2,
+    "travelRequested": false,
+    "travelActive": false,
+    "arrivalActive": false,
+    "deliveryCount": 0,
+    "arrivalEventCount": 0,
+    "victorySettled": false,
+    "victoryTarget": 1,
+    "victoryGain": 1,
+    "arrangementTarget": 0.72,
+    "arrangementGain": 0.7200000286102295,
+    "effectiveMusicTarget": 0.72,
+    "lastVictoryMixChange": null,
+    "arrivalSources": 0,
+    "arrivalVoicesPlayed": 0,
+    "arrivalVoicesSkipped": 0,
+    "arrivalVoicesReclaimed": 0,
+    "lastArrival": null,
+    "transferContacts": 1,
+    "transferPlayed": 1,
+    "transferSkipped": 0,
+    "transferSources": 0,
+    "peakTransferSources": 1,
+    "lastTransferContact": {
+      "weight": "full",
+      "settle": false,
+      "compact": false,
+      "count": 1,
+      "time": 0.2,
+      "played": true
+    },
+    "storyToken": null,
+    "storyConsumedIds": [],
+    "storyCueCount": 0,
+    "storyPlayed": 0,
+    "storySkipped": 0,
+    "storyRejected": 0,
+    "storyReclaimed": 0,
+    "storySources": 0,
+    "storyOwnedSources": 0,
+    "peakStorySources": 0,
+    "lastStoryCue": null,
+    "desiredArrangement": "ordinary",
+    "arrangement": "ordinary",
+    "pendingTerminal": false,
+    "accompanimentEnabled": true,
+    "companionSources": 0,
+    "companionNotes": 0,
+    "companionDeferrals": 0,
+    "droppedTones": 0,
+    "masterGain": 0.6499999761581421,
+    "phrase": "Between the lamps",
+    "bpm": 64,
+    "phraseSeconds": 75,
+    "cueDuration": 75,
+    "phaseSeconds": 1.512,
+    "loopCount": 0,
+    "scheduledEvents": 1,
+    "skippedEvents": 0,
+    "rms": 0.013037242768385707,
+    "peak": 0.031171049922704697
+  },
+  "active": "map-stone"
+}

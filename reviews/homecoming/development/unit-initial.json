@@ -1,0 +1,16 @@
+{
+  "command": "npm run test:unit",
+  "node": "v24.15.0",
+  "outcome": "failed",
+  "counts": {
+    "passed": 152,
+    "failed": 1
+  },
+  "failure": {
+    "file": "tests/unit/contact.test.ts",
+    "test": "home light uses the explicit lens and world anchor and restores its baseline after a delivery",
+    "assertion": "effects.presentation().arrival equals initial after effects.reset()",
+    "difference": "sweep.reduced expected false, received true"
+  },
+  "resolution": "CrossingEffects.reset clears its transient reduced flag. World supplies the effective preference on arrive, settle and update. Targeted contact/homecoming rerun passed 7/7; final full-suite result recorded separately."
+}

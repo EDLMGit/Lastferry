@@ -1,0 +1,25 @@
+
+> last-ferry@1.0.0 test:e2e
+> playwright test home-play-flow.spec.ts
+
+[WebServer] (node:43976) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] [plugin builtin:vite-reporter] 
+[WebServer] (!) Some chunks are larger than 500 kB after minification. Consider:
+[WebServer] - Using dynamic import() to code-split the application
+[WebServer] - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+[WebServer] - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[WebServer] (node:43212) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 7 tests using 1 worker
+
+(node:2056) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\e2e\home-play-flow.spec.ts:156:1 › integrated cold-touch Home autoplay direct transfers and two actual rescues with runtime audio (1.6m)
+  ok 2 tests\e2e\home-play-flow.spec.ts:313:1 › native Home and story fit, orientation, Options focus and inactive gameplay (25.5s)
+  ok 3 tests\e2e\home-play-flow.spec.ts:398:1 › first pointer and natural keyboard Play produce score output; mute and fresh final intent survive autoplay (49.5s)
+  ok 4 tests\e2e\home-play-flow.spec.ts:462:1 › checkpoint, invalid-byte recovery, replacement, practice isolation and unavailable storage (22.1s)
+  ok 5 tests\e2e\home-play-flow.spec.ts:528:1 › pending sound Retry and late completion after mute or hide use one owner (17.0s)
+  ok 6 tests\e2e\home-play-flow.spec.ts:633:1 › reduced motion, mixed and same-band delivery, repeat input, fullscreen and production root (14.3s)
+  x  7 tests\e2e\home-play-flow.spec.ts:780:1 › portrait real chooser loss/cancel and rescue with natural keyboard focus and full phone labels (8.3s)

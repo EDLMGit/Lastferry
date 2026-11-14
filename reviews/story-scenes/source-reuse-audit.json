@@ -1,0 +1,196 @@
+{
+  "generatedAt": "2026-10-25T19:16:54.247Z",
+  "comparisonBase": "8cc43c794274fe64d5fb634961fbf79aaff251f8",
+  "method": "Validate each whole-source file-map hash, then compare every source SHA-256 across the final gate, original browser, follow-up browser and current disk. Runtime/data/style/asset/dependency paths are checked separately. No source hash, capture or failed browser result is relabeled.",
+  "snapshots": [
+    {
+      "id": "gate",
+      "path": "source-manifest.json",
+      "sourceHash": "509171d5621573560626bdf0e488124d0d58a7656dcfc9fde5a40f3d5c0f7b86",
+      "snapshotTime": "2026-10-25T18:38:18.381Z",
+      "fileCount": 280,
+      "fileMapHashValid": true
+    },
+    {
+      "id": "browser",
+      "path": "browser/source-manifest.json",
+      "sourceHash": "9b6aaf5c6edaba428d662e7a1182de59304973e7ced3ad00e9ed2159bc280525",
+      "snapshotTime": "2026-10-25T18:38:54.684Z",
+      "fileCount": 280,
+      "fileMapHashValid": true
+    },
+    {
+      "id": "followUp",
+      "path": "follow-up/source-manifest.json",
+      "sourceHash": "742a4d93437e1eb79e2fcf4573de2ccada707282bf20e891b1a9bf1d0d754e6d",
+      "snapshotTime": "2026-10-25T18:47:36.436Z",
+      "fileCount": 280,
+      "fileMapHashValid": true
+    }
+  ],
+  "comparedSourceFileCount": 280,
+  "runtime": {
+    "comparedFileCount": 146,
+    "runtimeSets": [
+      {
+        "snapshot": "gate",
+        "runtimeHash": "a711665fa139e955ef93ab93c4fcd8cc894ba6a029b5b768cc8b4e58f9c75c53"
+      },
+      {
+        "snapshot": "browser",
+        "runtimeHash": "a711665fa139e955ef93ab93c4fcd8cc894ba6a029b5b768cc8b4e58f9c75c53"
+      },
+      {
+        "snapshot": "followUp",
+        "runtimeHash": "a711665fa139e955ef93ab93c4fcd8cc894ba6a029b5b768cc8b4e58f9c75c53"
+      }
+    ],
+    "byteExactAcrossAllSnapshotsAndDisk": true,
+    "scope": "All src/ including styles, data/, original asset packages, index.html and build/dependency configuration. Inventory and review metadata are separate source entries."
+  },
+  "comparisons": [
+    {
+      "before": "gate",
+      "after": "browser",
+      "wholeSourceHashesEqual": false,
+      "differences": [
+        {
+          "path": "tests/e2e/story-scenes.spec.ts",
+          "beforeSha256": "a35b1a84eff328c7192c3be8420835bf96eacad343530ca24bbe5475975bc6d9",
+          "afterSha256": "12be99367c3131077bbfe0caba3d309f9860c46852b6c2a314e5bedc44550599"
+        }
+      ],
+      "runtimeDifferences": [],
+      "runtimeByteExact": true,
+      "onlyExpectedHarnessDifferences": true
+    },
+    {
+      "before": "gate",
+      "after": "followUp",
+      "wholeSourceHashesEqual": false,
+      "differences": [
+        {
+          "path": "tests/e2e/story-scenes.spec.ts",
+          "beforeSha256": "a35b1a84eff328c7192c3be8420835bf96eacad343530ca24bbe5475975bc6d9",
+          "afterSha256": "01fd488cde19686c4bf41da785c75d2b771d826610c801dad1a3b557d6fa0192"
+        }
+      ],
+      "runtimeDifferences": [],
+      "runtimeByteExact": true,
+      "onlyExpectedHarnessDifferences": true
+    },
+    {
+      "before": "browser",
+      "after": "followUp",
+      "wholeSourceHashesEqual": false,
+      "differences": [
+        {
+          "path": "tests/e2e/story-scenes.spec.ts",
+          "beforeSha256": "12be99367c3131077bbfe0caba3d309f9860c46852b6c2a314e5bedc44550599",
+          "afterSha256": "01fd488cde19686c4bf41da785c75d2b771d826610c801dad1a3b557d6fa0192"
+        }
+      ],
+      "runtimeDifferences": [],
+      "runtimeByteExact": true,
+      "onlyExpectedHarnessDifferences": true
+    }
+  ],
+  "currentDiskComparisons": [
+    {
+      "snapshot": "source-manifest.json",
+      "allSnapshotFilesStillMatchDisk": false,
+      "changedPaths": [
+        "assets/catalog.json",
+        "docs/ASSET_LEDGER.md",
+        "tests/e2e/story-scenes.spec.ts",
+        "tools/capture-story-scenes.mjs"
+      ],
+      "productionRuntimeEntryCount": 144,
+      "productionRuntimeByteExact": true,
+      "explanation": "Later differences are fixture assertions, inventory/ledger verification metadata and the corrected offline media helper; production bytes are unchanged."
+    },
+    {
+      "snapshot": "browser/source-manifest.json",
+      "allSnapshotFilesStillMatchDisk": false,
+      "changedPaths": [
+        "assets/catalog.json",
+        "docs/ASSET_LEDGER.md",
+        "tests/e2e/story-scenes.spec.ts",
+        "tools/capture-story-scenes.mjs"
+      ],
+      "productionRuntimeEntryCount": 144,
+      "productionRuntimeByteExact": true,
+      "explanation": "Later differences are fixture assertions, inventory/ledger verification metadata and the corrected offline media helper; production bytes are unchanged."
+    },
+    {
+      "snapshot": "follow-up/source-manifest.json",
+      "allSnapshotFilesStillMatchDisk": false,
+      "changedPaths": [
+        "assets/catalog.json",
+        "docs/ASSET_LEDGER.md",
+        "tools/capture-story-scenes.mjs"
+      ],
+      "productionRuntimeEntryCount": 144,
+      "productionRuntimeByteExact": true,
+      "explanation": "Later differences are fixture assertions, inventory/ledger verification metadata and the corrected offline media helper; production bytes are unchanged."
+    }
+  ],
+  "expectedHarnessChanges": {
+    "paths": [
+      "tests/e2e/story-scenes.spec.ts"
+    ],
+    "gateToOriginalBrowser": "Small browser fixture update before the original run.",
+    "originalBrowserToFollowUp": "Native fullscreen exit/orientation protocol sequencing corrected in the test, and an actual-UI Harbor continuation-variant case added. Application source did not change."
+  },
+  "currentDiskSourceHash": "077f6f73afad961480771ce1ac5cc7e89c94da68e93222c8d998191259121555",
+  "result": "pass",
+  "interpretation": "Gate/browser/follow-up whole-source hashes remain distinct and captures retain their own source identities. At capture, the broad146-entry runtime/inventory scopes matched. The final packaging comparison explicitly excludes developer inventory from production: all144 production sources match every earlier snapshot. Later non-production changes are enumerated, not relabeled as byte-equal.",
+  "historicalDiskComparisons": {
+    "at": "2026-10-25T18:50:23.414Z",
+    "sourceHash": "742a4d93437e1eb79e2fcf4573de2ccada707282bf20e891b1a9bf1d0d754e6d",
+    "comparisons": [
+      {
+        "snapshot": "gate",
+        "allSnapshotFilesStillMatchDisk": false,
+        "differences": [
+          {
+            "path": "tests/e2e/story-scenes.spec.ts",
+            "snapshotSha256": "a35b1a84eff328c7192c3be8420835bf96eacad343530ca24bbe5475975bc6d9",
+            "currentDiskSha256": "01fd488cde19686c4bf41da785c75d2b771d826610c801dad1a3b557d6fa0192"
+          }
+        ],
+        "runtimeDifferences": [],
+        "runtimeStillMatchesDisk": true,
+        "onlyExpectedHarnessDifferences": true
+      },
+      {
+        "snapshot": "browser",
+        "allSnapshotFilesStillMatchDisk": false,
+        "differences": [
+          {
+            "path": "tests/e2e/story-scenes.spec.ts",
+            "snapshotSha256": "12be99367c3131077bbfe0caba3d309f9860c46852b6c2a314e5bedc44550599",
+            "currentDiskSha256": "01fd488cde19686c4bf41da785c75d2b771d826610c801dad1a3b557d6fa0192"
+          }
+        ],
+        "runtimeDifferences": [],
+        "runtimeStillMatchesDisk": true,
+        "onlyExpectedHarnessDifferences": true
+      },
+      {
+        "snapshot": "followUp",
+        "allSnapshotFilesStillMatchDisk": true,
+        "differences": [],
+        "runtimeDifferences": [],
+        "runtimeStillMatchesDisk": true,
+        "onlyExpectedHarnessDifferences": true
+      }
+    ]
+  },
+  "finalPackaging": {
+    "source": "final-source-manifest.json",
+    "sourceHash": "077f6f73afad961480771ce1ac5cc7e89c94da68e93222c8d998191259121555",
+    "runtimeHash": "ace1015917adb31934b595ae258601587747c16cc525e7031e7da3ddedc10387",
+    "productionRuntimeEntryCount": 144
+  }
+}

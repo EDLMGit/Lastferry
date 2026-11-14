@@ -1,0 +1,33 @@
+{
+  "recordedFromSourceHash": "bff425b3b6b9014077c0e28c24b7d137e65a338867cfdfee6ad3ac42aecbb9b6",
+  "original": {
+    "path": "reviews/phone-audio-fullscreen/browser-smoke/raw/cold-holding-runtime.webm",
+    "sha256": "11ba3545b2c3928a8e653b2f3e373a62ac7eb4b89626615a902df68a60059d2a",
+    "bytes": 38936
+  },
+  "accessible": {
+    "path": "reviews/phone-audio-fullscreen/cold-holding-runtime.ogg",
+    "sha256": "27bd288f38fcf58582af6e211a784c173b625ceacb37388cc26bf35fb88c0894",
+    "bytes": 38744,
+    "probe": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "opus",
+          "sample_rate": "48000",
+          "channels": 2
+        }
+      ],
+      "format": {
+        "duration": "2.398000",
+        "size": "38744"
+      }
+    }
+  },
+  "transformation": "ffmpeg -i original.webm -c:a copy accessible.ogg; Opus packet copy only, no gain, normalization, tempo, mix or codec change.",
+  "packetCount": 40,
+  "encodedPacketHashesEqual": true,
+  "fullDecodeExit": 0,
+  "listening": "Actual procedural runtime capture after first valid touch. Measured graph output is not physical speaker, Android or subjective listening approval."
+}

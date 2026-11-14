@@ -1,0 +1,936 @@
+{
+  "reviewedCommit": "fb5806a7a129984290c54a9f54e08d5171d0d3d3",
+  "nodeVersion": "v24.22.1",
+  "normalization": "After the final scheduled rise, turn is keyed as the last rise turn. Load/location/passenger/status state remains distinct. This is valid only because subsequent rules depend on tide and whether any future rise remains, with no total-action cap.",
+  "adaptations": [
+    {
+      "file": "src/game/rules.ts",
+      "change": "In a temporary copy only, both module specifiers '../levels/level' become '../levels/level.ts' so Node24 can resolve the TypeScript module. No rule logic changes."
+    }
+  ],
+  "sourceFiles": [
+    {
+      "path": "src/game/rules.ts",
+      "gitBlobSha": "bb63ee3874474c18c9329196866c138567da7b98",
+      "sha256": "8a03fd5a31cb2bcea512c2aa645eb554bd1d8a3b9c6818a6a5db7938d3f71453",
+      "bytes": 10136
+    },
+    {
+      "path": "src/levels/level.ts",
+      "gitBlobSha": "662c3754a93b7be379f561f47c92ab7748f12594",
+      "sha256": "1bde7d74abb0ee124389986772915b4fc89defa217419c5da416ef924ef59c70",
+      "bytes": 3741
+    },
+    {
+      "path": "data/first-crossing.level.json",
+      "gitBlobSha": "6ab0d33308742464a6b6aaad5eb6d92428afae76",
+      "sha256": "403a19ddd7840a52f5706490d6e2f5a35ddf1a38dd20715b602fcc572f6167ab",
+      "bytes": 4939
+    },
+    {
+      "path": "data/holding-pier.level.json",
+      "gitBlobSha": "622a69b4355849da04dedc6564743fbcf93b8272",
+      "sha256": "80d98e6c3a675eabb81dff75ef2df76b9ac90979d0ac1cbcc06a5603dc8fc81a",
+      "bytes": 4485
+    },
+    {
+      "path": "data/bellwater.level.json",
+      "gitBlobSha": "345a182c387a211dd482f3cb71e4af0125259d8a",
+      "sha256": "a716b3cda50c7fda9d5429a2316576fe2d93aced2287ac281fec5ed8ed8b4de0",
+      "bytes": 5439
+    },
+    {
+      "path": "data/driftwood-yard.level.json",
+      "gitBlobSha": "3ac4c568c3371a3a6b6bdc27f09fcf5e561f390a",
+      "sha256": "45f87252a9f2c7df359b2bffec117479ab629f2a79754f05f2056700758d6ec5",
+      "bytes": 8034
+    },
+    {
+      "path": "data/two-shelters.level.json",
+      "gitBlobSha": "2832c2870b33bc2abeb6a1fdd36c285548eaea30",
+      "sha256": "8ff6796b64038bedd91d5274de3f9296f9afc7829c572253a3292c68b7945832",
+      "bytes": 8057
+    },
+    {
+      "path": "data/wide-berth.level.json",
+      "gitBlobSha": "23c817d19649fe3f64ca537980fdf38db1346b36",
+      "sha256": "cdda825ba5077bd10840687f1a70cfcbd9eeca8cc0b6846003be8ebd4c5625b1",
+      "bytes": 10278
+    },
+    {
+      "path": "data/reef-return.level.json",
+      "gitBlobSha": "9774d96311e4bb699d8d6372f7c2a59e1317b7b5",
+      "sha256": "4eba067e936849c734d86e9acdfe240d3a0dbe322d872c4657685e51a55982a6",
+      "bytes": 9401
+    },
+    {
+      "path": "data/orchard-landing.level.json",
+      "gitBlobSha": "10e2e684df41ce594186d0ef5e1a1ebe0662510f",
+      "sha256": "2ef5d2f938be399121fc60d1dba1afa11350ef55dc9f173e9196e04ec9fe605f",
+      "bytes": 9373
+    }
+  ],
+  "highlightedChecks": {
+    "orchardPickupOrders": [
+      [
+        {
+          "type": "move",
+          "to": "quay"
+        },
+        {
+          "type": "move",
+          "to": "steps"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "sorrel"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "quay"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "pomme"
+          ]
+        }
+      ],
+      [
+        {
+          "type": "move",
+          "to": "quay"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "pomme"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "steps"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "sorrel"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "quay"
+        }
+      ]
+    ],
+    "orchardOrdersMerge": true,
+    "orchardMergedState": {
+      "turn": 5,
+      "tideLevel": 1,
+      "boatNodeId": "quay",
+      "aboard": [
+        "sorrel",
+        "pomme"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "orchard-pier": [
+          "orin"
+        ],
+        "quay-pier": [],
+        "steps-pier": []
+      },
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    "orchardTurn6": {
+      "turn": 6,
+      "node": "orchard",
+      "aboard": [
+        "sorrel",
+        "pomme"
+      ],
+      "load": 3,
+      "draft": 3,
+      "remaining": 4,
+      "legal": 5,
+      "viable": 5,
+      "optimal": 1,
+      "choices": [
+        {
+          "action": {
+            "type": "wait"
+          },
+          "toWin": 4,
+          "result": "playing"
+        },
+        {
+          "action": {
+            "type": "board",
+            "passengerIds": [
+              "orin"
+            ]
+          },
+          "toWin": 3,
+          "result": "playing"
+        },
+        {
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "sorrel"
+            ]
+          },
+          "toWin": 4,
+          "result": "playing"
+        },
+        {
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "pomme"
+            ]
+          },
+          "toWin": 4,
+          "result": "playing"
+        },
+        {
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "sorrel",
+              "pomme"
+            ]
+          },
+          "toWin": 4,
+          "result": "playing"
+        }
+      ]
+    },
+    "reefTurn8": {
+      "turn": 8,
+      "node": "quay",
+      "aboard": [
+        "dot",
+        "flick",
+        "heather",
+        "birch"
+      ],
+      "load": 6,
+      "draft": 4,
+      "remaining": 2,
+      "legal": 17,
+      "viable": 1,
+      "optimal": 1,
+      "choices": [
+        {
+          "action": {
+            "type": "wait"
+          },
+          "toWin": null,
+          "result": "lost"
+        },
+        {
+          "action": {
+            "type": "move",
+            "to": "harbor"
+          },
+          "toWin": 1,
+          "result": "playing"
+        },
+        {
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "dot"
+            ]
+          },
+          "toWin": null,
+          "result": "lost"
+        },
+        {
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "flick"
+            ]
+          },
+          "toWin": null,
+          "result": "lost"
+        },
+        {
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "dot",
+              "flick"
+            ]
+          },
+          "toWin": null,
+          "result": "lost"
+        },
+        {
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "heather"
+            ]
+          },
+          "toWin": null,
+          "result": "lost"
+        },
+        {
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "dot",
+              "heather"
+            ]
+          },
+          "toWin": null,
+          "result": "lost"
+        },
+        {
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "flick",
+              "heather"
+            ]
+          },
+          "toWin": null,
+          "result": "lost"
+        },
+        {
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "dot",
+              "flick",
+              "heather"
+            ]
+          },
+          "toWin": null,
+          "result": "lost"
+        },
+        {
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "birch"
+            ]
+          },
+          "toWin": null,
+          "result": "lost"
+        },
+        {
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "dot",
+              "birch"
+            ]
+          },
+          "toWin": null,
+          "result": "lost"
+        },
+        {
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "flick",
+              "birch"
+            ]
+          },
+          "toWin": null,
+          "result": "lost"
+        },
+        {
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "dot",
+              "flick",
+              "birch"
+            ]
+          },
+          "toWin": null,
+          "result": "lost"
+        },
+        {
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "heather",
+              "birch"
+            ]
+          },
+          "toWin": null,
+          "result": "lost"
+        },
+        {
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "dot",
+              "heather",
+              "birch"
+            ]
+          },
+          "toWin": null,
+          "result": "lost"
+        },
+        {
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "flick",
+              "heather",
+              "birch"
+            ]
+          },
+          "toWin": null,
+          "result": "lost"
+        },
+        {
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "dot",
+              "flick",
+              "heather",
+              "birch"
+            ]
+          },
+          "toWin": null,
+          "result": "lost"
+        }
+      ]
+    }
+  },
+  "results": [
+    {
+      "level": "holding-pier",
+      "cap": 8,
+      "passengerCount": 3,
+      "occupiedSpaces": 4,
+      "nodes": 4,
+      "edges": 3,
+      "states": 148,
+      "transitions": 495,
+      "wonStates": 1,
+      "playingStates": 136,
+      "viablePlayingStates": 122,
+      "minActions": 9,
+      "shortestActionSequences": "1",
+      "shortestCorridorStates": 10,
+      "shortestCorridorBranchStates": 0,
+      "witness": [
+        {
+          "type": "unload",
+          "passengerIds": [
+            "sheep-1"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "shallows"
+        },
+        {
+          "type": "move",
+          "to": "rabbit-pier"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "rabbit-1",
+            "rabbit-2"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "shallows"
+        },
+        {
+          "type": "move",
+          "to": "stone"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "sheep-1"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "rabbit-1",
+            "rabbit-2",
+            "sheep-1"
+          ]
+        }
+      ]
+    },
+    {
+      "level": "bellwater",
+      "cap": 8,
+      "passengerCount": 3,
+      "occupiedSpaces": 4,
+      "nodes": 6,
+      "edges": 6,
+      "states": 121,
+      "transitions": 305,
+      "wonStates": 1,
+      "playingStates": 85,
+      "viablePlayingStates": 59,
+      "minActions": 10,
+      "shortestActionSequences": "8",
+      "shortestCorridorStates": 20,
+      "shortestCorridorBranchStates": 4,
+      "witness": [
+        {
+          "type": "wait"
+        },
+        {
+          "type": "move",
+          "to": "shallows"
+        },
+        {
+          "type": "move",
+          "to": "low-pier"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "tansy",
+            "lark"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "shallows"
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "move",
+          "to": "bell-pier"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "bram"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "tansy",
+            "lark",
+            "bram"
+          ]
+        }
+      ]
+    },
+    {
+      "level": "driftwood-yard",
+      "cap": 11,
+      "passengerCount": 3,
+      "occupiedSpaces": 4,
+      "nodes": 5,
+      "edges": 5,
+      "states": 237,
+      "transitions": 830,
+      "wonStates": 1,
+      "playingStates": 213,
+      "viablePlayingStates": 152,
+      "minActions": 12,
+      "shortestActionSequences": "1",
+      "shortestCorridorStates": 13,
+      "shortestCorridorBranchStates": 0,
+      "witness": [
+        {
+          "type": "move",
+          "to": "yard"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "nell"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "mooring"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "nell"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "bend"
+        },
+        {
+          "type": "move",
+          "to": "reeds"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "fern",
+            "oat"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "bend"
+        },
+        {
+          "type": "move",
+          "to": "mooring"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "nell"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "fern",
+            "oat",
+            "nell"
+          ]
+        }
+      ]
+    },
+    {
+      "level": "two-shelters",
+      "cap": 9,
+      "passengerCount": 3,
+      "occupiedSpaces": 5,
+      "nodes": 4,
+      "edges": 5,
+      "states": 475,
+      "transitions": 1560,
+      "wonStates": 1,
+      "playingStates": 323,
+      "viablePlayingStates": 204,
+      "minActions": 11,
+      "shortestActionSequences": "16",
+      "shortestCorridorStates": 29,
+      "shortestCorridorBranchStates": 5,
+      "witness": [
+        {
+          "type": "wait"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "hazel",
+            "bracken"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "reeds"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "mica"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "refuge"
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "mica"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "low"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "hazel",
+            "bracken"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "hazel",
+            "bracken"
+          ]
+        }
+      ]
+    },
+    {
+      "level": "wide-berth",
+      "cap": 10,
+      "passengerCount": 6,
+      "occupiedSpaces": 8,
+      "nodes": 5,
+      "edges": 5,
+      "states": 1614,
+      "transitions": 5549,
+      "wonStates": 1,
+      "playingStates": 851,
+      "viablePlayingStates": 565,
+      "minActions": 12,
+      "shortestActionSequences": "3",
+      "shortestCorridorStates": 31,
+      "shortestCorridorBranchStates": 1,
+      "witness": [
+        {
+          "type": "board",
+          "passengerIds": [
+            "alder",
+            "clover",
+            "poppy",
+            "wren"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "high-quay"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "alder",
+            "clover"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "poppy",
+            "wren"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "high-quay"
+        },
+        {
+          "type": "move",
+          "to": "shell-landing"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "sorrel",
+            "finch"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "high-quay"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "alder",
+            "clover"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "sorrel",
+            "finch",
+            "alder",
+            "clover"
+          ]
+        }
+      ]
+    },
+    {
+      "level": "reef-return",
+      "cap": 9,
+      "passengerCount": 4,
+      "occupiedSpaces": 6,
+      "nodes": 4,
+      "edges": 4,
+      "states": 516,
+      "transitions": 1353,
+      "wonStates": 1,
+      "playingStates": 295,
+      "viablePlayingStates": 78,
+      "minActions": 10,
+      "shortestActionSequences": "1",
+      "shortestCorridorStates": 11,
+      "shortestCorridorBranchStates": 0,
+      "witness": [
+        {
+          "type": "unload",
+          "passengerIds": [
+            "heather",
+            "birch"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "wrack"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "dot"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "quay"
+        },
+        {
+          "type": "move",
+          "to": "pool"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "flick"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "quay"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "heather",
+            "birch"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "dot",
+            "flick",
+            "heather",
+            "birch"
+          ]
+        }
+      ]
+    },
+    {
+      "level": "orchard-landing",
+      "cap": 7,
+      "passengerCount": 3,
+      "occupiedSpaces": 6,
+      "nodes": 4,
+      "edges": 3,
+      "states": 115,
+      "transitions": 282,
+      "wonStates": 1,
+      "playingStates": 74,
+      "viablePlayingStates": 47,
+      "minActions": 10,
+      "shortestActionSequences": "2",
+      "shortestCorridorStates": 14,
+      "shortestCorridorBranchStates": 1,
+      "witness": [
+        {
+          "type": "move",
+          "to": "quay"
+        },
+        {
+          "type": "move",
+          "to": "steps"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "sorrel"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "quay"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "pomme"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "orchard"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "orin"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "quay"
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "sorrel",
+            "pomme",
+            "orin"
+          ]
+        }
+      ]
+    }
+  ]
+}

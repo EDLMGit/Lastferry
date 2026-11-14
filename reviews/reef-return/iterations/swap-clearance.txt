@@ -1,0 +1,66 @@
+
+ RUN  v5.0.5 C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry
+
+stdout | tests/unit/wide-clearance.test.ts > Reef Return physical clearances > occupied real modeled hull clears land and piers at every reachable heading in both directions
+{"wrack-quay/forward/pool-island":{"count":54,"position":[5.493848307307968,0,0.9876643912005637],"angle":0.3999354631516352}}
+
+----x···
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/wide-clearance.test.ts > Reef Return physical clearances > occupied real modeled hull clears land and piers at every reachable heading in both directions
+AssertionError: expected [ …(30) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "wrack-quay/forward from1.5707963267948966 sample242: pool-island",
++   "wrack-quay/forward from1.5707963267948966 sample243: pool-island",
++   "wrack-quay/forward from1.5707963267948966 sample244: pool-island",
++   "wrack-quay/forward from1.5707963267948966 sample245: pool-island",
++   "wrack-quay/forward from1.5707963267948966 sample246: pool-island",
++   "wrack-quay/forward from1.5707963267948966 sample247: pool-island",
++   "wrack-quay/forward from1.5707963267948966 sample248: pool-island",
++   "wrack-quay/forward from1.5707963267948966 sample249: pool-island",
++   "wrack-quay/forward from1.5707963267948966 sample250: pool-island",
++   "wrack-quay/forward from1.5707963267948966 sample251: pool-island",
++   "wrack-quay/forward from1.5707963267948966 sample252: pool-island",
++   "wrack-quay/forward from1.5707963267948966 sample253: pool-island",
++   "wrack-quay/forward from1.5707963267948966 sample254: pool-island",
++   "wrack-quay/forward from1.5707963267948966 sample255: pool-island",
++   "wrack-quay/forward from1.5707963267948966 sample256: pool-island",
++   "wrack-quay/forward from1.5707963267948966 sample257: pool-island",
++   "wrack-quay/forward from1.5707963267948966 sample258: pool-island",
++   "wrack-quay/forward from1.5707963267948966 sample259: pool-island",
++   "wrack-quay/forward from1.5707963267948966 sample260: pool-island",
++   "wrack-quay/forward from1.5707963267948966 sample261: pool-island",
++   "wrack-quay/forward from1.5707963267948966 sample262: pool-island",
++   "wrack-quay/forward from1.5707963267948966 sample263: pool-island",
++   "wrack-quay/forward from1.5707963267948966 sample264: pool-island",
++   "wrack-quay/forward from1.5707963267948966 sample265: pool-island",
++   "wrack-quay/forward from1.5707963267948966 sample266: pool-island",
++   "wrack-quay/forward from1.5707963267948966 sample267: pool-island",
++   "wrack-quay/forward from1.5707963267948966 sample268: pool-island",
++   "wrack-quay/forward from1.570796326794897 sample242: pool-island",
++   "wrack-quay/forward from1.570796326794897 sample243: pool-island",
++   "wrack-quay/forward from1.570796326794897 sample244: pool-island",
++ ]
+
+ ❯ tests/unit/wide-clearance.test.ts:208:20
+    206|     }
+    207|   if (failures.length) console.log(JSON.stringify(contacts));
+    208|   expect(failures).toEqual([]);
+       |                    ^
+    209|   expect(margins).toEqual([]);
+    210| }, 20000);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 3 passed | 4 skipped (8)
+   Start at  20:45:07
+   Duration  950ms (tests 84%, transform 8%, import 7%, worker 1%)
+

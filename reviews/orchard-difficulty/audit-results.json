@@ -1,0 +1,672 @@
+{
+  "node": "v24.15.0",
+  "sources": {
+    "data/orchard-landing.level.json": "f914b014ca903f4df0c3183d893c6b45f21fb7d9442aead2d8b31254ab5f3814",
+    "src/levels/level.ts": "1bde7d74abb0ee124389986772915b4fc89defa217419c5da416ef924ef59c70",
+    "src/game/rules.ts": "8a03fd5a31cb2bcea512c2aa645eb554bd1d8a3b9c6818a6a5db7938d3f71453"
+  },
+  "authored": {
+    "states": 482,
+    "transitions": 1311,
+    "shortest": 12,
+    "target": 13,
+    "familiesByRetrievalAfterFirstDelivery": {
+      "quay / medlar, 13 actions": {
+        "sequences": 18,
+        "example": [
+          "wait",
+          "board:medlar+pomme",
+          "quay",
+          "unload:medlar",
+          "harbor",
+          "unload:pomme",
+          "quay",
+          "board:medlar",
+          "orchard",
+          "board:orin",
+          "quay",
+          "harbor",
+          "unload:medlar+orin"
+        ]
+      },
+      "steps / medlar, 13 actions": {
+        "sequences": 1,
+        "example": [
+          "board:pomme",
+          "quay",
+          "harbor",
+          "unload:pomme",
+          "quay",
+          "steps",
+          "board:medlar",
+          "quay",
+          "orchard",
+          "board:orin",
+          "quay",
+          "harbor",
+          "unload:medlar+orin"
+        ]
+      },
+      "quay / medlar, 12 actions": {
+        "sequences": 1,
+        "example": [
+          "board:medlar+pomme",
+          "quay",
+          "unload:medlar",
+          "harbor",
+          "unload:pomme",
+          "quay",
+          "board:medlar",
+          "orchard",
+          "board:orin",
+          "quay",
+          "harbor",
+          "unload:medlar+orin"
+        ]
+      }
+    },
+    "everyViableFirstDelivery": [
+      "4, unload:pomme, orin at orchard, medlar at steps",
+      "5, unload:pomme, medlar at quay, orin at orchard",
+      "6, unload:pomme, medlar at quay, orin at orchard"
+    ],
+    "everyViableInwardCrossing": [
+      "8, medlar",
+      "9, medlar"
+    ],
+    "everyViableOutwardCrossing": [
+      "10, medlar, orin",
+      "11, medlar, orin",
+      "12, medlar, orin"
+    ],
+    "usefulUndo": [
+      {
+        "step": "start",
+        "turn": 0,
+        "state": "playing",
+        "minimumRemaining": 12,
+        "legal": 5,
+        "viable": 4
+      },
+      {
+        "step": "board:medlar+pomme",
+        "turn": 1,
+        "state": "playing",
+        "minimumRemaining": 11,
+        "legal": 5,
+        "viable": 2
+      },
+      {
+        "step": "quay",
+        "turn": 2,
+        "state": "playing",
+        "minimumRemaining": 10,
+        "legal": 5,
+        "viable": 3
+      },
+      {
+        "step": "unload:pomme",
+        "turn": 3,
+        "state": "playing",
+        "minimumRemaining": null,
+        "legal": 6,
+        "viable": 0
+      },
+      {
+        "step": "harbor",
+        "turn": 4,
+        "state": "playing",
+        "minimumRemaining": null,
+        "legal": 3,
+        "viable": 0
+      },
+      {
+        "step": "unload:medlar",
+        "turn": 5,
+        "state": "playing",
+        "minimumRemaining": null,
+        "legal": 2,
+        "viable": 0
+      },
+      {
+        "step": "quay",
+        "turn": 6,
+        "state": "playing",
+        "minimumRemaining": null,
+        "legal": 5,
+        "viable": 0
+      },
+      {
+        "step": "board:pomme",
+        "turn": 7,
+        "state": "playing",
+        "minimumRemaining": null,
+        "legal": 5,
+        "viable": 0
+      },
+      {
+        "step": "orchard",
+        "turn": 8,
+        "state": "playing",
+        "minimumRemaining": null,
+        "legal": 3,
+        "viable": 0
+      },
+      {
+        "step": "board:orin",
+        "turn": 9,
+        "state": "playing",
+        "minimumRemaining": null,
+        "legal": 4,
+        "viable": 0
+      }
+    ],
+    "firstActionOptions": [
+      {
+        "action": "wait",
+        "minimumRemaining": 12
+      },
+      {
+        "action": "quay",
+        "minimumRemaining": null
+      },
+      {
+        "action": "board:pomme",
+        "minimumRemaining": 12
+      },
+      {
+        "action": "board:medlar",
+        "minimumRemaining": 12
+      },
+      {
+        "action": "board:medlar+pomme",
+        "minimumRemaining": 11
+      }
+    ],
+    "twoOpeningWaits": {
+      "step": "wait",
+      "turn": 2,
+      "state": "playing",
+      "minimumRemaining": null,
+      "legal": 5,
+      "viable": 0
+    },
+    "stagedRescue": [
+      {
+        "step": "start",
+        "turn": 0,
+        "state": "playing",
+        "minimumRemaining": 12,
+        "legal": 5,
+        "viable": 4
+      },
+      {
+        "step": "board:medlar+pomme",
+        "turn": 1,
+        "state": "playing",
+        "minimumRemaining": 11,
+        "legal": 5,
+        "viable": 2
+      },
+      {
+        "step": "quay",
+        "turn": 2,
+        "state": "playing",
+        "minimumRemaining": 10,
+        "legal": 5,
+        "viable": 3
+      },
+      {
+        "step": "unload:medlar",
+        "turn": 3,
+        "state": "playing",
+        "minimumRemaining": 9,
+        "legal": 6,
+        "viable": 2
+      },
+      {
+        "step": "harbor",
+        "turn": 4,
+        "state": "playing",
+        "minimumRemaining": 8,
+        "legal": 3,
+        "viable": 2
+      },
+      {
+        "step": "unload:pomme",
+        "turn": 5,
+        "state": "playing",
+        "minimumRemaining": 7,
+        "legal": 2,
+        "viable": 2
+      },
+      {
+        "step": "quay",
+        "turn": 6,
+        "state": "playing",
+        "minimumRemaining": 6,
+        "legal": 5,
+        "viable": 2
+      },
+      {
+        "step": "board:medlar",
+        "turn": 7,
+        "state": "playing",
+        "minimumRemaining": 5,
+        "legal": 5,
+        "viable": 2
+      },
+      {
+        "step": "orchard",
+        "turn": 8,
+        "state": "playing",
+        "minimumRemaining": 4,
+        "legal": 3,
+        "viable": 3
+      },
+      {
+        "step": "board:orin",
+        "turn": 9,
+        "state": "playing",
+        "minimumRemaining": 3,
+        "legal": 5,
+        "viable": 5
+      },
+      {
+        "step": "quay",
+        "turn": 10,
+        "state": "playing",
+        "minimumRemaining": 2,
+        "legal": 3,
+        "viable": 3
+      },
+      {
+        "step": "harbor",
+        "turn": 11,
+        "state": "playing",
+        "minimumRemaining": 1,
+        "legal": 5,
+        "viable": 5
+      },
+      {
+        "step": "unload:medlar+orin",
+        "turn": 12,
+        "state": "won",
+        "minimumRemaining": 0,
+        "legal": 0,
+        "viable": 0
+      }
+    ],
+    "wrongPlanEndpoint": {
+      "step": "wait",
+      "turn": 12,
+      "state": "lost",
+      "loss": "RETURN_CUT_OFF",
+      "minimumRemaining": null,
+      "legal": 0,
+      "viable": 0
+    }
+  },
+  "twoSpace": {
+    "states": 493,
+    "transitions": 1347,
+    "shortest": 12,
+    "target": 13,
+    "familiesByRetrievalAfterFirstDelivery": {
+      "quay / pomme, 13 actions": {
+        "sequences": 18,
+        "example": [
+          "wait",
+          "board:medlar+pomme",
+          "quay",
+          "unload:pomme",
+          "harbor",
+          "unload:medlar",
+          "quay",
+          "board:pomme",
+          "orchard",
+          "board:orin",
+          "quay",
+          "harbor",
+          "unload:orin+pomme"
+        ]
+      },
+      "quay / medlar, 13 actions": {
+        "sequences": 18,
+        "example": [
+          "wait",
+          "board:medlar+pomme",
+          "quay",
+          "unload:medlar",
+          "harbor",
+          "unload:pomme",
+          "quay",
+          "board:medlar",
+          "orchard",
+          "board:orin",
+          "quay",
+          "harbor",
+          "unload:medlar+orin"
+        ]
+      },
+      "steps / medlar, 13 actions": {
+        "sequences": 1,
+        "example": [
+          "board:pomme",
+          "quay",
+          "harbor",
+          "unload:pomme",
+          "quay",
+          "steps",
+          "board:medlar",
+          "quay",
+          "orchard",
+          "board:orin",
+          "quay",
+          "harbor",
+          "unload:medlar+orin"
+        ]
+      },
+      "steps / pomme, 13 actions": {
+        "sequences": 1,
+        "example": [
+          "board:medlar",
+          "quay",
+          "harbor",
+          "unload:medlar",
+          "quay",
+          "steps",
+          "board:pomme",
+          "quay",
+          "orchard",
+          "board:orin",
+          "quay",
+          "harbor",
+          "unload:orin+pomme"
+        ]
+      },
+      "quay / pomme, 12 actions": {
+        "sequences": 1,
+        "example": [
+          "board:medlar+pomme",
+          "quay",
+          "unload:pomme",
+          "harbor",
+          "unload:medlar",
+          "quay",
+          "board:pomme",
+          "orchard",
+          "board:orin",
+          "quay",
+          "harbor",
+          "unload:orin+pomme"
+        ]
+      },
+      "quay / medlar, 12 actions": {
+        "sequences": 1,
+        "example": [
+          "board:medlar+pomme",
+          "quay",
+          "unload:medlar",
+          "harbor",
+          "unload:pomme",
+          "quay",
+          "board:medlar",
+          "orchard",
+          "board:orin",
+          "quay",
+          "harbor",
+          "unload:medlar+orin"
+        ]
+      }
+    },
+    "everyViableFirstDelivery": [
+      "4, unload:medlar, orin at orchard, pomme at steps",
+      "4, unload:pomme, orin at orchard, medlar at steps",
+      "5, unload:medlar, pomme at quay, orin at orchard",
+      "5, unload:pomme, medlar at quay, orin at orchard",
+      "6, unload:medlar, pomme at quay, orin at orchard",
+      "6, unload:pomme, medlar at quay, orin at orchard"
+    ],
+    "everyViableInwardCrossing": [
+      "8, medlar",
+      "8, pomme",
+      "9, medlar",
+      "9, pomme"
+    ],
+    "everyViableOutwardCrossing": [
+      "10, medlar, orin",
+      "10, orin, pomme",
+      "11, medlar, orin",
+      "11, orin, pomme",
+      "12, medlar, orin",
+      "12, orin, pomme"
+    ],
+    "usefulUndo": [
+      {
+        "step": "start",
+        "turn": 0,
+        "state": "playing",
+        "minimumRemaining": 12,
+        "legal": 5,
+        "viable": 4
+      },
+      {
+        "step": "board:medlar+pomme",
+        "turn": 1,
+        "state": "playing",
+        "minimumRemaining": 11,
+        "legal": 5,
+        "viable": 2
+      },
+      {
+        "step": "quay",
+        "turn": 2,
+        "state": "playing",
+        "minimumRemaining": 10,
+        "legal": 5,
+        "viable": 4
+      },
+      {
+        "step": "unload:pomme",
+        "turn": 3,
+        "state": "playing",
+        "minimumRemaining": 9,
+        "legal": 6,
+        "viable": 2
+      },
+      {
+        "step": "harbor",
+        "turn": 4,
+        "state": "playing",
+        "minimumRemaining": 8,
+        "legal": 3,
+        "viable": 2
+      },
+      {
+        "step": "unload:medlar",
+        "turn": 5,
+        "state": "playing",
+        "minimumRemaining": 7,
+        "legal": 2,
+        "viable": 2
+      },
+      {
+        "step": "quay",
+        "turn": 6,
+        "state": "playing",
+        "minimumRemaining": 6,
+        "legal": 5,
+        "viable": 2
+      },
+      {
+        "step": "board:pomme",
+        "turn": 7,
+        "state": "playing",
+        "minimumRemaining": 5,
+        "legal": 5,
+        "viable": 2
+      },
+      {
+        "step": "orchard",
+        "turn": 8,
+        "state": "playing",
+        "minimumRemaining": 4,
+        "legal": 3,
+        "viable": 3
+      },
+      {
+        "step": "board:orin",
+        "turn": 9,
+        "state": "playing",
+        "minimumRemaining": 3,
+        "legal": 5,
+        "viable": 5
+      }
+    ],
+    "firstActionOptions": [
+      {
+        "action": "wait",
+        "minimumRemaining": 12
+      },
+      {
+        "action": "quay",
+        "minimumRemaining": null
+      },
+      {
+        "action": "board:pomme",
+        "minimumRemaining": 12
+      },
+      {
+        "action": "board:medlar",
+        "minimumRemaining": 12
+      },
+      {
+        "action": "board:medlar+pomme",
+        "minimumRemaining": 11
+      }
+    ],
+    "twoOpeningWaits": {
+      "step": "wait",
+      "turn": 2,
+      "state": "playing",
+      "minimumRemaining": null,
+      "legal": 5,
+      "viable": 0
+    },
+    "stagedRescue": [
+      {
+        "step": "start",
+        "turn": 0,
+        "state": "playing",
+        "minimumRemaining": 12,
+        "legal": 5,
+        "viable": 4
+      },
+      {
+        "step": "board:medlar+pomme",
+        "turn": 1,
+        "state": "playing",
+        "minimumRemaining": 11,
+        "legal": 5,
+        "viable": 2
+      },
+      {
+        "step": "quay",
+        "turn": 2,
+        "state": "playing",
+        "minimumRemaining": 10,
+        "legal": 5,
+        "viable": 4
+      },
+      {
+        "step": "unload:medlar",
+        "turn": 3,
+        "state": "playing",
+        "minimumRemaining": 9,
+        "legal": 6,
+        "viable": 2
+      },
+      {
+        "step": "harbor",
+        "turn": 4,
+        "state": "playing",
+        "minimumRemaining": 8,
+        "legal": 3,
+        "viable": 2
+      },
+      {
+        "step": "unload:pomme",
+        "turn": 5,
+        "state": "playing",
+        "minimumRemaining": 7,
+        "legal": 2,
+        "viable": 2
+      },
+      {
+        "step": "quay",
+        "turn": 6,
+        "state": "playing",
+        "minimumRemaining": 6,
+        "legal": 5,
+        "viable": 2
+      },
+      {
+        "step": "board:medlar",
+        "turn": 7,
+        "state": "playing",
+        "minimumRemaining": 5,
+        "legal": 5,
+        "viable": 2
+      },
+      {
+        "step": "orchard",
+        "turn": 8,
+        "state": "playing",
+        "minimumRemaining": 4,
+        "legal": 3,
+        "viable": 3
+      },
+      {
+        "step": "board:orin",
+        "turn": 9,
+        "state": "playing",
+        "minimumRemaining": 3,
+        "legal": 5,
+        "viable": 5
+      },
+      {
+        "step": "quay",
+        "turn": 10,
+        "state": "playing",
+        "minimumRemaining": 2,
+        "legal": 3,
+        "viable": 3
+      },
+      {
+        "step": "harbor",
+        "turn": 11,
+        "state": "playing",
+        "minimumRemaining": 1,
+        "legal": 5,
+        "viable": 5
+      },
+      {
+        "step": "unload:medlar+orin",
+        "turn": 12,
+        "state": "won",
+        "minimumRemaining": 0,
+        "legal": 0,
+        "viable": 0
+      }
+    ],
+    "wrongPlanEndpoint": {
+      "step": "unload:orin+pomme",
+      "turn": 12,
+      "state": "won",
+      "minimumRemaining": 0,
+      "legal": 0,
+      "viable": 0
+    }
+  }
+}

@@ -1,0 +1,268 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "wide-berth.spec.ts",
+      "-g",
+      "historical two|original profiles|launch playback"
+    ],
+    "configFile": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\playwright.config.ts",
+    "rootDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "snapshotDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5270",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "deviceScaleFactor": 1,
+          "headless": true,
+          "launchOptions": {
+            "args": [
+              "--use-angle=swiftshader",
+              "--enable-unsafe-swiftshader"
+            ]
+          },
+          "video": {
+            "mode": "on",
+            "size": {
+              "width": 1440,
+              "height": 900
+            }
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "reviews/wide-berth/initial/automation-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "wide-berth.spec.ts",
+      "file": "wide-berth.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "historical two and three boundaries stay read-only then advance fresh and restore recap",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 300000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11545,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T18:36:26.859Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "749affe70e9d664edb6d-4a6efa11f280a6693ec8",
+          "file": "wide-berth.spec.ts",
+          "line": 467,
+          "column": 1
+        },
+        {
+          "title": "original profiles, dynamic Help, reduced transfers, keyboard and fullscreen lifecycle",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 300000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 3381,
+                  "error": {
+                    "message": "Error: page.setViewportSize: Protocol error (Browser.setWindowBounds): To resize minimized/maximized/fullscreen window, restore it to normal state first.",
+                    "stack": "Error: page.setViewportSize: Protocol error (Browser.setWindowBounds): To resize minimized/maximized/fullscreen window, restore it to normal state first.\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\wide-berth.spec.ts:531:16",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\wide-berth.spec.ts",
+                      "column": 16,
+                      "line": 531
+                    },
+                    "snippet": "  529 |     await activate(page, 'fullscreen', true);\n  530 |     await expect.poll(() => page.evaluate(() => document.fullscreenElement?.id)).toBe('app');\n> 531 |     await page.setViewportSize({ width: 390, height: 844 });\n      |                ^\n  532 |     await page.evaluate(() => document.exitFullscreen());\n  533 |     await page.keyboard.press('Escape');\n  534 |     await page.keyboard.press('Escape');"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\wide-berth.spec.ts",
+                        "column": 16,
+                        "line": 531
+                      },
+                      "message": "Error: page.setViewportSize: Protocol error (Browser.setWindowBounds): To resize minimized/maximized/fullscreen window, restore it to normal state first.\n\n  529 |     await activate(page, 'fullscreen', true);\n  530 |     await expect.poll(() => page.evaluate(() => document.fullscreenElement?.id)).toBe('app');\n> 531 |     await page.setViewportSize({ width: 390, height: 844 });\n      |                ^\n  532 |     await page.evaluate(() => document.exitFullscreen());\n  533 |     await page.keyboard.press('Escape');\n  534 |     await page.keyboard.press('Escape');\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\wide-berth.spec.ts:531:16"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T18:36:38.650Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\wide-berth-original-profil-72341-rd-and-fullscreen-lifecycle\\error-context.md"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\wide-berth-original-profil-72341-rd-and-fullscreen-lifecycle\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\wide-berth.spec.ts",
+                    "column": 16,
+                    "line": 531
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "749affe70e9d664edb6d-76545a94a70c0c3a2e8e",
+          "file": "wide-berth.spec.ts",
+          "line": 511,
+          "column": 1
+        },
+        {
+          "title": "launch playback intent, pause, skip, replay, mute and controlled background recovery",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 300000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8021,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T18:36:43.643Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "749affe70e9d664edb6d-4cdccd6357a9ce420bfc",
+          "file": "wide-berth.spec.ts",
+          "line": 567,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-31T18:36:26.216Z",
+    "duration": 26554.66,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

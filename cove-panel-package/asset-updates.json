@@ -1,0 +1,69 @@
+{
+  "purpose": "Integration update plan only; merge into the existing assets/catalog.json, never replace it with this file.",
+  "sourceCommit": "a4325353cf11cd4edba8d5384b58fe138e4772e3",
+  "newAssetFamilyRequired": false,
+  "candidateStatus": "authored material; not integrated or human accepted",
+  "entries": [
+    {
+      "id": "ui.component.panel",
+      "operation": "update",
+      "sources": [
+        "cove-panel-package/material/cove-panel-material.css",
+        "cove-panel-package/material/shoreline-corner.svg"
+      ],
+      "variants": [
+        "ordinary",
+        "compact without motif",
+        "arrival upper highlight"
+      ],
+      "requirements": [
+        "Record the final canonical runtime path rather than two maintained copies.",
+        "Opaque reading face; existing layout and native controls own geometry and interaction.",
+        "Same source in runtime and gallery; actual game evidence distinct from specimen."
+      ]
+    },
+    {
+      "id": "material.cove-ui-tokens",
+      "operation": "update",
+      "requirements": [
+        "Record exact final face/rim/edge tokens and explicit opacity contract.",
+        "Keep existing buttons, typography, warnings and semantic warm accents.",
+        "Do not replace historical contrast evidence with unverified candidate numbers."
+      ]
+    },
+    {
+      "id": "ui.component.passenger-choice",
+      "operation": "update",
+      "requirements": [
+        "Check plus name and full capacity readable at actual panel width.",
+        "Adaptive columns with stable control order and visible focus.",
+        "Native aria-pressed buttons, 48px primary targets and no horizontal clipping."
+      ]
+    },
+    {
+      "id": "ui.surfaces",
+      "operation": "update",
+      "requirements": [
+        "Share material across actual reading surfaces without growing HUD or shrinking scene.",
+        "Preserve warning/focus specificity and compact variants."
+      ]
+    },
+    {
+      "id": "ui.dialogs",
+      "operation": "update",
+      "requirements": [
+        "Future-state preview text and qualified projected load/tide.",
+        "Stable footer and nearby placement across subset toggles.",
+        "Same dialog/focus/subset/scroll retained across fullscreen.",
+        "Add three-passenger Harbor pre-confirmation evidence and nested text-fit checks."
+      ]
+    }
+  ],
+  "relatedDocumentation": [
+    "docs/UI_STYLE_GUIDE.md",
+    "docs/ASSET_LEDGER.md",
+    "docs/PROJECT_STATE.md",
+    "STATUS.md"
+  ],
+  "gallery": "Extend existing developer gallery with runtime material, narrow 3-passenger specimen and warning/focus variants."
+}

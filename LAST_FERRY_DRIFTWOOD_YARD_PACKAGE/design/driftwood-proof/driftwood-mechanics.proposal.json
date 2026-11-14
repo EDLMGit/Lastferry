@@ -1,0 +1,46 @@
+{
+  "proposalStatus": "Mechanical candidate only; not a shippable level. Author and verify island/route/berth geometry and actual phone play before acceptance.",
+  "id": "driftwood-yard",
+  "title": "Driftwood Yard",
+  "rules": {
+    "capacity": 4,
+    "draftBands": [{"maxLoad":0,"draft":1},{"maxLoad":2,"draft":2},{"maxLoad":4,"draft":3}],
+    "tide": {"initialLevel":0,"rises":[{"afterTurn":7,"level":1},{"afterTurn":11,"level":2}]},
+    "actionCost": 1,
+    "depthFormula": "baseDepth + tideLevel",
+    "pierDryWhen": "tideLevel < elevation",
+    "failureRule": "required passenger waiting at a flooded pier"
+  },
+  "names": {
+    "nodes": {"harbor":"Harbor","yard":"Driftwood Yard","mooring":"High Mooring","bend":"Shallow Bend","reeds":"Reed Landing"},
+    "passengers": {"nell":"Nell","fern":"Fern","oat":"Oat"}
+  },
+  "nodes": [
+    {"id":"harbor","baseDepth":3,"pierId":"harbor-pier"},
+    {"id":"yard","baseDepth":3,"pierId":"yard-pier"},
+    {"id":"mooring","baseDepth":3,"pierId":"mooring-pier"},
+    {"id":"bend","baseDepth":3},
+    {"id":"reeds","baseDepth":3,"pierId":"reeds-pier"}
+  ],
+  "edges": [
+    {"id":"harbor-yard","nodes":["harbor","yard"],"baseDepth":2,"bidirectional":true},
+    {"id":"yard-mooring","nodes":["yard","mooring"],"baseDepth":2,"bidirectional":true},
+    {"id":"harbor-mooring","nodes":["harbor","mooring"],"baseDepth":3,"bidirectional":true},
+    {"id":"mooring-bend","nodes":["mooring","bend"],"baseDepth":1,"bidirectional":true},
+    {"id":"bend-reeds","nodes":["bend","reeds"],"baseDepth":1,"bidirectional":true}
+  ],
+  "piers": [
+    {"id":"harbor-pier","nodeId":"harbor","elevation":3,"isDeliveryPier":true},
+    {"id":"yard-pier","nodeId":"yard","elevation":1,"isDeliveryPier":false},
+    {"id":"mooring-pier","nodeId":"mooring","elevation":3,"isDeliveryPier":false},
+    {"id":"reeds-pier","nodeId":"reeds","elevation":1,"isDeliveryPier":false}
+  ],
+  "passengers": [
+    {"id":"nell","species":"beaver","slots":2},
+    {"id":"fern","species":"rabbit","slots":1},
+    {"id":"oat","species":"rabbit","slots":1}
+  ],
+  "start": {"boatNodeId":"harbor","aboard":[],"waitingByPier":{"harbor-pier":[],"yard-pier":["nell"],"mooring-pier":[],"reeds-pier":["fern","oat"]}},
+  "objective": {"deliveryPierId":"harbor-pier","requiredPassengerIds":["nell","fern","oat"]},
+  "validation": {"witnessReplays":["witnesses.json"],"searchDepthLimit":24}
+}

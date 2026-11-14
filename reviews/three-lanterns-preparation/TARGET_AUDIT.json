@@ -1,0 +1,271 @@
+{
+  "reviewedCommit": "9933303178da04cac93ddc820ef55e181286d983",
+  "nodeVersion": "v24.22.1",
+  "method": "Exhaustive production legalActions/reduce BFS with post-final-tide equivalent-turn normalization; exact source blobs; temporary import-specifier adaptation only.",
+  "results": [
+    {
+      "id": "first-crossing",
+      "minimum": 7,
+      "target": 8,
+      "states": 502,
+      "transitions": 1585,
+      "witnesses": [
+        {
+          "id": "full-boat-detour",
+          "source": "data/replays/full-boat-detour.json",
+          "actions": 7,
+          "status": "won",
+          "qualifies": true,
+          "description": "Canonical tutorial witness: a full boat cannot use the shallow cut at tide 0, so take the safe deep detour."
+        },
+        {
+          "id": "wait-for-tide",
+          "source": "data/replays/wait-for-tide.json",
+          "actions": 7,
+          "status": "won",
+          "qualifies": true,
+          "description": "Equally valid tutorial solution: wait safely with everyone aboard until the shallow cut becomes deep enough."
+        },
+        {
+          "id": "harbor-first",
+          "source": "data/replays/harbor-first.json",
+          "actions": 8,
+          "status": "won",
+          "qualifies": true,
+          "description": "Valid alternative: deliver the rabbits first, then collect the sheep with a lighter boat."
+        }
+      ]
+    },
+    {
+      "id": "holding-pier",
+      "minimum": 9,
+      "target": 9,
+      "states": 148,
+      "transitions": 495,
+      "witnesses": [
+        {
+          "id": "canonical",
+          "source": "data/experiments/holding-pier-solution.json",
+          "actions": 9,
+          "status": "won",
+          "qualifies": true,
+          "description": "Developer witness; do not display as an in-game hint."
+        }
+      ]
+    },
+    {
+      "id": "bellwater",
+      "minimum": 10,
+      "target": 10,
+      "states": 121,
+      "transitions": 305,
+      "witnesses": [
+        {
+          "id": "shallow-outward-deep-return",
+          "source": "data/bellwater/witnesses.json",
+          "actions": 10,
+          "status": "won",
+          "qualifies": true,
+          "description": null
+        },
+        {
+          "id": "deep-outward-shallow-return",
+          "source": "data/bellwater/witnesses.json",
+          "actions": 10,
+          "status": "won",
+          "qualifies": true,
+          "description": null
+        },
+        {
+          "id": "wait-at-harbor",
+          "source": "data/bellwater/witnesses.json",
+          "actions": 10,
+          "status": "won",
+          "qualifies": true,
+          "description": null
+        },
+        {
+          "id": "wait-at-shallows",
+          "source": "data/bellwater/witnesses.json",
+          "actions": 10,
+          "status": "won",
+          "qualifies": true,
+          "description": null
+        },
+        {
+          "id": "wait-at-low-pier-before-boarding",
+          "source": "data/bellwater/witnesses.json",
+          "actions": 10,
+          "status": "won",
+          "qualifies": true,
+          "description": null
+        },
+        {
+          "id": "wait-at-low-pier-after-boarding",
+          "source": "data/bellwater/witnesses.json",
+          "actions": 10,
+          "status": "won",
+          "qualifies": true,
+          "description": null
+        },
+        {
+          "id": "tansy-then-lark",
+          "source": "data/bellwater/witnesses.json",
+          "actions": 10,
+          "status": "won",
+          "qualifies": true,
+          "description": null
+        },
+        {
+          "id": "lark-then-tansy",
+          "source": "data/bellwater/witnesses.json",
+          "actions": 10,
+          "status": "won",
+          "qualifies": true,
+          "description": null
+        }
+      ]
+    },
+    {
+      "id": "driftwood-yard",
+      "minimum": 12,
+      "target": 12,
+      "states": 237,
+      "transitions": 830,
+      "witnesses": [
+        {
+          "id": "stage-nell-collect-group",
+          "source": "data/driftwood-yard/witnesses.json",
+          "actions": 12,
+          "status": "won",
+          "qualifies": true,
+          "description": "Rescue Nell to the nearby high landing, save both rabbits at the rise, return for Nell and bring all three home together."
+        },
+        {
+          "id": "stage-nell-deliver-rabbits-first",
+          "source": "data/driftwood-yard/witnesses.json",
+          "actions": 15,
+          "status": "won",
+          "qualifies": false,
+          "description": "Same critical rescue plan, then deliver the rabbits before collecting Nell. This is a different safe delivery order, not a second distinct critical rescue strategy."
+        }
+      ]
+    },
+    {
+      "id": "two-shelters",
+      "minimum": 11,
+      "target": 12,
+      "states": 475,
+      "transitions": 1560,
+      "witnesses": [
+        {
+          "id": "low-rabbit-home-first",
+          "source": "data/two-shelters/witnesses.json",
+          "actions": 11,
+          "status": "won",
+          "qualifies": true,
+          "description": "Use the low shelter, take Mica home first, then board both larger neighbors exactly before the second rise."
+        },
+        {
+          "id": "high-mixed-first",
+          "source": "data/two-shelters/witnesses.json",
+          "actions": 12,
+          "status": "won",
+          "qualifies": true,
+          "description": "Use the high refuge, combine Hazel with Mica on the first delivery, then return for Bracken after the second rise."
+        },
+        {
+          "id": "high-rabbit-home-first",
+          "source": "data/two-shelters/witnesses.json",
+          "actions": 11,
+          "status": "won",
+          "qualifies": true,
+          "description": "The high refuge also permits delivering Mica before retrieving both larger neighbors."
+        },
+        {
+          "id": "low-separate-subsets",
+          "source": "data/two-shelters/witnesses.json",
+          "actions": 11,
+          "status": "won",
+          "qualifies": true,
+          "description": "Separate one-neighbor unloading actions use the same first-rise budget; useful actual-UI subset witness."
+        }
+      ]
+    },
+    {
+      "id": "wide-berth",
+      "minimum": 12,
+      "target": 14,
+      "states": 1614,
+      "transitions": 5549,
+      "witnesses": [
+        {
+          "id": "light-through-beacon",
+          "source": "data/wide-berth/witnesses.json",
+          "actions": 12,
+          "status": "won",
+          "qualifies": true,
+          "description": "Put the two sheep ashore at High Quay. Carry two rabbits through Beacon Reef at low water. Return light and use the inner channel to fetch the second rabbit pair, then board the sheep for the deep final crossing."
+        },
+        {
+          "id": "bring-the-quay-via-outer",
+          "source": "data/wide-berth/witnesses.json",
+          "actions": 14,
+          "status": "won",
+          "qualifies": true,
+          "description": "Send Alder through the first homeward tide. After returning, board the staged four spaces first. Take the deep outer approach to Shell Landing, board its pair before the flood and return with five bodies occupying six spaces."
+        }
+      ]
+    },
+    {
+      "id": "reef-return",
+      "minimum": 10,
+      "target": 11,
+      "states": 516,
+      "transitions": 1353,
+      "witnesses": [
+        {
+          "id": "gather-before-reef",
+          "source": "data/reef-return/witnesses.json",
+          "actions": 10,
+          "status": "won",
+          "qualifies": true,
+          "description": null
+        },
+        {
+          "id": "relay-through-shell-pool",
+          "source": "data/reef-return/witnesses.json",
+          "actions": 11,
+          "status": "won",
+          "qualifies": true,
+          "description": null
+        }
+      ]
+    },
+    {
+      "id": "orchard-landing",
+      "minimum": 12,
+      "target": 13,
+      "states": 482,
+      "transitions": 1311,
+      "witnesses": [
+        {
+          "id": "stage-the-orchard-escort",
+          "source": "data/orchard-landing/witnesses.json",
+          "actions": 12,
+          "status": "won",
+          "qualifies": true,
+          "description": null
+        },
+        {
+          "id": "return-to-spring-steps",
+          "source": "data/orchard-landing/witnesses.json",
+          "actions": 13,
+          "status": "won",
+          "qualifies": true,
+          "description": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,504 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "tests/e2e/production.spec.ts",
+      "tests/e2e/victory-mix.spec.ts",
+      "tests/e2e/transfer-audio.spec.ts",
+      "tests/e2e/homecoming.spec.ts",
+      "tests/e2e/sailing-direction-wake.spec.ts",
+      "--grep",
+      "production bundle|victory mix: visible final arrival|transfer audio: real UI|homecoming settings:|homecoming recovery:|direction:"
+    ],
+    "configFile": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\playwright.config.ts",
+    "rootDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "snapshotDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5211",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "deviceScaleFactor": 1,
+          "headless": true,
+          "launchOptions": {
+            "args": [
+              "--use-angle=swiftshader",
+              "--enable-unsafe-swiftshader"
+            ]
+          },
+          "video": {
+            "mode": "on",
+            "size": {
+              "width": 1440,
+              "height": 900
+            }
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "reviews/phone-playability/browser-regression/automation-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "homecoming.spec.ts",
+      "file": "homecoming.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "homecoming settings: natural keyboard, device and persisted Reduced preference, loss has no arrival",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11638,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T18:39:16.412Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\homecoming-homecoming-sett-eacaa-ference-loss-has-no-arrival\\video.webm"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "45d724c51660ed8253cd-f8933ea55580fd8c2cbb",
+          "file": "homecoming.spec.ts",
+          "line": 447,
+          "column": 1
+        },
+        {
+          "title": "homecoming recovery: simulated hide and context loss settle finite motion without replay or resource growth",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 23846,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 8\u001b[39m\n\u001b[31m+ Received  + 8\u001b[39m\n\n\u001b[2m  Object {\u001b[22m\n\u001b[32m-   \"bottom\": -3.5685411389099766,\u001b[39m\n\u001b[32m-   \"left\": -8.440640614473521,\u001b[39m\n\u001b[31m+   \"bottom\": -3.5243115899220276,\u001b[39m\n\u001b[31m+   \"left\": -8.400655179277729,\u001b[39m\n\u001b[2m    \"position\": Array [\u001b[22m\n\u001b[2m      0,\u001b[22m\n\u001b[2m      34,\u001b[22m\n\u001b[2m      24,\u001b[22m\n\u001b[2m    ],\u001b[22m\n\u001b[2m    \"projection\": Array [\u001b[22m\n\u001b[32m-     0.11951018272697603,\u001b[39m\n\u001b[31m+     0.12008402425086283,\u001b[39m\n\u001b[2m      0,\u001b[22m\n\u001b[2m      0,\u001b[22m\n\u001b[2m      0,\u001b[22m\n\u001b[2m      0,\u001b[22m\n\u001b[32m-     0.19121629236316168,\u001b[39m\n\u001b[31m+     0.19213443880138054,\u001b[39m\n\u001b[2m      0,\u001b[22m\n\u001b[2m      0,\u001b[22m\n\u001b[2m      0,\u001b[22m\n\u001b[2m      0,\u001b[22m\n\u001b[2m      -0.02002002002002002,\u001b[22m\n\u001b[2m      0,\u001b[22m\n\u001b[32m-     0.008742502168465715,\u001b[39m\n\u001b[32m-     -0.31763679427222,\u001b[39m\n\u001b[31m+     0.008784480271523233,\u001b[39m\n\u001b[31m+     -0.3228583705091301,\u001b[39m\n\u001b[2m      -1.002002002002002,\u001b[22m\n\u001b[2m      1,\u001b[22m\n\u001b[2m    ],\u001b[22m\n\u001b[32m-   \"right\": 8.294335053407847,\u001b[39m\n\u001b[32m-   \"top\": 6.890818653515877,\u001b[39m\n\u001b[31m+   \"right\": 8.254349618212055,\u001b[39m\n\u001b[31m+   \"top\": 6.885066408509087,\u001b[39m\n\u001b[2m  }\u001b[22m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 8\u001b[39m\n\u001b[31m+ Received  + 8\u001b[39m\n\n\u001b[2m  Object {\u001b[22m\n\u001b[32m-   \"bottom\": -3.5685411389099766,\u001b[39m\n\u001b[32m-   \"left\": -8.440640614473521,\u001b[39m\n\u001b[31m+   \"bottom\": -3.5243115899220276,\u001b[39m\n\u001b[31m+   \"left\": -8.400655179277729,\u001b[39m\n\u001b[2m    \"position\": Array [\u001b[22m\n\u001b[2m      0,\u001b[22m\n\u001b[2m      34,\u001b[22m\n\u001b[2m      24,\u001b[22m\n\u001b[2m    ],\u001b[22m\n\u001b[2m    \"projection\": Array [\u001b[22m\n\u001b[32m-     0.11951018272697603,\u001b[39m\n\u001b[31m+     0.12008402425086283,\u001b[39m\n\u001b[2m      0,\u001b[22m\n\u001b[2m      0,\u001b[22m\n\u001b[2m      0,\u001b[22m\n\u001b[2m      0,\u001b[22m\n\u001b[32m-     0.19121629236316168,\u001b[39m\n\u001b[31m+     0.19213443880138054,\u001b[39m\n\u001b[2m      0,\u001b[22m\n\u001b[2m      0,\u001b[22m\n\u001b[2m      0,\u001b[22m\n\u001b[2m      0,\u001b[22m\n\u001b[2m      -0.02002002002002002,\u001b[22m\n\u001b[2m      0,\u001b[22m\n\u001b[32m-     0.008742502168465715,\u001b[39m\n\u001b[32m-     -0.31763679427222,\u001b[39m\n\u001b[31m+     0.008784480271523233,\u001b[39m\n\u001b[31m+     -0.3228583705091301,\u001b[39m\n\u001b[2m      -1.002002002002002,\u001b[22m\n\u001b[2m      1,\u001b[22m\n\u001b[2m    ],\u001b[22m\n\u001b[32m-   \"right\": 8.294335053407847,\u001b[39m\n\u001b[32m-   \"top\": 6.890818653515877,\u001b[39m\n\u001b[31m+   \"right\": 8.254349618212055,\u001b[39m\n\u001b[31m+   \"top\": 6.885066408509087,\u001b[39m\n\u001b[2m  }\u001b[22m\n    at restoredMap (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\homecoming.spec.ts:221:38)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\homecoming.spec.ts:560:5\n    at observed (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\homecoming.spec.ts:96:5)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\homecoming.spec.ts:518:3",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\homecoming.spec.ts",
+                      "column": 38,
+                      "line": 221
+                    },
+                    "snippet": "  219 |\n  220 | async function restoredMap(page: Page, camera: any) {\n> 221 |   expect((await scene(page)).camera).toEqual(camera);\n      |                                      ^\n  222 |   const markers = await page.evaluate(() => {\n  223 |     const frame = (window as any).__LAST_FERRY__.getFrameStatus(),\n  224 |       canvas = document.querySelector('canvas')!.getBoundingClientRect();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\homecoming.spec.ts",
+                        "column": 38,
+                        "line": 221
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 8\u001b[39m\n\u001b[31m+ Received  + 8\u001b[39m\n\n\u001b[2m  Object {\u001b[22m\n\u001b[32m-   \"bottom\": -3.5685411389099766,\u001b[39m\n\u001b[32m-   \"left\": -8.440640614473521,\u001b[39m\n\u001b[31m+   \"bottom\": -3.5243115899220276,\u001b[39m\n\u001b[31m+   \"left\": -8.400655179277729,\u001b[39m\n\u001b[2m    \"position\": Array [\u001b[22m\n\u001b[2m      0,\u001b[22m\n\u001b[2m      34,\u001b[22m\n\u001b[2m      24,\u001b[22m\n\u001b[2m    ],\u001b[22m\n\u001b[2m    \"projection\": Array [\u001b[22m\n\u001b[32m-     0.11951018272697603,\u001b[39m\n\u001b[31m+     0.12008402425086283,\u001b[39m\n\u001b[2m      0,\u001b[22m\n\u001b[2m      0,\u001b[22m\n\u001b[2m      0,\u001b[22m\n\u001b[2m      0,\u001b[22m\n\u001b[32m-     0.19121629236316168,\u001b[39m\n\u001b[31m+     0.19213443880138054,\u001b[39m\n\u001b[2m      0,\u001b[22m\n\u001b[2m      0,\u001b[22m\n\u001b[2m      0,\u001b[22m\n\u001b[2m      0,\u001b[22m\n\u001b[2m      -0.02002002002002002,\u001b[22m\n\u001b[2m      0,\u001b[22m\n\u001b[32m-     0.008742502168465715,\u001b[39m\n\u001b[32m-     -0.31763679427222,\u001b[39m\n\u001b[31m+     0.008784480271523233,\u001b[39m\n\u001b[31m+     -0.3228583705091301,\u001b[39m\n\u001b[2m      -1.002002002002002,\u001b[22m\n\u001b[2m      1,\u001b[22m\n\u001b[2m    ],\u001b[22m\n\u001b[32m-   \"right\": 8.294335053407847,\u001b[39m\n\u001b[32m-   \"top\": 6.890818653515877,\u001b[39m\n\u001b[31m+   \"right\": 8.254349618212055,\u001b[39m\n\u001b[31m+   \"top\": 6.885066408509087,\u001b[39m\n\u001b[2m  }\u001b[22m\n\n  219 |\n  220 | async function restoredMap(page: Page, camera: any) {\n> 221 |   expect((await scene(page)).camera).toEqual(camera);\n      |                                      ^\n  222 |   const markers = await page.evaluate(() => {\n  223 |     const frame = (window as any).__LAST_FERRY__.getFrameStatus(),\n  224 |       canvas = document.querySelector('canvas')!.getBoundingClientRect();\n    at restoredMap (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\homecoming.spec.ts:221:38)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\homecoming.spec.ts:560:5\n    at observed (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\homecoming.spec.ts:96:5)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\homecoming.spec.ts:518:3"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T18:39:28.168Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\homecoming-homecoming-reco-a4ff2-t-replay-or-resource-growth\\video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\homecoming-homecoming-reco-a4ff2-t-replay-or-resource-growth\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\homecoming.spec.ts",
+                    "column": 38,
+                    "line": 221
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "45d724c51660ed8253cd-8952387a117ebc410769",
+          "file": "homecoming.spec.ts",
+          "line": 513,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "production.spec.ts",
+      "file": "production.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "production bundle: real rescue without debug globals or external assets",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 14859,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T18:39:53.571Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\production-production-bund-2b345--globals-or-external-assets\\video.webm"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ed69554c53210704c98c-9803c16ade72c886155b",
+          "file": "production.spec.ts",
+          "line": 4,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "sailing-direction-wake.spec.ts",
+      "file": "sailing-direction-wake.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "direction: free-water heading, both berths, transfer/tide Undo and winning pose remain paired",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 40896,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T18:40:08.559Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f90bbba4fe38542521ba-f78ad6416aca76615ec4",
+          "file": "sailing-direction-wake.spec.ts",
+          "line": 71,
+          "column": 1
+        },
+        {
+          "title": "direction: normal, hidden, device Reduced, recovery and animation failures settle the same planned pose once",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 23538,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T18:40:49.473Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\sailing-direction-wake-dir-3a04e--the-same-planned-pose-once\\video.webm"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f90bbba4fe38542521ba-05ca768f75c78c63711d",
+          "file": "sailing-direction-wake.spec.ts",
+          "line": 221,
+          "column": 1
+        },
+        {
+          "title": "direction: released crests retain their release data as the next journey turns and tide moves their height",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 13287,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T18:41:13.023Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\sailing-direction-wake-dir-39076-and-tide-moves-their-height\\video.webm"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f90bbba4fe38542521ba-972b8cface83d0cc89f0",
+          "file": "sailing-direction-wake.spec.ts",
+          "line": 325,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "transfer-audio.spec.ts",
+      "file": "transfer-audio.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "transfer audio: real UI normal rescue, subsets, tide Undo/replay and separate Harbor delivery",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 27831,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T18:41:26.343Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "0b6229a73b76f0490231-58391fc0591659b0fc0f",
+          "file": "transfer-audio.spec.ts",
+          "line": 177,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "victory-mix.spec.ts",
+      "file": "victory-mix.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "victory mix: visible final arrival, persistent ending, Undo/redelivery and next cove",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 37473,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T18:41:54.225Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\victory-mix-victory-mix-vi-b0d40-do-redelivery-and-next-cove\\video.webm"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "22d64b9cddb23863f5b9-eeaffb684d2edbd1f1b6",
+          "file": "victory-mix.spec.ts",
+          "line": 144,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-24T18:39:15.856Z",
+    "duration": 196703.544,
+    "expected": 7,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

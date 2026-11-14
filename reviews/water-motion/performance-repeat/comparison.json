@@ -1,0 +1,255 @@
+{
+  "method": "One matched low-overhead repeat, identical restrained2076ms plan, 844x390 DPR1 SwiftShader, same actual UI setup/load/tide/route directions. No video or per-frame geometry/environment/route-buffer copy. Metrics/state/transition reads only. Instrumented timing is not native-GPU or Android evidence.",
+  "rows": [
+    {
+      "run": "baseline",
+      "runtimeHash": "d943620659412c6af9a5254cb69c7277da9cded6641eaebf4ed5a4031c717d5b",
+      "sourceUnchanged": true,
+      "method": "rAF intervals and small transition/metrics/state reads; no per-frame environment or route-buffer copy",
+      "plan": [
+        {
+          "duration": 2076.1522096757963,
+          "tideDuration": 550,
+          "recoveryDelay": 3076.1522096757963
+        },
+        {
+          "duration": 2076.1522096757963,
+          "tideDuration": 550,
+          "recoveryDelay": 3076.1522096757963
+        }
+      ],
+      "crossings": [
+        {
+          "action": "map-west-buoy",
+          "before": {
+            "turn": 4,
+            "tideLevel": 1,
+            "boatNodeId": "east-buoy",
+            "aboard": [
+              "tansy",
+              "lark"
+            ],
+            "waitingByPier": {
+              "harbor-pier": [],
+              "low-pier": [],
+              "bell-pier": [
+                "bram"
+              ]
+            },
+            "delivered": [],
+            "status": "playing",
+            "lossReason": null
+          },
+          "after": {
+            "turn": 5,
+            "tideLevel": 1,
+            "boatNodeId": "west-buoy",
+            "aboard": [
+              "tansy",
+              "lark"
+            ],
+            "waitingByPier": {
+              "harbor-pier": [],
+              "low-pier": [],
+              "bell-pier": [
+                "bram"
+              ]
+            },
+            "delivered": [],
+            "status": "playing",
+            "lossReason": null
+          },
+          "actualMs": 2113.7000000178814
+        },
+        {
+          "action": "map-east-buoy",
+          "before": {
+            "turn": 5,
+            "tideLevel": 1,
+            "boatNodeId": "west-buoy",
+            "aboard": [
+              "tansy",
+              "lark"
+            ],
+            "waitingByPier": {
+              "harbor-pier": [],
+              "low-pier": [],
+              "bell-pier": [
+                "bram"
+              ]
+            },
+            "delivered": [],
+            "status": "playing",
+            "lossReason": null
+          },
+          "after": {
+            "turn": 6,
+            "tideLevel": 1,
+            "boatNodeId": "east-buoy",
+            "aboard": [
+              "tansy",
+              "lark"
+            ],
+            "waitingByPier": {
+              "harbor-pier": [],
+              "low-pier": [],
+              "bell-pier": [
+                "bram"
+              ]
+            },
+            "delivered": [],
+            "status": "playing",
+            "lossReason": null
+          },
+          "actualMs": 2134
+        }
+      ],
+      "idle": {
+        "count": 60,
+        "median": 33.399999999999636,
+        "p95": 83.29999999999927,
+        "maximum": 83.40000000000146
+      },
+      "active": {
+        "count": 109,
+        "median": 33.39999999999782,
+        "p95": 50.100000000000364,
+        "maximum": 83.39999999999964
+      },
+      "steadyDrawCalls": [
+        566
+      ],
+      "resources": {
+        "geometries": 305,
+        "textures": 6,
+        "programs": 20,
+        "sweepObjects": 1
+      }
+    },
+    {
+      "run": "after",
+      "runtimeHash": "be1d42f21ba0b4f45687fda21c1db730254e5f68dfc7a0ccd7eba16956a8c62b",
+      "sourceUnchanged": true,
+      "method": "rAF intervals and small transition/metrics/state reads; no per-frame environment or route-buffer copy",
+      "plan": [
+        {
+          "duration": 2076.1522096757963,
+          "tideDuration": 550,
+          "recoveryDelay": 3076.1522096757963
+        },
+        {
+          "duration": 2076.1522096757963,
+          "tideDuration": 550,
+          "recoveryDelay": 3076.1522096757963
+        }
+      ],
+      "crossings": [
+        {
+          "action": "map-west-buoy",
+          "before": {
+            "turn": 4,
+            "tideLevel": 1,
+            "boatNodeId": "east-buoy",
+            "aboard": [
+              "tansy",
+              "lark"
+            ],
+            "waitingByPier": {
+              "harbor-pier": [],
+              "low-pier": [],
+              "bell-pier": [
+                "bram"
+              ]
+            },
+            "delivered": [],
+            "status": "playing",
+            "lossReason": null
+          },
+          "after": {
+            "turn": 5,
+            "tideLevel": 1,
+            "boatNodeId": "west-buoy",
+            "aboard": [
+              "tansy",
+              "lark"
+            ],
+            "waitingByPier": {
+              "harbor-pier": [],
+              "low-pier": [],
+              "bell-pier": [
+                "bram"
+              ]
+            },
+            "delivered": [],
+            "status": "playing",
+            "lossReason": null
+          },
+          "actualMs": 2104.0999999940395
+        },
+        {
+          "action": "map-east-buoy",
+          "before": {
+            "turn": 5,
+            "tideLevel": 1,
+            "boatNodeId": "west-buoy",
+            "aboard": [
+              "tansy",
+              "lark"
+            ],
+            "waitingByPier": {
+              "harbor-pier": [],
+              "low-pier": [],
+              "bell-pier": [
+                "bram"
+              ]
+            },
+            "delivered": [],
+            "status": "playing",
+            "lossReason": null
+          },
+          "after": {
+            "turn": 6,
+            "tideLevel": 1,
+            "boatNodeId": "east-buoy",
+            "aboard": [
+              "tansy",
+              "lark"
+            ],
+            "waitingByPier": {
+              "harbor-pier": [],
+              "low-pier": [],
+              "bell-pier": [
+                "bram"
+              ]
+            },
+            "delivered": [],
+            "status": "playing",
+            "lossReason": null
+          },
+          "actualMs": 2119.199999988079
+        }
+      ],
+      "idle": {
+        "count": 60,
+        "median": 33.399999999999636,
+        "p95": 66.60000000000036,
+        "maximum": 83.39999999999964
+      },
+      "active": {
+        "count": 106,
+        "median": 33.399999999999636,
+        "p95": 50.099999999998545,
+        "maximum": 83.29999999999927
+      },
+      "steadyDrawCalls": [
+        566
+      ],
+      "resources": {
+        "geometries": 305,
+        "textures": 6,
+        "programs": 20,
+        "sweepObjects": 1
+      }
+    }
+  ]
+}

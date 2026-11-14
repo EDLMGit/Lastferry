@@ -1,0 +1,50 @@
+{
+  "recordedAt": "2026-10-24T22:56:31.383Z",
+  "evidenceSource": "291fb4fa24d02dbab84dfe6eca2abc5c29b6d411 plus tested-source.patch",
+  "sourceHash": "d01b2d45871890df6c0267327ed1fc15eeede2dcb9c07f30bd52d220574815b4",
+  "runtimeHash": "d76f3ea86d53f8affc7c1984f5737caca5819e63f46d191ed41a8e2e3c110c55",
+  "node": "24.15.0",
+  "npm": "11.12.1",
+  "checks": [
+    {
+      "command": "npm run build",
+      "result": "pass",
+      "includes": "npm run typecheck",
+      "rawLog": "build-results.txt",
+      "rootSession": 26555
+    },
+    {
+      "command": "npm run test:unit -- --maxWorkers=1",
+      "result": "pass",
+      "tests": 200,
+      "files": 27,
+      "durationSeconds": 9.55,
+      "rawLog": "unit-results.txt",
+      "rootSession": 26555
+    },
+    {
+      "command": "npm run typecheck",
+      "result": "pass",
+      "stage": "After final test/helper additions and source snapshot",
+      "rawLog": "typecheck-final.txt"
+    }
+  ],
+  "dist": [
+    {
+      "path": "dist/index.html",
+      "bytes": 484,
+      "sha256": "8a8a3fda2c29e4ed509428e8e78d74494c6c9b6dd34ac98676106880cb37a188"
+    },
+    {
+      "path": "dist/assets/index-DX2GiEJi.css",
+      "bytes": 15612,
+      "sha256": "e8ad37cadc45e83f2176cd623a8c9b14e84c4ed3a204ff632a114ce346d1f40a"
+    },
+    {
+      "path": "dist/assets/index-t90O8zhn.js",
+      "bytes": 756995,
+      "sha256": "3f6426160884a3364f5512350008d3e82ed13d2d0db511bc89c5ddca8dc6224d"
+    }
+  ],
+  "note": "No repeated build/units for subsequent fixture/prose-only changes; source-reuse identifies unchanged implementation inputs. Existing chunk advisory remains."
+}

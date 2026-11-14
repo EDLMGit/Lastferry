@@ -1,0 +1,16 @@
+{
+  "selectionOriginalRun": "browser-selection-regression",
+  "selectionOriginalResult": "2failed fixture contracts; trusted gameplay outcomes were recorded correctly",
+  "selectionCorrections": [
+    "The first historical test demanded the next Sail land inside the previous card rectangle. Nearby placement intentionally moved the new control234CSSpx vertically; remove only that obsolete co-location assumption, retaining actual trusted inputs,180ms time window, turn/history and current dock readiness.",
+    "The second historical fixture performed full-scene snapshots and several driver reads between rapid touches, producing277.3ms and missing the intended180ms window. Capture state/modal/selection at the real trusted input listener, then inspect afterward. Preserve the same180ms threshold and prove the repeat opens no dialog/spends no action before deliberate Board."
+  ],
+  "selectionAffectedRun": "browser-intent-rerun",
+  "selectionAffectedResult": "3/3passed, including strengthened literal live-marker drag release",
+  "actualTimingMs": {"newSail":58.099999994039536,"repeatOldSailPoint":84.2000000178814,"deliberateBoard":118.59999999403954},
+  "captureOriginalRun": "after",
+  "captureOriginalResult": "All10 native ordinary/preview stills completed, then uninterrupted sequence stopped at Rabbit subset because Playwright Browser.setWindowBounds refuses resizing a fullscreen window. Partial silent original is retained. No full-recording success claimed.",
+  "captureCorrection": "Use actual document.exitFullscreen while the subset remains open, retain its selected passenger state, then perform the emulated portrait/landscape resize. Real entry/exit and orientation outside fullscreen are supported; this does not establish physical Android rotation while fullscreen.",
+  "captureAffectedRun": "after-complete",
+  "runtimeChangedForTheseCorrections": false
+}

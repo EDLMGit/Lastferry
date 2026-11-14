@@ -1,0 +1,296 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "orchard-landing.spec.ts",
+      "--workers=1"
+    ],
+    "configFile": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\playwright.config.ts",
+    "rootDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "snapshotDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5270",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "deviceScaleFactor": 1,
+          "headless": true,
+          "launchOptions": {
+            "args": [
+              "--use-angle=swiftshader",
+              "--enable-unsafe-swiftshader"
+            ]
+          },
+          "video": {
+            "mode": "on",
+            "size": {
+              "width": 1440,
+              "height": 900
+            }
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "reviews/orchard-landing/automation-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "orchard-landing.spec.ts",
+      "file": "orchard-landing.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "actual Orchard rescue 390x844",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 600000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 76321,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#passenger-orin').locator('img')\nExpected: \u001b[32m\"loaded\"\u001b[39m\nReceived: \u001b[31m\"pending\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('#passenger-orin').locator('img') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('#passenger-orin').locator('img')\u001b[22m\n\u001b[2m    20 × locator resolved to <img alt=\"\" width=\"256\" height=\"256\" decoding=\"async\" draggable=\"false\" aria-hidden=\"true\" class=\"cove-portrait-image\" data-portrait-state=\"pending\" src=\"/assets/portraits/deer-chestnut.png?t=1794588020115\"/>\u001b[22m\n\u001b[2m       - unexpected value \"pending\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#passenger-orin').locator('img')\nExpected: \u001b[32m\"loaded\"\u001b[39m\nReceived: \u001b[31m\"pending\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('#passenger-orin').locator('img') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('#passenger-orin').locator('img')\u001b[22m\n\u001b[2m    20 × locator resolved to <img alt=\"\" width=\"256\" height=\"256\" decoding=\"async\" draggable=\"false\" aria-hidden=\"true\" class=\"cove-portrait-image\" data-portrait-state=\"pending\" src=\"/assets/portraits/deer-chestnut.png?t=1794588020115\"/>\u001b[22m\n\u001b[2m       - unexpected value \"pending\"\u001b[22m\n\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\orchard-landing.spec.ts:107:49\n    at transferStart (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\large-cove-support.ts:50:22)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\orchard-landing.spec.ts:104:11",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\orchard-landing.spec.ts",
+                      "column": 49,
+                      "line": 107
+                    },
+                    "snippet": "  105 |             const choice = page.locator('#passenger-' + orin);\n  106 |             await expect(choice).toHaveAccessibleName(/Orin.*3 spaces/);\n> 107 |             await expect(choice.locator('img')).toHaveAttribute('data-portrait-state', 'loaded');\n      |                                                 ^\n  108 |             for (const label of await page.locator('.cove-choice-name').all()) {\n  109 |               const lines = await label.evaluate(el => {\n  110 |                 const range = document.createRange();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\orchard-landing.spec.ts",
+                        "column": 49,
+                        "line": 107
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#passenger-orin').locator('img')\nExpected: \u001b[32m\"loaded\"\u001b[39m\nReceived: \u001b[31m\"pending\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('#passenger-orin').locator('img') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('#passenger-orin').locator('img')\u001b[22m\n\u001b[2m    20 × locator resolved to <img alt=\"\" width=\"256\" height=\"256\" decoding=\"async\" draggable=\"false\" aria-hidden=\"true\" class=\"cove-portrait-image\" data-portrait-state=\"pending\" src=\"/assets/portraits/deer-chestnut.png?t=1794588020115\"/>\u001b[22m\n\u001b[2m       - unexpected value \"pending\"\u001b[22m\n\n\n  105 |             const choice = page.locator('#passenger-' + orin);\n  106 |             await expect(choice).toHaveAccessibleName(/Orin.*3 spaces/);\n> 107 |             await expect(choice.locator('img')).toHaveAttribute('data-portrait-state', 'loaded');\n      |                                                 ^\n  108 |             for (const label of await page.locator('.cove-choice-name').all()) {\n  109 |               const lines = await label.evaluate(el => {\n  110 |                 const range = document.createRange();\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\orchard-landing.spec.ts:107:49\n    at transferStart (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\large-cove-support.ts:50:22)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\orchard-landing.spec.ts:104:11"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T16:40:20.828Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\orchard-landing-actual-Orchard-rescue-390x844\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\orchard-landing.spec.ts",
+                    "column": 49,
+                    "line": 107
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "229ab7b1d6c5c30d00c8-067eea4fd4b1e7e5011b",
+          "file": "orchard-landing.spec.ts",
+          "line": 69,
+          "column": 3
+        },
+        {
+          "title": "actual Orchard rescue 780x320",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 600000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 53890,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T16:41:39.896Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "229ab7b1d6c5c30d00c8-42c39cf8a630887599b9",
+          "file": "orchard-landing.spec.ts",
+          "line": 69,
+          "column": 3
+        },
+        {
+          "title": "boarding Orin immediately loses the shallow opportunity; Undo recovers the departure",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4764,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T16:42:33.985Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "229ab7b1d6c5c30d00c8-ce6b419fea2edab0adbe",
+          "file": "orchard-landing.spec.ts",
+          "line": 165,
+          "column": 1
+        },
+        {
+          "title": "production Practice entrance and desktop composition",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6223,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T16:42:38.773Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "229ab7b1d6c5c30d00c8-6ff232973ab91663e8ef",
+          "file": "orchard-landing.spec.ts",
+          "line": 196,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-13T16:40:19.486Z",
+    "duration": 147561.913,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

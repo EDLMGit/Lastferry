@@ -1,0 +1,107 @@
+{
+  "viewport": [
+    780,
+    390
+  ],
+  "touchEmulation": true,
+  "initialState": {
+    "turn": 0,
+    "tideLevel": 0,
+    "boatNodeId": "stone",
+    "aboard": [
+      "sheep-1"
+    ],
+    "waitingByPier": {
+      "harbor-pier": [],
+      "stone-pier": [],
+      "rabbit-pier": [
+        "rabbit-1",
+        "rabbit-2"
+      ]
+    },
+    "delivered": [],
+    "status": "playing",
+    "lossReason": null
+  },
+  "startNavigation": {
+    "currentNode": "stone",
+    "selectedDestination": null,
+    "routes": [
+      {
+        "id": "harbor-stone",
+        "nodes": [
+          "harbor",
+          "stone"
+        ],
+        "highlighted": false,
+        "dashSize": 0.09,
+        "gapSize": 0.16
+      },
+      {
+        "id": "stone-shallows",
+        "nodes": [
+          "stone",
+          "shallows"
+        ],
+        "highlighted": false,
+        "dashSize": 0.09,
+        "gapSize": 0.16
+      },
+      {
+        "id": "shallows-rabbit",
+        "nodes": [
+          "shallows",
+          "rabbit-pier"
+        ],
+        "highlighted": false,
+        "dashSize": 0.09,
+        "gapSize": 0.16
+      }
+    ],
+    "markers": [
+      {
+        "id": "harbor",
+        "status": "available",
+        "selected": false,
+        "shape": "open ring"
+      },
+      {
+        "id": "stone",
+        "status": "current",
+        "selected": false,
+        "shape": "double ring"
+      },
+      {
+        "id": "shallows",
+        "status": "too-shallow",
+        "selected": false,
+        "shape": "crossed ring"
+      },
+      {
+        "id": "rabbit-pier",
+        "status": "nonadjacent",
+        "selected": false,
+        "shape": "diamond"
+      }
+    ]
+  },
+  "finalState": {
+    "turn": 9,
+    "tideLevel": 2,
+    "boatNodeId": "harbor",
+    "aboard": [],
+    "waitingByPier": {
+      "harbor-pier": [],
+      "stone-pier": [],
+      "rabbit-pier": []
+    },
+    "delivered": [
+      "rabbit-1",
+      "rabbit-2",
+      "sheep-1"
+    ],
+    "status": "won",
+    "lossReason": null
+  },
+  "errors": []
+}

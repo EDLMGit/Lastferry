@@ -1,0 +1,15 @@
+Pre-freeze development execution, 2026-10-22 11:48:03 local
+Command: npm run test:unit
+Result: exit 1; 60 tests passed, 2 exceeded the default 5000 ms test budget.
+No geometry assertion reported a mismatch.
+
+tests/unit/clearance.test.ts (6 tests | 2 failed), 14747 ms
+holding-pier: actual modeled ferry footprint clears all land and pier decks along both directions and yaw turns — 6214 ms
+bellwater: actual modeled ferry footprint clears all land and pier decks along both directions and yaw turns — 5017 ms
+
+Error: Test timed out in 5000ms.
+Test Files: 1 failed, 5 passed.
+Tests: 2 failed, 60 passed.
+Duration: 15.65 s.
+
+The later frozen-source execution at 11:49:33 local passed all 62 tests using the unchanged default test budget, duration 2.45 s. See unit.log locally and verification-checks.txt in the versioned review. Source identity for that accepted run is source-manifest.json. This earlier execution preceded the source freeze and is retained as a development time-budget failure, not relabeled as a passed check. Its exact source was not separately pinned. No cause beyond the observed timeout is established.

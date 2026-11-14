@@ -1,0 +1,147 @@
+{
+  "base": "66ccfd4f6000a72b0bb8e147751a252057eabac7",
+  "source": "7d25d5bb40710d0f3937fac8944810638045b6abf24d6e9eb71a50295314d7bc",
+  "inputs": 124,
+  "node": "v24.15.0",
+  "host": "win32",
+  "browser": "Chromium 156.0.8078.4 with SwiftShader",
+  "firstFullUnits": {
+    "passed": 517,
+    "failed": 2,
+    "skipped": 0,
+    "failures": [
+      {
+        "test": "first-crossing: full modeled ferry clears land and piers from all reachable headings, both berth sides and reverse departures",
+        "milliseconds": 6084.2108,
+        "error": "Error: Test timed out in 5000ms."
+      },
+      {
+        "test": "candidate transfer soles stay over real pier, short gangway or ferry surfaces at both berth headings",
+        "milliseconds": 100906.55679999999,
+        "error": "Error: Test timed out in 30000ms."
+      }
+    ]
+  },
+  "timeoutRerun": {
+    "passed": 2,
+    "failed": 0,
+    "skipped": 15,
+    "failures": []
+  },
+  "finalFullUnits": {
+    "passed": 520,
+    "failed": 0,
+    "skipped": 0,
+    "failures": []
+  },
+  "browserRuns": {
+    "firstCombined": {
+      "stats": {
+        "startTime": "2026-11-13T16:40:19.486Z",
+        "duration": 147561.913,
+        "expected": 3,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "cases": [
+        {
+          "title": "actual Orchard rescue 390x844",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#passenger-orin').locator('img')\nExpected: \u001b[32m\"loaded\"\u001b[39m\nReceived: \u001b[31m\"pending\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('#passenger-orin').locator('img') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('#passenger-orin').locator('img')\u001b[22m\n\u001b[2m    20 × locator resolved to <img alt=\"\" width=\"256\" height=\"256\" decoding=\"async\" draggable=\"false\" aria-hidden=\"true\" class=\"cove-portrait-image\" data-portrait-state=\"pending\" src=\"/assets/portraits/deer-chestnut.png?t=1794588020115\"/>\u001b[22m\n\u001b[2m       - unexpected value \"pending\"\u001b[22m\n"
+        },
+        {
+          "title": "actual Orchard rescue 780x320",
+          "status": "passed"
+        },
+        {
+          "title": "boarding Orin immediately loses the shallow opportunity; Undo recovers the departure",
+          "status": "passed"
+        },
+        {
+          "title": "production Practice entrance and desktop composition",
+          "status": "passed"
+        }
+      ]
+    },
+    "portraitRerun": {
+      "stats": {
+        "startTime": "2026-11-13T16:43:54.027Z",
+        "duration": 40529.524,
+        "expected": 1,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "cases": [
+        {
+          "title": "actual Orchard rescue 390x844",
+          "status": "passed"
+        }
+      ]
+    },
+    "productionRebuilt": {
+      "stats": {
+        "startTime": "2026-11-13T16:46:00.391Z",
+        "duration": 8270.143,
+        "expected": 1,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "cases": [
+        {
+          "title": "production Practice entrance and desktop composition",
+          "status": "passed"
+        }
+      ]
+    },
+    "existingCoves": {
+      "stats": {
+        "startTime": "2026-11-13T16:46:56.054Z",
+        "duration": 16161.994000000002,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "cases": [
+        {
+          "title": "matched composition wide-whole",
+          "status": "passed"
+        },
+        {
+          "title": "matched composition reef-loaded",
+          "status": "passed"
+        }
+      ]
+    },
+    "liveEditingTrial": {
+      "stats": {
+        "startTime": "2026-11-13T16:37:45.693Z",
+        "duration": 76634.023,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "cases": [
+        {
+          "title": "actual Orchard rescue 780x320",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[data-testid=turn]')\nExpected: \u001b[32m\"\u001b[7m1\u001b[27m0\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7m0\u001b[27m0\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" locator('[data-testid=turn]') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=turn]')\u001b[22m\n\u001b[2m    16 × locator resolved to <b data-testid=\"turn\">00</b>\u001b[22m\n\u001b[2m       - unexpected value \"00\"\u001b[22m\n"
+        }
+      ]
+    }
+  },
+  "production": {
+    "dist/index.html": "7c3aecd08c7a37d1f02875c1849e5ce309f36f5983c7298de2b3c9a65e5873d0",
+    "dist/assets/beaver-brown---6ifzuF.png": "248a3568b1483c8745c12431a41b57fc2cdb969ac0ad9e1c0accc2505a7ffdc5",
+    "dist/assets/deer-chestnut-CQojSGGJ.png": "dd3bef91225cc476f2ae9a437953179ae0525ee738e3840e01426902dfeb7885",
+    "dist/assets/index-AosUWsjI.js": "cbbbf682bb4f52566bcf5bb51875afacbee7236e891870e3b9b58831e561d80c",
+    "dist/assets/index-CI6AGNmZ.css": "8b94c08c001d9cd8f33d962a3bbdc9f5695102e4d3edfc6f8d7b074f4b728da8",
+    "dist/assets/rabbit-cream-OSPd0Icu.png": "2f42b09b3e9965f4dc37ea698e9c0380f435e74bc0f7204399d502f176f0a223",
+    "dist/assets/rabbit-tan-M1Bz6QCD.png": "32254cc48c2203cc219635d4a5e0accf9ae8a9d61e00ac9b98440ee8a3232ed3",
+    "dist/assets/sheep-wool-BHIY3uFy.png": "34ed63cc740937734402f79fbe681a597de26e07c6e7e4583d87c21e9e22ee96"
+  }
+}

@@ -1,0 +1,104 @@
+
+Running 2 tests using 1 worker
+
+(node:20432) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\e2e\mobile-map.spec.ts:329:3 › actual rescues › Two Shelters continuous pan zoom inspect sail rotate recenter and rescue (22.2s)
+(node:9176) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  2 tests\e2e\mobile-map.spec.ts:418:3 › actual rescues › Wide Berth occupied departure, ferry subsets, reef reversal and whole rescue (15.9s)
+
+
+  1) tests\e2e\mobile-map.spec.ts:329:3 › actual rescues › Two Shelters continuous pan zoom inspect sail rotate recenter and rescue 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator:  locator('[data-testid=turn]')
+    Expected: "04"
+    Received: "00"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveText" locator('[data-testid=turn]') with timeout 5000ms
+      - waiting for locator('[data-testid=turn]')
+        10 × locator resolved to <b data-testid="turn">00</b>
+           - unexpected value "00"
+
+
+       at large-cove-support.ts:63
+
+      61 | }
+      62 | export async function checkTurn(page: Page, expected: State, development: boolean) {
+    > 63 |   await expect(page.locator('[data-testid=turn]')).toHaveText(
+         |                                                    ^
+      64 |     String(expected.turn).padStart(2, '0'),
+      65 |   );
+      66 |   await expect(page.locator('[data-testid=tide]')).toHaveText(String(expected.tideLevel));
+        at checkTurn (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\large-cove-support.ts:63:52)
+        at action (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\optional-tips-support.ts:72:9)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\mobile-map.spec.ts:395:11
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "85f6c8a2350a1e2870b4fd7df98c4d9b051a1a38a23517d1cf3ac3c1f6d6e35c"
+    Received: "1b57135ce2a83ae3c4c7f8537b4ed489d37c5365ba9b96d2a4c3d3045f2b279d"
+
+      61 | });
+      62 | test.afterEach(() => {
+    > 63 |   if (!accepted) expect(runtimeIdentity().identity).toBe(source);
+         |                                                     ^
+      64 | });
+      65 |
+      66 | async function inspect(page: Page) {
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\mobile-map.spec.ts:63:53
+
+    Error Context: .cache\mobile-map-results\mobile-map-actual-rescues--f90aa--rotate-recenter-and-rescue\error-context.md
+
+  2) tests\e2e\mobile-map.spec.ts:418:3 › actual rescues › Wide Berth occupied departure, ferry subsets, reef reversal and whole rescue 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator:  locator('[data-testid=turn]')
+    Expected: "02"
+    Received: "00"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveText" locator('[data-testid=turn]') with timeout 5000ms
+      - waiting for locator('[data-testid=turn]')
+        9 × locator resolved to <b data-testid="turn">00</b>
+          - unexpected value "00"
+
+
+       at large-cove-support.ts:63
+
+      61 | }
+      62 | export async function checkTurn(page: Page, expected: State, development: boolean) {
+    > 63 |   await expect(page.locator('[data-testid=turn]')).toHaveText(
+         |                                                    ^
+      64 |     String(expected.turn).padStart(2, '0'),
+      65 |   );
+      66 |   await expect(page.locator('[data-testid=tide]')).toHaveText(String(expected.tideLevel));
+        at checkTurn (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\large-cove-support.ts:63:52)
+        at action (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\optional-tips-support.ts:72:9)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\mobile-map.spec.ts:439:21
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "ec57f5897179fdfca61c883c33a62d137803413b7a842a5b974625e36fdcb419"
+    Received: "deee3f7befbc7335e74691e08522a948a9f67bc0decd2aa4048d9332ab6f9e39"
+
+      61 | });
+      62 | test.afterEach(() => {
+    > 63 |   if (!accepted) expect(runtimeIdentity().identity).toBe(source);
+         |                                                     ^
+      64 | });
+      65 |
+      66 | async function inspect(page: Page) {
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\mobile-map.spec.ts:63:53
+
+    Error Context: .cache\mobile-map-results\mobile-map-actual-rescues--1168c-f-reversal-and-whole-rescue\error-context.md
+
+  2 failed
+    tests\e2e\mobile-map.spec.ts:329:3 › actual rescues › Two Shelters continuous pan zoom inspect sail rotate recenter and rescue 
+    tests\e2e\mobile-map.spec.ts:418:3 › actual rescues › Wide Berth occupied departure, ferry subsets, reef reversal and whole rescue 

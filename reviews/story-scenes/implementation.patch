@@ -1,0 +1,829 @@
+diff --git a/assets/catalog.json b/assets/catalog.json
+index e798e4a..a1d53ba 100644
+--- a/assets/catalog.json
++++ b/assets/catalog.json
+@@ -4652,7 +4652,7 @@
+     },
+     {
+       "id": "ui.story-presentation",
+-      "name": "Journey entrance and brief story presentation",
++      "name": "Journey entrance and authored miniature story scenes",
+       "kind": "dom-component-family",
+       "status": "integrated",
+       "sources": [
+@@ -4662,7 +4662,7 @@
+         },
+         {
+           "path": "src/campaign/presentation.ts",
+-          "symbol": "StoryPresentation bounded optional scene motion/settling lifecycle"
++          "symbol": "StoryPresentation authored finite timeline, immediate continuation, settling and cancellation"
+         },
+         {
+           "path": "src/main.ts",
+@@ -4670,7 +4670,7 @@
+         },
+         {
+           "path": "src/campaign/story.css",
+-          "symbol": "responsive title/story reading surfaces within the existing app root"
++          "symbol": "Quiet responsive caption treatment with complete readable copy and native immediate Continue"
+         },
+         {
+           "path": "campaign/STORY_SCENES.md",
+@@ -4682,7 +4682,11 @@
+         },
+         {
+           "path": "src/scene/world.ts",
+-          "symbol": "World.setStoryFraming: bounded story-only fit of existing lighthouse/ferry/aboard silhouettes above or beside the caption card"
++          "symbol": "World.presentStory/clearStory: bounded shot composition and presentation-only acknowledgment over the existing world"
++        },
++        {
++          "path": "src/scene/story-staging.ts",
++          "symbol": "Editable opening/connection shot and character-pose recipe; no gameplay or audio owner"
+         }
+       ],
+       "meaning": "Introduce the first evening, connect the two existing rescues and explain cove-boundary checkpoints without changing puzzle state.",
+@@ -4694,14 +4698,14 @@
+         "checkpoint replacement/return",
+         "available-content endpoint"
+       ],
+-      "visualSignature": "Compact established painted teal surface with warm native controls and complete readable captions over the existing miniature world; no letterbox, prerendered video or second renderer.",
++      "visualSignature": "Quiet painted teal caption treatment beneath recognizable miniature subjects. Authored ferry/Moss acknowledgment, lighthouse reveal and safe-Harbor acknowledgment use the existing models and warm light. No letterbox, prerequisite wait or implementation-status label.",
+       "reuseAndOwnership": "Reuses ui.dialogs, original painted surfaces, cove controls/icons, ferry, passengers, water, lighthouse and the existing sound owner. Captions/staging are editable registry/presentation sources; root owns one active world and native dialog lifecycle.",
+-      "behaviorToPreserve": "Explicit continuation alone acknowledges a scene or completed rescue. Skip settles all copy without spending an action. Reduced Motion/restored scenes are still readable; background/cancellation never double-navigate. Practice does not touch campaign progress; native focus/fullscreen ownership stays shared.",
++      "behaviorToPreserve": "Continue is available from the first frame and alone acknowledges a scene. Skip settles motion without acknowledgement and disappears at settlement. All caption copy remains complete. Reduced/restored states are composed stills; ambient movement follows the actual preference. Finite poses/camera jobs cancel on navigation/background/recovery without changing puzzle state, Undo, checkpoint or audio intent.",
+       "provenance": "original-project-code",
+       "acceptance": {
+-        "state": "integrated-awaiting-final-browser-verification-and-human-review",
+-        "reviewedBaseline": "1a85874883af5caa59f6294a75495eccf2afebbc",
+-        "basis": "Current user supplied authored campaign direction; future scenes/assets remain proposals. Implementation and visual verification are distinct from human acceptance and publication."
++        "state": "implemented-awaiting-human-scene-review",
++        "reviewedBaseline": "8cc43c794274fe64d5fb634961fbf79aaff251f8",
++        "basis": "Foundation progression is preserved; this pass replaces idle-only staging with an authored 7.2-second ferry/Moss and lighthouse sequence plus a four-second safe-Harbor/Pip acknowledgment. Final build, 276 units, 73-family validation and seven distinct affected browser cases pass across retained runs. Native frame/recording inspection, original failures and human pacing acceptance remain distinct in reviews/story-scenes/REVIEW.md. Not deployed."
+       },
+       "evidence": [
+         {
+@@ -4719,6 +4723,22 @@
+         {
+           "path": "reviews/story-foundation/ASSETS.md",
+           "role": "Implemented family/reuse contract and preserved supplied source/publication provenance"
++        },
++        {
++          "path": "NEXT_TASK_STORY_SCENES.md",
++          "role": "Current scene correction contract, superseding old idle-timer and gated-Continue presentation"
++        },
++        {
++          "path": "reviews/story-scenes/supplied-inputs.json",
++          "role": "Byte-identical active task provenance"
++        },
++        {
++          "path": "reviews/story-scenes/ASSETS.md",
++          "role": "Updated existing-family source/reuse and scene evidence contract"
++        },
++        {
++          "path": "reviews/story-scenes/REVIEW.md",
++          "role": "Actual native scene beginning/intermediate/endpoint captures, recordings and executed verification; human acceptance is separate"
+         }
+       ],
+       "consumers": [
+@@ -4727,14 +4747,14 @@
+       ],
+       "gallery": {
+         "section": "interface",
+-        "preview": "Shared exact opening/connective copy, checkpoint policy, established title/Continue controls and painted material. Static gallery specimens are not gameplay captures."
++        "preview": "Shared exact caption copy, immediate Continue, active-only Skip and authored scene duration/beat descriptions using existing painted material. Static specimens remain design guidance, not gameplay evidence."
+       },
+       "typeSpecific": {
+-        "render/placement sources": "src/main.ts existing native dialog; src/campaign/story.css responsive story reading space; src/campaign/registry.ts captions; src/campaign/presentation.ts bounded 8000ms scene lifecycle. src/scene/world.ts: World.setStoryFraming opts into the caption-safe view and exits on playable recovery; ordinary Play/Whole cove framing is preserved.",
++        "render/placement sources": "src/main.ts existing native dialog; src/campaign/story.css quiet caption treatment; src/campaign/registry.ts exact copy and scene associations; src/campaign/presentation.ts finite timeline/cancellation; src/scene/story-staging.ts and World.presentStory/clearStory author camera/animal presentation while preserving normal gameplay framing.",
+         "semantic role/accessible name": "Native dialog with scene/title heading and complete live text; visible New journey, Continue journey, Skip animation, Continue, Practice and Settings actions.",
+         "icon and label mappings": "Reuse existing next-cove progression, Settings, close and fullscreen icons beside explicit text. No new glyph or ambiguous lighthouse/camera meaning.",
+-        "interaction states": "Title with valid/empty/invalid/unavailable checkpoint; replacement confirmation; pending/settled/skipped/reduced scene; explicit cove completion; honest endpoint; independent practice.",
+-        "nearby placement and viewport contract": "Story/title content remains within existing app/dialog root with wrapped live text and reachable native controls at 320px portrait and 780x320 landscape. Puzzle nearby confirmations and accepted camera controls remain separate. Story-only fit protects lighthouse/ferry/aboard silhouettes in the free area above portrait or beside landscape captions, without changing authoritative puzzle coordinates.",
++        "interaction states": "Existing journey/checkpoint/practice states retained; active authored opening/connection, immediate Continue, active-only Skip, watched/settled/skipped/reduced/restored endpoint, cancellation/background/orientation recovery.",
++        "nearby placement and viewport contract": "Native caption text and 44px controls fit 320x740, 390x844, 780x320 and 844x390. Portrait and landscape shots protect ferry/Moss, safe Harbor trio and lighthouse above a quiet caption treatment; short landscape uses composed cuts. Actual phone evidence is required, and static specimens do not establish gameplay quality.",
+         "focus/cancel/fullscreen preservation": "One existing native dialog owner; foreground scenes fence map input, retain visible focus and explicit continuation, settle/cancel pending motion safely, and preserve shared fullscreen promotion and audio intent."
+       }
+     }
+diff --git a/campaign/STORY_SCENES.md b/campaign/STORY_SCENES.md
+index befbf0b..f8b555e 100644
+--- a/campaign/STORY_SCENES.md
++++ b/campaign/STORY_SCENES.md
+@@ -1,14 +1,14 @@
+ # Last Ferry — story scenes for The Long Tide
+ 
+-**Status:** authored direction and caption copy, not implemented scenes, tested footage or supplied video. The first task includes only Scene 1 and the short Holding → Bellwater connective beat. The other five major scenes belong to their later content milestones.
++**Status:** the opening and Holding → Bellwater connection are the current implementation assignment in `NEXT_TASK_STORY_SCENES.md`. Their authored visual beats, verification and human acceptance are recorded separately in `reviews/story-scenes/`. The foundation's working journey/checkpoints are retained. The five later major scenes remain future authored direction, not implemented content or supplied footage.
+ 
+ The campaign has four phases of three coves. Nell joins in Cove 3; a prepared larger ferry launches afterward. Cove 4 teaches its six spaces before Cove 5 introduces Orin. Cove 11 is the hardest puzzle. Cove 12 is a gentle, short final rescue, followed by supper.
+ 
+ ## Shared presentation contract
+ 
+-Use small in-engine dioramas and the established miniature world. **Six to twelve seconds of settling motion** is the target for each major scene, not a reading deadline or minimum wait. Captions remain until the player advances. Keep Skip visible throughout; no caption advances automatically. A settled scene can remain on screen as long as the player wishes.
++Use small in-engine dioramas and the established miniature world. The opening targets roughly 6–9 seconds of optional authored motion; the connection targets 3–5 seconds. These are not reading deadlines or minimum waits. Captions remain until the player advances. Continue is available immediately. Skip animation is visible only while finite scene motion is active, then disappears; the settled frame can remain as long as the player wishes.
+ 
+-Opening captions may advance individually through Next; the final caption offers Continue. **Skip animation** settles the scene immediately and reveals all of its caption copy together. Continue alone leaves that readable end frame for the intended gameplay boundary. Settled, skipped, Reduced Motion and restored opening states retain all three opening lines. Every activation advances once. Cancel pending story motion and callbacks on Skip animation, navigation, restart or scene disposal.
++All three opening captions are readable together from the first frame; there is no required Next action for individual lines. **Skip animation** settles the finite visual sequence without acknowledging the scene. Continue alone leaves the readable frame for the intended gameplay boundary, cancelling any remaining finite motion and acknowledging once. Settled, skipped, Reduced Motion and restored opening states retain the same complete text. Cancel pending story motion and callbacks on navigation, restart or scene disposal. Settling finite motion does not change the player's actual Motion preference or suppress permitted ambient water/lighthouse movement.
+ 
+ Story presentation spends no turns and changes no tide, passenger, capacity or delivery state. During a scene, suspend puzzle input and animation-driven action commitments. Decorative scene arrangements must remain separate from canonical puzzle state; never create a scene by moving real delivered passengers back onto a low pier. Load the next authored puzzle only through the campaign transition.
+ 
+@@ -22,7 +22,7 @@ All Home harbors are protected piers around the same lighthouse island, seen thr
+ 
+ **Trigger:** starting the story, before Holding Pier. **First-task scope.**
+ 
+-**Composition:** begin close enough to recognize the yellow hull and red cabin beside the familiar shoreline. Show the lighthouse against luminous water, then settle into the accepted playable Holding framing. Keep the captain unseen. The boat and any animals shown must agree with the real starting arrangement; scenery-only camera views can avoid implying an invented departure.
++**Composition:** begin with the recognizable yellow hull, red cabin and Moss aboard at the real Stone Pier start. Give Moss a small presentation-only body/head acknowledgment. Deliberately reveal the warm lighthouse and the luminous water connecting it to the ferry, then settle into a composition that hands cleanly to the existing Holding play view. Use bounded camera travel in suitable views and a composed cut on short landscape. Keep the captain unseen and the starting passenger arrangement intact; no invented boarding or departure occurs.
+ 
+ **Caption sequence, exact:**
+ 
+@@ -30,7 +30,7 @@ All Home harbors are protected piers around the same lighthouse island, seen thr
+ 2. “The tide will be high tonight.”
+ 3. “Bring everyone to the lighthouse.”
+ 
+-Each line waits for the player. The final Continue reveals the untouched initial puzzle. The opening should feel like an invitation to care for this place. No ticking clock, flashing threat or approaching storm wall is needed.
++All lines remain readable while the visual beats run and on every settled/restored/Reduced Motion frame. Continue is available from the first frame and reveals the untouched initial puzzle. The opening should feel like an invitation to care for this place. No ticking clock, flashing threat or approaching storm wall is needed.
+ 
+ **Assets:** existing ferry, water, coastline, lighthouse, painted reading material, controls and music. Add the smallest reusable story-presentation family needed; register actual new assets when implemented. No new character, boat or environment asset is required for this scene.
+ 
+@@ -38,11 +38,11 @@ Each line waits for the player. The final Continue reveals the untouched initial
+ 
+ **Trigger:** the player chooses Continue from Holding's completed rescue. **First-task scope.** This is a short connective beat, not a seventh major cinematic.
+ 
+-**Composition:** keep the safe Harbor arrival visible, with Pip, Rue and Moss already home. An existing warm lamp and calm water are sufficient. A subtle change in framing may hint at the next part of the coast, but new scenery and travel animation are unnecessary.
++**Composition:** compose the safe Harbor around Pip, Rue and Moss already ashore. Give Pip one restrained turn/hop acknowledgment toward the ferry, then settle; a subtle widening or composed cut toward the water suggests the next crossing. Reuse the existing warm lamp, calm water and models. A restored pending connection starts on the readable settled composition without replaying the finite acknowledgment.
+ 
+ **Caption, exact:** “Pip, Rue and Moss are safe. Across the water, Bellwater is still waiting.”
+ 
+-Skip animation settles this readable frame; Continue enters Bellwater through the campaign boundary. The beat must not re-board the rescued trio, advance either puzzle's tide or imply they are Bellwater's passengers. Tansy, Lark and Bram remain Bellwater's own residents.
++Continue is available immediately and enters Bellwater through the existing explicit campaign transaction. Skip animation only settles the readable frame. The beat must not re-board the rescued trio, advance either puzzle's tide or imply they are Bellwater's passengers. Tansy, Lark and Bram remain Bellwater's own residents.
+ 
+ **Assets:** the completed Holding scene and shared story presentation. Use existing music behavior; do not replay victory audio solely because this beat opens.
+ 
+diff --git a/src/campaign/presentation.ts b/src/campaign/presentation.ts
+index e192035..04d09d2 100644
+--- a/src/campaign/presentation.ts
++++ b/src/campaign/presentation.ts
+@@ -1,5 +1,6 @@
+ import { initial, type State } from '../game/rules';
+ import type { Level } from '../levels/level';
++import { storyScenes, type SceneId } from './registry';
+ 
+ export function restoredHarbor(level: Level): State {
+   return {
+@@ -13,21 +14,40 @@ export function restoredHarbor(level: Level): State {
+ }
+ 
+ export class StoryPresentation {
+-  private timer: ReturnType<typeof setTimeout> | undefined;
++  private scene: SceneId | null = null;
++  private startedAt = 0;
++  private elapsed = 0;
+   settled = true;
+   constructor(private readonly changed: () => void) {}
+-  start(still: boolean) {
++  start(scene: SceneId, still: boolean, now = performance.now()) {
+     this.cancel();
++    this.scene = scene;
++    this.startedAt = now;
+     this.settled = still;
+-    if (!still) this.timer = setTimeout(() => this.settle(), 8000);
++    this.elapsed = still ? storyScenes[scene].duration : 0;
++  }
++  update(now = performance.now()) {
++    if (!this.scene || this.settled) return;
++    this.elapsed = Math.max(this.elapsed, Math.max(0, now - this.startedAt));
++    if (this.elapsed >= storyScenes[this.scene].duration) this.settle();
++  }
++  get frame() {
++    return {
++      scene: this.scene,
++      elapsed: this.elapsed,
++      duration: this.scene ? storyScenes[this.scene].duration : 0,
++      settled: this.settled,
++    };
+   }
+   settle() {
+-    this.cancel();
++    if (!this.scene || this.settled) return;
++    this.elapsed = storyScenes[this.scene].duration;
+     this.settled = true;
+     this.changed();
+   }
+   cancel() {
+-    clearTimeout(this.timer);
+-    this.timer = undefined;
++    this.scene = null;
++    this.elapsed = 0;
++    this.settled = true;
+   }
+ }
+diff --git a/src/campaign/registry.ts b/src/campaign/registry.ts
+index e568c97..48e8c8c 100644
+--- a/src/campaign/registry.ts
++++ b/src/campaign/registry.ts
+@@ -21,7 +21,7 @@ export const storyScenes: Record<SceneId, StoryScene> = {
+       'The tide will be high tonight.',
+       'Bring everyone to the lighthouse.',
+     ],
+-    duration: 8000,
++    duration: 7200,
+     staging: 'holding-start',
+     destination: 'holding-pier',
+   },
+@@ -29,7 +29,7 @@ export const storyScenes: Record<SceneId, StoryScene> = {
+     id: 'another-bell',
+     title: 'Another bell',
+     captions: ['Pip, Rue and Moss are safe. Across the water, Bellwater is still waiting.'],
+-    duration: 8000,
++    duration: 4000,
+     staging: 'holding-harbor',
+     destination: 'bellwater',
+   },
+diff --git a/src/campaign/story.css b/src/campaign/story.css
+index 76f28fe..17e82f7 100644
+--- a/src/campaign/story.css
++++ b/src/campaign/story.css
+@@ -60,6 +60,68 @@
+   font-size: 14px;
+   line-height: 1.4;
+ }
++.journey-screen #dialog.story-caption {
++  width: min(900px, calc(var(--viewport-width, 100vw) - 16px));
++}
++.story-caption #dialog-content {
++  display: grid;
++  grid-template-columns: minmax(0, 1fr) 280px;
++  align-items: center;
++  gap: 18px;
++  padding: 12px 16px;
++}
++.story-caption .dialog-head {
++  position: absolute;
++  width: 1px;
++  height: 1px;
++  padding: 0;
++  overflow: hidden;
++  clip-path: inset(50%);
++  white-space: nowrap;
++}
++.story-caption .journey-copy {
++  overflow: visible;
++  line-height: 1.35;
++}
++.story-caption #story-captions p {
++  margin-bottom: 4px;
++}
++.story-caption #story-captions p:last-child {
++  margin-bottom: 0;
++}
++.story-caption .journey-actions {
++  grid-template-columns: repeat(2, minmax(0, 1fr));
++  grid-template-rows: 46px;
++  gap: 8px;
++}
++.story-caption #story-skip {
++  grid-column: 1;
++  grid-row: 1;
++  font-size: 14px;
++}
++.story-caption #story-continue {
++  grid-column: 2;
++  grid-row: 1;
++}
++@media (max-width: 599px) {
++  .story-caption #dialog-content {
++    grid-template-columns: minmax(0, 1fr);
++    gap: 10px;
++    padding: 12px 14px;
++  }
++  .story-caption .journey-actions {
++    grid-template-columns: repeat(2, minmax(0, 1fr));
++    grid-template-rows: 46px;
++    gap: 8px;
++  }
++  .story-caption #story-skip {
++    grid-column: 1;
++  }
++  .story-caption #story-continue {
++    grid-column: 2;
++    grid-row: 1;
++  }
++}
+ @media (max-height: 420px) and (min-width: 600px) {
+   .journey-screen #dialog {
+     width: min(420px, calc(var(--viewport-width, 100vw) - 16px));
+@@ -78,4 +140,11 @@
+   .journey-copy p {
+     margin-bottom: 8px;
+   }
++  .journey-screen #dialog.story-caption {
++    width: calc(var(--viewport-width, 100vw) - 16px);
++  }
++  .story-caption #dialog-content {
++    padding: 10px 14px;
++    gap: 14px;
++  }
+ }
+diff --git a/src/dev/asset-gallery.ts b/src/dev/asset-gallery.ts
+index 7881a16..7b34936 100644
+--- a/src/dev/asset-gallery.ts
++++ b/src/dev/asset-gallery.ts
+@@ -23,7 +23,7 @@ root.innerHTML = `<header><p>Last Ferry · developer tools</p><h1>Cove asset gal
+ </div><div class="cove-panel cove-surface cove-surface--compact gallery-panel"><h3>Compact face</h3><p>Shared opaque wash with no corner decoration. HUD, names, forecast and local options retain their own dimensions.</p><button id="gallery-forecast" class="cove-panel cove-surface cove-surface--compact gallery-forecast" data-demo-state="focus">! Rabbit Pier floods in 1 action.</button></div>
+ <div class="cove-panel cove-surface cove-surface--arrival gallery-panel"><h3>Everyone home.</h3><p>Arrival uses only a warmer upper catchlight. Normal action and home colors remain the existing button family.</p><button id="gallery-next"></button></div></section>
+ <section aria-labelledby="portrait-heading"><h2 id="portrait-heading">Model-derived static portraits</h2><p>Three original transparent 256px PNG derivatives, displayed at 44px beside live copy in the shared choice helper. Offline SVG diffuse shading is not pixel-identical WebGL. These are design specimens, not gameplay captures.</p><div class="portrait-sources">${(Object.entries(portraitSources) as [PortraitKey, string][]).map(([key, url]) => `<figure class="cove-panel cove-surface gallery-panel"><img class="portrait-source" src="${url}" width="256" height="256" alt="${key.replace('-', ' ')} model-derived source portrait" draggable="false" /><figcaption>${key} · 256×256 PNG</figcaption></figure>`).join('')}</div><div class="panel-specimens"><article id="gallery-bellwater-portraits" class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow"><h3>Bellwater names, same appearances</h3>${choices([['Tansy', 1, false, 'rabbit-cream'], ['Lark', 1, true, 'rabbit-tan'], ['Bram', 2, false, 'sheep-wool']], true)}<p>Names and capacities remain level-owned. Offered order cannot recolor Lark.</p></article><article id="gallery-failed-portrait" class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow"><h3>Unavailable image</h3>${choices([['Lark', 1, true, 'rabbit-tan']])}<p>The image request intentionally fails. The reserved slot, full name/cost and selected check stay usable.</p></article><article id="gallery-unknown-portrait" class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow"><h3>Future appearance fallback</h3>${choices([['Future passenger', 1, false, null]])}<p>Explicit unavailable appearance preserves text instead of guessing a different animal.</p></article></div></section>
+-<section aria-labelledby="story-heading"><h2 id="story-heading">Journey and story reading surfaces</h2><p>Same authored caption data and painted material as the runtime. These static specimens are design guidance, not playable scenes or gameplay evidence.</p><div class="panel-specimens"><article class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow"><p>Journey entrance</p><h3>Last Ferry</h3><p>${text(checkpointCopy)}</p><button id="gallery-journey-new"></button><button id="gallery-journey-continue"></button></article>${Object.values(storyScenes).map((scene) => `<article class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow"><p>${text(scene.id)} · settled, skipped and Reduced Motion copy</p><h3>${text(scene.title)}</h3>${scene.captions.map((caption) => `<p>${text(caption)}</p>`).join('')}<button class="gallery-story-continue">${controlContent('next-cove', 'Continue')}</button><p>Optional ${scene.duration / 1000}s staging; captions remain until explicit continuation. No puzzle action.</p></article>`).join('')}</div></section>
++<section aria-labelledby="story-heading"><h2 id="story-heading">Journey surfaces and authored scene captions</h2><p>Same authored caption data and painted material as the runtime. These static specimens are design guidance, not playable scenes or gameplay evidence.</p><div class="panel-specimens"><article class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow"><p>Journey entrance</p><h3>Last Ferry</h3><p>${text(checkpointCopy)}</p><button id="gallery-journey-new"></button><button id="gallery-journey-continue"></button></article>${Object.values(storyScenes).map((scene) => `<article class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow"><p>${text(scene.id)} · settled, skipped and Reduced Motion copy</p><h3>${text(scene.title)}</h3>${scene.captions.map((caption) => `<p>${text(caption)}</p>`).join('')}<button class="gallery-story-continue">${controlContent('next-cove', 'Continue')}</button><p>Authored ${scene.duration / 1000}s optional scene; Continue is available immediately. Skip settles motion only, then disappears. Captions remain readable; no puzzle action.</p></article>`).join('')}</div></section>
+ <section class="cove-panel cove-surface gallery-panel"><h2>Original 24px glyphs</h2><div class="icon-grid">${iconNames.map((name) => `<div>${iconMarkup(name)}<span>${name}</span></div>`).join('')}</div></section><section><h2>Canonical inventory</h2><label>Filter by family, kind or meaning <input id="filter" type="search" /></label><p id="count" role="status"></p><div id="inventory"></div></section>`;
+ const failedPortrait = root.querySelector<HTMLImageElement>('#gallery-failed-portrait img')!;
+ failedPortrait.dataset.portraitState = 'pending';
+diff --git a/src/main.ts b/src/main.ts
+index c0f492e..d55281d 100644
+--- a/src/main.ts
++++ b/src/main.ts
+@@ -221,8 +221,8 @@ function resumeJourney(restored = true) {
+       mountCove(holdingPier);
+       if (storyId === 'another-bell') world.sync(restoredHarbor(holdingPier));
+     }
+-    storyPresentation.start(restored || motion.reduced || document.hidden);
+-    showJourney('story', storyPresentation.settled ? 'story-continue' : 'story-skip');
++    storyPresentation.start(storyId, restored || motion.reduced || document.hidden);
++    showJourney('story', 'story-continue');
+     renderStoryStatus();
+     return;
+   }
+@@ -230,6 +230,7 @@ function resumeJourney(restored = true) {
+ }
+ function startPlayable(next: typeof level, story: boolean) {
+   storyPresentation.cancel();
++  world.clearStory();
+   storyId = null;
+   campaignPlay = story;
+   if (dialog.open) closeDialog(false);
+@@ -242,7 +243,7 @@ function startPlayable(next: typeof level, story: boolean) {
+   focusAvailable('menu');
+ }
+ function continueStory() {
+-  if (mode !== 'story' || !storyId || !storyPresentation.settled) return;
++  if (mode !== 'story' || !storyId) return;
+   const id = storyId;
+   if (!journey?.acknowledge(id)) return;
+   resumeJourney();
+@@ -258,17 +259,17 @@ function renderStoryStatus() {
+   const skip = $('story-skip') as HTMLButtonElement | null;
+   const next = $('story-continue') as HTMLButtonElement | null;
+   if (skip) {
+-    skip.disabled = storyPresentation.settled;
+-    skip.textContent = storyPresentation.settled ? 'Animation settled' : 'Skip animation';
+-  }
+-  if (next) next.disabled = !storyPresentation.settled;
+-  if (storyPresentation.settled) {
+-    world.setReducedMotion(true);
+-    if (document.activeElement === skip) next?.focus({ preventScroll: true });
++    if (storyPresentation.settled && document.activeElement === skip)
++      next?.focus({ preventScroll: true });
++    skip.hidden = storyPresentation.settled;
+   }
++  if (next) next.disabled = false;
++  const frame = storyPresentation.frame;
++  if (frame.scene) world.presentStory(frame.scene, frame.elapsed, frame.settled);
+ }
+ function mountCove(next: typeof level) {
+   storyPresentation.cancel();
++  world.clearStory();
+   clearTimeout(fallback);
+   activeTransition = null;
+   lastTransition = null;
+@@ -359,9 +360,15 @@ function renderJourneyDialog() {
+       '<button id="journey-title">Return to title</button><button id="journey-practice">Practice</button><button id="journey-settings">Settings</button>';
+   }
+   $('dialog-content').innerHTML =
+-    `<header class="dialog-head"><h2 id="dialog-title">${heading}</h2></header><div class="dialog-body journey-copy">${body}</div><footer class="dialog-footer journey-actions">${actions}</footer>`;
++    `<header class="dialog-head${mode === 'story' ? ' sr-only' : ''}"><h2 id="dialog-title">${heading}</h2></header><div class="dialog-body journey-copy">${body}</div><footer class="dialog-footer journey-actions">${actions}</footer>`;
++  dialog.classList.toggle('story-caption', mode === 'story');
+   for (const button of dialog.querySelectorAll<HTMLButtonElement>('button'))
+-    setControl(button, null, button.textContent ?? '');
++    setControl(
++      button,
++      null,
++      button.textContent ?? '',
++      button.id === 'story-continue' ? 'warm' : button.id === 'story-skip' ? 'quiet' : 'action',
++    );
+   const on = (id: string, fn: () => void) => {
+     const element = $(id);
+     if (element) element.onclick = fn;
+@@ -621,7 +628,7 @@ function updateViewport() {
+     positionDialog();
+     const panel = dialog.getBoundingClientRect();
+     usableBounds =
+-      width > height
++      mode !== 'story' && width > height
+         ? {
+             left: panel.right + 12,
+             right: safeBounds.right - 8,
+@@ -799,6 +806,7 @@ function header(title: string, eyebrow?: string, closeLabel = 'Close dialog') {
+ }
+ function renderDialog() {
+   if (!mode) return;
++  dialog.classList.toggle('story-caption', mode === 'story');
+   dialog.classList.toggle(
+     'cove-surface--arrival',
+     mode === 'terminal' && session.state.status === 'won',
+@@ -1622,6 +1630,11 @@ function bindWorld() {
+   world.onViewChange = scheduleLayout;
+   world.onFrame = () => {
+     if (layoutRequest) flushLayout();
++    if (mode === 'story' && storyId) {
++      storyPresentation.update();
++      const frame = storyPresentation.frame;
++      world.presentStory(storyId, frame.elapsed, frame.settled);
++    }
+   };
+ }
+ bindWorld();
+@@ -1931,6 +1944,8 @@ if (import.meta.env.DEV)
+           settled: storyPresentation.settled,
+           progress: journey?.snapshot ?? null,
+         }),
++      getStoryStatus: () =>
++        copy({ timeline: storyPresentation.frame, world: world.storyPresentation() }),
+       getLegalActions: () => copy(legalActions(session.state, level)),
+       getRenderStatus: () => ({
+         pendingAnimation: session.busy,
+diff --git a/src/scene/world.ts b/src/scene/world.ts
+index 066faad..7dadb6d 100644
+--- a/src/scene/world.ts
++++ b/src/scene/world.ts
+@@ -29,6 +29,7 @@ import { getLevelPaths, type CanonicalPath } from './paths';
+ import { Shores, createReedBeds } from './shore';
+ import { CoastalWater } from './water';
+ import { CrossingEffects } from './effects';
++import { storyCameraFrame, storyStage, type StorySceneId, type StoryStage } from './story-staging';
+ import { contactMaterial } from './contact';
+ import { TransferTimeline, type TransferCue } from './transfer';
+ import {
+@@ -105,6 +106,14 @@ export class World {
+   viewFocus: ViewPoint | null = null;
+   viewScale = 1;
+   private storyFraming = false;
++  private storyJob: StoryStage | null = null;
++  private storyRestore: {
++    animals: Map<T.Object3D, { position: T.Vector3; rotation: T.Euler }>;
++    head: Map<T.Object3D, { position: T.Vector3; quaternion: T.Quaternion }>;
++    visibility: Map<T.Object3D, boolean>;
++    close: T.Box3;
++    wide: T.Box3;
++  } | null = null;
+   layoutStaticBounds = new Map<string, T.Box3>();
+   layoutAnimalBounds = new Map<string, T.Box3>();
+   layoutHullBounds = new T.Box3();
+@@ -726,6 +735,160 @@ export class World {
+     this.storyFraming = active;
+     this.reframeView();
+   }
++  presentStory(id: StorySceneId, elapsedMs: number, settled: boolean) {
++    if (this.storyJob && this.storyJob.id !== id) this.clearStory();
++    if (!this.storyRestore) {
++      if (this.homecoming.active) this.settleHomecoming('story-boundary');
++      this.scene.updateMatrixWorld(true);
++      const boat = new T.Box3().setFromObject(this.boatRoot);
++      const wide = new T.Box3().setFromObject(this.home.group).union(boat);
++      const neighbors = new T.Box3();
++      const animals = new Map<T.Object3D, { position: T.Vector3; rotation: T.Euler }>();
++      const head = new Map<T.Object3D, { position: T.Vector3; quaternion: T.Quaternion }>();
++      for (const [passengerId, animal] of this.animals) {
++        animals.set(animal, {
++          position: animal.position.clone(),
++          rotation: animal.rotation.clone(),
++        });
++        if (this.state.delivered.includes(passengerId))
++          neighbors.union(new T.Box3().setFromObject(animal));
++        const species = this.level.passengers.find(
++          (passenger) => passenger.id === passengerId,
++        )?.species;
++        if (id === 'opening' && this.state.aboard.includes(passengerId) && species === 'sheep')
++          for (const part of animal.children)
++            if (part.position.z > 0.2 && part.position.y >= 0.26)
++              head.set(part, {
++                position: part.position.clone(),
++                quaternion: part.quaternion.clone(),
++              });
++      }
++      if (!neighbors.isEmpty()) wide.union(neighbors);
++      const close = id === 'opening' || neighbors.isEmpty() ? boat : neighbors.union(boat);
++      close.expandByVector(
++        id === 'opening' ? new T.Vector3(0.22, 0.14, 0.22) : new T.Vector3(0.35, 0.13, 0.35),
++      );
++      wide.expandByScalar(0.08);
++      const visibility = new Map<T.Object3D, boolean>();
++      for (const object of [...this.routes.values(), ...this.markers.values()]) {
++        visibility.set(object, object.visible);
++        object.visible = false;
++      }
++      this.storyRestore = { animals, head, visibility, close, wide };
++    }
++    const cut = this.host.clientWidth > this.host.clientHeight && this.host.clientHeight <= 420;
++    this.storyJob = storyStage(id, elapsedMs, settled || this.reduced, cut);
++    this.restoreStoryAnimals();
++    const stage = this.storyJob;
++    if (id === 'opening') {
++      const moss = this.level.passengers.find(
++        (passenger) => passenger.species === 'sheep' && this.state.aboard.includes(passenger.id),
++      );
++      if (moss) {
++        const animal = this.animals.get(moss.id)!;
++        const towardViewer = this.camera.getWorldDirection(new T.Vector3()).negate();
++        towardViewer.applyQuaternion(
++          animal.parent!.getWorldQuaternion(new T.Quaternion()).invert(),
++        );
++        const turn = T.MathUtils.clamp(Math.atan2(towardViewer.x, towardViewer.z), -0.6, 0.6);
++        animal.rotation.y += (turn * stage.turn) / 0.24;
++      }
++      const pivot = new T.Vector3(0, 0.36, 0.2);
++      const nod = new T.Quaternion().setFromAxisAngle(new T.Vector3(1, 0, 0), stage.nod);
++      for (const [part, base] of this.storyRestore.head) {
++        part.position.copy(base.position).sub(pivot).applyQuaternion(nod).add(pivot);
++        part.quaternion.copy(nod).multiply(base.quaternion);
++      }
++    } else {
++      const pip = this.level.passengers.find(
++        (passenger) =>
++          passenger.species === 'rabbit' && this.state.delivered.includes(passenger.id),
++      );
++      if (pip) {
++        const animal = this.animals.get(pip.id)!;
++        const toward = Math.atan2(
++          this.boatRoot.position.x - animal.position.x,
++          this.boatRoot.position.z - animal.position.z,
++        );
++        const turn = Math.sign(toward || 1) * T.MathUtils.clamp(Math.abs(toward), 0.28, 0.8);
++        animal.position.y += stage.hop;
++        animal.rotation.y += turn * stage.turn;
++      }
++    }
++    for (const object of this.storyRestore.visibility.keys()) object.visible = false;
++    this.reframeView();
++  }
++  private restoreStoryAnimals() {
++    if (!this.storyRestore) return;
++    for (const [animal, base] of this.storyRestore.animals) {
++      animal.position.copy(base.position);
++      animal.rotation.copy(base.rotation);
++    }
++    for (const [part, base] of this.storyRestore.head) {
++      part.position.copy(base.position);
++      part.quaternion.copy(base.quaternion);
++    }
++  }
++  clearStory() {
++    if (!this.storyRestore && !this.storyJob) return;
++    this.restoreStoryAnimals();
++    for (const [object, visible] of this.storyRestore?.visibility ?? []) object.visible = visible;
++    this.storyRestore = null;
++    this.storyJob = null;
++    if (!this.disposed) this.reframeView();
++  }
++  private projectedStoryBounds(box: T.Box3) {
++    const points: T.Vector3[] = [];
++    for (const x of [box.min.x, box.max.x])
++      for (const y of [box.min.y, box.max.y])
++        for (const z of [box.min.z, box.max.z])
++          points.push(new T.Vector3(x, y, z).applyMatrix4(this.camera.matrixWorldInverse));
++    const local = new T.Box3().setFromPoints(points);
++    return { minX: local.min.x, maxX: local.max.x, minY: local.min.y, maxY: local.max.y };
++  }
++  storyPresentation() {
++    return {
++      active: !!this.storyJob,
++      stage: this.storyJob ? { ...this.storyJob } : null,
++      camera: {
++        left: this.camera.left,
++        right: this.camera.right,
++        top: this.camera.top,
++        bottom: this.camera.bottom,
++      },
++      usable: this.usableRectangle(),
++      routesVisible: [...this.routes].map(([id, route]) => ({ id, visible: route.visible })),
++      markersVisible: [...this.markers].map(([id, marker]) => ({ id, visible: marker.visible })),
++      animals: [...this.animals].map(([id, animal]) => ({
++        id,
++        position: animal.position.toArray(),
++        worldPosition: animal.getWorldPosition(new T.Vector3()).toArray(),
++        rotation: animal.rotation.toArray(),
++      })),
++      subjects: [
++        { id: 'ferry', object: this.boatRoot },
++        { id: 'lighthouse', object: this.home.group },
++        ...[...this.animals]
++          .filter(([id]) => this.state.aboard.includes(id) || this.state.delivered.includes(id))
++          .map(([id, object]) => ({ id, object })),
++      ].map(({ id, object }) => {
++        const bounds = new T.Box3().setFromObject(object);
++        const points: T.Vector3[] = [];
++        for (const x of [bounds.min.x, bounds.max.x])
++          for (const y of [bounds.min.y, bounds.max.y])
++            for (const z of [bounds.min.z, bounds.max.z])
++              points.push(new T.Vector3(x, y, z).project(this.camera));
++        const projected = new T.Box3().setFromPoints(points);
++        return {
++          id,
++          left: ((projected.min.x + 1) * this.host.clientWidth) / 2,
++          right: ((projected.max.x + 1) * this.host.clientWidth) / 2,
++          top: ((1 - projected.max.y) * this.host.clientHeight) / 2,
++          bottom: ((1 - projected.min.y) * this.host.clientHeight) / 2,
++        };
++      }),
++    };
++  }
+   setViewMode(mode: 'play' | 'overview') {
+     this.viewMode = mode;
+     this.viewPanned = false;
+@@ -874,6 +1037,18 @@ export class World {
+       };
+       this.viewScale = overviewScale(bounds, padded);
+       focus = { x: (bounds.minX + bounds.maxX) / 2, y: (bounds.minY + bounds.maxY) / 2 };
++      if (this.storyJob && this.storyRestore) {
++        const authored = storyCameraFrame(
++          this.projectedStoryBounds(this.storyRestore.close),
++          this.projectedStoryBounds(this.storyRestore.wide),
++          this.storyJob,
++          usable,
++          width,
++          height,
++        );
++        this.viewScale = authored.scale;
++        focus = authored.focus;
++      }
+     }
+     focus =
+       harborFrame || this.storyFraming
+@@ -1459,6 +1634,7 @@ export class World {
+   }
+   dispose() {
+     this.disposed = true;
++    this.clearStory();
+     cancelAnimationFrame(this.frameRequest);
+     this.resizeObserver.disconnect();
+     this.scene.remove(this.water);
+diff --git a/tests/unit/story-presentation.test.ts b/tests/unit/story-presentation.test.ts
+index 03eca7b..1711b8a 100644
+--- a/tests/unit/story-presentation.test.ts
++++ b/tests/unit/story-presentation.test.ts
+@@ -1,12 +1,10 @@
+-import { afterEach, describe, expect, test, vi } from 'vitest';
++import { describe, expect, test, vi } from 'vitest';
+ import { StoryPresentation, restoredHarbor } from '../../src/campaign/presentation';
+ import { storyScenes } from '../../src/campaign/registry';
+ import { initial } from '../../src/game/rules';
+ import { Session } from '../../src/game/session';
+ import { holdingPier } from '../../src/levels/level';
+ 
+-afterEach(() => vi.useRealTimers());
+-
+ describe('bounded optional story motion', () => {
+   test('restored connective scenery depicts the safe Harbor without altering a puzzle or inventing Undo history', () => {
+     const originalLevel = structuredClone(holdingPier);
+@@ -34,72 +32,79 @@ describe('bounded optional story motion', () => {
+     );
+   });
+ 
+-  test('watching settles at eight seconds and retains the readable endpoint indefinitely', () => {
+-    vi.useFakeTimers();
++  test('the render clock drives authored opening progress and holds its endpoint without acknowledging a checkpoint', () => {
+     const changed = vi.fn();
+     const presentation = new StoryPresentation(changed);
+-    presentation.start(false);
++    presentation.start('opening', false, 100);
+     expect(presentation.settled).toBe(false);
+-    vi.advanceTimersByTime(storyScenes.opening.duration - 1);
++    presentation.update(100 + 1600);
++    expect(presentation.frame.elapsed).toBe(1600);
++    presentation.update(100 + storyScenes.opening.duration - 1);
+     expect(changed).not.toHaveBeenCalled();
+     expect(presentation.settled).toBe(false);
+-    vi.advanceTimersByTime(1);
++    presentation.update(100 + storyScenes.opening.duration);
+     expect(presentation.settled).toBe(true);
+     expect(changed).toHaveBeenCalledTimes(1);
+-    vi.advanceTimersByTime(120000);
++    presentation.update(120000);
+     expect(presentation.settled).toBe(true);
++    expect(presentation.frame.elapsed).toBe(storyScenes.opening.duration);
+     expect(changed).toHaveBeenCalledTimes(1);
+-    expect(vi.getTimerCount()).toBe(0);
+   });
+ 
+-  test('Skip or background settling cancels the pending motion completion callback', () => {
+-    vi.useFakeTimers();
++  test('Skip and background settling reach the same endpoint once with no delayed render work', () => {
+     const changed = vi.fn();
+     const presentation = new StoryPresentation(changed);
+-    presentation.start(false);
+-    vi.advanceTimersByTime(500);
++    presentation.start('opening', false, 0);
++    presentation.update(500);
+     presentation.settle();
+     expect(presentation.settled).toBe(true);
+     expect(changed).toHaveBeenCalledTimes(1);
+-    expect(vi.getTimerCount()).toBe(0);
+-    vi.advanceTimersByTime(120000);
++    expect(presentation.frame.elapsed).toBe(storyScenes.opening.duration);
++    presentation.settle();
++    presentation.update(120000);
+     expect(changed).toHaveBeenCalledTimes(1);
+   });
+ 
+-  test('Reduced Motion or a restored pending scene starts settled without scheduling a timeout', () => {
+-    vi.useFakeTimers();
++  test('Reduced Motion and restored pending scenes begin at their authored endpoints', () => {
+     const presentation = new StoryPresentation(vi.fn());
+-    presentation.start(true);
++    presentation.start('opening', true, 0);
+     expect(presentation.settled).toBe(true);
+-    expect(vi.getTimerCount()).toBe(0);
++    expect(presentation.frame.elapsed).toBe(storyScenes.opening.duration);
++    presentation.start('another-bell', true, 200);
++    expect(presentation.frame).toMatchObject({ elapsed: 4000, settled: true });
+   });
+ 
+-  test('a new scene owns its own complete interval without inheriting an old callback', () => {
+-    vi.useFakeTimers();
++  test('the shorter Harbor scene owns its own interval without inheriting opening time', () => {
+     const changed = vi.fn();
+     const presentation = new StoryPresentation(changed);
+-    presentation.start(false);
+-    vi.advanceTimersByTime(7000);
+-    presentation.start(false);
+-    vi.advanceTimersByTime(1000);
++    presentation.start('opening', false, 0);
++    presentation.update(7000);
++    presentation.start('another-bell', false, 7000);
++    presentation.update(8000);
+     expect(presentation.settled).toBe(false);
+     expect(changed).not.toHaveBeenCalled();
+-    expect(vi.getTimerCount()).toBe(1);
+-    vi.advanceTimersByTime(7000);
++    expect(presentation.frame.elapsed).toBe(1000);
++    presentation.update(11000);
+     expect(presentation.settled).toBe(true);
+     expect(changed).toHaveBeenCalledTimes(1);
+   });
+ 
+-  test('navigation and disposal cancellation cannot perform a late presentation update', () => {
+-    vi.useFakeTimers();
++  test('immediate navigation and disposal cancel finite jobs before any late frame can change presentation', () => {
+     const changed = vi.fn();
+     const presentation = new StoryPresentation(changed);
+-    presentation.start(false);
+-    vi.advanceTimersByTime(7999);
++    presentation.start('opening', false, 0);
+     presentation.cancel();
+     presentation.cancel();
+-    vi.advanceTimersByTime(120000);
++    presentation.update(120000);
+     expect(changed).not.toHaveBeenCalled();
+-    expect(vi.getTimerCount()).toBe(0);
++    expect(presentation.frame).toMatchObject({ scene: null, elapsed: 0, settled: true });
++  });
++
++  test('out of order timestamps cannot reverse an in-progress acknowledgment', () => {
++    const presentation = new StoryPresentation(vi.fn());
++    presentation.start('opening', false, 100);
++    presentation.update(1600);
++    presentation.update(1200);
++    expect(presentation.frame.elapsed).toBe(1500);
+   });
+ });
+diff --git a/tests/unit/story-progress.test.ts b/tests/unit/story-progress.test.ts
+index 1deabc2..aa4b9f9 100644
+--- a/tests/unit/story-progress.test.ts
++++ b/tests/unit/story-progress.test.ts
+@@ -80,11 +80,10 @@ describe('authored story registry', () => {
+     expect(storyScenes['another-bell'].captions).toEqual([
+       'Pip, Rue and Moss are safe. Across the water, Bellwater is still waiting.',
+     ]);
+-    expect(
+-      Object.values(storyScenes).every(
+-        (scene) => scene.duration >= 6000 && scene.duration <= 10000,
+-      ),
+-    ).toBe(true);
++    expect(storyScenes.opening.duration).toBeGreaterThanOrEqual(6000);
++    expect(storyScenes.opening.duration).toBeLessThanOrEqual(9000);
++    expect(storyScenes['another-bell'].duration).toBeGreaterThanOrEqual(3000);
++    expect(storyScenes['another-bell'].duration).toBeLessThanOrEqual(5000);
+   });
+ });
+ 
+diff --git a/tools/snapshot-evidence.mjs b/tools/snapshot-evidence.mjs
+index 8459cfe..d2466de 100644
+--- a/tools/snapshot-evidence.mjs
++++ b/tools/snapshot-evidence.mjs
+@@ -74,6 +74,9 @@ const paths = [
+   ...(existsSync(new URL('NEXT_TASK_STORY_FOUNDATION.md', root))
+     ? ['NEXT_TASK_STORY_FOUNDATION.md']
+     : []),
++  ...(existsSync(new URL('NEXT_TASK_STORY_SCENES.md', root))
++    ? ['NEXT_TASK_STORY_SCENES.md']
++    : []),
+   'docs/GAMEPLAY_RULES.md',
+   'docs/FIRST_COVE.md',
+   'docs/ART_DIRECTION.md',

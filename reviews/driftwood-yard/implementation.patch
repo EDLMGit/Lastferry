@@ -1,0 +1,2116 @@
+diff --git a/README.md b/README.md
+index 166ef21..683734b 100644
+--- a/README.md
++++ b/README.md
+@@ -1,12 +1,12 @@
+ # Last Ferry — the first evening
+ 
+-Open the default root URL, without `?cove=`, for **Last Ferry**. **Play** starts the shared Sound intent and opens three illustrated shots of the changing coast, Rue and Pip’s lantern, and Moss aboard the ferry. Normal motion advances through the three pictures automatically; Take the helm starts **The Holding Pier**. After completing its rescue, **Continue story** accepts that cove and introduces **Bellwater Cove**. Bellwater tests changing route depths and two pickup deadlines. Its explicit continuation ends the available prototype honestly; the rest of the journey is still being made. See the current [Home and play review](reviews/home-play-flow/REVIEW.md), the [illustrated story production review](reviews/story-production/REVIEW.md), the [earlier authored-scenes record](reviews/story-scenes/REVIEW.md), the [foundation record](reviews/story-foundation/REVIEW.md), [campaign direction](campaign/CAMPAIGN_DIRECTION.md) and developer notes for [Holding Pier](docs/HOLDING_PIER.md) and [Bellwater](docs/BELLWATER.md).
++Open the default root URL, without `?cove=`, for **Last Ferry**. **Play** starts the shared Sound intent and opens three illustrated shots of the changing coast, Rue and Pip’s lantern, and Moss aboard the ferry. Normal motion advances through the three pictures automatically; Take the helm starts **The Holding Pier**. After completing its rescue, **Continue story** accepts that cove and introduces **Bellwater Cove**. Bellwater tests changing route depths and two pickup deadlines. Its explicit continuation introduces Nell at **Driftwood Yard**, the third campaign cove: use a safe mooring while reaching the low reeds in time. After its rescue, explicit continuation ends the available prototype honestly; the larger ferry and later coves are still being made. See the current [Driftwood review](reviews/driftwood-yard/REVIEW.md), the [Home and play review](reviews/home-play-flow/REVIEW.md), the [illustrated story production review](reviews/story-production/REVIEW.md), the [earlier authored-scenes record](reviews/story-scenes/REVIEW.md), the [foundation record](reviews/story-foundation/REVIEW.md), [campaign direction](campaign/CAMPAIGN_DIRECTION.md) and developer notes for [Holding Pier](docs/HOLDING_PIER.md) and [Bellwater](docs/BELLWATER.md), plus [Driftwood developer notes](docs/DRIFTWOOD_YARD.md).
+ 
+-**Practice** offers all three existing puzzles. Explicit `/?cove=first-crossing`, `/?cove=holding-pier` and `/?cove=bellwater` links enter a puzzle directly without story scenes and never read or change journey progress. First Crossing is separate practice, preserving the original baseline. Freestanding island names and light markers open free inspection; nearby dock controls offer direct named single-passenger transfers or a compact group chooser with one named commit. Sailing remains deliberate. Accepted painted panels, portraits, water, lighthouse, wooden contacts, music and sailing pace remain.
++**Practice** offers all four existing puzzles. Explicit `/?cove=first-crossing`, `/?cove=holding-pier` `/?cove=bellwater` and `/?cove=driftwood-yard` links enter a puzzle directly without story scenes and never read or change journey progress. First Crossing is separate practice, preserving the original baseline. Freestanding island names and light markers open free inspection; nearby dock controls offer direct named single-passenger transfers or a compact group chooser with one named commit. Sailing remains deliberate. Accepted painted panels, portraits, water, lighthouse, wooden contacts, music and sailing pace remain.
+ 
+ Baseline M1 is a playable 3D tutorial cove: rescue Moss the sheep with Pip and Rue already aboard, manage how much depth the loaded ferry needs, and bring everyone to the lighthouse. Time advances only on accepted actions. The scene, sounds and rules run locally in the browser.
+ 
+-The [victory mix review](reviews/victory-mix/REVIEW.md) verifies a clearer arrival cue and music that becomes quieter at visible final arrival, staying reduced while the cove is won. Undo, Restart and cove changes restore the gameplay mix. The private Site currently contains reviewed portrait game `1a85874883af5caa59f6294a75495eccf2afebbc` (Sites version **12**, hosting source `e87c5c5baa53a39001c5a89b07b59aab2ad150fc`), confirmed 2026-10-25 in [the supplied publication receipt](review/deployment-confirmation.json). It includes [Harbor homecoming](reviews/homecoming/REVIEW.md), [soft lighthouse light](reviews/lighthouse-light/REVIEW.md), and accepted [sailing direction and released crests](reviews/sailing-direction-wake/REVIEW.md). The earlier water-motion result was not visually accepted. **This Home/story/transfer pass is not deployed.** GitHub push alone does not update the Site; [PROJECT_STATE](docs/PROJECT_STATE.md) keeps publication history and current source separate.
++The [victory mix review](reviews/victory-mix/REVIEW.md) verifies a clearer arrival cue and music that becomes quieter at visible final arrival, staying reduced while the cove is won. Undo, Restart and cove changes restore the gameplay mix. The private Site currently contains reviewed portrait game `1a85874883af5caa59f6294a75495eccf2afebbc` (Sites version **12**, hosting source `e87c5c5baa53a39001c5a89b07b59aab2ad150fc`), confirmed 2026-10-25 in [the supplied publication receipt](review/deployment-confirmation.json). It includes [Harbor homecoming](reviews/homecoming/REVIEW.md), [soft lighthouse light](reviews/lighthouse-light/REVIEW.md), and accepted [sailing direction and released crests](reviews/sailing-direction-wake/REVIEW.md). The earlier water-motion result was not visually accepted. **The Home/story/Driftwood additions are not deployed.** GitHub push alone does not update the Site; [PROJECT_STATE](docs/PROJECT_STATE.md) keeps publication history and current source separate.
+ 
+ ## Run
+ 
+@@ -107,7 +107,7 @@ Reproduce the First Crossing detour manually: Sheep Pier → Board Moss → East
+ 
+ ## Evidence and source
+ 
+-See the current [Home and play review](reviews/home-play-flow/REVIEW.md), the [illustrated story production review](reviews/story-production/REVIEW.md), the historical [story foundation review](reviews/story-foundation/REVIEW.md), and [status](STATUS.md). Source manifests distinguish fresh gameplay evidence from earlier captures and development failures. The [portrait review](reviews/passenger-portraits/REVIEW.md), [cove asset interface review](reviews/cove-ui-assets/REVIEW.md), [cove interface review](reviews/cove-interface/REVIEW.md) and its [capture manifest](reviews/cove-interface/capture-manifest.json) retain their historical identities. The [refinement review](reviews/refinement/REVIEW.md) retains the previous water/music result and actual audio phrase. Raw videos/audio stay local under the review's `raw/` folders, ignored and unavailable in a fresh clone. Versioned screenshots/manifests provide remote evidence. The [atmosphere review](reviews/atmosphere/REVIEW.md), [environment review](reviews/environment/REVIEW.md), [Bellwater review](reviews/bellwater/REVIEW.md), [prerequisite responsive/input report](reviews/bellwater/phase-a/REVIEW.md) and [contextual interface review](reviews/contextual/REVIEW.md) remain historical evidence of preceding source.
++See the current [Driftwood review](reviews/driftwood-yard/REVIEW.md), the [Home and play review](reviews/home-play-flow/REVIEW.md), the [illustrated story production review](reviews/story-production/REVIEW.md), the historical [story foundation review](reviews/story-foundation/REVIEW.md), and [status](STATUS.md). Source manifests distinguish fresh gameplay evidence from earlier captures and development failures. The [portrait review](reviews/passenger-portraits/REVIEW.md), [cove asset interface review](reviews/cove-ui-assets/REVIEW.md), [cove interface review](reviews/cove-interface/REVIEW.md) and its [capture manifest](reviews/cove-interface/capture-manifest.json) retain their historical identities. The [refinement review](reviews/refinement/REVIEW.md) retains the previous water/music result and actual audio phrase. Raw videos/audio stay local under the review's `raw/` folders, ignored and unavailable in a fresh clone. Versioned screenshots/manifests provide remote evidence. The [atmosphere review](reviews/atmosphere/REVIEW.md), [environment review](reviews/environment/REVIEW.md), [Bellwater review](reviews/bellwater/REVIEW.md), [prerequisite responsive/input report](reviews/bellwater/phase-a/REVIEW.md) and [contextual interface review](reviews/contextual/REVIEW.md) remain historical evidence of preceding source.
+ 
+ The [navigation review](reviews/navigation/REVIEW.md) preserves the accepted navigation, rule wording and phone-layout pass. The [original Holding Pier review](reviews/holding-pier/REVIEW.md) records its nine-action solution, losing alternatives and exhaustive temporary-holding check. The [M1.1 refinement review](reviews/m1-1/REVIEW.md) preserves earlier phone framing, passenger deck attachment and keyboard work. These are historical records, not captures of the contextual interface.
+ 
+diff --git a/assets/catalog.json b/assets/catalog.json
+index 232d0c8..5535ba0 100644
+--- a/assets/catalog.json
++++ b/assets/catalog.json
+@@ -311,7 +311,7 @@
+       ],
+       "visualSignature": "Separated tall ears, compact body, tiny dark face and pink inner ears.",
+       "reuseAndOwnership": "Shared factory; names and gameplay identities come from level passengers. World scales rabbits 1.25 / 1.65 / 1.25.",
+-      "behaviorToPreserve": "Coat and pose variation imply no abilities. Keep feet/contact, aboard attachment and canonical settled pose.",
++      "behaviorToPreserve": "Coat and pose variation imply no abilities. Keep feet/contact, aboard attachment and canonical settled pose. Fern/Oat explicit cream/tan identities survive full passenger-array reorder; speciesOrdinal remains the full placement index.",
+       "provenance": "original-project-code",
+       "acceptance": {
+         "state": "part-of-accepted-baseline",
+@@ -4559,12 +4559,24 @@
+         {
+           "path": "cove-portrait-package/portraits/sheep-wool.svg",
+           "symbol": "generated geometric intermediate forsheep-wool"
++        },
++        {
++          "path": "tools/render-nell-portrait.mjs",
++          "symbol": "isolated original beaver factory to SVGRenderer and transparent Chromium PNG"
++        },
++        {
++          "path": "assets/portraits/beaver-brown.svg",
++          "symbol": "full completed beaver projection including broad tail"
++        },
++        {
++          "path": "assets/portraits/generation-manifest.json",
++          "symbol": "exact Nell model/generator/camera/shading and output provenance"
+         }
+       ],
+       "originalModelSource": "src/scene/models.ts",
+       "identitySource": "src/game/passenger-appearance.ts",
+       "generatorSource": "cove-portrait-package/tools/render-portraits.mjs",
+-      "generationRecord": "cove-portrait-package/portraits/generation-manifest.json",
++      "generationRecord": "assets/portraits/family-manifest.json",
+       "generatedOutputs": [
+         {
+           "variant": "rabbit-cream",
+@@ -4598,27 +4610,44 @@
+           "alpha": "straight",
+           "sha256": "34ed63cc740937734402f79fbe681a597de26e07c6e7e4583d87c21e9e22ee96",
+           "bytes": 43602
++        },
++        {
++          "variant": "beaver-brown",
++          "path": "assets/portraits/beaver-brown.png",
++          "width": 256,
++          "height": 256,
++          "format": "PNG",
++          "colorSpace": "sRGB",
++          "alpha": "straight",
++          "sha256": "248a3568b1483c8745c12431a41b57fc2cdb969ac0ad9e1c0accc2505a7ffdc5",
++          "bytes": 35678
+         }
+       ],
+-      "meaning": "Recognize the existing miniature animal beside its live passenger name and full capacity cost; appearance derives from full-level species ordinal, not current subset or displayname.",
++      "meaning": "Recognize the miniature animal beside live names and capacity; explicit appearance identities remain stable independently of offered order and full species placement ordinals.",
+       "variants": [
+         "rabbit-cream",
+         "rabbit-tan",
+-        "sheep-wool"
++        "sheep-wool",
++        "beaver-brown"
+       ],
+-      "visualSignature": "Original cream/tan upright-ear rabbit heads/upperchests and dark-faced cream-wool sheep, transparent256px sources displayed44px beside copy; no badge, accessories, recoloring or new silhouette.",
+-      "reuseAndOwnership": "Exactly three canonical runtime PNGs reused across nine level/passenger combinations. Editable model/generator and sourceSVG recipe own derivatives; shared helper owns static URL/loading decoration; nativebutton owns input.",
++      "visualSignature": "Cream/tan upright-ear rabbits, dark-faced wool sheep, and warm brown beaver with lighter muzzle/chest, round ears and broad flat darker tail; transparent256px originals displayed44px beside live text.",
++      "reuseAndOwnership": "Four canonical PNGs; existing three outputs remain byte-exact. Nell extends the existing family through the same original-model SVG derivation, rasterized offline by installedChromium; no production dependency. Names/costs/input remain native.",
+       "behaviorToPreserve": "Full species ordinal remains intact for world deck/pose; Rue/Lark staytan when offeredalone. Preserve modelproportions/geometry/colors, live names/costs, stable44pxslot/footer, focus/subsets/Undo, allacceptedgameplay/world/audio. Unknownappearance uses text-preserving reservedslot.",
+       "provenance": "original-model-derived-ui-image",
+       "acceptance": {
+-        "state": "reviewed-and-published-version12; no-new-device-acceptance-claim",
++        "state": "prior-three-portraits-published-version12; new-beaver-integrated-human-review-pending",
+         "gameCommit": "1a85874883af5caa59f6294a75495eccf2afebbc",
+-        "basis": "Supplied version12 receipt confirms the independently reviewed portrait build was published to the unchanged owner-private Site; publication is not new physical-device or blanket human visual approval.",
++        "basis": "Nell is an original model-derived extension; prior images and publication history unchanged. Native phone art and physical-device approval remain separate.",
+         "history": [
+           {
+             "state": "integrated-candidate-awaiting-human-playtest",
+             "reviewedBaseline": "23a644aba24e6479b9d82a106a745d15c3f8c7dc",
+             "basis": "Static model-derived candidates supplied for this task. Source/alpha checks and runtime integration are not human visual acceptance or pixel-identical WebGL rendering."
++          },
++          {
++            "state": "reviewed-and-published-version12; no-new-device-acceptance-claim",
++            "gameCommit": "1a85874883af5caa59f6294a75495eccf2afebbc",
++            "basis": "Supplied version12 receipt confirms the independently reviewed portrait build was published to the unchanged owner-private Site; publication is not new physical-device or blanket human visual approval."
+           }
+         ]
+       },
+@@ -4654,16 +4683,20 @@
+         {
+           "path": "review/deployment-confirmation.json",
+           "role": "Supplied version12 publication receipt for the reviewed portrait baseline; this story pass is not deployed"
++        },
++        {
++          "path": "assets/portraits/generation-manifest.json",
++          "role": "Nell source/output/environment provenance; model-derived diffuse shading differs from runtime WebGL"
+         }
+       ],
+       "typeSpecific": {
+-        "original model and shared identity sources": "src/scene/models.ts animal(species,variant), unchanged; src/game/passenger-appearance.ts resolves full level plus passenger ID and retains full speciesOrdinal for World placement/pose.",
+-        "camera/crop, world proportions and shading recipe": "Original generation-manifest.json: orthographic offset[1.8,1,5], projected head/upper-chest square with8%totalpadding, rabbit floor.23/sheep.15; rabbit scale[1.25,1.65,1.25],sheep[1.15,1.5,1.15]. Ambient linearRGB[.43,.45,.44], warmkey#fff1dc.75 at[-3,5,4],tealfill#aed5d1.26 at[4,1,2]. Offline diffuse SVG shading differs from liveWebGL/ACES/shadows.",
+-        "derived output format/dimensions/variants and alpha/color semantics": "Three canonical256x256 straight-alpha RGBA8PNG sRGB derivatives. Original geometric SVG intermediates remain editable reproducible outputs. Keys rabbit-cream/rabbit-tan/sheep-wool; no baked text/check/frame or backgrounddisk.",
+-        "generation command/environment and source/output provenance": "Node24.15.0 with existingThree0.186.1 freshly reproduces every suppliedSVG byte; no PNG regeneration because all suppliedmodel/generator/SVG/PNG hashes remain exact. Supplied PNGrasterization Node24.22.1/Sharp0.35.5/Lanczos3 768->256 and completeversions retained. Exact command/source/output audit reviews/passenger-portraits/generation-audit.json; no production rasterizer dependency.",
++        "original model and shared identity sources": "src/scene/models.ts original animal geometry; resolvePassengerAppearance/full speciesOrdinal and passengerModelVariant separate explicit coat identity from placement.",
++        "camera/crop, world proportions and shading recipe": "Original generation-manifest.json: orthographic offset[1.8,1,5], projected head/upper-chest square with8%totalpadding, rabbit floor.23/sheep.15; rabbit scale[1.25,1.65,1.25],sheep[1.15,1.5,1.15]. Ambient linearRGB[.43,.45,.44], warmkey#fff1dc.75 at[-3,5,4],tealfill#aed5d1.26 at[4,1,2]. Offline diffuse SVG shading differs from liveWebGL/ACES/shadows. Nell uses full-model/tail framing, scale[1.15,1.5,1.15], cameraoffset[2.7,1.8,5], same original diffuse ambient/key/fill colors.",
++        "derived output format/dimensions/variants and alpha/color semantics": "Four256x256 straight-alpha sRGB PNGs. Three unchanged supplied images plus original full-body beaver-brown; editable SVG intermediates retained; no baked labels or background.",
++        "generation command/environment and source/output provenance": "Node24.15.0 with existingThree0.186.1 freshly reproduces every suppliedSVG byte; no PNG regeneration because all suppliedmodel/generator/SVG/PNG hashes remain exact. Supplied PNGrasterization Node24.22.1/Sharp0.35.5/Lanczos3 768->256 and completeversions retained. Exact command/source/output audit reviews/passenger-portraits/generation-audit.json; no production rasterizer dependency. Nell: node tools/render-nell-portrait.mjs; Node24, installedThreeSVGRenderer and installedChromium transparent rasterization; exact versions/hashes in assets/portraits/generation-manifest.json. Family record lists both generation paths.",
+         "actual consumers, displayed size and semantic purpose": "Board/Letashore/Bringhome in src/main.ts use passengerChoiceContent with explicit resolved appearance; src/dev/asset-gallery.ts shares the original URLs/helper at44CSSpx plus source-size256px specimens. Identity recognition supports live name and capacity; it creates no gameplay difference.",
+         "native-control ownership and text-preserving load/failure behavior": "One nativebutton perpassenger, stableID/aria-pressed/order/focus. Emptyalt/non-draggable decorative PNG has reserved44px slot and no independentpointer/focus behavior. Pending/error leaves quietreservedslot; full labels, costs, selection, Close/Confirm remain live. Same dialog survives fullscreen; no newcanvas/context/loop.",
+-        "small-screen evidence and human acceptance boundary": "Actual game phone/source evidence under reviews/passenger-portraits; suppliedboard/gallery remain design evidence. User accepts the panel direction at published23a644a/version11, but new portrait appearance is integrated pending ChatGPT review/userplaytest. PhysicalAndroid/platformfonts/otherengines remain unverified unless explicitlyrecorded."
++        "small-screen evidence and human acceptance boundary": "Actual source-tied Driftwood phone evidence is retained with the task review; developer gallery and fullsize PNG inspection are design evidence. New beaver art/hardware listening/physicalAndroid approval remains pending."
+       },
+       "consumers": [
+         "src/main.ts",
+@@ -4672,7 +4705,7 @@
+       ],
+       "gallery": {
+         "section": "interface",
+-        "preview": "Actualshared44px portraitchoices plus256px originals; threeappearances, bothnamingschemes, selected/unselected/focus/failure and constrainedlonglabelstress. Gallery isdesign evidenceonly."
++        "preview": "Four shared44px choices and source-size images; real static beaver model; named Driftwood companions with stable cream/tan mapping and text-preserving fallback."
+       }
+     },
+     {
+@@ -4789,6 +4822,10 @@
+         {
+           "path": "src/campaign/registry.ts",
+           "symbol": "Illustration IDs, semantic shot descriptions and finite millisecond durations"
++        },
++        {
++          "path": "LAST_FERRY_DRIFTWOOD_YARD_PACKAGE/direction/NELL_AND_YARD.md",
++          "symbol": "New original Nell seven-second lantern lift and greeting direction"
+         }
+       ],
+       "meaning": "Presentation-only narrative pictures of changing shoreline, neighbors keeping a light, the answering ferry and safe Harbor. Illustration geometry is never route or passenger-state data.",
+@@ -4796,10 +4833,11 @@
+         "tide",
+         "lantern",
+         "ferry",
+-        "harbor"
++        "harbor",
++        "driftwood"
+       ],
+-      "visualSignature": "Soft teal water, dusk lavender/peach, tan Rue left and cream Pip right, woolly Moss, yellow ferry/red cabin and restrained warm lantern/lighthouse light. Three approved opening compositions plus one new protected-Harbor picture.",
+-      "reuseAndOwnership": "One current Canvas2D surface in the story view; painter receives illustration/time and bounded DPR1–2. Shared paths/characters/shore/light helpers are reused across four variants. It owns no frame loop, puzzle state, audio or progress.",
++      "visualSignature": "Soft teal water, dusk lavender/peach, tan Rue left and cream Pip right, woolly Moss, yellow ferry/red cabin and restrained warm lantern/lighthouse light. Three approved opening compositions plus one new protected-Harbor picture. Driftwood adds warm brown Nell, broad flat tail, timber rail and a visibly lifted lantern.",
++      "reuseAndOwnership": "One current Canvas2D surface in the story view; painter receives illustration/time and bounded DPR1â€“2. Shared paths/characters/shore/light helpers are reused across four variants. It owns no frame loop, puzzle state, audio or progress. Driftwood uses the same painter and player; accepted original opening/Harbor paths remain unchanged.",
+       "behaviorToPreserve": "Opening finite actions retain supplied art and 6/6/7-second endpoints. Harbor is five seconds. Milliseconds convert explicitly to painter seconds. Resize recomposes portrait/landscape; settled endpoints redraw only when needed. No rabbits board during the prelude and the Harbor ferry remains empty.",
+       "provenance": "original-package-canvas-art",
+       "acceptance": {
+@@ -4998,6 +5036,124 @@
+         "ui.icon.sound-off",
+         "ui.icon.sound-retry"
+       ]
++    },
++    {
++      "id": "model.beaver",
++      "name": "Beaver boatwright passenger",
++      "kind": "procedural-model",
++      "status": "integrated",
++      "sources": [
++        {
++          "path": "src/scene/models.ts",
++          "symbol": "animal('beaver'): compact original Nell geometry, beaver-flat-tail"
++        },
++        {
++          "path": "src/game/passenger-appearance.ts",
++          "symbol": "explicit beaver-brown identity; full speciesOrdinal preserved"
++        },
++        {
++          "path": "tools/render-nell-portrait.mjs",
++          "symbol": "matching model-derived static portrait"
++        }
++      ],
++      "variants": [
++        "warm-brown Nell; fixed lighter muzzle and broad resting tail"
++      ],
++      "visualSignature": "Compact warm brown body, lighter muzzle/chest, small rounded ears, broad nose, paired teeth and flattened darker tail.",
++      "reuseAndOwnership": "Original code-native model shares existing matte material palette/factory; World owns canonical deck/pier transforms.",
++      "behaviorToPreserve": "Two-space capacity is level data, not a species ability. Tail remains visible and attached with clearance through deck transfer, tide, berth headings and Undo.",
++      "provenance": "original-project-code",
++      "acceptance": {
++        "state": "integrated-awaiting-human-visual-review"
++      },
++      "evidence": [
++        {
++          "path": "assets/portraits/generation-manifest.json",
++          "role": "Original completed model and derivative provenance, not gameplay evidence"
++        },
++        {
++          "path": "src/dev/asset-gallery.ts",
++          "role": "Actual factory static 3D specimen; developer design view"
++        }
++      ],
++      "meaning": "Nell the two-space beaver boatwright; a new neighbor without a gameplay ability.",
++      "consumers": [
++        "src/scene/world.ts",
++        "src/dev/asset-gallery.ts",
++        "tools/render-nell-portrait.mjs"
++      ],
++      "gallery": {
++        "section": "beaver-heading",
++        "preview": "Static real3D model, original256px portrait and shared44px Nell/Fern/Oat choices; links actual Driftwood."
++      },
++      "typeSpecific": {
++        "factory/source symbol": "src/scene/models.ts: animal(species, variant)",
++        "semantic unit/axis/pivot convention or authoritative source": "animal(species,variant) local feet-contact origin, Y up; World applies species scale and canonical deck/shore positions.",
++        "named attachment points when relevant": "animal() returns one Group with local geometry, no separate rig or head attachment API. World passengerAnchors and canonical passenger IDs attach each instance beneath the hull.",
++        "material references": "Shared mat cache; warm fur#8e6848, muzzle#c3a47a, tail#5b4438, nose#3f352d and teeth#f3e4bf.",
++        "actual variant parameters": "animal(beaver,0): brown fur/muzzle/tail; local feet-contact origin; named beaver-flat-tail group; no costume.",
++        "consumers and scale/placement owner": "World applies1.15/1.5/1.15 scale and canonical deck/shore transforms; same scale used by portrait exporter.",
++        "pick/framing role": "World uses geometry for framing and scene selection; gameplay identities remain canonical nodes/passengers.",
++        "disposal owner": "World.dispose traverses shared geometry/material/texture sets and disposes each once; CoastalWater owns its separate resources."
++      }
++    },
++    {
++      "id": "environment.driftwood-yard",
++      "name": "Driftwood timber yard and raised mooring",
++      "kind": "procedural-geometry",
++      "status": "integrated",
++      "sources": [
++        {
++          "path": "src/scene/scenery.ts",
++          "symbol": "driftwoodYard: timber stacks, workbench, beam and rope"
++        },
++        {
++          "path": "src/scene/layout.ts",
++          "symbol": "Driftwood landmarks, stone mooring and reed styling"
++        },
++        {
++          "path": "data/driftwood-yard.level.json",
++          "symbol": "Authored islands, piers and clear passage network"
++        }
++      ],
++      "variants": [
++        "Low working yard",
++        "High stone mooring",
++        "Low reed landing"
++      ],
++      "visualSignature": "Sparse timber stacks, low trestle/rail and rope reuse wood; elevated stone contrasts with low reeds.",
++      "reuseAndOwnership": "Existing wood, stone, reed, coast and water families reused; level owns instances, scenery owns decorative original shapes.",
++      "behaviorToPreserve": "No props change passage depth or create collision-free rule exceptions; real berth and course clearance must remain valid.",
++      "provenance": "original-project-code",
++      "acceptance": {
++        "state": "integrated-awaiting-human-visual-review"
++      },
++      "evidence": [
++        {
++          "path": "LAST_FERRY_DRIFTWOOD_YARD_PACKAGE/direction/NELL_AND_YARD.md",
++          "role": "Supplied direction; not gameplay evidence"
++        }
++      ],
++      "meaning": "Working coast with readable low rescue landings and a raised safe holding platform.",
++      "consumers": [
++        "src/scene/world.ts"
++      ],
++      "gallery": {
++        "section": "driftwood-yard",
++        "preview": "Actual authored cove through independent Driftwood practice link."
++      },
++      "typeSpecific": {
++        "factory/source symbol": "src/scene/scenery.ts: driftwoodYard",
++        "semantic unit/axis/pivot convention or authoritative source": "World XZ units, Y up; instances authored in level/layout; decorative props never define rules",
++        "named attachment points when relevant": "Landmark Group at yard-island, pier transfer anchors from level",
++        "material references": "Shared existing wood and stone matte materials",
++        "actual variant parameters": "Original restrained yard group, rocky mooring and reed shoreline styles",
++        "authoritative geometry inputs": "data/driftwood-yard.level.json world/islands/piers, src/scene/layout.ts landmarks",
++        "style/elevation parameters": "Yard low elevation1; raised stone mooring3; low reeds1, scenery Y placement from authored level",
++        "mechanical versus decorative boundary": "Rules read JSON only; decorative timber props do not define paths or costs",
++        "material/texture dependencies": "Shared original wood, stone, reeds and coast palette; no new texture",
++        "generation and disposal owner": "World creates scenery Group and disposes geometry/material ownership with cove"
++      }
+     }
+   ],
+   "seedSource": "cove-ui-package/asset-catalog.seed.json",
+diff --git a/campaign/CAMPAIGN_DIRECTION.md b/campaign/CAMPAIGN_DIRECTION.md
+index a982828..757ddfe 100644
+--- a/campaign/CAMPAIGN_DIRECTION.md
++++ b/campaign/CAMPAIGN_DIRECTION.md
+@@ -2,9 +2,9 @@
+ 
+ **Campaign direction v1 · 25 October 2026**
+ 
+-Design baseline: `1a85874883af5caa59f6294a75495eccf2afebbc`, `EDLMGit/Lastferry`, branch `m1-first-crossing`. This document selects a coherent direction for the next prototype. Only Holding Pier, Bellwater Cove and the separate First Crossing practice puzzle currently exist. The ten further coves, new species, larger boat, later story scenes and current rule below are proposals, not implemented or solver-validated content.
++Original direction baseline: `1a85874883af5caa59f6294a75495eccf2afebbc`, `EDLMGit/Lastferry`, branch `m1-first-crossing`. The current contained implementation is `DRIFTWOOD_YARD_01`, starting from the reviewed Home/play game `da1f2686ce6aff8d754e13111447dabb6e1313f0` and preserving newer work. Holding Pier → Bellwater Cove → Driftwood Yard is now the implemented journey; First Crossing is separate practice. Nell, Fern and Oat, the authored yard puzzle, short illustrated entry and narrow two-cove completion compatibility are implemented in this slice. The remaining nine coves, six-space ferry, deer, launch scene and current rule are future direction, not shipped content. Actual checks and human-acceptance limits are recorded separately in `reviews/driftwood-yard/`.
+ 
+-The current executable task is `LAST_FERRY_STORY_PRODUCTION_PACKAGE/NEXT_TASK_STORY_PRODUCTION.md`, task `STORY_PRODUCTION_01`. It integrates the approved illustrated opening and a compact Harbor connection into the existing two-cove journey. The foundation, checkpoints and puzzles remain; the rest of this document provides direction for later contained tasks.
++The illustrated opening/Harbor production and accepted live Home/story autoplay/direct-transfer pass are complete foundations. Their historical assignments are not active prerequisites. This slice retains the four-space ferry, unchanged ordinary rules and cove-boundary checkpoint contract.
+ 
+ ## 1. The story we are making
+ 
+@@ -84,7 +84,7 @@ Future titles are working names. Each row is a design intention, not a proven pu
+ | --- | --- | --- | --- | --- |
+ | 1 | Holding Pier | Bring Pip, Rue and Moss home | Accepted introduction: load, depth, temporary landing and deadlines | Existing |
+ | 2 | Bellwater Cove | Meet Tansy, Lark and Bram | Accepted route and rescue-order puzzle with staged tide consequences | Existing |
+-| 3 | Driftwood Yard | Rescue Nell, the boatwright | New four-space layout using the existing rules; a meaningful staging or return-route decision | Proposed |
++| 3 | Driftwood Yard | Rescue Nell, Fern and Oat | Four-space staging at High Mooring, shallow rescue and deepened return | Implemented; human puzzle acceptance pending |
+ | 4 | Wide Berth | Enjoy the larger ferry | Six spaces and the new full-load draft band, with forgiving timing | Proposed |
+ | 5 | Orchard Landing | Meet Orin | A three-space passenger introduced separately from the boat lesson | Proposed |
+ | 6 | Two Landings | Bring a larger group together | Combine capacity, mixed costs, partial delivery and temporary staging | Proposed |
+@@ -154,13 +154,14 @@ Use six short major story scenes, plus a brief connection between the existing f
+ | Trigger | Scene | What it establishes |
+ | --- | --- | --- |
+ | Begin the journey | First evening at the helm | Captain, tide, lighthouse goal |
+-| After cove 3 | A wider deck | Safe neighbors launch Nell's prepared ferry |
++| Before cove 3 | A light at the yard — implemented | Introduce Nell before the Driftwood rescue |
++| After cove 3 — future | A wider deck | Safe neighbors launch Nell's prepared ferry |
+ | Before cove 5 | The orchard neighbor | Introduce Orin before his first selection |
+ | After cove 6 | The water turns | Prepare the player to learn the channel rule |
+ | After cove 9 | The last lights | Show the gathering and the remaining occupied landings |
+ | After cove 12 | A place for the captain | Supper, welcome and a complete ending |
+ 
+-The current opening uses three approved illustrated Canvas2D shots with finite 6 / 6 / 7-second actions; the Harbor connection uses one approximately five-second shot in the same language. The player advances each shot explicitly and may linger at its held endpoint. Next is available immediately, while only the final handoff acknowledges a scene. Normal captions follow a brief visual lead-in; Read story exposes the full scene immediately, and Reduced Motion shows each still endpoint with its caption. This supersedes the earlier model-only story presentation, while the playable world remains fully 3D. Later chapter composition and timing need their own authored review. The game remains understandable when muted.
++The current opening uses three approved illustrated Canvas2D shots with finite 6 / 6 / 7-second actions; the Harbor connection uses one approximately five-second shot in the same language. Normal-motion opening shots advance automatically, with Pause/Resume and immediate Next. The final picture holds for explicit acknowledgment. Driftwood adds one seven-second lantern greeting; Harbor keeps its five-second gathering. Reduced Motion and restored pending scenes retain still endpoints. Next is available immediately, while only the final handoff acknowledges a scene. Normal captions follow a brief visual lead-in; Read story exposes the full scene immediately, and Reduced Motion shows each still endpoint with its caption. This supersedes the earlier model-only story presentation, while the playable world remains fully 3D. Later chapter composition and timing need their own authored review. The game remains understandable when muted.
+ 
+ Let the current score continue through its existing audio owner. Scene transitions may change arrangement or level gently; they must honor mute, touch-start, background suspension and cancellation. A repeated scene must not create overlapping music or duplicate arrival cues. New music, if later needed, should be original and consistent with the accepted score.
+ 
+@@ -192,8 +193,8 @@ The actual authoring and mechanical acceptance details are in `PUZZLE_PROGRESSIO
+ 
+ | Slice | Concrete result | Stop before |
+ | --- | --- | --- |
+-| Story foundation — retained; illustrated production current | Approved three-shot opening and compact Harbor connection inside the working journey/practice flow and honest cove-boundary checkpoints | New levels, species, hull or currents |
+-| Complete Phase I | Driftwood Yard and Nell, using the existing four-space rules | Six-space gameplay |
++| Story foundation and illustrated production — complete, retained | Approved three-shot opening and compact Harbor connection inside the working journey/practice flow and honest cove-boundary checkpoints | New levels, species, hull or currents |
++| Complete Phase I — implemented in DRIFTWOOD_YARD_01 | Driftwood Yard and Nell, using the existing four-space rules | Six-space gameplay |
+ | Launch the larger ferry | Launch scene, actual six-space hull/seating and forgiving Wide Berth | Deer or currents |
+ | Meet Orin | Deer world model/portrait and Orchard Landing | New water rules |
+ | Complete Phase II | Two Landings; demonstrate that the known choices combine well | Broad content multiplication |
+diff --git a/campaign/PUZZLE_PROGRESSION.md b/campaign/PUZZLE_PROGRESSION.md
+index b69cfd0..ccc27c6 100644
+--- a/campaign/PUZZLE_PROGRESSION.md
++++ b/campaign/PUZZLE_PROGRESSION.md
+@@ -1,6 +1,6 @@
+ # Puzzle progression — selected campaign direction
+ 
+-Design baseline: `1a85874883af5caa59f6294a75495eccf2afebbc`, reviewed 2026-10-25. This document specifies intended progression. **Only Holding Pier, Bellwater and the optional First Crossing practice currently exist. Every future encounter below remains unproven until authored and tested.**
++Original design baseline: `1a85874883af5caa59f6294a75495eccf2afebbc`, reviewed 2026-10-25. Current implementation slice: `DRIFTWOOD_YARD_01`, built forward from the reviewed Home/play game `da1f2686ce6aff8d754e13111447dabb6e1313f0`. **Holding Pier, Bellwater and Driftwood Yard are now authored playable campaign coves; First Crossing remains optional practice. Later encounters remain proposals.** Production witness/geometry checks and actual UI evidence are recorded in `reviews/driftwood-yard/`, separately from supplied design proof and human puzzle acceptance.
+ 
+ ## Campaign sequence
+ 
+@@ -10,7 +10,7 @@ The campaign targets twelve coves in four phases. Milestones follow C3, C6 and C
+ | --- | --- | --- |
+ | I · C1 | **Holding Pier** | Accepted introduction: trust a safe temporary landing, lighten the boat, rescue Pip/Rue and collect Moss. Preserve its puzzle. |
+ | I · C2 | **Bellwater** | Accepted route/deadline composition: consider the loaded return and two shore heights. Preserve its puzzle. |
+-| I · C3 | **Driftwood Yard** | Rescue **Nell, a beaver who uses 2 spaces**, using existing load, staging and tide rules. Her introduction adds character, not a special ability. The threshold scene reveals the prepared larger spare boat. |
++| I · C3 | **Driftwood Yard** | Rescue **Nell, a beaver who uses 2 spaces**, using existing load, staging and tide rules. Her introduction adds character, not a special ability. Stage Nell at High Mooring to reach Fern and Oat before Reed Landing floods, then collect her through the newly deepened return. The larger spare boat is deferred to the next milestone. |
+ | II · C4 | **Wide Berth** | Enjoy the 6-space boat on forgiving deep water. Use familiar species with new named neighbors. Introduce only the boat and its load table. |
+ | II · C5 | **Orchard Landing** | Meet **Orin, a deer who uses 3 spaces** in a clear, generous encounter. Teach his space cost separately from current changes or a tight full-load bottleneck. |
+ | II · C6 | **Two Landings** | Combine known load choices, safe staging and the larger boat. A thoughtful subset or delivery order matters. No new rule. |
+@@ -100,7 +100,7 @@ The first task creates the campaign opening, connective story scene and explicit
+ 
+ Campaign completion becomes durable on explicit **Continue** after a win; terminal Undo remains available before that boundary. Replaying/Undoing/redelivering must not duplicate milestones. Initial checkpoints may resume at the current cove's beginning, with that behavior stated clearly.
+ 
+-Before releasing the longer phone campaign, add full mid-puzzle restoration including gameplay state, complete Undo history and the corresponding presentation/boat-pose history. A restored position without heading history is not complete recovery. Test tab/background/reload and storage failure, and retain settings independently. Neither checkpoint nor mid-puzzle persistence is claimed implemented by this document.
++Before releasing the longer phone campaign, add full mid-puzzle restoration including gameplay state, complete Undo history and the corresponding presentation/boat-pose history. A restored position without heading history is not complete recovery. Test tab/background/reload and storage failure, and retain settings independently. Current cove-boundary checkpoints are implemented, including the narrowly recognized historical two-cove completion. Full mid-puzzle persistence remains deferred; this document does not claim it.
+ 
+ ## Source grounding
+ 
+diff --git a/campaign/STORY_SCENES.md b/campaign/STORY_SCENES.md
+index de3fa1d..29c9c97 100644
+--- a/campaign/STORY_SCENES.md
++++ b/campaign/STORY_SCENES.md
+@@ -1,6 +1,6 @@
+ # Last Ferry — story scenes for The Long Tide
+ 
+-**Current flow:** `HOME_PLAY_FLOW_01` in `LAST_FERRY_HOME_PLAY_PACKAGE/NEXT_TASK_HOME_PLAY_FLOW.md` adds live Home and automatic normal-motion progression while preserving the illustrated production below. It replaces both unstarted tasks in `LAST_FERRY_FLOW_AND_FEEDBACK_PACKAGE`; no old Task 01 prerequisite applies. Current evidence: `reviews/home-play-flow/REVIEW.md`.
++**Current task:** `DRIFTWOOD_YARD_01` adds the third playable rescue and the one-shot `driftwood-light` entry. Holding → Bellwater → Driftwood is the implemented journey; First Crossing remains independent practice. The accepted `HOME_PLAY_FLOW_01` live Home, normal-motion autoplay, Pause/Resume and direct/group transfer ownership are retained. Evidence and human-acceptance limits belong in `reviews/driftwood-yard/`; earlier Home evidence remains historical in `reviews/home-play-flow/`.
+ 
+ **Illustrated art implementation:** task `STORY_PRODUCTION_01` in `LAST_FERRY_STORY_PRODUCTION_PACKAGE/NEXT_TASK_STORY_PRODUCTION.md`, from reviewed `6fc5a09dd4ef876ad96ad12d623532f0d13deb10`. The working journey, checkpoints, practice isolation and puzzles remain. The supplied Words and Light opening reference is user-approved; the production port, new Harbor drawing, runtime mix and physical-device experience have separate verification and human-approval status in `reviews/story-production/`. Implementation and focused verification are complete for the documented coverage; human review remains pending.
+ 
+@@ -8,13 +8,13 @@ The campaign has four phases of three coves. Nell joins in Cove 3; a prepared la
+ 
+ ## Shared presentation contract
+ 
+-The opening and first connection use a close illustrated Canvas2D layer inside the actual application's dialog/fullscreen surface. A small variable-length scene definition supplies artwork, complete caption groups, duration, cue positions and optional narration IDs; the finite controller owns shot position and its cancellable run. The existing application alone acknowledges scenes and writes checkpoints. Gameplay remains the accepted interactive 3D world. The standalone reference wrapper and prototype navigation are not shipped as a replacement game or iframe.
++The opening, Harbor connection and Driftwood entry use a close illustrated Canvas2D layer inside the actual application's dialog/fullscreen surface. A small variable-length scene definition supplies artwork, complete caption groups, duration, cue positions and optional narration IDs; the finite controller owns shot position and its cancellable run. The existing application alone acknowledges scenes and writes checkpoints. Gameplay remains the accepted interactive 3D world. The standalone reference wrapper and prototype navigation are not shipped as a replacement game or iframe.
+ 
+ The reference's lavender/peach dusk, teal water, cream/tan animals, yellow ferry/red cabin and warm lights are retained. Rue is tan on the left and Pip cream on the right in the opening. Portrait uses an attached deep teal reading area under recomposed artwork; landscape uses the quiet space beside the focal action. Narrative captions use Georgia with a serif fallback and remain readable HTML. Controls use the accepted cove interface language and native semantics.
+ 
+ Normal motion reveals the entire current caption after about 1,050ms with a brief 240ms opacity fade. Normal opening playback advances Tide → Lantern → Ferry at the existing 6 / 6 / 7-second endpoints; the final picture holds indefinitely. Harbor remains one five-second action with an explicit final handoff. Read story exposes all current-scene copy immediately. Reduced Motion presents each shot's endpoint and caption immediately, preserving ordinary Next navigation. Pause reveals the full caption and preserves elapsed art time; Resume retains consumed cues. Next remains immediate. There is no typewriter or mandatory sound. Reduced Motion remains manual stills.
+ 
+-Next is available immediately and changes only the shot. Only the final Take the helm or Continue to Bellwater action explicitly acknowledges the scene once and enters its destination. Replay restarts the current shot; Replay scene restarts the sequence. Skip animation and Escape from the main scene settle the final shot and expose the complete recap without advancing campaign progress. A pending scene restored from its existing checkpoint starts at that final static endpoint and remains pending until its final action.
++Next is available immediately and changes only the shot. Only the final Take the helm, Continue to Bellwater or Continue to Driftwood action explicitly acknowledges the scene once and enters its destination. Replay restarts the current shot; Replay scene restarts the sequence. Skip animation and Escape from the main scene settle the final shot and expose the complete recap without advancing campaign progress. A pending scene restored from its existing checkpoint starts at that final static endpoint and remains pending until its final action.
+ 
+ Read story and Options settle only the current shot, pause progression and cancel pending/active cues. Returning opens the secondary disclosure before restoring its trigger focus. Closing either returns to that held shot and trigger focus; Escape closes the subordinate reading/settings view before it can skip the scene. Hide/recovery and enabling Reduced Motion settle the current shot without Next or acknowledgment. Turning motion back on does not replay consumed work. Navigation, replacement and disposal cancel owned presentation and sound work. One story clock advances the existing controller; held illustrations do not draw repeatedly. The gameplay world is retained across shots.
+ 
+@@ -24,7 +24,7 @@ Home Play uses the existing trusted click capture to request Sound synchronously
+ 
+ Optional narration IDs and the exact four-clip script are prepared in `LAST_FERRY_STORY_PRODUCTION_PACKAGE/audio/narration-script.json`. Every asset is null and every recording remains pending. There is no generated voice, live TTS, unavailable narration toggle or voice-service dependency. Finished local voice recordings and human listening approval belong to a later contained pass.
+ 
+-All Home harbors are protected piers around the same lighthouse island, seen through different coastal vignettes. Delivered characters stay safe. Cosmetic story time never changes the local puzzle forecast. Adding a third campaign cove later requires a deliberate save-compatibility migration: the current completed-record validator checks the full ordered two-cove registry. This pass does not change that schema speculatively.
++All Home harbors are protected piers around the same lighthouse island, seen through different coastal vignettes. Delivered characters stay safe. Cosmetic story time never changes the local puzzle forecast. The third-cove extension recognizes only the exact historical version-1 two-cove-complete record. Viewing Home, Options or Practice leaves its original bytes untouched. The first deliberate Continue saves pending `driftwood-light` and plays it freshly; later restored pending scenes use the final static recap. Other invalid or future records are not coerced into a supported prefix. The storage key and version remain unchanged.
+ 
+ This task explicitly supersedes the older story-only requirements for distant gameplay-model gestures, one shared scene duration, and every opening caption visible on the first frame. It preserves the working campaign mechanics and all unrelated accepted results. The prior authored-scenes and foundation reports remain historical evidence.
+ 
+@@ -81,6 +81,24 @@ One quieter lantern contact supports placement. Opening the scene does not repla
+ 
+ **Assets:** the same illustrated characters/coast/props and scene player as the opening, with a newly authored Harbor composition and the existing persistent audio owner. The drawing is not footage of a new playable cove.
+ 
++## Cove 3 entry — Bellwater to Driftwood — `driftwood-light`
++
++**Trigger:** explicit acceptance of Bellwater's completed rescue. **Implemented scope; human visual/pacing acceptance remains separate.** The exact legacy two-cove completion offers the same fresh entry only after deliberate Continue; ordinary pending-scene restoration uses the established recap.
++
++### Shot — A light at the yard · seven seconds
++
++Nell works beside a timber rail with her lantern resting close to a rope coil. Her warm brown body, lighter muzzle, small round ears and broad dark flattened tail share the new 3D beaver's colors and identity. From 1.1–3.4 seconds her paw and lantern rise in a large visible arc. From 3.4–5.2 seconds her face turns toward the channel and the approaching ferry light. The composed greeting holds after 5.2 seconds and remains at the endpoint. Portrait and short landscape use separate placement/scale constraints to keep the face, lifted light and tail visible.
++
++**Caption, exact:**
++
++> Nell, the boatwright, is still at the yard.
++
++The existing brief caption lead-in, readable HTML, complete description/transcript, Pause/Resume, Replay, Skip and Reduced Motion apply. A restrained finite existing ferry-water cue supports the approaching light; it does not restart the score, arrival or transfer contacts. No narration recording or new narration slot is claimed.
++
++**Continue to Driftwood** is immediately available and alone acknowledges the scene before entering the authored original Driftwood start. Presentation spends no actions and grants no larger ferry. After the third actual rescue, terminal Undo remains until explicit acceptance. The available-content endpoint says **Three coves are safe**, with Home/Practice/Options. The prepared six-space ferry and Wide Berth remain the next contained task.
++
++**Assets:** `src/campaign/story-painter.ts` is the editable original beaver/yard illustration; `registry.ts` supplies its caption, timing, description and cue. Existing painter functions for opening and Harbor remain unchanged. The actual world, portrait and illustration are distinct renderings of the same stable character identity.
++
+ ## 2. A wider deck
+ 
+ **Trigger:** after completing Cove 3, Driftwood Yard, when continuing to Phase II. **Future milestone.**
+diff --git a/docs/ART_DIRECTION.md b/docs/ART_DIRECTION.md
+index ca6689c..b5971a4 100644
+--- a/docs/ART_DIRECTION.md
++++ b/docs/ART_DIRECTION.md
+@@ -44,7 +44,7 @@ The cove-interface pass separates freestanding place names from small light mark
+ 
+ Use the shared opaque painted blue-green reading material for the HUD, forecast, location callout, Menu, passenger preview and ending: a quiet upper wash, sage rim, shallow dark lower edge and restrained corner curves. Compact HUD/name contexts omit the motif; the world remains visible around panels, never as recognizable silhouettes through their text. Keep the accepted seafoam action faces and warm Home/progression accents. Focus rings have dark keylines, and warnings retain their real written consequences. No blur, pulse or scene-lighting change is needed. The canonical material and responsive passenger tiles are documented in `UI_STYLE_GUIDE.md` and the asset catalog.
+ 
+-Docked passenger controls sit near the ferry and gangplank: Board identifies boarding, Let ashore identifies temporary unloading, and Bring home marks Harbor unloading. The accepted ferry pictograms remain upright with their visible action words. They open the existing subset preview and never transfer passengers immediately. Names, dock controls and route callouts avoid figures, global controls, one another and opening touches. A selected current place remains inspectable for free. Modal presentation suppresses underlying local cards and dock controls; cancellation retains logical selection and returns focus safely. The dark success panel leaves Harbor and the delivered passengers visible.
++Docked passenger controls sit near the ferry and gangplank: Board identifies boarding, Let ashore identifies temporary unloading, and Bring home marks Harbor unloading. The accepted ferry pictograms remain upright with their visible action words. Routine safe single-passenger actions commit directly; groups open the nearby native subset chooser and real immediate losses require a warning with free Cancel. Dock buttons carry only the existing icon and short label, at least 44px targets. Current-place inspection holds optional predicted cost/depth/landing facts; Forecast and HUD retain ordinary timing and load. Names, dock controls and route callouts avoid figures, global controls, one another and opening touches. A selected current place remains inspectable for free. Modal presentation suppresses underlying local cards and dock controls; cancellation retains logical selection and returns focus safely. The dark success panel leaves Harbor and the delivered passengers visible.
+ 
+ The stable full-canvas fit reclaims water behind the HUD while protecting the complete future-loaded route envelope. Use lateral space before shrinking the cove for a corner control; selection itself never pans or zooms. Holding's Stone island uses the existing sparse rocky vocabulary; Harbor stays sheltered and Rabbit Pier retains its cottage. The lantern has a compact pale warm core within an amber surface, darker supports and local warm gallery/tower spill. Depth testing remains enabled; the roof must occlude light normally. Ordinary play retains this local illumination. The Harbor homecoming below adds a won-only sweep; no bloom or global lighting change is introduced.
+ 
+@@ -143,3 +143,7 @@ The beam stays one decorative draw object excluded from picking and scene-fit bo
+ After canonical disembarkation, rabbits make one small staggered hop and sheep a grounded bob, settling within 1.3 seconds. A one-second orthographic push toward Harbor tries 9% magnification, clamping against the full lighthouse, ferry, passengers and actual compact ending card. At 320-pixel phone height the stable ordinary camera is retained. Reduced motion keeps canonical framing and poses; turning normal motion back on never replays the finite gesture.
+ 
+ The ending uses one short line and a two-column action group. Holding progresses to Bellwater; other coves offer the real cove chooser. Menu can return to the arrival. Shared Settings uses the same native dialog for Sound and Motion, with Follow device or Reduced and Back to its origin. The won composition hides map controls until Undo restores canonical framing and repositions them.
++
++## Driftwood Yard and Nell
++
++The authored third cove contrasts a low timber yard/reed landing with a raised stone High Mooring. Sparse stacked beams, a trestle/rail and rope reuse the existing wood, stone and reed language. Nell is a real warm-brown two-space beaver with a lighter muzzle, round ears, teeth and a visible broad flat tail resting along her flank for deck clearance. Fern is cream and Oat tan through explicit stable appearance IDs. The illustrated seven-second greeting uses the same original painter and palette, visible lantern lift/turn and a held final handoff. The unchanged four-space ferry uses a Nell-only foredeck transfer approach to avoid seated rabbits; anchors and timing are retained. Native review evidence is under reviews/driftwood-yard; integration does not imply human art or acoustic acceptance.
+diff --git a/docs/ASSET_LEDGER.md b/docs/ASSET_LEDGER.md
+index 074a437..a3598ac 100644
+--- a/docs/ASSET_LEDGER.md
++++ b/docs/ASSET_LEDGER.md
+@@ -112,3 +112,15 @@ The user approved the supplied opening reference. The production port, new Harbo
+ ## HOME_PLAY_FLOW_01 · 2026-10-31
+ 
+ Adds `ui.home-composition`, an authored recipe using existing World assets, measured menu/title bounds, safe areas and explicit presentation ownership (`docs/HOME_COMPOSITION.md`). All 75 previous IDs remain. Updates existing story/dialog/action/choice families for autoplay controls and direct/selected transfers. No new model, image, audio composition, font, narration or externally generated asset. Gallery specimens link the actual root; they are not gameplay evidence. Supplied Home package and historical publication receipt are retained without claiming a deployment. Actual runtime source/evidence: `reviews/home-play-flow/REVIEW.md`.
++
++## DRIFTWOOD_YARD_01 · Nell and stable new neighbors
++
++`model.beaver` adds Nell's real original miniature geometry in `src/scene/models.ts`: warm brown compact body, light muzzle/chest, broad nose, small rounded ears, paired teeth and a clearly flattened dark resting tail. The shared material/factory and foot-contact axis remain; World owns deck/shore transforms. Capacity stays two spaces in level data with no new ability. New Fern/Oat reuse the existing rabbit models and portraits through explicit cream/tan identity; full species ordinals remain separately available to placement/pose. Existing named appearances are unchanged.
++
++The same `ui.passenger-portraits` family extends to `beaver-brown`; the original three PNG/SVG outputs are untouched. `tools/render-nell-portrait.mjs` imports the completed original model into the same isolated official Three.js SVGRenderer recipe, with a full-body/tail orthographic crop and the actual nonrabbit world proportions. Installed Chromium rasterizes the transparent SVG to a 256px straight-alpha PNG without a new dependency. `assets/portraits/generation-manifest.json` records source/output hashes, working-tree identity, exact Node/Three/Chromium versions, lighting/camera and dimensions. `family-manifest.json` links both generation records. Offline diffuse SVG shading is model-derived artwork, not a pixel-identical WebGL screenshot. Source rights follow original project code; Three.js remains MIT library code; no stock imagery or new license is asserted.
++
++The developer gallery renders the actual Nell factory in one static disposable 3D specimen and shows all four canonical source images and live 44px choices. Source/fullsize inspection is separate from actual phone rescue/transfer evidence and human visual approval. No live 3D portrait enters the game. Shared reserved image slots preserve full name/cost and native choice operation on delay/failure; actions do not depend on image loads. The earlier unexplained Harbor portrait-load timeout remains an inherited observation, not claimed fixed by this extension.
++
++## Driftwood Yard environment and story additions
++
++`environment.driftwood-yard` reuses original shared wood, stone, reeds and coast materials in `src/scene/scenery.ts`/`layout.ts`, with authored geometry in `data/driftwood-yard.level.json`. `story.illustrations` adds the original seven-second Nell greeting in `src/campaign/story-painter.ts`; no external images, narration or new score. Supplied direction is retained in `LAST_FERRY_DRIFTWOOD_YARD_PACKAGE/direction/NELL_AND_YARD.md`. Original project-authored editable code; integration is separate from human visual acceptance. Real gameplay evidence and final source identities are in `reviews/driftwood-yard/`.
+diff --git a/docs/PROJECT_STATE.md b/docs/PROJECT_STATE.md
+index 3082bc7..4878c07 100644
+--- a/docs/PROJECT_STATE.md
++++ b/docs/PROJECT_STATE.md
+@@ -6,7 +6,17 @@ Read this before choosing scope. Detailed implementation history belongs in `STA
+ 
+ ## Current scoped pass
+ 
+-`HOME_PLAY_FLOW_01` is the current implementation task: `LAST_FERRY_HOME_PLAY_PACKAGE/NEXT_TASK_HOME_PLAY_FLOW.md`, supplied one directory above the repository and retained here unchanged. It replaces both unstarted flow/feedback tasks. `STORY_PRODUCTION_01` is complete and retained, not rerun. Baseline: `d532c62f0f25854387869466572a1ed0cf35a0ac`; implementation and focused verification are complete, with source identity, original failures and remaining limitations recorded in `reviews/home-play-flow/REVIEW.md` at handoff.
++`DRIFTWOOD_YARD_01` implements `LAST_FERRY_DRIFTWOOD_YARD_PACKAGE/NEXT_TASK_DRIFTWOOD_YARD.md`. The supplied package resolved one directory above this Git root and is retained here unchanged. HOME_PLAY_FLOW_01 is complete and its dock-paragraph requirement is superseded: ordinary actions use icon/short label, free current-place inspection holds predicted facts, and real loss warnings remain deliberate.
++
++Reviewed game baseline: `da1f2686ce6aff8d754e13111447dabb6e1313f0`. Local checkout was there; fetched/fast-forwarded to newer remote `879c9d1cfb6745ce8a294e4dbba4aa3d984ef4b3`, preserving its six additional commits with identical tree `4aa851646f66cb0eda3ee9960ca9c5125170b0e0`. No reset or unrelated changes.
++
++Holding → Bellwater → Driftwood is the implemented journey, with First Crossing practice. Driftwood uses the original four-space ferry, Nell (two-space beaver), Fern (cream rabbit), Oat (tan rabbit), raised High Mooring and two low landings. The scene `driftwood-light` introduces Nell lifting a lantern; only Continue to Driftwood acknowledges it. Exact historical two-cove completions stay read-only until deliberate Continue, then first play the new scene fresh; later pending reloads retain recap. Three-cove completion is an available-content boundary. Six-space ferry, A wider deck, Wide Berth, deer and currents remain future work.
++
++Verification and source-tied evidence are recorded in `reviews/driftwood-yard/REVIEW.md`. Existing music/portrait/capture/device and timing limits remain explicit. This pass is not deployed: owner-private Site version 12/game `1a85874883af5caa59f6294a75495eccf2afebbc`, hosting `e87c5c5baa53a39001c5a89b07b59aab2ad150fc`; receipt/history below remain unchanged.
++
++## Previous scoped pass: Home and direct transfers
++
++`HOME_PLAY_FLOW_01` was the completed implementation task: `LAST_FERRY_HOME_PLAY_PACKAGE/NEXT_TASK_HOME_PLAY_FLOW.md`, supplied one directory above the repository and retained here unchanged. It replaces both unstarted flow/feedback tasks. `STORY_PRODUCTION_01` is complete and retained, not rerun. Baseline: `d532c62f0f25854387869466572a1ed0cf35a0ac`; implementation and focused verification are complete, with source identity, original failures and remaining limitations recorded in `reviews/home-play-flow/REVIEW.md` at handoff.
+ 
+ Live Home reuses the cove and honest checkpoints; normal stories autoplay with Pause/Resume and an explicit final handoff; single safe passenger actions act directly and groups retain deliberate selection. The score composition/gains, puzzles, Undo, water, sailing, headings and lighthouse remain accepted foundations. Missing music did not reproduce in cold touch/pointer/keyboard checks: score-specific dry/wet output and an unchanged-level actual journey recording are retained. This does not establish physical phone playback. Build/typecheck, 303 unit checks, 76-family validation and nine distinct browser cases passed across documented runs; capture stalls and the unchanged timing/device limitations remain explicit.
+ 
+@@ -40,7 +50,7 @@ Local Codex implements the current task. ChatGPT reviews the identifiable handof
+ | Authored-scenes implementation | `1aa73c59c37082f43990235a9efffd6f793cf642`, reviewed handoff `6fc5a09dd4ef876ad96ad12d623532f0d13deb10` — working journey retained; illustrated presentation supersedes its distant-model scenes; not published |
+ | Illustrated story production | `bdd7e86f1e2953144b11108eb828ab85c88eb542` — implemented and focused checks complete; following handoff commit records packaging/continuity only; not published |
+ | Home/play implementation | `682ee816537d9a9955f49ed35a3cfdcb3d67f752` — complete combined HOME_PLAY_FLOW_01; review and exact source/media audit in reviews/home-play-flow, not deployed |
+-| Reviewed implementation baseline | `d532c62f0f25854387869466572a1ed0cf35a0ac` — Home/play comparison; prior illustrated production is complete and retained |
++| Reviewed implementation baseline | `da1f2686ce6aff8d754e13111447dabb6e1313f0` — Driftwood comparison; newer identical-tree history preserved through `879c9d1` |
+ | Published private phone game | `1a85874883af5caa59f6294a75495eccf2afebbc` — Sites version 12, publication confirmed 2026-10-25 17:28 Madrid |
+ | Stable phone URL | https://last-ferry-playtest.abumech.chatgpt.site |
+ | Published hosting source | `e87c5c5baa53a39001c5a89b07b59aab2ad150fc` |
+@@ -56,7 +66,7 @@ The preceding version 9 publication remains historical evidence: hosting source
+ 
+ After the next implementation, record the new GitHub SHA separately from the live Site's game SHA. Do not update the live field until deployment is confirmed.
+ 
+-## Current task: Illustrated story production
++## Historical task: Illustrated story production
+ 
+ Implementation commit: `bdd7e86f1e2953144b11108eb828ab85c88eb542`. Packaging audit matches 217 source entries and 80 selected media files to committed content (283 exact, 14 text newline normalizations); all 66 tested runtime/data/dependency entries are byte-exact. Final branch SHA/remote equality are recorded in PR #1 and the handoff. Captured working-tree identities and scoped later corrections remain distinct in the evidence reuse audit.
+ 
+@@ -140,7 +150,7 @@ See `reviews/cove-ui-assets/REVIEW.md` for source identities, build, commands, o
+ 
+ | Area | Decision to carry forward |
+ | --- | --- |
+-| Puzzles | Holding Pier is the default training cove. Holding Pier → Bellwater is implemented progression. First Crossing remains an optional baseline. All three remain playable. |
++| Puzzles | Holding Pier is the default training cove. Holding Pier → Bellwater → Driftwood Yard is implemented progression. First Crossing remains an optional baseline. All four remain playable. |
+ | Rules | Deterministic action-based time, load/draft and passage-depth consequences, tide deadlines, subset transfers, passenger conservation and complete Undo. Inspection is free; explicit confirmation spends an action. |
+ | Interface | Full-width cove, freestanding place names and selectable markers, local dock controls, compact opaque painted dark teal surfaces, ivory text and warm borders. The user likes the published panel direction. The permanent right sidebar and white panels were rejected. |
+ | Environment | Rounded shared sailing courses, calmer crossing pace, luminous water, visible shallow ground, tide-aware contact, readable landmarks and Harbor identity. |
+diff --git a/src/campaign/home.css b/src/campaign/home.css
+index a84065a..f114c10 100644
+--- a/src/campaign/home.css
++++ b/src/campaign/home.css
+@@ -102,20 +102,9 @@ html[data-motion='reduced'] #transfer-receipt {
+   animation: none;
+ }
+ #dock-actions button {
+-  flex-wrap: wrap;
+-  max-width: 295px;
+-}
+-#dock-actions .dock-facts,
+-#dock-actions .dock-consequence {
+-  width: 100%;
+-  font-size: 14px;
+-  font-weight: 400;
+-  line-height: 1.25;
++  max-width: min(295px, calc(100vw - 16px));
+   white-space: normal;
+ }
+-#dock-actions .dock-consequence {
+-  max-width: 260px;
+-}
+ @media (orientation: portrait) {
+   #home {
+     justify-content: space-between;
+diff --git a/src/campaign/progress.ts b/src/campaign/progress.ts
+index 126af03..39d6438 100644
+--- a/src/campaign/progress.ts
++++ b/src/campaign/progress.ts
+@@ -55,6 +55,17 @@ function sameItems(value: unknown, expected: readonly string[]): boolean {
+   );
+ }
+ 
++export function isLegacyCompletion(value: unknown): value is JourneyRecord {
++  return (
++    keys(value, ['version', 'checkpoint', 'completed', 'acknowledgedScenes']) &&
++    value.version === 1 &&
++    keys(value.checkpoint, ['kind']) &&
++    value.checkpoint.kind === 'complete' &&
++    sameItems(value.completed, ['holding-pier', 'bellwater']) &&
++    sameItems(value.acknowledgedScenes, ['opening', 'another-bell'])
++  );
++}
++
+ export function newJourney(): JourneyRecord {
+   return {
+     version: 1,
+@@ -65,6 +76,7 @@ export function newJourney(): JourneyRecord {
+ }
+ 
+ export function validateJourney(value: unknown): JourneyValidation {
++  if (isLegacyCompletion(value)) return { valid: true, record: copy(value) };
+   if (value !== null && typeof value === 'object' && 'version' in value && value.version !== 1) {
+     return {
+       valid: false,
+@@ -173,7 +185,8 @@ export function acceptCove(record: JourneyRecord, id: CoveId, status: string): J
+ 
+ export function checkpointCove(record: JourneyRecord): CoveId {
+   const checkpoint = record.checkpoint;
+-  if (checkpoint.kind === 'complete') return storyCoves.at(-1)!.id;
++  if (checkpoint.kind === 'complete')
++    return isLegacyCompletion(record) ? 'bellwater' : storyCoves.at(-1)!.id;
+   return checkpoint.kind === 'scene' ? storyScenes[checkpoint.id].destination : checkpoint.id;
+ }
+ 
+@@ -212,6 +225,13 @@ export class JourneyProgress {
+     return copy(this.current.record!);
+   }
+ 
++  continueAvailableContent(): boolean {
++    const record = this.current.record;
++    if (!isLegacyCompletion(record)) return false;
++    this.save({ ...copy(record), checkpoint: { kind: 'scene', id: 'driftwood-light' } });
++    return true;
++  }
++
+   acknowledge(id: SceneId): boolean {
+     const record = this.current.record;
+     if (!record) return false;
+diff --git a/src/campaign/registry.ts b/src/campaign/registry.ts
+index 8217492..fa1ef51 100644
+--- a/src/campaign/registry.ts
++++ b/src/campaign/registry.ts
+@@ -1,8 +1,14 @@
+-import { bellwater, holdingPier, level as firstCrossing, type Level } from '../levels/level';
++import {
++  bellwater,
++  driftwoodYard,
++  holdingPier,
++  level as firstCrossing,
++  type Level,
++} from '../levels/level';
+ 
+-export type CoveId = 'holding-pier' | 'bellwater';
+-export type SceneId = 'opening' | 'another-bell';
+-export type IllustrationId = 'tide' | 'lantern' | 'ferry' | 'harbor';
++export type CoveId = 'holding-pier' | 'bellwater' | 'driftwood-yard';
++export type SceneId = 'opening' | 'another-bell' | 'driftwood-light';
++export type IllustrationId = 'tide' | 'lantern' | 'ferry' | 'harbor' | 'driftwood';
+ export type StoryCue = {
+   id: string;
+   atMs: number;
+@@ -96,6 +102,26 @@ export const storyScenes: Record<SceneId, StoryScene> = {
+     destination: 'bellwater',
+     continueLabel: 'Continue to Bellwater',
+   },
++  'driftwood-light': {
++    id: 'driftwood-light',
++    title: 'A light at the yard',
++    shots: [
++      {
++        id: 'driftwood',
++        illustration: 'driftwood',
++        durationMs: 7000,
++        captionCueMs: 1050,
++        caption: 'Nell, the boatwright, is still at the yard.',
++        description:
++          'Nell, a warm brown beaver with small round ears and a broad flat dark tail, works at a timber rail. She lifts her lantern in a clear arc, then turns toward the approaching ferry light and holds it in greeting.',
++        cues: [
++          { id: 'driftwood-light.channel.water', atMs: 3500, kind: 'ferry-water', strength: 0.65 },
++        ],
++      },
++    ],
++    destination: 'driftwood-yard',
++    continueLabel: 'Continue to Driftwood',
++  },
+ };
+ 
+ export type StoryCove = {
+@@ -108,9 +134,10 @@ export type StoryCove = {
+ export const storyCoves: readonly StoryCove[] = [
+   { id: 'holding-pier', level: holdingPier, order: 0, entryScene: 'opening' },
+   { id: 'bellwater', level: bellwater, order: 1, entryScene: 'another-bell' },
++  { id: 'driftwood-yard', level: driftwoodYard, order: 2, entryScene: 'driftwood-light' },
+ ];
+ 
+-export const practiceCoves = [firstCrossing, holdingPier, bellwater] as const;
++export const practiceCoves = [firstCrossing, holdingPier, bellwater, driftwoodYard] as const;
+ 
+ export function storyCove(id: string): StoryCove | undefined {
+   return storyCoves.find((cove) => cove.id === id);
+diff --git a/src/campaign/story-painter.ts b/src/campaign/story-painter.ts
+index 373b13b..327a9ab 100644
+--- a/src/campaign/story-painter.ts
++++ b/src/campaign/story-painter.ts
+@@ -1,4 +1,4 @@
+-export type StoryIllustration = 'tide' | 'lantern' | 'ferry' | 'harbor';
++export type StoryIllustration = 'tide' | 'lantern' | 'ferry' | 'harbor' | 'driftwood';
+ type Paint = string | CanvasGradient;
+ type RabbitPose = {
+   lift?: number;
+@@ -34,7 +34,13 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
+     return x * x * (3 - 2 * x);
+   };
+   const mix = (a: number, b: number, t: number) => a + (b - a) * t;
+-  const durations: Record<StoryIllustration, number> = { tide: 6, lantern: 6, ferry: 7, harbor: 5 };
++  const durations: Record<StoryIllustration, number> = {
++    tide: 6,
++    lantern: 6,
++    ferry: 7,
++    harbor: 5,
++    driftwood: 7,
++  };
+   const grains = Array.from({ length: 560 }, (_, i) => ({
+     x: ((i * 173 + 43) % 997) / 997,
+     y: ((i * 353 + 53) % 991) / 991,
+@@ -793,6 +799,185 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
+     glow(lampX, lampY, 58 * scale, 0.22);
+     finish(t);
+   }
++  function driftwoodShot(t: number) {
++    const portrait = W < 480,
++      short = H < 300,
++      lift = ease((t - 1.1) / 2.3),
++      turn = ease((t - 3.4) / 1.8),
++      working = Math.sin(Math.min(1, t / 1.1) * Math.PI * 4) * (1 - lift),
++      s = Math.min(portrait ? 2.3 : short ? 1.4 : 2.5, (H * 0.63) / 130),
++      x = W * (portrait ? 0.48 : 0.735),
++      ground = H * 0.845;
++    backdrop(t, 1);
++    foregroundWater(H * 0.58, t, { x: W * (portrait ? 0.17 : 0.46), strength: 0.34 });
++    const lightX = W * (portrait ? 0.11 : 0.46),
++      lightY = H * 0.62;
++    glow(lightX, lightY, 15, 0.5 + turn * 0.3);
++    ellipse(lightX, lightY, 2.1, 2.1, '#ffe9b2');
++    path(
++      `M ${x - 100 * s} ${ground + 8 * s} Q ${x - 103 * s} ${ground - 1 * s} ${x - 80 * s} ${ground - 3 * s} L ${W + 20} ${ground - 3 * s} L ${W + 20} ${H + 20} L ${x - 85 * s} ${H + 20} Z`,
++      '#496d65',
++    );
++    path(
++      `M ${x - 97 * s} ${ground + 2 * s} L ${W + 20} ${ground - 3 * s} L ${W + 20} ${ground + 12 * s} L ${x - 90 * s} ${ground + 18 * s} Z`,
++      '#a2916c',
++      '#c8b38a',
++      1.5,
++    );
++    for (let i = 0; i < 5; i++) {
++      const y = ground + (22 + 12 * i) * s;
++      line(
++        [
++          [x - 81 * s, y],
++          [W, y - 6 * s],
++        ],
++        '#57766a',
++        1.3,
++      );
++    }
++    ctx.save();
++    ctx.translate(x, ground);
++    ctx.scale(s, s);
++    ellipse(0, 3, 56, 8, 'rgba(21,58,59,.23)');
++    ellipse(43, -8, 36, 13, '#5b4438', -0.24);
++    line(
++      [
++        [24, -10],
++        [48, -20],
++        [62, -18],
++      ],
++      '#80634b',
++      1.3,
++    );
++    line(
++      [
++        [32, -2],
++        [53, -13],
++        [69, -11],
++      ],
++      '#80634b',
++      1.3,
++    );
++    line(
++      [
++        [41, -23],
++        [50, -1],
++      ],
++      '#423c33',
++      1,
++    );
++    line(
++      [
++        [52, -23],
++        [62, -5],
++      ],
++      '#423c33',
++      1,
++    );
++    ellipse(8, -33, 30, 36, '#8e6848', -0.1);
++    ellipse(-3, -34, 20, 29, '#c3a47a', 0.15);
++    ellipse(25, -36, 14, 29, '#76573f', -0.16);
++    ellipse(-9, -1, 18, 6, '#8e6848');
++    ellipse(20, -1, 19, 6, '#8e6848');
++    line(
++      [
++        [-18, -1],
++        [-10, -1],
++      ],
++      '#c3a47a',
++      1.5,
++    );
++    ctx.save();
++    ctx.translate(-4, -71);
++    ctx.rotate(mix(0.08, -0.13, turn));
++    ellipse(-17, -15, 9, 10, '#8e6848', -0.18);
++    ellipse(17, -14, 9, 10, '#8e6848', 0.15);
++    ellipse(-17, -15, 4, 5, '#b38a65');
++    ellipse(17, -14, 4, 5, '#b38a65');
++    ellipse(0, -2, 27, 25, '#8e6848');
++    ellipse(12, 3, 16, 20, '#76573f');
++    ellipse(-13, 12, 20, 13, '#c3a47a');
++    ellipse(0, 12, 13, 12, '#c3a47a');
++    ellipse(-23, 7, 8, 6, '#3f352d');
++    ellipse(-11, -5, 2.6, 3, '#223b36');
++    ellipse(9, -4, 2.2, 2.8, '#223b36');
++    ellipse(-11.8, -6, 0.8, 0.9, '#fff0cd');
++    ctx.fillStyle = '#f3e4bf';
++    ctx.fillRect(-16, 21, 6, 7);
++    ctx.fillRect(-9, 21, 6, 7);
++    line(
++      [
++        [-18, 18],
++        [-9, 20],
++        [-1, 17],
++      ],
++      '#795b43',
++      1.2,
++    );
++    line(
++      [
++        [-21, -15],
++        [-9, -22],
++        [7, -21],
++      ],
++      '#bf956a',
++      1.5,
++    );
++    ctx.restore();
++    const handX = mix(-46, -43, lift),
++      handY = mix(-40 + working * 2, -109, lift);
++    line(
++      [
++        [-16, -47],
++        [-30, mix(-40, -73, lift)],
++        [handX, handY],
++      ],
++      '#8e6848',
++      12,
++    );
++    ellipse(handX, handY, 6.5, 6.5, '#b28b64');
++    line(
++      [
++        [19, -44],
++        [9 - turn * 4, -31],
++      ],
++      '#8e6848',
++      11,
++    );
++    ellipse(9 - turn * 4, -31, 6.5, 6, '#b28b64');
++    ctx.restore();
++    const railX = x - 91 * s,
++      railY = ground - 25 * s;
++    path(
++      `M ${railX} ${railY} L ${railX + 55 * s} ${railY - 2 * s} L ${railX + 55 * s} ${railY + 8 * s} L ${railX} ${railY + 10 * s} Z`,
++      '#8d7754',
++      '#d1bd92',
++      1.2,
++    );
++    line(
++      [
++        [railX + 7 * s, railY + 8 * s],
++        [railX + 10 * s, ground + 5 * s],
++      ],
++      '#6b624b',
++      6 * s,
++    );
++    line(
++      [
++        [railX + 45 * s, railY + 7 * s],
++        [railX + 42 * s, ground + 3 * s],
++      ],
++      '#6b624b',
++      6 * s,
++    );
++    ellipse(railX + 15 * s, railY - 3 * s, 10 * s, 3.5 * s, '#b5a072');
++    ellipse(railX + 15 * s, railY - 3 * s, 6 * s, 2 * s, '#706449');
++    const lampX = x + (mix(-46, -43, lift) - 7) * s,
++      lampY = ground + (mix(-40 + working * 2, -109, lift) + 14) * s;
++    glow(lampX, lampY, 60 * s, 0.32);
++    lantern(lampX, lampY, s, 1, Math.sin(lift * Math.PI) * -0.1);
++    finish(t);
++  }
+   return {
+     durations,
+     resize(width: number, height: number, dpr = 1) {
+@@ -809,9 +994,13 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
+         0,
+         Math.min(durations[illustration], Number.isFinite(elapsedSeconds) ? elapsedSeconds : 0),
+       );
+-      ({ tide: tideShot, lantern: lanternShot, ferry: answerShot, harbor: harborShot })[
+-        illustration
+-      ](t);
++      ({
++        tide: tideShot,
++        lantern: lanternShot,
++        ferry: answerShot,
++        harbor: harborShot,
++        driftwood: driftwoodShot,
++      })[illustration](t);
+     },
+   };
+ }
+diff --git a/src/dev/asset-gallery.ts b/src/dev/asset-gallery.ts
+index 68696cf..4becb30 100644
+--- a/src/dev/asset-gallery.ts
++++ b/src/dev/asset-gallery.ts
+@@ -1,3 +1,5 @@
++import * as T from 'three';
++import { animal } from '../scene/models';
+ import '../ui/cove-ui.css';
+ import './asset-gallery.css';
+ import catalog from '../../assets/catalog.json';
+@@ -51,7 +53,7 @@ root.innerHTML = `<header><p>Last Ferry · developer tools</p><h1>Cove asset gal
+ )}<p>Gallery-only labels use explicit appearance fixtures to test wrapping. Actual passenger and level data are unchanged.</p></article>
+ </div><div class="cove-panel cove-surface cove-surface--compact gallery-panel"><h3>Compact face</h3><p>Shared opaque wash with no corner decoration. HUD, names, forecast and local options retain their own dimensions.</p><button id="gallery-forecast" class="cove-panel cove-surface cove-surface--compact gallery-forecast" data-demo-state="focus">! Rabbit Pier floods in 1 action.</button></div>
+ <div class="cove-panel cove-surface cove-surface--arrival gallery-panel"><h3>Everyone home.</h3><p>Arrival uses only a warmer upper catchlight. Normal action and home colors remain the existing button family.</p><button id="gallery-next"></button></div></section>
+-<section aria-labelledby="portrait-heading"><h2 id="portrait-heading">Model-derived static portraits</h2><p>Three original transparent 256px PNG derivatives, displayed at 44px beside live copy in the shared choice helper. Offline SVG diffuse shading is not pixel-identical WebGL. These are design specimens, not gameplay captures.</p><div class="portrait-sources">${(Object.entries(portraitSources) as [PortraitKey, string][]).map(([key, url]) => `<figure class="cove-panel cove-surface gallery-panel"><img class="portrait-source" src="${url}" width="256" height="256" alt="${key.replace('-', ' ')} model-derived source portrait" draggable="false" /><figcaption>${key} · 256×256 PNG</figcaption></figure>`).join('')}</div><div class="panel-specimens"><article id="gallery-bellwater-portraits" class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow"><h3>Bellwater names, same appearances</h3>${choices(
++<section aria-labelledby="beaver-heading"><h2 id="beaver-heading">Nell · real beaver model</h2><p>The production geometry, including the broad resting tail, muzzle and compact paws. A static developer specimen uses the same model factory; it is not gameplay evidence.</p><div class="panel-specimens"><figure class="cove-panel cove-surface gallery-panel"><canvas id="gallery-beaver-model" style="width:100%;height:260px;display:block" role="img" aria-label="Nell the warm brown beaver with a lighter muzzle, small round ears, broad nose and flat darker tail"></canvas><figcaption>Nell · two spaces · original editable geometry</figcaption></figure><article class="cove-panel cove-surface gallery-panel panel-specimen--narrow"><h3>Driftwood neighbors</h3>${choices([['Nell',2,true,'beaver-brown'],['Fern',1,true,'rabbit-cream'],['Oat',1,true,'rabbit-tan']])}<p>Explicit stable coats survive offered subsets and passenger-array reorder.</p><p><a href="/?cove=driftwood-yard">Open the actual Driftwood rescue</a></p></article></div></section><section aria-labelledby="portrait-heading"><h2 id="portrait-heading">Model-derived static portraits</h2><p>Four original transparent 256px PNG derivatives, displayed at 44px beside live copy in the shared choice helper. Offline SVG diffuse shading is not pixel-identical WebGL. These are design specimens, not gameplay captures.</p><div class="portrait-sources">${(Object.entries(portraitSources) as [PortraitKey, string][]).map(([key, url]) => `<figure class="cove-panel cove-surface gallery-panel"><img class="portrait-source" src="${url}" width="256" height="256" alt="${key.replace('-', ' ')} model-derived source portrait" draggable="false" /><figcaption>${key} · 256×256 PNG</figcaption></figure>`).join('')}</div><div class="panel-specimens"><article id="gallery-bellwater-portraits" class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow"><h3>Bellwater names, same appearances</h3>${choices(
+   [
+     ['Tansy', 1, false, 'rabbit-cream'],
+     ['Lark', 1, true, 'rabbit-tan'],
+@@ -88,6 +90,34 @@ setControl(
+ );
+ for (const button of root.querySelectorAll<HTMLButtonElement>('.gallery-story-continue'))
+   setControl(button, 'next-cove', button.dataset.continueLabel!, 'warm');
++const beaverCanvas = root.querySelector<HTMLCanvasElement>('#gallery-beaver-model')!;
++const beaverRenderer = new T.WebGLRenderer({ canvas: beaverCanvas, alpha: true, antialias: true });
++beaverRenderer.setPixelRatio(Math.min(devicePixelRatio, 2));
++beaverRenderer.outputColorSpace = T.SRGBColorSpace;
++beaverRenderer.toneMapping = T.ACESFilmicToneMapping;
++const beaverScene = new T.Scene();
++const beaver = animal('beaver');
++beaver.scale.set(1.15, 1.5, 1.15);
++beaverScene.add(beaver, new T.AmbientLight('#dce8dd', 2.2));
++const beaverKey = new T.DirectionalLight('#ffe4bc', 3);
++beaverKey.position.set(-3, 5, 4);
++beaverScene.add(beaverKey);
++const beaverCamera = new T.OrthographicCamera(-0.65, 0.65, 1, -0.3, 0.01, 20);
++beaverCamera.position.set(2.7, 2.3, 5);
++beaverCamera.lookAt(0, 0.4, 0);
++const beaverResize = new ResizeObserver(([entry]) => {
++  const { width, height } = entry.contentRect;
++  if (width <= 0 || height <= 0) return;
++  const halfHeight = 0.65;
++  beaverCamera.left = -halfHeight * width / height;
++  beaverCamera.right = halfHeight * width / height;
++  beaverCamera.top = halfHeight;
++  beaverCamera.bottom = -halfHeight;
++  beaverCamera.updateProjectionMatrix();
++  beaverRenderer.setSize(width, height, false);
++  beaverRenderer.render(beaverScene, beaverCamera);
++});
++beaverResize.observe(beaverCanvas);
+ const storyPainters = new Map<HTMLCanvasElement, ReturnType<typeof createCoveStoryPainter>>();
+ const storyResize = new ResizeObserver((entries) => {
+   for (const entry of entries) {
+@@ -106,6 +136,11 @@ for (const canvas of root.querySelectorAll<HTMLCanvasElement>('[data-illustratio
+ }
+ function releaseStoryGallery() {
+   storyResize.disconnect();
++  beaverResize.disconnect();
++  beaverScene.traverse((object) => {
++    if (object instanceof T.Mesh) object.geometry.dispose();
++  });
++  beaverRenderer.dispose();
+   storyPainters.clear();
+ }
+ window.addEventListener('pagehide', releaseStoryGallery, { once: true });
+@@ -164,3 +199,8 @@ const showInventory = () => {
+ };
+ document.querySelector('#filter')!.addEventListener('input', showInventory);
+ showInventory();
++
++const driftwoodLink = document.createElement("section");
++driftwoodLink.id = "driftwood-yard";
++driftwoodLink.innerHTML = `<h2>Driftwood Yard · authored environment and illustrated connection</h2><p><a href="/?cove=driftwood-yard">Play the actual timber-yard cove</a> · <a href="/">Open the journey for the earned Nell lantern scene</a></p>`;
++document.querySelector("main")!.append(driftwoodLink);
+diff --git a/src/game/passenger-appearance.ts b/src/game/passenger-appearance.ts
+index 6445350..dd1f0e1 100644
+--- a/src/game/passenger-appearance.ts
++++ b/src/game/passenger-appearance.ts
+@@ -1,6 +1,6 @@
+ import type { Level } from '../levels/level';
+ 
+-export type PortraitKey = 'rabbit-cream' | 'rabbit-tan' | 'sheep-wool';
++export type PortraitKey = 'rabbit-cream' | 'rabbit-tan' | 'sheep-wool' | 'beaver-brown';
+ 
+ export type PassengerAppearance = {
+   species: string;
+@@ -14,8 +14,21 @@ export function resolvePassengerAppearance(level: Level, id: string): PassengerA
+   const speciesOrdinal = level.passengers
+     .filter((candidate) => candidate.species === passenger.species)
+     .findIndex((candidate) => candidate.id === id);
+-  const portraitKey = passenger.species === 'rabbit'
++  const explicit = (passenger as { appearance?: string }).appearance;
++  const portraitKey: PortraitKey | null = explicit && validPortrait(explicit) ? explicit : passenger.species === 'rabbit'
+     ? speciesOrdinal === 0 ? 'rabbit-cream' : 'rabbit-tan'
+-    : passenger.species === 'sheep' ? 'sheep-wool' : null;
++    : passenger.species === 'sheep' ? 'sheep-wool' : passenger.species === 'beaver' ? 'beaver-brown' : null;
+   return { species: passenger.species, speciesOrdinal, portraitKey };
+ }
++
++function validPortrait(value: string): value is PortraitKey {
++  return ['rabbit-cream', 'rabbit-tan', 'sheep-wool', 'beaver-brown'].includes(value);
++}
++
++export function passengerModelVariant(level: Level, id: string): number {
++  const appearance = resolvePassengerAppearance(level, id);
++  if (!appearance) throw new Error(`Unknown passenger: ${id}`);
++  if (appearance.species === 'rabbit')
++    return appearance.portraitKey === 'rabbit-cream' ? 0 : Math.max(1, appearance.speciesOrdinal);
++  return appearance.speciesOrdinal;
++}
+diff --git a/src/levels/level.ts b/src/levels/level.ts
+index 2dfd8c2..60a128b 100644
+--- a/src/levels/level.ts
++++ b/src/levels/level.ts
+@@ -1,25 +1,19 @@
+ import data from '../../data/first-crossing.level.json';
+ import holdingData from '../../data/holding-pier.level.json';
+ import bellwaterData from '../../data/bellwater.level.json';
++import driftwoodData from '../../data/driftwood-yard.level.json';
+ export type Level = Pick<
+   typeof data,
+-  | 'id'
+-  | 'title'
+-  | 'rules'
+-  | 'world'
+-  | 'nodes'
+-  | 'edges'
+-  | 'piers'
+-  | 'passengers'
+-  | 'objective'
+-  | 'validation'
++  'id' | 'title' | 'rules' | 'world' | 'nodes' | 'edges' | 'piers' | 'objective' | 'validation'
+ > & {
++  passengers: ((typeof data.passengers)[number] & { appearance?: string })[];
+   start: { boatNodeId: string; aboard: string[]; waitingByPier: Record<string, string[]> };
+   names?: { nodes?: Record<string, string>; passengers?: Record<string, string> };
+ };
+ export const level: Level = data;
+ export const holdingPier: Level = holdingData;
+ export const bellwater: Level = bellwaterData;
++export const driftwoodYard: Level = driftwoodData;
+ export const nodeNames: Record<string, string> = {
+   harbor: 'Harbor',
+   cut: 'Shallow Cut',
+diff --git a/src/main.ts b/src/main.ts
+index d116904..58f3bee 100644
+--- a/src/main.ts
++++ b/src/main.ts
+@@ -44,12 +44,13 @@ import { waterPresets, type WaterTuning } from './scene/water';
+ import { placeActionCard, placeLocalCard, overlaps, type Rectangle } from './ui/placement';
+ import { locationFacts } from './ui/location';
+ import { endpointTargets } from './ui/cove-layout';
++import { placeDriftwoodLabels } from './ui/driftwood-labels';
+ import { MotionPreference, type MotionMode } from './ui/motion-preference';
+ import { PanGesture } from './ui/pan-gesture';
+ import { visibleViewport, insetRectangle } from './ui/viewport';
+ import { FullscreenSupport } from './ui/fullscreen';
+ import { storyCoves, practiceCoves, storyScenes, type SceneId } from './campaign/registry';
+-import { JourneyProgress } from './campaign/progress';
++import { JourneyProgress, isLegacyCompletion } from './campaign/progress';
+ import { StoryPresentation, restoredHarbor } from './campaign/presentation';
+ import { StoryView } from './campaign/story-view';
+ import './campaign/story.css';
+@@ -61,7 +62,7 @@ import { transferFacts, transferReceipt } from './ui/transfer';
+ const cove = new URLSearchParams(location.search).get('cove');
+ const journey = cove === null ? new JourneyProgress() : null;
+ let campaignPlay = false;
+-let level = cove === 'first-crossing' ? baseline : cove === 'bellwater' ? bellwater : holdingPier;
++let level = practiceCoves.find((entry) => entry.id === cove) ?? holdingPier;
+ let experiment = level.id === 'holding-pier';
+ let isBellwater = level.id === 'bellwater';
+ let { nodeNames, passengerNames } = levelNames(level);
+@@ -263,7 +264,8 @@ function showHome(focusId?: string) {
+ 
+   const checkpoint = snapshot?.record?.checkpoint;
+ 
+-  const complete = checkpoint?.kind === 'complete';
++  const legacy = !!snapshot?.record && isLegacyCompletion(snapshot.record);
++  const complete = checkpoint?.kind === 'complete' && !legacy;
+ 
+   const invalid = snapshot?.kind === 'invalid';
+ 
+@@ -275,13 +277,14 @@ function showHome(focusId?: string) {
+         ? 'New journey'
+         : 'Play';
+ 
+-  const notice =
+-    checkpoint?.kind === 'cove'
++  const notice = legacy
++    ? 'A light at Driftwood Yard is waiting.'
++    : checkpoint?.kind === 'cove'
+       ? `${storyCoves.find((entry) => entry.id === checkpoint.id)!.level.title} · from cove start.`
+       : checkpoint?.kind === 'scene'
+         ? `${storyScenes[checkpoint.id].title} · saved story.`
+         : complete
+-          ? 'Both available coves are safe.'
++          ? 'Three coves are safe.'
+           : '';
+ 
+   homeSurface.innerHTML = `<header id="home-title"><h1>Last Ferry</h1><p>The Long Tide</p></header><nav id="home-menu" aria-label="Home"><p class="home-notice">${notice}${snapshot && !snapshot.persistent ? ' Progress lasts only for this visit.' : ''}${invalid ? ` ${snapshot.issue}` : ''}</p><button id="home-play">${label}</button><div class="home-secondary"><button id="home-options">Options</button><button id="home-practice">Practice</button></div><div class="home-secondary"><button id="home-sound"></button>${checkpoint ? '<button id="home-new">New journey</button>' : ''}</div></nav>`;
+@@ -300,7 +303,9 @@ function showHome(focusId?: string) {
+   $('home-play').onclick = (event) => {
+     if (event.detail > 1) return;
+ 
+-    if (complete) showJourney('practice', 'practice-first-crossing');
++    if (legacy) {
++      if (journey?.continueAvailableContent()) resumeJourney(false);
++    } else if (complete) showJourney('practice', 'practice-first-crossing');
+     else if (checkpoint) resumeJourney();
+     else fresh();
+   };
+@@ -378,9 +383,10 @@ function resumeJourney(restored = true) {
+   }
+   if (checkpoint.kind === 'scene') {
+     storyId = checkpoint.id;
+-    if (storyId === 'opening' || restored) {
+-      mountCove(holdingPier);
+-      if (storyId === 'another-bell') world.sync(restoredHarbor(holdingPier));
++    const previous = storyId === 'driftwood-light' ? bellwater : holdingPier;
++    if (storyId === 'opening' || restored || level.id !== previous.id) {
++      mountCove(previous);
++      if (storyId !== 'opening') world.sync(restoredHarbor(previous));
+     }
+     storyPresentation.start(
+       storyId,
+@@ -566,8 +572,8 @@ function renderJourneyDialog() {
+       checkpoint?.kind === 'cove'
+         ? storyCoves.find((entry) => entry.id === checkpoint.id)!.level.title
+         : null;
+-    body = `<p class="journey-subtitle">The Long Tide · two playable coves</p><p>${checkpointNotice}</p>${destination ? `<p>Continue at ${destination}, from its beginning.</p>` : ''}${snapshot?.kind === 'invalid' ? `<p role="alert">${snapshot.issue} Start a new journey to replace it, or play Practice without changing it.</p>` : ''}${notice}`;
+-    actions = `${snapshot?.record ? `<button id="journey-continue">Continue journey${checkpoint?.kind === 'cove' ? ' · from cove start' : ''}</button>` : ''}<button id="journey-new">New journey</button><button id="journey-practice">Practice</button><button id="journey-settings">Settings</button>`;
++    body = `<p class="journey-subtitle">The Long Tide</p><p>${checkpointNotice}</p>${destination ? `<p>Continue at ${destination}, from its beginning.</p>` : ''}${snapshot?.kind === 'invalid' ? `<p role="alert">${snapshot.issue} Start a new journey to replace it, or play Practice without changing it.</p>` : ''}${notice}`;
++    actions = `${snapshot?.record ? `<button id="journey-continue">Continue journey${checkpoint?.kind === 'cove' ? ' · from cove start' : ''}</button>` : ''}<button id="journey-new">New journey</button><button id="journey-practice">Practice</button><button id="journey-settings">Options</button>`;
+   } else if ((mode === 'story' || mode === 'transcript') && storyId) {
+     renderIllustratedStory(mode === 'transcript');
+     return;
+@@ -593,10 +599,10 @@ function renderJourneyDialog() {
+     actions =
+       '<button id="journey-return-cancel">Keep playing</button><button id="journey-return-confirm">Return home</button>';
+   } else {
+-    heading = 'Both coves are safe.';
++    heading = 'Three coves are safe.';
+     body = '<p>The next part of the journey is still being made.</p>' + notice;
+     actions =
+-      '<button id="journey-title">Return to title</button><button id="journey-practice">Practice</button><button id="journey-settings">Settings</button>';
++      '<button id="journey-title">Return Home</button><button id="journey-practice">Practice</button><button id="journey-settings">Options</button>';
+   }
+   $('dialog-content').innerHTML =
+     `<header class="dialog-head${mode === 'story' ? ' sr-only' : ''}"><h2 id="dialog-title">${heading}</h2></header><div class="dialog-body journey-copy">${body}</div><footer class="dialog-footer journey-actions">${actions}</footer>`;
+@@ -1205,7 +1211,7 @@ function renderDialog() {
+         ? `<div class="passenger-options" role="group" aria-label="Passenger selection">${ids.map((id) => `<button id="passenger-${id}" class="cove-choice" aria-pressed="${a.passengerIds.includes(id)}">${passengerChoiceContent(passengerNames[id].split(' ·')[0], level.passengers.find((p) => p.id === id)!.slots, resolvePassengerAppearance(level, id)?.portraitKey ?? null)}</button>`).join('')}</div>`
+         : '';
+     $('dialog-content').innerHTML =
+-      `${header(transfer ? (a.type === 'board' ? 'Board passengers' : p?.isDeliveryPier ? 'Bring passengers home' : 'Let passengers ashore') : actionLabel(s, a, level), `${nodeNames[a.type === 'move' ? a.to : s.boatNodeId]} · inspection is free`)}<div id="preview" class="dialog-body ${proposed.error || proposed.state.status === 'lost' ? 'warning' : ''}" aria-live="polite" aria-atomic="true">${choices}<p class="requirement">${text.error ?? (transfer ? transfer.depth : text.requirement)}</p>${text.consequence ? `<p class="consequence">${text.consequence}</p>` : ''}${!proposed.error && !transfer ? `<p class="preview-result">After this action: Boat ${load(proposed.state, level)}/${level.rules.capacity} spaces · tide ${proposed.state.tideLevel}${s.tideLevel !== proposed.state.tideLevel ? ` (now ${s.tideLevel})` : ''}</p>` : ''}</div><footer class="dialog-footer"><button id="commit" ${proposed.error ? 'disabled' : ''}>${proposed.error ? 'Action unavailable' : transfer ? `${transfer.label} · 1 action` : 'Confirm · 1 action'}</button></footer>`;
++      `${header(transfer ? (a.type === 'board' ? 'Board passengers' : p?.isDeliveryPier ? 'Bring passengers home' : 'Let passengers ashore') : actionLabel(s, a, level), `${nodeNames[a.type === 'move' ? a.to : s.boatNodeId]} · inspection is free`)}<div id="preview" class="dialog-body ${proposed.error || proposed.state.status === 'lost' ? 'warning' : ''}" aria-live="polite" aria-atomic="true">${choices}<p class="requirement">${text.error ?? (transfer ? transfer.depth : text.requirement)}</p>${(transfer ? transfer.detail : text.consequence) ? `<p class="consequence">${transfer ? transfer.detail : text.consequence}</p>` : ''}${!proposed.error && !transfer ? `<p class="preview-result">After this action: Boat ${load(proposed.state, level)}/${level.rules.capacity} spaces · tide ${proposed.state.tideLevel}${s.tideLevel !== proposed.state.tideLevel ? ` (now ${s.tideLevel})` : ''}</p>` : ''}</div><footer class="dialog-footer"><button id="commit" ${proposed.error ? 'disabled' : ''}>${proposed.error ? 'Action unavailable' : transfer ? `${transfer.label} · 1 action` : 'Confirm · 1 action'}</button></footer>`;
+ 
+     if (a.type === 'board' || a.type === 'unload')
+       for (const id of ids)
+@@ -1240,9 +1246,14 @@ function renderDialog() {
+       level.rules.tide.rises.find((r) => r.afterTurn > s.turn)?.level ?? s.tideLevel,
+     );
+   } else if (mode === 'menu') {
+-    const sheep = level.passengers.find((p) => p.species === 'sheep')!;
++    const passengerCosts = level.passengers
++      .map(
++        (p) =>
++          `${passengerList([p.id], level)} uses ${p.slots} ${p.slots === 1 ? 'space' : 'spaces'}`,
++      )
++      .join('; ');
+     $('dialog-content').innerHTML =
+-      `${header('Crossing menu')}<div class="dialog-body menu-body">${s.status === 'won' ? '<button id="return-arrival">Return to arrival</button>' : ''}<div class="menu-actions"><button id="restart">Restart crossing</button><button id="settings">Settings</button></div><label class="cove-picker">Choose cove<select id="cove-picker">${[baseline, holdingPier, bellwater].map((l) => `<option value="${l.id}" ${l.id === level.id ? 'selected' : ''}>${l.title}${l.id === baseline.id ? ' · baseline' : ''}</option>`).join('')}</select></label><details id="help-details"><summary>How to play · actions and depth</summary><p>${actionCostCopy(level)}</p><p>Select a named place, island, pier or landmark to see its options for free. Choose Sail to travel one passage. Select the ferry for its current place. A named single-passenger action acts directly. For several passengers, choose names in the nearby chooser, then use its named action. Cost, depth and tide consequences appear before you act.</p><p>Boat depth needed: empty = 1; 1–2 spaces = 2; 3–4 spaces = 3. Each rabbit uses 1 space; ${passengerList([sheep.id], level)} uses ${sheep.slots}. A passage must be at least as deep as the boat needs.</p><p>Boarding and unloading happen before the tide rises. Use the status button for the tide and pier forecast. Undo earlier actions or restart to recover from a losing plan.</p><p>Tab and Shift+Tab move between controls; Enter or Space activates them. Escape closes a dialog first; press it again to close the location card. Selection never spends an action.</p></details></div>`;
++      `${header('Crossing menu')}<div class="dialog-body menu-body">${s.status === 'won' ? '<button id="return-arrival">Return to arrival</button>' : ''}<div class="menu-actions"><button id="restart">Restart crossing</button><button id="settings">Settings</button></div><label class="cove-picker">Choose cove<select id="cove-picker">${practiceCoves.map((l) => `<option value="${l.id}" ${l.id === level.id ? 'selected' : ''}>${l.title}${l.id === baseline.id ? ' · baseline' : ''}</option>`).join('')}</select></label><details id="help-details"><summary>How to play · actions and depth</summary><p>${actionCostCopy(level)}</p><p>Select a named place, island, pier or landmark to see its options for free. Choose Sail to travel one passage. Select the ferry for its current place. A named single-passenger action acts directly. For several passengers, choose names in the nearby chooser, then use its named action. Select your current place for free transfer details. The chooser shows selected depth and meaningful consequences; a losing action warns before you commit.</p><p>Boat depth needed: empty = 1; 1–2 spaces = 2; 3–4 spaces = 3. ${passengerCosts}. A passage must be at least as deep as the boat needs.</p><p>Boarding and unloading happen before the tide rises. Use the status button for the tide and pier forecast. Undo earlier actions or restart to recover from a losing plan.</p><p>Tab and Shift+Tab move between controls; Enter or Space activates them. Escape closes a dialog first; press it again to close the location card. Selection never spends an action.</p></details></div>`;
+ 
+     $('restart').onclick = restart;
+ 
+@@ -1555,7 +1566,14 @@ function renderLocation() {
+       ? paragraph(facts.aboardCopy) +
+         paragraph(facts.waiting.length ? facts.waitingCopy : '') +
+         paragraph(facts.safety) +
+-        paragraph(facts.transferNote)
++        paragraph(facts.transferNote) +
++        [facts.board, facts.unload]
++          .filter((action) => action !== null)
++          .map((action) => {
++            const info = transferFacts(session.state, action!, level);
++            return paragraph(`${info.label} · 1 action. ${info.depth}. ${info.detail}`);
++          })
++          .join('')
+       : paragraph(facts.passage, 'requirement') +
+         paragraph(facts.limitation && !facts.passage ? facts.limitation : '') +
+         paragraph(facts.waiting.length ? facts.waitingCopy : '') +
+@@ -1646,25 +1664,10 @@ function renderDock() {
+ 
+     if (!direct) button.setAttribute('aria-haspopup', 'dialog');
+ 
+-    const note = document.createElement('span');
+-
+-    note.className = 'dock-facts';
+-
+-    note.textContent = direct ? `1 action · ${info.depth}` : 'Choose passengers · 1 action';
+-
+-    button.append(note);
+-
+-    if (direct && info.detail) {
+-      const detail = document.createElement('span');
+-
+-      detail.className = 'dock-consequence';
+-
+-      detail.textContent = info.detail;
+-
+-      button.append(detail);
+-    }
+-
+     dock.append(button);
++    button.onfocus = () => {
++      if (keyboardInput && !blocked()) world.frameLocation(session.state.boatNodeId);
++    };
+ 
+     button.onclick = (event) => {
+       event.stopPropagation();
+@@ -2036,6 +2039,24 @@ function positionMap() {
+   });
+   const hint = $('selection-hint'),
+     hintBounds = hint.hidden ? null : toLocal(hint.getBoundingClientRect());
++  const driftwoodNames =
++    level.id === 'driftwood-yard'
++      ? placeDriftwoodLabels(
++          labels.filter(({ id }) => {
++            const marker = markers.find((m) => m.id === id)!;
++            return (
++              marker.x >= bounds.left &&
++              marker.x <= bounds.right &&
++              marker.y >= bounds.top &&
++              marker.y <= bounds.bottom
++            );
++          }),
++          markers,
++          bounds,
++          [...figures, ...(hintBounds ? [hintBounds] : [])],
++          labelLayout,
++        )
++      : null;
+   for (const { id, group, name, width: w, height: h } of labels) {
+     const marker = markers.find((m) => m.id === id)!;
+     const visible =
+@@ -2066,7 +2087,10 @@ function positionMap() {
+     const score = (choice: Rectangle) =>
+       avoid.filter((r) => overlaps(choice, r, 2)).length * 200 +
+       Math.hypot(choice.left - preferred[0][0], choice.top - preferred[0][1]);
+-    const choice = labelLayout.get(id) ?? candidates.sort((a, b) => score(a) - score(b))[0];
++    const choice =
++      driftwoodNames?.get(id) ??
++      labelLayout.get(id) ??
++      candidates.sort((a, b) => score(a) - score(b))[0];
+     labelLayout.set(id, choice);
+     name.style.left = choice.left - marker.bounds.left + 'px';
+     name.style.top = choice.top - marker.bounds.top + 'px';
+@@ -2088,7 +2112,7 @@ function positionMap() {
+         boat.left < bounds.right &&
+         boat.bottom > bounds.top &&
+         boat.top < bounds.bottom;
+-    dock.style.visibility = visible ? 'visible' : 'hidden';
++    dock.style.visibility = visible || keyboardInput ? 'visible' : 'hidden';
+     dock.dataset.layout = 'row';
+     if (dock.offsetWidth > bounds.right - bounds.left) dock.dataset.layout = 'column';
+     const nearby = placeActionCard(dock.offsetWidth, dock.offsetHeight, bounds, boat, {
+@@ -2146,7 +2170,7 @@ function bindWorld() {
+   world.onTransferContact = (contact) =>
+     sound.transferContact({
+       weight: contact.passengerIds.some(
+-        (id) => level.passengers.find((p) => p.id === id)?.species === 'sheep',
++        (id) => (level.passengers.find((p) => p.id === id)?.slots ?? 0) >= 2,
+       )
+         ? 'full'
+         : 'light',
+@@ -2333,6 +2357,8 @@ document.addEventListener(
+   (e) => {
+     if (['Tab', 'Enter', ' ', 'Escape'].includes(e.key)) {
+       keyboardInput = true;
++      if (e.key === 'Tab' && !$('dock-actions').hidden)
++        $('dock-actions').style.visibility = 'visible';
+       if (!e.repeat) {
+         viewFence = null;
+ 
+diff --git a/src/scene/deck-transfer.ts b/src/scene/deck-transfer.ts
+index e3b1ae5..52e7232 100644
+--- a/src/scene/deck-transfer.ts
++++ b/src/scene/deck-transfer.ts
+@@ -4,6 +4,12 @@ export const deckEntryZ = 0.28;
+ export const bridgeBowOffset = 0.3;
+ export const firstRabbitDeckZ = 0.1;
+ 
++export function deckTransferEntry(species: string) {
++  return species === 'beaver'
++    ? { z: 0.9, side: 0.82, bridgeAdvance: 0.1 }
++    : { z: deckEntryZ, side: 0.51, bridgeAdvance: 0.46 };
++}
++
+ export function sampleDeckTransfer(
+   board: boolean,
+   from: Vector3,
+diff --git a/src/scene/layout.ts b/src/scene/layout.ts
+index d30f1d7..d731176 100644
+--- a/src/scene/layout.ts
++++ b/src/scene/layout.ts
+@@ -1,6 +1,6 @@
+ export type IslandStyle = 'garden' | 'crag' | 'reeds' | 'rocky';
+ type Landmark = {
+-  kind: 'lighthouse' | 'cottage' | 'bell';
++  kind: 'lighthouse' | 'cottage' | 'bell' | 'yard';
+   islandId: string;
+   positionXZ: [number, number];
+ };
+@@ -20,6 +20,17 @@ export type SceneLayout = {
+   };
+ };
+ const layouts: Record<string, SceneLayout> = {
++  'driftwood-yard': {
++    landmarks: [
++      { kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-6.15, -3.25] },
++      { kind: 'yard', islandId: 'yard-island', positionXZ: [0, -4.9] },
++    ],
++    islandStyles: { 'yard-island': 'rocky', 'mooring-island': 'rocky', 'reed-island': 'reeds' },
++    stonePiers: ['mooring-pier'],
++    centeredWaitingPairs: true,
++    cameraPosition: [0, 34, 24],
++    landscapeCameraPosition: [0, 30, 30],
++  },
+   'first-crossing': {
+     landmarks: [
+       { kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-6.15, -3.25] },
+diff --git a/src/scene/models.ts b/src/scene/models.ts
+index 82df347..62a6a6f 100644
+--- a/src/scene/models.ts
++++ b/src/scene/models.ts
+@@ -140,6 +140,36 @@ export function animal(species: string, variant = 0) {
+     }
+     ball(g, '#ba7b6b', [0, 0.38, 0.16], [0.025, 0.018, 0.02]);
+     ball(g, wool, [0, 0.18, -0.13], [0.065, 0.065, 0.065]);
++  } else if (species === 'beaver') {
++    const fur = '#8e6848', muzzle = '#c3a47a', tailColor = '#5b4438';
++    const tail = new T.Group();
++    tail.name = 'beaver-flat-tail';
++    tail.position.set(0.1, 0.18, 0.02);
++    tail.rotation.x = -0.6;
++    tail.rotation.y = 0.35;
++    g.add(tail);
++    ball(tail, tailColor, [0, 0.01, -0.065], [0.16, 0.035, 0.12]);
++    for (const x of [-0.06, 0.06]) {
++      const seam = box(tail, '#765747', [0.008, 0.008, 0.12], [x, 0.044, -0.065], 0.003);
++      seam.rotation.y = x > 0 ? -0.24 : 0.24;
++    }
++    for (const x of [-0.115, 0.115])
++      ball(g, '#684b37', [x, 0.045, 0.045], [0.075, 0.045, 0.1]);
++    ball(g, fur, [0, 0.245, 0], [0.19, 0.23, 0.17]);
++    ball(g, muzzle, [0, 0.235, 0.13], [0.125, 0.145, 0.055]);
++    ball(g, fur, [0, 0.45, 0.045], [0.185, 0.155, 0.15]);
++    for (const x of [-0.145, 0.145]) {
++      ball(g, fur, [x, 0.565, 0.025], [0.06, 0.065, 0.045]);
++      ball(g, '#b18a64', [x, 0.57, 0.062], [0.035, 0.038, 0.012]);
++      const paw = ball(g, fur, [x, 0.26, 0.14], [0.06, 0.1, 0.065]);
++      paw.rotation.z = x > 0 ? 0.35 : -0.35;
++      ball(g, '#263d43', [x * 0.56, 0.475, 0.177], [0.019, 0.022, 0.013]);
++    }
++    for (const x of [-0.058, 0.058])
++      ball(g, muzzle, [x, 0.407, 0.178], [0.075, 0.055, 0.045]);
++    ball(g, '#3f352d', [0, 0.44, 0.212], [0.057, 0.035, 0.024]);
++    for (const x of [-0.018, 0.018])
++      box(g, '#f3e4bf', [0.03, 0.033, 0.014], [x, 0.366, 0.202], 0.005);
+   } else {
+     for (const x of [-0.12, 0.12])
+       for (const z of [-0.15, 0.15]) cylinder(g, '#5d6258', 0.037, 0.03, 0.16, [x, 0.08, z], 8);
+diff --git a/src/scene/scenery.ts b/src/scene/scenery.ts
+index 0331fc7..36d9d67 100644
+--- a/src/scene/scenery.ts
++++ b/src/scene/scenery.ts
+@@ -59,3 +59,48 @@ export function bellLandmark(parent: T.Object3D, position: [number, number, numb
+   ball(g, '#d0ab62', [0, 0.63, 0], [0.075, 0.085, 0.075]);
+   return g;
+ }
++export function driftwoodYard(parent: T.Object3D, position: [number, number, number]) {
++  const group = new T.Group();
++  group.name = 'driftwood-working-yard';
++  group.position.set(...position);
++  parent.add(group);
++  for (const x of [-0.62, 0.62]) {
++    for (const z of [-0.2, 0.2]) {
++      const leg = box(group, '#72563e', [0.12, 0.53, 0.12], [x, 0.26, z], 0.025);
++      leg.rotation.z = x > 0 ? -0.13 : 0.13;
++    }
++    box(group, '#b18b59', [0.19, 0.12, 0.68], [x, 0.48, 0], 0.025);
++  }
++  for (const z of [-0.19, 0, 0.19]) box(group, '#ccab74', [1.65, 0.095, 0.17], [0, 0.57, z], 0.025);
++  box(group, '#977043', [1.32, 0.065, 0.13], [-0.07, 0.65, 0.05], 0.025).rotation.y = -0.12;
++  for (let i = 0; i < 4; i++) {
++    const beam = box(
++      group,
++      i % 2 ? '#b08a58' : '#c6a573',
++      [0.2, 0.14, 1.02],
++      [0.98 + (i % 2) * 0.19, 0.1 + Math.floor(i / 2) * 0.14, -0.12],
++      0.035,
++    );
++    beam.rotation.y = 0.12;
++  }
++  for (const x of [-0.8, 0.8]) {
++    box(group, '#766147', [0.12, 1.15, 0.13], [x, 0.57, -0.56], 0.03);
++    box(group, '#cfb37f', [0.17, 0.06, 0.18], [x, 1.13, -0.56], 0.02);
++  }
++  box(group, '#aa8456', [1.86, 0.14, 0.18], [0, 1.06, -0.56], 0.035);
++  for (let loop = 0; loop < 3; loop++) {
++    const rope = mesh(
++      new T.TorusGeometry(0.13 + loop * 0.027, 0.018, 6, 28),
++      '#d8c395',
++      group,
++      -0.43,
++      0.64 + loop * 0.014,
++      -0.07,
++    );
++    rope.rotation.x = Math.PI / 2;
++  }
++  box(group, '#786346', [0.16, 0.065, 0.16], [0.6, 0.66, -0.14], 0.02);
++  box(group, '#f4ce80', [0.11, 0.18, 0.11], [0.6, 0.78, -0.14], 0.02);
++  cylinder(group, '#716048', 0.1, 0.08, 0.07, [0.6, 0.9, -0.14], 8);
++  return group;
++}
+diff --git a/src/scene/story-staging.ts b/src/scene/story-staging.ts
+index d8bef96..41fc770 100644
+--- a/src/scene/story-staging.ts
++++ b/src/scene/story-staging.ts
+@@ -1,6 +1,6 @@
+ import { overviewScale, viewFrame, type ViewBounds, type ViewRectangle } from './view';
+ 
+-export type StorySceneId = 'opening' | 'another-bell';
++export type StorySceneId = 'opening' | 'another-bell' | 'driftwood-light';
+ export type StoryStage = {
+   id: StorySceneId;
+   elapsed: number;
+diff --git a/src/scene/world.ts b/src/scene/world.ts
+index 0bcaa2a..ac31ff1 100644
+--- a/src/scene/world.ts
++++ b/src/scene/world.ts
+@@ -1,7 +1,7 @@
+ import * as T from 'three';
+ import { level as baseline, type Level } from '../levels/level';
+ import { draft, edgeTo, type State, type Action } from '../game/rules';
+-import { resolvePassengerAppearance } from '../game/passenger-appearance';
++import { passengerModelVariant, resolvePassengerAppearance } from '../game/passenger-appearance';
+ import { animal, ball, box, cylinder, ferry, lighthouse, mat, mesh, pine } from './models';
+ import { sampleJourney, type JourneyPlan } from './motion';
+ import { PresentationPoses } from './poses';
+@@ -19,12 +19,13 @@ import {
+ import {
+   bridgeBowOffset,
+   deckEntryZ,
++  deckTransferEntry,
+   firstRabbitDeckZ,
+   sampleDeckTransfer,
+   transferHeading,
+ } from './deck-transfer';
+ import { sceneLayout, type SceneLayout } from './layout';
+-import { bellLandmark, cottage } from './scenery';
++import { bellLandmark, cottage, driftwoodYard } from './scenery';
+ import { getLevelPaths, type CanonicalPath } from './paths';
+ import { Shores, createReedBeds } from './shore';
+ import { CoastalWater } from './water';
+@@ -281,7 +282,9 @@ export class World {
+         const model =
+           landmark.kind === 'cottage'
+             ? cottage(this.scene, [x, y, z])
+-            : bellLandmark(this.scene, [x, y, z]);
++            : landmark.kind === 'yard'
++              ? driftwoodYard(this.scene, [x, y, z])
++              : bellLandmark(this.scene, [x, y, z]);
+         if (node) this.registerPlace(node, 'landmark', model);
+       }
+     }
+@@ -359,7 +362,7 @@ export class World {
+       );
+       this.hull.add(anchor);
+       this.passengerAnchors.set(p.id, anchor);
+-      const g = animal(p.species, index);
++      const g = animal(p.species, passengerModelVariant(this.level, p.id));
+       g.name = p.id;
+       g.scale.set(
+         p.species === 'rabbit' ? 1.25 : 1.15,
+@@ -1561,6 +1564,7 @@ export class World {
+         if (tr.before.aboard.includes(id) !== tr.after.aboard.includes(id)) {
+           const pier = this.level.piers.find((p) => p.nodeId === tr.before.boatNodeId)!;
+           const passenger = this.level.passengers.find((passenger) => passenger.id === id)!;
++          const entry = deckTransferEntry(passenger.species);
+           const offset =
+             passenger.species === 'rabbit' ? (this.speciesIndex(id) ? 0.07 : -0.07) : 0;
+           const bridge = new T.Vector3(
+@@ -1571,7 +1575,7 @@ export class World {
+                 pier.width / 2,
+               ),
+             pier.elevation * 0.18 - 0.005,
+-            pier.positionXZ[1] + 0.46,
++            pier.positionXZ[1] + entry.bridgeAdvance,
+           );
+           const land = new T.Vector3(
+             pier.positionXZ[0] + offset,
+@@ -1580,8 +1584,8 @@ export class World {
+           );
+           const board = tr.after.aboard.includes(id);
+           const side = Math.sign(this.hull.worldToLocal(bridge.clone()).x) || 1;
+-          const gate = this.hull.localToWorld(new T.Vector3(side * 0.51, 0.26, deckEntryZ));
+-          const corridor = this.hull.localToWorld(new T.Vector3(0, 0.26, deckEntryZ));
++          const gate = this.hull.localToWorld(new T.Vector3(side * entry.side, 0.26, entry.z));
++          const corridor = this.hull.localToWorld(new T.Vector3(0, 0.26, entry.z));
+           g.position.copy(
+             sampleDeckTransfer(board, tr.positions.get(id)!, bridge, gate, corridor, land, dest, k),
+           );
+diff --git a/src/ui/cove-ui.ts b/src/ui/cove-ui.ts
+index 03d930c..810c58f 100644
+--- a/src/ui/cove-ui.ts
++++ b/src/ui/cove-ui.ts
+@@ -1,12 +1,14 @@
+ import type { PortraitKey } from '../game/passenger-appearance';
+ import creamPortrait from '../../cove-portrait-package/portraits/rabbit-cream.png';
+ import tanPortrait from '../../cove-portrait-package/portraits/rabbit-tan.png';
++import beaverPortrait from '../../assets/portraits/beaver-brown.png';
+ import woolPortrait from '../../cove-portrait-package/portraits/sheep-wool.png';
+ 
+ export const portraitSources: Record<PortraitKey, string> = {
+   'rabbit-cream': creamPortrait,
+   'rabbit-tan': tanPortrait,
+   'sheep-wool': woolPortrait,
++  'beaver-brown': beaverPortrait,
+ };
+ 
+ const originals = import.meta.glob<string>(
+diff --git a/src/ui/transfer.ts b/src/ui/transfer.ts
+index 4956f29..9927bda 100644
+--- a/src/ui/transfer.ts
++++ b/src/ui/transfer.ts
+@@ -1,5 +1,5 @@
+-import { draft, pierAt, preview, type Action, type State } from '../game/rules';
+-import type { Level } from '../levels/level';
++import { draft, edgeTo, pierAt, preview, type Action, type State } from '../game/rules';
++import { nodeName, type Level } from '../levels/level';
+ import { passengerList, previewCopy } from './presentation';
+ 
+ export type Transfer = Extract<Action, { type: 'board' | 'unload' }>;
+@@ -12,10 +12,21 @@ export function transferFacts(before: State, action: Transfer, level: Level) {
+     action.type === 'board' ? `Board ${who}` : home ? `Bring ${who} home` : `Let ${who} ashore`;
+   const depth = `Needs depth ${draft(before, level)} → ${draft(proposed.state, level)}`;
+   const text = previewCopy(before, action, level);
++  let detail = text.consequence;
++  if (action.type === 'board' && !proposed.error && proposed.state.status === 'playing') {
++    const next = proposed.state;
++    detail = next.tideLevel > before.tideLevel ? 'The tide rises after this action.' : '';
++    for (const node of level.nodes) {
++      const edge = edgeTo(next, node.id, level);
++      if (edge && edge.baseDepth + next.tideLevel < draft(next, level))
++        detail += ` Passage to ${nodeName(node.id, level)} has depth ${edge.baseDepth + next.tideLevel}: too shallow.`;
++    }
++    detail = detail.trim();
++  }
+   return {
+     label,
+     depth,
+-    detail: text.consequence,
++    detail,
+     error: proposed.error,
+     direct: action.passengerIds.length === 1 && !proposed.error && proposed.state.status !== 'lost',
+   };
+diff --git a/tests/unit/clearance.test.ts b/tests/unit/clearance.test.ts
+index 8cf95e7..7f58c38 100644
+--- a/tests/unit/clearance.test.ts
++++ b/tests/unit/clearance.test.ts
+@@ -3,7 +3,7 @@ import { InstancedMesh, Matrix4, Mesh, Vector3 } from 'three';
+ import { ferry } from '../../src/scene/models';
+ import { berthHeading, initialHeading, planJourney, sampleJourney } from '../../src/scene/motion';
+ import { getLevelPaths, samplePath } from '../../src/scene/paths';
+-import { level, holdingPier, bellwater } from '../../src/levels/level';
++import { level, holdingPier, bellwater, driftwoodYard } from '../../src/levels/level';
+ import { sceneLayout } from '../../src/scene/layout';
+ import { buildCoastGeometry, createReedBeds, createShoreRocks } from '../../src/scene/shore';
+ type P = [number, number];
+@@ -54,7 +54,7 @@ function segmentDistance(p: P, a: P, b: P) {
+   const t = span ? Math.max(0, Math.min(1, ((p[0] - a[0]) * x + (p[1] - a[1]) * z) / span)) : 0;
+   return Math.hypot(p[0] - a[0] - t * x, p[1] - a[1] - t * z);
+ }
+-test.each([level, holdingPier, bellwater])(
++test.each([level, holdingPier, bellwater, driftwoodYard])(
+   '$id: full modeled ferry clears land and piers from all reachable headings, both berth sides and reverse departures',
+   (level) => {
+     const model = ferry();
+@@ -148,7 +148,7 @@ test.each([level, holdingPier, bellwater])(
+   },
+ );
+ 
+-test.each([level, holdingPier, bellwater])(
++test.each([level, holdingPier, bellwater, driftwoodYard])(
+   '$id: actual refined coasts, rocks and reeds stay inside the validated land envelope',
+   (level) => {
+     const failures: string[] = [];
+diff --git a/tests/unit/deck-volume.test.ts b/tests/unit/deck-volume.test.ts
+index 038c1f6..8bad625 100644
+--- a/tests/unit/deck-volume.test.ts
++++ b/tests/unit/deck-volume.test.ts
+@@ -5,6 +5,7 @@ import { settlingProgress } from '../../src/scene/transitions';
+ import {
+   bridgeBowOffset,
+   deckEntryZ,
++  deckTransferEntry,
+   firstRabbitDeckZ,
+   sampleDeckTransfer,
+   transferHeading,
+@@ -33,32 +34,39 @@ const obstacles = boat.children
+     }
+     return { at: object.position.toArray(), box: new Box3().setFromObject(object), planes };
+   });
+-const figures = [0, 1, 2].map((id) => {
+-  const species = id === 2 ? 'sheep' : 'rabbit',
+-    figure = animal(species, id === 1 ? 1 : 0),
+-    vertices: Vector3[] = [];
+-  figure.scale.set(
+-    species === 'rabbit' ? 1.25 : 1.15,
+-    species === 'rabbit' ? 1.65 : 1.5,
+-    species === 'rabbit' ? 1.25 : 1.15,
+-  );
+-  figure.updateMatrixWorld(true);
+-  figure.traverse((object) => {
+-    if (!(object instanceof Mesh)) return;
+-    const position = object.geometry.getAttribute('position');
+-    for (let i = 0; i < position.count; i++)
+-      vertices.push(
+-        new Vector3().fromBufferAttribute(position, i).applyMatrix4(object.matrixWorld),
+-      );
++const figuresFor = (nonRabbit: string) =>
++  [0, 1, 2].map((id) => {
++    const species = id === 2 ? nonRabbit : 'rabbit',
++      figure = animal(species, id === 1 ? 1 : 0),
++      vertices: Vector3[] = [];
++    figure.scale.set(
++      species === 'rabbit' ? 1.25 : 1.15,
++      species === 'rabbit' ? 1.65 : 1.5,
++      species === 'rabbit' ? 1.25 : 1.15,
++    );
++    figure.updateMatrixWorld(true);
++    figure.traverse((object) => {
++      if (!(object instanceof Mesh)) return;
++      const position = object.geometry.getAttribute('position');
++      for (let i = 0; i < position.count; i++)
++        vertices.push(
++          new Vector3().fromBufferAttribute(position, i).applyMatrix4(object.matrixWorld),
++        );
++    });
++    return vertices;
+   });
+-  return vertices;
+-});
+ const axis = new Vector3(0, 1, 0),
+   smooth = (t: number) => t * t * (3 - 2 * t);
+ 
+-test.each([Math.PI / 2, -Math.PI / 2])(
+-  'modeled passengers avoid cabin and rails through each transfer phase at berth %s',
+-  (heading) => {
++test.each([
++  [Math.PI / 2, 'sheep'],
++  [-Math.PI / 2, 'sheep'],
++  [Math.PI / 2, 'beaver'],
++  [-Math.PI / 2, 'beaver'],
++] as const)(
++  'modeled passengers avoid cabin and rails through each transfer phase at berth %s with %s',
++  (heading, nonRabbit) => {
++    const figures = figuresFor(nonRabbit);
+     const failures: string[] = [];
+     expect(obstacles.length).toBeGreaterThan(8);
+     for (const scenario of [
+@@ -67,6 +75,7 @@ test.each([Math.PI / 2, -Math.PI / 2])(
+         board: false,
+         ids: [2],
+         pierY: 0.54,
++        gap: 0.9,
+         width: 0.8,
+         before: -0.045,
+         after: 0.03,
+@@ -78,6 +87,7 @@ test.each([Math.PI / 2, -Math.PI / 2])(
+         board: true,
+         ids: [2],
+         pierY: 0.54,
++        gap: 0.9,
+         width: 0.8,
+         before: -0.045,
+         after: -0.12,
+@@ -89,6 +99,7 @@ test.each([Math.PI / 2, -Math.PI / 2])(
+         board: true,
+         ids: [0, 1],
+         pierY: 0.18,
++        gap: 0.9,
+         width: 0.9,
+         before: 0.03,
+         after: -0.045,
+@@ -100,14 +111,40 @@ test.each([Math.PI / 2, -Math.PI / 2])(
+         board: false,
+         ids: [0, 1, 2],
+         pierY: 0.54,
++        gap: 0.9,
+         width: 0.6,
+         before: -0.12,
+         after: 0.03,
+         water: 0.36,
+         tide: 0,
+       },
++      {
++        name: 'mooring-unload',
++        board: false,
++        ids: [2],
++        pierY: 0.54,
++        gap: 1.3,
++        width: 0.9,
++        before: -0.045,
++        after: 0.03,
++        water: 0,
++        tide: 0,
++      },
++      {
++        name: 'mooring-reboard',
++        board: true,
++        ids: [2],
++        pierY: 0.54,
++        gap: 1.3,
++        width: 0.9,
++        before: -0.045,
++        after: -0.12,
++        water: 0.18,
++        tide: 0,
++      },
+     ]) {
+       for (const id of scenario.ids) {
++        const entry = deckTransferEntry(id === 2 ? nonRabbit : 'rabbit');
+         const anchor = new Vector3(
+             ...([
+               [-0.22, 0.26, firstRabbitDeckZ],
+@@ -123,13 +160,13 @@ test.each([Math.PI / 2, -Math.PI / 2])(
+               scenario.width / 2,
+             ),
+             scenario.pierY - 0.005,
+-            -0.44,
++            -scenario.gap + entry.bridgeAdvance,
+           ),
+-          land = new Vector3(offset, scenario.pierY + 0.025, -1.95),
++          land = new Vector3(offset, scenario.pierY + 0.025, -scenario.gap - 1.05),
+           waiting = new Vector3(
+             id === 2 ? 0 : id === 0 ? -0.21 : 0.21,
+             scenario.pierY - 0.005,
+-            -1.02,
++            -scenario.gap - 0.12,
+           ),
+           initial = anchor
+             .clone()
+@@ -153,8 +190,8 @@ test.each([Math.PI / 2, -Math.PI / 2])(
+                 .clone()
+                 .applyAxisAngle(axis, heading)
+                 .add(new Vector3(0, hullY, 0)),
+-            gate = world(new Vector3(Math.sign(heading) * 0.51, 0.26, deckEntryZ)),
+-            corridor = world(new Vector3(0, 0.26, deckEntryZ)),
++            gate = world(new Vector3(Math.sign(heading) * entry.side, 0.26, entry.z)),
++            corridor = world(new Vector3(0, 0.26, entry.z)),
+             position = sampleDeckTransfer(
+               scenario.board,
+               scenario.board ? waiting : initial,
+diff --git a/tests/unit/direct-transfer.test.ts b/tests/unit/direct-transfer.test.ts
+index 13f3ef3..4d4750d 100644
+--- a/tests/unit/direct-transfer.test.ts
++++ b/tests/unit/direct-transfer.test.ts
+@@ -29,7 +29,7 @@ test('last safe group is deliberate; a single rabbit still requires the real los
+     before = reduce(before, action, level);
+   const group = { type: 'board' as const, passengerIds: ['rabbit-1', 'rabbit-2'] };
+   expect(transferFacts(before, group, level)).toMatchObject({ direct: false, error: null });
+-  expect(transferFacts(before, group, level).detail).toContain('Both are safe aboard');
++  expect(transferFacts(before, group, level).detail).toBe('The tide rises after this action.');
+   const subset = { type: 'board' as const, passengerIds: ['rabbit-1'] };
+   const facts = transferFacts(before, subset, level);
+   expect(facts.direct).toBe(false);
+diff --git a/tests/unit/paths.test.ts b/tests/unit/paths.test.ts
+index e245728..e089c9a 100644
+--- a/tests/unit/paths.test.ts
++++ b/tests/unit/paths.test.ts
+@@ -1,6 +1,6 @@
+ import { describe, expect, test } from 'vitest';
+ import { Vector3 } from 'three';
+-import { bellwater, holdingPier, level, type Level } from '../../src/levels/level';
++import { bellwater, driftwoodYard, holdingPier, level, type Level } from '../../src/levels/level';
+ import { buildPath, getLevelPaths, samplePath } from '../../src/scene/paths';
+ import {
+   angularChange,
+@@ -80,7 +80,7 @@ function networkProblems(l: Level) {
+ }
+ 
+ describe('canonical curved courses', () => {
+-  test.each([level, holdingPier, bellwater])(
++  test.each([level, holdingPier, bellwater, driftwoodYard])(
+     '$id caches finite paths with exact endpoints and uniform distance samples',
+     (l) => {
+       const paths = getLevelPaths(l);
+@@ -154,7 +154,7 @@ describe('canonical curved courses', () => {
+     expect(() => buildPath([point(NaN, 0)])).toThrow('finite');
+   });
+ 
+-  test.each([level, holdingPier, bellwater])(
++  test.each([level, holdingPier, bellwater, driftwoodYard])(
+     '$id journeys retain their incoming tangent or nearest real berth with continuous steering',
+     (l) => {
+       const paths = getLevelPaths(l);
+@@ -243,7 +243,7 @@ describe('canonical curved courses', () => {
+   });
+ 
+   test('stop classification follows actual pier relationships and shaft geometry', () => {
+-    for (const l of [level, holdingPier, bellwater]) {
++    for (const l of [level, holdingPier, bellwater, driftwoodYard]) {
+       expect(initialHeading(l)).toBe(Math.PI / 2);
+       for (const node of l.nodes) {
+         const pier = l.piers.find((p) => p.nodeId === node.id && p.id === node.pierId);
+@@ -259,7 +259,7 @@ describe('canonical curved courses', () => {
+     expect(berthHeading(turned, 'stone', 0)).toBe(0);
+   });
+ 
+-  test.each([level, holdingPier, bellwater])(
++  test.each([level, holdingPier, bellwater, driftwoodYard])(
+     '$id actual curved network has no extra junction or unrelated-stop contact',
+     (l) => {
+       expect(networkProblems(l)).toEqual([]);
+diff --git a/tests/unit/story-presentation.test.ts b/tests/unit/story-presentation.test.ts
+index cc9cab7..f1b0507 100644
+--- a/tests/unit/story-presentation.test.ts
++++ b/tests/unit/story-presentation.test.ts
+@@ -228,3 +228,55 @@ describe('bounded optional story motion', () => {
+     expect(presentation.frame.elapsed).toBe(700);
+   });
+ });
++
++test('Driftwood entry holds an explicit handoff and preserves pause, still and recap policies', () => {
++  const cue = vi.fn(),
++    run = vi.fn();
++  const presentation = new StoryPresentation(vi.fn(), run, cue);
++  presentation.start('driftwood-light', false, 0);
++  for (let t = 100; t <= 2800; t += 100) presentation.update(t);
++  presentation.pause();
++  const elapsed = presentation.frame.elapsed;
++  presentation.update(9000);
++  expect(presentation.frame.elapsed).toBe(elapsed);
++  presentation.resume(false, 10000);
++  for (let t = 10100; t <= 15000; t += 100) presentation.update(t);
++  expect(presentation.frame).toMatchObject({
++    shot: 'driftwood',
++    elapsed: 7000,
++    final: true,
++    settled: true,
++    recap: false,
++  });
++  expect(cue).toHaveBeenCalledTimes(1);
++  expect(presentation.next(false, 16000)).toBe(false);
++  presentation.start('driftwood-light', false, 20000, true);
++  expect(presentation.frame).toMatchObject({
++    shot: 'driftwood',
++    elapsed: 7000,
++    final: true,
++    settled: true,
++    recap: true,
++  });
++  expect(cue).toHaveBeenCalledTimes(1);
++  presentation.replay(false, true, 21000);
++  expect(presentation.frame).toMatchObject({ elapsed: 0, paused: false, recap: false });
++  presentation.skip();
++  expect(presentation.frame).toMatchObject({
++    elapsed: 7000,
++    recap: true,
++    final: true,
++    settled: true,
++  });
++  presentation.start('driftwood-light', true, 22000);
++  expect(presentation.frame).toMatchObject({
++    elapsed: 7000,
++    final: true,
++    settled: true,
++    recap: false,
++  });
++  expect(storyScenes['driftwood-light'].continueLabel).toBe('Continue to Driftwood');
++  expect(storyScenes['driftwood-light'].shots[0].caption).toBe(
++    'Nell, the boatwright, is still at the yard.',
++  );
++});
+diff --git a/tests/unit/story-progress.test.ts b/tests/unit/story-progress.test.ts
+index c88be79..9ace4f5 100644
+--- a/tests/unit/story-progress.test.ts
++++ b/tests/unit/story-progress.test.ts
+@@ -5,6 +5,7 @@ import {
+   acceptCove,
+   acknowledgeScene,
+   checkpointCove,
++  isLegacyCompletion,
+   newJourney,
+   parseJourney,
+   validateJourney,
+@@ -20,7 +21,12 @@ import {
+ } from '../../src/campaign/registry';
+ import { Session } from '../../src/game/session';
+ import type { Action } from '../../src/game/rules';
+-import { bellwater, holdingPier, level as firstCrossing } from '../../src/levels/level';
++import {
++  bellwater,
++  driftwoodYard,
++  holdingPier,
++  level as firstCrossing,
++} from '../../src/levels/level';
+ import narration from '../../LAST_FERRY_STORY_PRODUCTION_PACKAGE/audio/narration-script.json';
+ 
+ function checkpoints() {
+@@ -28,8 +34,10 @@ function checkpoints() {
+   const holding = acknowledgeScene(opening, 'opening');
+   const transition = acceptCove(holding, 'holding-pier', 'won');
+   const second = acknowledgeScene(transition, 'another-bell');
+-  const complete = acceptCove(second, 'bellwater', 'won');
+-  return { opening, holding, transition, second, complete };
++  const yardEntry = acceptCove(second, 'bellwater', 'won');
++  const third = acknowledgeScene(yardEntry, 'driftwood-light');
++  const complete = acceptCove(third, 'driftwood-yard', 'won');
++  return { opening, holding, transition, second, yardEntry, third, complete };
+ }
+ 
+ function memory(raw: string | null = null) {
+@@ -55,7 +63,9 @@ function memory(raw: string | null = null) {
+ 
+ describe('authored story registry', () => {
+   test('optional narration slots match the supplied exact script without claiming recordings', () => {
+-    const shots = Object.values(storyScenes).flatMap((scene) => scene.shots);
++    const shots = Object.values(storyScenes)
++      .flatMap((scene) => scene.shots)
++      .filter((shot) => shot.narrationAssetId);
+     expect(shots).toHaveLength(narration.clips.length);
+     for (const shot of shots) {
+       const clip = narration.clips.find((item) => item.id === shot.narrationAssetId);
+@@ -67,15 +77,17 @@ describe('authored story registry', () => {
+       });
+     }
+   });
+-  test('only the two existing story puzzles are registered, with practice separate', () => {
++  test('three authored story puzzles are registered, with First Crossing practice separate', () => {
+     expect(storyCoves.map(({ id, order }) => [id, order])).toEqual([
+       ['holding-pier', 0],
+       ['bellwater', 1],
++      ['driftwood-yard', 2],
+     ]);
+     expect(storyCove('holding-pier')?.level).toBe(holdingPier);
+     expect(storyCove('bellwater')?.level).toBe(bellwater);
++    expect(storyCove('driftwood-yard')?.level).toBe(driftwoodYard);
+     expect(storyCove('first-crossing')).toBeUndefined();
+-    expect(practiceCoves).toEqual([firstCrossing, holdingPier, bellwater]);
++    expect(practiceCoves).toEqual([firstCrossing, holdingPier, bellwater, driftwoodYard]);
+     expect(practiceCove('first-crossing')).toBe(firstCrossing);
+     expect(practiceCove('future-cove')).toBeUndefined();
+     expect(storyCove('future-cove')).toBeUndefined();
+@@ -85,7 +97,7 @@ describe('authored story registry', () => {
+   });
+ 
+   test('all opening copy and the connective beat remain available without sound or motion', () => {
+-    expect(Object.keys(storyScenes)).toEqual(['opening', 'another-bell']);
++    expect(Object.keys(storyScenes)).toEqual(['opening', 'another-bell', 'driftwood-light']);
+     expect(storyScenes.opening.shots.map((shot) => shot.caption)).toEqual([
+       'Your first evening at the helm.\nA high tide ahead.',
+       'Pip and Rue have kept a light for you.',
+@@ -102,14 +114,16 @@ describe('authored story registry', () => {
+ });
+ 
+ describe('journey checkpoint transactions', () => {
+-  test('all five checkpoints round-trip with coherent accepted completions and scene acknowledgments', () => {
++  test('all seven checkpoints round-trip with coherent accepted completions and scene acknowledgments', () => {
+     const records = Object.values(checkpoints());
+     expect(records.map(checkpointCove)).toEqual([
+       'holding-pier',
+       'holding-pier',
+       'bellwater',
+       'bellwater',
+-      'bellwater',
++      'driftwood-yard',
++      'driftwood-yard',
++      'driftwood-yard',
+     ]);
+     for (const record of records) {
+       expect(validateJourney(record)).toEqual({ valid: true, record });
+@@ -129,10 +143,16 @@ describe('journey checkpoint transactions', () => {
+     });
+     expect(records[4]).toEqual({
+       version: 1,
+-      checkpoint: { kind: 'complete' },
++      checkpoint: { kind: 'scene', id: 'driftwood-light' },
+       completed: ['holding-pier', 'bellwater'],
+       acknowledgedScenes: ['opening', 'another-bell'],
+     });
++    expect(records[6]).toEqual({
++      version: 1,
++      checkpoint: { kind: 'complete' },
++      completed: ['holding-pier', 'bellwater', 'driftwood-yard'],
++      acknowledgedScenes: ['opening', 'another-bell', 'driftwood-light'],
++    });
+   });
+ 
+   test('wrong or repeated scene and cove completions never skip a puzzle or repeat acknowledgment', () => {
+@@ -296,9 +316,13 @@ describe('validated local journey storage', () => {
+     expect(backing.writes.length).toBe(2);
+     expect(restored.accept('bellwater', 'won')).toBe(true);
+     const endpoint = new JourneyProgress(() => backing.storage);
+-    expect(endpoint.snapshot.record).toEqual(checkpoints().complete);
++    expect(endpoint.snapshot.record).toEqual(checkpoints().yardEntry);
+     expect(endpoint.accept('bellwater', 'won')).toBe(false);
+     expect(backing.writes.length).toBe(3);
++    expect(endpoint.acknowledge('driftwood-light')).toBe(true);
++    expect(endpoint.accept('driftwood-yard', 'won')).toBe(true);
++    expect(endpoint.snapshot.record).toEqual(checkpoints().complete);
++    expect(backing.writes.length).toBe(5);
+   });
+ 
+   test('snapshots cannot mutate stored progress behind validation', () => {
+@@ -337,6 +361,8 @@ describe('validated local journey storage', () => {
+       expect(progress.accept('holding-pier', 'won')).toBe(true);
+       expect(progress.acknowledge('another-bell')).toBe(true);
+       expect(progress.accept('bellwater', 'won')).toBe(true);
++      expect(progress.acknowledge('driftwood-light')).toBe(true);
++      expect(progress.accept('driftwood-yard', 'won')).toBe(true);
+       expect(progress.snapshot.record).toEqual(checkpoints().complete);
+       expect(backing.values.get(JOURNEY_STORAGE_KEY)).toBeUndefined();
+       expect(backing.values.get('last-ferry.sound')).toBe('muted');
+@@ -366,3 +392,77 @@ describe('validated local journey storage', () => {
+     expect(acceptCove(forged, 'holding-pier', 'won')).toBe(forged);
+   });
+ });
++
++describe('narrow two-cove completion compatibility', () => {
++  const legacy: JourneyRecord = {
++    version: 1,
++    checkpoint: { kind: 'complete' },
++    completed: ['holding-pier', 'bellwater'],
++    acknowledgedScenes: ['opening', 'another-bell'],
++  };
++  test('reading exact historical completion is byte-preserving until deliberate continuation', () => {
++    const raw = JSON.stringify(legacy, null, 2);
++    const backing = memory(raw);
++    const progress = new JourneyProgress(() => backing.storage);
++    expect(isLegacyCompletion(progress.snapshot.record)).toBe(true);
++    expect(progress.snapshot.record).toEqual(legacy);
++    expect(progress.snapshot.raw).toBe(raw);
++    expect(backing.writes).toEqual([]);
++    expect(checkpointCove(legacy)).toBe('bellwater');
++    expect(progress.acknowledge('driftwood-light')).toBe(false);
++    expect(progress.accept('driftwood-yard', 'won')).toBe(false);
++    expect(progress.continueAvailableContent()).toBe(true);
++    expect(progress.continueAvailableContent()).toBe(false);
++    expect(progress.snapshot.record).toEqual(checkpoints().yardEntry);
++    expect(backing.writes).toEqual([
++      [JOURNEY_STORAGE_KEY, JSON.stringify(checkpoints().yardEntry)],
++    ]);
++    const restored = new JourneyProgress(() => backing.storage);
++    expect(restored.snapshot.record).toEqual(checkpoints().yardEntry);
++    expect(restored.continueAvailableContent()).toBe(false);
++    expect(restored.acknowledge('driftwood-light')).toBe(true);
++    expect(restored.snapshot.record).toEqual(checkpoints().third);
++    expect(restored.accept('driftwood-yard', 'won')).toBe(true);
++    expect(restored.snapshot.record).toEqual(checkpoints().complete);
++    expect(restored.accept('driftwood-yard', 'won')).toBe(false);
++    expect(restored.continueAvailableContent()).toBe(false);
++  });
++  test.each([
++    { ...legacy, extra: true },
++    { ...legacy, version: 2 },
++    { ...legacy, checkpoint: { kind: 'complete', id: 'bellwater' } },
++    { ...legacy, completed: ['holding-pier'], acknowledgedScenes: ['opening'] },
++    { ...legacy, completed: ['bellwater', 'holding-pier'] },
++    { ...legacy, acknowledgedScenes: ['another-bell', 'opening'] },
++    { ...legacy, acknowledgedScenes: ['opening'] },
++    { ...legacy, completed: ['holding-pier', 'unknown'] },
++  ])('rejects altered historical records without permissive prefix migration: %j', (record) => {
++    const raw = JSON.stringify(record);
++    const backing = memory(raw);
++    const progress = new JourneyProgress(() => backing.storage);
++    expect(isLegacyCompletion(record)).toBe(false);
++    expect(progress.snapshot.kind).toBe('invalid');
++    expect(progress.continueAvailableContent()).toBe(false);
++    expect(backing.values.get(JOURNEY_STORAGE_KEY)).toBe(raw);
++    expect(backing.writes).toEqual([]);
++  });
++  test('failed compatibility write preserves old bytes but continues honestly in memory', () => {
++    const raw = JSON.stringify(legacy);
++    const backing = memory(raw);
++    const progress = new JourneyProgress(() => ({
++      getItem: backing.storage.getItem,
++      setItem() {
++        throw new Error('Full');
++      },
++    }));
++    expect(progress.continueAvailableContent()).toBe(true);
++    expect(progress.snapshot.record).toEqual(checkpoints().yardEntry);
++    expect(progress.snapshot.persistent).toBe(false);
++    expect(progress.snapshot.issue).toContain('will not survive closing');
++    expect(backing.values.get(JOURNEY_STORAGE_KEY)).toBe(raw);
++    expect(progress.acknowledge('driftwood-light')).toBe(true);
++    expect(progress.continueAvailableContent()).toBe(false);
++    expect(backing.values.get('last-ferry.sound')).toBe('muted');
++    expect(backing.values.get('last-ferry.motion')).toBe('reduced');
++  });
++});
