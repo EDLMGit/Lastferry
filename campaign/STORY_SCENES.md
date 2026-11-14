@@ -1,20 +1,20 @@
 # Last Ferry — story scenes for The Long Tide
 
-## Deferred next story beat — Orin at the orchard · 14 November 2026
+## Current story assignment — Orin at the orchard · 14 November 2026
 
 The player has accepted Orin and the repaired Orchard puzzle at `9933303178da04cac93ddc820ef55e181286d983`. **Medlar** is the orchard's tan rabbit; **Sorrel** remains the cream rabbit rescued in Wide Berth. The ferry starts empty beside Pomme and Medlar at Spring Steps; Orin waits at Orchard Landing. The future scene must hand off truthfully into these positions. [Accepted design](../reviews/orchard-difficulty/DESIGN.md)
 
-The accepted six-cove presentation remains unchanged. [THREE_LANTERNS_01](../NEXT_TASK_THREE_LANTERNS.md) is the current assignment. **Orchard's illustrated entry is documented here for continuity and is not commissioned by the reward task.** After lantern review, a separate task will append the scene/cove with explicit historical-save continuation.
+The accepted six-cove presentation remains unchanged. After review of the lantern feature at `14f128619267e2da81b4108ece2de4da07b50359`, [ORCHARD_JOURNEY_01](../NEXT_TASK_ORCHARD_JOURNEY.md) now commissions this illustrated entry and the seventh-cove append with explicit historical-save continuation. Preserve the existing painter/player and choose a compact phone-readable composition.
 
-Proposed caption:
+Authored caption for this entry:
 
 > Orin knows every path through the orchard. Tonight, he needs the ferry.
 
-When commissioned after acceptance, use the existing illustrated player and show a recognizable orchard landing, one clear Orin acknowledgment, and a settled handoff consistent with the actual authored starting positions. His rounded face and short antlers should match the gameplay/portrait identity. Keep the landing supported at the water; do not repeat a tall floating platform or distant tiny characters.
+Use the existing illustrated player and show a recognizable orchard landing, one clear Orin acknowledgment, and a settled handoff consistent with the actual authored starting positions. Choose a single bounded composition or a brief two-beat scene so Orin and the starting relationships remain readable on a phone. His rounded face and short antlers should match the gameplay/portrait identity. Keep the landing supported at the water; do not repeat a tall floating platform or distant tiny characters.
 
 The accepted six-space ferry is already in service. Do not replay Nell's launch, claim Orin cannot fit any smaller boat, or present currents as newly introduced. A three-space cost is familiar capacity vocabulary, not a power or narrative inventory.
 
-Preserve immediate Continue, existing caption treatment, Skip without acknowledgment, Reduced Motion, Sound intent and explicit campaign acceptance. No new cinematic framework, narration service or score is required. A later Journey append must explicitly continue an old completed-six save with its earned rescues and original-byte backup preserved.
+Preserve immediate Continue/Next, autoplay/Pause, existing caption treatment, Skip without acknowledgment, Reduced Motion, Sound intent and explicit campaign acceptance. Use existing finite cues; no new cinematic framework, narration service or score is required. The current append must explicitly continue an old completed-six save with its earned rescues and original-byte backup preserved. A restored entry uses the safe Reef background and cannot manufacture Orchard completion or mastery.
 
 The later Drowned Orchard returns to recognizable landmarks with a **different waiting group**; Orin stays rescued. An orchard bough can recur at the final communal supper as a visual memory, without becoming a cargo objective. The intended closing line remains **“We saved you a place.”**
 

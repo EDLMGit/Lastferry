@@ -18,20 +18,22 @@ The **implemented Journey remains six coves**:
 
 First Crossing stays independent Practice. Among the reeds introduces Hazel, Bracken and Mica; Lights beyond the reef introduces Heather, Birch, Flick and Dot. Previously rescued neighbors remain safe. Existing save conversions preserve earned identities and acknowledged scenes.
 
-### Current assignment: optional three-lantern mastery
+### Current assignment: Orchard joins the Journey
 
-**Orchard Landing is accepted as the intended C7 puzzle**, while remaining Practice-only. The repair connects its early Harbor delivery to Orin's only outward crossing. Pomme is the orchard sheep and Medlar is its tan rabbit; Wide's Sorrel remains safely rescued. [Accepted design](../reviews/orchard-difficulty/DESIGN.md) · [Review](../reviews/three-lanterns-preparation/REVIEW.md)
+**Orchard Landing is player-accepted as the intended C7 puzzle.** The repaired first delivery determines which neighbor can accompany Orin on the only outward crossing. Pomme is the orchard sheep and Medlar is its tan rabbit; Wide's Sorrel remains safely rescued. [Accepted design](../reviews/orchard-difficulty/DESIGN.md)
 
-[THREE_LANTERNS_01](../NEXT_TASK_THREE_LANTERNS.md) now implements the [existing reward contract](../docs/DIFFICULTY_AND_MASTERY.md). Rescue earns story progress; efficiency and an efficient attempt without Undo earn optional recognition. Keep unrestricted Undo and the same ending for everyone. No new cove or story scene is part of this feature.
+The three-lantern implementation at `14f128619267e2da81b4108ece2de4da07b50359` is reviewed within the documented scope. [ORCHARD_JOURNEY_01](../NEXT_TASK_ORCHARD_JOURNEY.md) now commissions Orchard's short entry and explicit continuation for exact completed-six saves. The current runtime still has six Journey coves; the assigned integration will append the existing seventh puzzle.
 
-After lantern review, separately connect Orchard's compact entry and explicit completed-six save continuation. The ferry actually starts empty beside Pomme and Medlar at Spring Steps; Orin waits at Orchard Landing. The illustration must lead into that arrangement. Keep the six-cove Journey unchanged until the integration is assigned. Publication remains separate.
+The ferry actually starts empty beside Pomme and Medlar at Spring Steps; Orin waits across the reach at Orchard Landing. Show one readable new encounter and a truthful settled handoff. The existing six-space ferry, currents and lantern rewards need no new tutorial. The narrative caption is “Orin knows every path through the orchard. Tonight, he needs the ferry.”
+
+Keep earned Practice mastery under the same `orchard-landing@1` identity. Rescue earns full story progression at any rating. The new endpoint must say that seven available coves are safe, without presenting the final supper or claiming the twelve-cove journey is finished. C8 is a separate design task after integration review and phone playtesting. Publication remains separate.
 
 ### Remaining story roles — provisional, not additional assignments
 
 | Intended cove | Story purpose | Difficulty purpose |
 | --- | --- | --- |
-| **7 — Orchard Landing** | Meet Orin beyond the familiar headland. | The load on Orin’s return determines whom to bring home first. Character and revised Practice puzzle accepted; story/save integration remains separate. |
-| **8 — title open** | Carry the lesson farther along the channel. | Extend the planning horizon with a distinct combination of familiar load, route and tide dependencies; commission after lantern review and C7 integration. |
+| **7 — Orchard Landing** | Meet Orin beyond the familiar headland. | The load on Orin’s return determines whom to bring home first. Character and puzzle accepted; current task integrates its story and completed-six continuation. |
+| **8 — title open** | Carry the lesson farther along the channel. | Extend the planning horizon with a distinct combination of familiar load, route and tide dependencies; commission after C7 integration review and phone playtesting. |
 | **9 — Drowned Orchard** | Recognize the orchard under changed water, with a different waiting group. Orin remains safe. | Reinterpret familiar landmarks and established rules rather than repeat Orin's rescue. |
 | **10 — Lantern Reach** | See the welcome at the refuge taking shape. | Compact, quiet consolidation with a real inference and an elegant efficient solution. |
 | **11 — Far Shore** | Retrieve the hardest remaining group. | Peak synthesis of known rules, full information and no late exception. |

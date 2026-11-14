@@ -1,3 +1,15 @@
+# Lanterns reviewed; Orchard Journey next · 14 November 2026
+
+Three-lantern implementation `14f128619267e2da81b4108ece2de4da07b50359` has no blocker in the scoped review. Fresh execution passed 44 mastery tests and eight supplemental storage-check groups. Twenty protected rule/loader/level/witness blobs remain identical to the accepted Orchard baseline. Four committed native phone images were inspected. [Independent review and evidence](reviews/three-lanterns/INDEPENDENT_REVIEW.md)
+
+**Current task:** [ORCHARD_JOURNEY_01](NEXT_TASK_ORCHARD_JOURNEY.md). Append accepted Orchard as cove seven, add its brief illustrated encounter, preserve exact old-six saves through explicit continuation and carry the same Practice-earned mastery into Journey results. Target 13 and revision 1 remain.
+
+This is task/review preparation. The runtime still has six Journey coves and eight Practice entries until Codex implements the append. The final twelve-cove supper remains future content. No C8 or deployment is commissioned.
+
+The private Site remains **version 19**, game `f0ffe2c12f1cc0e42ad7ef10a4b57dd29097c731`, with its existing custom private audience. Physical-device, listening and spoken screen-reader verification remain open.
+
+## Previous implementation handoff
+
 # Three lanterns · 14 November 2026
 
 The player accepts the repaired Orchard at `9933303178da04cac93ddc820ef55e181286d983`. Independent production-rule analysis reproduces its 12-action minimum and 13-action retrieval alternative; **13** is now the accepted efficiency target. The repair and its presentation remain intact. [Acceptance and preparation review](reviews/three-lanterns-preparation/REVIEW.md)

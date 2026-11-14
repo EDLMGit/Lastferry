@@ -22,9 +22,11 @@ Independent production-rule enumeration and the Orin-two-space counterfactual co
 
 ### Current task and next gate
 
-[THREE_LANTERNS_01](../NEXT_TASK_THREE_LANTERNS.md) implements optional mastery on these unchanged puzzles and independent First Crossing. The [verified target table](../reviews/three-lanterns-preparation/TARGETS.md) distinguishes shortest solutions from authored efficiency targets. No reward gates story; Undo stays unlimited.
+The lantern feature at `14f128619267e2da81b4108ece2de4da07b50359` has passed its scoped independent review. The [verified target table](../reviews/three-lanterns-preparation/TARGETS.md) remains unchanged. No reward gates story; Undo stays unlimited.
 
-After reviewing the feature, connect Orchard's truthful scene and old completed-six saves under a separate task. Then specify C8's distinct longer planning dependency. C8–C12 remain uncommissioned design roles in [difficulty and mastery](../docs/DIFFICULTY_AND_MASTERY.md). Do not add animals, moves or map size simply to claim greater challenge.
+[ORCHARD_JOURNEY_01](../NEXT_TASK_ORCHARD_JOURNEY.md) now appends accepted Orchard to the Journey with its scene and exact completed-six continuation. Keep both accepted Orchard strategies, target 13 and mastery revision 1. This is integration of an existing puzzle, not a difficulty pass.
+
+After reviewing the seven-cove flow and Android playtest, specify C8's distinct longer planning dependency. C8–C12 remain uncommissioned design roles in [difficulty and mastery](../docs/DIFFICULTY_AND_MASTERY.md). Do not add animals, moves or map size simply to claim greater challenge.
 
 The earlier Orchard's ten-action pickup orders merged at turn five. That rejected structure and its diagnostic evidence remain in the [earlier review](../reviews/orchard-difficulty-review/REVIEW.md); it no longer describes the accepted puzzle.
 

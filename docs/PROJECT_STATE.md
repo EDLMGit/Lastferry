@@ -1,6 +1,18 @@
 # Last Ferry — Project state
 
-## Three lanterns ready for review · 14 November 2026
+## Lanterns reviewed; Orchard Journey commissioned · 14 November 2026
+
+Reviewed implementation `14f128619267e2da81b4108ece2de4da07b50359` adds the three-lantern system. No blocker was found in a fresh source/lifecycle review, 44 committed mastery tests, eight supplemental storage-check groups and inspection of four committed native phone frames. All twenty protected rule/loader/level/witness blobs match the accepted Orchard baseline. Broader build/browser results remain the implementation report's checks. Human physical-phone, listening and spoken screen-reader acceptance remain open. [Independent review and fresh evidence](../reviews/three-lanterns/INDEPENDENT_REVIEW.md)
+
+**ORCHARD_JOURNEY_01 is the current assignment.** Connect the accepted Orchard as Journey cove seven after Reef, add its short illustrated encounter and extend exact completed-six saves only after explicit Continue. Preserve previous checkpoints, original raw-byte backups and older supported migrations. The current runtime still has six Journey coves and eight Practice entries; this documentation commissions the append rather than claiming it already shipped. [Named root task](../NEXT_TASK_ORCHARD_JOURNEY.md)
+
+The scene introduces Orin without teaching the solution. The actual initial state is an empty six-space ferry at Spring Steps beside waiting Pomme and tan Medlar; Orin waits across the reach at Orchard Landing. Keep his accepted identity, supported shoreline, readable gesture and the existing player/Sound lifecycle. [Story direction](../campaign/STORY_SCENES.md)
+
+Orchard's puzzle, target **13** and mastery identity **orchard-landing@1** stay unchanged. Practice-earned bests carry into Journey results; they do not grant story completion or skip the entry. Every rescue advances the story regardless of lantern count. After Orchard is accepted, the endpoint will truthfully report seven available coves; the final supper remains for cove twelve.
+
+No C8, mechanic, rebalance or deployment is commissioned. After review, arrange the next Android playtest of the seven-cove Journey before designing C8's distinct planning dependency. **Publication unchanged:** Site version **19**, game `f0ffe2c12f1cc0e42ad7ef10a4b57dd29097c731`, hosting source `1ea40b815911a0fc1131350ee34125ae3508396e`, existing custom private audience. [Receipt](../reviews/mobile-map-readability/deployment-confirmation.json)
+
+## Previous implementation — three lanterns · 14 November 2026
 
 The player reports **“Feels good now, lets continue”** after the Orchard repair at `9933303178da04cac93ddc820ef55e181286d983`. Record human acceptance of its current feel and puzzle direction. Preserve this runtime; the feedback does not certify physical-device performance, listening or every inherited timing/layout limit.
 

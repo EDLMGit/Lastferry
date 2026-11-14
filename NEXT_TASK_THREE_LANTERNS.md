@@ -1,5 +1,7 @@
 # THREE_LANTERNS_01 — optional mastery for the accepted coves
 
+> **Implemented and scoped review complete · 14 November 2026.** Runtime `14f128619267e2da81b4108ece2de4da07b50359` has no blocker in the source/core/native-image review. Physical-phone, listening and spoken screen-reader approval remain open. The current assignment is [NEXT_TASK_ORCHARD_JOURNEY.md](NEXT_TASK_ORCHARD_JOURNEY.md). This original lantern brief remains historical.
+
 ## Outcome and baseline
 
 Implement the three-lantern result system in the existing game. The player has accepted the repaired Orchard Landing at `9933303178da04cac93ddc820ef55e181286d983` and asked to continue. Preserve that puzzle and the accepted visual, audio and phone interaction work.

@@ -2,13 +2,13 @@
 
 ## Objective
 
-**THREE_LANTERNS_01** is the current assignment: read root [NEXT_TASK_THREE_LANTERNS.md](NEXT_TASK_THREE_LANTERNS.md), [difficulty and mastery direction](docs/DIFFICULTY_AND_MASTERY.md), and [preparation review / verified targets](reviews/three-lanterns-preparation/REVIEW.md). The player has accepted the Orchard repair. Implement the existing optional three-lantern system while preserving all accepted puzzles.
+**ORCHARD_JOURNEY_01** is the current assignment: read root [NEXT_TASK_ORCHARD_JOURNEY.md](NEXT_TASK_ORCHARD_JOURNEY.md), active [project state](docs/PROJECT_STATE.md), [Orchard story direction](campaign/STORY_SCENES.md), and [independent lantern review](reviews/three-lanterns/INDEPENDENT_REVIEW.md).
 
-Start from accepted runtime `9933303178da04cac93ddc820ef55e181286d983` plus this task/continuity update. Preserve newer/unrelated work. All eight current Practice coves are eligible; the six matching Journey coves share their results. Orchard remains Practice-only and First Crossing remains independent training. Do not add coves, integrate Orchard's story, rebalance data or change the strict Journey save schema in this task.
+Start from reviewed runtime `14f128619267e2da81b4108ece2de4da07b50359` plus this task/continuity update, preserving newer/unrelated work. The repaired Orchard puzzle is player-accepted; the lantern implementation has no blocker in the scoped source/core/native-image review. Append Orchard as Journey cove seven, add its brief truthful illustrated entry and support explicit continuation from exact completed-six saves. Keep earlier checkpoints, original-byte backups and Practice isolation.
 
-Keep unrestricted Undo. Use final-route actions and successful attempt-level Undos; a win stays provisional until the player actually continues, leaves or restarts. Opening the cove picker or Settings does not accept it. Store real accepted bests separately from Journey. Older rescues remain completed and unrated until a scored replay. The named task specifies the compact UI and verification; choose implementation details independently.
+Preserve every accepted puzzle, Orchard target 13 / mastery revision 1, existing bests, unrestricted Undo and provisional victory acceptance. The new scene must end with the ferry empty at Spring Steps beside waiting Pomme/Medlar while Orin waits at Orchard Landing. Choose the composition and implementation independently within the named task. Do not add C8, a mechanic, narration, a new story framework or an ending that claims the twelve-cove campaign is finished.
 
-Read active `docs/PROJECT_STATE.md` and preserve the latest publication receipt. The Site remains version 19 with its custom private audience. Preserve that audience and all publication history; future publication uses the supported shared-Site flow. Do not copy recipient contact details into this public repository. **Do not deploy this task.**
+The Site remains version 19 with its custom private audience. Preserve that audience and publication history; future publication uses the supported shared-Site flow. Do not copy recipient contact details into this public repository. **Do not deploy this task.**
 
 ## Read and preserve the project decisions
 

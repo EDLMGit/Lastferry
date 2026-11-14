@@ -1,8 +1,8 @@
 # Last Ferry — difficulty and three-lantern mastery
 
-**Current implementation · 14 November 2026.** The player accepted the Orchard repair at `9933303178da04cac93ddc820ef55e181286d983`. [THREE_LANTERNS_01](../NEXT_TASK_THREE_LANTERNS.md) now adds cumulative rescue, efficiency and efficient-without-Undo results. The eight authored targets and all puzzle data retain their accepted values. [Feature review](../reviews/three-lanterns/REVIEW.md)
+**Reviewed implementation · 14 November 2026.** The player accepted the Orchard repair at `9933303178da04cac93ddc820ef55e181286d983`. The three-lantern feature at `14f128619267e2da81b4108ece2de4da07b50359` has no blocker in the scoped source/core/native-image review. The eight authored targets and all puzzle data retain their accepted values. [Independent review](../reviews/three-lanterns/INDEPENDENT_REVIEW.md) · [Implementation verification](../reviews/three-lanterns/REVIEW.md)
 
-This updates the 13 November direction after the successful repair playtest. The six-cove Journey stays unchanged; accepted Orchard remains Practice-only until a separate story/save-continuation task. [Preparation review](../reviews/three-lanterns-preparation/REVIEW.md) · [Verified targets](../reviews/three-lanterns-preparation/TARGETS.md) · [Earlier structural diagnosis](../reviews/orchard-difficulty-review/REVIEW.md)
+This updates the 13 November direction after the successful repair playtest. [ORCHARD_JOURNEY_01](../NEXT_TASK_ORCHARD_JOURNEY.md) now commissions the accepted cove's story/save continuation. Until that implementation, the runtime Journey remains six coves and Orchard remains Practice-only. [Preparation review](../reviews/three-lanterns-preparation/REVIEW.md) · [Verified targets](../reviews/three-lanterns-preparation/TARGETS.md) · [Earlier structural diagnosis](../reviews/orchard-difficulty-review/REVIEW.md)
 
 ## 1. What challenge means here
 
@@ -49,7 +49,7 @@ Readability is part of fairness: all required facts stay inspectable with Tips O
 
 ## 3. Twelve-cove progression
 
-The first six and repaired Orchard are accepted and remain unchanged during the lantern task. Orchard's Journey integration and later rows require separate assignments; they do not authorize building more levels now.
+The first six and repaired Orchard are accepted. The current integration task appends Orchard's existing puzzle to Journey without changing its decisions or rating. Later rows remain design roles, not authorization to build more levels.
 
 | Cove | Intended increase or pacing role |
 | --- | --- |
@@ -123,7 +123,7 @@ The result can say “14 actions · 2 Undos.” The target and requirements are 
 
 ## 5. Implementation contract
 
-[THREE_LANTERNS_01](../NEXT_TASK_THREE_LANTERNS.md) implements this contract. These outcomes preserve the current puzzle and save boundaries.
+[THREE_LANTERNS_01](../NEXT_TASK_THREE_LANTERNS.md) implemented this contract. Preserve these outcomes during Orchard's story/save integration.
 
 - Count actions from the final winning state's existing turn count. Undo removes discarded turns normally; do not charge additional tide turns or include abandoned branches in that efficiency count.
 - Track successful Undos as attempt metadata **outside the rewindable puzzle State**. An unavailable, busy or rejected input does not count.
@@ -132,7 +132,7 @@ The result can say “14 actions · 2 Undos.” The target and requirements are 
 - Terminal Undo before acceptance withdraws the provisional result, increments Undo use, and leaves the win fully reversible. A later delivery recomputes the result. Previously accepted best results never decrease.
 - Preserve one actual best run's result. Prefer more lanterns, then fewer final actions, then fewer successful Undos; retain the old entry on an exact tie. Do not combine the fewest actions from one attempt with zero Undos from another to invent a better award.
 - Keep results in a separate versioned store keyed by cove identity and puzzle/scoring revision. The strict Journey schema, original-byte backups and explicit campaign continuation remain unchanged.
-- All eight current Practice entries are eligible. Matching Journey/Practice revisions share bests without Practice writing Journey progress. Orchard is now accepted but stays Practice-only; its best can carry into a later matching Journey revision. First Crossing stays independent training. New Journey preserves mastery.
+- All eight current Practice entries are eligible. Matching Journey/Practice revisions share bests without Practice writing Journey progress. Orchard's integration must reuse `orchard-landing@1` and its accepted Practice best without granting Journey completion. First Crossing stays independent training. New Journey preserves mastery.
 - Older saves contain no action or Undo history. Keep their rescues completed and their mastery unrated until a scored replay; create no synthetic result or invented metrics. Restored Harbor worlds used for Home/story presentation are not playable attempts and cannot earn awards.
 - A mastery-storage failure leaves a usable in-session result/best and does not block play or campaign continuation. Validate data without rewriting Journey bytes. The game currently resumes at cove boundaries; any future mid-puzzle resume must carry the attempt metadata too.
 - No anti-cheat service is needed for this personal local mastery record. A genuine puzzle rebalance or scoring-target change changes its rating revision; a cosmetic change does not.
@@ -142,9 +142,9 @@ The Session keeps successful Undo history outside its rewindable State. A result
 ## 6. Implementation order
 
 1. **Complete:** repair existing Orchard Landing and demonstrate its connected load/crossing decision.
-2. **Complete:** player accepts the repair at `9933303178da04cac93ddc820ef55e181286d983` on 14 November.
-3. **Implemented, awaiting review:** THREE_LANTERNS_01 for the eight accepted Practice entries and matching six Journey coves.
-4. **Separate next task:** connect accepted Orchard with its truthful illustrated entry and explicit completed-six save continuation. Preserve matching earned mastery.
-5. Commission C8 only after these foundations are accepted. Its new dependency must extend the planning horizon, not merely increase bodies or moves.
+2. **Complete:** player accepts the repair at `9933303178da04cac93ddc820ef55e181286d983`.
+3. **Implemented and scoped review complete:** THREE_LANTERNS_01 at `14f128619267e2da81b4108ece2de4da07b50359`; physical-phone/listening/spoken-screen-reader approval remains open.
+4. **Current:** ORCHARD_JOURNEY_01 connects the accepted puzzle with its truthful illustrated entry and explicit completed-six save continuation. Keep its scoring revision and earned mastery.
+5. Review the seven-cove flow and arrange Android playtesting, then commission C8's distinct planning dependency. Additional bodies, moves or map area alone do not establish the next challenge.
 
-The current lantern task creates no level, changes no puzzle or Journey order, and does not deploy. Preserve the source-linked review and historical publication records.
+The current task adds no puzzle, rebalances no target and does not deploy. Preserve the source-linked reviews and historical publication records.
