@@ -1,0 +1,54 @@
+import {test,expect} from '@playwright/test';
+import {readFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {initial} from '../../src/game/rules';
+import {candidate,execute,acceptedBest} from '../../tests/e2e/cove-eight-support';
+import {fixture,ongoing,storage} from '../../tests/e2e/three-lanterns-support';
+import {act,activate,idle,ready,state,wholeCove} from '../../tests/e2e/ui';
+import {directory,localView,recordRescue,report,snapshot} from '../../tests/e2e/large-cove-support';
+import {arrivalSource,arrivalMeasure,arrivalResult} from '../../tests/e2e/arrival-bubble-support';
+
+test.use({viewport:{width:390,height:844},hasTouch:true,isMobile:true,deviceScaleFactor:1,video:'off',reducedMotion:'no-preference'});
+test.setTimeout(300000);
+test('bounded real UI final approach and arrival recording',async({page,browser})=>{
+  const source=arrivalSource(),errors:string[]=[];page.on('pageerror',error=>errors.push(error.message));
+  const {level,witnesses}=candidate('ternhaven');
+  await fixture(page,ongoing,acceptedBest);await ready(page,'ternhaven');
+  await activate(page,'menu',true);await activate(page,'settings',true);
+  await page.locator('#motion-preference').selectOption('reduced');
+  await page.keyboard.press('Escape');await page.keyboard.press('Escape');
+  let current=initial(level);
+  for(const action of witnesses[0].actions.slice(0,11))current=await execute(page,level,action,current);
+  expect(current).toMatchObject({turn:11,boatNodeId:'high',status:'playing'});
+  await activate(page,'menu',true);await activate(page,'settings',true);
+  await page.locator('#motion-preference').selectOption('device');
+  await page.keyboard.press('Escape');await page.keyboard.press('Escape');
+  await expect(page.locator('html')).toHaveAttribute('data-motion','normal');
+  await wholeCove(page,true);
+  const finish=await recordRescue(page,directory('390x844'),'final-arrival');
+  try{
+    await act(page,'map-fork',true);await act(page,'map-harbor',true);
+    await localView(page);await act(page,'unload',true);
+    await expect(page.locator('#dialog[open]')).toHaveAttribute('data-outcome','won');
+    await page.waitForTimeout(650);
+    await activate(page,'terminal-settings',true);await activate(page,'settings-back',true);
+    await activate(page,'cancel',true);await page.waitForTimeout(600);
+    await activate(page,'menu',true);await activate(page,'return-arrival',true);
+    await page.waitForTimeout(800);
+  }finally{await finish();}
+  await arrivalResult(page,level,3,14,0);
+  await snapshot(page,directory('gameplay'),'390x844-three');
+  report(directory('gameplay'),'390x844-three-fit',await arrivalMeasure(page));
+  await page.locator('#arrival-details summary').tap();await snapshot(page,directory('gameplay'),'390x844-details');
+  report(directory('gameplay'),'390x844-details-fit',await arrivalMeasure(page,true));
+  await page.locator('#arrival-details summary').tap();
+  await page.setViewportSize({width:780,height:320});await snapshot(page,directory('gameplay'),'780x320-three');
+  report(directory('gameplay'),'780x320-three-fit',await arrivalMeasure(page));
+  await page.setViewportSize({width:390,height:844});
+  await activate(page,'cancel',true);await snapshot(page,directory('gameplay'),'390x844-closed-harbor');
+  const saved=await storage(page);expect(saved.mastery).toBe(acceptedBest);expect(saved.masteryWrites).toBe(0);expect(saved.journey).toBe(ongoing);expect(saved.journeyWrites).toBe(0);
+  expect(await state(page)).toMatchObject({turn:14,status:'won',delivered:expect.arrayContaining(level.objective.requiredPassengerIds)});
+  expect(arrivalSource()).toEqual(source);expect(errors).toEqual([]);
+  report(directory('source'),source.sha256,{...source,browser:browser.version(),node:process.version,when:new Date().toISOString(),captureDriverSHA256:createHash('sha256').update(readFileSync('reviews/arrival-bubble/recording-driver.ts')).digest('hex')});
+  report(directory('gameplay'),'recording-sequence',{source:source.sha256,prep:'First eleven actual UI actions with Reduced selected in shared Settings. Returned to Follow device before capture; device normal motion. No injected game state.',recorded:'Final three natural-speed actions, arrival, Settings/Back, Close, settled Harbor, Menu/Return to arrival.',final:await state(page),saved});
+});

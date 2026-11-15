@@ -29,9 +29,9 @@ function play(session: Session, sequence = actions) {
 describe('unscored Practice compatibility', () => {
   test('the shared target table lists only accepted coves and keeps Orchard target 13', () => {
     const markup = masteryCriteriaMarkup();
-    expect(markup.match(/<dt>/g)).toHaveLength(8);
+    expect(markup.match(/<dt>/g)).toHaveLength(9);
     expect(markup).not.toContain('Unscored Fixture');
-    expect(markup).not.toContain('Ternhaven');
+    expect(markup).toContain('<dt>Ternhaven</dt><dd>14 actions</dd>');
     expect(markup).not.toContain('undefined');
     expect(markup).toContain('<dt>Orchard Landing</dt><dd>13 actions</dd>');
     expect(masteryTargets['orchard-landing']).toEqual({ target: 13, revision: 1 });

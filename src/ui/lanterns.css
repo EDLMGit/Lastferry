@@ -144,3 +144,106 @@
     fill: Canvas;
   }
 }
+
+.arrival-lanterns {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 5px;
+  min-width: 0;
+  padding-top: 7px;
+  pointer-events: none;
+}
+.arrival-lantern {
+  display: block;
+  flex: 0 0 auto;
+  width: var(--arrival-lantern-width, 61px);
+  height: var(--arrival-lantern-height, 84px);
+  overflow: visible;
+  color: #e8bd72;
+}
+.arrival-lantern:nth-child(2) {
+  transform: translateY(-7px);
+}
+.arrival-lantern .result-lantern-case {
+  fill: #284c50;
+  stroke: #718e82;
+}
+.arrival-lantern .result-lantern-glass {
+  fill: #193c43;
+  stroke: #a2b9ab;
+}
+.arrival-lantern .result-lantern-cap,
+.arrival-lantern .result-lantern-foot {
+  fill: #527164;
+  stroke: #bdd0b4;
+}
+.arrival-lantern .result-lantern-handle,
+.arrival-lantern .result-lantern-ribs {
+  stroke: #91a995;
+}
+.arrival-lantern .result-lantern-handle-shine,
+.arrival-lantern .result-lantern-cap-shine,
+.arrival-lantern .result-lantern-foot-shine {
+  stroke: #c3d0b9;
+}
+.arrival-lantern .result-lantern-wick {
+  stroke: #8fa99d;
+}
+.arrival-lantern .result-lantern-glass-shine {
+  stroke: #8bacaa;
+}
+.arrival-lantern .result-lantern-fire,
+.arrival-lantern .result-lantern-core,
+.arrival-lantern .result-lantern-aura,
+.arrival-lantern .result-lantern-spark {
+  visibility: hidden;
+}
+.arrival-lantern[data-lit='true'] .result-lantern-case {
+  fill: #916b3e;
+  stroke: #f0c27d;
+}
+.arrival-lantern[data-lit='true'] .result-lantern-glass {
+  fill: #edb852;
+  stroke: #ffe4a5;
+}
+.arrival-lantern[data-lit='true'] .result-lantern-cap,
+.arrival-lantern[data-lit='true'] .result-lantern-foot {
+  fill: #b88746;
+  stroke: #f2cb8d;
+}
+.arrival-lantern[data-lit='true'] .result-lantern-handle,
+.arrival-lantern[data-lit='true'] .result-lantern-ribs,
+.arrival-lantern[data-lit='true'] .result-lantern-wick {
+  stroke: #e9be7b;
+}
+.arrival-lantern[data-lit='true'] .result-lantern-handle-shine,
+.arrival-lantern[data-lit='true'] .result-lantern-cap-shine,
+.arrival-lantern[data-lit='true'] .result-lantern-foot-shine,
+.arrival-lantern[data-lit='true'] .result-lantern-glass-shine {
+  stroke: #fff0c7;
+}
+.arrival-lantern[data-lit='true'] .result-lantern-fire,
+.arrival-lantern[data-lit='true'] .result-lantern-core,
+.arrival-lantern[data-lit='true'] .result-lantern-aura,
+.arrival-lantern[data-lit='true'] .result-lantern-spark {
+  visibility: visible;
+}
+.arrival-lantern .result-lantern-fire {
+  fill: #fff2bf;
+}
+.arrival-lantern .result-lantern-core {
+  fill: #fffdf0;
+}
+.arrival-lantern .result-lantern-spark {
+  stroke: #f1d39c;
+}
+@media (forced-colors: active) {
+  .arrival-lantern * {
+    fill: Canvas !important;
+    stroke: CanvasText !important;
+  }
+  .arrival-lantern[data-lit='true'] .result-lantern-fire {
+    fill: CanvasText !important;
+  }
+}

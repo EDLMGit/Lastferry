@@ -105,7 +105,7 @@ export async function result(page: Page, lanterns: number, actions: number, undo
   await expect(card).toHaveAttribute('data-lanterns', String(lanterns));
   await expect(card).toHaveAttribute('data-actions', String(actions));
   await expect(card).toHaveAttribute('data-undos', String(undos));
-  await expect(card).toContainText('This rescue');
+  await expect(card).toHaveAttribute('aria-label', 'This rescue');
   await card.locator('.mastery-metrics').scrollIntoViewIfNeeded();
   await fullyVisible(page, card.locator('.mastery-metrics'), false);
   const primary = page.locator('#continue-story, #next-cove, #choose-cove');

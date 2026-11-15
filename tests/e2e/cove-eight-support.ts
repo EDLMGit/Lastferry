@@ -41,6 +41,8 @@ export async function capture(page: Page, folder: string, name: string) {
     });
     const scope = dialog ?? document.getElementById('app')!;
     for (const el of [scope, ...scope.querySelectorAll<HTMLElement>('*')]) {
+      const closed = el.closest('details:not([open])');
+      if (closed && !el.closest('summary') && closed !== el) continue;
       if (el.closest('.sr-only') || !el.getBoundingClientRect().width || getComputedStyle(el).display === 'inline') continue;
       if (dialog && el.clientWidth > 0 && el.scrollWidth > el.clientWidth + 1) failures.push((el.id || el.className) + ': horizontal overflow');
     }
@@ -117,10 +119,12 @@ export async function replay(page: Page, level: Level, actions: Action[], develo
   return states;
 }
 
-export async function unscoredWin(page: Page, turn: number) {
+export async function scoredWin(page: Page, turn: number, undos = 0) {
   await expect(page.locator('#dialog[open]')).toHaveAttribute('data-outcome', 'won');
-  await expect(page.locator('.ending')).toContainText(turn + ' actions');
-  await expect(page.locator('#mastery-result')).toHaveCount(0);
+  await expect(page.locator('#mastery-result')).toHaveAttribute('data-actions', String(turn));
+  await expect(page.locator('#mastery-result')).toHaveAttribute('data-undos', String(undos));
+  await expect(page.locator('#mastery-result')).toHaveAttribute('data-lanterns', undos ? '2' : '3');
+  await expect(page.locator('#arrival-cast li')).toHaveCount(4);
   await fullyVisible(page, page.locator('#terminal-undo'));
   await fullyVisible(page, page.locator('#terminal-restart'));
   await fullyVisible(page, page.locator('#choose-cove'));
@@ -128,11 +132,8 @@ export async function unscoredWin(page: Page, turn: number) {
   expect((await storage(page)).masteryWrites).toBe(0);
 }
 
-export async function unscoredMenu(page: Page) {
+export async function scoredMenu(page: Page) {
   await activate(page, 'menu', true);
-  await expect(page.locator('#dialog')).toContainText('Playtest · no lantern rating');
-  await expect(page.locator('.mastery-criteria')).toHaveCount(0);
-  await expect(page.locator('#dialog')).not.toContainText('keeps the lantern result');
-  await expect(page.locator('#dialog')).not.toContainText('keeps its lantern result');
+  await expect(page.locator('.mastery-criteria summary')).toContainText('14 actions');
   await page.keyboard.press('Escape');
 }

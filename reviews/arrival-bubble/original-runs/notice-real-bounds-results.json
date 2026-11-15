@@ -1,0 +1,203 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "-c",
+      ".cache/arrival-playwright.config.ts",
+      "--workers=1",
+      "--grep",
+      "isolated six"
+    ],
+    "configFile": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\.cache\\arrival-playwright.config.ts",
+    "rootDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "arrival-bubble.spec.ts"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "snapshotDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "testIgnore": [],
+        "testMatch": "arrival-bubble.spec.ts",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5298",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "deviceScaleFactor": 1,
+          "headless": true,
+          "launchOptions": {
+            "args": [
+              "--use-angle=swiftshader",
+              "--enable-unsafe-swiftshader"
+            ]
+          },
+          "video": {
+            "mode": "on",
+            "size": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "trace": "retain-on-failure"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "reviews/arrival-bubble/automation-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "arrival-bubble.spec.ts",
+      "file": "arrival-bubble.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "isolated six-neighbor renderer fits every native size and exposes storage failure clearly",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 420000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 14575,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeInViewport\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.arrival-storage-notice')\nExpected: in viewport\nReceived: viewport ratio 0.7461140155792236\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeInViewport\" locator('.arrival-storage-notice') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.arrival-storage-notice')\u001b[22m\n\u001b[2m    23 × locator resolved to <p role=\"status\" class=\"arrival-storage-notice\">This result could not be saved on this device. It…</p>\u001b[22m\n\u001b[2m       - unexpected value \"viewport ratio 0.7461140155792236\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeInViewport\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.arrival-storage-notice')\nExpected: in viewport\nReceived: viewport ratio 0.7461140155792236\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeInViewport\" locator('.arrival-storage-notice') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.arrival-storage-notice')\u001b[22m\n\u001b[2m    23 × locator resolved to <p role=\"status\" class=\"arrival-storage-notice\">This result could not be saved on this device. It…</p>\u001b[22m\n\u001b[2m       - unexpected value \"viewport ratio 0.7461140155792236\"\u001b[22m\n\n    at fullyVisible (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\ui.ts:119:25)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\arrival-bubble.spec.ts:200:9",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\ui.ts",
+                      "column": 25,
+                      "line": 119
+                    },
+                    "snippet": "\u001b[90m   at \u001b[39mui.ts:119\n\n  117 | }\n  118 | export async function fullyVisible(page: Page, locator: Locator, touchTarget = true) {\n> 119 |   await expect(locator).toBeInViewport({ ratio: 1 });\n      |                         ^\n  120 |   const bounds = await locator.boundingBox();\n  121 |   const size = page.viewportSize()!;\n  122 |   expect(bounds).not.toBeNull();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\ui.ts",
+                        "column": 25,
+                        "line": 119
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeInViewport\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.arrival-storage-notice')\nExpected: in viewport\nReceived: viewport ratio 0.7461140155792236\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeInViewport\" locator('.arrival-storage-notice') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.arrival-storage-notice')\u001b[22m\n\u001b[2m    23 × locator resolved to <p role=\"status\" class=\"arrival-storage-notice\">This result could not be saved on this device. It…</p>\u001b[22m\n\u001b[2m       - unexpected value \"viewport ratio 0.7461140155792236\"\u001b[22m\n\n\n   at ui.ts:119\n\n  117 | }\n  118 | export async function fullyVisible(page: Page, locator: Locator, touchTarget = true) {\n> 119 |   await expect(locator).toBeInViewport({ ratio: 1 });\n      |                         ^\n  120 |   const bounds = await locator.boundingBox();\n  121 |   const size = page.viewportSize()!;\n  122 |   expect(bounds).not.toBeNull();\n    at fullyVisible (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\ui.ts:119:25)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\arrival-bubble.spec.ts:200:9"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-15T17:10:41.593Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\arrival-bubble-isolated-si-dc7f5-ses-storage-failure-clearly\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\arrival-bubble-isolated-si-dc7f5-ses-storage-failure-clearly\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\ui.ts",
+                    "column": 25,
+                    "line": 119
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "d569c7adcd8c6595424c-73553bdf9263a7fe0b20",
+          "file": "arrival-bubble.spec.ts",
+          "line": 186,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-15T17:10:40.230Z",
+    "duration": 16647.986999999997,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

@@ -126,6 +126,7 @@ export class World {
   reduced = false;
   homecoming = new HomecomingTimeline();
   completionBounds: HomecomingRectangle | null = null;
+  completionLayout: 'side' | 'centered' = 'side';
   canonicalFrame: HomecomingRectangle | null = null;
   homecomingCameraFactor = 1;
   homecomingCameraTarget = 1;
@@ -1148,7 +1149,7 @@ export class World {
       !this.viewLocation
     ) {
       harborFrame = true;
-      if (this.completionBounds) {
+      if (this.completionBounds && this.completionLayout !== 'centered') {
         const card = this.completionBounds;
         const left = { ...usable, right: Math.min(usable.right, card.left - 12) };
         const above = { ...usable, bottom: Math.min(usable.bottom, card.top - 12) };
@@ -1300,12 +1301,14 @@ export class World {
     }
     this.coastalWater.update(this.water.position.y, reduced ? 0 : this.lastTime * 0.001);
   }
-  setCompletionBounds(bounds: HomecomingRectangle | null) {
+  setCompletionBounds(bounds: HomecomingRectangle | null, layout: 'side' | 'centered' = 'side') {
     const previous = this.completionBounds;
+    const previousLayout = this.completionLayout;
     this.completionBounds = bounds ? { ...bounds } : null;
+    this.completionLayout = layout;
     if (
       this.homecoming.active &&
-      (previous?.left !== bounds?.left ||
+      (previousLayout !== layout || previous?.left !== bounds?.left ||
         previous?.right !== bounds?.right ||
         previous?.top !== bounds?.top ||
         previous?.bottom !== bounds?.bottom)
@@ -1334,6 +1337,7 @@ export class World {
     this.homecomingCameraTarget = 1;
     this.homecomingCameraFallback = 'ordinary';
     this.completionBounds = null;
+    this.completionLayout = 'side';
     this.restoreCamera();
   }
   beginHomecoming(time: number) {
@@ -1393,7 +1397,7 @@ export class World {
           projected.right <= usable.right &&
           projected.top >= usable.top &&
           projected.bottom <= usable.bottom &&
-          !rectanglesOverlap(projected, this.completionBounds!, 10)
+          (this.completionLayout === 'centered' || !rectanglesOverlap(projected, this.completionBounds!, 10))
         );
       });
       if (fits) {

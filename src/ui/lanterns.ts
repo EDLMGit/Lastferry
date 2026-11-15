@@ -3,12 +3,20 @@ import { masteryTargets } from '../game/mastery';
 import { practiceCoves } from '../campaign/registry';
 import { escapeLabel } from './cove-ui';
 import lanternSource from '../../assets/ui/mastery-lantern.svg?raw';
+import resultLanternSource from '../../assets/ui/result-lantern.svg?raw';
 import './lanterns.css';
 
 export function lanterns(count: number) {
   return `<span class="mastery-lanterns" aria-hidden="true">${[1, 2, 3].map(index =>
     lanternSource.replace('<svg ', `<svg class="mastery-lantern" data-lit="${index <= count}" `),
   ).join('')}</span>`;
+}
+
+export function arrivalLanternsMarkup(current: MasteryResult | null) {
+  if (!current) return '<p class="arrival-unrated">Rescued · no lantern rating</p>';
+  return `<div class="arrival-lanterns" role="img" aria-label="This rescue · ${current.lanterns} of 3 lanterns" data-lanterns="${current.lanterns}">${[1, 2, 3].map(index =>
+    resultLanternSource.replace('<svg ', `<svg class="arrival-lantern" data-lit="${index <= current.lanterns}" data-lantern="${index}" `),
+  ).join('')}</div>`;
 }
 
 function metrics(result: MasteryResult) {

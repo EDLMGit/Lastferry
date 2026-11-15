@@ -22,6 +22,9 @@ import { storyScenes } from '../campaign/registry';
 import { checkpointCopy } from '../campaign/progress';
 import { createCoveStoryPainter } from '../campaign/story-painter';
 import { lanterns, masteryBadgeMarkup, masteryCriteriaMarkup, masteryResultMarkup } from '../ui/lanterns';
+import { arrivalMarkup } from '../ui/arrival';
+import { initial } from '../game/rules';
+import { resultFor } from '../game/mastery';
 
 const root = document.querySelector<HTMLElement>('#gallery')!;
 const text = escapeLabel;
@@ -94,6 +97,23 @@ const masteryExample = { coveId: 'orchard-landing', revision: 1, actions: 12, su
 const masteryBest = { ...masteryExample, successfulUndos: 0, lanterns: 3 as const };
 masterySection.innerHTML = `<h2>Three lanterns</h2><p>Shared live components at phone scale. The examples below are design specimens.</p><div class="panel-specimens"><article class="panel-specimen panel-specimen--narrow">${masteryResultMarkup(masteryExample, masteryBest)}${masteryCriteriaMarkup(13)}</article><article class="panel-specimen panel-specimen--narrow"><h3>Practice markers</h3><button class="cove-button cove-button--quiet mastery-practice-specimen"><span class="practice-title">Orchard Landing</span>${masteryBadgeMarkup(masteryBest)}</button><p>${masteryBadgeMarkup(null, true)}</p><p>${masteryBadgeMarkup(null)}</p><p>${lanterns(1)} ${lanterns(2)} ${lanterns(3)}</p></article></div><p>${sourceLink('assets/ui/mastery-lantern.svg', 'Editable lantern glyph')} · ${sourceLink('reviews/three-lanterns/REVIEW.md', 'Actual results and phone evidence')}</p>`;
 root.querySelector('#gallery-orchard')!.after(masterySection);
+const arrivalSection = document.createElement('section');
+arrivalSection.id = 'arrival-bubble';
+arrivalSection.className = 'gallery-panel';
+arrivalSection.innerHTML = `<h2>Centered homecoming</h2><p>Isolated renderer fixtures using real level rosters, portrait identities and the production arrival helper. These synthetic won states are not actual rescues, and the specimen cannot write results or Journey progress.</p><label for="gallery-arrival-cast">Rescued cast <select id="gallery-arrival-cast"><option value="ternhaven">Ternhaven · four neighbors including Sedge</option><option value="orchard">Orchard · three neighbors</option><option value="wide">Wide Berth · six neighbors</option></select></label><label for="gallery-arrival-result">Current result <select id="gallery-arrival-result"><option value="3">Three lanterns</option><option value="2">Two lanterns, better accepted best</option><option value="1">One lantern, better accepted best</option></select></label><div class="cove-panel cove-surface cove-surface--arrival" id="gallery-arrival-frame" style="width:min(100%,700px);margin:20px auto"></div><p>${sourceLink('assets/ui/result-lantern.svg', 'Original larger lantern source')} · ${sourceLink('cove-ui-package/ui/icons/replay.svg', 'Original Replay icon')} · ${sourceLink('reviews/arrival-bubble/REVIEW.md', 'Actual arrivals and phone evidence')}</p>`;
+masterySection.after(arrivalSection);
+function renderArrivalSpecimen() {
+  const selected = arrivalSection.querySelector<HTMLSelectElement>('#gallery-arrival-cast')!.value;
+  const level = selected === 'wide' ? wideBerth : selected === 'orchard' ? orchardLanding : ternhaven;
+  const count = Number(arrivalSection.querySelector<HTMLSelectElement>('#gallery-arrival-result')!.value);
+  const actions = count === 1 ? 20 : level.id === 'orchard-landing' ? 13 : 14;
+  const state = { ...initial(level), status: 'won' as const, turn: actions, aboard: [], delivered: [...level.objective.requiredPassengerIds], waitingByPier: Object.fromEntries(level.piers.map(pier => [pier.id, []])) };
+  const frame = arrivalSection.querySelector<HTMLDivElement>('#gallery-arrival-frame')!;
+  frame.innerHTML = arrivalMarkup({ level, state, result: resultFor(level.id, actions, count === 2 ? 1 : 0), best: resultFor(level.id, level.id === 'orchard-landing' ? 13 : 14, 0), forward: { id: 'choose-cove', label: 'Choose a cove' }, policy: 'Gallery fixture only. Controls do not navigate, save or award a rescue.' });
+  setControl(frame.querySelector<HTMLButtonElement>('#cancel')!, 'close', 'Close arrival', 'quiet', true);
+}
+arrivalSection.querySelectorAll('select').forEach(select => select.addEventListener('change', renderArrivalSpecimen));
+renderArrivalSpecimen();
 shelterSection.id = 'two-shelters';
 shelterSection.className = 'cove-panel cove-surface gallery-panel';
 const shelterResidents: [string, number, boolean, PortraitKey | null][] =
@@ -116,7 +136,7 @@ shelterSection.after(reefSection);
 const ternhavenSection = document.createElement('section');
 ternhavenSection.id = 'ternhaven';
 ternhavenSection.className = shelterSection.className;
-ternhavenSection.innerHTML = `<h2>Ternhaven · Practice playtest</h2><p>Juniper, Sedge, Fennel and Willow reuse the full-size chestnut deer, wool sheep, tan rabbit and brown beaver. Four modest shores share the accepted ferry, materials and five authored passages.</p><article class="panel-specimen panel-specimen--narrow"><h3>Passenger choices</h3>${choices(ternhaven.passengers.map(passenger => [passengerName(passenger.id, ternhaven), passenger.slots, ternhaven.start.aboard.includes(passenger.id), resolvePassengerAppearance(ternhaven, passenger.id)?.portraitKey ?? null]))}<p>Original 44px portraits and live choice components. This specimen is not gameplay evidence.</p><p>${masteryBadgeMarkup(null, false, false)}</p></article><p><a href="/?cove=ternhaven">Play Ternhaven</a> · <a href="#wide-ferry">Inspect automatic deck seating</a> · ${sourceLink('reviews/cove-eight-practice/REVIEW.md', 'Actual rescue and native phone evidence')}</p>`;
+ternhavenSection.innerHTML = `<h2>Ternhaven · Practice</h2><p>Juniper, Sedge, Fennel and Willow reuse the full-size chestnut deer, wool sheep, tan rabbit and brown beaver. Four modest shores share the accepted ferry, materials and five authored passages.</p><article class="panel-specimen panel-specimen--narrow"><h3>Passenger choices</h3>${choices(ternhaven.passengers.map(passenger => [passengerName(passenger.id, ternhaven), passenger.slots, ternhaven.start.aboard.includes(passenger.id), resolvePassengerAppearance(ternhaven, passenger.id)?.portraitKey ?? null]))}<p>Original 44px portraits and live choice components. This specimen is not gameplay evidence.</p><p>${masteryBadgeMarkup(null)}</p><p>Accepted action target: 14. A newly completed rescue supplies its rating.</p></article><p><a href="/?cove=ternhaven">Play Ternhaven</a> · <a href="#wide-ferry">Inspect automatic deck seating</a> · ${sourceLink('reviews/cove-eight-practice/REVIEW.md', 'Actual rescue and native phone evidence')}</p>`;
 reefSection.after(ternhavenSection);
 const failedPortrait = root.querySelector<HTMLImageElement>('#gallery-failed-portrait img')!;
 failedPortrait.dataset.portraitState = 'pending';

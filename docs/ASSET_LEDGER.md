@@ -1,5 +1,15 @@
 # Last Ferry asset provenance and history
 
+## ARRIVAL_BUBBLE_01 — centered homecoming
+
+The successful arrival reuses the painted teal panel, warm ivory text, sea-glass controls and original model-derived portraits. `src/ui/arrival.ts` and `src/ui/arrival.css` compose the real required rescued cast, current lantern result, compact metrics and native actions inside the existing dialog. Earlier deliveries remain part of the cast. This showcase adds no capacity labels, selection interaction, new portrait output or WebGL renderer. Stable named image slots preserve readable identities during loading or failure.
+
+`assets/ui/result-lantern.svg` is an original larger variant in the existing `ui.mastery-lanterns` family. It extends the rounded upright silhouette with a brass loop, cap, ribs and foot, layered glass, visible fire/core and a restrained aura. Hollow glass remains distinct from an earned flame beyond color. The three lanterns form a shallow arch, use only the current rescue, and expose the same result in accessible text. The original compact `mastery-lantern.svg` and Practice badges are unchanged. The SVG and stylesheet have no autoplay; the existing final-arrival owner controls any one-time inner illumination, with settled Reduced Motion and cancellation.
+
+The original `cove-ui-package/ui/icons/replay.svg` joins the existing individual icon sources and shared renderer. Its full looping arrow and play triangle distinguish Replay from the retained hooked Undo arrow. It is newly authored project vector art, not part of the historical supplied sprite. `ui.icon.replay` is the only new catalog ID; all 81 earlier IDs remain. The panel, dialog, portrait and lantern families record this new consumption without erasing earlier provenance or acceptance history.
+
+The shared developer gallery renders explicitly labeled arrival fixtures using the production helper and unchanged portrait assets. Fixtures demonstrate composition and component states; they do not claim actual rescues or update mastery/Journey storage. Native real arrivals, original failures, lifecycle/scoring checks and listening/device limits belong in the [arrival review](../reviews/arrival-bubble/REVIEW.md). Integration and internal inspection do not establish human visual acceptance. No publication is performed by this pass.
+
 ## COVE_EIGHT_PRACTICE_01 — Ternhaven
 
 Ternhaven is an independent Practice candidate using thirteen existing families. All 81 catalog IDs, existing animal geometry, portrait outputs and accepted family variants remain. Juniper uses the chestnut deer, Sedge the wool sheep, Fennel the tan rabbit and Willow the brown beaver. They are distinct level-owned identities; Orin and the earlier neighbors retain their names and appearances. The gallery uses the real 44px portrait choice component and offers the existing ferry specimen with both legal Ternhaven six-space rosters. These static specimens are not gameplay evidence.

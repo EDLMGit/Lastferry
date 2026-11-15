@@ -7,12 +7,14 @@ import {
   MeshBasicMaterial,
   OrthographicCamera,
   Scene,
+  Vector2,
   Vector3,
 } from 'three';
 import { World } from '../../src/scene/world';
 import { initial } from '../../src/game/rules';
 import { holdingPier } from '../../src/levels/level';
 import { ferryProfile } from '../../src/scene/ferry-profile';
+import { HomecomingTimeline } from '../../src/scene/homecoming';
 import {
   viewFrame,
   type ViewRectangle,
@@ -148,3 +150,60 @@ test('arrival camera callbacks cannot zoom beyond a story composition', () => {
   assertContained(world, home, usable);
   assertContained(world, boatRoot, usable);
 });
+
+test.each([[390, 844], [780, 320], [320, 740]])(
+  'a centered arrival keeps the whole safe Harbor frame stable at %s×%s and restores ordinary play',
+  (width, height) => {
+    const usable = { left: 12, right: width - 12, top: 12, bottom: height - 12 };
+    const { world, home, boatRoot, moss, remote } = fixture(width, height, usable);
+    const ordinaryFrame = { ...world.canonicalFrame };
+    const playing = structuredClone(world.state);
+    remote.position.set(-2.3, 0.7, -3.2);
+    Object.assign(world, { homecoming: new HomecomingTimeline(), reduced: true,
+      homecomingCameraSuppressed: false, homecomingFocus: new Vector2(),
+      completionBounds: null, completionLayout: 'side' });
+    world.state = { ...playing, status: 'won', boatNodeId: 'harbor', aboard: [],
+      delivered: [...holdingPier.objective.requiredPassengerIds],
+      waitingByPier: Object.fromEntries(holdingPier.piers.map(pier => [pier.id, []])) };
+    world.homecoming.start(100, true);
+    const internals = world as unknown as {
+      reframeView(): void;
+      fitHomecomingCamera(): void;
+      applyHomecomingCamera(factor: number): void;
+    };
+    const card = { left: 28, right: width - 28, top: height * 0.2, bottom: height * 0.8 };
+    world.setCompletionBounds(card, 'centered');
+    const settled = { ...world.canonicalFrame };
+    const revision = world.cameraRevision;
+    expect(world.homecomingCameraFactor).toBe(1);
+    world.setCompletionBounds(card, 'centered');
+    expect(world.cameraRevision).toBe(revision);
+    world.setCompletionBounds({ left: width / 2, right: width - 20, top: 40, bottom: height - 40 }, 'centered');
+    expect(world.canonicalFrame).toEqual(settled);
+    expect(world.cameraRevision).toBe(revision);
+    world.reduced = false;
+    internals.fitHomecomingCamera();
+    internals.applyHomecomingCamera(world.homecomingCameraTarget);
+    if (height <= 320) expect(world.homecomingCameraTarget).toBe(1);
+    for (const object of [home, boatRoot, moss, remote]) {
+      const box = new Box3().setFromObject(object);
+      for (const x of [box.min.x, box.max.x])
+        for (const y of [box.min.y, box.max.y])
+          for (const z of [box.min.z, box.max.z]) {
+            const point = new Vector3(x, y, z).project(world.camera);
+            expect((point.x + 1) * width / 2).toBeGreaterThanOrEqual(usable.left - 1e-7);
+            expect((point.x + 1) * width / 2).toBeLessThanOrEqual(usable.right + 1e-7);
+            expect((1 - point.y) * height / 2).toBeGreaterThanOrEqual(usable.top - 1e-7);
+            expect((1 - point.y) * height / 2).toBeLessThanOrEqual(usable.bottom + 1e-7);
+          }
+    }
+    world.state = playing;
+    world.resetHomecoming();
+    internals.reframeView();
+    expect(world.canonicalFrame).toEqual(ordinaryFrame);
+    expect(world.completionBounds).toBeNull();
+    expect(world.completionLayout).toBe('side');
+    expect(world.homecoming.active).toBe(false);
+    expect(world.homecomingCameraFactor).toBe(1);
+  },
+);

@@ -1,0 +1,203 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "-c",
+      ".cache/arrival-playwright.config.ts",
+      "--workers=1",
+      "--grep",
+      "portrait Ternhaven"
+    ],
+    "configFile": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\.cache\\arrival-playwright.config.ts",
+    "rootDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "arrival-bubble.spec.ts"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "snapshotDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "testIgnore": [],
+        "testMatch": "arrival-bubble.spec.ts",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5298",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "deviceScaleFactor": 1,
+          "headless": true,
+          "launchOptions": {
+            "args": [
+              "--use-angle=swiftshader",
+              "--enable-unsafe-swiftshader"
+            ]
+          },
+          "video": {
+            "mode": "on",
+            "size": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "trace": "retain-on-failure"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "reviews/arrival-bubble/automation-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "arrival-bubble.spec.ts",
+      "file": "arrival-bubble.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "portrait Ternhaven celebrates all four rescues and keeps lifecycle provisional through Undo and Replay",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 420000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 164105,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 1\u001b[39m\n\u001b[31m+ Received  + 9\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   \"arrival-detail-body: horizontal overflow\",\u001b[39m\n\u001b[31m+   \": horizontal overflow\",\u001b[39m\n\u001b[31m+   \": horizontal overflow\",\u001b[39m\n\u001b[31m+   \": horizontal overflow\",\u001b[39m\n\u001b[31m+   \": horizontal overflow\",\u001b[39m\n\u001b[31m+   \": horizontal overflow\",\u001b[39m\n\u001b[31m+   \": horizontal overflow\",\u001b[39m\n\u001b[31m+ ]\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 1\u001b[39m\n\u001b[31m+ Received  + 9\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   \"arrival-detail-body: horizontal overflow\",\u001b[39m\n\u001b[31m+   \": horizontal overflow\",\u001b[39m\n\u001b[31m+   \": horizontal overflow\",\u001b[39m\n\u001b[31m+   \": horizontal overflow\",\u001b[39m\n\u001b[31m+   \": horizontal overflow\",\u001b[39m\n\u001b[31m+   \": horizontal overflow\",\u001b[39m\n\u001b[31m+   \": horizontal overflow\",\u001b[39m\n\u001b[31m+ ]\u001b[39m\n    at arrivalMeasure (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\arrival-bubble-support.ts:69:29)\n    at arrivalFrame (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\arrival-bubble-support.ts:91:18)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\arrival-bubble.spec.ts:41:15",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\arrival-bubble-support.ts",
+                      "column": 29,
+                      "line": 69
+                    },
+                    "snippet": "\u001b[90m   at \u001b[39marrival-bubble-support.ts:69\n\n  67 |     return{viewport:[innerWidth,innerHeight],safe,bounds:bounds.toJSON(),failures,labels,controls,crown,wholeScroll:{client:content.clientHeight,scroll:content.scrollHeight},canvasCount:document.querySelectorAll('canvas').length};\n  68 |   });\n> 69 |   expect(measured.failures).toEqual([]);\n     |                             ^\n  70 |   expect(measured.labels.every(label=>label.fit)).toBe(true);\n  71 |   expect(Math.abs((measured.bounds.left+measured.bounds.right)/2-(measured.safe.left+measured.safe.right)/2)).toBeLessThanOrEqual(1.5);\n  72 |   expect(Math.abs((measured.bounds.top+measured.bounds.bottom)/2-(measured.safe.top+measured.safe.bottom)/2)).toBeLessThanOrEqual(1.5);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\arrival-bubble-support.ts",
+                        "column": 29,
+                        "line": 69
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 1\u001b[39m\n\u001b[31m+ Received  + 9\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   \"arrival-detail-body: horizontal overflow\",\u001b[39m\n\u001b[31m+   \": horizontal overflow\",\u001b[39m\n\u001b[31m+   \": horizontal overflow\",\u001b[39m\n\u001b[31m+   \": horizontal overflow\",\u001b[39m\n\u001b[31m+   \": horizontal overflow\",\u001b[39m\n\u001b[31m+   \": horizontal overflow\",\u001b[39m\n\u001b[31m+   \": horizontal overflow\",\u001b[39m\n\u001b[31m+ ]\u001b[39m\n\n   at arrival-bubble-support.ts:69\n\n  67 |     return{viewport:[innerWidth,innerHeight],safe,bounds:bounds.toJSON(),failures,labels,controls,crown,wholeScroll:{client:content.clientHeight,scroll:content.scrollHeight},canvasCount:document.querySelectorAll('canvas').length};\n  68 |   });\n> 69 |   expect(measured.failures).toEqual([]);\n     |                             ^\n  70 |   expect(measured.labels.every(label=>label.fit)).toBe(true);\n  71 |   expect(Math.abs((measured.bounds.left+measured.bounds.right)/2-(measured.safe.left+measured.safe.right)/2)).toBeLessThanOrEqual(1.5);\n  72 |   expect(Math.abs((measured.bounds.top+measured.bounds.bottom)/2-(measured.safe.top+measured.safe.bottom)/2)).toBeLessThanOrEqual(1.5);\n    at arrivalMeasure (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\arrival-bubble-support.ts:69:29)\n    at arrivalFrame (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\arrival-bubble-support.ts:91:18)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\arrival-bubble.spec.ts:41:15"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-15T16:46:50.338Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\arrival-bubble-portrait-Te-e3c19-nal-through-Undo-and-Replay\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\arrival-bubble-portrait-Te-e3c19-nal-through-Undo-and-Replay\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\arrival-bubble-support.ts",
+                    "column": 29,
+                    "line": 69
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "d569c7adcd8c6595424c-fbd5091cc7c2a6277577",
+          "file": "arrival-bubble.spec.ts",
+          "line": 22,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-15T16:46:49.450Z",
+    "duration": 167401.218,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

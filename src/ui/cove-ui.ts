@@ -19,7 +19,7 @@ const originals = import.meta.glob<string>(
 );
 
 export const iconNames = [
-  'board', 'unload', 'sail', 'harbor-home', 'undo', 'wait', 'whole-cove', 'back-to-boat',
+  'board', 'unload', 'sail', 'harbor-home', 'undo', 'replay', 'wait', 'whole-cove', 'back-to-boat',
   'menu', 'settings', 'close', 'confirm', 'next-cove', 'sound-on', 'sound-off',
   'sound-retry', 'fullscreen-enter', 'fullscreen-exit',
 ] as const;

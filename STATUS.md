@@ -1,3 +1,15 @@
+# Centered arrival bubble · 15 November 2026
+
+**ARRIVAL_BUBBLE_01** implements a centered, responsive won-only result with large original lanterns, the complete named rescued cast and clear forward/Replay actions. Undo, Close and shared Settings retain their existing handlers. Criteria, prior best and save policy sit in Details; storage failures stay visible. Stable card bounds and a won-only Harbor fit prevent the camera from chasing the decoration. The brief inner celebration belongs to the actual completed rescue and respects Reduced Motion and cancellation.
+
+Ternhaven is now scored at **target 14 / revision 1**. All other targets, previous bests, nine puzzles, seven Journey identities and save history are preserved. Closing or inspecting an arrival does not accept its provisional result; terminal Undo/redelivery remains complete. No historical unscored result is invented.
+
+The [review](reviews/arrival-bubble/REVIEW.md) records focused verification, original failures, actual native before/after phone frames, an uninterrupted runtime-audio sequence and source identities. Human phone/listening/screen-reader approval remains separate from these checks.
+
+No deployment: Site version20/game `9c7a05785a021538c996f5dcd4b03415d1a35080`, hosting `ffc5eebfd8520735b231ffe6fedf1b3a54757f9a`, existing private audience unchanged. Build, standalone TypeScript, 185 focused unit checks, 82 asset families and 8 distinct browser cases pass, with source qualifications and original failures retained. The normal branch push and draft PR #1 handoff leave main unchanged.
+
+## Previous task/review checkpoint
+
 # Ternhaven reviewed; centered arrival next · 15 November 2026
 
 **Current task: [ARRIVAL_BUBBLE_01](NEXT_TASK_ARRIVAL_BUBBLE.md).** The user approves the latest puzzle/lantern direction and requests a centered floating mobile arrival card with large original lanterns, the full rescued cast and clear icon actions. Their third supplied reference guides the structure; Last Ferry retains its coastal identity.

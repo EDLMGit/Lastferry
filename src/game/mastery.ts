@@ -8,6 +8,7 @@ export const masteryTargets: Readonly<Record<string, MasteryTarget>> = {
   'wide-berth': { revision: 1, target: 14 },
   'reef-return': { revision: 1, target: 11 },
   'orchard-landing': { revision: 1, target: 13 },
+  ternhaven: { revision: 1, target: 14 },
 };
 
 export type MasteryResult = {

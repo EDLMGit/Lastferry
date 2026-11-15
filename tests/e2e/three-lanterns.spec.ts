@@ -119,8 +119,9 @@ test('Journey accepts at continuation and a worse Practice replay keeps the real
   await undo(page, true);
   await run(page, holdingPier, steps.slice(-1), true, states.at(-2)!);
   await result(page, 2, 9, 2);
-  await expect(page.locator('#mastery-best')).toContainText(/Best rescue.*3 of 3 lanterns/s);
+  await expect(page.locator('#mastery-best')).toContainText(/Best accepted rescue.*3 of 3 lanterns/s);
   await frame(page, '780x320', 'current-two-best-three');
+  await page.locator('#arrival-details summary').click();
   await page.locator('#mastery-best').scrollIntoViewIfNeeded();
   await fullyVisible(page, page.locator('#mastery-best'), false);
   await fullyVisible(page, page.locator('#next-cove'));

@@ -1,6 +1,18 @@
 # Last Ferry — Project state
 
-## Current assignment — centered arrival bubble · 15 November 2026
+## Current implementation — centered homecoming · 15 November 2026
+
+**ARRIVAL_BUBBLE_01** replaces the won-only utility panel with a centered floating coastal card. Three original large brass lanterns reflect this rescue; the complete named portrait cast includes neighbors delivered on earlier trips. Portrait stacks the composition, while short landscape places the crew beside rewards and actions. Replay has an original looping-arrow icon distinct from Undo. Details holds criteria, accepted best and checkpoint policy; actual storage problems remain visible.
+
+The existing native dialog, shared Settings/fullscreen root, final-unload audio, lighthouse and homecoming remain the owners of their behavior. One finite inner settle/light animation begins only at an actual completed rescue; dismissal, Settings, rotation and reopen do not replay it. Outer card bounds stay stable. The won-only camera fit keeps Harbor coherent behind the centered card rather than shrinking it into a leftover strip. Undo restores the normal playable framing and whole state.
+
+**Ternhaven target 14 / revision 1 is registered.** All three reviewed 13/14/14-action witnesses qualify. Prior bests and the other eight targets are unchanged; earlier unscored rescues acquire no fictional scores. Current-run lanterns remain provisional until an existing actual departure/Restart boundary; Close, inspection and Settings never accept them. Ternhaven remains independent Practice. The nine puzzles/witness contracts, seven-cove Journey, original-byte backups and save format are unchanged.
+
+Build and standalone TypeScript pass; 185 focused unit checks and 8 distinct browser cases pass with their source qualifications. All 82 catalog families validate. [Review, commands, original failures and native evidence](../reviews/arrival-bubble/REVIEW.md). Captures identify the task/review base `107b18adedc4f59202eb105a35c2d9676d2752ee` plus their source manifests. Renderer fixtures are explicitly separate from actual UI rescues. Fresh physical Android, human listening and spoken screen-reader checks remain unperformed; the earlier deferred Android playtest stays deferred.
+
+**No deployment.** The live private Site remains version **20**, game `9c7a05785a021538c996f5dcd4b03415d1a35080`, hosting source `ffc5eebfd8520735b231ffe6fedf1b3a54757f9a`, with its existing custom audience. [Receipt](../reviews/orchard-journey/deployment-confirmation.json). This implementation is handed back for review before publication. PR #1 stays draft and GitHub main stays unchanged.
+
+## Previous assignment — centered arrival bubble · 15 November 2026
 
 The user reports **“Good job overall, on the last 2 levels and the lantern mechanic”** and requests a centered floating end-of-cove bubble with prominent lanterns, proper option icons and a rescued-animal showcase. The third supplied mobile-game reference is the structural preference. [ARRIVAL_BUBBLE_01](../NEXT_TASK_ARRIVAL_BUBBLE.md) is the new scoped task; preserve our coastal visual identity and the accepted puzzle direction.
 

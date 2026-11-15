@@ -6,7 +6,7 @@ import { activate, fullyVisible, idle, ready, state, tabTo, undo, wholeCove } fr
 import { directory, localView, recordRescue, report } from './large-cove-support';
 import { fixture, home, ongoing, storage, untouched } from './three-lanterns-support';
 import { productionURL } from './evidence';
-import { acceptedBest, candidate, capture, completeSeven, execute, recordOnly, replay, sources, startCheck, unscoredMenu, unscoredWin } from './cove-eight-support';
+import { acceptedBest, candidate, capture, completeSeven, execute, recordOnly, replay, sources, startCheck, scoredMenu, scoredWin } from './cove-eight-support';
 
 const candidateId = 'ternhaven';
 test.use({ hasTouch: true, isMobile: true, deviceScaleFactor: 1, video: 'off' });
@@ -24,7 +24,7 @@ test.afterEach(() => {
   expect(errors).toEqual([]);
 });
 
-test('portrait first strategy rescues the unscored candidate with tide and terminal Undo', async ({ page }) => {
+test('portrait first strategy rescues the scored candidate with tide and terminal Undo', async ({ page }) => {
   const { level, witnesses } = candidate(candidateId);
   await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ reducedMotion: 'no-preference' });
@@ -39,7 +39,7 @@ test('portrait first strategy rescues the unscored candidate with tide and termi
   }
   await capture(page, '390x844', 'start-whole');
   await localView(page);
-  await unscoredMenu(page);
+  await scoredMenu(page);
   await activate(page, 'status-toggle', true);
   const currentPassage = level.edges.find(edge => edge.current);
   if (currentPassage) {
@@ -75,24 +75,26 @@ test('portrait first strategy rescues the unscored candidate with tide and termi
     }
     expect(tideUndo).toBe(true);
     expect(subset).toBe(true);
-    await unscoredWin(page, witnesses[0].actions.length);
+    await scoredWin(page, witnesses[0].actions.length, 1);
     await capture(page, '390x844', 'rescue');
     await tabTo(page, 'terminal-undo');
     await page.keyboard.press('Enter');
     await idle(page);
     expect(await state(page)).toEqual(timeline.at(-2));
     current = await execute(page, level, witnesses[0].actions.at(-1)!, timeline.at(-2)!);
-    await unscoredWin(page, witnesses[0].actions.length);
+    await scoredWin(page, witnesses[0].actions.length, 2);
     await capture(page, '390x844', 'redelivery');
     if (finish) await page.waitForTimeout(900);
     report(directory('390x844'), recordOnly ? 'recorded-rescue' : 'rescue-run', { source: source.sha256, strategy: witnesses[0].id, timeline, final: current, tideUndo, terminalUndo: true, saved: await storage(page) });
   } finally { if (finish) await finish(); }
   await activate(page, 'terminal-restart', true);
   await startCheck(page, level);
-  expect((await storage(page)).masteryWrites).toBe(0);
+  expect((await storage(page)).masteryWrites).toBe(1);
+  const accepted = (await storage(page)).mastery!;
+  expect(JSON.parse(accepted).results['ternhaven@1']).toMatchObject({ actions: 14, successfulUndos: 2, lanterns: 2 });
   await home(page);
   await untouched(page, ongoing);
-  expect((await storage(page)).mastery).toBe(acceptedBest);
+  expect((await storage(page)).mastery).toBe(accepted);
   await page.reload();
   await untouched(page, ongoing);
 });
@@ -106,13 +108,13 @@ test('short landscape production route uses the second strategy and preserves co
   expect(await page.evaluate(() => typeof (window as any).__LAST_FERRY__)).toBe('undefined');
   await activate(page, 'home-practice', true);
   await expect(page.locator('[data-practice]')).toHaveCount(9);
-  await expect(page.locator('#practice-' + candidateId)).toContainText('Playtest · no lantern rating');
+  await expect(page.locator('#practice-' + candidateId)).toContainText('Not yet rated');
   await page.locator('#practice-' + candidateId).scrollIntoViewIfNeeded();
   await fullyVisible(page, page.locator('#practice-' + candidateId));
   await activate(page, 'practice-' + candidateId, true);
   await startCheck(page, level, false);
   await capture(page, '780x320', 'start-play');
-  await unscoredMenu(page);
+  await scoredMenu(page);
   let current = initial(level), choice = false, change = false;
   const timeline: State[] = [current];
   for (const action of witnesses[1].actions) {
@@ -126,16 +128,16 @@ test('short landscape production route uses the second strategy and preserves co
     }
     timeline.push(current);
   }
-  await unscoredWin(page, witnesses[1].actions.length);
+  await scoredWin(page, witnesses[1].actions.length);
   await capture(page, '780x320', 'rescue');
   await activate(page, 'choose-cove', true);
-  await expect(page.locator('#dialog')).toContainText('Playtest · no lantern rating');
+  await expect(page.locator('.mastery-criteria summary')).toContainText('14 actions');
   await page.locator('#cove-picker').selectOption('orchard-landing');
   await idle(page);
   await expect(page.locator('#seascape')).toHaveAttribute('aria-label', 'Orchard Landing');
   await untouched(page, completeSeven);
-  expect((await storage(page)).mastery).toBe(acceptedBest);
-  expect((await storage(page)).masteryWrites).toBe(0);
+  expect(JSON.parse((await storage(page)).mastery!).results['ternhaven@1']).toMatchObject({ actions: 14, successfulUndos: 0, lanterns: 3 });
+  expect((await storage(page)).masteryWrites).toBe(1);
   report(directory('780x320'), 'release-rescue', { source: source.sha256, url: productionURL, strategy: witnesses[1].id, timeline, saved: await storage(page) });
 });
 
@@ -182,7 +184,7 @@ test('a tempting placement is recovered through the real earlier choice and a co
   }
   await capture(page, 'recovery', 'early-choice-restored');
   const recovered = await replay(page, level, correct.slice(choice), true, timeline[choice]);
-  await unscoredWin(page, correct.length);
+  await scoredWin(page, correct.length, wrong.length - choice);
   await untouched(page, completeSeven);
   report(directory('recovery'), 'mistake-and-recovery', { source: source.sha256, wrong: alternative.id, actions: wrong, choice, undoCount: wrong.length - choice, outcomeBeforeUndo: timeline.at(-1), timeline, recovered: recovered.at(-1), saved: await storage(page) });
 });
@@ -197,8 +199,8 @@ test('320px Practice criteria, candidate menu, orientation and fullscreen retain
   await activate(page, 'home-practice', true);
   await expect(page.locator('[data-practice]')).toHaveCount(9);
   await page.locator('.mastery-criteria summary').tap();
-  await expect(page.locator('.mastery-targets dt')).toHaveCount(8);
-  await expect(page.locator('.mastery-targets')).not.toContainText(level.title);
+  await expect(page.locator('.mastery-targets dt')).toHaveCount(9);
+  await expect(page.locator('.mastery-targets')).toContainText(level.title);
   await expect(page.locator('.mastery-targets')).toContainText('Orchard Landing');
   await page.locator('#practice-' + candidateId).scrollIntoViewIfNeeded();
   await fullyVisible(page, page.locator('#practice-' + candidateId));
@@ -206,7 +208,7 @@ test('320px Practice criteria, candidate menu, orientation and fullscreen retain
   await activate(page, 'practice-' + candidateId, true);
   await startCheck(page, level);
   await capture(page, '320x740', 'start-play');
-  await unscoredMenu(page);
+  await scoredMenu(page);
   const before = await execute(page, level, witnesses[0].actions[0], initial(level));
   await activate(page, 'menu', true);
   await tabTo(page, 'settings');
@@ -265,7 +267,7 @@ test('the low landing requires the direct retrieval and Undo restores that appro
   await localView(page);
   await capture(page, 'low-recovery', 'direct-approach-restored');
   const final = await replay(page, level, correct.actions.slice(alternative.recoveryToTurn), true, timeline[alternative.recoveryToTurn]);
-  await unscoredWin(page, correct.actions.length);
+  await scoredWin(page, correct.actions.length, wrong.length - alternative.recoveryToTurn);
   await untouched(page, ongoing);
   report(directory('low-recovery'), 'retrieval-recovery', { source: source.sha256, wrong: alternative.id, recoveredStrategy: correct.id, firstUnwinnableTurn: alternative.firstNoWinningContinuationTurn, recoveredTurn: alternative.recoveryToTurn, timeline, final: final.at(-1), saved: await storage(page) });
 });
@@ -278,7 +280,7 @@ test('desktop candidate is readable and accepted Orchard scoring remains availab
   await ready(page, candidateId);
   await startCheck(page, level);
   await capture(page, 'desktop', 'start-play');
-  await unscoredMenu(page);
+  await scoredMenu(page);
   await home(page);
   await activate(page, 'home-practice');
   await expect(page.locator('#practice-orchard-landing .mastery-badge')).toHaveAccessibleName(/3 of 3 lanterns/);

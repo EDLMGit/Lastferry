@@ -59,14 +59,15 @@ describe('Ternhaven placement, approach and return', () => {
       const session = replay(actions);
       expect(session.state).toMatchObject({ status: 'won', tideLevel: 2,
         turn: index === 2 ? 13 : 14, boatNodeId: 'harbor' });
-      expect(session.result).toBeNull();
-      expect(session.takeResult()).toBeNull();
+      expect(session.result).toMatchObject({ coveId: 'ternhaven', revision: 1,
+        actions: index === 2 ? 13 : 14, successfulUndos: 0, lanterns: 3 });
       const won = structuredClone(session.state);
       expect(session.undo()).toBe(true);
       expect(session.state.status).toBe('playing');
       replay(actions.slice(-1), session);
       expect(session.state).toEqual(won);
       expect(session.successfulUndos).toBe(1);
+      expect(session.result).toMatchObject({ lanterns: 2, successfulUndos: 1 });
     }
   });
 

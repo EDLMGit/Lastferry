@@ -40,7 +40,8 @@ import {
 } from './ui/presentation';
 import { Session } from './game/session';
 import { MasteryStore, masteryTargets } from './game/mastery';
-import { masteryResultMarkup, masteryBadgeMarkup, masteryCriteriaMarkup } from './ui/lanterns';
+import { masteryBadgeMarkup, masteryCriteriaMarkup } from './ui/lanterns';
+import { arrivalMarkup } from './ui/arrival';
 import { World } from './scene/world';
 import { Sound } from './audio/sound';
 import {
@@ -179,6 +180,9 @@ let mode: DialogMode | null = null,
   returnId = '',
   keyboardInput = false;
 let settingsParent: 'menu' | 'terminal' | JourneyMode = 'menu';
+let arrivalCelebrationId = 0;
+let arrivalCelebrationPending = false;
+let arrivalAnimations: Animation[] = [];
 let storyId: SceneId | null = null;
 let storyView: StoryView | null = null;
 let storyUiKey = '';
@@ -1094,6 +1098,7 @@ world.setReducedMotion(motion.reduced);
 renderMotion();
 const unsubscribeMotion = motion.subscribe((reduced) => {
   world.setReducedMotion(reduced);
+  if (reduced) settleArrival();
   if (reduced && mode === 'story') storyPresentation.settle();
   renderMotion();
 });
@@ -1146,6 +1151,8 @@ function restoreHighlight() {
   else highlight((document.activeElement as HTMLElement)?.dataset.destination);
 }
 function closeDialog(restore = true, fence = false) {
+  settleArrival();
+  app.classList.remove('arrival-open');
   if (fence && !keyboardInput && $('cancel'))
     closingFence = {
       scope: 'dismiss',
@@ -1211,6 +1218,7 @@ function openDialog(next: DialogMode, action?: Action, trigger?: string) {
   ).focus();
   positionDialog();
   restoreHighlight();
+  if (next === 'terminal' && session.state.status === 'won') celebrateArrival();
 }
 function switchDialog(next: DialogMode, focusId: string) {
   if (!keyboardInput && lastPointer)
@@ -1257,8 +1265,30 @@ function backFromSettings() {
 function header(title: string, eyebrow?: string, closeLabel = 'Close dialog') {
   return `<header class="dialog-head"><div>${eyebrow ? `<p class="eyebrow">${eyebrow}</p>` : ''}<h2 id="dialog-title">${title}</h2></div><button id="cancel" aria-label="${closeLabel}">${controlContent('close', closeLabel)}</button></header>`;
 }
+function settleArrival() {
+  for (const animation of arrivalAnimations) animation.cancel();
+  arrivalAnimations = [];
+  arrivalCelebrationPending = false;
+}
+function celebrateArrival() {
+  if (!arrivalCelebrationPending) return;
+  arrivalCelebrationPending = false;
+  if (motion.reduced || document.hidden) return;
+  for (const element of dialog.querySelectorAll<HTMLElement>('.arrival-overview, .arrival-cast'))
+    arrivalAnimations.push(element.animate(
+      [{ opacity: 0.6, transform: 'translateY(6px)' }, { opacity: 1, transform: 'translateY(0)' }],
+      { duration: 450, easing: 'ease-out' },
+    ));
+  dialog.querySelectorAll<SVGElement>('.arrival-lantern[data-lit="true"] .arrival-lantern-light').forEach((element, index) =>
+    arrivalAnimations.push(element.animate([{ opacity: 0.15 }, { opacity: 1 }],
+      { duration: 650, delay: index * 110, easing: 'ease-out', fill: 'backwards' })),
+  );
+}
 function renderDialog() {
   if (!mode) return;
+  for (const animation of arrivalAnimations) animation.cancel();
+  arrivalAnimations = [];
+  app.classList.toggle('arrival-open', mode === 'terminal' && session.state.status === 'won');
   if (mode !== 'story') storyView = null;
   dialog.classList.toggle('story-caption', mode === 'story');
   dialog.classList.toggle(
@@ -1435,41 +1465,37 @@ function renderDialog() {
       RETURN_CAPACITY: 'Too few homeward trips.',
       RETURN_DEPTH: 'No way to lighten the boat.',
     }[s.lossReason.code] : '';
-    $('dialog-content').innerHTML =
-      `${header(won ? (isBellwater ? 'Bellwater is safe.' : 'Everyone home.') : lossTitle)}<div class="dialog-body ending ${won ? '' : 'loss'}"><p>${won ? `${level.objective.requiredPassengerIds.length} passengers safe at Harbor · ${s.turn} actions.` : f.headline}</p>${won ? '' : `<p>${f.detail}</p>`}</div><footer class="dialog-footer terminal-actions">${won ? `<button id="${next ? 'next-cove' : 'choose-cove'}">${next ? 'Next cove' : 'Choose a cove'}</button><button id="terminal-settings">Settings</button>` : ''}<button id="terminal-undo">↶ Undo last action</button><button id="terminal-restart">Restart</button></footer>`;
-    if (next)
-      $('next-cove').onclick = () => visitPractice(practiceCoves.find(entry => entry.id === 'bellwater')!);
-    else if (won) $('choose-cove').onclick = () => switchDialog('menu', 'cove-picker');
-    if (won) $('terminal-settings').onclick = () => openSettings('terminal');
+    if (won) {
+      let policy = '';
+      if (campaignPlay) {
+        const progress = journey!.snapshot;
+        const record = progress.record!;
+        if (record.checkpoint.kind === 'cove') {
+          const next = acceptCove(record, record.checkpoint.id, s.status);
+          const handoff = next.checkpoint.kind === 'complete'
+            ? 'Continue story records this rescue.'
+            : `Next crossing: ${storyCoves.find((entry) => entry.id === checkpointCove(next))!.level.title}.`;
+          policy = `${handoff} Undo stays available until you continue. ${progress.persistent ? 'Reloading restarts this cove.' : 'Progress lasts for this visit only.'}`;
+        }
+      } else policy = 'Practice does not change your journey.';
+      const forward = campaignPlay ? { id: 'continue-story', label: 'Continue story' }
+        : next ? { id: 'next-cove', label: 'Next cove' }
+        : { id: 'choose-cove', label: 'Choose a cove' };
+      $('dialog-content').innerHTML = arrivalMarkup({
+        level, state: s, result: session.result, best: mastery.best(level.id),
+        successfulUndos: session.successfulUndos, forward, policy, notice: mastery.issue ?? '',
+      });
+      $('arrival-content').dataset.celebrationId = String(arrivalCelebrationId);
+      $(forward.id).onclick = campaignPlay ? acceptStoryCove
+        : next ? () => visitPractice(practiceCoves.find(entry => entry.id === 'bellwater')!)
+        : () => switchDialog('menu', 'cove-picker');
+      $('terminal-settings').onclick = () => openSettings('terminal');
+    } else {
+      $('dialog-content').innerHTML =
+        `${header(lossTitle)}<div class="dialog-body ending loss"><p>${f.headline}</p><p>${f.detail}</p></div><footer class="dialog-footer terminal-actions"><button id="terminal-undo">Undo last action</button><button id="terminal-restart">Restart</button></footer>`;
+    }
     $('terminal-undo').onclick = undo;
     $('terminal-restart').onclick = restart;
-    if (won && session.result) {
-      document.querySelector('.ending')!.insertAdjacentHTML(
-        'beforeend',
-        masteryResultMarkup(session.result, mastery.best(level.id)) +
-        '<p class="checkpoint-policy">Continuing, leaving or restarting keeps this result. Until then, Undo can change it.</p>' +
-        masteryNotice(),
-      );
-    }
-    if (won && campaignPlay) {
-      const nextControl = $('next-cove') ?? $('choose-cove');
-      nextControl.id = 'continue-story';
-      setControl(nextControl, 'next-cove', 'Continue story', 'warm');
-      nextControl.onclick = acceptStoryCove;
-      const policy = document.createElement('p');
-      policy.className = 'checkpoint-policy';
-      const progress = journey!.snapshot;
-      const record = progress.record!;
-      if (record.checkpoint.kind === 'cove') {
-        const next = acceptCove(record, record.checkpoint.id, s.status);
-        const handoff = next.checkpoint.kind === 'complete'
-          ? 'Continue story records this rescue.'
-          : `Next crossing: ${storyCoves.find((entry) => entry.id === checkpointCove(next))!.level.title}.`;
-        const checkpoint = progress.persistent ? 'Reloading restarts this cove.' : 'Progress lasts for this visit only.';
-        policy.textContent = `${handoff} Undo stays available until you continue. ${checkpoint}`;
-      }
-      document.querySelector('.ending')!.append(policy);
-    }
   }
   const controls: [string, CoveIcon | null, string | null, CoveFace, boolean?][] = [
     ['cancel', 'close', $('cancel').getAttribute('aria-label'), 'quiet', true],
@@ -1485,9 +1511,9 @@ function renderDialog() {
     ['return-arrival', 'harbor-home', 'Return to arrival', 'warm'],
     ['next-cove', 'next-cove', 'Next cove', 'warm'],
     ['choose-cove', 'whole-cove', 'Choose a cove', 'warm'],
-    ['terminal-settings', 'settings', 'Settings', 'quiet'],
-    ['terminal-undo', 'undo', 'Undo last action', 'quiet'],
-    ['terminal-restart', null, 'Restart', 'quiet'],
+    ['terminal-settings', 'settings', 'Settings', 'quiet', true],
+    ['terminal-undo', 'undo', s.status === 'won' ? 'Undo' : 'Undo last action', 'quiet'],
+    ['terminal-restart', s.status === 'won' ? 'replay' : null, s.status === 'won' ? 'Replay' : 'Restart', s.status === 'won' ? 'action' : 'quiet'],
   ];
   for (const [id, icon, label, face, iconOnly] of controls) {
     const button = $(id);
@@ -1541,6 +1567,11 @@ function finish(id: number, reason: CompletionReason) {
   $('announcement').textContent =
     `${pendingReceipt?.title ? pendingReceipt.title + '. ' + pendingReceipt.depth + '. ' : ''}${session.state.turn} actions completed. ${statusCopy(session.state, level).headline}`;
 
+  if (session.state.status === 'won') {
+    clearReceipt();
+    arrivalCelebrationId = id;
+    arrivalCelebrationPending = reason === 'complete' && !document.hidden;
+  }
   if (session.state.status !== 'playing') openDialog('terminal', undefined, 'undo');
   else focusAvailable(returnId);
   positionReceipt();
@@ -2050,6 +2081,27 @@ function positionDialog() {
     if (mode === 'story') storyView?.render(storyPresentation.frame);
     return;
   }
+  if (mode === 'terminal' && session.state.status === 'won') {
+    dialog.dataset.layout = 'arrival';
+    dialog.style.removeProperty('height');
+    dialog.style.removeProperty('width');
+    dialog.style.maxWidth = Math.max(0, safeBounds.right - safeBounds.left - 16) + 'px';
+    dialog.style.setProperty('--dialog-max-height', safeBounds.bottom - safeBounds.top - 8 + 'px');
+    dialog.style.right = 'auto';
+    dialog.style.bottom = 'auto';
+    const rect = dialog.getBoundingClientRect();
+    const left = (safeBounds.left + safeBounds.right - rect.width) / 2;
+    const top = (safeBounds.top + safeBounds.bottom - rect.height) / 2;
+    dialog.style.left = left + 'px';
+    dialog.style.top = top + 'px';
+    world.setCompletionBounds({
+      left: left - canvas.left,
+      right: left + rect.width - canvas.left,
+      top: top - canvas.top,
+      bottom: top + rect.height - canvas.top,
+    }, 'centered');
+    return;
+  }
   if (mode === 'action' && selected && actionAnchor) {
     const key = [
       viewport.left,
@@ -2161,17 +2213,6 @@ function positionDialog() {
   dialog.style.top = top + 'px';
   dialog.style.right = 'auto';
   dialog.style.bottom = 'auto';
-  if (session.state.status === 'won') {
-    if (mode === 'terminal' && dialog.open) {
-      const rect = dialog.getBoundingClientRect();
-      world.setCompletionBounds({
-        left: rect.left - canvas.left,
-        right: rect.right - canvas.left,
-        top: rect.top - canvas.top,
-        bottom: rect.bottom - canvas.top,
-      });
-    }
-  }
 }
 function playObstacles(persistentOnly = false) {
   return [...document.querySelectorAll<HTMLElement>(persistentOnly
@@ -2718,6 +2759,7 @@ document.addEventListener('visibilitychange', () => {
   sound.visibility(document.hidden);
   if (document.hidden && mode === 'story') storyPresentation.settle();
   if (document.hidden) {
+    settleArrival();
     clearReceipt();
 
     world.settleHomecoming();
@@ -2732,6 +2774,7 @@ document.addEventListener('visibilitychange', () => {
 addEventListener('pagehide', () => {
   pageDisposed = true;
 
+  settleArrival();
   clearReceipt();
 
   storyPresentation.cancel();

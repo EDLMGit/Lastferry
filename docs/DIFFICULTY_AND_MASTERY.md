@@ -2,11 +2,11 @@
 
 **Reviewed implementation · 14 November 2026.** The player accepted the Orchard repair at `9933303178da04cac93ddc820ef55e181286d983`. The three-lantern feature at `14f128619267e2da81b4108ece2de4da07b50359` has no blocker in the scoped source/core/native-image review. The eight authored targets and all puzzle data retain their accepted values. [Independent review](../reviews/three-lanterns/INDEPENDENT_REVIEW.md) · [Implementation verification](../reviews/three-lanterns/REVIEW.md)
 
-This updates the 13 November direction after the successful repair playtest. [ORCHARD_JOURNEY_01](../NEXT_TASK_ORCHARD_JOURNEY.md) implements the accepted cove's story/save continuation. Journey now has seven playable coves; all eight Practice entrances remain. Orchard shares target 13 and mastery revision 1 across both entrances. [Preparation review](../reviews/three-lanterns-preparation/REVIEW.md) · [Verified targets](../reviews/three-lanterns-preparation/TARGETS.md) · [Earlier structural diagnosis](../reviews/orchard-difficulty-review/REVIEW.md)
+This updates the 13 November direction after the successful repair playtest. [ORCHARD_JOURNEY_01](../NEXT_TASK_ORCHARD_JOURNEY.md) implements the accepted cove's story/save continuation. At that checkpoint Journey had seven playable coves and all eight Practice entrances remained. Orchard shares target 13 and mastery revision 1 across both entrances. [Preparation review](../reviews/three-lanterns-preparation/REVIEW.md) · [Verified targets](../reviews/three-lanterns-preparation/TARGETS.md) · [Earlier structural diagnosis](../reviews/orchard-difficulty-review/REVIEW.md)
 
-**Current acceptance and task · 15 November 2026.** The user positively received the latest two levels and lantern mechanic and requested the centered [ARRIVAL_BUBBLE_01](../NEXT_TASK_ARRIVAL_BUBBLE.md). Fresh independent execution of Ternhaven's production-rule audit reproduced minimum **13** and two distinct **14-action** plans. Accept **target 14 / revision 1** for Ternhaven, preserving all eight prior target/revision pairs. [Independent review](../reviews/cove-eight-practice/INDEPENDENT_REVIEW.md)
+**Current implementation · 15 November 2026.** The user positively received the latest two levels and lantern mechanic and requested the centered [ARRIVAL_BUBBLE_01](../NEXT_TASK_ARRIVAL_BUBBLE.md). Fresh independent execution of Ternhaven's production-rule audit reproduced minimum **13** and two distinct **14-action** plans. ARRIVAL_BUBBLE_01 registers **target 14 / revision 1** for Ternhaven, preserving all eight prior target/revision pairs. [Independent review](../reviews/cove-eight-practice/INDEPENDENT_REVIEW.md)
 
-Ternhaven remains the ninth independent Practice entrance, outside the seven-cove Journey. Runtime at `291d8f2a9570d833709e10815db12bd5c1fe75cc` still has no Ternhaven target; its registration is part of the arrival task. Earlier unscored rescues remain unrated because they have no saved action/Undo history. Preserve the generic unscored fallback for other unsupported entries.
+Ternhaven remains the ninth independent Practice entrance, outside the seven-cove Journey. The reviewed runtime at `291d8f2a9570d833709e10815db12bd5c1fe75cc` was unscored; the arrival implementation now includes Ternhaven as the ninth target. Earlier unscored rescues remain unrated because they have no saved action/Undo history. Preserve the generic unscored fallback for other unsupported entries.
 
 The arrival pass changes reward presentation, not cumulative scoring or acceptance rules: large current-result lanterns, all rescued animal identities, a compact result line and icon actions. Keep prior best distinct and put detailed criteria/persistence copy in an accessible disclosure. A card opening, closing or animating does not accept a result.
 
@@ -55,7 +55,7 @@ Readability is part of fairness: all required facts stay inspectable with Tips O
 
 ## 3. Twelve-cove progression
 
-The first six and repaired Orchard are accepted; Orchard's story integration is reviewed and published. Ternhaven is implemented and reviewed as independent Practice, with positive user feedback and target 14 / revision 1 accepted for registration in the arrival pass. Its Journey integration remains a separate task. C9–C12 remain design roles, not authorization to build those levels.
+The first six and repaired Orchard are accepted; Orchard's story integration is reviewed and published. Ternhaven is implemented and reviewed as independent Practice, with positive user feedback and target 14 / revision 1 registered in the arrival pass. Its Journey integration remains a separate task. C9–C12 remain design roles, not authorization to build those levels.
 
 | Cove | Intended increase or pacing role |
 | --- | --- |
@@ -66,7 +66,7 @@ The first six and repaired Orchard are accepted; Orchard's story integration is 
 | 5 — Wide Berth | Allocate passengers across limited homeward opportunities. |
 | 6 — Reef Return | Make an early load decision that changes the later approach and delivery plan. |
 | 7 — Orchard Landing, Journey and Practice | Work backward from the only outward current. The early Harbor delivery determines which neighbor can fit beside Orin in depth-three water. |
-| 8 — Ternhaven; reviewed independent Practice | Preserve retrieval access while fulfilling a linked early delivery. Minimum 13; target 14 / revision 1 accepted for registration. Journey integration remains separate. |
+| 8 — Ternhaven; reviewed independent Practice | Preserve retrieval access while fulfilling a linked early delivery. Minimum 13; target 14 / revision 1 registered. Journey integration remains separate. |
 | 9 — Drowned Orchard | Reinterpret recognizable geometry for a new waiting group and changed conditions. Earlier rescued neighbors stay safe. |
 | 10 — Lantern Reach | A compact, quiet consolidation with a real inference and an elegant efficient solution; scenery can relax without making every decision automatic. |
 | 11 — Far Shore | Peak synthesis of established load, route, staging and timing knowledge. No late exception or new mechanic. |
@@ -106,7 +106,7 @@ A target may deliberately allow several meaningful strategies. The current accep
 
 Do not publish a target until its cove and revision are accepted. Document the minimum, candidate target, a qualifying witness and the strategies it includes or excludes. Do not manufacture inefficiency or arbitrary waiting to make the second lantern seem valuable.
 
-**Accepted efficient targets · 15 November 2026.** The 14 November review reproduced the eight existing minimums and twenty-four witnesses. The fresh Ternhaven review separately reproduced minimum 13 and its three 13/14/14-action witnesses. Preserve the eight existing runtime entries; register Ternhaven's accepted target in ARRIVAL_BUBBLE_01.
+**Accepted efficient targets · 15 November 2026.** The 14 November review reproduced the eight existing minimums and twenty-four witnesses. The fresh Ternhaven review separately reproduced minimum 13 and its three 13/14/14-action witnesses. ARRIVAL_BUBBLE_01 preserves the eight existing entries and registers Ternhaven at revision 1.
 
 | Cove | Proved minimum | Efficient target |
 | --- | ---: | ---: |
@@ -118,7 +118,7 @@ Do not publish a target until its cove and revision are accepted. Document the m
 | Wide Berth | 12 | **14** |
 | Reef Return | 10 | **11** |
 | Orchard Landing | 12 | **13** |
-| Ternhaven — registration commissioned | 13 | **14** |
+| Ternhaven — independent Practice | 13 | **14** |
 
 Orchard's 13 includes its 12-action Cider Quay staging and 13-action Spring Steps retrieval. Wide and Reef likewise retain distinct longer accepted strategies. Driftwood's fifteen-action order adds a home trip after the same critical rescue plan: it earns full rescue/story credit but does not meet the twelve-action efficiency target. [Exact audit, witnesses and rationale](../reviews/three-lanterns-preparation/TARGETS.md) · [Orchard proof](../reviews/orchard-difficulty/DESIGN.md)
 
@@ -139,7 +139,7 @@ The result can say “14 actions · 2 Undos.” The target and requirements are 
 - Terminal Undo before acceptance withdraws the provisional result, increments Undo use, and leaves the win fully reversible. A later delivery recomputes the result. Previously accepted best results never decrease.
 - Preserve one actual best run's result. Prefer more lanterns, then fewer final actions, then fewer successful Undos; retain the old entry on an exact tie. Do not combine the fewest actions from one attempt with zero Undos from another to invent a better award.
 - Keep results in a separate versioned store keyed by cove identity and puzzle/scoring revision. The strict Journey schema, original-byte backups and explicit campaign continuation remain unchanged.
-- The eight existing scored Practice entries retain their targets and bests. Register `ternhaven@1` / target 14 as the ninth under ARRIVAL_BUBBLE_01; earn its first result through a new scored replay. Matching Journey/Practice revisions share bests without Practice writing Journey progress. Preserve `orchard-landing@1` / target 13. First Crossing stays independent training; Ternhaven stays independent Practice. New Journey preserves mastery.
+- The eight existing scored Practice entries retain their targets and bests. `ternhaven@1` / target 14 is the ninth under ARRIVAL_BUBBLE_01; earn its first result through a new scored replay. Matching Journey/Practice revisions share bests without Practice writing Journey progress. Preserve `orchard-landing@1` / target 13. First Crossing stays independent training; Ternhaven stays independent Practice. New Journey preserves mastery.
 - Older saves contain no action or Undo history. Keep their rescues completed and their mastery unrated until a scored replay; create no synthetic result or invented metrics. Restored Harbor worlds used for Home/story presentation are not playable attempts and cannot earn awards.
 - A mastery-storage failure leaves a usable in-session result/best and does not block play or campaign continuation. Validate data without rewriting Journey bytes. The game currently resumes at cove boundaries; any future mid-puzzle resume must carry the attempt metadata too.
 - No anti-cheat service is needed for this personal local mastery record. A genuine puzzle rebalance or scoring-target change changes its rating revision; a cosmetic change does not.
@@ -154,7 +154,7 @@ The Session keeps successful Undo history outside its rewindable State. A result
 4. **Implemented, reviewed and published:** ORCHARD_JOURNEY_01 connects the accepted puzzle with its truthful illustrated entry and explicit completed-six continuation; Site version 20 retains scoring revision and earned mastery.
 5. **Android playtest deferred by the user on 15 November:** its device and human feedback remain open.
 6. **Implemented and reviewed:** Ternhaven at `291d8f2a9570d833709e10815db12bd5c1fe75cc`; independent proof and positive user feedback support target 14 / revision 1.
-7. **Current task:** ARRIVAL_BUBBLE_01 builds the centered result presentation and registers that target. Preserve puzzle/witness files, all prior bests and the seven-cove Journey. Keep generic unscored support; do not fabricate historical Ternhaven scores.
+7. **Implemented:** ARRIVAL_BUBBLE_01 builds the centered result presentation and registers that target. Preserve puzzle/witness files, all prior bests and the seven-cove Journey. Keep generic unscored support; do not fabricate historical Ternhaven scores.
 8. Ternhaven's future Journey integration remains a separately scoped task.
 
-This guidance update changes no runtime source. The next implementation may change successful-arrival presentation and register the accepted target; it does not deploy. Preserve the source-linked reviews and historical publication records.
+The arrival implementation changes only successful-arrival presentation and registers the accepted target; it does not deploy. Preserve the source-linked reviews and historical publication records.
