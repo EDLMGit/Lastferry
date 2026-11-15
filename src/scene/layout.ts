@@ -21,6 +21,21 @@ export type SceneLayout = {
   };
 };
 const layouts: Record<string, SceneLayout> = {
+  ternhaven: {
+    landmarks: [
+      { kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-9.33, -5.34] },
+    ],
+    islandStyles: {
+      'lighthouse-island': 'refuge',
+      'high-island': 'quay',
+      'low-island': 'working',
+      'reeds-island': 'spit',
+    },
+    stonePiers: ['high-pier'],
+    centeredWaitingPairs: true,
+    cameraPosition: [3.4, 21, 32],
+    landscapeCameraPosition: [3.4, 20, 32],
+  },
   'orchard-landing': {
     landmarks: [
       { kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-9.18, -5.24] },

@@ -1,6 +1,18 @@
 # Last Ferry — Project state
 
-## Current assignment — cove eight Practice candidate · 15 November 2026
+## Current implementation — Ternhaven Practice candidate · 15 November 2026
+
+**COVE_EIGHT_PRACTICE_01** adds **Ternhaven**, an independent ninth Practice entrance at `?cove=ternhaven`. The seven-cove Journey still ends at Orchard; its order, scene player, save format, historical records and completed-seven checkpoint are unchanged. The Android playtest was explicitly deferred by the user, not passed. [Design and proof](../reviews/cove-eight-practice/DESIGN.md) · [Implementation review and evidence](../reviews/cove-eight-practice/REVIEW.md)
+
+Juniper the deer, Sedge the sheep and tan rabbit Fennel start aboard the existing six-space ferry at Tern Buoy; Willow the beaver waits at Reed Landing. High Bank stays dry. Tern Steps and Reed Landing flood after action ten. Tern Reach permits a two-space first delivery before it turns after action four, then a six-space final trip after action ten. An early placement determines whether the player can collect Willow light first or must retrieve the staged group and use the deep link. No new rule, species, boat or chapter scene is added.
+
+Production enumeration proves a **13-action minimum**, with a direct low-landing retrieval, and two distinct **14-action** approaches using High Bank or retrieving the low group first. The proposed efficient target is **14**, kept only in developer evidence pending review. Ternhaven displays **Playtest · no lantern rating**. All eight accepted mastery entries remain unchanged, including `orchard-landing@1` / target 13. Practice does not acknowledge Journey progress or write an unscored best.
+
+The existing coast, pier, reed, animal and portrait families are reused; candidate-only automatic anchors support the mixed roster. Original collision/prop test failures and subsequent repairs remain recorded. Final focused results, native phone observations, source manifest and actual rescue recording are in the review. Human difficulty, physical Android, listening and spoken screen-reader acceptance remain open.
+
+Source base is task commit `e3bef3da3f655a4c9671e0500d356a83fe96786b`, safely fast-forwarded after fetching origin. **No deployment:** the private Site remains version **20**, game `9c7a05785a021538c996f5dcd4b03415d1a35080`, hosting source `ffc5eebfd8520735b231ffe6fedf1b3a54757f9a`, with its existing private audience. [Receipt](../reviews/orchard-journey/deployment-confirmation.json). PR #1 remains draft; main is unchanged. Candidate acceptance, target/revision acceptance and any Journey integration follow separate review.
+
+## Previous assignment — cove eight Practice candidate · 15 November 2026
 
 The user's latest direction is **“Ill test on the next pass, lets continue.”** Proceed with [COVE_EIGHT_PRACTICE_01](../NEXT_TASK_COVE_EIGHT_PRACTICE.md) while deferring the seven-cove Android playtest. This supersedes the earlier sequencing gate below; the playtest, phone performance, listening and scene-pacing judgment remain unperformed.
 

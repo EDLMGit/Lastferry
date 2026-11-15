@@ -20,7 +20,15 @@ Independent production-rule enumeration and the Orin-two-space counterfactual co
 | Reef Return | Let early loading/delivery change the later approach. |
 | Orchard Landing — Journey seven and Practice | Work backward from Orin's return load to the first delivery and smaller-neighbor retrieval. |
 
-### Current task — cove eight Practice candidate
+### Current candidate — Ternhaven, Practice only
+
+Ternhaven is implemented as the ninth Practice entrance, using four new neighbors and the accepted six-space ferry. Its added inference is that the staging place changes the retrieval order and available approach: High Bank allows the group to wait while Willow is collected through shallow water; Tern Steps buys a direct deep route but floods at action ten. Sedge must first pass home while Tern Reach supports only two spaces. Completing that early delivery alone does not solve the later access problem.
+
+The production audit proves minimum **13** and two distinct **14-action** approaches. Proposed target **14** includes all three; it remains developer-only until the candidate and revision are accepted. Ternhaven is unscored and does not change the seven-cove Journey or any accepted puzzle/target. [Design, counterfactuals and exhaustive branch checks](../reviews/cove-eight-practice/DESIGN.md) · [Actual phone play and limits](../reviews/cove-eight-practice/REVIEW.md)
+
+The user deferred the seven-cove Android playtest; this is no evidence of human acceptance for C8. Journey placement and C9–C12 remain open. The following task commission is retained as history.
+
+### Task commission — cove eight Practice candidate
 
 The lantern feature at `14f128619267e2da81b4108ece2de4da07b50359` has passed its scoped independent review. The [verified target table](../reviews/three-lanterns-preparation/TARGETS.md) remains unchanged. No reward gates story; Undo stays unlimited.
 

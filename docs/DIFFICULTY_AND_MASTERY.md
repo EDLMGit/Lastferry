@@ -6,6 +6,8 @@ This updates the 13 November direction after the successful repair playtest. [OR
 
 **Current scope · 15 November 2026.** The seven-cove integration has been reviewed and published as Site version 20. The user deferred its Android playtest and authorized [COVE_EIGHT_PRACTICE_01](../NEXT_TASK_COVE_EIGHT_PRACTICE.md). This commissions one independent Practice candidate, not its Journey append or an accepted scoring target. Keep all eight accepted targets/revisions below unchanged. Report C8's minimum and proposed target in developer evidence; show the candidate as unscored until its puzzle and revision are accepted. The task scopes the necessary target-lookup guards without changing the reward contract.
 
+Ternhaven is now implemented as the ninth independent Practice entrance. Its production proof establishes minimum 13 and proposed efficient target 14, admitting the safe-bank and low/deep approaches as well as the direct low retrieval. The proposed target remains in [developer evidence](../reviews/cove-eight-practice/DESIGN.md); no mastery revision or accepted target is added. The menu and Practice list explicitly identify it as an unscored playtest. The seven Journey coves and all eight accepted scoring identities remain unchanged.
+
 ## 1. What challenge means here
 
 Last Ferry is a deterministic planning puzzle with a calm presentation. The player can think, inspect and Undo without a time limit. The challenge is assembling a plan whose **earlier decisions preserve later possibilities**.
@@ -62,7 +64,7 @@ The first six and repaired Orchard are accepted; Orchard's story integration is 
 | 5 — Wide Berth | Allocate passengers across limited homeward opportunities. |
 | 6 — Reef Return | Make an early load decision that changes the later approach and delivery plan. |
 | 7 — Orchard Landing, Journey and Practice | Work backward from the only outward current. The early Harbor delivery determines which neighbor can fit beside Orin in depth-three water. |
-| 8 — title open; Practice candidate commissioned | Preserve later retrieval access while fulfilling a linked load/delivery obligation. Prove placement and load/order dependencies under familiar rules; no Journey append yet. |
+| 8 — Ternhaven; unscored Practice candidate | Preserve later retrieval access while fulfilling a linked early delivery. Proved minimum 13 and proposed target 14; human difficulty and Journey placement await review. |
 | 9 — Drowned Orchard | Reinterpret recognizable geometry for a new waiting group and changed conditions. Earlier rescued neighbors stay safe. |
 | 10 — Lantern Reach | A compact, quiet consolidation with a real inference and an elegant efficient solution; scenery can relax without making every decision automatic. |
 | 11 — Far Shore | Peak synthesis of established load, route, staging and timing knowledge. No late exception or new mechanic. |

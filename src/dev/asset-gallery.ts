@@ -1,6 +1,6 @@
 import * as T from 'three';
 import { animal, ferry } from '../scene/models';
-import { orchardLanding, passengerName, twoShelters, wideBerth } from '../levels/level';
+import { orchardLanding, passengerName, ternhaven, twoShelters, wideBerth } from '../levels/level';
 import { deckSeat, ferryProfile, passengerScale } from '../scene/ferry-profile';
 import { passengerModelVariant, resolvePassengerAppearance } from '../game/passenger-appearance';
 import '../ui/cove-ui.css';
@@ -113,6 +113,11 @@ reefSection.id = 'reef-return';
 reefSection.className = shelterSection.className;
 reefSection.innerHTML = `<h2>Reef Return</h2><p>The six-space ferry serves Cairn Quay, Wrack Pier and Shell Pool. Pale chevrons mark Needle Reef’s permitted direction. The inner shoal offers a second approach to Harbor for a lighter boat.</p><p><a href="/?cove=reef-return">Play Reef Return</a> · ${sourceLink('reviews/existing-coves-repair/REVIEW.md', 'Phone views and rescue evidence')}</p>`;
 shelterSection.after(reefSection);
+const ternhavenSection = document.createElement('section');
+ternhavenSection.id = 'ternhaven';
+ternhavenSection.className = shelterSection.className;
+ternhavenSection.innerHTML = `<h2>Ternhaven · Practice playtest</h2><p>Juniper, Sedge, Fennel and Willow reuse the full-size chestnut deer, wool sheep, tan rabbit and brown beaver. Four modest shores share the accepted ferry, materials and five authored passages.</p><article class="panel-specimen panel-specimen--narrow"><h3>Passenger choices</h3>${choices(ternhaven.passengers.map(passenger => [passengerName(passenger.id, ternhaven), passenger.slots, ternhaven.start.aboard.includes(passenger.id), resolvePassengerAppearance(ternhaven, passenger.id)?.portraitKey ?? null]))}<p>Original 44px portraits and live choice components. This specimen is not gameplay evidence.</p><p>${masteryBadgeMarkup(null, false, false)}</p></article><p><a href="/?cove=ternhaven">Play Ternhaven</a> · <a href="#wide-ferry">Inspect automatic deck seating</a> · ${sourceLink('reviews/cove-eight-practice/REVIEW.md', 'Actual rescue and native phone evidence')}</p>`;
+reefSection.after(ternhavenSection);
 const failedPortrait = root.querySelector<HTMLImageElement>('#gallery-failed-portrait img')!;
 failedPortrait.dataset.portraitState = 'pending';
 failedPortrait.src = '/__portrait-unavailable.png';
@@ -247,7 +252,7 @@ document.querySelector('main')!.append(driftwoodLink);
 const wideSection = document.createElement('section');
 wideSection.id = 'wide-ferry';
 wideSection.className = 'cove-panel cove-surface gallery-panel';
-wideSection.innerHTML = `<h2>The six-space harbor ferry</h2><p>This gallery view uses the same rounded hull, raised bow and red wheelhouse as Wide Berth and Reef Return. One sheep and four rabbits occupy its six spaces. In play, passengers use the side gate and a short brow between the deck and the landing.</p><canvas id="gallery-wide-ferry" aria-label="Six-space yellow ferry, red wheelhouse and five neighbors" style="width:100%;height:320px;display:block"></canvas><p><a href="/?cove=wide-berth">Wide Berth</a> · <a href="/?cove=reef-return">Reef Return</a> · ${sourceLink('reviews/existing-coves-repair/REVIEW.md', 'Actual dock and sailing frames')}</p>`;
+wideSection.innerHTML = `<h2>The six-space harbor ferry</h2><p>This static design specimen uses the production hull, real models and automatic deck seats. It is not a gameplay capture. In play, passengers use the side gate and a short brow between the deck and the landing.</p><label for="gallery-ferry-roster">Deck specimen <select id="gallery-ferry-roster"><option value="wide">Wide Berth · sheep and four rabbits · 6 spaces</option><option value="ternhaven-start">Ternhaven · deer, sheep and rabbit · 6 spaces</option><option value="ternhaven-beaver">Ternhaven · deer, beaver and rabbit · 6 spaces</option></select></label><canvas id="gallery-wide-ferry" aria-label="Six-space yellow ferry, red wheelhouse and five neighbors" style="width:100%;height:320px;display:block"></canvas><p><a href="/?cove=wide-berth">Wide Berth</a> · <a href="/?cove=reef-return">Reef Return</a> · <a href="/?cove=ternhaven">Ternhaven</a> · ${sourceLink('reviews/existing-coves-repair/REVIEW.md', 'Actual dock and sailing frames')}</p>`;
 root.append(wideSection);
 const wideCanvas = wideSection.querySelector<HTMLCanvasElement>('canvas')!;
 const wideRenderer = new T.WebGLRenderer({ canvas: wideCanvas, antialias: true });
@@ -263,16 +268,31 @@ wideSun.position.set(-8, 16, 7);
 wideScene.add(wideSun);
 const wideModel = ferry(ferryProfile(wideBerth));
 wideScene.add(wideModel);
-for (const id of ['alder', 'poppy', 'wren', 'sorrel', 'finch']) {
-  const passenger = wideBerth.passengers.find((p) => p.id === id)!;
-  const figure = animal(passenger.species, passengerModelVariant(wideBerth, id));
-  figure.scale.set(...passengerScale(passenger.species));
-  figure.position.copy(deckSeat(wideBerth, id));
-  wideModel.add(figure);
+const galleryPassengers = new T.Group();
+wideModel.add(galleryPassengers);
+function setGalleryRoster(value: string) {
+  galleryPassengers.traverse(object => { if (object instanceof T.Mesh) object.geometry.dispose(); });
+  galleryPassengers.clear();
+  const level = value === 'wide' ? wideBerth : ternhaven;
+  const ids = value === 'wide' ? ['alder', 'poppy', 'wren', 'sorrel', 'finch']
+    : value === 'ternhaven-start' ? ternhaven.start.aboard : ['juniper', 'willow', 'fennel'];
+  for (const id of ids) {
+    const passenger = level.passengers.find(p => p.id === id)!;
+    const figure = animal(passenger.species, passengerModelVariant(level, id));
+    figure.scale.set(...passengerScale(passenger.species));
+    figure.position.copy(deckSeat(level, id));
+    galleryPassengers.add(figure);
+  }
+  wideCanvas.setAttribute('aria-label', `${level.title}: six-space ferry with ${ids.map(id => passengerName(id, level)).join(', ')}`);
 }
+setGalleryRoster('wide');
 const wideCamera = new T.OrthographicCamera();
 wideCamera.position.set(7, 4.5, 8);
 wideCamera.lookAt(0, 0.55, 0);
+wideSection.querySelector<HTMLSelectElement>('select')!.onchange = event => {
+  setGalleryRoster((event.currentTarget as HTMLSelectElement).value);
+  wideRenderer.render(wideScene, wideCamera);
+};
 const wideResize = new ResizeObserver((entries) => {
   for (const entry of entries) {
     const { width, height } = entry.contentRect;

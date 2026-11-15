@@ -6,6 +6,7 @@ import wideData from '../../data/wide-berth.level.json' with { type: 'json' };
 import sheltersData from '../../data/two-shelters.level.json' with { type: 'json' };
 import reefData from '../../data/reef-return.level.json' with { type: 'json' };
 import orchardData from '../../data/orchard-landing.level.json' with { type: 'json' };
+import ternhavenData from '../../data/ternhaven.level.json' with { type: 'json' };
 export type CurrentPhase = { tideLevel: number; from: string; to: string };
 export type Passage = (typeof data.edges)[number] & {
   current?: { name: string; phases: CurrentPhase[] };
@@ -45,6 +46,7 @@ export function checkCurrents(l: Level): Level {
 }
 export const reefReturn = checkCurrents(reefData);
 export const orchardLanding = checkCurrents(orchardData);
+export const ternhaven = checkCurrents(ternhavenData);
 export const nodeNames: Record<string, string> = {
   harbor: 'Harbor',
   cut: 'Shallow Cut',

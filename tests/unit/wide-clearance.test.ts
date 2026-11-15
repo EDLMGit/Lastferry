@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { Box3, Group, InstancedMesh, Matrix4, Mesh, Vector3 } from 'three';
-import { wideBerth, reefReturn, orchardLanding } from '../../src/levels/level';
+import { wideBerth, reefReturn, orchardLanding, ternhaven } from '../../src/levels/level';
 import { animal, ferry, lighthouse } from '../../src/scene/models';
 import {
   ferryProfile,
@@ -16,7 +16,7 @@ import { createPier, isWalkableAt } from '../../src/scene/pier';
 import { sceneLayout } from '../../src/scene/layout';
 import { islandCenter, shoreContour, createShoreRocks } from '../../src/scene/shore';
 import { createReefPassage } from '../../src/scene/reef';
-import { cottage, decorateOrchardIsland, decorateReefIsland, decorateWideIsland, orchardTree, wideWaterfront } from '../../src/scene/scenery';
+import { cottage, decorateOrchardIsland, decorateReefIsland, decorateWideIsland, decorateTernhavenIsland, orchardTree, wideWaterfront } from '../../src/scene/scenery';
 import { passengerModelVariant } from '../../src/game/passenger-appearance';
 import { getLevelPaths, samplePath } from '../../src/scene/paths';
 import { berthHeading, initialHeading, planJourney, sampleJourney } from '../../src/scene/motion';
@@ -69,7 +69,7 @@ function segmentDistance(p: P, a: P, b: P) {
   const t = span ? Math.max(0, Math.min(1, ((p[0] - a[0]) * x + (p[1] - a[1]) * z) / span)) : 0;
   return Math.hypot(p[0] - a[0] - t * x, p[1] - a[1] - t * z);
 }
-describe.each([wideBerth, reefReturn, orchardLanding])('$title physical clearances', (level) => {
+describe.each([wideBerth, reefReturn, orchardLanding, ternhaven])('$title physical clearances', (level) => {
 test('occupied real modeled hull clears land and piers at every reachable heading in both directions', () => {
   const profile = ferryProfile(level),
     model = ferry(profile);
@@ -242,6 +242,7 @@ test('compact waiting groups and actual transfer bodies clear each rendered shor
       style = layout.islandStyles[island.id],
       group = new Group();
     if (level.id === 'orchard-landing') decorateOrchardIsland(group, island, style);
+    else if (level.id === 'ternhaven') decorateTernhavenIsland(group, island, style);
     else if (level.id === 'reef-return') decorateReefIsland(group, island, style);
     else decorateWideIsland(group, island, style);
     group.add(createShoreRocks(island, style));

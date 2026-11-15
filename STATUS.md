@@ -1,3 +1,15 @@
+# Ternhaven Practice candidate · 15 November 2026
+
+**COVE_EIGHT_PRACTICE_01** implements a ninth independent Practice entrance, [Ternhaven](http://127.0.0.1:5270/?cove=ternhaven), while preserving the seven-cove Journey and all eight accepted lantern identities. The new four-body roster reuses the existing six-space boat and species. Stage Juniper and Fennel, fulfill the early delivery, then preserve the right retrieval route before the low landings flood.
+
+The production reducer proves a 13-action minimum and two distinct 14-action strategies. Proposed target 14 is developer-only; the candidate is explicitly unscored. Exact branch exhaustion, isolated counterfactuals, Session replays and Undo recovery are retained in the [design](reviews/cove-eight-practice/DESIGN.md). Actual phone verification, original failures, source identity and rescue evidence are in the [review](reviews/cove-eight-practice/REVIEW.md).
+
+The initial spatial checks caught a course intersecting reef rocks, a turning hull clipping a pier and decorative shore overlap. Candidate routes/props were corrected; accepted hull, animal scale, collision checks and earlier coves were preserved. Build/TypeScript, all 81 asset families and 226 focused unit tests pass. All six distinct browser cases pass after correcting three test-only passenger-order assertions; the original failures remain. Actual high-bank14, low/deep14 and recovered low/direct13 rescues verify the choices, tide/terminal Undo and save isolation. Native phone/desktop frames and an uninterrupted 70.8-second normal-motion rescue with unchanged runtime audio are retained in the review. Maximum delivered-frame gap is 0.3833 seconds; this is not a physical-device performance result.
+
+Android testing remains explicitly deferred. Human difficulty and visual acceptance are pending. No deployment: Site version20/game `9c7a05785a021538c996f5dcd4b03415d1a35080`, hosting `ffc5eebfd8520735b231ffe6fedf1b3a54757f9a`, existing private audience unchanged. The normal branch push and draft PR #1 handoff are separate from publication; main stays unchanged.
+
+## Previous task commission
+
 # Cove eight Practice candidate commissioned · 15 November 2026
 
 **Current assignment: [COVE_EIGHT_PRACTICE_01](NEXT_TASK_COVE_EIGHT_PRACTICE.md).** The user has deferred the seven-cove Android playtest and asked to continue. The earlier wait-for-playtest gate is superseded; no Android acceptance is recorded.

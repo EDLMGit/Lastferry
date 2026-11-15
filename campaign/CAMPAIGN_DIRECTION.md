@@ -29,12 +29,14 @@ The ferry actually starts empty beside Pomme and Medlar at Spring Steps; Orin wa
 
 Keep earned Practice mastery under the same `orchard-landing@1` identity. Rescue earns full story progression at any rating. The new endpoint must say that seven available coves are safe, without presenting the final supper or claiming the twelve-cove journey is finished. The integration has been reviewed and published. On 15 November the user deferred the Android playtest and authorized [COVE_EIGHT_PRACTICE_01](../NEXT_TASK_COVE_EIGHT_PRACTICE.md): a separate Practice candidate with two linked placement/access and load/order decisions. Its puzzle, proposed target and phone presentation must be reviewed before Journey integration. No new phone acceptance or implementation is claimed by this commission; publication remains separate.
 
-### Remaining story roles — C8 candidate commissioned; later roles provisional
+### Remaining story roles — Ternhaven candidate implemented; later roles provisional
+
+Ternhaven now adds a ninth independent Practice entrance only. Juniper, Sedge, Fennel and Willow are new neighbors using existing species; previously rescued characters remain safe. Its temporary landing and retrieval/load problem is production-proved and awaiting human playtest. The root Journey, seven scenes and save identities remain unchanged. There is no Ternhaven story scene in this pass. Proposed target 14 remains developer-only; the player sees an unscored playtest. [Candidate design and evidence](../reviews/cove-eight-practice/REVIEW.md)
 
 | Intended cove | Story purpose | Difficulty purpose |
 | --- | --- | --- |
 | **7 — Orchard Landing, implemented** | Meet Orin beyond the familiar headland. | The load on Orin’s return determines whom to bring home first. Character and puzzle accepted; story integration reviewed and published, new Android playtest deferred. |
-| **8 — title open** | Carry the lesson farther along the channel. | [Practice candidate commissioned](../NEXT_TASK_COVE_EIGHT_PRACTICE.md): preserve later retrieval access while fulfilling a linked load/delivery obligation. Exact layout and target require proof; no Journey append yet. |
+| **8 — Ternhaven, Practice candidate** | Carry the lesson farther along the channel; story treatment awaits acceptance. | Preserve retrieval access while fulfilling the early delivery. Minimum 13, proposed target 14; two distinct 14-action plans. Unscored, no Journey append. |
 | **9 — Drowned Orchard** | Recognize the orchard under changed water, with a different waiting group. Orin remains safe. | Reinterpret familiar landmarks and established rules rather than repeat Orin's rescue. |
 | **10 — Lantern Reach** | See the welcome at the refuge taking shape. | Compact, quiet consolidation with a real inference and an elegant efficient solution. |
 | **11 — Far Shore** | Retrieve the hardest remaining group. | Peak synthesis of known rules, full information and no late exception. |

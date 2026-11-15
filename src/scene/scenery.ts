@@ -112,6 +112,14 @@ export function decorateWideIsland(
   return group;
 }
 
+export function decorateTernhavenIsland(group: T.Group, island: Level['world']['islands'][number], style: IslandStyle) {
+  if (style !== 'spit') return decorateWideIsland(group, island, style);
+  const accents = decorateReefIsland(new T.Group(), { ...island, id: 'pool-island' }, style);
+  accents.position.z = -0.55;
+  group.add(accents);
+  return group;
+}
+
 export function decorateReefIsland(group: T.Group, island: Level['world']['islands'][number], style: IslandStyle) {
   const {x, y: z} = islandCenter(island);
   const y = island.elevation * 0.18;

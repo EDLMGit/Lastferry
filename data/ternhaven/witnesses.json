@@ -1,0 +1,363 @@
+{
+  "levelId": "ternhaven",
+  "witnesses": [
+    {
+      "id": "safe-high-bank",
+      "actions": [
+        {
+          "type": "move",
+          "to": "high"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "fennel",
+            "juniper"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "fork"
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "sedge"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "fork"
+        },
+        {
+          "type": "move",
+          "to": "reeds"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "willow"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "fork"
+        },
+        {
+          "type": "move",
+          "to": "high"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "fennel",
+            "juniper"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "fork"
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "fennel",
+            "juniper",
+            "willow"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "low-deep-first",
+      "actions": [
+        {
+          "type": "move",
+          "to": "low"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "fennel",
+            "juniper"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "fork"
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "sedge"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "fork"
+        },
+        {
+          "type": "move",
+          "to": "low"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "fennel",
+            "juniper"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "reeds"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "willow"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "low"
+        },
+        {
+          "type": "move",
+          "to": "fork"
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "fennel",
+            "juniper",
+            "willow"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "low-direct-return",
+      "actions": [
+        {
+          "type": "move",
+          "to": "low"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "fennel",
+            "juniper"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "fork"
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "sedge"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "fork"
+        },
+        {
+          "type": "move",
+          "to": "reeds"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "willow"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "low"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "fennel",
+            "juniper"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "fork"
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "fennel",
+            "juniper",
+            "willow"
+          ]
+        }
+      ]
+    }
+  ],
+  "losingAlternatives": [
+    {
+      "id": "low-return-via-buoy",
+      "firstNoWinningContinuationTurn": 9,
+      "recoveryToTurn": 8,
+      "recoveryWitness": "low-direct-return",
+      "actions": [
+        {
+          "type": "move",
+          "to": "low"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "fennel",
+            "juniper"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "fork"
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "sedge"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "fork"
+        },
+        {
+          "type": "move",
+          "to": "reeds"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "willow"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "fork"
+        },
+        {
+          "type": "move",
+          "to": "low"
+        }
+      ]
+    },
+    {
+      "id": "wrong-early-load",
+      "firstNoWinningContinuationTurn": 2,
+      "recoveryToTurn": 1,
+      "recoveryWitness": "safe-high-bank",
+      "actions": [
+        {
+          "type": "move",
+          "to": "high"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "juniper"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "fork"
+        },
+        {
+          "type": "wait"
+        }
+      ]
+    },
+    {
+      "id": "high-heavy-first",
+      "firstNoWinningContinuationTurn": 8,
+      "recoveryToTurn": 7,
+      "recoveryWitness": "safe-high-bank",
+      "actions": [
+        {
+          "type": "move",
+          "to": "high"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "fennel",
+            "juniper"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "fork"
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "sedge"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "fork"
+        },
+        {
+          "type": "move",
+          "to": "high"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "fennel",
+            "juniper"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "fork"
+        },
+        {
+          "type": "wait"
+        }
+      ]
+    }
+  ]
+}

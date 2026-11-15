@@ -659,7 +659,7 @@ function renderJourneyDialog() {
       practiceCoves
         .map(
           (entry) =>
-            `<button class="cove-button cove-button--quiet practice-row" data-practice="${entry.id}" id="practice-${entry.id}"><span class="practice-title">${entry.title}</span>${masteryBadgeMarkup(mastery.best(entry.id), journey?.snapshot.record?.completed.some(id => id === entry.id))}</button>`,
+            `<button class="cove-button cove-button--quiet practice-row" data-practice="${entry.id}" id="practice-${entry.id}"><span class="practice-title">${entry.title}</span>${masteryBadgeMarkup(mastery.best(entry.id), journey?.snapshot.record?.completed.some(id => id === entry.id), Object.hasOwn(masteryTargets, entry.id))}</button>`,
         )
         .join('') + '<button id="journey-title">Back to title</button>';
   } else if (mode === 'replace') {
@@ -1356,8 +1356,11 @@ function renderDialog() {
       `${header('Crossing menu')}<div class="dialog-body menu-body">${s.status === 'won' ? '<button id="return-arrival">Return to arrival</button>' : ''}<div class="menu-actions"><button id="restart">Restart crossing</button><button id="settings">Settings</button></div><label class="cove-picker">Choose cove<select id="cove-picker">${practiceCoves.map((l) => `<option value="${l.id}" ${l.id === level.id ? 'selected' : ''}>${l.title}${l.id === baseline.id ? ' · baseline' : ''}</option>`).join('')}</select></label><details id="help-details"><summary>How to play · actions and depth</summary><p>${actionCostCopy(level)}</p><p>Select a named place, island, pier or landmark to see its options for free. Choose Sail to travel one passage. Select the ferry for its current place. A named single-passenger action acts directly. For several passengers, choose names in the nearby chooser, then use its named action. Select your current place for free transfer details. The chooser shows the selected load and depth. Tips in Settings adds predicted outcomes and warnings before losing actions. Tips starts Off. Route depths, currents, pier deadlines and the forecast are always available.</p><p>Boat depth needed: ${draftBandsCopy(level)}. ${passengerCosts}. A passage must be at least as deep as the boat needs.</p><p>Boarding and unloading happen before the tide rises. Use the status button for the tide and pier forecast. Undo earlier actions or restart to recover from a losing plan.</p><p>Tab and Shift+Tab move between controls; Enter or Space activates them. Escape closes a dialog first; press it again to close the location card. Selection never spends an action.</p></details></div>`;
 
     $('restart').onclick = restart;
+    const rating = Object.hasOwn(masteryTargets, level.id) ? masteryTargets[level.id] : null;
     document.querySelector('.menu-body')!.insertAdjacentHTML(
-      'beforeend', masteryCriteriaMarkup(masteryTargets[level.id].target, level.title) + masteryNotice(),
+      'beforeend', rating
+        ? masteryCriteriaMarkup(rating.target, level.title) + masteryNotice()
+        : '<p class="mastery-unrated">Playtest · no lantern rating</p>',
     );
 
     {
@@ -1369,7 +1372,8 @@ function renderDialog() {
       $('settings').closest('.menu-actions')!.after(returnButton);
       returnButton.onclick = () => showJourney('return-title', 'journey-return-cancel');
       const policy = document.createElement('p');
-      policy.textContent = 'Practice does not change your journey. Continuing, leaving or restarting after a rescue keeps its lantern result.';
+      policy.textContent = 'Practice does not change your journey.' +
+        (rating ? ' Continuing, leaving or restarting after a rescue keeps its lantern result.' : '');
       if (campaignPlay) {
         policy.textContent = journey?.snapshot.persistent
           ? 'Progress is saved between coves. An unfinished cove starts again. Continue story after arrival to advance. Continuing, leaving or restarting keeps the lantern result.'

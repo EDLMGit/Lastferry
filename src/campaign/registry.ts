@@ -6,6 +6,7 @@ import {
   twoShelters,
   reefReturn,
   orchardLanding,
+  ternhaven,
   level as firstCrossing,
   type Level,
 } from '../levels/level';
@@ -250,6 +251,7 @@ export const practiceCoves = [
   twoShelters,
   reefReturn,
   orchardLanding,
+  ternhaven,
 ] as const;
 
 export function storyCove(id: string): StoryCove | undefined {

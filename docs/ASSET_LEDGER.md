@@ -1,5 +1,15 @@
 # Last Ferry asset provenance and history
 
+## COVE_EIGHT_PRACTICE_01 — Ternhaven
+
+Ternhaven is an independent Practice candidate using thirteen existing families. All 81 catalog IDs, existing animal geometry, portrait outputs and accepted family variants remain. Juniper uses the chestnut deer, Sedge the wool sheep, Fennel the tan rabbit and Willow the brown beaver. They are distinct level-owned identities; Orin and the earlier neighbors retain their names and appearances. The gallery uses the real 44px portrait choice component and offers the existing ferry specimen with both legal Ternhaven six-space rosters. These static specimens are not gameplay evidence.
+
+`data/ternhaven.level.json` authors four shores, five passages, supported staging landings and the existing tide/current rules. `src/scene/layout.ts` places the Harbor lighthouse and composes refuge, quay, working and spit silhouettes. `decorateTernhavenIsland()` in `src/scene/scenery.ts` delegates three shores to the existing Wide decoration factory; Reed Landing reuses the compressed Reef pool reeds and shells with a local 0.55-unit rearward offset. Earlier factories and level compositions are preserved. No new scenery family, species, recording, raster, shader, boat model or story scene is introduced.
+
+`src/scene/ferry-profile.ts` supplies candidate-only stable automatic deck seats and compact four-body shore anchors. The deer keeps the accepted bow pose, the two heavy neighbors have opposite stern anchors, and the rabbit uses the free bow side. The existing fitted landing and short brow support transfers through the assigned aisle. The candidate shares the production controls and carries a truthful unscored Practice badge; the eight accepted mastery targets are unchanged.
+
+The inventory records each candidate use separately from prior acceptance. Mechanical proof, exhaustive geometry tests and internal phone inspection do not constitute human acceptance of the puzzle or its composition. The seven-cove Journey and its save identities are unchanged. No deployment is performed. [Candidate review and actual evidence](../reviews/cove-eight-practice/REVIEW.md) · [Canonical inventory](../assets/catalog.json) · [Gallery source](../src/dev/asset-gallery.ts)
+
 ## Three lanterns
 
 The original `ui.mastery-lanterns` family adds a small upright SVG lantern with a rounded handle, metal frame and warm filled glass. Earned lanterns contain a flame and filled glass; unearned lanterns retain the hollow frame. The glyph, compact result, Practice badge and native target disclosure share `src/ui/lanterns.ts` and `src/ui/lanterns.css`. The result's live text supplies the accessible count and run statistics. The developer gallery uses the same helpers for bounded design specimens. All 80 earlier family IDs remain. Actual phone results and the new family's visual acceptance are recorded separately. [Source](../assets/ui/mastery-lantern.svg) · [Review](../reviews/three-lanterns/REVIEW.md)
