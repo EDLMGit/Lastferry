@@ -1,3 +1,15 @@
+# Ternhaven reviewed; centered arrival next · 15 November 2026
+
+**Current task: [ARRIVAL_BUBBLE_01](NEXT_TASK_ARRIVAL_BUBBLE.md).** The user approves the latest puzzle/lantern direction and requests a centered floating mobile arrival card with large original lanterns, the full rescued cast and clear icon actions. Their third supplied reference guides the structure; Last Ferry retains its coastal identity.
+
+Independent exact-source review at `291d8f2a9570d833709e10815db12bd5c1fe75cc` reproduced the 13-action minimum, both distinct 14-action routes, losing-branch exhaustion, counterfactuals and Session recovery. **Target 14 / revision 1 is accepted for the next implementation.** Ternhaven's puzzle and Practice-only placement remain intact. [Independent review](reviews/cove-eight-practice/INDEPENDENT_REVIEW.md)
+
+This commit adds review evidence and guidance only. Runtime currently has seven Journey coves, nine Practice entrances and eight scoring targets; the named pass registers Ternhaven as the ninth without backfilling old results. Its centered card must retain complete Undo and existing acceptance/navigation semantics.
+
+Two committed native arrival frames were inspected; broad build/unit/browser results remain the contributor's reported checks. Positive feedback does not certify new physical Android, listening or spoken screen-reader results. Site version20/game `9c7a05785a021538c996f5dcd4b03415d1a35080` and existing audience remain unchanged. No deployment; PR #1 draft, main unchanged.
+
+## Previous implementation handoff
+
 # Ternhaven Practice candidate · 15 November 2026
 
 **COVE_EIGHT_PRACTICE_01** implements a ninth independent Practice entrance, [Ternhaven](http://127.0.0.1:5270/?cove=ternhaven), while preserving the seven-cove Journey and all eight accepted lantern identities. The new four-body roster reuses the existing six-space boat and species. Stage Juniper and Fennel, fulfill the early delivery, then preserve the right retrieval route before the low landings flood.

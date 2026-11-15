@@ -1,6 +1,20 @@
 # Last Ferry — Project state
 
-## Current implementation — Ternhaven Practice candidate · 15 November 2026
+## Current assignment — centered arrival bubble · 15 November 2026
+
+The user reports **“Good job overall, on the last 2 levels and the lantern mechanic”** and requests a centered floating end-of-cove bubble with prominent lanterns, proper option icons and a rescued-animal showcase. The third supplied mobile-game reference is the structural preference. [ARRIVAL_BUBBLE_01](../NEXT_TASK_ARRIVAL_BUBBLE.md) is the new scoped task; preserve our coastal visual identity and the accepted puzzle direction.
+
+**Ternhaven is reviewed within the recorded scope.** A fresh exact-source execution at `291d8f2a9570d833709e10815db12bd5c1fe75cc` reproduced 347 canonical states / 874 transitions, minimum 13, all three 13/14/14-action Session witnesses, meaningful losing branches, independent counterfactuals and Undo recovery. No scoped blocker was found. The user's positive feedback and that proof support **target 14 / revision 1**, now accepted for registration during the arrival pass. This guidance commit does not itself add the target to runtime. [Independent review](../reviews/cove-eight-practice/INDEPENDENT_REVIEW.md) · [Fresh audit](../reviews/cove-eight-practice/INDEPENDENT_AUDIT_RESULTS.json)
+
+The new result centers within the safe visible rectangle in portrait and short landscape, gives the lanterns a larger original treatment, shows every required rescued identity including early deliveries, and uses clear forward/Replay actions with reachable Undo, Settings and Close. Detailed rules/best/persistence copy moves into a quiet disclosure. Preserve native dialog/fullscreen and exact provisional acceptance boundaries; no result is accepted merely by closing the card. Stable bounds prevent the camera from chasing the result.
+
+Current runtime contains **seven Journey coves, nine Practice entrances and eight registered scoring targets**. The implementation should register Ternhaven as the ninth scored entry without inventing historical results, changing puzzle data or appending the Journey. Earlier bests, Orchard target 13 / revision 1, original-byte backups, accepted audio/water/ferry and complete Undo remain protected.
+
+Root review also inspected the two committed Ternhaven arrival frames at native 390×844 and 780×320: the current result sits low in portrait and on the right in landscape, with no prominent reward/cast composition. These are inspected contributor captures, not a fresh browser or physical-device run. The 226-unit, six-browser, build and asset results remain contributor evidence. Physical Android, listening and spoken screen-reader checks remain open.
+
+Local Codex implements the named task, then ChatGPT reviews and publishes separately. No deployment accompanies this guidance/review update. The recorded live Site remains **version 20**, game `9c7a05785a021538c996f5dcd4b03415d1a35080`, hosting source `ffc5eebfd8520735b231ffe6fedf1b3a54757f9a`, with its existing custom private audience. PR #1 remains draft and GitHub main unchanged.
+
+## Previous implementation — Ternhaven Practice candidate · 15 November 2026
 
 **COVE_EIGHT_PRACTICE_01** adds **Ternhaven**, an independent ninth Practice entrance at `?cove=ternhaven`. The seven-cove Journey still ends at Orchard; its order, scene player, save format, historical records and completed-seven checkpoint are unchanged. The Android playtest was explicitly deferred by the user, not passed. [Design and proof](../reviews/cove-eight-practice/DESIGN.md) · [Implementation review and evidence](../reviews/cove-eight-practice/REVIEW.md)
 

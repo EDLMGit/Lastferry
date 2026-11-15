@@ -2,7 +2,7 @@
 
 ## Current continuity · 15 November 2026
 
-The Orchard integration is independently reviewed and published as Site version 20. The user has deferred the new seven-cove Android playtest and authorized [COVE_EIGHT_PRACTICE_01](../NEXT_TASK_COVE_EIGHT_PRACTICE.md). That pass commissions a new independent Practice puzzle only: no C8 illustrated entry, Journey append, save migration or new supper scene. Current story content remains seven coves. Its phone scene pacing, listening and physical-device judgments remain open. [Current state](../docs/PROJECT_STATE.md) · [Publication review](../reviews/orchard-journey/PUBLICATION_REVIEW.md)
+The Orchard integration is independently reviewed and published as Site version 20. Ternhaven is now implemented and reviewed as independent Practice, with target 14 / revision 1 accepted for registration. The user positively received the latest levels and requests [ARRIVAL_BUBBLE_01](../NEXT_TASK_ARRIVAL_BUBBLE.md): centered successful-result presentation with lanterns, rescued animals and clear icon actions. This adds no C8 illustrated entry, Journey append, migration or supper scene. Current story content remains seven coves. New physical-device, listening and spoken screen-reader checks are not claimed. [Current state](../docs/PROJECT_STATE.md) · [Independent Ternhaven review](../reviews/cove-eight-practice/INDEPENDENT_REVIEW.md)
 
 ## Implemented Orchard encounter · 14 November 2026
 

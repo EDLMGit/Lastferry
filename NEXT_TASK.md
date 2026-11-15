@@ -1,8 +1,10 @@
 # Last Ferry — active task
 
-**15 November 2026: [COVE_EIGHT_PRACTICE_01](NEXT_TASK_COVE_EIGHT_PRACTICE.md).** Implement one proved, compact Practice candidate for intended cove eight. The user has deferred the seven-cove Android playtest and authorized continuation; no new playtest result is implied. Read the named task and current `AGENTS.md` / `docs/PROJECT_STATE.md`.
+**15 November 2026: [ARRIVAL_BUBBLE_01](NEXT_TASK_ARRIVAL_BUBBLE.md).** Build the centered floating mobile arrival card with large lanterns, all rescued animals and clear icon actions. Register the independently reviewed Ternhaven target 14 / revision 1 while preserving the other eight targets, puzzles, earned bests and seven-cove Journey.
 
-The existing Journey remains seven coves. The named task preserves accepted puzzles, scoring, saves and presentation; its candidate target remains a proposal until acceptance. Local Codex implements and hands off for ChatGPT review. Keep PR #1 draft and main unchanged; no implementation-pass deployment.
+COVE_EIGHT_PRACTICE_01 is implemented at `291d8f2a9570d833709e10815db12bd5c1fe75cc`; do not repeat its authoring. Read the named task, current `AGENTS.md` and active `docs/PROJECT_STATE.md`. The user has approved the current puzzle/reward direction and requested this UI refinement.
+
+Local Codex implements and returns evidence for ChatGPT review. Preserve newer work, keep PR #1 draft and main unchanged. No implementation-pass deployment.
 
 ## Historical audio brief — completed and superseded
 

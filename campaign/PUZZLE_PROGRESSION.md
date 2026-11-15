@@ -20,13 +20,13 @@ Independent production-rule enumeration and the Orin-two-space counterfactual co
 | Reef Return | Let early loading/delivery change the later approach. |
 | Orchard Landing — Journey seven and Practice | Work backward from Orin's return load to the first delivery and smaller-neighbor retrieval. |
 
-### Current candidate — Ternhaven, Practice only
+### Reviewed Ternhaven — Practice only; arrival UI next
 
 Ternhaven is implemented as the ninth Practice entrance, using four new neighbors and the accepted six-space ferry. Its added inference is that the staging place changes the retrieval order and available approach: High Bank allows the group to wait while Willow is collected through shallow water; Tern Steps buys a direct deep route but floods at action ten. Sedge must first pass home while Tern Reach supports only two spaces. Completing that early delivery alone does not solve the later access problem.
 
-The production audit proves minimum **13** and two distinct **14-action** approaches. Proposed target **14** includes all three; it remains developer-only until the candidate and revision are accepted. Ternhaven is unscored and does not change the seven-cove Journey or any accepted puzzle/target. [Design, counterfactuals and exhaustive branch checks](../reviews/cove-eight-practice/DESIGN.md) · [Actual phone play and limits](../reviews/cove-eight-practice/REVIEW.md)
+A fresh independent production audit reproduced minimum **13** and two distinct **14-action** approaches. The user positively received the latest two levels and lantern mechanic. Accept **target 14 / revision 1** for registration in [ARRIVAL_BUBBLE_01](../NEXT_TASK_ARRIVAL_BUBBLE.md), which adds the centered reward/animal result presentation. Runtime at 291d8f2 is still unscored; the new task implements its first rating. Preserve the puzzle/witnesses, seven-cove Journey and all previous targets/bests. [Independent review](../reviews/cove-eight-practice/INDEPENDENT_REVIEW.md) · [Design](../reviews/cove-eight-practice/DESIGN.md) · [Implementation evidence](../reviews/cove-eight-practice/REVIEW.md)
 
-The user deferred the seven-cove Android playtest; this is no evidence of human acceptance for C8. Journey placement and C9–C12 remain open. The following task commission is retained as history.
+The user's new feedback accepts the current puzzle/reward direction and requests arrival presentation refinement. It does not establish a new physical-device, acoustic or spoken screen-reader check. Journey integration and C9–C12 remain separate. The following C8 commission is retained as history.
 
 ### Task commission — cove eight Practice candidate
 

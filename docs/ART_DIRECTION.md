@@ -1,5 +1,17 @@
 # Last Ferry — Art Direction
 
+## Current assignment — centered arrival bubble · 15 November 2026
+
+The user likes the latest levels and lantern mechanic and wants a centered floating mobile end-of-cove card. Their preferred reference puts rewards over a framed character showcase and large actions below. [ARRIVAL_BUBBLE_01](../NEXT_TASK_ARRIVAL_BUBBLE.md) translates that hierarchy into Last Ferry's own rounded teal panel, ivory type, warm brass lanterns, sea-glass controls and restrained coastal detail.
+
+Make the three current-result lanterns prominent. Place every rescued neighbor together using the accepted portraits and real names, including earlier Harbor deliveries. Three-, four- and six-animal groups must remain recognizable; use two rows where needed. A welcoming portrait group gives clear identity even when the 3D Harbor group overlaps in the backdrop. Keep current versus prior-best rewards distinct.
+
+Use a short greeting, actual cove name, one compact action/Undo line, clear forward and Replay controls, and quieter Undo, Settings, Close and Details. Add a true replay icon distinct from Undo. Detailed rule/save-policy prose stays accessible in Details; actual storage-failure notices remain clear. Reuse and refine original art families rather than importing the supplied reference artwork.
+
+Center the entire visible bubble/crown within measured safe bounds in portrait and short landscape. Recompose landscape within one wider card; maintain space around it, readable text and touch targets. Keep the outer measured bounds stable so the camera does not chase animation. A short cancellable settle/lantern-lighting sequence can support the existing arrival sound; Reduced Motion is immediately settled. Ordinary action previews retain their local placement.
+
+This is a successful-result presentation task, with Ternhaven target 14 / revision 1 also commissioned. Accepted water, boat, sailing, audio, lighthouse, puzzles and story remain. No copied stars/coins/social bar, new species, failure-screen redesign or new Journey chapter is part of this pass.
+
 ## Orin and the orchard
 
 Orin’s four hooves, cream muzzle, spotted chestnut coat and short forked antlers define his silhouette. The compact body uses the same world scale as the sheep. Keep the branches behind the waiting place and leave open water around the brow. The 44px choice portrait comes from the same deer model. [Model and portrait provenance](../assets/portraits/deer-manifest.json)
@@ -174,7 +186,7 @@ The beam stays one decorative draw object excluded from picking and scene-fit bo
 
 After canonical disembarkation, rabbits make one small staggered hop and sheep a grounded bob, settling within 1.3 seconds. A one-second orthographic push toward Harbor tries 9% magnification, clamping against the full lighthouse, ferry, passengers and actual compact ending card. At 320-pixel phone height the stable ordinary camera is retained. Reduced motion keeps canonical framing and poses; turning normal motion back on never replays the finite gesture.
 
-The ending uses one short line and a two-column action group. Holding progresses to Bellwater; other coves offer the real cove chooser. Menu can return to the arrival. Shared Settings uses the same native dialog for Sound and Motion, with Follow device or Reduced and Back to its origin. The won composition hides map controls until Undo restores canonical framing and repositions them.
+The previous ending used a short line and a two-column action group. ARRIVAL_BUBBLE_01 replaces its won-state layout with the centered composition specified above while retaining real navigation: Journey continuation, the existing Holding-to-Bellwater Practice route, or the cove chooser. Menu can return to arrival. Shared Settings retains the same native dialog, Sound/Motion controls and Back origin. Closing a result remains distinct from accepting it; Undo restores canonical gameplay framing and controls.
 
 ## Driftwood Yard and Nell
 
