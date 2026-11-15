@@ -4,6 +4,8 @@
 
 This updates the 13 November direction after the successful repair playtest. [ORCHARD_JOURNEY_01](../NEXT_TASK_ORCHARD_JOURNEY.md) implements the accepted cove's story/save continuation. Journey now has seven playable coves; all eight Practice entrances remain. Orchard shares target 13 and mastery revision 1 across both entrances. [Preparation review](../reviews/three-lanterns-preparation/REVIEW.md) · [Verified targets](../reviews/three-lanterns-preparation/TARGETS.md) · [Earlier structural diagnosis](../reviews/orchard-difficulty-review/REVIEW.md)
 
+**Current scope · 15 November 2026.** The seven-cove integration has been reviewed and published as Site version 20. The user deferred its Android playtest and authorized [COVE_EIGHT_PRACTICE_01](../NEXT_TASK_COVE_EIGHT_PRACTICE.md). This commissions one independent Practice candidate, not its Journey append or an accepted scoring target. Keep all eight accepted targets/revisions below unchanged. Report C8's minimum and proposed target in developer evidence; show the candidate as unscored until its puzzle and revision are accepted. The task scopes the necessary target-lookup guards without changing the reward contract.
+
 ## 1. What challenge means here
 
 Last Ferry is a deterministic planning puzzle with a calm presentation. The player can think, inspect and Undo without a time limit. The challenge is assembling a plan whose **earlier decisions preserve later possibilities**.
@@ -49,7 +51,7 @@ Readability is part of fairness: all required facts stay inspectable with Tips O
 
 ## 3. Twelve-cove progression
 
-The first six and repaired Orchard are accepted. The current integration task appends Orchard's existing puzzle to Journey without changing its decisions or rating. Later rows remain design roles, not authorization to build more levels.
+The first six and repaired Orchard are accepted; Orchard's story integration is reviewed and published. C8 now has a separately commissioned Practice candidate task after the user deferred Android playtesting. Its eventual Journey placement and target still require review. C9–C12 remain design roles, not authorization to build those levels.
 
 | Cove | Intended increase or pacing role |
 | --- | --- |
@@ -60,7 +62,7 @@ The first six and repaired Orchard are accepted. The current integration task ap
 | 5 — Wide Berth | Allocate passengers across limited homeward opportunities. |
 | 6 — Reef Return | Make an early load decision that changes the later approach and delivery plan. |
 | 7 — Orchard Landing, Journey and Practice | Work backward from the only outward current. The early Harbor delivery determines which neighbor can fit beside Orin in depth-three water. |
-| 8 — title open | Extend the planning horizon: preserve one opportunity while fulfilling another, using familiar rules. |
+| 8 — title open; Practice candidate commissioned | Preserve later retrieval access while fulfilling a linked load/delivery obligation. Prove placement and load/order dependencies under familiar rules; no Journey append yet. |
 | 9 — Drowned Orchard | Reinterpret recognizable geometry for a new waiting group and changed conditions. Earlier rescued neighbors stay safe. |
 | 10 — Lantern Reach | A compact, quiet consolidation with a real inference and an elegant efficient solution; scenery can relax without making every decision automatic. |
 | 11 — Far Shore | Peak synthesis of established load, route, staging and timing knowledge. No late exception or new mechanic. |
@@ -123,7 +125,7 @@ The result can say “14 actions · 2 Undos.” The target and requirements are 
 
 ## 5. Implementation contract
 
-[THREE_LANTERNS_01](../NEXT_TASK_THREE_LANTERNS.md) implemented this contract. Preserve these outcomes during Orchard's story/save integration.
+[THREE_LANTERNS_01](../NEXT_TASK_THREE_LANTERNS.md) implemented this contract. Orchard's story/save integration preserves it; C8's unscored candidate must preserve it for all eight accepted coves.
 
 - Count actions from the final winning state's existing turn count. Undo removes discarded turns normally; do not charge additional tide turns or include abandoned branches in that efficiency count.
 - Track successful Undos as attempt metadata **outside the rewindable puzzle State**. An unavailable, busy or rejected input does not count.
@@ -144,7 +146,9 @@ The Session keeps successful Undo history outside its rewindable State. A result
 1. **Complete:** repair existing Orchard Landing and demonstrate its connected load/crossing decision.
 2. **Complete:** player accepts the repair at `9933303178da04cac93ddc820ef55e181286d983`.
 3. **Implemented and scoped review complete:** THREE_LANTERNS_01 at `14f128619267e2da81b4108ece2de4da07b50359`; physical-phone/listening/spoken-screen-reader approval remains open.
-4. **Implemented; review pending:** ORCHARD_JOURNEY_01 connects the accepted puzzle with its truthful illustrated entry and explicit completed-six save continuation. Keep its scoring revision and earned mastery.
-5. Review the seven-cove flow and arrange Android playtesting, then commission C8's distinct planning dependency. Additional bodies, moves or map area alone do not establish the next challenge.
+4. **Implemented, reviewed and published:** ORCHARD_JOURNEY_01 connects the accepted puzzle with its truthful illustrated entry and explicit completed-six continuation; Site version 20 retains scoring revision and earned mastery.
+5. **Android playtest deferred by the user on 15 November:** its device and human feedback remain open.
+6. **Commissioned:** COVE_EIGHT_PRACTICE_01 authors/proves one independent candidate with linked placement/access and load/order decisions. It produces a proposed target, keeps the candidate unscored and leaves the seven-cove Journey intact. Additional bodies, moves or map area alone do not establish the next challenge.
+7. Review the candidate and assess the later player feedback before accepting its scoring revision or commissioning Journey integration.
 
-The current task adds no puzzle, rebalances no target and does not deploy. Preserve the source-linked reviews and historical publication records.
+This guidance update implements no puzzle and rebalances no target. The scoped implementation may add only the C8 Practice candidate and required compatibility guards; it does not deploy. Preserve the source-linked reviews and historical publication records.

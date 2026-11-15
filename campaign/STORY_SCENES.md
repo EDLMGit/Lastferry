@@ -1,6 +1,10 @@
 # Last Ferry — story scenes for The Long Tide
 
-## Implemented Orchard encounter — review pending · 14 November 2026
+## Current continuity · 15 November 2026
+
+The Orchard integration is independently reviewed and published as Site version 20. The user has deferred the new seven-cove Android playtest and authorized [COVE_EIGHT_PRACTICE_01](../NEXT_TASK_COVE_EIGHT_PRACTICE.md). That pass commissions a new independent Practice puzzle only: no C8 illustrated entry, Journey append, save migration or new supper scene. Current story content remains seven coves. Its phone scene pacing, listening and physical-device judgments remain open. [Current state](../docs/PROJECT_STATE.md) · [Publication review](../reviews/orchard-journey/PUBLICATION_REVIEW.md)
+
+## Implemented Orchard encounter · 14 November 2026
 
 The player has accepted Orin and the repaired Orchard puzzle at `9933303178da04cac93ddc820ef55e181286d983`. **Medlar** is the orchard's tan rabbit; **Sorrel** remains the cream rabbit rescued in Wide Berth. The ferry starts empty beside Pomme and Medlar at Spring Steps; Orin waits at Orchard Landing. The illustrated scene hands off into these exact positions. [Accepted design](../reviews/orchard-difficulty/DESIGN.md)
 

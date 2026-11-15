@@ -1,6 +1,18 @@
 # Last Ferry — Project state
 
-## Reviewed and published — Android checkpoint · 14 November 2026 UTC
+## Current assignment — cove eight Practice candidate · 15 November 2026
+
+The user's latest direction is **“Ill test on the next pass, lets continue.”** Proceed with [COVE_EIGHT_PRACTICE_01](../NEXT_TASK_COVE_EIGHT_PRACTICE.md) while deferring the seven-cove Android playtest. This supersedes the earlier sequencing gate below; the playtest, phone performance, listening and scene-pacing judgment remain unperformed.
+
+Local Codex will author and implement one compact independent candidate using the existing six-space ferry, transfer/depth/tide rules and at most one current passage. Require a meaningful placement/access choice linked to a later load/order/approach obligation, production-rule proof, an understandable tempting failure and two distinct winning approaches. The minimum and proposed efficient target must be reported separately. The candidate remains unscored until its puzzle and scoring revision are accepted; the task includes the two identified Practice/menu target guards.
+
+**This commit commissions the task; it does not implement cove eight.** Current content remains seven Journey coves and eight Practice entrances. The implementation should add one ninth Practice entrance, leave the seven-cove Journey/checkpoints intact and preserve all eight accepted mastery identities, especially `orchard-landing@1` / target 13. C8's story integration follows review and player feedback. C9–C12 remain proposals.
+
+The verified starting continuity is `a49e07e901be7eb009c3538a77da5c7a799c71c0`. The recorded live build remains **Site version 20**, game `9c7a05785a021538c996f5dcd4b03415d1a35080`, hosting source `ffc5eebfd8520735b231ffe6fedf1b3a54757f9a`, with the existing custom private audience. [Play](https://last-ferry-playtest.abumech.chatgpt.site) · [Receipt](../reviews/orchard-journey/deployment-confirmation.json)
+
+ChatGPT prepares/reviews the contained task and later publishes reviewed builds; local Codex implements and returns an identifiable handoff. This guidance update and the Codex implementation pass do not deploy. Preserve the accepted art/audio, ferry/controls, puzzles, saves, original-byte backups, unrestricted Undo and provisional acceptance. PR #1 remains draft; GitHub main remains unchanged.
+
+## Previous checkpoint — seven-cove publication · 14 November 2026 UTC
 
 **ORCHARD_JOURNEY_01 is complete.** Runtime `9c7a05785a021538c996f5dcd4b03415d1a35080` was independently reviewed and published to the existing private Site as **version 20**. Hosting source: `ffc5eebfd8520735b231ffe6fedf1b3a54757f9a`. The existing custom access policy, owner and one authorized external viewer are unchanged. [Play](https://last-ferry-playtest.abumech.chatgpt.site) · [Receipt](../reviews/orchard-journey/deployment-confirmation.json) · [Publication review](../reviews/orchard-journey/PUBLICATION_REVIEW.md)
 

@@ -1,4 +1,14 @@
-# Last Ferry — fuller wooden contacts and a gentle arrival
+# Last Ferry — active task
+
+**15 November 2026: [COVE_EIGHT_PRACTICE_01](NEXT_TASK_COVE_EIGHT_PRACTICE.md).** Implement one proved, compact Practice candidate for intended cove eight. The user has deferred the seven-cove Android playtest and authorized continuation; no new playtest result is implied. Read the named task and current `AGENTS.md` / `docs/PROJECT_STATE.md`.
+
+The existing Journey remains seven coves. The named task preserves accepted puzzles, scoring, saves and presentation; its candidate target remains a proposal until acceptance. Local Codex implements and hands off for ChatGPT review. Keep PR #1 draft and main unchanged; no implementation-pass deployment.
+
+## Historical audio brief — completed and superseded
+
+The following earlier task is retained as project history. It is not the current implementation assignment.
+
+# Earlier task — fuller wooden contacts and a gentle arrival
 
 ## Immediate task
 

@@ -1,3 +1,15 @@
+# Cove eight Practice candidate commissioned · 15 November 2026
+
+**Current assignment: [COVE_EIGHT_PRACTICE_01](NEXT_TASK_COVE_EIGHT_PRACTICE.md).** The user has deferred the seven-cove Android playtest and asked to continue. The earlier wait-for-playtest gate is superseded; no Android acceptance is recorded.
+
+Prepare one independent candidate whose temporary placement/access decision and later load/order decision must be planned together. Codex must prove the dependencies and minimum with production rules, retain two meaningful winning approaches and propose an efficient target for review. The candidate is unscored until acceptance; the brief names the narrow menu/Practice guards required by existing target assumptions.
+
+This is a **guidance update only**. The runtime still contains seven Journey coves and eight Practice entrances. After implementation there should be nine Practice entrances with the same seven-cove Journey. Accepted puzzles, Orchard target 13 / revision 1, bests, saves, presentation and complete Undo remain protected.
+
+The recorded Site stays at version 20 / game `9c7a05785a021538c996f5dcd4b03415d1a35080` / hosting source `ffc5eebfd8520735b231ffe6fedf1b3a54757f9a`, with its existing custom private audience. No deployment accompanies this commission. Local Codex implements; ChatGPT reviews and publishes separately. PR #1 remains draft; main is unchanged.
+
+## Previous checkpoint and publication
+
 # Seven-cove Journey published for Android · 14 November 2026 UTC
 
 Reviewed game **`9c7a05785a021538c996f5dcd4b03415d1a35080`** is live as **Site version 20** with the existing custom private audience unchanged. [Play](https://last-ferry-playtest.abumech.chatgpt.site) · [Exact publication receipt](reviews/orchard-journey/deployment-confirmation.json) · [Independent publication review](reviews/orchard-journey/PUBLICATION_REVIEW.md)

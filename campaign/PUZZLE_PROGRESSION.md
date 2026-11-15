@@ -1,6 +1,6 @@
 # Puzzle progression — selected campaign direction
 
-## Current accepted progression · 14 November 2026
+## Current accepted progression · 15 November 2026
 
 The implemented Journey is **Holding → Bellwater → Driftwood → Two Shelters → launch → Wide → Reef → Orchard**. The player accepted repaired Orchard Landing at `9933303178da04cac93ddc820ef55e181286d983`. Its puzzle remains the eighth independent Practice entrance and now also serves as Journey cove seven, with an illustrated entry and explicit completed-six continuation.
 
@@ -20,13 +20,17 @@ Independent production-rule enumeration and the Orin-two-space counterfactual co
 | Reef Return | Let early loading/delivery change the later approach. |
 | Orchard Landing — Journey seven and Practice | Work backward from Orin's return load to the first delivery and smaller-neighbor retrieval. |
 
-### Current task and next gate
+### Current task — cove eight Practice candidate
 
 The lantern feature at `14f128619267e2da81b4108ece2de4da07b50359` has passed its scoped independent review. The [verified target table](../reviews/three-lanterns-preparation/TARGETS.md) remains unchanged. No reward gates story; Undo stays unlimited.
 
-[ORCHARD_JOURNEY_01](../NEXT_TASK_ORCHARD_JOURNEY.md) now appends accepted Orchard to the Journey with its scene and exact completed-six continuation. Keep both accepted Orchard strategies, target 13 and mastery revision 1. This is integration of an existing puzzle, not a difficulty pass.
+[ORCHARD_JOURNEY_01](../NEXT_TASK_ORCHARD_JOURNEY.md) appended accepted Orchard to the Journey with its scene and exact completed-six continuation. Both accepted Orchard strategies, target 13 and mastery revision 1 remain protected during C8 authoring.
 
-After reviewing the seven-cove flow and Android playtest, specify C8's distinct longer planning dependency. C8–C12 remain uncommissioned design roles in [difficulty and mastery](../docs/DIFFICULTY_AND_MASTERY.md). Do not add animals, moves or map size simply to claim greater challenge.
+The seven-cove integration has been independently reviewed and published as Site version 20. On 15 November the user explicitly deferred its Android playtest and asked to continue. [COVE_EIGHT_PRACTICE_01](../NEXT_TASK_COVE_EIGHT_PRACTICE.md) is now commissioned; C9–C12 remain provisional roles in [difficulty and mastery](../docs/DIFFICULTY_AND_MASTERY.md).
+
+C8's proposed question is **“Where must I leave this group, and what must the ferry accomplish before I can safely return for them?”** Require a meaningful placement/access choice linked to a later load, order or approach decision. Prove the effect of changing each choice, an understandable tempting failure and two consequentially different winning approaches. Exact layout, minimum and proposed target belong in production-rule evidence, not an assumed numerical difficulty rating.
+
+The candidate adds a ninth independent Practice entrance only after implementation. Keep the seven-cove Journey and all eight accepted scoring identities unchanged. Its target remains developer-only until candidate/revision acceptance; the scoped task includes the menu and Practice-list guards for an unscored entry. The earlier Android gate is deferred, not passed. Do not add animals, moves or map size simply to claim greater challenge.
 
 The earlier Orchard's ten-action pickup orders merged at turn five. That rejected structure and its diagnostic evidence remain in the [earlier review](../reviews/orchard-difficulty-review/REVIEW.md); it no longer describes the accepted puzzle.
 

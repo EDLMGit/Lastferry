@@ -1,8 +1,8 @@
 # Last Ferry — The Long Tide
 
-## Current direction · 14 November 2026
+## Current direction · 15 November 2026
 
-The player has positively accepted the repaired six-space ferry/docks, Wide/Reef complexity, connected story, mobile map presentation and now the Orchard repair at `9933303178da04cac93ddc820ef55e181286d983`. Preserve this calm visual/audio language and readable phone controls. Published runtime remains `f0ffe2c12f1cc0e42ad7ef10a4b57dd29097c731`, Sites version 19. [Current task and publication](../docs/PROJECT_STATE.md)
+The player has positively accepted the repaired six-space ferry/docks, Wide/Reef complexity, connected story, mobile map presentation and now the Orchard repair at `9933303178da04cac93ddc820ef55e181286d983`. Preserve this calm visual/audio language and readable phone controls. The reviewed seven-cove game `9c7a05785a021538c996f5dcd4b03415d1a35080` is recorded as published in Sites version 20. [Current task and publication](../docs/PROJECT_STATE.md)
 
 The **implemented Journey now has seven coves**:
 
@@ -27,14 +27,14 @@ The three-lantern implementation at `14f128619267e2da81b4108ece2de4da07b50359` i
 
 The ferry actually starts empty beside Pomme and Medlar at Spring Steps; Orin waits across the reach at Orchard Landing. Show one readable new encounter and a truthful settled handoff. The existing six-space ferry, currents and lantern rewards need no new tutorial. The narrative caption is “Orin knows every path through the orchard. Tonight, he needs the ferry.”
 
-Keep earned Practice mastery under the same `orchard-landing@1` identity. Rescue earns full story progression at any rating. The new endpoint must say that seven available coves are safe, without presenting the final supper or claiming the twelve-cove journey is finished. C8 is a separate design task after integration review and phone playtesting. Publication remains separate.
+Keep earned Practice mastery under the same `orchard-landing@1` identity. Rescue earns full story progression at any rating. The new endpoint must say that seven available coves are safe, without presenting the final supper or claiming the twelve-cove journey is finished. The integration has been reviewed and published. On 15 November the user deferred the Android playtest and authorized [COVE_EIGHT_PRACTICE_01](../NEXT_TASK_COVE_EIGHT_PRACTICE.md): a separate Practice candidate with two linked placement/access and load/order decisions. Its puzzle, proposed target and phone presentation must be reviewed before Journey integration. No new phone acceptance or implementation is claimed by this commission; publication remains separate.
 
-### Remaining story roles — provisional, not additional assignments
+### Remaining story roles — C8 candidate commissioned; later roles provisional
 
 | Intended cove | Story purpose | Difficulty purpose |
 | --- | --- | --- |
-| **7 — Orchard Landing, implemented** | Meet Orin beyond the familiar headland. | The load on Orin’s return determines whom to bring home first. Character and puzzle accepted; new story presentation awaits review. |
-| **8 — title open** | Carry the lesson farther along the channel. | Extend the planning horizon with a distinct combination of familiar load, route and tide dependencies; commission after C7 integration review and phone playtesting. |
+| **7 — Orchard Landing, implemented** | Meet Orin beyond the familiar headland. | The load on Orin’s return determines whom to bring home first. Character and puzzle accepted; story integration reviewed and published, new Android playtest deferred. |
+| **8 — title open** | Carry the lesson farther along the channel. | [Practice candidate commissioned](../NEXT_TASK_COVE_EIGHT_PRACTICE.md): preserve later retrieval access while fulfilling a linked load/delivery obligation. Exact layout and target require proof; no Journey append yet. |
 | **9 — Drowned Orchard** | Recognize the orchard under changed water, with a different waiting group. Orin remains safe. | Reinterpret familiar landmarks and established rules rather than repeat Orin's rescue. |
 | **10 — Lantern Reach** | See the welcome at the refuge taking shape. | Compact, quiet consolidation with a real inference and an elegant efficient solution. |
 | **11 — Far Shore** | Retrieve the hardest remaining group. | Peak synthesis of known rules, full information and no late exception. |
