@@ -1,6 +1,19 @@
 # Last Ferry — story scenes for The Long Tide
 
-## Current continuity · 15 November 2026
+## Active campaign step · 17 November 2026
+
+[TERNHAVEN_JOURNEY_01](../NEXT_TASK_TERNHAVEN_JOURNEY.md) now commissions the accepted eighth cove's Journey integration. ARRIVAL_BUBBLE_01 is reviewed at `a2740e61ec5a782f558ea6caad4181466d04e9f7` and published as Site **version 21**, with the existing custom private audience. [Active state](../docs/PROJECT_STATE.md) · [Independent review and receipt](../reviews/arrival-bubble/INDEPENDENT_REVIEW.md)
+
+The published game still has seven Journey coves; Ternhaven is the ninth Practice entrance with **target 14 / revision 1**. The next implementation appends Ternhaven after Orchard, yielding eight Journey coves while preserving all nine Practice entrances and bests. Its puzzle, witnesses, full six-space ferry and known mechanics remain unchanged.
+
+The new `ternhaven-wave` entry introduces the actual initial arrangement: Juniper, Sedge and tan Fennel already aboard at open-water Tern Buoy, with Willow waiting at Reed Landing. No pier at the buoy, boarding, staging choice, rescue or turn is invented by the scene. Previous neighbors remain safely rescued. Exact completed-seven saves extend only on deliberate Continue with a new original-byte backup, retaining all older compatibility and backups. Practice mastery never substitutes for Journey progress.
+
+The commissioned title is **A wave from Ternhaven**, with caption “Juniper, Sedge and Fennel are aboard. Willow is waiting by the reeds.” Use the existing Canvas player, a short readable greeting and held endpoint, immediate **Continue to Ternhaven**, the established caption cue, Reduced Motion, Skip-to-recap and explicit acknowledgment. Recompose for portrait/short landscape. Full authoring and evidence requirements are in the named task.
+
+C9–C12 remain future roles. The endpoint will describe eight available coves and four still to come, with the final supper reserved for cove twelve. This guidance supersedes earlier arrival-task restrictions on C8 integration; it is not a claim that Journey eight is already implemented.
+
+
+## Previous continuity · 15 November 2026
 
 The Orchard integration is independently reviewed and published as Site version 20. Ternhaven is now implemented and reviewed as independent Practice, with target 14 / revision 1 accepted for registration. The user positively received the latest levels and requests [ARRIVAL_BUBBLE_01](../NEXT_TASK_ARRIVAL_BUBBLE.md): centered successful-result presentation with lanterns, rescued animals and clear icon actions. This adds no C8 illustrated entry, Journey append, migration or supper scene. Current story content remains seven coves. New physical-device, listening and spoken screen-reader checks are not claimed. [Current state](../docs/PROJECT_STATE.md) · [Independent Ternhaven review](../reviews/cove-eight-practice/INDEPENDENT_REVIEW.md)
 

@@ -1,10 +1,10 @@
 # Last Ferry — active task
 
-**15 November 2026: [ARRIVAL_BUBBLE_01](NEXT_TASK_ARRIVAL_BUBBLE.md).** Build the centered floating mobile arrival card with large lanterns, all rescued animals and clear icon actions. Register the independently reviewed Ternhaven target 14 / revision 1 while preserving the other eight targets, puzzles, earned bests and seven-cove Journey.
+**17 November 2026: [TERNHAVEN_JOURNEY_01](NEXT_TASK_TERNHAVEN_JOURNEY.md).** Carry accepted Ternhaven into the Journey as cove eight, add its brief illustrated encounter, and preserve completed-seven saves through explicit backed-up continuation.
 
-COVE_EIGHT_PRACTICE_01 is implemented at `291d8f2a9570d833709e10815db12bd5c1fe75cc`; do not repeat its authoring. Read the named task, current `AGENTS.md` and active `docs/PROJECT_STATE.md`. The user has approved the current puzzle/reward direction and requested this UI refinement.
+ARRIVAL_BUBBLE_01 is reviewed at `a2740e61ec5a782f558ea6caad4181466d04e9f7` and published as Site **version 21**. [Independent review](reviews/arrival-bubble/INDEPENDENT_REVIEW.md) · [Receipt](reviews/arrival-bubble/deployment-confirmation.json). Current live content has seven Journey coves and nine Practice entrances; this task implements the eighth Journey placement. Keep `ternhaven@1` target 14, all accepted puzzles/bests and the centered arrival bubble.
 
-Local Codex implements and returns evidence for ChatGPT review. Preserve newer work, keep PR #1 draft and main unchanged. No implementation-pass deployment.
+Read the named task, current `AGENTS.md` and active `docs/PROJECT_STATE.md`. Safely incorporate this guidance and newer work. Local Codex implements and returns evidence; ChatGPT reviews and publishes separately. Keep PR #1 draft and main unchanged. No implementation-pass deployment.
 
 ## Historical audio brief — completed and superseded
 

@@ -1,6 +1,20 @@
 # Last Ferry — Project state
 
-## Current implementation — centered homecoming · 15 November 2026
+## Current task and publication · 17 November 2026
+
+**Current task: [TERNHAVEN_JOURNEY_01](../NEXT_TASK_TERNHAVEN_JOURNEY.md).** Append the accepted Ternhaven puzzle after Orchard as Journey cove eight, add one short truthful illustrated encounter, and extend exact completed-seven saves only through deliberate Continue with a distinct original-byte backup. The user asks to continue the campaign plan after the arrival handoff.
+
+**Reviewed and published runtime:** `a2740e61ec5a782f558ea6caad4181466d04e9f7`, Site **version 21**, hosting source `ea3bed5c0aaf41e4ba516e4621da0f81119e652b`. [Independent arrival review](../reviews/arrival-bubble/INDEPENDENT_REVIEW.md) · [Publication receipt](../reviews/arrival-bubble/deployment-confirmation.json) · [Playtest](https://last-ferry-playtest.abumech.chatgpt.site)
+
+The centered arrival meets the requested hierarchy in the inspected native frames. Fresh build/TypeScript and 180 focused checks pass; the rebuilt JavaScript/CSS exactly match the contributor's final build. Independent Session/storage replay confirms 14/14/13-action witnesses, three lanterns before terminal Undo and two after redelivery, complete rescued identity sets and preserved bests. The contributor's 185-unit, 82-family and eight-browser results remain separate evidence. Physical-phone, fresh listening and spoken screen-reader approval remain unverified; the deferred user playtest is not a new implementation gate.
+
+Current live content is still **seven Journey coves, nine Practice entrances and nine scoring targets**. Ternhaven is Practice-only at **target 14 / revision 1**. This guidance does not implement Journey eight. The next pass keeps its exact puzzle/witnesses, all targets and bests, the arrival bubble and accepted audio/ferry/water intact.
+
+The new entry, `ternhaven-wave`, settles with Juniper, Sedge and tan Fennel already aboard at open-water Tern Buoy, while Willow waits at Reed Landing. Tern Buoy has no pier. Nobody boards, stages or becomes rescued in the illustration. Preserve previous rescued neighbors and all older two/three/four/six-cove continuation cases. Existing Ternhaven Practice mastery must not skip the new scene or grant Journey progress. After integration, eight available coves are reported truthfully; C9–C12 and the final supper remain future work.
+
+Local Codex implements and returns source-tied evidence; ChatGPT reviews and publishes separately. Keep PR #1 draft, GitHub main unchanged, the Site's existing custom private audience unchanged, and all earlier reports/receipts as history. No implementation-pass deployment. Never copy recipient contact details into the repository.
+
+## Previous implementation handoff — centered homecoming · 15 November 2026
 
 **ARRIVAL_BUBBLE_01** replaces the won-only utility panel with a centered floating coastal card. Three original large brass lanterns reflect this rescue; the complete named portrait cast includes neighbors delivered on earlier trips. Portrait stacks the composition, while short landscape places the crew beside rewards and actions. Replay has an original looping-arrow icon distinct from Undo. Details holds criteria, accepted best and checkpoint policy; actual storage problems remain visible.
 

@@ -1,3 +1,15 @@
+# Arrival reviewed and published; Ternhaven Journey next · 17 November 2026
+
+**[TERNHAVEN_JOURNEY_01](NEXT_TASK_TERNHAVEN_JOURNEY.md)** is the current implementation assignment: Ternhaven becomes Journey cove eight, with a truthful short entry and exact completed-seven continuation. Preserve the accepted puzzle, `ternhaven@1` target 14, all earlier bests/backups, nine Practice entrances and the centered arrival bubble.
+
+Game `a2740e61ec5a782f558ea6caad4181466d04e9f7` is independently reviewed and published as **Site version 21**, hosting `ea3bed5c0aaf41e4ba516e4621da0f81119e652b`. [Review](reviews/arrival-bubble/INDEPENDENT_REVIEW.md) · [Receipt](reviews/arrival-bubble/deployment-confirmation.json) · [Playtest](https://last-ferry-playtest.abumech.chatgpt.site). Existing custom private access is unchanged.
+
+Fresh build/TypeScript, 180 focused checks and the separate Session/storage replay pass. Production JS/CSS match the contributor's reported final build exactly. Three committed native frames were inspected independently. Contributor 185-unit/82-family/eight-browser evidence and all original failures remain preserved. Physical-phone, fresh listening and spoken screen-reader checks are still unverified.
+
+Published runtime remains **seven Journey coves, nine Practice entrances and nine targets**. This commit contains review/publication evidence and guidance, with no runtime change. The next local-Codex task adds Journey eight; C9–C12 remain future work. PR #1 remains draft and GitHub main is unchanged. No local implementation-pass deployment.
+
+## Previous implementation handoff
+
 # Centered arrival bubble · 15 November 2026
 
 **ARRIVAL_BUBBLE_01** implements a centered, responsive won-only result with large original lanterns, the complete named rescued cast and clear forward/Replay actions. Undo, Close and shared Settings retain their existing handlers. Criteria, prior best and save policy sit in Details; storage failures stay visible. Stable card bounds and a won-only Harbor fit prevent the camera from chasing the decoration. The brief inner celebration belongs to the actual completed rescue and respects Reduced Motion and cancellation.

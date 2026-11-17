@@ -1,5 +1,14 @@
 # Last Ferry — difficulty and three-lantern mastery
 
+## Current integration · 17 November 2026
+
+The centered arrival and **Ternhaven target 14 / revision 1** are reviewed at `a2740e61ec5a782f558ea6caad4181466d04e9f7` and published in Site **version 21**. All nine target identities remain unchanged. Fresh independent Session replay confirms all three 13/14/14-action witnesses earn three lanterns, then two after terminal Undo/redelivery. [Independent review](../reviews/arrival-bubble/INDEPENDENT_REVIEW.md)
+
+[TERNHAVEN_JOURNEY_01](../NEXT_TASK_TERNHAVEN_JOURNEY.md) is now the active task. It appends the accepted Practice puzzle as Journey eight using the same `ternhaven@1` best. Existing Practice mastery survives but does not acknowledge the new scene or complete the Journey cove. Every rescue advances the story regardless of lantern count. Preserve provisional acceptance, earlier bests, all targets, generic unscored behavior and original-byte continuation backups. This task adds no new score or historical backfill.
+
+The paragraphs below retain earlier design and implementation checkpoints; the current task/publication above supersedes earlier assignment status.
+
+
 **Reviewed implementation · 14 November 2026.** The player accepted the Orchard repair at `9933303178da04cac93ddc820ef55e181286d983`. The three-lantern feature at `14f128619267e2da81b4108ece2de4da07b50359` has no blocker in the scoped source/core/native-image review. The eight authored targets and all puzzle data retain their accepted values. [Independent review](../reviews/three-lanterns/INDEPENDENT_REVIEW.md) · [Implementation verification](../reviews/three-lanterns/REVIEW.md)
 
 This updates the 13 November direction after the successful repair playtest. [ORCHARD_JOURNEY_01](../NEXT_TASK_ORCHARD_JOURNEY.md) implements the accepted cove's story/save continuation. At that checkpoint Journey had seven playable coves and all eight Practice entrances remained. Orchard shares target 13 and mastery revision 1 across both entrances. [Preparation review](../reviews/three-lanterns-preparation/REVIEW.md) · [Verified targets](../reviews/three-lanterns-preparation/TARGETS.md) · [Earlier structural diagnosis](../reviews/orchard-difficulty-review/REVIEW.md)

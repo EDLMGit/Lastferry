@@ -1,6 +1,17 @@
 # Puzzle progression — selected campaign direction
 
-## Current accepted progression · 15 November 2026
+## Active campaign step · 17 November 2026
+
+[TERNHAVEN_JOURNEY_01](../NEXT_TASK_TERNHAVEN_JOURNEY.md) now commissions the accepted eighth cove's Journey integration. ARRIVAL_BUBBLE_01 is reviewed at `a2740e61ec5a782f558ea6caad4181466d04e9f7` and published as Site **version 21**, with the existing custom private audience. [Active state](../docs/PROJECT_STATE.md) · [Independent review and receipt](../reviews/arrival-bubble/INDEPENDENT_REVIEW.md)
+
+The published game still has seven Journey coves; Ternhaven is the ninth Practice entrance with **target 14 / revision 1**. The next implementation appends Ternhaven after Orchard, yielding eight Journey coves while preserving all nine Practice entrances and bests. Its puzzle, witnesses, full six-space ferry and known mechanics remain unchanged.
+
+The new `ternhaven-wave` entry introduces the actual initial arrangement: Juniper, Sedge and tan Fennel already aboard at open-water Tern Buoy, with Willow waiting at Reed Landing. No pier at the buoy, boarding, staging choice, rescue or turn is invented by the scene. Previous neighbors remain safely rescued. Exact completed-seven saves extend only on deliberate Continue with a new original-byte backup, retaining all older compatibility and backups. Practice mastery never substitutes for Journey progress.
+
+C9–C12 remain future roles. The endpoint will describe eight available coves and four still to come, with the final supper reserved for cove twelve. This guidance supersedes earlier arrival-task restrictions on C8 integration; it is not a claim that Journey eight is already implemented.
+
+
+## Previous accepted progression · 15 November 2026
 
 The implemented Journey is **Holding → Bellwater → Driftwood → Two Shelters → launch → Wide → Reef → Orchard**. The player accepted repaired Orchard Landing at `9933303178da04cac93ddc820ef55e181286d983`. Its puzzle remains the eighth independent Practice entrance and now also serves as Journey cove seven, with an illustrated entry and explicit completed-six continuation.
 
