@@ -1,5 +1,7 @@
 # ANIMAL_PRESENTATION_01 — finished animals, clear passenger choices and a welcoming arrival
 
+> **Completed and reviewed · 17 November 2026.** Implementation `26ca0a4f7b42c3f9e809f4a6558b0df8dc0c9139` is published in Site version 22. The user positively receives this iteration. [TERNHAVEN_JOURNEY_01](NEXT_TASK_TERNHAVEN_JOURNEY.md) is now active; preserve the original animal brief below as history. [Independent review](reviews/animal-presentation/INDEPENDENT_REVIEW.md) · [Receipt](reviews/animal-presentation/deployment-confirmation.json)
+
 ## Outcome and order
 
 Refine Last Ferry's actual animal models and the two places where players inspect them closely: passenger choices and the rescued group in the arrival bubble. The user supplied [arrival](reviews/animal-presentation/baseline/user-arrival.png) and [offboarding](reviews/animal-presentation/baseline/user-offboarding.png) screenshots and asks for a finish comparable to the new lanterns.

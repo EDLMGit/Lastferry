@@ -1,6 +1,12 @@
 # Last Ferry — difficulty and three-lantern mastery
 
-## Current presentation pass and queued integration · 17 November 2026
+## Current integration after reviewed animal pass · 17 November 2026
+
+ANIMAL_PRESENTATION_01 is complete and published at `26ca0a4f7b42c3f9e809f4a6558b0df8dc0c9139`, Site version 22. The active [TERNHAVEN_JOURNEY_01](../NEXT_TASK_TERNHAVEN_JOURNEY.md) carries the accepted puzzle into the Journey without a rebalance, new difficulty search or target revision. All nine mastery identities and current bests remain. The accepted Ternhaven minimum is 13, with two distinct 14-action strategies; **target 14 / revision 1** remains the reward policy.
+
+Keep Practice mastery independent from Journey progression: a previous accepted best persists but cannot skip the new encounter or grant cove completion. Any ordinary rescue can continue the story. Preserve provisional acceptance, terminal Undo/redelivery and current-versus-best display. The published runtime still has seven Journey coves; the commissioned task yields eight while retaining nine Practice entrances. [Review](../reviews/animal-presentation/INDEPENDENT_REVIEW.md) · [Active state](PROJECT_STATE.md)
+
+## Historical presentation assignment and queue · 17 November 2026
 
 The centered arrival and **Ternhaven target 14 / revision 1** are reviewed at `a2740e61ec5a782f558ea6caad4181466d04e9f7` and published in Site **version 21**. All nine target identities remain unchanged. Fresh independent Session replay confirms all three 13/14/14-action witnesses earn three lanterns, then two after terminal Undo/redelivery. [Independent review](../reviews/arrival-bubble/INDEPENDENT_REVIEW.md)
 

@@ -1,12 +1,28 @@
 # Last Ferry — Project state
 
-## Animal presentation implementation · 17 November 2026
+## Current review, publication and task · 17 November 2026
+
+**ANIMAL_PRESENTATION_01 is reviewed and published. TERNHAVEN_JOURNEY_01 is now active.** The user says the revised animals look good for now and asks to continue. Treat that as positive visual direction for this iteration, separate from physical-device performance, listening or screen-reader certification.
+
+Live game: `26ca0a4f7b42c3f9e809f4a6558b0df8dc0c9139`, **Site version 22**, hosting `9bde1051ecdcab851c829473b75a82f73ace3be6`. [Independent review](../reviews/animal-presentation/INDEPENDENT_REVIEW.md) · [Receipt](../reviews/animal-presentation/deployment-confirmation.json) · [Playtest](https://last-ferry-playtest.abumech.chatgpt.site). Existing custom private audience is unchanged.
+
+Fresh independent build/TypeScript and **295 checks** pass: 186 interaction/identity plus 109 geometry checks across 17 files. All 541 selected non-review source blobs match exact GitHub bytes; the existing preview-host configuration is the only source adaptation. Fresh JavaScript and CSS match the contributor's minified actual-play build exactly. Seven committed images were visually inspected, including real Holding/Ternhaven arrivals, matched before/after frames and a clearly labeled six-neighbor fixture. This is not a new browser gameplay run. The live URL was opened and showed the expected private sign-in gate in the review browser.
+
+Source/model review found no scoped blocker: shared world/ferry helpers and lifecycle owners are unchanged, real foot sets remain nonempty, model counts reproduce, and ten actual PNGs match their recorded bytes. The full historical component digest has two unresolved inputs (developer gallery and ferry profile), with five other differences explained by CRLF and one known preview adaptation. Preserve that qualification and the original reports; use the verified fresh source/build for publication. Full 82-family filesystem validation and six catalog test results remain contributor evidence; independent reference and generated-image audits are linked in the review.
+
+The contributor's same-frame Wide Berth cost is **727 draws / 147,332 triangles**, compared with 674 / 126,796 before. This is +7.9% draws and +16.2% triangles, not Android FPS. Physical-phone performance, fresh human listening and spoken screen-reader checks remain open without blocking the authorized next implementation.
+
+**Current runtime remains seven Journey coves, nine Practice entrances and nine target identities.** Ternhaven stays Practice-only at target 14/revision 1 in version 22. The active [Journey brief](../NEXT_TASK_TERNHAVEN_JOURNEY.md) appends it after Orchard, using the accepted scene, exact turn-zero passenger state, narrow completed-seven backup/continuation and preserved earlier saves/bests. It retains the revised animals and separate choice/arrival image maps. C9–C12 and the final supper remain future work.
+
+This review/guidance commit changes no runtime, level, target, asset or test input. Local Codex performs the next contained integration and returns evidence; ChatGPT reviews and publishes separately. Keep PR #1 draft, GitHub main unchanged and existing access unchanged. Earlier sections below are historical handoffs, not active assignments.
+
+## Historical implementation handoff — animal presentation · 17 November 2026
 
 The four species use one animal-local miniature factory. Each of the five appearances has two transparent views: close portraits for choosing passengers and whole figures for arrivals. A delivered neighbor keeps their name and coat even when they arrived on an earlier trip. [Implementation, visual comparisons and verification](../reviews/animal-presentation/REVIEW.md) · [Asset provenance](ASSET_LEDGER.md).
 
 Holding (9 actions) and Ternhaven (14) were rescued through the minified interface. In the matched five-body Wide Berth frame, draws rose from 674 to 727 and triangles from 126,796 to 147,332; physical phone performance and visual acceptance remain to be reviewed. This presentation is for review on `m1-first-crossing`. The recorded private publication remains **version 21**, game `a2740e61ec5a782f558ea6caad4181466d04e9f7`, hosting `ea3bed5c0aaf41e4ba516e4621da0f81119e652b` ([receipt](../reviews/arrival-bubble/deployment-confirmation.json)). Journey still has seven coves; Practice has nine. Ternhaven is Practice-only, target 14/revision 1. Its Journey integration remains queued.
 
-## Current task — animal presentation before Journey eight · 17 November 2026
+## Historical assignment — animal presentation before Journey eight · 17 November 2026
 
 **[ANIMAL_PRESENTATION_01](../NEXT_TASK_ANIMAL_PRESENTATION.md)** is now the active assignment. The user requests improved animal models and showcase, plus offboarding passenger cards, and confirms the prior Ternhaven Journey task has not been sent to Codex. That brief is preserved and queued after this review; do not implement both together.
 

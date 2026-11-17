@@ -1,5 +1,11 @@
 # Last Ferry asset provenance and history
 
+## Review and publication checkpoint · 17 November 2026
+
+ANIMAL_PRESENTATION_01 at `26ca0a4f7b42c3f9e809f4a6558b0df8dc0c9139` is independently reviewed and published in Site version 22. The user positively receives its visual direction for now. All 82 family IDs and the original contributor provenance remain intact. Fresh review checks all ten PNG byte counts, hashes, 256px RGBA headers and their two-purpose mapping; all 176 catalog reference paths exist in the exact committed tree. Full filesystem catalog validation remains the contributor's recorded result. [Independent review and qualifications](../reviews/animal-presentation/INDEPENDENT_REVIEW.md)
+
+The active Ternhaven Journey task preserves these models and profiles. Story-art/gallery provenance should record the new illustrated encounter without replacing the accepted family or rewriting historical captures. Device, acoustic and spoken screen-reader acceptance remain separate.
+
 ## ANIMAL_PRESENTATION_01 — one model, two views
 
 Board, Let ashore and Bring home share five transparent face portraits. The arrival uses five separate full-body figurines: a neighbor keeps the same coat, ears, markings and live name across both views. These are two camera profiles of the original production animal family, not separately painted characters. The renderer is an offline authoring tool; each UI slot displays an ordinary image. The former SVG-derived portraits and their manifests remain in the repository as historical evidence.

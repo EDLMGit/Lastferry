@@ -1,20 +1,18 @@
 # TERNHAVEN_JOURNEY_01 — carry the eighth cove into the Journey
 
-
-> **Queued · 17 November 2026.** The user has not sent this task to Codex and requests [ANIMAL_PRESENTATION_01](NEXT_TASK_ANIMAL_PRESENTATION.md) first. Do not implement this Journey task during the animal pass. Preserve the full scope below for its later reviewed commission. When activated, incorporate the then-reviewed animal implementation and current guidance without resetting to the older runtime baseline; retain the finished models, profiles and UI.
-
+> **Active · 17 November 2026.** Following the user's positive visual response to ANIMAL_PRESENTATION_01 and its independent review, resume this contained Journey integration. Preserve the finished animal models, profiles and UI while implementing the scope below.
 
 ## Outcome and baseline
 
 Append accepted **Ternhaven** after Orchard Landing as Journey cove eight. Add one brief illustrated encounter and safe, deliberate continuation for players with an exact completed-seven save. Preserve all nine independent Practice entrances.
 
-Reviewed implementation baseline: `a2740e61ec5a782f558ea6caad4181466d04e9f7`, including **ARRIVAL_BUBBLE_01** and accepted **`ternhaven@1`, target 14**. Safely incorporate this task/continuity commit and any newer user work on `m1-first-crossing`; never reset to the baseline or force-push. This brief commissions the integration; it does not claim the eighth Journey cove is already implemented.
+Reviewed implementation baseline: `26ca0a4f7b42c3f9e809f4a6558b0df8dc0c9139`, including **ANIMAL_PRESENTATION_01**, **ARRIVAL_BUBBLE_01** and accepted **`ternhaven@1`, target 14**. Safely incorporate this task/continuity commit and any newer user work on `m1-first-crossing`; never reset to the baseline or force-push. This brief commissions the integration; it does not claim the eighth Journey cove is already implemented.
 
-Read `AGENTS.md`, active `docs/PROJECT_STATE.md`, `campaign/STORY_SCENES.md`, `campaign/CAMPAIGN_DIRECTION.md`, `docs/DIFFICULTY_AND_MASTERY.md`, and the Ternhaven and arrival-bubble reviews. Inspect the registry, strict progress validation and backup path, shared story painter/player, mastery identity, arrival actions and asset catalog.
+Read `AGENTS.md`, active `docs/PROJECT_STATE.md`, `campaign/STORY_SCENES.md`, `campaign/CAMPAIGN_DIRECTION.md`, `docs/DIFFICULTY_AND_MASTERY.md`, the Ternhaven and arrival-bubble reviews, `reviews/animal-presentation/REVIEW.md` and `assets/portraits/animal-profiles.json`. Inspect the registry, strict progress validation and backup path, shared story painter/player, mastery identity, arrival actions and asset catalog.
 
 The resulting Journey is Holding → Bellwater → Driftwood → Two Shelters → Nell's existing launch → Wide → Reef → Orchard → **Ternhaven**. The launch is a boundary; First Crossing remains independent Practice. There will be eight Journey coves and nine Practice entrances. C9–C12 remain unavailable.
 
-Complete this contained integration and evidence. Preserve the accepted puzzle, all three 13/14/14-action witnesses, target/revision, ferry, controls, audio, water and centered arrival bubble. Choose routine composition and implementation details independently. No new puzzle, rebalance, mechanic, narrator, story framework or deployment belongs to this pass.
+Complete this contained integration and evidence. Preserve the accepted puzzle, all three 13/14/14-action witnesses, target/revision, finished animals and profiles, ferry, controls, audio, water and centered arrival bubble. Choose routine composition and implementation details independently. No new puzzle, rebalance, mechanic, narrator, story framework or deployment belongs to this pass.
 
 ## 1. A truthful Ternhaven encounter
 
@@ -76,11 +74,15 @@ Retain protection against a newer checkpoint appearing before or during backup. 
 
 Update affected Home, Continue, transcript and endpoint copy to describe **eight available coves**, with four still to come. Do not show the final supper or claim the twelve-cove Journey is finished.
 
-## 4. Preserve earned results and the arrival bubble
+## 4. Preserve earned results, animal finish and the arrival bubble
 
 Journey and Practice share **`ternhaven@1`, target 14**. Keep all nine accepted scoring targets and existing bests unchanged. An accepted Practice best survives scene entry, continuation and reload; it cannot grant Journey completion, acknowledge the scene or skip the rescue. An ordinary rescue advances the story at any lantern count. Earlier unscored rescues remain unscored until replay.
 
 Keep the centered won-only bubble, prominent lanterns, complete rescued cast, Replay icon, Details, safe bounds and Harbor framing from ARRIVAL_BUBBLE_01. The existing next action must now lead from Orchard to the new scene and from Ternhaven to the truthful endpoint. Preserve terminal Undo/redelivery, camera restoration and the finite arrival animation's ownership.
+
+Retain ANIMAL_PRESENTATION_01's four-species/five-appearance miniature family, current world scales and compatible attachments, ten source-derived static profiles, passenger-choice layout and complete named arrival figurines. Keep the five stable appearance keys, image loading/fallback behavior and provenance. `portraitSources` in `src/ui/cove-ui.ts` uses `assets/portraits/choice/*.png` for Board/Let ashore/Bring home; `arrivalFigureSources` uses `assets/portraits/arrival/*.png` for whole rescued figures. Do not restore the older single-profile path or remodel/rebake the accepted family.
+
+Preserve the cached `animal(species, variant)` model/geometry path and animal-local shared material in `src/scene/animals.ts`, re-exported through `src/scene/models.ts`. Keep file-backed UI images and the existing story canvas/player; do not add per-card renderers, WebGL contexts or continuous portrait animation. The new illustration should match the finished characters' identities, coats and recognizable silhouettes within the established illustrated style. This narrative integration must not compound the animal rendering budget through unrelated model or profile changes.
 
 Close, Details, Settings, Escape and reopening the result accept nothing. Actual continuation, cove navigation, confirmed Home and successful Restart retain their existing acceptance boundaries. Preserve successful Undo tracking outside rewindable state, best-run selection and storage-failure behavior.
 
@@ -97,6 +99,7 @@ Cover the meaningful integration risks:
 - An actual-format accepted Ternhaven Practice best surviving extension and replay, without skipping the entry or changing its identity. Root/direct Practice must preserve representative active, completed-seven and older Journey bytes.
 - A genuine **Orchard rescue → explicit Continue → new scene → Ternhaven initial state → Ternhaven rescue → explicit acceptance → eight-cove endpoint → reload**, through real controls on the minified build. A valid Orchard boundary fixture may avoid replaying earlier coves; injected won states cannot replace either rescue.
 - Tide Undo and terminal Undo/redelivery during that route, with the centered bubble and best-result comparison intact. Closing or inspecting the provisional result must not accept it.
+- Within that same route, verify the finished close profiles in passenger choices and all four whole arrival figures, including early-delivered Sedge. Retain the current model identity and physical support through handoff and Undo; use the existing native captures rather than starting another animal-art or performance campaign.
 
 Inspect native **390×844 portrait** and **780×320 short landscape**, plus a 320px portrait fit and desktop smoke view. Capture the actual beginning, greeting and held endpoint in both principal orientations, the truthful playable handoff and accepted result. Confirm all four identities, open-water buoy, supported landing, captions and controls are readable. Use a second compact scene/fit pass where needed; a broad replay of unrelated coves is unnecessary.
 

@@ -2,14 +2,13 @@
 
 ## Current work order · 17 November 2026
 
-The user confirms TERNHAVEN_JOURNEY_01 has not been sent to Codex and requests animal-model, showcase and offboarding-card refinement first. **[ANIMAL_PRESENTATION_01](../NEXT_TASK_ANIMAL_PRESENTATION.md) is active.** The [Ternhaven Journey brief](../NEXT_TASK_TERNHAVEN_JOURNEY.md) remains queued for the next reviewed pass.
+**[TERNHAVEN_JOURNEY_01](../NEXT_TASK_TERNHAVEN_JOURNEY.md) is active again after the completed animal pass.** The user positively receives the visual direction and asks to continue. ANIMAL_PRESENTATION_01 at `26ca0a4f7b42c3f9e809f4a6558b0df8dc0c9139` is independently reviewed and published as Site **version 22**, with existing custom private access unchanged. [Active state](../docs/PROJECT_STATE.md) · [Review](../reviews/animal-presentation/INDEPENDENT_REVIEW.md)
 
-This presentation pass preserves the seven-cove Journey, all puzzles/targets/bests, nine Practice entrances, scene/save identities and original-byte backups. It creates no story content or migration. The existing Site remains version21 with its current private audience. The accepted C8 integration below remains the following campaign step; C9–C12 remain future work.
+Retain the finished animals, close choice profiles, complete arrival figurines and current resource approach. The next implementation appends accepted Ternhaven after Orchard through one truthful encounter and exact completed-seven continuation. Preserve all puzzles/targets/bests, nine Practice entrances, scene/save identities and original-byte backups. The currently published runtime still has seven Journey coves. C9–C12 remain future work.
 
+## Commissioned campaign step · 17 November 2026
 
-## Queued campaign step · 17 November 2026
-
-[TERNHAVEN_JOURNEY_01](../NEXT_TASK_TERNHAVEN_JOURNEY.md) specifies the accepted eighth cove's Journey integration for the following reviewed pass. ARRIVAL_BUBBLE_01 is reviewed at `a2740e61ec5a782f558ea6caad4181466d04e9f7` and published as Site **version 21**, with the existing custom private audience. [Active state](../docs/PROJECT_STATE.md) · [Independent review and receipt](../reviews/arrival-bubble/INDEPENDENT_REVIEW.md)
+[TERNHAVEN_JOURNEY_01](../NEXT_TASK_TERNHAVEN_JOURNEY.md) commissions the accepted eighth cove's Journey integration from the reviewed animal/arrival baseline `26ca0a4f7b42c3f9e809f4a6558b0df8dc0c9139`. Site **version 22** contains that baseline; no Journey-eight runtime change accompanies this guidance. [Active state](../docs/PROJECT_STATE.md) · [Publication receipt](../reviews/animal-presentation/deployment-confirmation.json)
 
 The published game still has seven Journey coves; Ternhaven is the ninth Practice entrance with **target 14 / revision 1**. The next implementation appends Ternhaven after Orchard, yielding eight Journey coves while preserving all nine Practice entrances and bests. Its puzzle, witnesses, full six-space ferry and known mechanics remain unchanged.
 

@@ -1,4 +1,16 @@
-# Animal presentation · 17 November 2026
+# Animal pass published; Ternhaven Journey active · 17 November 2026
+
+Reviewed runtime `26ca0a4f7b42c3f9e809f4a6558b0df8dc0c9139` is now **Site version 22**, hosting `9bde1051ecdcab851c829473b75a82f73ace3be6`. Existing custom private audience is unchanged. [Independent review](reviews/animal-presentation/INDEPENDENT_REVIEW.md) · [Publication receipt](reviews/animal-presentation/deployment-confirmation.json) · [Playtest](https://last-ferry-playtest.abumech.chatgpt.site)
+
+Fresh build/TypeScript, 295 focused checks and separate model/contact/provenance audits pass. Production JS/CSS exactly reproduce the reported final build; seven committed visual frames were inspected. Historical component-source discrepancies, contributor browser evidence and original failures remain explicit. No physical-phone FPS, fresh listening, spoken screen-reader or fresh independent browser gameplay approval is claimed.
+
+The user positively receives the animal direction. **[TERNHAVEN_JOURNEY_01](NEXT_TASK_TERNHAVEN_JOURNEY.md) is the active assignment**, preserving the finished models, two profile families and arrival/transfer controls. The published game still has seven Journey coves and nine Practice entrances. This guidance does not implement Journey eight; the next task appends accepted Ternhaven with one truthful encounter, exact completed-seven backup/continuation and a truthful eight-cove endpoint. C9–C12 remain future work.
+
+PR #1 remains draft; GitHub main is unchanged. Local Codex implements and returns a normal pushed handoff without deployment or access changes. Physical-device review remains pending, not a renewed gate.
+
+## Historical implementation and earlier assignments
+
+### Animal presentation handoff · 17 November 2026
 
 Implemented the shared model and static image pass on `m1-first-crossing`; [review and evidence](reviews/animal-presentation/REVIEW.md). The report distinguishes real play, model-studio renders and isolated layout fixtures. The build and asset validation passed. Both full minified rescues passed, as did 109 geometry checks; original failures, native comparisons and capture limits are in the review. No deployment or Journey expansion accompanies this change.
 

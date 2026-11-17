@@ -1,12 +1,12 @@
 # Last Ferry — active task
 
-**17 November 2026: [ANIMAL_PRESENTATION_01](NEXT_TASK_ANIMAL_PRESENTATION.md).** Refine the shared animal models, produce coherent choice portraits and arrival figurines, and improve the rescued group plus Board/Let ashore/Bring home cards.
+**17 November 2026: [TERNHAVEN_JOURNEY_01](NEXT_TASK_TERNHAVEN_JOURNEY.md) is active.** Carry accepted Ternhaven into the Journey after Orchard: one truthful illustrated encounter, exact completed-seven continuation with an original-byte backup, and a truthful eight-cove endpoint. Preserve the accepted puzzle, target 14/revision 1 and all nine independent Practice entrances.
 
-The user has not passed the previous task to Codex. **[TERNHAVEN_JOURNEY_01](NEXT_TASK_TERNHAVEN_JOURNEY.md) is queued for the following reviewed pass. Do not start it now.** Its accepted puzzle, target14@1 and integration scope remain intact.
+ANIMAL_PRESENTATION_01 is complete, independently reviewed and published as **Site version 22**, game `26ca0a4f7b42c3f9e809f4a6558b0df8dc0c9139`, hosting `9bde1051ecdcab851c829473b75a82f73ace3be6`. The user says it looks good for now. Retain the finished models, separate close choice portraits and full arrival figurines, lanterns, transfer decisions, complete Undo and acceptance owners. [Review](reviews/animal-presentation/INDEPENDENT_REVIEW.md) · [Receipt](reviews/animal-presentation/deployment-confirmation.json)
 
-Reviewed runtime `a2740e61ec5a782f558ea6caad4181466d04e9f7` remains published in Site version21. Keep seven Journey coves, nine Practice entrances, all targets/bests, save history, complete Undo and the successful lantern/arrival framework. [Current art/source findings](reviews/animal-presentation/PLANNING_REVIEW.md) · [Publication receipt](reviews/arrival-bubble/deployment-confirmation.json)
+The currently published game still has **seven Journey coves and nine Practice entrances**. Ternhaven remains Practice-only until the new implementation is reviewed. C9–C12 remain future work. Physical-phone performance, fresh listening and spoken screen-reader approval remain unverified; no renewed playtest gate is imposed.
 
-Read the named task, current AGENTS and active project state. Local Codex implements and returns evidence; ChatGPT reviews and publishes separately. Preserve newer work, keep PR #1 draft and main unchanged, and do not deploy in the implementation pass.
+Read the named task, AGENTS and active project state. Local Codex implements, verifies and returns a normal pushed handoff; ChatGPT reviews/publication is separate. Incorporate newer work safely, keep PR #1 draft and main unchanged, and do not deploy in this implementation pass.
 
 ## Historical audio brief — completed and superseded
 

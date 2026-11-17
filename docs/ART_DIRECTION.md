@@ -1,10 +1,16 @@
 # Last Ferry — Art Direction
 
+## Reviewed animal direction and next story pass · 17 November 2026
+
+The user says ANIMAL_PRESENTATION_01 looks good for now and asks to continue. Preserve the five revised production appearances and ten derived views at `26ca0a4f7b42c3f9e809f4a6558b0df8dc0c9139`, now published in Site version 22. This is positive visual direction for the present iteration, not a claim of physical-phone performance, fresh listening or spoken screen-reader approval. [Independent review](../reviews/animal-presentation/INDEPENDENT_REVIEW.md)
+
+The active Ternhaven Journey task reuses this family and the existing illustrated Canvas style. Keep choice portraits and complete arrival figures separate, retain identity/scale/contact and the animal-local cached geometry/material path, and introduce no continuously rendered portrait contexts or new model/export pass. Match Juniper, Sedge, Fennel and Willow recognizably in the short scene without compounding model/profile cost. Earlier brief language below is preserved as history and design rationale.
+
 ## Animal presentation implementation
 
 In Play, preserve each miniature's species scale, facing and foot contact; shape and paint belong to the animal factory. At the dock, frame the face and upper chest so a rabbit's ears or a deer's antlers still identify the portrait. At Harbor, use the full standing figure with a common foot line. Keep the live name close to the figure; the existing lanterns own the reward, and no checkmarks or space counts belong in the rescued group. [Model and profile comparisons](../reviews/animal-presentation/REVIEW.md) · [Generation record](../assets/portraits/animal-profiles.json).
 
-## Active animal finish · 17 November 2026
+## Original animal brief — completed · 17 November 2026
 
 The user wants the animal models, rescued-group showcase and offboarding passenger cards to reach the finish of the new lanterns. [ANIMAL_PRESENTATION_01](../NEXT_TASK_ANIMAL_PRESENTATION.md) takes priority before the queued Ternhaven Journey integration. [Exact user references and source review](../reviews/animal-presentation/PLANNING_REVIEW.md)
 
