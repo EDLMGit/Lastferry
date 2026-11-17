@@ -1,6 +1,22 @@
 # Last Ferry — Project state
 
-## Ternhaven Journey · implementation for review
+## Current review, publication and task · 17 November 2026
+
+**TERNHAVEN_JOURNEY_01 is reviewed and published. COVE_NINE_PRACTICE_01 is active.** The user asks to continue after the identifiable Ternhaven handoff. The reviewed game `1e3146652f50c88db1ce7d56c6de14e311aab719` is live as **Site version 23**, hosting `11ab9f44542ea798c2e4ed21aaabb071d1780ef4`, with the existing custom private audience unchanged. [Independent review](../reviews/ternhaven-journey/INDEPENDENT_REVIEW.md) · [Receipt](../reviews/ternhaven-journey/deployment-confirmation.json) · [Playtest](https://last-ferry-playtest.abumech.chatgpt.site)
+
+The Journey now connects eight coves through Ternhaven. Its seven-second greeting keeps Juniper, Sedge and tan Fennel aboard at the pierless buoy while Willow waits ashore. Only explicit Continue acknowledges the scene and mounts the exact fresh puzzle. Completed-seven saves extend deliberately through a verified original-byte before-ternhaven backup; older compatibility, stronger bests and Practice isolation remain. The endpoint truthfully reports eight available rescues and four future coves. Nine independent Practice entrances and all nine target/revision pairs remain, including `ternhaven@1` target 14.
+
+Fresh independent build/TypeScript and **213/213 checks across ten files** pass. The rebuilt JS/CSS exactly reproduce the contributor's minified build. The publication has 542 exact non-review source blobs plus the retained preview-host adaptation. All 101 declared protected blobs match both commits. Ten exact committed native images were inspected, covering both scene orientations, narrow fit, playable handoff, four-neighbor arrival and endpoint. Those are contributor captures, not a fresh independent browser rescue. The live URL opens to the expected private sign-in gate in the review browser.
+
+Preserve evidence limits: the 82.884s recording contains an unexplained 4.966s gap at handoff and cannot establish smoothness or distinguish capture delay from a game stall. The supplemental older Orchard timed-capture runs remain non-passes; the separate minified continuation and new Ternhaven route passed as contributor evidence. The current 147-input gameplay manifest has 136 exact matches, nine newline equivalents, the known preview adaptation and one unresolved ferry-profile digest. Fresh shipping bundles match exactly; do not relabel the whole raw capture manifest exact Git source. Full 82-family filesystem validation/six catalog tests remain contributor evidence; all 178 references were independently checked in the committed tree.
+
+Physical Android performance, fresh listening and spoken screen-reader behavior remain unverified. No animal models or profile assets were changed by this integration; the earlier measured animal-pass counts remain a phone-review concern, not proof of frame rate. Do not reinterpret user continuation as subjective approval of unperformed checks or introduce another permission gate.
+
+**[COVE_NINE_PRACTICE_01](../NEXT_TASK_COVE_NINE_PRACTICE.md)** now commissions Drowned Orchard (`drowned-orchard`) as a compact unscored Practice candidate. Recognizable accepted C7 landmarks and changed water serve a new waiting group; earlier rescued neighbors remain safe. Require a distinct connected position/access and load/order inference beyond C7/C8, production proof, a meaningful failed branch and two deliberate solutions. Original low landings must not acquire invalid waiting passengers merely by raising initial tide. Exact minimum and proposed target remain to be authored and proven.
+
+This guidance implements no C9 content. Its future implementation yields **eight Journey / ten Practice / nine scored**; C9 Journey, later story milestones, C10–C12 and the final supper remain outside this pass. Preserve all accepted puzzles, models/profiles, controls, audio, mastery, save histories/backups and arrival/Undo owners. Local Codex implements and returns a normal pushed handoff without deployment; ChatGPT reviews/publication is separate. PR #1 remains draft and main unchanged. Earlier sections below are historical.
+
+## Historical Ternhaven implementation handoff
 
 The review build appends Ternhaven after Orchard. The new scene opens with three neighbors aboard and Willow ashore; only Continue to Ternhaven starts the authored turn-zero crossing. Exact old-seven completions extend on deliberate Home Continue after backing up the original bytes under `last-ferry.journey.v1.before-ternhaven`. Earlier checkpoints and bests retain their owners. There are eight Journey coves, nine Practice entrances and nine scoring targets; C9–C12 remain unavailable.
 

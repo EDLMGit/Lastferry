@@ -1,6 +1,6 @@
 # TERNHAVEN_JOURNEY_01 — carry the eighth cove into the Journey
 
-> **Active · 17 November 2026.** Following the user's positive visual response to ANIMAL_PRESENTATION_01 and its independent review, resume this contained Journey integration. Preserve the finished animal models, profiles and UI while implementing the scope below.
+> **Completed, reviewed and published · 17 November 2026.** Implementation `1e3146652f50c88db1ce7d56c6de14e311aab719` is Site version 23. [COVE_NINE_PRACTICE_01](NEXT_TASK_COVE_NINE_PRACTICE.md) is now active. Preserve the original integration brief below as history. [Independent review](reviews/ternhaven-journey/INDEPENDENT_REVIEW.md) · [Receipt](reviews/ternhaven-journey/deployment-confirmation.json)
 
 ## Outcome and baseline
 

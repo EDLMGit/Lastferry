@@ -1,4 +1,16 @@
-# Ternhaven Journey implementation for review
+# Ternhaven published; Drowned Orchard candidate commissioned · 17 November 2026
+
+Reviewed game `1e3146652f50c88db1ce7d56c6de14e311aab719` is **Site version 23**, hosting `11ab9f44542ea798c2e4ed21aaabb071d1780ef4`. Existing private access is unchanged. [Independent review](reviews/ternhaven-journey/INDEPENDENT_REVIEW.md) · [Receipt](reviews/ternhaven-journey/deployment-confirmation.json) · [Playtest](https://last-ferry-playtest.abumech.chatgpt.site)
+
+Eight Journey coves, nine independent Practice entrances and nine accepted targets are live. Fresh build/TypeScript and 213 checks pass; fresh JS/CSS match the contributor's production build. Source/save/story review found no scoped blocker. Ten committed native images were inspected. Recording gaps, the current ferry-profile capture-hash discrepancy and failed supplemental Orchard timed captures retain their qualifications; no fresh independent browser rescue, physical Android FPS, human listening or spoken screen-reader approval is claimed.
+
+**[COVE_NINE_PRACTICE_01](NEXT_TASK_COVE_NINE_PRACTICE.md)** is active: author/prove/implement unscored Drowned Orchard Practice using recognizable changed-water geography and new neighbors. This guidance changes no runtime. The candidate will yield 8 Journey / 10 Practice / 9 scored, with C9 Journey and C10–C12 still future. Keep all accepted gameplay, animals/profiles, saves/backups, bests and acceptance behavior.
+
+Keep PR #1 draft/main unchanged. Local Codex implements and returns evidence; no deployment/access change in that pass. The deferred phone test is not reinstated as a gate.
+
+## Historical Ternhaven implementation handoff
+
+### Original implementation for review
 
 Eight Journey coves and nine independent Practice entrances. Orchard leads to A wave from Ternhaven and an explicit handoff to the accepted puzzle. [Review, checks and native gameplay](reviews/ternhaven-journey/REVIEW.md). The minified Orchard and Ternhaven rescues passed; the separate historical Orchard timed capture remains a documented non-pass. Private Site version 22 is unchanged; this review build has not been published.
 

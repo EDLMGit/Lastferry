@@ -1,12 +1,20 @@
 # Last Ferry — difficulty and three-lantern mastery
 
-## Ternhaven Journey · implementation for review
+## Current C9 candidate commission · 17 November 2026
+
+The reviewed eight-cove Journey is published in Site version 23 at `1e3146652f50c88db1ce7d56c6de14e311aab719`. All nine accepted scoring identities remain, including Orchard 13/revision 1 and Ternhaven 14/revision 1. Stronger Practice bests, unscored history, ordinary-rescue story progression and provisional acceptance remain unchanged. [Review](../reviews/ternhaven-journey/INDEPENDENT_REVIEW.md)
+
+[COVE_NINE_PRACTICE_01](../NEXT_TASK_COVE_NINE_PRACTICE.md) commissions Drowned Orchard as one unscored Practice candidate. It must establish a distinct future-position/access inference linked to an earlier load/order obligation in recognizable changed Orchard water. Require production proof, a meaningful losing branch and two consequentially different wins. The minimum and efficient-target proposal are separate outputs; no number or higher-than-C8 length is prescribed. The target stays in developer DESIGN until candidate/revision acceptance. Search counts cannot establish human difficulty. The implementation retains eight Journey and nine scored entries while adding a tenth Practice entrance.
+
+Physical-phone, listening and spoken screen-reader review remain pending. User continuation authorizes the bounded candidate work; it does not pre-accept an unbuilt puzzle or target. Earlier sections below are historical policy/application notes.
+
+## Historical Ternhaven implementation handoff
 
 Ternhaven Journey uses the existing Practice identity, target 14 / revision 1. An accepted best cannot acknowledge a scene or complete a cove. Any actual rescue can advance on explicit continuation, even when fewer lanterns are earned. All nine targets and best storage are unchanged.
 
 [Implementation and verification](../reviews/ternhaven-journey/REVIEW.md). Not deployed: the private Site remains version 22 at game `26ca0a4`. Its publication receipt and earlier records below are unchanged.
 
-## Current integration after reviewed animal pass · 17 November 2026
+## Historical integration after reviewed animal pass · 17 November 2026
 
 ANIMAL_PRESENTATION_01 is complete and published at `26ca0a4f7b42c3f9e809f4a6558b0df8dc0c9139`, Site version 22. The active [TERNHAVEN_JOURNEY_01](../NEXT_TASK_TERNHAVEN_JOURNEY.md) carries the accepted puzzle into the Journey without a rebalance, new difficulty search or target revision. All nine mastery identities and current bests remain. The accepted Ternhaven minimum is 13, with two distinct 14-action strategies; **target 14 / revision 1** remains the reward policy.
 

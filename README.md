@@ -12,7 +12,7 @@ Play starts the illustrated opening. Take the helm enters Holding Pier. After ea
 
 First Crossing is the independent tutorial cove. Its original four-space ferry starts with Pip and Rue aboard, and Moss waits for pickup.
 
-The [private phone Site](https://last-ferry-playtest.abumech.chatgpt.site) serves version **22**, game `26ca0a4f7b42c3f9e809f4a6558b0df8dc0c9139`, hosting source `9bde1051ecdcab851c829473b75a82f73ace3be6`. The live Journey still has seven coves. [Publication receipt](reviews/animal-presentation/deployment-confirmation.json)
+The [private phone Site](https://last-ferry-playtest.abumech.chatgpt.site) serves version **23**, game `1e3146652f50c88db1ce7d56c6de14e311aab719`, hosting source `11ab9f44542ea798c2e4ed21aaabb071d1780ef4`. Its Journey contains eight coves through Ternhaven; all nine Practice entrances remain independent. [Publication receipt](reviews/ternhaven-journey/deployment-confirmation.json) · [Independent review](reviews/ternhaven-journey/INDEPENDENT_REVIEW.md)
 
 ## Run
 

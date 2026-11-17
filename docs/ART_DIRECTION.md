@@ -1,6 +1,12 @@
 # Last Ferry — Art Direction
 
-## Reviewed animal direction and next story pass · 17 November 2026
+## Drowned Orchard Practice direction · 17 November 2026
+
+Preserve the finished animal/profile family and published Ternhaven scene at `1e3146652f50c88db1ce7d56c6de14e311aab719`, Site version 23. The new [C9 Practice task](../NEXT_TASK_COVE_NINE_PRACTICE.md) reuses recognizable accepted C7 Orchard landmarks and orientation under changed water. Original neighbors remain safe; use a new waiting group from existing species/appearances. Show real usable shores, supported berths and route conditions truthfully, with native phone legibility and no global art/export pass.
+
+Candidate-local instance/geometry placement can support the new proven puzzle while preserving shared asset families, scales, contacts and transfer/arrival ownership. No C9 illustrated scene is commissioned yet. The Ternhaven native frames were independently inspected; human pacing/listening and physical-phone performance remain separate. [Independent review](../reviews/ternhaven-journey/INDEPENDENT_REVIEW.md)
+
+## Historical reviewed animal direction and story commission · 17 November 2026
 
 The user says ANIMAL_PRESENTATION_01 looks good for now and asks to continue. Preserve the five revised production appearances and ten derived views at `26ca0a4f7b42c3f9e809f4a6558b0df8dc0c9139`, now published in Site version 22. This is positive visual direction for the present iteration, not a claim of physical-phone performance, fresh listening or spoken screen-reader approval. [Independent review](../reviews/animal-presentation/INDEPENDENT_REVIEW.md)
 

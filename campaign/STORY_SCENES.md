@@ -1,6 +1,16 @@
 # Last Ferry — story scenes for The Long Tide
 
-## Ternhaven Journey · implementation for review
+## Current work order · 17 November 2026
+
+Ternhaven Journey is independently reviewed at `1e3146652f50c88db1ce7d56c6de14e311aab719` and published as **Site version 23**, with existing private access unchanged. The playable order is Holding → Bellwater → Driftwood → Two Shelters → Nell's existing launch → Wide → Reef → Orchard → Ternhaven. There are eight Journey coves, nine independent Practice entrances and nine accepted target identities. [Active state](../docs/PROJECT_STATE.md) · [Review and receipt](../reviews/ternhaven-journey/INDEPENDENT_REVIEW.md)
+
+**[COVE_NINE_PRACTICE_01](../NEXT_TASK_COVE_NINE_PRACTICE.md) — Drowned Orchard** is now the bounded assignment. Revisit recognizable accepted C7 landmarks under changed water with a new waiting group; Orin, Pomme, Medlar and earlier rescued neighbors stay safe. Investigate a future ferry/group position across the turning reach that depends on an earlier load or rescue obligation. Prove what this adds beyond Orchard's escort partition and Ternhaven's staging/retrieval dependency. A title or larger action count alone does not establish a new challenge.
+
+The candidate remains unscored Practice until puzzle/revision review. Its implementation yields **8 Journey / 10 Practice / 9 scored** without a Journey append, save conversion, new story scene or reward identity. Exact layout, minimum, two strategies and proposed target are proof outcomes. Preserve the eight-cove Journey and all accepted models, profiles, puzzles, targets, bests and backups. This guidance adds no runtime content. C10 remains compact consolidation, C11 the peak synthesis and C12 the gentler final rescue/supper. Earlier work orders below are historical.
+
+Preserve the published A wave from Ternhaven greeting, exact starting roster, immediate explicit Continue, held recap and old-save behavior. Drowned Orchard Practice may use a short neutral description only. Its Journey introduction, “The last lights” after C9 and the final supper are not part of this pass; earlier neighbors are not stranded again. Recognition comes from familiar geography under changed conditions and a different waiting group.
+
+## Historical Ternhaven implementation handoff
 
 After Orchard’s accepted rescue, **A wave from Ternhaven** opens on Juniper, Sedge and tan Fennel already aboard the yellow six-space ferry. It settles in open water by Tern Buoy. Willow looks up and raises a paw from Reed Landing. The caption names the people and their positions; the picture spends no turns. Continue to Ternhaven is available immediately. Skip and the seven-second held endpoint leave acknowledgment to the player.
 
@@ -12,7 +22,7 @@ After Orchard’s accepted rescue, **A wave from Ternhaven** opens on Juniper, S
 
 Retain the finished animals, close choice profiles, complete arrival figurines and current resource approach. The next implementation appends accepted Ternhaven after Orchard through one truthful encounter and exact completed-seven continuation. Preserve all puzzles/targets/bests, nine Practice entrances, scene/save identities and original-byte backups. The currently published runtime still has seven Journey coves. C9–C12 remain future work.
 
-## Commissioned campaign step · 17 November 2026
+## Historical Ternhaven commission · 17 November 2026
 
 [TERNHAVEN_JOURNEY_01](../NEXT_TASK_TERNHAVEN_JOURNEY.md) commissions the accepted eighth cove's Journey integration from the reviewed animal/arrival baseline `26ca0a4f7b42c3f9e809f4a6558b0df8dc0c9139`. Site **version 22** contains that baseline; no Journey-eight runtime change accompanies this guidance. [Active state](../docs/PROJECT_STATE.md) · [Publication receipt](../reviews/animal-presentation/deployment-confirmation.json)
 
