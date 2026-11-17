@@ -1,5 +1,9 @@
 # TERNHAVEN_JOURNEY_01 — carry the eighth cove into the Journey
 
+
+> **Queued · 17 November 2026.** The user has not sent this task to Codex and requests [ANIMAL_PRESENTATION_01](NEXT_TASK_ANIMAL_PRESENTATION.md) first. Do not implement this Journey task during the animal pass. Preserve the full scope below for its later reviewed commission. When activated, incorporate the then-reviewed animal implementation and current guidance without resetting to the older runtime baseline; retain the finished models, profiles and UI.
+
+
 ## Outcome and baseline
 
 Append accepted **Ternhaven** after Orchard Landing as Journey cove eight. Add one brief illustrated encounter and safe, deliberate continuation for players with an exact completed-seven save. Preserve all nine independent Practice entrances.

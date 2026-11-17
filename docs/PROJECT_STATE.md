@@ -1,6 +1,18 @@
 # Last Ferry — Project state
 
-## Current task and publication · 17 November 2026
+## Current task — animal presentation before Journey eight · 17 November 2026
+
+**[ANIMAL_PRESENTATION_01](../NEXT_TASK_ANIMAL_PRESENTATION.md)** is now the active assignment. The user requests improved animal models and showcase, plus offboarding passenger cards, and confirms the prior Ternhaven Journey task has not been sent to Codex. That brief is preserved and queued after this review; do not implement both together.
+
+The source review found two concrete presentation issues: original rabbit/sheep portraits use head/upper-chest crops while beaver/deer use complete figures; the same mismatched images appear in both 44px choice slots and larger arrival slots. The rasterized offline SVG shading also leaves conspicuous facets. The user's Holding Pier screenshots show small, uneven figures within a large arrival recess and underused face area in the offboarding cards. [Planning review and exact user references](../reviews/animal-presentation/PLANNING_REVIEW.md)
+
+Refine all five shared appearances through actual animal-local model work, then export two consistent static views: close-up portraits for Board/Let ashore/Bring home and complete figurines for a compact named arrival group. Retain the coastal miniature style, identity/space costs, physical fit, lantern crown, safe bounds, nearby commit, accessibility, complete Undo and acceptance owners. Existing model/portrait-freeze language in historical tasks is superseded only for this bounded pass.
+
+**Publication remains version21**, runtime `a2740e61ec5a782f558ea6caad4181466d04e9f7`, hosting `ea3bed5c0aaf41e4ba516e4621da0f81119e652b`, existing custom private audience unchanged. The live content has seven Journey coves, nine Practice entrances and nine scoring targets. Ternhaven is Practice-only at target14/revision1. [Receipt](../reviews/arrival-bubble/deployment-confirmation.json)
+
+This commit contains guidance, source/geometry diagnostics and user-supplied references only. It does not implement revised animals or claim fresh build/browser/phone approval. Earlier arrival verification remains attributed to that reviewed source. Local Codex implements and returns before/after evidence; ChatGPT reviews and publishes separately. Keep PR #1 draft/main unchanged; no implementation-pass deployment.
+
+## Previous commission and publication — Journey task now queued · 17 November 2026
 
 **Current task: [TERNHAVEN_JOURNEY_01](../NEXT_TASK_TERNHAVEN_JOURNEY.md).** Append the accepted Ternhaven puzzle after Orchard as Journey cove eight, add one short truthful illustrated encounter, and extend exact completed-seven saves only through deliberate Continue with a distinct original-byte backup. The user asks to continue the campaign plan after the arrival handoff.
 

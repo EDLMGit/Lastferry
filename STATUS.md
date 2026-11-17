@@ -1,3 +1,15 @@
+# Animal presentation first; Ternhaven Journey queued · 17 November 2026
+
+**Current task: [ANIMAL_PRESENTATION_01](NEXT_TASK_ANIMAL_PRESENTATION.md).** The user requests actual animal-model polish, a stronger rescued group and improved offboarding passenger cards. They have not sent the Journey task to Codex. Finish this bounded art/presentation pass before the queued [TERNHAVEN_JOURNEY_01](NEXT_TASK_TERNHAVEN_JOURNEY.md).
+
+Improve the four species/five appearances, derive coherent close-up choice portraits and complete arrival figurines, and integrate them in the current mobile UI. Preserve physical fit, identities/costs, selection/commit, the lanterns, safe bounds, native controls, complete Undo and result acceptance. [Source findings and user references](reviews/animal-presentation/PLANNING_REVIEW.md)
+
+No runtime or publication changes are made by this guidance. Site version21 remains game `a2740e61ec5a782f558ea6caad4181466d04e9f7`, hosting `ea3bed5c0aaf41e4ba516e4621da0f81119e652b`, with existing custom private access. Seven Journey coves, nine Practice entrances and nine target identities remain. [Receipt](reviews/arrival-bubble/deployment-confirmation.json)
+
+Keep PR #1 draft and GitHub main unchanged. Local Codex implements and hands off; review/publication is separate. Physical-phone/listening/spoken screen-reader approval remains unverified.
+
+## Previous review and commission — Journey task now queued
+
 # Arrival reviewed and published; Ternhaven Journey next · 17 November 2026
 
 **[TERNHAVEN_JOURNEY_01](NEXT_TASK_TERNHAVEN_JOURNEY.md)** is the current implementation assignment: Ternhaven becomes Journey cove eight, with a truthful short entry and exact completed-seven continuation. Preserve the accepted puzzle, `ternhaven@1` target 14, all earlier bests/backups, nine Practice entrances and the centered arrival bubble.

@@ -1,10 +1,12 @@
 # Last Ferry — active task
 
-**17 November 2026: [TERNHAVEN_JOURNEY_01](NEXT_TASK_TERNHAVEN_JOURNEY.md).** Carry accepted Ternhaven into the Journey as cove eight, add its brief illustrated encounter, and preserve completed-seven saves through explicit backed-up continuation.
+**17 November 2026: [ANIMAL_PRESENTATION_01](NEXT_TASK_ANIMAL_PRESENTATION.md).** Refine the shared animal models, produce coherent choice portraits and arrival figurines, and improve the rescued group plus Board/Let ashore/Bring home cards.
 
-ARRIVAL_BUBBLE_01 is reviewed at `a2740e61ec5a782f558ea6caad4181466d04e9f7` and published as Site **version 21**. [Independent review](reviews/arrival-bubble/INDEPENDENT_REVIEW.md) · [Receipt](reviews/arrival-bubble/deployment-confirmation.json). Current live content has seven Journey coves and nine Practice entrances; this task implements the eighth Journey placement. Keep `ternhaven@1` target 14, all accepted puzzles/bests and the centered arrival bubble.
+The user has not passed the previous task to Codex. **[TERNHAVEN_JOURNEY_01](NEXT_TASK_TERNHAVEN_JOURNEY.md) is queued for the following reviewed pass. Do not start it now.** Its accepted puzzle, target14@1 and integration scope remain intact.
 
-Read the named task, current `AGENTS.md` and active `docs/PROJECT_STATE.md`. Safely incorporate this guidance and newer work. Local Codex implements and returns evidence; ChatGPT reviews and publishes separately. Keep PR #1 draft and main unchanged. No implementation-pass deployment.
+Reviewed runtime `a2740e61ec5a782f558ea6caad4181466d04e9f7` remains published in Site version21. Keep seven Journey coves, nine Practice entrances, all targets/bests, save history, complete Undo and the successful lantern/arrival framework. [Current art/source findings](reviews/animal-presentation/PLANNING_REVIEW.md) · [Publication receipt](reviews/arrival-bubble/deployment-confirmation.json)
+
+Read the named task, current AGENTS and active project state. Local Codex implements and returns evidence; ChatGPT reviews and publishes separately. Preserve newer work, keep PR #1 draft and main unchanged, and do not deploy in the implementation pass.
 
 ## Historical audio brief — completed and superseded
 

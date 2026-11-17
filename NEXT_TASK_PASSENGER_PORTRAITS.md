@@ -1,5 +1,9 @@
 # Next task — recognizable animal portraits in passenger choices
 
+
+> **Historical completed task.** Its original restrictions describe that implementation. The user's 17 November 2026 request authorizes animal-model and portrait refinement in [ANIMAL_PRESENTATION_01](NEXT_TASK_ANIMAL_PRESENTATION.md), including two consistent derivative profiles and measured layout changes. Follow current AGENTS and the new named task; retain this brief as history.
+
+
 ## Current task and intended result
 
 Read `AGENTS.md`, `docs/PROJECT_STATE.md`, this file and `cove-portrait-package/` before editing. This is the current task; older milestone/task files provide history rather than replacing this scope.

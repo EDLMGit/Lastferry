@@ -1,5 +1,18 @@
 # Last Ferry — Art Direction
 
+## Active animal finish · 17 November 2026
+
+The user wants the animal models, rescued-group showcase and offboarding passenger cards to reach the finish of the new lanterns. [ANIMAL_PRESENTATION_01](../NEXT_TASK_ANIMAL_PRESENTATION.md) takes priority before the queued Ternhaven Journey integration. [Exact user references and source review](../reviews/animal-presentation/PLANNING_REVIEW.md)
+
+Refine the actual original animals as rounded coastal figurines: joined cheeks/muzzles, clean ear and antler contours, deliberate wool masses, restrained readable eyes, matte painted surfaces and recognizable supported bodies. Keep cream/tan rabbits, cream/dark-faced sheep, warm-brown beaver with flat tail, and spotted chestnut deer. Preserve identity/palette and physical fit; animal-local geometry/material changes are authorized. Global ferry/world helper or lighting changes are outside this pass.
+
+Two faithful static views serve the two contexts. Choice portraits show head/upper chest with clear face and identifying ears/antlers. Arrival derivatives show complete figurines with a shared ground line and coherent apparent scale, composed as a compact named rescued group. All five appearances receive both profiles. Use the revised production factory and a documented render recipe; ordinary transparent runtime images keep the UI light. Correct the current mixed bust/full-figure crops and faceted projection. No unrelated painted character substitute or per-card 3D canvas is needed.
+
+Retain the lantern crown and successful bubble framework. Use the crew space purposefully in three/four/six-neighbor arrangements and native portrait/short-landscape views. Keep each name associated with its figure, complete cast including early deliveries, no hidden carousel members, useful loading/failure slots and safe stable bounds. Card dimensions can be authored more compactly while preserving measurement/centering.
+
+Passenger choices share the same finish across Board, Let ashore and Bring home. Faces, names and exact space costs read at actual size; selected fill/rim/tick are clear with fixed control geometry. Whole-tile native selection, nearby named confirmation, free inspection and reachable footer remain. Modest size changes are allowed where measured phone space supports them. The previous 44px and unchanged-geometry restrictions described an earlier completed task.
+
+
 ## Centered arrival implementation · 15 November 2026
 
 The user likes the latest levels and lantern mechanic and wants a centered floating mobile end-of-cove card. Their preferred reference puts rewards over a framed character showcase and large actions below. [ARRIVAL_BUBBLE_01](../NEXT_TASK_ARRIVAL_BUBBLE.md) translates that hierarchy into Last Ferry's own rounded teal panel, ivory type, warm brass lanterns, sea-glass controls and restrained coastal detail.
