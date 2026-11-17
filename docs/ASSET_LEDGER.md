@@ -1,5 +1,11 @@
 # Last Ferry asset provenance and history
 
+## Ternhaven Journey · implementation for review
+
+The tenth view in the existing story.illustrations family, ternhaven, is a local Canvas composition. It reuses the yellow six-space hull, illustrated deer, sheep, rabbit, beaver and reeds, with a new open-water buoy and raised-paw pose. No model, portrait, figure, lantern or audio asset was replaced. The two-sentence caption and finite ferry-water cue reuse the existing player and Sound owner. The developer story gallery reads this same painter and registry.
+
+[Implementation and verification](../reviews/ternhaven-journey/REVIEW.md). Not deployed: the private Site remains version 22 at game `26ca0a4`. Its publication receipt and earlier records below are unchanged.
+
 ## Review and publication checkpoint · 17 November 2026
 
 ANIMAL_PRESENTATION_01 at `26ca0a4f7b42c3f9e809f4a6558b0df8dc0c9139` is independently reviewed and published in Site version 22. The user positively receives its visual direction for now. All 82 family IDs and the original contributor provenance remain intact. Fresh review checks all ten PNG byte counts, hashes, 256px RGBA headers and their two-purpose mapping; all 176 catalog reference paths exist in the exact committed tree. Full filesystem catalog validation remains the contributor's recorded result. [Independent review and qualifications](../reviews/animal-presentation/INDEPENDENT_REVIEW.md)

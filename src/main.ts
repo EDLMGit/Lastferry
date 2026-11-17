@@ -274,6 +274,7 @@ function setHomeVisible(active: boolean) {
 }
 
 function homeCheckpointNotice(record: JourneyRecord, newEntry: SceneId | null) {
+  if (newEntry === 'ternhaven-wave') return 'Seven coves are safe. Ternhaven is next.';
   if (newEntry === 'orchard-paths') return 'Six coves are safe. Orchard Landing is next.';
   if (newEntry === 'among-the-reeds') {
     if (record.completed.includes('wide-berth')) return 'Two Shelters is next. Wide Berth is already safe.';
@@ -282,7 +283,7 @@ function homeCheckpointNotice(record: JourneyRecord, newEntry: SceneId | null) {
   }
   if (newEntry) return `${storyScenes[newEntry].title} · new story waiting.`;
   const checkpoint = record.checkpoint;
-  if (checkpoint.kind === 'complete') return 'Seven coves are safe.';
+  if (checkpoint.kind === 'complete') return 'Eight coves are safe. Four more are still to come.';
   if (checkpoint.kind === 'scene') return `${storyScenes[checkpoint.id].title} · saved story.`;
   return `${storyCoves.find((entry) => entry.id === checkpoint.id)!.level.title} · from cove start.`;
 }
@@ -678,8 +679,8 @@ function renderJourneyDialog() {
     actions =
       '<button id="journey-return-cancel">Keep playing</button><button id="journey-return-confirm">Return home</button>';
   } else {
-    heading = 'Seven coves are safe.';
-    body = '<p>You’ve rescued the seven available coves. The rest of the coast is still to come. You can revisit any crossing in Practice.</p>' + notice;
+    heading = 'Eight coves are safe.';
+    body = '<p>You’ve rescued the eight available coves. Four more are still to come. You can revisit any crossing in Practice.</p>' + notice;
     actions =
       '<button id="journey-title">Return Home</button><button id="journey-practice">Practice</button><button id="journey-settings">Options</button>';
   }

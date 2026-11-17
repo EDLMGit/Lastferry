@@ -3,6 +3,7 @@ import { storyCoves, storyScenes, type CoveId, type SceneId } from './registry';
 export const JOURNEY_STORAGE_KEY = 'last-ferry.journey.v1';
 export const JOURNEY_LEGACY_BACKUP_KEY = JOURNEY_STORAGE_KEY + '.before-six-coves';
 export const JOURNEY_ORCHARD_BACKUP_KEY = JOURNEY_STORAGE_KEY + '.before-orchard';
+export const JOURNEY_TERNHAVEN_BACKUP_KEY = JOURNEY_STORAGE_KEY + '.before-ternhaven';
 export const checkpointCopy = 'Progress is saved between coves. An unfinished cove starts again.';
 export const unavailableCopy =
   'Progress cannot be saved on this device. You can keep playing, but this journey will not survive closing.';
@@ -63,6 +64,8 @@ const throughDriftwood = [...earlyCoves, 'driftwood-yard'];
 const throughYardScene = [...earlyScenes, 'driftwood-light'];
 const throughReef = [...throughDriftwood, 'two-shelters', 'wide-berth', 'reef-return'];
 const throughReefScene = [...throughYardScene, 'among-the-reeds', 'a-wider-deck', 'lights-beyond-the-reef'];
+const throughOrchard = [...throughReef, 'orchard-landing'];
+const throughOrchardScene = [...throughReefScene, 'orchard-paths'];
 
 export function legacyContinuationScene(value: unknown): SceneId | null {
   if (
@@ -75,6 +78,9 @@ export function legacyContinuationScene(value: unknown): SceneId | null {
   const named = keys(checkpoint, ['kind', 'id']);
   const pendingLaunch = named && checkpoint.kind === 'scene' && checkpoint.id === 'a-wider-deck';
   const activeWide = named && checkpoint.kind === 'cove' && checkpoint.id === 'wide-berth';
+  if (complete && sameItems(value.completed, throughOrchard) && sameItems(value.acknowledgedScenes, throughOrchardScene)) {
+    return 'ternhaven-wave';
+  }
   if (
     complete &&
     sameItems(value.completed, throughReef) &&
@@ -294,7 +300,8 @@ export class JourneyProgress {
     this.save(
       { ...copy(record), checkpoint: { kind: 'scene', id: nextScene } },
       this.current.raw,
-      nextScene === 'orchard-paths' ? JOURNEY_ORCHARD_BACKUP_KEY : JOURNEY_LEGACY_BACKUP_KEY,
+      nextScene === 'ternhaven-wave' ? JOURNEY_TERNHAVEN_BACKUP_KEY :
+        nextScene === 'orchard-paths' ? JOURNEY_ORCHARD_BACKUP_KEY : JOURNEY_LEGACY_BACKUP_KEY,
     );
     return true;
   }

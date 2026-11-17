@@ -81,11 +81,11 @@ export async function checkTurn(page: Page, expected: State, development: boolea
     await expect(page.locator('#dialog')).toHaveAttribute('data-outcome', expected.status);
 }
 
-export async function recordRescue(page: Page, dir: string, name: string) {
+export async function recordRescue(page: Page, dir: string, name: string, monitorProduction = false) {
   const directory = join(dir, 'raw', name);
   mkdirSync(directory, { recursive: true });
-  const audioStartEpochMs = await passive(page, () => {
-    const stream = (window as any).__LAST_FERRY__.captureAudioStream();
+  const audioStartEpochMs = await passive(page, (monitor: boolean) => {
+    const stream = monitor ? (window as any).__lastFerryOutputMonitor : (window as any).__LAST_FERRY__.captureAudioStream();
     if (!stream) throw Error('No runtime audio stream');
     const recorder = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' });
     const chunks: Blob[] = [];
@@ -98,7 +98,7 @@ export async function recordRescue(page: Page, dir: string, name: string) {
     const start = performance.timeOrigin + performance.now();
     recorder.start();
     return start;
-  });
+  }, monitorProduction);
   const cdp = await page.context().newCDPSession(page);
   const frames: { path: string; timestamp: number; receipt: number }[] = [];
   cdp.on('Page.screencastFrame', (event) => {
@@ -107,7 +107,7 @@ export async function recordRescue(page: Page, dir: string, name: string) {
     frames.push({ path, timestamp: event.metadata.timestamp!, receipt: Date.now() });
     void cdp.send('Page.screencastFrameAck', { sessionId: event.sessionId });
   });
-  await cdp.send('Page.startScreencast', { format: 'jpeg', quality: 88, everyNthFrame: 2 });
+  await cdp.send('Page.startScreencast', { format: 'jpeg', quality: 88, everyNthFrame: monitorProduction ? 1 : 2 });
   return async () => {
     await cdp.send('Page.stopScreencast');
     const bytes = await passive(page, async () => {

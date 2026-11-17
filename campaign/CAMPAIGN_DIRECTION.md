@@ -1,6 +1,12 @@
 # Last Ferry — The Long Tide
 
-## Current work order · 17 November 2026
+## Ternhaven Journey · implementation for review
+
+The playable Journey follows Holding → Bellwater → Driftwood → Two Shelters → Wide Berth → Reef Return → Orchard → Ternhaven. Nell’s launch remains the scene before Wide Berth. All nine independent Practice entrances remain, including First Crossing. Eight accepted rescues reach the current endpoint; four future coves and the final supper are not implemented.
+
+[Implementation and verification](../reviews/ternhaven-journey/REVIEW.md). Not deployed: the private Site remains version 22 at game `26ca0a4`. Its publication receipt and earlier records below are unchanged.
+
+## Prior work order · 17 November 2026
 
 **[TERNHAVEN_JOURNEY_01](../NEXT_TASK_TERNHAVEN_JOURNEY.md) is active again after the completed animal pass.** The user positively receives the visual direction and asks to continue. ANIMAL_PRESENTATION_01 at `26ca0a4f7b42c3f9e809f4a6558b0df8dc0c9139` is independently reviewed and published as Site **version 22**, with existing custom private access unchanged. [Active state](../docs/PROJECT_STATE.md) · [Review](../reviews/animal-presentation/INDEPENDENT_REVIEW.md)
 

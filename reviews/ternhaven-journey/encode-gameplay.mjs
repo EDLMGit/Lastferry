@@ -1,0 +1,11 @@
+import {execFileSync} from 'node:child_process';
+import {readFileSync,writeFileSync,renameSync} from 'node:fs';
+import {join} from 'node:path';
+const base=process.argv[2] ?? 'reviews/ternhaven-journey/gameplay',native=join(base,'390x844');
+execFileSync(process.execPath,['reviews/arrival-bubble/encode-recording.mjs',native],{stdio:['ignore','ignore','inherit']});
+const mediaPath=join(base,'MEDIA.json'), media=JSON.parse(readFileSync(mediaPath,'utf8'));
+renameSync(join(native,'arrival.mp4'),join(native,'scene-to-acceptance.mp4'));
+media.video='390x844/scene-to-acceptance.mp4';
+media.source='Uninterrupted, minified actual Journey. From the genuine Orchard rescue card through explicit Continue, the complete Ternhaven scene, gameplay handoff, free inspection, tide Undo, delivery and terminal Undo/redelivery, acceptance and the held eight-cove endpoint. The full Orchard rescue preceded the recording and was played in the same browser session. No injected terminal states.';
+media.audio.source='Test-side Web Audio monitor: same final analyser feeding the unchanged browser destination, fanned in parallel to a stereo MediaStreamAudioDestinationNode. No independent score, synthetic overlay, new audio context, gain change, or production API. Normal device-motion and runtime audio throughout recording.';
+writeFileSync(mediaPath,JSON.stringify(media,null,2)+'\n');console.log(JSON.stringify(media));

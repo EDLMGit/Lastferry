@@ -135,7 +135,7 @@ describe('exact completed-six continuation into Orchard', () => {
       expect(progress.snapshot.issue).toContain('will not survive closing');
       expect(progress.acknowledge('orchard-paths')).toBe(true);
       expect(progress.accept('orchard-landing', 'won')).toBe(true);
-      expect(progress.snapshot.record?.checkpoint).toEqual({ kind: 'complete' });
+      expect(progress.snapshot.record?.checkpoint).toEqual({ kind: 'scene', id: 'ternhaven-wave' });
       expect(progress.snapshot.record?.completed).toEqual([...six.completed, 'orchard-landing']);
       expect(backing.values.get(JOURNEY_STORAGE_KEY)).toBe(rawSix);
     },
@@ -213,7 +213,7 @@ describe('exact completed-six continuation into Orchard', () => {
     expect(restored.accept('orchard-landing', session.state.status)).toBe(true);
     expect(mastery.accept(session.takeResult())).toBe(false);
     expect(restored.accept('orchard-landing', 'won')).toBe(false);
-    expect(restored.snapshot.record?.checkpoint).toEqual({ kind: 'complete' });
+    expect(restored.snapshot.record?.checkpoint).toEqual({ kind: 'scene', id: 'ternhaven-wave' });
     expect(restored.snapshot.record?.completed).toEqual([...six.completed, 'orchard-landing']);
     expect(restored.snapshot.record?.acknowledgedScenes).toEqual([...six.acknowledgedScenes, 'orchard-paths']);
     expect(new JourneyProgress(() => backing.storage).snapshot.record).toEqual(restored.snapshot.record);

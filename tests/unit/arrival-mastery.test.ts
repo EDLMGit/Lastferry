@@ -42,8 +42,8 @@ describe('accepted Ternhaven arrival scoring', () => {
   test('only Ternhaven target 14 revision 1 joins the eight accepted ratings', () => {
     expect(masteryTargets).toEqual({ ...acceptedBefore, ternhaven: { revision: 1, target: 14 } });
     expect(practiceCoves).toHaveLength(9);
-    expect(storyCoves).toHaveLength(7);
-    expect(storyCoves.map(cove => cove.id)).not.toContain('ternhaven');
+    expect(storyCoves).toHaveLength(8);
+    expect(storyCoves.at(-1)?.level).toBe(ternhaven);
   });
 
   test.each(plans.witnesses)('$id earns three, terminal Undo redelivery earns two and acceptance is once', plan => {

@@ -53,6 +53,7 @@ describe.each([twoShelters, reefReturn])('$title independent Practice boundary',
       ['wide-berth', 'a-wider-deck'],
       ['reef-return', 'lights-beyond-the-reef'],
       ['orchard-landing', 'orchard-paths'],
+      ['ternhaven', 'ternhaven-wave'],
     ]);
     expect(storyScenes['a-wider-deck'].destination).toBe('wide-berth');
     expect(twoShelters.rules.capacity).toBe(4);

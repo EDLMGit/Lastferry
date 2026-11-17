@@ -1,4 +1,8 @@
-# Animal pass published; Ternhaven Journey active · 17 November 2026
+# Ternhaven Journey implementation for review
+
+Eight Journey coves and nine independent Practice entrances. Orchard leads to A wave from Ternhaven and an explicit handoff to the accepted puzzle. [Review, checks and native gameplay](reviews/ternhaven-journey/REVIEW.md). The minified Orchard and Ternhaven rescues passed; the separate historical Orchard timed capture remains a documented non-pass. Private Site version 22 is unchanged; this review build has not been published.
+
+## Earlier handoff: animal pass published; Ternhaven Journey commissioned · 17 November 2026
 
 Reviewed runtime `26ca0a4f7b42c3f9e809f4a6558b0df8dc0c9139` is now **Site version 22**, hosting `9bde1051ecdcab851c829473b75a82f73ace3be6`. Existing custom private audience is unchanged. [Independent review](reviews/animal-presentation/INDEPENDENT_REVIEW.md) · [Publication receipt](reviews/animal-presentation/deployment-confirmation.json) · [Playtest](https://last-ferry-playtest.abumech.chatgpt.site)
 

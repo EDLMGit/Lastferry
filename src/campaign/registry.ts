@@ -12,7 +12,7 @@ import {
 } from '../levels/level';
 
 export type CoveId =
-  'holding-pier' | 'bellwater' | 'driftwood-yard' | 'two-shelters' | 'wide-berth' | 'reef-return' | 'orchard-landing';
+  'holding-pier' | 'bellwater' | 'driftwood-yard' | 'two-shelters' | 'wide-berth' | 'reef-return' | 'orchard-landing' | 'ternhaven';
 export type SceneId =
   | 'opening'
   | 'another-bell'
@@ -20,9 +20,10 @@ export type SceneId =
   | 'among-the-reeds'
   | 'a-wider-deck'
   | 'lights-beyond-the-reef'
-  | 'orchard-paths';
+  | 'orchard-paths'
+  | 'ternhaven-wave';
 export type IllustrationId =
-  'tide' | 'lantern' | 'ferry' | 'harbor' | 'driftwood' | 'reeds' | 'launch' | 'reef' | 'orchard';
+  'tide' | 'lantern' | 'ferry' | 'harbor' | 'driftwood' | 'reeds' | 'launch' | 'reef' | 'orchard' | 'ternhaven';
 export type StoryCue = {
   id: string;
   atMs: number;
@@ -223,6 +224,22 @@ export const storyScenes: Record<SceneId, StoryScene> = {
     destination: 'orchard-landing',
     continueLabel: 'Continue to Orchard Landing',
   },
+  'ternhaven-wave': {
+    id: 'ternhaven-wave',
+    title: 'A wave from Ternhaven',
+    shots: [{
+      id: 'ternhaven',
+      illustration: 'ternhaven',
+      durationMs: 7000,
+      captionCueMs: 1050,
+      caption: 'Juniper, Sedge and Fennel are aboard.\nWillow is waiting by the reeds.',
+      description:
+        'The yellow ferry glides to a stop in open water beside Tern Buoy. Juniper the chestnut deer, Sedge the sheep and Fennel the tan rabbit stand together on deck. On Reed Landing, Willow the brown beaver looks up and raises a paw to greet them. Water separates the boat from her bank; the neighbors stay where they are.',
+      cues: [{ id: 'ternhaven-wave.approach.water', atMs: 750, kind: 'ferry-water', strength: 0.55 }],
+    }],
+    destination: 'ternhaven',
+    continueLabel: 'Continue to Ternhaven',
+  },
 };
 
 export type StoryCove = {
@@ -240,6 +257,7 @@ export const storyCoves: readonly StoryCove[] = [
   { id: 'wide-berth', level: wideBerth, order: 4, entryScene: 'a-wider-deck' },
   { id: 'reef-return', level: reefReturn, order: 5, entryScene: 'lights-beyond-the-reef' },
   { id: 'orchard-landing', level: orchardLanding, order: 6, entryScene: 'orchard-paths' },
+  { id: 'ternhaven', level: ternhaven, order: 7, entryScene: 'ternhaven-wave' },
 ];
 
 export const practiceCoves = [

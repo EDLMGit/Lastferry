@@ -1,6 +1,12 @@
 # Last Ferry — story scenes for The Long Tide
 
-## Current work order · 17 November 2026
+## Ternhaven Journey · implementation for review
+
+After Orchard’s accepted rescue, **A wave from Ternhaven** opens on Juniper, Sedge and tan Fennel already aboard the yellow six-space ferry. It settles in open water by Tern Buoy. Willow looks up and raises a paw from Reed Landing. The caption names the people and their positions; the picture spends no turns. Continue to Ternhaven is available immediately. Skip and the seven-second held endpoint leave acknowledgment to the player.
+
+[Implementation and verification](../reviews/ternhaven-journey/REVIEW.md). Not deployed: the private Site remains version 22 at game `26ca0a4`. Its publication receipt and earlier records below are unchanged.
+
+## Prior work order · 17 November 2026
 
 **[TERNHAVEN_JOURNEY_01](../NEXT_TASK_TERNHAVEN_JOURNEY.md) is active again after the completed animal pass.** The user positively receives the visual direction and asks to continue. ANIMAL_PRESENTATION_01 at `26ca0a4f7b42c3f9e809f4a6558b0df8dc0c9139` is independently reviewed and published as Site **version 22**, with existing custom private access unchanged. [Active state](../docs/PROJECT_STATE.md) · [Review](../reviews/animal-presentation/INDEPENDENT_REVIEW.md)
 

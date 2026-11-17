@@ -7,7 +7,7 @@ import { productionURL } from './evidence';
 import { audio, timeline } from './journey-six-support';
 import { journeyKey } from './story-support';
 import { completeSix, completed, fixture, frame, home, legacyTwo, ongoing, result, run, storage, untouched, witness } from './three-lanterns-support';
-import { acceptedBest, backupKey, endpoint, fitStory, mastery, more, orchardScene, pendingOrchard, record, reefCheckpoint, scenePictures, source, startOrchard } from './orchard-journey-support';
+import { acceptedBest, backupKey, nextEncounter, fitStory, mastery, more, orchardScene, pendingOrchard, record, reefCheckpoint, scenePictures, source, startOrchard } from './orchard-journey-support';
 
 test.use({ hasTouch: true, isMobile: true, deviceScaleFactor: 1, video: 'off', launchOptions: {
   ignoreDefaultArgs: ['--autoplay-policy=no-user-gesture-required'],
@@ -59,7 +59,7 @@ test('completed-six continues through the actual portrait scene and rescue, pres
     await result(page, 2, 12, 2);
     await frame(page, '390x844', 'redelivery-result');
     await activate(page, 'continue-story', true);
-    await endpoint(page);
+    await nextEncounter(page);
     expect((await storage(page)).mastery).toBe(acceptedBest);
     expect((await storage(page)).masteryWrites).toBe(0);
     await frame(page, '390x844', 'accepted-seven');
@@ -67,7 +67,7 @@ test('completed-six continues through the actual portrait scene and rescue, pres
     report(directory('390x844'), 'rescue', { source: captureSource.sha256, final: await storage(page), backup: completeSix, tideUndo: true, terminalUndo: true, priorPracticeBest: acceptedBest });
   } finally { if (finish) await finish(); }
   await page.reload();
-  await expect(page.locator('.home-notice')).toContainText('Seven coves are safe');
+  await expect(page.locator('.home-notice')).toContainText('A wave from Ternhaven · saved story.');
   expect((await storage(page)).mastery).toBe(acceptedBest);
   await activate(page, 'home-practice', true);
   await expect(page.locator('#practice-orchard-landing .mastery-badge')).toHaveAccessibleName(/3 of 3 lanterns/);
@@ -165,12 +165,12 @@ test('minified Journey rescues Reef, explicitly enters Orchard, rescues and acce
   await frame(page, 'release', 'orchard-result');
   expect(JSON.parse((await storage(page)).mastery!).results['orchard-landing@1']).toBeUndefined();
   await activate(page, 'continue-story', true);
-  await endpoint(page);
+  await nextEncounter(page);
   const accepted = await storage(page);
   expect(accepted.masteryWrites).toBe(2);
   expect(JSON.parse(accepted.mastery!).results['orchard-landing@1']).toMatchObject({ revision: 1, lanterns: 3, actions: 13, successfulUndos: 0 });
   await page.reload();
-  await expect(page.locator('.home-notice')).toContainText('Seven coves are safe');
+  await expect(page.locator('.home-notice')).toContainText('A wave from Ternhaven · saved story.');
   expect((await storage(page)).mastery).toBe(accepted.mastery);
   report(directory('release'), 'integration', { source: captureSource.sha256, url: productionURL, saved: accepted });
 });

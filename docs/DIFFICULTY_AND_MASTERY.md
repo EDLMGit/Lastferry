@@ -1,5 +1,11 @@
 # Last Ferry — difficulty and three-lantern mastery
 
+## Ternhaven Journey · implementation for review
+
+Ternhaven Journey uses the existing Practice identity, target 14 / revision 1. An accepted best cannot acknowledge a scene or complete a cove. Any actual rescue can advance on explicit continuation, even when fewer lanterns are earned. All nine targets and best storage are unchanged.
+
+[Implementation and verification](../reviews/ternhaven-journey/REVIEW.md). Not deployed: the private Site remains version 22 at game `26ca0a4`. Its publication receipt and earlier records below are unchanged.
+
 ## Current integration after reviewed animal pass · 17 November 2026
 
 ANIMAL_PRESENTATION_01 is complete and published at `26ca0a4f7b42c3f9e809f4a6558b0df8dc0c9139`, Site version 22. The active [TERNHAVEN_JOURNEY_01](../NEXT_TASK_TERNHAVEN_JOURNEY.md) carries the accepted puzzle into the Journey without a rebalance, new difficulty search or target revision. All nine mastery identities and current bests remain. The accepted Ternhaven minimum is 13, with two distinct 14-action strategies; **target 14 / revision 1** remains the reward policy.

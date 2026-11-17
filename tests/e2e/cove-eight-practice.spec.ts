@@ -195,7 +195,7 @@ test('320px Practice criteria, candidate menu, orientation and fullscreen retain
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await fixture(page, completeSeven, acceptedBest);
   await page.goto('/');
-  await expect(page.locator('.home-notice')).toContainText('Seven coves are safe');
+  await expect(page.locator('.home-notice')).toContainText('Seven coves are safe. Ternhaven is next.');
   await activate(page, 'home-practice', true);
   await expect(page.locator('[data-practice]')).toHaveCount(9);
   await page.locator('.mastery-criteria summary').tap();

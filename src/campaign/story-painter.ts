@@ -69,6 +69,7 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
     reeds: 7,
     reef: 7,
     orchard: 7,
+    ternhaven: 7,
   };
   const grains = Array.from({ length: 560 }, (_, i) => ({
     x: ((i * 173 + 43) % 997) / 997,
@@ -146,15 +147,15 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
     ellipse(0, 0, 1.8, 4, '#fff5d1');
     ctx.restore();
   }
-  function rabbit(x: number, y: number, s: number, kind: 'tan' | 'cream', p: RabbitPose = {}) {
+  function rabbit(x: number, y: number, s: number, kind: 'tan' | 'cream' | 'honey-tan', p: RabbitPose = {}) {
     const lift = p.lift || 0,
       step = p.step || 0,
       head = p.head || 0,
       warmth = p.warmth || 0,
       guide = p.guide || 0;
-    const base = kind === 'tan' ? C.tan : C.cream,
-      shade = kind === 'tan' ? '#7d927b' : '#a3b8a6',
-      rim = kind === 'tan' ? '#e1c89b' : '#efdfb9';
+    const base = kind === 'honey-tan' ? '#c79869' : kind === 'tan' ? C.tan : C.cream,
+      shade = kind === 'honey-tan' ? '#a47c55' : kind === 'tan' ? '#7d927b' : '#a3b8a6',
+      rim = kind === 'honey-tan' ? '#f2d6a0' : kind === 'tan' ? '#e1c89b' : '#efdfb9';
     ctx.save();
     ctx.translate(x, y);
     ctx.scale(s, s);
@@ -189,8 +190,8 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
     ellipse(1, -6, 17, 19, base, -0.1);
     ellipse(-11, -38, 6.5, 25, base, -0.17);
     ellipse(6, -38, 6, 23, base, 0.16);
-    ellipse(-11, -38, 2.1, 17, kind === 'tan' ? '#c5ad88' : '#d7c7ab', -0.17);
-    ellipse(6, -38, 1.9, 15, kind === 'tan' ? '#c5ad88' : '#d7c7ab', 0.16);
+    ellipse(-11, -38, 2.1, 17, kind === 'honey-tan' ? '#d6a083' : kind === 'tan' ? '#c5ad88' : '#d7c7ab', -0.17);
+    ellipse(6, -38, 1.9, 15, kind === 'honey-tan' ? '#d6a083' : kind === 'tan' ? '#c5ad88' : '#d7c7ab', 0.16);
     ellipse(-13, 1, 11, 9, base);
     ellipse(-22, 0, 2.7, 2.2, '#284c49');
     ellipse(-8, -10, 2, 2.3, '#24494a');
@@ -1005,7 +1006,7 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
     lantern(lampX, lampY, s, 1, Math.sin(lift * Math.PI) * -0.1);
     finish(t);
   }
-  function launchBeaver(x: number, y: number, s: number, release: number, acknowledge: number) {
+  function launchBeaver(x: number, y: number, s: number, release: number, acknowledge: number, waveToBoat = false) {
     ctx.save();
     ctx.translate(x, y);
     ctx.scale(s, s);
@@ -1040,8 +1041,8 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
     ellipse(-13, -1, 17, 5, '#8e6848');
     ellipse(13, -1, 17, 5, '#8e6848');
     ctx.save();
-    ctx.translate(-5, -60);
-    ctx.rotate(mix(0.08, -0.1, acknowledge));
+    ctx.translate(-5, -60 - (waveToBoat ? acknowledge * 3.5 : 0));
+    ctx.rotate(waveToBoat ? mix(-0.09, 0.14, acknowledge) : mix(0.08, -0.1, acknowledge));
     ellipse(-15, -15, 8, 9, '#8e6848');
     ellipse(15, -14, 8, 9, '#8e6848');
     ellipse(-15, -15, 3.7, 4.6, '#b38a65');
@@ -1065,12 +1066,12 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
       1.2,
     );
     ctx.restore();
-    const handX = mix(-38, -33, release),
+    const handX = mix(-38, waveToBoat ? -57 : -33, release),
       handY = mix(-20, -65, release);
     line(
       [
         [-14, -37],
-        [-29, mix(-23, -43, release)],
+        [mix(-29, waveToBoat ? -49 : -29, release), mix(-23, -43, release)],
         [handX, handY],
       ],
       '#8e6848',
@@ -1374,6 +1375,66 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
     ctx.restore();
     finish(t);
   }
+  function ternhavenShot(seconds: number) {
+    const t = Math.min(seconds, 5.9);
+    const portrait = W < 600;
+    const scale = portrait
+      ? Math.min((W - 16) / 325, (H - 56) / 283, 1.45)
+      : Math.min((W * 0.61 - 18) / 377, (H - 26) / 208, 2.24);
+    const center = W * (portrait ? 0.50 : 0.694);
+    const approach = ease((t - 0.12) / 4.55);
+    const look = ease((t - 1.18) / 1.18);
+    const wave = ease((t - 2.55) / 0.9) * (1 - 0.82 * ease((t - 4.3) / 1.15));
+    backdrop(t, 1);
+    foregroundWater(H * (portrait ? 0.42 : 0.48), t);
+    ctx.save();
+    ctx.translate(center, H * (portrait ? 0.48 : 0.53));
+    ctx.scale(scale, scale);
+
+    ctx.save();
+    ctx.translate(portrait ? 69 : 126, portrait ? -17 : -5);
+    ellipse(5, 14, 69, 6, 'rgba(30,66,68,.22)');
+    path('M -63 2 Q -52 -8 -38 -8 Q -19 -16 7 -13 Q 43 -22 64 -5 L 78 4 Q 65 19 37 20 L -2 22 Q -44 18 -63 10 Z', '#647d6c');
+    path('M -63 2 Q -52 -8 -38 -8 Q -19 -16 7 -13 Q 43 -22 64 -5 L 78 4 Q 49 3 30 8 Q 2 13 -17 7 Q -48 10 -63 2 Z', '#a6ad82');
+    path('M -55 12 Q -29 20 -6 19 M 20 21 Q 48 20 63 13', null, '#c9c6a3', 1.4);
+    reeds(45, -7, 0.79, t, false);
+    reeds(61, -2, 0.49, t + 2, false);
+    ellipse(0, 2, 33, 4, 'rgba(60,75,54,.19)');
+    launchBeaver(-7, 0, portrait ? 0.97 : 0.88, wave, look, true);
+    path('M -48 5 Q -40 3 -36 4 M 28 10 Q 34 8 41 8', null, '#c6bb93', 1.3);
+    ctx.restore();
+
+    const boatX = mix(portrait ? -64 : -97, portrait ? -24 : -62, approach);
+    const boatY = (portrait ? 117 : 57) - 4 * approach;
+    const buoyX = portrait ? 125 : 96;
+    const buoyY = (portrait ? 100 : 67) + 0.9 * Math.sin(t * 1.8);
+    ctx.save();
+    ctx.translate(buoyX, buoyY);
+    path('M -19 3 Q -8 8 16 4 M -13 8 Q -2 10 8 8', null, '#b0caba', 1.4);
+    ellipse(0, 2, 10, 3.4, '#5a8380');
+    path('M -9 -2 Q -5 -5 -4 -12 L 4 -12 Q 4 -5 9 -2 Q 5 3 0 3 Q -6 2 -9 -2 Z', '#b6614d');
+    line([[0, -8], [0, -29]], '#6e6150', 3.7);
+    path('M -5 -21 L 0 -31 L 5 -21 Z', '#e3c788', '#9d7753', 1);
+    ellipse(0, -4, 6.3, 2, '#ebd6ac');
+    ctx.restore();
+
+    approachWake(boatX, boatY + 22, approach);
+    readyFerry(boatX, boatY, 1.04, () => {
+      ctx.save();
+      ctx.translate(27, -22);
+      ctx.scale(-1, 1);
+      orchardDeer(0, 0, 0.67, 1, 0);
+      ctx.restore();
+      ctx.save();
+      ctx.translate(92, -23);
+      ctx.scale(-1, 1);
+      rabbit(0, 0, 0.49, 'honey-tan', { head: -0.06 * look });
+      ctx.restore();
+      sheep(54, -4, 0.70, -0.06 * look);
+    });
+    ctx.restore();
+    finish(t);
+  }
   function launchShot(t: number) {
     const portrait = W < 480,
       short = H < 300,
@@ -1559,6 +1620,7 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
         reeds: reedsShot,
         reef: reefShot,
         orchard: orchardShot,
+        ternhaven: ternhavenShot,
       })[illustration](t);
     },
   };

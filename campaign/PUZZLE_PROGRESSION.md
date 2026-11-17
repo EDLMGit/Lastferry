@@ -1,6 +1,12 @@
 # Puzzle progression — selected campaign direction
 
-## Current work order · 17 November 2026
+## Ternhaven Journey · implementation for review
+
+Journey cove eight uses the accepted Ternhaven puzzle. The full six-space opening, both staging refuges, early delivery, timed flood and three 13/14/14-action solutions are unchanged. Its shared Practice/Journey target is 14 at revision 1. There is no ninth Journey puzzle or difficulty adjustment in this integration.
+
+[Implementation and verification](../reviews/ternhaven-journey/REVIEW.md). Not deployed: the private Site remains version 22 at game `26ca0a4`. Its publication receipt and earlier records below are unchanged.
+
+## Prior work order · 17 November 2026
 
 **[TERNHAVEN_JOURNEY_01](../NEXT_TASK_TERNHAVEN_JOURNEY.md) is active again after the completed animal pass.** The user positively receives the visual direction and asks to continue. ANIMAL_PRESENTATION_01 at `26ca0a4f7b42c3f9e809f4a6558b0df8dc0c9139` is independently reviewed and published as Site **version 22**, with existing custom private access unchanged. [Active state](../docs/PROJECT_STATE.md) · [Review](../reviews/animal-presentation/INDEPENDENT_REVIEW.md)
 

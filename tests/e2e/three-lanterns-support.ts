@@ -122,6 +122,8 @@ export async function frame(page: Page, folder: string, name: string) {
     for (const el of [dialog, ...dialog.querySelectorAll<HTMLElement>('*')]) {
       const bounds = el.getBoundingClientRect(), style = getComputedStyle(el);
       if (!bounds.width || el.closest('.sr-only') || style.display === 'inline') continue;
+      const closedDetails = el.closest('details:not([open])');
+      if (closedDetails && el !== closedDetails && !closedDetails.querySelector(':scope > summary')?.contains(el)) continue;
       if (el.scrollWidth > el.clientWidth + 1 && el.clientWidth > 0)
         failures.push((el.id || el.className) + ' horizontal overflow');
     }

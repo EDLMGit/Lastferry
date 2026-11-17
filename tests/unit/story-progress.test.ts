@@ -52,7 +52,9 @@ function checkpoints() {
   const sixth = acknowledgeScene(reefEntry, 'lights-beyond-the-reef');
   const orchardEntry = acceptCove(sixth, 'reef-return', 'won');
   const seventh = acknowledgeScene(orchardEntry, 'orchard-paths');
-  const complete = acceptCove(seventh, 'orchard-landing', 'won');
+  const ternhavenEntry = acceptCove(seventh, 'orchard-landing', 'won');
+  const eighth = acknowledgeScene(ternhavenEntry, 'ternhaven-wave');
+  const complete = acceptCove(eighth, 'ternhaven', 'won');
   return {
     opening,
     holding,
@@ -68,6 +70,8 @@ function checkpoints() {
     sixth,
     orchardEntry,
     seventh,
+    ternhavenEntry,
+    eighth,
     complete,
   };
 }
@@ -109,7 +113,7 @@ describe('authored story registry', () => {
       });
     }
   });
-  test('seven authored story puzzles are registered, with First Crossing practice separate', () => {
+  test('eight authored story puzzles are registered, with First Crossing practice separate', () => {
     expect(storyCoves.map(({ id, order }) => [id, order])).toEqual([
       ['holding-pier', 0],
       ['bellwater', 1],
@@ -118,6 +122,7 @@ describe('authored story registry', () => {
       ['wide-berth', 4],
       ['reef-return', 5],
       ['orchard-landing', 6],
+      ['ternhaven', 7],
     ]);
     expect(storyCove('holding-pier')?.level).toBe(holdingPier);
     expect(storyCove('bellwater')?.level).toBe(bellwater);
@@ -137,12 +142,12 @@ describe('authored story registry', () => {
       ternhaven,
     ]);
     expect(practiceCove('ternhaven')).toBe(ternhaven);
-    expect(storyCove('ternhaven')).toBeUndefined();
+    expect(storyCove('ternhaven')?.level).toBe(ternhaven);
     expect(practiceCove('orchard-landing')).toBe(orchardLanding);
     expect(storyCove('orchard-landing')?.level).toBe(orchardLanding);
     expect(practiceCove('reef-return')).toBe(reefReturn);
     expect(storyCove('reef-return')?.level).toBe(reefReturn);
-    expect(storyCoves.map(({ level }) => level.rules.capacity)).toEqual([4, 4, 4, 4, 6, 6, 6]);
+    expect(storyCoves.map(({ level }) => level.rules.capacity)).toEqual([4, 4, 4, 4, 6, 6, 6, 6]);
     expect(practiceCove('first-crossing')).toBe(firstCrossing);
     expect(practiceCove('future-cove')).toBeUndefined();
     expect(storyCove('future-cove')).toBeUndefined();
@@ -160,6 +165,7 @@ describe('authored story registry', () => {
       'a-wider-deck',
       'lights-beyond-the-reef',
       'orchard-paths',
+      'ternhaven-wave',
     ]);
     expect(storyScenes.opening.shots.map((shot) => shot.caption)).toEqual([
       'Your first evening at the helm.\nA high tide ahead.',
@@ -177,7 +183,7 @@ describe('authored story registry', () => {
 });
 
 describe('journey checkpoint transactions', () => {
-  test('all fifteen checkpoints round-trip with coherent accepted completions and scene acknowledgments', () => {
+  test('all seventeen checkpoints round-trip with coherent accepted completions and scene acknowledgments', () => {
     const records = Object.values(checkpoints());
     expect(records.map(checkpointCove)).toEqual([
       'holding-pier',
@@ -194,7 +200,9 @@ describe('journey checkpoint transactions', () => {
       'reef-return',
       'orchard-landing',
       'orchard-landing',
-      'orchard-landing',
+      'ternhaven',
+      'ternhaven',
+      'ternhaven',
     ]);
     for (const record of records) {
       expect(validateJourney(record)).toEqual({ valid: true, record });
@@ -404,8 +412,11 @@ describe('validated local journey storage', () => {
     expect(endpoint.snapshot.record).toEqual(checkpoints().orchardEntry);
     expect(endpoint.acknowledge('orchard-paths')).toBe(true);
     expect(endpoint.accept('orchard-landing', 'won')).toBe(true);
+    expect(endpoint.snapshot.record).toEqual(checkpoints().ternhavenEntry);
+    expect(endpoint.acknowledge('ternhaven-wave')).toBe(true);
+    expect(endpoint.accept('ternhaven', 'won')).toBe(true);
     expect(endpoint.snapshot.record).toEqual(checkpoints().complete);
-    expect(backing.writes.length).toBe(13);
+    expect(backing.writes.length).toBe(15);
   });
 
   test('snapshots cannot mutate stored progress behind validation', () => {
@@ -454,6 +465,8 @@ describe('validated local journey storage', () => {
       expect(progress.accept('reef-return', 'won')).toBe(true);
       expect(progress.acknowledge('orchard-paths')).toBe(true);
       expect(progress.accept('orchard-landing', 'won')).toBe(true);
+      expect(progress.acknowledge('ternhaven-wave')).toBe(true);
+      expect(progress.accept('ternhaven', 'won')).toBe(true);
       expect(progress.snapshot.record).toEqual(checkpoints().complete);
       expect(backing.values.get(JOURNEY_STORAGE_KEY)).toBeUndefined();
       expect(backing.values.get('last-ferry.sound')).toBe('muted');
@@ -644,6 +657,7 @@ describe('both exact historical boundaries and current completed world', () => {
     expect(scenePredecessor('a-wider-deck')).toBe(twoShelters);
     expect(scenePredecessor('lights-beyond-the-reef')).toBe(wideBerth);
     expect(scenePredecessor('orchard-paths')).toBe(reefReturn);
+    expect(scenePredecessor('ternhaven-wave')).toBe(orchardLanding);
     expect(
       checkpointCove({
         ...third,

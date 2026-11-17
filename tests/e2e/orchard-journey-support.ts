@@ -109,7 +109,7 @@ export async function more(page: Page) {
   }
 }
 
-export async function endpoint(page: Page) {
-  await expect(page.locator('#dialog')).toContainText('Seven coves are safe.');
-  expect(await record(page)).toMatchObject({ completed: seven, acknowledgedScenes: sevenScenes, checkpoint: { kind: 'complete' } });
+export async function nextEncounter(page: Page) {
+  await expect(page.locator('#story-continue')).toHaveText('Continue to Ternhaven');
+  expect(await record(page)).toMatchObject({ completed: seven, acknowledgedScenes: sevenScenes, checkpoint: { kind: 'scene', id: 'ternhaven-wave' } });
 }

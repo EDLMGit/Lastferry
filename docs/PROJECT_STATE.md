@@ -1,6 +1,12 @@
 # Last Ferry — Project state
 
-## Current review, publication and task · 17 November 2026
+## Ternhaven Journey · implementation for review
+
+The review build appends Ternhaven after Orchard. The new scene opens with three neighbors aboard and Willow ashore; only Continue to Ternhaven starts the authored turn-zero crossing. Exact old-seven completions extend on deliberate Home Continue after backing up the original bytes under `last-ferry.journey.v1.before-ternhaven`. Earlier checkpoints and bests retain their owners. There are eight Journey coves, nine Practice entrances and nine scoring targets; C9–C12 remain unavailable.
+
+[Implementation and verification](../reviews/ternhaven-journey/REVIEW.md). Not deployed: the private Site remains version 22 at game `26ca0a4`. Its publication receipt and earlier records below are unchanged.
+
+## Prior review, publication and task · 17 November 2026
 
 **ANIMAL_PRESENTATION_01 is reviewed and published. TERNHAVEN_JOURNEY_01 is now active.** The user says the revised animals look good for now and asks to continue. Treat that as positive visual direction for this iteration, separate from physical-device performance, listening or screen-reader certification.
 
