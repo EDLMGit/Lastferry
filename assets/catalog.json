@@ -6,7 +6,7 @@
       "author": "Original project code authored through Codex; exact individual attribution not independently expanded here",
       "rights": "Follow project rights; do not invent a new distribution license",
       "evidence": "docs/ASSET_LEDGER.md; source Git history",
-      "runtimeDownloads": "No third-party runtime asset downloads. Original assets are local; the three model-derived PNG portraits have separate generation/source/output provenance in this catalog.",
+      "runtimeDownloads": "No external runtime artwork downloads. The local animal profile PNGs have separate generation records.",
       "evidencePaths": [
         "docs/ASSET_LEDGER.md"
       ]
@@ -42,15 +42,16 @@
       ]
     },
     "original-model-derived-ui-image": {
-      "author": "Original project animal models with supplied original offline geometric SVG exporter and PNG derivatives",
+      "author": "Original Last Ferry procedural animal family and offline Three.js profile renderer",
       "rights": "Retain with project sources; no new project license is asserted; Three.js SVGRenderer remains MIT library code",
-      "evidence": "cove-portrait-package/README.md; portraits/generation-manifest.json; reviews/passenger-portraits/generation-audit.json",
-      "derivation": "Original editable models and isolated generator -> geometric SVG intermediates -> transparent PNG derivatives. Simplified offline diffuse shading is not pixel-identical WebGL rendering.",
+      "evidence": "assets/portraits/animal-profiles.json; docs/ASSET_LEDGER.md",
+      "derivation": "Actual animal geometry in a controlled offline WebGL studio, rendered to transparent PNG; studio light and camera differ from the cove. assets/portraits/animal-profiles.json identifies the current outputs; earlier SVG-based generation records are historical.",
       "evidencePaths": [
         "cove-portrait-package/README.md",
         "cove-portrait-package/portraits/generation-manifest.json",
         "reviews/passenger-portraits/generation-audit.json",
-        "assets/portraits/family-manifest.json"
+        "assets/portraits/family-manifest.json",
+        "assets/portraits/animal-profiles.json"
       ]
     },
     "original-package-canvas-art": {
@@ -432,24 +433,33 @@
         {
           "path": "data/ternhaven.level.json",
           "symbol": "passengers.fennel: rabbit-tan"
+        },
+        {
+          "path": "src/scene/animals.ts",
+          "symbol": "animal: shared rabbit construction, animal-local geometry and paint"
         }
       ],
       "variants": [
         "cream coat",
         "tan coat; changed ear splay"
       ],
-      "visualSignature": "Separated tall ears, compact body, tiny dark face and pink inner ears.",
+      "visualSignature": "Compact cream or tan coat, joined cheeks, tapered upright ears with integral pink paint and breed-specific splay.",
       "reuseAndOwnership": "Shared factory; names and gameplay identities come from level passengers. World scales rabbits 1.25 / 1.65 / 1.25.",
       "behaviorToPreserve": "Coat and pose variation imply no abilities. Keep feet/contact, aboard attachment and canonical settled pose. Fern/Oat explicit cream/tan identities survive full passenger-array reorder; speciesOrdinal remains the full placement index. Two Shelters reuses the unchanged model and explicit appearance for Mica: rabbit-cream, one space; full species ordinal and original proportions remain.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "existing-family-reused-two-shelters-practice-awaiting-human-playtest",
-        "reviewedBaseline": "2e4f99268da4691b315fe8467d9e539cda15e927",
-        "basis": "Existing original family reused by one independent three-body four-space Practice candidate. Earlier accepted variants and historical reviews remain below; candidate integration and mechanical proof do not establish visual acceptance or campaign suitability. No deployment in this pass.",
+        "state": "integrated-awaiting-human-visual-review",
+        "reviewedBaseline": "a2740e61ec5a782f558ea6caad4181466d04e9f7",
+        "basis": "reviews/animal-presentation/REVIEW.md",
         "history": [
           {
             "state": "part-of-accepted-baseline",
             "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+          },
+          {
+            "state": "existing-family-reused-two-shelters-practice-awaiting-human-playtest",
+            "reviewedBaseline": "2e4f99268da4691b315fe8467d9e539cda15e927",
+            "basis": "Existing original family reused by one independent three-body four-space Practice candidate. Earlier accepted variants and historical reviews remain below; candidate integration and mechanical proof do not establish visual acceptance or campaign suitability. No deployment in this pass."
           }
         ]
       },
@@ -489,6 +499,10 @@
         {
           "path": "reviews/cove-eight-practice/REVIEW.md",
           "role": "Candidate runtime verification and actual native phone review; gallery specimens and solver proof do not establish human acceptance."
+        },
+        {
+          "path": "reviews/animal-presentation/REVIEW.md",
+          "role": "Animal presentation implementation: actual model/UI comparisons, scoped checks and limitations."
         }
       ],
       "meaning": "Rabbit passenger family. Coat and pose variation imply no abilities. Keep feet/contact, aboard attachment and canonical settled pose.",
@@ -497,14 +511,14 @@
         "cove-portrait-package/tools/render-portraits.mjs"
       ],
       "gallery": {
-        "section": "two-shelters",
-        "preview": "Source links and attributed existing evidence; no isolated rendering claimed Two Shelters reuses this family with Hazel, Bracken and Mica; the candidate section links actual gameplay and retains separate design specimens."
+        "section": "animal-profiles",
+        "preview": "Five original appearances, with a choice portrait and a complete arrival figurine for each. Design specimens are separate from actual-play evidence."
       },
       "typeSpecific": {
-        "factory/source symbol": "src/scene/models.ts: animal(species, variant); src/scene/world.ts: World.speciesIndex / passengerAnchors",
+        "factory/source symbol": "src/scene/animals.ts: animal(species, variant); re-exported by src/scene/models.ts",
         "semantic unit/axis/pivot convention or authoritative source": "animal(species,variant) local feet-contact origin, Y up; World applies species scale and canonical deck/shore positions.",
-        "named attachment points when relevant": "animal() returns one Group with local geometry, no separate rig or head attachment API. World passengerAnchors and canonical passenger IDs attach each instance beneath the hull.",
-        "material references": "src/scene/models.ts palette/mat and local authored colors; scoped contact/lighthouse materials where used.",
+        "named attachment points when relevant": "Root is the existing ground/seat anchor; both rabbit coats retain supported feet.",
+        "material references": "Animal-local matte vertex paint; shared ferry, world and lighting helpers are unchanged.",
         "actual variant parameters": "cream coat; tan coat; changed ear splay",
         "consumers and scale/placement owner": "Shared factory; names and gameplay identities come from level passengers. World scales rabbits 1.25 / 1.65 / 1.25. Offline portrait generation reuses these exact proportions; src/game/passenger-appearance.ts preserves the full species ordinal for World and independently resolves the static image key.",
         "pick/framing role": "World uses geometry for framing and scene selection; gameplay identities remain canonical nodes/passengers.",
@@ -548,18 +562,29 @@
         {
           "path": "data/ternhaven.level.json",
           "symbol": "passengers.sedge: sheep-wool"
+        },
+        {
+          "path": "src/scene/animals.ts",
+          "symbol": "animal: shared sheep construction, animal-local geometry and paint"
         }
       ],
       "variants": [
         "one cream wool family; instantiated with each level identity"
       ],
-      "visualSignature": "Clustered cream wool, dark face/ears, four modest legs.",
+      "visualSignature": "Cream fleece with rounded curls, dark outspread ears, a lighter muzzle and four planted feet.",
       "reuseAndOwnership": "Same factory per sheep identity. World scale 1.15 / 1.5 / 1.15.",
       "behaviorToPreserve": "Keep larger passenger silhouette and true capacity semantics; presentation never determines passenger weight.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "part-of-accepted-baseline",
-        "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+        "state": "integrated-awaiting-human-visual-review",
+        "reviewedBaseline": "a2740e61ec5a782f558ea6caad4181466d04e9f7",
+        "basis": "reviews/animal-presentation/REVIEW.md",
+        "history": [
+          {
+            "state": "part-of-accepted-baseline",
+            "gameCommit": "8052cfcd67f2e56cf3258243618c4ce125d51c4b"
+          }
+        ]
       },
       "evidence": [
         {
@@ -577,6 +602,10 @@
         {
           "path": "reviews/cove-eight-practice/REVIEW.md",
           "role": "Candidate runtime verification and actual native phone review; gallery specimens and solver proof do not establish human acceptance."
+        },
+        {
+          "path": "reviews/animal-presentation/REVIEW.md",
+          "role": "Animal presentation implementation: actual model/UI comparisons, scoped checks and limitations."
         }
       ],
       "meaning": "Sheep passenger family. Keep larger passenger silhouette and true capacity semantics; presentation never determines passenger weight.",
@@ -585,14 +614,14 @@
         "cove-portrait-package/tools/render-portraits.mjs"
       ],
       "gallery": {
-        "section": "inventory",
-        "preview": "Source links and attributed existing evidence; no isolated rendering claimed"
+        "section": "animal-profiles",
+        "preview": "Five original appearances, with a choice portrait and a complete arrival figurine for each. Design specimens are separate from actual-play evidence."
       },
       "typeSpecific": {
-        "factory/source symbol": "src/scene/models.ts: animal(species, variant)",
+        "factory/source symbol": "src/scene/animals.ts: animal(species, variant); re-exported by src/scene/models.ts",
         "semantic unit/axis/pivot convention or authoritative source": "animal(species,variant) local feet-contact origin, Y up; World applies species scale and canonical deck/shore positions.",
-        "named attachment points when relevant": "animal() returns one Group with local geometry, no separate rig or head attachment API. World passengerAnchors and canonical passenger IDs attach each instance beneath the hull.",
-        "material references": "src/scene/models.ts palette/mat and local authored colors; scoped contact/lighthouse materials where used.",
+        "named attachment points when relevant": "sheep-head group moves the eyes, ears, muzzle and forelock together during the existing Moss acknowledgment.",
+        "material references": "Animal-local matte vertex paint; shared ferry, world and lighting helpers are unchanged.",
         "actual variant parameters": "one cream wool family; instantiated with each level identity",
         "consumers and scale/placement owner": "Same factory per sheep identity. World scale 1.15 / 1.5 / 1.15. Offline portrait generation reuses these exact proportions; src/game/passenger-appearance.ts preserves the full species ordinal for World and independently resolves the static image key.",
         "pick/framing role": "World uses geometry for framing and scene selection; gameplay identities remain canonical nodes/passengers.",
@@ -3179,9 +3208,9 @@
       "behaviorToPreserve": "Preview uses future delivery language and qualified projected load/tide; opening/toggling/cancelling keeps committed state/history and victory effects unchanged. Same native dialog/choices/focus/scroll survive fullscreen; portrait recovery and stable footer remain. Image decode/failure and rerendering reserve the same geometry; portrait children remain decoration within each existing native button. No portrait-specific overlay or replacement dialog. Story uses this same native owner; cove-boundary progression requires explicit departure and never follows previews, victory display or Undo. Six-option groups use a bounded wider short-landscape chooser; Confirm stays near the initiating context with native choices and overcapacity rejection. Sailing uses inline consequences and its explicit nearby action; native passenger subset/loss dialogs, fullscreen identity and complete Undo remain.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "implemented-existing-coves-repair-awaiting-player-review",
-        "reviewedBaseline": "5085b894cd611dfdcd4ffe55d3bc7296d830ce09",
-        "basis": "Forecast lists every remaining tide phase, reef depth and flood. Previews explain a final trip with too little space or a boat too deep to get home.",
+        "state": "integrated-awaiting-human-visual-review",
+        "reviewedBaseline": "a2740e61ec5a782f558ea6caad4181466d04e9f7",
+        "basis": "reviews/animal-presentation/REVIEW.md",
         "history": [
           {
             "state": "accepted-painted-panel-direction; published-portrait-integration; story-awaiting-review",
@@ -3206,6 +3235,11 @@
             "state": "integrated-play-readability-awaiting-human-review",
             "reviewedBaseline": "7ae1d8ab211c73708d45f7cbbdecc1a7da6e1695",
             "basis": "Existing family reused for the scoped readable-play correction. Earlier accepted material, identity and behavior remain; new composition and perceptual readability require their own actual evidence and user review. Published version13 still contains the reviewed baseline."
+          },
+          {
+            "state": "implemented-existing-coves-repair-awaiting-player-review",
+            "reviewedBaseline": "5085b894cd611dfdcd4ffe55d3bc7296d830ce09",
+            "basis": "Forecast lists every remaining tide phase, reef depth and flood. Previews explain a final trip with too little space or a boat too deep to get home."
           }
         ]
       },
@@ -3285,6 +3319,10 @@
         {
           "path": "reviews/arrival-bubble/REVIEW.md",
           "role": "Actual centered arrival, native phone evidence and lifecycle verification; design specimens and synthetic won states are labeled separately."
+        },
+        {
+          "path": "reviews/animal-presentation/REVIEW.md",
+          "role": "Animal presentation implementation: actual model/UI comparisons, scoped checks and limitations."
         }
       ],
       "meaning": "Shared native dialogs retain full passenger names and space costs. Tips defaults Off, with optional predictive help in Settings. Factual route and tide inspection and actual loss explanations remain available.",
@@ -3293,8 +3331,8 @@
         "src/campaign/presentation.ts"
       ],
       "gallery": {
-        "section": "interface",
-        "preview": "Actual shared material and passengerChoiceContent; ordinary/compact/arrival, long warning, native selected/unselected/focus states and constrained three-passenger specimens. Gallery is design evidence only. The gallery links to actual Holding/Driftwood practice and this pass evidence; gallery specimens remain design evidence."
+        "section": "animal-profiles",
+        "preview": "Five original appearances, with a choice portrait and a complete arrival figurine for each. Design specimens are separate from actual-play evidence."
       },
       "typeSpecific": {
         "render/placement sources": "src/main.ts: renderDialog / renderLocation; src/ui/placement.ts: placeLocalCard / placeActionCard; src/ui/cove-layout.ts: endpointTargets; src/ui/fullscreen.ts: FullscreenSupport.changed; src/style.css: dialog / .dialog-body / .dialog-footer / .terminal-actions; src/ui/cove-ui.ts: shared icon and control rendering helpers; src/ui/cove-ui.css: shared cove interface surfaces; cove-panel-package/material/cove-panel-material.css: .cove-surface / .cove-surface--compact / .cove-surface--arrival / focus state; src/ui/presentation.ts: previewCopy future winning consequence",
@@ -4928,17 +4966,22 @@
       },
       "provenance": "original-package-vector-and-css",
       "acceptance": {
-        "state": "accepted-painted-panel-direction; portrait-integration-awaiting-human-playtest",
-        "basis": "Current user reports the published painted panels look good. Sites version11 publication is confirmed in cove-portrait-package/verification/deployment-confirmation.json. New portraits are a separate unaccepted integration, not in that live build; no blanket device/engine approval.",
-        "reviewedSourceCommit": "23a644aba24e6479b9d82a106a745d15c3f8c7dc",
+        "state": "integrated-awaiting-human-visual-review",
+        "reviewedBaseline": "a2740e61ec5a782f558ea6caad4181466d04e9f7",
+        "basis": "reviews/animal-presentation/REVIEW.md",
         "history": [
           {
             "state": "accepted-button-direction; panel-and-three-choice-refinement-awaiting-human-playtest",
             "basis": "User likes the new button/icon direction at a432535; the supplied review requests panel and three-passenger correction. Integration, independent baseline code checks and human visual acceptance are separate.",
             "reviewedSourceCommit": "a4325353cf11cd4edba8d5384b58fe138e4772e3"
+          },
+          {
+            "state": "accepted-painted-panel-direction; portrait-integration-awaiting-human-playtest",
+            "basis": "Current user reports the published painted panels look good. Sites version11 publication is confirmed in cove-portrait-package/verification/deployment-confirmation.json. New portraits are a separate unaccepted integration, not in that live build; no blanket device/engine approval.",
+            "reviewedSourceCommit": "23a644aba24e6479b9d82a106a745d15c3f8c7dc",
+            "gameCommit": "23a644aba24e6479b9d82a106a745d15c3f8c7dc"
           }
-        ],
-        "gameCommit": "23a644aba24e6479b9d82a106a745d15c3f8c7dc"
+        ]
       },
       "evidence": [
         {
@@ -4996,6 +5039,10 @@
         {
           "path": "LAST_FERRY_WIDE_BERTH_PACKAGE/contracts/FERRY_AND_TRANSFERS.md",
           "role": "Current scoped wider-profile contract; verification remains distinct from specification"
+        },
+        {
+          "path": "reviews/animal-presentation/REVIEW.md",
+          "role": "Animal presentation implementation: actual model/UI comparisons, scoped checks and limitations."
         }
       ],
       "consumers": [
@@ -5003,17 +5050,17 @@
         "src/dev/asset-gallery.ts"
       ],
       "gallery": {
-        "section": "interface",
-        "preview": "Actual shared portraits/helper at44px, selected/unselected/focus/failure states, both naming schemes,400/320px constrained panels and20px longer-label stress; source-size256px derivatives shown separately as design evidence."
+        "section": "animal-profiles",
+        "preview": "Five original appearances, with a choice portrait and a complete arrival figurine for each. Design specimens are separate from actual-play evidence."
       },
       "typeSpecific": {
         "component/selector sources": "src/ui/cove-ui.ts: passengerChoiceContent / observePassengerPortraits; src/ui/cove-ui.css: .passenger-options / .cove-choice / .cove-choice-portrait / .cove-choice-copy; src/game/passenger-appearance.ts: full-level identity",
         "token and elevation roles": "Existing inset #204952 / selected #315e5e faces, checked warm-top square and ivory full labels; accepted button colors remain unchanged.",
         "interaction states": "selected; unselected; focus; unavailable",
-        "size/hit target/layout behavior": "44px portrait beside flexible copy, about62px tile height where content fits,16px essential text, width-aware grid minimum accounting for portrait/check/name. Wrapping may grow only the needed tile; body vertical scroll preserves the fixed sheet/footer.",
+        "size/hit target/layout behavior": "Reserved portrait with flexible live name and cost; responsive columns, scrollable constrained content and nearby named commit footer.",
         "text/icon contract": "Decorative non-draggable empty-alt image and check; live complete name and1space/2spaces text own the accessible decision. Image width/height reserved before decode; failed image is hidden without broken-image text, and its quiet slot remains.",
         "focus and disabled/warning semantics": "Focus keyline; selected/disabled/warning have shape and text as well as color.",
-        "mobile and reduced-motion evidence": "Actual portrait phone measurements, load/failure stability and input checks belong under reviews/passenger-portraits. Prior panel272contrast/13stages and all13Reduced transitions remain historical unaffected material evidence, not new portrait approval. Static images add no motion."
+        "mobile and reduced-motion evidence": "reviews/animal-presentation/REVIEW.md; static portraits add no animation owner."
       }
     },
     {
@@ -5511,152 +5558,192 @@
     },
     {
       "id": "ui.passenger-portraits",
-      "name": "Model-derived static passenger portraits",
+      "name": "Model-derived choice portraits and arrival figurines",
       "kind": "generated-ui-image",
       "status": "integrated",
       "sources": [
         {
-          "path": "src/scene/models.ts",
-          "symbol": "animal(species, variant): original editable animal geometry/materials"
+          "path": "src/scene/animals.ts",
+          "symbol": "animal: editable runtime miniatures"
+        },
+        {
+          "path": "tools/bake-animal-profiles.mjs",
+          "symbol": "offline bake from the shared factory"
+        },
+        {
+          "path": "assets/portraits/animal-profiles.json",
+          "symbol": "camera, lighting, source and output provenance"
         },
         {
           "path": "src/game/passenger-appearance.ts",
-          "symbol": "resolvePassengerAppearance: complete level identity and full species ordinal"
+          "symbol": "resolvePassengerAppearance"
         },
         {
-          "path": "cove-portrait-package/tools/render-portraits.mjs",
-          "symbol": "isolated SVGRenderer geometric export; optional offline Sharp PNG rasterization"
-        },
-        {
-          "path": "cove-portrait-package/portraits/generation-manifest.json",
-          "symbol": "original camera, crop, scale, shading, versions and output hashes"
-        },
-        {
-          "path": "cove-portrait-package/portraits/rabbit-cream.svg",
-          "symbol": "generated geometric intermediate forrabbit-cream"
-        },
-        {
-          "path": "cove-portrait-package/portraits/rabbit-tan.svg",
-          "symbol": "generated geometric intermediate forrabbit-tan"
-        },
-        {
-          "path": "cove-portrait-package/portraits/sheep-wool.svg",
-          "symbol": "generated geometric intermediate forsheep-wool"
-        },
-        {
-          "path": "tools/render-nell-portrait.mjs",
-          "symbol": "isolated original beaver factory to SVGRenderer and transparent Chromium PNG"
-        },
-        {
-          "path": "assets/portraits/beaver-brown.svg",
-          "symbol": "full completed beaver projection including broad tail"
-        },
-        {
-          "path": "assets/portraits/generation-manifest.json",
-          "symbol": "exact Nell model/generator/camera/shading and output provenance"
-        },
-        {
-          "path": "data/two-shelters.level.json",
-          "symbol": "Hazel and Bracken beaver-brown, and Mica rabbit-cream explicitly reuse unchanged portrait outputs"
-        },
-        {
-          "path": "data/reef-return.level.json",
-          "symbol": "explicit appearance for all four passengers"
-        },
-        {
-          "path": "assets/portraits/deer-manifest.json",
-          "symbol": "Source, camera, renderer and output identities for deer-chestnut"
-        },
-        {
-          "path": "src/dev/asset-gallery.ts",
-          "symbol": "ternhavenSection: shared passengerChoiceContent / resolvePassengerAppearance"
-        },
-        {
-          "path": "data/ternhaven.level.json",
-          "symbol": "Ternhaven authored Practice instance, roster, stopping basins, shores and five routes"
+          "path": "src/ui/cove-ui.ts",
+          "symbol": "appearance-to-profile URLs and shared choice markup"
         },
         {
           "path": "src/ui/arrival.ts",
-          "symbol": "requiredPassengerIds / resolvePassengerAppearance / portraitSources in the whole rescued-cast showcase"
+          "symbol": "whole rescued cast and figure composition"
         }
       ],
-      "originalModelSource": "src/scene/models.ts",
+      "originalModelSource": "src/scene/animals.ts",
       "identitySource": "src/game/passenger-appearance.ts",
-      "generatorSource": "cove-portrait-package/tools/render-portraits.mjs",
-      "generationRecord": "assets/portraits/family-manifest.json",
+      "generatorSource": "tools/bake-animal-profiles.mjs",
+      "generationRecord": "assets/portraits/animal-profiles.json",
       "generatedOutputs": [
         {
-          "variant": "rabbit-cream",
-          "path": "cove-portrait-package/portraits/rabbit-cream.png",
+          "variant": "choice/rabbit-cream",
+          "profile": "choice",
+          "appearance": "rabbit-cream",
+          "path": "assets/portraits/choice/rabbit-cream.png",
           "width": 256,
           "height": 256,
           "format": "PNG",
           "colorSpace": "sRGB",
           "alpha": "straight",
-          "sha256": "2f42b09b3e9965f4dc37ea698e9c0380f435e74bc0f7204399d502f176f0a223",
-          "bytes": 27139
+          "sha256": "d2de80f3293ec3964db4f8adcdafa4e253b200fa2aa1ebaf875b4afe233b510c",
+          "bytes": 40420
         },
         {
-          "variant": "rabbit-tan",
-          "path": "cove-portrait-package/portraits/rabbit-tan.png",
+          "variant": "choice/rabbit-tan",
+          "profile": "choice",
+          "appearance": "rabbit-tan",
+          "path": "assets/portraits/choice/rabbit-tan.png",
           "width": 256,
           "height": 256,
           "format": "PNG",
           "colorSpace": "sRGB",
           "alpha": "straight",
-          "sha256": "32254cc48c2203cc219635d4a5e0accf9ae8a9d61e00ac9b98440ee8a3232ed3",
-          "bytes": 28653
+          "sha256": "b1847e8ca503a1b5634408034899fa81c57659dc017e4e77759dfa7ebce94634",
+          "bytes": 42422
         },
         {
-          "variant": "sheep-wool",
-          "path": "cove-portrait-package/portraits/sheep-wool.png",
+          "variant": "choice/sheep-wool",
+          "profile": "choice",
+          "appearance": "sheep-wool",
+          "path": "assets/portraits/choice/sheep-wool.png",
           "width": 256,
           "height": 256,
           "format": "PNG",
           "colorSpace": "sRGB",
           "alpha": "straight",
-          "sha256": "34ed63cc740937734402f79fbe681a597de26e07c6e7e4583d87c21e9e22ee96",
-          "bytes": 43602
+          "sha256": "4651a55b69882fbc584787d7c4274e9803a9cdb159e46bd28abcb20b3bbb2829",
+          "bytes": 74031
         },
         {
-          "variant": "beaver-brown",
-          "path": "assets/portraits/beaver-brown.png",
+          "variant": "choice/beaver-brown",
+          "profile": "choice",
+          "appearance": "beaver-brown",
+          "path": "assets/portraits/choice/beaver-brown.png",
           "width": 256,
           "height": 256,
           "format": "PNG",
           "colorSpace": "sRGB",
           "alpha": "straight",
-          "sha256": "248a3568b1483c8745c12431a41b57fc2cdb969ac0ad9e1c0accc2505a7ffdc5",
-          "bytes": 35678
+          "sha256": "1fc7e31f5c54d6a582cfe59e527a5f97c83b01bd455ab433fdf61a055bc8a393",
+          "bytes": 64963
         },
         {
-          "variant": "deer-chestnut",
-          "path": "assets/portraits/deer-chestnut.png",
+          "variant": "choice/deer-chestnut",
+          "profile": "choice",
+          "appearance": "deer-chestnut",
+          "path": "assets/portraits/choice/deer-chestnut.png",
           "width": 256,
           "height": 256,
           "format": "PNG",
           "colorSpace": "sRGB",
           "alpha": "straight",
-          "sha256": "dd3bef91225cc476f2ae9a437953179ae0525ee738e3840e01426902dfeb7885",
-          "bytes": 32110
+          "sha256": "703fbed6990d580bd5e4caf5c9f2de1c6da366fc41434bb7e5ace30beb02d5c9",
+          "bytes": 52030
+        },
+        {
+          "variant": "arrival/rabbit-cream",
+          "profile": "arrival",
+          "appearance": "rabbit-cream",
+          "path": "assets/portraits/arrival/rabbit-cream.png",
+          "width": 256,
+          "height": 256,
+          "format": "PNG",
+          "colorSpace": "sRGB",
+          "alpha": "straight",
+          "sha256": "a03042d72c5af6add2627ed068319f8707ceafa822e6f24ed6ef07aa646895e1",
+          "bytes": 27515
+        },
+        {
+          "variant": "arrival/rabbit-tan",
+          "profile": "arrival",
+          "appearance": "rabbit-tan",
+          "path": "assets/portraits/arrival/rabbit-tan.png",
+          "width": 256,
+          "height": 256,
+          "format": "PNG",
+          "colorSpace": "sRGB",
+          "alpha": "straight",
+          "sha256": "a7c35bb4ddbc25e1f4f2ba9f3b4c490478422ce3a870edbfc4682f28444acc98",
+          "bytes": 27954
+        },
+        {
+          "variant": "arrival/sheep-wool",
+          "profile": "arrival",
+          "appearance": "sheep-wool",
+          "path": "assets/portraits/arrival/sheep-wool.png",
+          "width": 256,
+          "height": 256,
+          "format": "PNG",
+          "colorSpace": "sRGB",
+          "alpha": "straight",
+          "sha256": "6419ec9c9c0c9ec9501b7879ae085f7bcb92c56dff4dea2f4a3c95bb0f0d8818",
+          "bytes": 45170
+        },
+        {
+          "variant": "arrival/beaver-brown",
+          "profile": "arrival",
+          "appearance": "beaver-brown",
+          "path": "assets/portraits/arrival/beaver-brown.png",
+          "width": 256,
+          "height": 256,
+          "format": "PNG",
+          "colorSpace": "sRGB",
+          "alpha": "straight",
+          "sha256": "dbd36c628e777fc1a8f2b10e083e7de8dac5c2c0750b53486ba57a5ba0f50b46",
+          "bytes": 37112
+        },
+        {
+          "variant": "arrival/deer-chestnut",
+          "profile": "arrival",
+          "appearance": "deer-chestnut",
+          "path": "assets/portraits/arrival/deer-chestnut.png",
+          "width": 256,
+          "height": 256,
+          "format": "PNG",
+          "colorSpace": "sRGB",
+          "alpha": "straight",
+          "sha256": "0a1efa1791f64915a49cef11e49c0a95e5cf80ba13ae1606366b2306d25abea4",
+          "bytes": 35012
         }
       ],
-      "meaning": "Recognize the miniature animal beside live names and capacity; explicit appearance identities remain stable independently of offered order and full species placement ordinals.",
+      "meaning": "Two intentionally framed views of each animal. The passenger key comes from the full level and ID; names, costs and choices remain live UI.",
       "variants": [
-        "rabbit-cream",
-        "rabbit-tan",
-        "sheep-wool",
-        "beaver-brown",
-        "deer-chestnut"
+        "choice/rabbit-cream",
+        "choice/rabbit-tan",
+        "choice/sheep-wool",
+        "choice/beaver-brown",
+        "choice/deer-chestnut",
+        "arrival/rabbit-cream",
+        "arrival/rabbit-tan",
+        "arrival/sheep-wool",
+        "arrival/beaver-brown",
+        "arrival/deer-chestnut"
       ],
-      "visualSignature": "Transparent 256px portraits of cream and tan rabbits, a wool sheep, a brown beaver and a chestnut deer with short forked antlers. Displayed beside each passenger’s name and space cost.",
-      "reuseAndOwnership": "Four canonical PNGs; existing three outputs remain byte-exact. Nell extends the existing family through the same original-model SVG derivation, rasterized offline by installedChromium; no production dependency. Names/costs/input remain native.",
-      "behaviorToPreserve": "Full species ordinal remains intact for world deck/pose; Rue/Lark staytan when offeredalone. Preserve modelproportions/geometry/colors, live names/costs, stable44pxslot/footer, focus/subsets/Undo, allacceptedgameplay/world/audio. Unknownappearance uses text-preserving reservedslot.",
+      "visualSignature": "Five head-and-chest portraits and five complete, grounded figures with intact ears, feet, antlers and tail silhouettes.",
+      "reuseAndOwnership": "Two reusable image profiles per appearance. A neighbor name never creates a new asset. The existing Three.js model supplies both views.",
+      "behaviorToPreserve": "Full species ordinal and explicit coats, one native selection owner, stable reserved slots and visible named fallback; the complete arrival cast includes earlier deliveries.",
       "provenance": "original-model-derived-ui-image",
       "acceptance": {
-        "state": "existing-family-reused-two-shelters-practice-awaiting-human-playtest",
-        "reviewedBaseline": "2e4f99268da4691b315fe8467d9e539cda15e927",
-        "basis": "Existing original family reused by one independent three-body four-space Practice candidate. Earlier accepted variants and historical reviews remain below; candidate integration and mechanical proof do not establish visual acceptance or campaign suitability. No deployment in this pass.",
+        "state": "integrated-awaiting-human-visual-review",
+        "reviewedBaseline": "a2740e61ec5a782f558ea6caad4181466d04e9f7",
+        "basis": "reviews/animal-presentation/REVIEW.md",
         "history": [
           {
             "state": "integrated-candidate-awaiting-human-playtest",
@@ -5672,6 +5759,11 @@
             "state": "prior-three-portraits-published-version12; new-beaver-integrated-human-review-pending",
             "gameCommit": "1a85874883af5caa59f6294a75495eccf2afebbc",
             "basis": "Nell is an original model-derived extension; prior images and publication history unchanged. Native phone art and physical-device approval remain separate."
+          },
+          {
+            "state": "existing-family-reused-two-shelters-practice-awaiting-human-playtest",
+            "reviewedBaseline": "2e4f99268da4691b315fe8467d9e539cda15e927",
+            "basis": "Existing original family reused by one independent three-body four-space Practice candidate. Earlier accepted variants and historical reviews remain below; candidate integration and mechanical proof do not establish visual acceptance or campaign suitability. No deployment in this pass."
           }
         ]
       },
@@ -5747,16 +5839,20 @@
         {
           "path": "reviews/arrival-bubble/REVIEW.md",
           "role": "Actual centered arrival, native phone evidence and lifecycle verification; design specimens and synthetic won states are labeled separately."
+        },
+        {
+          "path": "reviews/animal-presentation/REVIEW.md",
+          "role": "Animal presentation implementation: actual model/UI comparisons, scoped checks and limitations."
         }
       ],
       "typeSpecific": {
-        "original model and shared identity sources": "src/scene/models.ts original animal geometry; resolvePassengerAppearance/full speciesOrdinal and passengerModelVariant separate explicit coat identity from placement.",
-        "camera/crop, world proportions and shading recipe": "Original generation-manifest.json: orthographic offset[1.8,1,5], projected head/upper-chest square with8%totalpadding, rabbit floor.23/sheep.15; rabbit scale[1.25,1.65,1.25],sheep[1.15,1.5,1.15]. Ambient linearRGB[.43,.45,.44], warmkey#fff1dc.75 at[-3,5,4],tealfill#aed5d1.26 at[4,1,2]. Offline diffuse SVG shading differs from liveWebGL/ACES/shadows. Nell uses full-model/tail framing, scale[1.15,1.5,1.15], cameraoffset[2.7,1.8,5], same original diffuse ambient/key/fill colors. The Orchard entry records its own orthographic crop and bounds in deer-manifest.json.",
-        "derived output format/dimensions/variants and alpha/color semantics": "Five 256×256 sRGB straight-alpha PNGs. The source manifest for each derivative records its SVG and raster output.",
-        "generation command/environment and source/output provenance": "Node24.15.0 with existingThree0.186.1 freshly reproduces every suppliedSVG byte; no PNG regeneration because all suppliedmodel/generator/SVG/PNG hashes remain exact. Supplied PNGrasterization Node24.22.1/Sharp0.35.5/Lanczos3 768->256 and completeversions retained. Exact command/source/output audit reviews/passenger-portraits/generation-audit.json; no production rasterizer dependency. Nell: node tools/render-nell-portrait.mjs; Node24, installedThreeSVGRenderer and installedChromium transparent rasterization; exact versions/hashes in assets/portraits/generation-manifest.json. Family record lists both generation paths. Orin uses node tools/render-nell-portrait.mjs --appearance deer-chestnut. See assets/portraits/deer-manifest.json for exact hashes, crop and rendering environment.",
-        "actual consumers, displayed size and semantic purpose": "Board/Letashore/Bringhome in src/main.ts use passengerChoiceContent with explicit resolved appearance; src/dev/asset-gallery.ts shares the original URLs/helper at44CSSpx plus source-size256px specimens. Identity recognition supports live name and capacity; it creates no gameplay difference. Two Shelters adds only named level instances using the same beaver-brown and rabbit-cream outputs; no new generator output or portrait family.",
-        "native-control ownership and text-preserving load/failure behavior": "One nativebutton perpassenger, stableID/aria-pressed/order/focus. Emptyalt/non-draggable decorative PNG has reserved44px slot and no independentpointer/focus behavior. Pending/error leaves quietreservedslot; full labels, costs, selection, Close/Confirm remain live. Same dialog survives fullscreen; no newcanvas/context/loop.",
-        "small-screen evidence and human acceptance boundary": "Actual source-tied Driftwood phone evidence is retained with the task review; developer gallery and fullsize PNG inspection are design evidence. New beaver art/hardware listening/physicalAndroid approval remains pending."
+        "original model and shared identity sources": "src/scene/animals.ts through models.ts; passenger-appearance.ts resolves the full level and passenger ID.",
+        "camera/crop, world proportions and shading recipe": "Offline WebGL bake with the production factory and species scale. Orthographic close faces versus grounded full figures; see assets/portraits/animal-profiles.json for each camera and lighting recipe.",
+        "derived output format/dimensions/variants and alpha/color semantics": "Ten 256px square transparent sRGB RGBA PNGs: five original appearances in each of two profiles.",
+        "generation command/environment and source/output provenance": "Node 24: node tools/bake-animal-profiles.mjs. Exact renderer, current model hashes, camera and derivative hashes: assets/portraits/animal-profiles.json. Earlier SVG projection records are retained as history.",
+        "actual consumers, displayed size and semantic purpose": "Responsive close portraits beside full names and exact space costs on passenger choices; complete figurines in the named, non-interactive arrival cast.",
+        "native-control ownership and text-preserving load/failure behavior": "One native, whole-tile pressed button in choices; reserved slots, decorative static images and live names survive failure. No nested input, new runtime renderer or image-driven layout.",
+        "small-screen evidence and human acceptance boundary": "Actual native-size emulated phone frames and capture limits: reviews/animal-presentation/REVIEW.md. Physical-device and human acceptance are separate."
       },
       "consumers": [
         "src/main.ts",
@@ -5764,8 +5860,8 @@
         "src/dev/asset-gallery.ts"
       ],
       "gallery": {
-        "section": "gallery-orchard",
-        "preview": "Orin, Pomme and Medlar use the same portrait choices as Orchard Practice."
+        "section": "animal-profiles",
+        "preview": "Five original appearances, with a choice portrait and a complete arrival figurine for each. Design specimens are separate from actual-play evidence."
       },
       "reefReturnUse": {
         "description": "Existing cream, tan, brown and wool portraits at mobile chooser size",
@@ -5786,7 +5882,73 @@
         "report": "reviews/arrival-bubble/REVIEW.md",
         "gallery": "asset-gallery.html#arrival-bubble",
         "provenance": "Original editable project SVG/TypeScript/CSS using accepted cove paint and unmodified model-derived portrait PNG outputs. No bitmap or external icon library added."
-      }
+      },
+      "historicalSources": [
+        {
+          "path": "src/scene/models.ts",
+          "symbol": "animal(species, variant): original editable animal geometry/materials"
+        },
+        {
+          "path": "src/game/passenger-appearance.ts",
+          "symbol": "resolvePassengerAppearance: complete level identity and full species ordinal"
+        },
+        {
+          "path": "cove-portrait-package/tools/render-portraits.mjs",
+          "symbol": "isolated SVGRenderer geometric export; optional offline Sharp PNG rasterization"
+        },
+        {
+          "path": "cove-portrait-package/portraits/generation-manifest.json",
+          "symbol": "original camera, crop, scale, shading, versions and output hashes"
+        },
+        {
+          "path": "cove-portrait-package/portraits/rabbit-cream.svg",
+          "symbol": "generated geometric intermediate forrabbit-cream"
+        },
+        {
+          "path": "cove-portrait-package/portraits/rabbit-tan.svg",
+          "symbol": "generated geometric intermediate forrabbit-tan"
+        },
+        {
+          "path": "cove-portrait-package/portraits/sheep-wool.svg",
+          "symbol": "generated geometric intermediate forsheep-wool"
+        },
+        {
+          "path": "tools/render-nell-portrait.mjs",
+          "symbol": "isolated original beaver factory to SVGRenderer and transparent Chromium PNG"
+        },
+        {
+          "path": "assets/portraits/beaver-brown.svg",
+          "symbol": "full completed beaver projection including broad tail"
+        },
+        {
+          "path": "assets/portraits/generation-manifest.json",
+          "symbol": "exact Nell model/generator/camera/shading and output provenance"
+        },
+        {
+          "path": "data/two-shelters.level.json",
+          "symbol": "Hazel and Bracken beaver-brown, and Mica rabbit-cream explicitly reuse unchanged portrait outputs"
+        },
+        {
+          "path": "data/reef-return.level.json",
+          "symbol": "explicit appearance for all four passengers"
+        },
+        {
+          "path": "assets/portraits/deer-manifest.json",
+          "symbol": "Source, camera, renderer and output identities for deer-chestnut"
+        },
+        {
+          "path": "src/dev/asset-gallery.ts",
+          "symbol": "ternhavenSection: shared passengerChoiceContent / resolvePassengerAppearance"
+        },
+        {
+          "path": "data/ternhaven.level.json",
+          "symbol": "Ternhaven authored Practice instance, roster, stopping basins, shores and five routes"
+        },
+        {
+          "path": "src/ui/arrival.ts",
+          "symbol": "requiredPassengerIds / resolvePassengerAppearance / portraitSources in the whole rescued-cast showcase"
+        }
+      ]
     },
     {
       "id": "ui.story-presentation",
@@ -6250,22 +6412,31 @@
         {
           "path": "data/ternhaven.level.json",
           "symbol": "passengers.willow: beaver-brown"
+        },
+        {
+          "path": "src/scene/animals.ts",
+          "symbol": "animal: shared beaver construction, animal-local geometry and paint"
         }
       ],
       "variants": [
         "warm-brown beaver with fixed lighter muzzle and broad resting tail; explicit Nell, Hazel and Bracken identities"
       ],
-      "visualSignature": "Compact warm brown body, lighter muzzle/chest, small rounded ears, broad nose, paired teeth and flattened darker tail.",
+      "visualSignature": "Warm brown coat, cheek pads, light teeth, shaped forepaws and broad flat tail.",
       "reuseAndOwnership": "Original code-native model shares existing matte material palette/factory; World owns canonical deck/pier transforms.",
       "behaviorToPreserve": "Two-space capacity is level data, not a species ability. Tail remains visible and attached with clearance through deck transfer, tide, berth headings and Undo. Two Shelters reuses the unchanged model and explicit appearance for Hazel and Bracken: beaver-brown, two spaces each; full species ordinal and original proportions remain.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "existing-family-reused-two-shelters-practice-awaiting-human-playtest",
-        "reviewedBaseline": "2e4f99268da4691b315fe8467d9e539cda15e927",
-        "basis": "Existing original family reused by one independent three-body four-space Practice candidate. Earlier accepted variants and historical reviews remain below; candidate integration and mechanical proof do not establish visual acceptance or campaign suitability. No deployment in this pass.",
+        "state": "integrated-awaiting-human-visual-review",
+        "reviewedBaseline": "a2740e61ec5a782f558ea6caad4181466d04e9f7",
+        "basis": "reviews/animal-presentation/REVIEW.md",
         "history": [
           {
             "state": "integrated-awaiting-human-visual-review"
+          },
+          {
+            "state": "existing-family-reused-two-shelters-practice-awaiting-human-playtest",
+            "reviewedBaseline": "2e4f99268da4691b315fe8467d9e539cda15e927",
+            "basis": "Existing original family reused by one independent three-body four-space Practice candidate. Earlier accepted variants and historical reviews remain below; candidate integration and mechanical proof do not establish visual acceptance or campaign suitability. No deployment in this pass."
           }
         ]
       },
@@ -6305,6 +6476,10 @@
         {
           "path": "reviews/cove-eight-practice/REVIEW.md",
           "role": "Candidate runtime verification and actual native phone review; gallery specimens and solver proof do not establish human acceptance."
+        },
+        {
+          "path": "reviews/animal-presentation/REVIEW.md",
+          "role": "Animal presentation implementation: actual model/UI comparisons, scoped checks and limitations."
         }
       ],
       "meaning": "Original two-space beaver model shared by Nell the boatwright and independent Practice neighbors Hazel and Bracken; no species ability or new model.",
@@ -6314,14 +6489,14 @@
         "tools/render-nell-portrait.mjs"
       ],
       "gallery": {
-        "section": "two-shelters",
-        "preview": "Static real3D model, original256px portrait and shared44px Nell/Fern/Oat choices; links actual Driftwood. Two Shelters reuses this family with Hazel, Bracken and Mica; the candidate section links actual gameplay and retains separate design specimens."
+        "section": "animal-profiles",
+        "preview": "Five original appearances, with a choice portrait and a complete arrival figurine for each. Design specimens are separate from actual-play evidence."
       },
       "typeSpecific": {
-        "factory/source symbol": "src/scene/models.ts: animal(species, variant)",
+        "factory/source symbol": "src/scene/animals.ts: animal(species, variant); re-exported by src/scene/models.ts",
         "semantic unit/axis/pivot convention or authoritative source": "animal(species,variant) local feet-contact origin, Y up; World applies species scale and canonical deck/shore positions.",
-        "named attachment points when relevant": "animal() returns one Group with local geometry, no separate rig or head attachment API. World passengerAnchors and canonical passenger IDs attach each instance beneath the hull.",
-        "material references": "Shared mat cache; warm fur#8e6848, muzzle#c3a47a, tail#5b4438, nose#3f352d and teeth#f3e4bf.",
+        "named attachment points when relevant": "beaver-flat-tail and independent foot contact forms.",
+        "material references": "Animal-local matte vertex paint; shared ferry, world and lighting helpers are unchanged.",
         "actual variant parameters": "animal(beaver,0): brown fur/muzzle/tail; local feet-contact origin; named beaver-flat-tail group; no costume.",
         "consumers and scale/placement owner": "World applies1.15/1.5/1.15 scale and canonical deck/shore transforms; same scale used by portrait exporter.",
         "pick/framing role": "World uses geometry for framing and scene selection; gameplay identities remain canonical nodes/passengers.",
@@ -6499,20 +6674,31 @@
         {
           "path": "data/ternhaven.level.json",
           "symbol": "passengers.juniper: deer-chestnut"
+        },
+        {
+          "path": "src/scene/animals.ts",
+          "symbol": "animal: shared deer construction, animal-local geometry and paint"
         }
       ],
       "variants": [
         "deer-chestnut"
       ],
-      "visualSignature": "Warm spotted coat, cream muzzle, alert ears, four dark hooves and paired short forked antlers.",
+      "visualSignature": "Spotted chestnut coat, continuous neck and muzzle forms, forked antlers and four dark hooves.",
       "meaning": "Orin, a three-space neighbor at Orchard Landing.",
       "reuseAndOwnership": "The production model and the offline portrait share the project animal factory.",
       "behaviorToPreserve": "Feet contact their support throughout automatic boarding and disembarking. Cost comes from the level.",
       "provenance": "original-project-code",
       "acceptance": {
-        "state": "character-direction-accepted",
-        "reviewedBaseline": "fb5806a7a129984290c54a9f54e08d5171d0d3d3",
-        "basis": "The player liked Orin’s character direction. The revised puzzle awaits its own playtest."
+        "state": "integrated-awaiting-human-visual-review",
+        "reviewedBaseline": "a2740e61ec5a782f558ea6caad4181466d04e9f7",
+        "basis": "reviews/animal-presentation/REVIEW.md",
+        "history": [
+          {
+            "state": "character-direction-accepted",
+            "reviewedBaseline": "fb5806a7a129984290c54a9f54e08d5171d0d3d3",
+            "basis": "The player liked Orin’s character direction. The revised puzzle awaits its own playtest."
+          }
+        ]
       },
       "evidence": [
         {
@@ -6526,6 +6712,10 @@
         {
           "path": "reviews/cove-eight-practice/REVIEW.md",
           "role": "Candidate runtime verification and actual native phone review; gallery specimens and solver proof do not establish human acceptance."
+        },
+        {
+          "path": "reviews/animal-presentation/REVIEW.md",
+          "role": "Animal presentation implementation: actual model/UI comparisons, scoped checks and limitations."
         }
       ],
       "consumers": [
@@ -6533,14 +6723,14 @@
         "tools/render-nell-portrait.mjs"
       ],
       "gallery": {
-        "section": "gallery-orchard",
-        "preview": "Orin, Pomme and Medlar use the same portrait choices as Orchard Practice."
+        "section": "animal-profiles",
+        "preview": "Five original appearances, with a choice portrait and a complete arrival figurine for each. Design specimens are separate from actual-play evidence."
       },
       "typeSpecific": {
-        "factory/source symbol": "src/scene/models.ts: animal(species, variant)",
+        "factory/source symbol": "src/scene/animals.ts: animal(species, variant); re-exported by src/scene/models.ts",
         "semantic unit/axis/pivot convention or authoritative source": "animal(species,variant) local feet-contact origin, Y up; World applies species scale and canonical deck/shore positions.",
-        "named attachment points when relevant": "animal() returns one Group with local geometry, no separate rig or head attachment API. World passengerAnchors and canonical passenger IDs attach each instance beneath the hull.",
-        "material references": "Original chestnut and ochre coat, pale muzzle and spots, dark hooves and antlers.",
+        "named attachment points when relevant": "deer-hoof contact meshes and deer-antler groups.",
+        "material references": "Animal-local matte vertex paint; shared ferry, world and lighting helpers are unchanged.",
         "actual variant parameters": "deer-chestnut, model variant 0. Four deer-hoof meshes and two forked deer-antler groups.",
         "consumers and scale/placement owner": "World applies1.15/1.5/1.15 scale and canonical deck/shore transforms; same scale used by portrait exporter.",
         "pick/framing role": "World uses geometry for framing and scene selection; gameplay identities remain canonical nodes/passengers.",
@@ -7046,5 +7236,23 @@
     "report": "reviews/arrival-bubble/REVIEW.md",
     "gallery": "asset-gallery.html#arrival-bubble",
     "acceptance": "Integrated art requires actual phone inspection and human review. Existing palette, portrait PNGs, compact badges, audio and puzzle assets are preserved. No deployment."
+  },
+  "animalPresentationChanges": {
+    "task": "ANIMAL_PRESENTATION_01",
+    "source": "d7884445c35fc24ebdabc2790b168b68294bf0bd",
+    "updatedFamilies": [
+      "model.rabbit",
+      "model.sheep",
+      "model.beaver",
+      "model.deer",
+      "ui.passenger-portraits",
+      "ui.component.passenger-choice",
+      "ui.dialogs"
+    ],
+    "addedIds": [],
+    "removedIds": [],
+    "historicalManifest": "assets/portraits/family-manifest.json",
+    "generationRecord": "assets/portraits/animal-profiles.json",
+    "evidence": "reviews/animal-presentation/REVIEW.md"
   }
 }

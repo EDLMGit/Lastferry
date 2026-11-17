@@ -1,0 +1,245 @@
+{
+  "qualifier": "Trusted direct unload; visibility change simulated in a microtask during the real transfer. Ordinary Undo through controls.",
+  "interrupted": {
+    "state": {
+      "turn": 1,
+      "tideLevel": 0,
+      "boatNodeId": "stone",
+      "aboard": [],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "stone-pier": [
+          "sheep-1"
+        ],
+        "rabbit-pier": [
+          "rabbit-1",
+          "rabbit-2"
+        ]
+      },
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    "render": {
+      "profile": {
+        "id": "four-space",
+        "capacity": 4,
+        "deckY": 0.26,
+        "beam": 1.06,
+        "bow": 1.04,
+        "stern": 0.89,
+        "gateX": 0.51,
+        "gateZ": 0.28,
+        "wake": {
+          "fore": 0.76,
+          "aft": 0.76,
+          "lateral": 0.48
+        },
+        "berthHold": 0.45,
+        "berthTurn": 0.55
+      },
+      "pendingAnimation": false,
+      "historyLength": 1,
+      "poseHistoryLength": 1,
+      "passengers": [
+        {
+          "id": "rabbit-1",
+          "position": [
+            5.79,
+            0.175,
+            -1.02
+          ],
+          "parent": "",
+          "deckLocalFoot": [
+            0.02000000000000135,
+            0.13343339419807304,
+            5.79
+          ]
+        },
+        {
+          "id": "rabbit-2",
+          "position": [
+            6.21,
+            0.175,
+            -1.02
+          ],
+          "parent": "",
+          "deckLocalFoot": [
+            0.02000000000000135,
+            0.13343339419807304,
+            6.21
+          ]
+        },
+        {
+          "id": "sheep-1",
+          "position": [
+            0,
+            0.535,
+            -2.02
+          ],
+          "parent": "",
+          "deckLocalFoot": [
+            1.02,
+            0.4934333941980731,
+            -2.2648549702353194e-16
+          ]
+        }
+      ],
+      "boatPosition": [
+        0,
+        0,
+        -1
+      ],
+      "waterY": 0,
+      "hullY": 0.041566605801926955
+    },
+    "transition": {
+      "active": null,
+      "last": {
+        "id": 1,
+        "action": {
+          "type": "unload",
+          "passengerIds": [
+            "sheep-1"
+          ]
+        },
+        "plan": {
+          "duration": 520,
+          "tideDuration": 520,
+          "recoveryDelay": 1520
+        },
+        "startedAt": 714,
+        "finishedAt": 719.7999999970198,
+        "reason": "visibility"
+      },
+      "completionCounts": {
+        "complete": 0,
+        "recovery": 0,
+        "visibility": 1,
+        "cancelled": 0,
+        "error": 0
+      }
+    }
+  },
+  "recovered": {
+    "state": {
+      "turn": 0,
+      "tideLevel": 0,
+      "boatNodeId": "stone",
+      "aboard": [
+        "sheep-1"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "stone-pier": [],
+        "rabbit-pier": [
+          "rabbit-1",
+          "rabbit-2"
+        ]
+      },
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    "render": {
+      "profile": {
+        "id": "four-space",
+        "capacity": 4,
+        "deckY": 0.26,
+        "beam": 1.06,
+        "bow": 1.04,
+        "stern": 0.89,
+        "gateX": 0.51,
+        "gateZ": 0.28,
+        "wake": {
+          "fore": 0.76,
+          "aft": 0.76,
+          "lateral": 0.48
+        },
+        "berthHold": 0.45,
+        "berthTurn": 0.55
+      },
+      "pendingAnimation": false,
+      "historyLength": 0,
+      "poseHistoryLength": 0,
+      "passengers": [
+        {
+          "id": "rabbit-1",
+          "position": [
+            5.79,
+            0.175,
+            -1.02
+          ],
+          "parent": "",
+          "deckLocalFoot": [
+            0.02000000000000135,
+            0.21999999999999997,
+            5.79
+          ]
+        },
+        {
+          "id": "rabbit-2",
+          "position": [
+            6.21,
+            0.175,
+            -1.02
+          ],
+          "parent": "",
+          "deckLocalFoot": [
+            0.02000000000000135,
+            0.21999999999999997,
+            6.21
+          ]
+        },
+        {
+          "id": "sheep-1",
+          "position": [
+            0.69,
+            0.21500000000000002,
+            -0.9999999999999999
+          ],
+          "parent": "deck-anchor-sheep-1",
+          "deckLocalFoot": [
+            0,
+            0.26,
+            0.69
+          ]
+        }
+      ],
+      "boatPosition": [
+        0,
+        0,
+        -1
+      ],
+      "waterY": 0,
+      "hullY": -0.045
+    },
+    "transition": {
+      "active": null,
+      "last": {
+        "id": 1,
+        "action": {
+          "type": "unload",
+          "passengerIds": [
+            "sheep-1"
+          ]
+        },
+        "plan": {
+          "duration": 520,
+          "tideDuration": 520,
+          "recoveryDelay": 1520
+        },
+        "startedAt": 714,
+        "finishedAt": 719.7999999970198,
+        "reason": "visibility"
+      },
+      "completionCounts": {
+        "complete": 0,
+        "recovery": 0,
+        "visibility": 1,
+        "cancelled": 0,
+        "error": 0
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 import * as T from 'three';
 import { animal, ferry } from '../scene/models';
-import { orchardLanding, passengerName, ternhaven, twoShelters, wideBerth } from '../levels/level';
+import { holdingPier, orchardLanding, passengerName, ternhaven, twoShelters, wideBerth } from '../levels/level';
 import { deckSeat, ferryProfile, passengerScale } from '../scene/ferry-profile';
 import { passengerModelVariant, resolvePassengerAppearance } from '../game/passenger-appearance';
 import '../ui/cove-ui.css';
@@ -14,6 +14,7 @@ import {
   observePassengerPortraits,
   passengerChoiceContent,
   portraitSources,
+  arrivalFigureSources,
   setControl,
   type CoveIcon,
 } from '../ui/cove-ui';
@@ -24,7 +25,7 @@ import { createCoveStoryPainter } from '../campaign/story-painter';
 import { lanterns, masteryBadgeMarkup, masteryCriteriaMarkup, masteryResultMarkup } from '../ui/lanterns';
 import { arrivalMarkup } from '../ui/arrival';
 import { initial } from '../game/rules';
-import { resultFor } from '../game/mastery';
+import { masteryTargets, resultFor } from '../game/mastery';
 
 const root = document.querySelector<HTMLElement>('#gallery')!;
 const text = escapeLabel;
@@ -68,7 +69,7 @@ root.innerHTML = `<header><p>Last Ferry · developer tools</p><h1>Cove asset gal
     ['Fern', 1, true, 'rabbit-cream'],
     ['Oat', 1, true, 'rabbit-tan'],
   ],
-)}<p>Explicit stable coats survive offered subsets and passenger-array reorder.</p><p><a href="/?cove=driftwood-yard">Open the actual Driftwood rescue</a></p></article></div></section><section aria-labelledby="portrait-heading"><h2 id="portrait-heading">Model-derived static portraits</h2><p>Five transparent 256px PNG derivatives, displayed at 44px beside live copy in the shared choice helper. Offline SVG diffuse shading is not pixel-identical WebGL. These are design specimens, not gameplay captures.</p><div class="portrait-sources">${(Object.entries(portraitSources) as [PortraitKey, string][]).map(([key, url]) => `<figure class="cove-panel cove-surface gallery-panel"><img class="portrait-source" src="${url}" width="256" height="256" alt="${key.replace('-', ' ')} model-derived source portrait" draggable="false" /><figcaption>${key} · 256×256 PNG</figcaption></figure>`).join('')}</div><div class="panel-specimens"><article id="gallery-bellwater-portraits" class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow"><h3>Bellwater names, same appearances</h3>${choices(
+)}<p>Explicit stable coats survive offered subsets and passenger-array reorder.</p><p><a href="/?cove=driftwood-yard">Open the actual Driftwood rescue</a></p></article></div></section><section id="animal-profiles" aria-labelledby="portrait-heading"><h2 id="portrait-heading">Five neighbors, two views</h2><p>The same five miniature appearances supply close-up passenger choices and full figures at arrival. Each pair uses two transparent 256px images baked from the shared gameplay geometry. These are developer specimens.</p><div class="portrait-sources">${(Object.entries(portraitSources) as [PortraitKey, string][]).map(([key, choice]) => `<figure class="cove-panel cove-surface gallery-panel"><div class="profile-pair"><img src="${choice}" width="256" height="256" alt="${key} choice portrait" /><img src="${arrivalFigureSources[key]}" width="256" height="256" alt="${key} arrival figure" /></div><figcaption>${key} · choice / arrival</figcaption></figure>`).join('')}</div><div class="panel-specimens"><article id="gallery-bellwater-portraits" class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow"><h3>Bellwater names, same appearances</h3>${choices(
   [
     ['Tansy', 1, false, 'rabbit-cream'],
     ['Lark', 1, true, 'rabbit-tan'],
@@ -100,16 +101,17 @@ root.querySelector('#gallery-orchard')!.after(masterySection);
 const arrivalSection = document.createElement('section');
 arrivalSection.id = 'arrival-bubble';
 arrivalSection.className = 'gallery-panel';
-arrivalSection.innerHTML = `<h2>Centered homecoming</h2><p>Isolated renderer fixtures using real level rosters, portrait identities and the production arrival helper. These synthetic won states are not actual rescues, and the specimen cannot write results or Journey progress.</p><label for="gallery-arrival-cast">Rescued cast <select id="gallery-arrival-cast"><option value="ternhaven">Ternhaven · four neighbors including Sedge</option><option value="orchard">Orchard · three neighbors</option><option value="wide">Wide Berth · six neighbors</option></select></label><label for="gallery-arrival-result">Current result <select id="gallery-arrival-result"><option value="3">Three lanterns</option><option value="2">Two lanterns, better accepted best</option><option value="1">One lantern, better accepted best</option></select></label><div class="cove-panel cove-surface cove-surface--arrival" id="gallery-arrival-frame" style="width:min(100%,700px);margin:20px auto"></div><p>${sourceLink('assets/ui/result-lantern.svg', 'Original larger lantern source')} · ${sourceLink('cove-ui-package/ui/icons/replay.svg', 'Original Replay icon')} · ${sourceLink('reviews/arrival-bubble/REVIEW.md', 'Actual arrivals and phone evidence')}</p>`;
+arrivalSection.innerHTML = `<h2>Centered homecoming</h2><p>Isolated renderer fixtures using complete figurines, real level rosters and the production arrival helper. These synthetic won states are not actual rescues, and the specimen cannot write results or Journey progress.</p><label for="gallery-arrival-cast">Rescued cast <select id="gallery-arrival-cast"><option value="holding">Holding Pier · Pip, Rue and Moss</option><option value="ternhaven">Ternhaven · four neighbors including Sedge</option><option value="orchard">Orchard · three neighbors</option><option value="wide">Wide Berth · six neighbors</option></select></label><label for="gallery-arrival-result">Current result <select id="gallery-arrival-result"><option value="3">Three lanterns</option><option value="2">Two lanterns, better accepted best</option><option value="1">One lantern, better accepted best</option></select></label><div class="cove-panel cove-surface cove-surface--arrival" id="gallery-arrival-frame" style="width:min(100%,700px);margin:20px auto"></div><p>${sourceLink('assets/ui/result-lantern.svg', 'Original larger lantern source')} · ${sourceLink('cove-ui-package/ui/icons/replay.svg', 'Original Replay icon')} · ${sourceLink('reviews/animal-presentation/REVIEW.md', 'Revised animals in actual play')}</p>`;
 masterySection.after(arrivalSection);
 function renderArrivalSpecimen() {
   const selected = arrivalSection.querySelector<HTMLSelectElement>('#gallery-arrival-cast')!.value;
-  const level = selected === 'wide' ? wideBerth : selected === 'orchard' ? orchardLanding : ternhaven;
+  const level = selected === 'wide' ? wideBerth : selected === 'orchard' ? orchardLanding : selected === 'holding' ? holdingPier : ternhaven;
   const count = Number(arrivalSection.querySelector<HTMLSelectElement>('#gallery-arrival-result')!.value);
-  const actions = count === 1 ? 20 : level.id === 'orchard-landing' ? 13 : 14;
+  const target = masteryTargets[level.id].target;
+  const actions = count === 1 ? target + 1 : target;
   const state = { ...initial(level), status: 'won' as const, turn: actions, aboard: [], delivered: [...level.objective.requiredPassengerIds], waitingByPier: Object.fromEntries(level.piers.map(pier => [pier.id, []])) };
   const frame = arrivalSection.querySelector<HTMLDivElement>('#gallery-arrival-frame')!;
-  frame.innerHTML = arrivalMarkup({ level, state, result: resultFor(level.id, actions, count === 2 ? 1 : 0), best: resultFor(level.id, level.id === 'orchard-landing' ? 13 : 14, 0), forward: { id: 'choose-cove', label: 'Choose a cove' }, policy: 'Gallery fixture only. Controls do not navigate, save or award a rescue.' });
+  frame.innerHTML = arrivalMarkup({ level, state, result: resultFor(level.id, actions, count === 2 ? 1 : 0), best: resultFor(level.id, target, 0), forward: { id: 'choose-cove', label: 'Choose a cove' }, policy: 'Gallery fixture only. Controls do not navigate, save or award a rescue.' });
   setControl(frame.querySelector<HTMLButtonElement>('#cancel')!, 'close', 'Close arrival', 'quiet', true);
 }
 arrivalSection.querySelectorAll('select').forEach(select => select.addEventListener('change', renderArrivalSpecimen));
@@ -123,7 +125,7 @@ const shelterResidents: [string, number, boolean, PortraitKey | null][] =
     twoShelters.start.aboard.includes(passenger.id),
     resolvePassengerAppearance(twoShelters, passenger.id)?.portraitKey ?? null,
   ]);
-shelterSection.innerHTML = `<h2>Two Shelters</h2><p>Hazel and Bracken share the four-space ferry. Mica waits at the reeds.</p><article class="panel-specimen panel-specimen--narrow"><h3>Passenger choices</h3>${choices(shelterResidents)}<p>The portrait choices use the production level and appearance resolver at 44px.</p></article><p><a href="/?cove=two-shelters">Two Shelters Practice</a> · <a href="/">Play the Journey</a> · ${sourceLink('reviews/journey-six-coves/REVIEW.md', 'Entry scene and actual rescue')}</p>`;
+shelterSection.innerHTML = `<h2>Two Shelters</h2><p>Hazel and Bracken share the four-space ferry. Mica waits at the reeds.</p><article class="panel-specimen panel-specimen--narrow"><h3>Passenger choices</h3>${choices(shelterResidents)}<p>The portrait choices use the production level and appearance resolver with the choice crops.</p></article><p><a href="/?cove=two-shelters">Two Shelters Practice</a> · <a href="/">Play the Journey</a> · ${sourceLink('reviews/journey-six-coves/REVIEW.md', 'Entry scene and actual rescue')}</p>`;
 root.querySelector('#readability-heading')!.closest('section')!.after(shelterSection);
 const mobileMap = document.createElement('p');
 mobileMap.innerHTML = `<a href="/?cove=two-shelters">Inspect Two Shelters</a> · <a href="/?cove=wide-berth">Inspect Wide Berth</a> · ${sourceLink('reviews/mobile-map-readability/REVIEW.md', 'Matched phone map views and control placement')}`;
@@ -136,8 +138,13 @@ shelterSection.after(reefSection);
 const ternhavenSection = document.createElement('section');
 ternhavenSection.id = 'ternhaven';
 ternhavenSection.className = shelterSection.className;
-ternhavenSection.innerHTML = `<h2>Ternhaven · Practice</h2><p>Juniper, Sedge, Fennel and Willow reuse the full-size chestnut deer, wool sheep, tan rabbit and brown beaver. Four modest shores share the accepted ferry, materials and five authored passages.</p><article class="panel-specimen panel-specimen--narrow"><h3>Passenger choices</h3>${choices(ternhaven.passengers.map(passenger => [passengerName(passenger.id, ternhaven), passenger.slots, ternhaven.start.aboard.includes(passenger.id), resolvePassengerAppearance(ternhaven, passenger.id)?.portraitKey ?? null]))}<p>Original 44px portraits and live choice components. This specimen is not gameplay evidence.</p><p>${masteryBadgeMarkup(null)}</p><p>Accepted action target: 14. A newly completed rescue supplies its rating.</p></article><p><a href="/?cove=ternhaven">Play Ternhaven</a> · <a href="#wide-ferry">Inspect automatic deck seating</a> · ${sourceLink('reviews/cove-eight-practice/REVIEW.md', 'Actual rescue and native phone evidence')}</p>`;
+ternhavenSection.innerHTML = `<h2>Ternhaven · Practice</h2><p>Juniper, Sedge, Fennel and Willow reuse the full-size chestnut deer, wool sheep, tan rabbit and brown beaver. Four modest shores share the accepted ferry, materials and five authored passages.</p><article class="panel-specimen panel-specimen--narrow"><h3>Passenger choices</h3>${choices(ternhaven.passengers.map(passenger => [passengerName(passenger.id, ternhaven), passenger.slots, ternhaven.start.aboard.includes(passenger.id), resolvePassengerAppearance(ternhaven, passenger.id)?.portraitKey ?? null]))}<p>Model-derived choice portraits and live selection controls. This specimen is not gameplay evidence.</p><p>${masteryBadgeMarkup(null)}</p><p>Accepted action target: 14. A newly completed rescue supplies its rating.</p></article><p><a href="/?cove=ternhaven">Play Ternhaven</a> · <a href="#wide-ferry">Inspect automatic deck seating</a> · ${sourceLink('reviews/cove-eight-practice/REVIEW.md', 'Actual rescue and native phone evidence')}</p>`;
 reefSection.after(ternhavenSection);
+const fullRoster = document.createElement('article');
+fullRoster.id = 'gallery-six-passengers';
+fullRoster.className = 'cove-panel cove-surface gallery-panel panel-specimen gallery-manifest';
+fullRoster.innerHTML = `<h3>Six neighbors · choice layout fixture</h3>${choices(wideBerth.passengers.map(person => [passengerName(person.id, wideBerth), person.slots, person.species === 'rabbit', resolvePassengerAppearance(wideBerth, person.id)?.portraitKey ?? null]))}<p>All six Wide Berth names in an isolated layout sample. Selection changes only this specimen.</p>`;
+document.querySelector('#gallery-text-stress')!.after(fullRoster);
 const failedPortrait = root.querySelector<HTMLImageElement>('#gallery-failed-portrait img')!;
 failedPortrait.dataset.portraitState = 'pending';
 failedPortrait.src = '/__portrait-unavailable.png';

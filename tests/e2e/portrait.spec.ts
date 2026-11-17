@@ -24,7 +24,7 @@ async function verify(page: Page, expected: Record<string,string>) {
   expect(result.imageCount).toBe(result.choices.length);
   for(const c of result.choices){
     expect(c.image).toMatchObject({complete:true,naturalWidth:256,naturalHeight:256,alt:'',draggable:false,pointerEvents:'none',opacity:'1'});
-    expect(c.image!.rect!.width).toBe(44);expect(c.image!.rect!.height).toBe(44);
+    expect(c.image!.rect!.width).toBe(54);expect(c.image!.rect!.height).toBe(54);
     expect(c.imageContained).toBe(true);expect(c.checkContained).toBe(true);expect(c.checkOverlapsPortrait).toBe(false);
     await expect(page.locator(`#${c.id} .cove-choice-portrait`)).toHaveAttribute('data-appearance',expected[c.id.replace('passenger-','')]);
     expect(c.image!.currentSrc).toContain(expected[c.id.replace('passenger-','')]);

@@ -8,7 +8,7 @@ import { resultFor, masteryTargets } from '../../src/game/mastery';
 import { resolvePassengerAppearance } from '../../src/game/passenger-appearance';
 import { arrivalMarkup, rescuedCast } from '../../src/ui/arrival';
 import { arrivalLanternsMarkup, masteryBadgeMarkup } from '../../src/ui/lanterns';
-import { iconMarkup } from '../../src/ui/cove-ui';
+import { arrivalFigureSources, iconMarkup, passengerChoiceContent, portraitSources } from '../../src/ui/cove-ui';
 
 function fixture(level: Level): State {
   return { ...initial(level), status: 'won', turn: masteryTargets[level.id]?.target ?? 14,
@@ -34,11 +34,25 @@ describe('arrival presentation from real level identities', () => {
       expect(person.appearance).toEqual(resolvePassengerAppearance(level, person.id));
       expect(markup).toContain(`data-passenger-id="${person.id}"`);
       expect(markup).toContain(`data-appearance="${person.appearance?.portraitKey}"`);
+      const key = person.appearance!.portraitKey!;
+      expect(markup).toContain(`src="${arrivalFigureSources[key]}"`);
+      expect(markup).not.toContain(`src="${portraitSources[key]}"`);
       expect(markup).toContain(`>${person.name}</span>`);
     }
     expect(markup).not.toContain('aria-pressed');
     expect(markup).not.toContain('cove-choice-capacity');
     expect(state).toEqual(before);
+  });
+
+  test('each choice and arrival profile uses a distinct static derivative for the same coat', () => {
+    expect(Object.keys(arrivalFigureSources)).toEqual(Object.keys(portraitSources));
+    expect(new Set([...Object.values(portraitSources), ...Object.values(arrivalFigureSources)]).size).toBe(10);
+    const choice = passengerChoiceContent('Fennel', 1, 'rabbit-tan');
+    expect(choice).toContain(`src="${portraitSources['rabbit-tan']}"`);
+    expect(choice).not.toContain(arrivalFigureSources['rabbit-tan']);
+    expect(choice).toContain('data-initial="F" aria-hidden="true"');
+    expect(choice).toContain('>Fennel</b>');
+    expect(choice).toContain('>1 space</span>');
   });
 
   test('matching Journey entries reuse the same level identities and the six-person showcase remains complete', () => {

@@ -1,5 +1,11 @@
 # Last Ferry — Project state
 
+## Animal presentation implementation · 17 November 2026
+
+The four species use one animal-local miniature factory. Each of the five appearances has two transparent views: close portraits for choosing passengers and whole figures for arrivals. A delivered neighbor keeps their name and coat even when they arrived on an earlier trip. [Implementation, visual comparisons and verification](../reviews/animal-presentation/REVIEW.md) · [Asset provenance](ASSET_LEDGER.md).
+
+Holding (9 actions) and Ternhaven (14) were rescued through the minified interface. In the matched five-body Wide Berth frame, draws rose from 674 to 727 and triangles from 126,796 to 147,332; physical phone performance and visual acceptance remain to be reviewed. This presentation is for review on `m1-first-crossing`. The recorded private publication remains **version 21**, game `a2740e61ec5a782f558ea6caad4181466d04e9f7`, hosting `ea3bed5c0aaf41e4ba516e4621da0f81119e652b` ([receipt](../reviews/arrival-bubble/deployment-confirmation.json)). Journey still has seven coves; Practice has nine. Ternhaven is Practice-only, target 14/revision 1. Its Journey integration remains queued.
+
 ## Current task — animal presentation before Journey eight · 17 November 2026
 
 **[ANIMAL_PRESENTATION_01](../NEXT_TASK_ANIMAL_PRESENTATION.md)** is now the active assignment. The user requests improved animal models and showcase, plus offboarding passenger cards, and confirms the prior Ternhaven Journey task has not been sent to Codex. That brief is preserved and queued after this review; do not implement both together.

@@ -1,9 +1,14 @@
 import type { PortraitKey } from '../game/passenger-appearance';
-import creamPortrait from '../../cove-portrait-package/portraits/rabbit-cream.png';
-import tanPortrait from '../../cove-portrait-package/portraits/rabbit-tan.png';
-import beaverPortrait from '../../assets/portraits/beaver-brown.png';
-import deerPortrait from '../../assets/portraits/deer-chestnut.png';
-import woolPortrait from '../../cove-portrait-package/portraits/sheep-wool.png';
+import creamPortrait from '../../assets/portraits/choice/rabbit-cream.png';
+import tanPortrait from '../../assets/portraits/choice/rabbit-tan.png';
+import woolPortrait from '../../assets/portraits/choice/sheep-wool.png';
+import beaverPortrait from '../../assets/portraits/choice/beaver-brown.png';
+import deerPortrait from '../../assets/portraits/choice/deer-chestnut.png';
+import creamFigure from '../../assets/portraits/arrival/rabbit-cream.png';
+import tanFigure from '../../assets/portraits/arrival/rabbit-tan.png';
+import woolFigure from '../../assets/portraits/arrival/sheep-wool.png';
+import beaverFigure from '../../assets/portraits/arrival/beaver-brown.png';
+import deerFigure from '../../assets/portraits/arrival/deer-chestnut.png';
 
 export const portraitSources: Record<PortraitKey, string> = {
   'rabbit-cream': creamPortrait,
@@ -11,6 +16,14 @@ export const portraitSources: Record<PortraitKey, string> = {
   'sheep-wool': woolPortrait,
   'beaver-brown': beaverPortrait,
   'deer-chestnut': deerPortrait,
+};
+
+export const arrivalFigureSources: Record<PortraitKey, string> = {
+  'rabbit-cream': creamFigure,
+  'rabbit-tan': tanFigure,
+  'sheep-wool': woolFigure,
+  'beaver-brown': beaverFigure,
+  'deer-chestnut': deerFigure,
 };
 
 const originals = import.meta.glob<string>(
@@ -44,7 +57,7 @@ export function controlContent(name: CoveIcon | null, label: string) {
 
 export function passengerChoiceContent(name: string, spaces: number, portrait: PortraitKey | null) {
   const image = portrait ? portraitSources[portrait] : null;
-  return `<span class="cove-choice-portrait" data-appearance="${portrait ?? 'unavailable'}" aria-hidden="true">${image ? `<img class="cove-portrait-image" src="${escapeLabel(image)}" alt="" aria-hidden="true" width="256" height="256" draggable="false" decoding="async" data-portrait-state="pending">` : ''}</span><span class="cove-choice-copy"><span class="cove-choice-check" aria-hidden="true">${iconMarkup('confirm')}</span><b class="cove-choice-name">${escapeLabel(name)}</b><span class="cove-choice-capacity">${spaces} ${spaces === 1 ? 'space' : 'spaces'}</span></span>`;
+  return `<span class="cove-choice-portrait" data-appearance="${portrait ?? 'unavailable'}" data-initial="${escapeLabel(Array.from(name)[0] ?? '')}" aria-hidden="true">${image ? `<img class="cove-portrait-image" src="${escapeLabel(image)}" alt="" width="256" height="256" draggable="false" decoding="async" data-portrait-state="pending">` : ''}</span><span class="cove-choice-copy"><b class="cove-choice-name">${escapeLabel(name)}</b><span class="cove-choice-check" aria-hidden="true">${iconMarkup('confirm')}</span><span class="cove-choice-capacity">${spaces} ${spaces === 1 ? 'space' : 'spaces'}</span></span>`;
 }
 
 export function observePassengerPortraits(root: HTMLElement) {

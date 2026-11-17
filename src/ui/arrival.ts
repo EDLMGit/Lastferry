@@ -4,7 +4,7 @@ import type { State } from '../game/rules';
 import type { MasteryResult } from '../game/mastery';
 import { masteryTargets } from '../game/mastery';
 import { resolvePassengerAppearance } from '../game/passenger-appearance';
-import { controlContent, escapeLabel, portraitSources } from './cove-ui';
+import { arrivalFigureSources, controlContent, escapeLabel } from './cove-ui';
 import { arrivalLanternsMarkup } from './lanterns';
 import './arrival.css';
 
@@ -47,7 +47,7 @@ export function arrivalMarkup({ level, state, result, best, successfulUndos = 0,
     </div>
     <ul id="arrival-cast" class="arrival-cast" aria-label="Rescued neighbors">${cast.map(({ id, name, appearance }) => {
       const portrait = appearance?.portraitKey ?? null;
-      return `<li data-passenger-id="${escapeLabel(id)}" data-appearance="${portrait ?? 'unavailable'}"><span class="arrival-portrait"><span class="arrival-portrait-fallback" aria-hidden="true">${escapeLabel(appearance?.species ?? 'neighbor')}</span>${portrait ? `<img class="cove-portrait-image" src="${escapeLabel(portraitSources[portrait])}" alt="" width="256" height="256" draggable="false" decoding="async" data-portrait-state="pending">` : ''}</span><span class="arrival-name">${escapeLabel(name)}</span></li>`;
+      return `<li data-passenger-id="${escapeLabel(id)}" data-appearance="${portrait ?? 'unavailable'}"><span class="arrival-portrait"><span class="arrival-portrait-fallback" aria-hidden="true">${escapeLabel(appearance?.species ?? 'neighbor')}</span>${portrait ? `<img class="cove-portrait-image" src="${escapeLabel(arrivalFigureSources[portrait])}" alt="" width="256" height="256" draggable="false" decoding="async" data-portrait-state="pending">` : ''}</span><span class="arrival-name">${escapeLabel(name)}</span></li>`;
     }).join('')}</ul>
     <section ${result ? 'id="mastery-result"' : ''} class="arrival-result" data-lanterns="${result?.lanterns ?? 0}" data-actions="${metrics.actions}" data-undos="${metrics.successfulUndos}" aria-label="This rescue">
       <p class="mastery-metrics">${metrics.actions} actions · ${metrics.successfulUndos} ${metrics.successfulUndos === 1 ? 'Undo' : 'Undos'}</p>

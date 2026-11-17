@@ -1,4 +1,8 @@
-# Animal presentation first; Ternhaven Journey queued · 17 November 2026
+# Animal presentation · 17 November 2026
+
+Implemented the shared model and static image pass on `m1-first-crossing`; [review and evidence](reviews/animal-presentation/REVIEW.md). The report distinguishes real play, model-studio renders and isolated layout fixtures. The build and asset validation passed. Both full minified rescues passed, as did 109 geometry checks; original failures, native comparisons and capture limits are in the review. No deployment or Journey expansion accompanies this change.
+
+## Original assignment
 
 **Current task: [ANIMAL_PRESENTATION_01](NEXT_TASK_ANIMAL_PRESENTATION.md).** The user requests actual animal-model polish, a stronger rescued group and improved offboarding passenger cards. They have not sent the Journey task to Codex. Finish this bounded art/presentation pass before the queued [TERNHAVEN_JOURNEY_01](NEXT_TASK_TERNHAVEN_JOURNEY.md).
 

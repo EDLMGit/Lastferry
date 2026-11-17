@@ -1,5 +1,5 @@
 import { expect, test, vi } from 'vitest';
-import { BoxGeometry, Group, Mesh, MeshBasicMaterial, OrthographicCamera, Scene } from 'three';
+import { BoxGeometry, Group, Mesh, MeshBasicMaterial, OrthographicCamera, Scene, Vector3 } from 'three';
 import { World } from '../../src/scene/world';
 import { animal, ferry } from '../../src/scene/models';
 import { storyCameraFrame, storyStage } from '../../src/scene/story-staging';
@@ -193,6 +193,14 @@ test.each([
 
 test('actual Moss head meshes acknowledge once without moving deck feet or changing state/history, and clear restores all transforms', () => {
   const { world, moss, pip, rue, route, hiddenRoute, marker } = fixture();
+  const head = moss.getObjectByName('sheep-head')!;
+  expect(head.parent).toBe(moss);
+  const moving = head.children.filter(part => ['sheep-ear', 'sheep-nose', 'painted-eye', 'sheep-forelock'].includes(part.name));
+  expect(moving.map(part => part.name).sort()).toEqual(['painted-eye', 'painted-eye', 'sheep-ear', 'sheep-ear', 'sheep-forelock', 'sheep-forelock', 'sheep-forelock', 'sheep-nose']);
+  const feet = moss.children.filter(part => part.name === 'sheep-foot');
+  expect(feet).toHaveLength(4);
+  const localCenters = (parts: typeof moving) => parts.map(part => moss.worldToLocal(part.getWorldPosition(new Vector3())));
+  const restCenters = localCenters(moving), restFeet = localCenters(feet), restHead = head.quaternion.clone();
   const before = {
     state: structuredClone(world.state),
     poses: world.poses.presentation(),
@@ -202,6 +210,11 @@ test('actual Moss head meshes acknowledge once without moving deck feet or chang
     rue: pose(rue),
   };
   world.presentStory('opening', 950, false);
+  expect(head.quaternion.angleTo(restHead)).toBeGreaterThan(0.15);
+  for (const [index, center] of localCenters(moving).entries())
+    expect(center.distanceTo(restCenters[index])).toBeGreaterThan(0.002);
+  for (const [index, foot] of localCenters(feet).entries())
+    expect(foot.distanceTo(restFeet[index])).toBeLessThan(1e-8);
   expect(moss.position.toArray()).toEqual(before.moss.position);
   expect(moss.rotation.y).toBeGreaterThan(0.15);
   expect(pose(moss).children).not.toEqual(before.moss.children);
@@ -216,6 +229,8 @@ test('actual Moss head meshes acknowledge once without moving deck feet or chang
   expect(route.visible).toBe(false);
   expect(marker.visible).toBe(false);
   world.clearStory();
+  for (const [index, center] of localCenters(moving).entries())
+    expect(center.distanceTo(restCenters[index])).toBeLessThan(1e-8);
   expect(pose(moss)).toEqual(before.moss);
   expect(pose(pip)).toEqual(before.pip);
   expect(pose(rue)).toEqual(before.rue);

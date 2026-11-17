@@ -215,8 +215,12 @@ test('isolated initial pending and failed portraits keep names and stable geomet
   await page.setViewportSize({width:390,height:844});
   let release!:()=>void;
   const gate=new Promise<void>(resolve=>release=resolve);
-  await page.route('**/beaver-brown.png',async route=>{await gate;await route.continue();});
-  await page.route('**/deer-chestnut.png',route=>route.abort());
+  await page.route(/\/arrival\/beaver-brown\.png(?:\?|$)/,async route=>{
+    if(route.request().resourceType()==='image')await gate;
+    await route.continue();
+  });
+  await page.route(/\/arrival\/deer-chestnut\.png(?:\?|$)/,route=>
+    route.request().resourceType()==='image'?route.abort():route.continue());
   await page.goto('/tests/e2e/arrival-bubble-fixture.html?cast=four',{waitUntil:'domcontentloaded'});
   await expect(page.locator('[data-passenger-id=willow] img')).toHaveAttribute('data-portrait-state','pending');
   await expect(page.locator('[data-passenger-id=juniper] img')).toHaveAttribute('data-portrait-state','failed');

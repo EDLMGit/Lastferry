@@ -42,6 +42,20 @@ describe('canonical asset catalog', () => {
     expect(errors).toContain('byte count differs from its provenance');
   });
 
+  it('registers one distinct current PNG per profile for each of the five appearances', () => {
+    const family = catalog().entries.find((entry: {id: string}) => entry.id === 'ui.passenger-portraits');
+    const keys = ['rabbit-cream', 'rabbit-tan', 'sheep-wool', 'beaver-brown', 'deer-chestnut'];
+    const outputs: {profile: string; appearance: string; path: string; sha256: string}[] = family.generatedOutputs;
+    expect(outputs).toHaveLength(10);
+    expect(new Set(outputs.map(output => output.sha256)).size).toBe(10);
+    for (const profile of ['choice', 'arrival']) {
+      expect(outputs.filter(output => output.profile === profile).map(output => output.appearance).sort()).toEqual([...keys].sort());
+      for (const appearance of keys) expect(outputs).toContainEqual(expect.objectContaining({
+        profile, appearance, path: `assets/portraits/${profile}/${appearance}.png`, width: 256, height: 256,
+      }));
+    }
+  });
+
   it('rejects missing or duplicated generated variants and unsafe output sources', () => {
     const broken = catalog();
     const portrait = broken.entries.find((entry: { id: string }) => entry.id === 'ui.passenger-portraits');

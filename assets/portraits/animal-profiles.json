@@ -1,0 +1,399 @@
+{
+  "sourceHashesLf": {
+    "src/scene/models.ts": "1081e83616bb5a656e4c09ea099761ff8de46537b0d9cc055ba8b7246593fc95",
+    "src/scene/animals.ts": "e0909b1857d85b3f916647348cdfd966c05a5dea79d6959e1ba8b977c94c4f49",
+    "src/scene/ferry-profile.ts": "639a71a15c8be508ee0edd2fd45f34e4192eed183b9ef344c2db89127423a19b",
+    "src/game/passenger-appearance.ts": "ce3ad00e93bc9f4b742898cca78d13523a5146a1665cdce83bdf221e012ca2b7",
+    "tools/bake-animal-profiles.mjs": "52e836ddc3f91c725225aec6d425f32f32ea47c6d1f3ff5820e849919007bea0",
+    "package-lock.json": "fa75e13e3b5a563e3d99e14d514a205bb521344250c7479861e3e1507731a7f1"
+  },
+  "renderer": "Three.WebGLRenderer / MeshStandardMaterial, original production geometry, material and passengerScale; controlled portrait lighting, not gameplay screenshots",
+  "threeRevision": "186",
+  "node": "v24.15.0",
+  "recipe": "node tools/bake-animal-profiles.mjs",
+  "lighting": {
+    "hemisphere": [
+      "#fff5e7",
+      "#b8b2ae",
+      1.22
+    ],
+    "key": [
+      "#ffecd2",
+      2.1,
+      [
+        -3,
+        5,
+        4
+      ]
+    ],
+    "fill": [
+      "#c9e1e4",
+      0.75,
+      [
+        4,
+        1,
+        3
+      ]
+    ],
+    "rim": [
+      "#fff0d7",
+      1.22,
+      [
+        2,
+        3,
+        -4
+      ]
+    ]
+  },
+  "rendering": {
+    "encoding": "sRGB",
+    "toneMapping": "ACESFilmic",
+    "exposure": 1,
+    "renderPixels": 768,
+    "outputPixels": 256,
+    "downsample": "Chromium Canvas2D high-quality, transparent RGBA",
+    "shadows": "PCF 1024, separate from gameplay shadows"
+  },
+  "profiles": [
+    {
+      "profile": "choice",
+      "key": "rabbit-cream",
+      "species": "rabbit",
+      "variant": 0,
+      "scale": [
+        1.25,
+        1.65,
+        1.25
+      ],
+      "file": "choice/rabbit-cream.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "d2de80f3293ec3964db4f8adcdafa4e253b200fa2aa1ebaf875b4afe233b510c",
+      "bytes": 40420,
+      "pixelBounds": [
+        63,
+        10,
+        195,
+        255
+      ],
+      "cameraDirection": [
+        0.2,
+        1.37,
+        1
+      ],
+      "ortho": {
+        "left": -0.3520131950005335,
+        "right": 0.33798680499946643,
+        "top": 0.8090392985089223,
+        "bottom": 0.11903929850892236
+      }
+    },
+    {
+      "profile": "arrival",
+      "key": "rabbit-cream",
+      "species": "rabbit",
+      "variant": 0,
+      "scale": [
+        1.25,
+        1.65,
+        1.25
+      ],
+      "file": "arrival/rabbit-cream.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "a03042d72c5af6add2627ed068319f8707ceafa822e6f24ed6ef07aa646895e1",
+      "bytes": 27515,
+      "pixelBounds": [
+        91,
+        14,
+        164,
+        241
+      ],
+      "cameraDirection": [
+        0.5,
+        0.7,
+        1
+      ],
+      "ortho": {
+        "left": -0.694095587617066,
+        "right": 0.6619417907504637,
+        "top": 1.1884692876414173,
+        "bottom": -0.16756809072611242
+      }
+    },
+    {
+      "profile": "choice",
+      "key": "rabbit-tan",
+      "species": "rabbit",
+      "variant": 1,
+      "scale": [
+        1.25,
+        1.65,
+        1.25
+      ],
+      "file": "choice/rabbit-tan.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "b1847e8ca503a1b5634408034899fa81c57659dc017e4e77759dfa7ebce94634",
+      "bytes": 42422,
+      "pixelBounds": [
+        60,
+        10,
+        195,
+        255
+      ],
+      "cameraDirection": [
+        -0.2,
+        1.37,
+        1
+      ],
+      "ortho": {
+        "left": -0.33737352339735827,
+        "right": 0.3526264766026417,
+        "top": 0.8073728195425902,
+        "bottom": 0.11737281954259027
+      }
+    },
+    {
+      "profile": "arrival",
+      "key": "rabbit-tan",
+      "species": "rabbit",
+      "variant": 1,
+      "scale": [
+        1.25,
+        1.65,
+        1.25
+      ],
+      "file": "arrival/rabbit-tan.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "a7c35bb4ddbc25e1f4f2ba9f3b4c490478422ce3a870edbfc4682f28444acc98",
+      "bytes": 27954,
+      "pixelBounds": [
+        91,
+        14,
+        164,
+        241
+      ],
+      "cameraDirection": [
+        -0.5,
+        0.7,
+        1
+      ],
+      "ortho": {
+        "left": -0.6665700322609873,
+        "right": 0.6987238291275899,
+        "top": 1.1972166640963071,
+        "bottom": -0.16807719729227003
+      }
+    },
+    {
+      "profile": "choice",
+      "key": "sheep-wool",
+      "species": "sheep",
+      "variant": 0,
+      "scale": [
+        1.15,
+        1.5,
+        1.15
+      ],
+      "file": "choice/sheep-wool.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "4651a55b69882fbc584787d7c4274e9803a9cdb159e46bd28abcb20b3bbb2829",
+      "bytes": 74031,
+      "pixelBounds": [
+        5,
+        10,
+        250,
+        255
+      ],
+      "cameraDirection": [
+        0.18,
+        0.13,
+        1
+      ],
+      "ortho": {
+        "left": -0.3640381217248357,
+        "right": 0.32596187827516426,
+        "top": 0.8228160452320957,
+        "bottom": 0.13281604523209578
+      }
+    },
+    {
+      "profile": "arrival",
+      "key": "sheep-wool",
+      "species": "sheep",
+      "variant": 0,
+      "scale": [
+        1.15,
+        1.5,
+        1.15
+      ],
+      "file": "arrival/sheep-wool.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "6419ec9c9c0c9ec9501b7879ae085f7bcb92c56dff4dea2f4a3c95bb0f0d8818",
+      "bytes": 45170,
+      "pixelBounds": [
+        37,
+        47,
+        218,
+        241
+      ],
+      "cameraDirection": [
+        0.77,
+        0.31,
+        1
+      ],
+      "ortho": {
+        "left": -0.583257984746998,
+        "right": 0.529477578262915,
+        "top": 0.9957327669570029,
+        "bottom": -0.11700279605291013
+      }
+    },
+    {
+      "profile": "choice",
+      "key": "beaver-brown",
+      "species": "beaver",
+      "variant": 0,
+      "scale": [
+        1.15,
+        1.5,
+        1.15
+      ],
+      "file": "choice/beaver-brown.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "1fc7e31f5c54d6a582cfe59e527a5f97c83b01bd455ab433fdf61a055bc8a393",
+      "bytes": 64963,
+      "pixelBounds": [
+        5,
+        10,
+        215,
+        255
+      ],
+      "cameraDirection": [
+        0.29,
+        0.24,
+        1
+      ],
+      "ortho": {
+        "left": -0.25849090503530114,
+        "right": 0.2915090949646989,
+        "top": 0.9403537874478237,
+        "bottom": 0.3903537874478237
+      }
+    },
+    {
+      "profile": "arrival",
+      "key": "beaver-brown",
+      "species": "beaver",
+      "variant": 0,
+      "scale": [
+        1.15,
+        1.5,
+        1.15
+      ],
+      "file": "arrival/beaver-brown.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "dbd36c628e777fc1a8f2b10e083e7de8dac5c2c0750b53486ba57a5ba0f50b46",
+      "bytes": 37112,
+      "pixelBounds": [
+        66,
+        24,
+        189,
+        241
+      ],
+      "cameraDirection": [
+        1.29,
+        0.49,
+        1
+      ],
+      "ortho": {
+        "left": -0.557415552695901,
+        "right": 0.5961662832212797,
+        "top": 1.0411891694182769,
+        "bottom": -0.1123926664989038
+      }
+    },
+    {
+      "profile": "choice",
+      "key": "deer-chestnut",
+      "species": "deer",
+      "variant": 0,
+      "scale": [
+        1.15,
+        1.5,
+        1.15
+      ],
+      "file": "choice/deer-chestnut.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "703fbed6990d580bd5e4caf5c9f2de1c6da366fc41434bb7e5ace30beb02d5c9",
+      "bytes": 52030,
+      "pixelBounds": [
+        34,
+        10,
+        221,
+        255
+      ],
+      "cameraDirection": [
+        -0.32,
+        0.31,
+        1
+      ],
+      "ortho": {
+        "left": -0.34603423472262074,
+        "right": 0.41396576527737927,
+        "top": 1.360750212136649,
+        "bottom": 0.600750212136649
+      }
+    },
+    {
+      "profile": "arrival",
+      "key": "deer-chestnut",
+      "species": "deer",
+      "variant": 0,
+      "scale": [
+        1.15,
+        1.5,
+        1.15
+      ],
+      "file": "arrival/deer-chestnut.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "0a1efa1791f64915a49cef11e49c0a95e5cf80ba13ae1606366b2306d25abea4",
+      "bytes": 35012,
+      "pixelBounds": [
+        78,
+        9,
+        177,
+        241
+      ],
+      "cameraDirection": [
+        -0.88,
+        0.41,
+        1
+      ],
+      "ortho": {
+        "left": -0.7639821031806315,
+        "right": 0.8052480868012706,
+        "top": 1.4073005575904616,
+        "bottom": -0.16192963239144043
+      }
+    }
+  ],
+  "choiceOmissions": {
+    "names": [
+      "sheep-shank",
+      "sheep-foot",
+      "beaver-flat-tail"
+    ],
+    "purpose": "A bust omits low shanks and the beaver paddle that would peek into its lower edge; no geometry, pose, paint or scale changes."
+  },
+  "chromium": "156.0.8078.4",
+  "webgl": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+}

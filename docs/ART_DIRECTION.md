@@ -1,5 +1,9 @@
 # Last Ferry — Art Direction
 
+## Animal presentation implementation
+
+In Play, preserve each miniature's species scale, facing and foot contact; shape and paint belong to the animal factory. At the dock, frame the face and upper chest so a rabbit's ears or a deer's antlers still identify the portrait. At Harbor, use the full standing figure with a common foot line. Keep the live name close to the figure; the existing lanterns own the reward, and no checkmarks or space counts belong in the rescued group. [Model and profile comparisons](../reviews/animal-presentation/REVIEW.md) · [Generation record](../assets/portraits/animal-profiles.json).
+
 ## Active animal finish · 17 November 2026
 
 The user wants the animal models, rescued-group showcase and offboarding passenger cards to reach the finish of the new lanterns. [ANIMAL_PRESENTATION_01](../NEXT_TASK_ANIMAL_PRESENTATION.md) takes priority before the queued Ternhaven Journey integration. [Exact user references and source review](../reviews/animal-presentation/PLANNING_REVIEW.md)

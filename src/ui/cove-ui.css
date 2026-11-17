@@ -148,17 +148,17 @@
 #app .cove-choice {
   display: grid;
   container-type: inline-size;
-  grid-template-columns: 44px minmax(0, 1fr);
+  grid-template-columns: 54px minmax(0, 1fr);
   align-items: center;
-  gap: 4px 7px;
+  gap: 4px 6px;
   min-width: 0;
   min-height: 62px;
-  padding: 7px;
+  padding: 3px 7px 3px 3px;
   border: 1px solid #91aaa1;
   border-radius: 12px;
   color: var(--cove-ivory);
-  background: #204952;
-  box-shadow: inset 0 2px 3px #092f3c42;
+  background: linear-gradient(110deg, #2b555b, #204750 70%);
+  box-shadow: inset 0 1px #b8d5c914, 0 1px #0e343e;
   font:
     400 16px/1.25 'Segoe UI',
     Arial,
@@ -168,20 +168,33 @@
 }
 .cove-kit .cove-choice[aria-pressed='true'],
 #app .cove-choice[aria-pressed='true'] {
-  background: #315e5e;
+  background: linear-gradient(110deg, #416c69, #2b5557 78%);
   border-color: var(--cove-focus);
+  box-shadow: inset 0 0 0 1px #e2c18b59, 0 1px #0e343e;
 }
 .cove-kit .cove-choice-portrait {
-  display: block;
-  width: 44px;
-  height: 44px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
   align-self: center;
+  border-radius: 9px;
+  background: radial-gradient(ellipse at 50% 85%, #a3c7aa38, #234b52 78%);
+  box-shadow: inset 0 -1px #b7cdb24d;
   pointer-events: none;
 }
+.cove-kit .cove-choice-portrait::before {
+  content: attr(data-initial);
+  color: #c3d4c5;
+  font: normal 21px/1 Georgia, serif;
+}
+.cove-kit .cove-choice-portrait:has([data-portrait-state='loaded'])::before { visibility: hidden; }
+.cove-kit .cove-choice-portrait .cove-portrait-image { position: absolute; inset: 0; border-radius: inherit; }
 .cove-kit .cove-portrait-image {
   display: block;
-  width: 44px;
-  height: 44px;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
   opacity: 0;
   pointer-events: none;
@@ -191,18 +204,19 @@
 }
 .cove-kit .cove-choice-copy {
   display: grid;
-  grid-template-columns: 22px minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) 19px;
   align-items: center;
-  gap: 4px 7px;
+  gap: 2px 3px;
   min-width: 0;
 }
 .cove-kit .cove-choice-check {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex: 0 0 22px;
-  width: 22px;
-  height: 22px;
+  grid-column: 2;
+  grid-row: 1;
+  width: 19px;
+  height: 19px;
   border: 1px solid #b5cfc2;
   border-radius: 6px;
   background: #173e46;
@@ -213,6 +227,7 @@
     column-gap: 2px;
   }
 }
+.cove-kit .cove-choice-name { grid-column: 1; grid-row: 1; }
 .cove-kit .cove-choice-check .cove-glyph {
   visibility: hidden;
   width: 20px;

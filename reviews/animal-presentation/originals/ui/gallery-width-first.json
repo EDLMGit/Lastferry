@@ -1,0 +1,3848 @@
+{
+  "purpose": "Actual shared static portrait/helper gallery design checks, not gameplay or physical-phone evidence.",
+  "source": {
+    "head": "d7884445c35fc24ebdabc2790b168b68294bf0bd",
+    "files": {
+      "asset-gallery.html": "973ec13176c7c50b070716a32c80a58e3087bf193477bba70ba7765ef0625ab5",
+      "src/dev/asset-gallery.ts": "0916585b9387fdd69f94c865146d5c0de7db5ed101dc416f79e0ba569afc3dda",
+      "src/dev/asset-gallery.css": "bc3644f52928d7cd8adbb02bb22294eec4523a24812e06e841277736e4f28137",
+      "src/ui/cove-ui.ts": "6d4c57d5cc62ac94a4537906083097188a524ef9e0843fc5bfecb4b8d4bcb56e",
+      "src/ui/cove-ui.css": "66764a9e31fd80fbf8bf77f52f60fcc570fec5029e0237f11ed27835fcb8201b",
+      "assets/catalog.json": "f70db04a494e9b3e9a55e56765a206c0363d33d47e95801f75f27718b9859a7e",
+      "src/game/passenger-appearance.ts": "ce3ad00e93bc9f4b742898cca78d13523a5146a1665cdce83bdf221e012ca2b7",
+      "src/ui/arrival.ts": "d3b6e36ab2b91a77558dc760d360b819e301a25ad9a9ba340a2c3bcd4853c9b8",
+      "src/ui/arrival.css": "af025f3023ac2bff9a135161019e3832b270c143626ec5d4725bc67b71f50a52",
+      "assets/portraits/choice/rabbit-cream.png": "8028eb21bb025c7d57192daa2fefa08d1e008a93f74726479e9c725c3dfc263a",
+      "assets/portraits/choice/rabbit-tan.png": "2c641245ee81c692e76959b37e1a6294985ac1bf4ad629f89d1a512fc5315ebc",
+      "assets/portraits/choice/sheep-wool.png": "0861e40f029985315283cbf4b781052b3a497b4e1b9baf5da32a0035dd55a177",
+      "assets/portraits/choice/beaver-brown.png": "f062157a2c680a7e1005fa0d5d52c9231319cd7d7a7dddcaf1ce771be6a37fac",
+      "assets/portraits/choice/deer-chestnut.png": "b17ddfc828e17fb9623a693c086f13abea491e111ff278fbd53d3f7e3b39026f",
+      "assets/portraits/arrival/rabbit-cream.png": "1884c30b8b8ce16b856cefef7fe23ef463bc0637f25237f0a89740bbdc9d30c8",
+      "assets/portraits/arrival/rabbit-tan.png": "b31b873b77eba286d6f2672617f092d3d45120fb36851bb7c1d5dca224ce6809",
+      "assets/portraits/arrival/sheep-wool.png": "fd416dde55510d7d702c65ed085dd944c2b1be53a49af1f44a50eab29e0e36fc",
+      "assets/portraits/arrival/beaver-brown.png": "c3689ae451fe073c19987983aa1141215114562508e062c534295f82e53090b5",
+      "assets/portraits/arrival/deer-chestnut.png": "af021a99642abf85f6e2a7a7e6f757b863da889d57a3713e4797b19132fce96b"
+    },
+    "hash": "fb81d6012bb7bba05b0644df8180509c21e51176beccf4cf3847440b66c68eb9",
+    "sourceStable": true
+  },
+  "environment": {
+    "node": "v24.15.0",
+    "browser": "156.0.8078.4",
+    "dpr": 1,
+    "viewports": [
+      1440,
+      320
+    ]
+  },
+  "command": "node tools/check-passenger-portrait-gallery.mjs (PORTRAIT_GALLERY_URL defaults to http://127.0.0.1:5250)",
+  "method": "Each live text-node Range line and nested scrollWidth/clientWidth, 54px portrait containment, ten decoded 256px source derivatives, failure fallback, five appearance keys and 20px long-name stress. Only game passenger components are required to have zero canvases; the existing developer model/story gallery has separately owned specimens. No hidden-scrollbar exemption.",
+  "results": [
+    {
+      "width": 1440,
+      "height": 900,
+      "errors": [],
+      "pass": true,
+      "documentWidth": 1440,
+      "passengerCanvases": 0,
+      "pairedImages": [
+        {
+          "src": "http://127.0.0.1:5326/assets/portraits/choice/rabbit-cream.png",
+          "width": 256,
+          "height": 256
+        },
+        {
+          "src": "http://127.0.0.1:5326/assets/portraits/arrival/rabbit-cream.png",
+          "width": 256,
+          "height": 256
+        },
+        {
+          "src": "http://127.0.0.1:5326/assets/portraits/choice/rabbit-tan.png",
+          "width": 256,
+          "height": 256
+        },
+        {
+          "src": "http://127.0.0.1:5326/assets/portraits/arrival/rabbit-tan.png",
+          "width": 256,
+          "height": 256
+        },
+        {
+          "src": "http://127.0.0.1:5326/assets/portraits/choice/sheep-wool.png",
+          "width": 256,
+          "height": 256
+        },
+        {
+          "src": "http://127.0.0.1:5326/assets/portraits/arrival/sheep-wool.png",
+          "width": 256,
+          "height": 256
+        },
+        {
+          "src": "http://127.0.0.1:5326/assets/portraits/choice/beaver-brown.png",
+          "width": 256,
+          "height": 256
+        },
+        {
+          "src": "http://127.0.0.1:5326/assets/portraits/arrival/beaver-brown.png",
+          "width": 256,
+          "height": 256
+        },
+        {
+          "src": "http://127.0.0.1:5326/assets/portraits/choice/deer-chestnut.png",
+          "width": 256,
+          "height": 256
+        },
+        {
+          "src": "http://127.0.0.1:5326/assets/portraits/arrival/deer-chestnut.png",
+          "width": 256,
+          "height": 256
+        }
+      ],
+      "specimens": [
+        {
+          "id": "",
+          "dimensions": [
+            {
+              "selector": "passenger-options",
+              "clientWidth": 320,
+              "scrollWidth": 320,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 155,
+              "scrollWidth": 155,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 85,
+              "scrollWidth": 85,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 63,
+              "scrollWidth": 63,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 85,
+              "scrollWidth": 85,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 155,
+              "scrollWidth": 155,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 85,
+              "scrollWidth": 85,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 63,
+              "scrollWidth": 63,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 85,
+              "scrollWidth": 85,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 155,
+              "scrollWidth": 155,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 85,
+              "scrollWidth": 85,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 63,
+              "scrollWidth": 63,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 85,
+              "scrollWidth": 85,
+              "fits": true
+            }
+          ],
+          "choices": [
+            {
+              "text": "Hazel\n2 spaces",
+              "selected": "true",
+              "bounds": {
+                "left": 205,
+                "right": 361.5,
+                "top": 799.21875,
+                "bottom": 861.21875,
+                "width": 156.5,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Hazel",
+                  "bounds": {
+                    "left": 269,
+                    "right": 310.734375,
+                    "top": 808.21875,
+                    "bottom": 829.21875,
+                    "width": 41.734375,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "2 spaces",
+                  "bounds": {
+                    "left": 269,
+                    "right": 328.890625,
+                    "top": 830.21875,
+                    "bottom": 851.21875,
+                    "width": 59.890625,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "beaver-brown",
+                "bounds": {
+                  "left": 209,
+                  "right": 263,
+                  "top": 803.21875,
+                  "bottom": 857.21875,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            },
+            {
+              "text": "Bracken\n2 spaces",
+              "selected": "true",
+              "bounds": {
+                "left": 368.5,
+                "right": 525,
+                "top": 799.21875,
+                "bottom": 861.21875,
+                "width": 156.5,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Bracken",
+                  "bounds": {
+                    "left": 432.5,
+                    "right": 492.46875,
+                    "top": 808.21875,
+                    "bottom": 829.21875,
+                    "width": 59.96875,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "2 spaces",
+                  "bounds": {
+                    "left": 432.5,
+                    "right": 492.390625,
+                    "top": 830.21875,
+                    "bottom": 851.21875,
+                    "width": 59.890625,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "beaver-brown",
+                "bounds": {
+                  "left": 372.5,
+                  "right": 426.5,
+                  "top": 803.21875,
+                  "bottom": 857.21875,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            },
+            {
+              "text": "Mica\n1 space",
+              "selected": "false",
+              "bounds": {
+                "left": 205,
+                "right": 361.5,
+                "top": 868.21875,
+                "bottom": 930.21875,
+                "width": 156.5,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Mica",
+                  "bounds": {
+                    "left": 269,
+                    "right": 305.15625,
+                    "top": 877.21875,
+                    "bottom": 898.21875,
+                    "width": 36.15625,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "1 space",
+                  "bounds": {
+                    "left": 269,
+                    "right": 322.109375,
+                    "top": 899.21875,
+                    "bottom": 920.21875,
+                    "width": 53.109375,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "rabbit-cream",
+                "bounds": {
+                  "left": 209,
+                  "right": 263,
+                  "top": 872.21875,
+                  "bottom": 926.21875,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            }
+          ]
+        },
+        {
+          "id": "",
+          "dimensions": [
+            {
+              "selector": "passenger-options",
+              "clientWidth": 320,
+              "scrollWidth": 320,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 155,
+              "scrollWidth": 155,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 85,
+              "scrollWidth": 85,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 63,
+              "scrollWidth": 63,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 85,
+              "scrollWidth": 85,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 155,
+              "scrollWidth": 155,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 85,
+              "scrollWidth": 85,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 63,
+              "scrollWidth": 63,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 85,
+              "scrollWidth": 85,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 155,
+              "scrollWidth": 155,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 85,
+              "scrollWidth": 85,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 63,
+              "scrollWidth": 63,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 85,
+              "scrollWidth": 85,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 155,
+              "scrollWidth": 155,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 85,
+              "scrollWidth": 85,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 63,
+              "scrollWidth": 63,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 85,
+              "scrollWidth": 85,
+              "fits": true
+            }
+          ],
+          "choices": [
+            {
+              "text": "Juniper\n3 spaces",
+              "selected": "true",
+              "bounds": {
+                "left": 205,
+                "right": 361.5,
+                "top": 1547.5625,
+                "bottom": 1609.5625,
+                "width": 156.5,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Juniper",
+                  "bounds": {
+                    "left": 269,
+                    "right": 324.984375,
+                    "top": 1556.5625,
+                    "bottom": 1577.5625,
+                    "width": 55.984375,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "3 spaces",
+                  "bounds": {
+                    "left": 269,
+                    "right": 328.890625,
+                    "top": 1578.5625,
+                    "bottom": 1599.5625,
+                    "width": 59.890625,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "deer-chestnut",
+                "bounds": {
+                  "left": 209,
+                  "right": 263,
+                  "top": 1551.5625,
+                  "bottom": 1605.5625,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            },
+            {
+              "text": "Sedge\n2 spaces",
+              "selected": "true",
+              "bounds": {
+                "left": 368.5,
+                "right": 525,
+                "top": 1547.5625,
+                "bottom": 1609.5625,
+                "width": 156.5,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Sedge",
+                  "bounds": {
+                    "left": 432.5,
+                    "right": 478.59375,
+                    "top": 1556.5625,
+                    "bottom": 1577.5625,
+                    "width": 46.09375,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "2 spaces",
+                  "bounds": {
+                    "left": 432.5,
+                    "right": 492.390625,
+                    "top": 1578.5625,
+                    "bottom": 1599.5625,
+                    "width": 59.890625,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "sheep-wool",
+                "bounds": {
+                  "left": 372.5,
+                  "right": 426.5,
+                  "top": 1551.5625,
+                  "bottom": 1605.5625,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            },
+            {
+              "text": "Fennel\n1 space",
+              "selected": "true",
+              "bounds": {
+                "left": 205,
+                "right": 361.5,
+                "top": 1616.5625,
+                "bottom": 1678.5625,
+                "width": 156.5,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Fennel",
+                  "bounds": {
+                    "left": 269,
+                    "right": 318.546875,
+                    "top": 1625.5625,
+                    "bottom": 1646.5625,
+                    "width": 49.546875,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "1 space",
+                  "bounds": {
+                    "left": 269,
+                    "right": 322.109375,
+                    "top": 1647.5625,
+                    "bottom": 1668.5625,
+                    "width": 53.109375,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "rabbit-tan",
+                "bounds": {
+                  "left": 209,
+                  "right": 263,
+                  "top": 1620.5625,
+                  "bottom": 1674.5625,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            },
+            {
+              "text": "Willow\n2 spaces",
+              "selected": "false",
+              "bounds": {
+                "left": 368.5,
+                "right": 525,
+                "top": 1616.5625,
+                "bottom": 1678.5625,
+                "width": 156.5,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Willow",
+                  "bounds": {
+                    "left": 432.5,
+                    "right": 484.765625,
+                    "top": 1625.5625,
+                    "bottom": 1646.5625,
+                    "width": 52.265625,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "2 spaces",
+                  "bounds": {
+                    "left": 432.5,
+                    "right": 492.390625,
+                    "top": 1647.5625,
+                    "bottom": 1668.5625,
+                    "width": 59.890625,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "beaver-brown",
+                "bounds": {
+                  "left": 372.5,
+                  "right": 426.5,
+                  "top": 1620.5625,
+                  "bottom": 1674.5625,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            }
+          ]
+        },
+        {
+          "id": "gallery-three-passengers",
+          "dimensions": [
+            {
+              "selector": "passenger-options",
+              "clientWidth": 358,
+              "scrollWidth": 358,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 174,
+              "scrollWidth": 174,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 104,
+              "scrollWidth": 104,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 82,
+              "scrollWidth": 82,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 104,
+              "scrollWidth": 104,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 174,
+              "scrollWidth": 174,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 104,
+              "scrollWidth": 104,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 82,
+              "scrollWidth": 82,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 104,
+              "scrollWidth": 104,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 174,
+              "scrollWidth": 174,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 104,
+              "scrollWidth": 104,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 82,
+              "scrollWidth": 82,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 104,
+              "scrollWidth": 104,
+              "fits": true
+            }
+          ],
+          "choices": [
+            {
+              "text": "Pip\n1 space",
+              "selected": "true",
+              "bounds": {
+                "left": 205,
+                "right": 380.5,
+                "top": 2559.59375,
+                "bottom": 2621.59375,
+                "width": 175.5,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Pip",
+                  "bounds": {
+                    "left": 269,
+                    "right": 293.296875,
+                    "top": 2568.59375,
+                    "bottom": 2589.59375,
+                    "width": 24.296875,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "1 space",
+                  "bounds": {
+                    "left": 269,
+                    "right": 322.109375,
+                    "top": 2590.59375,
+                    "bottom": 2611.59375,
+                    "width": 53.109375,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "rabbit-cream",
+                "bounds": {
+                  "left": 209,
+                  "right": 263,
+                  "top": 2563.59375,
+                  "bottom": 2617.59375,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            },
+            {
+              "text": "Rue\n1 space",
+              "selected": "true",
+              "bounds": {
+                "left": 387.5,
+                "right": 563,
+                "top": 2559.59375,
+                "bottom": 2621.59375,
+                "width": 175.5,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Rue",
+                  "bounds": {
+                    "left": 451.5,
+                    "right": 480.28125,
+                    "top": 2568.59375,
+                    "bottom": 2589.59375,
+                    "width": 28.78125,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "1 space",
+                  "bounds": {
+                    "left": 451.5,
+                    "right": 504.609375,
+                    "top": 2590.59375,
+                    "bottom": 2611.59375,
+                    "width": 53.109375,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "rabbit-tan",
+                "bounds": {
+                  "left": 391.5,
+                  "right": 445.5,
+                  "top": 2563.59375,
+                  "bottom": 2617.59375,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            },
+            {
+              "text": "Moss\n2 spaces",
+              "selected": "true",
+              "bounds": {
+                "left": 205,
+                "right": 380.5,
+                "top": 2628.59375,
+                "bottom": 2690.59375,
+                "width": 175.5,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Moss",
+                  "bounds": {
+                    "left": 269,
+                    "right": 308.171875,
+                    "top": 2637.59375,
+                    "bottom": 2658.59375,
+                    "width": 39.171875,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "2 spaces",
+                  "bounds": {
+                    "left": 269,
+                    "right": 328.890625,
+                    "top": 2659.59375,
+                    "bottom": 2680.59375,
+                    "width": 59.890625,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "sheep-wool",
+                "bounds": {
+                  "left": 209,
+                  "right": 263,
+                  "top": 2632.59375,
+                  "bottom": 2686.59375,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            }
+          ]
+        },
+        {
+          "id": "gallery-narrow-passengers",
+          "dimensions": [
+            {
+              "selector": "passenger-options",
+              "clientWidth": 278,
+              "scrollWidth": 278,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 276,
+              "scrollWidth": 276,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 206,
+              "scrollWidth": 207,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 184,
+              "scrollWidth": 184,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 206,
+              "scrollWidth": 206,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 276,
+              "scrollWidth": 276,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 206,
+              "scrollWidth": 207,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 184,
+              "scrollWidth": 184,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 206,
+              "scrollWidth": 206,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 276,
+              "scrollWidth": 276,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 206,
+              "scrollWidth": 207,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 184,
+              "scrollWidth": 184,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 206,
+              "scrollWidth": 206,
+              "fits": true
+            }
+          ],
+          "choices": [
+            {
+              "text": "Pip\n1 space",
+              "selected": "true",
+              "bounds": {
+                "left": 625,
+                "right": 903,
+                "top": 2559.59375,
+                "bottom": 2621.59375,
+                "width": 278,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Pip",
+                  "bounds": {
+                    "left": 689,
+                    "right": 713.296875,
+                    "top": 2568.59375,
+                    "bottom": 2589.59375,
+                    "width": 24.296875,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "1 space",
+                  "bounds": {
+                    "left": 689,
+                    "right": 742.109375,
+                    "top": 2590.59375,
+                    "bottom": 2611.59375,
+                    "width": 53.109375,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "rabbit-cream",
+                "bounds": {
+                  "left": 629,
+                  "right": 683,
+                  "top": 2563.59375,
+                  "bottom": 2617.59375,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            },
+            {
+              "text": "Rue\n1 space",
+              "selected": "false",
+              "bounds": {
+                "left": 625,
+                "right": 903,
+                "top": 2628.59375,
+                "bottom": 2690.59375,
+                "width": 278,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Rue",
+                  "bounds": {
+                    "left": 689,
+                    "right": 717.78125,
+                    "top": 2637.59375,
+                    "bottom": 2658.59375,
+                    "width": 28.78125,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "1 space",
+                  "bounds": {
+                    "left": 689,
+                    "right": 742.109375,
+                    "top": 2659.59375,
+                    "bottom": 2680.59375,
+                    "width": 53.109375,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "rabbit-tan",
+                "bounds": {
+                  "left": 629,
+                  "right": 683,
+                  "top": 2632.59375,
+                  "bottom": 2686.59375,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            },
+            {
+              "text": "Moss\n2 spaces",
+              "selected": "true",
+              "bounds": {
+                "left": 625,
+                "right": 903,
+                "top": 2697.59375,
+                "bottom": 2759.59375,
+                "width": 278,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Moss",
+                  "bounds": {
+                    "left": 689,
+                    "right": 728.171875,
+                    "top": 2706.59375,
+                    "bottom": 2727.59375,
+                    "width": 39.171875,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "2 spaces",
+                  "bounds": {
+                    "left": 689,
+                    "right": 748.890625,
+                    "top": 2728.59375,
+                    "bottom": 2749.59375,
+                    "width": 59.890625,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "sheep-wool",
+                "bounds": {
+                  "left": 629,
+                  "right": 683,
+                  "top": 2701.59375,
+                  "bottom": 2755.59375,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            }
+          ]
+        },
+        {
+          "id": "gallery-text-stress",
+          "dimensions": [
+            {
+              "selector": "passenger-options",
+              "clientWidth": 278,
+              "scrollWidth": 278,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 276,
+              "scrollWidth": 276,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 206,
+              "scrollWidth": 207,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 184,
+              "scrollWidth": 184,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 206,
+              "scrollWidth": 206,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 276,
+              "scrollWidth": 276,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 206,
+              "scrollWidth": 207,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 184,
+              "scrollWidth": 184,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 206,
+              "scrollWidth": 206,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 276,
+              "scrollWidth": 276,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 206,
+              "scrollWidth": 207,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 184,
+              "scrollWidth": 184,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 206,
+              "scrollWidth": 206,
+              "fits": true
+            }
+          ],
+          "choices": [
+            {
+              "text": "Alexandria\n1 space",
+              "selected": "true",
+              "bounds": {
+                "left": 205,
+                "right": 483,
+                "top": 3162.375,
+                "bottom": 3228.375,
+                "width": 278,
+                "height": 66
+              },
+              "fontSize": "20px",
+              "lines": [
+                {
+                  "text": "Alexandria",
+                  "bounds": {
+                    "left": 269,
+                    "right": 370.34375,
+                    "top": 3166.375,
+                    "bottom": 3193.375,
+                    "width": 101.34375,
+                    "height": 27
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "1 space",
+                  "bounds": {
+                    "left": 269,
+                    "right": 335.390625,
+                    "top": 3196.375,
+                    "bottom": 3223.375,
+                    "width": 66.390625,
+                    "height": 27
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "rabbit-cream",
+                "bounds": {
+                  "left": 209,
+                  "right": 263,
+                  "top": 3168.375,
+                  "bottom": 3222.375,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            },
+            {
+              "text": "Marigold\n1 space",
+              "selected": "false",
+              "bounds": {
+                "left": 205,
+                "right": 483,
+                "top": 3235.375,
+                "bottom": 3301.375,
+                "width": 278,
+                "height": 66
+              },
+              "fontSize": "20px",
+              "lines": [
+                {
+                  "text": "Marigold",
+                  "bounds": {
+                    "left": 269,
+                    "right": 355.3125,
+                    "top": 3239.375,
+                    "bottom": 3266.375,
+                    "width": 86.3125,
+                    "height": 27
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "1 space",
+                  "bounds": {
+                    "left": 269,
+                    "right": 335.390625,
+                    "top": 3269.375,
+                    "bottom": 3296.375,
+                    "width": 66.390625,
+                    "height": 27
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "rabbit-tan",
+                "bounds": {
+                  "left": 209,
+                  "right": 263,
+                  "top": 3241.375,
+                  "bottom": 3295.375,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            },
+            {
+              "text": "Moss\n2 spaces",
+              "selected": "true",
+              "bounds": {
+                "left": 205,
+                "right": 483,
+                "top": 3308.375,
+                "bottom": 3374.375,
+                "width": 278,
+                "height": 66
+              },
+              "fontSize": "20px",
+              "lines": [
+                {
+                  "text": "Moss",
+                  "bounds": {
+                    "left": 269,
+                    "right": 317.96875,
+                    "top": 3312.375,
+                    "bottom": 3339.375,
+                    "width": 48.96875,
+                    "height": 27
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "2 spaces",
+                  "bounds": {
+                    "left": 269,
+                    "right": 343.875,
+                    "top": 3342.375,
+                    "bottom": 3369.375,
+                    "width": 74.875,
+                    "height": 27
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "sheep-wool",
+                "bounds": {
+                  "left": 209,
+                  "right": 263,
+                  "top": 3314.375,
+                  "bottom": 3368.375,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            }
+          ]
+        },
+        {
+          "id": "",
+          "dimensions": [],
+          "choices": []
+        },
+        {
+          "id": "",
+          "dimensions": [],
+          "choices": []
+        },
+        {
+          "id": "gallery-bellwater-portraits",
+          "dimensions": [
+            {
+              "selector": "passenger-options",
+              "clientWidth": 278,
+              "scrollWidth": 278,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 276,
+              "scrollWidth": 276,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 206,
+              "scrollWidth": 207,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 184,
+              "scrollWidth": 184,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 206,
+              "scrollWidth": 206,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 276,
+              "scrollWidth": 276,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 206,
+              "scrollWidth": 207,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 184,
+              "scrollWidth": 184,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 206,
+              "scrollWidth": 206,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 276,
+              "scrollWidth": 276,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 206,
+              "scrollWidth": 207,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 184,
+              "scrollWidth": 184,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 206,
+              "scrollWidth": 206,
+              "fits": true
+            }
+          ],
+          "choices": [
+            {
+              "text": "Tansy\n1 space",
+              "selected": "false",
+              "bounds": {
+                "left": 205,
+                "right": 483,
+                "top": 6559.53125,
+                "bottom": 6621.53125,
+                "width": 278,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Tansy",
+                  "bounds": {
+                    "left": 269,
+                    "right": 310.953125,
+                    "top": 6568.53125,
+                    "bottom": 6589.53125,
+                    "width": 41.953125,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "1 space",
+                  "bounds": {
+                    "left": 269,
+                    "right": 322.109375,
+                    "top": 6590.53125,
+                    "bottom": 6611.53125,
+                    "width": 53.109375,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "rabbit-cream",
+                "bounds": {
+                  "left": 209,
+                  "right": 263,
+                  "top": 6563.53125,
+                  "bottom": 6617.53125,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            },
+            {
+              "text": "Lark\n1 space",
+              "selected": "true",
+              "bounds": {
+                "left": 205,
+                "right": 483,
+                "top": 6628.53125,
+                "bottom": 6690.53125,
+                "width": 278,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Lark",
+                  "bounds": {
+                    "left": 269,
+                    "right": 301.109375,
+                    "top": 6637.53125,
+                    "bottom": 6658.53125,
+                    "width": 32.109375,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "1 space",
+                  "bounds": {
+                    "left": 269,
+                    "right": 322.109375,
+                    "top": 6659.53125,
+                    "bottom": 6680.53125,
+                    "width": 53.109375,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "rabbit-tan",
+                "bounds": {
+                  "left": 209,
+                  "right": 263,
+                  "top": 6632.53125,
+                  "bottom": 6686.53125,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            },
+            {
+              "text": "Bram\n2 spaces",
+              "selected": "false",
+              "bounds": {
+                "left": 205,
+                "right": 483,
+                "top": 6697.53125,
+                "bottom": 6759.53125,
+                "width": 278,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Bram",
+                  "bounds": {
+                    "left": 269,
+                    "right": 308.890625,
+                    "top": 6706.53125,
+                    "bottom": 6727.53125,
+                    "width": 39.890625,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "2 spaces",
+                  "bounds": {
+                    "left": 269,
+                    "right": 328.890625,
+                    "top": 6728.53125,
+                    "bottom": 6749.53125,
+                    "width": 59.890625,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "sheep-wool",
+                "bounds": {
+                  "left": 209,
+                  "right": 263,
+                  "top": 6701.53125,
+                  "bottom": 6755.53125,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            }
+          ]
+        },
+        {
+          "id": "gallery-failed-portrait",
+          "dimensions": [
+            {
+              "selector": "passenger-options",
+              "clientWidth": 278,
+              "scrollWidth": 278,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 276,
+              "scrollWidth": 276,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 206,
+              "scrollWidth": 207,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 184,
+              "scrollWidth": 184,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 206,
+              "scrollWidth": 206,
+              "fits": true
+            }
+          ],
+          "choices": [
+            {
+              "text": "Lark\n1 space",
+              "selected": "true",
+              "bounds": {
+                "left": 545,
+                "right": 823,
+                "top": 6538.53125,
+                "bottom": 6600.53125,
+                "width": 278,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Lark",
+                  "bounds": {
+                    "left": 609,
+                    "right": 641.109375,
+                    "top": 6547.53125,
+                    "bottom": 6568.53125,
+                    "width": 32.109375,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "1 space",
+                  "bounds": {
+                    "left": 609,
+                    "right": 662.109375,
+                    "top": 6569.53125,
+                    "bottom": 6590.53125,
+                    "width": 53.109375,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "rabbit-tan",
+                "bounds": {
+                  "left": 549,
+                  "right": 603,
+                  "top": 6542.53125,
+                  "bottom": 6596.53125,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "failed",
+                "sourceWidth": 0,
+                "sourceHeight": 0,
+                "opacity": "0",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            }
+          ]
+        },
+        {
+          "id": "gallery-unknown-portrait",
+          "dimensions": [
+            {
+              "selector": "passenger-options",
+              "clientWidth": 278,
+              "scrollWidth": 278,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 276,
+              "scrollWidth": 276,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 206,
+              "scrollWidth": 207,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 184,
+              "scrollWidth": 184,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 206,
+              "scrollWidth": 206,
+              "fits": true
+            }
+          ],
+          "choices": [
+            {
+              "text": "Future passenger\n1 space",
+              "selected": "false",
+              "bounds": {
+                "left": 885,
+                "right": 1163,
+                "top": 6538.53125,
+                "bottom": 6600.53125,
+                "width": 278,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Future passenger",
+                  "bounds": {
+                    "left": 949,
+                    "right": 1078,
+                    "top": 6547.53125,
+                    "bottom": 6568.53125,
+                    "width": 129,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "1 space",
+                  "bounds": {
+                    "left": 949,
+                    "right": 1002.109375,
+                    "top": 6569.53125,
+                    "bottom": 6590.53125,
+                    "width": 53.109375,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "unavailable",
+                "bounds": {
+                  "left": 889,
+                  "right": 943,
+                  "top": 6542.53125,
+                  "bottom": 6596.53125,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "unavailable",
+                "sourceWidth": null,
+                "sourceHeight": null,
+                "opacity": null,
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            }
+          ]
+        },
+        {
+          "id": "",
+          "dimensions": [],
+          "choices": []
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "height": 900,
+      "errors": [],
+      "pass": false,
+      "documentWidth": 326,
+      "passengerCanvases": 0,
+      "pairedImages": [
+        {
+          "src": "http://127.0.0.1:5326/assets/portraits/choice/rabbit-cream.png",
+          "width": 256,
+          "height": 256
+        },
+        {
+          "src": "http://127.0.0.1:5326/assets/portraits/arrival/rabbit-cream.png",
+          "width": 256,
+          "height": 256
+        },
+        {
+          "src": "http://127.0.0.1:5326/assets/portraits/choice/rabbit-tan.png",
+          "width": 256,
+          "height": 256
+        },
+        {
+          "src": "http://127.0.0.1:5326/assets/portraits/arrival/rabbit-tan.png",
+          "width": 256,
+          "height": 256
+        },
+        {
+          "src": "http://127.0.0.1:5326/assets/portraits/choice/sheep-wool.png",
+          "width": 256,
+          "height": 256
+        },
+        {
+          "src": "http://127.0.0.1:5326/assets/portraits/arrival/sheep-wool.png",
+          "width": 256,
+          "height": 256
+        },
+        {
+          "src": "http://127.0.0.1:5326/assets/portraits/choice/beaver-brown.png",
+          "width": 256,
+          "height": 256
+        },
+        {
+          "src": "http://127.0.0.1:5326/assets/portraits/arrival/beaver-brown.png",
+          "width": 256,
+          "height": 256
+        },
+        {
+          "src": "http://127.0.0.1:5326/assets/portraits/choice/deer-chestnut.png",
+          "width": 256,
+          "height": 256
+        },
+        {
+          "src": "http://127.0.0.1:5326/assets/portraits/arrival/deer-chestnut.png",
+          "width": 256,
+          "height": 256
+        }
+      ],
+      "specimens": [
+        {
+          "id": "",
+          "dimensions": [
+            {
+              "selector": "passenger-options",
+              "clientWidth": 266,
+              "scrollWidth": 266,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 264,
+              "scrollWidth": 264,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 194,
+              "scrollWidth": 195,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 172,
+              "scrollWidth": 172,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 194,
+              "scrollWidth": 194,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 264,
+              "scrollWidth": 264,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 194,
+              "scrollWidth": 195,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 172,
+              "scrollWidth": 172,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 194,
+              "scrollWidth": 194,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 264,
+              "scrollWidth": 264,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 194,
+              "scrollWidth": 195,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 172,
+              "scrollWidth": 172,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 194,
+              "scrollWidth": 194,
+              "fits": true
+            }
+          ],
+          "choices": [
+            {
+              "text": "Hazel\n2 spaces",
+              "selected": "true",
+              "bounds": {
+                "left": 27,
+                "right": 293,
+                "top": 1276.21875,
+                "bottom": 1338.21875,
+                "width": 266,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Hazel",
+                  "bounds": {
+                    "left": 91,
+                    "right": 132.734375,
+                    "top": 1285.21875,
+                    "bottom": 1306.21875,
+                    "width": 41.734375,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "2 spaces",
+                  "bounds": {
+                    "left": 91,
+                    "right": 150.890625,
+                    "top": 1307.21875,
+                    "bottom": 1328.21875,
+                    "width": 59.890625,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "beaver-brown",
+                "bounds": {
+                  "left": 31,
+                  "right": 85,
+                  "top": 1280.21875,
+                  "bottom": 1334.21875,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            },
+            {
+              "text": "Bracken\n2 spaces",
+              "selected": "true",
+              "bounds": {
+                "left": 27,
+                "right": 293,
+                "top": 1345.21875,
+                "bottom": 1407.21875,
+                "width": 266,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Bracken",
+                  "bounds": {
+                    "left": 91,
+                    "right": 150.96875,
+                    "top": 1354.21875,
+                    "bottom": 1375.21875,
+                    "width": 59.96875,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "2 spaces",
+                  "bounds": {
+                    "left": 91,
+                    "right": 150.890625,
+                    "top": 1376.21875,
+                    "bottom": 1397.21875,
+                    "width": 59.890625,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "beaver-brown",
+                "bounds": {
+                  "left": 31,
+                  "right": 85,
+                  "top": 1349.21875,
+                  "bottom": 1403.21875,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            },
+            {
+              "text": "Mica\n1 space",
+              "selected": "false",
+              "bounds": {
+                "left": 27,
+                "right": 293,
+                "top": 1414.21875,
+                "bottom": 1476.21875,
+                "width": 266,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Mica",
+                  "bounds": {
+                    "left": 91,
+                    "right": 127.15625,
+                    "top": 1423.21875,
+                    "bottom": 1444.21875,
+                    "width": 36.15625,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "1 space",
+                  "bounds": {
+                    "left": 91,
+                    "right": 144.109375,
+                    "top": 1445.21875,
+                    "bottom": 1466.21875,
+                    "width": 53.109375,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "rabbit-cream",
+                "bounds": {
+                  "left": 31,
+                  "right": 85,
+                  "top": 1418.21875,
+                  "bottom": 1472.21875,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            }
+          ]
+        },
+        {
+          "id": "",
+          "dimensions": [
+            {
+              "selector": "passenger-options",
+              "clientWidth": 266,
+              "scrollWidth": 266,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 264,
+              "scrollWidth": 264,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 194,
+              "scrollWidth": 195,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 172,
+              "scrollWidth": 172,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 194,
+              "scrollWidth": 194,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 264,
+              "scrollWidth": 264,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 194,
+              "scrollWidth": 195,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 172,
+              "scrollWidth": 172,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 194,
+              "scrollWidth": 194,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 264,
+              "scrollWidth": 264,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 194,
+              "scrollWidth": 195,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 172,
+              "scrollWidth": 172,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 194,
+              "scrollWidth": 194,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 264,
+              "scrollWidth": 264,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 194,
+              "scrollWidth": 195,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 172,
+              "scrollWidth": 172,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 194,
+              "scrollWidth": 194,
+              "fits": true
+            }
+          ],
+          "choices": [
+            {
+              "text": "Juniper\n3 spaces",
+              "selected": "true",
+              "bounds": {
+                "left": 27,
+                "right": 293,
+                "top": 2333.5625,
+                "bottom": 2395.5625,
+                "width": 266,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Juniper",
+                  "bounds": {
+                    "left": 91,
+                    "right": 146.984375,
+                    "top": 2342.5625,
+                    "bottom": 2363.5625,
+                    "width": 55.984375,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "3 spaces",
+                  "bounds": {
+                    "left": 91,
+                    "right": 150.890625,
+                    "top": 2364.5625,
+                    "bottom": 2385.5625,
+                    "width": 59.890625,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "deer-chestnut",
+                "bounds": {
+                  "left": 31,
+                  "right": 85,
+                  "top": 2337.5625,
+                  "bottom": 2391.5625,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            },
+            {
+              "text": "Sedge\n2 spaces",
+              "selected": "true",
+              "bounds": {
+                "left": 27,
+                "right": 293,
+                "top": 2402.5625,
+                "bottom": 2464.5625,
+                "width": 266,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Sedge",
+                  "bounds": {
+                    "left": 91,
+                    "right": 137.09375,
+                    "top": 2411.5625,
+                    "bottom": 2432.5625,
+                    "width": 46.09375,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "2 spaces",
+                  "bounds": {
+                    "left": 91,
+                    "right": 150.890625,
+                    "top": 2433.5625,
+                    "bottom": 2454.5625,
+                    "width": 59.890625,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "sheep-wool",
+                "bounds": {
+                  "left": 31,
+                  "right": 85,
+                  "top": 2406.5625,
+                  "bottom": 2460.5625,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            },
+            {
+              "text": "Fennel\n1 space",
+              "selected": "true",
+              "bounds": {
+                "left": 27,
+                "right": 293,
+                "top": 2471.5625,
+                "bottom": 2533.5625,
+                "width": 266,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Fennel",
+                  "bounds": {
+                    "left": 91,
+                    "right": 140.546875,
+                    "top": 2480.5625,
+                    "bottom": 2501.5625,
+                    "width": 49.546875,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "1 space",
+                  "bounds": {
+                    "left": 91,
+                    "right": 144.109375,
+                    "top": 2502.5625,
+                    "bottom": 2523.5625,
+                    "width": 53.109375,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "rabbit-tan",
+                "bounds": {
+                  "left": 31,
+                  "right": 85,
+                  "top": 2475.5625,
+                  "bottom": 2529.5625,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            },
+            {
+              "text": "Willow\n2 spaces",
+              "selected": "false",
+              "bounds": {
+                "left": 27,
+                "right": 293,
+                "top": 2540.5625,
+                "bottom": 2602.5625,
+                "width": 266,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Willow",
+                  "bounds": {
+                    "left": 91,
+                    "right": 143.265625,
+                    "top": 2549.5625,
+                    "bottom": 2570.5625,
+                    "width": 52.265625,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "2 spaces",
+                  "bounds": {
+                    "left": 91,
+                    "right": 150.890625,
+                    "top": 2571.5625,
+                    "bottom": 2592.5625,
+                    "width": 59.890625,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "beaver-brown",
+                "bounds": {
+                  "left": 31,
+                  "right": 85,
+                  "top": 2544.5625,
+                  "bottom": 2598.5625,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            }
+          ]
+        },
+        {
+          "id": "gallery-three-passengers",
+          "dimensions": [
+            {
+              "selector": "passenger-options",
+              "clientWidth": 266,
+              "scrollWidth": 266,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 264,
+              "scrollWidth": 264,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 194,
+              "scrollWidth": 195,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 172,
+              "scrollWidth": 172,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 194,
+              "scrollWidth": 194,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 264,
+              "scrollWidth": 264,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 194,
+              "scrollWidth": 195,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 172,
+              "scrollWidth": 172,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 194,
+              "scrollWidth": 194,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 264,
+              "scrollWidth": 264,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 194,
+              "scrollWidth": 195,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 172,
+              "scrollWidth": 172,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 194,
+              "scrollWidth": 194,
+              "fits": true
+            }
+          ],
+          "choices": [
+            {
+              "text": "Pip\n1 space",
+              "selected": "true",
+              "bounds": {
+                "left": 27,
+                "right": 293,
+                "top": 4310.59375,
+                "bottom": 4372.59375,
+                "width": 266,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Pip",
+                  "bounds": {
+                    "left": 91,
+                    "right": 115.296875,
+                    "top": 4319.59375,
+                    "bottom": 4340.59375,
+                    "width": 24.296875,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "1 space",
+                  "bounds": {
+                    "left": 91,
+                    "right": 144.109375,
+                    "top": 4341.59375,
+                    "bottom": 4362.59375,
+                    "width": 53.109375,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "rabbit-cream",
+                "bounds": {
+                  "left": 31,
+                  "right": 85,
+                  "top": 4314.59375,
+                  "bottom": 4368.59375,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            },
+            {
+              "text": "Rue\n1 space",
+              "selected": "true",
+              "bounds": {
+                "left": 27,
+                "right": 293,
+                "top": 4379.59375,
+                "bottom": 4441.59375,
+                "width": 266,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Rue",
+                  "bounds": {
+                    "left": 91,
+                    "right": 119.78125,
+                    "top": 4388.59375,
+                    "bottom": 4409.59375,
+                    "width": 28.78125,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "1 space",
+                  "bounds": {
+                    "left": 91,
+                    "right": 144.109375,
+                    "top": 4410.59375,
+                    "bottom": 4431.59375,
+                    "width": 53.109375,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "rabbit-tan",
+                "bounds": {
+                  "left": 31,
+                  "right": 85,
+                  "top": 4383.59375,
+                  "bottom": 4437.59375,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            },
+            {
+              "text": "Moss\n2 spaces",
+              "selected": "true",
+              "bounds": {
+                "left": 27,
+                "right": 293,
+                "top": 4448.59375,
+                "bottom": 4510.59375,
+                "width": 266,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Moss",
+                  "bounds": {
+                    "left": 91,
+                    "right": 130.171875,
+                    "top": 4457.59375,
+                    "bottom": 4478.59375,
+                    "width": 39.171875,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "2 spaces",
+                  "bounds": {
+                    "left": 91,
+                    "right": 150.890625,
+                    "top": 4479.59375,
+                    "bottom": 4500.59375,
+                    "width": 59.890625,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "sheep-wool",
+                "bounds": {
+                  "left": 31,
+                  "right": 85,
+                  "top": 4452.59375,
+                  "bottom": 4506.59375,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            }
+          ]
+        },
+        {
+          "id": "gallery-narrow-passengers",
+          "dimensions": [
+            {
+              "selector": "passenger-options",
+              "clientWidth": 266,
+              "scrollWidth": 266,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 264,
+              "scrollWidth": 264,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 194,
+              "scrollWidth": 195,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 172,
+              "scrollWidth": 172,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 194,
+              "scrollWidth": 194,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 264,
+              "scrollWidth": 264,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 194,
+              "scrollWidth": 195,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 172,
+              "scrollWidth": 172,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 194,
+              "scrollWidth": 194,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 264,
+              "scrollWidth": 264,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 194,
+              "scrollWidth": 195,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 172,
+              "scrollWidth": 172,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 194,
+              "scrollWidth": 194,
+              "fits": true
+            }
+          ],
+          "choices": [
+            {
+              "text": "Pip\n1 space",
+              "selected": "true",
+              "bounds": {
+                "left": 27,
+                "right": 293,
+                "top": 4984.3125,
+                "bottom": 5046.3125,
+                "width": 266,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Pip",
+                  "bounds": {
+                    "left": 91,
+                    "right": 115.296875,
+                    "top": 4993.3125,
+                    "bottom": 5014.3125,
+                    "width": 24.296875,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "1 space",
+                  "bounds": {
+                    "left": 91,
+                    "right": 144.109375,
+                    "top": 5015.3125,
+                    "bottom": 5036.3125,
+                    "width": 53.109375,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "rabbit-cream",
+                "bounds": {
+                  "left": 31,
+                  "right": 85,
+                  "top": 4988.3125,
+                  "bottom": 5042.3125,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            },
+            {
+              "text": "Rue\n1 space",
+              "selected": "false",
+              "bounds": {
+                "left": 27,
+                "right": 293,
+                "top": 5053.3125,
+                "bottom": 5115.3125,
+                "width": 266,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Rue",
+                  "bounds": {
+                    "left": 91,
+                    "right": 119.78125,
+                    "top": 5062.3125,
+                    "bottom": 5083.3125,
+                    "width": 28.78125,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "1 space",
+                  "bounds": {
+                    "left": 91,
+                    "right": 144.109375,
+                    "top": 5084.3125,
+                    "bottom": 5105.3125,
+                    "width": 53.109375,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "rabbit-tan",
+                "bounds": {
+                  "left": 31,
+                  "right": 85,
+                  "top": 5057.3125,
+                  "bottom": 5111.3125,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            },
+            {
+              "text": "Moss\n2 spaces",
+              "selected": "true",
+              "bounds": {
+                "left": 27,
+                "right": 293,
+                "top": 5122.3125,
+                "bottom": 5184.3125,
+                "width": 266,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Moss",
+                  "bounds": {
+                    "left": 91,
+                    "right": 130.171875,
+                    "top": 5131.3125,
+                    "bottom": 5152.3125,
+                    "width": 39.171875,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "2 spaces",
+                  "bounds": {
+                    "left": 91,
+                    "right": 150.890625,
+                    "top": 5153.3125,
+                    "bottom": 5174.3125,
+                    "width": 59.890625,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "sheep-wool",
+                "bounds": {
+                  "left": 31,
+                  "right": 85,
+                  "top": 5126.3125,
+                  "bottom": 5180.3125,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            }
+          ]
+        },
+        {
+          "id": "gallery-text-stress",
+          "dimensions": [
+            {
+              "selector": "passenger-options",
+              "clientWidth": 266,
+              "scrollWidth": 266,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 264,
+              "scrollWidth": 264,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 194,
+              "scrollWidth": 195,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 172,
+              "scrollWidth": 172,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 194,
+              "scrollWidth": 194,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 264,
+              "scrollWidth": 264,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 194,
+              "scrollWidth": 195,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 172,
+              "scrollWidth": 172,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 194,
+              "scrollWidth": 194,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 264,
+              "scrollWidth": 264,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 194,
+              "scrollWidth": 195,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 172,
+              "scrollWidth": 172,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 194,
+              "scrollWidth": 194,
+              "fits": true
+            }
+          ],
+          "choices": [
+            {
+              "text": "Alexandria\n1 space",
+              "selected": "true",
+              "bounds": {
+                "left": 27,
+                "right": 293,
+                "top": 5599.09375,
+                "bottom": 5665.09375,
+                "width": 266,
+                "height": 66
+              },
+              "fontSize": "20px",
+              "lines": [
+                {
+                  "text": "Alexandria",
+                  "bounds": {
+                    "left": 91,
+                    "right": 192.34375,
+                    "top": 5603.09375,
+                    "bottom": 5630.09375,
+                    "width": 101.34375,
+                    "height": 27
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "1 space",
+                  "bounds": {
+                    "left": 91,
+                    "right": 157.390625,
+                    "top": 5633.09375,
+                    "bottom": 5660.09375,
+                    "width": 66.390625,
+                    "height": 27
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "rabbit-cream",
+                "bounds": {
+                  "left": 31,
+                  "right": 85,
+                  "top": 5605.09375,
+                  "bottom": 5659.09375,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            },
+            {
+              "text": "Marigold\n1 space",
+              "selected": "false",
+              "bounds": {
+                "left": 27,
+                "right": 293,
+                "top": 5672.09375,
+                "bottom": 5738.09375,
+                "width": 266,
+                "height": 66
+              },
+              "fontSize": "20px",
+              "lines": [
+                {
+                  "text": "Marigold",
+                  "bounds": {
+                    "left": 91,
+                    "right": 177.3125,
+                    "top": 5676.09375,
+                    "bottom": 5703.09375,
+                    "width": 86.3125,
+                    "height": 27
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "1 space",
+                  "bounds": {
+                    "left": 91,
+                    "right": 157.390625,
+                    "top": 5706.09375,
+                    "bottom": 5733.09375,
+                    "width": 66.390625,
+                    "height": 27
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "rabbit-tan",
+                "bounds": {
+                  "left": 31,
+                  "right": 85,
+                  "top": 5678.09375,
+                  "bottom": 5732.09375,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            },
+            {
+              "text": "Moss\n2 spaces",
+              "selected": "true",
+              "bounds": {
+                "left": 27,
+                "right": 293,
+                "top": 5745.09375,
+                "bottom": 5811.09375,
+                "width": 266,
+                "height": 66
+              },
+              "fontSize": "20px",
+              "lines": [
+                {
+                  "text": "Moss",
+                  "bounds": {
+                    "left": 91,
+                    "right": 139.96875,
+                    "top": 5749.09375,
+                    "bottom": 5776.09375,
+                    "width": 48.96875,
+                    "height": 27
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "2 spaces",
+                  "bounds": {
+                    "left": 91,
+                    "right": 165.875,
+                    "top": 5779.09375,
+                    "bottom": 5806.09375,
+                    "width": 74.875,
+                    "height": 27
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "sheep-wool",
+                "bounds": {
+                  "left": 31,
+                  "right": 85,
+                  "top": 5751.09375,
+                  "bottom": 5805.09375,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            }
+          ]
+        },
+        {
+          "id": "",
+          "dimensions": [],
+          "choices": []
+        },
+        {
+          "id": "",
+          "dimensions": [],
+          "choices": []
+        },
+        {
+          "id": "gallery-bellwater-portraits",
+          "dimensions": [
+            {
+              "selector": "passenger-options",
+              "clientWidth": 266,
+              "scrollWidth": 266,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 264,
+              "scrollWidth": 264,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 194,
+              "scrollWidth": 195,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 172,
+              "scrollWidth": 172,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 194,
+              "scrollWidth": 194,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 264,
+              "scrollWidth": 264,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 194,
+              "scrollWidth": 195,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 172,
+              "scrollWidth": 172,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 194,
+              "scrollWidth": 194,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 264,
+              "scrollWidth": 264,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 194,
+              "scrollWidth": 195,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 172,
+              "scrollWidth": 172,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 194,
+              "scrollWidth": 194,
+              "fits": true
+            }
+          ],
+          "choices": [
+            {
+              "text": "Tansy\n1 space",
+              "selected": "false",
+              "bounds": {
+                "left": 27,
+                "right": 293,
+                "top": 11034.5625,
+                "bottom": 11096.5625,
+                "width": 266,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Tansy",
+                  "bounds": {
+                    "left": 91,
+                    "right": 132.953125,
+                    "top": 11043.5625,
+                    "bottom": 11064.5625,
+                    "width": 41.953125,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "1 space",
+                  "bounds": {
+                    "left": 91,
+                    "right": 144.109375,
+                    "top": 11065.5625,
+                    "bottom": 11086.5625,
+                    "width": 53.109375,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "rabbit-cream",
+                "bounds": {
+                  "left": 31,
+                  "right": 85,
+                  "top": 11038.5625,
+                  "bottom": 11092.5625,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            },
+            {
+              "text": "Lark\n1 space",
+              "selected": "true",
+              "bounds": {
+                "left": 27,
+                "right": 293,
+                "top": 11103.5625,
+                "bottom": 11165.5625,
+                "width": 266,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Lark",
+                  "bounds": {
+                    "left": 91,
+                    "right": 123.109375,
+                    "top": 11112.5625,
+                    "bottom": 11133.5625,
+                    "width": 32.109375,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "1 space",
+                  "bounds": {
+                    "left": 91,
+                    "right": 144.109375,
+                    "top": 11134.5625,
+                    "bottom": 11155.5625,
+                    "width": 53.109375,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "rabbit-tan",
+                "bounds": {
+                  "left": 31,
+                  "right": 85,
+                  "top": 11107.5625,
+                  "bottom": 11161.5625,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            },
+            {
+              "text": "Bram\n2 spaces",
+              "selected": "false",
+              "bounds": {
+                "left": 27,
+                "right": 293,
+                "top": 11172.5625,
+                "bottom": 11234.5625,
+                "width": 266,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Bram",
+                  "bounds": {
+                    "left": 91,
+                    "right": 130.890625,
+                    "top": 11181.5625,
+                    "bottom": 11202.5625,
+                    "width": 39.890625,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "2 spaces",
+                  "bounds": {
+                    "left": 91,
+                    "right": 150.890625,
+                    "top": 11203.5625,
+                    "bottom": 11224.5625,
+                    "width": 59.890625,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "sheep-wool",
+                "bounds": {
+                  "left": 31,
+                  "right": 85,
+                  "top": 11176.5625,
+                  "bottom": 11230.5625,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "loaded",
+                "sourceWidth": 256,
+                "sourceHeight": 256,
+                "opacity": "1",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            }
+          ]
+        },
+        {
+          "id": "gallery-failed-portrait",
+          "dimensions": [
+            {
+              "selector": "passenger-options",
+              "clientWidth": 266,
+              "scrollWidth": 266,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 264,
+              "scrollWidth": 264,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 194,
+              "scrollWidth": 195,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 172,
+              "scrollWidth": 172,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 194,
+              "scrollWidth": 194,
+              "fits": true
+            }
+          ],
+          "choices": [
+            {
+              "text": "Lark\n1 space",
+              "selected": "true",
+              "bounds": {
+                "left": 27,
+                "right": 293,
+                "top": 11492.28125,
+                "bottom": 11554.28125,
+                "width": 266,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Lark",
+                  "bounds": {
+                    "left": 91,
+                    "right": 123.109375,
+                    "top": 11501.28125,
+                    "bottom": 11522.28125,
+                    "width": 32.109375,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "1 space",
+                  "bounds": {
+                    "left": 91,
+                    "right": 144.109375,
+                    "top": 11523.28125,
+                    "bottom": 11544.28125,
+                    "width": 53.109375,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "rabbit-tan",
+                "bounds": {
+                  "left": 31,
+                  "right": 85,
+                  "top": 11496.28125,
+                  "bottom": 11550.28125,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "failed",
+                "sourceWidth": 0,
+                "sourceHeight": 0,
+                "opacity": "0",
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            }
+          ]
+        },
+        {
+          "id": "gallery-unknown-portrait",
+          "dimensions": [
+            {
+              "selector": "passenger-options",
+              "clientWidth": 266,
+              "scrollWidth": 266,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice",
+              "clientWidth": 264,
+              "scrollWidth": 264,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-copy",
+              "clientWidth": 194,
+              "scrollWidth": 195,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-name",
+              "clientWidth": 172,
+              "scrollWidth": 172,
+              "fits": true
+            },
+            {
+              "selector": "cove-choice-capacity",
+              "clientWidth": 194,
+              "scrollWidth": 194,
+              "fits": true
+            }
+          ],
+          "choices": [
+            {
+              "text": "Future passenger\n1 space",
+              "selected": "false",
+              "bounds": {
+                "left": 27,
+                "right": 293,
+                "top": 11812,
+                "bottom": 11874,
+                "width": 266,
+                "height": 62
+              },
+              "fontSize": "16px",
+              "lines": [
+                {
+                  "text": "Future passenger",
+                  "bounds": {
+                    "left": 91,
+                    "right": 220,
+                    "top": 11821,
+                    "bottom": 11842,
+                    "width": 129,
+                    "height": 21
+                  },
+                  "fits": true
+                },
+                {
+                  "text": "1 space",
+                  "bounds": {
+                    "left": 91,
+                    "right": 144.109375,
+                    "top": 11843,
+                    "bottom": 11864,
+                    "width": 53.109375,
+                    "height": 21
+                  },
+                  "fits": true
+                }
+              ],
+              "portrait": {
+                "key": "unavailable",
+                "bounds": {
+                  "left": 31,
+                  "right": 85,
+                  "top": 11816,
+                  "bottom": 11870,
+                  "width": 54,
+                  "height": 54
+                },
+                "fits": true,
+                "state": "unavailable",
+                "sourceWidth": null,
+                "sourceHeight": null,
+                "opacity": null,
+                "noninteractive": true,
+                "decoded": true
+              },
+              "fits": true
+            }
+          ]
+        },
+        {
+          "id": "",
+          "dimensions": [],
+          "choices": []
+        }
+      ]
+    }
+  ]
+}

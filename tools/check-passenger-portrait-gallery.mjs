@@ -4,20 +4,20 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 
 const base = process.env.PORTRAIT_GALLERY_URL ?? 'http://127.0.0.1:5250';
-const output = 'reviews/passenger-portraits/gallery';
+const output = process.env.PORTRAIT_GALLERY_OUTPUT ?? 'test-results/animal-presentation/gallery';
 mkdirSync(output, { recursive: true });
 const digest = (value) => createHash('sha256').update(value).digest('hex');
-const paths = ['asset-gallery.html', 'src/dev/asset-gallery.ts', 'src/dev/asset-gallery.css', 'src/ui/cove-ui.ts', 'src/ui/cove-ui.css', 'assets/catalog.json', 'src/game/passenger-appearance.ts', ...['rabbit-cream', 'rabbit-tan', 'sheep-wool'].map((key) => `cove-portrait-package/portraits/${key}.png`)];
+const paths = ['asset-gallery.html', 'src/dev/asset-gallery.ts', 'src/dev/asset-gallery.css', 'src/ui/cove-ui.ts', 'src/ui/cove-ui.css', 'assets/catalog.json', 'src/game/passenger-appearance.ts', 'src/ui/arrival.ts', 'src/ui/arrival.css', ...['choice', 'arrival'].flatMap(profile => ['rabbit-cream', 'rabbit-tan', 'sheep-wool', 'beaver-brown', 'deer-chestnut'].map(key => `assets/portraits/${profile}/${key}.png`))];
 const snapshot = () => Object.fromEntries(paths.map((path) => [path, digest(readFileSync(path))]));
 const files = snapshot();
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({ headless: true, args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
 const results = [];
 try {
-  for (const width of [1440, 320]) {
-    const page = await browser.newPage({ viewport: { width, height: 900 }, deviceScaleFactor: 1 });
+  for (const [width, height] of [[1440, 900], [780, 320], [320, 740]]) {
+    const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: 1 });
     const errors = [];
     page.on('pageerror', (error) => errors.push(error.message));
-    await page.goto(`${base}/asset-gallery.html`);
+    await page.goto(`${base}/asset-gallery.html`, { waitUntil: 'domcontentloaded' });
     await page.locator('#gallery-failed-portrait .cove-portrait-image[data-portrait-state="failed"]').waitFor({ state: 'attached' });
     await page.waitForFunction(() => [...document.querySelectorAll('.cove-portrait-image')].every((image) => image.closest('#gallery-failed-portrait') || image.dataset.portraitState === 'loaded'));
     await page.evaluate(() => document.fonts.ready);
@@ -40,24 +40,24 @@ try {
           });
           const slot = button.querySelector('.cove-choice-portrait'), slotBox = slot.getBoundingClientRect();
           const image = slot.querySelector('img'), failed = !!button.closest('#gallery-failed-portrait');
-          const portrait = { key: slot.dataset.appearance, bounds: rect(slotBox), fits: inside(slotBox, bounds) && Math.abs(slotBox.width - 44) < .1 && Math.abs(slotBox.height - 44) < .1, state: image?.dataset.portraitState ?? 'unavailable', sourceWidth: image?.naturalWidth ?? null, sourceHeight: image?.naturalHeight ?? null, opacity: image ? getComputedStyle(image).opacity : null, noninteractive: !image || image.alt === '' && !image.draggable && getComputedStyle(image).pointerEvents === 'none', decoded: !image || failed ? !image || image.dataset.portraitState === 'failed' && image.naturalWidth === 0 && getComputedStyle(image).opacity === '0' : image.dataset.portraitState === 'loaded' && image.naturalWidth === 256 && image.naturalHeight === 256 && getComputedStyle(image).opacity === '1' };
+          const portrait = { key: slot.dataset.appearance, bounds: rect(slotBox), fits: inside(slotBox, bounds) && Math.abs(slotBox.width - 54) < .1 && Math.abs(slotBox.height - 54) < .1, state: image?.dataset.portraitState ?? 'unavailable', sourceWidth: image?.naturalWidth ?? null, sourceHeight: image?.naturalHeight ?? null, opacity: image ? getComputedStyle(image).opacity : null, noninteractive: !image || image.alt === '' && !image.draggable && getComputedStyle(image).pointerEvents === 'none', decoded: !image || failed ? !image || image.dataset.portraitState === 'failed' && image.naturalWidth === 0 && getComputedStyle(image).opacity === '0' : image.dataset.portraitState === 'loaded' && image.naturalWidth === 256 && image.naturalHeight === 256 && getComputedStyle(image).opacity === '1' };
           return { text: button.textContent, selected: button.getAttribute('aria-pressed'), bounds: rect(box), fontSize: style.fontSize, lines, portrait, fits: lines.every((line) => line.fits) && box.height >= 48 && portrait.fits && portrait.noninteractive && portrait.decoded };
         });
         return { id: panel.id, dimensions, choices };
       });
-      return { documentWidth: document.documentElement.scrollWidth, canvasCount: document.querySelectorAll('canvas').length, specimens };
+      return { documentWidth: document.documentElement.scrollWidth, passengerCanvases: document.querySelectorAll('.passenger-options canvas, .arrival-cast canvas, #animal-profiles canvas').length, pairedImages: [...document.querySelectorAll('.profile-pair img')].map(img => ({ src: img.currentSrc, width: img.naturalWidth, height: img.naturalHeight })), specimens };
     });
-    for (const id of ['gallery-three-passengers', 'gallery-narrow-passengers', 'gallery-text-stress', 'gallery-bellwater-portraits', 'gallery-failed-portrait'])
+    for (const id of ['gallery-three-passengers', 'gallery-text-stress', 'gallery-six-passengers', 'gallery-failed-portrait'])
       await page.locator(`#${id}`).screenshot({ path: `${output}/${width}-${id}.png` });
-    const pass = errors.length === 0 && measurements.documentWidth <= width + 1 && measurements.canvasCount === 0 && measurements.specimens.every((panel) => panel.dimensions.every((item) => item.fits) && panel.choices.every((choice) => choice.fits));
-    results.push({ width, height: 900, errors, pass, ...measurements });
+    const pass = errors.length === 0 && measurements.documentWidth <= width + 1 && measurements.passengerCanvases === 0 && measurements.pairedImages.length === 10 && measurements.pairedImages.every(img => img.width === 256 && img.height === 256) && measurements.specimens.every((panel) => panel.dimensions.every((item) => item.fits) && panel.choices.every((choice) => choice.fits));
+    results.push({ width, height, errors, pass, ...measurements });
     await page.close();
   }
 } finally {
   await browser.close();
 }
 const sourceStable = JSON.stringify(files) === JSON.stringify(snapshot());
-const report = { purpose: 'Actual shared static portrait/helper gallery design checks, not gameplay or physical-phone evidence.', source: { head: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(), files, hash: digest(JSON.stringify(files)), sourceStable }, environment: { node: process.version, browser: browser.version(), dpr: 1, viewports: [1440, 320] }, command: 'node tools/check-passenger-portrait-gallery.mjs (PORTRAIT_GALLERY_URL defaults to http://127.0.0.1:5250)', method: 'Each live text-node Range line and nested scrollWidth/clientWidth,44px portrait containment, decoded256px source dimensions, pending/failure ownership, allnameschemes and20pxlongname stress. Original sources also appear at256px. No hidden-scrollbar exemption.', results };
+const report = { purpose: 'Actual shared static portrait/helper gallery design checks, not gameplay or physical-phone evidence.', source: { head: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(), files, hash: digest(JSON.stringify(files)), sourceStable }, environment: { node: process.version, browser: browser.version(), dpr: 1, viewports: [[1440, 900], [780, 320], [320, 740]] }, command: 'node tools/check-passenger-portrait-gallery.mjs (PORTRAIT_GALLERY_URL defaults to http://127.0.0.1:5250)', method: 'Each live text-node Range line and nested scrollWidth/clientWidth, 54px portrait containment, ten decoded 256px source derivatives, failure fallback, five appearance keys and 20px long-name stress. Only game passenger components are required to have zero canvases; the existing developer model/story gallery has separately owned specimens. No hidden-scrollbar exemption.', results };
 writeFileSync(`${output}/measurements.json`, JSON.stringify(report, null, 2) + '\n');
 console.log(JSON.stringify({ sourceStable, results: results.map((entry) => ({ width: entry.width, pass: entry.pass, choices: entry.specimens.reduce((n, panel) => n + panel.choices.length, 0) })) }));
 if (!sourceStable || results.some((entry) => !entry.pass)) process.exitCode = 1;

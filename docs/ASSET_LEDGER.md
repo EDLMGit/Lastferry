@@ -1,5 +1,11 @@
 # Last Ferry asset provenance and history
 
+## ANIMAL_PRESENTATION_01 — one model, two views
+
+Board, Let ashore and Bring home share five transparent face portraits. The arrival uses five separate full-body figurines: a neighbor keeps the same coat, ears, markings and live name across both views. These are two camera profiles of the original production animal family, not separately painted characters. The renderer is an offline authoring tool; each UI slot displays an ordinary image. The former SVG-derived portraits and their manifests remain in the repository as historical evidence.
+
+See the [profile generation record](../assets/portraits/animal-profiles.json), [review and phone evidence](../reviews/animal-presentation/REVIEW.md) and [original visual findings](../reviews/animal-presentation/PLANNING_REVIEW.md). The four existing model IDs and the existing generated-portrait family retain ownership; no new species, per-name asset or externally sourced art is introduced. Device and human visual acceptance remain separate from integration.
+
 ## ARRIVAL_BUBBLE_01 — centered homecoming
 
 The successful arrival reuses the painted teal panel, warm ivory text, sea-glass controls and original model-derived portraits. `src/ui/arrival.ts` and `src/ui/arrival.css` compose the real required rescued cast, current lantern result, compact metrics and native actions inside the existing dialog. Earlier deliveries remain part of the cast. This showcase adds no capacity labels, selection interaction, new portrait output or WebGL renderer. Stable named image slots preserve readable identities during loading or failure.
