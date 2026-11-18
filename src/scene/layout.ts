@@ -144,5 +144,5 @@ const layouts: Record<string, SceneLayout> = {
   },
 };
 export function sceneLayout(levelId: string) {
-  return layouts[levelId] ?? layouts['first-crossing'];
+  return layouts[levelId === 'drowned-orchard' ? 'orchard-landing' : levelId] ?? layouts['first-crossing'];
 }

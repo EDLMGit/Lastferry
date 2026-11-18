@@ -31,6 +31,7 @@ import {
   wideBerth,
   twoShelters,
   reefReturn,
+  drownedOrchard,
   orchardLanding,
   ternhaven,
   level as firstCrossing,
@@ -140,7 +141,10 @@ describe('authored story registry', () => {
       reefReturn,
       orchardLanding,
       ternhaven,
+      drownedOrchard,
     ]);
+    expect(practiceCove('drowned-orchard')).toBe(drownedOrchard);
+    expect(storyCove('drowned-orchard')).toBeUndefined();
     expect(practiceCove('ternhaven')).toBe(ternhaven);
     expect(storyCove('ternhaven')?.level).toBe(ternhaven);
     expect(practiceCove('orchard-landing')).toBe(orchardLanding);

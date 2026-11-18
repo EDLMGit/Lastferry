@@ -1,0 +1,319 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "-c",
+      "reviews/cove-nine-practice/isolation.config.ts"
+    ],
+    "configFile": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-nine-practice\\isolation.config.ts",
+    "rootDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/reviews/cove-nine-practice",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/.cache/c9-isolation",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/reviews/cove-nine-practice",
+        "testIgnore": [],
+        "testMatch": [
+          "isolation.spec.ts"
+        ],
+        "timeout": 210000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\.cache\\c9-isolation",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-nine-practice",
+        "snapshotDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-nine-practice",
+        "testIgnore": [],
+        "testMatch": "isolation.spec.ts",
+        "timeout": 210000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5362",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "reducedMotion": "reduce",
+          "deviceScaleFactor": 1,
+          "isMobile": true,
+          "hasTouch": true,
+          "actionTimeout": 12000,
+          "video": "off",
+          "launchOptions": {
+            "args": [
+              "--use-angle=swiftshader",
+              "--enable-unsafe-swiftshader"
+            ]
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-nine-practice\\isolation\\initial.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "isolation.spec.ts",
+      "file": "isolation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "completed-eight: independent Practice rescue, Restart, Home and reload",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 210000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 3625,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 1\u001b[39m\n\u001b[31m+ Received  + 1\u001b[39m\n\n\u001b[2m  Object {\u001b[22m\n\u001b[2m    \"journey\": \"{\\\"version\\\":1,\\\"checkpoint\\\":{\\\"kind\\\":\\\"complete\\\"},\\\"completed\\\":[\\\"holding-pier\\\",\\\"bellwater\\\",\\\"driftwood-yard\\\",\\\"two-shelters\\\",\\\"wide-berth\\\",\\\"reef-return\\\",\\\"orchard-landing\\\",\\\"ternhaven\\\"],\\\"acknowledgedScenes\\\":[\\\"opening\\\",\\\"another-bell\\\",\\\"driftwood-light\\\",\\\"among-the-reeds\\\",\\\"a-wider-deck\\\",\\\"lights-beyond-the-reef\\\",\\\"orchard-paths\\\",\\\"ternhaven-wave\\\"]}\",\u001b[22m\n\u001b[32m-   \"journeyWrites\": 0,\u001b[39m\n\u001b[31m+   \"journeyWrites\": 4,\u001b[39m\n\u001b[2m    \"mastery\": \"{\\\"version\\\":1,\\\"results\\\":{\\\"orchard-landing@1\\\":{\\\"coveId\\\":\\\"orchard-landing\\\",\\\"revision\\\":1,\\\"actions\\\":12,\\\"successfulUndos\\\":0,\\\"lanterns\\\":3},\\\"ternhaven@1\\\":{\\\"coveId\\\":\\\"ternhaven\\\",\\\"revision\\\":1,\\\"actions\\\":14,\\\"successfulUndos\\\":1,\\\"lanterns\\\":2}}}\",\u001b[22m\n\u001b[2m    \"masteryWrites\": 0,\u001b[22m\n\u001b[2m  }\u001b[22m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 1\u001b[39m\n\u001b[31m+ Received  + 1\u001b[39m\n\n\u001b[2m  Object {\u001b[22m\n\u001b[2m    \"journey\": \"{\\\"version\\\":1,\\\"checkpoint\\\":{\\\"kind\\\":\\\"complete\\\"},\\\"completed\\\":[\\\"holding-pier\\\",\\\"bellwater\\\",\\\"driftwood-yard\\\",\\\"two-shelters\\\",\\\"wide-berth\\\",\\\"reef-return\\\",\\\"orchard-landing\\\",\\\"ternhaven\\\"],\\\"acknowledgedScenes\\\":[\\\"opening\\\",\\\"another-bell\\\",\\\"driftwood-light\\\",\\\"among-the-reeds\\\",\\\"a-wider-deck\\\",\\\"lights-beyond-the-reef\\\",\\\"orchard-paths\\\",\\\"ternhaven-wave\\\"]}\",\u001b[22m\n\u001b[32m-   \"journeyWrites\": 0,\u001b[39m\n\u001b[31m+   \"journeyWrites\": 4,\u001b[39m\n\u001b[2m    \"mastery\": \"{\\\"version\\\":1,\\\"results\\\":{\\\"orchard-landing@1\\\":{\\\"coveId\\\":\\\"orchard-landing\\\",\\\"revision\\\":1,\\\"actions\\\":12,\\\"successfulUndos\\\":0,\\\"lanterns\\\":3},\\\"ternhaven@1\\\":{\\\"coveId\\\":\\\"ternhaven\\\",\\\"revision\\\":1,\\\"actions\\\":14,\\\"successfulUndos\\\":1,\\\"lanterns\\\":2}}}\",\u001b[22m\n\u001b[2m    \"masteryWrites\": 0,\u001b[22m\n\u001b[2m  }\u001b[22m\n    at unchanged (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-nine-practice\\isolation.spec.ts:30:35)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-nine-practice\\isolation.spec.ts:42:55",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-nine-practice\\isolation.spec.ts",
+                      "column": 35,
+                      "line": 30
+                    },
+                    "snippet": "  28 |     },{key,older:completeSeven});\n  29 |     const unchanged=async()=>{\n> 30 |       expect(await storage(page)).toEqual({journey:raw,mastery:best,journeyWrites:0,masteryWrites:0});\n     |                                   ^\n  31 |       const actual=await page.evaluate(key=>({backups:Object.fromEntries(Object.keys(localStorage).filter(k=>k.startsWith(key+'.before-')).map(k=>[k,localStorage.getItem(k)])),writes:sessionStorage.getItem('c9-backup-write')}),key);\n  32 |       expect(actual.writes).toBeNull();\n  33 |       expect(actual.backups).toEqual(Object.fromEntries(['.before-six-coves','.before-orchard','.before-ternhaven','.before-ternhaven.2'].map((s,i)=>[key+s,completeSeven+' '.repeat(i)])));"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-nine-practice\\isolation.spec.ts",
+                        "column": 35,
+                        "line": 30
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 1\u001b[39m\n\u001b[31m+ Received  + 1\u001b[39m\n\n\u001b[2m  Object {\u001b[22m\n\u001b[2m    \"journey\": \"{\\\"version\\\":1,\\\"checkpoint\\\":{\\\"kind\\\":\\\"complete\\\"},\\\"completed\\\":[\\\"holding-pier\\\",\\\"bellwater\\\",\\\"driftwood-yard\\\",\\\"two-shelters\\\",\\\"wide-berth\\\",\\\"reef-return\\\",\\\"orchard-landing\\\",\\\"ternhaven\\\"],\\\"acknowledgedScenes\\\":[\\\"opening\\\",\\\"another-bell\\\",\\\"driftwood-light\\\",\\\"among-the-reeds\\\",\\\"a-wider-deck\\\",\\\"lights-beyond-the-reef\\\",\\\"orchard-paths\\\",\\\"ternhaven-wave\\\"]}\",\u001b[22m\n\u001b[32m-   \"journeyWrites\": 0,\u001b[39m\n\u001b[31m+   \"journeyWrites\": 4,\u001b[39m\n\u001b[2m    \"mastery\": \"{\\\"version\\\":1,\\\"results\\\":{\\\"orchard-landing@1\\\":{\\\"coveId\\\":\\\"orchard-landing\\\",\\\"revision\\\":1,\\\"actions\\\":12,\\\"successfulUndos\\\":0,\\\"lanterns\\\":3},\\\"ternhaven@1\\\":{\\\"coveId\\\":\\\"ternhaven\\\",\\\"revision\\\":1,\\\"actions\\\":14,\\\"successfulUndos\\\":1,\\\"lanterns\\\":2}}}\",\u001b[22m\n\u001b[2m    \"masteryWrites\": 0,\u001b[22m\n\u001b[2m  }\u001b[22m\n\n  28 |     },{key,older:completeSeven});\n  29 |     const unchanged=async()=>{\n> 30 |       expect(await storage(page)).toEqual({journey:raw,mastery:best,journeyWrites:0,masteryWrites:0});\n     |                                   ^\n  31 |       const actual=await page.evaluate(key=>({backups:Object.fromEntries(Object.keys(localStorage).filter(k=>k.startsWith(key+'.before-')).map(k=>[k,localStorage.getItem(k)])),writes:sessionStorage.getItem('c9-backup-write')}),key);\n  32 |       expect(actual.writes).toBeNull();\n  33 |       expect(actual.backups).toEqual(Object.fromEntries(['.before-six-coves','.before-orchard','.before-ternhaven','.before-ternhaven.2'].map((s,i)=>[key+s,completeSeven+' '.repeat(i)])));\n    at unchanged (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-nine-practice\\isolation.spec.ts:30:35)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-nine-practice\\isolation.spec.ts:42:55"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-18T06:56:24.244Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\.cache\\c9-isolation\\isolation-completed-eight--96396-cue-Restart-Home-and-reload\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-nine-practice\\isolation.spec.ts",
+                    "column": 35,
+                    "line": 30
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "8603831629f4016ade15-e07d8e3195e21591df02",
+          "file": "isolation.spec.ts",
+          "line": 14,
+          "column": 3
+        },
+        {
+          "title": "pending-ternhaven: independent Practice rescue, Restart, Home and reload",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 210000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6217,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 1\u001b[39m\n\u001b[31m+ Received  + 1\u001b[39m\n\n\u001b[33m@@ -23,9 +23,9 @@\u001b[39m\n\u001b[2m      \\\"kind\\\": \\\"scene\\\",\u001b[22m\n\u001b[2m      \\\"id\\\": \\\"ternhaven-wave\\\"\u001b[22m\n\u001b[2m    }\u001b[22m\n\u001b[2m  }\u001b[22m\n\u001b[2m  \",\u001b[22m\n\u001b[32m-   \"journeyWrites\": 0,\u001b[39m\n\u001b[31m+   \"journeyWrites\": 4,\u001b[39m\n\u001b[2m    \"mastery\": \"{\\\"version\\\":1,\\\"results\\\":{\\\"orchard-landing@1\\\":{\\\"coveId\\\":\\\"orchard-landing\\\",\\\"revision\\\":1,\\\"actions\\\":12,\\\"successfulUndos\\\":0,\\\"lanterns\\\":3},\\\"ternhaven@1\\\":{\\\"coveId\\\":\\\"ternhaven\\\",\\\"revision\\\":1,\\\"actions\\\":14,\\\"successfulUndos\\\":1,\\\"lanterns\\\":2}}}\",\u001b[22m\n\u001b[2m    \"masteryWrites\": 0,\u001b[22m\n\u001b[2m  }\u001b[22m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 1\u001b[39m\n\u001b[31m+ Received  + 1\u001b[39m\n\n\u001b[33m@@ -23,9 +23,9 @@\u001b[39m\n\u001b[2m      \\\"kind\\\": \\\"scene\\\",\u001b[22m\n\u001b[2m      \\\"id\\\": \\\"ternhaven-wave\\\"\u001b[22m\n\u001b[2m    }\u001b[22m\n\u001b[2m  }\u001b[22m\n\u001b[2m  \",\u001b[22m\n\u001b[32m-   \"journeyWrites\": 0,\u001b[39m\n\u001b[31m+   \"journeyWrites\": 4,\u001b[39m\n\u001b[2m    \"mastery\": \"{\\\"version\\\":1,\\\"results\\\":{\\\"orchard-landing@1\\\":{\\\"coveId\\\":\\\"orchard-landing\\\",\\\"revision\\\":1,\\\"actions\\\":12,\\\"successfulUndos\\\":0,\\\"lanterns\\\":3},\\\"ternhaven@1\\\":{\\\"coveId\\\":\\\"ternhaven\\\",\\\"revision\\\":1,\\\"actions\\\":14,\\\"successfulUndos\\\":1,\\\"lanterns\\\":2}}}\",\u001b[22m\n\u001b[2m    \"masteryWrites\": 0,\u001b[22m\n\u001b[2m  }\u001b[22m\n    at unchanged (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-nine-practice\\isolation.spec.ts:30:35)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-nine-practice\\isolation.spec.ts:42:55",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-nine-practice\\isolation.spec.ts",
+                      "column": 35,
+                      "line": 30
+                    },
+                    "snippet": "  28 |     },{key,older:completeSeven});\n  29 |     const unchanged=async()=>{\n> 30 |       expect(await storage(page)).toEqual({journey:raw,mastery:best,journeyWrites:0,masteryWrites:0});\n     |                                   ^\n  31 |       const actual=await page.evaluate(key=>({backups:Object.fromEntries(Object.keys(localStorage).filter(k=>k.startsWith(key+'.before-')).map(k=>[k,localStorage.getItem(k)])),writes:sessionStorage.getItem('c9-backup-write')}),key);\n  32 |       expect(actual.writes).toBeNull();\n  33 |       expect(actual.backups).toEqual(Object.fromEntries(['.before-six-coves','.before-orchard','.before-ternhaven','.before-ternhaven.2'].map((s,i)=>[key+s,completeSeven+' '.repeat(i)])));"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-nine-practice\\isolation.spec.ts",
+                        "column": 35,
+                        "line": 30
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 1\u001b[39m\n\u001b[31m+ Received  + 1\u001b[39m\n\n\u001b[33m@@ -23,9 +23,9 @@\u001b[39m\n\u001b[2m      \\\"kind\\\": \\\"scene\\\",\u001b[22m\n\u001b[2m      \\\"id\\\": \\\"ternhaven-wave\\\"\u001b[22m\n\u001b[2m    }\u001b[22m\n\u001b[2m  }\u001b[22m\n\u001b[2m  \",\u001b[22m\n\u001b[32m-   \"journeyWrites\": 0,\u001b[39m\n\u001b[31m+   \"journeyWrites\": 4,\u001b[39m\n\u001b[2m    \"mastery\": \"{\\\"version\\\":1,\\\"results\\\":{\\\"orchard-landing@1\\\":{\\\"coveId\\\":\\\"orchard-landing\\\",\\\"revision\\\":1,\\\"actions\\\":12,\\\"successfulUndos\\\":0,\\\"lanterns\\\":3},\\\"ternhaven@1\\\":{\\\"coveId\\\":\\\"ternhaven\\\",\\\"revision\\\":1,\\\"actions\\\":14,\\\"successfulUndos\\\":1,\\\"lanterns\\\":2}}}\",\u001b[22m\n\u001b[2m    \"masteryWrites\": 0,\u001b[22m\n\u001b[2m  }\u001b[22m\n\n  28 |     },{key,older:completeSeven});\n  29 |     const unchanged=async()=>{\n> 30 |       expect(await storage(page)).toEqual({journey:raw,mastery:best,journeyWrites:0,masteryWrites:0});\n     |                                   ^\n  31 |       const actual=await page.evaluate(key=>({backups:Object.fromEntries(Object.keys(localStorage).filter(k=>k.startsWith(key+'.before-')).map(k=>[k,localStorage.getItem(k)])),writes:sessionStorage.getItem('c9-backup-write')}),key);\n  32 |       expect(actual.writes).toBeNull();\n  33 |       expect(actual.backups).toEqual(Object.fromEntries(['.before-six-coves','.before-orchard','.before-ternhaven','.before-ternhaven.2'].map((s,i)=>[key+s,completeSeven+' '.repeat(i)])));\n    at unchanged (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-nine-practice\\isolation.spec.ts:30:35)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-nine-practice\\isolation.spec.ts:42:55"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-18T06:56:30.568Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\.cache\\c9-isolation\\isolation-pending-ternhave-dd525-cue-Restart-Home-and-reload\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-nine-practice\\isolation.spec.ts",
+                    "column": 35,
+                    "line": 30
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "8603831629f4016ade15-f9b4e8486345bec4643f",
+          "file": "isolation.spec.ts",
+          "line": 14,
+          "column": 3
+        },
+        {
+          "title": "legacy-seven: independent Practice rescue, Restart, Home and reload",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 210000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 5612,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 1\u001b[39m\n\u001b[31m+ Received  + 1\u001b[39m\n\n\u001b[33m@@ -22,9 +22,9 @@\u001b[39m\n\u001b[2m    \\\"checkpoint\\\": {\u001b[22m\n\u001b[2m      \\\"kind\\\": \\\"complete\\\"\u001b[22m\n\u001b[2m    }\u001b[22m\n\u001b[2m  }\u001b[22m\n\u001b[2m  \",\u001b[22m\n\u001b[32m-   \"journeyWrites\": 0,\u001b[39m\n\u001b[31m+   \"journeyWrites\": 4,\u001b[39m\n\u001b[2m    \"mastery\": \"{\\\"version\\\":1,\\\"results\\\":{\\\"orchard-landing@1\\\":{\\\"coveId\\\":\\\"orchard-landing\\\",\\\"revision\\\":1,\\\"actions\\\":12,\\\"successfulUndos\\\":0,\\\"lanterns\\\":3},\\\"ternhaven@1\\\":{\\\"coveId\\\":\\\"ternhaven\\\",\\\"revision\\\":1,\\\"actions\\\":14,\\\"successfulUndos\\\":1,\\\"lanterns\\\":2}}}\",\u001b[22m\n\u001b[2m    \"masteryWrites\": 0,\u001b[22m\n\u001b[2m  }\u001b[22m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 1\u001b[39m\n\u001b[31m+ Received  + 1\u001b[39m\n\n\u001b[33m@@ -22,9 +22,9 @@\u001b[39m\n\u001b[2m    \\\"checkpoint\\\": {\u001b[22m\n\u001b[2m      \\\"kind\\\": \\\"complete\\\"\u001b[22m\n\u001b[2m    }\u001b[22m\n\u001b[2m  }\u001b[22m\n\u001b[2m  \",\u001b[22m\n\u001b[32m-   \"journeyWrites\": 0,\u001b[39m\n\u001b[31m+   \"journeyWrites\": 4,\u001b[39m\n\u001b[2m    \"mastery\": \"{\\\"version\\\":1,\\\"results\\\":{\\\"orchard-landing@1\\\":{\\\"coveId\\\":\\\"orchard-landing\\\",\\\"revision\\\":1,\\\"actions\\\":12,\\\"successfulUndos\\\":0,\\\"lanterns\\\":3},\\\"ternhaven@1\\\":{\\\"coveId\\\":\\\"ternhaven\\\",\\\"revision\\\":1,\\\"actions\\\":14,\\\"successfulUndos\\\":1,\\\"lanterns\\\":2}}}\",\u001b[22m\n\u001b[2m    \"masteryWrites\": 0,\u001b[22m\n\u001b[2m  }\u001b[22m\n    at unchanged (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-nine-practice\\isolation.spec.ts:30:35)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-nine-practice\\isolation.spec.ts:42:55",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-nine-practice\\isolation.spec.ts",
+                      "column": 35,
+                      "line": 30
+                    },
+                    "snippet": "  28 |     },{key,older:completeSeven});\n  29 |     const unchanged=async()=>{\n> 30 |       expect(await storage(page)).toEqual({journey:raw,mastery:best,journeyWrites:0,masteryWrites:0});\n     |                                   ^\n  31 |       const actual=await page.evaluate(key=>({backups:Object.fromEntries(Object.keys(localStorage).filter(k=>k.startsWith(key+'.before-')).map(k=>[k,localStorage.getItem(k)])),writes:sessionStorage.getItem('c9-backup-write')}),key);\n  32 |       expect(actual.writes).toBeNull();\n  33 |       expect(actual.backups).toEqual(Object.fromEntries(['.before-six-coves','.before-orchard','.before-ternhaven','.before-ternhaven.2'].map((s,i)=>[key+s,completeSeven+' '.repeat(i)])));"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-nine-practice\\isolation.spec.ts",
+                        "column": 35,
+                        "line": 30
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 1\u001b[39m\n\u001b[31m+ Received  + 1\u001b[39m\n\n\u001b[33m@@ -22,9 +22,9 @@\u001b[39m\n\u001b[2m    \\\"checkpoint\\\": {\u001b[22m\n\u001b[2m      \\\"kind\\\": \\\"complete\\\"\u001b[22m\n\u001b[2m    }\u001b[22m\n\u001b[2m  }\u001b[22m\n\u001b[2m  \",\u001b[22m\n\u001b[32m-   \"journeyWrites\": 0,\u001b[39m\n\u001b[31m+   \"journeyWrites\": 4,\u001b[39m\n\u001b[2m    \"mastery\": \"{\\\"version\\\":1,\\\"results\\\":{\\\"orchard-landing@1\\\":{\\\"coveId\\\":\\\"orchard-landing\\\",\\\"revision\\\":1,\\\"actions\\\":12,\\\"successfulUndos\\\":0,\\\"lanterns\\\":3},\\\"ternhaven@1\\\":{\\\"coveId\\\":\\\"ternhaven\\\",\\\"revision\\\":1,\\\"actions\\\":14,\\\"successfulUndos\\\":1,\\\"lanterns\\\":2}}}\",\u001b[22m\n\u001b[2m    \"masteryWrites\": 0,\u001b[22m\n\u001b[2m  }\u001b[22m\n\n  28 |     },{key,older:completeSeven});\n  29 |     const unchanged=async()=>{\n> 30 |       expect(await storage(page)).toEqual({journey:raw,mastery:best,journeyWrites:0,masteryWrites:0});\n     |                                   ^\n  31 |       const actual=await page.evaluate(key=>({backups:Object.fromEntries(Object.keys(localStorage).filter(k=>k.startsWith(key+'.before-')).map(k=>[k,localStorage.getItem(k)])),writes:sessionStorage.getItem('c9-backup-write')}),key);\n  32 |       expect(actual.writes).toBeNull();\n  33 |       expect(actual.backups).toEqual(Object.fromEntries(['.before-six-coves','.before-orchard','.before-ternhaven','.before-ternhaven.2'].map((s,i)=>[key+s,completeSeven+' '.repeat(i)])));\n    at unchanged (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-nine-practice\\isolation.spec.ts:30:35)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-nine-practice\\isolation.spec.ts:42:55"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-18T06:56:39.189Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\.cache\\c9-isolation\\isolation-legacy-seven-ind-a532c-cue-Restart-Home-and-reload\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-nine-practice\\isolation.spec.ts",
+                    "column": 35,
+                    "line": 30
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "8603831629f4016ade15-8685de646b0151f6a455",
+          "file": "isolation.spec.ts",
+          "line": 14,
+          "column": 3
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-18T06:56:23.578Z",
+    "duration": 22787.229,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 3,
+    "flaky": 0
+  }
+}

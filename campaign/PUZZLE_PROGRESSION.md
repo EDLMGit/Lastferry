@@ -1,6 +1,12 @@
 # Puzzle progression — selected campaign direction
 
-## Current work order · 17 November 2026
+## Drowned Orchard · Practice implementation for review
+
+Drowned Orchard is a playable candidate for cove nine. Eight spaces of new neighbors begin on the orchard side. The shallow first crossing and the single chance to get back across Pomona Reach make the boat’s position matter as much as its load. The two witnessed wins approach Spring Steps on different trips. This is a distinct test from C7’s escort partition and C8’s staging/retrieval order, not an accepted human difficulty rating.
+
+**Eight Journey coves / ten Practice entrances / nine accepted scoring identities.** [Design, verification and review](../reviews/cove-nine-practice/REVIEW.md). The eight-cove Journey, earlier saves and all original publication records are unchanged.
+
+## Previous work order · 17 November 2026
 
 Ternhaven Journey is independently reviewed at `1e3146652f50c88db1ce7d56c6de14e311aab719` and published as **Site version 23**, with existing private access unchanged. The playable order is Holding → Bellwater → Driftwood → Two Shelters → Nell's existing launch → Wide → Reef → Orchard → Ternhaven. There are eight Journey coves, nine independent Practice entrances and nine accepted target identities. [Active state](../docs/PROJECT_STATE.md) · [Review and receipt](../reviews/ternhaven-journey/INDEPENDENT_REVIEW.md)
 

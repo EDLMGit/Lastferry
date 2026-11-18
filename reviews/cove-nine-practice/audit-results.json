@@ -1,0 +1,2970 @@
+{
+  "engine": "v24.15.0",
+  "method": "Unbounded FIFO enumeration of all legal production transitions, then reverse multi-source BFS from every genuine won state. Full time until turn 9; canonical plateau thereafter.",
+  "mechanicsSha256": "bd7229c7d890651ca4b0ed0ecf7d30999c80dcd93724bc955f0591cc92d83602",
+  "sourceHashesLF": {
+    "src/game/rules.ts": "8a03fd5a31cb2bcea512c2aa645eb554bd1d8a3b9c6818a6a5db7938d3f71453",
+    "src/game/session.ts": "0359790f9c7624c90633549e6e74fdfcba3fc3b5fb6964f06d0efebc594c4900",
+    "src/game/mastery.ts": "ef6308c569e180beae6080838bda960f407a7fa1dd8ed7810dd29baa6ade7df2",
+    "src/levels/level.ts": "b583a4fc06ec94b6e404a4f4cf7e75c9c947c76ac50420490d6df369f9a1275a",
+    "data/drowned-orchard.level.json": "f8f045e7e2d960ad9fbc10987945e3ebe8f2203c3bb296a628a128e0f106ea19",
+    "reviews/cove-nine-practice/audit.mjs": "cc445e3265db31ed16677926a81898123bb9c35db7f1206350906a60d486f65b",
+    "data/drowned-orchard/witnesses.json": "0fd12d2a4b4e8e087bdb4a3933cf9ff895183016fdd637fa8ac2687d3eff2c92"
+  },
+  "initialLegality": [
+    {
+      "id": "harbor-pier",
+      "elevation": 4,
+      "tide": 1,
+      "dry": true,
+      "waiting": []
+    },
+    {
+      "id": "quay-pier",
+      "elevation": 1,
+      "tide": 1,
+      "dry": false,
+      "waiting": []
+    },
+    {
+      "id": "orchard-pier",
+      "elevation": 4,
+      "tide": 1,
+      "dry": true,
+      "waiting": [
+        "damson",
+        "brindle"
+      ]
+    },
+    {
+      "id": "steps-pier",
+      "elevation": 3,
+      "tide": 1,
+      "dry": true,
+      "waiting": [
+        "burr",
+        "sloe"
+      ]
+    }
+  ],
+  "graph": {
+    "states": 326,
+    "transitions": 880,
+    "winningStates": 1,
+    "viableStates": 85,
+    "shortest": 13,
+    "shortestWitness": [
+      "steps",
+      "board:burr+sloe",
+      "orchard",
+      "unload:sloe",
+      "quay",
+      "harbor",
+      "unload:burr",
+      "quay",
+      "orchard",
+      "board:brindle+damson+sloe",
+      "quay",
+      "harbor",
+      "unload:brindle+damson+sloe"
+    ]
+  },
+  "optimalPaths": [
+    [
+      "steps",
+      "board:burr+sloe",
+      "orchard",
+      "unload:sloe",
+      "quay",
+      "harbor",
+      "unload:burr",
+      "quay",
+      "orchard",
+      "board:brindle+damson+sloe",
+      "quay",
+      "harbor",
+      "unload:brindle+damson+sloe"
+    ],
+    [
+      "board:brindle",
+      "quay",
+      "harbor",
+      "unload:brindle",
+      "quay",
+      "orchard",
+      "steps",
+      "board:burr+sloe",
+      "orchard",
+      "board:damson",
+      "quay",
+      "harbor",
+      "unload:burr+damson+sloe"
+    ],
+    [
+      "board:brindle",
+      "quay",
+      "harbor",
+      "unload:brindle",
+      "quay",
+      "orchard",
+      "board:damson",
+      "steps",
+      "board:burr+sloe",
+      "orchard",
+      "quay",
+      "harbor",
+      "unload:burr+damson+sloe"
+    ]
+  ],
+  "viableFirstPomonaCrossings": [
+    "brindle",
+    "burr"
+  ],
+  "viableStatesOnTurnNine": [
+    {
+      "boat": "steps",
+      "aboard": [
+        "burr",
+        "sloe"
+      ],
+      "delivered": [
+        "brindle"
+      ],
+      "orchard": [
+        "damson"
+      ],
+      "steps": []
+    },
+    {
+      "boat": "orchard",
+      "aboard": [],
+      "delivered": [
+        "burr"
+      ],
+      "orchard": [
+        "brindle",
+        "damson",
+        "sloe"
+      ],
+      "steps": []
+    },
+    {
+      "boat": "orchard",
+      "aboard": [
+        "burr",
+        "sloe"
+      ],
+      "delivered": [
+        "brindle"
+      ],
+      "orchard": [
+        "damson"
+      ],
+      "steps": []
+    },
+    {
+      "boat": "steps",
+      "aboard": [
+        "burr",
+        "damson",
+        "sloe"
+      ],
+      "delivered": [
+        "brindle"
+      ],
+      "orchard": [],
+      "steps": []
+    }
+  ],
+  "verifiedWitnesses": [
+    {
+      "id": "clear-steps-first",
+      "steps": [
+        {
+          "step": "start",
+          "turn": 0,
+          "boat": "orchard",
+          "tide": 1,
+          "load": 0,
+          "draft": 1,
+          "status": "playing",
+          "loss": null,
+          "aboard": [],
+          "delivered": [],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": [
+              "burr",
+              "sloe"
+            ]
+          },
+          "minimumRemaining": 13,
+          "viableActions": [
+            "wait",
+            "steps",
+            "board:brindle",
+            "board:brindle+damson"
+          ]
+        },
+        {
+          "step": "steps",
+          "turn": 1,
+          "boat": "steps",
+          "tide": 1,
+          "load": 0,
+          "draft": 1,
+          "status": "playing",
+          "loss": null,
+          "aboard": [],
+          "delivered": [],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": [
+              "burr",
+              "sloe"
+            ]
+          },
+          "minimumRemaining": 12,
+          "viableActions": [
+            "board:burr+sloe"
+          ]
+        },
+        {
+          "step": "board:burr+sloe",
+          "turn": 2,
+          "boat": "steps",
+          "tide": 1,
+          "load": 3,
+          "draft": 3,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "burr",
+            "sloe"
+          ],
+          "delivered": [],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": []
+          },
+          "minimumRemaining": 11,
+          "viableActions": [
+            "orchard"
+          ]
+        },
+        {
+          "step": "orchard",
+          "turn": 3,
+          "boat": "orchard",
+          "tide": 1,
+          "load": 3,
+          "draft": 3,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "burr",
+            "sloe"
+          ],
+          "delivered": [],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": []
+          },
+          "minimumRemaining": 10,
+          "viableActions": [
+            "unload:sloe"
+          ]
+        },
+        {
+          "step": "unload:sloe",
+          "turn": 4,
+          "boat": "orchard",
+          "tide": 1,
+          "load": 2,
+          "draft": 2,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "burr"
+          ],
+          "delivered": [],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle",
+              "sloe"
+            ],
+            "steps-pier": []
+          },
+          "minimumRemaining": 9,
+          "viableActions": [
+            "quay"
+          ]
+        },
+        {
+          "step": "quay",
+          "turn": 5,
+          "boat": "quay",
+          "tide": 2,
+          "load": 2,
+          "draft": 2,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "burr"
+          ],
+          "delivered": [],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle",
+              "sloe"
+            ],
+            "steps-pier": []
+          },
+          "minimumRemaining": 8,
+          "viableActions": [
+            "harbor"
+          ]
+        },
+        {
+          "step": "harbor",
+          "turn": 6,
+          "boat": "harbor",
+          "tide": 2,
+          "load": 2,
+          "draft": 2,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "burr"
+          ],
+          "delivered": [],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle",
+              "sloe"
+            ],
+            "steps-pier": []
+          },
+          "minimumRemaining": 7,
+          "viableActions": [
+            "unload:burr"
+          ]
+        },
+        {
+          "step": "unload:burr",
+          "turn": 7,
+          "boat": "harbor",
+          "tide": 2,
+          "load": 0,
+          "draft": 1,
+          "status": "playing",
+          "loss": null,
+          "aboard": [],
+          "delivered": [
+            "burr"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle",
+              "sloe"
+            ],
+            "steps-pier": []
+          },
+          "minimumRemaining": 6,
+          "viableActions": [
+            "quay"
+          ]
+        },
+        {
+          "step": "quay",
+          "turn": 8,
+          "boat": "quay",
+          "tide": 2,
+          "load": 0,
+          "draft": 1,
+          "status": "playing",
+          "loss": null,
+          "aboard": [],
+          "delivered": [
+            "burr"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle",
+              "sloe"
+            ],
+            "steps-pier": []
+          },
+          "minimumRemaining": 5,
+          "viableActions": [
+            "orchard"
+          ]
+        },
+        {
+          "step": "orchard",
+          "turn": 9,
+          "boat": "orchard",
+          "tide": 3,
+          "load": 0,
+          "draft": 1,
+          "status": "playing",
+          "loss": null,
+          "aboard": [],
+          "delivered": [
+            "burr"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle",
+              "sloe"
+            ],
+            "steps-pier": []
+          },
+          "minimumRemaining": 4,
+          "viableActions": [
+            "wait",
+            "steps",
+            "board:damson",
+            "board:brindle",
+            "board:brindle+damson",
+            "board:sloe",
+            "board:damson+sloe",
+            "board:brindle+sloe",
+            "board:brindle+damson+sloe"
+          ]
+        },
+        {
+          "step": "board:brindle+damson+sloe",
+          "turn": 10,
+          "boat": "orchard",
+          "tide": 3,
+          "load": 6,
+          "draft": 4,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "damson",
+            "brindle",
+            "sloe"
+          ],
+          "delivered": [
+            "burr"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [],
+            "steps-pier": []
+          },
+          "minimumRemaining": 3,
+          "viableActions": [
+            "wait",
+            "quay",
+            "steps",
+            "unload:damson",
+            "unload:brindle",
+            "unload:brindle+damson",
+            "unload:sloe",
+            "unload:damson+sloe",
+            "unload:brindle+sloe",
+            "unload:brindle+damson+sloe"
+          ]
+        },
+        {
+          "step": "quay",
+          "turn": 11,
+          "boat": "quay",
+          "tide": 3,
+          "load": 6,
+          "draft": 4,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "damson",
+            "brindle",
+            "sloe"
+          ],
+          "delivered": [
+            "burr"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [],
+            "steps-pier": []
+          },
+          "minimumRemaining": 2,
+          "viableActions": [
+            "wait",
+            "harbor"
+          ]
+        },
+        {
+          "step": "harbor",
+          "turn": 12,
+          "boat": "harbor",
+          "tide": 3,
+          "load": 6,
+          "draft": 4,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "damson",
+            "brindle",
+            "sloe"
+          ],
+          "delivered": [
+            "burr"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [],
+            "steps-pier": []
+          },
+          "minimumRemaining": 1,
+          "viableActions": [
+            "wait",
+            "quay",
+            "unload:damson",
+            "unload:brindle",
+            "unload:brindle+damson",
+            "unload:sloe",
+            "unload:damson+sloe",
+            "unload:brindle+sloe",
+            "unload:brindle+damson+sloe"
+          ]
+        },
+        {
+          "step": "unload:brindle+damson+sloe",
+          "turn": 13,
+          "boat": "harbor",
+          "tide": 3,
+          "load": 0,
+          "draft": 1,
+          "status": "won",
+          "loss": null,
+          "aboard": [],
+          "delivered": [
+            "burr",
+            "damson",
+            "brindle",
+            "sloe"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [],
+            "steps-pier": []
+          },
+          "minimumRemaining": 0,
+          "viableActions": []
+        }
+      ],
+      "terminalUndoAndRedelivery": true,
+      "unscored": true
+    },
+    {
+      "id": "return-for-steps",
+      "steps": [
+        {
+          "step": "start",
+          "turn": 0,
+          "boat": "orchard",
+          "tide": 1,
+          "load": 0,
+          "draft": 1,
+          "status": "playing",
+          "loss": null,
+          "aboard": [],
+          "delivered": [],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": [
+              "burr",
+              "sloe"
+            ]
+          },
+          "minimumRemaining": 13,
+          "viableActions": [
+            "wait",
+            "steps",
+            "board:brindle",
+            "board:brindle+damson"
+          ]
+        },
+        {
+          "step": "board:brindle",
+          "turn": 1,
+          "boat": "orchard",
+          "tide": 1,
+          "load": 2,
+          "draft": 2,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "brindle"
+          ],
+          "delivered": [],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson"
+            ],
+            "steps-pier": [
+              "burr",
+              "sloe"
+            ]
+          },
+          "minimumRemaining": 12,
+          "viableActions": [
+            "wait",
+            "quay"
+          ]
+        },
+        {
+          "step": "quay",
+          "turn": 2,
+          "boat": "quay",
+          "tide": 1,
+          "load": 2,
+          "draft": 2,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "brindle"
+          ],
+          "delivered": [],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson"
+            ],
+            "steps-pier": [
+              "burr",
+              "sloe"
+            ]
+          },
+          "minimumRemaining": 11,
+          "viableActions": [
+            "wait",
+            "harbor"
+          ]
+        },
+        {
+          "step": "harbor",
+          "turn": 3,
+          "boat": "harbor",
+          "tide": 1,
+          "load": 2,
+          "draft": 2,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "brindle"
+          ],
+          "delivered": [],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson"
+            ],
+            "steps-pier": [
+              "burr",
+              "sloe"
+            ]
+          },
+          "minimumRemaining": 10,
+          "viableActions": [
+            "wait",
+            "unload:brindle"
+          ]
+        },
+        {
+          "step": "unload:brindle",
+          "turn": 4,
+          "boat": "harbor",
+          "tide": 1,
+          "load": 0,
+          "draft": 1,
+          "status": "playing",
+          "loss": null,
+          "aboard": [],
+          "delivered": [
+            "brindle"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson"
+            ],
+            "steps-pier": [
+              "burr",
+              "sloe"
+            ]
+          },
+          "minimumRemaining": 9,
+          "viableActions": [
+            "wait",
+            "quay"
+          ]
+        },
+        {
+          "step": "quay",
+          "turn": 5,
+          "boat": "quay",
+          "tide": 2,
+          "load": 0,
+          "draft": 1,
+          "status": "playing",
+          "loss": null,
+          "aboard": [],
+          "delivered": [
+            "brindle"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson"
+            ],
+            "steps-pier": [
+              "burr",
+              "sloe"
+            ]
+          },
+          "minimumRemaining": 8,
+          "viableActions": [
+            "wait",
+            "orchard"
+          ]
+        },
+        {
+          "step": "orchard",
+          "turn": 6,
+          "boat": "orchard",
+          "tide": 2,
+          "load": 0,
+          "draft": 1,
+          "status": "playing",
+          "loss": null,
+          "aboard": [],
+          "delivered": [
+            "brindle"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson"
+            ],
+            "steps-pier": [
+              "burr",
+              "sloe"
+            ]
+          },
+          "minimumRemaining": 7,
+          "viableActions": [
+            "wait",
+            "steps",
+            "board:damson"
+          ]
+        },
+        {
+          "step": "steps",
+          "turn": 7,
+          "boat": "steps",
+          "tide": 2,
+          "load": 0,
+          "draft": 1,
+          "status": "playing",
+          "loss": null,
+          "aboard": [],
+          "delivered": [
+            "brindle"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson"
+            ],
+            "steps-pier": [
+              "burr",
+              "sloe"
+            ]
+          },
+          "minimumRemaining": 6,
+          "viableActions": [
+            "wait",
+            "board:burr",
+            "board:sloe",
+            "board:burr+sloe"
+          ]
+        },
+        {
+          "step": "board:burr+sloe",
+          "turn": 8,
+          "boat": "steps",
+          "tide": 2,
+          "load": 3,
+          "draft": 3,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "burr",
+            "sloe"
+          ],
+          "delivered": [
+            "brindle"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson"
+            ],
+            "steps-pier": []
+          },
+          "minimumRemaining": 5,
+          "viableActions": [
+            "wait",
+            "orchard"
+          ]
+        },
+        {
+          "step": "orchard",
+          "turn": 9,
+          "boat": "orchard",
+          "tide": 3,
+          "load": 3,
+          "draft": 3,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "burr",
+            "sloe"
+          ],
+          "delivered": [
+            "brindle"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson"
+            ],
+            "steps-pier": []
+          },
+          "minimumRemaining": 4,
+          "viableActions": [
+            "wait",
+            "steps",
+            "board:damson",
+            "unload:burr",
+            "unload:sloe",
+            "unload:burr+sloe"
+          ]
+        },
+        {
+          "step": "board:damson",
+          "turn": 10,
+          "boat": "orchard",
+          "tide": 3,
+          "load": 6,
+          "draft": 4,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "burr",
+            "sloe",
+            "damson"
+          ],
+          "delivered": [
+            "brindle"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [],
+            "steps-pier": []
+          },
+          "minimumRemaining": 3,
+          "viableActions": [
+            "wait",
+            "quay",
+            "steps",
+            "unload:burr",
+            "unload:sloe",
+            "unload:burr+sloe",
+            "unload:damson",
+            "unload:burr+damson",
+            "unload:damson+sloe",
+            "unload:burr+damson+sloe"
+          ]
+        },
+        {
+          "step": "quay",
+          "turn": 11,
+          "boat": "quay",
+          "tide": 3,
+          "load": 6,
+          "draft": 4,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "burr",
+            "sloe",
+            "damson"
+          ],
+          "delivered": [
+            "brindle"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [],
+            "steps-pier": []
+          },
+          "minimumRemaining": 2,
+          "viableActions": [
+            "wait",
+            "harbor"
+          ]
+        },
+        {
+          "step": "harbor",
+          "turn": 12,
+          "boat": "harbor",
+          "tide": 3,
+          "load": 6,
+          "draft": 4,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "burr",
+            "sloe",
+            "damson"
+          ],
+          "delivered": [
+            "brindle"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [],
+            "steps-pier": []
+          },
+          "minimumRemaining": 1,
+          "viableActions": [
+            "wait",
+            "quay",
+            "unload:burr",
+            "unload:sloe",
+            "unload:burr+sloe",
+            "unload:damson",
+            "unload:burr+damson",
+            "unload:damson+sloe",
+            "unload:burr+damson+sloe"
+          ]
+        },
+        {
+          "step": "unload:burr+damson+sloe",
+          "turn": 13,
+          "boat": "harbor",
+          "tide": 3,
+          "load": 0,
+          "draft": 1,
+          "status": "won",
+          "loss": null,
+          "aboard": [],
+          "delivered": [
+            "burr",
+            "damson",
+            "brindle",
+            "sloe"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [],
+            "steps-pier": []
+          },
+          "minimumRemaining": 0,
+          "viableActions": []
+        }
+      ],
+      "terminalUndoAndRedelivery": true,
+      "unscored": true
+    }
+  ],
+  "firstMistake": {
+    "trace": [
+      {
+        "step": "start",
+        "turn": 0,
+        "boat": "orchard",
+        "tide": 1,
+        "load": 0,
+        "draft": 1,
+        "status": "playing",
+        "loss": null,
+        "aboard": [],
+        "delivered": [],
+        "waiting": {
+          "harbor-pier": [],
+          "quay-pier": [],
+          "orchard-pier": [
+            "damson",
+            "brindle"
+          ],
+          "steps-pier": [
+            "burr",
+            "sloe"
+          ]
+        },
+        "minimumRemaining": 13,
+        "viableActions": [
+          "wait",
+          "steps",
+          "board:brindle",
+          "board:brindle+damson"
+        ]
+      },
+      {
+        "step": "steps",
+        "turn": 1,
+        "boat": "steps",
+        "tide": 1,
+        "load": 0,
+        "draft": 1,
+        "status": "playing",
+        "loss": null,
+        "aboard": [],
+        "delivered": [],
+        "waiting": {
+          "harbor-pier": [],
+          "quay-pier": [],
+          "orchard-pier": [
+            "damson",
+            "brindle"
+          ],
+          "steps-pier": [
+            "burr",
+            "sloe"
+          ]
+        },
+        "minimumRemaining": 12,
+        "viableActions": [
+          "board:burr+sloe"
+        ]
+      },
+      {
+        "step": "board:sloe",
+        "turn": 2,
+        "boat": "steps",
+        "tide": 1,
+        "load": 1,
+        "draft": 2,
+        "status": "playing",
+        "loss": null,
+        "aboard": [
+          "sloe"
+        ],
+        "delivered": [],
+        "waiting": {
+          "harbor-pier": [],
+          "quay-pier": [],
+          "orchard-pier": [
+            "damson",
+            "brindle"
+          ],
+          "steps-pier": [
+            "burr"
+          ]
+        },
+        "minimumRemaining": null,
+        "viableActions": []
+      },
+      {
+        "step": "orchard",
+        "turn": 3,
+        "boat": "orchard",
+        "tide": 1,
+        "load": 1,
+        "draft": 2,
+        "status": "playing",
+        "loss": null,
+        "aboard": [
+          "sloe"
+        ],
+        "delivered": [],
+        "waiting": {
+          "harbor-pier": [],
+          "quay-pier": [],
+          "orchard-pier": [
+            "damson",
+            "brindle"
+          ],
+          "steps-pier": [
+            "burr"
+          ]
+        },
+        "minimumRemaining": null,
+        "viableActions": []
+      },
+      {
+        "step": "quay",
+        "turn": 4,
+        "boat": "quay",
+        "tide": 1,
+        "load": 1,
+        "draft": 2,
+        "status": "lost",
+        "loss": {
+          "code": "RETURN_CAPACITY",
+          "edgeId": "orchard-quay",
+          "passengerIds": [
+            "damson",
+            "brindle",
+            "burr"
+          ],
+          "offshoreSlots": 7,
+          "homewardTrips": 1
+        },
+        "aboard": [
+          "sloe"
+        ],
+        "delivered": [],
+        "waiting": {
+          "harbor-pier": [],
+          "quay-pier": [],
+          "orchard-pier": [
+            "damson",
+            "brindle"
+          ],
+          "steps-pier": [
+            "burr"
+          ]
+        },
+        "minimumRemaining": null,
+        "viableActions": []
+      }
+    ],
+    "descendantsAfterTurnTwo": {
+      "states": 46,
+      "transitions": 93,
+      "won": 0,
+      "lost": 30,
+      "playing": 16
+    },
+    "recovery": {
+      "terminal": {
+        "turn": 4,
+        "tideLevel": 1,
+        "boatNodeId": "quay",
+        "aboard": [
+          "sloe"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "quay-pier": [],
+          "orchard-pier": [
+            "damson",
+            "brindle"
+          ],
+          "steps-pier": [
+            "burr"
+          ]
+        },
+        "delivered": [],
+        "status": "lost",
+        "lossReason": {
+          "code": "RETURN_CAPACITY",
+          "edgeId": "orchard-quay",
+          "passengerIds": [
+            "damson",
+            "brindle",
+            "burr"
+          ],
+          "offshoreSlots": 7,
+          "homewardTrips": 1
+        }
+      },
+      "restored": {
+        "turn": 1,
+        "tideLevel": 1,
+        "boatNodeId": "steps",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "quay-pier": [],
+          "orchard-pier": [
+            "damson",
+            "brindle"
+          ],
+          "steps-pier": [
+            "burr",
+            "sloe"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "won": {
+        "turn": 13,
+        "tideLevel": 3,
+        "boatNodeId": "harbor",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "quay-pier": [],
+          "orchard-pier": [],
+          "steps-pier": []
+        },
+        "delivered": [
+          "burr",
+          "brindle",
+          "damson",
+          "sloe"
+        ],
+        "status": "won",
+        "lossReason": null
+      },
+      "successfulUndos": 3
+    }
+  },
+  "bypass": {
+    "restrictions": {
+      "mustStayOffshoreUntilLastRise": {
+        "states": 146,
+        "transitions": 454,
+        "winningStates": 0,
+        "viableStates": 0,
+        "shortest": null,
+        "shortestWitness": null
+      },
+      "noSecondOutboundEntry": {
+        "states": 217,
+        "transitions": 579,
+        "winningStates": 0,
+        "viableStates": 0,
+        "shortest": null,
+        "shortestWitness": null
+      },
+      "neverUseOrchardSteps": {
+        "states": 63,
+        "transitions": 137,
+        "winningStates": 0,
+        "viableStates": 0,
+        "shortest": null,
+        "shortestWitness": null
+      },
+      "noFirstWindowDelivery": {
+        "states": 272,
+        "transitions": 719,
+        "winningStates": 1,
+        "viableStates": 40,
+        "shortest": 13,
+        "shortestWitness": [
+          "steps",
+          "board:burr+sloe",
+          "orchard",
+          "unload:sloe",
+          "quay",
+          "harbor",
+          "unload:burr",
+          "quay",
+          "orchard",
+          "board:brindle+damson+sloe",
+          "quay",
+          "harbor",
+          "unload:brindle+damson+sloe"
+        ]
+      },
+      "noTemporaryUnloading": {
+        "states": 193,
+        "transitions": 399,
+        "winningStates": 1,
+        "viableStates": 40,
+        "shortest": 13,
+        "shortestWitness": [
+          "board:brindle",
+          "quay",
+          "harbor",
+          "unload:brindle",
+          "quay",
+          "orchard",
+          "steps",
+          "board:burr+sloe",
+          "orchard",
+          "board:damson",
+          "quay",
+          "harbor",
+          "unload:burr+damson+sloe"
+        ]
+      }
+    },
+    "emptyReturn": [
+      {
+        "step": "start",
+        "turn": 0,
+        "boat": "orchard",
+        "tide": 1,
+        "load": 0,
+        "draft": 1,
+        "status": "playing",
+        "loss": null,
+        "aboard": [],
+        "delivered": [],
+        "waiting": {
+          "harbor-pier": [],
+          "quay-pier": [],
+          "orchard-pier": [
+            "damson",
+            "brindle"
+          ],
+          "steps-pier": [
+            "burr",
+            "sloe"
+          ]
+        },
+        "minimumRemaining": 13,
+        "viableActions": [
+          "wait",
+          "steps",
+          "board:brindle",
+          "board:brindle+damson"
+        ]
+      },
+      {
+        "step": "quay",
+        "turn": 1,
+        "boat": "quay",
+        "tide": 1,
+        "load": 0,
+        "draft": 1,
+        "status": "lost",
+        "loss": {
+          "code": "RETURN_CAPACITY",
+          "edgeId": "orchard-quay",
+          "passengerIds": [
+            "damson",
+            "brindle",
+            "burr",
+            "sloe"
+          ],
+          "offshoreSlots": 8,
+          "homewardTrips": 1
+        },
+        "aboard": [],
+        "delivered": [],
+        "waiting": {
+          "harbor-pier": [],
+          "quay-pier": [],
+          "orchard-pier": [
+            "damson",
+            "brindle"
+          ],
+          "steps-pier": [
+            "burr",
+            "sloe"
+          ]
+        },
+        "minimumRemaining": null,
+        "viableActions": []
+      }
+    ],
+    "firstFiveSpaceLoad": 1,
+    "canRecoverFromEarlyHeavyLoad": true,
+    "earliestSixSpaceLoad": 3,
+    "earliestViableSixSpaceLoad": 9,
+    "earliestSixSpaceLoadBeforeAnyDelivery": 3,
+    "canWinFromThatCollection": false,
+    "fullLoadCarriesEveryone": false
+  },
+  "relaxations": {
+    "deeperPomona": {
+      "reason": "Only Pomona Reach baseDepth from 1 to 2: carrying both Step residents through the first homeward window becomes legal.",
+      "branch": [
+        "steps",
+        "board:sloe"
+      ],
+      "states": 544,
+      "transitions": 1360,
+      "winningStates": 1,
+      "viableStates": 152,
+      "shortest": 12,
+      "shortestWitness": [
+        "steps",
+        "board:burr+sloe",
+        "orchard",
+        "quay",
+        "harbor",
+        "unload:burr",
+        "quay",
+        "orchard",
+        "board:brindle+damson",
+        "quay",
+        "harbor",
+        "unload:brindle+damson+sloe"
+      ],
+      "winningAfterBranch": [
+        {
+          "step": "start",
+          "turn": 0,
+          "boat": "orchard",
+          "tide": 1,
+          "load": 0,
+          "draft": 1,
+          "status": "playing",
+          "loss": null,
+          "aboard": [],
+          "delivered": [],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": [
+              "burr",
+              "sloe"
+            ]
+          },
+          "minimumRemaining": 12,
+          "viableActions": [
+            "wait",
+            "steps",
+            "board:damson",
+            "board:brindle",
+            "board:brindle+damson"
+          ]
+        },
+        {
+          "step": "steps",
+          "turn": 1,
+          "boat": "steps",
+          "tide": 1,
+          "load": 0,
+          "draft": 1,
+          "status": "playing",
+          "loss": null,
+          "aboard": [],
+          "delivered": [],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": [
+              "burr",
+              "sloe"
+            ]
+          },
+          "minimumRemaining": 11,
+          "viableActions": [
+            "wait",
+            "board:burr",
+            "board:sloe",
+            "board:burr+sloe"
+          ]
+        },
+        {
+          "step": "board:sloe",
+          "turn": 2,
+          "boat": "steps",
+          "tide": 1,
+          "load": 1,
+          "draft": 2,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "sloe"
+          ],
+          "delivered": [],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": [
+              "burr"
+            ]
+          },
+          "minimumRemaining": 11,
+          "viableActions": [
+            "board:burr"
+          ]
+        },
+        {
+          "step": "board:burr",
+          "turn": 3,
+          "boat": "steps",
+          "tide": 1,
+          "load": 3,
+          "draft": 3,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "burr",
+            "sloe"
+          ],
+          "delivered": [],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": []
+          },
+          "minimumRemaining": 10,
+          "viableActions": [
+            "orchard"
+          ]
+        },
+        {
+          "step": "orchard",
+          "turn": 4,
+          "boat": "orchard",
+          "tide": 1,
+          "load": 3,
+          "draft": 3,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "burr",
+            "sloe"
+          ],
+          "delivered": [],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": []
+          },
+          "minimumRemaining": 9,
+          "viableActions": [
+            "quay"
+          ]
+        },
+        {
+          "step": "quay",
+          "turn": 5,
+          "boat": "quay",
+          "tide": 2,
+          "load": 3,
+          "draft": 3,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "burr",
+            "sloe"
+          ],
+          "delivered": [],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": []
+          },
+          "minimumRemaining": 8,
+          "viableActions": [
+            "harbor"
+          ]
+        },
+        {
+          "step": "harbor",
+          "turn": 6,
+          "boat": "harbor",
+          "tide": 2,
+          "load": 3,
+          "draft": 3,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "burr",
+            "sloe"
+          ],
+          "delivered": [],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": []
+          },
+          "minimumRemaining": 7,
+          "viableActions": [
+            "unload:burr",
+            "unload:burr+sloe"
+          ]
+        },
+        {
+          "step": "unload:burr",
+          "turn": 7,
+          "boat": "harbor",
+          "tide": 2,
+          "load": 1,
+          "draft": 2,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "sloe"
+          ],
+          "delivered": [
+            "burr"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": []
+          },
+          "minimumRemaining": 6,
+          "viableActions": [
+            "quay"
+          ]
+        },
+        {
+          "step": "quay",
+          "turn": 8,
+          "boat": "quay",
+          "tide": 2,
+          "load": 1,
+          "draft": 2,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "sloe"
+          ],
+          "delivered": [
+            "burr"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": []
+          },
+          "minimumRemaining": 5,
+          "viableActions": [
+            "orchard"
+          ]
+        },
+        {
+          "step": "orchard",
+          "turn": 9,
+          "boat": "orchard",
+          "tide": 3,
+          "load": 1,
+          "draft": 2,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "sloe"
+          ],
+          "delivered": [
+            "burr"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": []
+          },
+          "minimumRemaining": 4,
+          "viableActions": [
+            "wait",
+            "steps",
+            "board:damson",
+            "board:brindle",
+            "board:brindle+damson",
+            "unload:sloe"
+          ]
+        },
+        {
+          "step": "board:brindle+damson",
+          "turn": 10,
+          "boat": "orchard",
+          "tide": 3,
+          "load": 6,
+          "draft": 4,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "sloe",
+            "damson",
+            "brindle"
+          ],
+          "delivered": [
+            "burr"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [],
+            "steps-pier": []
+          },
+          "minimumRemaining": 3,
+          "viableActions": [
+            "wait",
+            "quay",
+            "steps",
+            "unload:sloe",
+            "unload:damson",
+            "unload:damson+sloe",
+            "unload:brindle",
+            "unload:brindle+sloe",
+            "unload:brindle+damson",
+            "unload:brindle+damson+sloe"
+          ]
+        },
+        {
+          "step": "quay",
+          "turn": 11,
+          "boat": "quay",
+          "tide": 3,
+          "load": 6,
+          "draft": 4,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "sloe",
+            "damson",
+            "brindle"
+          ],
+          "delivered": [
+            "burr"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [],
+            "steps-pier": []
+          },
+          "minimumRemaining": 2,
+          "viableActions": [
+            "wait",
+            "harbor"
+          ]
+        },
+        {
+          "step": "harbor",
+          "turn": 12,
+          "boat": "harbor",
+          "tide": 3,
+          "load": 6,
+          "draft": 4,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "sloe",
+            "damson",
+            "brindle"
+          ],
+          "delivered": [
+            "burr"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [],
+            "steps-pier": []
+          },
+          "minimumRemaining": 1,
+          "viableActions": [
+            "wait",
+            "quay",
+            "unload:sloe",
+            "unload:damson",
+            "unload:damson+sloe",
+            "unload:brindle",
+            "unload:brindle+sloe",
+            "unload:brindle+damson",
+            "unload:brindle+damson+sloe"
+          ]
+        },
+        {
+          "step": "unload:brindle+damson+sloe",
+          "turn": 13,
+          "boat": "harbor",
+          "tide": 3,
+          "load": 0,
+          "draft": 1,
+          "status": "won",
+          "loss": null,
+          "aboard": [],
+          "delivered": [
+            "burr",
+            "sloe",
+            "damson",
+            "brindle"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [],
+            "steps-pier": []
+          },
+          "minimumRemaining": 0,
+          "viableActions": []
+        }
+      ],
+      "suffix": [
+        "board:burr",
+        "orchard",
+        "quay",
+        "harbor",
+        "unload:burr",
+        "quay",
+        "orchard",
+        "board:brindle+damson",
+        "quay",
+        "harbor",
+        "unload:brindle+damson+sloe"
+      ]
+    },
+    "reversiblePomona": {
+      "reason": "Only Pomona Reach direction changes to ordinary bidirectional at all tides. The production current-only terminal predicates also no longer apply, and this explicit witness reaches an actual win.",
+      "branch": [
+        "steps",
+        "board:sloe"
+      ],
+      "states": 1560,
+      "transitions": 5596,
+      "winningStates": 1,
+      "viableStates": 866,
+      "shortest": 13,
+      "shortestWitness": [
+        "steps",
+        "board:burr+sloe",
+        "orchard",
+        "unload:sloe",
+        "quay",
+        "harbor",
+        "unload:burr",
+        "quay",
+        "orchard",
+        "board:brindle+damson+sloe",
+        "quay",
+        "harbor",
+        "unload:brindle+damson+sloe"
+      ],
+      "winningAfterBranch": [
+        {
+          "step": "start",
+          "turn": 0,
+          "boat": "orchard",
+          "tide": 1,
+          "load": 0,
+          "draft": 1,
+          "status": "playing",
+          "loss": null,
+          "aboard": [],
+          "delivered": [],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": [
+              "burr",
+              "sloe"
+            ]
+          },
+          "minimumRemaining": 13,
+          "viableActions": [
+            "wait",
+            "quay",
+            "steps",
+            "board:damson",
+            "board:brindle",
+            "board:brindle+damson"
+          ]
+        },
+        {
+          "step": "steps",
+          "turn": 1,
+          "boat": "steps",
+          "tide": 1,
+          "load": 0,
+          "draft": 1,
+          "status": "playing",
+          "loss": null,
+          "aboard": [],
+          "delivered": [],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": [
+              "burr",
+              "sloe"
+            ]
+          },
+          "minimumRemaining": 12,
+          "viableActions": [
+            "wait",
+            "orchard",
+            "board:burr",
+            "board:sloe",
+            "board:burr+sloe"
+          ]
+        },
+        {
+          "step": "board:sloe",
+          "turn": 2,
+          "boat": "steps",
+          "tide": 1,
+          "load": 1,
+          "draft": 2,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "sloe"
+          ],
+          "delivered": [],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": [
+              "burr"
+            ]
+          },
+          "minimumRemaining": 12,
+          "viableActions": [
+            "wait",
+            "orchard",
+            "board:burr",
+            "unload:sloe"
+          ]
+        },
+        {
+          "step": "wait",
+          "turn": 3,
+          "boat": "steps",
+          "tide": 1,
+          "load": 1,
+          "draft": 2,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "sloe"
+          ],
+          "delivered": [],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": [
+              "burr"
+            ]
+          },
+          "minimumRemaining": 11,
+          "viableActions": [
+            "wait",
+            "orchard",
+            "board:burr",
+            "unload:sloe"
+          ]
+        },
+        {
+          "step": "board:burr",
+          "turn": 4,
+          "boat": "steps",
+          "tide": 1,
+          "load": 3,
+          "draft": 3,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "burr",
+            "sloe"
+          ],
+          "delivered": [],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": []
+          },
+          "minimumRemaining": 10,
+          "viableActions": [
+            "wait",
+            "orchard",
+            "unload:burr",
+            "unload:sloe",
+            "unload:burr+sloe"
+          ]
+        },
+        {
+          "step": "orchard",
+          "turn": 5,
+          "boat": "orchard",
+          "tide": 2,
+          "load": 3,
+          "draft": 3,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "burr",
+            "sloe"
+          ],
+          "delivered": [],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": []
+          },
+          "minimumRemaining": 9,
+          "viableActions": [
+            "wait",
+            "quay",
+            "steps",
+            "board:damson",
+            "board:brindle",
+            "unload:burr",
+            "unload:sloe",
+            "unload:burr+sloe"
+          ]
+        },
+        {
+          "step": "quay",
+          "turn": 6,
+          "boat": "quay",
+          "tide": 2,
+          "load": 3,
+          "draft": 3,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "burr",
+            "sloe"
+          ],
+          "delivered": [],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": []
+          },
+          "minimumRemaining": 8,
+          "viableActions": [
+            "wait",
+            "harbor",
+            "orchard"
+          ]
+        },
+        {
+          "step": "harbor",
+          "turn": 7,
+          "boat": "harbor",
+          "tide": 2,
+          "load": 3,
+          "draft": 3,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "burr",
+            "sloe"
+          ],
+          "delivered": [],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": []
+          },
+          "minimumRemaining": 7,
+          "viableActions": [
+            "wait",
+            "quay",
+            "unload:burr",
+            "unload:sloe",
+            "unload:burr+sloe"
+          ]
+        },
+        {
+          "step": "unload:burr",
+          "turn": 8,
+          "boat": "harbor",
+          "tide": 2,
+          "load": 1,
+          "draft": 2,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "sloe"
+          ],
+          "delivered": [
+            "burr"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": []
+          },
+          "minimumRemaining": 6,
+          "viableActions": [
+            "wait",
+            "quay",
+            "unload:sloe"
+          ]
+        },
+        {
+          "step": "quay",
+          "turn": 9,
+          "boat": "quay",
+          "tide": 3,
+          "load": 1,
+          "draft": 2,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "sloe"
+          ],
+          "delivered": [
+            "burr"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": []
+          },
+          "minimumRemaining": 5,
+          "viableActions": [
+            "wait",
+            "harbor",
+            "orchard"
+          ]
+        },
+        {
+          "step": "orchard",
+          "turn": 10,
+          "boat": "orchard",
+          "tide": 3,
+          "load": 1,
+          "draft": 2,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "sloe"
+          ],
+          "delivered": [
+            "burr"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": []
+          },
+          "minimumRemaining": 4,
+          "viableActions": [
+            "wait",
+            "quay",
+            "steps",
+            "board:damson",
+            "board:brindle",
+            "board:brindle+damson",
+            "unload:sloe"
+          ]
+        },
+        {
+          "step": "board:brindle+damson",
+          "turn": 11,
+          "boat": "orchard",
+          "tide": 3,
+          "load": 6,
+          "draft": 4,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "damson",
+            "brindle",
+            "sloe"
+          ],
+          "delivered": [
+            "burr"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [],
+            "steps-pier": []
+          },
+          "minimumRemaining": 3,
+          "viableActions": [
+            "wait",
+            "quay",
+            "steps",
+            "unload:damson",
+            "unload:brindle",
+            "unload:brindle+damson",
+            "unload:sloe",
+            "unload:damson+sloe",
+            "unload:brindle+sloe",
+            "unload:brindle+damson+sloe"
+          ]
+        },
+        {
+          "step": "quay",
+          "turn": 12,
+          "boat": "quay",
+          "tide": 3,
+          "load": 6,
+          "draft": 4,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "damson",
+            "brindle",
+            "sloe"
+          ],
+          "delivered": [
+            "burr"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [],
+            "steps-pier": []
+          },
+          "minimumRemaining": 2,
+          "viableActions": [
+            "wait",
+            "harbor",
+            "orchard"
+          ]
+        },
+        {
+          "step": "harbor",
+          "turn": 13,
+          "boat": "harbor",
+          "tide": 3,
+          "load": 6,
+          "draft": 4,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "damson",
+            "brindle",
+            "sloe"
+          ],
+          "delivered": [
+            "burr"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [],
+            "steps-pier": []
+          },
+          "minimumRemaining": 1,
+          "viableActions": [
+            "wait",
+            "quay",
+            "unload:damson",
+            "unload:brindle",
+            "unload:brindle+damson",
+            "unload:sloe",
+            "unload:damson+sloe",
+            "unload:brindle+sloe",
+            "unload:brindle+damson+sloe"
+          ]
+        },
+        {
+          "step": "unload:brindle+damson+sloe",
+          "turn": 14,
+          "boat": "harbor",
+          "tide": 3,
+          "load": 0,
+          "draft": 1,
+          "status": "won",
+          "loss": null,
+          "aboard": [],
+          "delivered": [
+            "burr",
+            "damson",
+            "brindle",
+            "sloe"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [],
+            "steps-pier": []
+          },
+          "minimumRemaining": 0,
+          "viableActions": []
+        }
+      ],
+      "suffix": [
+        "wait",
+        "board:burr",
+        "orchard",
+        "quay",
+        "harbor",
+        "unload:burr",
+        "quay",
+        "orchard",
+        "board:brindle+damson",
+        "quay",
+        "harbor",
+        "unload:brindle+damson+sloe"
+      ]
+    },
+    "higherSteps": {
+      "reason": "Only raised Steps pier elevation from 3 to 4: Sloe can wait through the last turn of the current.",
+      "branch": [
+        "steps",
+        "board:burr"
+      ],
+      "states": 421,
+      "transitions": 1290,
+      "winningStates": 1,
+      "viableStates": 195,
+      "shortest": 13,
+      "shortestWitness": [
+        "steps",
+        "board:burr+sloe",
+        "orchard",
+        "unload:sloe",
+        "quay",
+        "harbor",
+        "unload:burr",
+        "quay",
+        "orchard",
+        "board:brindle+damson+sloe",
+        "quay",
+        "harbor",
+        "unload:brindle+damson+sloe"
+      ],
+      "winningAfterBranch": [
+        {
+          "step": "start",
+          "turn": 0,
+          "boat": "orchard",
+          "tide": 1,
+          "load": 0,
+          "draft": 1,
+          "status": "playing",
+          "loss": null,
+          "aboard": [],
+          "delivered": [],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": [
+              "burr",
+              "sloe"
+            ]
+          },
+          "minimumRemaining": 13,
+          "viableActions": [
+            "wait",
+            "steps",
+            "board:damson",
+            "board:brindle",
+            "board:brindle+damson"
+          ]
+        },
+        {
+          "step": "steps",
+          "turn": 1,
+          "boat": "steps",
+          "tide": 1,
+          "load": 0,
+          "draft": 1,
+          "status": "playing",
+          "loss": null,
+          "aboard": [],
+          "delivered": [],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": [
+              "burr",
+              "sloe"
+            ]
+          },
+          "minimumRemaining": 12,
+          "viableActions": [
+            "wait",
+            "orchard",
+            "board:burr",
+            "board:burr+sloe"
+          ]
+        },
+        {
+          "step": "board:burr",
+          "turn": 2,
+          "boat": "steps",
+          "tide": 1,
+          "load": 2,
+          "draft": 2,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "burr"
+          ],
+          "delivered": [],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": [
+              "sloe"
+            ]
+          },
+          "minimumRemaining": 13,
+          "viableActions": [
+            "wait",
+            "orchard"
+          ]
+        },
+        {
+          "step": "orchard",
+          "turn": 3,
+          "boat": "orchard",
+          "tide": 1,
+          "load": 2,
+          "draft": 2,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "burr"
+          ],
+          "delivered": [],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": [
+              "sloe"
+            ]
+          },
+          "minimumRemaining": 12,
+          "viableActions": [
+            "wait",
+            "quay"
+          ]
+        },
+        {
+          "step": "quay",
+          "turn": 4,
+          "boat": "quay",
+          "tide": 1,
+          "load": 2,
+          "draft": 2,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "burr"
+          ],
+          "delivered": [],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": [
+              "sloe"
+            ]
+          },
+          "minimumRemaining": 11,
+          "viableActions": [
+            "wait",
+            "harbor"
+          ]
+        },
+        {
+          "step": "harbor",
+          "turn": 5,
+          "boat": "harbor",
+          "tide": 2,
+          "load": 2,
+          "draft": 2,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "burr"
+          ],
+          "delivered": [],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": [
+              "sloe"
+            ]
+          },
+          "minimumRemaining": 10,
+          "viableActions": [
+            "wait",
+            "unload:burr"
+          ]
+        },
+        {
+          "step": "unload:burr",
+          "turn": 6,
+          "boat": "harbor",
+          "tide": 2,
+          "load": 0,
+          "draft": 1,
+          "status": "playing",
+          "loss": null,
+          "aboard": [],
+          "delivered": [
+            "burr"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": [
+              "sloe"
+            ]
+          },
+          "minimumRemaining": 9,
+          "viableActions": [
+            "wait",
+            "quay"
+          ]
+        },
+        {
+          "step": "quay",
+          "turn": 7,
+          "boat": "quay",
+          "tide": 2,
+          "load": 0,
+          "draft": 1,
+          "status": "playing",
+          "loss": null,
+          "aboard": [],
+          "delivered": [
+            "burr"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": [
+              "sloe"
+            ]
+          },
+          "minimumRemaining": 8,
+          "viableActions": [
+            "wait",
+            "orchard"
+          ]
+        },
+        {
+          "step": "orchard",
+          "turn": 8,
+          "boat": "orchard",
+          "tide": 2,
+          "load": 0,
+          "draft": 1,
+          "status": "playing",
+          "loss": null,
+          "aboard": [],
+          "delivered": [
+            "burr"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": [
+              "sloe"
+            ]
+          },
+          "minimumRemaining": 7,
+          "viableActions": [
+            "wait",
+            "steps",
+            "board:damson",
+            "board:brindle",
+            "board:brindle+damson"
+          ]
+        },
+        {
+          "step": "steps",
+          "turn": 9,
+          "boat": "steps",
+          "tide": 3,
+          "load": 0,
+          "draft": 1,
+          "status": "playing",
+          "loss": null,
+          "aboard": [],
+          "delivered": [
+            "burr"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": [
+              "sloe"
+            ]
+          },
+          "minimumRemaining": 6,
+          "viableActions": [
+            "wait",
+            "orchard",
+            "board:sloe"
+          ]
+        },
+        {
+          "step": "board:sloe",
+          "turn": 10,
+          "boat": "steps",
+          "tide": 3,
+          "load": 1,
+          "draft": 2,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "sloe"
+          ],
+          "delivered": [
+            "burr"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": []
+          },
+          "minimumRemaining": 5,
+          "viableActions": [
+            "wait",
+            "orchard",
+            "unload:sloe"
+          ]
+        },
+        {
+          "step": "orchard",
+          "turn": 11,
+          "boat": "orchard",
+          "tide": 3,
+          "load": 1,
+          "draft": 2,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "sloe"
+          ],
+          "delivered": [
+            "burr"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [
+              "damson",
+              "brindle"
+            ],
+            "steps-pier": []
+          },
+          "minimumRemaining": 4,
+          "viableActions": [
+            "wait",
+            "steps",
+            "board:damson",
+            "board:brindle",
+            "board:brindle+damson",
+            "unload:sloe"
+          ]
+        },
+        {
+          "step": "board:brindle+damson",
+          "turn": 12,
+          "boat": "orchard",
+          "tide": 3,
+          "load": 6,
+          "draft": 4,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "damson",
+            "brindle",
+            "sloe"
+          ],
+          "delivered": [
+            "burr"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [],
+            "steps-pier": []
+          },
+          "minimumRemaining": 3,
+          "viableActions": [
+            "wait",
+            "quay",
+            "steps",
+            "unload:damson",
+            "unload:brindle",
+            "unload:brindle+damson",
+            "unload:sloe",
+            "unload:damson+sloe",
+            "unload:brindle+sloe",
+            "unload:brindle+damson+sloe"
+          ]
+        },
+        {
+          "step": "quay",
+          "turn": 13,
+          "boat": "quay",
+          "tide": 3,
+          "load": 6,
+          "draft": 4,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "damson",
+            "brindle",
+            "sloe"
+          ],
+          "delivered": [
+            "burr"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [],
+            "steps-pier": []
+          },
+          "minimumRemaining": 2,
+          "viableActions": [
+            "wait",
+            "harbor"
+          ]
+        },
+        {
+          "step": "harbor",
+          "turn": 14,
+          "boat": "harbor",
+          "tide": 3,
+          "load": 6,
+          "draft": 4,
+          "status": "playing",
+          "loss": null,
+          "aboard": [
+            "damson",
+            "brindle",
+            "sloe"
+          ],
+          "delivered": [
+            "burr"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [],
+            "steps-pier": []
+          },
+          "minimumRemaining": 1,
+          "viableActions": [
+            "wait",
+            "quay",
+            "unload:damson",
+            "unload:brindle",
+            "unload:brindle+damson",
+            "unload:sloe",
+            "unload:damson+sloe",
+            "unload:brindle+sloe",
+            "unload:brindle+damson+sloe"
+          ]
+        },
+        {
+          "step": "unload:brindle+damson+sloe",
+          "turn": 15,
+          "boat": "harbor",
+          "tide": 3,
+          "load": 0,
+          "draft": 1,
+          "status": "won",
+          "loss": null,
+          "aboard": [],
+          "delivered": [
+            "burr",
+            "damson",
+            "brindle",
+            "sloe"
+          ],
+          "waiting": {
+            "harbor-pier": [],
+            "quay-pier": [],
+            "orchard-pier": [],
+            "steps-pier": []
+          },
+          "minimumRemaining": 0,
+          "viableActions": []
+        }
+      ],
+      "suffix": [
+        "orchard",
+        "quay",
+        "harbor",
+        "unload:burr",
+        "quay",
+        "orchard",
+        "steps",
+        "board:sloe",
+        "orchard",
+        "board:brindle+damson",
+        "quay",
+        "harbor",
+        "unload:brindle+damson+sloe"
+      ]
+    }
+  }
+}

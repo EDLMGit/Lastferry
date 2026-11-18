@@ -1,4 +1,8 @@
-# Ternhaven published; Drowned Orchard candidate commissioned · 17 November 2026
+# Drowned Orchard Practice candidate · review branch
+
+Eight Journey coves, ten independent Practice entrances, nine accepted scoring identities. C9 is not part of Journey and is not published. The unchanged v23 Site serves 1e31466. [Candidate design, tests and gameplay evidence](reviews/cove-nine-practice/REVIEW.md).
+
+## Earlier record: Ternhaven published; Drowned Orchard candidate commissioned · 17 November 2026
 
 Reviewed game `1e3146652f50c88db1ce7d56c6de14e311aab719` is **Site version 23**, hosting `11ab9f44542ea798c2e4ed21aaabb071d1780ef4`. Existing private access is unchanged. [Independent review](reviews/ternhaven-journey/INDEPENDENT_REVIEW.md) · [Receipt](reviews/ternhaven-journey/deployment-confirmation.json) · [Playtest](https://last-ferry-playtest.abumech.chatgpt.site)
 

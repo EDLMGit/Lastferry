@@ -1,6 +1,12 @@
 # Last Ferry — The Long Tide
 
-## Current work order · 17 November 2026
+## Drowned Orchard · Practice implementation for review
+
+Drowned Orchard returns to the accepted six-space Orchard geography after the water has changed. Damson, Brindle, Burr and Sloe are new residents. The original neighbors remain safely rescued. This revisit is available only from Practice; there is no ninth entry or encounter in the Journey.
+
+**Eight Journey coves / ten Practice entrances / nine accepted scoring identities.** [Design, verification and review](../reviews/cove-nine-practice/REVIEW.md). The eight-cove Journey, earlier saves and all original publication records are unchanged.
+
+## Previous work order · 17 November 2026
 
 Ternhaven Journey is independently reviewed at `1e3146652f50c88db1ce7d56c6de14e311aab719` and published as **Site version 23**, with existing private access unchanged. The playable order is Holding → Bellwater → Driftwood → Two Shelters → Nell's existing launch → Wide → Reef → Orchard → Ternhaven. There are eight Journey coves, nine independent Practice entrances and nine accepted target identities. [Active state](../docs/PROJECT_STATE.md) · [Review and receipt](../reviews/ternhaven-journey/INDEPENDENT_REVIEW.md)
 

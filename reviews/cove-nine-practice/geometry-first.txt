@@ -1,0 +1,154 @@
+
+ RUN  v5.0.5 C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry
+
+stdout | tests/unit/wide-clearance.test.ts > Drowned Orchard physical clearances > occupied real modeled hull clears land and piers at every reachable heading in both directions
+{"orchard-steps/reverse/steps-pier/mesh13":{"count":24,"position":[0.7002682154180332,0,9.406767630354786],"angle":-0.013661170499694064},"orchard-steps/reverse/steps-pier/mesh19":{"count":14,"position":[0.7202027362498317,0,9.407575786604722],"angle":0.07908213962851662},"orchard-steps/reverse/steps-pier/mesh22":{"count":2,"position":[0.7202027362498317,0,9.407575786604722],"angle":0.07908213962851662},"orchard-steps/reverse/steps-pier/mesh23":{"count":2,"position":[0.7202027362498317,0,9.407575786604722],"angle":0.07908213962851662}}
+
+----------------x···------------------------------------------------x·xx········---
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/wide-clearance.test.ts > Drowned Orchard physical clearances > occupied real modeled hull clears land and piers at every reachable heading in both directions
+AssertionError: expected [ …(30) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "orchard-steps/reverse from-1.5707963267948961 sample160: steps-pier/mesh13",
++   "orchard-steps/reverse from-1.5707963267948961 sample161: steps-pier/mesh13",
++   "orchard-steps/reverse from-1.5707963267948961 sample161: steps-pier/mesh19",
++   "orchard-steps/reverse from-1.5707963267948961 sample161: steps-pier/mesh22",
++   "orchard-steps/reverse from-1.5707963267948961 sample161: steps-pier/mesh23",
++   "orchard-steps/reverse from-1.5707963267948961 sample162: steps-pier/mesh13",
++   "orchard-steps/reverse from-1.5707963267948961 sample162: steps-pier/mesh19",
++   "orchard-steps/reverse from-1.5707963267948961 sample163: steps-pier/mesh13",
++   "orchard-steps/reverse from-1.5707963267948961 sample163: steps-pier/mesh19",
++   "orchard-steps/reverse from-1.5707963267948961 sample164: steps-pier/mesh13",
++   "orchard-steps/reverse from-1.5707963267948961 sample164: steps-pier/mesh19",
++   "orchard-steps/reverse from-1.5707963267948961 sample165: steps-pier/mesh13",
++   "orchard-steps/reverse from-1.5707963267948961 sample165: steps-pier/mesh19",
++   "orchard-steps/reverse from-1.5707963267948961 sample166: steps-pier/mesh13",
++   "orchard-steps/reverse from-1.5707963267948961 sample167: steps-pier/mesh13",
++   "orchard-steps/reverse from-1.5707963267948961 sample168: steps-pier/mesh13",
++   "orchard-steps/reverse from-1.5707963267948961 sample169: steps-pier/mesh13",
++   "orchard-steps/reverse from-1.5707963267948961 sample170: steps-pier/mesh13",
++   "orchard-steps/reverse from-1.5707963267948961 sample170: steps-pier/mesh19",
++   "orchard-steps/reverse from-1.5707963267948961 sample171: steps-pier/mesh13",
++   "orchard-steps/reverse from-1.5707963267948961 sample171: steps-pier/mesh19",
++   "orchard-steps/reverse from-1.5707963267948966 sample160: steps-pier/mesh13",
++   "orchard-steps/reverse from-1.5707963267948966 sample161: steps-pier/mesh13",
++   "orchard-steps/reverse from-1.5707963267948966 sample161: steps-pier/mesh19",
++   "orchard-steps/reverse from-1.5707963267948966 sample161: steps-pier/mesh22",
++   "orchard-steps/reverse from-1.5707963267948966 sample161: steps-pier/mesh23",
++   "orchard-steps/reverse from-1.5707963267948966 sample162: steps-pier/mesh13",
++   "orchard-steps/reverse from-1.5707963267948966 sample162: steps-pier/mesh19",
++   "orchard-steps/reverse from-1.5707963267948966 sample163: steps-pier/mesh13",
++   "orchard-steps/reverse from-1.5707963267948966 sample163: steps-pier/mesh19",
++ ]
+
+ ❯ tests/unit/wide-clearance.test.ts:208:20
+    206|     }
+    207|   if (failures.length) console.log(JSON.stringify(contacts));
+    208|   expect(failures).toEqual([]);
+       |                    ^
+    209|   expect(margins).toEqual([]);
+    210| }, 20000);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  tests/unit/wide-ferry.test.ts > Drowned Orchard seating and transfers > active-level profiles preserve all four original boats and provide a physical six-space deck
+AssertionError: expected [ Array(14) ] to have a length of 8 but got 14
+
+- Expected
++ Received
+
+- 8
++ 14
+
+ ❯ tests/unit/wide-ferry.test.ts:88:17
+     86|   expect(model.getObjectByName('passenger-deck')).toBeTruthy();
+     87|   expect(model.children.some((object) => object.name === 'wide-cabin-o…
+     88|   expect(legal).toHaveLength(level === wideBerth ? 59 : level === reef…
+       |                 ^
+     89|   expect(ferry().name).toBe('ferry-hull-and-deck');
+     90| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  tests/unit/wide-ferry.test.ts > Drowned Orchard seating and transfers > the whole roster has supported compact land and quay positions with stable identity and no body overlap
+AssertionError: expected [ …(8) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "harbor-pier:2 unsupported actual foot -0.21149208002090453/0.1646942215681076",
++   "harbor-pier:2 unsupported actual foot -0.21149208002090453/0.1646942215681076",
++   "quay-pier:2 unsupported actual foot -0.21149208002090453/0.1646942215681076",
++   "quay-pier:2 unsupported actual foot -0.21149208002090453/0.1646942215681076",
++   "orchard-pier:2 unsupported actual foot -0.21149208002090453/0.1646942215681076",
++   "orchard-pier:2 unsupported actual foot -0.21149208002090453/0.1646942215681076",
++   "steps-pier:2 unsupported actual foot -0.21149208002090453/0.1646942215681076",
++   "steps-pier:2 unsupported actual foot -0.21149208002090453/0.1646942215681076",
++ ]
+
+ ❯ tests/unit/wide-ferry.test.ts:134:20
+    132|       }
+    133|     }
+    134|   expect(failures).toEqual([]);
+       |                    ^
+    135| });
+    136|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  tests/unit/wide-ferry.test.ts > Drowned Orchard seating and transfers > actual foot bounds remain supported by land, fitted landing, gangway and deck during every authored walking path
+AssertionError: expected [ …(16) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "harbor-pier:1.5707963267948966:tide1:draft1:burr:true:0:-8.761492080020904,0.715,-2.7553057784318926",
++   "harbor-pier:1.5707963267948966:tide1:draft1:burr:false:60:-8.761492080020904,0.715,-2.7553057784318926",
++   "harbor-pier:1.5707963267948966:tide1:draft2:burr:true:0:-8.761492080020904,0.715,-2.7553057784318926",
++   "harbor-pier:1.5707963267948966:tide1:draft2:burr:false:60:-8.761492080020904,0.715,-2.7553057784318926",
++   "harbor-pier:1.5707963267948966:tide1:draft3:burr:true:0:-8.761492080020904,0.715,-2.7553057784318926",
++   "harbor-pier:1.5707963267948966:tide1:draft3:burr:false:60:-8.761492080020904,0.715,-2.7553057784318926",
++   "harbor-pier:1.5707963267948966:tide1:draft4:burr:true:0:-8.761492080020904,0.715,-2.7553057784318926",
++   "harbor-pier:1.5707963267948966:tide1:draft4:burr:false:60:-8.761492080020904,0.715,-2.7553057784318926",
++   "harbor-pier:1.5707963267948966:tide2:draft1:burr:true:0:-8.761492080020904,0.715,-2.7553057784318926",
++   "harbor-pier:1.5707963267948966:tide2:draft1:burr:false:60:-8.761492080020904,0.715,-2.7553057784318926",
++   "harbor-pier:1.5707963267948966:tide2:draft2:burr:true:0:-8.761492080020904,0.715,-2.7553057784318926",
++   "harbor-pier:1.5707963267948966:tide2:draft2:burr:false:60:-8.761492080020904,0.715,-2.7553057784318926",
++   "harbor-pier:1.5707963267948966:tide2:draft3:burr:true:0:-8.761492080020904,0.715,-2.7553057784318926",
++   "harbor-pier:1.5707963267948966:tide2:draft3:burr:false:60:-8.761492080020904,0.715,-2.7553057784318926",
++   "harbor-pier:1.5707963267948966:tide2:draft4:burr:true:0:-8.761492080020904,0.715,-2.7553057784318926",
++   "harbor-pier:1.5707963267948966:tide2:draft4:burr:false:60:-8.761492080020904,0.715,-2.7553057784318926",
++ ]
+
+ ❯ tests/unit/wide-ferry.test.ts:178:20
+    176|             }
+    177|         }
+    178|   expect(failures).toEqual([]);
+       |                    ^
+    179| }, 60000);
+    180|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  4 failed | 12 passed | 67 skipped (83)
+   Start at  07:55:56
+   Duration  1.62s (tests 86%, import 8%, transform 5%, worker 1%)
+
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.3
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.3
+npm notice To update run: npm install -g npm@12.2.3
+npm notice

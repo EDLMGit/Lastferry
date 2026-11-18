@@ -6,6 +6,7 @@ import {
   reefReturn,
   orchardLanding,
   ternhaven,
+  drownedOrchard,
   level as firstCrossing,
   holdingPier,
   bellwater,
@@ -31,7 +32,7 @@ import { settlingProgress, transitionPlan } from '../../src/scene/transitions';
 import { FerryWake, wakeContactReach } from '../../src/scene/wake';
 import { isWalkableAt } from '../../src/scene/pier';
 
-describe.each([wideBerth, reefReturn, orchardLanding, ternhaven])('$title seating and transfers', (level) => {
+describe.each([wideBerth, reefReturn, orchardLanding, ternhaven, drownedOrchard])('$title seating and transfers', (level) => {
 const localBoxes = new Map(
   level.passengers.map((passenger) => {
     const figure = animal(passenger.species, passenger.appearance === 'rabbit-tan' ? 1 : 0);
@@ -84,7 +85,7 @@ test('active-level profiles preserve all four original boats and provide a physi
   expect(hullBounds.max.y).toBeGreaterThan(wideFerryProfile.deckY + 0.04);
   expect(model.getObjectByName('passenger-deck')).toBeTruthy();
   expect(model.children.some((object) => object.name === 'wide-cabin-obstacle')).toBe(true);
-  expect(legal).toHaveLength(level === wideBerth ? 59 : level === reefReturn ? 16 : level === ternhaven ? 14 : 8);
+  expect(legal).toHaveLength(level === wideBerth ? 59 : level === reefReturn ? 16 : level === ternhaven || level === drownedOrchard ? 14 : 8);
   expect(ferry().name).toBe('ferry-hull-and-deck');
 });
 
@@ -147,7 +148,7 @@ test('actual foot bounds remain supported by land, fitted landing, gangway and d
   const failures: string[] = [];
   for (const pier of level.piers)
     for (const heading of [Math.PI / 2, -Math.PI / 2])
-      for (const tide of [0, 1, 2].filter((n) => n < pier.elevation))
+      for (const tide of [level.rules.tide.initialLevel, ...level.rules.tide.rises.map(rise => rise.level)].filter((n) => n < pier.elevation))
         for (const required of [1, 2, 3, 4]) {
           const boat = level.nodes.find((n) => n.id === pier.nodeId)!;
           const matrix = new Matrix4().makeRotationY(heading).setPosition(boat.positionXZ[0], tide * 0.18 + hullDraftY(required), boat.positionXZ[1]);
@@ -196,7 +197,7 @@ test.each(
           const after = board ? before | selection : before & ~selection;
           if (loadFor(after) > 6) continue;
           const moving = idsFor(selection);
-          for (const tide of [0, 1, 2].filter((tide) => tide < pier.elevation))
+          for (const tide of [level.rules.tide.initialLevel, ...level.rules.tide.rises.map(rise => rise.level)].filter((tide) => tide < pier.elevation))
             for (let step = 0; step <= 50; step++) {
               const time = step / 50,
                 k = time * time * (3 - 2 * time);

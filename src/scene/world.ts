@@ -452,7 +452,8 @@ export class World {
       cz = points.reduce((a, p) => a + p[1], 0) / points.length;
     const height = island.elevation * 0.18;
     const style = this.layout.islandStyles[island.id] ?? 'garden';
-    if (this.level.id === 'orchard-landing') return decorateOrchardIsland(group, island, style);
+    if (this.level.id === 'orchard-landing' || this.level.id === 'drowned-orchard')
+      return decorateOrchardIsland(group, island, style, this.level.id === 'drowned-orchard');
     if (this.level.id === 'reef-return') return decorateReefIsland(group, island, style);
     if (this.level.id === 'ternhaven') return decorateTernhavenIsland(group, island, style);
     if (this.level.id === 'wide-berth') {

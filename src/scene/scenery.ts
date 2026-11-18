@@ -46,12 +46,17 @@ export function orchardTree(parent: T.Object3D, position: [number, number, numbe
 }
 
 export function decorateOrchardIsland(
-  group: T.Group, island: Level['world']['islands'][number], style: IslandStyle,
+  group: T.Group, island: Level['world']['islands'][number], style: IslandStyle, returned = false,
 ) {
   if (style === 'refuge') return decorateWideIsland(group, island, style);
   const { x, y: z } = islandCenter(island);
   const y = island.elevation * 0.18;
   if (style === 'quay') {
+    if (returned) {
+      const lowTree = orchardTree(group, [x - 1.24, y - 0.005, z - 0.67]);
+      lowTree.scale.setScalar(0.79);
+      lowTree.rotation.y = 0.46;
+    }
     const crate = new T.Group();
     crate.name = 'cider-quay-fruit-crate';
     crate.position.set(x + 1.26, y, z - 0.72);

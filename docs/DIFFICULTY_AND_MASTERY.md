@@ -1,6 +1,12 @@
 # Last Ferry — difficulty and three-lantern mastery
 
-## Current C9 candidate commission · 17 November 2026
+## Drowned Orchard · Practice implementation for review
+
+Drowned Orchard uses the existing unscored Practice path. Successful rescues, terminal Undo and redelivery do not write a lantern record. The exact minimum and proposed efficient target are authoring evidence, not a rating or acceptance.
+
+**Eight Journey coves / ten Practice entrances / nine accepted scoring identities.** [Design, verification and review](../reviews/cove-nine-practice/REVIEW.md). The eight-cove Journey, earlier saves and all original publication records are unchanged.
+
+## C9 candidate commission · 17 November 2026
 
 The reviewed eight-cove Journey is published in Site version 23 at `1e3146652f50c88db1ce7d56c6de14e311aab719`. All nine accepted scoring identities remain, including Orchard 13/revision 1 and Ternhaven 14/revision 1. Stronger Practice bests, unscored history, ordinary-rescue story progression and provisional acceptance remain unchanged. [Review](../reviews/ternhaven-journey/INDEPENDENT_REVIEW.md)
 

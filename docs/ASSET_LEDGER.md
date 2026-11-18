@@ -1,5 +1,11 @@
 # Last Ferry asset provenance and history
 
+## Drowned Orchard · Practice implementation for review
+
+Drowned Orchard reuses the six-space hull, supported pier boards, shoreline, established orchard planting, current markers, transfer paths and existing four-species miniature family. Damson, Brindle, Burr and Sloe retain chestnut deer, wool sheep, brown beaver and cream rabbit appearances across the world, choices and unscored result. No new image, model or asset-family ID. The ten baked images, licensed inputs, source provenance and previous acceptance remain unchanged. See the developer gallery at asset-gallery.html#drowned-orchard.
+
+**Eight Journey coves / ten Practice entrances / nine accepted scoring identities.** [Design, verification and review](../reviews/cove-nine-practice/REVIEW.md). The eight-cove Journey, earlier saves and all original publication records are unchanged.
+
 ## Ternhaven Journey · implementation for review
 
 The tenth view in the existing story.illustrations family, ternhaven, is a local Canvas composition. It reuses the yellow six-space hull, illustrated deer, sheep, rabbit, beaver and reeds, with a new open-water buoy and raised-paw pose. No model, portrait, figure, lantern or audio asset was replaced. The two-sentence caption and finite ferry-water cue reuse the existing player and Sound owner. The developer story gallery reads this same painter and registry.

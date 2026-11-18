@@ -1,6 +1,12 @@
 # Last Ferry — Project state
 
-## Current review, publication and task · 17 November 2026
+## Drowned Orchard · Practice implementation for review
+
+The unscored Drowned Orchard Practice candidate is implemented on the review branch. It reuses the four Orchard landmarks with changed water, a redirected approach to Spring Steps and a new group. The first ferry load and the boat’s side of the turning current determine whether the remaining six spaces can come home. Published v23 still contains the Ternhaven Journey runtime 1e31466; it does not contain this candidate.
+
+**Eight Journey coves / ten Practice entrances / nine accepted scoring identities.** [Design, verification and review](../reviews/cove-nine-practice/REVIEW.md). The eight-cove Journey, earlier saves and all original publication records are unchanged.
+
+## Previous review, publication and commission · 17 November 2026
 
 **TERNHAVEN_JOURNEY_01 is reviewed and published. COVE_NINE_PRACTICE_01 is active.** The user asks to continue after the identifiable Ternhaven handoff. The reviewed game `1e3146652f50c88db1ce7d56c6de14e311aab719` is live as **Site version 23**, hosting `11ab9f44542ea798c2e4ed21aaabb071d1780ef4`, with the existing custom private audience unchanged. [Independent review](../reviews/ternhaven-journey/INDEPENDENT_REVIEW.md) · [Receipt](../reviews/ternhaven-journey/deployment-confirmation.json) · [Playtest](https://last-ferry-playtest.abumech.chatgpt.site)
 
