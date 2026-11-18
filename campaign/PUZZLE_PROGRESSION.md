@@ -1,5 +1,9 @@
 # Puzzle progression — selected campaign direction
 
+## Lantern Reach difficulty direction
+
+The player liked the swing bridge and found its six/seven-action debut too easy. Keep the signal readable from the outset. In the revised cove an early load, position or rescue choice should change the value of the bridge while another passenger still needs help. Use Ternhaven and Drowned Orchard as references for the amount of planning. Far Shore remains the intended difficulty peak and Last Ferry the gentle homecoming. [Active Codex brief](../NEXT_TASK_LANTERN_REACH_DIFFICULTY.md)
+
 ## Drowned Orchard · Practice implementation for review
 
 Drowned Orchard is a playable candidate for cove nine. Eight spaces of new neighbors begin on the orchard side. The shallow first crossing and the single chance to get back across Pomona Reach make the boat’s position matter as much as its load. The two witnessed wins approach Spring Steps on different trips. This is a distinct test from C7’s escort partition and C8’s staging/retrieval order, not an accepted human difficulty rating.

@@ -1,10 +1,14 @@
 # Last Ferry — Project state
 
-## Lantern Reach · Practice implementation for review
+## Current direction · Lantern Reach difficulty revision
+
+The player likes the bridge and finds the present cove too easy after Ternhaven and Drowned Orchard. The [next task](../NEXT_TASK_LANTERN_REACH_DIFFICULTY.md) gives Codex ownership of authoring and tuning a more consequential rescue with the existing bridge. The current six- and seven-action solutions document the initial Practice implementation. Human difficulty feedback has arrived for this version. The revised design needs its own playtest.
+
+## Lantern Reach · implementation baseline
 
 The review branch has eight Journey coves, eleven Practice entrances and nine scoring identities. Lantern Reach adds a signal-operated swing bridge to an independent Practice cove using the four-space ferry. Drowned Orchard is still available independently. Opening the bridge uses one action and advances the tide clock. Production minima are six actions via the bridge and seven along the outer route. Neither is a player target. [Proof and actual play](../reviews/lantern-reach/REVIEW.md)
 
-Private Site v23 still serves `1e3146652f50c88db1ce7d56c6de14e311aab719`. [Receipt](../reviews/ternhaven-journey/deployment-confirmation.json)
+The live [private Drowned Orchard playtest](https://last-ferry-playtest.abumech.chatgpt.site/?cove=drowned-orchard) serves version 24, game `e583ec29578e7561c0a8ab8fe6e3b08275d44ac2`. Its ten Practice entrances include Drowned Orchard. Lantern Reach is the eleventh on the review branch. [Receipt](../reviews/cove-nine-practice/deployment-confirmation.json)
 
 ## Earlier review · Drowned Orchard
 
