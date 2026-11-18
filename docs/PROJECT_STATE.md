@@ -1,6 +1,12 @@
 # Last Ferry — Project state
 
-## Current direction · Lantern Reach difficulty revision
+## Lantern Reach · revised Practice candidate for playtest
+
+The six-space ferry starts at Wick. The rabbits here and Sorbus across Wick Race have different pickup windows. Signal Quay's winch floods after action three. When the ferry returns to the rabbits on six, deck space is available, but collecting them uses one of Sorbus’s last two actions. The empty-deck visit and the one-rabbit outer route were proved and played. [Decision, recovery and evidence](../reviews/lantern-reach-difficulty/REVIEW.md)
+
+Eight Journey coves, eleven Practice entrances, nine scoring identities. Lantern Reach and Drowned Orchard both remain unscored. Private Site v24 serves Drowned Orchard at `e583ec29578e7561c0a8ab8fe6e3b08275d44ac2`; the revised Lantern Reach is on the review branch. [Existing receipt](../reviews/cove-nine-practice/deployment-confirmation.json)
+
+## Earlier direction · Lantern Reach difficulty revision
 
 The player likes the bridge and finds the present cove too easy after Ternhaven and Drowned Orchard. The [next task](../NEXT_TASK_LANTERN_REACH_DIFFICULTY.md) gives Codex ownership of authoring and tuning a more consequential rescue with the existing bridge. The current six- and seven-action solutions document the initial Practice implementation. Human difficulty feedback has arrived for this version. The revised design needs its own playtest.
 

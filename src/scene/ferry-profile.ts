@@ -75,6 +75,12 @@ export function ferryProfile(level?: Pick<Level, 'rules'>): FerryProfile {
 export function passengerScale(species: string): [number, number, number] {
   return species === 'rabbit' ? [1.25, 1.65, 1.25] : [1.15, 1.5, 1.15];
 }
+function usesSecondAftBerth(level: Level, passenger: Level['passengers'][number]) {
+  if (passenger.species === 'beaver') return true;
+  if (level.id !== 'lantern-reach' || passenger.species !== 'rabbit') return false;
+  const rabbits = level.passengers.filter(p => p.species === 'rabbit').map(p => p.id);
+  return rabbits.sort()[0] === passenger.id;
+}
 export function deckSeat(level: Level, id: string): Vector3 {
   const passenger = level.passengers.find((p) => p.id === id)!;
   const peers = level.passengers.filter((p) => p.species === passenger.species);
@@ -91,10 +97,10 @@ export function deckSeat(level: Level, id: string): Vector3 {
     const [x, z] = passenger.slots === 3 ? [-0.24, 1.43] : passenger.slots === 2 ? [-0.48, -0.525] : [0.52, -0.26];
     return new Vector3(x, wideFerryProfile.deckY, z);
   }
-  if ((level.id === 'ternhaven' || level.id === 'drowned-orchard')) {
+  if (level.id === 'ternhaven' || level.id === 'drowned-orchard' || level.id === 'lantern-reach') {
     const [x, z] = passenger.slots === 3 ? [-0.24, 1.43]
       : passenger.species === 'sheep' ? [-0.48, -0.525]
-        : passenger.species === 'beaver' ? [0.48, -0.525] : [0.57, 0.93];
+        : usesSecondAftBerth(level, passenger) ? [0.48, -0.525] : [0.57, 0.93];
     return new Vector3(x, wideFerryProfile.deckY, z);
   }
   const bank = level.passengers.filter((p) => p.slots === passenger.slots);
@@ -112,10 +118,10 @@ export function shoreSeat(
   delivered = false,
 ): Vector3 {
   const passenger = level.passengers.find((p) => p.id === id)!;
-  if ((level.id === 'ternhaven' || level.id === 'drowned-orchard')) {
+  if (level.id === 'ternhaven' || level.id === 'drowned-orchard' || level.id === 'lantern-reach') {
     const [x, z] = passenger.slots === 3 ? [0.8, -0.65]
       : passenger.species === 'sheep' ? [-0.75, -0.65]
-        : passenger.species === 'beaver' ? [-0.7, 0.3] : [0.65, 0.3];
+        : usesSecondAftBerth(level, passenger) ? [-0.7, 0.3] : [0.65, 0.3];
     return new Vector3(pier.positionXZ[0] + x, pier.elevation * 0.18 - 0.005, pier.landAnchorXZ[1] + z);
   }
   if (level.id === 'orchard-landing') {
@@ -186,12 +192,13 @@ export function wideTransferPath(
   const gate = new Vector3(side * profile.gateX, profile.deckY, gateZ).applyMatrix4(
     hullMatrix,
   );
-  const pierOverlap = level.id === 'orchard-landing' || (level.id === 'ternhaven' || level.id === 'drowned-orchard') ? 0.52 : 0.25;
+  const deerBerth = level.passengers.some(passenger => passenger.species === 'deer');
+  const pierOverlap = deerBerth ? 0.52 : 0.25;
   const bridge = new Vector3(gate.x, pierY, pier.positionXZ[1] - pierOverlap);
   const shore = new Vector3(pier.positionXZ[0], pierY, bridge.z);
   const shoreAisle = new Vector3(pier.positionXZ[0], pierY, board ? from.z : destination.z);
   const large = level.passengers.find((p) => p.id === id)!.slots >= 2;
-  const entryX = large || level.id === 'orchard-landing' || (level.id === 'ternhaven' || level.id === 'drowned-orchard') ? seat.x : 0;
+  const entryX = large || deerBerth ? seat.x : 0;
   const transverse = new Vector3(entryX, profile.deckY, gateZ).applyMatrix4(hullMatrix);
   const aisle = new Vector3(entryX, profile.deckY, seat.z).applyMatrix4(hullMatrix);
   const points = board

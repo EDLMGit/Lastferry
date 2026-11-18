@@ -16,7 +16,7 @@ import { createPier, isWalkableAt } from '../../src/scene/pier';
 import { sceneLayout } from '../../src/scene/layout';
 import { islandCenter, shoreContour, createShoreRocks } from '../../src/scene/shore';
 import { createReefPassage } from '../../src/scene/reef';
-import { createSwingBridge } from '../../src/scene/swing-bridge';
+import { createSwingBridge, signalStation } from '../../src/scene/swing-bridge';
 import { cottage, decorateOrchardIsland, decorateReefIsland, decorateWideIsland, decorateTernhavenIsland, orchardTree, wideWaterfront } from '../../src/scene/scenery';
 import { passengerModelVariant } from '../../src/game/passenger-appearance';
 import { getLevelPaths, samplePath } from '../../src/scene/paths';
@@ -250,7 +250,7 @@ test.each([wideBerth, reefReturn, orchardLanding, ternhaven, drownedOrchard, lan
   expect(margins).toEqual([]);
 }, 20000);
 
-describe.each([wideBerth, reefReturn, orchardLanding, ternhaven, drownedOrchard])('$title physical clearances', (level) => {
+describe.each([wideBerth, reefReturn, orchardLanding, ternhaven, drownedOrchard, lanternReach])('$title physical clearances', (level) => {
 test('distinct authored shores retain valid center-fan top support without filled water notches', () => {
   const outlines = new Set<string>();
   for (const island of level.world.islands) {
@@ -285,13 +285,14 @@ test('compact waiting groups and actual transfer bodies clear each rendered shor
       group = new Group();
     if (level.id === 'orchard-landing' || level.id === 'drowned-orchard')
       decorateOrchardIsland(group, island, style, level.id === 'drowned-orchard');
-    else if (level.id === 'ternhaven') decorateTernhavenIsland(group, island, style);
+    else if (level.id === 'ternhaven' || level.id === 'lantern-reach') decorateTernhavenIsland(group, island, style);
     else if (level.id === 'reef-return') decorateReefIsland(group, island, style);
     else decorateWideIsland(group, island, style);
     group.add(createShoreRocks(island, style));
     for (const landmark of layout.landmarks.filter((l) => l.islandId === island.id)) {
       const [x, z] = landmark.positionXZ;
       if (landmark.kind === 'lighthouse') lighthouse(group, x, island.elevation * 0.18, z);
+      if (landmark.kind === 'signal') signalStation(group, [x, island.elevation * 0.18, z]);
       if (landmark.kind === 'cottage') cottage(group, [x, island.elevation * 0.18, z]);
       if (landmark.kind === 'waterfront') wideWaterfront(group, [x, island.elevation * 0.18, z]);
       if (landmark.kind === 'orchard') orchardTree(group, [x, island.elevation * 0.18, z]);

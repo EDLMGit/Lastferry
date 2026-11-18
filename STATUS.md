@@ -1,4 +1,8 @@
-# Lantern Reach · Practice review
+# Lantern Reach difficulty revision · Practice review
+
+The player liked the bridge and found its first puzzle too easy. Testing a six-space relay exposed a similar weakness, so the revised cove gives the winch and two separate rescues different deadlines. Both the signal and outer routes passed in the minified UI. The production build, TypeScript, all 714 unit tests, 83-family inventory and final save-isolation checks passed. [Decision, evidence and checks](reviews/lantern-reach-difficulty/REVIEW.md). Private Site v24 serves Drowned Orchard.
+
+## First Lantern Reach · historical review
 
 Eight Journey coves, eleven independent Practice entrances, nine scoring identities. Lantern Reach adds a single signal-operated swing bridge, with an open shortcut and a closed detour. The final build, all 696 unit tests, 83-family asset inventory and both actual minified rescues passed. The earlier water/asset timeouts and mid-swing contact are documented in the review. Current deployment remains v23. [Production proof and actual-play review](reviews/lantern-reach/REVIEW.md).
 

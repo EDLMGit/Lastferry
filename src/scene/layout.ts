@@ -24,15 +24,14 @@ export type SceneLayout = {
 const layouts: Record<string, SceneLayout> = {
   'lantern-reach': {
     landmarks: [
-      { kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-6.15, -3.25] },
-      { kind: 'signal', islandId: 'stone-island', positionXZ: [0, -4.1] },
+      { kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-9, -5.5] },
+      { kind: 'signal', islandId: 'stone-island', positionXZ: [0, -7.6] },
     ],
-    islandStyles: { 'stone-island': 'rocky', 'rabbit-island': 'reeds' },
+    islandStyles: { 'lighthouse-island': 'refuge', 'stone-island': 'quay', 'rabbit-island': 'working', 'east-island': 'spit' },
     stonePiers: ['signal-pier'],
     centeredWaitingPairs: true,
-    retractableStep: true,
     cameraPosition: [0, 34, 24],
-    landscapeCameraPosition: [0, 30, 30],
+    landscapeCameraPosition: [27.2, 26, 12.7],
   },
   ternhaven: {
     landmarks: [

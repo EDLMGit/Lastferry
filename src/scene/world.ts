@@ -464,7 +464,7 @@ export class World {
     if (this.level.id === 'orchard-landing' || this.level.id === 'drowned-orchard')
       return decorateOrchardIsland(group, island, style, this.level.id === 'drowned-orchard');
     if (this.level.id === 'reef-return') return decorateReefIsland(group, island, style);
-    if (this.level.id === 'ternhaven') return decorateTernhavenIsland(group, island, style);
+    if (this.level.id === 'ternhaven' || this.level.id === 'lantern-reach') return decorateTernhavenIsland(group, island, style);
     if (this.level.id === 'wide-berth') {
       return decorateWideIsland(group, island, style);
     }

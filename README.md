@@ -2,7 +2,7 @@
 
 **[Play the Journey locally](http://127.0.0.1:5270/)**. The available coast connects eight rescues, ending at Ternhaven. The direct [Wide Berth](http://127.0.0.1:5270/?cove=wide-berth) and [Reef Return](http://127.0.0.1:5270/?cove=reef-return) links open independent Practice.
 
-[Play Lantern Reach locally](http://127.0.0.1:5270/?cove=lantern-reach). Operate the swing bridge from Signal Quay or take the outer floats. This Practice candidate is unscored.
+[Play Lantern Reach locally](http://127.0.0.1:5380/?cove=lantern-reach). Flax is aboard at Wick Landing. Two rabbits wait at the dock, and Sorbus waits across the race. The tide forecast shows who is ashore, how much room they need and when each landing floods. This six-space Practice cove is unscored.
 
 [Play Drowned Orchard locally](http://127.0.0.1:5270/?cove=drowned-orchard). A later tide has reached Cider Quay. Four new neighbors wait on the orchard side of Pomona Reach. This independent Practice playtest is unscored and leaves Journey progress alone.
 

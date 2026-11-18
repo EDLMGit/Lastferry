@@ -141,14 +141,22 @@ function checkReturn(s: State, l: Level): State['lossReason'] {
   return capacityCutoff(s, l, reef, tides);
 }
 
+export function bridgeStatus(s: State, l: Level): string {
+  const bridge = l.bridge;
+  if (!bridge) return '';
+  if (s.bridgeOpen) return `${bridge.name} is open.`;
+  const signal = l.piers.find(pier => pier.id === bridge.signalPierId)!;
+  const name = nodeName(signal.nodeId, l);
+  if (s.tideLevel >= signal.elevation) return `${bridge.name} is closed. The winch at ${name} is flooded.`;
+  const flood = l.rules.tide.rises.find(rise => rise.afterTurn > s.turn && rise.level >= signal.elevation);
+  return `${bridge.name} is closed. Open it at ${name}${flood ? ' by action ' + flood.afterTurn : ''}.`;
+}
+
 export function passageError(s: State, to: string, l = level): string | null {
   const edge = edgeTo(s, to, l);
   const node = l.nodes.find((n) => n.id === to);
   if (!edge || !node) return 'Choose an adjacent waypoint. Each passage is one turn.';
-  if (l.bridge?.edgeId === edge.id && !s.bridgeOpen) {
-    const signal = l.piers.find(p => p.id === l.bridge!.signalPierId)!;
-    return `${l.bridge.name} is closed. Open it at ${nodeName(signal.nodeId, l)}.`;
-  }
+  if (l.bridge?.edgeId === edge.id && !s.bridgeOpen) return bridgeStatus(s, l);
   const flow = passageFlow(edge, s.tideLevel);
   if (flow && flow.from !== s.boatNodeId)
     return `${edge.current!.name} flows only from ${nodeName(flow.from, l)} to ${nodeName(flow.to, l)}.`;

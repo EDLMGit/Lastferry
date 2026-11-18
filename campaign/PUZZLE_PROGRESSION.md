@@ -1,6 +1,10 @@
 # Puzzle progression — selected campaign direction
 
-## Lantern Reach difficulty direction
+## Lantern Reach difficulty playtest
+
+The revised candidate keeps the six-space boat. One early plan trades pickup capacity for access to the signal. The other reserves three spaces for Sorbus and uses the outer floats. The second rescue deadline tests whether the player can distinguish room on the boat from time to board. [Comparison and play evidence](../reviews/lantern-reach-difficulty/REVIEW.md).
+
+## Prior Lantern Reach difficulty direction
 
 The player liked the swing bridge and found its six/seven-action debut too easy. Keep the signal readable from the outset. In the revised cove an early load, position or rescue choice should change the value of the bridge while another passenger still needs help. Use Ternhaven and Drowned Orchard as references for the amount of planning. Far Shore remains the intended difficulty peak and Last Ferry the gentle homecoming. [Active Codex brief](../NEXT_TASK_LANTERN_REACH_DIFFICULTY.md)
 
@@ -236,6 +240,6 @@ Before releasing the longer phone campaign, add full mid-puzzle restoration incl
 - [Production rules](https://github.com/EDLMGit/Lastferry/blob/1a85874883af5caa59f6294a75495eccf2afebbc/src/game/rules.ts) and [session/Undo](https://github.com/EDLMGit/Lastferry/blob/1a85874883af5caa59f6294a75495eccf2afebbc/src/game/session.ts)
 - [Current world seating](https://github.com/EDLMGit/Lastferry/blob/1a85874883af5caa59f6294a75495eccf2afebbc/src/scene/world.ts), [model factory](https://github.com/EDLMGit/Lastferry/blob/1a85874883af5caa59f6294a75495eccf2afebbc/src/scene/models.ts) and [appearance resolver](https://github.com/EDLMGit/Lastferry/blob/1a85874883af5caa59f6294a75495eccf2afebbc/src/game/passenger-appearance.ts)
 
-### Lantern Reach · independent Practice study
+### First Lantern Reach prototype · historical
 
 A sheep and two rabbits fill the original ferry. The early Wick pickup sets up a choice between returning to the signal quay to open a shortcut and taking the outer current. Its Practice placement carries no Journey order or mastery target. [Design and reducer proof](../reviews/lantern-reach/REVIEW.md).

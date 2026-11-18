@@ -2,7 +2,7 @@
 
 ## Lantern Reach · unscored Practice
 
-The bridge and outer-current routes have verified minima of six and seven actions. They are developer evidence. Lantern Reach shares the unrated Practice result and writes no mastery record. The nine accepted scoring identities remain in force.
+The revised six-space cove has a minimum of thirteen actions. Keeping its bridge closed raises the minimum to seventeen. Timing is consequential even with an empty boat and room for a safe-looking pickup. These are design results for a new playtest. [Original demonstration](../reviews/lantern-reach/REVIEW.md) · [Revised proof](../reviews/lantern-reach-difficulty/proof.json). Lantern Reach shares the unrated Practice result and writes no mastery record. The nine accepted scoring identities remain in force.
 
 ## Drowned Orchard · Practice implementation for review
 

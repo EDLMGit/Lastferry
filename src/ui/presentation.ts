@@ -1,5 +1,5 @@
 import { occupiedPierDeadline } from '../game/rescue-facts';
-import { draft, edgeTo, passageFlow, pierAt, preview, type Action, type State } from '../game/rules';
+import { bridgeStatus, draft, edgeTo, passageFlow, pierAt, preview, type Action, type State } from '../game/rules';
 import { level as baseline, nodeName, passengerName, type Level } from '../levels/level';
 
 const stop = (id: string, l: Level) => nodeName(id, l);
@@ -97,12 +97,6 @@ export function objectiveCopy(s: State, l: Level): { headline: string; progress:
   };
 }
 
-export function bridgeNotice(s: State, l: Level): string {
-  if (!l.bridge) return '';
-  const signal = l.piers.find(p => p.id === l.bridge!.signalPierId)!;
-  return s.bridgeOpen ? `${l.bridge.name} is open.` : `${l.bridge.name} is closed. Operate it at ${stop(signal.nodeId, l)}.`;
-}
-
 export function passageCopy(s: State, to: string, l: Level): string {
   if (to === s.boatNodeId) return `You are at ${stop(to, l)}.`;
   const edge = edgeTo(s, to, l);
@@ -111,7 +105,7 @@ export function passageCopy(s: State, to: string, l: Level): string {
     depth = edge.baseDepth + s.tideLevel;
   const depthText = `Boat needs depth ${need}. Passage has depth ${depth}: ${depth < need ? 'too shallow' : 'enough depth'}.`;
   const current = currentNotice(s, l, edge);
-  const gate = edge.id === l.bridge?.edgeId ? bridgeNotice(s, l) : '';
+  const gate = edge.id === l.bridge?.edgeId ? bridgeStatus(s, l) : '';
   return [gate, depthText, current?.direction, current?.next].filter(Boolean).join(' ');
 }
 
@@ -216,6 +210,15 @@ export function forecastCopy(s: State, l: Level) {
   }) : [];
   return {
     schedule,
+    waitingAtLandings: l.bridge ? l.piers.flatMap(pier => {
+      const ids = s.waitingByPier[pier.id] ?? [];
+      if (ids.length === 0) return [];
+      const spaces = l.passengers.reduce((total, passenger) => total + (ids.includes(passenger.id) ? passenger.slots : 0), 0);
+      const flood = upcoming.find(rise => rise.level >= pier.elevation);
+      const deadline = s.tideLevel >= pier.elevation ? 'flooded'
+        : flood ? 'floods in ' + countActions(flood.afterTurn - s.turn) : 'stays dry';
+      return [{ landing: stop(pier.nodeId, l), passengers: passengerList(ids, l), spaces, deadline }];
+    }) : [],
     headline: tideCopy(s, l),
     current: currentNotice(s, l),
     detail: l.piers

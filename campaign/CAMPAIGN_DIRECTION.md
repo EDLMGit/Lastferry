@@ -2,7 +2,7 @@
 
 ## Lantern Reach · independent Practice
 
-The review branch adds a four-space signal-bridge cove alongside Drowned Orchard. Both are unscored Practice studies. Eight Journey coves end at Ternhaven, with eleven independent Practice entrances and nine scoring identities on this branch. [Lantern Reach design and verification](../reviews/lantern-reach/REVIEW.md).
+The review branch revises Lantern Reach for the six-space ferry. Tide windows at the winch and two occupied landings link the initial manifest to a later rescue. [Revised design](../reviews/lantern-reach-difficulty/REVIEW.md). It remains alongside Drowned Orchard. Both are unscored Practice studies. Eight Journey coves end at Ternhaven, with eleven independent Practice entrances and nine scoring identities on this branch. [Lantern Reach design and verification](../reviews/lantern-reach/REVIEW.md).
 
 ## Earlier review · Drowned Orchard
 

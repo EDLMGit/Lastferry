@@ -1,6 +1,10 @@
 # Last Ferry asset provenance and history
 
-## Lantern Reach · swing bridge
+## Lantern Reach · six-space difficulty revision
+
+The cove reuses the six-space ferry, its fitted dock and transfer path, the two rabbit appearances, wool sheep and chestnut deer. Lantern Steps gives Sorbus a supported fourth landing across the current. The original bridge fits the selected beam. Candidate-local berths and four landing silhouettes are authored in the level, scene layout and ferry profile. All 83 family IDs remain. [Asset gallery](../asset-gallery.html#lantern-reach) · [Actual Play evidence](../reviews/lantern-reach-difficulty/REVIEW.md).
+
+## First Lantern Reach · swing bridge
 
 One original procedural family, `model.swing-bridge`, adds the timber span, two stone bridgeheads and a handwheel station to the four-space cove. Positions derive from the authored passage and signal landing. The catalog now contains 83 families. [Model source](../src/scene/swing-bridge.ts) · [Playtest review](../reviews/lantern-reach/REVIEW.md)
 

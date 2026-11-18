@@ -17,6 +17,7 @@ import {
 import { resolvePassengerAppearance } from './game/passenger-appearance';
 import { level as baseline, holdingPier, levelNames } from './levels/level';
 import {
+  bridgeStatus,
   copy,
   draft,
   edgeTo,
@@ -33,7 +34,6 @@ import {
   draftBandsCopy,
   objectiveCopy,
   passageCopy,
-  bridgeNotice,
   statusCopy,
   forecastCopy,
   previewCopy,
@@ -1368,11 +1368,14 @@ function renderDialog() {
     };
   } else if (mode === 'forecast') {
     const f = forecastCopy(s, level);
+    const waiting = f.waitingAtLandings.map(group =>
+      `<li><strong>${group.landing}</strong> · ${group.passengers} (${group.spaces} ${group.spaces === 1 ? 'space' : 'spaces'}) · ${group.deadline}.</li>`
+    ).join('');
     const tideTable = f.schedule.length
       ? '<ol class="current-schedule">' + f.schedule.map(row => `<li><strong>After action ${row.turn}</strong> · ${row.direction} · depth ${row.depth}.${row.floods.length ? ' Flooding at ' + row.floods.join(' and ') + '.' : ''}</li>`).join('') + '</ol>'
       : '';
     $('dialog-content').innerHTML =
-      `${header(f.current ? 'Reef and tide forecast' : 'Tide and pier forecast', 'Inspection · no action spent')}<div class="dialog-body forecast-detail"><strong>${f.headline}</strong>${level.bridge ? `<p>${bridgeNotice(s, level)}</p>` : ''}${f.current ? `<p>${f.current.direction} ${f.current.next}</p>${tideTable}<p>Sail with the current. Your action finishes before the tide changes.</p>` : ''}<p>${f.detail}</p><p>Each accepted action advances the tide schedule. Thinking and inspection do not.</p></div>`;
+      `${header(level.bridge ? 'Tide and bridge forecast' : f.current ? 'Reef and tide forecast' : 'Tide and pier forecast', 'Inspection · no action spent')}<div class="dialog-body forecast-detail"><strong>${f.headline}</strong>${waiting ? `<ul class="current-schedule" aria-label="Waiting passengers">${waiting}</ul>` : ''}${level.bridge ? `<p>${bridgeStatus(s, level)}</p>` : ''}${f.current ? `<p>${f.current.direction} ${f.current.next}</p>${tideTable}<p>Sail with the current. Your action finishes before the tide changes.</p>` : ''}<p>${f.detail}</p><p>Each accepted action advances the tide schedule. Thinking and inspection do not.</p></div>`;
     world.setForecast(
       true,
       level.rules.tide.rises.find((r) => r.afterTurn > s.turn)?.level ?? s.tideLevel,
@@ -1770,7 +1773,7 @@ function renderLocation() {
   const reason = facts.relation === 'remote'
     ? 'No direct passage'
     : facts.status === 'bridge-closed' || (bridgeHere && (facts.current || facts.canSail) && !facts.consequence)
-      ? bridgeNotice(session.state, level)
+      ? bridgeStatus(session.state, level)
     : facts.status === 'against-current' && flow
       ? `Against the current. ${flow.compact}.`
     : !facts.current && !facts.canSail
