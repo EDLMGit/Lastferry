@@ -87,8 +87,8 @@ export async function run(page: Page, level: Level, actions: Action[], developme
       await page.locator('#map-' + action.to + ' .map-hit').tap();
       await fullyVisible(page, page.locator('#sail'));
       await activate(page, 'sail', true);
-    } else if (action.type === 'wait') {
-      await activate(page, 'wait', true);
+    } else if (action.type === 'wait' || action.type === 'open-bridge') {
+      await activate(page, action.type, true);
       await activate(page, 'commit', true);
     } else await transferStart(page, action);
     await idle(page);

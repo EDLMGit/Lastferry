@@ -8,6 +8,7 @@ import reefData from '../../data/reef-return.level.json' with { type: 'json' };
 import orchardData from '../../data/orchard-landing.level.json' with { type: 'json' };
 import ternhavenData from '../../data/ternhaven.level.json' with { type: 'json' };
 import drownedOrchardData from '../../data/drowned-orchard.level.json' with { type: 'json' };
+import lanternReachData from '../../data/lantern-reach.level.json' with { type: 'json' };
 export type CurrentPhase = { tideLevel: number; from: string; to: string };
 export type Passage = (typeof data.edges)[number] & {
   current?: { name: string; phases: CurrentPhase[] };
@@ -17,6 +18,7 @@ export type Level = Pick<
   'id' | 'title' | 'rules' | 'world' | 'nodes' | 'piers' | 'objective' | 'validation'
 > & {
   edges: Passage[];
+  bridge?: { name: string; edgeId: string; signalPierId: string };
   passengers: ((typeof data.passengers)[number] & { appearance?: string })[];
   start: { boatNodeId: string; aboard: string[]; waitingByPier: Record<string, string[]> };
   names?: { nodes?: Record<string, string>; passengers?: Record<string, string> };
@@ -28,6 +30,9 @@ export const driftwoodYard: Level = driftwoodData;
 export const wideBerth = checkCurrents(wideData);
 export const twoShelters: Level = sheltersData;
 export function checkCurrents(l: Level): Level {
+  if (l.bridge && (!l.bridge.name.trim() || !l.edges.some(edge => edge.id === l.bridge!.edgeId) ||
+    !l.piers.some(pier => pier.id === l.bridge!.signalPierId)))
+    throw new Error(`Invalid swing bridge in ${l.id}.`);
   if (l.edges.filter((edge) => edge.current).length > 1)
     throw new Error(`Only one current passage is supported in ${l.id}.`);
   const levels = new Set([l.rules.tide.initialLevel, ...l.rules.tide.rises.map((rise) => rise.level)]);
@@ -49,6 +54,7 @@ export const reefReturn = checkCurrents(reefData);
 export const orchardLanding = checkCurrents(orchardData);
 export const ternhaven = checkCurrents(ternhavenData);
 export const drownedOrchard = checkCurrents(drownedOrchardData);
+export const lanternReach = checkCurrents(lanternReachData);
 export const nodeNames: Record<string, string> = {
   harbor: 'Harbor',
   cut: 'Shallow Cut',

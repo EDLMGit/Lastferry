@@ -1,5 +1,9 @@
 # Last Ferry — difficulty and three-lantern mastery
 
+## Lantern Reach · unscored Practice
+
+The bridge and outer-current routes have verified minima of six and seven actions. They are developer evidence. Lantern Reach shares the unrated Practice result and writes no mastery record. The nine accepted scoring identities remain in force.
+
 ## Drowned Orchard · Practice implementation for review
 
 Drowned Orchard uses the existing unscored Practice path. Successful rescues, terminal Undo and redelivery do not write a lantern record. The exact minimum and proposed efficient target are authoring evidence, not a rating or acceptance.

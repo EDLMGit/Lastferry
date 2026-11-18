@@ -63,6 +63,7 @@ import { createPier, createShelterGangway, updateShelterGangway } from './pier';
 import { getLevelPaths, type CanonicalPath } from './paths';
 import { Shores, createReedBeds } from './shore';
 import { createReefPassage, setReefDirection } from './reef';
+import { createSwingBridge, signalStation } from './swing-bridge';
 import { CoastalWater } from './water';
 import { CrossingEffects } from './effects';
 import { storyCameraFrame, storyStage, type StorySceneId, type StoryStage } from './story-staging';
@@ -97,6 +98,7 @@ export class World {
   profile: FerryProfile;
   hull: T.Group;
   gangway: T.Group | null = null;
+  swingBridge: ReturnType<typeof createSwingBridge> | null = null;
   animals = new Map<string, T.Group>();
   passengerAnchors = new Map<string, T.Object3D>();
   markers = new Map<string, T.Group>();
@@ -277,6 +279,7 @@ export class World {
         this.layout.stonePiers.includes(p.id),
         this.profile.id === 'six-space',
         this.level.id === 'two-shelters',
+        this.layout.retractableStep,
       );
       this.scene.add(group);
       if (
@@ -309,7 +312,9 @@ export class World {
         if (node) this.registerPlace(node, 'landmark', model.group);
       } else {
         const model =
-          landmark.kind === 'orchard'
+          landmark.kind === 'signal'
+            ? signalStation(this.scene, [x, y, z])
+            : landmark.kind === 'orchard'
             ? orchardTree(this.scene, [x, y, z])
             : landmark.kind === 'cottage'
             ? cottage(this.scene, [x, y, z])
@@ -322,6 +327,10 @@ export class World {
       }
     }
     for (const e of this.level.edges) {
+      if (this.level.bridge?.edgeId === e.id) {
+        this.swingBridge = createSwingBridge(this.paths.get(e.id)!, this.profile.beam);
+        this.scene.add(this.swingBridge.root);
+      }
       const pts = this.paths.get(e.id)!.points.map((p) => p.clone().setY(0.035));
       const geom = new T.BufferGeometry().setFromPoints(pts);
       const line = new T.Line(
@@ -404,7 +413,7 @@ export class World {
         box(this.gangway, '#66776c', [0.86, 0.018, 0.035], [0, 0.008, end], 0.006);
       this.gangway.name = 'wide-pier-gangway';
     }
-    if (this.level.id === 'two-shelters') {
+    if (this.level.id === 'two-shelters' || this.layout.retractableStep) {
       this.gangway = createShelterGangway();
       this.scene.add(this.gangway);
     }
@@ -1074,8 +1083,12 @@ export class World {
       new T.Vector3(x - envelope.radius, envelope.bottom, z - envelope.radius),
       new T.Vector3(x + envelope.radius, envelope.top, z + envelope.radius),
     ));
-    const landing = this.projectedStoryBounds(this.layoutStaticBounds.get(id)!);
-    const adjacent = this.level.edges.filter(edge => edge.nodes.includes(id))
+    const landingBounds = this.layoutStaticBounds.get(id)!.clone();
+    const signal = this.level.bridge && node.pierId === this.level.bridge.signalPierId;
+    if (signal && this.swingBridge) landingBounds.union(this.swingBridge.sweepBounds);
+    const landing = this.projectedStoryBounds(landingBounds);
+    const adjacent = this.level.edges.filter(edge => edge.nodes.includes(id) &&
+      !(signal && edge.id === this.level.bridge!.edgeId))
       .map(edge => {
         const other = edge.nodes[0] === id ? edge.nodes[1] : edge.nodes[0];
         return this.projectedStoryBounds(this.layoutStaticBounds.get(other)!);
@@ -1524,6 +1537,17 @@ export class World {
     this.gangway.visible = !!pier && !this.transition?.path;
     if (!pier || !this.gangway.visible) return;
     this.hull.updateWorldMatrix(true, false);
+    if (this.layout.retractableStep) {
+      this.gangway.visible = this.water.position.y < pier.elevation * 0.18 - 0.001;
+      const bridge = new T.Vector3(
+        pier.positionXZ[0] + Math.sin(this.boatRoot.rotation.y) * bridgeBowOffset,
+        pier.elevation * 0.18 - 0.005, pier.positionXZ[1],
+      );
+      const side = Math.sign(this.hull.worldToLocal(bridge.clone()).x) || 1;
+      const gate = this.hull.localToWorld(new T.Vector3(side * 0.51, 0.26, deckEntryZ));
+      updateShelterGangway(this.gangway, bridge, gate);
+      return;
+    }
     if (this.level.id === 'two-shelters') {
       this.gangway.visible = this.water.position.y < pier.elevation * 0.18 - 0.001;
       const tr = this.transition;
@@ -1598,6 +1622,7 @@ export class World {
   }
   sync(s: State, preserveEffects = false) {
     this.state = s;
+    this.swingBridge?.setProgress(s.bridgeOpen ? 1 : 0);
     if (!preserveEffects) this.resetHomecoming();
     this.coastalWater.update(s.tideLevel * 0.18, this.reduced ? 0 : this.lastTime * 0.001);
     this.shores.update(this.water.position.y);
@@ -1652,7 +1677,9 @@ export class World {
           : !e
             ? 'nonadjacent'
             : blocked
-              ? flow && flow.from !== s.boatNodeId ? 'against-current' : 'too-shallow'
+              ? e.id === this.level.bridge?.edgeId && !s.bridgeOpen
+                ? 'bridge-closed'
+                : flow && flow.from !== s.boatNodeId ? 'against-current' : 'too-shallow'
               : 'available';
       const active = id === this.navigationSelected;
       g.visible = !this.homePresentation && !crossing?.nodes.includes(id);
@@ -1701,7 +1728,8 @@ export class World {
       m.color.set(
         highlighted
           ? '#ffe09a'
-          : (flow && flow.to === s.boatNodeId) || e.baseDepth + s.tideLevel < draft(s, this.level)
+          : (e.id === this.level.bridge?.edgeId && !s.bridgeOpen) ||
+              (flow && flow.to === s.boatNodeId) || e.baseDepth + s.tideLevel < draft(s, this.level)
             ? '#dca180'
             : '#a6d3cc',
       );
@@ -1820,6 +1848,7 @@ export class World {
       const t = Math.min(1, (time - tr.start) / tr.duration),
         k = smooth(t),
         tideProgress = smooth(settlingProgress(time - tr.start, tr));
+      if (tr.action.type === 'open-bridge') this.swingBridge?.setProgress(this.reduced ? 1 : t);
       this.water.position.y = T.MathUtils.lerp(
         tr.before.tideLevel * 0.18,
         tr.after.tideLevel * 0.18,
@@ -1923,7 +1952,7 @@ export class World {
                 pier.width / 2,
               ),
             pier.elevation * 0.18 - 0.005,
-            pier.positionXZ[1] + entry.bridgeAdvance,
+            pier.positionXZ[1] + (this.layout.retractableStep ? 0 : entry.bridgeAdvance),
           );
           const land = new T.Vector3(
             pier.positionXZ[0] + offset,
@@ -2081,6 +2110,7 @@ export class World {
   environmentPresentation() {
     const material = this.water.material as T.ShaderMaterial;
     return {
+      swingBridge: this.swingBridge?.presentation() ?? null,
       waterY: this.water.position.y,
       waterUniformY: material.uniforms.waterY.value as number,
       waterTime: material.uniforms.time.value as number,

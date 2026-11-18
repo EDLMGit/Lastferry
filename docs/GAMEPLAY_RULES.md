@@ -191,3 +191,7 @@ Free inspection names the direction, the next reversal and its action distance. 
 | `RETURN_DEPTH` | On the final tide a required neighbor is aboard, but the loaded boat can reach **no dry landing** using its actual legal direction, channel depth and berth depth. It cannot lighten, and later waits cannot change its options. | Undo the missed crossing or an earlier loading choice. |
 
 A blocked individual passage leaves the game state alone. A dry reachable landing may still permit a new split or another approach. These checks diagnose specific irreversible conditions. Other choices can require earlier Undo even before a terminal reason has been reached. At Harbor with everyone aboard, waiting and unloading in subsets remain legal. [Reducer and movement validator](../src/game/rules.ts) · [Wide proof](../reviews/existing-coves-repair/WIDE_DESIGN.md) · [Reef proof](../reviews/existing-coves-repair/REEF_DESIGN.md)
+
+## Swing bridge
+
+A cove may designate one passage and one signal pier. That passage starts closed in both directions. At the dry signal pier, opening the bridge takes one action. The span opens, the turn advances, then the usual tide and flood checks run. Opening again is unavailable. The open passage still obeys its normal depth, berth and current restrictions. Undo restores the prior bridge state with the rest of the turn. Restart closes it.

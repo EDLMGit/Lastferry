@@ -33,8 +33,8 @@ test('built game defaults Tips Off and completes Reef Return after a real loss a
       if (action.type === 'move') {
         await selectRoute(page, action.to);
         await activate(page, 'sail', true);
-      } else if (action.type === 'wait') {
-        await activate(page, 'wait', true);
+      } else if (action.type === 'wait' || action.type === 'open-bridge') {
+        await activate(page, action.type, true);
         await activate(page, 'commit', true);
       } else await transferStart(page, action);
       await idle(page);

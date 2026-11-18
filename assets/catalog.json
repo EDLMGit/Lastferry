@@ -7090,6 +7090,58 @@
         "native owner hit area": "Native button owns 48px main or constrained 44px minimum; SVG decorative, aria-hidden, focusable false, pointer-events none.",
         "source/sprite generation ownership": "Original cove-ui-package/ui/icons/replay.svg added in this pass is the sole editable runtime source, loaded by the same Vite import map as earlier icons. The supplied package sprite remains its original historical snapshot."
       }
+    },
+    {
+      "id": "model.swing-bridge",
+      "name": "Swing bridge and signal station",
+      "kind": "procedural-model",
+      "status": "integrated",
+      "sources": [
+        {
+          "path": "src/scene/swing-bridge.ts",
+          "symbol": "createSwingBridge and signalStation"
+        },
+        {
+          "path": "data/lantern-reach.level.json",
+          "symbol": "bridge.edgeId and bridge.signalPierId"
+        }
+      ],
+      "meaning": "Operable timber footbridge across the Harbor shortcut. The handwheel identifies its signal quay.",
+      "variants": [
+        "closed across the passage",
+        "swinging on the fixed pivot",
+        "open along the waterway"
+      ],
+      "visualSignature": "Cross-braced timber rails, two stone bridgeheads, handwheel and a small signal lamp.",
+      "reuseAndOwnership": "World constructs the span from the canonical passage and signal station for levels declaring a bridge.",
+      "behaviorToPreserve": "Opening the span releases the passage for this attempt. Sync restores the correct pose after Undo or Restart.",
+      "provenance": "original-project-code",
+      "acceptance": {
+        "state": "implemented-awaiting-human-playtest"
+      },
+      "consumers": [
+        "src/scene/world.ts"
+      ],
+      "gallery": {
+        "section": "inventory",
+        "preview": "Search for Swing bridge. The live Practice cove shows both positions."
+      },
+      "evidence": [
+        {
+          "path": "reviews/lantern-reach/REVIEW.md",
+          "role": "Candidate geometry, UI and playtest evidence"
+        }
+      ],
+      "typeSpecific": {
+        "factory/source symbol": "createSwingBridge and signalStation in src/scene/swing-bridge.ts",
+        "semantic unit/axis/pivot convention or authoritative source": "Y-up. The local hinge is fixed at the stone head beside the canonical water path.",
+        "named attachment points when relevant": "Pivoting walkway and signal lamp in the bridge group. The quay handwheel is a separate group.",
+        "material references": "Local timber, iron, brass and stone palette using shared box, cylinder and mesh factories.",
+        "actual variant parameters": "Normalized opening progress from zero to one controls the leaf angle and signal.",
+        "consumers and scale/placement owner": "World places the bridge at the gated passage, sized for the ferry.",
+        "pick/framing role": "Signal Quay owns the accessible action. Gate geometry indicates the passage state.",
+        "disposal owner": "World disposes the scene resources."
+      }
     }
   ],
   "seedSource": "cove-ui-package/asset-catalog.seed.json",

@@ -1,6 +1,10 @@
 # Last Ferry — The Long Tide
 
-## Drowned Orchard · Practice implementation for review
+## Lantern Reach · independent Practice
+
+The review branch adds a four-space signal-bridge cove alongside Drowned Orchard. Both are unscored Practice studies. Eight Journey coves end at Ternhaven, with eleven independent Practice entrances and nine scoring identities on this branch. [Lantern Reach design and verification](../reviews/lantern-reach/REVIEW.md).
+
+## Earlier review · Drowned Orchard
 
 Drowned Orchard returns to the accepted six-space Orchard geography after the water has changed. Damson, Brindle, Burr and Sloe are new residents. The original neighbors remain safely rescued. This revisit is available only from Practice; there is no ninth entry or encounter in the Journey.
 

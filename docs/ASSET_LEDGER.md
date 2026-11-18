@@ -1,5 +1,9 @@
 # Last Ferry asset provenance and history
 
+## Lantern Reach · swing bridge
+
+One original procedural family, `model.swing-bridge`, adds the timber span, two stone bridgeheads and a handwheel station to the four-space cove. Positions derive from the authored passage and signal landing. The catalog now contains 83 families. [Model source](../src/scene/swing-bridge.ts) · [Playtest review](../reviews/lantern-reach/REVIEW.md)
+
 ## Drowned Orchard · Practice implementation for review
 
 Drowned Orchard reuses the six-space hull, supported pier boards, shoreline, established orchard planting, current markers, transfer paths and existing four-species miniature family. Damson, Brindle, Burr and Sloe retain chestnut deer, wool sheep, brown beaver and cream rabbit appearances across the world, choices and unscored result. No new image, model or asset-family ID. The ten baked images, licensed inputs, source provenance and previous acceptance remain unchanged. See the developer gallery at asset-gallery.html#drowned-orchard.

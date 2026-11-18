@@ -3,10 +3,12 @@ export type { Level } from '../levels/level';
 export type Action =
   | { type: 'move'; to: string }
   | { type: 'board' | 'unload'; passengerIds: string[] }
+  | { type: 'open-bridge' }
   | { type: 'wait' };
 export type State = {
   turn: number;
   tideLevel: number;
+  bridgeOpen?: boolean;
   boatNodeId: string;
   aboard: string[];
   waitingByPier: Record<string, string[]>;
@@ -24,6 +26,7 @@ export function initial(l: Level = level): State {
     turn: 0,
     tideLevel: l.rules.tide.initialLevel,
     ...copy(l.start),
+    ...(l.bridge ? { bridgeOpen: false } : {}),
     delivered: [],
     status: 'playing',
     lossReason: null,
@@ -142,6 +145,10 @@ export function passageError(s: State, to: string, l = level): string | null {
   const edge = edgeTo(s, to, l);
   const node = l.nodes.find((n) => n.id === to);
   if (!edge || !node) return 'Choose an adjacent waypoint. Each passage is one turn.';
+  if (l.bridge?.edgeId === edge.id && !s.bridgeOpen) {
+    const signal = l.piers.find(p => p.id === l.bridge!.signalPierId)!;
+    return `${l.bridge.name} is closed. Open it at ${nodeName(signal.nodeId, l)}.`;
+  }
   const flow = passageFlow(edge, s.tideLevel);
   if (flow && flow.from !== s.boatNodeId)
     return `${edge.current!.name} flows only from ${nodeName(flow.from, l)} to ${nodeName(flow.to, l)}.`;
@@ -153,9 +160,16 @@ export function passageError(s: State, to: string, l = level): string | null {
 
 export function validate(s: State, a: Action, l = level): string | null {
   if (s.status !== 'playing') return 'This crossing has ended. Undo or restart to continue.';
-  if (!a || !['move', 'board', 'unload', 'wait'].includes(a.type)) return 'Unknown action.';
+  if (!a || !['move', 'board', 'unload', 'wait', 'open-bridge'].includes(a.type)) return 'Unknown action.';
   if (a.type === 'wait') return null;
   if (a.type === 'move') return passageError(s, a.to, l);
+  if (a.type === 'open-bridge') {
+    if (!l.bridge) return 'There is no swing bridge in this cove.';
+    if (s.bridgeOpen) return `${l.bridge.name} is already open.`;
+    const signal = l.piers.find(p => p.id === l.bridge!.signalPierId)!;
+    if (signal.nodeId !== s.boatNodeId) return `Operate ${l.bridge.name} at ${nodeName(signal.nodeId, l)}.`;
+    return s.tideLevel >= signal.elevation ? 'The signal quay is flooded.' : null;
+  }
   const ids = a.passengerIds;
   if (!Array.isArray(ids) || !ids.length || ids.some((id) => typeof id !== 'string'))
     return 'Select at least one passenger.';
@@ -182,6 +196,7 @@ export function reduce(s: State, a: Action, l = level): State {
   const n = copy(s),
     pier = pierAt(s, l);
   if (a.type === 'move') n.boatNodeId = a.to;
+  if (a.type === 'open-bridge') n.bridgeOpen = true;
   if (a.type === 'board') {
     n.aboard.push(...a.passengerIds);
     n.waitingByPier[pier!.id] = n.waitingByPier[pier!.id].filter(
@@ -225,6 +240,7 @@ export function legalActions(s: State, l = level): Action[] {
       { type: 'wait' },
       ...l.nodes.map((n) => ({ type: 'move' as const, to: n.id })),
     ];
+  if (l.bridge) actions.push({ type: 'open-bridge' });
   for (const type of ['board', 'unload'] as const) {
     const ids = type === 'board' ? (p ? s.waitingByPier[p.id] : []) : s.aboard;
     for (let mask = 1; mask < 1 << ids.length; mask++)

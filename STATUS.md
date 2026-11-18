@@ -1,4 +1,8 @@
-# Drowned Orchard Practice candidate · review branch
+# Lantern Reach · Practice review
+
+Eight Journey coves, eleven independent Practice entrances, nine scoring identities. Lantern Reach adds a single signal-operated swing bridge, with an open shortcut and a closed detour. The final build, all 696 unit tests, 83-family asset inventory and both actual minified rescues passed. The earlier water/asset timeouts and mid-swing contact are documented in the review. Current deployment remains v23. [Production proof and actual-play review](reviews/lantern-reach/REVIEW.md).
+
+## Earlier review · Drowned Orchard Practice candidate
 
 Eight Journey coves, ten independent Practice entrances, nine accepted scoring identities. C9 is not part of Journey and is not published. The unchanged v23 Site serves 1e31466. [Candidate design, tests and gameplay evidence](reviews/cove-nine-practice/REVIEW.md).
 

@@ -2,6 +2,8 @@
 
 **[Play the Journey locally](http://127.0.0.1:5270/)**. The available coast connects eight rescues, ending at Ternhaven. The direct [Wide Berth](http://127.0.0.1:5270/?cove=wide-berth) and [Reef Return](http://127.0.0.1:5270/?cove=reef-return) links open independent Practice.
 
+[Play Lantern Reach locally](http://127.0.0.1:5270/?cove=lantern-reach). Operate the swing bridge from Signal Quay or take the outer floats. This Practice candidate is unscored.
+
 [Play Drowned Orchard locally](http://127.0.0.1:5270/?cove=drowned-orchard). A later tide has reached Cider Quay. Four new neighbors wait on the orchard side of Pomona Reach. This independent Practice playtest is unscored and leaves Journey progress alone.
 
 [Play Orchard Landing](http://127.0.0.1:5270/?cove=orchard-landing) from a local server or choose it from Home → Practice. Bring Orin, Pomme and Medlar home on the six-space ferry. Practice keeps your Journey checkpoint.
@@ -39,7 +41,7 @@ New journey asks before replacing existing progress, and Return home explains th
 
 ## Play
 
-Every rescue in the nine scored coves earns a lantern. Drowned Orchard is an unscored Practice playtest. Finishing within the cove’s authored action target earns a second. Meeting that target without a successful Undo during the attempt earns all three. Inspect the requirements in Practice or the crossing menu. Undo stays unlimited, and the final route’s actions determine efficiency. Restart begins a fresh attempt. Ternhaven uses target 14 in both Journey and Practice.
+Every rescue in the nine scored coves earns a lantern. Drowned Orchard and Lantern Reach are unscored Practice playtests. Finishing within the cove’s authored action target earns a second. Meeting that target without a successful Undo during the attempt earns all three. Inspect the requirements in Practice or the crossing menu. Undo stays unlimited, and the final route’s actions determine efficiency. Restart begins a fresh attempt. Ternhaven uses target 14 in both Journey and Practice.
 
 The arrival result stays provisional until you continue, leave the cove or restart. Terminal Undo withdraws it and redelivery computes it again. Opening the cove picker, Settings or a Home confirmation leaves it provisional. Accepted bests belong to actual individual rescues and persist separately from Journey checkpoints. Practice can improve the same cove’s best, and New journey keeps those bests. Older rescues stay completed and unrated until replay. [Lantern review](reviews/three-lanterns/REVIEW.md)
 

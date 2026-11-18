@@ -1,0 +1,255 @@
+{
+  "source": "29b232d80259d1ed929d7236803b200c44c6ba207eec091187a97222b98c58c4",
+  "build": {
+    "./assets/index-CiF04D6R.js": "b028e994cf7348878800d28b420e27beb5d7540311db212ffc8c9889c7d7b665",
+    "./assets/index-BL2fzgv8.css": "57c4d4113b47aa32a9972bb05f9dba1c3b8d2a6b8b9eb9f6d77eca8d1984e936"
+  },
+  "route": "outer-detour",
+  "actions": [
+    {
+      "type": "move",
+      "to": "wick"
+    },
+    {
+      "type": "board",
+      "passengerIds": [
+        "tallow",
+        "ember"
+      ]
+    },
+    {
+      "type": "move",
+      "to": "east-float"
+    },
+    {
+      "type": "move",
+      "to": "south-float"
+    },
+    {
+      "type": "move",
+      "to": "west-float"
+    },
+    {
+      "type": "move",
+      "to": "harbor"
+    },
+    {
+      "type": "unload",
+      "passengerIds": [
+        "flax",
+        "tallow",
+        "ember"
+      ]
+    }
+  ],
+  "timeline": [
+    {
+      "turn": 0,
+      "tideLevel": 0,
+      "boatNodeId": "signal",
+      "aboard": [
+        "flax"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": [
+          "tallow",
+          "ember"
+        ]
+      },
+      "bridgeOpen": false,
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 1,
+      "tideLevel": 0,
+      "boatNodeId": "wick",
+      "aboard": [
+        "flax"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": [
+          "tallow",
+          "ember"
+        ]
+      },
+      "bridgeOpen": false,
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 2,
+      "tideLevel": 1,
+      "boatNodeId": "wick",
+      "aboard": [
+        "flax",
+        "tallow",
+        "ember"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": []
+      },
+      "bridgeOpen": false,
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 3,
+      "tideLevel": 1,
+      "boatNodeId": "east-float",
+      "aboard": [
+        "flax",
+        "tallow",
+        "ember"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": []
+      },
+      "bridgeOpen": false,
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 4,
+      "tideLevel": 2,
+      "boatNodeId": "south-float",
+      "aboard": [
+        "flax",
+        "tallow",
+        "ember"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": []
+      },
+      "bridgeOpen": false,
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 5,
+      "tideLevel": 2,
+      "boatNodeId": "west-float",
+      "aboard": [
+        "flax",
+        "tallow",
+        "ember"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": []
+      },
+      "bridgeOpen": false,
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 6,
+      "tideLevel": 2,
+      "boatNodeId": "harbor",
+      "aboard": [
+        "flax",
+        "tallow",
+        "ember"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": []
+      },
+      "bridgeOpen": false,
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 7,
+      "tideLevel": 2,
+      "boatNodeId": "harbor",
+      "aboard": [],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": []
+      },
+      "bridgeOpen": false,
+      "delivered": [
+        "flax",
+        "tallow",
+        "ember"
+      ],
+      "status": "won",
+      "lossReason": null
+    }
+  ],
+  "earlyOpening": {
+    "early": {
+      "turn": 1,
+      "tideLevel": 0,
+      "boatNodeId": "signal",
+      "aboard": [
+        "flax"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": [
+          "tallow",
+          "ember"
+        ]
+      },
+      "bridgeOpen": true,
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    "lost": {
+      "turn": 2,
+      "tideLevel": 1,
+      "boatNodeId": "wick",
+      "aboard": [
+        "flax"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": [
+          "tallow",
+          "ember"
+        ]
+      },
+      "bridgeOpen": true,
+      "delivered": [],
+      "status": "lost",
+      "lossReason": {
+        "code": "PASSENGER_STRANDED",
+        "pierId": "wick-pier",
+        "passengerIds": [
+          "tallow",
+          "ember"
+        ]
+      }
+    },
+    "recovered": "Turn 00, bridge closed, Undo disabled"
+  },
+  "terminalUndoAndRedelivery": true,
+  "errors": [],
+  "time": "2026-11-18T17:56:33.690Z",
+  "stateMethod": "Production reducer expectations compared to visible release turn, tide, local map/action controls, terminal status and arrival roster. No debug API."
+}

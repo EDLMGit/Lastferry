@@ -17,7 +17,7 @@ export type LocationFacts = {
   home: boolean;
   current: boolean;
   relation: 'current' | 'adjacent' | 'remote';
-  status: 'current' | 'safe' | 'too-shallow' | 'against-current' | 'loss' | 'remote';
+  status: 'current' | 'safe' | 'too-shallow' | 'against-current' | 'bridge-closed' | 'loss' | 'remote';
   pierId: string | null;
   flooded: boolean;
   waiting: string[];
@@ -86,7 +86,8 @@ export function locationFacts(s: State, nodeId: string, l: Level, tips = true): 
       : !edge
         ? 'remote'
         : !canSail && (s.status === 'playing' || passageError(s, nodeId, l))
-          ? flow && flow.from !== s.boatNodeId ? 'against-current' : 'too-shallow'
+          ? edge.id === l.bridge?.edgeId && !s.bridgeOpen ? 'bridge-closed'
+            : flow && flow.from !== s.boatNodeId ? 'against-current' : 'too-shallow'
           : wouldLose
             ? 'loss'
             : 'safe',

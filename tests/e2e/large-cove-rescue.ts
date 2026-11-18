@@ -190,8 +190,8 @@ export function rescueCases(id: RepairId) {
                 await shot('sailing-' + expected.turn);
                 sailingShot = true;
               }
-            } else if (action.type === 'wait') {
-              await activate(page, 'wait', true);
+            } else if (action.type === 'wait' || action.type === 'open-bridge') {
+              await activate(page, action.type, true);
               await activate(page, 'commit', true);
             } else {
               const choosePicture =
@@ -226,9 +226,9 @@ export function rescueCases(id: RepairId) {
               if (action.type === 'move') {
                 await selectPassage(page, action.to);
                 await activate(page, 'sail', true);
-              } else if (action.type !== 'wait') await transferStart(page, action);
+              } else if ('passengerIds' in action) await transferStart(page, action);
               else {
-                await activate(page, 'wait', true);
+                await activate(page, action.type, true);
                 await activate(page, 'commit', true);
               }
               await idle(page);

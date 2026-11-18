@@ -1,7 +1,7 @@
 export type IslandStyle =
   'garden' | 'crag' | 'reeds' | 'rocky' | 'refuge' | 'working' | 'quay' | 'spit';
 type Landmark = {
-  kind: 'lighthouse' | 'cottage' | 'bell' | 'yard' | 'waterfront' | 'orchard';
+  kind: 'lighthouse' | 'cottage' | 'bell' | 'yard' | 'waterfront' | 'orchard' | 'signal';
   islandId: string;
   positionXZ: [number, number];
 };
@@ -10,6 +10,7 @@ export type SceneLayout = {
   islandStyles: Record<string, IslandStyle>;
   stonePiers: string[];
   centeredWaitingPairs: boolean;
+  retractableStep?: boolean;
   cameraPosition: [number, number, number];
   landscapeCameraPosition?: [number, number, number];
   light?: {
@@ -21,6 +22,18 @@ export type SceneLayout = {
   };
 };
 const layouts: Record<string, SceneLayout> = {
+  'lantern-reach': {
+    landmarks: [
+      { kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-6.15, -3.25] },
+      { kind: 'signal', islandId: 'stone-island', positionXZ: [0, -4.1] },
+    ],
+    islandStyles: { 'stone-island': 'rocky', 'rabbit-island': 'reeds' },
+    stonePiers: ['signal-pier'],
+    centeredWaitingPairs: true,
+    retractableStep: true,
+    cameraPosition: [0, 34, 24],
+    landscapeCameraPosition: [0, 30, 30],
+  },
   ternhaven: {
     landmarks: [
       { kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-9.33, -5.34] },

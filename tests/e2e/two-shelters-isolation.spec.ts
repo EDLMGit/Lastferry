@@ -76,7 +76,7 @@ async function preserved(page: Page, raw: string | null) {
 
 async function execute(page: Page, action: Action) {
   if (action.type === 'move') await act(page, `map-${action.to}`, true);
-  else if (action.type === 'wait') await act(page, 'wait', true);
+  else if (action.type === 'wait' || action.type === 'open-bridge') await act(page, action.type, true);
   else {
     await activate(page, action.type, true);
     if (await page.locator('#dialog[open][data-mode=action]').count()) {

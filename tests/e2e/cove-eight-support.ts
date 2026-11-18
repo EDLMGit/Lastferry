@@ -74,8 +74,8 @@ export async function execute(page: Page, level: Level, action: Action, before: 
     if (development) expect(await state(page)).toEqual(before);
     if (previewCapture) await previewCapture();
     await activate(page, 'sail', true);
-  } else if (action.type === 'wait') {
-    await activate(page, 'wait', true);
+  } else if (action.type === 'wait' || action.type === 'open-bridge') {
+    await activate(page, action.type, true);
     if (development) expect(await state(page)).toEqual(before);
     if (previewCapture) await previewCapture();
     await activate(page, 'commit', true);

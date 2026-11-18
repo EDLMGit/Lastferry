@@ -31,7 +31,7 @@ export async function activate(page: Page, id: string, touch = false) {
     });
     if (!inFrame) await wholeCove(page, touch);
   }
-  if ((id === 'board' || id === 'unload') && !(await page.locator(`#${id}`).isVisible())) {
+  if ((id === 'board' || id === 'unload' || id === 'open-bridge') && !(await page.locator(`#${id}`).isVisible())) {
     const current = await page.locator('.map-target[aria-current="location"]').getAttribute('id');
     if (!current) throw Error('No current location selector is available');
     await activate(page, current, touch);

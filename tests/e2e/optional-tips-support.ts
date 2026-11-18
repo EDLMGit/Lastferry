@@ -64,8 +64,8 @@ export async function action(page: Page, next: Action, level: Level) {
   if (next.type === 'move') {
     await selectRoute(page, next.to);
     await activate(page, 'sail', true);
-  } else if (next.type === 'wait') {
-    await activate(page, 'wait', true);
+  } else if (next.type === 'wait' || next.type === 'open-bridge') {
+    await activate(page, next.type, true);
     await activate(page, 'commit', true);
   } else await transferStart(page, next);
   await idle(page);

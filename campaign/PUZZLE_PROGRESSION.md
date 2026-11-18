@@ -231,3 +231,7 @@ Before releasing the longer phone campaign, add full mid-puzzle restoration incl
 - [Gameplay contract](https://github.com/EDLMGit/Lastferry/blob/1a85874883af5caa59f6294a75495eccf2afebbc/docs/GAMEPLAY_RULES.md)
 - [Production rules](https://github.com/EDLMGit/Lastferry/blob/1a85874883af5caa59f6294a75495eccf2afebbc/src/game/rules.ts) and [session/Undo](https://github.com/EDLMGit/Lastferry/blob/1a85874883af5caa59f6294a75495eccf2afebbc/src/game/session.ts)
 - [Current world seating](https://github.com/EDLMGit/Lastferry/blob/1a85874883af5caa59f6294a75495eccf2afebbc/src/scene/world.ts), [model factory](https://github.com/EDLMGit/Lastferry/blob/1a85874883af5caa59f6294a75495eccf2afebbc/src/scene/models.ts) and [appearance resolver](https://github.com/EDLMGit/Lastferry/blob/1a85874883af5caa59f6294a75495eccf2afebbc/src/game/passenger-appearance.ts)
+
+### Lantern Reach · independent Practice study
+
+A sheep and two rabbits fill the original ferry. The early Wick pickup sets up a choice between returning to the signal quay to open a shortcut and taking the outer current. Its Practice placement carries no Journey order or mastery target. [Design and reducer proof](../reviews/lantern-reach/REVIEW.md).

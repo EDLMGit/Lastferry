@@ -1,0 +1,481 @@
+{
+  "id": "lantern-reach",
+  "title": "Lantern Reach",
+  "rules": {
+    "capacity": 4,
+    "draftBands": [
+      {
+        "maxLoad": 0,
+        "draft": 1
+      },
+      {
+        "maxLoad": 2,
+        "draft": 2
+      },
+      {
+        "maxLoad": 4,
+        "draft": 3
+      }
+    ],
+    "tide": {
+      "initialLevel": 0,
+      "rises": [
+        {
+          "afterTurn": 2,
+          "level": 1
+        },
+        {
+          "afterTurn": 4,
+          "level": 2
+        }
+      ]
+    },
+    "actionCost": 1,
+    "depthFormula": "baseDepth + tideLevel",
+    "pierDryWhen": "tideLevel < elevation",
+    "failureRule": "required passenger stranded, or required return no longer possible"
+  },
+  "world": {
+    "plane": "XZ",
+    "north": "negative Z",
+    "waterYPerTideLevel": 0.18,
+    "referenceBoatRadius": 0.3,
+    "requiredRouteClearance": 0.45,
+    "clearanceScope": "Actual ferry geometry is checked independently along both directions of each route.",
+    "presentationNote": "Three close landings share an inner swing-bridge cut. Three named floats trace the outer water.",
+    "suggestedCamera": {
+      "projection": "orthographic",
+      "positionXYZ": [
+        0,
+        34,
+        24
+      ],
+      "targetXYZ": [
+        0,
+        0,
+        -1
+      ],
+      "verticalSpan": 11
+    },
+    "islands": [
+      {
+        "id": "lighthouse-island",
+        "elevation": 3,
+        "footprintXZ": [
+          [
+            -8,
+            -4.6
+          ],
+          [
+            -4.2,
+            -4.6
+          ],
+          [
+            -3.8,
+            -3.2
+          ],
+          [
+            -4.5,
+            -1.9
+          ],
+          [
+            -7.5,
+            -1.9
+          ],
+          [
+            -8.2,
+            -3.2
+          ]
+        ]
+      },
+      {
+        "id": "stone-island",
+        "elevation": 3,
+        "footprintXZ": [
+          [
+            -1.5,
+            -5.4
+          ],
+          [
+            1.5,
+            -5.4
+          ],
+          [
+            1.9,
+            -4.1
+          ],
+          [
+            1.25,
+            -2.9
+          ],
+          [
+            -1.25,
+            -2.9
+          ],
+          [
+            -1.9,
+            -4.1
+          ]
+        ]
+      },
+      {
+        "id": "rabbit-island",
+        "elevation": 1,
+        "footprintXZ": [
+          [
+            4.3,
+            -4.4
+          ],
+          [
+            7.7,
+            -4.4
+          ],
+          [
+            8.1,
+            -3
+          ],
+          [
+            7.4,
+            -1.9
+          ],
+          [
+            4.6,
+            -1.9
+          ],
+          [
+            3.9,
+            -3
+          ]
+        ]
+      }
+    ]
+  },
+  "nodes": [
+    {
+      "id": "harbor",
+      "positionXZ": [
+        -6,
+        0
+      ],
+      "baseDepth": 3,
+      "pierId": "harbor-pier"
+    },
+    {
+      "id": "signal",
+      "positionXZ": [
+        0,
+        -1
+      ],
+      "baseDepth": 3,
+      "pierId": "signal-pier"
+    },
+    {
+      "id": "wick",
+      "positionXZ": [
+        6,
+        0
+      ],
+      "baseDepth": 3,
+      "pierId": "wick-pier"
+    },
+    {
+      "id": "east-float",
+      "positionXZ": [
+        6,
+        3.8
+      ],
+      "baseDepth": 3
+    },
+    {
+      "id": "south-float",
+      "positionXZ": [
+        0.3,
+        5
+      ],
+      "baseDepth": 3
+    },
+    {
+      "id": "west-float",
+      "positionXZ": [
+        -5.9,
+        3.8
+      ],
+      "baseDepth": 3
+    }
+  ],
+  "edges": [
+    {
+      "id": "bridge-cut",
+      "nodes": [
+        "harbor",
+        "signal"
+      ],
+      "baseDepth": 2,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [
+          -6,
+          0
+        ],
+        [
+          -3,
+          0.2
+        ],
+        [
+          0,
+          -1
+        ]
+      ]
+    },
+    {
+      "id": "wick-channel",
+      "nodes": [
+        "signal",
+        "wick"
+      ],
+      "baseDepth": 2,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [
+          0,
+          -1
+        ],
+        [
+          3,
+          0.35
+        ],
+        [
+          6,
+          0
+        ]
+      ]
+    },
+    {
+      "id": "wick-race",
+      "nodes": [
+        "wick",
+        "east-float"
+      ],
+      "baseDepth": 2,
+      "bidirectional": false,
+      "waypointsXZ": [
+        [
+          6,
+          0
+        ],
+        [
+          6.5,
+          1.9
+        ],
+        [
+          6,
+          3.8
+        ]
+      ],
+      "current": {
+        "name": "Wick Race",
+        "phases": [
+          {
+            "tideLevel": 0,
+            "from": "east-float",
+            "to": "wick"
+          },
+          {
+            "tideLevel": 1,
+            "from": "wick",
+            "to": "east-float"
+          },
+          {
+            "tideLevel": 2,
+            "from": "east-float",
+            "to": "wick"
+          }
+        ]
+      }
+    },
+    {
+      "id": "outer-east",
+      "nodes": [
+        "east-float",
+        "south-float"
+      ],
+      "baseDepth": 2,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [
+          6,
+          3.8
+        ],
+        [
+          3.4,
+          4.9
+        ],
+        [
+          0.3,
+          5
+        ]
+      ]
+    },
+    {
+      "id": "outer-west",
+      "nodes": [
+        "south-float",
+        "west-float"
+      ],
+      "baseDepth": 2,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [
+          0.3,
+          5
+        ],
+        [
+          -3,
+          4.9
+        ],
+        [
+          -5.9,
+          3.8
+        ]
+      ]
+    },
+    {
+      "id": "outer-home",
+      "nodes": [
+        "west-float",
+        "harbor"
+      ],
+      "baseDepth": 2,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [
+          -5.9,
+          3.8
+        ],
+        [
+          -6.5,
+          1.8
+        ],
+        [
+          -6,
+          0
+        ]
+      ]
+    }
+  ],
+  "bridge": {
+    "name": "Lantern Bridge",
+    "edgeId": "bridge-cut",
+    "signalPierId": "signal-pier"
+  },
+  "piers": [
+    {
+      "id": "harbor-pier",
+      "nodeId": "harbor",
+      "islandId": "lighthouse-island",
+      "elevation": 3,
+      "positionXZ": [
+        -6,
+        -1.13
+      ],
+      "landAnchorXZ": [
+        -6,
+        -2.1
+      ],
+      "width": 0.6,
+      "isDeliveryPier": true
+    },
+    {
+      "id": "signal-pier",
+      "nodeId": "signal",
+      "islandId": "stone-island",
+      "elevation": 3,
+      "positionXZ": [
+        0,
+        -2.13
+      ],
+      "landAnchorXZ": [
+        0,
+        -3.1
+      ],
+      "width": 0.8,
+      "isDeliveryPier": false
+    },
+    {
+      "id": "wick-pier",
+      "nodeId": "wick",
+      "islandId": "rabbit-island",
+      "elevation": 1,
+      "positionXZ": [
+        6,
+        -1.13
+      ],
+      "landAnchorXZ": [
+        6,
+        -2.1
+      ],
+      "width": 0.9,
+      "isDeliveryPier": false
+    }
+  ],
+  "names": {
+    "nodes": {
+      "harbor": "Harbor",
+      "signal": "Signal Quay",
+      "wick": "Wick Landing",
+      "east-float": "East Float",
+      "south-float": "South Float",
+      "west-float": "West Float"
+    },
+    "passengers": {
+      "flax": "Flax",
+      "tallow": "Tallow",
+      "ember": "Ember"
+    }
+  },
+  "passengers": [
+    {
+      "id": "flax",
+      "species": "sheep",
+      "slots": 2
+    },
+    {
+      "id": "tallow",
+      "species": "rabbit",
+      "slots": 1
+    },
+    {
+      "id": "ember",
+      "species": "rabbit",
+      "slots": 1
+    }
+  ],
+  "start": {
+    "boatNodeId": "signal",
+    "aboard": [
+      "flax"
+    ],
+    "waitingByPier": {
+      "harbor-pier": [],
+      "signal-pier": [],
+      "wick-pier": [
+        "tallow",
+        "ember"
+      ]
+    }
+  },
+  "objective": {
+    "deliveryPierId": "harbor-pier",
+    "requiredPassengerIds": [
+      "flax",
+      "tallow",
+      "ember"
+    ]
+  },
+  "validation": {
+    "searchDepthLimit": 0,
+    "witnessReplays": [
+      "data/lantern-reach/witnesses.json"
+    ]
+  }
+}

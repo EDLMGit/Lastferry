@@ -1,6 +1,12 @@
 # Last Ferry — Project state
 
-## Drowned Orchard · Practice implementation for review
+## Lantern Reach · Practice implementation for review
+
+The review branch has eight Journey coves, eleven Practice entrances and nine scoring identities. Lantern Reach adds a signal-operated swing bridge to an independent Practice cove using the four-space ferry. Drowned Orchard is still available independently. Opening the bridge uses one action and advances the tide clock. Production minima are six actions via the bridge and seven along the outer route. Neither is a player target. [Proof and actual play](../reviews/lantern-reach/REVIEW.md)
+
+Private Site v23 still serves `1e3146652f50c88db1ce7d56c6de14e311aab719`. [Receipt](../reviews/ternhaven-journey/deployment-confirmation.json)
+
+## Earlier review · Drowned Orchard
 
 The unscored Drowned Orchard Practice candidate is implemented on the review branch. It reuses the four Orchard landmarks with changed water, a redirected approach to Spring Steps and a new group. The first ferry load and the boat’s side of the turning current determine whether the remaining six spaces can come home. Published v23 still contains the Ternhaven Journey runtime 1e31466; it does not contain this candidate.
 

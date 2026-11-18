@@ -33,6 +33,7 @@ import {
   draftBandsCopy,
   objectiveCopy,
   passageCopy,
+  bridgeNotice,
   statusCopy,
   forecastCopy,
   previewCopy,
@@ -1339,7 +1340,7 @@ function renderDialog() {
         ? `<div class="passenger-options${level.id === 'reef-return' && ids.length === 4 ? ' reef-manifest' : ''}" role="group" aria-label="Passenger selection">${ids.map((id) => `<button id="passenger-${id}" class="cove-choice" aria-pressed="${a.passengerIds.includes(id)}">${passengerChoiceContent(passengerNames[id].split(' ·')[0], level.passengers.find((p) => p.id === id)!.slots, resolvePassengerAppearance(level, id)?.portraitKey ?? null)}</button>`).join('')}</div>`
         : '';
     $('dialog-content').innerHTML =
-      `${header(transfer ? (a.type === 'board' ? 'Board passengers' : p?.isDeliveryPier ? 'Bring passengers home' : 'Let passengers ashore') : actionLabel(s, a, level), `${nodeNames[a.type === 'move' ? a.to : s.boatNodeId]} · inspection is free`)}<div id="preview" class="dialog-body ${proposed.error || (tips.enabled && proposed.state.status === 'lost') ? 'warning' : ''}" aria-live="polite" aria-atomic="true">${choices}<p class="requirement">${text.error ?? (transfer ? `${transfer.depth} · ${transfer.load}` : text.requirement)}</p>${(transfer ? transfer.detail : text.consequence) ? `<p class="consequence">${transfer ? transfer.detail : text.consequence}</p>` : ''}${!proposed.error && !transfer ? `<p class="preview-result">After this action: Boat ${load(proposed.state, level)}/${level.rules.capacity} spaces · tide ${proposed.state.tideLevel}${s.tideLevel !== proposed.state.tideLevel ? ` (now ${s.tideLevel})` : ''}</p>` : ''}</div><footer class="dialog-footer"><button id="commit" ${proposed.error ? 'disabled' : ''}>${proposed.error ? 'Action unavailable' : transfer ? `${transfer.label} · 1 action` : 'Confirm · 1 action'}</button></footer>`;
+      `${header(transfer ? (a.type === 'board' ? 'Board passengers' : p?.isDeliveryPier ? 'Bring passengers home' : 'Let passengers ashore') : actionLabel(s, a, level), `${nodeNames[a.type === 'move' ? a.to : s.boatNodeId]} · inspection is free`)}<div id="preview" class="dialog-body ${proposed.error || (tips.enabled && proposed.state.status === 'lost') ? 'warning' : ''}" aria-live="polite" aria-atomic="true">${choices}<p class="requirement">${text.error ?? (transfer ? `${transfer.depth} · ${transfer.load}` : text.requirement)}</p>${(transfer ? transfer.detail : text.consequence) ? `<p class="consequence">${transfer ? transfer.detail : text.consequence}</p>` : ''}${!proposed.error && !transfer ? `<p class="preview-result">After this action: Boat ${load(proposed.state, level)}/${level.rules.capacity} spaces · tide ${proposed.state.tideLevel}${s.tideLevel !== proposed.state.tideLevel ? ` (now ${s.tideLevel})` : ''}</p>` : ''}</div><footer class="dialog-footer"><button id="commit" ${proposed.error ? 'disabled' : ''}>${proposed.error ? 'Action unavailable' : transfer ? `${transfer.label} · 1 action` : a.type === 'open-bridge' ? 'Open bridge · 1 action' : 'Confirm · 1 action'}</button></footer>`;
 
     if (a.type === 'board' || a.type === 'unload')
       for (const id of ids)
@@ -1371,7 +1372,7 @@ function renderDialog() {
       ? '<ol class="current-schedule">' + f.schedule.map(row => `<li><strong>After action ${row.turn}</strong> · ${row.direction} · depth ${row.depth}.${row.floods.length ? ' Flooding at ' + row.floods.join(' and ') + '.' : ''}</li>`).join('') + '</ol>'
       : '';
     $('dialog-content').innerHTML =
-      `${header(f.current ? 'Reef and tide forecast' : 'Tide and pier forecast', 'Inspection · no action spent')}<div class="dialog-body forecast-detail"><strong>${f.headline}</strong>${f.current ? `<p>${f.current.direction} ${f.current.next}</p>${tideTable}<p>Sail with the current. Your action finishes before the tide changes.</p>` : ''}<p>${f.detail}</p><p>Each accepted action advances the tide schedule. Thinking and inspection do not.</p></div>`;
+      `${header(f.current ? 'Reef and tide forecast' : 'Tide and pier forecast', 'Inspection · no action spent')}<div class="dialog-body forecast-detail"><strong>${f.headline}</strong>${level.bridge ? `<p>${bridgeNotice(s, level)}</p>` : ''}${f.current ? `<p>${f.current.direction} ${f.current.next}</p>${tideTable}<p>Sail with the current. Your action finishes before the tide changes.</p>` : ''}<p>${f.detail}</p><p>Each accepted action advances the tide schedule. Thinking and inspection do not.</p></div>`;
     world.setForecast(
       true,
       level.rules.tide.rises.find((r) => r.afterTurn > s.turn)?.level ?? s.tideLevel,
@@ -1703,11 +1704,12 @@ function renderMap() {
           current: ['current', '•', 'current location'],
           remote: ['nonadjacent', '◇', 'no direct passage'],
           'too-shallow': ['too-shallow', '╱', 'adjacent, too shallow'],
+          'bridge-closed': ['bridge-closed', 'Ⅱ', 'adjacent, swing bridge closed'],
           'against-current': ['against-current', '×', 'adjacent, against the current'],
           loss: ['available', '!', 'adjacent, ' + facts.consequence],
           safe: ['available', '', 'adjacent passage available'],
         }[departure && facts.wouldLose ? 'safe' : facts.status];
-        return `<div id="stop-${n.id}" class="map-stop" data-adjacent="${facts.relation === 'adjacent'}"><button id="map-${n.id}" class="map-target" data-status="${status}" data-risk="${!departure && facts.wouldLose ? 'loss' : 'safe'}" data-destination="${n.id}" aria-expanded="${locationSelection === n.id}" aria-controls="local-context" ${facts.current ? 'aria-current="location"' : ''} aria-label="Select ${facts.name}; ${description}${facts.home ? '; Home, delivery destination' : ''}" title="${description}" ${session.busy || s.status !== 'playing' ? 'disabled' : ''}><span class="map-hit"><span class="map-symbol" aria-hidden="true">${facts.home ? iconMarkup('harbor-home') : symbol}</span></span><span class="map-name"><b class="cove-name cove-surface cove-surface--compact">${facts.name}${facts.home ? '<span class="map-home cove-objective"> · Home</span>' : ''}</b></span></button></div>`;
+        return `<div id="stop-${n.id}" class="map-stop" data-adjacent="${facts.relation === 'adjacent'}"><button id="map-${n.id}" class="map-target" data-status="${status}" data-risk="${!departure && facts.wouldLose ? 'loss' : 'safe'}" data-destination="${n.id}" aria-expanded="${locationSelection === n.id}" aria-controls="local-context" ${facts.current ? 'aria-current="location"' : ''} aria-label="Select ${facts.name}; ${description}${facts.home ? '; Home, delivery destination' : ''}" title="${description}" ${session.busy || s.status !== 'playing' ? 'disabled' : ''}><span class="map-hit"><span class="map-symbol" aria-hidden="true">${facts.home && facts.status !== 'bridge-closed' ? iconMarkup('harbor-home') : symbol}</span></span><span class="map-name"><b class="cove-name cove-surface cove-surface--compact">${facts.name}${facts.home ? '<span class="map-home cove-objective"> · Home</span>' : ''}</b></span></button></div>`;
       })
       .join('');
   for (const node of level.nodes) bindTarget($(`map-${node.id}`), node.id);
@@ -1764,8 +1766,11 @@ function renderLocation() {
   const floodWarning = loss?.code === 'PASSENGER_STRANDED'
     ? `${passengerList(loss.passengerIds, level)} will be lost when ${nodeNames[level.piers.find((pier) => pier.id === loss.pierId)!.nodeId]} floods.`
     : '';
+  const bridgeHere = level.bridge && (facts.pierId === level.bridge.signalPierId || edge?.id === level.bridge.edgeId);
   const reason = facts.relation === 'remote'
     ? 'No direct passage'
+    : facts.status === 'bridge-closed' || (bridgeHere && (facts.current || facts.canSail) && !facts.consequence)
+      ? bridgeNotice(session.state, level)
     : facts.status === 'against-current' && flow
       ? `Against the current. ${flow.compact}.`
     : !facts.current && !facts.canSail
@@ -1823,6 +1828,8 @@ function renderLocation() {
 function renderDock() {
   const dock = $('dock-actions'),
     facts = locationFacts(session.state, session.state.boatNodeId, level, tips.enabled),
+    atSignal = !!level.bridge && facts.pierId === level.bridge.signalPierId,
+    canOpen = atSignal && !session.state.bridgeOpen,
     visible =
       !journeySurface() &&
       (!locationSelection || locationSelection === session.state.boatNodeId) &&
@@ -1831,11 +1838,11 @@ function renderDock() {
       session.state.status === 'playing' &&
       !facts.flooded &&
       !!facts.pierId &&
-      !!(facts.board || facts.unload);
+      !!(facts.board || facts.unload || canOpen);
   dock.hidden = !visible;
   dock.inert = !visible;
   if (!visible) return;
-  dock.setAttribute('aria-label', `Passenger actions at ${facts.name}`);
+  dock.setAttribute('aria-label', `${atSignal ? 'Dock' : 'Passenger'} actions at ${facts.name}`);
   dock.dataset.owner = facts.name;
 
   dock.replaceChildren();
@@ -1843,6 +1850,17 @@ function renderDock() {
   owner.className = 'dock-owner';
   owner.textContent = 'At ' + facts.name;
   dock.append(owner);
+  if (canOpen) {
+    const open = document.createElement('button');
+    open.id = 'open-bridge';
+    setControl(open, null, 'Open bridge', 'action');
+    open.setAttribute('aria-haspopup', 'dialog');
+    open.onclick = (event) => {
+      event.stopPropagation();
+      if (event.detail < 2) openDialog('action', { type: 'open-bridge' }, open.id);
+    };
+    dock.append(open);
+  }
 
   for (const type of ['board', 'unload'] as const) {
     const ids = type === 'board' ? facts.boardOptions : facts.aboard;
@@ -2713,7 +2731,7 @@ document.addEventListener(
     }
 
     const commit = (e.target as Element).closest(
-      '#sail, #commit, #board, #unload, #story-continue, #home-play',
+      '#sail, #commit, #board, #unload, #open-bridge, #story-continue, #home-play',
     );
 
     if (commit && e.isTrusted && e.detail > 0 && lastPointer?.control !== commit) {

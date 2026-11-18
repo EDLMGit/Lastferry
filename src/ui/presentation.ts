@@ -73,6 +73,7 @@ export function passengerList(ids: string[], l: Level = baseline): string {
 export function actionLabel(s: State, a: Action, l: Level): string {
   if (a.type === 'move') return `Sail to ${stop(a.to, l)}`;
   if (a.type === 'wait') return 'Wait';
+  if (a.type === 'open-bridge') return 'Open bridge';
   const who = passengerList(a.passengerIds, l) || 'passengers';
   if (a.type === 'board') return `Board ${who}`;
   return pierAt(s, l)?.isDeliveryPier ? `Deliver ${who}` : `Let ${who} ashore`;
@@ -96,6 +97,12 @@ export function objectiveCopy(s: State, l: Level): { headline: string; progress:
   };
 }
 
+export function bridgeNotice(s: State, l: Level): string {
+  if (!l.bridge) return '';
+  const signal = l.piers.find(p => p.id === l.bridge!.signalPierId)!;
+  return s.bridgeOpen ? `${l.bridge.name} is open.` : `${l.bridge.name} is closed. Operate it at ${stop(signal.nodeId, l)}.`;
+}
+
 export function passageCopy(s: State, to: string, l: Level): string {
   if (to === s.boatNodeId) return `You are at ${stop(to, l)}.`;
   const edge = edgeTo(s, to, l);
@@ -104,11 +111,12 @@ export function passageCopy(s: State, to: string, l: Level): string {
     depth = edge.baseDepth + s.tideLevel;
   const depthText = `Boat needs depth ${need}. Passage has depth ${depth}: ${depth < need ? 'too shallow' : 'enough depth'}.`;
   const current = currentNotice(s, l, edge);
-  return current ? `${depthText} ${current.direction} ${current.next}` : depthText;
+  const gate = edge.id === l.bridge?.edgeId ? bridgeNotice(s, l) : '';
+  return [gate, depthText, current?.direction, current?.next].filter(Boolean).join(' ');
 }
 
 export function actionCostCopy(l: Level): string {
-  return `Sailing, boarding, unloading and waiting each cost ${countActions(l.rules.actionCost)}. Inspection is free.`;
+  return `Sailing, boarding, unloading${l.bridge ? ', opening the bridge' : ''} and waiting each cost ${countActions(l.rules.actionCost)}. Inspection is free.`;
 }
 
 export function pierSafetyCopy(s: State, pierId: string, l: Level): string {
@@ -251,7 +259,9 @@ export function previewCopy(
     };
   }
   const requirement =
-    a.type === 'board' || a.type === 'unload'
+    a.type === 'open-bridge'
+      ? 'The span swings clear for the rest of this crossing.'
+      : a.type === 'board' || a.type === 'unload'
       ? `After ${a.type === 'board' ? 'boarding' : 'unloading'}: boat needs depth ${draft(n, l)}.`
       : a.type === 'move'
         ? passageCopy(s, a.to, l)

@@ -29,6 +29,8 @@ export function transitionPlan(
     ? 30
     : action.type === 'move'
       ? Math.min(timing.maximum, Math.max(timing.minimum, timing.base + timing.perUnit * length))
+      : action.type === 'open-bridge'
+        ? 1400
       : action.type === 'unload' && won
         ? 900
         : 520;

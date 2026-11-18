@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { Box3, Group, InstancedMesh, Matrix4, Mesh, Vector3 } from 'three';
-import { wideBerth, reefReturn, orchardLanding, ternhaven, drownedOrchard } from '../../src/levels/level';
+import { wideBerth, reefReturn, orchardLanding, ternhaven, drownedOrchard, lanternReach } from '../../src/levels/level';
 import { animal, ferry, lighthouse } from '../../src/scene/models';
 import {
   ferryProfile,
@@ -16,6 +16,7 @@ import { createPier, isWalkableAt } from '../../src/scene/pier';
 import { sceneLayout } from '../../src/scene/layout';
 import { islandCenter, shoreContour, createShoreRocks } from '../../src/scene/shore';
 import { createReefPassage } from '../../src/scene/reef';
+import { createSwingBridge } from '../../src/scene/swing-bridge';
 import { cottage, decorateOrchardIsland, decorateReefIsland, decorateWideIsland, decorateTernhavenIsland, orchardTree, wideWaterfront } from '../../src/scene/scenery';
 import { passengerModelVariant } from '../../src/game/passenger-appearance';
 import { getLevelPaths, samplePath } from '../../src/scene/paths';
@@ -69,19 +70,20 @@ function segmentDistance(p: P, a: P, b: P) {
   const t = span ? Math.max(0, Math.min(1, ((p[0] - a[0]) * x + (p[1] - a[1]) * z) / span)) : 0;
   return Math.hypot(p[0] - a[0] - t * x, p[1] - a[1] - t * z);
 }
-describe.each([wideBerth, reefReturn, orchardLanding, ternhaven, drownedOrchard])('$title physical clearances', (level) => {
-test('occupied real modeled hull clears land and piers at every reachable heading in both directions', () => {
-  const profile = ferryProfile(level),
-    model = ferry(profile);
+function occupiedFerry(level: typeof lanternReach) {
+  const model = ferry(ferryProfile(level));
   for (const passenger of level.passengers) {
     const group = animal(passenger.species, passengerModelVariant(level, passenger.id));
     group.scale.set(...passengerScale(passenger.species));
     group.position.copy(deckSeat(level, passenger.id));
     model.add(group);
   }
-  model.updateMatrixWorld(true);
+  return model;
+}
+function footprintOf(group: Group) {
+  group.updateWorldMatrix(true, true);
   const vertices: P[] = [];
-  model.traverse((o) => {
+  group.traverse((o) => {
     if (!(o instanceof Mesh)) return;
     const attribute = o.geometry.getAttribute('position');
     for (let i = 0; i < attribute.count; i++) {
@@ -89,7 +91,37 @@ test('occupied real modeled hull clears land and piers at every reachable headin
       vertices.push([v.x, v.z]);
     }
   });
-  const footprint = convex(vertices),
+  return convex(vertices);
+}
+test('the bridge leaf crosses the real channel when closed and clears the moored ferry throughout its sweep', () => {
+  const level = lanternReach, profile = ferryProfile(level);
+  const path = getLevelPaths(level).get(level.bridge!.edgeId)!;
+  const bridge = createSwingBridge(path, profile.beam);
+  const pivot = bridge.leaf.getWorldPosition(new Vector3());
+  const local = footprintOf(bridge.leaf).map(([x, z]) => bridge.leaf.worldToLocal(new Vector3(x, 0, z)));
+  const signal = level.piers.find(pier => pier.id === level.bridge!.signalPierId)!;
+  const [x, z] = level.nodes.find(node => node.id === signal.nodeId)!.positionXZ;
+  const boat = occupiedFerry(level);
+  boat.position.set(x, 0, z);
+  const orientations = [-Math.PI / 2, Math.PI / 2].map(heading => {
+    boat.rotation.y = heading;
+    return footprintOf(boat);
+  });
+  const crossing = bridge.root.position;
+  for (let i = 0; i <= 1000; i++) {
+    bridge.setProgress(i / 1000);
+    expect(bridge.leaf.getWorldPosition(new Vector3()).distanceTo(pivot)).toBeLessThan(1e-8);
+    const leaf = local.map(v => {
+      const at = bridge.leaf.localToWorld(v.clone());
+      return [at.x, at.z] as P;
+    });
+    expect(orientations.some(hull => overlaps(hull, leaf))).toBe(false);
+    if (i === 0 || i === 1000) expect(inside([crossing.x, crossing.z], leaf)).toBe(i === 0);
+  }
+});
+test.each([wideBerth, reefReturn, orchardLanding, ternhaven, drownedOrchard, lanternReach])('$title occupied real modeled hull clears land and piers at every reachable heading in both directions', (level) => {
+  const profile = ferryProfile(level),
+    footprint = footprintOf(occupiedFerry(level)),
     paths = getLevelPaths(level),
     failures: string[] = [],
     margins: string[] = [],
@@ -98,10 +130,18 @@ test('occupied real modeled hull clears land and piers at every reachable headin
     ...level.world.islands.map((island) => ({ id: island.id, polygon: island.footprintXZ as P[] })),
   ];
   const obstacles3D: [string, Group][] = level.piers.map((pier) => [
-    pier.id, createPier(pier, sceneLayout(level.id).stonePiers.includes(pier.id), true),
+    pier.id, createPier(pier, sceneLayout(level.id).stonePiers.includes(pier.id),
+      profile.id === 'six-space', false, sceneLayout(level.id).retractableStep),
   ]);
   for (const edge of level.edges.filter((e) => e.current))
     obstacles3D.push([edge.id, createReefPassage(paths.get(edge.id)!).rocks]);
+  if (level.bridge) {
+    for (const progress of [0, 1]) {
+      const bridge = createSwingBridge(paths.get(level.bridge.edgeId)!, profile.beam);
+      bridge.setProgress(progress);
+      obstacles3D.push([progress ? 'open-bridge' : 'closed-bridge', bridge.root]);
+    }
+  }
   for (const [id, group] of obstacles3D) {
     group.updateMatrixWorld(true);
     let meshIndex = 0;
@@ -166,6 +206,7 @@ test('occupied real modeled hull clears land and piers at every reachable headin
             bottom: Math.max(...hull.map((p) => p[1])),
           };
           for (const exclusion of obstacles) {
+            if (edge.id === level.bridge?.edgeId && exclusion.id.startsWith('closed-bridge/')) continue;
             const b = exclusion.bounds;
             const nearHull =
               hullBounds.left <= b.right &&
@@ -209,6 +250,7 @@ test('occupied real modeled hull clears land and piers at every reachable headin
   expect(margins).toEqual([]);
 }, 20000);
 
+describe.each([wideBerth, reefReturn, orchardLanding, ternhaven, drownedOrchard])('$title physical clearances', (level) => {
 test('distinct authored shores retain valid center-fan top support without filled water notches', () => {
   const outlines = new Set<string>();
   for (const island of level.world.islands) {

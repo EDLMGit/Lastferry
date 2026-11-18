@@ -53,7 +53,7 @@ export async function transferStart(
 }
 export async function simpleAction(page: Page, action: Action) {
   if (action.type === 'move') await act(page, 'map-' + action.to, true);
-  else if (action.type === 'wait') await act(page, 'wait', true);
+  else if (action.type === 'wait' || action.type === 'open-bridge') await act(page, action.type, true);
   else {
     await transferStart(page, action);
     await idle(page);

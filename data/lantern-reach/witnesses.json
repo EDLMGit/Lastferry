@@ -1,0 +1,94 @@
+{
+  "levelId": "lantern-reach",
+  "witnesses": [
+    {
+      "id": "open-shortcut",
+      "actions": [
+        {
+          "type": "move",
+          "to": "wick"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "tallow",
+            "ember"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "signal"
+        },
+        {
+          "type": "open-bridge"
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "flax",
+            "tallow",
+            "ember"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "outer-detour",
+      "actions": [
+        {
+          "type": "move",
+          "to": "wick"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "tallow",
+            "ember"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "east-float"
+        },
+        {
+          "type": "move",
+          "to": "south-float"
+        },
+        {
+          "type": "move",
+          "to": "west-float"
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "flax",
+            "tallow",
+            "ember"
+          ]
+        }
+      ]
+    }
+  ],
+  "losingAlternatives": [
+    {
+      "id": "open-too-early",
+      "actions": [
+        {
+          "type": "open-bridge"
+        },
+        {
+          "type": "move",
+          "to": "wick"
+        }
+      ]
+    }
+  ]
+}

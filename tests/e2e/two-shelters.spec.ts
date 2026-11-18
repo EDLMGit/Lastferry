@@ -79,7 +79,7 @@ async function playView(page: Page) {
 }
 async function execute(page: Page, action: Action, touch = true) {
   if (action.type === 'move') await act(page, `map-${action.to}`, touch);
-  else if (action.type === 'wait') await act(page, 'wait', touch);
+  else if (action.type === 'wait' || action.type === 'open-bridge') await act(page, action.type, touch);
   else {
     await activate(page, action.type, touch);
     if (await page.locator('#dialog[open][data-mode=action]').count()) {

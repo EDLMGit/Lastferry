@@ -8,6 +8,7 @@ export function createPier(
   stone: boolean,
   compact = false,
   broadStep = false,
+  retractableStep = false,
 ) {
   if (compact) return compactPier(p, stone);
   const group = new Group();
@@ -29,7 +30,7 @@ export function createPier(
       pile.userData.pierPile = true;
       cylinder(group, '#dbc799', 0.075, 0.075, 0.055, [px, y + 0.17, pz], 9);
     }
-  box(
+  if (!retractableStep) box(
     group,
     '#b68f5b',
     [broadStep ? p.width : 0.35, 0.055, broadStep ? 0.65 : 0.49],
