@@ -1,3 +1,13 @@
+# Lantern Reach published for private playtesting · Far Shore next
+
+**Current assignment — [FAR_SHORE_01](NEXT_TASK_FAR_SHORE.md).** Author, play and tune the independent, unscored Practice candidate for Far Shore, the campaign’s eleventh cove and planned difficulty peak. Local Codex owns the puzzle, prototyping, production implementation and evidence. The director reviews the choices players face. Keep the final rescue and supper for Last Ferry.
+
+The private phone playtest now serves the revised Lantern Reach, game `5f28d71566463462b9407e34b0bf236bb05e20c6`, Site version **25**. The player liked the revision. Eight Journey coves, eleven Practice entrances and nine scored coves are available. Lantern Reach and Drowned Orchard remain unscored while the player can try both. Their Journey integrations follow in story order after acceptance. [Independent review](reviews/lantern-reach-difficulty/INDEPENDENT_REVIEW.md) · [Publication receipt](reviews/lantern-reach-difficulty/deployment-confirmation.json).
+
+Safely incorporate current guidance and later user work on `m1-first-crossing`. Local Codex returns a tested handoff on draft PR #1. ChatGPT reviews and handles private publication.
+
+## Previous implementation handoff
+
 # Lantern Reach difficulty revision · Practice review
 
 The player liked the bridge and found its first puzzle too easy. Testing a six-space relay exposed a similar weakness, so the revised cove gives the winch and two separate rescues different deadlines. Both the signal and outer routes passed in the minified UI. The production build, TypeScript, all 714 unit tests, 83-family inventory and final save-isolation checks passed. [Decision, evidence and checks](reviews/lantern-reach-difficulty/REVIEW.md). Private Site v24 serves Drowned Orchard.

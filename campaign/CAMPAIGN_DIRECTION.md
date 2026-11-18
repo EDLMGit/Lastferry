@@ -1,5 +1,9 @@
 # Last Ferry — The Long Tide
 
+## Current campaign work
+
+[Far Shore](../NEXT_TASK_FAR_SHORE.md) is the next independent Practice candidate. The director’s benchmark is a fair late-game rescue that rewards thinking ahead. Drowned Orchard and the revised Lantern Reach are available together on the phone. Their eventual Journey entries follow Ternhaven in that order. Last Ferry follows Far Shore as the final homecoming.
+
 ## Lantern Reach · independent Practice
 
 The review branch revises Lantern Reach for the six-space ferry. Tide windows at the winch and two occupied landings link the initial manifest to a later rescue. [Revised design](../reviews/lantern-reach-difficulty/REVIEW.md). It remains alongside Drowned Orchard. Both are unscored Practice studies. Eight Journey coves end at Ternhaven, with eleven independent Practice entrances and nine scoring identities on this branch. [Lantern Reach design and verification](../reviews/lantern-reach/REVIEW.md).

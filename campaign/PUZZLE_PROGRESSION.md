@@ -1,5 +1,9 @@
 # Puzzle progression — selected campaign direction
 
+## Far Shore · current Practice direction
+
+The player responded positively to revised Lantern Reach. Codex now owns [Far Shore](../NEXT_TASK_FAR_SHORE.md), the eleventh cove and the hardest planned rescue. Combine lessons the player already knows into a decision they can anticipate. Keep the last cove as the gentler trip home. The current [private playtest](https://last-ferry-playtest.abumech.chatgpt.site/?cove=lantern-reach) has eight Journey coves, eleven Practice entrances and nine scored coves.
+
 ## Lantern Reach difficulty playtest
 
 The revised candidate keeps the six-space boat. One early plan trades pickup capacity for access to the signal. The other reserves three spaces for Sorbus and uses the outer floats. The second rescue deadline tests whether the player can distinguish room on the boat from time to board. [Comparison and play evidence](../reviews/lantern-reach-difficulty/REVIEW.md).

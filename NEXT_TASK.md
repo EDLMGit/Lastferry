@@ -1,8 +1,10 @@
 # Last Ferry — active task
 
-**Active assignment — [LANTERN_REACH_DIFFICULTY_02](NEXT_TASK_LANTERN_REACH_DIFFICULTY.md).** Revise the existing Lantern Reach Practice puzzle in response to the player's difficulty feedback. Retain the bridge and give its timing consequences for a later rescue. Local Codex owns comparative prototyping, level and technical design, implementation, iteration, proof and real-interface checks. The director sets the player experience and reviews the resulting choices. The player decides whether the difficulty feels right. The task brief records the acceptance criteria.
+**Current assignment — [FAR_SHORE_01](NEXT_TASK_FAR_SHORE.md).** Author, play and tune the independent, unscored Practice candidate for Far Shore, the campaign’s eleventh cove and planned difficulty peak. Local Codex owns the puzzle, prototyping, production implementation and evidence. The director reviews the choices players face. Keep the final rescue and supper for Last Ferry.
 
-The branch baseline is `ca89eeed7cde27b48c3a17d2d47dc1ebd3c71745`. Eight Journey coves, eleven Practice entrances and nine scored coves are available there. The current private playtest is version 24 with Drowned Orchard. [Publication receipt](reviews/cove-nine-practice/deployment-confirmation.json). Keep PR #1 draft and follow the existing publication workflow.
+The private phone playtest now serves the revised Lantern Reach, game `5f28d71566463462b9407e34b0bf236bb05e20c6`, Site version **25**. The player liked the revision. Eight Journey coves, eleven Practice entrances and nine scored coves are available. Lantern Reach and Drowned Orchard remain unscored while the player can try both. Their Journey integrations follow in story order after acceptance. [Independent review](reviews/lantern-reach-difficulty/INDEPENDENT_REVIEW.md) · [Publication receipt](reviews/lantern-reach-difficulty/deployment-confirmation.json).
+
+Safely incorporate current guidance and later user work on `m1-first-crossing`. Local Codex returns a tested handoff on draft PR #1. ChatGPT reviews and handles private publication.
 
 ## Historical audio brief — completed and superseded
 

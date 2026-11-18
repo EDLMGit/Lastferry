@@ -4,7 +4,9 @@
 
 The six-space ferry starts at Wick. The rabbits here and Sorbus across Wick Race have different pickup windows. Signal Quay's winch floods after action three. When the ferry returns to the rabbits on six, deck space is available, but collecting them uses one of Sorbus’s last two actions. The empty-deck visit and the one-rabbit outer route were proved and played. [Decision, recovery and evidence](../reviews/lantern-reach-difficulty/REVIEW.md)
 
-Eight Journey coves, eleven Practice entrances, nine scoring identities. Lantern Reach and Drowned Orchard both remain unscored. Private Site v24 serves Drowned Orchard at `e583ec29578e7561c0a8ab8fe6e3b08275d44ac2`; the revised Lantern Reach is on the review branch. [Existing receipt](../reviews/cove-nine-practice/deployment-confirmation.json)
+The reviewed runtime `5f28d71566463462b9407e34b0bf236bb05e20c6` is live at **Site version 25**. Eight Journey coves, eleven Practice entrances and nine scoring identities are available. The revised Lantern Reach and Drowned Orchard remain unscored. [Private phone playtest](https://last-ferry-playtest.abumech.chatgpt.site/?cove=lantern-reach) · [Independent review](../reviews/lantern-reach-difficulty/INDEPENDENT_REVIEW.md) · [Receipt](../reviews/lantern-reach-difficulty/deployment-confirmation.json)
+
+**[FAR_SHORE_01](../NEXT_TASK_FAR_SHORE.md) is active.** Codex owns the next unscored Practice candidate, the campaign's difficulty peak. The player can review the two previous candidates on their phone while development proceeds. Scoring and Journey promotion follow separate acceptance decisions in story order.
 
 ## Earlier direction · Lantern Reach difficulty revision
 
