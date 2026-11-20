@@ -1,12 +1,18 @@
 # Last Ferry — Project state
 
+## Journey Home · twelve-cove review build
+
+The review branch follows the coast through Drowned Orchard, Lantern Reach, Far Shore and Last Ferry. Every rescue advances on Continue story. After the final delivery the captain can still Undo, accept the rescue and linger at supper, or later return to credits. These four crossings are unrated in both entrances. There are twelve Journey chapters, thirteen Practice entrances and nine scored coves. [Local Journey](http://127.0.0.1:5420/) · [Review and evidence](../reviews/journey-home/REVIEW.md)
+
+An exact completed-eight save first returns to Home. An explicit Continue preserves its original bytes in a verified backup before opening the orchard scene. Historical backups and independently earned bests keep their owners. The published private Site is still **version 28** with the eight-cove Journey at `a5e1eff68ee93eb2d4cf9814863a3b104fc6a889`. The uncoached readability retest and physical-phone checks are pending. [Version 28 receipt](../reviews/last-ferry/deployment-confirmation.json)
+
 ## Last Ferry · independent Practice playtest
 
 The thirteenth Practice entrance opens at Lantern Buoy. Pipit and Rill wait at Lace Landing, with Mallow and Osier across the cut at Quilt Quay. Either first pickup can bring all four home on the six-space ferry. A single rise after action four opens more water at Lace. Once the group is aboard, the player can linger, sail the lamp channel and choose when to bring everyone ashore. [Local Practice](http://127.0.0.1:5410/?cove=last-ferry) · [Review and moving evidence](../reviews/last-ferry/REVIEW.md)
 
 The [private phone playtest](https://last-ferry-playtest.abumech.chatgpt.site/?cove=last-ferry) serves **version 28**, game `a5e1eff68ee93eb2d4cf9814863a3b104fc6a889`. The live build has eight Journey coves, thirteen Practice entrances and nine scored coves. The friend’s readability retest and physical Android check remain open. [Independent review](../reviews/last-ferry/INDEPENDENT_REVIEW.md) · [Receipt](../reviews/last-ferry/deployment-confirmation.json) · [Observer sheet](../reviews/cove-readability/PLAYTEST.md)
 
-**[JOURNEY_HOME_01](../NEXT_TASK_JOURNEY_HOME.md) is active.** Connect the four existing late rescues, stage The last lights and A place for the captain, and carry the player from Home to credits. Test both a fresh start and deliberate continuation from a completed-eight save. Keep the four late coves provisionally unrated while evaluating their mastery targets. Credits follow every ordinary final rescue after explicit continuation. Public release remains a separate decision after private playtesting.
+[The Journey Home commission](../NEXT_TASK_JOURNEY_HOME.md) followed the private version 28 review. Its twelve-cove implementation and verification are recorded above. Public release remains a separate decision after private playtesting.
 
 ## Cove readability · friend retest
 

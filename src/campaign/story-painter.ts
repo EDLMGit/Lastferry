@@ -70,6 +70,11 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
     reef: 7,
     orchard: 7,
     ternhaven: 7,
+    'drowned-orchard': 7,
+    'last-lights': 7,
+    'far-shore': 6,
+    'last-ferry': 6,
+    supper: 8,
   };
   const grains = Array.from({ length: 560 }, (_, i) => ({
     x: ((i * 173 + 43) % 997) / 997,
@@ -484,24 +489,24 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
     }
     ctx.restore();
   }
-  function backdrop(t: number, variant = 0) {
-    const sky = ctx.createLinearGradient(0, 0, 0, H * 0.72);
+  function backdrop(t: number, variant = 0, skyHeight = H) {
+    const sky = ctx.createLinearGradient(0, 0, 0, skyHeight * 0.72);
     sky.addColorStop(0, '#b0a9bb');
     sky.addColorStop(0.42, '#ddc7b9');
     sky.addColorStop(1, '#f2dbb6');
     ctx.fillStyle = sky;
     ctx.fillRect(0, 0, W, H);
     const mx = W * (variant === 1 ? 0.8 : 0.66),
-      my = H * (variant === 1 ? 0.25 : 0.21);
-    glow(mx, my, H * 0.22, 0.14);
-    ellipse(mx, my, Math.min(23, H * 0.058), Math.min(23, H * 0.058), '#ece2bf');
+      my = skyHeight * (variant === 1 ? 0.25 : 0.21);
+    glow(mx, my, skyHeight * 0.22, 0.14);
+    ellipse(mx, my, Math.min(23, skyHeight * 0.058), Math.min(23, skyHeight * 0.058), '#ece2bf');
     const shift = Math.sin(t * 0.1) * 2;
     path(
-      `M -20 ${H * 0.48} Q ${W * 0.03 + shift} ${H * 0.34} ${W * 0.17} ${H * 0.41} Q ${W * 0.28} ${H * 0.29} ${W * 0.42} ${H * 0.43} Q ${W * 0.57} ${H * 0.3} ${W * 0.75} ${H * 0.45} Q ${W * 0.91} ${H * 0.38} ${W + 20} ${H * 0.49} L ${W + 20} ${H * 0.65} L -20 ${H * 0.65} Z`,
+      `M -20 ${skyHeight * 0.48} Q ${W * 0.03 + shift} ${skyHeight * 0.34} ${W * 0.17} ${skyHeight * 0.41} Q ${W * 0.28} ${skyHeight * 0.29} ${W * 0.42} ${skyHeight * 0.43} Q ${W * 0.57} ${skyHeight * 0.3} ${W * 0.75} ${skyHeight * 0.45} Q ${W * 0.91} ${skyHeight * 0.38} ${W + 20} ${skyHeight * 0.49} L ${W + 20} ${skyHeight * 0.65} L -20 ${skyHeight * 0.65} Z`,
       '#9cafaa',
     );
     path(
-      `M -20 ${H * 0.55} Q ${W * 0.1} ${H * 0.45} ${W * 0.29} ${H * 0.51} Q ${W * 0.49} ${H * 0.4} ${W * 0.65} ${H * 0.51} Q ${W * 0.86} ${H * 0.42} ${W + 20} ${H * 0.55} L ${W + 20} ${H * 0.68} L -20 ${H * 0.68} Z`,
+      `M -20 ${skyHeight * 0.55} Q ${W * 0.1} ${skyHeight * 0.45} ${W * 0.29} ${skyHeight * 0.51} Q ${W * 0.49} ${skyHeight * 0.4} ${W * 0.65} ${skyHeight * 0.51} Q ${W * 0.86} ${skyHeight * 0.42} ${W + 20} ${skyHeight * 0.55} L ${W + 20} ${skyHeight * 0.68} L -20 ${skyHeight * 0.68} Z`,
       '#7e9f98',
     );
     const water = ctx.createLinearGradient(0, H * 0.51, 0, H);
@@ -1435,6 +1440,359 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
     ctx.restore();
     finish(t);
   }
+  function placed(x: number, y: number, scale: number, paint: () => void) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(scale, scale);
+    paint();
+    ctx.restore();
+  }
+  function lateSceneLayout() {
+    const portrait = W < 600;
+    return {
+      portrait,
+      x: W * (portrait ? 0.5 : 0.694),
+      y: H * (portrait ? 0.52 : 0.55),
+      scale: Math.min(
+        (W * (portrait ? 1 : 0.61) - 16) / 345,
+        (H - (portrait ? 60 : 20)) / (portrait ? 260 : 221),
+        2.2,
+      ),
+    };
+  }
+  function eveningWater(t: number, horizon: number, dusk = false) {
+    backdrop(t, 1, horizon / 0.53);
+    foregroundWater(horizon, t);
+    if (dusk) {
+      const shade = ctx.createLinearGradient(0, 0, W * 0.62, H * 0.88);
+      shade.addColorStop(0, 'rgba(116,93,113,.04)');
+      shade.addColorStop(0.52, 'rgba(97,83,115,.16)');
+      shade.addColorStop(1, 'rgba(39,77,85,.48)');
+      ctx.fillStyle = shade;
+      ctx.fillRect(0, 0, W, H);
+    }
+  }
+  function stoneShelf(x: number, y: number, size: number) {
+    placed(x, y, size, () => {
+      ellipse(1, 21, 69, 5, 'rgba(25,62,64,.19)');
+      path('M -64 -2 Q -56 -15 -25 -16 Q 0 -26 33 -21 L 60 -10 L 69 1 L 61 14 Q 42 21 9 23 L -43 20 L -63 11 Z', '#678275');
+      path('M -64 -2 Q -56 -15 -25 -16 Q 0 -26 33 -21 L 60 -10 L 69 1 Q 40 14 12 10 Q -23 14 -64 3 Z', '#a8ad84');
+      path('M -59 12 Q -36 21 -10 18 M 4 22 Q 42 23 62 12', null, '#d0ccab', 1.6);
+      path('M -53 2 Q -39 -1 -26 -1 M 12 -12 Q 33 -18 44 -12', null, '#bfbd98', 1.2);
+    });
+  }
+  function timberLanding(x: number, y: number, size: number) {
+    placed(x, y, size, () => {
+      for (const px of [-25, 30]) {
+        line([[px, 5], [px - 1, 19]], '#766e55', 4.5);
+        ellipse(px - 1, 20, 6, 1.4, 'rgba(207,217,187,.57)');
+      }
+      path('M -32 -8 L 25 -14 L 38 3 L -23 12 Z', '#b79a6f', '#d2bd8c', 1.4);
+      for (let n = 0; n < 4; n++)
+        line([[-30 + n * 2.6, -6 + n * 4], [27 + n * 2.6, -12 + n * 4]], '#8b805e', 1);
+    });
+  }
+  function drownedOrchardShot(seconds: number) {
+    const t = Math.min(seconds, 5.9);
+    const { portrait, x, y, scale } = lateSceneLayout();
+    const look = ease((t - 1.0) / 1.8);
+    const greeting = ease((t - 2.4) / 1.25) * (1 - 0.76 * ease((t - 4.15) / 1.3));
+    eveningWater(t, y - (portrait ? 72 : 54) * scale);
+    placed(x, y, scale, () => {
+      const orchardY = portrait ? -37 : -12;
+      const springY = portrait ? 54 : 26;
+      stoneShelf(81, orchardY, 1.23);
+      orchardTree(114, orchardY - 12, 0.74);
+      timberLanding(57, orchardY + 19, 0.78);
+      orchardDeer(55, orchardY + 1, 0.64, look, 0);
+      sheep(110, orchardY + 5, 0.82, -0.13 * look);
+      placed(-81, portrait ? -57 : -45, 0.65, () => {
+        path('M -48 3 L 9 -9 L 39 -1 L -17 13 Z', '#79a49c');
+        for (let i = 0; i < 4; i++) line([[-39 + 9 * i, 3 - i * 2], [-19 + 9 * i, 9 - i * 2]], '#86afa3', 1.2);
+        for (const px of [-36, 16]) {
+          line([[px, 2], [px, -15]], '#726f59', 4.5);
+          ellipse(px, -15, 2.4, 1.3, '#d3b88a');
+          path(`M ${px - 8} 3 q 6 3 14 1`, null, '#d2d7b6', 1.4);
+        }
+      });
+      stoneShelf(-94, springY, 0.97);
+      for (let i = 0; i < 3; i++)
+        path(`M ${-96 + i * 3} ${springY + 6 + i * 5} l 39 -4 l 6 5 l -39 5 Z`, i === 2 ? '#829f8f' : '#bab492', '#d2c8a4', 1);
+      launchBeaver(-116, springY, 0.64, greeting, look, true);
+      rabbit(-72, springY + 2, 0.54, 'cream', { head: -0.08 * look });
+      const boatY = orchardY + 89;
+      readyFerry(78, boatY + Math.sin(t * 1.7) * (1 - look), 0.65);
+      path(`M 34 ${orchardY + 26} Q 17 ${orchardY + 58} 34 ${boatY - 3}`, null, '#d5bd85', 1.5);
+    });
+    finish(t);
+  }
+  function farShoreShot(seconds: number) {
+    const t = Math.min(seconds, 5.1);
+    const { portrait, x, y, scale } = lateSceneLayout();
+    const turn = ease((t - 0.45) / 2.4);
+    const answer = ease((t - 2.4) / 1.2) * (1 - 0.75 * ease((t - 4) / 1));
+    eveningWater(t, y - (portrait ? 80 : 65) * scale);
+    placed(x, y, scale, () => {
+      const rushY = portrait ? -46 : -34;
+      stoneShelf(94, rushY, 0.83);
+      reeds(126, rushY - 4, 0.7, t, false);
+      orchardDeer(90, rushY + 3, 0.54, turn, 0);
+      stoneShelf(-81, rushY - 20, 0.63);
+      rabbit(-80, rushY - 18, 0.46, 'honey-tan', { head: 0.12 * turn });
+      const stepY = portrait ? 66 : 53;
+      stoneShelf(-73, stepY, 1.09);
+      for (let i = 0; i < 3; i++)
+        path(`M ${-91 + i * 3} ${stepY + 4 + i * 5} l 66 -4 l 5 5 l -67 5 Z`, '#b6b495', '#d8d1ad', 1.2);
+      sheep(-117, stepY, 0.95, 0.13 * turn);
+      placed(-49, stepY - 2, 0.70, () => {
+        ctx.scale(-1, 1);
+        rabbit(0, 0, 1, 'cream', { lift: answer, head: -0.09 * turn });
+      });
+      readyFerry(66, stepY + 14 + Math.sin(t * 2) * (1 - turn), 0.73);
+    });
+    finish(t);
+  }
+  function lastFerryShot(seconds: number) {
+    const t = Math.min(seconds, 5.1);
+    const { portrait, x, y, scale } = lateSceneLayout();
+    const turn = ease((t - 0.35) / 1.8);
+    const wave = ease((t - 1.6) / 1.2) * (1 - 0.8 * ease((t - 3.45) / 1.35));
+    backdrop(t, 1);
+    tower(x - 104 * scale, H * 0.43 - 7 * scale, scale * 0.30);
+    foregroundWater(H * 0.43, t, { x: x - 104 * scale, strength: 0.42 });
+    placed(x, y, scale, () => {
+      const laceY = portrait ? 8 : -3, quiltY = portrait ? -36 : -24;
+      stoneShelf(-99, laceY, 0.81);
+      reeds(-139, laceY - 5, 0.48, t, false);
+      timberLanding(-87, laceY + 10, 0.72);
+      rabbit(-113, laceY, 0.56, 'cream', { head: -0.08 * turn });
+      rabbit(-82, laceY + 1, 0.57, 'honey-tan', { lift: wave, head: -0.06 * turn });
+      stoneShelf(92, quiltY, 1.02);
+      path(`M 112 ${quiltY - 5} v -29 h 31 v 27 M 116 ${quiltY - 29} v 21`, null, '#796e53', 3.4);
+      path(`M 106 ${quiltY - 33} l 9 -13 l 27 -3 l 9 13 Z`, '#a56950', '#d2aa78', 1.4);
+      sheep(62, quiltY + 2, 0.77, -0.07 * turn);
+      launchBeaver(103, quiltY + 2, 0.66, 0, turn);
+      const boatY = portrait ? 104 : 69;
+      readyFerry(4, boatY, 0.88);
+      placed(132, boatY - 1, 1, () => {
+        path('M -11 4 q 9 5 23 0 M -6 9 q 7 3 11 0', null, '#c7d7bb', 1.4);
+        path('M -7 0 l 5 -11 h 4 l 6 11 q -7 5 -15 0 Z', '#a76750', '#c4bb85', 1);
+        line([[0, -7], [0, -26]], '#546b60', 3);
+        lantern(0, -28, 0.41, 0.8);
+      });
+    });
+    finish(t);
+  }
+  function refugePier() {
+    path('M -170 4 Q -158 -8 -113 -14 L 83 -27 Q 134 -32 158 -19 L 174 -3 L 166 53 Q 128 81 48 83 L -119 81 Q -160 75 -170 49 Z', '#5f7c70');
+    path('M -170 4 Q -151 -15 -105 -15 L 85 -29 Q 142 -33 165 -11 L 172 19 Q 139 43 63 55 L -89 62 Q -150 61 -169 41 Z', '#a8a982');
+    path('M -166 40 Q -146 57 -90 57 L 61 51 Q 131 42 167 20 M -135 68 L -105 71 M 110 69 L 145 58', null, '#c6bf94', 1.8);
+    path('M -109 62 l 7 11 l -3 7 M 14 60 l -6 12 l 8 9 M 96 50 l 8 9', null, '#71897a', 1.8);
+    path('M -158 72 Q -136 85 -86 85 M 26 86 Q 79 88 122 73', null, '#b8ccae', 1.4);
+    for (const [px, py] of [[-146,17],[-120,49],[117,26],[135,10],[-44,51]]) {
+      path(`M ${px} ${py} q 6 -4 13 -2 m 2 2 l 3 -2`, null, '#c1bd93', 1.3);
+    }
+  }
+  function table(unfold: number) {
+    path('M -91 6 L -85 9 L -87 35 L -93 36 Z M 83 0 L 90 -1 L 86 24 L 81 25 Z', '#71634c');
+    path('M -95 -12 L 74 -24 L 101 -12 L -73 6 Z', '#bc996a', '#d2bc8c', 1.6);
+    path('M -95 -12 L -73 6 L 101 -12 L 99 -3 L -74 16 L -96 -4 Z', '#997851');
+    path('M -74 16 L -66 15 L -67 42 L -73 44 Z M 91 0 L 96 -1 L 92 26 L 86 27 Z', '#907451');
+    const edge = mix(36, -93, unfold);
+    const height = 8 * Math.sin(unfold * Math.PI);
+    const cloth = `M ${edge} ${-12 - height} L 73 -25 L 103 -12 L 100 6 Q 76 8 61 10 L ${edge + 22} ${25 - height} Q ${edge + 11} ${21 - height} ${edge + 15} ${7 - height} Z`;
+    path(cloth, '#d7bf98', '#ead9b4', 1.4);
+    ctx.save();
+    ctx.clip(new Path2D(cloth));
+    for (let x = -118; x < 128; x += 22) {
+      path(`M ${x} -25 l 6 -1 l 24 20 l -2 31 l -5 1 l 1 -31 Z`, '#ac7865');
+      path(`M ${x + 9} -25 l 1.8 0 l 24 20 l -1 31 l -2 0 l 1 -30 Z`, '#b18b6b');
+    }
+    for (const y of [-12, 0, 13]) {
+      line([[-112, y + 7], [113, y - 15]], 'rgba(147,92,76,.56)', 3.8);
+      line([[-112, y + 11], [113, y - 11]], '#ebdbb3', 1.6);
+    }
+    path('M -78 6 L 104 -13 L 101 11 L -78 30 Z', 'rgba(127,83,67,.16)');
+    ctx.restore();
+    if (unfold < 0.98) {
+      line([[edge + 2, -13 - height], [edge + 25, 4 - height]], '#b89877', 6 * (1 - unfold) + 1);
+      line([[edge + 2, -15 - height], [edge + 24, 2 - height]], '#edd8ac', 2);
+    }
+  }
+  function bellFrame(x: number, y: number, scale: number) {
+    placed(x, y, scale, () => {
+      path('M -17 0 L -17 -53 Q -1 -58 18 -53 L 17 0 M 0 -54 L 1 -42', null, '#78674e', 4.7);
+      path('M -18 -54 Q 1 -60 19 -54', null, '#c0a57b', 2.4);
+      path('M -2 -44 Q 5 -46 7 -39 L 9 -29 Q 9 -25 14 -22 Q 2 -16 -12 -21 Q -7 -25 -7 -29 L -6 -37 Q -6 -42 -2 -44 Z', '#c4a060', '#836f4d', 1.4);
+      ellipse(1, -21, 12, 2.5, '#ab884e');
+      ellipse(1, -19, 2.5, 3.2, '#705d45');
+      path('M -3 -38 Q -2 -41 2 -41 M -7 -24 Q -2 -22 5 -23', null, '#f4d791', 1.6);
+    });
+  }
+  function litWindows(x: number, y: number, s: number) {
+    placed(x, y, s, () => {
+      path('M -42 -1 L -41 -23 L 5 -25 L 20 -19 L 20 -1 Z', '#7b9481');
+      path('M -47 -22 L -34 -35 L 5 -37 L 21 -20 L 6 -22 Z', '#976e5c');
+      for (const dx of [-31, -15, 1]) {
+        glow(dx + 3, -13, 13, 0.65);
+        path(`M ${dx} -18 h 8 v 11 h -8 Z`, '#eac88d', '#a58c61', 0.8);
+        line([[dx + 4, -18], [dx + 4, -7]], '#b59a6c', 1);
+      }
+    });
+  }
+  function lastLightsShot(seconds: number) {
+    const t = Math.min(seconds, 6);
+    const { portrait, x, y, scale } = lateSceneLayout();
+    const unfold = ease((t - 0.4) / 3.1);
+    const settle = ease((t - 1.9) / 2.7);
+    const signal = ease((t - 3.8) / 1.7);
+    const bankY = portrait ? -83 : -53;
+    eveningWater(t, y + (bankY - 9) * scale, true);
+    placed(x, y, scale, () => {
+      stoneShelf(28, bankY, 0.54);
+      rabbit(18, bankY - 1, 0.28, 'honey-tan', { lift: signal, lantern: true });
+      rabbit(38, bankY - 1, 0.27, 'cream', { head: 0.1 * signal });
+      glow(7, bankY - 13, 27, signal * 0.6);
+      for (const [offset, width] of [[11, 6], [16, 10], [22, 7]])
+        line([[6 - width, bankY + offset], [6 + width, bankY + offset - 1]], `rgba(246,219,153,${0.19 + signal * 0.3})`, 1.6);
+      const quayY = portrait ? 38 : 20;
+      placed(0, quayY, 1, () => {
+        litWindows(-104, -23, 1.06);
+        refugePier();
+        bellFrame(112, -5, 1.1);
+        sheep(81, -6, 0.86, 0.12 * signal);
+        placed(-110, 9, 1, () => {
+          ctx.scale(1, 1 - 0.12 * settle);
+          sheep(0, 0, 1.04, 0.13 * settle);
+        });
+        const tansyX = mix(46, -47, unfold);
+        const lift = 0.24 + 0.24 * Math.sin(unfold * Math.PI);
+        rabbit(tansyX, 2, 0.78, 'cream', {
+          lift, step: unfold,
+          head: 0.13 * unfold - 0.2 * signal,
+        });
+        placed(-5, 10, 0.99, () => table(unfold));
+        const release = ease((t - 3.08) / 0.6);
+        if (release < 1) {
+          const pawX = tansyX + 0.78 * mix(-9, -34, lift);
+          const pawY = 2 + 0.78 * mix(-25, -61, lift);
+          const hemY = mix(pawY + 1.8, -2, release);
+          path(`M ${pawX - 10} -1 Q ${pawX - 4} ${hemY + 13} ${pawX} ${hemY} Q ${pawX + 5} ${hemY + 6} ${pawX + 13} -3 L ${pawX + 8} 1 Z`, '#d9c29e', '#e9d7af', 1);
+          path(`M ${pawX + 1} ${hemY + 4} Q ${pawX + 4} ${hemY + 12} ${pawX + 9} -2`, null, '#b37e69', 2);
+          ellipse(pawX, pawY, 3.7, 3.4, C.cream);
+        }
+        lantern(34, 18, 0.64, 0.66);
+      });
+    });
+    finish(t);
+  }
+  function emptyChair(x: number, y: number) {
+    placed(x, y, 1, () => {
+      ellipse(1, 23, 24, 4.2, 'rgba(51,67,52,.21)');
+      path('M -18 -36 Q -8 -43 11 -39 L 14 -32 L -15 -28 Z', '#bf9a6d', '#8e7456', 1.8);
+      line([[-16, -32], [-12, 19]], '#846e53', 4.4);
+      line([[11, -36], [14, 15]], '#846e53', 4.4);
+      for (const dx of [-10, -2, 6]) line([[dx, -31], [dx + 2, -8]], '#b99a72', 3.2);
+      path('M -15 -8 L 11 -13 L 23 -4 L -4 3 Z', '#d0aa72', '#947b59', 1.6);
+      line([[-4, 3], [-3, 25]], '#9f815b', 4.6);
+      line([[21, -4], [19, 18]], '#987e5a', 3.8);
+    });
+  }
+  function placeSetting(x: number, y: number, s: number) {
+    placed(x, y, s, () => {
+      ellipse(0, 0, 13, 4.8, '#b3b694', -0.07);
+      ellipse(0, -1.5, 13, 4.4, '#e8d8ae', -0.07);
+      ellipse(0, -1.6, 9.3, 2.75, '#b2bd9e', -0.07);
+      ellipse(0, -1.45, 7.3, 1.95, '#dcd7b5', -0.07);
+      path('M 13 -10 q 11 -5 7 3 q -2 2 -6 1', null, '#a08a64', 1.4);
+      path('M 8 -11 l 9 -1 l -1 6 q -4 3 -8 0 Z', '#c3b28c');
+      ellipse(12.5, -11.2, 4.6, 1.5, '#735e48');
+    });
+  }
+  function orchardBough(x: number, y: number) {
+    placed(x, y, 1, () => {
+      path('M -25 1 Q -5 2 14 -8 L 30 -10 M -7 0 L -12 -7 M 7 -5 L 11 -16', null, '#826849', 2.5);
+      for (const [lx, ly, rot] of [[-13, -7, 0.58], [-3, -4, -0.8], [12, -14, -0.85], [22, -9, 0.25], [28, -12, -0.42]]) {
+        ellipse(lx, ly, 5.7, 2.4, '#6c8c69', rot);
+      }
+      for (const [ax, ay] of [[-8, -4], [6, -8], [17, -8]]) {
+        ellipse(ax, ay, 4.2, 4.6, '#bc7054');
+        ellipse(ax - 1, ay - 1.5, 1.1, 1.6, '#e4ae82');
+      }
+    });
+  }
+  function supperSweep(lampX: number, lampY: number, t: number) {
+    const sweep = ease((t - 1.3) / 4.9);
+    if (sweep <= 0 || sweep >= 1) return;
+    ctx.save();
+    ctx.translate(lampX, lampY);
+    ctx.rotate(mix(3.12, 0.48, sweep));
+    ctx.globalCompositeOperation = 'screen';
+    const strength = Math.sin(Math.PI * sweep);
+    const shaft = ctx.createLinearGradient(0, 0, 272, 0);
+    shaft.addColorStop(0, 'rgba(255,235,173,.075)');
+    shaft.addColorStop(0.52, 'rgba(255,224,153,.045)');
+    shaft.addColorStop(1, 'rgba(253,215,145,0)');
+    ctx.globalAlpha = strength;
+    for (let i = 0; i < 10; i++) {
+      const spread = 12 + i * 5;
+      path(`M 0 -1.6 Q 128 ${-spread * 0.43} 280 ${-spread} L 280 ${spread} Q 128 ${spread * 0.43} 0 1.6 Z`, shaft);
+    }
+    ctx.restore();
+  }
+  function supperShot(seconds: number) {
+    const t = Math.min(seconds, 6.7);
+    const { portrait, x, y, scale } = lateSceneLayout();
+    const settle = ease((t - 0.15) / 2.1);
+    const welcome = ease((t - 1.4) / 1.1) * (1 - 0.86 * ease((t - 4.25) / 1.5));
+    const towerY = portrait ? -71 : -42;
+    eveningWater(t, y + (towerY - 1) * scale, true);
+    placed(x, y, scale, () => {
+      tower(123, towerY, 0.37);
+      litWindows(76, towerY + 9, 0.64);
+      const quayY = portrait ? 28 : 4;
+      placed(0, quayY, 1, () => {
+        refugePier();
+        sheep(-78, 0, 1.0, -0.12 * settle);
+        rabbit(-26, -1, 0.71, 'cream', { lift: welcome, head: -0.09 * settle });
+        rabbit(mix(31, 17, settle), -3, 0.69, 'honey-tan', { step: settle, head: -0.15 * settle });
+        launchBeaver(69, -5, 0.84, 0.18 * welcome, settle);
+        placed(1, 13, 1.02, () => {
+          table(1);
+          placeSetting(-58, -7, 1);
+          placeSetting(48, -15, 0.67);
+          orchardBough(-10, -10);
+          ellipse(27, -15, 11, 3.8, '#c2bb95');
+          ellipse(27, -18, 9, 4.7, '#c99257', -0.09);
+          path('M 22 -21 l 2 4 M 27 -22 l 2 4 M 32 -21 l 2 3', null, '#e7c894', 1.3);
+          path('M -41 -16 q 5 10 18 2 l -2 6 q -8 6 -13 -1 Z', '#ac8564', '#d2ab81', 1);
+          ellipse(-32, -15, 9.3, 3.4, '#e4c28c', -0.09);
+          ellipse(-32, -15, 7.5, 2.2, '#c08c5f', -0.09);
+          lantern(75, -24, 0.58, 0.85);
+        });
+        emptyChair(-114, 19);
+        timberLanding(35, 57, 0.85);
+        placed(-23, 44, 1, () => {
+          line([[0, -4], [0, 7]], '#817253', 7);
+          line([[-6, -5], [6, -6]], '#aa936d', 4);
+          for (let i = 3; i >= 0; i--) {
+            ctx.beginPath();
+            ctx.ellipse(-11, 12 - i * 1.3, 11 + i * 0.8, 3.4, -0.05, 0, Math.PI * 2);
+            ctx.strokeStyle = i % 2 ? '#947747' : '#d8b97c';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+          }
+          path('M -7 8 Q -4 2 2 3 Q 9 7 16 6', null, '#dec18a', 2);
+        });
+      });
+      const boatY = portrait ? 134 : 76;
+      const boatX = mix(81, 72, settle);
+      readyFerry(boatX, boatY, portrait ? 0.65 : 0.58);
+      path(`M -23 ${quayY + 44} Q -9 ${boatY + 18} ${boatX - 40} ${boatY + 1}`, null, '#ceb887', 1.8);
+      supperSweep(123, towerY - 114 * 0.37, t);
+    });
+    finish(t);
+  }
   function launchShot(t: number) {
     const portrait = W < 480,
       short = H < 300,
@@ -1621,6 +1979,11 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
         reef: reefShot,
         orchard: orchardShot,
         ternhaven: ternhavenShot,
+        'drowned-orchard': drownedOrchardShot,
+        'last-lights': lastLightsShot,
+        'far-shore': farShoreShot,
+        'last-ferry': lastFerryShot,
+        supper: supperShot,
       })[illustration](t);
     },
   };

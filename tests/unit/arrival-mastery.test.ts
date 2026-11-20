@@ -2,7 +2,7 @@ import { describe, expect, test } from 'vitest';
 import plans from '../../data/ternhaven/witnesses.json';
 import { storyCoves, practiceCoves } from '../../src/campaign/registry';
 import { JOURNEY_STORAGE_KEY } from '../../src/campaign/progress';
-import { ternhaven } from '../../src/levels/level';
+import { lastFerry, ternhaven } from '../../src/levels/level';
 import { type Action } from '../../src/game/rules';
 import { Session } from '../../src/game/session';
 import { MasteryStore, MASTERY_STORAGE_KEY, masteryTargets, resultFor,
@@ -42,8 +42,8 @@ describe('accepted Ternhaven arrival scoring', () => {
   test('only Ternhaven target 14 revision 1 joins the eight accepted ratings', () => {
     expect(masteryTargets).toEqual({ ...acceptedBefore, ternhaven: { revision: 1, target: 14 } });
     expect(practiceCoves).toHaveLength(13);
-    expect(storyCoves).toHaveLength(8);
-    expect(storyCoves.at(-1)?.level).toBe(ternhaven);
+    expect(storyCoves).toHaveLength(12);
+    expect(storyCoves.at(-1)?.level).toBe(lastFerry);
   });
 
   test.each(plans.witnesses)('$id earns three, terminal Undo redelivery earns two and acceptance is once', plan => {

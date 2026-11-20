@@ -1,5 +1,9 @@
 # Puzzle progression — selected campaign direction
 
+## Twelve crossings in Journey
+
+Drowned Orchard, Lantern Reach, Far Shore and Last Ferry now play in that order after Ternhaven. Each uses its original Practice data. Far Shore asks the captain to plan a later boarding trip. The final coast gives the captain deep water and time to bring the last four home together. The nine existing mastery targets still belong to their original coves. [Journey integration](../reviews/journey-home/REVIEW.md)
+
 ## Last Ferry · candidate for cove twelve
 
 Where Far Shore asks the player to anticipate a later pickup, this final crossing rewards recognizing the water under the ferry now. The two rabbits together draw depth 2, enough for the cut at low water. Taking the sheep and beaver first draws depth 3 and leaves the deeper way round. Both routes collect the same six spaces. The last two sails are in permanently deep water. The candidate uses the existing unscored arrival and has no mastery target. [Production witnesses](../data/last-ferry/witnesses.json) · [Played crossing](../reviews/last-ferry/REVIEW.md)

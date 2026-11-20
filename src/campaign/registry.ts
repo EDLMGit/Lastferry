@@ -16,7 +16,8 @@ import {
 } from '../levels/level';
 
 export type CoveId =
-  'holding-pier' | 'bellwater' | 'driftwood-yard' | 'two-shelters' | 'wide-berth' | 'reef-return' | 'orchard-landing' | 'ternhaven';
+  'holding-pier' | 'bellwater' | 'driftwood-yard' | 'two-shelters' | 'wide-berth' | 'reef-return' | 'orchard-landing' | 'ternhaven'
+  | 'drowned-orchard' | 'lantern-reach' | 'far-shore' | 'last-ferry';
 export type SceneId =
   | 'opening'
   | 'another-bell'
@@ -25,9 +26,16 @@ export type SceneId =
   | 'a-wider-deck'
   | 'lights-beyond-the-reef'
   | 'orchard-paths'
-  | 'ternhaven-wave';
+  | 'ternhaven-wave'
+  | 'orchard-underwater'
+  | 'the-last-lights'
+  | 'across-far-reach'
+  | 'one-last-crossing'
+  | 'a-place-for-the-captain';
+export const supperScene = 'a-place-for-the-captain';
 export type IllustrationId =
-  'tide' | 'lantern' | 'ferry' | 'harbor' | 'driftwood' | 'reeds' | 'launch' | 'reef' | 'orchard' | 'ternhaven';
+  'tide' | 'lantern' | 'ferry' | 'harbor' | 'driftwood' | 'reeds' | 'launch' | 'reef' | 'orchard' | 'ternhaven'
+  | 'drowned-orchard' | 'last-lights' | 'far-shore' | 'last-ferry' | 'supper';
 export type StoryCue = {
   id: string;
   atMs: number;
@@ -49,7 +57,7 @@ export type StoryScene = {
   id: SceneId;
   title: string;
   shots: readonly StoryShot[];
-  destination: CoveId;
+  destination: CoveId | 'credits';
   continueLabel: string;
 };
 
@@ -244,6 +252,81 @@ export const storyScenes: Record<SceneId, StoryScene> = {
     destination: 'ternhaven',
     continueLabel: 'Continue to Ternhaven',
   },
+  'orchard-underwater': {
+    id: 'orchard-underwater',
+    title: 'The orchard again',
+    shots: [{
+      id: 'drowned-orchard',
+      illustration: 'drowned-orchard',
+      durationMs: 7000,
+      captionCueMs: 1050,
+      caption: 'The old apple tree is still here. The water has reached Cider Quay.',
+      description: 'The familiar apple tree shades Damson the deer and Brindle the sheep at Orchard Landing. The empty ferry is alongside. Burr and Sloe wait across the water at Spring Steps. Only the posts of Cider Quay stand above the water. Orin, Pomme and Medlar are safe at the refuge.',
+      cues: [{ id: 'orchard-underwater.water', atMs: 1100, kind: 'tide-wash', strength: 0.45 }],
+    }],
+    destination: 'drowned-orchard',
+    continueLabel: 'Continue to Drowned Orchard',
+  },
+  'the-last-lights': {
+    id: 'the-last-lights',
+    title: 'The last lights',
+    shots: [{
+      id: 'last-lights',
+      illustration: 'last-lights',
+      durationMs: 7000,
+      captionCueMs: 1050,
+      caption: 'The table is nearly ready. A few lights are still waiting across the water.',
+      description: 'Tansy unfolds her cloth across the supper table. Moss settles beside it while Bram stands by the bell. A light shines at an occupied landing across the water.',
+      cues: [{ id: 'the-last-lights.lantern.contact', atMs: 4500, kind: 'lantern-contact', strength: 0.4 }],
+    }],
+    destination: 'lantern-reach',
+    continueLabel: 'Continue to Lantern Reach',
+  },
+  'across-far-reach': {
+    id: 'across-far-reach',
+    title: 'Across Far Reach',
+    shots: [{
+      id: 'far-shore',
+      illustration: 'far-shore',
+      durationMs: 6000,
+      captionCueMs: 1050,
+      caption: 'Thistle and Button wait at Tide Steps. Two more neighbors are across the reach.',
+      description: 'Beside the empty ferry at Tide Steps stand Thistle the sheep and Button the cream rabbit. Tan Peat waits at Far Bank, and Rowan the deer is at Rush Landing.',
+      cues: [{ id: 'across-far-reach.water', atMs: 900, kind: 'ferry-water', strength: 0.5 }],
+    }],
+    destination: 'far-shore',
+    continueLabel: 'Continue to Far Shore',
+  },
+  'one-last-crossing': {
+    id: 'one-last-crossing',
+    title: 'One last crossing',
+    shots: [{
+      id: 'last-ferry',
+      illustration: 'last-ferry',
+      durationMs: 6000,
+      captionCueMs: 1050,
+      caption: 'Four neighbors are waiting. The lighthouse will shine all the way home.',
+      description: 'The empty ferry rests at Lantern Buoy. Pipit and Rill wait at Lace Landing. Mallow and Osier wait on Quilt Quay. Beyond the channel, the lighthouse glows.',
+      cues: [{ id: 'one-last-crossing.water', atMs: 900, kind: 'ferry-water', strength: 0.45 }],
+    }],
+    destination: 'last-ferry',
+    continueLabel: 'Continue to Last Ferry',
+  },
+  [supperScene]: {
+    id: supperScene,
+    title: 'A place for the captain',
+    shots: [{
+      id: 'supper',
+      illustration: 'supper',
+      durationMs: 8000,
+      captionCueMs: 1050,
+      caption: 'We saved you a place.',
+      description: 'Pipit, Rill, Mallow and Osier are safe on the pier. Bellwater’s cloth covers the supper table. Nell’s rope lies at the mooring, and Orin’s fruiting bough rests along the table. An empty place faces the ferry. The lighthouse sweeps across the table once, then rests.',
+      cues: [],
+    }],
+    destination: 'credits',
+    continueLabel: 'Continue to credits',
+  },
 };
 
 export type StoryCove = {
@@ -262,6 +345,10 @@ export const storyCoves: readonly StoryCove[] = [
   { id: 'reef-return', level: reefReturn, order: 5, entryScene: 'lights-beyond-the-reef' },
   { id: 'orchard-landing', level: orchardLanding, order: 6, entryScene: 'orchard-paths' },
   { id: 'ternhaven', level: ternhaven, order: 7, entryScene: 'ternhaven-wave' },
+  { id: 'drowned-orchard', level: drownedOrchard, order: 8, entryScene: 'orchard-underwater' },
+  { id: 'lantern-reach', level: lanternReach, order: 9, entryScene: 'the-last-lights' },
+  { id: 'far-shore', level: farShore, order: 10, entryScene: 'across-far-reach' },
+  { id: 'last-ferry', level: lastFerry, order: 11, entryScene: 'one-last-crossing' },
 ];
 
 export const practiceCoves = [
@@ -289,6 +376,7 @@ export function practiceCove(id: string): Level | undefined {
 }
 
 export function scenePredecessor(id: SceneId): Level {
+  if (id === supperScene) return lastFerry;
   const index = storyCoves.findIndex((cove) => cove.entryScene === id);
   return storyCoves[Math.max(0, index - 1)].level;
 }

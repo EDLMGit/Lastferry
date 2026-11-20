@@ -56,7 +56,7 @@ describe('arrival presentation from real level identities', () => {
   });
 
   test('matching Journey entries reuse the same level identities and the six-person showcase remains complete', () => {
-    expect(storyCoves).toHaveLength(8);
+    expect(storyCoves).toHaveLength(12);
     for (const entry of storyCoves) expect(practiceCoves).toContain(entry.level);
     const six = render(wideBerth);
     expect(six).toContain('data-cast-size="6"');

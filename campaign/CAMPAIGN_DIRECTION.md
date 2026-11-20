@@ -1,6 +1,10 @@
 # Last Ferry — The Long Tide
 
-## Journey through supper · current assignment
+## The complete private Journey
+
+Holding Pier → Bellwater → Driftwood Yard → Two Shelters → Wide Berth → Reef Return → Orchard Landing → Ternhaven → Drowned Orchard → Lantern Reach → Far Shore → Last Ferry. The last approach and the final Bring home stay in the captain's hands. After that rescue, Continue story opens the supper at Harbor. The closing illustration holds until the captain chooses credits. All four late coves remain unrated in Journey and Practice. [Journey Home](../reviews/journey-home/REVIEW.md)
+
+## Journey through supper · original commission
 
 The twelve planned rescues are playable independently. [Journey Home](../NEXT_TASK_JOURNEY_HOME.md) now connects the last four. Preserve the final coves’ existing puzzles, introduce Drowned Orchard as a recognizable return and let the few remaining lights lead back to the refuge. After the captain accepts the final delivery, stage the authored place at the table and credits. Scoring decisions can follow the private campaign playtest. [Final crossing review](../reviews/last-ferry/INDEPENDENT_REVIEW.md)
 

@@ -19,7 +19,7 @@ const seven: JourneyRecord = {
 const raw = '\r\n' + JSON.stringify(seven, null, 3) + '\t';
 const pending: JourneyRecord = { ...seven, checkpoint: { kind: 'scene', id: 'ternhaven-wave' } };
 const playing: JourneyRecord = { ...seven, checkpoint: { kind: 'cove', id: 'ternhaven' }, acknowledgedScenes: [...seven.acknowledgedScenes, 'ternhaven-wave'] };
-const complete: JourneyRecord = { ...playing, checkpoint: { kind: 'complete' }, completed: [...seven.completed, 'ternhaven'] };
+const nextEntry: JourneyRecord = { ...playing, checkpoint: { kind: 'scene', id: 'orchard-underwater' }, completed: [...seven.completed, 'ternhaven'] };
 
 function backing(bytes = raw) {
   const values = new Map([[JOURNEY_STORAGE_KEY, bytes]]);
@@ -88,7 +88,7 @@ describe('historical seven-cove endpoint', () => {
       expect(progress.snapshot.issue).toContain('will not survive closing');
       expect(progress.acknowledge('ternhaven-wave')).toBe(true);
       expect(progress.accept('ternhaven', 'won')).toBe(true);
-      expect(progress.snapshot.record).toEqual(complete);
+      expect(progress.snapshot.record).toEqual(nextEntry);
       expect(writes.some(([key]) => key === JOURNEY_STORAGE_KEY)).toBe(false);
       expect(values.get(JOURNEY_STORAGE_KEY)).toBe(condition === 'before backup' || condition === 'during backup' ? newer : raw);
     },
@@ -113,7 +113,7 @@ describe('historical seven-cove endpoint', () => {
     expect(values.get(JOURNEY_STORAGE_KEY)).toBe(original);
   });
 
-  test('Practice best cannot grant progress; a one-lantern Journey rescue can finish exactly once', () => {
+  test('Practice best cannot grant progress; a one-lantern Journey rescue advances exactly once', () => {
     const { storage, values } = backing();
     const bestStore = new MasteryStore(() => storage);
     const practice = new Session(practiceCove('ternhaven')!);
@@ -145,7 +145,7 @@ describe('historical seven-cove endpoint', () => {
     expect(journey.accept('ternhaven', session.state.status)).toBe(true);
     expect(bestStore.accept(session.takeResult())).toBe(false);
     expect(journey.accept('ternhaven', 'won')).toBe(false);
-    expect(new JourneyProgress(() => storage).snapshot.record).toEqual(complete);
+    expect(new JourneyProgress(() => storage).snapshot.record).toEqual(nextEntry);
     expect(new MasteryStore(() => storage).best('ternhaven')).toEqual(best);
     expect(values.get(MASTERY_STORAGE_KEY)).toBe(bestBytes);
     expect(values.get(JOURNEY_TERNHAVEN_BACKUP_KEY)).toBe(raw);

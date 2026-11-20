@@ -1,9 +1,10 @@
-import { storyCoves, storyScenes, type CoveId, type SceneId } from './registry';
+import { storyCoves, storyScenes, supperScene, type CoveId, type SceneId } from './registry';
 
 export const JOURNEY_STORAGE_KEY = 'last-ferry.journey.v1';
 export const JOURNEY_LEGACY_BACKUP_KEY = JOURNEY_STORAGE_KEY + '.before-six-coves';
 export const JOURNEY_ORCHARD_BACKUP_KEY = JOURNEY_STORAGE_KEY + '.before-orchard';
 export const JOURNEY_TERNHAVEN_BACKUP_KEY = JOURNEY_STORAGE_KEY + '.before-ternhaven';
+export const JOURNEY_DROWNED_ORCHARD_BACKUP_KEY = JOURNEY_STORAGE_KEY + '.before-drowned-orchard';
 export const checkpointCopy = 'Progress is saved between coves. An unfinished cove starts again.';
 export const unavailableCopy =
   'Progress cannot be saved on this device. You can keep playing, but this journey will not survive closing.';
@@ -66,6 +67,8 @@ const throughReef = [...throughDriftwood, 'two-shelters', 'wide-berth', 'reef-re
 const throughReefScene = [...throughYardScene, 'among-the-reeds', 'a-wider-deck', 'lights-beyond-the-reef'];
 const throughOrchard = [...throughReef, 'orchard-landing'];
 const throughOrchardScene = [...throughReefScene, 'orchard-paths'];
+const throughTernhaven = [...throughOrchard, 'ternhaven'];
+const throughTernhavenScene = [...throughOrchardScene, 'ternhaven-wave'];
 
 export function legacyContinuationScene(value: unknown): SceneId | null {
   if (
@@ -78,6 +81,9 @@ export function legacyContinuationScene(value: unknown): SceneId | null {
   const named = keys(checkpoint, ['kind', 'id']);
   const pendingLaunch = named && checkpoint.kind === 'scene' && checkpoint.id === 'a-wider-deck';
   const activeWide = named && checkpoint.kind === 'cove' && checkpoint.id === 'wide-berth';
+  if (complete && sameItems(value.completed, throughTernhaven) && sameItems(value.acknowledgedScenes, throughTernhavenScene)) {
+    return 'orchard-underwater';
+  }
   if (complete && sameItems(value.completed, throughOrchard) && sameItems(value.acknowledgedScenes, throughOrchardScene)) {
     return 'ternhaven-wave';
   }
@@ -153,19 +159,13 @@ export function validateJourney(value: unknown): JourneyValidation {
       issue: 'This journey has an invalid checkpoint. Your stored progress has been kept.',
     };
   }
-  if (
-    checkpoint.kind === 'complete' &&
-    keys(checkpoint, ['kind']) &&
-    sameItems(
-      value.completed,
-      storyCoves.map((cove) => cove.id),
-    ) &&
-    sameItems(
-      value.acknowledgedScenes,
-      storyCoves.map((cove) => cove.entryScene),
-    )
-  ) {
-    return { valid: true, record: copy(value as JourneyRecord) };
+  const atSupper = keys(checkpoint, ['kind', 'id']) && checkpoint.kind === 'scene' && checkpoint.id === supperScene;
+  const atCredits = keys(checkpoint, ['kind']) && checkpoint.kind === 'complete';
+  if (atSupper || atCredits) {
+    const scenes = storyCoves.map(cove => cove.entryScene);
+    if (atCredits) scenes.push(supperScene);
+    if (sameItems(value.completed, storyCoves.map(cove => cove.id)) && sameItems(value.acknowledgedScenes, scenes))
+      return { valid: true, record: copy(value as JourneyRecord) };
   }
   for (let i = 0; i < storyCoves.length; i++) {
     const cove = storyCoves[i];
@@ -217,9 +217,17 @@ export function acknowledgeScene(record: JourneyRecord, id: SceneId): JourneyRec
     record.checkpoint.id !== id
   )
     return record;
+  const destination = storyScenes[id].destination;
+  if (destination === 'credits') {
+    return {
+      ...copy(record),
+      checkpoint: { kind: 'complete' },
+      acknowledgedScenes: [...record.acknowledgedScenes, id],
+    };
+  }
   return {
     ...copy(record),
-    checkpoint: { kind: 'cove', id: storyScenes[id].destination },
+    checkpoint: { kind: 'cove', id: destination },
     acknowledgedScenes: storyCoves
       .map((cove) => cove.entryScene)
       .filter((scene) => scene === id || record.acknowledgedScenes.includes(scene)),
@@ -239,7 +247,7 @@ export function acceptCove(record: JourneyRecord, id: CoveId, status: string): J
     .map((cove) => cove.id)
     .filter((coveId) => coveId === id || record.completed.includes(coveId));
   const next = storyCoves.find((cove) => !completed.includes(cove.id));
-  let checkpoint: JourneyCheckpoint = { kind: 'complete' };
+  let checkpoint: JourneyCheckpoint = { kind: 'scene', id: supperScene };
   if (next) {
     checkpoint = record.acknowledgedScenes.includes(next.entryScene)
       ? { kind: 'cove', id: next.id }
@@ -255,7 +263,9 @@ export function acceptCove(record: JourneyRecord, id: CoveId, status: string): J
 export function checkpointCove(record: JourneyRecord): CoveId {
   const checkpoint = record.checkpoint;
   if (checkpoint.kind === 'complete') return record.completed.at(-1)!;
-  return checkpoint.kind === 'scene' ? storyScenes[checkpoint.id].destination : checkpoint.id;
+  if (checkpoint.kind === 'cove') return checkpoint.id;
+  const destination = storyScenes[checkpoint.id].destination;
+  return destination === 'credits' ? record.completed.at(-1)! : destination;
 }
 
 export class JourneyProgress {
@@ -297,13 +307,16 @@ export class JourneyProgress {
     const record = this.current.record;
     const nextScene = legacyContinuationScene(record);
     if (!record || !nextScene || this.current.raw === null) return false;
-    this.save(
+    const backupKeys: Partial<Record<SceneId, string>> = {
+      'orchard-underwater': JOURNEY_DROWNED_ORCHARD_BACKUP_KEY,
+      'ternhaven-wave': JOURNEY_TERNHAVEN_BACKUP_KEY,
+      'orchard-paths': JOURNEY_ORCHARD_BACKUP_KEY,
+    };
+    return this.save(
       { ...copy(record), checkpoint: { kind: 'scene', id: nextScene } },
       this.current.raw,
-      nextScene === 'ternhaven-wave' ? JOURNEY_TERNHAVEN_BACKUP_KEY :
-        nextScene === 'orchard-paths' ? JOURNEY_ORCHARD_BACKUP_KEY : JOURNEY_LEGACY_BACKUP_KEY,
+      backupKeys[nextScene],
     );
-    return true;
   }
 
   acknowledge(id: SceneId): boolean {
@@ -329,9 +342,9 @@ export class JourneyProgress {
     let persistent = this.current.persistent;
     try {
       if (!this.storage) throw new Error('Storage unavailable');
+      if (this.storage.getItem(JOURNEY_STORAGE_KEY) !== this.current.raw)
+        throw new Error('Checkpoint changed');
       if (previousRoute !== undefined) {
-        if (this.storage.getItem(JOURNEY_STORAGE_KEY) !== previousRoute)
-          throw new Error('Checkpoint changed');
         let key = backupKey;
         let saved = this.storage.getItem(key);
         for (let slot = 2; saved !== null && saved !== previousRoute; slot++) {
@@ -346,10 +359,14 @@ export class JourneyProgress {
           throw new Error('Checkpoint changed during backup');
       }
       this.storage.setItem(JOURNEY_STORAGE_KEY, raw);
-      if (previousRoute !== undefined && this.storage.getItem(JOURNEY_STORAGE_KEY) !== raw) {
+      if (this.storage.getItem(JOURNEY_STORAGE_KEY) !== raw) {
         throw new Error('Checkpoint unavailable');
       }
     } catch {
+      if (backupKey === JOURNEY_DROWNED_ORCHARD_BACKUP_KEY) {
+        this.current.issue = 'The next chapter could not be saved safely. Try Continue again, or reload to read the current save.';
+        return false;
+      }
       persistent = false;
       this.storage = null;
     }
@@ -360,5 +377,6 @@ export class JourneyProgress {
       persistent,
       issue: persistent ? null : unavailableCopy,
     };
+    return true;
   }
 }

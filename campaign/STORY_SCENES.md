@@ -1,8 +1,20 @@
 # Last Ferry — story scenes for The Long Tide
 
-## Drowned Orchard · Practice implementation for review
+## The last four chapters and the invitation
 
-There is no Drowned Orchard scene or ninth Journey checkpoint. Its four new neighbors appear in an independent Practice puzzle. The last playable Journey transition remains Orchard → A wave from Ternhaven → Ternhaven.
+| Scene | When it opens | Picture and handoff |
+| --- | --- | --- |
+| The orchard again | After Ternhaven | An old apple tree identifies Orchard Landing across the higher water. The empty ferry is alongside Damson and Brindle. Burr and Sloe wait at Spring Steps. Cider Quay is underwater. Continue to Drowned Orchard. |
+| The last lights | After Drowned Orchard | Tansy unfolds her cloth. Moss settles beside the table and Bram waits by the bell. Across the water one occupied landing still has a light. Continue to Lantern Reach. |
+| Across Far Reach | After Lantern Reach | The empty ferry is at Tide Steps beside Thistle and Button. Peat and Rowan are on separate landings across the reach. Continue to Far Shore. |
+| One last crossing | After Far Shore | The empty ferry waits at Lantern Buoy between the two remaining groups and Harbor. Continue to Last Ferry. |
+| A place for the captain | After accepting Last Ferry's rescue | All four final neighbors stand safely ashore. An empty place faces the ferry. Bellwater’s cloth, Nell’s mooring rope and Orin’s orchard bough return. The lighthouse sweeps once. Continue to credits. |
+
+The milestone captions are **“The table is nearly ready. A few lights are still waiting across the water.”** and **“We saved you a place.”** The three entrance greetings and the last lights each hold their endpoint. Supper holds for as long as the player stays. Skip, Replay, Read story and Settings spend no turn and never acknowledge the scene. The pending supper survives reload as a held recap. Acknowledgment records completion and opens credits with Replay coves, Settings and Home. [Production captions and descriptions](../src/campaign/registry.ts) · [Native Journey scenes](../reviews/journey-home/REVIEW.md)
+
+## Historical checkpoint · Drowned Orchard in Practice
+
+At its independent Practice debut, Drowned Orchard introduced four new neighbors. Journey then ended with Orchard → A wave from Ternhaven → Ternhaven.
 
 **Eight Journey coves / ten Practice entrances / nine accepted scoring identities.** [Design, verification and review](../reviews/cove-nine-practice/REVIEW.md). The eight-cove Journey, earlier saves and all original publication records are unchanged.
 

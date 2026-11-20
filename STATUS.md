@@ -1,8 +1,14 @@
-# Last Ferry published in Practice · complete Journey next
+# Last Ferry · Journey Home
+
+The full twelve-cove Journey now leads from Holding Pier to supper and credits. The four late chapters are unrated, and the player still chooses each departure. Completed Ternhaven saves continue at the orchard after their original bytes are backed up. [Play locally](http://127.0.0.1:5420/) · [Review and gameplay evidence](reviews/journey-home/REVIEW.md)
+
+The fresh production Journey passed all twelve rescues, terminal Undo, a pending-supper reload, credits and independent replay. The production build typechecked, the full unit suite passed 776/776, and the catalog retained 83 asset families. A separate archived Ternhaven save resumed via a verified byte-preserving backup. The portable copy reached Holding Pier and the earned supper with the network disabled. [Verification results](reviews/journey-home/REVIEW.md#verification)
+
+## Publication and original commission
 
 **Active task — [JOURNEY_HOME_01](NEXT_TASK_JOURNEY_HOME.md).** Complete the private review Journey after Ternhaven. Integrate Drowned Orchard, Lantern Reach, Far Shore and Last Ferry in story order, add the authored late scenes and finish at supper and credits. Codex owns the storytelling, implementation, pacing and end-to-end play. Keep the four late coves provisionally unrated while their lantern targets await player feedback. Every successful rescue advances when the player chooses Continue story.
 
-The [private phone playtest](https://last-ferry-playtest.abumech.chatgpt.site/?cove=last-ferry) serves **version 28**, game `a5e1eff68ee93eb2d4cf9814863a3b104fc6a889`. All twelve planned rescues and the separate First Crossing are playable in Practice. Journey currently ends at Ternhaven after eight coves. Nine coves have accepted lantern targets. [Independent review](reviews/last-ferry/INDEPENDENT_REVIEW.md) · [Publication receipt](reviews/last-ferry/deployment-confirmation.json).
+The [private phone playtest](https://last-ferry-playtest.abumech.chatgpt.site/?cove=last-ferry) serves **version 28**, game `a5e1eff68ee93eb2d4cf9814863a3b104fc6a889`. On that published build, all twelve rescues and First Crossing are playable in Practice, and Journey ends at Ternhaven after eight coves. Nine coves have accepted lantern targets. [Independent review](reviews/last-ferry/INDEPENDENT_REVIEW.md) · [Publication receipt](reviews/last-ferry/deployment-confirmation.json).
 
 ## Submitted final crossing handoff
 

@@ -187,3 +187,45 @@ html[data-motion='reduced'] #transfer-receipt {
     margin-top: 6px;
   }
 }
+
+.credits-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #f3d9a1;
+}
+.credits-title .cove-glyph {
+  width: 40px;
+  height: 40px;
+}
+.credits-title p {
+  font: 32px/1.05 Georgia, serif;
+}
+.credits-title span {
+  display: block;
+  margin-top: 4px;
+  font: 16px/1.2 Georgia, serif;
+}
+.credits-bill dl {
+  margin: 14px 0;
+  padding: 10px 0;
+  border-block: 1px solid #aa9568;
+}
+.credits-bill dl div {
+  display: grid;
+  grid-template-columns: minmax(7em, 0.8fr) 1.4fr;
+  gap: 8px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.credits-bill dt { color: #c6d6c6; }
+.credits-bill dd { margin: 0; color: #fff3da; }
+.credits-thanks { font: italic 17px/1.3 Georgia, serif; }
+#dialog[data-mode='journey-end'] #journey-practice { grid-column: 1 / -1; }
+@media (max-height: 420px) and (orientation: landscape) {
+  #dialog[data-mode='journey-end'] #dialog-content { padding: 10px 14px; gap: 6px; }
+  .credits-title p { font-size: 25px; }
+  .credits-bill dl { margin: 6px 0; padding: 4px 0; }
+  #dialog[data-mode='journey-end'] .journey-actions { grid-template-columns: 1.4fr 1fr 1fr; }
+  #dialog[data-mode='journey-end'] #journey-practice { grid-column: auto; }
+}

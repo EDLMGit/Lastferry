@@ -1,5 +1,9 @@
 # Last Ferry asset provenance and history
 
+## Journey Home · five illustrations and credits
+
+The existing Words and Light painter adds the returning orchard, last lights, Far Reach, final ferry and supper. Bellwater’s cloth connects the Lantern Reach entry and the table at Harbor. The existing sound owner carries the score and finite effects. The credits reuse the painted panel, button faces and Harbor glyph. The developer gallery takes these five held specimens directly from the registry. The 83-family catalog retains the original scene and control IDs. [Painter](../src/campaign/story-painter.ts) · [Gallery](../asset-gallery.html#story-heading) · [Actual play](../reviews/journey-home/REVIEW.md)
+
 ## Last Ferry · the approach from Lantern Buoy
 
 The cove places the established six-space ferry, buoy, fitted piers, lighthouse and keeper’s cottage on a new three-island coast. Pipit and Rill use the cream and tan rabbit models, Mallow the wool sheep and Osier the brown beaver. The same identities drive their chooser portraits and arrival figures. The catalog records the new use under six existing families. [Coast data](../data/last-ferry.level.json) · [Gallery](../asset-gallery.html#last-ferry) · [Playtest](../reviews/last-ferry/REVIEW.md)

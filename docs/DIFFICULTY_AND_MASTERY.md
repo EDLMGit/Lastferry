@@ -1,5 +1,9 @@
 # Last Ferry — difficulty and three-lantern mastery
 
+## Journey Home playtest
+
+All thirteen Practice entrances remain available. Nine have accepted scoring targets. Journey uses the same identities; the four chapters following Ternhaven record a rescue only when the player chooses Continue story, regardless of efficiency or Undo. Their arrivals show the passengers, action count and successful Undos without a lantern award. A Practice rescue cannot unlock supper. [Private review](../reviews/journey-home/REVIEW.md)
+
 ## Far Shore · unscored Practice
 
 The production minimum is 13 actions. The first trip changes the load that can board at a distant shallow berth. A one-unit deeper berth makes the opposite first pickup viable. Far Shore uses the unrated arrival and preserves earned bests. Scoring awaits a later playtest decision. [Proof and play](../reviews/far-shore/REVIEW.md)

@@ -70,6 +70,7 @@ import {
   practiceCoves,
   storyScenes,
   scenePredecessor,
+  supperScene,
   type SceneId,
 } from './campaign/registry';
 import {
@@ -283,6 +284,7 @@ function setHomeVisible(active: boolean) {
 }
 
 function homeCheckpointNotice(record: JourneyRecord, newEntry: SceneId | null) {
+  if (newEntry === 'orchard-underwater') return 'Eight coves are safe. Continue to Drowned Orchard.';
   if (newEntry === 'ternhaven-wave') return 'Seven coves are safe. Ternhaven is next.';
   if (newEntry === 'orchard-paths') return 'Six coves are safe. Orchard Landing is next.';
   if (newEntry === 'among-the-reeds') {
@@ -292,13 +294,17 @@ function homeCheckpointNotice(record: JourneyRecord, newEntry: SceneId | null) {
   }
   if (newEntry) return `${storyScenes[newEntry].title} · new story waiting.`;
   const checkpoint = record.checkpoint;
-  if (checkpoint.kind === 'complete') return 'Eight coves are safe. Four more are still to come.';
+  if (checkpoint.kind === 'complete') return 'All twelve coves are safe.';
   if (checkpoint.kind === 'scene') return `${storyScenes[checkpoint.id].title} · saved story.`;
   return `${storyCoves.find((entry) => entry.id === checkpoint.id)!.level.title} · from cove start.`;
 }
 
 function continueSavedJourney() {
   const freshEntry = journey?.continueAvailableContent();
+  if (!freshEntry && legacyContinuationScene(journey?.snapshot.record)) {
+    showHome('home-play');
+    return;
+  }
   resumeJourney(!freshEntry);
 }
 
@@ -354,7 +360,7 @@ function showHome(focusId?: string) {
   const invalid = snapshot?.kind === 'invalid';
 
   const label = complete
-    ? 'Play a cove'
+    ? 'View credits'
     : checkpoint
       ? 'Continue'
       : invalid
@@ -363,7 +369,7 @@ function showHome(focusId?: string) {
 
   const notice = snapshot?.record ? homeCheckpointNotice(snapshot.record, newEntry) : '';
 
-  homeSurface.innerHTML = `<header id="home-title"><h1>Last Ferry</h1><p>The Long Tide</p></header><nav id="home-menu" aria-label="Home"><p class="home-notice">${notice}${snapshot && !snapshot.persistent ? ' Progress lasts only for this visit.' : ''}${invalid ? ` ${snapshot.issue}` : ''}</p><button id="home-play">${label}</button><div class="home-secondary"><button id="home-options">Options</button><button id="home-practice">Practice</button></div><div class="home-secondary"><button id="home-sound"></button>${checkpoint ? '<button id="home-new">New journey</button>' : ''}</div>${masteryNotice()}</nav>`;
+  homeSurface.innerHTML = `<header id="home-title"><h1>Last Ferry</h1><p>The Long Tide</p></header><nav id="home-menu" aria-label="Home"><p class="home-notice">${notice}${snapshot && !snapshot.persistent ? ' Progress lasts only for this visit.' : ''}${snapshot?.issue && (invalid || newEntry) ? ` ${snapshot.issue}` : ''}</p><button id="home-play">${label}</button><div class="home-secondary"><button id="home-options">Options</button><button id="home-practice">Practice</button></div><div class="home-secondary"><button id="home-sound"></button>${checkpoint ? '<button id="home-new">New journey</button>' : ''}</div>${masteryNotice()}</nav>`;
 
   for (const button of homeSurface.querySelectorAll<HTMLButtonElement>('button'))
     setControl(
@@ -379,7 +385,7 @@ function showHome(focusId?: string) {
   $('home-play').onclick = (event) => {
     if (event.detail > 1) return;
 
-    if (complete) showJourney('practice', 'practice-first-crossing');
+    if (complete) resumeJourney();
     else if (checkpoint) continueSavedJourney();
     else fresh();
   };
@@ -458,7 +464,7 @@ function resumeJourney(restored = true) {
       mountCove(destination);
       world.sync(restoredHarbor(destination));
     }
-    showJourney('journey-end', 'journey-title');
+    showJourney('journey-end', 'journey-practice');
     return;
   }
   if (checkpoint.kind === 'scene') {
@@ -512,7 +518,7 @@ function continueStory() {
   }
   const id = storyId;
   if (!journey?.acknowledge(id)) return;
-  resumeJourney();
+  resumeJourney(false);
 }
 function acceptStoryCove() {
   if (!campaignPlay || session.busy || session.state.status !== 'won') return;
@@ -688,10 +694,10 @@ function renderJourneyDialog() {
     actions =
       '<button id="journey-return-cancel">Keep playing</button><button id="journey-return-confirm">Return home</button>';
   } else {
-    heading = 'Eight coves are safe.';
-    body = '<p>You’ve rescued the eight available coves. Four more are still to come. You can revisit any crossing in Practice.</p>' + notice;
+    heading = 'Credits';
+    body = `<div class="credits-bill"><div class="credits-title">${iconMarkup('harbor-home')}<p>Last Ferry <span>The Long Tide</span></p></div><dl><div><dt>Game direction</dt><dd>The Last Ferry project</dd></div><div><dt>Development</dt><dd>Built with OpenAI Codex</dd></div><div><dt>3D rendering</dt><dd>Three.js contributors</dd></div></dl><p class="credits-thanks">Thank you for bringing everyone home.</p></div>` + notice;
     actions =
-      '<button id="journey-title">Return Home</button><button id="journey-practice">Practice</button><button id="journey-settings">Options</button>';
+      '<button id="journey-practice">Replay coves</button><button id="journey-settings">Settings</button><button id="journey-title">Home</button>';
   }
   $('dialog-content').innerHTML =
     `<header class="dialog-head${mode === 'story' ? ' sr-only' : ''}"><h2 id="dialog-title">${heading}</h2></header><div class="dialog-body journey-copy">${body}</div><footer class="dialog-footer journey-actions">${actions}</footer>`;
@@ -701,7 +707,7 @@ function renderJourneyDialog() {
       button,
       null,
       button.textContent ?? '',
-      button.id === 'story-continue' ? 'warm' : button.id === 'story-skip' ? 'quiet' : 'action',
+      button.id === 'journey-practice' && mode === 'journey-end' ? 'warm' : 'action',
     );
   const on = (id: string, fn: () => void) => {
     const element = $(id);
@@ -1433,9 +1439,11 @@ function renderDialog() {
       policy.textContent = 'Practice does not change your journey.' +
         (rating ? ' Continuing, leaving or restarting after a rescue keeps its lantern result.' : '');
       if (campaignPlay) {
-        policy.textContent = journey?.snapshot.persistent
-          ? 'Progress is saved between coves. An unfinished cove starts again. Continue story after arrival to advance. Continuing, leaving or restarting keeps the lantern result.'
-          : 'Journey progress lasts for this visit only. Continue story after arrival to advance. Continuing, leaving or restarting keeps the lantern result.';
+        const storagePolicy = journey?.snapshot.persistent
+          ? 'Progress is saved between coves. An unfinished cove starts again.'
+          : 'Journey progress lasts for this visit only.';
+        policy.textContent = storagePolicy + ' Continue story after arrival to advance.' +
+          (rating ? ' Continuing, leaving or restarting keeps the lantern result.' : ' This crossing has no lantern rating.');
       }
       returnButton.after(policy);
     }
@@ -1500,8 +1508,8 @@ function renderDialog() {
         const record = progress.record!;
         if (record.checkpoint.kind === 'cove') {
           const next = acceptCove(record, record.checkpoint.id, s.status);
-          const handoff = next.checkpoint.kind === 'complete'
-            ? 'Continue story records this rescue.'
+          const handoff = next.checkpoint.kind === 'scene' && next.checkpoint.id === supperScene
+            ? 'Continue story to join the others at supper.'
             : `Next crossing: ${storyCoves.find((entry) => entry.id === checkpointCove(next))!.level.title}.`;
           policy = `${handoff} Undo stays available until you continue. ${progress.persistent ? 'Reloading restarts this cove.' : 'Progress lasts for this visit only.'}`;
         }
