@@ -466,7 +466,7 @@ export class World {
       return decorateOrchardIsland(group, island, style, this.level.id === 'drowned-orchard');
     if (this.level.id === 'far-shore') return decorateFarShoreIsland(group, island, style);
     if (this.level.id === 'reef-return') return decorateReefIsland(group, island, style);
-    if (this.level.id === 'ternhaven' || this.level.id === 'lantern-reach') return decorateTernhavenIsland(group, island, style);
+    if (['ternhaven', 'lantern-reach', 'last-ferry'].includes(this.level.id)) return decorateTernhavenIsland(group, island, style);
     if (this.level.id === 'wide-berth') {
       return decorateWideIsland(group, island, style);
     }
@@ -717,18 +717,21 @@ export class World {
     if (this.layoutStaticBounds.has('bell'))
       this.overviewSubjects.push(this.layoutStaticBounds.get('bell')!.clone());
     for (const pier of this.level.piers) {
-      const group = new T.Box3();
-      for (const passenger of this.level.passengers) {
-        const shore =
-          this.level.id === 'two-shelters'
-            ? shelterShoreSeat(this.level, passenger.id, pier, !!pier.isDeliveryPier)
-            : shoreSeat(this.level, passenger.id, pier, !!pier.isDeliveryPier);
-        const transform = new T.Matrix4().makeTranslation(shore.x, shore.y + 0.08, shore.z);
-        transform.scale(new T.Vector3(...passengerScale(passenger.species)));
-        group.union(this.layoutAnimalBounds.get(passenger.id)!.clone().applyMatrix4(transform));
-      }
+      const group = this.shoreGroupBounds(pier, this.level.passengers);
       if (!group.isEmpty()) this.overviewSubjects.push(group);
     }
+  }
+  private shoreGroupBounds(pier: Level['piers'][number], passengers: Level['passengers']) {
+    const group = new T.Box3();
+    for (const passenger of passengers) {
+      const shore = this.level.id === 'two-shelters'
+        ? shelterShoreSeat(this.level, passenger.id, pier, !!pier.isDeliveryPier)
+        : shoreSeat(this.level, passenger.id, pier, !!pier.isDeliveryPier);
+      const transform = new T.Matrix4().makeTranslation(shore.x, shore.y + 0.08, shore.z);
+      transform.scale(new T.Vector3(...passengerScale(passenger.species)));
+      group.union(this.layoutAnimalBounds.get(passenger.id)!.clone().applyMatrix4(transform));
+    }
+    return group;
   }
   project(p: number[], height = this.water.position.y + 0.04) {
     const v = V(p, height).project(this.camera);
@@ -1075,8 +1078,12 @@ export class World {
     point.applyMatrix4(this.camera.matrixWorldInverse);
     return { x: point.x, y: point.y + 0.8 };
   }
-  private neighborhood(id: string, usable: ViewRectangle) {
-    const cached = this.neighborhoodFrames.get(id);
+  private neighborhood(id: string, usable: ViewRectangle, state: State) {
+    const waiting = id === this.layout.pickupViewFrom ? this.level.piers.filter(pier =>
+      !pier.isDeliveryPier && state.waitingByPier[pier.id].length) : [];
+    const key = [id, ...waiting.map(pier => pier.id + '=' + this.level.passengers
+      .filter(passenger => state.waitingByPier[pier.id].includes(passenger.id)).map(passenger => passenger.id).join(','))].join(':');
+    const cached = this.neighborhoodFrames.get(key);
     if (cached) return cached;
     const node = this.level.nodes.find((entry) => entry.id === id)!;
     const [x, z] = node.positionXZ;
@@ -1085,6 +1092,22 @@ export class World {
       new T.Vector3(x - envelope.radius, envelope.bottom, z - envelope.radius),
       new T.Vector3(x + envelope.radius, envelope.top, z + envelope.radius),
     ));
+    if (this.layout.pickupViewFrom && (id === this.layout.pickupViewFrom || node.pierId === this.level.objective.deliveryPierId)) {
+      const subjects = [boat];
+      for (const pier of waiting) {
+        const passengers = this.level.passengers.filter(entry => state.waitingByPier[pier.id].includes(entry.id));
+        subjects.push(this.projectedStoryBounds(this.shoreGroupBounds(pier, passengers).expandByScalar(0.55)));
+      }
+      if (!waiting.length) subjects.push(this.projectedStoryBounds(this.layoutStaticBounds.get('lighthouse')!));
+      const bounds = {
+        minX: Math.min(...subjects.map(box => box.minX)), maxX: Math.max(...subjects.map(box => box.maxX)),
+        minY: Math.min(...subjects.map(box => box.minY)), maxY: Math.max(...subjects.map(box => box.maxY)),
+      };
+      const padded = { left: usable.left + 12, right: usable.right - 12, top: usable.top + 16, bottom: usable.bottom - 16 };
+      const result = unobscuredOverview(bounds, subjects, padded, this.overviewObstacles, 40);
+      this.neighborhoodFrames.set(key, result);
+      return result;
+    }
     const landingBounds = this.layoutStaticBounds.get(id)!.clone();
     const signal = this.level.bridge && node.pierId === this.level.bridge.signalPierId;
     if (signal && this.swingBridge) landingBounds.union(this.swingBridge.sweepBounds);
@@ -1133,9 +1156,9 @@ export class World {
       };
     }
     if (!this.storyFraming) {
-      const after = this.neighborhood(this.state.boatNodeId, usable);
+      const after = this.neighborhood(this.state.boatNodeId, usable, this.state);
       const journey = this.transition?.path && this.transition;
-      const before = journey ? this.neighborhood(journey.before.boatNodeId, usable) : after;
+      const before = journey ? this.neighborhood(journey.before.boatNodeId, usable, journey.before) : after;
       const progress = journey ? smooth(this.journeyFrame?.progress ?? 0) : 1;
       const normal = phone ? T.MathUtils.lerp(before.scale, after.scale, progress) : overview;
       this.wholeScale = this.planningFrame!.scale;

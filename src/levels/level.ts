@@ -10,6 +10,7 @@ import ternhavenData from '../../data/ternhaven.level.json' with { type: 'json' 
 import drownedOrchardData from '../../data/drowned-orchard.level.json' with { type: 'json' };
 import lanternReachData from '../../data/lantern-reach.level.json' with { type: 'json' };
 import farShoreData from '../../data/far-shore.level.json' with { type: 'json' };
+import lastFerryData from '../../data/last-ferry.level.json' with { type: 'json' };
 export type CurrentPhase = { tideLevel: number; from: string; to: string };
 export type Passage = (typeof data.edges)[number] & {
   current?: { name: string; phases: CurrentPhase[] };
@@ -57,6 +58,7 @@ export const ternhaven = checkCurrents(ternhavenData);
 export const drownedOrchard = checkCurrents(drownedOrchardData);
 export const lanternReach = checkCurrents(lanternReachData);
 export const farShore = checkCurrents(farShoreData);
+export const lastFerry = checkCurrents(lastFerryData);
 export const nodeNames: Record<string, string> = {
   harbor: 'Harbor',
   cut: 'Shallow Cut',

@@ -1,0 +1,286 @@
+{
+  "sources": {
+    "src/game/rules.ts": "906e6f4199b60acf18bbfb2c7ac83510d7e91bb344cf8e50b732b21c5d3aa9e3",
+    "data/last-ferry.level.json": "0de56d40900c865f8ea7574d3fa6b9baee03637a2626984c700b258c61a2db1f",
+    "data/last-ferry/witnesses.json": "16b8a494f356d50afaf2933788dc28bce377fa382f525050746d7573e9d8a763",
+    "reviews/last-ferry/proof.mjs": "90a17235c17657b6cf77ed66bd5df38213393a9242e532a5f50e55ae3a209574"
+  },
+  "hashFormat": "SHA-256 of LF-normalized UTF-8",
+  "graph": {
+    "configurations": 1057,
+    "legalTransitions": 5072,
+    "canFinish": 1057,
+    "minimum": 7,
+    "fullDeckStops": [
+      "quilt",
+      "lantern",
+      "lace",
+      "harbor"
+    ]
+  },
+  "witnesses": [
+    {
+      "id": "ribbon-cut",
+      "actions": 7,
+      "fastestWithThatFirstPickup": 7,
+      "fullDeckOnAction": 4,
+      "trip": [
+        {
+          "action": {
+            "type": "move",
+            "to": "lace"
+          },
+          "turn": 1,
+          "at": "lace",
+          "tide": 0,
+          "aboard": [],
+          "load": 0,
+          "depthNeeded": 1
+        },
+        {
+          "action": {
+            "type": "board",
+            "passengerIds": [
+              "pipit",
+              "rill"
+            ]
+          },
+          "turn": 2,
+          "at": "lace",
+          "tide": 0,
+          "aboard": [
+            "pipit",
+            "rill"
+          ],
+          "load": 2,
+          "depthNeeded": 2
+        },
+        {
+          "action": {
+            "type": "move",
+            "to": "quilt"
+          },
+          "turn": 3,
+          "at": "quilt",
+          "tide": 0,
+          "aboard": [
+            "pipit",
+            "rill"
+          ],
+          "load": 2,
+          "depthNeeded": 2
+        },
+        {
+          "action": {
+            "type": "board",
+            "passengerIds": [
+              "mallow",
+              "osier"
+            ]
+          },
+          "turn": 4,
+          "at": "quilt",
+          "tide": 1,
+          "aboard": [
+            "pipit",
+            "rill",
+            "mallow",
+            "osier"
+          ],
+          "load": 6,
+          "depthNeeded": 4
+        },
+        {
+          "action": {
+            "type": "move",
+            "to": "lantern"
+          },
+          "turn": 5,
+          "at": "lantern",
+          "tide": 1,
+          "aboard": [
+            "pipit",
+            "rill",
+            "mallow",
+            "osier"
+          ],
+          "load": 6,
+          "depthNeeded": 4
+        },
+        {
+          "action": {
+            "type": "move",
+            "to": "harbor"
+          },
+          "turn": 6,
+          "at": "harbor",
+          "tide": 1,
+          "aboard": [
+            "pipit",
+            "rill",
+            "mallow",
+            "osier"
+          ],
+          "load": 6,
+          "depthNeeded": 4
+        },
+        {
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "pipit",
+              "rill",
+              "mallow",
+              "osier"
+            ]
+          },
+          "turn": 7,
+          "at": "harbor",
+          "tide": 1,
+          "aboard": [],
+          "load": 0,
+          "depthNeeded": 1
+        }
+      ]
+    },
+    {
+      "id": "outer-water",
+      "actions": 8,
+      "fastestWithThatFirstPickup": 8,
+      "fullDeckOnAction": 5,
+      "trip": [
+        {
+          "action": {
+            "type": "move",
+            "to": "quilt"
+          },
+          "turn": 1,
+          "at": "quilt",
+          "tide": 0,
+          "aboard": [],
+          "load": 0,
+          "depthNeeded": 1
+        },
+        {
+          "action": {
+            "type": "board",
+            "passengerIds": [
+              "mallow",
+              "osier"
+            ]
+          },
+          "turn": 2,
+          "at": "quilt",
+          "tide": 0,
+          "aboard": [
+            "mallow",
+            "osier"
+          ],
+          "load": 4,
+          "depthNeeded": 3
+        },
+        {
+          "action": {
+            "type": "move",
+            "to": "lantern"
+          },
+          "turn": 3,
+          "at": "lantern",
+          "tide": 0,
+          "aboard": [
+            "mallow",
+            "osier"
+          ],
+          "load": 4,
+          "depthNeeded": 3
+        },
+        {
+          "action": {
+            "type": "move",
+            "to": "lace"
+          },
+          "turn": 4,
+          "at": "lace",
+          "tide": 1,
+          "aboard": [
+            "mallow",
+            "osier"
+          ],
+          "load": 4,
+          "depthNeeded": 3
+        },
+        {
+          "action": {
+            "type": "board",
+            "passengerIds": [
+              "pipit",
+              "rill"
+            ]
+          },
+          "turn": 5,
+          "at": "lace",
+          "tide": 1,
+          "aboard": [
+            "mallow",
+            "osier",
+            "pipit",
+            "rill"
+          ],
+          "load": 6,
+          "depthNeeded": 4
+        },
+        {
+          "action": {
+            "type": "move",
+            "to": "lantern"
+          },
+          "turn": 6,
+          "at": "lantern",
+          "tide": 1,
+          "aboard": [
+            "mallow",
+            "osier",
+            "pipit",
+            "rill"
+          ],
+          "load": 6,
+          "depthNeeded": 4
+        },
+        {
+          "action": {
+            "type": "move",
+            "to": "harbor"
+          },
+          "turn": 7,
+          "at": "harbor",
+          "tide": 1,
+          "aboard": [
+            "mallow",
+            "osier",
+            "pipit",
+            "rill"
+          ],
+          "load": 6,
+          "depthNeeded": 4
+        },
+        {
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "mallow",
+              "osier",
+              "pipit",
+              "rill"
+            ]
+          },
+          "turn": 8,
+          "at": "harbor",
+          "tide": 1,
+          "aboard": [],
+          "load": 0,
+          "depthNeeded": 1
+        }
+      ]
+    }
+  ]
+}

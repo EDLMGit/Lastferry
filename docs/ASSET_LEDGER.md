@@ -1,5 +1,9 @@
 # Last Ferry asset provenance and history
 
+## Last Ferry · the approach from Lantern Buoy
+
+The cove places the established six-space ferry, buoy, fitted piers, lighthouse and keeper’s cottage on a new three-island coast. Pipit and Rill use the cream and tan rabbit models, Mallow the wool sheep and Osier the brown beaver. The same identities drive their chooser portraits and arrival figures. The catalog records the new use under six existing families. [Coast data](../data/last-ferry.level.json) · [Gallery](../asset-gallery.html#last-ferry) · [Playtest](../reviews/last-ferry/REVIEW.md)
+
 ## Cove instruments and rising-water mark
 
 The painted panel, passenger-choice and map-marker families now include the ferry and tide signs. A brass notch marks hull depth against a pale waterline. The original twin-wave symbol connects the tide notice to a specific landing. Both use local CSS and inline vector geometry, alongside the existing lighthouse icon. The 83-family inventory records their sources, runtime use and review. [Gallery](../asset-gallery.html#cove-instruments) · [Native phone frames](../reviews/cove-readability/REVIEW.md)

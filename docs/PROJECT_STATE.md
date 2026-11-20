@@ -1,12 +1,18 @@
 # Last Ferry — Project state
 
+## Last Ferry · independent Practice playtest
+
+The thirteenth Practice entrance opens at Lantern Buoy. Pipit and Rill wait at Lace Landing, with Mallow and Osier across the cut at Quilt Quay. Either first pickup can bring all four home on the six-space ferry. A single rise after action four opens more water at Lace. Once the group is aboard, the player can linger, sail the lamp channel and choose when to bring everyone ashore. [Local Practice](http://127.0.0.1:5410/?cove=last-ferry) · [Review and moving evidence](../reviews/last-ferry/REVIEW.md)
+
+Eight Journey coves still end at Ternhaven. Nine coves have lantern targets. The four later candidates are available through independent Practice. Their story promotions and the supper remain queued for review. The private phone Site serves version 27, game `29ed5dfb32f976b5de97ddfab0b701b3b3df0989`. The friend's earlier readability retest stays open. [Published receipt](../reviews/cove-readability/deployment-confirmation.json) · [Observer sheet](../reviews/cove-readability/PLAYTEST.md)
+
 ## Cove readability · friend retest
 
 The branch opens a fresh Journey with two painted instruments. At Holding Pier the ferry sign names Harbor, gives rescue progress and distinguishes load, required depth and local water. The tide sign names the waiting group and the first change. Its rising-water symbol repeats at the affected map landing. Inspections can frame that landing or Harbor for free. Crossings show passage and destination depth. A prospective transfer uses the berth depth at commitment. [Phone comparisons and verification](../reviews/cove-readability/REVIEW.md)
 
 The [private phone build](https://last-ferry-playtest.abumech.chatgpt.site/) now serves **version 27**, game `29ed5dfb32f976b5de97ddfab0b701b3b3df0989`, with eight Journey coves, twelve Practice entrances and nine scoring identities. The portable file can be rebuilt from the same commit. Fresh-player and physical-phone responses are pending. [Observer sheet](../reviews/cove-readability/PLAYTEST.md) · [Independent review](../reviews/cove-readability/INDEPENDENT_REVIEW.md) · [Receipt](../reviews/cove-readability/deployment-confirmation.json)
 
-**[LAST_FERRY_PRACTICE_01](../NEXT_TASK_LAST_FERRY.md) is active.** The next candidate is the final group’s crossing. Codex owns its authoring and playtest. Journey currently ends at Ternhaven. The late-cove integrations and final Journey welcome follow separate review.
+**[LAST_FERRY_PRACTICE_01](../NEXT_TASK_LAST_FERRY.md) commissioned the final group’s crossing.** Codex owns its authoring and playtest. Journey currently ends at Ternhaven. The late-cove integrations and final Journey welcome follow separate review.
 
 ## Far Shore · independent Practice playtest
 

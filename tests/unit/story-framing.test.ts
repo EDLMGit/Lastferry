@@ -11,6 +11,7 @@ import {
   Vector3,
 } from 'three';
 import { World } from '../../src/scene/world';
+import { sceneLayout } from '../../src/scene/layout';
 import { initial } from '../../src/game/rules';
 import { holdingPier } from '../../src/levels/level';
 import { ferryProfile } from '../../src/scene/ferry-profile';
@@ -52,6 +53,7 @@ function fixture(width: number, height: number, usable: ViewRectangle) {
     ]),
     state: initial(holdingPier),
     level: holdingPier,
+    layout: sceneLayout(holdingPier.id),
     neighborhoodFrames: new Map(),
     zoomStep: 0,
     overviewObstacles: [],

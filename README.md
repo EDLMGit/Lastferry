@@ -1,22 +1,24 @@
 # Last Ferry — the first evening
 
-[Play the current local Journey](http://127.0.0.1:5400/). For a fresh playtest, choose Play at Home. The ferry sign opens crossing details. The tide sign opens the forecast. Looking around and choosing passengers are free. [Readability review](reviews/cove-readability/REVIEW.md)
+[Play Last Ferry](http://127.0.0.1:5410/?cove=last-ferry) or choose **Practice → Last Ferry** at Home. Four neighbors are waiting for the evening ferry. You steer the crossing and bring them ashore at the lighthouse. [Gameplay and review](reviews/last-ferry/REVIEW.md)
 
-[Play Far Shore locally](http://127.0.0.1:5400/?cove=far-shore) or open Home → Practice. Thistle and Button are waiting at Tide Steps. The free tide forecast tells you who is across the current and how much the landing there can support. [Playtest review](reviews/far-shore/REVIEW.md)
+[Play the current local Journey](http://127.0.0.1:5410/). For a fresh playtest, choose Play at Home. The ferry sign opens crossing details. The tide sign opens the forecast. Looking around and choosing passengers are free. [Readability review](reviews/cove-readability/REVIEW.md)
 
-**[Play the Journey locally](http://127.0.0.1:5400/)**. The available coast connects eight rescues, ending at Ternhaven. The direct [Wide Berth](http://127.0.0.1:5400/?cove=wide-berth) and [Reef Return](http://127.0.0.1:5400/?cove=reef-return) links open independent Practice.
+[Play Far Shore locally](http://127.0.0.1:5410/?cove=far-shore) or open Home → Practice. Thistle and Button are waiting at Tide Steps. The free tide forecast tells you who is across the current and how much the landing there can support. [Playtest review](reviews/far-shore/REVIEW.md)
 
-[Play Lantern Reach locally](http://127.0.0.1:5400/?cove=lantern-reach). Flax is aboard at Wick Landing. Two rabbits wait at the dock, and Sorbus waits across the race. The tide forecast shows who is ashore, how much room they need and when each landing floods. This six-space Practice cove is unscored.
+**[Play the Journey locally](http://127.0.0.1:5410/)**. The available coast connects eight rescues, ending at Ternhaven. The direct [Wide Berth](http://127.0.0.1:5410/?cove=wide-berth) and [Reef Return](http://127.0.0.1:5410/?cove=reef-return) links open independent Practice.
 
-[Play Drowned Orchard locally](http://127.0.0.1:5400/?cove=drowned-orchard). A later tide has reached Cider Quay. Four new neighbors wait on the orchard side of Pomona Reach. This independent Practice playtest is unscored and leaves Journey progress alone.
+[Play Lantern Reach locally](http://127.0.0.1:5410/?cove=lantern-reach). Flax is aboard at Wick Landing. Two rabbits wait at the dock, and Sorbus waits across the race. The tide forecast shows who is ashore, how much room they need and when each landing floods. This six-space Practice cove is unscored.
 
-[Play Orchard Landing](http://127.0.0.1:5400/?cove=orchard-landing) from a local server or choose it from Home → Practice. Bring Orin, Pomme and Medlar home on the six-space ferry. Practice keeps your Journey checkpoint.
+[Play Drowned Orchard locally](http://127.0.0.1:5410/?cove=drowned-orchard). A later tide has reached Cider Quay. Four new neighbors wait on the orchard side of Pomona Reach. This independent Practice playtest is unscored and leaves Journey progress alone.
 
-[Play Ternhaven](http://127.0.0.1:5400/?cove=ternhaven), the independent Practice entrance to Journey cove eight. Juniper, Sedge and Fennel are aboard at Tern Buoy; Willow waits at Reed Landing. The target is 14 actions. Practice shares earned lanterns and leaves your Journey checkpoint alone. [Design and actual play review](reviews/cove-eight-practice/REVIEW.md)
+[Play Orchard Landing](http://127.0.0.1:5410/?cove=orchard-landing) from a local server or choose it from Home → Practice. Bring Orin, Pomme and Medlar home on the six-space ferry. Practice keeps your Journey checkpoint.
+
+[Play Ternhaven](http://127.0.0.1:5410/?cove=ternhaven), the independent Practice entrance to Journey cove eight. Juniper, Sedge and Fennel are aboard at Tern Buoy; Willow waits at Reed Landing. The target is 14 actions. Practice shares earned lanterns and leaves your Journey checkpoint alone. [Design and actual play review](reviews/cove-eight-practice/REVIEW.md)
 
 Play starts the illustrated opening. Take the helm enters Holding Pier. After each rescue, Continue story accepts that crossing and takes you onward to Bellwater, Driftwood Yard, then Two Shelters. Hazel and Bracken ride the small ferry while Mica waits by the reeds. After Two Shelters, Nell launches her prepared six-space ferry for Wide Berth. Heather and Birch are aboard for Reef Return, where Dot and Flick answer with lights. Beyond the reef, Orin greets the ferry from Orchard Landing. The empty ferry settles at Spring Steps beside waiting Pomme and Medlar. Continue to Orchard Landing enters the seventh puzzle. After Orchard, Willow greets the occupied ferry from Reed Landing. Continue to Ternhaven begins cove eight. Four later Journey coves remain unavailable. [Campaign direction](campaign/CAMPAIGN_DIRECTION.md) · [Story and captions](campaign/STORY_SCENES.md) · [Orchard Journey review](reviews/orchard-journey/REVIEW.md)
 
-**Practice** offers twelve coves on this branch, including Ternhaven, the repaired Wide Berth and Reef Return and the four-space Two Shelters. Each direct `?cove=` link opens its puzzle independently of Journey progress. First Crossing is separate practice, preserving the original baseline. Freestanding island names and light markers open free inspection; nearby dock controls offer direct named single-passenger transfers or a compact group chooser with one named commit. Marker inspection is free. A nearby Sail · 1 action commits one adjacent passage; blocked routes explain the depth or direction. Tips On also shows predicted losses. Details holds the exact route and passenger facts. Independent corner controls replace the continuous HUD: the load/depth capsule expands crossing information, and the occupied-pier deadline remains visible. Accepted painted panels, portraits, water, lighthouse, wooden contacts, music and sailing pace remain.
+**Practice** offers thirteen coves on this branch, including Ternhaven, the repaired Wide Berth and Reef Return and the four-space Two Shelters. Each direct `?cove=` link opens its puzzle independently of Journey progress. First Crossing is separate practice, preserving the original baseline. Freestanding island names and light markers open free inspection; nearby dock controls offer direct named single-passenger transfers or a compact group chooser with one named commit. Marker inspection is free. A nearby Sail · 1 action commits one adjacent passage; blocked routes explain the depth or direction. Tips On also shows predicted losses. Details holds the exact route and passenger facts. Independent corner controls replace the continuous HUD: the load/depth capsule expands crossing information, and the occupied-pier deadline remains visible. Accepted painted panels, portraits, water, lighthouse, wooden contacts, music and sailing pace remain.
 
 First Crossing is the independent tutorial cove. Its original four-space ferry starts with Pip and Rue aboard, and Moss waits for pickup.
 
@@ -33,7 +35,7 @@ npm ci
 npm run dev
 ```
 
-Open the printed local root URL without `?cove=`, normally `http://127.0.0.1:5173/`. To reproduce the local review build at [port 5400](http://127.0.0.1:5400/), run `npm run build` and then `npm run preview -- --port 5400 --strictPort`. No credentials, downloaded art, API account or backend is needed for play.
+Open the printed local root URL without `?cove=`, normally `http://127.0.0.1:5173/`. To reproduce the local review build at [port 5410](http://127.0.0.1:5410/), run `npm run build` and then `npm run preview -- --port 5410 --strictPort`. No credentials, downloaded art, API account or backend is needed for play.
 
 ## Journey checkpoints
 

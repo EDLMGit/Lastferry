@@ -1,6 +1,12 @@
-# Cove readability published · Last Ferry Practice next
+# Last Ferry · Practice playtest
 
-**Active task — [LAST_FERRY_PRACTICE_01](NEXT_TASK_LAST_FERRY.md).** Author the unscored Practice candidate for cove twelve. Give the last group one satisfying pickup decision and a short, unhurried sail home together. Codex owns the cast, map, pacing, implementation and tuning. The director reviews what the player can see and feel. After the Practice review, the late coves can join Journey in story order and the final delivery can lead to the supper.
+Four new neighbors share the last six-space ferry. The two pickups lead to Lantern Buoy, then Harbor. At the dock the captain still chooses Bring home. In the first trip, a countdown to the flooding of an empty landing followed the loaded boat all the way to Harbor. The revised tide schedule settles as the pickups finish. [Try the crossing](http://127.0.0.1:5410/?cove=last-ferry) · [Review and actual play](reviews/last-ferry/REVIEW.md)
+
+The minified build, typecheck, 762 unit tests, 83-family catalog and both production phone rescues passed. The desktop trip and the offline portable copy also passed. Start and homeward camera compositions were revised after the first portrait run. The review includes the uninterrupted rescue, a six-second approach and the original failures. Physical phone and independent-player feedback are pending. [Evidence](reviews/last-ferry/play/README.md)
+
+## Earlier commission after the version 27 publication
+
+**Commission — [LAST_FERRY_PRACTICE_01](NEXT_TASK_LAST_FERRY.md).** Author the unscored Practice candidate for cove twelve. Give the last group one satisfying pickup decision and a short, unhurried sail home together. Codex owns the cast, map, pacing, implementation and tuning. The director reviews what the player can see and feel. After the Practice review, the late coves can join Journey in story order and the final delivery can lead to the supper.
 
 The [private phone playtest](https://last-ferry-playtest.abumech.chatgpt.site/) serves **version 27**, game `29ed5dfb32f976b5de97ddfab0b701b3b3df0989`. Its new ferry and tide signs appear across eight Journey coves and twelve Practice entrances. Nine coves have lantern targets. [Independent review](reviews/cove-readability/INDEPENDENT_REVIEW.md) · [Publication receipt](reviews/cove-readability/deployment-confirmation.json).
 

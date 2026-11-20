@@ -1,5 +1,9 @@
 # Puzzle progression — selected campaign direction
 
+## Last Ferry · candidate for cove twelve
+
+Where Far Shore asks the player to anticipate a later pickup, this final crossing rewards recognizing the water under the ferry now. The two rabbits together draw depth 2, enough for the cut at low water. Taking the sheep and beaver first draws depth 3 and leaves the deeper way round. Both routes collect the same six spaces. The last two sails are in permanently deep water. The candidate uses the existing unscored arrival and has no mastery target. [Production witnesses](../data/last-ferry/witnesses.json) · [Played crossing](../reviews/last-ferry/REVIEW.md)
+
 ## Far Shore · independent Practice playtest
 
 At Tide Steps, the early Harbor delivery determines which companion must accompany the ferry outward. Anticipating the loaded draft at the receiving berth links two trips before the current turns. Rush Landing's last dry tide supports four spaces. The tested first version left enough time to stage the heavier companion after crossing. The revised deadline makes that choice matter on the home bank. Minimum 13, unscored pending player feedback. [Design and actual play](../reviews/far-shore/REVIEW.md)

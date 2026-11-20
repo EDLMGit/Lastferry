@@ -107,7 +107,7 @@ test('short landscape production route uses the second strategy and preserves co
   await page.goto(productionURL);
   expect(await page.evaluate(() => typeof (window as any).__LAST_FERRY__)).toBe('undefined');
   await activate(page, 'home-practice', true);
-  await expect(page.locator('[data-practice]')).toHaveCount(12);
+  await expect(page.locator('[data-practice]')).toHaveCount(13);
   await expect(page.locator('#practice-' + candidateId)).toContainText('Not yet rated');
   await page.locator('#practice-' + candidateId).scrollIntoViewIfNeeded();
   await fullyVisible(page, page.locator('#practice-' + candidateId));
@@ -197,7 +197,7 @@ test('320px Practice criteria, candidate menu, orientation and fullscreen retain
   await page.goto('/');
   await expect(page.locator('.home-notice')).toContainText('Seven coves are safe. Ternhaven is next.');
   await activate(page, 'home-practice', true);
-  await expect(page.locator('[data-practice]')).toHaveCount(12);
+  await expect(page.locator('[data-practice]')).toHaveCount(13);
   await page.locator('.mastery-criteria summary').tap();
   await expect(page.locator('.mastery-targets dt')).toHaveCount(9);
   await expect(page.locator('.mastery-targets')).toContainText(level.title);

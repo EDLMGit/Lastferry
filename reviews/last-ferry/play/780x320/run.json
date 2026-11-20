@@ -1,0 +1,377 @@
+{
+  "level": "last-ferry",
+  "entry": "?cove=last-ferry",
+  "stage": "minified release",
+  "source": "5446f672fca58dd18b73256e5485785427f1966b64c67467ebec828853310ca9",
+  "endSource": "5446f672fca58dd18b73256e5485785427f1966b64c67467ebec828853310ca9",
+  "build": {
+    "./assets/index-CW1w97YN.js": "6a6a2fe2ffd3882a58f93d98ee175e787cbf7a6d5bd9300e8e5c5d44903161fa",
+    "./assets/index-CBZbXHRC.css": "1a456b3e28a5d45723f840559a5726535d8864d90811804e22ed46b0a89e00dd"
+  },
+  "node": "v24.15.0",
+  "browser": "156.0.8078.4",
+  "viewport": [
+    780,
+    320
+  ],
+  "motion": "reduced",
+  "tips": "default off",
+  "route": "outer-water",
+  "actions": [
+    {
+      "type": "move",
+      "to": "quilt"
+    },
+    {
+      "type": "board",
+      "passengerIds": [
+        "mallow",
+        "osier"
+      ]
+    },
+    {
+      "type": "move",
+      "to": "lantern"
+    },
+    {
+      "type": "move",
+      "to": "lace"
+    },
+    {
+      "type": "board",
+      "passengerIds": [
+        "pipit",
+        "rill"
+      ]
+    },
+    {
+      "type": "move",
+      "to": "lantern"
+    },
+    {
+      "type": "move",
+      "to": "harbor"
+    },
+    {
+      "type": "unload",
+      "passengerIds": [
+        "mallow",
+        "osier",
+        "pipit",
+        "rill"
+      ]
+    }
+  ],
+  "states": [
+    {
+      "turn": 0,
+      "tideLevel": 0,
+      "boatNodeId": "lantern",
+      "aboard": [],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "lace-pier": [
+          "pipit",
+          "rill"
+        ],
+        "quilt-pier": [
+          "mallow",
+          "osier"
+        ]
+      },
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 1,
+      "tideLevel": 0,
+      "boatNodeId": "quilt",
+      "aboard": [],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "lace-pier": [
+          "pipit",
+          "rill"
+        ],
+        "quilt-pier": [
+          "mallow",
+          "osier"
+        ]
+      },
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 2,
+      "tideLevel": 0,
+      "boatNodeId": "quilt",
+      "aboard": [
+        "mallow",
+        "osier"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "lace-pier": [
+          "pipit",
+          "rill"
+        ],
+        "quilt-pier": []
+      },
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 3,
+      "tideLevel": 0,
+      "boatNodeId": "lantern",
+      "aboard": [
+        "mallow",
+        "osier"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "lace-pier": [
+          "pipit",
+          "rill"
+        ],
+        "quilt-pier": []
+      },
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 4,
+      "tideLevel": 1,
+      "boatNodeId": "lace",
+      "aboard": [
+        "mallow",
+        "osier"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "lace-pier": [
+          "pipit",
+          "rill"
+        ],
+        "quilt-pier": []
+      },
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 5,
+      "tideLevel": 1,
+      "boatNodeId": "lace",
+      "aboard": [
+        "mallow",
+        "osier",
+        "pipit",
+        "rill"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "lace-pier": [],
+        "quilt-pier": []
+      },
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 6,
+      "tideLevel": 1,
+      "boatNodeId": "lantern",
+      "aboard": [
+        "mallow",
+        "osier",
+        "pipit",
+        "rill"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "lace-pier": [],
+        "quilt-pier": []
+      },
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 7,
+      "tideLevel": 1,
+      "boatNodeId": "harbor",
+      "aboard": [
+        "mallow",
+        "osier",
+        "pipit",
+        "rill"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "lace-pier": [],
+        "quilt-pier": []
+      },
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 8,
+      "tideLevel": 1,
+      "boatNodeId": "harbor",
+      "aboard": [],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "lace-pier": [],
+        "quilt-pier": []
+      },
+      "delivered": [
+        "mallow",
+        "osier",
+        "pipit",
+        "rill"
+      ],
+      "status": "won",
+      "lossReason": null
+    }
+  ],
+  "events": [
+    {
+      "name": "Captain commits · move to quilt",
+      "turn": 0,
+      "epochMs": 1795194672440.5
+    },
+    {
+      "name": "Captain commits · board",
+      "turn": 1,
+      "epochMs": 1795194674202.0999
+    },
+    {
+      "name": "Captain commits · move to lantern",
+      "turn": 2,
+      "epochMs": 1795194678099
+    },
+    {
+      "name": "Captain commits · move to lace",
+      "turn": 3,
+      "epochMs": 1795194679380.5
+    },
+    {
+      "name": "Undo through first rise",
+      "turn": 3,
+      "epochMs": 1795194680451.7
+    },
+    {
+      "name": "Captain repeats after Undo · move to lace",
+      "turn": 3,
+      "epochMs": 1795194680452.9
+    },
+    {
+      "name": "Captain commits · board",
+      "turn": 4,
+      "epochMs": 1795194681253.5
+    },
+    {
+      "name": "All neighbors safely aboard",
+      "turn": 5,
+      "epochMs": 1795194683982
+    },
+    {
+      "name": "Captain commits · move to lantern",
+      "turn": 5,
+      "epochMs": 1795194685505.2
+    },
+    {
+      "name": "Captain commits · move to harbor",
+      "turn": 6,
+      "epochMs": 1795194687157.2998
+    },
+    {
+      "name": "Last approach begins",
+      "turn": 6,
+      "epochMs": 1795194689695.9
+    },
+    {
+      "name": "Harbor docked, waiting for captain",
+      "turn": 7,
+      "epochMs": 1795194690580.5
+    },
+    {
+      "name": "Captain commits · unload",
+      "turn": 7,
+      "epochMs": 1795194691898.7998
+    },
+    {
+      "name": "All ashore",
+      "turn": 8,
+      "epochMs": 1795194693997.7
+    },
+    {
+      "name": "Redelivery · unload",
+      "turn": 7,
+      "epochMs": 1795194695772.2998
+    }
+  ],
+  "readings": [
+    {
+      "turn": 0,
+      "to": "quilt",
+      "text": "Crossing depth Needs depth 1 · passage & arrival 4"
+    },
+    {
+      "turn": 2,
+      "to": "lace",
+      "text": "Passage too shallow Needs depth 3 · passage 2 · arrival 3"
+    },
+    {
+      "turn": 2,
+      "to": "lantern",
+      "text": "Crossing depth Needs depth 3 · passage & arrival 4"
+    },
+    {
+      "turn": 3,
+      "to": "lace",
+      "text": "Arrival limits depth Needs depth 3 · passage 4 · arrival 3"
+    },
+    {
+      "turn": 3,
+      "to": "lace",
+      "text": "Arrival limits depth Needs depth 3 · passage 4 · arrival 3"
+    },
+    {
+      "turn": 5,
+      "to": "lantern",
+      "text": "Crossing depth Needs depth 4 · passage & arrival 5"
+    },
+    {
+      "turn": 6,
+      "to": "harbor",
+      "text": "Crossing depth Needs depth 4 · passage & arrival 5"
+    }
+  ],
+  "openingRosters": {
+    "lace": "Boat needs depth 1. Passage has depth 4: enough depth.\n\nPipit and Rill wait here.\n\nLace Landing stays safe through all tide rises. Berth: depth 3, up to 4 spaces.",
+    "quilt": "Boat needs depth 1. Passage has depth 4: enough depth.\n\nMallow and Osier wait here.\n\nQuilt Quay stays safe through all tide rises."
+  },
+  "homewardForecast": "5 actions taken\nNo more tide rises.",
+  "undos": 2,
+  "terminalRedelivery": true,
+  "saved": {},
+  "errors": [],
+  "images": {
+    "01-opening.png": "8f484917ca82ff38a49b904bc9c0be7b0086cf2cab0db19fc02f91a04b45abc1",
+    "02-first-passage.png": "158f643fc2b8f33acbb251ff93b2ac0f5766dfbcbaf29b554c0a7cb627a0ba6f",
+    "03-first-pickup.png": "330e9b61aa981f3aa7d1bcfc874a698e49700c0142453f35b1d77bb92c3adc3d",
+    "03b-loaded-cut.png": "259a43dbb979f60aa40a30570ef3c81f6f10fc59d0694f710c2df62bb157ffcc",
+    "04-full-deck.png": "cbd1f2b684d1493523045d4a74ee9c6c9c4a6bde60c6635b0315400dd38c060e",
+    "05-harbor-passage.png": "1cb9213b612ec316d8df25dcf11bcec9d9ecd5eb50752578370ab98a64e4fa78",
+    "07-docked.png": "a90a4adf53414383556042a911f49677a790bbcf75c5fe96674df4810c392072",
+    "08-bring-home.png": "af8ea2ebf105b54b67953fa59c354fa016462a95b16852cdf097378d2352942c",
+    "09-arrival.png": "0d1b70970f7d642f6a29affabe4a65a97aa37c10af08c5c300e699698c90954e"
+  }
+}

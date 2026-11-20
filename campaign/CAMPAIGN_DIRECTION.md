@@ -1,6 +1,10 @@
 # Last Ferry — The Long Tide
 
-## Final crossing · active Practice work
+## Last Ferry · Practice handoff
+
+The four final neighbors have their own shores and identities. Two familiar pickup orders lead to the same full-deck homecoming. The player can watch the lighthouse, wait on the water and choose to deliver the group. This brings the branch to thirteen Practice crossings. The eight-cove Journey ends at Ternhaven. A future Journey continuation can offer the communal welcome after rescue at any lantern rating, including after Undo. [Candidate review](../reviews/last-ferry/REVIEW.md)
+
+## Final crossing · original commission
 
 [Last Ferry](../NEXT_TASK_LAST_FERRY.md) gives the final group a playable, unhurried ride to Harbor. Let everyone return together. Keep the player at the helm through the delivery. The unscored Practice arrival is the review endpoint. The welcome at supper belongs to the Journey conclusion after the late coves have been integrated in order.
 

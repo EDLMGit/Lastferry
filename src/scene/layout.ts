@@ -11,6 +11,7 @@ export type SceneLayout = {
   stonePiers: string[];
   centeredWaitingPairs: boolean;
   retractableStep?: boolean;
+  pickupViewFrom?: string;
   cameraPosition: [number, number, number];
   landscapeCameraPosition?: [number, number, number];
   light?: {
@@ -22,6 +23,23 @@ export type SceneLayout = {
   };
 };
 const layouts: Record<string, SceneLayout> = {
+  'last-ferry': {
+    landmarks: [
+      { kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-7.93, -4.48] },
+      { kind: 'cottage', islandId: 'lighthouse-island', positionXZ: [-10.36, -4.03] },
+      { kind: 'waterfront', islandId: 'quilt-island', positionXZ: [7.28, -5.31] },
+    ],
+    islandStyles: { 'lighthouse-island': 'refuge', 'lace-island': 'spit', 'quilt-island': 'working' },
+    stonePiers: ['quilt-pier'],
+    centeredWaitingPairs: true,
+    pickupViewFrom: 'lantern',
+    cameraPosition: [-21, 38, 22],
+    landscapeCameraPosition: [-8, 29, 32],
+    light: {
+      background: '#286271', sky: '#f6edda', ground: '#69878b', sun: '#ffdaab',
+      sunPosition: [-10, 14, 6],
+    },
+  },
   'far-shore': {
     landmarks: [{ kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-10.15, 1.85] }],
     islandStyles: { 'lighthouse-island': 'refuge', 'steps-island': 'quay', 'bank-island': 'working', 'rush-island': 'spit' },

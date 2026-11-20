@@ -128,7 +128,7 @@ export function shoreSeat(
     const [x, z] = passenger.slots === 3 ? [0.8, -0.6] : passenger.slots === 2 ? [-0.75, -0.62] : [0.62, 0.18];
     return new Vector3(pier.positionXZ[0] + x, pier.elevation * 0.18 - 0.005, pier.landAnchorXZ[1] + z);
   }
-  if (level.id === 'reef-return') {
+  if (level.id === 'reef-return' || level.id === 'last-ferry') {
     const peers = level.passengers.filter((p) => p.slots === passenger.slots)
       .sort((a, b) => a.id.localeCompare(b.id));
     const side = peers[0].id === id ? -1 : 1;

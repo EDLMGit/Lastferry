@@ -34,6 +34,7 @@ import {
   drownedOrchard,
   lanternReach,
   farShore,
+  lastFerry,
   orchardLanding,
   ternhaven,
   level as firstCrossing,
@@ -146,7 +147,10 @@ describe('authored story registry', () => {
       drownedOrchard,
       lanternReach,
       farShore,
+      lastFerry,
     ]);
+    expect(practiceCove('last-ferry')).toBe(lastFerry);
+    expect(storyCove('last-ferry')).toBeUndefined();
     expect(practiceCove('far-shore')).toBe(farShore);
     expect(storyCove('far-shore')).toBeUndefined();
     expect(practiceCove('lantern-reach')).toBe(lanternReach);

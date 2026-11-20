@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { Box3, Group, InstancedMesh, Matrix4, Mesh, Vector3 } from 'three';
-import { wideBerth, reefReturn, orchardLanding, ternhaven, drownedOrchard, lanternReach, farShore } from '../../src/levels/level';
+import { wideBerth, reefReturn, orchardLanding, ternhaven, drownedOrchard, lanternReach, farShore, lastFerry } from '../../src/levels/level';
 import { animal, ferry, lighthouse } from '../../src/scene/models';
 import {
   ferryProfile,
@@ -119,7 +119,7 @@ test('the bridge leaf crosses the real channel when closed and clears the moored
     if (i === 0 || i === 1000) expect(inside([crossing.x, crossing.z], leaf)).toBe(i === 0);
   }
 });
-test.each([wideBerth, reefReturn, orchardLanding, ternhaven, drownedOrchard, lanternReach, farShore])('$title occupied real modeled hull clears land and piers at every reachable heading in both directions', (level) => {
+test.each([wideBerth, reefReturn, orchardLanding, ternhaven, drownedOrchard, lanternReach, farShore, lastFerry])('$title occupied real modeled hull clears land and piers at every reachable heading in both directions', (level) => {
   const profile = ferryProfile(level),
     footprint = footprintOf(occupiedFerry(level)),
     paths = getLevelPaths(level),
@@ -250,7 +250,7 @@ test.each([wideBerth, reefReturn, orchardLanding, ternhaven, drownedOrchard, lan
   expect(margins).toEqual([]);
 }, 20000);
 
-describe.each([wideBerth, reefReturn, orchardLanding, ternhaven, drownedOrchard, lanternReach, farShore])('$title physical clearances', (level) => {
+describe.each([wideBerth, reefReturn, orchardLanding, ternhaven, drownedOrchard, lanternReach, farShore, lastFerry])('$title physical clearances', (level) => {
 test('distinct authored shores retain valid center-fan top support without filled water notches', () => {
   const outlines = new Set<string>();
   for (const island of level.world.islands) {
@@ -273,7 +273,7 @@ test('distinct authored shores retain valid center-fan top support without fille
       ),
     );
   }
-  expect(outlines.size).toBe(4);
+  expect(outlines.size).toBe(level === lastFerry ? 3 : 4);
 });
 
 test('compact waiting groups and actual transfer bodies clear each rendered shore prop', () => {
@@ -286,7 +286,7 @@ test('compact waiting groups and actual transfer bodies clear each rendered shor
     if (level.id === 'orchard-landing' || level.id === 'drowned-orchard')
       decorateOrchardIsland(group, island, style, level.id === 'drowned-orchard');
     else if (level.id === 'far-shore') decorateFarShoreIsland(group, island, style);
-    else if (level.id === 'ternhaven' || level.id === 'lantern-reach') decorateTernhavenIsland(group, island, style);
+    else if (['ternhaven', 'lantern-reach', 'last-ferry'].includes(level.id)) decorateTernhavenIsland(group, island, style);
     else if (level.id === 'reef-return') decorateReefIsland(group, island, style);
     else decorateWideIsland(group, island, style);
     group.add(createShoreRocks(island, style));
