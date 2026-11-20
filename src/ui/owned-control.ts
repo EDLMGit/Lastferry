@@ -25,19 +25,25 @@ export function besideOwner(size: Size, anchor: Rectangle, bounds: Rectangle, ob
   return null;
 }
 
-export function atScreenEdge(size: Size, bounds: Rectangle, controls: Rectangle[], subjects: Rectangle[]) {
+export function edgeObstructions(r: Rectangle, controls: Rectangle[], subjects: Rectangle[], targets: Rectangle[] = []) {
+  const collisions = (obstacles: Rectangle[], gap: number) => obstacles.filter(obstacle => overlaps(r, obstacle, gap)).length;
+  return (collisions(controls, 2) * (targets.length + 1) + collisions(targets, 2)) * (subjects.length + 1) +
+    collisions(subjects, 1);
+}
+
+export function atScreenEdge(size: Size, bounds: Rectangle, controls: Rectangle[], subjects: Rectangle[], targets: Rectangle[] = []) {
   const { width, height } = size;
   const candidates: Rectangle[] = [];
-  const xs = [bounds.left, bounds.right - width, ...controls.flatMap(r => [r.left - width - 5, r.right + 5])];
-  const ys = [bounds.bottom - height, bounds.top, ...controls.flatMap(r => [r.top - height - 5, r.bottom + 5])];
+  const interactive = [...controls, ...targets];
+  const xs = [bounds.left, bounds.right - width, ...interactive.flatMap(r => [r.left - width - 5, r.right + 5])];
+  const ys = [bounds.bottom - height, bounds.top, ...interactive.flatMap(r => [r.top - height - 5, r.bottom + 5])];
   for (const x of xs) {
     candidates.push(rectangle(x, bounds.bottom - height, size), rectangle(x, bounds.top, size));
   }
   for (const y of ys) {
     candidates.push(rectangle(bounds.left, y, size), rectangle(bounds.right - width, y, size));
   }
-  const weight = (r: Rectangle) => controls.filter(c => overlaps(r, c, 2)).length * 100 +
-    subjects.filter(s => overlaps(r, s, 1)).length;
+  const weight = (r: Rectangle) => edgeObstructions(r, controls, subjects, targets);
   return candidates.filter(r => fits(r, bounds)).sort((a, b) => weight(a) - weight(b))[0] ??
     rectangle(bounds.left, bounds.top, size);
 }

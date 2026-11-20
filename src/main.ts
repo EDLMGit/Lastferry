@@ -5,7 +5,7 @@ import './ui/view-controls.css';
 import './ui/mobile-map-controls.css';
 import './ui/crossing-instruments.css';
 import { ferryInstrument, tideInstrument } from './ui/crossing-instruments';
-import { besideOwner, atScreenEdge } from './ui/owned-control';
+import { besideOwner, atScreenEdge, edgeObstructions } from './ui/owned-control';
 import { nextWaterChange } from './game/rescue-facts';
 import { waterlineMark } from './ui/tide-mark';
 import './ui/tide-mark.css';
@@ -2422,8 +2422,19 @@ function positionOwnedControls(
       if (!nearby) {
         dock.dataset.placement = 'edge';
         dock.dataset.layout = 'row';
+        const scenery = [...figures, lighthouse];
+        const edge = () => atScreenEdge(size(dock), bounds, obstacles, scenery, stops);
+        const row = edge();
+        nearby = row;
+        const score = (r: Rectangle) => edgeObstructions(r, obstacles, scenery, stops);
+        if (dock.children.length > 2 && score(row)) {
+          dock.dataset.layout = 'column';
+          const column = edge();
+          if (score(column) < score(row)) nearby = column;
+          else dock.dataset.layout = 'row';
+        }
       }
-      dockPlacement = nearby ?? atScreenEdge(size(dock), bounds, [...obstacles, ...stops], [...figures, lighthouse]);
+      dockPlacement = nearby;
       position(dock, dockPlacement);
     }
   }
