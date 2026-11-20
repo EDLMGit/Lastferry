@@ -235,6 +235,8 @@ let placementViewportKey = '';
 let layoutRequest = 0;
 let layoutFlushing = false;
 let pageDisposed = false;
+let activityHidden = false;
+let gameHidden = false;
 let viewport = visibleViewport(window.visualViewport, innerWidth, innerHeight);
 let safeBounds: Rectangle = viewport;
 let usableBounds: Rectangle = viewport;
@@ -476,7 +478,7 @@ function resumeJourney(restored = true) {
     }
     storyPresentation.start(
       storyId,
-      motion.reduced || document.hidden,
+      motion.reduced || gameHidden,
       performance.now(),
       restored,
     );
@@ -512,7 +514,7 @@ function startPlayable(next: typeof level, story: boolean) {
 function continueStory() {
   if (mode !== 'story' || !storyId) return;
   if (!storyPresentation.frame.final) {
-    storyPresentation.next(motion.reduced || document.hidden);
+    storyPresentation.next(motion.reduced || gameHidden);
     $('story-continue').focus({ preventScroll: true });
     return;
   }
@@ -587,7 +589,7 @@ function scheduleStoryClock() {
     !storyId ||
     storyPresentation.settled ||
     storyPresentation.paused ||
-    document.hidden
+    gameHidden
   )
     return;
   storyFrameRequest = requestAnimationFrame((time) => {
@@ -787,7 +789,7 @@ function renderIllustratedStory(transcript: boolean) {
 
   $('story-pause').onclick = () =>
     storyPresentation.paused
-      ? storyPresentation.resume(motion.reduced || document.hidden)
+      ? storyPresentation.resume(motion.reduced || gameHidden)
       : storyPresentation.pause();
 
   $('story-sound').onclick = toggleSound;
@@ -799,9 +801,9 @@ function renderIllustratedStory(transcript: boolean) {
     storyPresentation.skip();
     $('story-continue').focus({ preventScroll: true });
   };
-  $('story-replay').onclick = () => storyPresentation.replay(motion.reduced || document.hidden);
+  $('story-replay').onclick = () => storyPresentation.replay(motion.reduced || gameHidden);
   $('story-replay-scene').onclick = () => {
-    storyPresentation.replay(motion.reduced || document.hidden, true);
+    storyPresentation.replay(motion.reduced || gameHidden, true);
     $('story-replay').focus({ preventScroll: true });
   };
   $('story-read').onclick = () => {
@@ -1289,7 +1291,7 @@ function settleArrival() {
 function celebrateArrival() {
   if (!arrivalCelebrationPending) return;
   arrivalCelebrationPending = false;
-  if (motion.reduced || document.hidden) return;
+  if (motion.reduced || gameHidden) return;
   for (const element of dialog.querySelectorAll<HTMLElement>('.arrival-overview, .arrival-cast'))
     arrivalAnimations.push(element.animate(
       [{ opacity: 0.6, transform: 'translateY(6px)' }, { opacity: 1, transform: 'translateY(0)' }],
@@ -1586,7 +1588,7 @@ function finish(id: number, reason: CompletionReason) {
   if (locationSelection === session.state.boatNodeId) locationSelection = null;
   render();
 
-  if (pendingReceipt?.id === id && reason === 'complete' && !document.hidden) {
+  if (pendingReceipt?.id === id && reason === 'complete' && !gameHidden) {
     const data = pendingReceipt;
 
     receipt.innerHTML = `<strong>${data.title}</strong>${data.depth ? `<span>${data.depth}</span>` : ''}`;
@@ -1606,7 +1608,7 @@ function finish(id: number, reason: CompletionReason) {
   if (session.state.status === 'won') {
     clearReceipt();
     arrivalCelebrationId = id;
-    arrivalCelebrationPending = reason === 'complete' && !document.hidden;
+    arrivalCelebrationPending = reason === 'complete' && !gameHidden;
   }
   if (session.state.status !== 'playing') openDialog('terminal', undefined, 'undo');
   else focusAvailable(returnId);
@@ -2885,22 +2887,27 @@ document.addEventListener('pointerup', (event) => {
 document.addEventListener('pointercancel', () => {
   soundIntent = null;
 });
-document.addEventListener('visibilitychange', () => {
-  sound.visibility(document.hidden);
-  if (document.hidden && mode === 'story') storyPresentation.settle();
-  if (document.hidden) {
+function updateGameVisibility() {
+  const hidden = activityHidden || document.hidden;
+  if (hidden === gameHidden || pageDisposed) return;
+  gameHidden = hidden;
+  sound.visibility(hidden);
+  if (gameHidden && mode === 'story') storyPresentation.settle();
+  if (gameHidden) {
     settleArrival();
     clearReceipt();
 
     world.settleHomecoming();
     world.clearMovement();
   }
-  if (document.hidden && session.busy) {
+  if (gameHidden && session.busy) {
     const id = activeTransition?.id;
     world.cancel('visibility');
     if (session.busy && id !== undefined) finish(id, 'visibility');
   }
-});
+}
+document.addEventListener('visibilitychange', updateGameVisibility);
+updateGameVisibility();
 addEventListener('pagehide', () => {
   pageDisposed = true;
 
@@ -2930,7 +2937,15 @@ scheduleLayout();
 if (journey) showHome();
 
 if (location.origin === 'https://appassets.androidplatform.net') {
-  Object.assign(window, { lastFerryAndroidBack: androidBack });
+  activityHidden = (window as Window & { lastFerryAndroidBackground?: boolean }).lastFerryAndroidBackground === true;
+  updateGameVisibility();
+  Object.assign(window, {
+    lastFerryAndroidBack: androidBack,
+    lastFerryAndroidVisibility(background: boolean) {
+      activityHidden = background;
+      updateGameVisibility();
+    },
+  });
   requestAnimationFrame(function checkFirstFrame() {
     if (world.renderer.info.render.calls > 0) document.documentElement.dataset.lastFerryReady = 'true';
     else if (!pageDisposed) requestAnimationFrame(checkFirstFrame);

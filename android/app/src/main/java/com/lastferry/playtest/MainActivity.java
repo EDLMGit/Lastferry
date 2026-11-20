@@ -142,6 +142,7 @@ public final class MainActivity extends Activity {
                 public void onPageFinished(WebView view, String url) {
                     if (game != view || !isLocal(Uri.parse(url))) return;
                     pageLoaded = true;
+                    publishVisibility();
                     checkReady();
                 }
 
@@ -183,6 +184,12 @@ public final class MainActivity extends Activity {
 
     private boolean isLocal(Uri uri) {
         return "https".equals(uri.getScheme()) && WebViewAssetLoader.DEFAULT_DOMAIN.equals(uri.getEncodedAuthority());
+    }
+
+    private void publishVisibility() {
+        if (game == null) return;
+        game.evaluateJavascript("window.lastFerryAndroidBackground = " + !foreground
+            + "; window.lastFerryAndroidVisibility?.(window.lastFerryAndroidBackground)", null);
     }
 
     private void checkReady() {
@@ -315,9 +322,10 @@ public final class MainActivity extends Activity {
     @Override
     public void onPause() {
         foreground = false;
+        publishVisibility();
         pauseStartupCheck();
-        super.onPause();
         if (game != null) game.onPause();
+        super.onPause();
     }
 
     @Override
@@ -325,6 +333,7 @@ public final class MainActivity extends Activity {
         super.onResume();
         foreground = true;
         if (game != null) game.onResume();
+        publishVisibility();
         resumeStartupCheck();
     }
 
