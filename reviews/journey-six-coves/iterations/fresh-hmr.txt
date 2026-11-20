@@ -1,0 +1,87 @@
+
+> last-ferry@1.0.0 test:e2e
+> playwright test --config .cache/journey-six.config.ts journey-six-coves.spec.ts --grep fresh root
+
+
+Running 1 test using 1 worker
+
+(node:29548) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\e2e\journey-six-coves.spec.ts:79:1 › fresh root Journey earns six rescues and the four-to-six-space launch (15.3s)
+
+
+  1) tests\e2e\journey-six-coves.spec.ts:79:1 › fresh root Journey earns six rescues and the four-to-six-space launch 
+
+    TimeoutError: locator.tap: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for locator('#map-stone')
+        - locator resolved to <button id="map-stone" data-risk="safe" class="map-target" data-status="current" aria-expanded="false" aria-current="location" data-destination="stone" title="current location" aria-controls="local-context" aria-label="Select Stone Pier; current location">…</button>
+      - attempting tap action
+        2 × waiting for element to be visible, enabled and stable
+          - element is not visible
+        - retrying tap action
+        - waiting 20ms
+        - waiting for element to be visible, enabled and stable
+        - element is not visible
+      - retrying tap action
+        - waiting 100ms
+        - waiting for "http://127.0.0.1:5270/" navigation to finish...
+        - navigated to "http://127.0.0.1:5270/"
+        - waiting for element to be visible, enabled and stable
+      - element was detached from the DOM, retrying
+        - locator resolved to <button id="map-stone" data-risk="safe" class="map-target" data-status="current" aria-expanded="false" aria-current="location" data-destination="stone" title="current location" aria-controls="local-context" aria-label="Select Stone Pier; current location">…</button>
+      - attempting tap action
+        2 × waiting for element to be visible, enabled and stable
+          - element is not visible
+        - retrying tap action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is not visible
+        - retrying tap action
+          - waiting 100ms
+        8 × waiting for element to be visible, enabled and stable
+          - element is not visible
+        - retrying tap action
+          - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+
+
+       at ui.ts:39
+
+      37 |     await activate(page, current, touch);
+      38 |   }
+    > 39 |   if (touch) await page.locator(`#${id}`).tap();
+         |                                           ^
+      40 |   else await page.locator(`#${id}`).click();
+      41 | }
+      42 | export async function wholeCove(page: Page, touch = false) {
+        at activate (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\ui.ts:39:43)
+        at activate (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\ui.ts:37:5)
+        at transferStart (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\large-cove-support.ts:38:3)
+        at action (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\optional-tips-support.ts:70:10)
+        at rescue (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\journey-six-support.ts:70:19)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\journey-six-coves.spec.ts:104:20
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "137c47067eb03b82a2946cf5711ff11c74bc2586d63f0a92fb534b0b3fad0021"
+    Received: "04f450741e9bce554ca3e88105c192cf42434c6075247f754243cc08a26190cb"
+
+      42 |   info.annotations.push({ type: 'captured working tree', description: input.identity });
+      43 | });
+    > 44 | test.afterEach(() => expect(sources().identity).toBe(captureSource));
+         |                                                 ^
+      45 |
+      46 | async function phone(browser: Browser, baseURL: string | undefined, width: number, height: number, reduced = false) {
+      47 |   const context = await browser.newContext({
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\journey-six-coves.spec.ts:44:49
+
+    Error Context: test-results\journey-six-evidence\journey-six-coves-fresh-ro-8714d-he-four-to-six-space-launch\error-context.md
+
+  1 failed
+    tests\e2e\journey-six-coves.spec.ts:79:1 › fresh root Journey earns six rescues and the four-to-six-space launch 
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+npm notice To update run: npm install -g npm@12.2.2
+npm notice

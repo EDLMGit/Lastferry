@@ -1,0 +1,248 @@
+{
+  "createdAt": "2026-10-24T20:04:38.255Z",
+  "evidenceSource": "a93bed3897586fbfa66ed06e54ee2d9685c87be0 plus the retained tested-source.patch",
+  "finalSourceHash": "31764a1ee974c9eb59b0f21cd8d91e1e8632a89efca5321421dcffa1a23764e4",
+  "finalSourceCount": 145,
+  "finalBrowserGateSourceHash": "efead79bb0648b70f15a0560a830bc906c58a89f7682e6779dc19a8b9a6d4f57",
+  "finalGateDifference": "Capture helper only: added UI-only Play homecoming captures, then optional flags for a native-size ordinary-browser video. Default fullscreen/rotation capture remains retained. Runtime, tests, unit inputs and production build inputs are identical to final browser gates.",
+  "finalRuntimeHash": "0d6bf4dc2707ef88b9b1402fa51e2a7aa23581dc0fce8f60b4aea4f278d91b89",
+  "captureComparedFileCount": 52,
+  "changedCaptureFiles": [],
+  "finalTypecheck": {
+    "command": "npm run typecheck",
+    "result": "pass",
+    "after": "Final helper-only change and source snapshot"
+  },
+  "originalRuns": [
+    {
+      "run": "browser-anchor-rerun",
+      "path": "reviews/phone-playability/browser-anchor-rerun/source-manifest.json",
+      "sourceHash": "22dd0701d5e27691ccbdaf5953c5429d6bd44ba74a2d49b2bf448d1ced340ef9",
+      "differences": [
+        "src/main.ts",
+        "tests/e2e/phone-playability.spec.ts",
+        "tests/e2e/sailing-direction-wake.spec.ts",
+        "tools/capture-phone-playability.mjs"
+      ],
+      "identicalRuntimeDataBuildInputs": false
+    },
+    {
+      "run": "browser-cache-final",
+      "path": "reviews/phone-playability/browser-cache-final/source-manifest.json",
+      "sourceHash": "efead79bb0648b70f15a0560a830bc906c58a89f7682e6779dc19a8b9a6d4f57",
+      "differences": [
+        "tools/capture-phone-playability.mjs"
+      ],
+      "identicalRuntimeDataBuildInputs": true
+    },
+    {
+      "run": "browser-cache-timing",
+      "path": "reviews/phone-playability/browser-cache-timing/source-manifest.json",
+      "sourceHash": "efead79bb0648b70f15a0560a830bc906c58a89f7682e6779dc19a8b9a6d4f57",
+      "differences": [
+        "tools/capture-phone-playability.mjs"
+      ],
+      "identicalRuntimeDataBuildInputs": true
+    },
+    {
+      "run": "browser-complete",
+      "path": "reviews/phone-playability/browser-complete/source-manifest.json",
+      "sourceHash": "3658fa37e10632f6d6c9e0468b0ccc0eb7778be543b0f191e555dfe91b5c120c",
+      "differences": [
+        "src/main.ts",
+        "src/scene/world.ts",
+        "tests/e2e/bellwater.spec.ts",
+        "tests/e2e/game.spec.ts",
+        "tests/e2e/holding-pier.spec.ts",
+        "tests/e2e/homecoming.spec.ts",
+        "tests/e2e/navigation.spec.ts",
+        "tests/e2e/phone-playability.spec.ts",
+        "tests/e2e/refinement.spec.ts",
+        "tests/e2e/sailing-direction-wake.spec.ts",
+        "tests/e2e/selection.spec.ts",
+        "tools/capture-phone-playability.mjs"
+      ],
+      "identicalRuntimeDataBuildInputs": false
+    },
+    {
+      "run": "browser-corrected",
+      "path": "reviews/phone-playability/browser-corrected/source-manifest.json",
+      "sourceHash": "601afd9d202e3beee21dec9b6156cd047553c407815460cb547e63422691beb5",
+      "differences": [
+        "src/main.ts",
+        "src/scene/world.ts",
+        "src/style.css",
+        "tests/e2e/bellwater.spec.ts",
+        "tests/e2e/game.spec.ts",
+        "tests/e2e/holding-pier.spec.ts",
+        "tests/e2e/homecoming.spec.ts",
+        "tests/e2e/navigation.spec.ts",
+        "tests/e2e/phone-playability.spec.ts",
+        "tests/e2e/refinement.spec.ts",
+        "tests/e2e/sailing-direction-wake.spec.ts",
+        "tests/e2e/selection.spec.ts",
+        "tools/capture-phone-playability.mjs"
+      ],
+      "identicalRuntimeDataBuildInputs": false
+    },
+    {
+      "run": "browser-final",
+      "path": "reviews/phone-playability/browser-final/source-manifest.json",
+      "sourceHash": "f86fe33129a2f493ee818930089ef98610cd45fb2e2b7a0aa3fd8e68f89bf0fb",
+      "differences": [
+        "src/main.ts",
+        "src/scene/world.ts",
+        "src/style.css",
+        "tests/e2e/bellwater.spec.ts",
+        "tests/e2e/game.spec.ts",
+        "tests/e2e/holding-pier.spec.ts",
+        "tests/e2e/homecoming.spec.ts",
+        "tests/e2e/navigation.spec.ts",
+        "tests/e2e/phone-playability.spec.ts",
+        "tests/e2e/refinement.spec.ts",
+        "tests/e2e/sailing-direction-wake.spec.ts",
+        "tests/e2e/selection.spec.ts",
+        "tools/capture-phone-playability.mjs"
+      ],
+      "identicalRuntimeDataBuildInputs": false
+    },
+    {
+      "run": "browser-initial",
+      "path": "reviews/phone-playability/browser-initial/source-manifest.json",
+      "sourceHash": "c37e3138a290c4b67a6c4eef1e82905ba46953b5bc1b52f3ba2eaa43556e5767",
+      "differences": [
+        "NEXT_TASK_PHONE_PLAYABILITY.md",
+        "docs/ART_DIRECTION.md",
+        "src/main.ts",
+        "src/scene/view.ts",
+        "src/scene/world.ts",
+        "src/style.css",
+        "src/ui/viewport.ts",
+        "tests/e2e/bellwater.spec.ts",
+        "tests/e2e/game.spec.ts",
+        "tests/e2e/holding-pier.spec.ts",
+        "tests/e2e/homecoming.spec.ts",
+        "tests/e2e/navigation.spec.ts",
+        "tests/e2e/phone-playability.spec.ts",
+        "tests/e2e/refinement.spec.ts",
+        "tests/e2e/sailing-direction-wake.spec.ts",
+        "tests/e2e/selection.spec.ts",
+        "tests/e2e/ui.ts",
+        "tests/unit/pan-gesture.test.ts",
+        "tools/capture-phone-playability.mjs",
+        "tools/snapshot-evidence.mjs"
+      ],
+      "identicalRuntimeDataBuildInputs": false
+    },
+    {
+      "run": "browser-intent-rerun",
+      "path": "reviews/phone-playability/browser-intent-rerun/source-manifest.json",
+      "sourceHash": "dacd9bc4db41106ee0ea04168f53a91a16b1a59f941a2c54f5684eb3eb217b70",
+      "differences": [
+        "src/main.ts",
+        "src/scene/world.ts",
+        "tests/e2e/bellwater.spec.ts",
+        "tests/e2e/game.spec.ts",
+        "tests/e2e/holding-pier.spec.ts",
+        "tests/e2e/navigation.spec.ts",
+        "tests/e2e/phone-playability.spec.ts",
+        "tests/e2e/refinement.spec.ts",
+        "tests/e2e/sailing-direction-wake.spec.ts",
+        "tools/capture-phone-playability.mjs"
+      ],
+      "identicalRuntimeDataBuildInputs": false
+    },
+    {
+      "run": "browser-preservation-final",
+      "path": "reviews/phone-playability/browser-preservation-final/source-manifest.json",
+      "sourceHash": "82a870a3eac07212266d88c4cb6035a83d65747f65d0c7deae32a98d9c061002",
+      "differences": [
+        "src/main.ts",
+        "tests/e2e/sailing-direction-wake.spec.ts",
+        "tools/capture-phone-playability.mjs"
+      ],
+      "identicalRuntimeDataBuildInputs": false
+    },
+    {
+      "run": "browser-projection-final",
+      "path": "reviews/phone-playability/browser-projection-final/source-manifest.json",
+      "sourceHash": "cfc4cb707e5b9dc96127a0a638f9442a97d9b09c1bedc7f7ad7f67fbfc631b47",
+      "differences": [
+        "src/main.ts",
+        "tests/e2e/phone-playability.spec.ts",
+        "tests/e2e/sailing-direction-wake.spec.ts",
+        "tools/capture-phone-playability.mjs"
+      ],
+      "identicalRuntimeDataBuildInputs": false
+    },
+    {
+      "run": "browser-recovery-rerun",
+      "path": "reviews/phone-playability/browser-recovery-rerun/source-manifest.json",
+      "sourceHash": "94b45300481ef8bd33c0f205a7a4402733f4343374380a3299821e52e9800d47",
+      "differences": [
+        "src/main.ts",
+        "src/scene/world.ts",
+        "tests/e2e/bellwater.spec.ts",
+        "tests/e2e/game.spec.ts",
+        "tests/e2e/holding-pier.spec.ts",
+        "tests/e2e/navigation.spec.ts",
+        "tests/e2e/phone-playability.spec.ts",
+        "tests/e2e/refinement.spec.ts",
+        "tests/e2e/sailing-direction-wake.spec.ts",
+        "tests/e2e/selection.spec.ts",
+        "tools/capture-phone-playability.mjs"
+      ],
+      "identicalRuntimeDataBuildInputs": false
+    },
+    {
+      "run": "browser-regression",
+      "path": "reviews/phone-playability/browser-regression/source-manifest.json",
+      "sourceHash": "3658fa37e10632f6d6c9e0468b0ccc0eb7778be543b0f191e555dfe91b5c120c",
+      "differences": [
+        "src/main.ts",
+        "src/scene/world.ts",
+        "tests/e2e/bellwater.spec.ts",
+        "tests/e2e/game.spec.ts",
+        "tests/e2e/holding-pier.spec.ts",
+        "tests/e2e/homecoming.spec.ts",
+        "tests/e2e/navigation.spec.ts",
+        "tests/e2e/phone-playability.spec.ts",
+        "tests/e2e/refinement.spec.ts",
+        "tests/e2e/sailing-direction-wake.spec.ts",
+        "tests/e2e/selection.spec.ts",
+        "tools/capture-phone-playability.mjs"
+      ],
+      "identicalRuntimeDataBuildInputs": false
+    },
+    {
+      "run": "browser-selection-regression",
+      "path": "reviews/phone-playability/browser-selection-regression/source-manifest.json",
+      "sourceHash": "94b45300481ef8bd33c0f205a7a4402733f4343374380a3299821e52e9800d47",
+      "differences": [
+        "src/main.ts",
+        "src/scene/world.ts",
+        "tests/e2e/bellwater.spec.ts",
+        "tests/e2e/game.spec.ts",
+        "tests/e2e/holding-pier.spec.ts",
+        "tests/e2e/navigation.spec.ts",
+        "tests/e2e/phone-playability.spec.ts",
+        "tests/e2e/refinement.spec.ts",
+        "tests/e2e/sailing-direction-wake.spec.ts",
+        "tests/e2e/selection.spec.ts",
+        "tools/capture-phone-playability.mjs"
+      ],
+      "identicalRuntimeDataBuildInputs": false
+    },
+    {
+      "run": "browser-timing-rerun",
+      "path": "reviews/phone-playability/browser-timing-rerun/source-manifest.json",
+      "sourceHash": "503df4c172f63313e58cc49d229cabb0c961574f41dbe74749b63050028b0008",
+      "differences": [
+        "src/main.ts",
+        "tools/capture-phone-playability.mjs"
+      ],
+      "identicalRuntimeDataBuildInputs": false
+    }
+  ],
+  "preservationReuse": "Seven pre-cache preservation cases are retained as supporting evidence; main.ts final cache/unchanged-write optimization differs, so they are not called identical whole-runtime reruns. Final17 phone cases and four timing cases run on final cached runtime. Protected42-file byte audit and read-only integration review support unchanged lifecycle/audio/heading behavior."
+}

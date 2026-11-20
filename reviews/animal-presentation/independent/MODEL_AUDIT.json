@@ -1,0 +1,700 @@
+{
+  "review": "Independent exact-source geometry and contact audit; no WebGL, device FPS or visual claim.",
+  "base": "d7884445c35fc24ebdabc2790b168b68294bf0bd",
+  "head": "26ca0a4f7b42c3f9e809f4a6558b0df8dc0c9139",
+  "node": "v24.22.1",
+  "threeRevision": "186",
+  "source": [
+    {
+      "path": "src/scene/animals.ts",
+      "version": "head",
+      "commit": "26ca0a4f7b42c3f9e809f4a6558b0df8dc0c9139",
+      "git_blob": "2b821f2daa2488de86d25ee301faaa23ed3ef27b",
+      "sha256": "e0909b1857d85b3f916647348cdfd966c05a5dea79d6959e1ba8b977c94c4f49"
+    },
+    {
+      "path": "src/scene/models.ts",
+      "version": "head",
+      "commit": "26ca0a4f7b42c3f9e809f4a6558b0df8dc0c9139",
+      "git_blob": "a0de08e4bfa6aaf2ca872656d9656be69356019a",
+      "sha256": "1081e83616bb5a656e4c09ea099761ff8de46537b0d9cc055ba8b7246593fc95"
+    },
+    {
+      "path": "src/scene/ferry-profile.ts",
+      "version": "head",
+      "commit": "26ca0a4f7b42c3f9e809f4a6558b0df8dc0c9139",
+      "git_blob": "87f0d608c0fd2b89765115a0ab2af7169ace42d4",
+      "sha256": "639a71a15c8be508ee0edd2fd45f34e4192eed183b9ef344c2db89127423a19b"
+    },
+    {
+      "path": "src/scene/models.ts",
+      "version": "base",
+      "commit": "d7884445c35fc24ebdabc2790b168b68294bf0bd",
+      "git_blob": "863a295578f064375de68a33748c84aca084a2ee",
+      "sha256": "c63e8405769358875b42b6cafa727a24287a68bb8efc827e5140835245b04ac5"
+    },
+    {
+      "path": "src/scene/ferry-profile.ts",
+      "version": "base",
+      "commit": "d7884445c35fc24ebdabc2790b168b68294bf0bd",
+      "git_blob": "87f0d608c0fd2b89765115a0ab2af7169ace42d4",
+      "sha256": "639a71a15c8be508ee0edd2fd45f34e4192eed183b9ef344c2db89127423a19b"
+    }
+  ],
+  "checks": {
+    "sharedHelpersFerrySceneryExactlyPreserved": true,
+    "scalesSeatsAndTransferProfileExactlyPreserved": true,
+    "actualWideSupportSetsNonemptyAndNamed": true,
+    "footOriginsAndCloneTransformsPreserved": true,
+    "animalMaterialSeparateFromWorldPalette": true,
+    "mossHeadMatchesUnchangedWorldPredicate": {
+      "selected": [
+        "sheep-head"
+      ],
+      "measuredFaceParts": [
+        "sheep-nose",
+        "painted-eye",
+        "painted-eye",
+        "sheep-ear",
+        "sheep-ear",
+        "sheep-forelock",
+        "sheep-forelock",
+        "sheep-forelock"
+      ],
+      "stationaryFeet": 4
+    },
+    "allVerticesNormalsAndColorsFinite": true
+  },
+  "appearances": [
+    {
+      "appearance": "rabbit-cream",
+      "before": {
+        "meshes": 12,
+        "triangles": 2016,
+        "vertices": 1404,
+        "materialCount": 4,
+        "zeroNormals": 0,
+        "localVertexMin": [
+          -0.14006442230378763,
+          0,
+          -0.195
+        ],
+        "localVertexMax": [
+          0.14006442230378763,
+          0.7884577472198444,
+          0.18
+        ],
+        "scale": [
+          1.25,
+          1.65,
+          1.25
+        ],
+        "contactMeshCount": 2,
+        "contacts": [
+          {
+            "name": "",
+            "min": [
+              -0.175,
+              0.008249999999999993,
+              -0.03749999999999999
+            ],
+            "max": [
+              -0.012499999999999997,
+              0.17325000000000002,
+              0.21250000000000002
+            ]
+          },
+          {
+            "name": "",
+            "min": [
+              0.012499999999999997,
+              0.008249999999999993,
+              -0.03749999999999999
+            ],
+            "max": [
+              0.175,
+              0.17325000000000002,
+              0.21250000000000002
+            ]
+          }
+        ]
+      },
+      "after": {
+        "meshes": 19,
+        "triangles": 3908,
+        "vertices": 2633,
+        "materialCount": 1,
+        "zeroNormals": 0,
+        "localVertexMin": [
+          -0.139,
+          0,
+          -0.1919801596403122
+        ],
+        "localVertexMax": [
+          0.139,
+          0.7897279654741287,
+          0.17774145126342775
+        ],
+        "scale": [
+          1.25,
+          1.65,
+          1.25
+        ],
+        "contactMeshCount": 2,
+        "contacts": [
+          {
+            "name": "rabbit-foot",
+            "min": [
+              -0.1700536087155342,
+              0,
+              -0.021345226913690563
+            ],
+            "max": [
+              -0.014946391284465788,
+              0.1518,
+              0.20668245732784268
+            ]
+          },
+          {
+            "name": "rabbit-foot",
+            "min": [
+              0.014946391284465788,
+              0,
+              -0.021345226913690563
+            ],
+            "max": [
+              0.1700536087155342,
+              0.1518,
+              0.20668245732784268
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "appearance": "rabbit-tan",
+      "before": {
+        "meshes": 12,
+        "triangles": 2016,
+        "vertices": 1404,
+        "materialCount": 4,
+        "zeroNormals": 0,
+        "localVertexMin": [
+          -0.15310130615285422,
+          0,
+          -0.195
+        ],
+        "localVertexMax": [
+          0.15310130615285422,
+          0.7838560261808294,
+          0.18
+        ],
+        "scale": [
+          1.25,
+          1.65,
+          1.25
+        ],
+        "contactMeshCount": 2,
+        "contacts": [
+          {
+            "name": "",
+            "min": [
+              -0.175,
+              0.008249999999999993,
+              -0.03749999999999999
+            ],
+            "max": [
+              -0.012499999999999997,
+              0.17325000000000002,
+              0.21250000000000002
+            ]
+          },
+          {
+            "name": "",
+            "min": [
+              0.012499999999999997,
+              0.008249999999999993,
+              -0.03749999999999999
+            ],
+            "max": [
+              0.175,
+              0.17325000000000002,
+              0.21250000000000002
+            ]
+          }
+        ]
+      },
+      "after": {
+        "meshes": 19,
+        "triangles": 3908,
+        "vertices": 2633,
+        "materialCount": 1,
+        "zeroNormals": 0,
+        "localVertexMin": [
+          -0.139,
+          0,
+          -0.1919801596403122
+        ],
+        "localVertexMax": [
+          0.14992224329710008,
+          0.7800974940061569,
+          0.17774145126342775
+        ],
+        "scale": [
+          1.25,
+          1.65,
+          1.25
+        ],
+        "contactMeshCount": 2,
+        "contacts": [
+          {
+            "name": "rabbit-foot",
+            "min": [
+              -0.1700536087155342,
+              0,
+              -0.021345226913690563
+            ],
+            "max": [
+              -0.014946391284465788,
+              0.1518,
+              0.20668245732784268
+            ]
+          },
+          {
+            "name": "rabbit-foot",
+            "min": [
+              0.014946391284465788,
+              0,
+              -0.021345226913690563
+            ],
+            "max": [
+              0.1700536087155342,
+              0.1518,
+              0.20668245732784268
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "appearance": "sheep-wool",
+      "before": {
+        "meshes": 29,
+        "triangles": 4328,
+        "vertices": 3133,
+        "materialCount": 6,
+        "zeroNormals": 0,
+        "localVertexMin": [
+          -0.2898509035432481,
+          1.7881393449270533e-9,
+          -0.33911786003224337
+        ],
+        "localVertexMax": [
+          0.29,
+          0.5599999999999999,
+          0.42
+        ],
+        "scale": [
+          1.15,
+          1.5,
+          1.15
+        ],
+        "contactMeshCount": 4,
+        "contacts": [
+          {
+            "name": "",
+            "min": [
+              -0.1805500005483627,
+              2.682209010451686e-9,
+              -0.2150500005483627
+            ],
+            "max": [
+              -0.09544999945163726,
+              0.23999999731779098,
+              -0.12994999945163727
+            ]
+          },
+          {
+            "name": "",
+            "min": [
+              -0.1805500005483627,
+              2.682209010451686e-9,
+              0.12994999945163727
+            ],
+            "max": [
+              -0.09544999945163726,
+              0.23999999731779098,
+              0.2150500005483627
+            ]
+          },
+          {
+            "name": "",
+            "min": [
+              0.09544999945163726,
+              2.682209010451686e-9,
+              -0.2150500005483627
+            ],
+            "max": [
+              0.1805500005483627,
+              0.23999999731779098,
+              -0.12994999945163727
+            ]
+          },
+          {
+            "name": "",
+            "min": [
+              0.09544999945163726,
+              2.682209010451686e-9,
+              0.12994999945163727
+            ],
+            "max": [
+              0.1805500005483627,
+              0.23999999731779098,
+              0.2150500005483627
+            ]
+          }
+        ]
+      },
+      "after": {
+        "meshes": 28,
+        "triangles": 6128,
+        "vertices": 4091,
+        "materialCount": 1,
+        "zeroNormals": 0,
+        "localVertexMin": [
+          -0.26831282043457033,
+          0,
+          -0.33568913424015046
+        ],
+        "localVertexMax": [
+          0.26831282043457033,
+          0.5606568854581427,
+          0.4167737698554993
+        ],
+        "scale": [
+          1.15,
+          1.5,
+          1.15
+        ],
+        "contactMeshCount": 4,
+        "contacts": [
+          {
+            "name": "sheep-foot",
+            "min": [
+              -0.18966018476486204,
+              0,
+              -0.2195437482088804
+            ],
+            "max": [
+              -0.09323981523513794,
+              0.189,
+              -0.1141540387570858
+            ]
+          },
+          {
+            "name": "sheep-foot",
+            "min": [
+              -0.18966018476486204,
+              0,
+              0.12545625179111958
+            ],
+            "max": [
+              -0.09323981523513794,
+              0.189,
+              0.23084596124291418
+            ]
+          },
+          {
+            "name": "sheep-foot",
+            "min": [
+              0.09323981523513794,
+              0,
+              -0.2195437482088804
+            ],
+            "max": [
+              0.18966018476486204,
+              0.189,
+              -0.1141540387570858
+            ]
+          },
+          {
+            "name": "sheep-foot",
+            "min": [
+              0.09323981523513794,
+              0,
+              0.12545625179111958
+            ],
+            "max": [
+              0.18966018476486204,
+              0.189,
+              0.23084596124291418
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "appearance": "beaver-brown",
+      "before": {
+        "meshes": 21,
+        "triangles": 4056,
+        "vertices": 5589,
+        "materialCount": 9,
+        "zeroNormals": 0,
+        "localVertexMin": [
+          -0.21019416254983492,
+          0,
+          -0.17
+        ],
+        "localVertexMax": [
+          0.22844880989815927,
+          0.6299999999999999,
+          0.236
+        ],
+        "scale": [
+          1.15,
+          1.5,
+          1.15
+        ],
+        "contactMeshCount": 2,
+        "contacts": [
+          {
+            "name": "",
+            "min": [
+              -0.2185,
+              0,
+              -0.06325
+            ],
+            "max": [
+              -0.04600000000000001,
+              0.135,
+              0.16674999999999998
+            ]
+          },
+          {
+            "name": "",
+            "min": [
+              0.04600000000000001,
+              0,
+              -0.06325
+            ],
+            "max": [
+              0.2185,
+              0.135,
+              0.16674999999999998
+            ]
+          }
+        ]
+      },
+      "after": {
+        "meshes": 21,
+        "triangles": 4688,
+        "vertices": 3117,
+        "materialCount": 1,
+        "zeroNormals": 0,
+        "localVertexMin": [
+          -0.195,
+          0,
+          -0.17381569589239865
+        ],
+        "localVertexMax": [
+          0.20782890032021392,
+          0.627,
+          0.232966326713562
+        ],
+        "scale": [
+          1.15,
+          1.5,
+          1.15
+        ],
+        "contactMeshCount": 2,
+        "contacts": [
+          {
+            "name": "beaver-foot",
+            "min": [
+              -0.21149208002090453,
+              0,
+              -0.04067471173405647
+            ],
+            "max": [
+              -0.04840791997909545,
+              0.132,
+              0.1646942215681076
+            ]
+          },
+          {
+            "name": "beaver-foot",
+            "min": [
+              0.04840791997909545,
+              0,
+              -0.04067471173405647
+            ],
+            "max": [
+              0.21149208002090453,
+              0.132,
+              0.1646942215681076
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "appearance": "deer-chestnut",
+      "before": {
+        "meshes": 42,
+        "triangles": 6240,
+        "vertices": 4524,
+        "materialCount": 9,
+        "zeroNormals": 0,
+        "localVertexMin": [
+          -0.2624929728316442,
+          0,
+          -0.3148168875932375
+        ],
+        "localVertexMax": [
+          0.2624929728316442,
+          0.932,
+          0.387
+        ],
+        "scale": [
+          1.15,
+          1.5,
+          1.15
+        ],
+        "contactMeshCount": 4,
+        "contacts": [
+          {
+            "name": "deer-hoof",
+            "min": [
+              -0.19549999999999998,
+              0,
+              -0.2438
+            ],
+            "max": [
+              -0.0759,
+              0.12,
+              -0.08509999999999998
+            ]
+          },
+          {
+            "name": "deer-hoof",
+            "min": [
+              -0.19549999999999998,
+              0,
+              0.1127
+            ],
+            "max": [
+              -0.0759,
+              0.12,
+              0.2714
+            ]
+          },
+          {
+            "name": "deer-hoof",
+            "min": [
+              0.0759,
+              0,
+              -0.2438
+            ],
+            "max": [
+              0.19549999999999998,
+              0.12,
+              -0.08509999999999998
+            ]
+          },
+          {
+            "name": "deer-hoof",
+            "min": [
+              0.0759,
+              0,
+              0.1127
+            ],
+            "max": [
+              0.19549999999999998,
+              0.12,
+              0.2714
+            ]
+          }
+        ]
+      },
+      "after": {
+        "meshes": 33,
+        "triangles": 5728,
+        "vertices": 3895,
+        "materialCount": 1,
+        "zeroNormals": 0,
+        "localVertexMin": [
+          -0.25386292237043384,
+          0,
+          -0.30557351288716433
+        ],
+        "localVertexMax": [
+          0.25386292237043384,
+          0.9259999990463257,
+          0.37593187093734737
+        ],
+        "scale": [
+          1.15,
+          1.5,
+          1.15
+        ],
+        "contactMeshCount": 4,
+        "contacts": [
+          {
+            "name": "deer-hoof",
+            "min": [
+              -0.1928795214653015,
+              0,
+              -0.22965957202911375
+            ],
+            "max": [
+              -0.07852047853469848,
+              0.11699999999999999,
+              -0.08615018043518063
+            ]
+          },
+          {
+            "name": "deer-hoof",
+            "min": [
+              -0.1928795214653015,
+              0,
+              0.12684042797088624
+            ],
+            "max": [
+              -0.07852047853469848,
+              0.11699999999999999,
+              0.2703498195648193
+            ]
+          },
+          {
+            "name": "deer-hoof",
+            "min": [
+              0.07852047853469848,
+              0,
+              -0.22965957202911375
+            ],
+            "max": [
+              0.1928795214653015,
+              0.11699999999999999,
+              -0.08615018043518063
+            ]
+          },
+          {
+            "name": "deer-hoof",
+            "min": [
+              0.07852047853469848,
+              0,
+              0.12684042797088624
+            ],
+            "max": [
+              0.1928795214653015,
+              0.11699999999999999,
+              0.2703498195648193
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "auditScriptSha256": "8c7e67bb68eed61d9ef42b3a2610e2952564fab096f98c8103f0a16497cd9772"
+}

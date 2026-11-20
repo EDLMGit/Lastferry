@@ -1,0 +1,20 @@
+Original targeted tool output retained from the first completed checks (2026-10-24, Node24). This is an export of the tool-returned stdout/stderr, not a rerun.
+
+RUN at14:45:43: npx vitest run tests/unit/deck-transfer.test.ts tests/unit/clearance.test.ts tests/unit/paths.test.ts
+Test Files1failed |2passed(3); Tests2failed |21passed(23); Duration30.76s
+clearance.test.ts6tests,2failed,20901ms:
+first-crossing full modeled ferry clears land and piers from all reachable headings, both berth sides and reverse departures:9051ms
+bellwater same check:8233ms
+Both failures: Error: Test timed out in5000ms. No failed geometric assertion was returned. Earlier same motion/clearance subset21/21 completed5.04s. Host and shell startup were visibly delayed in this run; CPU contention is plausible but no profiler diagnosis was captured. Timeout is unchanged. Subsequent scalar footprint transform removes per-vertex Vector3/quaternion allocations without dropping samples, reachable headings, hull vertices or clearance tolerance.
+
+RUN at14:46:14: npx vitest run tests/unit/deck-transfer.test.ts tests/unit/deck-volume.test.ts
+Test Files1failed |1passed(2); Tests1failed |3passed(4); Duration744ms
+FAIL modeled passengers avoid cabin and rails through each transfer phase at berth -1.5707963267948966
+AssertionError: expected [...] to deeply equal []
+Received:
+  harbor-unload/2/0.37: -0.46,0.38,0.65
+  harbor-unload/2/0.38: -0.46,0.38,0.65
+  harbor-unload/2/0.39: -0.46,0.38,0.65
+The new volume fixture incorrectly interpolated final-unload draft over all900ms. Runtime uses the accepted final550ms settling phase. The affected test now calls production settlingProgress with900ms/550ms; no runtime or geometric tolerance change was made for this failure.
+
+RERUN at14:46:48: same two transfer unit files4/4passed,771ms. Original output above preserved.

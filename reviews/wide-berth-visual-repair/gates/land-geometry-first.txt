@@ -1,0 +1,67 @@
+
+ RUN  v5.0.5 C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry
+
+stdout | tests/unit/wide-clearance.test.ts > Wide Berth occupied real modeled hull clears land and piers at every reachable heading in both directions
+{"harbor-high-quay/forward/harbor-pier/mesh1":{"count":40,"position":[-5.256172839506174,0,0],"angle":-0.7120142093957733},"harbor-high-quay/forward/harbor-pier/mesh15":{"count":36,"position":[-5.256172839506174,0,0],"angle":-0.7120142093957733},"harbor-high-quay/reverse/high-quay-pier/mesh0":{"count":35,"position":[-1.187654320987658,0,0],"angle":2.201097537828525},"harbor-high-quay/reverse/high-quay-pier/mesh1":{"count":50,"position":[-1.187654320987658,0,0],"angle":2.201097537828525},"harbor-high-quay/reverse/high-quay-pier/mesh4":{"count":35,"position":[-1.187654320987658,0,0],"angle":2.201097537828525},"harbor-high-quay/reverse/high-quay-pier/mesh8":{"count":45,"position":[-1.2277777777777816,0,0],"angle":2.362110294465611},"high-quay-wide-berth/forward/high-quay-pier/mesh1":{"count":16,"position":[1.249572942069618,0,0],"angle":-0.6874834219010652},"high-quay-wide-berth/forward/high-quay-pier/mesh9":{"count":16,"position":[1.249572942069618,0,0],"angle":-0.6874834219010652},"high-quay-wide-berth/reverse/wide-berth-pier/mesh1":{"count":16,"position":[7.049572942069614,0,-7.4],"angle":-0.687483421901065},"high-quay-wide-berth/reverse/wide-berth-pier/mesh15":{"count":16,"position":[7.049572942069614,0,-7.4],"angle":-0.687483421901065},"high-quay-shell-landing/reverse/shell-landing-pier/mesh0":{"count":20,"position":[9.316491813012059,0,3.8],"angle":2.1851525590445973},"high-quay-shell-landing/reverse/shell-landing-pier/mesh1":{"count":29,"position":[9.316491813012059,0,3.8],"angle":2.1851525590445973},"high-quay-shell-landing/reverse/shell-landing-pier/mesh9":{"count":19,"position":[9.302532798010768,0,3.8],"angle":2.2393787815622654},"high-quay-shell-landing/reverse/shell-landing-pier/mesh8":{"count":14,"position":[9.260531164675475,0,3.8],"angle":2.411100453813737},"high-quay-shell-landing/reverse/shell-landing-pier/mesh12":{"count":25,"position":[9.260531164675475,0,3.8],"angle":2.411100453813737},"high-quay-shell-landing/reverse/shell-landing-pier/mesh11":{"count":23,"position":[9.246496195101592,0,3.8],"angle":2.470999773428671},"high-quay-shell-landing/reverse/shell-landing-pier/mesh16":{"count":18,"position":[9.147995466922774,0,3.8],"angle":2.9161140173338578},"high-quay-shell-landing/reverse/shell-landing-pier/mesh17":{"count":18,"position":[9.147995466922774,0,3.8],"angle":2.9161140173338578},"outer-buoy-harbor/forward/harbor-pier/mesh16":{"count":2,"position":[-9.175223508248251,0,0.15990082258276916],"angle":-3.926436777994102},"outer-buoy-harbor/forward/harbor-pier/mesh17":{"count":2,"position":[-9.175223508248251,0,0.15990082258276916],"angle":-3.926436777994102},"outer-buoy-harbor/reverse/harbor-pier/mesh0":{"count":36,"position":[-7.688897167733698,0,0],"angle":2.205904141339015},"outer-buoy-harbor/reverse/harbor-pier/mesh1":{"count":54,"position":[-7.688897167733698,0,0],"angle":2.205904141339015},"outer-buoy-harbor/reverse/harbor-pier/mesh9":{"count":38,"position":[-7.688897167733698,0,0],"angle":2.205904141339015},"outer-buoy-harbor/reverse/harbor-pier/mesh12":{"count":48,"position":[-7.7332330760045345,0,0],"angle":2.384863385726237},"outer-buoy-harbor/reverse/harbor-pier/mesh8":{"count":24,"position":[-7.748075056376338,0,0],"angle":2.4476958929148656},"outer-buoy-harbor/reverse/harbor-pier/mesh11":{"count":42,"position":[-7.7629451155087,0,0],"angle":2.511912438811068},"outer-buoy-harbor/reverse/harbor-pier/mesh16":{"count":34,"position":[-7.8526303375737445,0,0],"angle":2.9190362311472033},"outer-buoy-harbor/reverse/harbor-pier/mesh17":{"count":34,"position":[-7.8526303375737445,0,0],"angle":2.9190362311472033}}
+
+ ❯ tests/unit/wide-clearance.test.ts (2 tests | 1 failed) 592ms
+   × Wide Berth occupied real modeled hull clears land and piers at every reachable heading in both directions 589ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/wide-clearance.test.ts > Wide Berth occupied real modeled hull clears land and piers at every reachable heading in both directions
+AssertionError: expected [ …(30) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "harbor-high-quay/forward from-1.570796326794897 sample250: harbor-pier/mesh1",
++   "harbor-high-quay/forward from-1.570796326794897 sample250: harbor-pier/mesh15",
++   "harbor-high-quay/forward from-1.570796326794897 sample251: harbor-pier/mesh1",
++   "harbor-high-quay/forward from-1.570796326794897 sample251: harbor-pier/mesh15",
++   "harbor-high-quay/forward from-1.570796326794897 sample252: harbor-pier/mesh1",
++   "harbor-high-quay/forward from-1.570796326794897 sample252: harbor-pier/mesh15",
++   "harbor-high-quay/forward from-1.570796326794897 sample253: harbor-pier/mesh1",
++   "harbor-high-quay/forward from-1.570796326794897 sample253: harbor-pier/mesh15",
++   "harbor-high-quay/forward from-1.570796326794897 sample254: harbor-pier/mesh1",
++   "harbor-high-quay/forward from-1.570796326794897 sample254: harbor-pier/mesh15",
++   "harbor-high-quay/forward from-1.570796326794897 sample255: harbor-pier/mesh1",
++   "harbor-high-quay/forward from-1.570796326794897 sample255: harbor-pier/mesh15",
++   "harbor-high-quay/forward from-1.570796326794897 sample256: harbor-pier/mesh1",
++   "harbor-high-quay/forward from-1.570796326794897 sample256: harbor-pier/mesh15",
++   "harbor-high-quay/forward from-1.570796326794897 sample257: harbor-pier/mesh1",
++   "harbor-high-quay/forward from-1.570796326794897 sample257: harbor-pier/mesh15",
++   "harbor-high-quay/forward from-1.570796326794897 sample258: harbor-pier/mesh1",
++   "harbor-high-quay/forward from-1.570796326794897 sample258: harbor-pier/mesh15",
++   "harbor-high-quay/forward from-1.570796326794897 sample259: harbor-pier/mesh1",
++   "harbor-high-quay/forward from-1.570796326794897 sample280: harbor-pier/mesh1",
++   "harbor-high-quay/forward from-1.570796326794897 sample281: harbor-pier/mesh1",
++   "harbor-high-quay/forward from-1.570796326794897 sample281: harbor-pier/mesh15",
++   "harbor-high-quay/forward from-1.570796326794897 sample282: harbor-pier/mesh1",
++   "harbor-high-quay/forward from-1.570796326794897 sample282: harbor-pier/mesh15",
++   "harbor-high-quay/forward from-1.570796326794897 sample283: harbor-pier/mesh1",
++   "harbor-high-quay/forward from-1.570796326794897 sample283: harbor-pier/mesh15",
++   "harbor-high-quay/forward from-1.570796326794897 sample284: harbor-pier/mesh1",
++   "harbor-high-quay/forward from-1.570796326794897 sample284: harbor-pier/mesh15",
++   "harbor-high-quay/forward from-1.570796326794897 sample285: harbor-pier/mesh1",
++   "harbor-high-quay/forward from-1.570796326794897 sample285: harbor-pier/mesh15",
++ ]
+
+ ❯ tests/unit/wide-clearance.test.ts:192:20
+    190|     }
+    191|   if (failures.length) console.log(JSON.stringify(contacts));
+    192|   expect(failures).toEqual([]);
+       |                    ^
+    193|   expect(margins).toEqual([]);
+    194| }, 20000);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 1 passed (2)
+   Start at  22:40:55
+   Duration  1.01s (tests 73%, transform 17%, import 9%, worker 1%)
+

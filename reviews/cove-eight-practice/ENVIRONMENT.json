@@ -1,0 +1,128 @@
+{
+  "source": "source/c1ed244aef5d0c7f235d111258bc28658ade82086df5427f2228537aafdc783d.json",
+  "runtimeInputCount": 131,
+  "workingTreeBase": "e3bef3da3f655a4c9671e0500d356a83fe96786b",
+  "node": "v24.15.0",
+  "npm": "11.12.1",
+  "os": "win32",
+  "browser": "156.0.8078.4",
+  "rendering": "Chromium emulated touch; ANGLE SwiftShader, DPR1",
+  "viewports": [
+    [
+      390,
+      844
+    ],
+    [
+      780,
+      320
+    ],
+    [
+      320,
+      740
+    ],
+    [
+      1440,
+      900
+    ]
+  ],
+  "motion": {
+    "normal": "Portrait safe-high-bank rescue, tide Undo, terminal Undo/redelivery and uninterrupted recording",
+    "reduced": "Minified landscape low-deep-first rescue; both tempting recovery branches; narrow/desktop and Settings/fullscreen"
+  },
+  "tips": "Off throughout; free forecast inspected against actual authored depths and current phases.",
+  "server": {
+    "dev": "http://127.0.0.1:5297",
+    "production": "http://127.0.0.1:5283",
+    "localUserURL": "http://127.0.0.1:5270/",
+    "viteConfig": "import { defineConfig, mergeConfig } from 'vite';\nimport base from '../vite.config.ts';\nexport default mergeConfig(base, defineConfig({ server: { host: '127.0.0.1', port: 5297, strictPort: true, hmr: false, watch: null } }));\r\n",
+    "playwrightConfig": "import { defineConfig } from '@playwright/test';\nimport base from '../playwright.config.ts';\nexport default defineConfig({ ...base, testDir: '../tests/e2e', webServer: undefined, use: { ...base.use, baseURL: 'http://127.0.0.1:5297', trace: 'retain-on-failure' } });\r\n"
+  },
+  "production": {
+    "entry": "dist/assets/index-Brb746hC.js",
+    "sha256": "dbc74f6bfad5d3d857967fa1d0a1172aedbac7214547a76291bb2bfc4b943415",
+    "bytes": 924238,
+    "css": "dist/assets/index-OXeb4GMi.css",
+    "cssSHA256": "8c5d5ba18c24ba706b170a60592c32adbc5b29896e476218db6599b36b1c480b",
+    "apiAbsent": "Minified test asserts window.__LAST_FERRY__ undefined and commits only through visible UI."
+  },
+  "environment": {
+    "PLAYWRIGHT_BROWSERS_PATH": ".cache/ms-playwright",
+    "LAST_FERRY_REVIEW_DIR": "reviews/cove-eight-practice",
+    "LAST_FERRY_PRODUCTION_PORT": "5283"
+  },
+  "commands": [
+    "npm run build",
+    "npm run check:assets",
+    "npm run typecheck",
+    "node node_modules/vite/bin/vite.js --config .cache/cove-eight-vite.config.ts",
+    "node node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 5283 --strictPort",
+    "node node_modules/@playwright/test/cli.js test -c .cache/cove-eight-playwright.config.ts cove-eight-practice.spec.ts --workers=1",
+    "node node_modules/@playwright/test/cli.js test -c .cache/cove-eight-playwright.config.ts cove-eight-practice.spec.ts --workers=1 --grep \"portrait first|a tempting|the low landing\"",
+    "With LAST_FERRY_C8_RECORD_ONLY=1: node node_modules/@playwright/test/cli.js test -c .cache/cove-eight-playwright.config.ts cove-eight-practice.spec.ts --workers=1 --grep \"portrait first\"",
+    "node reviews/cove-eight-practice/encode-recording.mjs reviews/cove-eight-practice/390x844"
+  ],
+  "results": {
+    "first": {
+      "path": "original-runs/browser-first.json",
+      "stats": {
+        "startTime": "2026-11-15T10:34:17.348Z",
+        "duration": 147566.147,
+        "expected": 3,
+        "skipped": 0,
+        "unexpected": 3,
+        "flaky": 0
+      }
+    },
+    "affectedRerun": {
+      "path": "development-results.json",
+      "stats": {
+        "startTime": "2026-11-15T10:37:10.456Z",
+        "duration": 155301.157,
+        "expected": 3,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    },
+    "recording": {
+      "path": "recording-results.json",
+      "stats": {
+        "startTime": "2026-11-15T10:39:56.164Z",
+        "duration": 83476.478,
+        "expected": 1,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    },
+    "interpretation": "Six distinct focused cases passed across the original three passes and the affected three-case rerun. The normal-motion portrait case then passed again while recording. The original three failures were test passenger-array-order assertions, retained with their initial source/helper hashes. Runtime unchanged."
+  },
+  "recording": {
+    "driver": "tests/e2e/cove-eight-practice.spec.ts portrait first test",
+    "flag": "LAST_FERRY_C8_RECORD_ONLY=1 omits simultaneous still-capture calls but preserves UI actions and assertions",
+    "capture": "Native CDP screencast JPEG quality88 everyNthFrame2 plus existing Sound master MediaRecorder Opus. All delivered images retain timestamps.",
+    "manifest": "390x844/rescue-recording.json",
+    "video": "390x844/rescue.mp4",
+    "media": "MEDIA.json",
+    "encodeScript": "encode-recording.mjs",
+    "encodeScriptSHA256": "29be9e587ad3d29274165593d2619fc5ee20b5a581d3355e9a987b3e2ed97ea1",
+    "uninterrupted": "High Bank staging, Sedge early delivery, tide Undo/replay, Willow pickup, heavy-group retrieval, four-neighbor arrival, terminal Undo and redelivery. No injected action or terminal state.",
+    "executedEncodeScriptSHA256": "b87daafe9400a4b3dd74e735b51d10ed62f46916106c105718ff2d82853e6dce",
+    "encodeDefaultNote": "After capture, the unused fallback directory was corrected from the earlier Orchard script to this review. The executed command passed this directory explicitly, so the encoded output and timing are unaffected."
+  },
+  "limits": [
+    "Chromium emulation, not physical Android/iOS testing.",
+    "Human difficulty, handheld readability, spoken screen-reader use and speaker/headphone listening remain unverified.",
+    "Runtime audio was captured from the existing master at unchanged levels; measured nonzero signal does not establish listening approval.",
+    "Native frame intervals and capture stalls are preserved and quantified in MEDIA.json, not a device performance benchmark.",
+    "No Journey replay or accepted-cove puzzle rebalance in this pass; those source identities and progress contracts remain protected by focused unit/source checks."
+  ],
+  "portraitDiagnostic": {
+    "driver": "portrait-check.spec.ts",
+    "command": "node node_modules/@playwright/test/cli.js test -c .cache/c8-portrait.config.ts --workers=1",
+    "config": "import { defineConfig } from '@playwright/test';\nimport base from './cove-eight-playwright.config.ts';\nexport default defineConfig({ ...base, testDir: '../reviews/cove-eight-practice', testMatch: 'portrait-check.spec.ts', reporter:[['list'],['json',{outputFile:'../reviews/cove-eight-practice/portrait-check/results.json'}]] });\n",
+    "result": "portrait-check/results.json",
+    "mapping": "portrait-check/mapping.json",
+    "outcome": "Passed actual UI route to turn13 final-delivery chooser. Immediate and settled Willow beaver-brown / Juniper deer-chestnut / Fennel rabbit-tan images loaded256x256 and displayed44x44; no wrong portrait reproduced. Native full preview and tile images visually inspected."
+  }
+}

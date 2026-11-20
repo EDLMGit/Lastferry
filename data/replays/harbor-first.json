@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "levelId": "first-crossing",
+  "id": "harbor-first",
+  "purpose": "Valid alternative: deliver the rabbits first, then collect the sheep with a lighter boat.",
+  "actions": [
+    { "type": "move", "to": "harbor" },
+    { "type": "unload", "passengerIds": ["rabbit-1", "rabbit-2"] },
+    { "type": "move", "to": "cut" },
+    { "type": "move", "to": "sheep-pier" },
+    { "type": "board", "passengerIds": ["sheep-1"] },
+    { "type": "move", "to": "cut" },
+    { "type": "move", "to": "harbor" },
+    { "type": "unload", "passengerIds": ["sheep-1"] }
+  ],
+  "expected": { "status": "won", "turn": 8, "tideLevel": 2, "boatNodeId": "harbor", "delivered": ["rabbit-1", "rabbit-2", "sheep-1"] }
+}

@@ -1,0 +1,2933 @@
+diff --git a/NEXT_TASK_SAILING_DIRECTION_AND_WAKE.md b/NEXT_TASK_SAILING_DIRECTION_AND_WAKE.md
+new file mode 100644
+index 0000000..58b7e6c
+--- /dev/null
++++ b/NEXT_TASK_SAILING_DIRECTION_AND_WAKE.md
+@@ -0,0 +1,186 @@
++# Last Ferry — Sailing direction and water trails
++
++## Disposition and active goal
++
++The water-motion pass at `8b874adccfc1d65af569b81fade548f0368645b0` is functionally verified but **not visually accepted**. The user reports unnecessary rotation at stops and water effects that feel attached to particular points on the boat.
++
++Correct both in one contained pass: the ferry should settle facing a direction justified by its journey or berth, and the visible waves it creates should spread through the water independently after release.
++
++The previous brief requested a bow crescent and stern disturbance and carried forward the old endpoint behavior. This correction explicitly revises those art/presentation requirements. Preserve the useful bounded wake architecture and calmer timing.
++
++## Source, live build and workflow
++
++- Repository: https://github.com/EDLMGit/Lastferry
++- Branch: `m1-first-crossing`; PR #1 remains draft; main remains unchanged.
++- Implementation to refine: `8b874adccfc1d65af569b81fade548f0368645b0`.
++- Last accepted and published game: `0ee7d685071179b82ec2a599fac2f818251d0e54`.
++- Existing owner-private phone Site: https://last-ferry-playtest.abumech.chatgpt.site
++- Last confirmed Site source: `273aa4a9900ca8a302b8708f356a2dc83dac7acd`.
++- Independent fresh build/typecheck and 163/163 unit tests pass for 8b874ad. Contributor browser evidence supports 17 passes plus one corrected affected-case rerun, covering 18 distinct cases. These results do not establish perceptual acceptance.
++- This review does not publish 8b874ad. Implement the correction, return a new handoff, then ChatGPT reviews and publishes the accepted result.
++
++Read `AGENTS.md`, `docs/PROJECT_STATE.md`, this task, relevant art guidance, `reviews/water-motion/REVIEW.md`, `COMPARISON.md` and `SELECTED_FRAMES.md`. Preserve newer/unrelated work. This file is the active task and supersedes conflicting requirements in the completed wake brief and the old all-stops-broadside tests.
++
++## Confirmed diagnosis
++
++### Heading
++
++`src/scene/motion.ts` blends toward the route tangent away from endpoints, then blends back to the same `fromAngle` near every destination. `World.sync()` assigns `Math.PI / 2` at every node. Together they return the ferry to the same orientation at piers, Shallows, Cut and buoys.
++
++This policy predates the new wake. Normal arrival usually turns during the approach; it is not necessarily a one-frame completion snap. Removing only the sync assignment leaves the approach turn; changing only the approach blend leaves a completion reset.
++
++The current path and browser tests intentionally enforce this old policy. Replace that artistic contract while retaining meaningful continuity and clearance checks.
++
++### Water
++
++The historical stern trail already stores world-space samples. Do not describe the whole wake as parented to the boat.
++
++The bow crescent and complete stern ellipse are rebuilt from the live position/heading every frame in `wake.ts`. `finish()` records a time/strength but no release pose, so their docking fade is also hull-relative. It restores strength from the journey's peak, which can create another accent after deceleration.
++
++The trail shader places bright crests in two fixed lateral bands. Breaking those bands with a distance sinusoid leaves a repeated paired-dash appearance. The selected phone frames support the impression of fixed accents and rails; local raw videos remain unavailable to the remote reviewer.
++
++Navigation rings and dotted routes are separate accepted controls. Preserve their purpose and visibility.
++
++## Priority 1 — Natural stopping and departure headings
++
++### Free-water stops
++
++Classify stops using the level's pier relationship, not the presence of a buoy prop. Cut, Shallows and buoys are free-water nodes.
++
++- Arrive aligned with the final course tangent and retain that settled heading.
++- Inspection, selection, Wait, Settings and other nonmove actions retain the settled heading.
++- On the next movement, begin from that actual pose and turn toward the newly chosen course.
++- An immediate reversal legitimately requires a maneuver. Use a brief, controlled low-speed turn or backing departure within the existing movement budget. Keep angular motion continuous and avoid prolonged sideways sliding.
++- Choose the shortest angular change, with a deterministic tie for an exact 180-degree reversal. Keep angles unwrapped through sampling/emission so crossing ±π cannot create an unintended long rotation.
++
++### Real piers
++
++A berth can justify alignment. The current pier shafts run along world Z; the ferry stops 0.9 units seaward of their tips. The current safe broadside axis is world X, giving two candidate headings, +π/2 and -π/2.
++
++Use the safe berth orientation nearest the incoming course, then make only the required final alignment during the approach. Derive/declare that policy from the actual berth geometry. Do not align the long hull with the pier shaft merely because it points toward land.
++
++Validate both opposite berth headings and the full approach/departure rotation. Their safety is an implementation requirement, not assumed from the existing +π/2 tests. Preserve the current route centerlines and boat stopping positions; no route-graph redesign is requested.
++
++Hold heading through boarding, unloading and Wait. Check the bridge-to-deck path on both boat sides: animals must reach their real deck anchors without crossing the cabin/railings or jumping during reparenting. Adjust local transfer presentation only as needed for the valid berth poses; keep contact timing, passenger conservation and action rules.
++
++### One presentation pose contract
++
++Implement a coherent plan with independent starting and destination headings. Sample it deterministically from progress, with an exact final pose; do not make rest orientation depend on the last frame delivered by the renderer.
++
++Keep orientation in the presentation/controller layer, separate from puzzle rules. Preserve the visual heading through every completion and restoration path:
++
++- Record pre-action presentation pose only when the action is accepted.
++- Determine the intended final pose before animation can fail or be interrupted.
++- Nonmove actions carry their prior heading.
++- Undo restores the paired pre-action pose when gameplay Undo succeeds.
++- Restart/cove changes clear presentation history and use a deterministic initial pose.
++- Normal completion, hidden-tab settlement, Reduced interruption, recovery timeout and animation-error synchronization all resolve to the same planned final pose, with one unlock.
++- Invalid actions and free inspection add no presentation-history entries.
++
++A small presentation snapshot stack aligned with accepted transactions is suitable; no persistence subsystem or new gameplay state is required. If using a parallel stack, centralize its updates and verify its agreement with accepted Undo history. The target pose must survive fallback paths that call `world.sync(session.state)` without a successfully created transition.
++
++## Priority 2 — Water that is left behind
++
++Start by removing the complete travelling stern ellipse and substantially quieting the persistent bow outline. A small waterline contact while moving is reasonable; it should support the effect rather than dominate it.
++
++Build the readable motion from a few broad, soft, open wave crests emitted as the ferry displaces water:
++
++- Capture each release position, direction, birth time and strength in world space.
++- After birth, its X/Z movement and shape depend on its own age and release data. Later hull translation or yaw must not drag it around.
++- Let crests spread outward, relax and fade. Use the travelled curve and actual horizontal movement to choose their initial direction; the visible hull can determine a plausible birth location.
++- Use gently varied lengths and breakup with stable per-release variation. Avoid a regularly spaced pair of bright dashed rails, closed ornaments and fine shimmer.
++- Retain a restrained teal body and pearl/seafoam crests within the accepted palette. Judge width and contrast at native phone size.
++- Idle bobbing, pure tide/draft changes and an in-place steering adjustment produce no travel wake. A controlled backing departure should be visually consistent with its movement direction.
++- Keep existing released crests independent when another valid journey begins. Use bounded segment/event ownership, without connecting old and new positions with a strip.
++
++Let residual travelling water supply the docking finish first. If a separate settling event improves the real phone view, snapshot its release pose and evolve it independently. Its intensity must flow continuously from recent movement; do not restart a conspicuous hull ornament using the trip's peak strength.
++
++Normal action completion restores controls immediately while finite water tails finish. Undo, Restart, cove changes, discontinuous synchronization, hidden/recovered transitions and Reduced clear transient water state. Interrupted movement must not trigger a new docking flourish.
++
++## Keep the current pace and accepted scene
++
++Hold `clamp(1000 + 200 × path length, 1600, 3000) ms` for normal sailing during this correction. The reviewed examples are roughly 1.9 seconds for the short route and 2.8 seconds for the long one. This isolates direction and water behavior; no automatic further slowdown.
++
++Fit necessary departure/berth steering within that action budget. Preserve the established easing where compatible, while allowing a narrow movement/heading profile adjustment to make the maneuver coherent. Boarding, unloading, Wait, the final tide phase, Reduced duration, recovery margin and audio event timing retain their accepted contracts.
++
++Keep the luminous sea, shallow detail, Harbor reflection, new lighthouse light, homecoming camera/animals, interface and score. The rejected local-normal experiment need not be repeated. A full water/renderer rewrite or extra full-screen effect is not part of this correction.
++
++## Architecture and performance
++
++Reuse the fixed pool/preallocated mesh approach. Short-lived wave events can share bounded geometry and buffers. Tune the allocation to the chosen treatment and report the final cap; avoid per-wave meshes, per-frame materials/textures or another animation loop.
++
++Retain the coast mask, depth testing, water-relative height, disabled depth writes and exclusion from picking/camera bounds. Released X/Z history remains independent while Y follows a tide rise. Inspect land/pier overlap and transparent overlap brightness.
++
++Changing yaw can alter full-hull clearance even with an unchanged centerline. Use the production heading plan and actual reachable start headings for geometry checks, including both berth variants and reverse departures. Check the full ferry footprint, not only its center.
++
++The existing camera envelope is radius-based. Inspect phone framing and passenger readability, but do not redesign the camera automatically.
++
++Compare warmed baseline/candidate idle and active movement in the same viewport/DPR/renderer. Check bounded resource counts and a short frame-interval sample; investigate a demonstrated new regression. Keep the known SwiftShader limits separate from physical Android performance.
++
++## Work order and visual decision
++
++1. Capture the current arrival → rest → next-departure sequence at one free-water node and one real pier, including a reversal.
++2. Correct heading ownership and restoration first. Finish both berth transfer checks.
++3. Replace the fixed water accents/paired-rail treatment with released crests, using the corrected motion.
++4. Watch the complete sequence at ordinary playback speed and native phone size. Choose one coherent treatment independently.
++5. Run the focused checks below, update continuity and return the reviewable handoff.
++
++This is a correction to an open milestone, not a new feature milestone. Do not ask the user to tune parameters or recruit additional playtesters.
++
++## Focused verification and evidence
++
++Run Node 24 production build/typecheck and the unit suite. Update the old all-stops-π/2 expectations intentionally; retain the safeguards they were covering.
++
++Required behavioral checks:
++
++- Free-water arrival retains its tangent through rest, inspection and Wait; the next move begins at the retained pose.
++- Necessary reverse departure follows a continuous, deterministic angular plan and the same action budget.
++- Both pier berth headings preserve full-hull/pier/land clearance and convincing boarding/unloading.
++- Undo after a move, a nonmove, a tide rise and a winning unload restores the corresponding pose; an alternate next route still works.
++- Normal, hidden, Reduced, recovery and error settlements agree on the intended end pose, with one action and one completion.
++- A released water crest remains independent when the ferry subsequently turns or moves. Its world evolution, tide height, finite fade and cleanup remain correct.
++- Immediate follow-up input, repeated crossings, resets and cove changes produce no extra lock, trail connector or resource growth.
++- Accepted lighthouse/homecoming, transfer audio and victory-mix lifecycle remain coherent.
++
++Use the real UI for one complete Holding rescue and the relevant Bellwater routes in both directions. Include a First Crossing smoke view. Use 1440×900, 844×390 and 780×390, plus a 780×320 layout/ending smoke check. Test a device-motion preference change during travel through accurately labeled media emulation; manual Settings can be checked at rest.
++
++Evidence must show more than mid-crossing stills:
++
++- A natural-speed clip of arrival → rest → onward departure at a free-water node.
++- A return/reversal and an actual-pier approach/transfer/departure.
++- A few closely spaced frames around stopping and the next turn; half-second sampling can miss the key transition.
++- One clearly traceable released crest that continues independently as the boat changes pose.
++- Restored pose after Undo, plus Reduced/cleanup evidence.
++- Matched native before/after route/load/tide/camera views, with actual timing labels.
++
++Retain uninterrupted originals locally/ignored by default and commit a compact selected sequence. State accurately which media the reviewer can access. Tests support lifecycle/geometry claims; moving visual evidence supports the chosen treatment.
++
++## Completion, continuity and Git handoff
++
++Create `reviews/sailing-direction-wake/REVIEW.md` with confirmed causes, chosen heading/berth policy, released-wave treatment, before/after evidence, source identity, exact commands/results, original failures and affected reruns, and device limitations. Describe finite fading separately from actual world-space release.
++
++Update `docs/PROJECT_STATE.md`: lighthouse accepted/published; 8b874ad water pass needs this correction based on user feedback; current active task is this file; other future ideas remain queued. Keep the live game SHA at 0ee7d685 until publication is confirmed. Briefly update relevant art guidance and `STATUS.md`.
++
++Commit/push the completed correction on `m1-first-crossing`, update existing PR #1 while retaining draft status, and leave main unchanged. No merge, force-push or automatic Site publication.
++
++Return the full final SHA, remote equality, working-tree/PR state, concrete visual decision, fresh versus reused checks, accessible evidence and remaining limits. Publication follows ChatGPT review of that new SHA.
++
++## Source references for the diagnosis
++
++- [Current heading sampler](https://github.com/EDLMGit/Lastferry/blob/8b874adccfc1d65af569b81fade548f0368645b0/src/scene/motion.ts)
++- [World synchronization and transition lifecycle](https://github.com/EDLMGit/Lastferry/blob/8b874adccfc1d65af569b81fade548f0368645b0/src/scene/world.ts)
++- [Wake history, live contacts and docking fade](https://github.com/EDLMGit/Lastferry/blob/8b874adccfc1d65af569b81fade548f0368645b0/src/scene/wake.ts)
++- [Current path/heading tests](https://github.com/EDLMGit/Lastferry/blob/8b874adccfc1d65af569b81fade548f0368645b0/tests/unit/paths.test.ts)
++- [Ferry clearance tests](https://github.com/EDLMGit/Lastferry/blob/8b874adccfc1d65af569b81fade548f0368645b0/tests/unit/clearance.test.ts)
++- [Contributor review](https://github.com/EDLMGit/Lastferry/blob/8b874adccfc1d65af569b81fade548f0368645b0/reviews/water-motion/REVIEW.md)
++
++## Kickoff prompt
++
++Implement NEXT_TASK_SAILING_DIRECTION_AND_WAKE.md at the repository root as the current task. Read AGENTS.md and docs/PROJECT_STATE.md first.
++
++Refine 8b874adccfc1d65af569b81fade548f0368645b0 on m1-first-crossing, preserving newer/unrelated work. The prior water pass is not visually accepted. Fix the universal stop-heading behavior and replace the conspicuous hull-following water accents with independently released crests as specified in the task.
++
++Finish the heading, berth/transfer, Undo/recovery and wave-release work together. Keep the current sailing timing and accepted puzzles, audio, UI, water palette and lighthouse. Make routine implementation decisions independently.
++
++Complete the task's focused checks and natural-speed phone comparisons, commit/push, and update PR #1 while keeping it draft. Leave main unchanged. Return the exact final SHA and review handoff. Publication follows ChatGPT review.
++
+diff --git a/docs/ART_DIRECTION.md b/docs/ART_DIRECTION.md
+index b3a61e2..084b29f 100644
+--- a/docs/ART_DIRECTION.md
++++ b/docs/ART_DIRECTION.md
+@@ -60,9 +60,9 @@ At a representative small landscape viewport such as 844 × 390 CSS pixels, user
+ 
+ Water is calm and stylized: broad color fields, quiet highlights, and sparse ripples. Prefer a simple water surface and authored shoreline shapes over fluid simulation. Use discrete tide states from the rules, with authored land exposure and waterlines for each state. The scene must clearly distinguish exposed sand, shallow passage, navigable water, and a flooded boarding point.
+ 
+-Sailing now leaves a softly spreading, world-space trail with broken pearl crests and a restrained teal body. Its small bow crescent and stern disturbance sit at the actual hull's waterline; horizontal movement governs their strength. Preserve visible curvature and reverse travel without connecting unrelated journeys. The fixed96-sample pool retains at most1800ms/3.6world units, roughly one to two hull lengths at the selected pace. New emission eases with actual speed; normal docking leaves a finite tail and650ms contact settlement while controls unlock normally. Tide moves the existing trail with the surface without emitting extra samples. Reduced, Undo, reset and recovery clear movement effects.
++The previous hull-following bow crescent, complete stern ellipse and paired crest bands were not visually accepted. Sailing now releases a few broad, soft, open pearl/seafoam crests over restrained teal. Each release stores its own world pose, direction, age and stable variation. Its later spreading, relaxation, drift and fade depend on that release, not the boat's later position or yaw. Actual horizontal displacement controls emission, including backing departures. There is no live hull ornament or renewed peak-strength docking flourish. Finite residual water finishes after controls unlock; a following journey retains independent older events without joining them. Tide moves their height with the sea; idle bobbing, pure yaw and draft changes emit nothing. Reduced, Undo, reset and recovery clear movement effects.
+ 
+-Native phone comparison selected broken crests over the initial continuous rail-like pair, and a calmer1000+200×path-length millisecond sailing policy bounded to1600–3000ms. Representative short/long plans are1874/2823ms; easing and transfer/tide/recovery contracts remain. A localized normal-perturbation experiment did not demonstrate a useful consistent phone-size gain and was rejected. Preserve the accepted water shader, coast/substrate fields and Harbor reflection; the visible contact comes from bounded geometry borrowing the existing dry-land mask. See `reviews/water-motion/REVIEW.md` for moving evidence, exact timing and limits.
++Keep the calmer1000+200×path-length millisecond sailing policy bounded to1600–3000ms. Representative short/long plans are1874/2823ms. Free-water stops retain the final course tangent, while real piers choose the closer safe broadside heading derived from their shaft geometry. The next journey begins at that retained pose. Necessary short steering/backing maneuvers fit within the same budget; required pier alignment occurs on approach. Transfer/tide/recovery contracts remain. The rejected local-normal experiment stays removed. Preserve the accepted water shader, coast/substrate fields and Harbor reflection, borrowing the existing dry-land mask for released waves. See `reviews/sailing-direction-wake/REVIEW.md` for the correction's actual phone comparisons and limitations.
+ 
+ Represent increasing load with a modest, readable change in ferry draft. The hull settles; occupants stay correctly attached to the deck. This movement illustrates the model and never computes navigation validity.
+ 
+diff --git a/docs/ENVIRONMENT.md b/docs/ENVIRONMENT.md
+index 3827446..f195e45 100644
+--- a/docs/ENVIRONMENT.md
++++ b/docs/ENVIRONMENT.md
+@@ -1,6 +1,6 @@
+ # Luminous evening cove
+ 
+-`NEXT_TASK.md` records the historical atmosphere scope; `NEXT_TASK_WATER_MOTION.md` owns the current boat/water refinement. Holding Pier, Bellwater and First Crossing retain their accepted compositions, canonical courses, stops, elevations, rules and complete Undo. Earlier course/shore and atmosphere results remain attributed to their original review folders; current evidence belongs to `reviews/water-motion/REVIEW.md`.
++`NEXT_TASK.md` records the historical atmosphere scope; `NEXT_TASK_SAILING_DIRECTION_AND_WAKE.md` owns the current correction to the visually unaccepted water-motion pass. Holding Pier, Bellwater and First Crossing retain their accepted compositions, canonical courses, stops, elevations, rules and complete Undo. Earlier results remain attributed to their original review folders; current evidence belongs to `reviews/sailing-direction-wake/REVIEW.md`.
+ 
+ ## Water and light
+ 
+@@ -12,15 +12,15 @@ One bounded material draws the water. Two local RGBA data fields total 524,288 b
+ 
+ ## Journeys and clear silhouettes
+ 
+-The cached canonical course still drives dots, emphasis, distance-sampled ferry motion, continuous heading and full-ferry clearance. Only time-to-distance mapping changes: gentle symmetric 19% departure/arrival ramps with a steady middle. Exact endpoints, reverse courses and docking clearance remain intact. The review records actual short/long comparisons and the selected policy from `src/scene/transitions.ts`.
++The cached canonical course still drives dots, emphasis and distance-sampled ferry motion. Each accepted action records its prior presentation heading and precomputes an exact destination heading. Free-water nodes retain the final tangent. Real piers choose the closer broadside orientation from their actual shaft geometry. A shortest-angle free-water maneuver occupies at most22% of the existing budget before the original travel easing; pier departures can back clear before turning, and approaches perform only the necessary berth alignment. Full-model clearance tests cover reachable starting headings and both berth variants. Centerlines, stopping positions and total durations remain intact.
+ 
+ One plan supplies animation and duration-plus-1,000ms recovery. Tide and coincident draft settle in a separate phase capped at 550ms, finishing no later than the action. Transfers/Wait remain prompt. Completion, cancellation, visibility reconciliation, error and recovery synchronize committed state and release the lock exactly once. No input queues a second action.
+ 
+ During travel the local passenger card is hidden and a compact “Sailing to …” status remains. At rest card placement checks the projected full ferry and aboard passengers after viewport clamping, plus map/HUD/forecast obstacles, then tries alternate positions or a compact card. Controls retain accessible focus and touch areas.
+ 
+-A single preallocated wake mesh combines broken pearl crests, a subtle teal center and small bow/stern contacts. Distance-resampled stern history stays in world space, with smoothed bounded joins and separate segments between journeys. Its fixed96-point budget retains1800ms/3.6world units. Horizontal motion supplies strength; water elevation, draft and idle bob do not emit samples. The existing coast field masks exposed land. Normal completion preserves a finite spreading/fading tail and650ms contact settlement without extending the input lock. Undo, Restart, cove changes, discontinuity, hide/recovery and Reduced clear transients. Reduced keeps30ms transitions and accepted frozen water. The local normal-response trial was rejected after native phone comparison; the water shader/fields and Harbor reflection retain baseline content.
++A single preallocated mesh holds at most12 independently released, open wave crests with1800ms lifetime and12 segments each. Five attributes total24,192bytes. Broad soft pearl over restrained teal replaces the paired rails and live hull contacts. Stable release variation changes width, bend, breakup and spacing; age spreads and relaxes each crest independently of later hull translation or yaw. Horizontal displacement supplies direction and strength, including backing; tide/draft/bobbing and pure steering emit nothing. The existing coast mask clips exposed land. Normal completion simply stops emission while residual events fade, without extending the input lock or creating a docking ornament. Separate ownership prevents connectors across journeys. Undo, Restart, cove changes, discontinuity, hide/recovery and Reduced clear transients. Accepted water shader/fields and Harbor reflection remain unchanged.
+ 
+-The chosen normal sailing policy is clamp(1000+200×canonical length,1600,3000)ms. Natural short/long trials selected it over clamp(800+140×length,1200,2300). Easing, exact route/endpoints, transfer/final delivery timing, the capped550ms tide phase and duration+1000ms recovery remain. Actual observed durations and software-renderer limits belong to the water-motion review.
++The normal sailing policy remains clamp(1000+200×canonical length,1600,3000)ms, selected in the previous pass. Required steering fits inside it. Transfers/final delivery,30ms Reduced, the capped550ms tide phase, audio marks and duration+1000ms recovery retain their contracts. A presentation history aligned with accepted actions restores headings on Undo; normal, hidden, Reduced, recovery and error synchronization use the same intended endpoint. Mirrored deck entries and interior transfer routing support both berth sides.
+ 
+ ## Shallow detail, contact and home
+ 
+diff --git a/src/main.ts b/src/main.ts
+index 9b56a2b..45ce312 100644
+--- a/src/main.ts
++++ b/src/main.ts
+@@ -349,6 +349,7 @@ function execute(action: Action) {
+   if (session.busy) return;
+   const transaction = session.commit(copy(action));
+   if (!transaction) return;
++  world.poses.accept(transaction.before, action);
+   actionOrigin = !keyboardInput && lastPointer ? { x: lastPointer.x, y: lastPointer.y } : null;
+   sound.reconcileState(transaction.after, level, true);
+   if (action.type === 'move') locationSelection = action.to;
+@@ -378,10 +379,13 @@ function execute(action: Action) {
+       plan,
+     );
+   } catch {
+-    try {
+-      world.sync(session.state);
+-    } finally {
+-      finish(id, 'error');
++    world.cancel('error');
++    if (session.busy) {
++      try {
++        world.sync(session.state);
++      } finally {
++        finish(id, 'error');
++      }
+     }
+   }
+ }
+@@ -605,6 +609,7 @@ function undo() {
+   if (session.busy) return;
+   if (dialog.open) closeDialog(false);
+   if (session.undo()) {
++    world.poses.undo();
+     locationSelection = null;
+     selectionOrigin = null;
+     actionOrigin = null;
+@@ -620,6 +625,7 @@ function restart() {
+   if (session.busy) return;
+   if (dialog.open) closeDialog(false);
+   if (session.restart()) {
++    world.poses.reset();
+     locationSelection = null;
+     selectionOrigin = null;
+     actionOrigin = null;
+@@ -1055,6 +1061,7 @@ if (import.meta.env.DEV)
+       getRenderStatus: () => ({
+         pendingAnimation: session.busy,
+         historyLength: session.history.length,
++        poseHistoryLength: world.poses.history.length,
+         passengers: world.passengerPresentation(),
+         boatPosition: world.boatRoot.position.toArray(),
+         waterY: world.water.position.y,
+diff --git a/src/scene/deck-transfer.ts b/src/scene/deck-transfer.ts
+new file mode 100644
+index 0000000..e3b1ae5
+--- /dev/null
++++ b/src/scene/deck-transfer.ts
+@@ -0,0 +1,37 @@
++import { Vector3 } from 'three';
++
++export const deckEntryZ = 0.28;
++export const bridgeBowOffset = 0.3;
++export const firstRabbitDeckZ = 0.1;
++
++export function sampleDeckTransfer(
++  board: boolean,
++  from: Vector3,
++  bridge: Vector3,
++  gate: Vector3,
++  corridor: Vector3,
++  land: Vector3,
++  destination: Vector3,
++  progress: number,
++) {
++  const marks = board ? [0, 0.5, 0.67, 0.81, 1] : [0, 0.09, 0.19, 1 / 3, 2 / 3, 1];
++  const points = board
++    ? [from, bridge, gate, corridor, destination]
++    : [from, corridor, gate, bridge, land, destination];
++  const p = Math.min(1, Math.max(0, progress));
++  const index = Math.min(marks.length - 2, marks.findIndex((mark) => mark > p) - 1);
++  if (index < 0) return destination.clone();
++  return new Vector3().lerpVectors(
++    points[index],
++    points[index + 1],
++    (p - marks[index]) / (marks[index + 1] - marks[index]),
++  );
++}
++
++export function transferHeading(board: boolean, heading: number, progress: number) {
++  const angle = Math.atan2(Math.sin(heading), Math.cos(heading));
++  const turn = board
++    ? Math.min(1, Math.max(0, progress / 0.5))
++    : 1 - Math.min(1, Math.max(0, (progress - 1 / 3) / (2 / 3)));
++  return angle * turn;
++}
+diff --git a/src/scene/models.ts b/src/scene/models.ts
+index 87c18a5..82df347 100644
+--- a/src/scene/models.ts
++++ b/src/scene/models.ts
+@@ -106,8 +106,9 @@ export function ferry() {
+   cylinder(g, '#3a4a49', 0.065, 0.07, 0.45, [0.2, 0.99, -0.63]);
+   cylinder(g, '#d5c9ab', 0.09, 0.09, 0.055, [0.2, 1.23, -0.63]);
+   for (const x of [-0.46, 0.46]) {
+-    for (const z of [-0.55, 0.05, 0.6]) cylinder(g, '#f5d179', 0.024, 0.024, 0.24, [x, 0.38, z], 8);
+-    box(g, '#f5d179', [0.034, 0.035, 1.24], [x, 0.5, 0.04], 0.01);
++    for (const z of [-0.55, -0.35, 0.65])
++      cylinder(g, '#f5d179', 0.024, 0.024, 0.24, [x, 0.38, z], 8);
++    box(g, '#f5d179', [0.034, 0.035, 0.24], [x, 0.5, -0.46], 0.01);
+   }
+   for (const x of [-0.49, 0.49])
+     for (const z of [-0.45, 0.45]) {
+diff --git a/src/scene/motion.ts b/src/scene/motion.ts
+index 4b896ce..4861a65 100644
+--- a/src/scene/motion.ts
++++ b/src/scene/motion.ts
+@@ -1,29 +1,118 @@
+ import { MathUtils, Vector3 } from 'three';
++import type { Level } from '../levels/level';
+ import { buildPath, samplePath, type CanonicalPath } from './paths';
+ import { journeyProgress } from './transitions';
+ 
+ const legacyPaths = new WeakMap<Vector3[], CanonicalPath>();
++const turn = Math.PI * 2;
++
++export type JourneyPlan = {
++  path: CanonicalPath;
++  reverse: boolean;
++  fromAngle: number;
++  toAngle: number;
++  courseOffset: number;
++  initialCourseAngle: number;
++  departureTurn: number;
++  fromBerth: boolean;
++  toBerth: boolean;
++};
++
++function smooth(value: number) {
++  const x = MathUtils.clamp(value, 0, 1);
++  return x * x * (3 - 2 * x);
++}
++
++export function angularChange(from: number, to: number) {
++  const delta = ((((to - from + Math.PI) % turn) + turn) % turn) - Math.PI;
++  return Math.abs(delta + Math.PI) < 1e-10 ? Math.PI : delta;
++}
++
++export function berthHeading(level: Level, nodeId: string, incoming: number): number | null {
++  const node = level.nodes.find((candidate) => candidate.id === nodeId);
++  const pier = level.piers.find(
++    (candidate) => candidate.id === node?.pierId && candidate.nodeId === nodeId,
++  );
++  if (!pier) return null;
++  const axis =
++    Math.atan2(
++      pier.positionXZ[0] - pier.landAnchorXZ[0],
++      pier.positionXZ[1] - pier.landAnchorXZ[1],
++    ) +
++    Math.PI / 2;
++  const first = angularChange(incoming, axis),
++    opposite = angularChange(incoming, axis + Math.PI);
++  return incoming + (Math.abs(first) <= Math.abs(opposite) ? first : opposite);
++}
++
++export function initialHeading(level: Level) {
++  return berthHeading(level, level.start.boatNodeId, Math.PI / 2) ?? Math.PI / 2;
++}
++
++export function planJourney(
++  path: CanonicalPath,
++  fromAngle: number,
++  reverse = false,
++  berths: { fromBerth?: number; toBerth?: number } = {},
++): JourneyPlan {
++  const rawInitial = samplePath(path, 0, reverse).angle,
++    initialCourseAngle = fromAngle + angularChange(fromAngle, rawInitial),
++    courseOffset = initialCourseAngle - rawInitial,
++    finalCourseAngle = samplePath(path, path.length, reverse).angle + courseOffset,
++    fromBerth = berths.fromBerth !== undefined,
++    toBerth = berths.toBerth !== undefined,
++    toAngle = !path.length
++      ? fromAngle
++      : toBerth
++        ? finalCourseAngle + angularChange(finalCourseAngle, berths.toBerth!)
++        : finalCourseAngle,
++    departureTurn = fromBerth ? 0 : (Math.abs(initialCourseAngle - fromAngle) / Math.PI) * 0.22;
++  return {
++    path,
++    reverse,
++    fromAngle,
++    toAngle,
++    courseOffset,
++    initialCourseAngle,
++    departureTurn,
++    fromBerth,
++    toBerth,
++  };
++}
+ 
+ export function sampleJourney(
+-  input: CanonicalPath | Vector3[],
++  input: JourneyPlan | CanonicalPath | Vector3[],
+   progress: number,
+   fromAngle = Math.PI / 2,
+   reverse = false,
+ ) {
+-  let path: CanonicalPath;
+-  if (Array.isArray(input)) {
+-    const cached = legacyPaths.get(input);
+-    path = cached ?? buildPath(input);
+-    if (!cached) legacyPaths.set(input, path);
+-  } else path = input;
+-  const t = Number.isFinite(progress) ? MathUtils.clamp(progress, 0, 1) : 0,
+-    eased = journeyProgress(t),
+-    pose = samplePath(path, eased * path.length, reverse);
+-  if (!path.length) return { ...pose, angle: fromAngle };
+-  const initial = path.headings[reverse ? path.headings.length - 1 : 0] + (reverse ? Math.PI : 0),
+-    winding = Math.round((fromAngle - initial) / (Math.PI * 2)) * Math.PI * 2,
+-    clearance = Math.min(pose.distance, path.length - pose.distance),
+-    turn = MathUtils.clamp((clearance - 0.45) / 0.55, 0, 1),
+-    blend = turn * turn * (3 - 2 * turn);
+-  return { ...pose, angle: fromAngle + (pose.angle + winding - fromAngle) * blend };
++  let plan: JourneyPlan;
++  if ('path' in input) plan = input;
++  else {
++    let path: CanonicalPath;
++    if (Array.isArray(input)) {
++      const cached = legacyPaths.get(input);
++      path = cached ?? buildPath(input);
++      if (!cached) legacyPaths.set(input, path);
++    } else path = input;
++    plan = planJourney(path, fromAngle, reverse);
++  }
++  const { path } = plan,
++    t = Number.isFinite(progress) ? MathUtils.clamp(progress, 0, 1) : 0,
++    travel = MathUtils.clamp((t - plan.departureTurn) / (1 - plan.departureTurn), 0, 1),
++    pose = samplePath(path, journeyProgress(travel) * path.length, plan.reverse);
++  if (!path.length || t === 0) return { ...pose, angle: plan.fromAngle };
++  if (t === 1) return { ...pose, angle: plan.toAngle };
++  if (t < plan.departureTurn)
++    return {
++      ...pose,
++      angle:
++        plan.fromAngle +
++        (plan.initialCourseAngle - plan.fromAngle) * smooth(t / plan.departureTurn),
++    };
++  const courseAngle = pose.angle + plan.courseOffset,
++    departure = plan.fromBerth ? smooth((pose.distance - 0.45) / 0.55) : 1,
++    approach = plan.toBerth ? 1 - smooth((path.length - pose.distance - 0.45) / 0.55) : 0,
++    steering = plan.fromAngle + (courseAngle - plan.fromAngle) * departure;
++  return { ...pose, angle: steering + (plan.toAngle - steering) * approach };
+ }
+diff --git a/src/scene/poses.ts b/src/scene/poses.ts
+new file mode 100644
+index 0000000..9ce2ae3
+--- /dev/null
++++ b/src/scene/poses.ts
+@@ -0,0 +1,63 @@
++import type { Action, State } from '../game/rules';
++import { edgeTo } from '../game/rules';
++import type { Level } from '../levels/level';
++import { berthHeading, initialHeading, planJourney, type JourneyPlan } from './motion';
++import { getLevelPaths, samplePath } from './paths';
++
++export class PresentationPoses {
++  heading: number;
++  readonly history: number[] = [];
++  journey: JourneyPlan | null = null;
++  private paths;
++
++  constructor(private level: Level) {
++    this.paths = getLevelPaths(level);
++    this.heading = initialHeading(level);
++  }
++
++  accept(before: State, action: Action) {
++    const from = this.heading;
++    let journey: JourneyPlan | null = null;
++    if (action.type === 'move') {
++      const edge = edgeTo(before, action.to, this.level)!;
++      const path = this.paths.get(edge.id)!;
++      const reverse = edge.nodes[0] !== before.boatNodeId;
++      const incoming = samplePath(path, path.length, reverse).angle;
++      journey = planJourney(path, from, reverse, {
++        fromBerth: berthHeading(this.level, before.boatNodeId, from) ?? undefined,
++        toBerth: berthHeading(this.level, action.to, incoming) ?? undefined,
++      });
++    }
++    this.history.push(from);
++    this.journey = journey;
++    this.heading = journey?.toAngle ?? from;
++  }
++
++  undo() {
++    const heading = this.history.pop();
++    if (heading === undefined) return false;
++    this.heading = heading;
++    this.journey = null;
++    return true;
++  }
++
++  reset() {
++    this.heading = initialHeading(this.level);
++    this.history.length = 0;
++    this.journey = null;
++  }
++
++  presentation() {
++    return {
++      heading: this.heading,
++      history: [...this.history],
++      next: this.journey
++        ? {
++            fromAngle: this.journey.fromAngle,
++            toAngle: this.journey.toAngle,
++            reverse: this.journey.reverse,
++          }
++        : null,
++    };
++  }
++}
+diff --git a/src/scene/wake.ts b/src/scene/wake.ts
+index 7b5fafb..b7aa40f 100644
+--- a/src/scene/wake.ts
++++ b/src/scene/wake.ts
+@@ -2,34 +2,47 @@ import * as T from 'three';
+ 
+ export type WakeCoast = { texture: T.Texture; bounds: T.Vector4 };
+ 
+-export const wakeLimits = { capacity: 96, lifetime: 1800, length: 3.6, spacing: 0.055 };
++export const wakeLimits = {
++  capacity: 12,
++  lifetime: 1800,
++  spacing: 0.72,
++  variation: 0.5,
++  sections: 12,
++};
+ 
+-type WakePoint = {
++type ReleasedCrest = {
++  id: number;
+   position: T.Vector3;
+   center: T.Vector3;
++  direction: T.Vector3;
+   time: number;
+   angle: number;
+   strength: number;
+-  distance: number;
++  seed: number;
+   segment: number;
+ };
+ 
++const variation = (id: number) => (id * 0.61803398875 + 0.27) % 1;
++
+ export class FerryWake {
+   mesh: T.Mesh<T.BufferGeometry, T.ShaderMaterial>;
+   interaction = { position: new T.Vector3(), direction: new T.Vector3(0, 0, 1), strength: 0 };
+-  readonly pool: WakePoint[] = Array.from({ length: wakeLimits.capacity }, () => ({
++  readonly pool: ReleasedCrest[] = Array.from({ length: wakeLimits.capacity }, () => ({
++    id: 0,
+     position: new T.Vector3(),
+     center: new T.Vector3(),
++    direction: new T.Vector3(),
+     time: 0,
+     angle: 0,
+     strength: 0,
+-    distance: 0,
++    seed: 0,
+     segment: 0,
+   }));
+-  readonly joins = new Float32Array(wakeLimits.capacity * 2);
++  private shape = { age: 0, width: 0, bend: 0, skew: 0, opacity: 0, x: 0, z: 0 };
+   count = 0;
+   first = 0;
+   segment = 0;
++  serial = 0;
+   emitting = false;
+   active = false;
+   previous = new T.Vector3();
+@@ -37,23 +50,19 @@ export class FerryWake {
+   previousTime: number | null = null;
+   previousWater = 0;
+   carried = 0;
+-  travelled = 0;
++  nextSpacing = 0.2;
+   speed = 0;
+   strength = 0;
+-  peakStrength = 0;
+-  dockingStarted: number | null = null;
+-  dockingStrength = 0;
+-  contactStrength = 0;
+   vertices = 0;
+ 
+   constructor(coast?: WakeCoast) {
+-    const capacity = (wakeLimits.capacity + 48) * 6,
++    const capacity = wakeLimits.capacity * wakeLimits.sections * 6,
+       geometry = new T.BufferGeometry();
+     geometry.setAttribute(
+       'position',
+       new T.Float32BufferAttribute(new Float32Array(capacity * 3), 3).setUsage(T.DynamicDrawUsage),
+     );
+-    for (const name of ['fade', 'lateral', 'distance', 'age', 'kind'])
++    for (const name of ['fade', 'lateral', 'distance', 'age'])
+       geometry.setAttribute(
+         name,
+         new T.Float32BufferAttribute(new Float32Array(capacity), 1).setUsage(T.DynamicDrawUsage),
+@@ -73,32 +82,27 @@ export class FerryWake {
+         hasCoast: { value: coast ? 1 : 0 },
+         waterY: { value: 0 },
+       },
+-      vertexShader: `attribute float fade;attribute float lateral;attribute float distance;attribute float age;attribute float kind;
+-        varying float alpha;varying float side;varying float along;varying float old;varying float layer;varying vec2 worldXZ;
++      vertexShader: `attribute float fade;attribute float lateral;attribute float distance;attribute float age;
++        varying float alpha;varying float across;varying float along;varying float seed;varying vec2 worldXZ;
+         void main(){
+-          alpha=fade;side=lateral;along=distance;old=age;layer=kind;worldXZ=position.xz;
++          alpha=fade;across=lateral;along=distance;seed=age;worldXZ=position.xz;
+           gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);
+         }`,
+       fragmentShader: `uniform vec3 pearl;uniform vec3 body;uniform sampler2D coast;uniform vec4 field;uniform float hasCoast;uniform float waterY;
+-        varying float alpha;varying float side;varying float along;varying float old;varying float layer;varying vec2 worldXZ;
++        varying float alpha;varying float across;varying float along;varying float seed;varying vec2 worldXZ;
+         void main(){
+-          float feather=1.-smoothstep(.78,1.,abs(side));
+-          float rhythm=.12+.88*smoothstep(-.3,.75,sin(along*7.1+side*1.2));
+-          float crestCenter=.66+.045*sin(along*3.8+old*.7);
+-          float crest=(1.-smoothstep(.065,.22,abs(abs(side)-crestCenter)))*rhythm;
+-          float center=(1.-smoothstep(.05,.67,abs(side)))*.15;
+-          float coverage=(center+crest*.85)*feather;
+-          vec3 color=mix(body,pearl,crest);
+-          if(layer>.5){
+-            coverage=(1.-smoothstep(.1,1.,abs(side)))*(.72+.28*sin(along*2.4));
+-            color=pearl;
+-          }
++          float ends=1.-smoothstep(.55,1.,abs(along));
++          float softness=1.-smoothstep(.04,1.,abs(across));
++          float crest=1.-smoothstep(.04,.6,abs(across-.1));
++          float gap=1.-.64*exp(-pow((along-(seed-.5)*.9)*5.5,2.));
++          float bodyWeight=softness*.18;
++          float coverage=(bodyWeight+crest*.82)*ends*gap;
+           float wet=1.;
+           if(hasCoast>.5){
+             vec4 land=texture2D(coast,clamp((worldXZ-field.xy)/field.zw,0.,1.));
+             wet=1.-land.a*smoothstep(waterY+.004,waterY+.025,land.b*.72);
+           }
+-          gl_FragColor=vec4(color,alpha*coverage*wet);
++          gl_FragColor=vec4(mix(body,pearl,crest),alpha*coverage*wet);
+           #include <tonemapping_fragment>
+           #include <colorspace_fragment>
+         }`,
+@@ -119,17 +123,15 @@ export class FerryWake {
+   clear() {
+     this.count = 0;
+     this.first = 0;
++    this.segment = 0;
++    this.serial = 0;
+     this.emitting = false;
+     this.active = false;
+     this.previousTime = null;
+     this.carried = 0;
+-    this.travelled = 0;
++    this.nextSpacing = 0.2;
+     this.speed = 0;
+     this.strength = 0;
+-    this.peakStrength = 0;
+-    this.dockingStarted = null;
+-    this.dockingStrength = 0;
+-    this.contactStrength = 0;
+     this.interaction.strength = 0;
+     this.vertices = 0;
+     this.mesh.geometry.setDrawRange(0, 0);
+@@ -145,23 +147,18 @@ export class FerryWake {
+     this.previousTime = time;
+     this.previousWater = position.y;
+     this.carried = 0;
++    this.nextSpacing = 0.2;
+     this.speed = 0;
+     this.strength = 0;
+-    this.peakStrength = 0;
+-    this.dockingStarted = null;
+-    this.dockingStrength = 0;
+     this.interaction.strength = 0;
+   }
+ 
+-  finish(time: number) {
+-    if (this.active && this.peakStrength > 0.05) {
+-      this.dockingStarted = time;
+-      this.dockingStrength = Math.min(0.26, this.peakStrength * 0.32);
+-    }
++  finish(_time: number) {
+     this.active = false;
+     this.emitting = false;
+     this.speed = 0;
+     this.strength = 0;
++    this.interaction.strength = 0;
+   }
+ 
+   private emit(
+@@ -169,21 +166,29 @@ export class FerryWake {
+     x: number,
+     z: number,
+     angle: number,
++    dx: number,
++    dz: number,
+     waterY: number,
+-    distance: number,
+   ) {
++    if (this.strength < 0.025) return;
+     if (this.count === wakeLimits.capacity) {
+       this.first = (this.first + 1) % wakeLimits.capacity;
+       this.count--;
+     }
+-    const point = this.point(this.count++);
++    const point = this.point(this.count++),
++      forward = dx * Math.sin(angle) + dz * Math.cos(angle),
++      sideways = dx * Math.cos(angle) - dz * Math.sin(angle),
++      reach = 1 / Math.hypot(forward / 0.76, sideways / 0.48);
++    point.id = ++this.serial;
+     point.center.set(x, waterY, z);
+-    point.position.set(x - Math.sin(angle) * 0.72, waterY + 0.018, z - Math.cos(angle) * 0.72);
++    point.position.set(x - dx * reach, waterY + 0.018, z - dz * reach);
++    point.direction.set(dx, 0, dz);
+     point.time = time;
+     point.angle = angle;
+     point.strength = this.strength;
+-    point.distance = distance;
++    point.seed = variation(point.id);
+     point.segment = this.segment;
++    this.nextSpacing = wakeLimits.spacing + point.seed * wakeLimits.variation;
+   }
+ 
+   update(
+@@ -210,13 +215,13 @@ export class FerryWake {
+       if (moving) this.begin(time, position, angle);
+     } else if (moving && elapsed > 0 && horizontal > 0.00001) {
+       this.speed = horizontal / (elapsed * 0.001);
+-      this.strength = T.MathUtils.smoothstep(this.speed, 0.08, 1.5) * 0.64;
+-      this.peakStrength = Math.max(this.peakStrength, this.strength);
+-      this.emitting = this.strength > 0.001;
++      this.strength = T.MathUtils.smoothstep(this.speed, 0.08, 1.5) * 0.58;
++      this.emitting = this.strength > 0.025;
++      this.interaction.direction.set(dx / horizontal, 0, dz / horizontal);
+       let remaining = horizontal,
+         used = 0;
+-      while (this.carried + remaining >= wakeLimits.spacing) {
+-        const step = wakeLimits.spacing - this.carried;
++      while (this.carried + remaining >= this.nextSpacing) {
++        const step = this.nextSpacing - this.carried;
+         used += step;
+         remaining -= step;
+         const fraction = used / horizontal;
+@@ -225,13 +230,13 @@ export class FerryWake {
+           this.previous.x + dx * fraction,
+           this.previous.z + dz * fraction,
+           this.previousAngle + (angle - this.previousAngle) * fraction,
++          dx / horizontal,
++          dz / horizontal,
+           this.previousWater + (waterY - this.previousWater) * fraction,
+-          this.travelled + used,
+         );
+         this.carried = 0;
+       }
+       this.carried += remaining;
+-      this.travelled += horizontal;
+     } else {
+       this.emitting = false;
+       this.speed = 0;
+@@ -241,159 +246,84 @@ export class FerryWake {
+     this.previousAngle = angle;
+     this.previousTime = time;
+     this.previousWater = waterY;
+-    while (this.count && time - this.point(0).time > wakeLimits.lifetime) {
++    while (this.count && time - this.point(0).time >= wakeLimits.lifetime) {
+       this.first = (this.first + 1) % wakeLimits.capacity;
+       this.count--;
+     }
+-    let length = 0;
+-    for (let i = this.count - 2; i >= 0; i--) {
+-      const a = this.point(i),
+-        b = this.point(i + 1);
+-      if (a.segment === b.segment)
+-        length += Math.hypot(a.position.x - b.position.x, a.position.z - b.position.z);
+-      if (length > wakeLimits.length) {
+-        this.first = (this.first + i + 1) % wakeLimits.capacity;
+-        this.count -= i + 1;
+-        break;
+-      }
+-    }
+-    let settling = 0;
+-    if (this.dockingStarted !== null) {
+-      settling = T.MathUtils.clamp((time - this.dockingStarted) / 650, 0, 1);
+-      if (settling === 1) {
+-        this.dockingStarted = null;
+-        this.dockingStrength = 0;
+-      }
+-    }
+-    this.contactStrength = this.strength * 0.5 + this.dockingStrength * (1 - settling) ** 2;
+     this.interaction.position.set(position.x, waterY, position.z);
+-    this.interaction.direction.set(Math.sin(angle), 0, Math.cos(angle));
+-    this.interaction.strength = this.strength + this.dockingStrength * (1 - settling) ** 2;
++    this.interaction.strength = this.strength;
+     this.mesh.material.uniforms.waterY.value = waterY;
+     this.vertices = 0;
+-    this.buildTrail(time, waterY);
+-    if (this.contactStrength > 0.001) {
+-      const swell = settling * 0.18,
+-        width = 0.51 - Math.min(0.05, hullY * 0.15);
+-      this.contact(position, angle, waterY, width, 0.9, -1.43, 1.43, this.contactStrength, 0, 0);
+-      this.contact(
+-        position,
+-        angle,
+-        waterY,
+-        0.25 + swell,
+-        0.19 + swell * 0.7,
+-        -Math.PI,
+-        Math.PI,
+-        this.contactStrength * 0.58,
+-        -0.76,
+-        1,
+-      );
+-    }
++    for (let i = 0; i < this.count; i++) this.buildCrest(this.point(i), time, waterY);
+     for (const attribute of Object.values(this.mesh.geometry.attributes))
+       attribute.needsUpdate = true;
+     this.mesh.geometry.setDrawRange(0, this.vertices);
+     this.mesh.visible = this.vertices > 0;
+   }
+ 
++  private evolve(point: ReleasedCrest, time: number) {
++    const age = T.MathUtils.clamp((time - point.time) / wakeLimits.lifetime, 0, 1),
++      spread = 1 - (1 - age) ** 1.5,
++      drift = spread * 0.24,
++      skew = (point.seed - 0.5) * 0.3;
++    this.shape.age = age;
++    this.shape.width = 0.43 + point.seed * 0.1 + spread * (0.72 + point.seed * 0.22);
++    this.shape.bend = 0.12 + spread * 0.36;
++    this.shape.skew = skew;
++    this.shape.opacity = point.strength * T.MathUtils.smoothstep(age, 0, 0.07) * (1 - age) ** 1.1;
++    this.shape.x = point.position.x - point.direction.x * drift + point.direction.z * skew * spread;
++    this.shape.z = point.position.z - point.direction.z * drift - point.direction.x * skew * spread;
++    return this.shape;
++  }
++
+   private vertex(
+     x: number,
+     y: number,
+     z: number,
+     alpha: number,
+     side: number,
+-    distance: number,
+-    age: number,
+-    kind: number,
++    along: number,
++    seed: number,
+   ) {
+     const geometry = this.mesh.geometry,
+       index = this.vertices++;
+     geometry.getAttribute('position').setXYZ(index, x, y, z);
+     geometry.getAttribute('fade').setX(index, alpha);
+     geometry.getAttribute('lateral').setX(index, side);
+-    geometry.getAttribute('distance').setX(index, distance);
+-    geometry.getAttribute('age').setX(index, age);
+-    geometry.getAttribute('kind').setX(index, kind);
+-  }
+-
+-  private buildTrail(time: number, waterY: number) {
+-    for (let i = 0; i < this.count; i++) {
+-      const current = this.point(i),
+-        previous = i && this.point(i - 1).segment === current.segment ? this.point(i - 1) : current,
+-        next =
+-          i + 1 < this.count && this.point(i + 1).segment === current.segment
+-            ? this.point(i + 1)
+-            : current,
+-        dx = next.position.x - previous.position.x,
+-        dz = next.position.z - previous.position.z,
+-        length = Math.hypot(dx, dz) || 1;
+-      this.joins[i * 2] = -dz / length;
+-      this.joins[i * 2 + 1] = dx / length;
+-    }
+-    for (let i = 1; i < this.count; i++) {
+-      const a = this.point(i - 1),
+-        b = this.point(i);
+-      if (a.segment !== b.segment) continue;
+-      const ageA = T.MathUtils.clamp((time - a.time) / wakeLimits.lifetime, 0, 1),
+-        ageB = T.MathUtils.clamp((time - b.time) / wakeLimits.lifetime, 0, 1),
+-        widthA = 0.36 + ageA * 0.28,
+-        widthB = 0.36 + ageB * 0.28,
+-        ax = this.joins[(i - 1) * 2] * widthA,
+-        az = this.joins[(i - 1) * 2 + 1] * widthA,
+-        bx = this.joins[i * 2] * widthB,
+-        bz = this.joins[i * 2 + 1] * widthB,
+-        fadeA = a.strength * (1 - ageA) ** 0.9,
+-        fadeB = b.strength * (1 - ageB) ** 0.9,
+-        y = waterY + 0.018;
+-      this.vertex(a.position.x + ax, y, a.position.z + az, fadeA, 1, a.distance, ageA, 0);
+-      this.vertex(a.position.x - ax, y, a.position.z - az, fadeA, -1, a.distance, ageA, 0);
+-      this.vertex(b.position.x + bx, y, b.position.z + bz, fadeB, 1, b.distance, ageB, 0);
+-      this.vertex(a.position.x - ax, y, a.position.z - az, fadeA, -1, a.distance, ageA, 0);
+-      this.vertex(b.position.x - bx, y, b.position.z - bz, fadeB, -1, b.distance, ageB, 0);
+-      this.vertex(b.position.x + bx, y, b.position.z + bz, fadeB, 1, b.distance, ageB, 0);
+-    }
++    geometry.getAttribute('distance').setX(index, along);
++    geometry.getAttribute('age').setX(index, seed);
+   }
+ 
+-  private contact(
+-    position: T.Vector3,
+-    angle: number,
+-    waterY: number,
+-    width: number,
+-    reach: number,
+-    start: number,
+-    end: number,
+-    strength: number,
+-    offset: number,
+-    seed: number,
+-  ) {
+-    const sine = Math.sin(angle),
+-      cosine = Math.cos(angle);
+-    for (let i = 0; i < 24; i++) {
+-      const a = start + ((end - start) * i) / 24,
+-        b = start + ((end - start) * (i + 1)) / 24;
++  private buildCrest(point: ReleasedCrest, time: number, waterY: number) {
++    const shape = this.evolve(point, time);
++    if (shape.opacity < 0.001) return;
++    const thickness = 0.105 + shape.age * 0.075;
++    for (let i = 0; i < wakeLimits.sections; i++) {
+       for (let j = 0; j < 6; j++) {
+-        const front = j === 2 || j === 4 || j === 5,
+-          outer = j === 0 || j === 2 || j === 5,
+-          theta = front ? b : a,
+-          side = outer ? 1 : -1,
+-          x = Math.sin(theta) * (width + side * 0.065),
+-          z = Math.cos(theta) * (reach + side * 0.065) + offset,
+-          endFade = seed ? 1 : Math.sin(((theta - start) / (end - start)) * Math.PI) ** 0.6;
++        const end = j === 2 || j === 4 || j === 5,
++          side = j === 0 || j === 2 || j === 5 ? 1 : -1,
++          u = ((i + Number(end)) / wakeLimits.sections) * 2 - 1,
++          slope = 2 * shape.bend * u + shape.skew,
++          length = Math.hypot(shape.width, slope),
++          x = u * shape.width - (slope / length) * side * thickness,
++          z =
++            -shape.bend * (1 - u * u) + shape.skew * u + (shape.width / length) * side * thickness;
+         this.vertex(
+-          position.x + x * cosine + z * sine,
++          shape.x + x * point.direction.z + z * point.direction.x,
+           waterY + 0.018,
+-          position.z - x * sine + z * cosine,
+-          strength * endFade,
++          shape.z - x * point.direction.x + z * point.direction.z,
++          shape.opacity,
+           side,
+-          theta + seed,
+-          0,
+-          1,
++          u,
++          point.seed,
+         );
+       }
+     }
+   }
+ 
+   presentation() {
+-    const geometry = this.mesh.geometry;
++    const geometry = this.mesh.geometry,
++      time = this.previousTime ?? 0;
+     return {
+       emitting: this.emitting,
+       visible: this.mesh.visible,
+@@ -405,20 +335,26 @@ export class FerryWake {
+         (geometry.getAttribute('fade') as T.BufferAttribute).array.slice(0, this.vertices),
+       ),
+       points: Array.from({ length: this.count }, (_, index) => {
+-        const point = this.point(index);
++        const point = this.point(index),
++          shape = this.evolve(point, time);
+         return {
++          id: point.id,
+           position: point.position.toArray(),
+           center: point.center.toArray(),
++          direction: point.direction.toArray(),
+           time: point.time,
+           heading: point.angle,
++          strength: point.strength,
++          seed: point.seed,
+           segment: point.segment,
++          evolution: { ...shape, waterY: this.previousWater + 0.018 },
+         };
+       }),
+       limits: { ...wakeLimits },
+       speed: this.speed,
+       strength: this.strength,
+-      contactStrength: this.contactStrength,
+-      docking: this.dockingStarted !== null,
++      contactStrength: 0,
++      docking: false,
+       interaction: {
+         position: this.interaction.position.toArray(),
+         direction: this.interaction.direction.toArray(),
+diff --git a/src/scene/world.ts b/src/scene/world.ts
+index 9dde56d..fe9b06a 100644
+--- a/src/scene/world.ts
++++ b/src/scene/world.ts
+@@ -2,7 +2,15 @@ import * as T from 'three';
+ import { level as baseline, type Level } from '../levels/level';
+ import { draft, edgeTo, type State, type Action } from '../game/rules';
+ import { animal, ball, box, cylinder, ferry, lighthouse, mat, mesh, pine } from './models';
+-import { sampleJourney } from './motion';
++import { sampleJourney, type JourneyPlan } from './motion';
++import { PresentationPoses } from './poses';
++import {
++  bridgeBowOffset,
++  deckEntryZ,
++  firstRabbitDeckZ,
++  sampleDeckTransfer,
++  transferHeading,
++} from './deck-transfer';
+ import { sceneLayout, type SceneLayout } from './layout';
+ import { bellLandmark, cottage } from './scenery';
+ import { getLevelPaths, type CanonicalPath } from './paths';
+@@ -57,6 +65,7 @@ export class World {
+   state: State;
+   layout: SceneLayout;
+   paths: Map<string, CanonicalPath>;
++  poses: PresentationPoses;
+   shores: Shores;
+   coastalWater: CoastalWater;
+   effects: CrossingEffects;
+@@ -95,7 +104,7 @@ export class World {
+     path: CanonicalPath | null;
+     edgeId: string | null;
+     reverse: boolean;
+-    fromAngle: number;
++    journey: JourneyPlan | null;
+     fromHullY: number;
+     transfer: TransferPresentation | null;
+   } = null;
+@@ -112,6 +121,7 @@ export class World {
+     this.state = state;
+     this.layout = sceneLayout(this.level.id);
+     this.paths = getLevelPaths(this.level);
++    this.poses = new PresentationPoses(this.level);
+     this.renderer = new T.WebGLRenderer({ antialias: true, alpha: false });
+     this.renderer.setPixelRatio(Math.min(devicePixelRatio, 1.7));
+     this.renderer.shadowMap.enabled = true;
+@@ -305,7 +315,7 @@ export class World {
+       anchor.position.set(
+         ...((p.species === 'rabbit'
+           ? index === 0
+-            ? [-0.22, 0.26, -0.02]
++            ? [-0.22, 0.26, firstRabbitDeckZ]
+             : [0.22, 0.26, 0.3]
+           : [0, 0.26, 0.69]) as [number, number, number]),
+       );
+@@ -887,7 +897,7 @@ export class World {
+     this.shadow.position.y = this.water.position.y + 0.008;
+     const n = this.level.nodes.find((n) => n.id === s.boatNodeId)!;
+     this.boatRoot.position.copy(V(n.positionXZ, s.tideLevel * 0.18));
+-    this.boatRoot.rotation.y = Math.PI / 2;
++    this.boatRoot.rotation.y = this.poses.heading;
+     this.hull.position.y = this.draftY(s);
+     for (const [id, g] of this.animals) {
+       if (s.aboard.includes(id)) {
+@@ -1006,7 +1016,7 @@ export class World {
+       ? {
+           progress: 0,
+           distance: 0,
+-          tangent: sampleJourney(path, 0, this.boatRoot.rotation.y, reverse).tangent,
++          tangent: sampleJourney(this.poses.journey!, 0).tangent,
+         }
+       : null;
+     const timeline = TransferTimeline.create(before, after, action, this.reduced);
+@@ -1028,7 +1038,7 @@ export class World {
+       path,
+       edgeId,
+       reverse,
+-      fromAngle: this.boatRoot.rotation.y,
++      journey: this.poses.journey,
+       fromHullY: this.hull.position.y,
+       transfer,
+     };
+@@ -1070,7 +1080,7 @@ export class World {
+         tideProgress,
+       );
+       if (tr.path) {
+-        const pose = sampleJourney(tr.path, t, tr.fromAngle, tr.reverse);
++        const pose = sampleJourney(tr.journey!, t);
+         this.boatRoot.position.copy(pose.position);
+         this.boatRoot.rotation.y = pose.angle;
+         this.journeyFrame = { progress: t, distance: pose.distance, tangent: pose.tangent };
+@@ -1086,7 +1096,12 @@ export class World {
+           const offset =
+             passenger.species === 'rabbit' ? (this.speciesIndex(id) ? 0.07 : -0.07) : 0;
+           const bridge = new T.Vector3(
+-            pier.positionXZ[0] + offset,
++            pier.positionXZ[0] +
++              T.MathUtils.clamp(
++                Math.sin(this.boatRoot.rotation.y) * bridgeBowOffset + offset,
++                -pier.width / 2,
++                pier.width / 2,
++              ),
+             pier.elevation * 0.18 - 0.005,
+             pier.positionXZ[1] + 0.46,
+           );
+@@ -1095,13 +1110,14 @@ export class World {
+             pier.elevation * 0.18 + 0.025,
+             pier.landAnchorXZ[1] + 0.15,
+           );
+-          const way = tr.after.aboard.includes(id)
+-            ? [tr.positions.get(id)!, bridge, dest]
+-            : [tr.positions.get(id)!, bridge, land, dest];
+-          const f = k * (way.length - 1),
+-            i = Math.min(way.length - 2, Math.floor(f));
+-          g.position.lerpVectors(way[i], way[i + 1], f - i);
+-          g.rotation.y = 0;
++          const board = tr.after.aboard.includes(id);
++          const side = Math.sign(this.hull.worldToLocal(bridge.clone()).x) || 1;
++          const gate = this.hull.localToWorld(new T.Vector3(side * 0.51, 0.26, deckEntryZ));
++          const corridor = this.hull.localToWorld(new T.Vector3(0, 0.26, deckEntryZ));
++          g.position.copy(
++            sampleDeckTransfer(board, tr.positions.get(id)!, bridge, gate, corridor, land, dest, k),
++          );
++          g.rotation.y = transferHeading(board, this.boatRoot.rotation.y, k);
+           if (!this.reduced) {
+             g.position.y += Math.sin(t * Math.PI * 4) ** 2 * 0.055;
+             if (tr.after.status !== 'won' && tr.after.delivered.includes(id) && t > 0.72)
+@@ -1279,6 +1295,7 @@ export class World {
+     return {
+       boatWorldPosition: this.boatRoot.getWorldPosition(new T.Vector3()).toArray(),
+       boatHeading: this.boatRoot.rotation.y,
++      pose: this.poses.presentation(),
+       active:
+         transition?.path && this.journeyFrame
+           ? {
+diff --git a/tests/e2e/environment.spec.ts b/tests/e2e/environment.spec.ts
+index 42625bc..8380483 100644
+--- a/tests/e2e/environment.spec.ts
++++ b/tests/e2e/environment.spec.ts
+@@ -182,7 +182,10 @@ test('environment: visible curved courses carry the ferry, tangent and fading wa
+       );
+       expect((await state(page)).turn).toBe(4);
+     }
+-    expect((await journey(page)).boatHeading).toBeCloseTo(Math.PI / 2, 6);
++    const settled = await journey(page);
++    expect(settled.boatHeading).toBeCloseTo(settled.pose.heading, 8);
++    if (['harbor', 'low-pier', 'bell-pier'].includes((await state(page)).boatNodeId))
++      expect(Math.abs(Math.sin(settled.boatHeading))).toBeCloseTo(1, 8);
+   }
+   const samples = await stopSamples(page);
+   expect(samples.length).toBeGreaterThan(20);
+@@ -219,10 +222,9 @@ test('environment: visible curved courses carry the ferry, tangent and fading wa
+         Math.abs(sample.wake.positions[i] - sample.waterY - 0.018),
+       );
+     expect(maximumWaterHeightError).toBeLessThan(0.000005);
+-    expect(sample.wake.limits).toMatchObject({ capacity: 96, lifetime: 1800, length: 3.6 });
++    expect(sample.wake.limits).toMatchObject({ capacity: 12, lifetime: 1800, sections: 12 });
+     expect(sample.wake.points.length).toBeLessThanOrEqual(sample.wake.limits.capacity);
+-    let wakeLength = 0,
+-      maximumSternError = 0,
++    let maximumReleaseError = 0,
+       maximumCourseDistance = 0,
+       minimumAge = Infinity,
+       maximumAge = 0,
+@@ -234,11 +236,16 @@ test('environment: visible curved courses carry the ferry, tangent and fading wa
+         point.position.every(Number.isFinite) &&
+         point.center.every(Number.isFinite) &&
+         Number.isFinite(point.heading);
+-      maximumSternError = Math.max(
+-        maximumSternError,
+-        Math.abs(point.position[0] - point.center[0] + Math.sin(point.heading) * 0.72),
++      const forward =
++        point.direction[0] * Math.sin(point.heading) + point.direction[2] * Math.cos(point.heading);
++      const side =
++        point.direction[0] * Math.cos(point.heading) - point.direction[2] * Math.sin(point.heading);
++      const reach = 1 / Math.hypot(forward / 0.76, side / 0.48);
++      maximumReleaseError = Math.max(
++        maximumReleaseError,
++        Math.abs(point.position[0] - point.center[0] + point.direction[0] * reach),
+         Math.abs(point.position[1] - point.center[1] - 0.018),
+-        Math.abs(point.position[2] - point.center[2] + Math.cos(point.heading) * 0.72),
++        Math.abs(point.position[2] - point.center[2] + point.direction[2] * reach),
+       );
+       maximumCourseDistance = Math.max(
+         maximumCourseDistance,
+@@ -248,18 +255,17 @@ test('environment: visible curved courses carry the ferry, tangent and fading wa
+       );
+       minimumAge = Math.min(minimumAge, sample.time - point.time);
+       maximumAge = Math.max(maximumAge, sample.time - point.time);
+-      if (i && point.segment === sample.wake.points[i - 1].segment)
+-        wakeLength += Math.hypot(
+-          point.position[0] - sample.wake.points[i - 1].position[0],
+-          point.position[2] - sample.wake.points[i - 1].position[2],
+-        );
+     }
+     expect(finitePoints).toBe(true);
+-    expect(maximumSternError).toBeLessThan(0.000005);
++    expect(maximumReleaseError).toBeLessThan(0.000005);
+     expect(maximumCourseDistance).toBeLessThanOrEqual(0.08);
+     expect(minimumAge).toBeGreaterThanOrEqual(0);
+     expect(maximumAge).toBeLessThanOrEqual(sample.wake.limits.lifetime);
+-    expect(wakeLength).toBeLessThanOrEqual(sample.wake.limits.length + 0.00001);
++    expect(sample.wake.vertices).toBeLessThanOrEqual(
++      sample.wake.points.length * sample.wake.limits.sections * 6,
++    );
++    expect(sample.wake.contactStrength).toBe(0);
++    expect(sample.wake.docking).toBe(false);
+     expect(sample.wake.opacity.every(Number.isFinite)).toBe(true);
+     expect(Math.min(0, ...sample.wake.opacity)).toBeGreaterThanOrEqual(0);
+     expect(Math.max(0, ...sample.wake.opacity)).toBeLessThanOrEqual(0.641);
+diff --git a/tests/e2e/sailing-direction-wake.spec.ts b/tests/e2e/sailing-direction-wake.spec.ts
+new file mode 100644
+index 0000000..8971147
+--- /dev/null
++++ b/tests/e2e/sailing-direction-wake.spec.ts
+@@ -0,0 +1,410 @@
++import { expect, test, type Page } from '@playwright/test';
++import { mkdirSync, writeFileSync } from 'node:fs';
++import { reviewDir } from './evidence';
++import { act, activate, idle, ready, restart, startMove, state, undo } from './ui';
++
++const journey = (page: Page) =>
++  page.evaluate(() => (window as any).__LAST_FERRY__.getJourneyStatus());
++const environment = (page: Page) =>
++  page.evaluate(() => (window as any).__LAST_FERRY__.getEnvironmentStatus());
++async function crestObservation(page: Page) {
++  return page.evaluate(() => {
++    const api = (window as any).__LAST_FERRY__;
++    return {
++      at: performance.now(),
++      state: api.getState(),
++      journey: api.getJourneyStatus(),
++      environment: api.getEnvironmentStatus(),
++      frame: api.getFrameStatus(),
++    };
++  });
++}
++const angularDistance = (a: number, b: number) =>
++  Math.abs(Math.atan2(Math.sin(a - b), Math.cos(a - b)));
++const totalCompletions = (counts: Record<string, number>) =>
++  Object.values(counts).reduce((n, v) => n + v, 0);
++async function agreedPose(page: Page) {
++  const j = await journey(page);
++  const r = await page.evaluate(() => (window as any).__LAST_FERRY__.getRenderStatus());
++  expect(j.boatHeading).toBeCloseTo(j.pose.heading, 8);
++  expect(j.pose.history).toHaveLength(r.historyLength);
++  expect(r.poseHistoryLength).toBe(r.historyLength);
++  return j;
++}
++async function cleared(page: Page) {
++  expect((await environment(page)).wake).toMatchObject({
++    emitting: false,
++    visible: false,
++    vertices: 0,
++    points: [],
++    contactStrength: 0,
++    docking: false,
++  });
++}
++async function beginSamples(page: Page) {
++  await page.evaluate(() => {
++    const target = window as any;
++    target.__headingFrames = [];
++    target.__headingSampling = true;
++    function sample(time: number) {
++      if (!target.__headingSampling) return;
++      const a = target.__LAST_FERRY__,
++        j = a.getJourneyStatus();
++      target.__headingFrames.push({
++        time,
++        heading: j.boatHeading,
++        position: j.boatWorldPosition,
++        active: j.active,
++        pose: j.pose,
++      });
++      requestAnimationFrame(sample);
++    }
++    requestAnimationFrame(sample);
++  });
++}
++async function endSamples(page: Page) {
++  return page.evaluate(() => {
++    (window as any).__headingSampling = false;
++    return (window as any).__headingFrames as any[];
++  });
++}
++test('direction: free-water heading, both berths, transfer/tide Undo and winning pose remain paired', async ({
++  browser,
++}) => {
++  test.setTimeout(180000);
++  mkdirSync(`${reviewDir}/raw`, { recursive: true });
++  const context = await browser.newContext({
++    baseURL: `http://127.0.0.1:${process.env.LAST_FERRY_DEV_PORT ?? 5173}`,
++    viewport: { width: 844, height: 390 },
++    deviceScaleFactor: 1,
++    hasTouch: true,
++    isMobile: true,
++    reducedMotion: 'no-preference',
++    recordVideo: { dir: `${reviewDir}/raw`, size: { width: 844, height: 390 } },
++  });
++  const page = await context.newPage(),
++    observations: any[] = [],
++    errors: string[] = [];
++  page.on('pageerror', (e) => errors.push(e.message));
++  let failure: string | null = null;
++  async function save(label: string, shot = false) {
++    const j = await agreedPose(page),
++      s = await state(page),
++      w = (await environment(page)).wake;
++    observations.push({ label, state: s, journey: j, wave: w });
++    if (shot) await page.screenshot({ path: `${reviewDir}/direction-${label}.png` });
++    return j;
++  }
++  try {
++    await ready(page, 'holding-pier');
++    const initial = await save('start', true);
++    await activate(page, 'map-shallows', true);
++    expect((await journey(page)).pose.history).toHaveLength(0);
++    expect((await state(page)).turn).toBe(0);
++    await activate(page, 'close-location', true);
++    await act(page, 'unload', true);
++    expect((await agreedPose(page)).boatHeading).toBeCloseTo(initial.boatHeading, 8);
++    await startMove(page, 'map-shallows', true);
++    await page.waitForFunction(
++      () => (window as any).__LAST_FERRY__.getJourneyStatus().active?.progress > 0.3,
++    );
++    const planned = (await journey(page)).pose;
++    await idle(page);
++    const shallow = await save('free-water-rest', true);
++    expect(shallow.boatHeading).toBeCloseTo(planned.heading, 8);
++    expect(angularDistance(shallow.boatHeading, Math.PI / 2)).toBeGreaterThan(0.1);
++    await activate(page, 'map-rabbit-pier', true);
++    await page.waitForTimeout(350);
++    expect((await agreedPose(page)).boatHeading).toBeCloseTo(shallow.boatHeading, 8);
++    expect((await state(page)).turn).toBe(2);
++    await activate(page, 'close-location', true);
++    await activate(page, 'menu', true);
++    await activate(page, 'settings', true);
++    expect((await agreedPose(page)).boatHeading).toBeCloseTo(shallow.boatHeading, 8);
++    expect((await journey(page)).pose.history).toHaveLength(2);
++    await activate(page, 'settings-back', true);
++    await activate(page, 'cancel', true);
++    await act(page, 'wait', true);
++    expect((await agreedPose(page)).boatHeading).toBeCloseTo(shallow.boatHeading, 8);
++    await undo(page, true);
++    expect((await agreedPose(page)).boatHeading).toBeCloseTo(shallow.boatHeading, 8);
++    await undo(page, true);
++    expect((await agreedPose(page)).boatHeading).toBeCloseTo(initial.boatHeading, 8);
++    await act(page, 'map-harbor', true);
++    await undo(page, true);
++    expect((await agreedPose(page)).boatHeading).toBeCloseTo(initial.boatHeading, 8);
++    await act(page, 'map-shallows', true);
++    await startMove(page, 'map-rabbit-pier', true);
++    await page.waitForFunction(
++      () => (window as any).__LAST_FERRY__.getJourneyStatus().active?.progress > 0.03,
++    );
++    expect((await journey(page)).pose.next.fromAngle).toBeCloseTo(shallow.boatHeading, 8);
++    await idle(page);
++    const rabbit = await save('rabbit-berth', true);
++    expect(Math.abs(Math.sin(rabbit.boatHeading))).toBeCloseTo(1, 8);
++    await activate(page, 'board', true);
++    await activate(page, 'passenger-rabbit-2', true);
++    expect((await journey(page)).pose.history).toHaveLength(3);
++    await activate(page, 'passenger-rabbit-2', true);
++    await activate(page, 'commit', true);
++    await idle(page);
++    await save('tide', true);
++    expect(await state(page)).toMatchObject({
++      turn: 4,
++      tideLevel: 1,
++      aboard: ['rabbit-1', 'rabbit-2'],
++    });
++    expect((await agreedPose(page)).boatHeading).toBeCloseTo(rabbit.boatHeading, 8);
++    await undo(page, true);
++    await cleared(page);
++    expect((await agreedPose(page)).boatHeading).toBeCloseTo(rabbit.boatHeading, 8);
++    await act(page, 'board', true);
++    await beginSamples(page);
++    await act(page, 'map-shallows', true);
++    const reverseFrames = await endSamples(page);
++    const activeFrames = reverseFrames.filter((f) => f.active);
++    expect(activeFrames.length).toBeGreaterThan(4);
++    expect(activeFrames[0].pose.next.fromAngle).toBeCloseTo(rabbit.boatHeading, 8);
++    expect(activeFrames.every((f) => f.active.duration >= 1600 && f.active.duration <= 3000)).toBe(
++      true,
++    );
++    let maxStep = 0;
++    for (let i = 1; i < activeFrames.length; i++)
++      maxStep = Math.max(maxStep, Math.abs(activeFrames[i].heading - activeFrames[i - 1].heading));
++    expect(maxStep).toBeLessThan(0.85);
++    observations.push({ label: 'reverse-samples', frames: reverseFrames });
++    await act(page, 'map-stone', true);
++    const stone = await save('opposite-berth', true);
++    expect(angularDistance(stone.boatHeading, initial.boatHeading)).toBeCloseTo(Math.PI, 7);
++    await act(page, 'board', true);
++    expect((await agreedPose(page)).boatHeading).toBeCloseTo(stone.boatHeading, 8);
++    await activate(page, 'unload', true);
++    for (const id of ['rabbit-1', 'rabbit-2']) await activate(page, `passenger-${id}`, true);
++    await activate(page, 'commit', true);
++    await idle(page);
++    expect((await state(page)).aboard).toEqual(['rabbit-1', 'rabbit-2']);
++    expect((await agreedPose(page)).boatHeading).toBeCloseTo(stone.boatHeading, 8);
++    await undo(page, true);
++    await cleared(page);
++    expect((await agreedPose(page)).boatHeading).toBeCloseTo(stone.boatHeading, 8);
++    await act(page, 'map-harbor', true);
++    const harbor = await agreedPose(page);
++    await act(page, 'unload', true);
++    expect(await state(page)).toMatchObject({ turn: 9, status: 'won' });
++    await save('won', true);
++    await undo(page, true);
++    await cleared(page);
++    expect((await agreedPose(page)).boatHeading).toBeCloseTo(harbor.boatHeading, 8);
++    await save('terminal-undo', true);
++    await act(page, 'unload', true);
++    await page.waitForTimeout(1900);
++    await cleared(page);
++    expect(errors).toEqual([]);
++  } catch (e) {
++    failure = String(e);
++    throw e;
++  } finally {
++    writeFileSync(
++      `${reviewDir}/direction-lifecycle.json`,
++      JSON.stringify(
++        { outcome: failure ? 'failed' : 'passed', failure, observations, errors },
++        null,
++        2,
++      ),
++    );
++    const video = page.video();
++    await context.close();
++    if (video) await video.saveAs(`${reviewDir}/raw/direction-lifecycle.webm`);
++  }
++});
++
++test('direction: normal, hidden, device Reduced, recovery and animation failures settle the same planned pose once', async ({
++  page,
++}) => {
++  test.setTimeout(180000);
++  mkdirSync(`${reviewDir}/raw`, { recursive: true });
++  const observations: any[] = [];
++  let failure: string | null = null,
++    normalHeading: number | null = null;
++  try {
++    await ready(page, 'holding-pier');
++    for (const mode of [
++      'complete',
++      'visibility',
++      'cancelled',
++      'recovery',
++      'error-before',
++      'error-after',
++    ]) {
++      await restart(page);
++      await act(page, 'unload');
++      const prior = await agreedPose(page);
++      const counts = await page.evaluate(
++        () => (window as any).__LAST_FERRY__.getTransitionStatus().completionCounts,
++      );
++      if (mode === 'recovery' || mode.startsWith('error'))
++        await page.evaluate(async (mode) => {
++          const modulePath = performance
++            .getEntriesByType('resource')
++            .find((entry) => new URL(entry.name).pathname === '/src/scene/world.ts')?.name;
++          if (!modulePath) throw Error('The live World module resource was not found');
++          const { World } = await import(modulePath);
++          const original = World.prototype.animate;
++          (window as any).__restoreAnimate = () => {
++            World.prototype.animate = original;
++          };
++          World.prototype.animate = function (...args: any[]) {
++            if (mode === 'error-after') original.apply(this, args);
++            if (mode !== 'recovery')
++              throw Error('Injected animation failure for fallback verification');
++          };
++        }, mode);
++      await startMove(page, 'map-shallows');
++      if (mode === 'visibility' || mode === 'cancelled') {
++        await page.waitForFunction(
++          () => (window as any).__LAST_FERRY__.getJourneyStatus().active?.progress > 0.3,
++        );
++        if (mode === 'cancelled') await page.emulateMedia({ reducedMotion: 'reduce' });
++        else
++          await page.evaluate(() => {
++            Object.defineProperty(document, 'hidden', { configurable: true, value: true });
++            document.dispatchEvent(new Event('visibilitychange'));
++          });
++      }
++      await idle(page);
++      const j = await agreedPose(page),
++        transition = await page.evaluate(() =>
++          (window as any).__LAST_FERRY__.getTransitionStatus(),
++        );
++      if (normalHeading === null) normalHeading = j.boatHeading;
++      expect(j.boatHeading).toBeCloseTo(normalHeading!, 8);
++      const reason = mode.startsWith('error') ? 'error' : mode;
++      expect(transition.last.reason).toBe(reason);
++      expect(totalCompletions(transition.completionCounts)).toBe(totalCompletions(counts) + 1);
++      expect(await state(page)).toMatchObject({ turn: 2, boatNodeId: 'shallows' });
++      if (mode !== 'complete') await cleared(page);
++      observations.push({
++        mode,
++        journey: j,
++        transition,
++        labels:
++          mode === 'cancelled'
++            ? 'Emulated prefers-reduced-motion change during travel under Follow device'
++            : mode === 'visibility'
++              ? 'Simulated document.hidden and visibilitychange'
++              : mode === 'recovery'
++                ? 'Injected no-op animate; real recovery timeout'
++                : mode.startsWith('error')
++                  ? 'Injected animate throw through real execute catch'
++                  : 'Natural completion',
++      });
++      await page.evaluate(() => {
++        (window as any).__restoreAnimate?.();
++        delete (window as any).__restoreAnimate;
++      });
++      await page.emulateMedia({ reducedMotion: 'no-preference' });
++      await page.evaluate(() => {
++        Object.defineProperty(document, 'hidden', { configurable: true, value: false });
++        document.dispatchEvent(new Event('visibilitychange'));
++      });
++      await undo(page);
++      await cleared(page);
++      expect((await agreedPose(page)).boatHeading).toBeCloseTo(prior.boatHeading, 8);
++    }
++  } catch (e) {
++    failure = String(e);
++    throw e;
++  } finally {
++    writeFileSync(
++      `${reviewDir}/direction-settlements.json`,
++      JSON.stringify({ outcome: failure ? 'failed' : 'passed', failure, observations }, null, 2),
++    );
++  }
++});
++
++test('direction: released crests retain their release data as the next journey turns and tide moves their height', async ({
++  page,
++}) => {
++  await ready(page, 'holding-pier');
++  await act(page, 'unload');
++  await startMove(page, 'map-shallows');
++  await idle(page);
++  const firstFrame = await crestObservation(page);
++  const before = firstFrame.environment.wake;
++  expect(before.points.length).toBeGreaterThan(0);
++  const tracked = before.points.at(-1);
++  const poseBefore = firstFrame.journey;
++  await startMove(page, 'map-rabbit-pier');
++  await page.waitForFunction((heading) => {
++    const api = (window as any).__LAST_FERRY__;
++    const j = api.getJourneyStatus();
++    return j.active?.progress > 0.03 && Math.abs(j.boatHeading - heading) > 0.15;
++  }, poseBefore.boatHeading);
++  const nextFrame = await crestObservation(page);
++  const after = nextFrame.environment.wake,
++    poseAfter = nextFrame.journey;
++  const surviving = after.points.find((p: any) => p.id === tracked.id);
++  writeFileSync(
++    `${reviewDir}/released-crest-observations.json`,
++    JSON.stringify({ firstFrame, nextFrame, tracked, surviving: surviving ?? null }, null, 2),
++  );
++  expect(surviving).toBeDefined();
++  for (const field of [
++    'position',
++    'center',
++    'direction',
++    'time',
++    'heading',
++    'strength',
++    'seed',
++    'segment',
++  ])
++    expect(surviving[field]).toEqual(tracked[field]);
++  expect(surviving.evolution.age).toBeGreaterThan(tracked.evolution.age);
++  expect(surviving.evolution.width).toBeGreaterThan(tracked.evolution.width);
++  expect(
++    Math.hypot(
++      surviving.evolution.x - tracked.evolution.x,
++      surviving.evolution.z - tracked.evolution.z,
++    ),
++  ).toBeGreaterThan(0.01);
++  expect(angularDistance(poseBefore.boatHeading, poseAfter.boatHeading)).toBeGreaterThan(0.1);
++  expect(after.vertices).toBeLessThanOrEqual(after.points.length * after.limits.sections * 6);
++  await idle(page);
++  const birthCutoff = await page.evaluate(() => performance.now());
++  await activate(page, 'board');
++  await activate(page, 'commit');
++  await page.waitForFunction(
++    () => (window as any).__LAST_FERRY__.getEnvironmentStatus().waterY > 0.02,
++  );
++  const tide = await environment(page);
++  expect(tide.wake.points.every((p: any) => p.time <= birthCutoff)).toBe(true);
++  let yError = 0;
++  for (let i = 1; i < tide.wake.positions.length; i += 3)
++    yError = Math.max(yError, Math.abs(tide.wake.positions[i] - tide.waterY - 0.018));
++  expect(yError).toBeLessThan(0.000005);
++  await idle(page);
++  await page.waitForTimeout(1900);
++  await cleared(page);
++  await undo(page);
++  await cleared(page);
++  writeFileSync(
++    `${reviewDir}/released-crest.json`,
++    JSON.stringify(
++      {
++        tracked,
++        surviving,
++        firstFrame,
++        nextFrame,
++        captureMethod:
++          'Runtime diagnostics without synchronous pixel readback; natural full-interface moving evidence is captured separately.',
++        poseBefore,
++        poseAfter,
++        tide: { waterY: tide.waterY, wave: tide.wake },
++        outcome: 'passed',
++      },
++      null,
++      2,
++    ),
++  );
++});
+diff --git a/tests/e2e/water-motion.spec.ts b/tests/e2e/water-motion.spec.ts
+index 7433790..9501b0f 100644
+--- a/tests/e2e/water-motion.spec.ts
++++ b/tests/e2e/water-motion.spec.ts
+@@ -85,7 +85,7 @@ test('water motion: finite docking, immediate follow-up, tide Undo and mid-cross
+     await movementClear(page);
+     await startMove(page, 'map-shallows', true);
+     await page.waitForFunction(
+-      () => (window as any).__LAST_FERRY__.getEnvironmentStatus().wake.points.length > 5,
++      () => (window as any).__LAST_FERRY__.getEnvironmentStatus().wake.points.length > 2,
+     );
+     await idle(page);
+     const docking = await save('natural-docking');
+@@ -100,12 +100,12 @@ test('water motion: finite docking, immediate follow-up, tide Undo and mid-cross
+     const follow = await save('immediate-follow-up');
+     expect(follow.state.turn).toBe(3);
+     expect(follow.transition.active.startedAt - nextStartedAt).toBeLessThan(1600);
+-    expect(follow.wake.points.length).toBeLessThanOrEqual(96);
++    expect(follow.wake.points.length).toBeLessThanOrEqual(12);
+     for (let i = 1; i < follow.wake.points.length; i++) {
+       const a = follow.wake.points[i - 1],
+         b = follow.wake.points[i];
+       if (a.segment === b.segment)
+-        expect(Math.hypot(b.center[0] - a.center[0], b.center[2] - a.center[2])).toBeLessThan(0.1);
++        expect(Math.hypot(b.center[0] - a.center[0], b.center[2] - a.center[2])).toBeLessThan(1.3);
+     }
+     await idle(page);
+     const beforeTide = await state(page);
+diff --git a/tests/unit/clearance.test.ts b/tests/unit/clearance.test.ts
+index 0e36851..8cf95e7 100644
+--- a/tests/unit/clearance.test.ts
++++ b/tests/unit/clearance.test.ts
+@@ -1,8 +1,8 @@
+ import { test, expect } from 'vitest';
+ import { InstancedMesh, Matrix4, Mesh, Vector3 } from 'three';
+ import { ferry } from '../../src/scene/models';
+-import { sampleJourney } from '../../src/scene/motion';
+-import { getLevelPaths } from '../../src/scene/paths';
++import { berthHeading, initialHeading, planJourney, sampleJourney } from '../../src/scene/motion';
++import { getLevelPaths, samplePath } from '../../src/scene/paths';
+ import { level, holdingPier, bellwater } from '../../src/levels/level';
+ import { sceneLayout } from '../../src/scene/layout';
+ import { buildCoastGeometry, createReedBeds, createShoreRocks } from '../../src/scene/shore';
+@@ -55,7 +55,7 @@ function segmentDistance(p: P, a: P, b: P) {
+   return Math.hypot(p[0] - a[0] - t * x, p[1] - a[1] - t * z);
+ }
+ test.each([level, holdingPier, bellwater])(
+-  '$id: actual modeled ferry footprint clears all land and pier decks along both directions and yaw turns',
++  '$id: full modeled ferry clears land and piers from all reachable headings, both berth sides and reverse departures',
+   (level) => {
+     const model = ferry();
+     model.updateMatrixWorld(true);
+@@ -86,36 +86,60 @@ test.each([level, holdingPier, bellwater])(
+     const marginFailures: string[] = [];
+     const samples = 1000;
+     const paths = getLevelPaths(level);
++    const reachable = new Map<string, number[]>();
++    for (const node of level.nodes) {
++      const headings: number[] = [];
++      if (node.id === level.start.boatNodeId) headings.push(initialHeading(level));
++      for (const edge of level.edges.filter((edge) => edge.nodes.includes(node.id))) {
++        const path = paths.get(edge.id)!,
++          incoming = samplePath(path, path.length, edge.nodes[0] === node.id).angle;
++        headings.push(berthHeading(level, node.id, incoming) ?? incoming);
++      }
++      const berth = berthHeading(level, node.id, Math.PI / 2);
++      if (berth !== null) headings.push(berth, berth - Math.PI);
++      reachable.set(node.id, [
++        ...new Set(headings.map((angle) => Math.atan2(Math.sin(angle), Math.cos(angle)))),
++      ]);
++    }
+     for (const edge of level.edges)
+       for (const reverse of [false, true]) {
+-        const path = paths.get(edge.id)!;
+-        for (let frame = 0; frame <= samples; frame++) {
+-          const pose = sampleJourney(path, frame / samples, Math.PI / 2, reverse);
+-          const hull = footprint.map(([x, z]) => {
+-            const v = new Vector3(x, 0, z)
+-              .applyAxisAngle(new Vector3(0, 1, 0), pose.angle)
+-              .add(pose.position);
+-            return [v.x, v.z] as P;
++        const path = paths.get(edge.id)!,
++          from = edge.nodes[reverse ? 1 : 0],
++          to = edge.nodes[reverse ? 0 : 1],
++          incoming = samplePath(path, path.length, reverse).angle;
++        for (const heading of reachable.get(from)!) {
++          const plan = planJourney(path, heading, reverse, {
++            fromBerth: berthHeading(level, from, heading) ?? undefined,
++            toBerth: berthHeading(level, to, incoming) ?? undefined,
+           });
+-          for (const exclusion of exclusions)
+-            if (overlaps(hull, exclusion.polygon))
+-              failures.push(
+-                `${edge.id}/${reverse ? 'reverse' : 'forward'} frame ${frame}: ${exclusion.id}`,
+-              );
+-          const center: P = [pose.position.x, pose.position.z];
+-          for (const exclusion of exclusions) {
+-            const margin = Math.min(
+-              ...exclusion.polygon.map((p, i) =>
+-                segmentDistance(center, p, exclusion.polygon[(i + 1) % exclusion.polygon.length]),
+-              ),
++          for (let frame = 0; frame <= samples; frame++) {
++            const pose = sampleJourney(plan, frame / samples);
++            const cos = Math.cos(pose.angle),
++              sin = Math.sin(pose.angle);
++            const hull = footprint.map(
++              ([x, z]) =>
++                [x * cos + z * sin + pose.position.x, z * cos - x * sin + pose.position.z] as P,
+             );
+-            if (
+-              margin < level.world.requiredRouteClearance - 1e-6 ||
+-              inside(center, exclusion.polygon)
+-            )
+-              marginFailures.push(
+-                `${edge.id}/${reverse ? 'reverse' : 'forward'} frame ${frame}: ${exclusion.id} margin ${margin}`,
++            for (const exclusion of exclusions)
++              if (overlaps(hull, exclusion.polygon))
++                failures.push(
++                  `${edge.id}/${reverse ? 'reverse' : 'forward'} from ${heading} frame ${frame}: ${exclusion.id}`,
++                );
++            const center: P = [pose.position.x, pose.position.z];
++            for (const exclusion of exclusions) {
++              const margin = Math.min(
++                ...exclusion.polygon.map((p, i) =>
++                  segmentDistance(center, p, exclusion.polygon[(i + 1) % exclusion.polygon.length]),
++                ),
+               );
++              if (
++                margin < level.world.requiredRouteClearance - 1e-6 ||
++                inside(center, exclusion.polygon)
++              )
++                marginFailures.push(
++                  `${edge.id}/${reverse ? 'reverse' : 'forward'} from ${heading} frame ${frame}: ${exclusion.id} margin ${margin}`,
++                );
++            }
+           }
+         }
+       }
+diff --git a/tests/unit/deck-transfer.test.ts b/tests/unit/deck-transfer.test.ts
+new file mode 100644
+index 0000000..1e95bce
+--- /dev/null
++++ b/tests/unit/deck-transfer.test.ts
+@@ -0,0 +1,56 @@
++import { expect, test } from 'vitest';
++import { Vector3 } from 'three';
++import {
++  bridgeBowOffset,
++  deckEntryZ,
++  firstRabbitDeckZ,
++  sampleDeckTransfer,
++  transferHeading,
++} from '../../src/scene/deck-transfer';
++
++test.each([Math.PI / 2, -Math.PI / 2])(
++  'both berth headings cross the open entry and finish exactly on their anchors: %s',
++  (heading) => {
++    const axis = new Vector3(0, 1, 0);
++    const world = (p: Vector3) => p.clone().applyAxisAngle(axis, heading);
++    const local = (p: Vector3) => p.clone().applyAxisAngle(axis, -heading);
++    const side = Math.sign(heading);
++    const from = new Vector3(0, 0.54, -1.02);
++    const bridge = new Vector3(Math.sin(heading) * bridgeBowOffset, 0.54, -0.44);
++    const gate = world(new Vector3(side * 0.51, 0.26, deckEntryZ));
++    const corridor = world(new Vector3(0, 0.26, deckEntryZ));
++    const land = new Vector3(0, 0.56, -1.5);
++    for (const anchor of [
++      new Vector3(-0.22, 0.26, firstRabbitDeckZ),
++      new Vector3(0.22, 0.26, 0.3),
++      new Vector3(0, 0.26, 0.69),
++    ]) {
++      const destination = world(anchor);
++      const board = (p: number) =>
++        sampleDeckTransfer(true, from, bridge, gate, corridor, land, destination, p);
++      const unload = (p: number) =>
++        sampleDeckTransfer(false, destination, bridge, gate, corridor, land, from, p);
++      expect(board(0).distanceTo(from)).toBe(0);
++      expect(board(1).distanceTo(destination)).toBe(0);
++      expect(unload(0).distanceTo(destination)).toBe(0);
++      expect(unload(1).distanceTo(from)).toBe(0);
++      expect(board(0.5).distanceTo(bridge)).toBeLessThan(1e-12);
++      expect(unload(1 / 3).distanceTo(bridge)).toBeLessThan(1e-12);
++      for (let i = 0; i <= 400; i++) {
++        for (const sample of [board, unload]) {
++          const point = local(sample(i / 400));
++          if (Math.abs(point.x) <= 0.51 && Math.abs(point.x) >= 0.4) {
++            expect(point.z).toBeGreaterThan(-0.3);
++            expect(point.z).toBeLessThan(0.6);
++          }
++          if (Math.abs(point.x) <= 0.35) expect(point.z).toBeGreaterThanOrEqual(-0.020001);
++        }
++      }
++      expect(transferHeading(true, heading, 1)).toBeCloseTo(heading);
++      expect(transferHeading(false, heading, 0)).toBeCloseTo(heading);
++      expect(transferHeading(false, heading, 1)).toBeCloseTo(0, 12);
++      expect(transferHeading(true, heading, 0.5)).toBeCloseTo(heading);
++      expect(transferHeading(false, heading, 1 / 3)).toBeCloseTo(heading);
++    }
++  },
++);
+diff --git a/tests/unit/deck-volume.test.ts b/tests/unit/deck-volume.test.ts
+new file mode 100644
+index 0000000..038c1f6
+--- /dev/null
++++ b/tests/unit/deck-volume.test.ts
+@@ -0,0 +1,188 @@
++import { expect, test } from 'vitest';
++import { Box3, MathUtils, Mesh, Plane, Vector3 } from 'three';
++import { animal, ferry } from '../../src/scene/models';
++import { settlingProgress } from '../../src/scene/transitions';
++import {
++  bridgeBowOffset,
++  deckEntryZ,
++  firstRabbitDeckZ,
++  sampleDeckTransfer,
++  transferHeading,
++} from '../../src/scene/deck-transfer';
++
++const boat = ferry();
++boat.updateMatrixWorld(true);
++const obstacles = boat.children
++  .filter(
++    (object): object is Mesh =>
++      object instanceof Mesh &&
++      ((object.position.z <= -0.15 && object.position.y >= 0.38 && object.position.y <= 0.85) ||
++        (Math.abs(object.position.x) === 0.46 && object.position.y >= 0.38)),
++  )
++  .map((object) => {
++    const position = object.geometry.getAttribute('position'),
++      indices = object.geometry.index,
++      planes: Plane[] = [];
++    for (let i = 0; i < (indices?.count ?? position.count); i += 3) {
++      const vertices = [0, 1, 2].map((j) =>
++        new Vector3()
++          .fromBufferAttribute(position, indices ? indices.getX(i + j) : i + j)
++          .applyMatrix4(object.matrixWorld),
++      );
++      planes.push(new Plane().setFromCoplanarPoints(vertices[0], vertices[1], vertices[2]));
++    }
++    return { at: object.position.toArray(), box: new Box3().setFromObject(object), planes };
++  });
++const figures = [0, 1, 2].map((id) => {
++  const species = id === 2 ? 'sheep' : 'rabbit',
++    figure = animal(species, id === 1 ? 1 : 0),
++    vertices: Vector3[] = [];
++  figure.scale.set(
++    species === 'rabbit' ? 1.25 : 1.15,
++    species === 'rabbit' ? 1.65 : 1.5,
++    species === 'rabbit' ? 1.25 : 1.15,
++  );
++  figure.updateMatrixWorld(true);
++  figure.traverse((object) => {
++    if (!(object instanceof Mesh)) return;
++    const position = object.geometry.getAttribute('position');
++    for (let i = 0; i < position.count; i++)
++      vertices.push(
++        new Vector3().fromBufferAttribute(position, i).applyMatrix4(object.matrixWorld),
++      );
++  });
++  return vertices;
++});
++const axis = new Vector3(0, 1, 0),
++  smooth = (t: number) => t * t * (3 - 2 * t);
++
++test.each([Math.PI / 2, -Math.PI / 2])(
++  'modeled passengers avoid cabin and rails through each transfer phase at berth %s',
++  (heading) => {
++    const failures: string[] = [];
++    expect(obstacles.length).toBeGreaterThan(8);
++    for (const scenario of [
++      {
++        name: 'holding-unload',
++        board: false,
++        ids: [2],
++        pierY: 0.54,
++        width: 0.8,
++        before: -0.045,
++        after: 0.03,
++        water: 0,
++        tide: 0,
++      },
++      {
++        name: 'holding-board',
++        board: true,
++        ids: [2],
++        pierY: 0.54,
++        width: 0.8,
++        before: -0.045,
++        after: -0.12,
++        water: 0.18,
++        tide: 0,
++      },
++      {
++        name: 'rabbit-boundary',
++        board: true,
++        ids: [0, 1],
++        pierY: 0.18,
++        width: 0.9,
++        before: 0.03,
++        after: -0.045,
++        water: 0,
++        tide: 0.18,
++      },
++      {
++        name: 'harbor-unload',
++        board: false,
++        ids: [0, 1, 2],
++        pierY: 0.54,
++        width: 0.6,
++        before: -0.12,
++        after: 0.03,
++        water: 0.36,
++        tide: 0,
++      },
++    ]) {
++      for (const id of scenario.ids) {
++        const anchor = new Vector3(
++            ...([
++              [-0.22, 0.26, firstRabbitDeckZ],
++              [0.22, 0.26, 0.3],
++              [0, 0.26, 0.69],
++            ][id] as [number, number, number]),
++          ),
++          offset = id === 2 ? 0 : id === 0 ? -0.07 : 0.07,
++          bridge = new Vector3(
++            MathUtils.clamp(
++              Math.sin(heading) * bridgeBowOffset + offset,
++              -scenario.width / 2,
++              scenario.width / 2,
++            ),
++            scenario.pierY - 0.005,
++            -0.44,
++          ),
++          land = new Vector3(offset, scenario.pierY + 0.025, -1.95),
++          waiting = new Vector3(
++            id === 2 ? 0 : id === 0 ? -0.21 : 0.21,
++            scenario.pierY - 0.005,
++            -1.02,
++          ),
++          initial = anchor
++            .clone()
++            .applyAxisAngle(axis, heading)
++            .add(new Vector3(0, scenario.water + scenario.before, 0));
++        expect(Math.abs(bridge.x)).toBeLessThanOrEqual(scenario.width / 2);
++        for (let i = 0; i <= 100; i++) {
++          const t = i / 100,
++            k = smooth(t),
++            duration = scenario.name === 'harbor-unload' ? 900 : 520,
++            settled = smooth(
++              settlingProgress(t * duration, { duration, tideDuration: Math.min(duration, 550) }),
++            ),
++            hullY =
++              scenario.water +
++              scenario.tide * settled +
++              scenario.before +
++              (scenario.after - scenario.before) * settled,
++            world = (point: Vector3) =>
++              point
++                .clone()
++                .applyAxisAngle(axis, heading)
++                .add(new Vector3(0, hullY, 0)),
++            gate = world(new Vector3(Math.sign(heading) * 0.51, 0.26, deckEntryZ)),
++            corridor = world(new Vector3(0, 0.26, deckEntryZ)),
++            position = sampleDeckTransfer(
++              scenario.board,
++              scenario.board ? waiting : initial,
++              bridge,
++              gate,
++              corridor,
++              land,
++              scenario.board ? world(anchor) : waiting,
++              k,
++            );
++          position.y += Math.sin(t * Math.PI * 4) ** 2 * 0.055;
++          position.y -= hullY;
++          position.applyAxisAngle(axis, -heading);
++          const yaw = transferHeading(scenario.board, heading, k) - heading;
++          for (const vertex of figures[id]) {
++            const point = vertex.clone().applyAxisAngle(axis, yaw).add(position);
++            for (const obstacle of obstacles)
++              if (
++                obstacle.box.containsPoint(point) &&
++                obstacle.planes.every((plane) => plane.distanceToPoint(point) < -1e-7)
++              ) {
++                if (failures.length < 20)
++                  failures.push(`${scenario.name}/${id}/${t}: ${obstacle.at.join(',')}`);
++              }
++          }
++        }
++      }
++    }
++    expect(failures).toEqual([]);
++  },
++);
+diff --git a/tests/unit/paths.test.ts b/tests/unit/paths.test.ts
+index 214d25e..e245728 100644
+--- a/tests/unit/paths.test.ts
++++ b/tests/unit/paths.test.ts
+@@ -2,7 +2,13 @@ import { describe, expect, test } from 'vitest';
+ import { Vector3 } from 'three';
+ import { bellwater, holdingPier, level, type Level } from '../../src/levels/level';
+ import { buildPath, getLevelPaths, samplePath } from '../../src/scene/paths';
+-import { sampleJourney } from '../../src/scene/motion';
++import {
++  angularChange,
++  berthHeading,
++  initialHeading,
++  planJourney,
++  sampleJourney,
++} from '../../src/scene/motion';
+ 
+ const point = (x: number, z: number) => new Vector3(x, 0, z);
+ const cross = (a: Vector3, b: Vector3, c: Vector3) =>
+@@ -149,15 +155,25 @@ describe('canonical curved courses', () => {
+   });
+ 
+   test.each([level, holdingPier, bellwater])(
+-    '$id journeys keep eased distance, continuous steering and exact broadside docking in both directions',
++    '$id journeys retain their incoming tangent or nearest real berth with continuous steering',
+     (l) => {
+-      for (const path of getLevelPaths(l).values())
++      const paths = getLevelPaths(l);
++      for (const edge of l.edges)
+         for (const reverse of [false, true]) {
+-          const poses = Array.from({ length: 1001 }, (_, i) =>
+-            sampleJourney(path, i / 1000, Math.PI / 2, reverse),
+-          );
++          const path = paths.get(edge.id)!,
++            from = edge.nodes[reverse ? 1 : 0],
++            to = edge.nodes[reverse ? 0 : 1],
++            incoming = samplePath(path, path.length, reverse).angle,
++            destination = berthHeading(l, to, incoming),
++            plan = planJourney(path, Math.PI / 2, reverse, {
++              fromBerth: berthHeading(l, from, Math.PI / 2) ?? undefined,
++              toBerth: destination ?? undefined,
++            });
++          const poses = Array.from({ length: 1001 }, (_, i) => sampleJourney(plan, i / 1000));
+           expect(poses[0].angle).toBe(Math.PI / 2);
+-          expect(poses.at(-1)!.angle).toBe(Math.PI / 2);
++          expect(poses.at(-1)!.angle).toBe(plan.toAngle);
++          expect(angularChange(plan.toAngle, destination ?? incoming)).toBeCloseTo(0, 9);
++          expect(Math.abs(angularChange(incoming, plan.toAngle))).toBeLessThanOrEqual(Math.PI / 2);
+           expect(
+             poses[0].position.distanceTo(path.points[reverse ? path.points.length - 1 : 0]),
+           ).toBeLessThan(1e-9);
+@@ -168,13 +184,17 @@ describe('canonical curved courses', () => {
+             const before = poses[i - 1],
+               after = poses[i],
+               expected = after.distance - before.distance;
+-            expect(after.position.distanceTo(before.position) / expected).toBeGreaterThan(0.97);
+-            expect(after.position.distanceTo(before.position) / expected).toBeLessThanOrEqual(
+-              1.00001,
+-            );
++            expect(expected).toBeGreaterThanOrEqual(0);
++            if (expected > 1e-9) {
++              expect(after.position.distanceTo(before.position) / expected).toBeGreaterThan(0.97);
++              expect(after.position.distanceTo(before.position) / expected).toBeLessThanOrEqual(
++                1.00001,
++              );
++            } else expect(after.position.distanceTo(before.position)).toBeLessThan(1e-9);
+             expect(Math.abs(after.angle - before.angle)).toBeLessThan(0.16);
+-            if (Math.min(after.distance, path.length - after.distance) <= 0.45)
+-              expect(after.angle).toBe(Math.PI / 2);
++            if (plan.fromBerth && after.distance <= 0.45) expect(after.angle).toBe(plan.fromAngle);
++            if (plan.toBerth && path.length - after.distance <= 0.45)
++              expect(after.angle).toBeCloseTo(plan.toAngle, 12);
+           }
+         }
+     },
+@@ -192,9 +212,7 @@ describe('canonical curved courses', () => {
+       ).toBeLessThan(0.05);
+       for (let i = 0; i < poses.length; i++)
+         expect(
+-          poses[i].position.distanceTo(
+-            sampleJourney(path, 1 - i / 1000, Math.PI / 2, !reverse).position,
+-          ),
++          poses[i].position.distanceTo(samplePath(path, poses[i].distance, reverse).position),
+         ).toBeLessThan(1e-8);
+     }
+     const pointPath = buildPath([point(3, 4), point(3, 4)]);
+@@ -204,6 +222,43 @@ describe('canonical curved courses', () => {
+     expect(sampleJourney(path, 2).position.distanceTo(path.points.at(-1)!)).toBe(0);
+   });
+ 
++  test('free-water reversal turns from the retained pose without sideways travel or angle wrapping', () => {
++    const path = getLevelPaths(holdingPier).get('stone-shallows')!,
++      outward = planJourney(path, Math.PI / 2, false, { fromBerth: Math.PI / 2 }),
++      retained = sampleJourney(outward, 1).angle,
++      reversal = planJourney(path, retained, true, { toBerth: -Math.PI / 2 });
++    expect(reversal.departureTurn).toBeCloseTo(0.22, 12);
++    expect(reversal.initialCourseAngle - retained).toBeCloseTo(Math.PI, 12);
++    for (let frame = 0; frame <= 220; frame++) {
++      const pose = sampleJourney(reversal, frame / 1000);
++      expect(pose.distance).toBe(0);
++      expect(pose.angle).toBeGreaterThanOrEqual(retained);
++      expect(pose.angle).toBeLessThanOrEqual(retained + Math.PI);
++    }
++    expect(sampleJourney(reversal, 0).angle).toBe(retained);
++    expect(sampleJourney(reversal, 1).angle).toBe(reversal.toAngle);
++    expect(angularChange(0, Math.PI)).toBe(Math.PI);
++    expect(angularChange(0, -Math.PI)).toBe(Math.PI);
++    expect(angularChange(Math.PI - 0.01, -Math.PI + 0.01)).toBeCloseTo(0.02, 12);
++  });
++
++  test('stop classification follows actual pier relationships and shaft geometry', () => {
++    for (const l of [level, holdingPier, bellwater]) {
++      expect(initialHeading(l)).toBe(Math.PI / 2);
++      for (const node of l.nodes) {
++        const pier = l.piers.find((p) => p.nodeId === node.id && p.id === node.pierId);
++        if (!pier) expect(berthHeading(l, node.id, 0)).toBeNull();
++        else {
++          expect(berthHeading(l, node.id, Math.PI / 2)).toBe(Math.PI / 2);
++          expect(berthHeading(l, node.id, -Math.PI / 2)).toBe(-Math.PI / 2);
++        }
++      }
++    }
++    const turned = structuredClone(holdingPier);
++    turned.piers[1].landAnchorXZ = [-1.2, -1.9];
++    expect(berthHeading(turned, 'stone', 0)).toBe(0);
++  });
++
+   test.each([level, holdingPier, bellwater])(
+     '$id actual curved network has no extra junction or unrelated-stop contact',
+     (l) => {
+diff --git a/tests/unit/poses.test.ts b/tests/unit/poses.test.ts
+new file mode 100644
+index 0000000..3e3aaa7
+--- /dev/null
++++ b/tests/unit/poses.test.ts
+@@ -0,0 +1,64 @@
++import { expect, test } from 'vitest';
++import { readFileSync } from 'node:fs';
++import { Session } from '../../src/game/session';
++import type { Action } from '../../src/game/rules';
++import { holdingPier } from '../../src/levels/level';
++import { PresentationPoses } from '../../src/scene/poses';
++import { sampleJourney } from '../../src/scene/motion';
++
++test('accepted transactions pair exact planned poses with complete gameplay Undo', () => {
++  const session = new Session(holdingPier),
++    poses = new PresentationPoses(holdingPier);
++  const actions = JSON.parse(readFileSync('data/experiments/holding-pier-solution.json', 'utf8'))
++    .actions as Action[];
++  const headings = [poses.heading];
++  for (const action of actions) {
++    const accepted = session.commit(action)!;
++    poses.accept(accepted.before, action);
++    const planned = poses.heading;
++    if (poses.journey) {
++      expect(sampleJourney(poses.journey, 1).angle).toBe(planned);
++      expect(sampleJourney(poses.journey, 0).angle).toBe(headings.at(-1));
++      sampleJourney(poses.journey, 0.37);
++      expect(poses.heading).toBe(planned);
++    } else expect(planned).toBe(headings.at(-1));
++    expect(poses.history.length).toBe(session.history.length);
++    headings.push(planned);
++    session.finish();
++  }
++  expect(session.state.status).toBe('won');
++  for (let i = actions.length - 1; i >= 0; i--) {
++    expect(session.undo()).toBe(true);
++    expect(poses.undo()).toBe(true);
++    expect(poses.heading).toBe(headings[i]);
++    expect(poses.history.length).toBe(session.history.length);
++  }
++  expect(poses.undo()).toBe(false);
++});
++
++test('invalid input, nonmoves, alternate next route and restart preserve pose-history agreement', () => {
++  const session = new Session(holdingPier),
++    poses = new PresentationPoses(holdingPier);
++  const accept = (action: Action) => {
++    const transaction = session.commit(action);
++    if (transaction) poses.accept(transaction.before, action);
++    session.finish();
++    return transaction;
++  };
++  expect(accept({ type: 'move', to: 'shallows' })).toBeNull();
++  expect(poses.history).toEqual([]);
++  accept({ type: 'unload', passengerIds: ['sheep-1'] });
++  accept({ type: 'move', to: 'shallows' });
++  const retained = poses.heading;
++  accept({ type: 'wait' });
++  expect(poses.heading).toBe(retained);
++  expect(session.undo() && poses.undo()).toBe(true);
++  expect(poses.heading).toBe(retained);
++  accept({ type: 'move', to: 'stone' });
++  expect(poses.journey!.fromAngle).toBe(retained);
++  expect(poses.history.length).toBe(session.history.length);
++  session.restart();
++  poses.reset();
++  expect(poses.history).toEqual([]);
++  expect(poses.heading).toBe(new PresentationPoses(holdingPier).heading);
++});
+diff --git a/tests/unit/wake.test.ts b/tests/unit/wake.test.ts
+index 4f7e2ee..c829649 100644
+--- a/tests/unit/wake.test.ts
++++ b/tests/unit/wake.test.ts
+@@ -2,16 +2,20 @@ import { expect, test } from 'vitest';
+ import * as T from 'three';
+ import { FerryWake, wakeLimits } from '../../src/scene/wake';
+ 
+-function runStraight(wake: FerryWake, step: number, until = 1200) {
++function runStraight(wake: FerryWake, step: number, until = 1200, heading = Math.PI / 2) {
+   const position = new T.Vector3();
+-  wake.begin(0, position, Math.PI / 2);
++  wake.begin(0, position, heading);
+   for (let time = step; time <= until; time += step) {
+     position.set(time * 0.002, 0, 0);
+-    wake.update(time, position, Math.PI / 2, true, 0, false);
++    wake.update(time, position, heading, true, 0, false);
+   }
+ }
+ 
+-test('wake depends on horizontal movement, not water elevation, hull draft or dock heading', () => {
++function releaseData(wake: FerryWake) {
++  return wake.presentation().points.map(({ evolution: _, ...point }) => point);
++}
++
++test('water elevation, hull draft and in-place steering produce no travel crest', () => {
+   const wake = new FerryWake(),
+     position = new T.Vector3();
+   wake.begin(0, position, 0);
+@@ -26,45 +30,95 @@ test('wake depends on horizontal movement, not water elevation, hull draft or do
+     points: [],
+     strength: 0,
+   });
+-  position.x = 0.2;
++  position.x = 0.4;
+   wake.update(420, position, 0.9, true, 0.36, false, -0.12);
+-  expect(wake.count).toBeGreaterThan(0);
+-  for (const point of wake.presentation().points) {
+-    expect(point.position[0]).toBeCloseTo(point.center[0] - Math.sin(point.heading) * 0.72);
+-    expect(point.position[2]).toBeCloseTo(point.center[2] - Math.cos(point.heading) * 0.72);
++  const release = releaseData(wake);
++  expect(release.length).toBeGreaterThan(0);
++  for (const point of release) {
++    expect(point.direction).toEqual([1, 0, 0]);
++    expect(point.position[0]).toBeLessThan(point.center[0]);
+     expect(point.position[1]).toBeCloseTo(point.center[1] + 0.018);
+   }
+-  wake.update(440, position, 1.2, false, 0.4, false, -0.12);
++  wake.update(500, position, 1.2, false, 0.4, false, -0.12);
+   const view = wake.presentation();
++  expect(releaseData(wake)).toEqual(release);
+   for (let i = 1; i < view.positions.length; i += 3)
+     expect(view.positions[i]).toBeCloseTo(0.418, 6);
+-  expect(view.interaction.direction[0]).toBeCloseTo(Math.sin(1.2));
+ });
+ 
+-test('distance sampling is consistent across frame rates and retains world-space history', () => {
++test('stable distance releases agree across frame rates and keep birth data immutable', () => {
+   const fine = new FerryWake(),
+     coarse = new FerryWake();
+   runStraight(fine, 10);
+   runStraight(coarse, 80);
+   expect(fine.count).toBe(coarse.count);
+-  const a = fine.presentation().points,
+-    b = coarse.presentation().points;
++  const a = releaseData(fine),
++    b = releaseData(coarse);
++  expect(a.length).toBeGreaterThan(2);
+   for (let i = 0; i < a.length; i++) {
++    expect(a[i].id).toBe(b[i].id);
+     expect(a[i].time).toBeCloseTo(b[i].time, 6);
+     expect(a[i].position[0]).toBeCloseTo(b[i].position[0], 6);
+     expect(a[i].position[2]).toBeCloseTo(b[i].position[2], 6);
+   }
+-  const old = fine.pool[fine.first].position.clone();
+   fine.update(1220, new T.Vector3(2.44, 0, 0.02), 1.5, true, 0.18, false);
+-  expect(fine.pool[fine.first].position).toEqual(old);
++  expect(releaseData(fine).slice(0, a.length)).toEqual(a);
++});
++
++test('released crests spread on their own when the ferry turns and takes a new route', () => {
++  const resting = new FerryWake(),
++    turning = new FerryWake(),
++    stop = new T.Vector3(2.4, 0, 0);
++  runStraight(resting, 20);
++  runStraight(turning, 20);
++  const birth = releaseData(resting),
++    original = resting.presentation().points;
++  resting.finish(1200);
++  turning.finish(1200);
++  turning.begin(1200, stop, Math.PI / 2);
++  for (let time = 1220; time <= 1600; time += 20) {
++    resting.update(time, stop, Math.PI / 2, false, 0.18, false);
++    turning.update(
++      time,
++      new T.Vector3(2.4, 0.18, (time - 1200) * 0.003),
++      Math.PI / 2 - (time - 1200) * 0.004,
++      true,
++      0.18,
++      false,
++    );
++  }
++  const idleEvents = resting.presentation().points,
++    movingEvents = turning.presentation().points,
++    ids = birth.map((point) => point.id);
++  expect(releaseData(resting)).toEqual(birth);
++  expect(movingEvents.filter((point) => ids.includes(point.id))).toEqual(idleEvents);
++  expect(new Set(movingEvents.map((point) => point.segment)).size).toBe(2);
++  for (const point of idleEvents) {
++    const old = original.find((sample) => sample.id === point.id)!;
++    expect(point.evolution.width).toBeGreaterThan(old.evolution.width);
++    expect(point.evolution.x).toBeLessThan(old.evolution.x);
++    expect(point.evolution.waterY).toBeCloseTo(0.198);
++  }
++  expect(turning.vertices).toBeLessThanOrEqual(turning.count * wakeLimits.sections * 6);
+ });
+ 
+-test('joined curved history and hull contacts stay finite inside a fixed resource budget', () => {
++test('backing movement releases from the displaced-water side rather than the nominal stern', () => {
++  const wake = new FerryWake();
++  runStraight(wake, 20, 1200, -Math.PI / 2);
++  for (const point of wake.presentation().points) {
++    expect(point.heading).toBe(-Math.PI / 2);
++    expect(point.direction).toEqual([1, 0, 0]);
++    expect(point.position[0]).toBeCloseTo(point.center[0] - 0.76, 6);
++    expect(point.position[2]).toBeCloseTo(point.center[2], 6);
++  }
++});
++
++test('repeated curved releases stay finite in one fixed mesh and event pool', () => {
+   const wake = new FerryWake(),
+     geometry = wake.mesh.geometry,
+     material = wake.mesh.material,
+     attributes = Object.values(geometry.attributes).map((attribute) => attribute.array),
+-    pool = wake.pool.map((point) => point.position),
++    pool = wake.pool.map((point) => [point.position, point.center, point.direction]),
+     position = new T.Vector3();
+   wake.begin(0, position, 0);
+   for (let time = 20; time <= 20000; time += 20) {
+@@ -72,65 +126,55 @@ test('joined curved history and hull contacts stay finite inside a fixed resourc
+     position.set(Math.sin(angle) * 2, 0, Math.cos(angle) * 2 - 2);
+     wake.update(time, position, angle + Math.PI / 2, true, 0, false);
+     expect(wake.count).toBeLessThanOrEqual(wakeLimits.capacity);
+-    expect(wake.vertices).toBeLessThanOrEqual((wakeLimits.capacity + 48) * 6);
++    expect(wake.vertices).toBeLessThanOrEqual(wakeLimits.capacity * wakeLimits.sections * 6);
+   }
+   expect(wake.mesh.geometry).toBe(geometry);
+   expect(wake.mesh.material).toBe(material);
+   Object.values(geometry.attributes).forEach((attribute, index) =>
+     expect(attribute.array).toBe(attributes[index]),
+   );
+-  wake.pool.forEach((point, index) => expect(point.position).toBe(pool[index]));
++  wake.pool.forEach((point, index) => {
++    expect(point.position).toBe(pool[index][0]);
++    expect(point.center).toBe(pool[index][1]);
++    expect(point.direction).toBe(pool[index][2]);
++  });
+   const view = wake.presentation();
+   expect(view.positions.every(Number.isFinite)).toBe(true);
+-  expect(view.opacity.every((value) => Number.isFinite(value) && value >= 0 && value <= 0.64)).toBe(
++  expect(view.opacity.every((value) => Number.isFinite(value) && value >= 0 && value <= 0.58)).toBe(
+     true,
+   );
+-  const points = view.points;
+-  let length = 0;
+-  for (let i = 1; i < points.length; i++)
+-    length += Math.hypot(
+-      points[i].position[0] - points[i - 1].position[0],
+-      points[i].position[2] - points[i - 1].position[2],
+-    );
+-  expect(length).toBeLessThanOrEqual(wakeLimits.length + 0.00001);
+-  for (let i = 0; i < wake.count; i++)
+-    expect(Math.hypot(wake.joins[i * 2], wake.joins[i * 2 + 1])).toBeLessThanOrEqual(1.000001);
++  for (const point of view.points)
++    expect(Math.hypot(point.direction[0], point.direction[2])).toBeCloseTo(1, 6);
+ });
+ 
+-test('normal docking retains a finite tail without joining it to a subsequent journey', () => {
++test('arrival uses only finite residual water without reintroducing a hull contact or peak-strength pulse', () => {
+   const wake = new FerryWake(),
+     position = new T.Vector3(2.4, 0, 0);
+   runStraight(wake, 20);
++  const before = wake.presentation();
+   wake.finish(1200);
+   wake.update(1220, position, 0, false, 0, false);
+-  expect(wake.presentation()).toMatchObject({ emitting: false, visible: true, docking: true });
+-  const oldCount = wake.count,
+-    firstSegment = wake.presentation().points[0].segment;
+-  wake.begin(1220, position, 0);
+-  position.z = 0.2;
+-  wake.update(1240, position, 0, true, 0, false);
+-  const newView = wake.presentation(),
+-    segments = new Set(newView.points.map((point) => point.segment));
+-  expect(segments.size).toBe(2);
+-  expect(newView.points.at(-1)!.segment).not.toBe(firstSegment);
+-  const trailVertices = (wake.mesh.geometry.getAttribute('kind').array as Float32Array)
+-    .slice(0, wake.vertices)
+-    .filter((kind) => kind === 0).length;
+-  expect(trailVertices).toBe((wake.count - segments.size) * 6);
+-  expect(wake.count).toBeGreaterThan(oldCount);
+-  wake.finish(1240);
+-  for (let time = 1260; time <= 3200; time += 20) wake.update(time, position, 0, false, 0, false);
++  const after = wake.presentation();
++  expect(after).toMatchObject({
++    emitting: false,
++    visible: true,
++    docking: false,
++    contactStrength: 0,
++  });
++  expect(after.points).toHaveLength(before.points.length);
++  expect(after.points.map((point) => point.time)).toEqual(before.points.map((point) => point.time));
++  expect(Math.max(...after.opacity)).toBeLessThanOrEqual(Math.max(...before.opacity));
++  for (let time = 1240; time <= 3200; time += 20) wake.update(time, position, 0, false, 0, false);
+   expect(wake.presentation()).toMatchObject({
+     visible: false,
+     emitting: false,
+-    docking: false,
+     vertices: 0,
+     points: [],
+-    contactStrength: 0,
++    strength: 0,
+   });
+ });
+ 
+-test('reset, reduced motion and discontinuities clear wake and do not synthesize an arrival ripple', () => {
++test('reset, reduced motion and discontinuities clear all released water without an arrival flourish', () => {
+   const wake = new FerryWake(),
+     position = new T.Vector3(2.4, 0, 0);
+   for (const reason of ['reset', 'reduced', 'gap', 'teleport']) {
+@@ -152,14 +196,18 @@ test('reset, reduced motion and discontinuities clear wake and do not synthesize
+   expect(wake.count).toBe(0);
+ });
+ 
+-test('decorative wake keeps depth occlusion and never claims camera bounds or pointer hits', () => {
+-  const wake = new FerryWake();
++test('released crests keep coast masking, depth occlusion and no camera or pointer influence', () => {
++  const texture = new T.Texture(),
++    bounds = new T.Vector4(-4, -5, 12, 13),
++    wake = new FerryWake({ texture, bounds });
+   runStraight(wake, 20);
+   expect(wake.mesh.material).toMatchObject({
+     depthTest: true,
+     depthWrite: false,
+     forceSinglePass: true,
+   });
++  expect(wake.mesh.material.uniforms.coast.value).toBe(texture);
++  expect(wake.mesh.material.uniforms.field.value).toBe(bounds);
+   expect(wake.mesh.userData).toMatchObject({ decorative: true, excludeFromFrame: true });
+   const ray = new T.Raycaster(new T.Vector3(1, 10, 0), new T.Vector3(0, -1, 0));
+   expect(ray.intersectObject(wake.mesh)).toHaveLength(0);
+diff --git a/tools/capture-sailing-direction-wake.mjs b/tools/capture-sailing-direction-wake.mjs
+new file mode 100644
+index 0000000..5e245e9
+--- /dev/null
++++ b/tools/capture-sailing-direction-wake.mjs
+@@ -0,0 +1,264 @@
++import { chromium } from '@playwright/test';
++import { createHash } from 'node:crypto';
++import { execFileSync } from 'node:child_process';
++import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
++import { relative, resolve } from 'node:path';
++
++const args = Object.fromEntries(process.argv.slice(2).map((v) => v.replace(/^--/, '').split('=')));
++const base = args.base ?? 'http://127.0.0.1:5206';
++const phase = args.phase ?? 'after';
++const width = Number(args.width ?? 844),
++  height = Number(args.height ?? 390);
++const root = resolve(args.root ?? '.'),
++  out = args.output ?? `reviews/sailing-direction-wake/${phase}/${width}x${height}`;
++const hash = (v) => createHash('sha256').update(v).digest('hex');
++const walk = (dir) =>
++  readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
++    e.isDirectory() ? walk(`${dir}/${e.name}`) : [`${dir}/${e.name}`],
++  );
++const paths = ['src', 'data', 'public']
++  .map((p) => resolve(root, p))
++  .filter(existsSync)
++  .flatMap(walk)
++  .concat(
++    ['index.html', 'package.json', 'package-lock.json', 'vite.config.ts'].map((p) =>
++      resolve(root, p),
++    ),
++  )
++  .sort();
++const snapshot = () =>
++  Object.fromEntries(
++    paths.map((p) => [relative(root, p).replaceAll('\\', '/'), hash(readFileSync(p))]),
++  );
++const files = snapshot(),
++  runtimeHash = hash(JSON.stringify(files));
++mkdirSync(`${out}/raw`, { recursive: true });
++writeFileSync(
++  `${out}/source.json`,
++  JSON.stringify(
++    {
++      head: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
++      sourceRoot: root,
++      baselineArchive: args.baselineSha ?? null,
++      workingTree: execFileSync('git', ['status', '--short'], { encoding: 'utf8' }).trim(),
++      files,
++      runtimeHash,
++      capturedAt: new Date().toISOString(),
++      command: [process.execPath, ...process.argv.slice(1)],
++      helperHash: hash(readFileSync(new URL(import.meta.url))),
++    },
++    null,
++    2,
++  ),
++);
++writeFileSync(`${out}/raw/capture-helper.mjs`, readFileSync(new URL(import.meta.url)));
++const browser = await chromium.launch({
++  headless: true,
++  args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'],
++});
++const result = {
++  phase,
++  runtimeHash,
++  environment: {
++    node: process.version,
++    browser: browser.version(),
++    renderer: 'SwiftShader',
++    width,
++    height,
++    dpr: 1,
++    input:
++      width < 1000
++        ? 'Touch-enabled mobile context; mouse click activation of the actual UI'
++        : 'Mouse click activation of the actual UI',
++    recording:
++      'Uninterrupted silent full-interface Playwright originals at natural runtime speed; all gameplay uses actual UI.',
++  },
++  sequences: [],
++  errors: [],
++};
++const idle = (p) =>
++  p.waitForFunction(
++    () => document.querySelector('#seascape')?.getAttribute('aria-busy') === 'false',
++  );
++const read = (p) =>
++  p.evaluate(() => {
++    const a = window.__LAST_FERRY__,
++      j = a.getJourneyStatus(),
++      w = a.getEnvironmentStatus();
++    return {
++      at: performance.now(),
++      state: a.getState(),
++      pose: { position: j.boatWorldPosition, heading: j.boatHeading, active: j.active },
++      transition: a.getTransitionStatus(),
++      wave: w.wake,
++      waterY: w.waterY,
++      camera: a.getFrameStatus().camera,
++      metrics: a.getMetrics(),
++    };
++  });
++const press = async (p, id) => {
++  if ((id === 'board' || id === 'unload') && !(await p.locator(`#${id}`).isVisible()))
++    await p.locator('.map-target[aria-current="location"]').click();
++  await p.locator(`#${id}`).click();
++  if (id.startsWith('map-')) await p.locator('#sail').click();
++  else await p.locator('#commit').click();
++};
++const cases = {
++  holding: {
++    cove: 'holding-pier',
++    actions: [
++      'unload',
++      'map-shallows',
++      'map-rabbit-pier',
++      'board',
++      'map-shallows',
++      'map-stone',
++      'board',
++      'map-harbor',
++      'unload',
++    ],
++  },
++  bellwater: {
++    cove: 'bellwater',
++    actions: [
++      'map-shallows',
++      'map-low-pier',
++      'board',
++      'map-east-buoy',
++      'map-west-buoy',
++      'map-harbor',
++      'map-bell-pier',
++      'board',
++      'map-harbor',
++      'map-west-buoy',
++      'map-east-buoy',
++      'map-west-buoy',
++      'map-harbor',
++      'unload',
++    ],
++  },
++};
++for (const name of (args.cases ?? 'holding,bellwater').split(',')) {
++  const scenario = cases[name];
++  const context = await browser.newContext({
++    viewport: { width, height },
++    deviceScaleFactor: 1,
++    hasTouch: width < 1000,
++    isMobile: width < 1000,
++    reducedMotion: 'no-preference',
++    recordVideo: { dir: `${out}/raw`, size: { width, height } },
++  });
++  const page = await context.newPage();
++  page.on('pageerror', (e) => result.errors.push(e.message));
++  await page.goto(`${base}/?cove=${scenario.cove}`);
++  await page.waitForFunction(() => window.__LAST_FERRY__?.getMetrics().frames > 6);
++  await idle(page);
++  await page.waitForTimeout(600);
++  const sequence = {
++    name,
++    cove: scenario.cove,
++    actions: [],
++    screenshots: [],
++    start: await read(page),
++  };
++  if (args.stills !== 'false') {
++    const path = `${out}/${name}-start.png`;
++    await page.screenshot({ path });
++    sequence.screenshots.push({
++      path,
++      sha256: hash(readFileSync(path)),
++      observation: sequence.start,
++    });
++  }
++  await page.evaluate(() => {
++    window.__directionSamples = [];
++    window.__directionSampling = true;
++    let previous = 0;
++    function sample(time) {
++      if (!window.__directionSampling) return;
++      const a = window.__LAST_FERRY__,
++        j = a.getJourneyStatus();
++      const sample = {
++        time,
++        position: j.boatWorldPosition,
++        heading: j.boatHeading,
++        active: j.active,
++      };
++      if (time - previous >= 95) {
++        const e = a.getEnvironmentStatus();
++        sample.wave = e.wake;
++        sample.waterY = e.waterY;
++        sample.state = a.getState();
++        sample.metrics = a.getMetrics();
++        previous = time;
++      }
++      window.__directionSamples.push(sample);
++      requestAnimationFrame(sampleFn);
++    }
++    const sampleFn = sample;
++    requestAnimationFrame(sampleFn);
++  });
++  for (const [index, id] of scenario.actions.entries()) {
++    const before = await read(page);
++    await press(page, id);
++    await idle(page);
++    const completed = await read(page);
++    if (completed.transition.last?.reason !== 'complete')
++      throw Error(JSON.stringify(completed.transition));
++    const restMs = id.startsWith('map-') ? Number(args.rest ?? 650) : 250;
++    await page.waitForTimeout(restMs);
++    const rest = await read(page);
++    sequence.actions.push({ index, id, before, completed, restMs, rest });
++    if (
++      args.stills !== 'false' &&
++      ((name === 'holding' && [1, 2, 3, 4, 5, 6, 8].includes(index)) ||
++        (name === 'bellwater' && [3, 4, 5, 8, 9].includes(index)))
++    ) {
++      const path = `${out}/${name}-${String(index + 1).padStart(2, '0')}-${id}-rest.png`;
++      await page.screenshot({ path });
++      sequence.screenshots.push({
++        path,
++        sha256: hash(readFileSync(path)),
++        observation: await read(page),
++      });
++    }
++  }
++  await page.waitForTimeout(1600);
++  const samples = await page.evaluate(() => {
++    window.__directionSampling = false;
++    return window.__directionSamples;
++  });
++  const samplePath = `${out}/raw/${name}-samples.json`;
++  writeFileSync(samplePath, JSON.stringify(samples));
++  sequence.samples = {
++    path: samplePath,
++    sha256: hash(readFileSync(samplePath)),
++    count: samples.length,
++  };
++  sequence.end = await read(page);
++  const video = page.video(),
++    path = `${out}/raw/${name}-arrival-rest-departure.webm`;
++  await context.close();
++  await video.saveAs(path);
++  sequence.recording = { path, sha256: hash(readFileSync(path)), bytes: readFileSync(path).length };
++  result.sequences.push(sequence);
++  writeFileSync(`${out}/capture-in-progress.json`, JSON.stringify(result, null, 2));
++}
++await browser.close();
++result.sourceUnchanged = JSON.stringify(files) === JSON.stringify(snapshot());
++result.outcome = result.sourceUnchanged && result.errors.length === 0 ? 'passed' : 'failed';
++writeFileSync(`${out}/capture.json`, JSON.stringify(result, null, 2));
++process.stdout.write(
++  JSON.stringify({
++    outcome: result.outcome,
++    runtimeHash,
++    sequences: result.sequences.map((s) => ({
++      name: s.name,
++      recording: s.recording.path,
++      turn: s.end.state.turn,
++      status: s.end.state.status,
++      samples: s.samples.count,
++    })),
++  }) + '\n',
++);
++if (result.outcome !== 'passed') throw Error('Capture failed or runtime source changed');
+diff --git a/tools/measure-sailing-direction-wake.mjs b/tools/measure-sailing-direction-wake.mjs
+new file mode 100644
+index 0000000..dca8f07
+--- /dev/null
++++ b/tools/measure-sailing-direction-wake.mjs
+@@ -0,0 +1,126 @@
++import { chromium } from '@playwright/test';
++import { createHash } from 'node:crypto';
++import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
++
++const args = Object.fromEntries(process.argv.slice(2).map((v) => v.replace(/^--/, '').split('=')));
++const out = args.output ?? 'reviews/sailing-direction-wake/performance';
++mkdirSync(out, { recursive: true });
++const browser = await chromium.launch({
++  headless: true,
++  args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'],
++});
++const result = {
++  environment: {
++    node: process.version,
++    browser: browser.version(),
++    renderer: 'SwiftShader',
++    viewport: [844, 390],
++    dpr: 1,
++    method:
++      'Matched warmed natural timing, no video or geometry-array sampling; rAF intervals and small transition reads.',
++  },
++  runs: [],
++};
++const idle = (p) =>
++  p.waitForFunction(
++    () => document.querySelector('#seascape')?.getAttribute('aria-busy') === 'false',
++  );
++const act = async (p, id) => {
++  if ((id === 'unload' || id === 'board') && !(await p.locator(`#${id}`).isVisible()))
++    await p.locator('.map-target[aria-current="location"]').click();
++  await p.locator(`#${id}`).click();
++  await p.locator(id.startsWith('map-') ? '#sail' : '#commit').click();
++  await idle(p);
++};
++for (const [label, base] of [
++  ['baseline', args.baseline ?? 'http://127.0.0.1:5205'],
++  ['candidate', args.candidate ?? 'http://127.0.0.1:5206'],
++]) {
++  const context = await browser.newContext({
++      viewport: { width: 844, height: 390 },
++      deviceScaleFactor: 1,
++      hasTouch: true,
++      isMobile: true,
++      reducedMotion: 'no-preference',
++    }),
++    page = await context.newPage();
++  await page.goto(`${base}/?cove=holding-pier`);
++  await page.waitForFunction(() => window.__LAST_FERRY__?.getMetrics().frames > 6);
++  for (const id of [
++    'unload',
++    'map-shallows',
++    'map-rabbit-pier',
++    'board',
++    'map-shallows',
++    'map-stone',
++    'map-shallows',
++    'map-stone',
++  ])
++    await act(page, id);
++  await page.waitForTimeout(2000);
++  const idleSample = await page.evaluate(async () => {
++    const frames = [];
++    let last = await new Promise(requestAnimationFrame);
++    for (let i = 0; i < 90; i++) {
++      const now = await new Promise(requestAnimationFrame);
++      frames.push(now - last);
++      last = now;
++    }
++    return { frames, metrics: window.__LAST_FERRY__.getMetrics() };
++  });
++  await page.evaluate(() => {
++    window.__perfSample = { running: true, frames: [], last: 0 };
++    function read(time) {
++      const s = window.__perfSample;
++      if (!s.running) return;
++      const a = window.__LAST_FERRY__,
++        t = a.getTransitionStatus();
++      if (t.active?.action.type === 'move' && s.last) s.frames.push(time - s.last);
++      s.last = time;
++      requestAnimationFrame(read);
++    }
++    requestAnimationFrame(read);
++  });
++  for (const id of ['map-shallows', 'map-stone']) await act(page, id);
++  const activeSample = await page.evaluate(() => {
++    window.__perfSample.running = false;
++    return {
++      frames: window.__perfSample.frames,
++      metrics: window.__LAST_FERRY__.getMetrics(),
++      state: window.__LAST_FERRY__.getState(),
++      transition: window.__LAST_FERRY__.getTransitionStatus(),
++    };
++  });
++  await page.waitForTimeout(2000);
++  const afterMetrics = await page.evaluate(() => window.__LAST_FERRY__.getMetrics());
++  result.runs.push({ label, base, idleSample, activeSample, afterMetrics });
++  await context.close();
++}
++await browser.close();
++const summary = (values) => {
++  const a = [...values].sort((a, b) => a - b);
++  return {
++    count: a.length,
++    median: a[Math.floor(a.length * 0.5)],
++    p95: a[Math.min(a.length - 1, Math.floor(a.length * 0.95))],
++    maximum: Math.max(...a),
++  };
++};
++for (const run of result.runs) {
++  run.idleSummary = summary(run.idleSample.frames);
++  run.activeSummary = summary(run.activeSample.frames);
++}
++result.helperHash = createHash('sha256')
++  .update(readFileSync(new URL(import.meta.url)))
++  .digest('hex');
++writeFileSync(`${out}/comparison.json`, JSON.stringify(result, null, 2));
++process.stdout.write(
++  JSON.stringify(
++    result.runs.map((r) => ({
++      label: r.label,
++      idle: r.idleSummary,
++      active: r.activeSummary,
++      resources: r.afterMetrics,
++    })),
++  ) + '\n',
++);
+diff --git a/tools/snapshot-evidence.mjs b/tools/snapshot-evidence.mjs
+index cfb4e29..c58608b 100644
+--- a/tools/snapshot-evidence.mjs
++++ b/tools/snapshot-evidence.mjs
+@@ -47,6 +47,7 @@ const paths = [
+   ...(existsSync(new URL('NEXT_TASK_HOMECOMING.md', root)) ? ['NEXT_TASK_HOMECOMING.md'] : []),
+   ...(existsSync(new URL('NEXT_TASK_LIGHTHOUSE.md', root)) ? ['NEXT_TASK_LIGHTHOUSE.md'] : []),
+   ...(existsSync(new URL('NEXT_TASK_WATER_MOTION.md', root)) ? ['NEXT_TASK_WATER_MOTION.md'] : []),
++  ...(existsSync(new URL('NEXT_TASK_SAILING_DIRECTION_AND_WAKE.md', root)) ? ['NEXT_TASK_SAILING_DIRECTION_AND_WAKE.md'] : []),
+   'docs/GAMEPLAY_RULES.md',
+   'docs/FIRST_COVE.md',
+   'docs/ART_DIRECTION.md',
+@@ -77,7 +78,8 @@ const paths = [
+       path.includes('victory-mix') ||
+       path.includes('homecoming') ||
+       path.includes('lighthouse-light') ||
+-      path.includes('water-motion'),
++      path.includes('water-motion') ||
++      path.includes('sailing-direction'),
+   ),
+ ].sort();
+ const files = Object.fromEntries(paths.map((p) => [p, digest(readFileSync(new URL(p, root)))]));

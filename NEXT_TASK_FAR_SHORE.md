@@ -1,0 +1,11 @@
+# FAR_SHORE_01 · The hardest rescue of the evening
+
+Author, play and tune **Far Shore**, the independent, unscored Practice candidate for Journey cove eleven. The reviewed runtime is `5f28d71566463462b9407e34b0bf236bb05e20c6`. Incorporate current guidance on `m1-first-crossing` and preserve newer work. Read the current campaign direction and the [Lantern Reach difficulty review](reviews/lantern-reach-difficulty/REVIEW.md).
+
+Give a player who has reached this part of the coast the most satisfying planning challenge of the campaign. In Drowned Orchard, they planned where the ferry needed to be when the current turned. In revised Lantern Reach, they could have room to board a neighbor yet lack the time to do so. What fresh decision can they now make with that knowledge? The map and forecast should give them enough information to anticipate a consequence, understand a setback and use Undo to try a different plan. Keep the pace calm and leave the gentler final rescue and supper for cove twelve.
+
+**Codex owns the design.** Choose the geometry, cast, rescue conditions, routes, use of familiar mechanics, technical approach and iterations. Use the bridge if it earns its place in this particular rescue. Explain what changed after playing an early version and what a player can infer in the final version.
+
+Deliver Far Shore through Home → Practice and a direct Practice URL. Show its decisive choice with real controls in phone portrait and short landscape. Use the full production rescue loop, including an Undo recovery and unscored arrival. Protect existing Journey saves, backups, earned bests and independent Practice entrances. Use production rules to verify the winning plan, a plausible alternative or mistake, and its particular consequence. Report the minimum separately from any proposed scoring target. Return an identifiable tested commit on the existing draft PR and evidence another person can inspect.
+
+Completing this Practice candidate brings the branch to **eight Journey coves, twelve Practice entrances and nine scored coves**. Drowned Orchard and revised Lantern Reach remain available for player feedback on the phone. Their lantern targets and Journey promotions are separate decisions. After acceptance, connect them in story order, with Far Shore following in turn.

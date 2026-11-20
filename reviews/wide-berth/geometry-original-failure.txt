@@ -1,0 +1,69 @@
+
+ RUN  v5.0.5 C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry
+
+ ❯ tests/unit/wide-clearance.test.ts (1 test | 1 failed) 1875ms
+   × Wide Berth occupied real modeled hull clears land and piers at every reachable heading in both directions 1874ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/wide-clearance.test.ts > Wide Berth occupied real modeled hull clears land and piers at every reachable heading in both directions
+AssertionError: expected [ …(30) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "high-quay-wide-berth/forward from1.5707963267948966 sample277: shell-island",
++   "high-quay-wide-berth/forward from1.5707963267948966 sample278: shell-island",
++   "high-quay-wide-berth/forward from1.5707963267948966 sample279: shell-island",
++   "high-quay-wide-berth/forward from-1.570796326794897 sample277: shell-island",
++   "high-quay-wide-berth/forward from-1.570796326794897 sample278: shell-island",
++   "high-quay-wide-berth/forward from-1.570796326794897 sample279: shell-island",
++   "high-quay-wide-berth/forward from-1.570796326794896 sample277: shell-island",
++   "high-quay-wide-berth/forward from-1.570796326794896 sample278: shell-island",
++   "high-quay-wide-berth/forward from-1.570796326794896 sample279: shell-island",
++   "high-quay-wide-berth/forward from1.5707963267948974 sample277: shell-island",
++   "high-quay-wide-berth/forward from1.5707963267948974 sample278: shell-island",
++   "high-quay-wide-berth/forward from1.5707963267948974 sample279: shell-island",
++   "high-quay-wide-berth/forward from-1.5707963267948966 sample277: shell-island",
++   "high-quay-wide-berth/forward from-1.5707963267948966 sample278: shell-island",
++   "high-quay-wide-berth/forward from-1.5707963267948966 sample279: shell-island",
++   "high-quay-wide-berth/reverse from-1.570796326794897 sample515: quay-island",
++   "high-quay-wide-berth/reverse from-1.570796326794897 sample516: quay-island",
++   "high-quay-wide-berth/reverse from-1.570796326794897 sample517: quay-island",
++   "high-quay-wide-berth/reverse from-1.570796326794897 sample518: quay-island",
++   "high-quay-wide-berth/reverse from-1.570796326794897 sample519: quay-island",
++   "high-quay-wide-berth/reverse from-1.570796326794897 sample520: quay-island",
++   "high-quay-wide-berth/reverse from1.5707963267948966 sample515: quay-island",
++   "high-quay-wide-berth/reverse from1.5707963267948966 sample516: quay-island",
++   "high-quay-wide-berth/reverse from1.5707963267948966 sample517: quay-island",
++   "high-quay-wide-berth/reverse from1.5707963267948966 sample518: quay-island",
++   "high-quay-wide-berth/reverse from1.5707963267948966 sample519: quay-island",
++   "high-quay-wide-berth/reverse from1.5707963267948966 sample520: quay-island",
++   "high-quay-wide-berth/reverse from-1.5707963267948966 sample515: quay-island",
++   "high-quay-wide-berth/reverse from-1.5707963267948966 sample516: quay-island",
++   "high-quay-wide-berth/reverse from-1.5707963267948966 sample517: quay-island",
++ ]
+
+ ❯ tests/unit/wide-clearance.test.ts:98:20
+     96|     }
+     97|   }
+     98|   expect(failures).toEqual([]);expect(margins).toEqual([]);
+       |                    ^
+     99| },20000);
+    100|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 9 passed (10)
+   Start at  19:21:21
+   Duration  5.79s (tests 96%, transform 2%, import 2%)
+
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

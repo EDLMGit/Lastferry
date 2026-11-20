@@ -1,0 +1,152 @@
+{
+  "method": "Idle turn0 at1440x900,DPR1,normal motion;120 consecutive requestAnimationFrame intervals after metrics.frames>4. Median/p95 and unique drawcall/triangle counts.",
+  "environment": {
+    "os": "win32",
+    "release": "10.0.26200",
+    "node": "v24.15.0",
+    "browser": "156.0.8078.4",
+    "renderer": "Chromium SwiftShader software WebGL; no physical-device performance claim",
+    "baseURL": "http://127.0.0.1:5180"
+  },
+  "comparisons": [
+    {
+      "cove": "holding-pier",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "frames": 120,
+      "before": {
+        "calls": [
+          685
+        ],
+        "triangles": [
+          127020
+        ],
+        "medianMs": 66.69999999999982,
+        "p95Ms": 133.29999999999927
+      },
+      "after": {
+        "calls": [
+          685
+        ],
+        "triangles": [
+          127020
+        ],
+        "medianMs": 83.39999999999964,
+        "p95Ms": 166.70000000000073
+      },
+      "audio": {
+        "muted": false,
+        "activated": false,
+        "hidden": false,
+        "disposed": false,
+        "unavailable": false,
+        "error": null,
+        "contextState": "not-created",
+        "currentTime": 0,
+        "contextCount": 0,
+        "schedulerActive": false,
+        "schedulerCount": 0,
+        "schedulerStarts": 0,
+        "sourceCount": 0,
+        "sourceNodesCreated": 0,
+        "peakOwnedSources": 0,
+        "graphNodeCount": 0,
+        "musicSources": 0,
+        "ambienceSources": 0,
+        "travelRequested": false,
+        "travelActive": false,
+        "arrivalActive": false,
+        "deliveryCount": 0,
+        "masterGain": 0,
+        "phrase": "Between the lamps",
+        "bpm": 64,
+        "phraseSeconds": 75,
+        "cueDuration": 75,
+        "phaseSeconds": 0,
+        "loopCount": 0,
+        "scheduledEvents": 0,
+        "skippedEvents": 0,
+        "rms": 0,
+        "peak": 0
+      }
+    },
+    {
+      "cove": "bellwater",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "frames": 120,
+      "before": {
+        "calls": [
+          561
+        ],
+        "triangles": [
+          101960
+        ],
+        "medianMs": 66.60000000000036,
+        "p95Ms": 133.20000000000027
+      },
+      "after": {
+        "calls": [
+          561
+        ],
+        "triangles": [
+          101960
+        ],
+        "medianMs": 83.29999999999927,
+        "p95Ms": 166.5999999999999
+      },
+      "audio": {
+        "muted": false,
+        "activated": false,
+        "hidden": false,
+        "disposed": false,
+        "unavailable": false,
+        "error": null,
+        "contextState": "not-created",
+        "currentTime": 0,
+        "contextCount": 0,
+        "schedulerActive": false,
+        "schedulerCount": 0,
+        "schedulerStarts": 0,
+        "sourceCount": 0,
+        "sourceNodesCreated": 0,
+        "peakOwnedSources": 0,
+        "graphNodeCount": 0,
+        "musicSources": 0,
+        "ambienceSources": 0,
+        "travelRequested": false,
+        "travelActive": false,
+        "arrivalActive": false,
+        "deliveryCount": 0,
+        "masterGain": 0,
+        "phrase": "Between the lamps",
+        "bpm": 64,
+        "phraseSeconds": 75,
+        "cueDuration": 75,
+        "phaseSeconds": 0,
+        "loopCount": 0,
+        "scheduledEvents": 0,
+        "skippedEvents": 0,
+        "rms": 0,
+        "peak": 0
+      }
+    }
+  ],
+  "resources": {
+    "waterDraws": 1,
+    "dataTextures": [
+      256,
+      256
+    ],
+    "totalTextureBytes": 524288,
+    "extraScenePasses": 0,
+    "reflectionTargets": 0
+  },
+  "interpretation": "More water fragment work and a second cached data texture; identical calls/triangles. Median/p95 intervals increase about25percent in this final software run. No per-frame data rebake, extra scene pass or active audio graph. Fragment work is a plausible cost, not a proven single cause. These observations do not establish native-device headroom."
+}

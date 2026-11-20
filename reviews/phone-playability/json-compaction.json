@@ -1,0 +1,599 @@
+{
+  "createdAt": "2026-10-24T20:11:35.117Z",
+  "method": "Remove JSON formatting whitespace outside strings only, preserving all tokens, keys, array order, numeric spelling, string escapes and values. Verify parsed equality. Originals moved intact into ignored same-directory raw/original-json. No data omitted and no tests relabeled. Source manifests, logs and selected media remain unchanged.",
+  "fileCount": 74,
+  "files": [
+    {
+      "path": "reviews/phone-playability/after/capture.json",
+      "originalArchive": "reviews/phone-playability/after/raw/original-json/capture.json",
+      "originalBytes": 114609,
+      "originalSha256": "a924b67c9c4af963794b21b2c567e58d219a8d79d2e69df58d14cac34d7031b0",
+      "compactBytes": 62419,
+      "compactSha256": "e4c86ee3b7f4bbd0380516ab1a23ed1ab0fd9bb7ec9248c86556e23fdc6ca654"
+    },
+    {
+      "path": "reviews/phone-playability/after-complete/capture.json",
+      "originalArchive": "reviews/phone-playability/after-complete/raw/original-json/capture.json",
+      "originalBytes": 148312,
+      "originalSha256": "cbb1f256defa245a46dd815d9c621be3ca5fda60f5c1c8d19aa273ca3384c2d1",
+      "compactBytes": 81243,
+      "compactSha256": "681b9ce60a84bf42b48c7f8796b3ea8bc744d9e1b7307d0c0d5ff3f8046cdd32"
+    },
+    {
+      "path": "reviews/phone-playability/archive-map.json",
+      "originalArchive": "reviews/phone-playability/raw/original-json/archive-map.json",
+      "originalBytes": 107001,
+      "originalSha256": "9c38b4f1902aa42ace7debd7ab4e91d3720191e3dc74da4fa1c63731d32643bf",
+      "compactBytes": 93411,
+      "compactSha256": "f0b408964c92ff366347d6d038be7fba5e59d7f682f3a3af52251b3b7cbef1c7"
+    },
+    {
+      "path": "reviews/phone-playability/before/capture.json",
+      "originalArchive": "reviews/phone-playability/before/raw/original-json/capture.json",
+      "originalBytes": 69961,
+      "originalSha256": "964d3e8a790995c0cbc78b0c4091ea77c4050f735ae7ae057e201daceb137ffb",
+      "compactBytes": 39106,
+      "compactSha256": "5ce3f508a01618248c5b4ea4e8b6832e59af6b4c735270e40eac14ddb7bcbf97"
+    },
+    {
+      "path": "reviews/phone-playability/before-previews/capture.json",
+      "originalArchive": "reviews/phone-playability/before-previews/raw/original-json/capture.json",
+      "originalBytes": 73798,
+      "originalSha256": "17c568702892823c5aa8fa6e3d075952a539ae67e6634513a1204dfd725c8289",
+      "compactBytes": 41415,
+      "compactSha256": "85d712fc6601642eb48a2efa26b6f47c84c436409defe37930ce7aeffe7c1025"
+    },
+    {
+      "path": "reviews/phone-playability/browser-anchor-rerun/layout-360x740.json",
+      "originalArchive": "reviews/phone-playability/browser-anchor-rerun/raw/original-json/layout-360x740.json",
+      "originalBytes": 61189,
+      "originalSha256": "8ee115c984afc576693b1d101d6928058eb60defa592a96a42c575369086b1a0",
+      "compactBytes": 34550,
+      "compactSha256": "2b17d2a931abb63a5a9bf69768ff1c0f1155e5364c9be3031295e6c7ac433346"
+    },
+    {
+      "path": "reviews/phone-playability/browser-anchor-rerun/rendered-marker-anchors.json",
+      "originalArchive": "reviews/phone-playability/browser-anchor-rerun/raw/original-json/rendered-marker-anchors.json",
+      "originalBytes": 291023,
+      "originalSha256": "d50e4e9fb0a5e139c41e002f2d53f425a300b493c102062bbfc53431243fd758",
+      "compactBytes": 158705,
+      "compactSha256": "d2884894c6a54a71c8bf661b1a13f849cb86e7028ee9a5ae99c67718dffc35af"
+    },
+    {
+      "path": "reviews/phone-playability/browser-cache-final/camera-input.json",
+      "originalArchive": "reviews/phone-playability/browser-cache-final/raw/original-json/camera-input.json",
+      "originalBytes": 109337,
+      "originalSha256": "d7444103213c42ebe43ea7c432962e580158e454afc4eb81609388eb0f7089ba",
+      "compactBytes": 61953,
+      "compactSha256": "5497a9aa0f4962e55678b02ee21aef662073d02a2a24a875c74e9527d6bceb2a"
+    },
+    {
+      "path": "reviews/phone-playability/browser-cache-final/fullscreen-actual.json",
+      "originalArchive": "reviews/phone-playability/browser-cache-final/raw/original-json/fullscreen-actual.json",
+      "originalBytes": 82450,
+      "originalSha256": "4fb5c1fad9bc90da36c772218cde1ad34175d6a164bb1fed881f67926160064c",
+      "compactBytes": 46737,
+      "compactSha256": "d7f30a1e2c16062c591db7ea25adc79af4ca38dce7e8c9677430692be0821c40"
+    },
+    {
+      "path": "reviews/phone-playability/browser-cache-final/layout-360x740.json",
+      "originalArchive": "reviews/phone-playability/browser-cache-final/raw/original-json/layout-360x740.json",
+      "originalBytes": 61193,
+      "originalSha256": "3640c3f67e7a3408cfb7ffaa01ed7cc1f0bf46c23e4f459fe3259f8c61b23371",
+      "compactBytes": 34554,
+      "compactSha256": "1a3d8a233822a7764895228b47647d6571ab187bd9e486037ddc25feaf89ecc6"
+    },
+    {
+      "path": "reviews/phone-playability/browser-cache-final/layout-390x844.json",
+      "originalArchive": "reviews/phone-playability/browser-cache-final/raw/original-json/layout-390x844.json",
+      "originalBytes": 61307,
+      "originalSha256": "2c97371d94da871fdb928bed514823dd28136e500c98ad9429c7fcde8d17b882",
+      "compactBytes": 34668,
+      "compactSha256": "aeacb86d1a73eba17d0899ec00dd9eba67e77450a96d3389875521e091a96cd5"
+    },
+    {
+      "path": "reviews/phone-playability/browser-cache-final/layout-780x320.json",
+      "originalArchive": "reviews/phone-playability/browser-cache-final/raw/original-json/layout-780x320.json",
+      "originalBytes": 62110,
+      "originalSha256": "e41010edeaa39157a442d9154e113cb24661465d01e5ca0067d55f639e9a0eb7",
+      "compactBytes": 35287,
+      "compactSha256": "bba5bc8b2df3ac33d43342ebf47153ac460ad672fdb9f2c5522c8f43bf7f3bcc"
+    },
+    {
+      "path": "reviews/phone-playability/browser-cache-final/layout-780x390.json",
+      "originalArchive": "reviews/phone-playability/browser-cache-final/raw/original-json/layout-780x390.json",
+      "originalBytes": 62456,
+      "originalSha256": "99594e4e450f49e42e6e285487ba750e8c762c1bc2c02c37ee79eb011629879f",
+      "compactBytes": 35449,
+      "compactSha256": "a8d464857eb43d2be42a4db79899f237df860658ae724e05429f90589bc37fc4"
+    },
+    {
+      "path": "reviews/phone-playability/browser-cache-final/layout-844x390.json",
+      "originalArchive": "reviews/phone-playability/browser-cache-final/raw/original-json/layout-844x390.json",
+      "originalBytes": 62374,
+      "originalSha256": "95d374f4d6645e5ff7472017fb3c2a4a1239b750f4a0d51429143d308114ac10",
+      "compactBytes": 35367,
+      "compactSha256": "900b32b3997d6b7eedb2107b514ef1d88dd9b5c2af0b270d97e6c01801bd713c"
+    },
+    {
+      "path": "reviews/phone-playability/browser-cache-final/rendered-marker-anchors.json",
+      "originalArchive": "reviews/phone-playability/browser-cache-final/raw/original-json/rendered-marker-anchors.json",
+      "originalBytes": 290766,
+      "originalSha256": "b89e52d55ebe292d20b3ee6438c062dc79d0dacbe0921a9b7a1b9481f5df3822",
+      "compactBytes": 158529,
+      "compactSha256": "8ed549cf3f6ae718351d9802ca8c97c0820cf236ffbd3f0604c765bd39c0f1b2"
+    },
+    {
+      "path": "reviews/phone-playability/browser-cache-final/rescue-390x844.json",
+      "originalArchive": "reviews/phone-playability/browser-cache-final/raw/original-json/rescue-390x844.json",
+      "originalBytes": 210210,
+      "originalSha256": "04a4837ad2b0a82e1627d3bf80496cd30607ffd7f95421445752eae38158d5c6",
+      "compactBytes": 118507,
+      "compactSha256": "e3dff49614e485f1d8ffbf8a5380d2207b57604760f020d233b19ce54a724e75"
+    },
+    {
+      "path": "reviews/phone-playability/browser-cache-final/rescue-844x390.json",
+      "originalArchive": "reviews/phone-playability/browser-cache-final/raw/original-json/rescue-844x390.json",
+      "originalBytes": 214975,
+      "originalSha256": "2a9f553ee769dde5191db1d6324e46240c012e54fe9e521bbe4846139de15ea0",
+      "compactBytes": 121524,
+      "compactSha256": "dde6d86f7789be22dfefd06668bc1db91fbae347a644c05e9deb726867e6cf97"
+    },
+    {
+      "path": "reviews/phone-playability/browser-cache-final/rotation.json",
+      "originalArchive": "reviews/phone-playability/browser-cache-final/raw/original-json/rotation.json",
+      "originalBytes": 64192,
+      "originalSha256": "23368341f4c5f2fe3a409a5bdafe8c7fc9d2a3bfb2debc3965ccfeed737b0f44",
+      "compactBytes": 36448,
+      "compactSha256": "8f5efc02b76d2253c699b548690fc56e6212d3438a883e438f78cd7c1f260546"
+    },
+    {
+      "path": "reviews/phone-playability/browser-cache-final/synthesized-viewport.json",
+      "originalArchive": "reviews/phone-playability/browser-cache-final/raw/original-json/synthesized-viewport.json",
+      "originalBytes": 82689,
+      "originalSha256": "9803ad829be073fde6d8bc2c6ff1238bf6cc269ead68cd7fd5e3e27db00821f3",
+      "compactBytes": 47145,
+      "compactSha256": "5b60938276f6b43041c7208c134adf03d179b6c6b674d59c9e6d7744850ba98c"
+    },
+    {
+      "path": "reviews/phone-playability/browser-cache-timing/direction-lifecycle.json",
+      "originalArchive": "reviews/phone-playability/browser-cache-timing/raw/original-json/direction-lifecycle.json",
+      "originalBytes": 406140,
+      "originalSha256": "d7805f453858b82b6352521fe35527ef344c8372bdd9b3a77a2441f1f73686e5",
+      "compactBytes": 199743,
+      "compactSha256": "21d3d80945505b33aabe3682209ef228c6fe6bb154863fecd5aa3807554bea5d"
+    },
+    {
+      "path": "reviews/phone-playability/browser-complete/camera-input.json",
+      "originalArchive": "reviews/phone-playability/browser-complete/raw/original-json/camera-input.json",
+      "originalBytes": 87010,
+      "originalSha256": "74e59cfb6a6f735ae006c8aa6ac38a2f73783b61a74deb20a764434e2d27393c",
+      "compactBytes": 49524,
+      "compactSha256": "1e9cbb0a727c4efd8572071e30df7a63114a6f2b297db65598f315168cd2e007"
+    },
+    {
+      "path": "reviews/phone-playability/browser-complete/fullscreen-actual.json",
+      "originalArchive": "reviews/phone-playability/browser-complete/raw/original-json/fullscreen-actual.json",
+      "originalBytes": 60895,
+      "originalSha256": "3cbfe565b0b6a03990e4fbd96c6764fbe64fcdb45868cb99153af533499feec1",
+      "compactBytes": 34735,
+      "compactSha256": "39cd587472daee3e81b85bf6f566681ee518ae613ca079a7c6b292b264263ef7"
+    },
+    {
+      "path": "reviews/phone-playability/browser-complete/layout-360x740.json",
+      "originalArchive": "reviews/phone-playability/browser-complete/raw/original-json/layout-360x740.json",
+      "originalBytes": 60088,
+      "originalSha256": "f4d64035fa215aaea8f29255af19ab0a9662ad2efc8c6dc7ba33eab8276bfdbc",
+      "compactBytes": 34142,
+      "compactSha256": "0ac6a6531efb1b636b6107e22499412cc55863f3a726b8b1385627a7c98c343c"
+    },
+    {
+      "path": "reviews/phone-playability/browser-complete/layout-390x844.json",
+      "originalArchive": "reviews/phone-playability/browser-complete/raw/original-json/layout-390x844.json",
+      "originalBytes": 60170,
+      "originalSha256": "0f8c635939dbfbe31a68082ede0691155e9dc8f57f571d877375a8e9e309c7f8",
+      "compactBytes": 34224,
+      "compactSha256": "3e095807753a77d3909bff2e1c14a10fbd750bbc630d4918815ffcacb1d607d0"
+    },
+    {
+      "path": "reviews/phone-playability/browser-complete/layout-780x320.json",
+      "originalArchive": "reviews/phone-playability/browser-complete/raw/original-json/layout-780x320.json",
+      "originalBytes": 60947,
+      "originalSha256": "51eac911728b808e6f7821c241c9ec27e768b8172db2ffe6756e381fe7d03fdc",
+      "compactBytes": 34817,
+      "compactSha256": "9f4b398b2b22fa3170d7ecdf952a5c96388e1e3602d28d31ecb8d86a071d5596"
+    },
+    {
+      "path": "reviews/phone-playability/browser-complete/layout-780x390.json",
+      "originalArchive": "reviews/phone-playability/browser-complete/raw/original-json/layout-780x390.json",
+      "originalBytes": 61307,
+      "originalSha256": "0f9b767c87dab37da2d1ecdbb4a312efc3cce93f3b337408ba096795d91743a3",
+      "compactBytes": 34993,
+      "compactSha256": "175b1ad6ffaa9c2cb088aabd4dbb4e8cd4d24a604a8b506335794d316ccb4fb8"
+    },
+    {
+      "path": "reviews/phone-playability/browser-complete/layout-844x390.json",
+      "originalArchive": "reviews/phone-playability/browser-complete/raw/original-json/layout-844x390.json",
+      "originalBytes": 61249,
+      "originalSha256": "36a9e344ff7c94f0c58463980cf9939b55231c16d22d8ccd9be4bb0b5bb5eab5",
+      "compactBytes": 34935,
+      "compactSha256": "61932ee9c6067dc0a44047fd51403f50975843f65efb9201c87eab48737daa19"
+    },
+    {
+      "path": "reviews/phone-playability/browser-complete/rescue-390x844.json",
+      "originalArchive": "reviews/phone-playability/browser-complete/raw/original-json/rescue-390x844.json",
+      "originalBytes": 206393,
+      "originalSha256": "6ba3e4762ddbdd68adaabdb13cab8c0b3d6bccd48aa78e99c3f786c46ba9fef9",
+      "compactBytes": 117000,
+      "compactSha256": "d715eed553cbbc8b168a80d05432a73084b6fea6f71dc305415bc8eca3c31906"
+    },
+    {
+      "path": "reviews/phone-playability/browser-complete/rescue-844x390.json",
+      "originalArchive": "reviews/phone-playability/browser-complete/raw/original-json/rescue-844x390.json",
+      "originalBytes": 211031,
+      "originalSha256": "cc4ec1d00bcea23418670a431dc843bdadf3efe15a3ee573940b663af486aec6",
+      "compactBytes": 119890,
+      "compactSha256": "07f3ee972ab16c2ae8557d6510bb5414b8565ede44479bd0fcaf2ad693ee711d"
+    },
+    {
+      "path": "reviews/phone-playability/browser-complete/rotation.json",
+      "originalArchive": "reviews/phone-playability/browser-complete/raw/original-json/rotation.json",
+      "originalBytes": 63045,
+      "originalSha256": "7c7b073b76f9a942389da4face80cf6e70303f9aa23f17adaa818f39a6520043",
+      "compactBytes": 35994,
+      "compactSha256": "0d28ce54d745a421ecf2b651a0252e32b5d2a113694822d0c45ba9e97ef8c0e3"
+    },
+    {
+      "path": "reviews/phone-playability/browser-complete/synthesized-viewport.json",
+      "originalArchive": "reviews/phone-playability/browser-complete/raw/original-json/synthesized-viewport.json",
+      "originalBytes": 81244,
+      "originalSha256": "66d0c511ef9b8cf76988ef612dcf7150f9fe8ed7c2a740c7538e673d7beaa55e",
+      "compactBytes": 46624,
+      "compactSha256": "e0ff6dc1e7f0b87a3dab15f52975ca1791011827a8b96e7f64f1b7c4555c0402"
+    },
+    {
+      "path": "reviews/phone-playability/browser-corrected/camera-input.json",
+      "originalArchive": "reviews/phone-playability/browser-corrected/raw/original-json/camera-input.json",
+      "originalBytes": 66232,
+      "originalSha256": "1a3accbc00de6bf79a1a6fc2323fed7856e4f606d43e56456208af9dc51e85ca",
+      "compactBytes": 38266,
+      "compactSha256": "3caa23c169370851a8b03fe2b034442531cf0876a3907efefa2969a6e36bea38"
+    },
+    {
+      "path": "reviews/phone-playability/browser-corrected/fullscreen-actual.json",
+      "originalArchive": "reviews/phone-playability/browser-corrected/raw/original-json/fullscreen-actual.json",
+      "originalBytes": 60918,
+      "originalSha256": "48d99fac7fb5c42c3c2aaf5851908621e4950e48545ecbab5971365dc264fde1",
+      "compactBytes": 34758,
+      "compactSha256": "a80d97d1f713759e9896051f4b295f2f9a6aeba7d5a989a9cbac7160ded817f2"
+    },
+    {
+      "path": "reviews/phone-playability/browser-corrected/layout-360x740.json",
+      "originalArchive": "reviews/phone-playability/browser-corrected/raw/original-json/layout-360x740.json",
+      "originalBytes": 60077,
+      "originalSha256": "2d665e81465416ea894fb670235467c8761a60cf31c32fc8dad15954ba9803da",
+      "compactBytes": 34131,
+      "compactSha256": "daae52acfe7b26f70797cdedb327c89595d0df9c9e026dfc9cfcd36e10b23258"
+    },
+    {
+      "path": "reviews/phone-playability/browser-corrected/layout-390x844.json",
+      "originalArchive": "reviews/phone-playability/browser-corrected/raw/original-json/layout-390x844.json",
+      "originalBytes": 60170,
+      "originalSha256": "049b5836e4aea59491ad6d3abb79c91525ca5a7834a1566c47f9d678dd43704a",
+      "compactBytes": 34224,
+      "compactSha256": "3f582a064fa81d027d4edf191d973782c18e0fc6da84afac1006220d48c9577e"
+    },
+    {
+      "path": "reviews/phone-playability/browser-corrected/layout-780x320.json",
+      "originalArchive": "reviews/phone-playability/browser-corrected/raw/original-json/layout-780x320.json",
+      "originalBytes": 60926,
+      "originalSha256": "f2b9634d8499d9c7a9b35b3a3c87b1ba1d089f13db6ab296680a2a7407cacc7d",
+      "compactBytes": 34796,
+      "compactSha256": "813bd0e6749525bed94b4a23c9ff3c667b371d963dfab32e95d08aa7cf16c8ba"
+    },
+    {
+      "path": "reviews/phone-playability/browser-corrected/layout-780x390.json",
+      "originalArchive": "reviews/phone-playability/browser-corrected/raw/original-json/layout-780x390.json",
+      "originalBytes": 61328,
+      "originalSha256": "ee244d120750772f2f944ef5c8819d83379c6d8191cb0fbc373c25b63b9725ce",
+      "compactBytes": 35014,
+      "compactSha256": "800a687edc612a229bee52f7f8b061a73542447cb87c771c77dbde8985d7f1a9"
+    },
+    {
+      "path": "reviews/phone-playability/browser-corrected/layout-844x390.json",
+      "originalArchive": "reviews/phone-playability/browser-corrected/raw/original-json/layout-844x390.json",
+      "originalBytes": 61261,
+      "originalSha256": "0fb32e695ea9278591e7f712126945441566f55608e668c6bab423e13191e8a0",
+      "compactBytes": 34947,
+      "compactSha256": "526b6c0a90a8ca6aefd78abb219d5125654c66e5a758352159ac4838aef1220d"
+    },
+    {
+      "path": "reviews/phone-playability/browser-corrected/rescue-390x844.json",
+      "originalArchive": "reviews/phone-playability/browser-corrected/raw/original-json/rescue-390x844.json",
+      "originalBytes": 206550,
+      "originalSha256": "1581b91540df2ce014ce268f0e104035b81586a1ab720f58c6dbcd7c1f01c346",
+      "compactBytes": 117157,
+      "compactSha256": "552318f883dd1448d9e7445fd56a19984c507a3e6330a149b28c77fe863753ae"
+    },
+    {
+      "path": "reviews/phone-playability/browser-corrected/rescue-844x390.json",
+      "originalArchive": "reviews/phone-playability/browser-corrected/raw/original-json/rescue-844x390.json",
+      "originalBytes": 211108,
+      "originalSha256": "e06076e9355d75443e4a157e5c78612dc8229a62633c830b4737b6f8aa0c98ea",
+      "compactBytes": 119967,
+      "compactSha256": "bf8cb3d8c506fbd36226779bd542c7bb873960a6726648176686a365be989012"
+    },
+    {
+      "path": "reviews/phone-playability/browser-corrected/rotation.json",
+      "originalArchive": "reviews/phone-playability/browser-corrected/raw/original-json/rotation.json",
+      "originalBytes": 63070,
+      "originalSha256": "719e86100efa7dc00333bf00a2bf5ba377847929ba80f0be7575d81d6e6884d7",
+      "compactBytes": 36019,
+      "compactSha256": "85172318c6356228fe4710d82e3d6483d90118042c80ebcf69e6dee5ea7f438b"
+    },
+    {
+      "path": "reviews/phone-playability/browser-final/layout-780x320.json",
+      "originalArchive": "reviews/phone-playability/browser-final/raw/original-json/layout-780x320.json",
+      "originalBytes": 60004,
+      "originalSha256": "653aa229575fbb7a0f1082b60e4bacdccd384ab16010fe5b5e26f3114e7e9806",
+      "compactBytes": 34270,
+      "compactSha256": "b440cb6e88b3e46c22326d1b26f30a1c7278e86944720821b1e49e4aed9c47f8"
+    },
+    {
+      "path": "reviews/phone-playability/browser-final/layout-844x390.json",
+      "originalArchive": "reviews/phone-playability/browser-final/raw/original-json/layout-844x390.json",
+      "originalBytes": 60295,
+      "originalSha256": "56a94323b660d74cc027fec82fa883ef8f018a619b3ca59fa06c08cc91afa305",
+      "compactBytes": 34377,
+      "compactSha256": "a7d6639dfd5f4ef7eb102696ea8776c1f3cff405cd422cdc77a928300648b03c"
+    },
+    {
+      "path": "reviews/phone-playability/browser-final/rescue-390x844.json",
+      "originalArchive": "reviews/phone-playability/browser-final/raw/original-json/rescue-390x844.json",
+      "originalBytes": 162168,
+      "originalSha256": "78ae07d744e1c1abafc64c4d6c48043524ee817501eaee331db519928efe81ba",
+      "compactBytes": 91906,
+      "compactSha256": "7b999541684a1caf569da8f7b9c84fedb7d77c628b259144f84147cf43a9655c"
+    },
+    {
+      "path": "reviews/phone-playability/browser-intent-rerun/camera-input.json",
+      "originalArchive": "reviews/phone-playability/browser-intent-rerun/raw/original-json/camera-input.json",
+      "originalBytes": 107386,
+      "originalSha256": "ebeb3b84861e799c133853245164d8ffca91edb1dc101ebdbeab894bbe7bf38f",
+      "compactBytes": 61157,
+      "compactSha256": "c8aaba3ab9383287448d80b936eadd0cd640c7685d37a416eb0505d3d2d7eefa"
+    },
+    {
+      "path": "reviews/phone-playability/browser-preservation-final/direction-lifecycle.json",
+      "originalArchive": "reviews/phone-playability/browser-preservation-final/raw/original-json/direction-lifecycle.json",
+      "originalBytes": 352813,
+      "originalSha256": "a167a8196ff03a8f0be92d01dbb40e35e0f453f720f96fbe6b8113ee67aeb427",
+      "compactBytes": 170802,
+      "compactSha256": "0fed1433154d605c6c911573aa50a72d0ffe9bbe33c27f7223cf81c066b56a13"
+    },
+    {
+      "path": "reviews/phone-playability/browser-preservation-final/direction-settlements.json",
+      "originalArchive": "reviews/phone-playability/browser-preservation-final/raw/original-json/direction-settlements.json",
+      "originalBytes": 408872,
+      "originalSha256": "8ae20825a07e9c380b398a15fc51007aff2af5ebbbf488f901dea65116c6ae37",
+      "compactBytes": 181049,
+      "compactSha256": "2456edb05920652f67975243c57e19002886775d76a3c74f6fa0d1a3555cda9a"
+    },
+    {
+      "path": "reviews/phone-playability/browser-preservation-final/fullscreen-actual.json",
+      "originalArchive": "reviews/phone-playability/browser-preservation-final/raw/original-json/fullscreen-actual.json",
+      "originalBytes": 82469,
+      "originalSha256": "54b50678da258eb3f53a6c21807c8b337c7ea98e22542e4b19a8f7bd0e6ce4b3",
+      "compactBytes": 46756,
+      "compactSha256": "32da0f3d655b16c60ff495b1c433268edeb4f5d02627a5151af83a075252baae"
+    },
+    {
+      "path": "reviews/phone-playability/browser-preservation-final/released-crest-observations.json",
+      "originalArchive": "reviews/phone-playability/browser-preservation-final/raw/original-json/released-crest-observations.json",
+      "originalBytes": 273221,
+      "originalSha256": "85fafd5cfd8ebd7ebea9f8c4e70f7e5f3298a157ec60c72236fa4b0cfb4cff27",
+      "compactBytes": 143953,
+      "compactSha256": "7a79cbde44c9737edb84fc5ccd9f35e66f8c23d32c7a00d68e60381c61b219c2"
+    },
+    {
+      "path": "reviews/phone-playability/browser-preservation-final/released-crest.json",
+      "originalArchive": "reviews/phone-playability/browser-preservation-final/raw/original-json/released-crest.json",
+      "originalBytes": 399146,
+      "originalSha256": "6d73f5f15a3f5993b8a895102b255dc17647aa73e8314c4c03b9d5e6353e0146",
+      "compactBytes": 210334,
+      "compactSha256": "fed97509cbc5e756aaf41ad8c785f7291e58f4805b7d0f3aad81bca9f7b51cba"
+    },
+    {
+      "path": "reviews/phone-playability/browser-preservation-final/visual-recovery.json",
+      "originalArchive": "reviews/phone-playability/browser-preservation-final/raw/original-json/visual-recovery.json",
+      "originalBytes": 80235,
+      "originalSha256": "69a6374e48e10894d8e26a0665caf364791a74268c8a74238f3356765dca7c4b",
+      "compactBytes": 45570,
+      "compactSha256": "8a66cdc8f12bb8eda69072e19cb10fb300e4e501abece7bdd39ed74677ff292f"
+    },
+    {
+      "path": "reviews/phone-playability/browser-projection-final/camera-input.json",
+      "originalArchive": "reviews/phone-playability/browser-projection-final/raw/original-json/camera-input.json",
+      "originalBytes": 109280,
+      "originalSha256": "ac10844fcaf1b4b81797a765a480f5c3701ba7c56fc423a465020516177834e6",
+      "compactBytes": 61896,
+      "compactSha256": "900adb24288fade550ce7dedd9a2a90559327f4f96d7603431de4b922382ffa9"
+    },
+    {
+      "path": "reviews/phone-playability/browser-projection-final/fullscreen-actual.json",
+      "originalArchive": "reviews/phone-playability/browser-projection-final/raw/original-json/fullscreen-actual.json",
+      "originalBytes": 62044,
+      "originalSha256": "d3234c2b3fb453e2d698f95210ae184c7332c3c7db73acebcc5ac5b2b523059e",
+      "compactBytes": 35191,
+      "compactSha256": "00dba1dad7c5fa083927885d0d8cf2daa722f99555016285217ece12efd7f6b3"
+    },
+    {
+      "path": "reviews/phone-playability/browser-projection-final/layout-390x844.json",
+      "originalArchive": "reviews/phone-playability/browser-projection-final/raw/original-json/layout-390x844.json",
+      "originalBytes": 61297,
+      "originalSha256": "83c29354f4f0d0963f3b44ac14aa2bd847278a27517369d2eb2d6562f8c5ccd6",
+      "compactBytes": 34658,
+      "compactSha256": "0869d0cfc51621ea25e0ee000ac5e6aeb0397e532bed628554edb41cf9608caf"
+    },
+    {
+      "path": "reviews/phone-playability/browser-projection-final/layout-780x320.json",
+      "originalArchive": "reviews/phone-playability/browser-projection-final/raw/original-json/layout-780x320.json",
+      "originalBytes": 62069,
+      "originalSha256": "ee6a39eca3e55a64c699799a2dbc1c66edc9ef3fccd526e72908b0a47b6ff7d7",
+      "compactBytes": 35246,
+      "compactSha256": "69f316f43a2baf73e79edce08b97d3d5409c61e9b1537ff3d4a2b6de64cdb8bf"
+    },
+    {
+      "path": "reviews/phone-playability/browser-projection-final/layout-780x390.json",
+      "originalArchive": "reviews/phone-playability/browser-projection-final/raw/original-json/layout-780x390.json",
+      "originalBytes": 62429,
+      "originalSha256": "a118527c109b7db7658198f9e028a28ebe8042d5f6b829130cb5f0c21bf2986b",
+      "compactBytes": 35422,
+      "compactSha256": "6006066b0dc0edd51e65cedefadc8715ab9e2059f617d6474a9324af6308654e"
+    },
+    {
+      "path": "reviews/phone-playability/browser-projection-final/layout-844x390.json",
+      "originalArchive": "reviews/phone-playability/browser-projection-final/raw/original-json/layout-844x390.json",
+      "originalBytes": 62414,
+      "originalSha256": "dbc9846ae88b40f54fbcb79a9cb8f62275ead350468c74ef5e8aa8136efed445",
+      "compactBytes": 35407,
+      "compactSha256": "670fd8aa111f358e20761cdb268bfef9504f96b72d43e3559bfb3c353e0912f2"
+    },
+    {
+      "path": "reviews/phone-playability/browser-projection-final/rendered-marker-anchors.json",
+      "originalArchive": "reviews/phone-playability/browser-projection-final/raw/original-json/rendered-marker-anchors.json",
+      "originalBytes": 187652,
+      "originalSha256": "9b08ba94206d9cec1c0e7df0c53e26f538230a5f3591c8384d9dacb3951582df",
+      "compactBytes": 102580,
+      "compactSha256": "7cb187217f496eb6da17a1e005a1bd5f05af120b1a6bd345d7038012528c7965"
+    },
+    {
+      "path": "reviews/phone-playability/browser-projection-final/rescue-390x844.json",
+      "originalArchive": "reviews/phone-playability/browser-projection-final/raw/original-json/rescue-390x844.json",
+      "originalBytes": 210054,
+      "originalSha256": "4e57e67ba35d593a7eb65ec76d4d3115a5736d4a9c82d4d5110117e8456b3928",
+      "compactBytes": 118351,
+      "compactSha256": "cda6d1524a33987a8aa43b05e620bc527f4e46603c56ea57929fe6e2a1532a71"
+    },
+    {
+      "path": "reviews/phone-playability/browser-projection-final/rescue-844x390.json",
+      "originalArchive": "reviews/phone-playability/browser-projection-final/raw/original-json/rescue-844x390.json",
+      "originalBytes": 214732,
+      "originalSha256": "7d154a623418cf4ec47d539ef8f88578979f22ad16033a5a9dbd8bd36d01a6fa",
+      "compactBytes": 121281,
+      "compactSha256": "951942a2b43d4486d2bfd306a5df55ab2c3dab74149a5e7bc899dd6de28d18f9"
+    },
+    {
+      "path": "reviews/phone-playability/browser-projection-final/rotation.json",
+      "originalArchive": "reviews/phone-playability/browser-projection-final/raw/original-json/rotation.json",
+      "originalBytes": 64215,
+      "originalSha256": "32b1c8eb69fdd847ae4395ac94bff7ae9c7ae9616a3fd2dd8bf5ec8442cd5d32",
+      "compactBytes": 36471,
+      "compactSha256": "d302e28f4b44025d8ce32b496f7a49985c603b207e38e5edc41b2550c77b1742"
+    },
+    {
+      "path": "reviews/phone-playability/browser-projection-final/synthesized-viewport.json",
+      "originalArchive": "reviews/phone-playability/browser-projection-final/raw/original-json/synthesized-viewport.json",
+      "originalBytes": 82733,
+      "originalSha256": "5211b661a791b25be6bad83ae59ef3f2adde67b3fd66990ea9600b70c99bb0c8",
+      "compactBytes": 47189,
+      "compactSha256": "e19c6d9c317e9207d65dd55793c7044374cb8ed1362f6ca8a1eab2ad2245204a"
+    },
+    {
+      "path": "reviews/phone-playability/browser-recovery-rerun/visual-recovery.json",
+      "originalArchive": "reviews/phone-playability/browser-recovery-rerun/raw/original-json/visual-recovery.json",
+      "originalBytes": 78785,
+      "originalSha256": "473d5398aa13f57a7d5d5dd040f23e01a416617c0cea7a48099922dc3ebeb0ec",
+      "compactBytes": 45044,
+      "compactSha256": "3aeb451cdf8391c6b538a1f40d09462d0bb4fe57a4b28b0466778207838bfdda"
+    },
+    {
+      "path": "reviews/phone-playability/browser-regression/direction-lifecycle.json",
+      "originalArchive": "reviews/phone-playability/browser-regression/raw/original-json/direction-lifecycle.json",
+      "originalBytes": 662900,
+      "originalSha256": "503ad021e89f72aea052515d5f134792eb0055152d7ca00911e51614685de838",
+      "compactBytes": 321741,
+      "compactSha256": "9634b6ed11dab0800b9fd4d4ec1d6bc66f534ab18334ade3e11d1973cf19dc7b"
+    },
+    {
+      "path": "reviews/phone-playability/browser-regression/direction-settlements.json",
+      "originalArchive": "reviews/phone-playability/browser-regression/raw/original-json/direction-settlements.json",
+      "originalBytes": 408915,
+      "originalSha256": "fed1afec6f9d5dc56ad7cc0daf44c00644eafd45cda58b3e8ace2ec9be485a24",
+      "compactBytes": 181092,
+      "compactSha256": "d50bd9fe6c880ce388a5d829360a658bc14d44a94414cdef0cb5ff0fc1a3566f"
+    },
+    {
+      "path": "reviews/phone-playability/browser-regression/released-crest-observations.json",
+      "originalArchive": "reviews/phone-playability/browser-regression/raw/original-json/released-crest-observations.json",
+      "originalBytes": 282583,
+      "originalSha256": "8f119dc8c285ac420e6b8527ca2ba7a03efcfd8261b3e91f4970897db3ff3bd9",
+      "compactBytes": 150060,
+      "compactSha256": "933b4244bba17a710a7f94956ea004b6bcae6fbcac90b9d2cec68a25fef37da2"
+    },
+    {
+      "path": "reviews/phone-playability/browser-regression/released-crest.json",
+      "originalArchive": "reviews/phone-playability/browser-regression/raw/original-json/released-crest.json",
+      "originalBytes": 426585,
+      "originalSha256": "7ef30efe4e32ab65caee1acc5809b50a0e9958341d864a877c8d90676f80f7fe",
+      "compactBytes": 228512,
+      "compactSha256": "4c94c36df2a6588970eefbfb879429c997c2c40dea39fcca3984834b20019b85"
+    },
+    {
+      "path": "reviews/phone-playability/browser-timing-rerun/direction-lifecycle.json",
+      "originalArchive": "reviews/phone-playability/browser-timing-rerun/raw/original-json/direction-lifecycle.json",
+      "originalBytes": 418729,
+      "originalSha256": "968ef2b8113c36983c40afe54c7697e363fd13d691937bd46ddfcbdb1f205f30",
+      "compactBytes": 207816,
+      "compactSha256": "91c17e46bbc560226f85dfb26897d20339cded6c31147e52abbf996d9441fd2f"
+    },
+    {
+      "path": "reviews/phone-playability/development/marker-audit-included-hidden-won.json",
+      "originalArchive": "reviews/phone-playability/development/raw/original-json/marker-audit-included-hidden-won.json",
+      "originalBytes": 74898,
+      "originalSha256": "74593fd264a7a9dbb5ec2e92050f5749720a5ebc3069c9a288dbc32017409240",
+      "compactBytes": 37512,
+      "compactSha256": "22313c5b380595946337908738155a9f722da90f39b90e6909e3e2a843ca9589"
+    },
+    {
+      "path": "reviews/phone-playability/development/probe/results.json",
+      "originalArchive": "reviews/phone-playability/development/probe/raw/original-json/results.json",
+      "originalBytes": 148244,
+      "originalSha256": "81477d9ff2b3e2e347d769fae32a1e62d79190690c7f915d060dc2b7f13bd283",
+      "compactBytes": 82408,
+      "compactSha256": "52f785436dc00e7a9893f620df00d0ce798415a664767bfe9a2f4054447f2728"
+    },
+    {
+      "path": "reviews/phone-playability/development/probe-refined/results.json",
+      "originalArchive": "reviews/phone-playability/development/probe-refined/raw/original-json/results.json",
+      "originalBytes": 146802,
+      "originalSha256": "8450ac2f5b177ab34c9355f74858534838ebcef4691dfe1716678032b274d6cc",
+      "compactBytes": 81450,
+      "compactSha256": "b93be6f1b31a1716bab9c5dc1502d940e60d56fd4e6df5f138fb53256edb515b"
+    },
+    {
+      "path": "reviews/phone-playability/final-capture/capture.json",
+      "originalArchive": "reviews/phone-playability/final-capture/raw/original-json/capture.json",
+      "originalBytes": 428536,
+      "originalSha256": "2dbfe6f1a90404d604c96d9956c2f0c09a67f76a5baf95ac20a2de40d83c8035",
+      "compactBytes": 216001,
+      "compactSha256": "cb31f99bdfe28812963dcd6d4258b8265f164c597a896606e61418cafba0035c"
+    },
+    {
+      "path": "reviews/phone-playability/marker-water-anchor-final.json",
+      "originalArchive": "reviews/phone-playability/raw/original-json/marker-water-anchor-final.json",
+      "originalBytes": 80459,
+      "originalSha256": "b52838a9db0eec9061f46d3c6774cb1f721b331dcaddf85c4c3941a0d50b5a6f",
+      "compactBytes": 41201,
+      "compactSha256": "399173735eef76acad74851829ca773d61f3a6e701f3ef5827de7b4704a2a58b"
+    },
+    {
+      "path": "reviews/phone-playability/phone-bellwater/capture.json",
+      "originalArchive": "reviews/phone-playability/phone-bellwater/raw/original-json/capture.json",
+      "originalBytes": 188497,
+      "originalSha256": "72c9c8722775e08a8bd85878c3e1ee9f312c897f75b608e1e8e3783ab8abfdd7",
+      "compactBytes": 95654,
+      "compactSha256": "3c827b1e713e85512ffa1ae8ee52a1a29c8b99537a7513a9375f9df820b7833d"
+    }
+  ]
+}

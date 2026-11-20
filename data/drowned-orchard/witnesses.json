@@ -1,0 +1,175 @@
+{
+  "levelId": "drowned-orchard",
+  "witnesses": [
+    {
+      "id": "clear-steps-first",
+      "actions": [
+        {
+          "type": "move",
+          "to": "steps"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "burr",
+            "sloe"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "orchard"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "sloe"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "quay"
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "burr"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "quay"
+        },
+        {
+          "type": "move",
+          "to": "orchard"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "brindle",
+            "damson",
+            "sloe"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "quay"
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "brindle",
+            "damson",
+            "sloe"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "return-for-steps",
+      "actions": [
+        {
+          "type": "board",
+          "passengerIds": [
+            "brindle"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "quay"
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "brindle"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "quay"
+        },
+        {
+          "type": "move",
+          "to": "orchard"
+        },
+        {
+          "type": "move",
+          "to": "steps"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "burr",
+            "sloe"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "orchard"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "damson"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "quay"
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "burr",
+            "damson",
+            "sloe"
+          ]
+        }
+      ]
+    }
+  ],
+  "losingAlternatives": [
+    {
+      "id": "take-just-sloe",
+      "actions": [
+        {
+          "type": "move",
+          "to": "steps"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "sloe"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "orchard"
+        },
+        {
+          "type": "move",
+          "to": "quay"
+        }
+      ],
+      "recoveryToTurn": 1,
+      "recoveryWitness": "clear-steps-first",
+      "firstNoWinningContinuationTurn": 2
+    }
+  ]
+}

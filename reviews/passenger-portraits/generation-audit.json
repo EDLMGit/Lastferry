@@ -1,0 +1,105 @@
+{
+  "suppliedRecipe": "cove-portrait-package/portraits/generation-manifest.json",
+  "status": "Original PNG derivatives retained; isolated SVG export reproduced all three intermediates. Runtime integration and human visual acceptance are separate.",
+  "command": "node cove-portrait-package/tools/render-portraits.mjs --repo . --out reviews/passenger-portraits/raw/generated-svg --source-commit 23a644aba24e6479b9d82a106a745d15c3f8c7dc",
+  "execution": {
+    "node": "v24.15.0",
+    "sourceCommit": "23a644aba24e6479b9d82a106a745d15c3f8c7dc",
+    "sourceWorkingTreeChanges": [],
+    "threeVersion": "0.186.1",
+    "modelSourceSha256": "37ee9b94ce017632921a089db8df1263ea020f31382160292a9779f3efd24dfb",
+    "worldSourceSha256": "cca6ea155da97ae53d43a2292c4b40bad3cd0c8fd71da0d5a29305fcc2368447",
+    "generatorSha256": "fc1accae7878212b7d6cef3fd7be6f76013ec0e989330387c8121bd4e522c01a",
+    "rendering": "Offline official SVGRenderer geometric projection; simplified diffuse shading, not WebGL/ACES or shadow equivalence."
+  },
+  "sourceMatches": {
+    "model": true,
+    "generator": true,
+    "lockfile": true
+  },
+  "pngRegeneration": "Not performed: source model, all generated SVG bytes, and supplied PNG hashes remain exact. Supplied PNG rasterization environment Node24.22.1/Three0.186.1/Sharp0.35.5 and complete camera/light/alpha/color recipe are retained in the original generation manifest. No production rasterizer dependency was added.",
+  "variants": [
+    {
+      "key": "rabbit-cream",
+      "scale": [
+        1.25,
+        1.65,
+        1.25
+      ],
+      "framingFloorModelY": 0.23,
+      "svgExact": true,
+      "outputs": [
+        {
+          "path": "rabbit-cream.svg",
+          "sha256": "f57cf082e33df647691b6e6b5a08d9d583e72e78d8893b9c3e5ff4c8c5549e20",
+          "bytes": 80621,
+          "actualBytes": 80621,
+          "actualSha256": "f57cf082e33df647691b6e6b5a08d9d583e72e78d8893b9c3e5ff4c8c5549e20"
+        },
+        {
+          "path": "rabbit-cream.png",
+          "sha256": "2f42b09b3e9965f4dc37ea698e9c0380f435e74bc0f7204399d502f176f0a223",
+          "bytes": 27139,
+          "actualBytes": 27139,
+          "actualSha256": "2f42b09b3e9965f4dc37ea698e9c0380f435e74bc0f7204399d502f176f0a223"
+        }
+      ]
+    },
+    {
+      "key": "rabbit-tan",
+      "scale": [
+        1.25,
+        1.65,
+        1.25
+      ],
+      "framingFloorModelY": 0.23,
+      "svgExact": true,
+      "outputs": [
+        {
+          "path": "rabbit-tan.svg",
+          "sha256": "f00c07c657233c27f8606dd2f2406350044b2a616a6b695436bc8fa6d66bb74d",
+          "bytes": 80431,
+          "actualBytes": 80431,
+          "actualSha256": "f00c07c657233c27f8606dd2f2406350044b2a616a6b695436bc8fa6d66bb74d"
+        },
+        {
+          "path": "rabbit-tan.png",
+          "sha256": "32254cc48c2203cc219635d4a5e0accf9ae8a9d61e00ac9b98440ee8a3232ed3",
+          "bytes": 28653,
+          "actualBytes": 28653,
+          "actualSha256": "32254cc48c2203cc219635d4a5e0accf9ae8a9d61e00ac9b98440ee8a3232ed3"
+        }
+      ]
+    },
+    {
+      "key": "sheep-wool",
+      "scale": [
+        1.15,
+        1.5,
+        1.15
+      ],
+      "framingFloorModelY": 0.15,
+      "svgExact": true,
+      "outputs": [
+        {
+          "path": "sheep-wool.svg",
+          "sha256": "2c1f46b872580ea5208d6c98b22a2f7412f3378dc0e5d7a3968d0f371a2470b5",
+          "bytes": 227818,
+          "actualBytes": 227818,
+          "actualSha256": "2c1f46b872580ea5208d6c98b22a2f7412f3378dc0e5d7a3968d0f371a2470b5"
+        },
+        {
+          "path": "sheep-wool.png",
+          "sha256": "34ed63cc740937734402f79fbe681a597de26e07c6e7e4583d87c21e9e22ee96",
+          "bytes": 43602,
+          "actualBytes": 43602,
+          "actualSha256": "34ed63cc740937734402f79fbe681a597de26e07c6e7e4583d87c21e9e22ee96"
+        }
+      ]
+    }
+  ],
+  "totalPngBytes": 99394,
+  "freshPngValidation": "png-audit.json: Pillow decoded all three256x256RGBA images; alpha ranges0–255; complete upper rabbit ears/wool and intentional upper-chest lower crop. No PNG edits.",
+  "runtimeContract": "Static ordinary PNGs only; no additional canvas/WebGL context/renderer/render loop. Full-level/passenger-ID resolver is shared by World and portrait lookup; actual labels remain level-owned.",
+  "visualLimit": "Offline SVG geometric diffuse shading is model-derived, not pixel-identical WebGL/ACES/shadow output. Source-size PNG inspection is separate from actual44px native phone gameplay inspection."
+}

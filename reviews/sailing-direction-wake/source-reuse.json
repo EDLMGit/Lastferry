@@ -1,0 +1,17 @@
+{
+  "generatedAt": "2026-10-24T13:15:57.737Z",
+  "gateSource": "4c4885f804657e2d77d9d4b41776ea98ac812bdd2c60951a3f30edbd110550b6",
+  "browserSource": "e581d4a826f280fcaeae1006b6a03caf52ba7eab9e1039df25d9ab86a22c0dce",
+  "finalSource": "2a42444983d3910e314137f0ca3f3d962082d8af527bc4f894b06270721fc84e",
+  "changedSinceGates": [
+    "tests/e2e/sailing-direction-wake.spec.ts",
+    "tools/capture-sailing-direction-wake.mjs",
+    "tools/measure-sailing-direction-wake.mjs"
+  ],
+  "changedSinceBrowserStart": [
+    "tools/capture-sailing-direction-wake.mjs",
+    "tools/measure-sailing-direction-wake.mjs"
+  ],
+  "runtimeBuildUnitInputsUnchanged": true,
+  "explanation": "Only the new browser fault/crest observation fixture, capture input-label clarification and safe performance-setup sequence changed after build/unit execution. The runtime and unit/build inputs are identical. Final TypeScript passes; affected browser cases passed with the corrected test. Capture-label clarification changes no UI activation, rendering or timing. The performance helper now rescues rabbits at action4 before warming at tide2; its completed matched comparison uses that corrected helper."
+}

@@ -1,0 +1,85 @@
+{
+  "sourceHash": "43eba503a9cbc1bdc62249a2f23299c76563c821db9084b1e252003f5f6c76f5",
+  "sourceManifest": "source-manifest.json",
+  "comparisonBase": "7e37214c3a06b224a6e2449f3216c15f9079b4bc",
+  "build": {
+    "command": "npm run build",
+    "result": "pass",
+    "includesTypecheck": true,
+    "jsRawKB": 620.1,
+    "jsGzipKB": 162.11,
+    "advisory": "JS bundle exceeds 500 kB"
+  },
+  "units": {
+    "command": "npm run test:unit",
+    "result": "pass",
+    "passed": 26,
+    "failed": 0,
+    "newPresentationChecks": 6
+  },
+  "browser": {
+    "command": "npm run test:e2e",
+    "result": "pass",
+    "stats": {
+      "startTime": "2026-10-21T19:44:41.224Z",
+      "duration": 268393.28400000004,
+      "expected": 22,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "existingChecks": 19,
+    "newNavigationChecks": 3,
+    "viewports": [
+      [
+        1440,
+        900
+      ],
+      [
+        844,
+        390
+      ],
+      [
+        780,
+        390
+      ]
+    ],
+    "dpr": 1,
+    "touch": "Chromium emulation"
+  },
+  "reachability": {
+    "canonicalStates": 154,
+    "winningStates": 1,
+    "bypassWins": 0,
+    "shortestActions": 9,
+    "method": "Actual reducer and legalActions; turn canonicalized only after final rise, no search horizon."
+  },
+  "screenshots": 17,
+  "nativeSizeInspection": "All 17 selected screenshots; desktop and baseline independently inspected, phone states and video frames inspected by the primary agent.",
+  "recording": {
+    "sourceHash": "43eba503a9cbc1bdc62249a2f23299c76563c821db9084b1e252003f5f6c76f5",
+    "video": "reviews/navigation/raw/uninterrupted-rescue.webm",
+    "sampleTimesSeconds": [
+      2,
+      8,
+      16,
+      29
+    ],
+    "duration": "00:00:29.44",
+    "encoding": "vp9 (libvpx-vp9) (Profile 0), yuv420p(tv, progressive), 1440x900, SAR 1:1 DAR 8:5, 25 fps, 25 tbr, 1k tbn (default)",
+    "audio": "Silent screen recording",
+    "inspection": "Decoded native-size full-frame samples; no temporal edits, speed changes or state injection. One complete nine-action UI rescue, with blocked free inspection before starting. Undo verified separately."
+  },
+  "notRun": [
+    "Fresh npm ci (lockfile unchanged)",
+    "Separate reference-model verifier this pass",
+    "Physical phones",
+    "Safari",
+    "Firefox",
+    "Different platform fonts",
+    "Screen-reader speech output",
+    "Native GPU performance",
+    "Speaker listening"
+  ],
+  "disposition": "Ready for focused player/reviewer evaluation; no confirmed remaining defect in performed checks."
+}

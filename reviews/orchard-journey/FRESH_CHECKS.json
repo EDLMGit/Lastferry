@@ -1,0 +1,45 @@
+{
+  "reviewedCommit": "9c7a05785a021538c996f5dcd4b03415d1a35080",
+  "comparisonBaseline": "14f128619267e2da81b4108ece2de4da07b50359",
+  "node": "v24.22.1",
+  "vitest": "5.0.5",
+  "platform": "Linux",
+  "command": "npm run test:unit -- tests/unit/orchard-progress.test.ts tests/unit/story-progress.test.ts tests/unit/story-presentation.test.ts tests/unit/mastery.test.ts --maxWorkers=1 --reporter=json --outputFile=/tmp/last-ferry-orchard-core.json",
+  "passed": 149,
+  "failed": 0,
+  "files": [
+    {
+      "file": "mastery.test.ts",
+      "passed": 44,
+      "failed": 0
+    },
+    {
+      "file": "orchard-progress.test.ts",
+      "passed": 22,
+      "failed": 0
+    },
+    {
+      "file": "story-presentation.test.ts",
+      "passed": 19,
+      "failed": 0
+    },
+    {
+      "file": "story-progress.test.ts",
+      "passed": 64,
+      "failed": 0
+    }
+  ],
+  "sourceFilesVerified": 34,
+  "protectedRuleLevelWitnessBlobsUnchanged": 20,
+  "orchardMastery": {
+    "coveId": "orchard-landing",
+    "revision": 1,
+    "target": 13
+  },
+  "sourceAdaptations": [],
+  "limitations": [
+    "Existing matching Vitest dependencies reused; no fresh npm install.",
+    "Pure core logic only; no new build, asset-validator or browser run.",
+    "Scene timing and ownership tested; painter appearance, actual audio, physical Android performance and screen-reader speech are separate review scopes."
+  ]
+}

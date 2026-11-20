@@ -1,0 +1,294 @@
+{
+  "finalSourceHash": "faff91efb9d700d30ae6b9ce53f0dd723e880f43730d5b3a6d505395a8737065",
+  "sourceManifest": "source-manifest.json",
+  "capturedRuntimeHash": "60617c88dec76b6232459953785cdb27890138cbbb33a9333a2ec05eb076c4d9",
+  "build": {
+    "result": "pass",
+    "command": "npm run build",
+    "includes": "npm run typecheck && vite build",
+    "output": "final-build-output.txt",
+    "advisory": "Existing >500kB warning; JS702.16kB/186.49kB gzip."
+  },
+  "unit": {
+    "result": "pass",
+    "command": "npm run test:unit -- --reporter=default --reporter=json --outputFile=reviews/selection/final-unit-results.json",
+    "passed": 101,
+    "failed": 0,
+    "output": "final-unit-results.json",
+    "scope": "Final unit dependencies unchanged; later main input wiring, CSS and browser timing harness verified by build/browser checks.",
+    "unitDependencyAudit": [
+      {
+        "path": "src/audio/arrangement.ts",
+        "sha256": "370bc490f7dd5cb12a106fd122d2687b27bb51e931f98f7e7770833f52d07313",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "src/audio/atmosphere.ts",
+        "sha256": "f56ebbd2ead62bfb376724258e8cdea7594f86271ec4ac8ee2bef4ce05a7167a",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "src/audio/score.ts",
+        "sha256": "a6188eebfa64b958130a2ff918e4f9f637f58872cf731b4e66d6fd48caefb1f0",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "src/audio/sound.ts",
+        "sha256": "2173581a6ba0b08f7742a2c155085c1640b098c583dc2aff7baac7977c2cee2a",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "src/game/rescue-facts.ts",
+        "sha256": "7b91d4dd8c81999370a6bd324a292d163addef294e0b8eefc4f744ec4baf63c8",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "src/game/rules.ts",
+        "sha256": "aa37c820e121955416e964476de296bfd6b755ac569dcdc958b459884530a44b",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "src/game/session.ts",
+        "sha256": "96a670a82ceada27f7a0f750b45589b55e621256b97b9b7b26916221e4f3fde9",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "src/levels/level.ts",
+        "sha256": "ad0f978d63a96157c043484081b83ec363a9c82f165c916ff726e678742bb9a9",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "src/scene/contact.ts",
+        "sha256": "2df78646cb214a3f23d8ee82024d67c3ac6ea63d2ef1308b79898601ce3307fa",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "src/scene/effects.ts",
+        "sha256": "2c1861dbd356b0a7bc099a313b9a3e602386045c2d199315f59e611d16b86ac3",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "src/scene/layout.ts",
+        "sha256": "f336360510c4e45084d8972f0cf9f39013b4719209cac2bf7f2395d77656ae67",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "src/scene/models.ts",
+        "sha256": "64f14207059e1ff848acf20991292e70777fc6ad607a07e62519119ad78b8fa5",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "src/scene/motion.ts",
+        "sha256": "70c0fdc7edd9aaba2b0d11ee6ed5ce109d0682188b2d96f0fac288d69d2ec118",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "src/scene/paths.ts",
+        "sha256": "cb907cdf1a03733e7714cb83d936fe5061c763522b6d76fb518124d8e692f39d",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "src/scene/scenery.ts",
+        "sha256": "5ab1963591082baaebdffd061ac48b945ec922d58cae04071f73db22d1a43e7c",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "src/scene/seabed.ts",
+        "sha256": "67e7140cf48871d3d4f1d3f526e4c0092d745df33ea85cbc958bcb05a3adf7c1",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "src/scene/shore.ts",
+        "sha256": "c35393c1e9a11f3202b869c86ca174b585f3e59d3b13a7427c304c16d87da0eb",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "src/scene/transitions.ts",
+        "sha256": "8e5732e945bba3d417cb07a20a9d4ec390522bd074de92d275e1a342f086b20c",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "src/scene/water-shader.ts",
+        "sha256": "7e5f976c88546d3f38a18afdd1861ad955ae728ba87c0d278f54d2eff271d0ed",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "src/scene/water.ts",
+        "sha256": "8c189a3f1e641ea1e925e923de57b98faa0c39845b89e74a3b319a530f9f14ad",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "src/scene/world.ts",
+        "sha256": "aebae949eeac4b196ada358ed39c5a1a9a9bd17a90a81e1d2f30c63b6f443798",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "src/ui/location.ts",
+        "sha256": "9d7e3d62e694026aa7191351f4b6d5a009f275d7bfad4456a6c1cc3c9d01585f",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "src/ui/placement.ts",
+        "sha256": "d25ab3b37a2a41c2dece532d8dd07d896064f444cb5607309bc7fe5e6fc8f6ab",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "src/ui/presentation.ts",
+        "sha256": "a5a77643084bc2749f3698ccec7619b98dd649ea4d34ff301d4b77c01c3bbfbb",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "tests/unit/arrangement.test.ts",
+        "sha256": "2557e849ff1928a3dfffa50ccfe83d8786470af8b0f41f8155f3b0e831417126",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "tests/unit/audio.test.ts",
+        "sha256": "74a7545af0a540e1e6c7ebf183aecdf5754c9e5942ba20b4023624d4a3ee0cfc",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "tests/unit/bellwater.test.ts",
+        "sha256": "2ef5baa45558b8ca589c9fd0efb01766bb72f71102e276443d10aa8eb1684118",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "tests/unit/clearance.test.ts",
+        "sha256": "c35f0ff557812a83604402e16a1998a5a76a37f4cdf1e42eb25cc6816bd35eba",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "tests/unit/contact.test.ts",
+        "sha256": "a61b26e08ef8a9d90c67bbde877e003c5dbe539fb2dfa10e4f529befd33974c8",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "tests/unit/holding-pier.test.ts",
+        "sha256": "d1cbf76e571580473d393bd17a8b7e790b21477b938f20e365f81adbb546ecd3",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "tests/unit/location.test.ts",
+        "sha256": "04aa92247b26c66b0a9932fd7dd90e908546077464c9d2e0559ac93bea59067f",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "tests/unit/paths.test.ts",
+        "sha256": "c0f1aeb3667ac34599168ac0157fcb5edc297cafa1a776b2f65af15909169397",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "tests/unit/presentation.test.ts",
+        "sha256": "90b85bbdb5d9d68a4cadb9ff8c7be85b5d1ba158c56b72250883d14d89f5b99d",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "tests/unit/rules.test.ts",
+        "sha256": "562e4af83625cb859642c3d9eda8c334a180f015170e27b4cc98d1b1d10751c8",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "tests/unit/selection-placement.test.ts",
+        "sha256": "1d0c07c24f982a89964d57fe7a6dd5ff1807b5fd757b55ff190612f7a30f4d26",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "tests/unit/transitions.test.ts",
+        "sha256": "5043c54a72bdbb6a7b8f0981b14a89689e4daf8faa38af9e259d039bfdd958ae",
+        "unchangedSinceRecordedUnitExecution": true
+      },
+      {
+        "path": "tests/unit/water.test.ts",
+        "sha256": "2be6b0290b4ea3a8255b2059dba222499b95722f3749b5709f249e72ebc166a2",
+        "unchangedSinceRecordedUnitExecution": true
+      }
+    ]
+  },
+  "browser": {
+    "result": "Affected scenarios covered across source-separated executions; not a clean full-suite result.",
+    "detail": "BROWSER_QA.md",
+    "runs": [
+      {
+        "report": "initial-browser/automation-results.json",
+        "sourceHash": "397035fba4b94779f01b0180b5b392c90b0d76415cfb1059d69ca5ce53fd7829",
+        "passed": 11,
+        "failed": 2,
+        "skipped": 0,
+        "flaky": 0,
+        "startTime": "2026-10-22T17:23:56.241Z",
+        "durationMs": 441679.961
+      },
+      {
+        "report": "corrected-browser/automation-results.json",
+        "sourceHash": "cc4dc35adbf6599f89700e3b087741ace21245b0c511d8e3c0e46201173ad57e",
+        "passed": 3,
+        "failed": 2,
+        "skipped": 0,
+        "flaky": 0,
+        "startTime": "2026-10-22T17:39:07.086Z",
+        "durationMs": 26819.73
+      },
+      {
+        "report": "final-browser/automation-results.json",
+        "sourceHash": "5a16864563aea3fa762f62cfdec5610b71428689534784372f9f7d3577d4b6cf",
+        "passed": 7,
+        "failed": 2,
+        "skipped": 0,
+        "flaky": 0,
+        "startTime": "2026-10-22T17:46:46.993Z",
+        "durationMs": 125254.277
+      },
+      {
+        "report": "postfix-browser/automation-results.json",
+        "sourceHash": "c3ff67efa9eb873470772b0b6de75648989d66fca001ac791598cbf254f55aa2",
+        "passed": 8,
+        "failed": 1,
+        "skipped": 0,
+        "flaky": 0,
+        "startTime": "2026-10-22T17:55:39.862Z",
+        "durationMs": 79195.803
+      },
+      {
+        "report": "rapid-clock-check/automation-results.json",
+        "sourceHash": "4b3a27c263a06258429237666915a57327e34804f1add0d925c94137544ae2fc",
+        "passed": 1,
+        "failed": 1,
+        "skipped": 0,
+        "flaky": 0,
+        "startTime": "2026-10-22T17:57:47.311Z",
+        "durationMs": 8344.285
+      },
+      {
+        "report": "rapid-final-check/automation-results.json",
+        "sourceHash": "931df97f2c13f6ec065f437f0dcc05673e44e4920525f85f6f791db6df1a7d92",
+        "passed": 0,
+        "failed": 1,
+        "skipped": 0,
+        "flaky": 0,
+        "startTime": "2026-10-22T17:59:18.882Z",
+        "durationMs": 3489.663
+      }
+    ],
+    "outstanding": "One legacy reduced-motion rapid-Confirm test did not exercise its <=180ms precondition; final equivalent lifecycle input pairs passed at59.6ms Confirm/33.9ms Sail. Original failed attempts remain."
+  },
+  "captures": {
+    "result": "actual gameplay captured; native inspection documented separately",
+    "index": "capture-manifest.json",
+    "media": "MEDIA_QA.md"
+  },
+  "performance": {
+    "result": "Desktop software tails worse in full-canvas comparison; phones unchanged. Separate matched-canvas diagnostic, not a hardware guarantee.",
+    "detail": "RENDERER_QA.md"
+  },
+  "preservation": "preservation-audit.json",
+  "notRun": [
+    "Fresh npm ci",
+    "Physical phones/native GPU",
+    "Safari/Firefox",
+    "Screen-reader speech",
+    "Fresh speaker/headphone listening",
+    "Actual OS audio interruption policy",
+    "Unrelated full browser suite",
+    "Fresh reference-simulator run"
+  ]
+}

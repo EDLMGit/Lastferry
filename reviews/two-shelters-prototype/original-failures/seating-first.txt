@@ -1,0 +1,129 @@
+
+ RUN  v5.0.5 C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry
+
+ ❯ tests/unit/two-shelters-seating.test.ts (6 tests | 6 failed) 4369ms
+   × every legal four-space roster retains full animal geometry with separated seating 79ms
+   × both large neighbors clear the unchanged cabin and roof on their actual geometry 60ms
+   × four waiting neighbors occupy compact supported pier rows without body overlap 91ms
+   × automatic foredeck shift is deterministic, bounded and restored from state 2ms
+   × all legal selected transfers avoid occupants through berth heading 1.5707963267948966 2249ms
+   × all legal selected transfers avoid occupants through berth heading -1.5707963267948966 1886ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/two-shelters-seating.test.ts > every legal four-space roster retains full animal geometry with separated seating
+AssertionError: expected [ 'hazel,fenn:hazel/fenn', …(1) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "hazel,fenn:hazel/fenn",
++   "hazel,mica,fenn:hazel/fenn",
++ ]
+
+ ❯ tests/unit/two-shelters-seating.test.ts:70:20
+     68|         if (intersects(current, transformed(other, shelterDeckSeat(lev…
+     69|     }
+     70|   expect(failures).toEqual([]);
+       |                    ^
+     71|   expect(shelterDeckSeat(level, 'bracken', ['bracken']).toArray()).toE…
+     72|   expect(shelterDeckSeat(level, 'bracken', ['hazel', 'bracken']).z).to…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  tests/unit/two-shelters-seating.test.ts > both large neighbors clear the unchanged cabin and roof on their actual geometry
+AssertionError: bracken: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ tests/unit/two-shelters-seating.test.ts:84:143
+     82|     return solids(group);
+     83|   });
+     84|   for (const id of ['hazel', 'bracken']) expect(intersects(transformed…
+       |                                                                                                                                               ^
+     85| });
+     86|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  tests/unit/two-shelters-seating.test.ts > four waiting neighbors occupy compact supported pier rows without body overlap
+AssertionError: expected 0.07250000000000001 to be less than or equal to 0.07
+ ❯ tests/unit/two-shelters-seating.test.ts:100:26
+     98|           expect(Math.abs(foot.x)).toBeLessThanOrEqual(0.7);
+     99|           expect(foot.z).toBeGreaterThanOrEqual(-1.2);
+    100|           expect(foot.z).toBeLessThanOrEqual(0.07);
+       |                          ^
+    101|         }
+    102|       }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  tests/unit/two-shelters-seating.test.ts > automatic foredeck shift is deterministic, bounded and restored from state
+AssertionError: expected [ +0, 0.26, 0.025000000000000022 ] to deeply equal [ +0, 0.26, 0.025 ]
+
+- Expected
++ Received
+
+  [
+    0,
+    0.26,
+-   0.025,
++   0.025000000000000022,
+  ]
+
+ ❯ tests/unit/two-shelters-seating.test.ts:109:79
+    107|   for (const [before, after] of [[['bracken'], ['hazel', 'bracken']], …
+    108|     expect(shelterAnchorDuring(level, 'bracken', before, after, 0).toA…
+    109|     expect(shelterAnchorDuring(level, 'bracken', before, after, 1).toA…
+       |                                                                               ^
+    110|     for (let i = 0; i <= 100; i++) {
+    111|       const point = shelterAnchorDuring(level, 'bracken', before, afte…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  tests/unit/two-shelters-seating.test.ts > all legal selected transfers avoid occupants through berth heading 1.5707963267948966
+ FAIL  tests/unit/two-shelters-seating.test.ts > all legal selected transfers avoid occupants through berth heading -1.5707963267948966
+AssertionError: expected [ …(8) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "hazel->hazel,mica:20:mica/hazel",
++   "hazel->hazel,mica:21:mica/hazel",
++   "hazel->hazel,mica:22:mica/hazel",
++   "hazel->hazel,mica:23:mica/hazel",
++   "hazel->hazel,mica:24:mica/hazel",
++   "hazel->hazel,mica:25:mica/hazel",
++   "hazel->hazel,fenn:20:fenn/hazel",
++   "hazel->hazel,fenn:21:fenn/hazel",
++ ]
+
+ ❯ tests/unit/two-shelters-seating.test.ts:147:20
+    145|       }
+    146|     }
+    147|   expect(failures).toEqual([]);
+       |                    ^
+    148| }, 60000);
+    149|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  6 failed (6)
+   Start at  15:23:46
+   Duration  5.47s (tests 96%, import 3%, transform 2%)
+
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

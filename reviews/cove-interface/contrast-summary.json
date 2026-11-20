@@ -1,0 +1,1137 @@
+{
+  "method": "Measured actual WebGL canvas pixels at local controls and sampled bright/dark scene locations, then composited computed browser foreground/background layers. Compared unrounded sRGB contrast ratios against 4.5:1 ordinary text and 3:1 meaningful cues. Borders report interior adjacency; focus rings report solid dark keyline adjacency. Decorative panel borders are not a blanket WCAG requirement. UI was exercised by taps and natural Tab; no game state was injected.",
+  "helper": {
+    "path": "tools/check-cove-contrast.mjs",
+    "sha256": "ae8d5077a9211227280e7527f6ae512b30d506adcb3331bfaabd2d8612cc19c4"
+  },
+  "references": [
+    "https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html",
+    "https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html"
+  ],
+  "limitations": [
+    "Headless Chromium with SwiftShader and DPR1 touch emulation; no physical Android coverage.",
+    "Computed foreground colors avoid browser-dependent glyph antialiasing; native-size screenshot inspection remains a separate requirement.",
+    "This is a focused contrast audit of these states and samples, not blanket WCAG certification.",
+    "Raw detailed reports and logs remain locally in the ignored raw directory; this compact record retains their hashes and selected measurements."
+  ],
+  "runs": [
+    {
+      "size": "844x390",
+      "rawReport": {
+        "path": "reviews/cove-interface/raw/contrast-initial-844x390.json",
+        "sha256": "91a961cc618eefcce698a74bbcffc678ef52223470b8efcbd2f6091cbd76bf7e"
+      },
+      "rawLog": {
+        "path": "reviews/cove-interface/raw/contrast-initial-844x390.log",
+        "sha256": "e8a08de0bce774d23f157f440a516c07ce25dd1c5b259426e6224083c54e1ec1"
+      },
+      "source": {
+        "head": "ab8ff33fb1471aacb0dd7a22acbf90be3a4b1db6",
+        "hash": "f7875468f2d5dbd8c265a09c112ffb6289128a95d9c1a95b6dc8c50eaf536735",
+        "stable": true
+      },
+      "environment": {
+        "node": "v24.15.0",
+        "browser": "156.0.8078.4",
+        "viewport": {
+          "width": 844,
+          "height": 390
+        },
+        "deviceScaleFactor": 1,
+        "renderer": "SwiftShader",
+        "hasTouch": true,
+        "physicalDevice": false
+      },
+      "startedAt": "2026-10-23T07:36:11.948Z",
+      "finishedAt": "2026-10-23T07:36:33.280Z",
+      "summary": {
+        "stages": 11,
+        "checks": 237,
+        "failed": [],
+        "minimumText": 5.801101762824837,
+        "minimumCue": 4.2077179609672966
+      },
+      "byKind": [
+        {
+          "kind": "text",
+          "count": 139,
+          "minimum": 5.801101762824837,
+          "threshold": 4.5,
+          "weakest": {
+            "stage": "temporary-unload-preview",
+            "selector": "#passenger-sheep-1",
+            "foreground": "rgb(255, 243, 217)",
+            "layers": [
+              {
+                "selector": "dialog::backdrop",
+                "css": "rgba(9, 47, 60, 0.15)"
+              },
+              {
+                "selector": "#dialog",
+                "css": "rgba(16, 58, 69, 0.96)"
+              },
+              {
+                "selector": "#preview",
+                "css": "rgb(26, 74, 84)"
+              },
+              {
+                "selector": "#passenger-sheep-1",
+                "css": "rgb(50, 103, 107)"
+              }
+            ],
+            "backgrounds": [
+              {
+                "region": "local",
+                "sample": {
+                  "x": 664,
+                  "y": 185.6,
+                  "rgba": [
+                    10,
+                    62,
+                    90,
+                    255
+                  ]
+                },
+                "rgb": [
+                  50,
+                  103,
+                  107
+                ]
+              },
+              {
+                "region": "bright-scene",
+                "sample": {
+                  "x": 82,
+                  "y": 138,
+                  "rgba": [
+                    237,
+                    229,
+                    205,
+                    255
+                  ]
+                },
+                "rgb": [
+                  50,
+                  103,
+                  107
+                ]
+              },
+              {
+                "region": "dark-scene",
+                "sample": {
+                  "x": 322,
+                  "y": 234,
+                  "rgba": [
+                    22,
+                    40,
+                    43,
+                    255
+                  ]
+                },
+                "rgb": [
+                  50,
+                  103,
+                  107
+                ]
+              }
+            ],
+            "ratios": [
+              {
+                "region": "local",
+                "ratio": 5.801101762824837
+              },
+              {
+                "region": "bright-scene",
+                "ratio": 5.801101762824837
+              },
+              {
+                "region": "dark-scene",
+                "ratio": 5.801101762824837
+              }
+            ]
+          }
+        },
+        {
+          "kind": "border-to-inner-surface",
+          "count": 63,
+          "minimum": 4.2077179609672966,
+          "threshold": 3,
+          "weakest": {
+            "stage": "temporary-unload-preview",
+            "selector": "#commit",
+            "foreground": "rgb(169, 220, 208)",
+            "layers": [
+              {
+                "selector": "dialog::backdrop",
+                "css": "rgba(9, 47, 60, 0.15)"
+              },
+              {
+                "selector": "#dialog",
+                "css": "rgba(16, 58, 69, 0.96)"
+              },
+              {
+                "selector": "#commit",
+                "css": "rgb(50, 103, 107)"
+              }
+            ],
+            "backgrounds": [
+              {
+                "region": "local",
+                "sample": {
+                  "x": 664,
+                  "y": 349,
+                  "rgba": [
+                    0,
+                    55,
+                    84,
+                    255
+                  ]
+                },
+                "rgb": [
+                  50,
+                  103,
+                  107
+                ]
+              },
+              {
+                "region": "bright-scene",
+                "sample": {
+                  "x": 82,
+                  "y": 138,
+                  "rgba": [
+                    237,
+                    229,
+                    205,
+                    255
+                  ]
+                },
+                "rgb": [
+                  50,
+                  103,
+                  107
+                ]
+              },
+              {
+                "region": "dark-scene",
+                "sample": {
+                  "x": 322,
+                  "y": 234,
+                  "rgba": [
+                    22,
+                    40,
+                    43,
+                    255
+                  ]
+                },
+                "rgb": [
+                  50,
+                  103,
+                  107
+                ]
+              }
+            ],
+            "ratios": [
+              {
+                "region": "local",
+                "ratio": 4.2077179609672966
+              },
+              {
+                "region": "bright-scene",
+                "ratio": 4.2077179609672966
+              },
+              {
+                "region": "dark-scene",
+                "ratio": 4.2077179609672966
+              }
+            ]
+          }
+        },
+        {
+          "kind": "icon",
+          "count": 26,
+          "minimum": 7.306812438440265,
+          "threshold": 3,
+          "weakest": {
+            "stage": "holding-pier-ordinary",
+            "selector": {},
+            "foreground": "rgb(169, 220, 208)",
+            "layers": [
+              {
+                "selector": "#unload",
+                "css": "rgba(16, 58, 69, 0.96)"
+              }
+            ],
+            "backgrounds": [
+              {
+                "region": "local",
+                "sample": {
+                  "x": 248.9,
+                  "y": 176.8,
+                  "rgba": [
+                    187,
+                    183,
+                    135,
+                    255
+                  ]
+                },
+                "rgb": [
+                  22.840000000000007,
+                  63.00000000000001,
+                  71.64
+                ]
+              },
+              {
+                "region": "bright-scene",
+                "sample": {
+                  "x": 82,
+                  "y": 138,
+                  "rgba": [
+                    237,
+                    229,
+                    205,
+                    255
+                  ]
+                },
+                "rgb": [
+                  24.840000000000007,
+                  64.84,
+                  74.44
+                ]
+              },
+              {
+                "region": "dark-scene",
+                "sample": {
+                  "x": 322,
+                  "y": 234,
+                  "rgba": [
+                    13,
+                    34,
+                    39,
+                    255
+                  ]
+                },
+                "rgb": [
+                  15.879999999999999,
+                  57.04,
+                  67.8
+                ]
+              }
+            ],
+            "ratios": [
+              {
+                "region": "local",
+                "ratio": 7.52031449454563
+              },
+              {
+                "region": "bright-scene",
+                "ratio": 7.306812438440265
+              },
+              {
+                "region": "dark-scene",
+                "ratio": 8.182347582606004
+              }
+            ]
+          }
+        },
+        {
+          "kind": "focus-to-keyline",
+          "count": 9,
+          "minimum": 9.326169995950085,
+          "threshold": 3,
+          "weakest": {
+            "stage": "holding-pier-ordinary",
+            "selector": "map-symbol",
+            "foreground": "rgb(169, 220, 208)",
+            "keyline": "rgb(9, 47, 60)",
+            "layers": [
+              {
+                "selector": "map-symbol",
+                "css": "rgb(16, 58, 69)"
+              }
+            ],
+            "backgrounds": [
+              {
+                "region": "local",
+                "sample": {
+                  "x": 284,
+                  "y": 250.4,
+                  "rgba": [
+                    165,
+                    108,
+                    45,
+                    255
+                  ]
+                },
+                "rgb": [
+                  16,
+                  58,
+                  69
+                ]
+              },
+              {
+                "region": "bright-scene",
+                "sample": {
+                  "x": 82,
+                  "y": 138,
+                  "rgba": [
+                    237,
+                    229,
+                    205,
+                    255
+                  ]
+                },
+                "rgb": [
+                  16,
+                  58,
+                  69
+                ]
+              },
+              {
+                "region": "dark-scene",
+                "sample": {
+                  "x": 322,
+                  "y": 234,
+                  "rgba": [
+                    13,
+                    34,
+                    39,
+                    255
+                  ]
+                },
+                "rgb": [
+                  16,
+                  58,
+                  69
+                ]
+              }
+            ],
+            "ratios": [
+              {
+                "region": "local",
+                "ratio": 9.326169995950085
+              },
+              {
+                "region": "bright-scene",
+                "ratio": 9.326169995950085
+              },
+              {
+                "region": "dark-scene",
+                "ratio": 9.326169995950085
+              }
+            ]
+          }
+        }
+      ],
+      "representativeSamples": [
+        {
+          "stage": "holding-pier-ordinary",
+          "turn": 0,
+          "status": "playing",
+          "opaqueGridSamples": 5194,
+          "bright": {
+            "x": 82,
+            "y": 138,
+            "rgba": [
+              237,
+              229,
+              205,
+              255
+            ]
+          },
+          "dark": {
+            "x": 322,
+            "y": 234,
+            "rgba": [
+              13,
+              34,
+              39,
+              255
+            ]
+          }
+        },
+        {
+          "stage": "bellwater-ordinary",
+          "turn": 0,
+          "status": "playing",
+          "opaqueGridSamples": 5194,
+          "bright": {
+            "x": 122,
+            "y": 130,
+            "rgba": [
+              251,
+              238,
+              202,
+              255
+            ]
+          },
+          "dark": {
+            "x": 314,
+            "y": 170,
+            "rgba": [
+              13,
+              22,
+              18,
+              255
+            ]
+          }
+        },
+        {
+          "stage": "current-marker-keyboard-focus",
+          "turn": 0,
+          "status": "playing",
+          "opaqueGridSamples": 5194,
+          "bright": {
+            "x": 82,
+            "y": 138,
+            "rgba": [
+              237,
+              229,
+              205,
+              255
+            ]
+          },
+          "dark": {
+            "x": 322,
+            "y": 234,
+            "rgba": [
+              13,
+              34,
+              39,
+              255
+            ]
+          }
+        },
+        {
+          "stage": "critical-boarding-subset-warning",
+          "turn": 3,
+          "status": "playing",
+          "opaqueGridSamples": 5194,
+          "bright": {
+            "x": 82,
+            "y": 138,
+            "rgba": [
+              237,
+              229,
+              205,
+              255
+            ]
+          },
+          "dark": {
+            "x": 458,
+            "y": 10,
+            "rgba": [
+              0,
+              52,
+              81,
+              255
+            ]
+          }
+        },
+        {
+          "stage": "success",
+          "turn": 9,
+          "status": "won",
+          "opaqueGridSamples": 5194,
+          "bright": {
+            "x": 74,
+            "y": 130,
+            "rgba": [
+              251,
+              238,
+              209,
+              255
+            ]
+          },
+          "dark": {
+            "x": 98,
+            "y": 202,
+            "rgba": [
+              40,
+              46,
+              34,
+              255
+            ]
+          }
+        }
+      ],
+      "finalState": {
+        "turn": 9,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [],
+          "rabbit-pier": []
+        },
+        "delivered": [
+          "rabbit-1",
+          "rabbit-2",
+          "sheep-1"
+        ],
+        "status": "won",
+        "lossReason": null
+      },
+      "errors": []
+    },
+    {
+      "size": "780x320",
+      "rawReport": {
+        "path": "reviews/cove-interface/raw/contrast-initial-780x320.json",
+        "sha256": "d4158591a182d08e9b4a858db030a662ae89d0f63350a0a80a6803f925380e9a"
+      },
+      "rawLog": {
+        "path": "reviews/cove-interface/raw/contrast-initial-780x320.log",
+        "sha256": "631f228701959ba689c53ccfdc07b0cc5094c8c734c19363e654bbf571ba00bc"
+      },
+      "source": {
+        "head": "ab8ff33fb1471aacb0dd7a22acbf90be3a4b1db6",
+        "hash": "f7875468f2d5dbd8c265a09c112ffb6289128a95d9c1a95b6dc8c50eaf536735",
+        "stable": true
+      },
+      "environment": {
+        "node": "v24.15.0",
+        "browser": "156.0.8078.4",
+        "viewport": {
+          "width": 780,
+          "height": 320
+        },
+        "deviceScaleFactor": 1,
+        "renderer": "SwiftShader",
+        "hasTouch": true,
+        "physicalDevice": false
+      },
+      "startedAt": "2026-10-23T07:36:38.452Z",
+      "finishedAt": "2026-10-23T07:36:58.945Z",
+      "summary": {
+        "stages": 11,
+        "checks": 237,
+        "failed": [],
+        "minimumText": 5.801101762824837,
+        "minimumCue": 4.2077179609672966
+      },
+      "byKind": [
+        {
+          "kind": "text",
+          "count": 139,
+          "minimum": 5.801101762824837,
+          "threshold": 4.5,
+          "weakest": {
+            "stage": "temporary-unload-preview",
+            "selector": "#passenger-sheep-1",
+            "foreground": "rgb(255, 243, 217)",
+            "layers": [
+              {
+                "selector": "dialog::backdrop",
+                "css": "rgba(9, 47, 60, 0.15)"
+              },
+              {
+                "selector": "#dialog",
+                "css": "rgba(16, 58, 69, 0.96)"
+              },
+              {
+                "selector": "#preview",
+                "css": "rgb(26, 74, 84)"
+              },
+              {
+                "selector": "#passenger-sheep-1",
+                "css": "rgb(50, 103, 107)"
+              }
+            ],
+            "backgrounds": [
+              {
+                "region": "local",
+                "sample": {
+                  "x": 600,
+                  "y": 115.6,
+                  "rgba": [
+                    0,
+                    55,
+                    83,
+                    255
+                  ]
+                },
+                "rgb": [
+                  50,
+                  103,
+                  107
+                ]
+              },
+              {
+                "region": "bright-scene",
+                "sample": {
+                  "x": 74,
+                  "y": 114,
+                  "rgba": [
+                    241,
+                    235,
+                    213,
+                    255
+                  ]
+                },
+                "rgb": [
+                  50,
+                  103,
+                  107
+                ]
+              },
+              {
+                "region": "dark-scene",
+                "sample": {
+                  "x": 282,
+                  "y": 202,
+                  "rgba": [
+                    16,
+                    24,
+                    20,
+                    255
+                  ]
+                },
+                "rgb": [
+                  50,
+                  103,
+                  107
+                ]
+              }
+            ],
+            "ratios": [
+              {
+                "region": "local",
+                "ratio": 5.801101762824837
+              },
+              {
+                "region": "bright-scene",
+                "ratio": 5.801101762824837
+              },
+              {
+                "region": "dark-scene",
+                "ratio": 5.801101762824837
+              }
+            ]
+          }
+        },
+        {
+          "kind": "border-to-inner-surface",
+          "count": 63,
+          "minimum": 4.2077179609672966,
+          "threshold": 3,
+          "weakest": {
+            "stage": "temporary-unload-preview",
+            "selector": "#commit",
+            "foreground": "rgb(169, 220, 208)",
+            "layers": [
+              {
+                "selector": "dialog::backdrop",
+                "css": "rgba(9, 47, 60, 0.15)"
+              },
+              {
+                "selector": "#dialog",
+                "css": "rgba(16, 58, 69, 0.96)"
+              },
+              {
+                "selector": "#commit",
+                "css": "rgb(50, 103, 107)"
+              }
+            ],
+            "backgrounds": [
+              {
+                "region": "local",
+                "sample": {
+                  "x": 600,
+                  "y": 279,
+                  "rgba": [
+                    5,
+                    59,
+                    88,
+                    255
+                  ]
+                },
+                "rgb": [
+                  50,
+                  103,
+                  107
+                ]
+              },
+              {
+                "region": "bright-scene",
+                "sample": {
+                  "x": 74,
+                  "y": 114,
+                  "rgba": [
+                    241,
+                    235,
+                    213,
+                    255
+                  ]
+                },
+                "rgb": [
+                  50,
+                  103,
+                  107
+                ]
+              },
+              {
+                "region": "dark-scene",
+                "sample": {
+                  "x": 282,
+                  "y": 202,
+                  "rgba": [
+                    16,
+                    24,
+                    20,
+                    255
+                  ]
+                },
+                "rgb": [
+                  50,
+                  103,
+                  107
+                ]
+              }
+            ],
+            "ratios": [
+              {
+                "region": "local",
+                "ratio": 4.2077179609672966
+              },
+              {
+                "region": "bright-scene",
+                "ratio": 4.2077179609672966
+              },
+              {
+                "region": "dark-scene",
+                "ratio": 4.2077179609672966
+              }
+            ]
+          }
+        },
+        {
+          "kind": "icon",
+          "count": 26,
+          "minimum": 7.2807270756803595,
+          "threshold": 3,
+          "weakest": {
+            "stage": "holding-pier-ordinary",
+            "selector": {},
+            "foreground": "rgb(169, 220, 208)",
+            "layers": [
+              {
+                "selector": "#unload",
+                "css": "rgba(16, 58, 69, 0.96)"
+              }
+            ],
+            "backgrounds": [
+              {
+                "region": "local",
+                "sample": {
+                  "x": 127.7,
+                  "y": 173.3,
+                  "rgba": [
+                    202,
+                    185,
+                    139,
+                    255
+                  ]
+                },
+                "rgb": [
+                  23.440000000000005,
+                  63.080000000000005,
+                  71.8
+                ]
+              },
+              {
+                "region": "bright-scene",
+                "sample": {
+                  "x": 74,
+                  "y": 114,
+                  "rgba": [
+                    241,
+                    235,
+                    213,
+                    255
+                  ]
+                },
+                "rgb": [
+                  25.000000000000007,
+                  65.08000000000001,
+                  74.76
+                ]
+              },
+              {
+                "region": "dark-scene",
+                "sample": {
+                  "x": 282,
+                  "y": 202,
+                  "rgba": [
+                    14,
+                    32,
+                    36,
+                    255
+                  ]
+                },
+                "rgb": [
+                  15.92,
+                  56.96,
+                  67.67999999999999
+                ]
+              }
+            ],
+            "ratios": [
+              {
+                "region": "local",
+                "ratio": 7.50557077120055
+              },
+              {
+                "region": "bright-scene",
+                "ratio": 7.2807270756803595
+              },
+              {
+                "region": "dark-scene",
+                "ratio": 8.19108564266018
+              }
+            ]
+          }
+        },
+        {
+          "kind": "focus-to-keyline",
+          "count": 9,
+          "minimum": 9.326169995950085,
+          "threshold": 3,
+          "weakest": {
+            "stage": "holding-pier-ordinary",
+            "selector": "map-symbol",
+            "foreground": "rgb(169, 220, 208)",
+            "keyline": "rgb(9, 47, 60)",
+            "layers": [
+              {
+                "selector": "map-symbol",
+                "css": "rgb(16, 58, 69)"
+              }
+            ],
+            "backgrounds": [
+              {
+                "region": "local",
+                "sample": {
+                  "x": 251.7,
+                  "y": 211.3,
+                  "rgba": [
+                    175,
+                    124,
+                    55,
+                    255
+                  ]
+                },
+                "rgb": [
+                  16,
+                  58,
+                  69
+                ]
+              },
+              {
+                "region": "bright-scene",
+                "sample": {
+                  "x": 74,
+                  "y": 114,
+                  "rgba": [
+                    241,
+                    235,
+                    213,
+                    255
+                  ]
+                },
+                "rgb": [
+                  16,
+                  58,
+                  69
+                ]
+              },
+              {
+                "region": "dark-scene",
+                "sample": {
+                  "x": 282,
+                  "y": 202,
+                  "rgba": [
+                    14,
+                    32,
+                    36,
+                    255
+                  ]
+                },
+                "rgb": [
+                  16,
+                  58,
+                  69
+                ]
+              }
+            ],
+            "ratios": [
+              {
+                "region": "local",
+                "ratio": 9.326169995950085
+              },
+              {
+                "region": "bright-scene",
+                "ratio": 9.326169995950085
+              },
+              {
+                "region": "dark-scene",
+                "ratio": 9.326169995950085
+              }
+            ]
+          }
+        }
+      ],
+      "representativeSamples": [
+        {
+          "stage": "holding-pier-ordinary",
+          "turn": 0,
+          "status": "playing",
+          "opaqueGridSamples": 3920,
+          "bright": {
+            "x": 74,
+            "y": 114,
+            "rgba": [
+              241,
+              235,
+              213,
+              255
+            ]
+          },
+          "dark": {
+            "x": 282,
+            "y": 202,
+            "rgba": [
+              14,
+              32,
+              36,
+              255
+            ]
+          }
+        },
+        {
+          "stage": "bellwater-ordinary",
+          "turn": 0,
+          "status": "playing",
+          "opaqueGridSamples": 3920,
+          "bright": {
+            "x": 154,
+            "y": 114,
+            "rgba": [
+              250,
+              244,
+              228,
+              255
+            ]
+          },
+          "dark": {
+            "x": 298,
+            "y": 146,
+            "rgba": [
+              14,
+              23,
+              19,
+              255
+            ]
+          }
+        },
+        {
+          "stage": "current-marker-keyboard-focus",
+          "turn": 0,
+          "status": "playing",
+          "opaqueGridSamples": 3920,
+          "bright": {
+            "x": 74,
+            "y": 114,
+            "rgba": [
+              241,
+              235,
+              213,
+              255
+            ]
+          },
+          "dark": {
+            "x": 282,
+            "y": 202,
+            "rgba": [
+              12,
+              21,
+              18,
+              255
+            ]
+          }
+        },
+        {
+          "stage": "critical-boarding-subset-warning",
+          "turn": 3,
+          "status": "playing",
+          "opaqueGridSamples": 3920,
+          "bright": {
+            "x": 74,
+            "y": 114,
+            "rgba": [
+              241,
+              235,
+              213,
+              255
+            ]
+          },
+          "dark": {
+            "x": 74,
+            "y": 210,
+            "rgba": [
+              58,
+              44,
+              24,
+              255
+            ]
+          }
+        },
+        {
+          "stage": "success",
+          "turn": 9,
+          "status": "won",
+          "opaqueGridSamples": 3920,
+          "bright": {
+            "x": 82,
+            "y": 114,
+            "rgba": [
+              248,
+              233,
+              202,
+              255
+            ]
+          },
+          "dark": {
+            "x": 346,
+            "y": 10,
+            "rgba": [
+              0,
+              51,
+              80,
+              255
+            ]
+          }
+        }
+      ],
+      "finalState": {
+        "turn": 9,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [],
+          "rabbit-pier": []
+        },
+        "delivered": [
+          "rabbit-1",
+          "rabbit-2",
+          "sheep-1"
+        ],
+        "status": "won",
+        "lossReason": null
+      },
+      "errors": []
+    }
+  ]
+}

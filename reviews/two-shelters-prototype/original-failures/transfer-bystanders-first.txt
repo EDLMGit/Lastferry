@@ -1,0 +1,76 @@
+
+ RUN  v5.0.5 C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry
+
+ ❯ tests/unit/two-shelters-seating.test.ts (6 tests | 2 failed) 1812ms
+   × all legal selected transfers avoid occupants through berth heading 1.5707963267948966 922ms
+   × all legal selected transfers avoid occupants through berth heading -1.5707963267948966 797ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/two-shelters-seating.test.ts > all legal selected transfers avoid occupants through berth heading 1.5707963267948966
+AssertionError: expected [ '->hazel:4:hazel/mica', …(7) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "->hazel:4:hazel/mica",
++   "->hazel:5:hazel/bracken",
++   "->hazel:5:hazel/mica",
++   "->hazel:6:hazel/bracken",
++   "->hazel:6:hazel/mica",
++   "->hazel:7:hazel/bracken",
++   "->hazel:7:hazel/mica",
++   "->hazel:8:hazel/bracken",
++ ]
+
+ ❯ tests/unit/two-shelters-seating.test.ts:157:20
+    155|       }
+    156|     }
+    157|   expect(failures).toEqual([]);
+       |                    ^
+    158| }, 60000);
+    159|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/unit/two-shelters-seating.test.ts > all legal selected transfers avoid occupants through berth heading -1.5707963267948966
+AssertionError: expected [ '->hazel:6:hazel/mica', …(7) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "->hazel:6:hazel/mica",
++   "->hazel:7:hazel/mica",
++   "->hazel:8:hazel/mica",
++   "->hazel:9:hazel/mica",
++   "->hazel:10:hazel/mica",
++   "->hazel:11:hazel/mica",
++   "->hazel:12:hazel/mica",
++   "->hazel:13:hazel/mica",
++ ]
+
+ ❯ tests/unit/two-shelters-seating.test.ts:157:20
+    155|       }
+    156|     }
+    157|   expect(failures).toEqual([]);
+       |                    ^
+    158| }, 60000);
+    159|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 4 passed (6)
+   Start at  15:30:37
+   Duration  2.20s (tests 92%, import 5%, transform 3%)
+
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

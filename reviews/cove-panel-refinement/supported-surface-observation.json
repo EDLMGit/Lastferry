@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-25",
+  "surface": "Windows ChatGPT in-app browser; own temporary hidden verification tab",
+  "url": "http://127.0.0.1:4195/?cove=holding-pier&review=cove-panel",
+  "artifact": "index-Ci7LaYNV.js",
+  "css": "index-BZRcdLkS.css",
+  "steps": [
+    "Actual Crossing menu click",
+    "Actual Fullscreen activation while menu open",
+    "Checked Exit fullscreen and visible opaque painted menu observed; focus remains on Exit",
+    "Actual Exit click restores unchecked Fullscreen, menu remains visible and focused control retained",
+    "Open Settings and inspect opaque painted surface; existing muted Sound and Follow device settings unchanged",
+    "Close only the temporary verification tab"
+  ],
+  "result": "passed on this supported surface",
+  "evidence": "Native AX and screenshots inspected in CUA output; no exported screenshot claimed. Committed phone screenshots come from the separate Playwright runs.",
+  "limitations": [
+    "Not physical Android",
+    "No native GPU or browser version measurement",
+    "No new acoustic judgment",
+    "Subset/rotation coverage is supplied separately by the focused browser harness"
+  ]
+}

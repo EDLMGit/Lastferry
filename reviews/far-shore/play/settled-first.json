@@ -1,0 +1,224 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "-c",
+      "reviews/far-shore/play/settled.config.ts"
+    ],
+    "configFile": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\far-shore\\play\\settled.config.ts",
+    "rootDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/reviews/far-shore/play",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/.cache/far-shore-play/release",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/reviews/far-shore/play",
+        "testIgnore": [],
+        "testMatch": [
+          "settled.spec.ts"
+        ],
+        "timeout": 480000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\.cache\\far-shore-play\\release",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\far-shore\\play",
+        "snapshotDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\far-shore\\play",
+        "testIgnore": [],
+        "testMatch": "settled.spec.ts",
+        "timeout": 480000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5390",
+          "hasTouch": true,
+          "isMobile": true,
+          "deviceScaleFactor": 1,
+          "video": "off",
+          "actionTimeout": 12000,
+          "launchOptions": {
+            "ignoreDefaultArgs": [
+              "--autoplay-policy=no-user-gesture-required"
+            ],
+            "args": [
+              "--use-angle=swiftshader",
+              "--enable-unsafe-swiftshader",
+              "--autoplay-policy=document-user-activation-required"
+            ]
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "reviews/far-shore/play/settled.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "settled.spec.ts",
+      "file": "settled.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Settled Rush companions 780x320",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 480000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6184,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeInViewport\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('listitem').filter({ hasText: 'Rowan (3)' })\nExpected: in viewport\nReceived: viewport ratio 0.997906506061554\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeInViewport\" getByRole('listitem').filter({ hasText: 'Rowan (3)' }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('listitem').filter({ hasText: 'Rowan (3)' })\u001b[22m\n\u001b[2m    13 × locator resolved to <li>…</li>\u001b[22m\n\u001b[2m       - unexpected value \"viewport ratio 0.997906506061554\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeInViewport\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('listitem').filter({ hasText: 'Rowan (3)' })\nExpected: in viewport\nReceived: viewport ratio 0.997906506061554\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeInViewport\" getByRole('listitem').filter({ hasText: 'Rowan (3)' }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('listitem').filter({ hasText: 'Rowan (3)' })\u001b[22m\n\u001b[2m    13 × locator resolved to <li>…</li>\u001b[22m\n\u001b[2m       - unexpected value \"viewport ratio 0.997906506061554\"\u001b[22m\n\n    at fullyVisible (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\ui.ts:119:25)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\far-shore\\play\\settled.spec.ts:23:15",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\ui.ts",
+                      "column": 25,
+                      "line": 119
+                    },
+                    "snippet": "\u001b[90m   at \u001b[39m..\\..\\..\\tests\\e2e\\ui.ts:119\n\n  117 | }\n  118 | export async function fullyVisible(page: Page, locator: Locator, touchTarget = true) {\n> 119 |   await expect(locator).toBeInViewport({ ratio: 1 });\n      |                         ^\n  120 |   const bounds = await locator.boundingBox();\n  121 |   const size = page.viewportSize()!;\n  122 |   expect(bounds).not.toBeNull();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\ui.ts",
+                        "column": 25,
+                        "line": 119
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeInViewport\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('listitem').filter({ hasText: 'Rowan (3)' })\nExpected: in viewport\nReceived: viewport ratio 0.997906506061554\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeInViewport\" getByRole('listitem').filter({ hasText: 'Rowan (3)' }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('listitem').filter({ hasText: 'Rowan (3)' })\u001b[22m\n\u001b[2m    13 × locator resolved to <li>…</li>\u001b[22m\n\u001b[2m       - unexpected value \"viewport ratio 0.997906506061554\"\u001b[22m\n\n\n   at ..\\..\\..\\tests\\e2e\\ui.ts:119\n\n  117 | }\n  118 | export async function fullyVisible(page: Page, locator: Locator, touchTarget = true) {\n> 119 |   await expect(locator).toBeInViewport({ ratio: 1 });\n      |                         ^\n  120 |   const bounds = await locator.boundingBox();\n  121 |   const size = page.viewportSize()!;\n  122 |   expect(bounds).not.toBeNull();\n    at fullyVisible (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\ui.ts:119:25)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\far-shore\\play\\settled.spec.ts:23:15"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-20T11:36:26.877Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\.cache\\far-shore-play\\release\\settled-Settled-Rush-companions-780x320\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\ui.ts",
+                    "column": 25,
+                    "line": 119
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "e0f3dec3e1100781fd67-11ee89763c3a6b85f9e8",
+          "file": "settled.spec.ts",
+          "line": 11,
+          "column": 3
+        },
+        {
+          "title": "Settled Rush companions 390x844",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 480000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 64117,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-20T11:37:02.123Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e0f3dec3e1100781fd67-b1bab4093fefcc7b81d2",
+          "file": "settled.spec.ts",
+          "line": 11,
+          "column": 3
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-20T11:36:26.231Z",
+    "duration": 101453.018,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

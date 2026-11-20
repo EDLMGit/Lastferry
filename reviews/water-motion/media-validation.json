@@ -1,0 +1,540 @@
+{
+  "method": "ffprobe exact streams/duration; ffmpeg complete decode to null. No cuts,time edits,normalization or acoustic listening. Playwright full-interface originals are silent.",
+  "commands": [
+    "ffprobe -v error -show_entries format=duration:stream=index,codec_name,codec_type,width,height,sample_rate,channels -of json <file>",
+    "ffmpeg -v error -threads 1 -i <file> -f null -"
+  ],
+  "media": [
+    {
+      "capture": "reviews/water-motion/after/1440x900/capture.json",
+      "path": "reviews/water-motion/after/1440x900/raw/short-natural-full-interface.webm",
+      "sha256": "b36a39be3a0d191cf0e5b64f388de731994ff82bf7a9d4c24f503ca0cd7ca34a",
+      "runtimeHash": "be1d42f21ba0b4f45687fda21c1db730254e5f68dfc7a0ccd7eba16956a8c62b",
+      "environment": {
+        "node": "v24.15.0",
+        "browser": "156.0.8078.4",
+        "platform": "win32",
+        "renderer": "SwiftShader",
+        "width": 1440,
+        "height": 900,
+        "dpr": 1,
+        "input": "mouse",
+        "sampling": "Full presentation diagnostics per rAF; instrumented capture, not native GPU performance"
+      },
+      "bytes": 6703878,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "vp9",
+            "codec_type": "video",
+            "width": 1440,
+            "height": 900
+          }
+        ],
+        "format": {
+          "duration": "22.280000"
+        }
+      },
+      "completeDecode": "passed",
+      "availability": "Local ignored original only; not uploaded or present in a fresh clone"
+    },
+    {
+      "capture": "reviews/water-motion/after/1440x900/capture.json",
+      "path": "reviews/water-motion/after/1440x900/raw/long-natural-full-interface.webm",
+      "sha256": "10e5ab07eb841950ea3ee65f9135fd7fad55000410f467334b4ff9afdd15f233",
+      "runtimeHash": "be1d42f21ba0b4f45687fda21c1db730254e5f68dfc7a0ccd7eba16956a8c62b",
+      "environment": {
+        "node": "v24.15.0",
+        "browser": "156.0.8078.4",
+        "platform": "win32",
+        "renderer": "SwiftShader",
+        "width": 1440,
+        "height": 900,
+        "dpr": 1,
+        "input": "mouse",
+        "sampling": "Full presentation diagnostics per rAF; instrumented capture, not native GPU performance"
+      },
+      "bytes": 9645387,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "vp9",
+            "codec_type": "video",
+            "width": 1440,
+            "height": 900
+          }
+        ],
+        "format": {
+          "duration": "31.600000"
+        }
+      },
+      "completeDecode": "passed",
+      "availability": "Local ignored original only; not uploaded or present in a fresh clone"
+    },
+    {
+      "capture": "reviews/water-motion/after/780x390/capture.json",
+      "path": "reviews/water-motion/after/780x390/raw/short-natural-full-interface.webm",
+      "sha256": "5fc071d0a1c0fda5df7e07d732c20aec18c369c0c20302f2636b775df9cc1461",
+      "runtimeHash": "be1d42f21ba0b4f45687fda21c1db730254e5f68dfc7a0ccd7eba16956a8c62b",
+      "environment": {
+        "node": "v24.15.0",
+        "browser": "156.0.8078.4",
+        "platform": "win32",
+        "renderer": "SwiftShader",
+        "width": 780,
+        "height": 390,
+        "dpr": 1,
+        "input": "emulated touch",
+        "sampling": "Full presentation diagnostics per rAF; instrumented capture, not native GPU performance"
+      },
+      "bytes": 1952201,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "vp9",
+            "codec_type": "video",
+            "width": 780,
+            "height": 390
+          }
+        ],
+        "format": {
+          "duration": "15.520000"
+        }
+      },
+      "completeDecode": "passed",
+      "availability": "Local ignored original only; not uploaded or present in a fresh clone"
+    },
+    {
+      "capture": "reviews/water-motion/after/780x390/capture.json",
+      "path": "reviews/water-motion/after/780x390/raw/long-natural-full-interface.webm",
+      "sha256": "ad5de48f68171fa444dea27b07fdd1d05606ce9f52f95aa1c82fc849b602f900",
+      "runtimeHash": "be1d42f21ba0b4f45687fda21c1db730254e5f68dfc7a0ccd7eba16956a8c62b",
+      "environment": {
+        "node": "v24.15.0",
+        "browser": "156.0.8078.4",
+        "platform": "win32",
+        "renderer": "SwiftShader",
+        "width": 780,
+        "height": 390,
+        "dpr": 1,
+        "input": "emulated touch",
+        "sampling": "Full presentation diagnostics per rAF; instrumented capture, not native GPU performance"
+      },
+      "bytes": 3845986,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "vp9",
+            "codec_type": "video",
+            "width": 780,
+            "height": 390
+          }
+        ],
+        "format": {
+          "duration": "34.080000"
+        }
+      },
+      "completeDecode": "passed",
+      "availability": "Local ignored original only; not uploaded or present in a fresh clone"
+    },
+    {
+      "capture": "reviews/water-motion/after/844x390/capture.json",
+      "path": "reviews/water-motion/after/844x390/raw/short-natural-full-interface.webm",
+      "sha256": "6fd044efb4ac0a0311a4f00ef214ca41cb988ff98d36585cd68c98cbabc697ae",
+      "runtimeHash": "be1d42f21ba0b4f45687fda21c1db730254e5f68dfc7a0ccd7eba16956a8c62b",
+      "environment": {
+        "node": "v24.15.0",
+        "browser": "156.0.8078.4",
+        "platform": "win32",
+        "renderer": "SwiftShader",
+        "width": 844,
+        "height": 390,
+        "dpr": 1,
+        "input": "emulated touch",
+        "sampling": "Full presentation diagnostics per rAF; instrumented capture, not native GPU performance"
+      },
+      "bytes": 2020321,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "vp9",
+            "codec_type": "video",
+            "width": 844,
+            "height": 390
+          }
+        ],
+        "format": {
+          "duration": "16.000000"
+        }
+      },
+      "completeDecode": "passed",
+      "availability": "Local ignored original only; not uploaded or present in a fresh clone"
+    },
+    {
+      "capture": "reviews/water-motion/after/844x390/capture.json",
+      "path": "reviews/water-motion/after/844x390/raw/long-natural-full-interface.webm",
+      "sha256": "a7965c5ab455408b694eeca46373b761a8e517f38d82ed0e2211ceb3171aa998",
+      "runtimeHash": "be1d42f21ba0b4f45687fda21c1db730254e5f68dfc7a0ccd7eba16956a8c62b",
+      "environment": {
+        "node": "v24.15.0",
+        "browser": "156.0.8078.4",
+        "platform": "win32",
+        "renderer": "SwiftShader",
+        "width": 844,
+        "height": 390,
+        "dpr": 1,
+        "input": "emulated touch",
+        "sampling": "Full presentation diagnostics per rAF; instrumented capture, not native GPU performance"
+      },
+      "bytes": 3782749,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "vp9",
+            "codec_type": "video",
+            "width": 844,
+            "height": 390
+          }
+        ],
+        "format": {
+          "duration": "32.880000"
+        }
+      },
+      "completeDecode": "passed",
+      "availability": "Local ignored original only; not uploaded or present in a fresh clone"
+    },
+    {
+      "capture": "reviews/water-motion/baseline/844x390/capture.json",
+      "path": "reviews/water-motion/baseline/844x390/raw/short-natural-full-interface.webm",
+      "sha256": "47eb591005f33a4840c5ebc1a89b98e060af03f1b5853f0b8b1ce9bf18184583",
+      "runtimeHash": "d943620659412c6af9a5254cb69c7277da9cded6641eaebf4ed5a4031c717d5b",
+      "environment": {
+        "node": "v24.15.0",
+        "browser": "156.0.8078.4",
+        "platform": "win32",
+        "renderer": "SwiftShader",
+        "width": 844,
+        "height": 390,
+        "dpr": 1,
+        "input": "emulated touch"
+      },
+      "bytes": 2031639,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "vp9",
+            "codec_type": "video",
+            "width": 844,
+            "height": 390
+          }
+        ],
+        "format": {
+          "duration": "15.680000"
+        }
+      },
+      "completeDecode": "passed",
+      "availability": "Local ignored original only; not uploaded or present in a fresh clone"
+    },
+    {
+      "capture": "reviews/water-motion/baseline/844x390/capture.json",
+      "path": "reviews/water-motion/baseline/844x390/raw/long-natural-full-interface.webm",
+      "sha256": "b50305d77407067ac70f88e35b88393d48837866e4ec86a71f0e433392d9bdf1",
+      "runtimeHash": "d943620659412c6af9a5254cb69c7277da9cded6641eaebf4ed5a4031c717d5b",
+      "environment": {
+        "node": "v24.15.0",
+        "browser": "156.0.8078.4",
+        "platform": "win32",
+        "renderer": "SwiftShader",
+        "width": 844,
+        "height": 390,
+        "dpr": 1,
+        "input": "emulated touch"
+      },
+      "bytes": 2931010,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "vp9",
+            "codec_type": "video",
+            "width": 844,
+            "height": 390
+          }
+        ],
+        "format": {
+          "duration": "21.800000"
+        }
+      },
+      "completeDecode": "passed",
+      "availability": "Local ignored original only; not uploaded or present in a fresh clone"
+    },
+    {
+      "capture": "reviews/water-motion/trial-current/844x390/capture.json",
+      "path": "reviews/water-motion/trial-current/844x390/raw/short-natural-full-interface.webm",
+      "sha256": "bc797a9485319deb94e70b926ee2e7f983d97639f0bbc12d4c329a7925894b3a",
+      "runtimeHash": "c065255df2132ce3a74d57096fee99deda27d15fecf9de80767ddd42d1006f5b",
+      "environment": {
+        "node": "v24.15.0",
+        "browser": "156.0.8078.4",
+        "platform": "win32",
+        "renderer": "SwiftShader",
+        "width": 844,
+        "height": 390,
+        "dpr": 1,
+        "input": "emulated touch"
+      },
+      "bytes": 2141838,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "vp9",
+            "codec_type": "video",
+            "width": 844,
+            "height": 390
+          }
+        ],
+        "format": {
+          "duration": "16.680000"
+        }
+      },
+      "completeDecode": "passed",
+      "availability": "Local ignored original only; not uploaded or present in a fresh clone"
+    },
+    {
+      "capture": "reviews/water-motion/trial-current/844x390/capture.json",
+      "path": "reviews/water-motion/trial-current/844x390/raw/long-natural-full-interface.webm",
+      "sha256": "e16b58155392bb33a166f16b2e578ffc8581efe9d3039a8bd176c6b636661302",
+      "runtimeHash": "c065255df2132ce3a74d57096fee99deda27d15fecf9de80767ddd42d1006f5b",
+      "environment": {
+        "node": "v24.15.0",
+        "browser": "156.0.8078.4",
+        "platform": "win32",
+        "renderer": "SwiftShader",
+        "width": 844,
+        "height": 390,
+        "dpr": 1,
+        "input": "emulated touch"
+      },
+      "bytes": 2982319,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "vp9",
+            "codec_type": "video",
+            "width": 844,
+            "height": 390
+          }
+        ],
+        "format": {
+          "duration": "22.120000"
+        }
+      },
+      "completeDecode": "passed",
+      "availability": "Local ignored original only; not uploaded or present in a fresh clone"
+    },
+    {
+      "capture": "reviews/water-motion/trial-response-off/844x390/capture.json",
+      "path": "reviews/water-motion/trial-response-off/844x390/raw/short-natural-full-interface.webm",
+      "sha256": "d335cc7fd46baf8e66db33c2ab95568c2d9c3c5855de93ca74468b81c2028c9c",
+      "runtimeHash": "c065255df2132ce3a74d57096fee99deda27d15fecf9de80767ddd42d1006f5b",
+      "environment": {
+        "node": "v24.15.0",
+        "browser": "156.0.8078.4",
+        "platform": "win32",
+        "renderer": "SwiftShader",
+        "width": 844,
+        "height": 390,
+        "dpr": 1,
+        "input": "emulated touch"
+      },
+      "bytes": 2099018,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "vp9",
+            "codec_type": "video",
+            "width": 844,
+            "height": 390
+          }
+        ],
+        "format": {
+          "duration": "16.760000"
+        }
+      },
+      "completeDecode": "passed",
+      "availability": "Local ignored original only; not uploaded or present in a fresh clone"
+    },
+    {
+      "capture": "reviews/water-motion/trial-response-off/844x390/capture.json",
+      "path": "reviews/water-motion/trial-response-off/844x390/raw/long-natural-full-interface.webm",
+      "sha256": "f205a5e4241033d38dd93f99aeb8cbbf717ce5468b3e3a352e0f48cdce1a89fe",
+      "runtimeHash": "c065255df2132ce3a74d57096fee99deda27d15fecf9de80767ddd42d1006f5b",
+      "environment": {
+        "node": "v24.15.0",
+        "browser": "156.0.8078.4",
+        "platform": "win32",
+        "renderer": "SwiftShader",
+        "width": 844,
+        "height": 390,
+        "dpr": 1,
+        "input": "emulated touch"
+      },
+      "bytes": 4008031,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "vp9",
+            "codec_type": "video",
+            "width": 844,
+            "height": 390
+          }
+        ],
+        "format": {
+          "duration": "33.920000"
+        }
+      },
+      "completeDecode": "passed",
+      "availability": "Local ignored original only; not uploaded or present in a fresh clone"
+    },
+    {
+      "capture": "reviews/water-motion/trial-slower/844x390/capture.json",
+      "path": "reviews/water-motion/trial-slower/844x390/raw/short-natural-full-interface.webm",
+      "sha256": "832e0ccebe4ad74e0a140a941f2980d3ebb42c42f3b53218f48669b43161c001",
+      "runtimeHash": "c065255df2132ce3a74d57096fee99deda27d15fecf9de80767ddd42d1006f5b",
+      "environment": {
+        "node": "v24.15.0",
+        "browser": "156.0.8078.4",
+        "platform": "win32",
+        "renderer": "SwiftShader",
+        "width": 844,
+        "height": 390,
+        "dpr": 1,
+        "input": "emulated touch"
+      },
+      "bytes": 2073997,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "vp9",
+            "codec_type": "video",
+            "width": 844,
+            "height": 390
+          }
+        ],
+        "format": {
+          "duration": "16.400000"
+        }
+      },
+      "completeDecode": "passed",
+      "availability": "Local ignored original only; not uploaded or present in a fresh clone"
+    },
+    {
+      "capture": "reviews/water-motion/trial-slower/844x390/capture.json",
+      "path": "reviews/water-motion/trial-slower/844x390/raw/long-natural-full-interface.webm",
+      "sha256": "a47057a1369738ef5aa3a3dfbb41ac7fb8cfe104fe685226f29b88abd3c21464",
+      "runtimeHash": "c065255df2132ce3a74d57096fee99deda27d15fecf9de80767ddd42d1006f5b",
+      "environment": {
+        "node": "v24.15.0",
+        "browser": "156.0.8078.4",
+        "platform": "win32",
+        "renderer": "SwiftShader",
+        "width": 844,
+        "height": 390,
+        "dpr": 1,
+        "input": "emulated touch"
+      },
+      "bytes": 3495149,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "vp9",
+            "codec_type": "video",
+            "width": 844,
+            "height": 390
+          }
+        ],
+        "format": {
+          "duration": "26.680000"
+        }
+      },
+      "completeDecode": "passed",
+      "availability": "Local ignored original only; not uploaded or present in a fresh clone"
+    },
+    {
+      "capture": "reviews/water-motion/browser-rerun/water-motion-lifecycle.json",
+      "path": "reviews/water-motion/browser-rerun/raw/water-motion-lifecycle.webm",
+      "sha256": "831b852c6ec1b23d535781390a119a5519c434372b99e3d86189c330693e4ce0",
+      "runtimeHash": "be1d42f21ba0b4f45687fda21c1db730254e5f68dfc7a0ccd7eba16956a8c62b",
+      "sourceSnapshotHash": "e84792307ccda2b3efea3b70f7846331a6c3cec9d6afce4cc0bccdca48d52804",
+      "environment": {
+        "viewport": [
+          844,
+          390
+        ],
+        "DPR": 1,
+        "input": "emulated touch",
+        "browser": "Chromium156.0.8078.4 SwiftShader"
+      },
+      "bytes": 5987886,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "vp9",
+            "codec_type": "video",
+            "width": 844,
+            "height": 390
+          }
+        ],
+        "format": {
+          "duration": "41.080000"
+        }
+      },
+      "completeDecode": "passed",
+      "availability": "Local ignored original only; not uploaded or present in a fresh clone"
+    }
+  ]
+}

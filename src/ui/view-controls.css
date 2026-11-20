@@ -1,0 +1,48 @@
+#app .view-controls:has(#zoom-tools:not([hidden])) {
+  z-index: 8;
+}
+#zoom-tools:not([hidden]) {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 5px);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px;
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--foam);
+  border-radius: 15px;
+}
+#zoom-level {
+  min-width: 5em;
+  text-align: center;
+  font-size: 14px;
+}
+#app #zoom-tools button {
+  font-size: 20px;
+  min-width: 44px;
+}
+#zoom-tools [aria-disabled='true'] {
+  opacity: 0.65;
+}
+@media (max-width: 1000px), (max-height: 480px) {
+  #app .view-controls {
+    gap: 4px;
+  }
+  #app .view-controls .cove-button {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 5px 8px;
+  }
+  #app #view-toggle .cove-glyph {
+    display: none;
+  }
+  #app #back-to-boat .cove-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+}

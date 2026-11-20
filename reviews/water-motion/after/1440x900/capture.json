@@ -1,0 +1,861 @@
+{
+  "phase": "after",
+  "sourceHead": "0ee7d685071179b82ec2a599fac2f818251d0e54",
+  "runtimeHash": "be1d42f21ba0b4f45687fda21c1db730254e5f68dfc7a0ccd7eba16956a8c62b",
+  "startedAt": "2026-10-24T11:27:49.706Z",
+  "environment": {
+    "node": "v24.15.0",
+    "browser": "156.0.8078.4",
+    "platform": "win32",
+    "renderer": "SwiftShader",
+    "width": 1440,
+    "height": 900,
+    "dpr": 1,
+    "input": "mouse",
+    "sampling": "Full presentation diagnostics per rAF; instrumented capture, not native GPU performance"
+  },
+  "routes": [
+    {
+      "length": "short",
+      "cove": "holding-pier",
+      "timing": "active",
+      "response": "active",
+      "setup": [
+        "unload"
+      ],
+      "crossings": [
+        {
+          "index": 0,
+          "action": "map-shallows",
+          "before": {
+            "turn": 1,
+            "tideLevel": 0,
+            "boatNodeId": "stone",
+            "aboard": [],
+            "waitingByPier": {
+              "harbor-pier": [],
+              "stone-pier": [
+                "sheep-1"
+              ],
+              "rabbit-pier": [
+                "rabbit-1",
+                "rabbit-2"
+              ]
+            },
+            "delivered": [],
+            "status": "playing",
+            "lossReason": null
+          },
+          "after": {
+            "turn": 2,
+            "tideLevel": 0,
+            "boatNodeId": "shallows",
+            "aboard": [],
+            "waitingByPier": {
+              "harbor-pier": [],
+              "stone-pier": [
+                "sheep-1"
+              ],
+              "rabbit-pier": [
+                "rabbit-1",
+                "rabbit-2"
+              ]
+            },
+            "delivered": [],
+            "status": "playing",
+            "lossReason": null
+          },
+          "transition": {
+            "id": 2,
+            "action": {
+              "type": "move",
+              "to": "shallows"
+            },
+            "plan": {
+              "duration": 1873.6380619376841,
+              "tideDuration": 550,
+              "recoveryDelay": 2873.638061937684
+            },
+            "startedAt": 10892.5,
+            "finishedAt": 12808.800000011921,
+            "reason": "complete"
+          },
+          "postDockHoldMs": 2250,
+          "afterHold": {
+            "state": {
+              "turn": 2,
+              "tideLevel": 0,
+              "boatNodeId": "shallows",
+              "aboard": [],
+              "waitingByPier": {
+                "harbor-pier": [],
+                "stone-pier": [
+                  "sheep-1"
+                ],
+                "rabbit-pier": [
+                  "rabbit-1",
+                  "rabbit-2"
+                ]
+              },
+              "delivered": [],
+              "status": "playing",
+              "lossReason": null
+            },
+            "wake": {
+              "emitting": false,
+              "visible": false,
+              "vertices": 0,
+              "positions": [],
+              "opacity": [],
+              "points": [],
+              "limits": {
+                "capacity": 96,
+                "lifetime": 1800,
+                "length": 3.6,
+                "spacing": 0.055
+              },
+              "speed": 0,
+              "strength": 0,
+              "contactStrength": 0,
+              "docking": false,
+              "interaction": {
+                "position": [
+                  3,
+                  0,
+                  2
+                ],
+                "direction": [
+                  1,
+                  0,
+                  6.123233995736766e-17
+                ],
+                "strength": 0
+              }
+            },
+            "waterInteraction": null
+          }
+        },
+        {
+          "index": 1,
+          "action": "map-stone",
+          "before": {
+            "turn": 2,
+            "tideLevel": 0,
+            "boatNodeId": "shallows",
+            "aboard": [],
+            "waitingByPier": {
+              "harbor-pier": [],
+              "stone-pier": [
+                "sheep-1"
+              ],
+              "rabbit-pier": [
+                "rabbit-1",
+                "rabbit-2"
+              ]
+            },
+            "delivered": [],
+            "status": "playing",
+            "lossReason": null
+          },
+          "after": {
+            "turn": 3,
+            "tideLevel": 0,
+            "boatNodeId": "stone",
+            "aboard": [],
+            "waitingByPier": {
+              "harbor-pier": [],
+              "stone-pier": [
+                "sheep-1"
+              ],
+              "rabbit-pier": [
+                "rabbit-1",
+                "rabbit-2"
+              ]
+            },
+            "delivered": [],
+            "status": "playing",
+            "lossReason": null
+          },
+          "transition": {
+            "id": 3,
+            "action": {
+              "type": "move",
+              "to": "stone"
+            },
+            "plan": {
+              "duration": 1873.6380619376841,
+              "tideDuration": 550,
+              "recoveryDelay": 2873.638061937684
+            },
+            "startedAt": 17839.69999998808,
+            "finishedAt": 19748.19999998808,
+            "reason": "complete"
+          },
+          "postDockHoldMs": 2250,
+          "afterHold": {
+            "state": {
+              "turn": 3,
+              "tideLevel": 0,
+              "boatNodeId": "stone",
+              "aboard": [],
+              "waitingByPier": {
+                "harbor-pier": [],
+                "stone-pier": [
+                  "sheep-1"
+                ],
+                "rabbit-pier": [
+                  "rabbit-1",
+                  "rabbit-2"
+                ]
+              },
+              "delivered": [],
+              "status": "playing",
+              "lossReason": null
+            },
+            "wake": {
+              "emitting": false,
+              "visible": false,
+              "vertices": 0,
+              "positions": [],
+              "opacity": [],
+              "points": [],
+              "limits": {
+                "capacity": 96,
+                "lifetime": 1800,
+                "length": 3.6,
+                "spacing": 0.055
+              },
+              "speed": 0,
+              "strength": 0,
+              "contactStrength": 0,
+              "docking": false,
+              "interaction": {
+                "position": [
+                  0,
+                  0,
+                  -1
+                ],
+                "direction": [
+                  1,
+                  0,
+                  6.123233995736766e-17
+                ],
+                "strength": 0
+              }
+            },
+            "waterInteraction": null
+          }
+        }
+      ],
+      "screenshots": [],
+      "idleSample": {
+        "intervals": [
+          75.99999999403963,
+          100,
+          100,
+          100,
+          100,
+          100,
+          116.59999999999991,
+          133.4000000000001,
+          99.90000000000009,
+          116.69999999999982,
+          100,
+          66.69999999999982,
+          99.90000000000009,
+          116.70000000000027,
+          100,
+          133.39999999999964,
+          99.90000000000009,
+          116.70000000000027,
+          100,
+          116.69999999999982,
+          100,
+          116.69999999999982,
+          100,
+          216.60000000000036,
+          100,
+          83.30000000000018,
+          33.29999999999927,
+          100,
+          116.70000000000073,
+          100,
+          100,
+          100,
+          100,
+          116.69999999999982,
+          99.89999999999964,
+          116.69999999999982,
+          100,
+          100,
+          116.70000000000073,
+          183.29999999999927,
+          33.30000000000018,
+          100,
+          116.69999999999982,
+          100,
+          216.60000000000036,
+          16.699999999999818,
+          100,
+          100,
+          116.60000000000036,
+          83.39999999999964,
+          116.69999999999982,
+          83.30000000000018,
+          116.69999999999982,
+          100,
+          99.90000000000055,
+          100,
+          100.09999999999945,
+          99.90000000000055,
+          116.69999999999982,
+          100
+        ],
+        "metrics": {
+          "frames": 78,
+          "drawCalls": 622,
+          "triangles": 112774,
+          "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+          "pixelRatio": 1,
+          "resources": {
+            "geometries": 317,
+            "textures": 6,
+            "programs": 16,
+            "sweepObjects": 1
+          }
+        }
+      },
+      "samples": {
+        "path": "reviews/water-motion/after/1440x900/raw/short-samples.json",
+        "sha256": "a53dee62f6bcf05470af1fb057bcdf91071916c458e905e4497457849ac1d2dd",
+        "count": 131
+      },
+      "phaseStills": [],
+      "pageClockAtCaptureEnd": {
+        "now": 25187.90000000596,
+        "timeOrigin": 1792841269810.1
+      },
+      "recording": {
+        "path": "reviews/water-motion/after/1440x900/raw/short-natural-full-interface.webm",
+        "sha256": "b36a39be3a0d191cf0e5b64f388de731994ff82bf7a9d4c24f503ca0cd7ca34a",
+        "bytes": 6703878,
+        "method": "Uninterrupted actual full interface at natural runtime speed; no timing override unless named. Silent Playwright original; at least2.25saftereachdocking. Setup also recorded. No cuts,slowdown or state injection."
+      },
+      "activeFrameSummary": [
+        {
+          "turn": 2,
+          "action": "map-shallows",
+          "frames": 17,
+          "intervals": {
+            "count": 16,
+            "median": 100.10000000000036,
+            "p95": 266.59999999999854,
+            "maximum": 266.59999999999854
+          },
+          "progressRange": [
+            -0.011795234332069502,
+            0.8955304837641402
+          ],
+          "firstPose": [
+            0,
+            0,
+            -1
+          ],
+          "lastPose": [
+            2.9400234872078883,
+            0,
+            1.8920422769741991
+          ],
+          "steadyDrawCalls": [
+            625
+          ],
+          "steadyResources": {
+            "geometries": 322,
+            "textures": 6,
+            "programs": 17,
+            "sweepObjects": 1
+          },
+          "wakeObservations": {
+            "maximumPoints": 63,
+            "maximumVertices": 660,
+            "maximumOpacity": 0.639818012714386,
+            "emittingFrames": 15,
+            "visibleFrames": 15
+          },
+          "waterInteractionProbe": "Unavailable in this take; null is not proof of zero response."
+        },
+        {
+          "turn": 3,
+          "action": "map-stone",
+          "frames": 18,
+          "intervals": {
+            "count": 17,
+            "median": 100.10000000000218,
+            "p95": 200,
+            "maximum": 200
+          },
+          "progressRange": [
+            -0.010300815505444816,
+            0.9503436315541822
+          ],
+          "firstPose": [
+            3,
+            0,
+            2
+          ],
+          "lastPose": [
+            0.013634746967131045,
+            0,
+            -0.9918191518197214
+          ],
+          "steadyDrawCalls": [
+            625
+          ],
+          "steadyResources": {
+            "geometries": 323,
+            "textures": 6,
+            "programs": 17,
+            "sweepObjects": 1
+          },
+          "wakeObservations": {
+            "maximumPoints": 58,
+            "maximumVertices": 630,
+            "maximumOpacity": 0.6398131251335144,
+            "emittingFrames": 17,
+            "visibleFrames": 17
+          },
+          "waterInteractionProbe": "Unavailable in this take; null is not proof of zero response."
+        }
+      ],
+      "excludedPhaseStills": []
+    },
+    {
+      "length": "long",
+      "cove": "bellwater",
+      "timing": "active",
+      "response": "active",
+      "setup": [
+        "map-shallows",
+        "map-low-pier",
+        "board",
+        "map-east-buoy"
+      ],
+      "crossings": [
+        {
+          "index": 0,
+          "action": "map-west-buoy",
+          "before": {
+            "turn": 4,
+            "tideLevel": 1,
+            "boatNodeId": "east-buoy",
+            "aboard": [
+              "tansy",
+              "lark"
+            ],
+            "waitingByPier": {
+              "harbor-pier": [],
+              "low-pier": [],
+              "bell-pier": [
+                "bram"
+              ]
+            },
+            "delivered": [],
+            "status": "playing",
+            "lossReason": null
+          },
+          "after": {
+            "turn": 5,
+            "tideLevel": 1,
+            "boatNodeId": "west-buoy",
+            "aboard": [
+              "tansy",
+              "lark"
+            ],
+            "waitingByPier": {
+              "harbor-pier": [],
+              "low-pier": [],
+              "bell-pier": [
+                "bram"
+              ]
+            },
+            "delivered": [],
+            "status": "playing",
+            "lossReason": null
+          },
+          "transition": {
+            "id": 5,
+            "action": {
+              "type": "move",
+              "to": "west-buoy"
+            },
+            "plan": {
+              "duration": 2823.0745852511373,
+              "tideDuration": 550,
+              "recoveryDelay": 3823.0745852511373
+            },
+            "startedAt": 17376.29999998212,
+            "finishedAt": 20289.399999976158,
+            "reason": "complete"
+          },
+          "postDockHoldMs": 2250,
+          "afterHold": {
+            "state": {
+              "turn": 5,
+              "tideLevel": 1,
+              "boatNodeId": "west-buoy",
+              "aboard": [
+                "tansy",
+                "lark"
+              ],
+              "waitingByPier": {
+                "harbor-pier": [],
+                "low-pier": [],
+                "bell-pier": [
+                  "bram"
+                ]
+              },
+              "delivered": [],
+              "status": "playing",
+              "lossReason": null
+            },
+            "wake": {
+              "emitting": false,
+              "visible": false,
+              "vertices": 0,
+              "positions": [],
+              "opacity": [],
+              "points": [],
+              "limits": {
+                "capacity": 96,
+                "lifetime": 1800,
+                "length": 3.6,
+                "spacing": 0.055
+              },
+              "speed": 0,
+              "strength": 0,
+              "contactStrength": 0,
+              "docking": false,
+              "interaction": {
+                "position": [
+                  -4.5,
+                  0.18,
+                  3.9
+                ],
+                "direction": [
+                  1,
+                  0,
+                  6.123233995736766e-17
+                ],
+                "strength": 0
+              }
+            },
+            "waterInteraction": null
+          }
+        },
+        {
+          "index": 1,
+          "action": "map-east-buoy",
+          "before": {
+            "turn": 5,
+            "tideLevel": 1,
+            "boatNodeId": "west-buoy",
+            "aboard": [
+              "tansy",
+              "lark"
+            ],
+            "waitingByPier": {
+              "harbor-pier": [],
+              "low-pier": [],
+              "bell-pier": [
+                "bram"
+              ]
+            },
+            "delivered": [],
+            "status": "playing",
+            "lossReason": null
+          },
+          "after": {
+            "turn": 6,
+            "tideLevel": 1,
+            "boatNodeId": "east-buoy",
+            "aboard": [
+              "tansy",
+              "lark"
+            ],
+            "waitingByPier": {
+              "harbor-pier": [],
+              "low-pier": [],
+              "bell-pier": [
+                "bram"
+              ]
+            },
+            "delivered": [],
+            "status": "playing",
+            "lossReason": null
+          },
+          "transition": {
+            "id": 6,
+            "action": {
+              "type": "move",
+              "to": "east-buoy"
+            },
+            "plan": {
+              "duration": 2823.0745852511373,
+              "tideDuration": 550,
+              "recoveryDelay": 3823.0745852511373
+            },
+            "startedAt": 25174.59999999404,
+            "finishedAt": 28100.5,
+            "reason": "complete"
+          },
+          "postDockHoldMs": 2250,
+          "afterHold": {
+            "state": {
+              "turn": 6,
+              "tideLevel": 1,
+              "boatNodeId": "east-buoy",
+              "aboard": [
+                "tansy",
+                "lark"
+              ],
+              "waitingByPier": {
+                "harbor-pier": [],
+                "low-pier": [],
+                "bell-pier": [
+                  "bram"
+                ]
+              },
+              "delivered": [],
+              "status": "playing",
+              "lossReason": null
+            },
+            "wake": {
+              "emitting": false,
+              "visible": false,
+              "vertices": 0,
+              "positions": [],
+              "opacity": [],
+              "points": [],
+              "limits": {
+                "capacity": 96,
+                "lifetime": 1800,
+                "length": 3.6,
+                "spacing": 0.055
+              },
+              "speed": 0,
+              "strength": 0,
+              "contactStrength": 0,
+              "docking": false,
+              "interaction": {
+                "position": [
+                  4.5,
+                  0.18,
+                  4.2
+                ],
+                "direction": [
+                  1,
+                  0,
+                  6.123233995736766e-17
+                ],
+                "strength": 0
+              }
+            },
+            "waterInteraction": null
+          }
+        }
+      ],
+      "screenshots": [],
+      "idleSample": {
+        "intervals": [
+          53.10000001788103,
+          100,
+          100,
+          100,
+          99.89999999999964,
+          100.10000000000036,
+          100,
+          83.30000000000109,
+          16.599999999998545,
+          100,
+          100.10000000000036,
+          99.89999999999964,
+          100,
+          100,
+          100.10000000000036,
+          99.89999999999964,
+          100.10000000000036,
+          116.60000000000036,
+          100,
+          100,
+          83.29999999999927,
+          116.70000000000073,
+          100,
+          83.29999999999927,
+          100,
+          100,
+          116.70000000000073,
+          100,
+          99.89999999999964,
+          100,
+          100,
+          100,
+          100,
+          100.10000000000036,
+          183.29999999999927,
+          100,
+          83.30000000000109,
+          100,
+          99.89999999999964,
+          100,
+          100.10000000000036,
+          100,
+          99.89999999999964,
+          100.10000000000036,
+          99.89999999999964,
+          100,
+          100.10000000000036,
+          49.899999999999636,
+          133.29999999999927,
+          100.10000000000036,
+          99.89999999999964,
+          100.10000000000036,
+          99.89999999999964,
+          116.70000000000073,
+          100,
+          100,
+          83.29999999999927,
+          116.60000000000036,
+          100.10000000000036,
+          100
+        ],
+        "metrics": {
+          "frames": 153,
+          "drawCalls": 565,
+          "triangles": 102090,
+          "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+          "pixelRatio": 1,
+          "resources": {
+            "geometries": 303,
+            "textures": 6,
+            "programs": 20,
+            "sweepObjects": 1
+          }
+        }
+      },
+      "samples": {
+        "path": "reviews/water-motion/after/1440x900/raw/long-samples.json",
+        "sha256": "074979076680ff0a8533446f49cf06cbb029737c51f10604bb388e4f4f83ecb5",
+        "count": 150
+      },
+      "phaseStills": [],
+      "pageClockAtCaptureEnd": {
+        "now": 34120.5,
+        "timeOrigin": 1792841297171.4
+      },
+      "recording": {
+        "path": "reviews/water-motion/after/1440x900/raw/long-natural-full-interface.webm",
+        "sha256": "10e5ab07eb841950ea3ee65f9135fd7fad55000410f467334b4ff9afdd15f233",
+        "bytes": 9645387,
+        "method": "Uninterrupted actual full interface at natural runtime speed; no timing override unless named. Silent Playwright original; at least2.25saftereachdocking. Setup also recorded. No cuts,slowdown or state injection."
+      },
+      "activeFrameSummary": [
+        {
+          "turn": 5,
+          "action": "map-west-buoy",
+          "frames": 28,
+          "intervals": {
+            "count": 27,
+            "median": 100,
+            "p95": 183.39999999999782,
+            "maximum": 200
+          },
+          "progressRange": [
+            -0.00924523926372874,
+            0.9825457727866745
+          ],
+          "firstPose": [
+            4.5,
+            0.18,
+            4.2
+          ],
+          "lastPose": [
+            -4.498449232555286,
+            0.18,
+            3.9003101534889426
+          ],
+          "steadyDrawCalls": [
+            566
+          ],
+          "steadyResources": {
+            "geometries": 305,
+            "textures": 6,
+            "programs": 20,
+            "sweepObjects": 1
+          },
+          "wakeObservations": {
+            "maximumPoints": 66,
+            "maximumVertices": 678,
+            "maximumOpacity": 0.6395363211631775,
+            "emittingFrames": 26,
+            "visibleFrames": 26
+          },
+          "waterInteractionProbe": "Unavailable in this take; null is not proof of zero response."
+        },
+        {
+          "turn": 6,
+          "action": "map-east-buoy",
+          "frames": 29,
+          "intervals": {
+            "count": 28,
+            "median": 100,
+            "p95": 183.40000000000146,
+            "maximum": 200
+          },
+          "progressRange": [
+            -0.00867848129909097,
+            0.9889926446125354
+          ],
+          "firstPose": [
+            -4.5,
+            0.18,
+            3.9
+          ],
+          "lastPose": [
+            4.499599835262266,
+            0.18,
+            4.2000533552983645
+          ],
+          "steadyDrawCalls": [
+            566
+          ],
+          "steadyResources": {
+            "geometries": 305,
+            "textures": 6,
+            "programs": 20,
+            "sweepObjects": 1
+          },
+          "wakeObservations": {
+            "maximumPoints": 66,
+            "maximumVertices": 678,
+            "maximumOpacity": 0.6398189663887024,
+            "emittingFrames": 27,
+            "visibleFrames": 27
+          },
+          "waterInteractionProbe": "Unavailable in this take; null is not proof of zero response."
+        }
+      ],
+      "excludedPhaseStills": []
+    }
+  ],
+  "errors": [],
+  "sourceUnchanged": true,
+  "finishedAt": "2026-10-24T11:28:53.471Z",
+  "outcome": "passed",
+  "reviewDerivative": {
+    "method": "Compact post-capture review derivative: exact before/after game states, plans/times, idle frame intervals as originally captured, per-crossing active frame statistics, resource budgets, exact synchronous phase pose/camera/source and cleanup state retained. Full original observations and all per-frame data remain local/ignored. No source, PNG or media bytes changed.",
+    "rawOriginal": "reviews/water-motion/after/1440x900/raw/capture-full.json",
+    "rawSha256": "ed3ade772e95bef82b04b75b084b26259798270e4473feb412bfaeb2b14bccea",
+    "rawBytes": 136944,
+    "availability": "Local ignored original; unavailable in a fresh clone"
+  }
+}

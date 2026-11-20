@@ -1,0 +1,37 @@
+
+> last-ferry@1.0.0 test:e2e
+> playwright test --config .cache/journey-six.config.ts journey-six-coves.spec.ts --grep fresh root
+
+
+Running 1 test using 1 worker
+
+(node:17404) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\e2e\journey-six-coves.spec.ts:79:1 › fresh root Journey earns six rescues and the four-to-six-space launch (44.6s)
+
+
+  1) tests\e2e\journey-six-coves.spec.ts:79:1 › fresh root Journey earns six rescues and the four-to-six-space launch 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "d56cc63a73291ada0a3a89bb1e3c3e1dbcbe14875ac75bd0ca21cce5878858c2"
+    Received: "0ef214c9d17010a5537e3223be6a1c98407853fdb9308e8836b98077bc10f779"
+
+      42 |   info.annotations.push({ type: 'captured working tree', description: input.identity });
+      43 | });
+    > 44 | test.afterEach(() => expect(sources().identity).toBe(captureSource));
+         |                                                 ^
+      45 |
+      46 | async function phone(browser: Browser, baseURL: string | undefined, width: number, height: number, reduced = false) {
+      47 |   const context = await browser.newContext({
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\journey-six-coves.spec.ts:44:49
+
+    Error Context: test-results\journey-six-evidence\journey-six-coves-fresh-ro-8714d-he-four-to-six-space-launch\error-context.md
+
+  1 failed
+    tests\e2e\journey-six-coves.spec.ts:79:1 › fresh root Journey earns six rescues and the four-to-six-space launch 
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+npm notice To update run: npm install -g npm@12.2.2
+npm notice

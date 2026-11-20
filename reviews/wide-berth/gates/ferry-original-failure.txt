@@ -1,0 +1,100 @@
+
+ RUN  v5.0.5 C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry
+
+ ❯ tests/unit/wide-ferry.test.ts (6 tests | 2 failed) 2722ms
+   × every legal boarding/unloading selection clears actual bodies, cabin and rails at berth 1.5707963267948966 1430ms
+   × every legal boarding/unloading selection clears actual bodies, cabin and rails at berth -1.5707963267948966 1195ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/wide-ferry.test.ts > every legal boarding/unloading selection clears actual bodies, cabin and rails at berth 1.5707963267948966
+AssertionError: expected [ …(20) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "board:0/1:tide0:10:alder/clover",
++   "board:0/1:tide0:11:alder/clover",
++   "board:0/1:tide0:12:alder/clover",
++   "board:0/1:tide0:13:alder/clover",
++   "board:0/1:tide0:14:alder/clover",
++   "board:0/1:tide0:15:alder/clover",
++   "board:0/1:tide1:10:alder/clover",
++   "board:0/1:tide1:11:alder/clover",
++   "board:0/1:tide1:12:alder/clover",
++   "board:0/1:tide1:13:alder/clover",
++   "board:0/1:tide1:14:alder/clover",
++   "board:0/1:tide1:15:alder/clover",
++   "board:0/1:tide2:10:alder/clover",
++   "board:0/1:tide2:11:alder/clover",
++   "board:0/1:tide2:12:alder/clover",
++   "board:0/1:tide2:13:alder/clover",
++   "board:0/1:tide2:14:alder/clover",
++   "board:0/1:tide2:15:alder/clover",
++   "board:0/3:tide0:7:alder/clover",
++   "board:0/3:tide0:8:alder/clover",
++ ]
+
+ ❯ tests/unit/wide-ferry.test.ts:89:19
+     87|   }
+     88|  }
+     89|  expect(failures).toEqual([]);
+       |                   ^
+     90| },60000);
+     91|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/unit/wide-ferry.test.ts > every legal boarding/unloading selection clears actual bodies, cabin and rails at berth -1.5707963267948966
+AssertionError: expected [ …(20) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "board:0/2:tide0:12:alder/clover",
++   "board:0/2:tide0:13:alder/clover",
++   "board:0/2:tide0:14:alder/clover",
++   "board:0/2:tide0:15:alder/clover",
++   "board:0/2:tide1:12:alder/clover",
++   "board:0/2:tide1:13:alder/clover",
++   "board:0/2:tide1:14:alder/clover",
++   "board:0/2:tide1:15:alder/clover",
++   "board:0/2:tide2:12:alder/clover",
++   "board:0/2:tide2:13:alder/clover",
++   "board:0/2:tide2:14:alder/clover",
++   "board:0/2:tide2:15:alder/clover",
++   "board:0/6:tide0:9:alder/clover",
++   "board:0/6:tide0:10:alder/clover",
++   "board:0/6:tide1:9:alder/clover",
++   "board:0/6:tide1:10:alder/clover",
++   "board:0/6:tide2:9:alder/clover",
++   "board:0/6:tide2:10:alder/clover",
++   "board:0/10:tide0:9:alder/clover",
++   "board:0/10:tide0:10:alder/clover",
++ ]
+
+ ❯ tests/unit/wide-ferry.test.ts:89:19
+     87|   }
+     88|  }
+     89|  expect(failures).toEqual([]);
+       |                   ^
+     90| },60000);
+     91|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 4 passed (6)
+   Start at  19:23:05
+   Duration  3.08s (tests 95%, import 3%, transform 2%)
+
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

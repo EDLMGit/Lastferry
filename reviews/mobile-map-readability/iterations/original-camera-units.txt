@@ -1,0 +1,153 @@
+
+> last-ferry@1.0.0 test:unit
+> vitest run tests/unit/view.test.ts tests/unit/story-framing.test.ts tests/unit/story-staging.test.ts --reporter=dot --maxWorkers=1
+
+
+ RUN  v5.0.5 C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry
+
+········xxxxxxxxxxxxx···x·x
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 15 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/story-framing.test.ts > opt-in story framing contains the lighthouse roof, hull and aboard silhouette at 780×320
+ FAIL  tests/unit/story-framing.test.ts > opt-in story framing contains the lighthouse roof, hull and aboard silhouette at 844×390
+ FAIL  tests/unit/story-framing.test.ts > opt-in story framing contains the lighthouse roof, hull and aboard silhouette at 320×740
+ FAIL  tests/unit/story-framing.test.ts > opt-in story framing contains the lighthouse roof, hull and aboard silhouette at 390×844
+ FAIL  tests/unit/story-framing.test.ts > opt-in story framing contains the lighthouse roof, hull and aboard silhouette at 1440×900
+TypeError: Cannot read properties of undefined (reading 'clear')
+ ❯ World.setUsableRectangle src/scene/world.ts:795:29
+    793|       return;
+    794|     this.measuredUsable = { ...rectangle };
+    795|     this.neighborhoodFrames.clear();
+       |                             ^
+    796|     this.reframeView();
+    797|   }
+ ❯ fixture tests/unit/story-framing.test.ts:72:9
+ ❯ tests/unit/story-framing.test.ts:100:53
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/15]⎯
+
+ FAIL  tests/unit/story-framing.test.ts > normal play keeps its original full-network calculation until story framing is explicitly enabled
+TypeError: Cannot read properties of undefined (reading 'clear')
+ ❯ World.setUsableRectangle src/scene/world.ts:795:29
+    793|       return;
+    794|     this.measuredUsable = { ...rectangle };
+    795|     this.neighborhoodFrames.clear();
+       |                             ^
+    796|     this.reframeView();
+    797|   }
+ ❯ fixture tests/unit/story-framing.test.ts:72:9
+ ❯ tests/unit/story-framing.test.ts:120:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/15]⎯
+
+ FAIL  tests/unit/story-framing.test.ts > arrival camera callbacks cannot zoom beyond a story composition
+TypeError: Cannot read properties of undefined (reading 'clear')
+ ❯ World.setUsableRectangle src/scene/world.ts:795:29
+    793|       return;
+    794|     this.measuredUsable = { ...rectangle };
+    795|     this.neighborhoodFrames.clear();
+       |                             ^
+    796|     this.reframeView();
+    797|   }
+ ❯ fixture tests/unit/story-framing.test.ts:72:9
+ ❯ tests/unit/story-framing.test.ts:135:37
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/15]⎯
+
+ FAIL  tests/unit/story-staging.test.ts > actual Moss head meshes acknowledge once without moving deck feet or changing state/history, and clear restores all transforms
+TypeError: Cannot read properties of undefined (reading 'clear')
+ ❯ World.setUsableRectangle src/scene/world.ts:795:29
+    793|       return;
+    794|     this.measuredUsable = { ...rectangle };
+    795|     this.neighborhoodFrames.clear();
+       |                             ^
+    796|     this.reframeView();
+    797|   }
+ ❯ fixture tests/unit/story-staging.test.ts:101:9
+ ❯ tests/unit/story-staging.test.ts:193:65
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/15]⎯
+
+ FAIL  tests/unit/story-staging.test.ts > actual safe Harbor acknowledgment is temporary, does not reboard neighbors, and reduced/restored settlement is motionless
+TypeError: Cannot read properties of undefined (reading 'clear')
+ ❯ World.setUsableRectangle src/scene/world.ts:795:29
+    793|       return;
+    794|     this.measuredUsable = { ...rectangle };
+    795|     this.neighborhoodFrames.clear();
+       |                             ^
+    796|     this.reframeView();
+    797|   }
+ ❯ fixture tests/unit/story-staging.test.ts:101:9
+ ❯ tests/unit/story-staging.test.ts:228:37
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/15]⎯
+
+ FAIL  tests/unit/story-staging.test.ts > Moss turns toward the orthographic viewer in deck-local coordinates at the Stone berth, then returns to its original heading
+TypeError: Cannot read properties of undefined (reading 'clear')
+ ❯ World.setUsableRectangle src/scene/world.ts:795:29
+    793|       return;
+    794|     this.measuredUsable = { ...rectangle };
+    795|     this.neighborhoodFrames.clear();
+       |                             ^
+    796|     this.reframeView();
+    797|   }
+ ❯ fixture tests/unit/story-staging.test.ts:101:9
+ ❯ tests/unit/story-staging.test.ts:255:27
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/15]⎯
+
+ FAIL  tests/unit/story-staging.test.ts > the Harbor close shot protects the full ferry and safe trio above the caption at 320×740
+ FAIL  tests/unit/story-staging.test.ts > the Harbor close shot protects the full ferry and safe trio above the caption at 780×320
+ FAIL  tests/unit/story-staging.test.ts > the Harbor close shot protects the full ferry and safe trio above the caption at 844×390
+TypeError: Cannot read properties of undefined (reading 'clear')
+ ❯ World.setUsableRectangle src/scene/world.ts:795:29
+    793|       return;
+    794|     this.measuredUsable = { ...rectangle };
+    795|     this.neighborhoodFrames.clear();
+       |                             ^
+    796|     this.reframeView();
+    797|   }
+ ❯ fixture tests/unit/story-staging.test.ts:101:9
+ ❯ tests/unit/story-staging.test.ts:276:23
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/15]⎯
+
+ FAIL  tests/unit/view.test.ts > Play magnifies the same ferry without reducing portrait to a whole-network postage stamp
+TypeError: phonePlayScale is not a function
+ ❯ tests/unit/view.test.ts:104:18
+    102|     });
+    103|     const overview = overviewScale(network, usable);
+    104|     const play = phonePlayScale(network, usable);
+       |                  ^
+    105|     expect(play).toBeGreaterThanOrEqual(overview * 1.4);
+    106|     expect(1.5 * play).toBeGreaterThan(40);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/15]⎯
+
+ FAIL  tests/unit/view.test.ts > the usable rectangle clamps transient browser-bar measurements without invalid projection sizes
+TypeError: phonePlayScale is not a function
+ ❯ tests/unit/view.test.ts:124:17
+    122|   const usable = usableViewRectangle(360, 280, { left: -100, top: 800,…
+    123|   expect(usable).toEqual({ left: 8, right: 352, top: 216, bottom: 264 …
+    124|   const scale = phonePlayScale(network, usable);
+       |                 ^
+    125|   const frame = viewFrame(360, 280, usable, scale, { x: 0.5, y: 0.5 });
+    126|   expect(Object.values(frame).every(Number.isFinite)).toBe(true);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/15]⎯
+
+
+ Test Files  3 failed (3)
+      Tests  15 failed | 12 passed (27)
+   Start at  22:32:39
+   Duration  1.27s (transform 50%, import 28%, tests 18%, worker 4%)
+
+    Isolate  3 workers spawned · ~195ms startup each (spawn + environment, per file)
+             at least ~390ms faster with isolate: false — reuses workers across files instead of one per file
+
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+npm notice To update run: npm install -g npm@12.2.2
+npm notice

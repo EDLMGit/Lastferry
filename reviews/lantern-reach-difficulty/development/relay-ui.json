@@ -1,0 +1,343 @@
+{
+  "provenance": "Rejected production-rule prototype, separately compiled over ca89eee",
+  "dataSHA256": "3f14b932c159bff31f7e3182e8e29c1818ac68661ead50a479a9d73c464750f1",
+  "build": {
+    "./assets/index-CddNTC7q.js": "03fa93e896951fbb19a2877c899b277be7bbe7989b64ea66a66b76707ea8080f",
+    "./assets/index-BL2fzgv8.css": "57c4d4113b47aa32a9972bb05f9dba1c3b8d2a6b8b9eb9f6d77eca8d1984e936"
+  },
+  "browser": "156.0.8078.4",
+  "phone": "390x844 DPR 1 touch emulation, Reduced Motion",
+  "decisionFrameSHA256": "00102da8147ec841b3e97e34f4f3d676cfb046d0ca27c5cdcd5f127a0d240096",
+  "plan": [
+    {
+      "type": "board",
+      "passengerIds": [
+        "flax"
+      ]
+    },
+    {
+      "type": "move",
+      "to": "signal"
+    },
+    {
+      "type": "unload",
+      "passengerIds": [
+        "flax"
+      ]
+    },
+    {
+      "type": "move",
+      "to": "wick"
+    },
+    {
+      "type": "board",
+      "passengerIds": [
+        "tallow",
+        "spindle",
+        "wicklow"
+      ]
+    },
+    {
+      "type": "move",
+      "to": "signal"
+    },
+    {
+      "type": "open-bridge"
+    },
+    {
+      "type": "move",
+      "to": "harbor"
+    },
+    {
+      "type": "unload",
+      "passengerIds": [
+        "spindle"
+      ]
+    },
+    {
+      "type": "move",
+      "to": "signal"
+    },
+    {
+      "type": "board",
+      "passengerIds": [
+        "flax"
+      ]
+    },
+    {
+      "type": "move",
+      "to": "harbor"
+    },
+    {
+      "type": "unload",
+      "passengerIds": [
+        "tallow",
+        "wicklow",
+        "flax"
+      ]
+    }
+  ],
+  "timeline": [
+    {
+      "turn": 1,
+      "tide": 0,
+      "node": "wick",
+      "load": [
+        "flax"
+      ],
+      "open": false,
+      "waiting": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": [
+          "tallow",
+          "spindle",
+          "wicklow"
+        ]
+      },
+      "delivered": [],
+      "status": "playing"
+    },
+    {
+      "turn": 2,
+      "tide": 0,
+      "node": "signal",
+      "load": [
+        "flax"
+      ],
+      "open": false,
+      "waiting": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": [
+          "tallow",
+          "spindle",
+          "wicklow"
+        ]
+      },
+      "delivered": [],
+      "status": "playing"
+    },
+    {
+      "turn": 3,
+      "tide": 0,
+      "node": "signal",
+      "load": [],
+      "open": false,
+      "waiting": {
+        "harbor-pier": [],
+        "signal-pier": [
+          "flax"
+        ],
+        "wick-pier": [
+          "tallow",
+          "spindle",
+          "wicklow"
+        ]
+      },
+      "delivered": [],
+      "status": "playing"
+    },
+    {
+      "turn": 4,
+      "tide": 0,
+      "node": "wick",
+      "load": [],
+      "open": false,
+      "waiting": {
+        "harbor-pier": [],
+        "signal-pier": [
+          "flax"
+        ],
+        "wick-pier": [
+          "tallow",
+          "spindle",
+          "wicklow"
+        ]
+      },
+      "delivered": [],
+      "status": "playing"
+    },
+    {
+      "turn": 5,
+      "tide": 1,
+      "node": "wick",
+      "load": [
+        "tallow",
+        "spindle",
+        "wicklow"
+      ],
+      "open": false,
+      "waiting": {
+        "harbor-pier": [],
+        "signal-pier": [
+          "flax"
+        ],
+        "wick-pier": []
+      },
+      "delivered": [],
+      "status": "playing"
+    },
+    {
+      "turn": 6,
+      "tide": 1,
+      "node": "signal",
+      "load": [
+        "tallow",
+        "spindle",
+        "wicklow"
+      ],
+      "open": false,
+      "waiting": {
+        "harbor-pier": [],
+        "signal-pier": [
+          "flax"
+        ],
+        "wick-pier": []
+      },
+      "delivered": [],
+      "status": "playing"
+    },
+    {
+      "turn": 7,
+      "tide": 1,
+      "node": "signal",
+      "load": [
+        "tallow",
+        "spindle",
+        "wicklow"
+      ],
+      "open": true,
+      "waiting": {
+        "harbor-pier": [],
+        "signal-pier": [
+          "flax"
+        ],
+        "wick-pier": []
+      },
+      "delivered": [],
+      "status": "playing"
+    },
+    {
+      "turn": 8,
+      "tide": 1,
+      "node": "harbor",
+      "load": [
+        "tallow",
+        "spindle",
+        "wicklow"
+      ],
+      "open": true,
+      "waiting": {
+        "harbor-pier": [],
+        "signal-pier": [
+          "flax"
+        ],
+        "wick-pier": []
+      },
+      "delivered": [],
+      "status": "playing"
+    },
+    {
+      "turn": 9,
+      "tide": 2,
+      "node": "harbor",
+      "load": [
+        "tallow",
+        "wicklow"
+      ],
+      "open": true,
+      "waiting": {
+        "harbor-pier": [],
+        "signal-pier": [
+          "flax"
+        ],
+        "wick-pier": []
+      },
+      "delivered": [
+        "spindle"
+      ],
+      "status": "playing"
+    },
+    {
+      "turn": 10,
+      "tide": 2,
+      "node": "signal",
+      "load": [
+        "tallow",
+        "wicklow"
+      ],
+      "open": true,
+      "waiting": {
+        "harbor-pier": [],
+        "signal-pier": [
+          "flax"
+        ],
+        "wick-pier": []
+      },
+      "delivered": [
+        "spindle"
+      ],
+      "status": "playing"
+    },
+    {
+      "turn": 11,
+      "tide": 2,
+      "node": "signal",
+      "load": [
+        "tallow",
+        "wicklow",
+        "flax"
+      ],
+      "open": true,
+      "waiting": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": []
+      },
+      "delivered": [
+        "spindle"
+      ],
+      "status": "playing"
+    },
+    {
+      "turn": 12,
+      "tide": 2,
+      "node": "harbor",
+      "load": [
+        "tallow",
+        "wicklow",
+        "flax"
+      ],
+      "open": true,
+      "waiting": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": []
+      },
+      "delivered": [
+        "spindle"
+      ],
+      "status": "playing"
+    },
+    {
+      "turn": 13,
+      "tide": 2,
+      "node": "harbor",
+      "load": [],
+      "open": true,
+      "waiting": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": []
+      },
+      "delivered": [
+        "spindle",
+        "tallow",
+        "wicklow",
+        "flax"
+      ],
+      "status": "won"
+    }
+  ]
+}

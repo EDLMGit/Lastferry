@@ -1,0 +1,385 @@
+import * as T from 'three';
+import { animal, ferry } from '../scene/models';
+import { holdingPier, orchardLanding, passengerName, ternhaven, twoShelters, wideBerth } from '../levels/level';
+import { deckSeat, ferryProfile, passengerScale } from '../scene/ferry-profile';
+import { passengerModelVariant, resolvePassengerAppearance } from '../game/passenger-appearance';
+import '../ui/cove-ui.css';
+import '../ui/depth-reading.css';
+import '../ui/crossing-instruments.css';
+import { ferryInstrument } from '../ui/crossing-instruments';
+import '../ui/tide-mark.css';
+import { depthReading, readingMarkup } from '../ui/depth-reading';
+import { waterlineMark } from '../ui/tide-mark';
+import './asset-gallery.css';
+import catalog from '../../assets/catalog.json';
+import {
+  controlContent,
+  escapeLabel,
+  iconMarkup,
+  iconNames,
+  observePassengerPortraits,
+  passengerChoiceContent,
+  portraitSources,
+  arrivalFigureSources,
+  setControl,
+  type CoveIcon,
+} from '../ui/cove-ui';
+import type { PortraitKey } from '../game/passenger-appearance';
+import { storyScenes } from '../campaign/registry';
+import { checkpointCopy } from '../campaign/progress';
+import { createCoveStoryPainter } from '../campaign/story-painter';
+import { lanterns, masteryBadgeMarkup, masteryCriteriaMarkup, masteryResultMarkup } from '../ui/lanterns';
+import { arrivalMarkup } from '../ui/arrival';
+import { initial } from '../game/rules';
+import { masteryTargets, resultFor } from '../game/mastery';
+
+const root = document.querySelector<HTMLElement>('#gallery')!;
+const text = escapeLabel;
+const entries = catalog.entries;
+const sourceLink = (path: string, label: string) =>
+  `<a href="/${encodeURI(path)}" target="_blank" rel="noopener">${text(label)}</a>`;
+const choices = (names: [string, number, boolean, PortraitKey | null][], focus = false) =>
+  `<div class="passenger-options" role="group" aria-label="Specimen passenger selection">${names.map(([name, spaces, selected, appearance], index) => `<button class="cove-choice" aria-pressed="${selected}"${focus && index === 0 ? ' data-demo-state="focus"' : ''}>${passengerChoiceContent(name, spaces, appearance)}</button>`).join('')}</div>`;
+const residents: [string, number, boolean, PortraitKey][] = [
+  ['Pip', 1, true, 'rabbit-cream'],
+  ['Rue', 1, true, 'rabbit-tan'],
+  ['Moss', 2, true, 'sheep-wool'],
+];
+observePassengerPortraits(root);
+root.innerHTML = `<header><p>Last Ferry · developer tools</p><h1>Cove asset gallery</h1><p>Live component sources and canonical inventory. This is design evidence, not a gameplay capture.</p><p>${entries.length} families · <a href="/">Open the game</a> · <a href="/assets/catalog.json">Canonical JSON</a></p></header>
+<section class="cove-panel cove-surface gallery-panel" aria-labelledby="readability-heading"><h2 id="readability-heading">Readable play in context</h2><p>The game uses separate corner controls, compact load/depth and occupied-pier deadline capsules, optional details and one nearby Sail action. Canonical shallow banks and deeper turning pockets are shown by the actual water renderer. These layout and world relationships require gameplay inspection; this gallery does not simulate them.</p><p><a href="/?cove=holding-pier">Holding Pier practice</a> · <a href="/?cove=driftwood-yard">Driftwood Yard practice</a> · <a href="/">Journey and Harbor connection</a></p><p>${sourceLink('reviews/play-readability/REVIEW.md', 'Actual play review and source-tied evidence')} · ${sourceLink('reviews/play-readability/HARBOR_OBSERVATIONS.md', 'Native Harbor composition observations')}</p><p>The Harbor specimen below uses the same bounded foreground painter. Prior acceptance of the opening art is distinct from human review of this correction.</p></section>
+<section class="cove-panel cove-surface gallery-panel"><h2>Shared controls</h2><div id="controls" class="specimens"></div><p><span class="cove-name cove-surface cove-surface--compact cove-objective">${iconMarkup('harbor-home')}Harbor · Home</span> <small>The Android launcher uses the same lighthouse in gold on teal.</small> &nbsp; ${controlContent('back-to-boat', 'Back to boat identifies the camera control')}</p></section>
+<section aria-labelledby="panel-material-heading"><h2 id="panel-material-heading">Painted reading material</h2><p>Actual shared CSS and one original SVG corner. Component geometry remains local; no text is baked into the decoration.</p><div class="panel-specimens">
+<article id="gallery-three-passengers" class="cove-panel cove-surface gallery-panel panel-specimen"><p>Harbor · inspection is free</p><h3>Deliver Pip, Rue and Moss</h3>${choices(residents)}<p><strong>After unloading: boat needs depth 1.</strong></p><p>Everyone will be safely home at Harbor.</p><p>After this action: Boat 0/4 spaces · tide 2.</p><button id="gallery-confirm"></button></article>
+<article id="gallery-narrow-passengers" class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow"><p>320px panel · native selection buttons</p><h3>Room for full labels</h3>${choices(
+  [
+    ['Pip', 1, true, 'rabbit-cream'],
+    ['Rue', 1, false, 'rabbit-tan'],
+    ['Moss', 2, true, 'sheep-wool'],
+  ],
+  true,
+)}<p>Tips On · predictive warning specimen</p><p class="gallery-warning">Pip boards, then the tide rises. Rue is still waiting at Rabbit Pier when it floods. This ends the crossing.</p></article>
+<article id="gallery-text-stress" class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow gallery-text-stress"><p>Bounded stress specimen · 320px panel, 20px text (125%)</p><h3>Longer names</h3>${choices(
+  [
+    ['Alexandria', 1, true, 'rabbit-cream'],
+    ['Marigold', 1, false, 'rabbit-tan'],
+    ['Moss', 2, true, 'sheep-wool'],
+  ],
+)}<p>Gallery-only labels use explicit appearance fixtures to test wrapping. Actual passenger and level data are unchanged.</p></article>
+</div><div class="cove-panel cove-surface cove-surface--compact gallery-panel"><h3>Compact face</h3><p>Shared opaque wash with no corner decoration. HUD, names, forecast and local options retain their own dimensions.</p><button id="gallery-forecast" class="cove-panel cove-surface cove-surface--compact gallery-forecast" data-demo-state="focus">! Rabbit Pier floods in 1 action.</button></div>
+<div class="cove-panel cove-surface cove-surface--arrival gallery-panel"><h3>Everyone home.</h3><p>Arrival uses only a warmer upper catchlight. Normal action and home colors remain the existing button family.</p><button id="gallery-next"></button></div></section>
+<section id="gallery-orchard" class="cove-panel cove-surface gallery-panel"><h2>Orchard Landing</h2><p>Orin has a chestnut coat, a cream muzzle and a pair of short forked antlers. The portrait is projected from his gameplay model. Three spaces is his indivisible load.</p>${choices(orchardLanding.passengers.map(p => [passengerName(p.id, orchardLanding), p.slots, true, resolvePassengerAppearance(orchardLanding, p.id)!.portraitKey]))}<p><a href="/?cove=orchard-landing">Visit Orchard Landing in Practice</a></p></section>
+<section aria-labelledby="beaver-heading"><h2 id="beaver-heading">Nell · real beaver model</h2><p>The production geometry, including the broad resting tail, muzzle and compact paws. A static developer specimen uses the same model factory; it is not gameplay evidence.</p><div class="panel-specimens"><figure class="cove-panel cove-surface gallery-panel"><canvas id="gallery-beaver-model" style="width:100%;height:260px;display:block" role="img" aria-label="Nell the warm brown beaver with a lighter muzzle, small round ears, broad nose and flat darker tail"></canvas><figcaption>Nell · two spaces · original editable geometry</figcaption></figure><article class="cove-panel cove-surface gallery-panel panel-specimen--narrow"><h3>Driftwood neighbors</h3>${choices(
+  [
+    ['Nell', 2, true, 'beaver-brown'],
+    ['Fern', 1, true, 'rabbit-cream'],
+    ['Oat', 1, true, 'rabbit-tan'],
+  ],
+)}<p>Explicit stable coats survive offered subsets and passenger-array reorder.</p><p><a href="/?cove=driftwood-yard">Open the actual Driftwood rescue</a></p></article></div></section><section id="animal-profiles" aria-labelledby="portrait-heading"><h2 id="portrait-heading">Five neighbors, two views</h2><p>The same five miniature appearances supply close-up passenger choices and full figures at arrival. Each pair uses two transparent 256px images baked from the shared gameplay geometry. These are developer specimens.</p><div class="portrait-sources">${(Object.entries(portraitSources) as [PortraitKey, string][]).map(([key, choice]) => `<figure class="cove-panel cove-surface gallery-panel"><div class="profile-pair"><img src="${choice}" width="256" height="256" alt="${key} choice portrait" /><img src="${arrivalFigureSources[key]}" width="256" height="256" alt="${key} arrival figure" /></div><figcaption>${key} · choice / arrival</figcaption></figure>`).join('')}</div><div class="panel-specimens"><article id="gallery-bellwater-portraits" class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow"><h3>Bellwater names, same appearances</h3>${choices(
+  [
+    ['Tansy', 1, false, 'rabbit-cream'],
+    ['Lark', 1, true, 'rabbit-tan'],
+    ['Bram', 2, false, 'sheep-wool'],
+  ],
+  true,
+)}<p>Names and capacities remain level-owned. Offered order cannot recolor Lark.</p></article><article id="gallery-failed-portrait" class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow"><h3>Unavailable image</h3>${choices([['Lark', 1, true, 'rabbit-tan']])}<p>The image request intentionally fails. The reserved slot, full name/cost and selected check stay usable.</p></article><article id="gallery-unknown-portrait" class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow"><h3>Future appearance fallback</h3>${choices([['Future passenger', 1, false, null]])}<p>Explicit unavailable appearance preserves text instead of guessing a different animal.</p></article></div></section>
+<section aria-labelledby="home-heading"><h2 id="home-heading">Live Home composition</h2><p>Authored framing of the retained ferry, lighthouse and water. The actual root composes around measured title/menu bounds; this gallery does not create a second World.</p><p><a href="/">Open actual Home</a> · ${sourceLink('docs/HOME_COMPOSITION.md', 'Camera, layouts and ownership recipe')}</p><div class="cove-panel cove-surface gallery-panel"><h3>Last Ferry · The Long Tide</h3><button id="gallery-home-play"></button><button id="gallery-home-options"></button><p>Saved cove: Continue · from cove start. These are shared control specimens, not gameplay evidence.</p></div></section><section aria-labelledby="story-heading"><h2 id="story-heading">Illustrated story and journey surfaces</h2><p>The composed endpoints below use the actual production painter and registry captions. These static design specimens are not journey recordings or gameplay evidence. The opening reference is approved. Orchard adds a supported two-shore encounter with the empty ferry, waiting Pomme and Medlar, and Orin’s finite greeting. Ternhaven places the three passengers aboard the six-space ferry beside the open-water buoy, while Willow waves from the reed bank. The last four chapters return to the flooded orchard, unfold Bellwater’s cloth, cross Far Reach and gather the final ferry. At supper the same cloth, Nell’s rope and Orin’s bough surround one empty place. The five illustrations use the shared painter; the actual Journey holds its final scene until the captain chooses Credits.</p><article class="cove-panel cove-surface gallery-panel panel-specimen panel-specimen--narrow"><p>Journey entrance</p><h3>Last Ferry</h3><p>${text(checkpointCopy)}</p><button id="gallery-journey-new"></button><button id="gallery-journey-continue"></button></article><div class="story-specimens">${Object.values(
+  storyScenes,
+)
+  .flatMap((scene) =>
+    scene.shots.map(
+      (shot, index) =>
+        `<figure class="cove-panel cove-surface gallery-story"><h3>${text(scene.title)} · ${text(shot.id)}</h3><canvas data-illustration="${shot.illustration}" data-duration-ms="${shot.durationMs}" role="img" aria-label="${text(shot.description)}"></canvas><figcaption class="gallery-story-caption">${text(shot.caption)}</figcaption><button class="gallery-story-continue" data-continue-label="${text(index === scene.shots.length - 1 ? scene.continueLabel : 'Next')}"></button><p>${shot.durationMs / 1000}s finite illustration; normal opening playback advances until the final held endpoint. The primary action is immediately available. Next changes only the picture; only the final handoff acknowledges the scene.</p><p>${text(shot.description)}</p></figure>`,
+    ),
+  )
+  .join(
+    '',
+  )}</div><div class="cove-panel cove-surface gallery-panel"><h3>Story effects and optional narration</h3><p>Finite tide wash, lantern contact and ferry water share the existing Sound owner. This gallery does not autoplay sound. Actual runtime audio, cancellation checks and listening limitations belong in the review report.</p><p>${sourceLink('src/audio/story-effects.ts', 'Story envelope definitions')} · ${sourceLink('src/audio/atmosphere.ts', 'Sound ownership and routing')} · ${sourceLink('LAST_FERRY_STORY_PRODUCTION_PACKAGE/audio/narration-script.json', 'Narration script: recordings absent')}</p><p>Four narration IDs are optional asset slots only. There is no delivered voice, live TTS or unavailable narration control.</p></div></section>
+<section class="cove-panel cove-surface gallery-panel"><h2>Original 24px glyphs</h2><div class="icon-grid">${iconNames.map((name) => `<div>${iconMarkup(name)}<span>${name}</span></div>`).join('')}</div></section><section><h2>Canonical inventory</h2><label>Filter by family, kind or meaning <input id="filter" type="search" /></label><p id="count" role="status"></p><div id="inventory"></div></section>`;
+const shelterSection = document.createElement('section');
+const masterySection = document.createElement('section');
+masterySection.id = 'mastery-lanterns';
+masterySection.className = 'cove-panel cove-surface gallery-panel';
+const masteryExample = { coveId: 'orchard-landing', revision: 1, actions: 12, successfulUndos: 1, lanterns: 2 as const };
+const masteryBest = { ...masteryExample, successfulUndos: 0, lanterns: 3 as const };
+masterySection.innerHTML = `<h2>Three lanterns</h2><p>Shared live components at phone scale. The examples below are design specimens.</p><div class="panel-specimens"><article class="panel-specimen panel-specimen--narrow">${masteryResultMarkup(masteryExample, masteryBest)}${masteryCriteriaMarkup(13)}</article><article class="panel-specimen panel-specimen--narrow"><h3>Practice markers</h3><button class="cove-button cove-button--quiet mastery-practice-specimen"><span class="practice-title">Orchard Landing</span>${masteryBadgeMarkup(masteryBest)}</button><p>${masteryBadgeMarkup(null, true)}</p><p>${masteryBadgeMarkup(null)}</p><p>${lanterns(1)} ${lanterns(2)} ${lanterns(3)}</p></article></div><p>${sourceLink('assets/ui/mastery-lantern.svg', 'Editable lantern glyph')} · ${sourceLink('reviews/three-lanterns/REVIEW.md', 'Actual results and phone evidence')}</p>`;
+root.querySelector('#gallery-orchard')!.after(masterySection);
+const arrivalSection = document.createElement('section');
+arrivalSection.id = 'arrival-bubble';
+arrivalSection.className = 'gallery-panel';
+arrivalSection.innerHTML = `<h2>Centered homecoming</h2><p>Isolated renderer fixtures using complete figurines, real level rosters and the production arrival helper. These synthetic won states are not actual rescues, and the specimen cannot write results or Journey progress.</p><label for="gallery-arrival-cast">Rescued cast <select id="gallery-arrival-cast"><option value="holding">Holding Pier · Pip, Rue and Moss</option><option value="ternhaven">Ternhaven · four neighbors including Sedge</option><option value="orchard">Orchard · three neighbors</option><option value="wide">Wide Berth · six neighbors</option></select></label><label for="gallery-arrival-result">Current result <select id="gallery-arrival-result"><option value="3">Three lanterns</option><option value="2">Two lanterns, better accepted best</option><option value="1">One lantern, better accepted best</option></select></label><div class="cove-panel cove-surface cove-surface--arrival" id="gallery-arrival-frame" style="width:min(100%,700px);margin:20px auto"></div><p>${sourceLink('assets/ui/result-lantern.svg', 'Original larger lantern source')} · ${sourceLink('cove-ui-package/ui/icons/replay.svg', 'Original Replay icon')} · ${sourceLink('reviews/animal-presentation/REVIEW.md', 'Revised animals in actual play')}</p>`;
+masterySection.after(arrivalSection);
+function renderArrivalSpecimen() {
+  const selected = arrivalSection.querySelector<HTMLSelectElement>('#gallery-arrival-cast')!.value;
+  const level = selected === 'wide' ? wideBerth : selected === 'orchard' ? orchardLanding : selected === 'holding' ? holdingPier : ternhaven;
+  const count = Number(arrivalSection.querySelector<HTMLSelectElement>('#gallery-arrival-result')!.value);
+  const target = masteryTargets[level.id].target;
+  const actions = count === 1 ? target + 1 : target;
+  const state = { ...initial(level), status: 'won' as const, turn: actions, aboard: [], delivered: [...level.objective.requiredPassengerIds], waitingByPier: Object.fromEntries(level.piers.map(pier => [pier.id, []])) };
+  const frame = arrivalSection.querySelector<HTMLDivElement>('#gallery-arrival-frame')!;
+  frame.innerHTML = arrivalMarkup({ level, state, result: resultFor(level.id, actions, count === 2 ? 1 : 0), best: resultFor(level.id, target, 0), forward: { id: 'choose-cove', label: 'Choose a cove' }, policy: 'Gallery fixture only. Controls do not navigate, save or award a rescue.' });
+  setControl(frame.querySelector<HTMLButtonElement>('#cancel')!, 'close', 'Close arrival', 'quiet', true);
+}
+arrivalSection.querySelectorAll('select').forEach(select => select.addEventListener('change', renderArrivalSpecimen));
+renderArrivalSpecimen();
+shelterSection.id = 'two-shelters';
+shelterSection.className = 'cove-panel cove-surface gallery-panel';
+const shelterResidents: [string, number, boolean, PortraitKey | null][] =
+  twoShelters.passengers.map((passenger) => [
+    passengerName(passenger.id, twoShelters),
+    passenger.slots,
+    twoShelters.start.aboard.includes(passenger.id),
+    resolvePassengerAppearance(twoShelters, passenger.id)?.portraitKey ?? null,
+  ]);
+shelterSection.innerHTML = `<h2>Two Shelters</h2><p>Hazel and Bracken share the four-space ferry. Mica waits at the reeds.</p><article class="panel-specimen panel-specimen--narrow"><h3>Passenger choices</h3>${choices(shelterResidents)}<p>The portrait choices use the production level and appearance resolver with the choice crops.</p></article><p><a href="/?cove=two-shelters">Two Shelters Practice</a> · <a href="/">Play the Journey</a> · ${sourceLink('reviews/journey-six-coves/REVIEW.md', 'Entry scene and actual rescue')}</p>`;
+root.querySelector('#readability-heading')!.closest('section')!.after(shelterSection);
+const mobileMap = document.createElement('p');
+mobileMap.innerHTML = `<a href="/?cove=two-shelters">Inspect Two Shelters</a> · <a href="/?cove=wide-berth">Inspect Wide Berth</a> · ${sourceLink('reviews/mobile-map-readability/REVIEW.md', 'Matched phone map views and control placement')}`;
+root.querySelector('#readability-heading')!.after(mobileMap);
+const reefSection = document.createElement('section');
+reefSection.id = 'reef-return';
+reefSection.className = shelterSection.className;
+reefSection.innerHTML = `<h2>Reef Return</h2><p>The six-space ferry serves Cairn Quay, Wrack Pier and Shell Pool. Pale chevrons mark Needle Reef’s permitted direction. The inner shoal offers a second approach to Harbor for a lighter boat.</p><p><a href="/?cove=reef-return">Play Reef Return</a> · ${sourceLink('reviews/existing-coves-repair/REVIEW.md', 'Phone views and rescue evidence')}</p>`;
+shelterSection.after(reefSection);
+const ternhavenSection = document.createElement('section');
+ternhavenSection.id = 'ternhaven';
+ternhavenSection.className = shelterSection.className;
+ternhavenSection.innerHTML = `<h2>Ternhaven · Practice</h2><p>Juniper, Sedge, Fennel and Willow reuse the full-size chestnut deer, wool sheep, tan rabbit and brown beaver. Four modest shores share the accepted ferry, materials and five authored passages.</p><article class="panel-specimen panel-specimen--narrow"><h3>Passenger choices</h3>${choices(ternhaven.passengers.map(passenger => [passengerName(passenger.id, ternhaven), passenger.slots, ternhaven.start.aboard.includes(passenger.id), resolvePassengerAppearance(ternhaven, passenger.id)?.portraitKey ?? null]))}<p>Model-derived choice portraits and live selection controls. This specimen is not gameplay evidence.</p><p>${masteryBadgeMarkup(null)}</p><p>Accepted action target: 14. A newly completed rescue supplies its rating.</p></article><p><a href="/?cove=ternhaven">Play Ternhaven</a> · <a href="#wide-ferry">Inspect automatic deck seating</a> · ${sourceLink('reviews/cove-eight-practice/REVIEW.md', 'Actual rescue and native phone evidence')}</p>`;
+reefSection.after(ternhavenSection);
+const drownedOrchardSection = document.createElement('section');
+drownedOrchardSection.id = 'drowned-orchard';
+drownedOrchardSection.className = reefSection.className;
+drownedOrchardSection.innerHTML = `<h2>Drowned Orchard · Practice playtest</h2><p>The lighthouse, orchard trees, Cider Quay and Spring Steps mark the same coast on a later tide. The ferry and its neighbors use the existing six-space hull and miniature animal family.</p><p><a href="/?cove=orchard-landing">Visit Orchard Landing</a> · <a href="/?cove=drowned-orchard">Visit Drowned Orchard</a> · ${sourceLink('reviews/cove-nine-practice/REVIEW.md', 'Compare actual gameplay views')}</p>`;
+ternhavenSection.after(drownedOrchardSection);
+const lanternSection = document.createElement('section');
+lanternSection.id = 'lantern-reach';
+lanternSection.className = reefSection.className;
+lanternSection.innerHTML = `<h2>Lantern Reach</h2><p>The timber swing bridge fits the six-space ferry. Lantern Steps across Wick Race is the fourth supported landing, with room for Sorbus at the shore and on deck.</p><p><a href="/?cove=lantern-reach">Play Lantern Reach</a> · ${sourceLink('reviews/lantern-reach-difficulty/REVIEW.md', 'Native phone evidence')}</p>`;
+drownedOrchardSection.after(lanternSection);
+const farShoreSection = document.createElement('section');
+farShoreSection.id = 'far-shore';
+farShoreSection.className = reefSection.className;
+farShoreSection.innerHTML = `<h2>Far Shore</h2><p>From the stone Tide Steps, look across Far Reach to the high bank and the reed-lined shallows where Rowan waits. The four passengers share the six-space ferry.</p><p><a href="/?cove=far-shore">Play Far Shore</a> · ${sourceLink('reviews/far-shore/REVIEW.md', 'Phone views and rescue')}</p>`;
+lanternSection.after(farShoreSection);
+const instruments = document.createElement('section');
+instruments.id = 'cove-instruments';
+instruments.className = reefSection.className;
+const startingFerry = ferryInstrument(initial(holdingPier), holdingPier);
+instruments.innerHTML = `<h2>Cove instruments</h2><div class="gallery-ferry-instrument cove-panel cove-surface cove-surface--compact" role="img" aria-label="Moss occupies two of four deck spaces. The hull needs depth two in water three deep.">${startingFerry.markup}</div><p>Each solid plank is one occupied deck space. The brass pointer marks the hull requirement against a ticked column of water.</p>${readingMarkup(depthReading(initial(holdingPier), holdingPier, { type: 'move', to: 'shallows' }))}<p>${waterlineMark()} The tide sign and the affected map landing share this rising-water mark.</p><p><a href="/?cove=holding-pier">Play Holding Pier</a> · ${sourceLink('reviews/android-cove-view/REVIEW.md', 'Android playtest')}</p>`;
+const lastFerrySection = document.createElement('section');
+lastFerrySection.id = 'last-ferry';
+lastFerrySection.className = reefSection.className;
+lastFerrySection.innerHTML = `<h2>Last Ferry</h2><p>Two pairs of neighbors wait across a shallow cut. From Lantern Buoy the homeward channel runs to the lighthouse and its keeper’s cottage.</p><p><a href="/?cove=last-ferry">Play Last Ferry</a> · ${sourceLink('reviews/last-ferry/REVIEW.md', 'See the loaded approach')}</p>`;
+farShoreSection.after(lastFerrySection);
+lastFerrySection.after(instruments);
+const fullRoster = document.createElement('article');
+fullRoster.id = 'gallery-six-passengers';
+fullRoster.className = 'cove-panel cove-surface gallery-panel panel-specimen gallery-manifest';
+fullRoster.innerHTML = `<h3>Six neighbors · choice layout fixture</h3>${choices(wideBerth.passengers.map(person => [passengerName(person.id, wideBerth), person.slots, person.species === 'rabbit', resolvePassengerAppearance(wideBerth, person.id)?.portraitKey ?? null]))}<p>All six Wide Berth names in an isolated layout sample. Selection changes only this specimen.</p>`;
+document.querySelector('#gallery-text-stress')!.after(fullRoster);
+const failedPortrait = root.querySelector<HTMLImageElement>('#gallery-failed-portrait img')!;
+failedPortrait.dataset.portraitState = 'pending';
+failedPortrait.src = '/__portrait-unavailable.png';
+setControl(document.querySelector('#gallery-confirm')!, 'confirm', 'Confirm · 1 action', 'warm');
+setControl(document.querySelector('#gallery-next')!, 'next-cove', 'Next cove', 'warm');
+setControl(document.querySelector('#gallery-home-play')!, null, 'Play', 'warm');
+setControl(document.querySelector('#gallery-home-options')!, 'settings', 'Options', 'quiet');
+setControl(document.querySelector('#gallery-journey-new')!, 'next-cove', 'New journey', 'warm');
+setControl(
+  document.querySelector('#gallery-journey-continue')!,
+  'next-cove',
+  'Continue journey · from cove start',
+  'action',
+);
+for (const button of root.querySelectorAll<HTMLButtonElement>('.gallery-story-continue'))
+  setControl(button, 'next-cove', button.dataset.continueLabel!, 'warm');
+const beaverCanvas = root.querySelector<HTMLCanvasElement>('#gallery-beaver-model')!;
+const beaverRenderer = new T.WebGLRenderer({ canvas: beaverCanvas, alpha: true, antialias: true });
+beaverRenderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+beaverRenderer.outputColorSpace = T.SRGBColorSpace;
+beaverRenderer.toneMapping = T.ACESFilmicToneMapping;
+const beaverScene = new T.Scene();
+const beaver = animal('beaver');
+beaver.scale.set(1.15, 1.5, 1.15);
+beaverScene.add(beaver, new T.AmbientLight('#dce8dd', 2.2));
+const beaverKey = new T.DirectionalLight('#ffe4bc', 3);
+beaverKey.position.set(-3, 5, 4);
+beaverScene.add(beaverKey);
+const beaverCamera = new T.OrthographicCamera(-0.65, 0.65, 1, -0.3, 0.01, 20);
+beaverCamera.position.set(2.7, 2.3, 5);
+beaverCamera.lookAt(0, 0.4, 0);
+const beaverResize = new ResizeObserver(([entry]) => {
+  const { width, height } = entry.contentRect;
+  if (width <= 0 || height <= 0) return;
+  const halfHeight = 0.65;
+  beaverCamera.left = (-halfHeight * width) / height;
+  beaverCamera.right = (halfHeight * width) / height;
+  beaverCamera.top = halfHeight;
+  beaverCamera.bottom = -halfHeight;
+  beaverCamera.updateProjectionMatrix();
+  beaverRenderer.setSize(width, height, false);
+  beaverRenderer.render(beaverScene, beaverCamera);
+});
+beaverResize.observe(beaverCanvas);
+const storyPainters = new Map<HTMLCanvasElement, ReturnType<typeof createCoveStoryPainter>>();
+const storyResize = new ResizeObserver((entries) => {
+  for (const entry of entries) {
+    const canvas = entry.target as HTMLCanvasElement,
+      painter = storyPainters.get(canvas)!;
+    painter.resize(entry.contentRect.width, entry.contentRect.height, devicePixelRatio);
+    painter.draw(
+      canvas.dataset.illustration as Parameters<typeof painter.draw>[0],
+      Number(canvas.dataset.durationMs) / 1000,
+    );
+  }
+});
+for (const canvas of root.querySelectorAll<HTMLCanvasElement>('[data-illustration]')) {
+  storyPainters.set(canvas, createCoveStoryPainter(canvas));
+  storyResize.observe(canvas);
+}
+function releaseStoryGallery() {
+  storyResize.disconnect();
+  beaverResize.disconnect();
+  beaverScene.traverse((object) => {
+    if (object instanceof T.Mesh) object.geometry.dispose();
+  });
+  beaverRenderer.dispose();
+  storyPainters.clear();
+}
+window.addEventListener('pagehide', releaseStoryGallery, { once: true });
+const demoControls: [CoveIcon | null, string, 'quiet' | 'action' | 'warm', string?][] = [
+  ['board', 'Board', 'action'],
+  ['unload', 'Let ashore', 'action'],
+  ['unload', 'Bring home', 'warm'],
+  ['sail', 'Sail · 1 action', 'action'],
+  ['confirm', 'Confirm · 1 action', 'action'],
+  ['next-cove', 'Next cove', 'warm'],
+  ['undo', 'Undo', 'quiet'],
+  ['wait', 'Wait · 1 action', 'quiet'],
+  ['whole-cove', 'Whole cove', 'quiet'],
+  ['back-to-boat', 'Back to boat', 'quiet'],
+  ['sound-retry', 'Retry sound', 'quiet'],
+  ['fullscreen-exit', 'Exit fullscreen', 'quiet'],
+  ['board', 'Pressed', 'action', 'pressed'],
+  ['board', 'Focus', 'action', 'focus'],
+  ['sail', 'Unavailable', 'action', 'disabled'],
+];
+for (const [icon, label, face, state] of demoControls) {
+  const button = document.createElement('button');
+  setControl(button, icon, label, face);
+  if (state === 'disabled') button.disabled = true;
+  else if (state) button.dataset.demoState = state;
+  document.querySelector('#controls')!.append(button);
+}
+for (const [icon, label] of [
+  ['menu', 'Menu'],
+  ['settings', 'Settings'],
+  ['close', 'Close'],
+  ['sound-on', 'Mute sound'],
+  ['sound-off', 'Enable sound'],
+  ['fullscreen-enter', 'Fullscreen'],
+] as const) {
+  const button = document.createElement('button');
+  setControl(button, icon, label, 'quiet', true);
+  button.title = label;
+  document.querySelector('#controls')!.append(button);
+}
+for (const button of root.querySelectorAll<HTMLButtonElement>('.cove-choice'))
+  button.onclick = () =>
+    button.setAttribute('aria-pressed', String(button.getAttribute('aria-pressed') !== 'true'));
+const showInventory = () => {
+  const query = (document.querySelector('#filter') as HTMLInputElement).value.toLowerCase();
+  const shown = entries.filter((entry) =>
+    `${entry.id} ${entry.name} ${entry.kind} ${entry.meaning}`.toLowerCase().includes(query),
+  );
+  document.querySelector('#count')!.textContent = `${shown.length} of ${entries.length} families`;
+  document.querySelector('#inventory')!.innerHTML = shown
+    .map(
+      (entry) =>
+        `<details class="cove-panel cove-surface cove-surface--compact gallery-panel"><summary><b>${text(entry.name)}</b> <span>${text(entry.id)} · ${text(entry.status)}</span></summary><p>${text(entry.meaning)}</p><p>${text(entry.visualSignature)}</p><p>Human acceptance: ${text(entry.acceptance.state)}</p><h3>Source and ownership</h3><ul>${entry.sources.map((source) => `<li>${sourceLink(source.path, source.path)} · ${text(source.symbol)}</li>`).join('')}</ul><p>${text(entry.reuseAndOwnership)}</p><p>${text(entry.behaviorToPreserve)}</p><h3>Provenance</h3><p>${text(entry.provenance)}</p><pre>${text(JSON.stringify(catalog.provenanceProfiles[entry.provenance as keyof typeof catalog.provenanceProfiles], null, 2))}</pre><h3>Evidence</h3><ul>${entry.evidence.map((item) => `<li>${sourceLink(item.path, item.role)}</li>`).join('')}</ul><h3>Type contract</h3><pre>${text(JSON.stringify(entry.typeSpecific, null, 2))}</pre></details>`,
+    )
+    .join('');
+};
+document.querySelector('#filter')!.addEventListener('input', showInventory);
+showInventory();
+
+const driftwoodLink = document.createElement('section');
+driftwoodLink.id = 'driftwood-yard';
+driftwoodLink.innerHTML = `<h2>Driftwood Yard · authored environment and illustrated connection</h2><p><a href="/?cove=driftwood-yard">Play the actual timber-yard cove</a> · <a href="/">Open the journey for the earned Nell lantern scene</a></p>`;
+document.querySelector('main')!.append(driftwoodLink);
+
+const wideSection = document.createElement('section');
+wideSection.id = 'wide-ferry';
+wideSection.className = 'cove-panel cove-surface gallery-panel';
+wideSection.innerHTML = `<h2>The six-space harbor ferry</h2><p>This static design specimen uses the production hull, real models and automatic deck seats. It is not a gameplay capture. In play, passengers use the side gate and a short brow between the deck and the landing.</p><label for="gallery-ferry-roster">Deck specimen <select id="gallery-ferry-roster"><option value="wide">Wide Berth · sheep and four rabbits · 6 spaces</option><option value="ternhaven-start">Ternhaven · deer, sheep and rabbit · 6 spaces</option><option value="ternhaven-beaver">Ternhaven · deer, beaver and rabbit · 6 spaces</option></select></label><canvas id="gallery-wide-ferry" aria-label="Six-space yellow ferry, red wheelhouse and five neighbors" style="width:100%;height:320px;display:block"></canvas><p><a href="/?cove=wide-berth">Wide Berth</a> · <a href="/?cove=reef-return">Reef Return</a> · <a href="/?cove=ternhaven">Ternhaven</a> · ${sourceLink('reviews/existing-coves-repair/REVIEW.md', 'Actual dock and sailing frames')}</p>`;
+root.append(wideSection);
+const wideCanvas = wideSection.querySelector<HTMLCanvasElement>('canvas')!;
+const wideRenderer = new T.WebGLRenderer({ canvas: wideCanvas, antialias: true });
+wideRenderer.setPixelRatio(Math.min(devicePixelRatio, 1.7));
+wideRenderer.outputColorSpace = T.SRGBColorSpace;
+wideRenderer.toneMapping = T.ACESFilmicToneMapping;
+wideRenderer.toneMappingExposure = 1;
+const wideScene = new T.Scene();
+wideScene.background = new T.Color('#245f70');
+wideScene.add(new T.HemisphereLight('#fff1dc', '#5f8c9a', 1.9));
+const wideSun = new T.DirectionalLight('#ffe0af', 2.4);
+wideSun.position.set(-8, 16, 7);
+wideScene.add(wideSun);
+const wideModel = ferry(ferryProfile(wideBerth));
+wideScene.add(wideModel);
+const galleryPassengers = new T.Group();
+wideModel.add(galleryPassengers);
+function setGalleryRoster(value: string) {
+  galleryPassengers.traverse(object => { if (object instanceof T.Mesh) object.geometry.dispose(); });
+  galleryPassengers.clear();
+  const level = value === 'wide' ? wideBerth : ternhaven;
+  const ids = value === 'wide' ? ['alder', 'poppy', 'wren', 'sorrel', 'finch']
+    : value === 'ternhaven-start' ? ternhaven.start.aboard : ['juniper', 'willow', 'fennel'];
+  for (const id of ids) {
+    const passenger = level.passengers.find(p => p.id === id)!;
+    const figure = animal(passenger.species, passengerModelVariant(level, id));
+    figure.scale.set(...passengerScale(passenger.species));
+    figure.position.copy(deckSeat(level, id));
+    galleryPassengers.add(figure);
+  }
+  wideCanvas.setAttribute('aria-label', `${level.title}: six-space ferry with ${ids.map(id => passengerName(id, level)).join(', ')}`);
+}
+setGalleryRoster('wide');
+const wideCamera = new T.OrthographicCamera();
+wideCamera.position.set(7, 4.5, 8);
+wideCamera.lookAt(0, 0.55, 0);
+wideSection.querySelector<HTMLSelectElement>('select')!.onchange = event => {
+  setGalleryRoster((event.currentTarget as HTMLSelectElement).value);
+  wideRenderer.render(wideScene, wideCamera);
+};
+const wideResize = new ResizeObserver((entries) => {
+  for (const entry of entries) {
+    const { width, height } = entry.contentRect;
+    if (!width || !height) continue;
+    const aspect = width / height,
+      vertical = Math.max(3.2, 3.3 / aspect);
+    Object.assign(wideCamera, {
+      left: -vertical * aspect,
+      right: vertical * aspect,
+      top: vertical,
+      bottom: -vertical,
+      near: 0.1,
+      far: 60,
+    });
+    wideCamera.updateProjectionMatrix();
+    wideRenderer.setSize(width, height, false);
+    wideRenderer.render(wideScene, wideCamera);
+  }
+});
+wideResize.observe(wideCanvas);
+window.addEventListener(
+  'pagehide',
+  () => {
+    wideResize.disconnect();
+    wideModel.traverse((object) => {
+      if (object instanceof T.Mesh) object.geometry.dispose();
+    });
+    wideRenderer.dispose();
+  },
+  { once: true },
+);

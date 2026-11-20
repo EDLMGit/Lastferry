@@ -1,0 +1,189 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "-c",
+      ".cache/two-shelters.config.ts",
+      "reef-return-practice.spec.ts"
+    ],
+    "configFile": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\.cache\\two-shelters.config.ts",
+    "rootDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/test-results/two-shelters",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 240000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\two-shelters",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "snapshotDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 240000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5270",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "deviceScaleFactor": 1,
+          "headless": true,
+          "launchOptions": {
+            "executablePath": "C:/Users/ernes/Documents/last-ferry-codex-starter/.cache/ms-playwright/chromium-1248/chrome-win64/chrome.exe",
+            "args": [
+              "--use-angle=swiftshader",
+              "--enable-unsafe-swiftshader"
+            ]
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "reviews/reef-return/practice-check/automation-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "reef-return-practice.spec.ts",
+      "file": "reef-return-practice.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "short landscape Practice keeps the pending launch through reef inspection, loss, Undo and direct replay",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 18277,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#local-context .location-warning')\nExpected substring: \u001b[32m\"This cuts Birch and Dot off\"\u001b[39m\nError: strict mode violation: locator('#local-context .location-warning') resolved to 2 elements:\n    1) <p class=\"location-warning\">This cuts Birch and Dot off from Harbor. The ferr…</p> aka getByRole('paragraph')\n    2) <p class=\"location-warning\">This cuts Birch and Dot off from Harbor. The ferr…</p> aka locator('#location-facts').getByText('This cuts Birch and Dot off')\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" locator('#local-context .location-warning') with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('#local-context .location-warning')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#local-context .location-warning')\nExpected substring: \u001b[32m\"This cuts Birch and Dot off\"\u001b[39m\nError: strict mode violation: locator('#local-context .location-warning') resolved to 2 elements:\n    1) <p class=\"location-warning\">This cuts Birch and Dot off from Harbor. The ferr…</p> aka getByRole('paragraph')\n    2) <p class=\"location-warning\">This cuts Birch and Dot off from Harbor. The ferr…</p> aka locator('#location-facts').getByText('This cuts Birch and Dot off')\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" locator('#local-context .location-warning') with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('#local-context .location-warning')\u001b[22m\n\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\reef-return-practice.spec.ts:48:68",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\reef-return-practice.spec.ts",
+                      "column": 68,
+                      "line": 48
+                    },
+                    "snippet": "  46 |     const before = await state(page);\n  47 |     await selectPlace(page, 'harbor', true);\n> 48 |     await expect(page.locator('#local-context .location-warning')).toContainText('This cuts Birch and Dot off');\n     |                                                                    ^\n  49 |     expect(await state(page)).toEqual(before);\n  50 |     await activate(page, 'sail', true);\n  51 |     await idle(page);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\reef-return-practice.spec.ts",
+                        "column": 68,
+                        "line": 48
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#local-context .location-warning')\nExpected substring: \u001b[32m\"This cuts Birch and Dot off\"\u001b[39m\nError: strict mode violation: locator('#local-context .location-warning') resolved to 2 elements:\n    1) <p class=\"location-warning\">This cuts Birch and Dot off from Harbor. The ferr…</p> aka getByRole('paragraph')\n    2) <p class=\"location-warning\">This cuts Birch and Dot off from Harbor. The ferr…</p> aka locator('#location-facts').getByText('This cuts Birch and Dot off')\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" locator('#local-context .location-warning') with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('#local-context .location-warning')\u001b[22m\n\n\n  46 |     const before = await state(page);\n  47 |     await selectPlace(page, 'harbor', true);\n> 48 |     await expect(page.locator('#local-context .location-warning')).toContainText('This cuts Birch and Dot off');\n     |                                                                    ^\n  49 |     expect(await state(page)).toEqual(before);\n  50 |     await activate(page, 'sail', true);\n  51 |     await idle(page);\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\reef-return-practice.spec.ts:48:68"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-04T19:39:12.243Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\two-shelters\\reef-return-practice-short-629b2-loss-Undo-and-direct-replay\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\reef-return-practice.spec.ts",
+                    "column": 68,
+                    "line": 48
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "507f8e93d96e30f2f2ae-af6356a0f6c7630d12bc",
+          "file": "reef-return-practice.spec.ts",
+          "line": 5,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-04T19:39:10.900Z",
+    "duration": 21865.854,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

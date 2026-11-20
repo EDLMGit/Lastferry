@@ -1,0 +1,2922 @@
+diff --git a/src/levels/level.ts b/src/levels/level.ts
+index 98c5b33..92dff8c 100644
+--- a/src/levels/level.ts
++++ b/src/levels/level.ts
+@@ -1,7 +1,5 @@
+ import data from '../../data/first-crossing.level.json';
+ import holdingData from '../../data/holding-pier.level.json';
+-// Shared authored schema; the original JSON remains the baseline and default
+-// for rule callers. A session owns its level, never a mutable global selection.
+ export type Level = Pick<
+   typeof data,
+   | 'id'
+@@ -20,12 +18,12 @@ export type Level = Pick<
+ export const level: Level = data;
+ export const holdingPier: Level = holdingData;
+ export const nodeNames: Record<string, string> = {
+-  harbor: 'Lighthouse harbor',
+-  cut: 'Shallow cut',
+-  'sheep-pier': 'Sheep pier',
+-  'outer-east': 'East buoy',
+-  'outer-south': 'South buoy',
+-  'outer-west': 'West buoy',
++  harbor: 'Harbor',
++  cut: 'Shallow Cut',
++  'sheep-pier': 'Sheep Pier',
++  'outer-east': 'East Buoy',
++  'outer-south': 'South Buoy',
++  'outer-west': 'West Buoy',
+   stone: 'Stone Pier',
+   shallows: 'Shallows',
+   'rabbit-pier': 'Rabbit Pier',
+diff --git a/src/main.ts b/src/main.ts
+index 923e1f9..e2c689a 100644
+--- a/src/main.ts
++++ b/src/main.ts
+@@ -9,25 +9,25 @@ import {
+   pierAt,
+   preview,
+   type Action,
+-  type State,
+ } from './game/rules';
++import {
++  actionLabel,
++  actionCostCopy,
++  passengerList,
++  passageCopy,
++  pierSafetyCopy,
++  statusCopy,
++  forecastCopy,
++  previewCopy,
++} from './ui/presentation';
+ import { Session } from './game/session';
+ import { World } from './scene/world';
+ import { Sound } from './audio/sound';
+ 
+ const experiment = new URLSearchParams(location.search).get('cove') === 'holding-pier';
+ const level = experiment ? holdingPier : baseline;
+-const shallowBase = Math.min(...level.edges.map((e) => e.baseDepth));
+-const vulnerablePier = level.piers
+-  .filter((p) => !p.isDeliveryPier)
+-  .sort((a, b) => a.elevation - b.elevation)[0];
+-const floodTurn = level.rules.tide.rises.find(
+-  (r) => r.level >= vulnerablePier.elevation,
+-)!.afterTurn;
+-const vulnerableName = nodeNames[vulnerablePier.nodeId];
+-const name = (id: string) => passengerNames[id].split(' ·')[0];
+ const app = document.querySelector<HTMLDivElement>('#app')!;
+-app.innerHTML = `<main class="game ${experiment ? 'experiment' : ''}"><section id="seascape" aria-label="${level.title}"><div id="world"></div><header class="masthead"><span class="eyebrow">LAST FERRY <span class="dash">—</span> ${experiment ? 'PLAYABLE EXPERIMENT' : 'CHAPTER 01'}</span><h1>${experiment ? 'The Holding Pier' : 'The First Crossing'}</h1><p>A little boat. A way home.</p></header><div id="map-labels" aria-hidden="true">${experiment ? '<span class="pier-tag" data-pier="harbor-pier">HARBOR · SAFE</span><span class="pier-tag" data-pier="stone-pier">STONE PIER · SAFE</span><span class="pier-tag low" data-pier="rabbit-pier">RABBIT PIER · LOW</span>' : '<span class="island-label refuge">THE LIGHTHOUSE</span><span class="island-label sheep">MOSS’S PIER</span><span class="sea-label">THE OUTER PASSAGE</span>'}</div><div class="map-key"><span>··· One passage · one turn</span><span>◇ Shallows <b id="shallow-depth"></b> / deep <b id="deep-depth"></b></span></div><nav class="tools" aria-label="Crossing controls"><button id="undo" aria-label="Undo last turn" title="Undo the last turn">↶ <span>Undo</span></button><button id="restart" aria-label="Restart crossing">↺ <span>Restart</span></button><button id="sound" aria-label="Mute sound"></button></nav><p class="portrait-note">For a wider view, turn your phone sideways. All controls are available below.</p></section><aside class="panel" aria-label="Ferry controls"><div id="hud"></div><div id="controls"></div><div id="preview" aria-live="polite" aria-atomic="true"></div><div id="forecast"></div><p class="panel-foot">Take your time. The sea only moves when you do.</p><label class="cove-picker">Choose cove <select id="cove-picker"><option value="first-crossing" ${!experiment ? 'selected' : ''}>First Crossing · baseline</option><option value="holding-pier" ${experiment ? 'selected' : ''}>The Holding Pier · experiment</option></select></label></aside><div id="announcement" class="sr-only" role="status" aria-live="polite"></div></main>`;
++app.innerHTML = `<main class="game ${experiment ? 'holding' : 'baseline'}"><section id="seascape" aria-label="${level.title}"><div id="world"></div><header class="masthead"><span>LAST FERRY</span><h1>${experiment ? 'The Holding Pier' : 'The First Crossing'}</h1></header><nav id="map-labels" aria-label="Map stops"></nav><nav class="tools" aria-label="Crossing controls"><button id="undo" aria-label="Undo last action">↶ <span>Undo</span></button><button id="restart" aria-label="Restart crossing" title="Restart crossing">↺</button><button id="sound"></button></nav><p class="portrait-note">Turn sideways for a wider view. All controls remain available below.</p></section><aside class="panel" aria-label="Ferry controls"><div id="hud"></div><div id="controls"></div><div id="preview" aria-live="polite" aria-atomic="true"></div><div id="secondary"><button id="wait" class="action quiet"><b>Wait</b><span>1 action</span></button><div id="forecast"></div><details id="rules-details"><summary>Actions and boat depth</summary><p id="action-cost">${actionCostCopy(level)}</p><p>Boat depth needed: empty = 1; 1–2 spaces = 2; 3–4 spaces = 3. A rabbit uses 1 space; Moss uses 2.</p></details><label class="cove-picker">Choose cove<select id="cove-picker"><option value="first-crossing" ${!experiment ? 'selected' : ''}>First Crossing · baseline</option><option value="holding-pier" ${experiment ? 'selected' : ''}>The Holding Pier</option></select></label></div></aside><div id="announcement" class="sr-only" role="status" aria-live="polite"></div></main>`;
+ const session = new Session(level),
+   sound = new Sound(),
+   world = new World(document.querySelector('#world')!, session.state, level);
+@@ -50,25 +50,32 @@ function focusAvailable(preferred?: string) {
+     target.focus();
+     return;
+   }
+-  const fallback =
++  const next =
+     session.state.status !== 'playing'
+       ? $('undo')
+-      : document.querySelector<HTMLButtonElement>('#controls button:not(:disabled)');
+-  fallback?.focus();
++      : document.querySelector<HTMLButtonElement>(
++          '#local-actions button:not(:disabled), #travel-actions .route:not(:disabled)',
++        );
++  next?.focus();
++}
++function highlight(id?: string) {
++  const destination = id && edgeTo(session.state, id, level) ? id : undefined;
++  world.indicate(session.state, destination);
++  for (const target of document.querySelectorAll<HTMLElement>('[data-destination]'))
++    target.classList.toggle('highlighted', target.dataset.destination === destination);
++}
++function restoreHighlight() {
++  const active = document.activeElement as HTMLElement;
++  highlight(active?.dataset.destination ?? (selected?.type === 'move' ? selected.to : undefined));
+ }
+ function closePreview() {
+   selected = null;
+   render();
+   if (keyboardInput) focusAvailable(previewReturnId);
+ }
+-const actionTitle = (a: Action) =>
+-  a.type === 'move'
+-    ? `Sail to ${nodeNames[a.to]}`
+-    : a.type === 'wait'
+-      ? 'Wait one turn'
+-      : `${a.type === 'board' ? 'Board' : 'Unload'} ${a.passengerIds.length === 3 ? 'everyone' : a.passengerIds.map(name).join(' & ')}`;
+ function select(a: Action) {
+   if (session.busy || session.state.status !== 'playing') return;
++  if (a.type === 'move' && a.to === session.state.boatNodeId) return;
+   previewReturnId = (document.activeElement as HTMLElement)?.id ?? '';
+   selected = a;
+   render();
+@@ -89,18 +96,12 @@ function finish() {
+     focusAvailable();
+   }
+   recoverAfterCommit = false;
+-  const s = session.state;
+   $('announcement').textContent =
+-    s.status === 'won'
+-      ? 'Everyone is home. All three passengers are safe.'
+-      : s.status === 'lost'
+-        ? `${vulnerableName} flooded with passengers waiting. Undo a turn.`
+-        : `Turn ${s.turn}. Tide ${s.tideLevel}. At ${nodeNames[s.boatNodeId]}.`;
++    `${session.state.turn} actions completed. ${statusCopy(session.state, level).headline}`;
+ }
+-function execute(action: Action | null) {
+-  if (!action) return;
+-  const a = copy(action),
+-    transaction = session.commit(a);
++function execute(a: Action | null) {
++  if (!a) return;
++  const transaction = session.commit(copy(a));
+   if (!transaction) return;
+   recoverAfterCommit = keyboardInput;
+   selected = null;
+@@ -124,94 +125,140 @@ function execute(action: Action | null) {
+ }
+ function activateMove(to: string) {
+   if (session.busy || session.state.status !== 'playing') return;
++  if (to === session.state.boatNodeId) {
++    $('announcement').textContent =
++      `You are at ${nodeNames[to]}. Passenger actions are in the controls.`;
++    return;
++  }
+   const a: Action = { type: 'move', to },
+     proposed = preview(session.state, a, level);
+-  // Routine travel commits once. Dangerous/invalid moves open a free explanation.
+   if (experiment && !proposed.error && proposed.state.status !== 'lost') execute(a);
+   else select(a);
+ }
+-function channelConsequence(s: State) {
+-  const blocked = draft(s, level) > shallowBase + s.tideLevel;
+-  return `${blocked ? '⊘' : '◇'} ${experiment ? 'Shallow channel' : 'Shallow cut'} ${blocked ? 'blocked' : 'open'}: depth ${shallowBase + s.tideLevel}, draft ${draft(s, level)}.`;
++function navigationState(id: string) {
++  if (id === session.state.boatNodeId) return 'current';
++  const e = edgeTo(session.state, id, level);
++  return !e
++    ? 'nonadjacent'
++    : e.baseDepth + session.state.tideLevel < draft(session.state, level)
++      ? 'too-shallow'
++      : 'available';
++}
++function bindTarget(button: HTMLElement, id: string, inspect = false) {
++  button.onclick = () => (inspect ? select({ type: 'move', to: id }) : activateMove(id));
++  button.onpointerenter = () => highlight(id);
++  button.onpointerleave = restoreHighlight;
++  button.onfocus = () => highlight(id);
++  button.onblur = () => highlight(selected?.type === 'move' ? selected.to : undefined);
++}
++function renderMap() {
++  const s = session.state;
++  $('map-labels').innerHTML = level.nodes
++    .map((n) => {
++      const state = navigationState(n.id),
++        current = state === 'current',
++        unavailable = state === 'nonadjacent',
++        blocked = state === 'too-shallow',
++        loses =
++          state === 'available' &&
++          preview(s, { type: 'move', to: n.id }, level).state.status === 'lost';
++      const label = current
++        ? `You are at ${nodeNames[n.id]}`
++        : unavailable
++          ? `${nodeNames[n.id]}: no direct passage`
++          : `Sail to ${nodeNames[n.id]}${loses ? '; flood warning' : ''}`;
++      return `<button id="map-${n.id}" class="map-target" data-status="${state}" data-risk="${loses ? 'loss' : 'safe'}" data-destination="${n.id}" ${current ? 'aria-current="location"' : ''} aria-label="${label}" title="${passageCopy(s, n.id, level)}${loses ? ' Flood warning: inspect before confirming.' : ''}" ${session.busy || s.status !== 'playing' ? 'disabled' : ''}><span class="map-symbol" aria-hidden="true">${current ? '●' : unavailable ? '◇' : blocked ? '⊘' : loses ? '!' : '○'}</span><span><b>${current || unavailable ? nodeNames[n.id] : `Sail to ${nodeNames[n.id]}`}</b><span class="map-state">${current ? 'You are here' : unavailable ? 'No direct passage' : blocked ? 'Too shallow' : loses ? 'Flood warning · inspect' : 'Available · 1 action'}</span></span></button>`;
++    })
++    .join('');
++  for (const n of level.nodes) bindTarget($(`map-${n.id}`), n.id);
++  positionMap();
+ }
+ function render() {
+   const focused = (document.activeElement as HTMLElement)?.id,
+     s = session.state,
+     p = pierAt(s, level),
+     busy = session.busy;
+-  document.querySelector('.panel')!.classList.toggle('selecting', !!selected);
+-  const nextRise = level.rules.tide.rises.find((r) => r.afterTurn > s.turn),
+-    filled = load(s, level);
+-  const riseNote = nextRise?.afterTurn === s.turn + 1 ? ` · tide rises to ${nextRise.level}` : '';
+-  const waitingAtRisk = s.waitingByPier[vulnerablePier.id].length;
+-  const danger =
+-    s.tideLevel >= vulnerablePier.elevation
+-      ? `${vulnerableName} is flooded · ${waitingAtRisk} waiting.`
+-      : `${vulnerableName} floods after turn ${floodTurn} · ${floodTurn - s.turn} turn${floodTurn - s.turn === 1 ? '' : 's'} left.`;
++  const panel = document.querySelector('.panel')!;
++  panel.classList.toggle('selecting', !!selected);
++  const facts = statusCopy(s, level);
+   $('hud').innerHTML =
+-    `<div class="panel-kicker">${experiment ? 'THE HOLDING PIER' : 'YOUR CROSSING'} <span class="chapter-mark">${experiment ? 'EXPERIMENT' : '01 / 01'}</span></div><div class="counters"><div><small>TURN</small><strong data-testid="turn">${String(s.turn).padStart(2, '0')}</strong></div><div><small>TIDE</small><strong data-testid="tide">${s.tideLevel}<span> / 2</span></strong></div><div><small>SAFE HOME</small><strong>${s.delivered.length}<span> / 3</span></strong></div></div><div class="cargo"><div><strong>${filled} / 4 spaces</strong><span>Draft <b>${draft(s, level)}</b></span></div><div class="slots" aria-label="${filled} of four passenger spaces occupied">${Array.from({ length: 4 }, (_, i) => `<i class="${i < filled ? 'filled' : ''}"></i>`).join('')}</div><p>${s.aboard.length ? s.aboard.map((id) => `${id.startsWith('rabbit') ? '♧' : '☁'} ${name(id)}`).join(' · ') : 'An empty boat, riding light.'}</p></div>${experiment ? `<div class="voyage-note"><strong>${danger}</strong><p>Stone Pier & Harbor stay dry through both rises.</p><p>Draft: empty = 1 · 1–2 spaces = 2 · 3–4 = 3</p></div>` : ''}`;
+-  $('controls').innerHTML =
+-    s.status === 'won'
+-      ? `<div class="ending"><span class="ending-icon">☀</span><span class="eyebrow">THE LIGHTHOUSE IS LIT</span><h2>Everyone home.</h2><p>Pip, Rue, and Moss are safe. A small crossing, a good evening.</p><p class="ending-small">All 3 passengers delivered · ${s.turn} turns<br>Undo to revisit the crossing, or start again.</p></div>`
+-      : s.status === 'lost'
+-        ? `<div class="ending loss"><span class="eyebrow">THE WATER HAS RISEN</span><h2>A turn too late.</h2><p>${vulnerableName} flooded with ${s.lossReason?.passengerIds.map(name).join(' and ')} still waiting. Undo a turn and try another way.</p></div>`
+-        : `<div class="location"><span class="eyebrow">${busy ? 'UNDER WAY' : 'NOW AT'}</span><h2>${nodeNames[s.boatNodeId]}</h2></div><p class="instruction">${experiment ? 'Bring everyone to Harbor. Sail costs 1 turn; Preview is free.' : s.boatNodeId === 'cut' && s.turn === 0 ? 'Moss is waiting at the low pier. Bring all three passengers to the lighthouse.' : 'Choose a passage or an action. Preview first, then confirm.'}</p><div class="action-list">${level.nodes
+-            .filter((n) => edgeTo(s, n.id, level))
+-            .map((n) => {
+-              const e = edgeTo(s, n.id, level)!,
+-                depth = e.baseDepth + s.tideLevel,
+-                blocked = depth < draft(s, level),
+-                willLose = preview(s, { type: 'move', to: n.id }, level).state.status === 'lost';
+-              return `${experiment ? '<div class="route-row">' : ''}<button class="action route ${selected?.type === 'move' && selected.to === n.id ? 'selected' : ''}" id="route-${n.id}" ${busy ? 'disabled' : ''}><span><b>${blocked ? '⊘' : '↗'} ${nodeNames[n.id]}</b><small>${experiment ? `${blocked ? 'Blocked' : willLose ? '⚠ Preview loss' : 'Sail · 1 turn'} · depth ${depth} / draft ${draft(s, level)}${riseNote}` : `${blocked ? 'Too shallow' : 'One passage'} · depth ${depth}`}</small></span><span class="chevron">›</span></button>${experiment ? `<button id="inspect-${n.id}" class="inspect-route" aria-label="Preview passage to ${nodeNames[n.id]}" ${busy ? 'disabled' : ''}>Preview</button></div>` : ''}`;
+-            })
+-            .join(
+-              '',
+-            )}${p && s.tideLevel < p.elevation && s.waitingByPier[p.id].length ? `<button class="action" id="board" ${busy ? 'disabled' : ''}><span><b>＋ Board passengers</b><small>${s.waitingByPier[p.id].map((id) => passengerNames[id]).join(', ')}${experiment ? ` · 1 turn${riseNote}` : ''}</small></span><span>›</span></button>` : ''}${p && s.tideLevel < p.elevation && s.aboard.length ? `<button class="action" id="unload" ${busy ? 'disabled' : ''}><span><b>⇥ ${p.isDeliveryPier ? 'Deliver passengers' : 'Unload at this pier'}</b><small>${experiment ? `1 turn · ${p.isDeliveryPier ? 'Safe home' : `Wait here; board again later · elevation ${p.elevation}`}${riseNote}` : 'Choose who leaves the ferry'}</small></span><span>›</span></button>` : ''}<button class="action quiet" id="wait" ${busy ? 'disabled' : ''}><span><b>≈ Wait one turn</b><small>${nextRise ? `${nextRise.afterTurn - s.turn} turn${nextRise.afterTurn - s.turn === 1 ? '' : 's'} until tide ${nextRise.level}` : 'High tide · no further rises'}</small></span><span>›</span></button></div>`;
+-  for (const n of level.nodes) {
+-    if ($(`route-${n.id}`)) $(`route-${n.id}`).onclick = () => activateMove(n.id);
+-    if ($(`inspect-${n.id}`))
+-      $(`inspect-${n.id}`).onclick = () => select({ type: 'move', to: n.id });
++    `<div class="score-strip"><span><b data-testid="turn">${String(s.turn).padStart(2, '0')}</b> actions</span><span>Tide <b data-testid="tide">${s.tideLevel}</b></span><span>Home <b>${s.delivered.length}/3</b></span></div><div class="boat-summary"><strong>Boat needs depth ${draft(s, level)}</strong><span>${load(s, level)}/${level.rules.capacity} spaces</span></div><div class="situation ${facts.urgent ? 'urgent' : ''}"><strong id="status-headline">${facts.headline}</strong><p id="status-detail">${facts.detail}</p></div>`;
++  if (s.status === 'won')
++    $('controls').innerHTML =
++      `<section class="ending"><span class="ending-icon" aria-hidden="true">☀</span><h2>Everyone home.</h2><p>Pip, Rue and Moss are safe at Harbor.</p><p>All 3 passengers delivered · ${s.turn} actions</p><p>Undo to revisit the crossing, or restart.</p></section>`;
++  else if (s.status === 'lost')
++    $('controls').innerHTML =
++      `<section class="ending loss"><h2>A turn too late.</h2><p>${facts.headline}</p><p>Undo earlier moves, or restart to try a different plan.</p></section>`;
++  else {
++    const dry = p && s.tideLevel < p.elevation;
++    const boarding = dry ? s.waitingByPier[p.id] : [],
++      unloading = dry ? s.aboard : [];
++    const local = (type: 'board' | 'unload', ids: string[]) => {
++      const a: Action = { type, passengerIds: ids };
++      const detail =
++        type === 'board'
++          ? `${passengerList(ids)} ${ids.length === 1 ? 'is' : 'are'} waiting here. 1 action.`
++          : p!.isDeliveryPier
++            ? 'Safe at Harbor. 1 action.'
++            : `Wait at ${nodeNames[p!.nodeId]}; ${level.rules.tide.rises.every((r) => r.level < p!.elevation) ? 'stays safe' : pierSafetyCopy(s, p!.id, level)}. 1 action.`;
++      return `<button id="${type}" class="action local-action" ${busy ? 'disabled' : ''}><span><b>${actionLabel(s, a, level)}</b><small>${detail}</small></span></button>`;
++    };
++    $('controls').innerHTML =
++      `<section class="local-context"><h2 id="local-heading">${nodeNames[s.boatNodeId]}</h2><div id="local-actions">${boarding.length ? local('board', boarding) : ''}${unloading.length ? local('unload', unloading) : ''}${!boarding.length && !unloading.length ? `<p class="local-empty">${p && !dry ? 'This pier is flooded. The ferry can leave.' : p ? 'No passengers to transfer here.' : 'Buoy stop · choose the next passage.'}</p>` : ''}</div></section><p class="action-guide">${actionCostCopy(level)}</p><section id="travel-actions"><h3>Travel · 1 action per passage</h3><div class="action-list">${level.nodes
++        .filter((n) => edgeTo(s, n.id, level))
++        .map((n) => {
++          const e = edgeTo(s, n.id, level)!,
++            depth = e.baseDepth + s.tideLevel,
++            blocked = depth < draft(s, level),
++            loses = preview(s, { type: 'move', to: n.id }, level).state.status === 'lost';
++          return `<div class="route-row"><button class="action route" id="route-${n.id}" data-destination="${n.id}" data-status="${blocked ? 'too-shallow' : 'available'}" ${busy ? 'disabled' : ''}><span><b>${blocked ? '⊘ ' : ''}Sail to ${nodeNames[n.id]}</b><small>Boat ${draft(s, level)} · passage ${depth}${blocked ? ': too shallow' : loses ? ': flood warning' : ': enough depth'}</small></span></button><button id="inspect-${n.id}" class="inspect-route" data-destination="${n.id}" aria-label="Inspect passage to ${nodeNames[n.id]} for free" ${busy ? 'disabled' : ''}>Inspect</button></div>`;
++        })
++        .join('')}</div></section>`;
++    for (const n of level.nodes) {
++      if ($(`route-${n.id}`)) bindTarget($(`route-${n.id}`), n.id);
++      if ($(`inspect-${n.id}`)) bindTarget($(`inspect-${n.id}`), n.id, true);
++    }
++    if ($('board'))
++      $('board').onclick = () =>
++        select({ type: 'board', passengerIds: [...s.waitingByPier[p!.id]] });
++    if ($('unload'))
++      $('unload').onclick = () => select({ type: 'unload', passengerIds: [...s.aboard] });
+   }
+-  if ($('board'))
+-    $('board').onclick = () => select({ type: 'board', passengerIds: [...s.waitingByPier[p!.id]] });
+-  if ($('unload'))
+-    $('unload').onclick = () => select({ type: 'unload', passengerIds: [...s.aboard] });
+-  if ($('wait')) $('wait').onclick = () => select({ type: 'wait' });
+-  const pr = selected ? preview(s, selected, level) : null,
+-    next = pr?.state;
++  const a = selected,
++    copyText = a ? previewCopy(s, a, level) : null,
++    pr = a ? preview(s, a, level) : null;
+   let subset = '';
+-  if (selected && (selected.type === 'board' || selected.type === 'unload')) {
+-    const a = selected,
+-      ids = a.type === 'board' ? s.waitingByPier[p!.id] : s.aboard;
+-    subset = `<div class="passenger-options" role="group" aria-label="Passenger selection">${ids.map((id) => `<button id="passenger-${id}" aria-pressed="${a.passengerIds.includes(id)}">${id.startsWith('rabbit') ? '♧' : '☁'} ${passengerNames[id]} · ${level.passengers.find((p) => p.id === id)!.slots}</button>`).join('')}</div>`;
++  if (a && (a.type === 'board' || a.type === 'unload')) {
++    const ids = a.type === 'board' ? s.waitingByPier[p!.id] : s.aboard;
++    subset = `<div class="passenger-options" role="group" aria-label="Passenger selection">${ids.map((id) => `<button id="passenger-${id}" aria-pressed="${a.passengerIds.includes(id)}"><b>${passengerNames[id].split(' ·')[0]}</b><span>${level.passengers.find((p) => p.id === id)!.slots} ${level.passengers.find((p) => p.id === id)!.slots === 1 ? 'space' : 'spaces'}</span></button>`).join('')}</div>`;
+   }
+   $('preview').innerHTML = busy
+-    ? `<div id="transition-status" class="preview busy" role="status" tabindex="-1"><span class="eyebrow">A MOMENT ON THE WATER</span><p>Finishing this turn…</p></div>`
+-    : selected && pr
+-      ? `<div class="preview ${pr.error || next?.status === 'lost' ? 'warning' : ''}"><div class="preview-head"><span class="eyebrow">ACTION PREVIEW · FREE</span><button id="cancel" aria-label="Close preview">×</button></div><h3>${actionTitle(selected)}</h3>${subset}<p>${pr.error ?? `Turn ${next!.turn} · tide ${next!.tideLevel} · ${load(next!, level)} / 4 spaces · draft ${draft(next!, level)}`}</p>${!pr.error ? `<p class="consequence">${next!.status === 'lost' ? `⚠ ${vulnerableName} floods with passengers waiting. This action ends the crossing.` : next!.status === 'won' ? 'All three passengers will be safe at the lighthouse.' : `${channelConsequence(next!)}${next!.tideLevel > s.tideLevel ? ' The tide rises after this action.' : ''}`}</p>` : ''}<button id="commit" class="commit" ${pr.error ? 'disabled' : ''}>${pr.error ? 'Action unavailable' : `Confirm · ${actionTitle(selected)}`} <span>${pr.error ? '' : '→'}</span></button></div>`
++    ? `<div id="transition-status" class="busy" role="status" tabindex="-1">Finishing this action…</div>`
++    : a && copyText
++      ? `<section class="preview-card ${copyText.error || pr?.state.status === 'lost' ? 'warning' : ''}"><div class="preview-head"><div><span>Free inspection</span><h3>${actionLabel(s, a, level)}</h3></div><button id="cancel" aria-label="Close preview">×</button></div><div class="preview-scroll">${subset}<p class="requirement">${copyText.error ?? copyText.requirement}</p><p class="consequence">${copyText.consequence}</p><p class="preview-cost">${copyText.error ? 'No action spent.' : `Costs 1 action. Result: ${pr!.state.turn} actions · tide ${pr!.state.tideLevel} · ${load(pr!.state, level)}/${level.rules.capacity} spaces.`}</p></div><button id="commit" class="commit" ${copyText.error ? 'disabled' : ''}>${copyText.error ? 'Action unavailable' : `Confirm · ${actionLabel(s, a, level)}`}</button></section>`
+       : '';
+   if ($('cancel')) $('cancel').onclick = closePreview;
+   if ($('commit')) $('commit').onclick = () => execute(selected);
+-  if (selected && (selected.type === 'board' || selected.type === 'unload')) {
+-    const a = selected;
++  if (a && (a.type === 'board' || a.type === 'unload'))
+     for (const id of a.type === 'board' ? s.waitingByPier[p!.id] : s.aboard)
+-      if ($(`passenger-${id}`))
+-        $(`passenger-${id}`).onclick = () => {
+-          selected = {
+-            ...a,
+-            passengerIds: a.passengerIds.includes(id)
+-              ? a.passengerIds.filter((v) => v !== id)
+-              : [...a.passengerIds, id],
+-          };
+-          render();
++      $(`passenger-${id}`).onclick = () => {
++        selected = {
++          ...a,
++          passengerIds: a.passengerIds.includes(id)
++            ? a.passengerIds.filter((v) => v !== id)
++            : [...a.passengerIds, id],
+         };
+-  }
++        render();
++      };
++  const forecast = forecastCopy(s, level);
+   $('forecast').innerHTML =
+-    `<button id="forecast-toggle" aria-expanded="${forecastOpen}" class="forecast-button">≈ Next-tide forecast <span>${forecastOpen ? '−' : '+'}</span></button>${forecastOpen ? `<div class="forecast-detail"><strong>${nextRise ? `Tide ${nextRise.level} after turn ${nextRise.afterTurn}` : 'High tide has settled'}</strong><p>Shallows: ${shallowBase + (nextRise?.level ?? s.tideLevel)} · deep: ${3 + (nextRise?.level ?? s.tideLevel)}.</p><p>${level.piers.map((p) => `${nodeNames[p.nodeId]}: ${(nextRise?.level ?? s.tideLevel) >= p.elevation ? 'flooded' : 'dry'} (elevation ${p.elevation})`).join('<br>')}</p><p>Looking ahead is free. Use Wait to spend a turn.</p></div>` : `<p class="deadline">${vulnerableName} floods after turn <b>${floodTurn}</b>.</p>`}`;
++    `<button id="forecast-toggle" aria-expanded="${forecastOpen}" class="forecast-button">Tide and pier forecast <span>${forecastOpen ? '−' : '+'}</span></button>${forecastOpen ? `<div class="forecast-detail"><b>${forecast.headline}</b><p>${forecast.detail}</p><p>Inspection is free. Wait costs 1 action.</p></div>` : ''}`;
+   $('forecast-toggle').onclick = () => {
+     forecastOpen = !forecastOpen;
+     render();
+   };
++  ($('wait') as HTMLButtonElement).disabled = busy || s.status !== 'playing';
++  $('wait').onclick = () => select({ type: 'wait' });
+   ($('undo') as HTMLButtonElement).disabled = busy || !session.history.length;
+   ($('restart') as HTMLButtonElement).disabled = busy;
+   ($('cove-picker') as HTMLSelectElement).disabled = busy;
+@@ -220,9 +267,8 @@ function render() {
+       selected = null;
+       world.sync(session.state);
+       render();
+-      document.querySelector('.panel')!.scrollTop = 0;
+-      $('announcement').textContent =
+-        `Undid turn. Turn ${session.state.turn}, tide ${session.state.tideLevel}.`;
++      panel.scrollTop = 0;
++      $('announcement').textContent = `Undid action. ${session.state.turn} actions completed.`;
+     }
+   };
+   $('restart').onclick = () => {
+@@ -231,7 +277,7 @@ function render() {
+       forecastOpen = false;
+       world.sync(session.state);
+       render();
+-      document.querySelector('.panel')!.scrollTop = 0;
++      panel.scrollTop = 0;
+     }
+   };
+   $('sound').textContent = sound.muted ? '♫ Off' : '♫ On';
+@@ -241,30 +287,46 @@ function render() {
+     sound.toggle();
+     render();
+   };
+-  $('shallow-depth').textContent = String(shallowBase + s.tideLevel);
+-  $('deep-depth').textContent = String(3 + s.tideLevel);
+-  world.indicate(s, selected?.type === 'move' ? selected.to : undefined);
+-  world.setForecast(forecastOpen, nextRise?.level ?? s.tideLevel);
+-  if (experiment) positionLabels();
++  renderMap();
++  world.setForecast(
++    forecastOpen,
++    level.rules.tide.rises.find((r) => r.afterTurn > s.turn)?.level ?? s.tideLevel,
++  );
++  highlight(selected?.type === 'move' ? selected.to : undefined);
+   if (focused && $(focused) && !($(focused) as HTMLButtonElement).disabled)
+     $(focused).focus({ preventScroll: true });
+-  if (s.status !== 'playing') document.querySelector('.panel')!.scrollTop = 0;
++  if (s.status !== 'playing') panel.scrollTop = 0;
+ }
+-world.onSelect = activateMove;
+-($('cove-picker') as HTMLSelectElement).onchange = (event) => {
+-  location.search = `?cove=${(event.target as HTMLSelectElement).value}`;
+-};
+-function positionLabels() {
+-  for (const label of document.querySelectorAll<HTMLElement>('[data-pier]')) {
+-    const pier = level.piers.find((p) => p.id === label.dataset.pier)!;
+-    label.hidden = pier.isDeliveryPier && session.state.delivered.length > 0;
+-    const point = world.project([pier.positionXZ[0], pier.positionXZ[1] - 1.9]);
+-    label.style.left = `${point.x}px`;
+-    label.style.top = `${point.y + world.host.offsetTop}px`;
++function positionMap() {
++  const small = matchMedia('(max-height: 480px) and (min-width: 701px)').matches;
++  const sea = $('seascape'),
++    width = sea.clientWidth,
++    height = sea.clientHeight;
++  for (const n of level.nodes) {
++    const target = $(`map-${n.id}`);
++    if (!target) continue;
++    let point;
++    if (experiment)
++      point = world.project([
++        n.positionXZ[0],
++        n.positionXZ[1] +
++          (n.id === 'stone' || n.id === 'rabbit-pier' ? -3.8 : n.id === 'shallows' ? 1.05 : 1.65),
++      ]);
++    else
++      point = world.project([
++        n.positionXZ[0],
++        n.positionXZ[1] + (n.id === 'cut' ? -2.8 : n.id.startsWith('outer') ? 0.7 : 1.5),
++      ]);
++    const half = target.offsetWidth / 2;
++    target.style.left = `${Math.max(half + 6, Math.min(width - half - 6, point.x))}px`;
++    target.style.top = `${Math.max(small ? 76 : 130, Math.min(height - target.offsetHeight / 2 - 8, point.y + world.host.offsetTop))}px`;
+   }
+ }
+-new ResizeObserver(positionLabels).observe(world.host);
+-positionLabels();
++world.onSelect = activateMove;
++($('cove-picker') as HTMLSelectElement).onchange = (e) => {
++  location.search = `?cove=${(e.target as HTMLSelectElement).value}`;
++};
++new ResizeObserver(positionMap).observe(world.host);
+ document.addEventListener('visibilitychange', () => {
+   if (document.hidden && session.busy) {
+     world.cancel();
+@@ -293,6 +355,7 @@ if (import.meta.env.DEV)
+         hullY: world.hull.position.y,
+       }),
+       getFrameStatus: () => world.frameStatus(),
++      getNavigationStatus: () => world.navigationPresentation(),
+       getMetrics: () => world.metrics(),
+     },
+   });
+diff --git a/src/scene/world.ts b/src/scene/world.ts
+index a7b43cc..0b791cd 100644
+--- a/src/scene/world.ts
++++ b/src/scene/world.ts
+@@ -15,6 +15,8 @@ export class World {
+   passengerAnchors = new Map<string, T.Object3D>();
+   markers = new Map<string, T.Group>();
+   routes = new Map<string, T.Line>();
++  navigationCurrent = '';
++  navigationSelected: string | null = null;
+   forecast = new T.Group();
+   water: T.Mesh;
+   shadow: T.Mesh;
+@@ -123,7 +125,7 @@ export class World {
+           cylinder(this.scene, '#79644a', 0.065, 0.07, 0.83, [px, y - 0.27, pz], 9);
+           cylinder(this.scene, '#dbc799', 0.075, 0.075, 0.055, [px, y + 0.17, pz], 9);
+         }
+-      box(this.scene, '#b68f5b', [0.35, 0.055, 0.49], [x, y - 0.015, z + 0.25], 0.015); // boarding gangway
++      box(this.scene, '#b68f5b', [0.35, 0.055, 0.49], [x, y - 0.015, z + 0.25], 0.015);
+       cylinder(this.scene, '#655b43', 0.025, 0.025, 0.65, [x + 0.36, y + 0.33, z - 0.1], 7);
+       box(this.scene, '#f5cb77', [0.13, 0.19, 0.13], [x + 0.36, y + 0.68, z - 0.1]);
+     }
+@@ -180,13 +182,37 @@ export class World {
+       this.scene.add(g);
+       this.markers.set(n.id, g);
+       const ring = mesh(new T.TorusGeometry(0.25, 0.025, 6, 36), '#f3db9a', g);
++      ring.name = 'stop-ring';
+       ring.rotation.x = Math.PI / 2;
++      const halo = mesh(new T.TorusGeometry(0.37, 0.025, 6, 36), '#ffe09a', g);
++      halo.name = 'selection-ring';
++      halo.rotation.x = Math.PI / 2;
++      const current = mesh(new T.TorusGeometry(0.44, 0.014, 6, 36), '#fff1d7', g);
++      current.name = 'current-ring';
++      current.rotation.x = Math.PI / 2;
++      const blocked = new T.Group();
++      blocked.name = 'blocked-cross';
++      g.add(blocked);
++      for (const angle of [-Math.PI / 4, Math.PI / 4]) {
++        const bar = box(blocked, '#dca180', [0.34, 0.024, 0.045], [0, 0.01, 0], 0.008);
++        bar.rotation.y = angle;
++      }
++      const remote = new T.LineLoop(
++        new T.BufferGeometry().setFromPoints([
++          V([0, -0.2]),
++          V([0.2, 0]),
++          V([0, 0.2]),
++          V([-0.2, 0]),
++        ]),
++        new T.LineBasicMaterial({ color: '#8fada9', transparent: true, opacity: 0.65 }),
++      );
++      remote.name = 'nonadjacent-diamond';
++      g.add(remote);
+       if (!n.pierId && n.id !== 'cut') {
+         cylinder(g, '#e2bf70', 0.055, 0.13, 0.2, [0, 0.07, 0], 10);
+         cylinder(g, '#eee2bc', 0.025, 0.025, 0.25, [0, 0.28, 0], 7);
+       }
+     }
+-    // Sparse broken foam accents hugging the three authored footprints.
+     for (const island of this.level.world.islands) {
+       const points = island.footprintXZ;
+       const cx = points.reduce((n, p) => n + p[0], 0) / points.length,
+@@ -240,12 +266,30 @@ export class World {
+     new ResizeObserver(() => this.resize()).observe(host);
+     this.resize();
+     this.renderer.domElement.addEventListener('click', (ev) => {
++      if (this.transition || this.state.status !== 'playing') return;
+       const bounds = host.getBoundingClientRect();
++      const point = { x: ev.clientX - bounds.left, y: ev.clientY - bounds.top };
++      const boatBounds = new T.Box3().setFromObject(this.boatRoot);
++      const boatCorners: T.Vector3[] = [];
++      for (const x of [boatBounds.min.x, boatBounds.max.x])
++        for (const y of [boatBounds.min.y, boatBounds.max.y])
++          for (const z of [boatBounds.min.z, boatBounds.max.z])
++            boatCorners.push(new T.Vector3(x, y, z).project(this.camera));
++      const boatX = boatCorners.map((p) => ((p.x + 1) * host.clientWidth) / 2);
++      const boatY = boatCorners.map((p) => ((1 - p.y) * host.clientHeight) / 2);
++      if (
++        point.x >= Math.min(...boatX) - 6 &&
++        point.x <= Math.max(...boatX) + 6 &&
++        point.y >= Math.min(...boatY) - 6 &&
++        point.y <= Math.max(...boatY) + 6
++      )
++        return;
+       let closest: string | undefined,
+         dist = 32;
+       for (const n of this.level.nodes) {
++        if (n.id === this.state.boatNodeId) continue;
+         const p = this.project(n.positionXZ);
+-        const d = Math.hypot(p.x - (ev.clientX - bounds.left), p.y - (ev.clientY - bounds.top));
++        const d = Math.hypot(p.x - point.x, p.y - point.y);
+         if (d < dist) {
+           closest = n.id;
+           dist = d;
+@@ -406,8 +450,6 @@ export class World {
+     if (smallLandscape || this.level.id === 'holding-pier') this.camera.position.set(0, 34, 24);
+     this.camera.lookAt(0, 0, 0.05);
+     if (smallLandscape || this.level.id === 'holding-pier') {
+-      // Fit the actual tall lighthouse and the complete possible ferry envelope,
+-      // rather than relying on a water-plane span that clips the lantern roof.
+       this.scene.updateMatrixWorld(true);
+       this.camera.updateMatrixWorld(true);
+       const points: T.Vector3[] = [];
+@@ -497,25 +539,62 @@ export class World {
+     this.indicate(s);
+   }
+   indicate(s: State, selected?: string) {
++    const selectedEdge = selected ? edgeTo(s, selected, this.level) : undefined;
++    this.navigationCurrent = s.boatNodeId;
++    this.navigationSelected = selectedEdge ? selected! : null;
+     for (const [id, g] of this.markers) {
+       const e = edgeTo(s, id, this.level);
+-      g.visible = id !== s.boatNodeId;
+-      const color =
+-        id === selected
+-          ? '#ffe09a'
+-          : e && e.baseDepth + s.tideLevel < draft(s, this.level)
+-            ? '#d19272'
++      const status =
++        id === s.boatNodeId
++          ? 'current'
++          : !e
++            ? 'nonadjacent'
++            : e.baseDepth + s.tideLevel < draft(s, this.level)
++              ? 'too-shallow'
++              : 'available';
++      const active = id === this.navigationSelected;
++      g.visible = true;
++      const color = active
++        ? '#ffe09a'
++        : status === 'too-shallow'
++          ? '#d19272'
++          : status === 'current'
++            ? '#fff1d7'
+             : '#cce2d6';
+-      (g.children[0] as T.Mesh).material = mat(color);
+-      g.scale.setScalar(id === selected ? 1.3 : 1);
++      const ring = g.getObjectByName('stop-ring') as T.Mesh;
++      ring.material = mat(color);
++      ring.visible = status !== 'nonadjacent';
++      g.getObjectByName('selection-ring')!.visible = active;
++      g.getObjectByName('current-ring')!.visible = status === 'current';
++      g.getObjectByName('blocked-cross')!.visible = status === 'too-shallow';
++      g.getObjectByName('nonadjacent-diamond')!.visible = status === 'nonadjacent';
++      g.userData.navigationStatus = status;
++      g.userData.selected = active;
++      g.scale.setScalar(active ? 1.15 : 1);
+       g.position.y = s.tideLevel * 0.18 + 0.04;
+     }
+     for (const [id, line] of this.routes) {
+       const e = this.level.edges.find((e) => e.id === id)!;
+       line.position.y = s.tideLevel * 0.18;
+       const m = line.material as T.LineDashedMaterial;
+-      m.opacity = e.nodes.includes(s.boatNodeId) ? 0.85 : 0.3;
+-      m.color.set(e.baseDepth + s.tideLevel < draft(s, this.level) ? '#dca180' : '#a6d3cc');
++      const highlighted = selectedEdge?.id === id;
++      line.userData.highlighted = highlighted;
++      m.opacity = highlighted
++        ? 1
++        : selectedEdge
++          ? 0.2
++          : e.nodes.includes(s.boatNodeId)
++            ? 0.85
++            : 0.3;
++      m.dashSize = highlighted ? 0.35 : 0.09;
++      m.gapSize = highlighted ? 0.055 : 0.16;
++      m.color.set(
++        highlighted
++          ? '#ffe09a'
++          : e.baseDepth + s.tideLevel < draft(s, this.level)
++            ? '#dca180'
++            : '#a6d3cc',
++      );
+     }
+   }
+   animate(before: State, after: State, action: Action, done: () => void) {
+@@ -584,10 +663,8 @@ export class World {
+       this.hull.position.y = T.MathUtils.lerp(tr.fromHullY, this.draftY(tr.after), k);
+       for (const [id, g] of this.animals) {
+         const dest = this.passengerPos(id, tr.after);
+-        if (tr.before.aboard.includes(id) && tr.after.aboard.includes(id)) {
+-          // Already aboard: local feet stay on the deck anchor throughout draft,
+-          // tide, travel and bobbing. The parent transform does all the work.
+-        } else if (tr.before.aboard.includes(id) !== tr.after.aboard.includes(id)) {
++        if (tr.before.aboard.includes(id) && tr.after.aboard.includes(id)) continue;
++        if (tr.before.aboard.includes(id) !== tr.after.aboard.includes(id)) {
+           const pier = this.level.piers.find((p) => p.nodeId === tr.before.boatNodeId)!;
+           const offset = id === 'rabbit-1' ? -0.07 : id === 'rabbit-2' ? 0.07 : 0;
+           const bridge = new T.Vector3(
+@@ -649,6 +726,35 @@ export class World {
+       };
+     });
+   }
++  navigationPresentation() {
++    return {
++      currentNode: this.navigationCurrent,
++      selectedDestination: this.navigationSelected,
++      routes: [...this.routes].map(([id, route]) => {
++        const material = route.material as T.LineDashedMaterial;
++        return {
++          id,
++          nodes: [...this.level.edges.find((edge) => edge.id === id)!.nodes],
++          highlighted: route.userData.highlighted === true,
++          dashSize: material.dashSize,
++          gapSize: material.gapSize,
++        };
++      }),
++      markers: [...this.markers].map(([id, marker]) => ({
++        id,
++        status: marker.userData.navigationStatus as string,
++        selected: marker.userData.selected === true,
++        shape:
++          marker.userData.navigationStatus === 'current'
++            ? 'double ring'
++            : marker.userData.navigationStatus === 'too-shallow'
++              ? 'crossed ring'
++              : marker.userData.navigationStatus === 'nonadjacent'
++                ? 'diamond'
++                : 'open ring',
++      })),
++    };
++  }
+   frameStatus() {
+     const rectangle = (object: T.Object3D) => {
+       const b = new T.Box3().setFromObject(object),
+diff --git a/src/style.css b/src/style.css
+index 2176abe..5b521cc 100644
+--- a/src/style.css
++++ b/src/style.css
+@@ -1,6 +1,6 @@
+ :root {
+   font-family: Arial, Helvetica, sans-serif;
+-  color: #29434a;
++  color: #233f42;
+   background: #235c6c;
+   font-synthesis: none;
+   font-size: 14px;
+@@ -11,23 +11,30 @@
+ body {
+   margin: 0;
+ }
+-button {
++button,
++select,
++summary {
+   font: inherit;
++}
++button,
++select {
+   color: inherit;
++}
++button {
+   cursor: pointer;
+   touch-action: manipulation;
++  min-height: 44px;
+ }
+ button:disabled {
+   cursor: default;
+-  opacity: 0.48;
++  opacity: 0.55;
+ }
+-button:focus-visible {
+-  outline: 3px solid #af5d36;
++button:focus-visible,
++select:focus-visible,
++summary:focus-visible {
++  outline: 3px solid #ac522c;
+   outline-offset: 3px;
+ }
+-button {
+-  min-height: 44px;
+-}
+ h1,
+ h2,
+ h3,
+@@ -38,7 +45,7 @@ p {
+   height: 100svh;
+   min-height: 600px;
+   display: grid;
+-  grid-template-columns: minmax(0, 1fr) 332px;
++  grid-template-columns: minmax(0, 1fr) 370px;
+   overflow: hidden;
+ }
+ #seascape {
+@@ -57,347 +64,415 @@ p {
+ }
+ .masthead {
+   position: absolute;
+-  left: 38px;
+-  top: 32px;
+-  pointer-events: none;
++  left: 32px;
++  top: 27px;
+   color: #fff0d3;
+-  text-shadow: 0 2px 12px #18445180;
++  pointer-events: none;
++  text-shadow: 0 2px 10px #18445190;
+ }
+-.eyebrow,
+-.panel-kicker {
+-  font-size: 10px;
+-  font-weight: 700;
+-  letter-spacing: 2px;
++.masthead > span {
++  font-size: 12px;
++  letter-spacing: 3px;
+ }
+ .masthead h1 {
+-  font-family: Georgia, serif;
+-  font-weight: 400;
+-  font-size: 38px;
+-  line-height: 1.25;
+-  margin: 8px 0;
+-}
+-.masthead p {
+-  font-family: Georgia, serif;
+-  font-size: 16px;
+-  font-style: italic;
+-  color: #c8ded8;
+-}
+-.dash {
+-  padding: 0 8px;
+-  color: #c1c9b4;
+-}
+-.map-key {
+-  position: absolute;
+-  bottom: 88px;
+-  left: 30px;
+-  display: flex;
+-  gap: 18px;
+-  color: #c7dfd7;
+-  font-size: 11px;
+-  letter-spacing: 0.3px;
++  font:
++    normal 34px/1.2 Georgia,
++    serif;
++  margin-top: 6px;
+ }
+ .tools {
+   position: absolute;
+-  bottom: 26px;
+   left: 30px;
++  bottom: 24px;
+   display: flex;
+-  gap: 9px;
++  gap: 8px;
+ }
+ .tools button {
+-  border: 1px solid #eadcc2;
+-  background: #f8efd9;
++  min-width: 44px;
++  border: 1px solid #e4d7bc;
+   border-radius: 24px;
+-  box-shadow: 0 3px 8px #123a4d38;
+-  padding: 0 18px;
++  background: #fcf1d8;
++  box-shadow: 0 2px 7px #123a4d38;
++  padding: 0 14px;
+   font-size: 16px;
+ }
++.tools #undo {
++  padding: 0 15px;
++}
+ .tools span {
+-  font-size: 12px;
+-  margin-left: 4px;
++  font-size: 14px;
+ }
+-.panel {
+-  position: relative;
+-  z-index: 2;
+-  overflow: auto;
+-  background: #f7f0df;
+-  padding: 27px 24px 18px;
+-  border-left: 1px solid #fff8e9;
+-  box-shadow: -8px 0 40px #163d4c20;
+-  scrollbar-width: thin;
++#map-labels {
++  position: absolute;
++  inset: 0;
++  pointer-events: none;
+ }
+-.panel-kicker {
+-  color: #617575;
++.map-target {
++  position: absolute;
++  transform: translate(-50%, -50%);
+   display: flex;
+-  justify-content: space-between;
+-  font-size: 9px;
+-}
+-.chapter-mark {
+-  color: #9b9f87;
+-  letter-spacing: 1px;
++  align-items: center;
++  justify-content: center;
++  gap: 6px;
++  min-width: 112px;
++  min-height: 48px;
++  max-width: 180px;
++  border: 1px solid #bbccc1;
++  border-radius: 8px;
++  background: #f8f0dcf5;
++  padding: 6px 9px;
++  box-shadow: 0 2px 6px #173b4b45;
++  pointer-events: auto;
++  text-align: left;
++  font-size: 14px;
++  line-height: 1.25;
+ }
+-.counters {
+-  display: flex;
+-  justify-content: space-between;
+-  margin: 23px 0 20px;
++.map-target b {
++  display: block;
++  font-size: 14px;
++  font-weight: 600;
+ }
+-.counters small {
++.map-state {
+   display: block;
+-  font-size: 8px;
+-  letter-spacing: 1.8px;
+-  color: #6c7e79;
+-  margin-bottom: 6px;
+-}
+-.counters strong {
+-  font-family: Georgia, serif;
+-  font-size: 29px;
+-  font-weight: 400;
+-  line-height: 1;
+-}
+-.counters strong span {
+-  font-size: 13px;
+-  color: #7d8b80;
+-}
+-.cargo {
+-  padding: 13px 14px;
+-  background: #ece8d7;
+-  border: 1px solid #dedfcb;
+-  border-radius: 9px;
+-  margin-bottom: 23px;
++  margin-top: 2px;
++  font-size: 14px;
++}
++.map-symbol {
++  font-size: 20px;
++}
++.map-target[data-status='current'] {
++  border: 2px solid #294e50;
++  background: #dce9d7;
++}
++.map-target[data-status='too-shallow'] {
++  border: 2px solid #af6942;
++  background: #f8e4c7;
++}
++.map-target[data-risk='loss'] {
++  border: 2px solid #af6942;
++  background: #f8e4c7;
++}
++.map-target[data-status='nonadjacent'] {
++  border-style: dashed;
++  background: #e2e6dcf0;
++  color: #405850;
+ }
+-.cargo > div:first-child {
++.map-target.highlighted,
++.action.highlighted,
++.inspect-route.highlighted {
++  border-color: #b37e24;
++  box-shadow: 0 0 0 2px #f6d687;
++  background: #fff0bc;
++}
++.panel {
++  overflow: auto;
++  background: #f7f0df;
++  padding: 23px 22px;
++  border-left: 1px solid #fffaec;
++  box-shadow: -8px 0 35px #163d4c20;
++  scrollbar-width: thin;
++}
++.score-strip {
+   display: flex;
+   justify-content: space-between;
+-  font-size: 11px;
++  gap: 8px;
++  font-size: 14px;
++  line-height: 1.5;
++  color: #49635b;
++  margin-bottom: 12px;
+ }
+-.cargo > div:first-child > span {
+-  color: #64766b;
++.score-strip b {
++  font-size: 18px;
++  color: #233f42;
+ }
+-.slots {
++.boat-summary {
+   display: flex;
+-  gap: 6px;
+-  margin: 10px 0;
++  justify-content: space-between;
++  gap: 8px;
++  padding: 11px 12px;
++  background: #e8e5d4;
++  border: 1px solid #d5dac5;
++  border-radius: 7px;
++  font-size: 14px;
++  line-height: 1.35;
++  margin-bottom: 12px;
+ }
+-.slots i {
+-  height: 7px;
+-  flex: 1;
+-  border: 1px solid #a6b3a0;
+-  border-radius: 8px;
++.boat-summary span {
++  white-space: nowrap;
+ }
+-.slots .filled {
+-  background: #7a8c64;
+-  border-color: #7a8c64;
++.situation {
++  border-left: 3px solid #6e947c;
++  padding: 8px 10px;
++  background: #e7ecdc;
++  line-height: 1.45;
++  font-size: 14px;
++  margin-bottom: 18px;
+ }
+-.cargo p {
+-  font-family: Georgia, serif;
+-  font-size: 12px;
+-  color: #5f756d;
++.situation.urgent {
++  border-color: #b67643;
++  background: #f0e2c9;
+ }
+-.location .eyebrow {
+-  font-size: 8px;
+-  color: #7d8c7b;
+-  letter-spacing: 1.7px;
++.situation strong {
++  font-size: 15px;
+ }
+-.location h2 {
+-  font-family: Georgia, serif;
+-  font-size: 23px;
+-  font-weight: 400;
+-  margin: 6px 0 9px;
++.situation p {
++  margin-top: 4px;
+ }
+-.instruction {
+-  font-size: 11px;
+-  color: #748075;
+-  line-height: 1.6;
+-  margin-bottom: 13px;
++.local-context h2 {
++  font:
++    normal 24px/1.2 Georgia,
++    serif;
++  margin-bottom: 10px;
+ }
+-.action-list {
++#local-actions {
+   display: grid;
+-  gap: 7px;
++  gap: 6px;
++}
++.local-empty {
++  color: #52695b;
++  line-height: 1.4;
+ }
+ .action {
+   width: 100%;
+-  text-align: left;
+   display: flex;
+-  align-items: center;
+   justify-content: space-between;
+-  gap: 8px;
+-  border: 1px solid #d6dbc9;
+-  background: #fffaee;
++  align-items: center;
++  gap: 6px;
++  text-align: left;
++  padding: 10px 11px;
++  border: 1px solid #cbd3bd;
++  background: #fffaed;
+   border-radius: 7px;
+-  padding: 10px 12px;
+-  min-height: 58px;
+-}
+-.action:hover,
+-.action.selected {
+-  background: #eee8cf;
+-  border-color: #aaa98a;
++  min-height: 48px;
++  font-size: 14px;
++  line-height: 1.35;
+ }
+ .action b {
+-  font-size: 12px;
++  font-size: 15px;
+   font-weight: 600;
+ }
+ .action small {
+   display: block;
+-  font-size: 10px;
+-  color: #7b8777;
+-  margin: 5px 0 0 16px;
++  margin-top: 4px;
++  font-size: 14px;
++  line-height: 1.4;
++  color: #435f53;
+ }
+-.chevron {
+-  font-size: 20px;
+-  color: #9a9c7e;
++.local-action {
++  background: #edf0df;
++}
++.action:hover,
++.inspect-route:hover {
++  background: #f1e8cd;
++}
++.action-guide {
++  font-size: 14px;
++  line-height: 1.4;
++  color: #4e6559;
++  margin: 12px 0;
+ }
+-.action.quiet {
++#travel-actions {
++  margin-top: 17px;
++}
++#travel-actions h3 {
++  font-size: 14px;
++  font-weight: 600;
++  margin-bottom: 7px;
++}
++.action-list {
++  display: grid;
++  gap: 8px;
++}
++.route-row {
++  display: grid;
++  grid-template-columns: minmax(0, 1fr) 64px;
++  gap: 6px;
++}
++.inspect-route {
++  min-width: 44px;
++  min-height: 44px;
++  border: 1px solid #bdc9b3;
++  border-radius: 7px;
++  background: #e9e7d4;
++  font-size: 14px;
++}
++#secondary {
++  margin-top: 20px;
++  font-size: 14px;
++  line-height: 1.5;
++}
++.quiet {
+   background: transparent;
+   border-style: dashed;
+ }
+-.preview {
+-  background: #e7ead9;
+-  border: 1px solid #c2ccaf;
++.forecast-button,
++summary {
++  min-height: 44px;
++  cursor: pointer;
++  border: 0;
++  background: none;
++  padding: 10px 0;
++  width: 100%;
++  font-size: 14px;
++}
++.forecast-button {
++  display: flex;
++  justify-content: space-between;
++  text-align: left;
++  border-bottom: 1px solid #d1d7c2;
++  margin-top: 8px;
++}
++.forecast-detail,
++details p {
++  padding: 7px 0;
++  font-size: 14px;
++  line-height: 1.5;
++}
++.forecast-detail p,
++details p + p {
++  margin-top: 8px;
++}
++.cove-picker {
++  display: grid;
++  gap: 5px;
++  margin-top: 12px;
++}
++.cove-picker select {
++  min-height: 44px;
++  padding: 7px;
++  background: #fff9eb;
++  border: 1px solid #bccab4;
++  border-radius: 5px;
++  width: 100%;
++  font-size: 14px;
++}
++#preview:not(:empty) {
++  margin-top: 16px;
++}
++.preview-card {
++  min-height: 0;
++  padding: 12px;
++  background: #e7ecda;
++  border: 1px solid #b8c8a7;
+   border-radius: 9px;
+-  padding: 13px;
+-  margin-top: 15px;
++  display: grid;
++  grid-template-rows: auto minmax(0, 1fr) auto;
++  gap: 10px;
++}
++.preview-card.warning {
++  background: #f3e1cb;
++  border-color: #bd8a61;
+ }
+ .preview-head {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+-  gap: 4px;
++  gap: 7px;
++  min-height: 44px;
+ }
+-.preview-head .eyebrow {
+-  font-size: 8px;
+-  letter-spacing: 1.3px;
+-  color: #5c7561;
++.preview-head span {
++  font-size: 14px;
++  color: #506b57;
++}
++.preview-head h3 {
++  font:
++    normal 21px/1.2 Georgia,
++    serif;
++  margin-top: 3px;
+ }
+ .preview-head button {
++  width: 44px;
++  min-width: 44px;
++  height: 44px;
+   border: 0;
+   background: none;
+-  font-size: 20px;
+-  min-width: 44px;
+-  margin: -12px -10px -9px 0;
++  font-size: 24px;
+ }
+-.preview h3 {
+-  font-family: Georgia, serif;
+-  font-size: 18px;
+-  font-weight: 400;
+-  margin: 8px 0;
+-}
+-.preview p {
+-  font-size: 11px;
+-  line-height: 1.65;
+-}
+-.preview .consequence {
+-  margin-top: 7px;
+-  color: #5c735b;
++.preview-scroll {
++  min-height: 0;
++  overflow: auto;
++  font-size: 14px;
++  line-height: 1.45;
+ }
+-.preview.warning {
+-  background: #f0e2ce;
+-  border-color: #d0af86;
++.preview-scroll p {
++  font-size: 14px;
++  line-height: 1.45;
+ }
+-.preview.warning .consequence {
+-  color: #9a5439;
++.preview-scroll p + p {
++  margin-top: 8px;
+ }
+-.commit {
+-  margin-top: 12px;
+-  background: #294e50;
+-  color: #fff3d8;
+-  border: 0;
+-  border-radius: 5px;
+-  width: 100%;
+-  display: flex;
+-  align-items: center;
+-  justify-content: space-between;
+-  font-size: 11px;
+-  text-align: left;
+-  padding: 9px 12px;
+-  line-height: 1.5;
++.requirement {
++  font-weight: 600;
+ }
+-.commit:hover {
+-  background: #3e6461;
++.preview-cost {
++  color: #4f6658;
+ }
+ .passenger-options {
+   display: flex;
+-  gap: 5px;
+-  flex-wrap: wrap;
+-  margin-bottom: 8px;
++  gap: 6px;
++  margin-bottom: 10px;
+ }
+ .passenger-options button {
+-  background: transparent;
+-  border: 1px solid #b8c3a7;
+-  font-size: 10px;
++  min-width: 0;
++  flex: 1;
++  padding: 5px;
++  min-height: 44px;
++  border: 1px solid #a7b891;
+   border-radius: 5px;
+-  padding: 7px;
++  background: #f2f0df;
++  font-size: 14px;
++}
++.passenger-options button span {
++  display: block;
++  font-size: 14px;
++  margin-top: 2px;
+ }
+ .passenger-options [aria-pressed='true'] {
+-  background: #d1dabe;
+-  border-color: #819672;
++  background: #d1debf;
++  border: 2px solid #6a875d;
+ }
+-.forecast-button {
+-  border: 0;
+-  border-top: 1px solid #d7dccb;
+-  background: none;
++.commit {
+   width: 100%;
+-  display: flex;
+-  align-items: center;
+-  justify-content: space-between;
++  min-height: 44px;
++  border: 0;
++  padding: 9px 10px;
++  border-radius: 6px;
++  background: #284e50;
++  color: #fff3d7;
++  font-size: 14px;
+   text-align: left;
+-  font-size: 11px;
+-  padding: 15px 0 8px;
+-  margin-top: 19px;
++  line-height: 1.4;
+ }
+-.forecast-button > span {
+-  font-size: 16px;
++.commit:hover {
++  background: #3a6561;
+ }
+-.deadline {
+-  font-size: 10px;
+-  color: #847e65;
+-}
+-.forecast-detail {
+-  font-size: 11px;
+-  line-height: 1.7;
+-  color: #667b6e;
+-}
+-.forecast-detail p {
+-  margin-top: 5px;
+-}
+-.panel-foot {
+-  font-family: Georgia, serif;
+-  font-style: italic;
+-  color: #969a82;
+-  font-size: 11px;
+-  line-height: 1.6;
+-  margin-top: 25px;
+-  text-align: center;
++.busy {
++  padding: 12px;
++  border-radius: 8px;
++  background: #e5e9d6;
++  font-size: 14px;
+ }
+ .ending {
+   text-align: center;
+-  padding: 20px 0;
++  padding: 18px 0;
+ }
+ .ending-icon {
+-  display: block;
+-  font-size: 42px;
+-  color: #bd8c3e;
+-  margin: 0 0 15px;
+-}
+-.ending .eyebrow {
+-  font-size: 8px;
+-  color: #929b77;
++  font-size: 36px;
++  color: #b98231;
+ }
+ .ending h2 {
+-  font-family: Georgia, serif;
+-  font-weight: 400;
+-  font-size: 32px;
++  font:
++    normal 32px/1.3 Georgia,
++    serif;
+   margin: 12px 0;
+ }
+ .ending p {
+-  font-size: 12px;
+-  line-height: 1.8;
+-  color: #6b7d6b;
+-}
+-.ending .ending-small {
+-  font-size: 10px;
+-  margin-top: 18px;
++  font-size: 14px;
++  line-height: 1.5;
++  margin-top: 10px;
+ }
+-.loss h2 {
+-  font-size: 28px;
++.portrait-note {
++  display: none;
+ }
+ .sr-only {
+   position: absolute;
+@@ -410,488 +485,256 @@ p {
+   white-space: nowrap;
+   border: 0;
+ }
+-.portrait-note {
++.panel.selecting #local-actions,
++.panel.selecting #travel-actions,
++.panel.selecting .action-guide,
++.panel.selecting #secondary {
+   display: none;
+ }
+-.island-label,
+-.sea-label {
+-  position: absolute;
+-  pointer-events: none;
+-  font-size: 8px;
+-  letter-spacing: 2px;
+-  color: #e7ebd3;
+-  opacity: 0.8;
+-}
+-.refuge {
+-  top: 29%;
+-  left: 14%;
+-}
+-.sheep {
+-  top: 30%;
+-  right: 12%;
+-}
+-.sea-label {
+-  bottom: 23%;
+-  left: 40%;
+-  font-size: 9px;
+-  opacity: 0.5;
+-}
+-@media (min-width: 1600px) {
+-  .game {
+-    grid-template-columns: minmax(0, 1fr) 364px;
++@media (min-width: 701px) {
++  .panel.selecting {
++    display: grid;
++    grid-template-rows: auto auto minmax(0, 1fr);
++    align-content: start;
++    gap: 8px;
++    overflow: hidden;
+   }
+-  .panel {
+-    padding: 34px 30px;
++  .panel.selecting #preview {
++    grid-template-rows: minmax(0, 1fr);
++    margin: 0;
++    min-height: 0;
++    display: grid;
+   }
+-  .masthead {
+-    left: 45px;
+-    top: 40px;
++  .panel.selecting .local-context h2 {
++    margin: 0;
+   }
+-  .masthead h1 {
+-    font-size: 44px;
++  .panel.selecting .situation {
++    margin-bottom: 0;
++  }
++  .panel.selecting #status-detail {
++    display: none;
+   }
+ }
+ @media (max-height: 740px) and (min-width: 701px) {
+   .game {
+     min-height: 0;
++    grid-template-columns: minmax(0, 1fr) 340px;
+   }
+   .panel {
+-    padding: 14px 16px 10px;
+-  }
+-  .counters {
+-    margin: 12px 0;
+-  }
+-  .counters strong {
+-    font-size: 24px;
+-  }
+-  .cargo {
+-    margin-bottom: 12px;
+-    padding: 9px 11px;
+-  }
+-  .location h2 {
+-    font-size: 20px;
+-  }
+-  .instruction {
+-    margin-bottom: 8px;
+-  }
+-  .action {
+-    padding: 7px 10px;
+-    min-height: 49px;
+-  }
+-  .action small {
+-    margin-top: 3px;
+-  }
+-  .panel-foot {
+-    margin-top: 12px;
+-  }
+-  .forecast-button {
+-    margin-top: 12px;
+-  }
+-  .preview {
+-    margin-top: 10px;
+-    padding: 10px;
++    padding: 14px;
+   }
+   .masthead {
+     top: 18px;
+-    left: 22px;
++    left: 20px;
+   }
+   .masthead h1 {
+     font-size: 28px;
+   }
+-  .masthead p {
+-    font-size: 13px;
+-  }
+-  .map-key {
+-    bottom: 65px;
+-    left: 20px;
+-    gap: 10px;
+-    font-size: 9px;
+-  }
+-  .tools {
+-    bottom: 15px;
+-    left: 20px;
+-  }
+-  .tools button {
+-    padding: 0 13px;
+-  }
+-  .game {
+-    grid-template-columns: minmax(0, 1fr) 290px;
+-  }
+ }
+ @media (max-height: 480px) and (min-width: 701px) {
+   .game {
+-    grid-template-columns: minmax(0, 1fr) 264px;
++    grid-template-columns: minmax(0, 1fr) 320px;
+   }
+-  .masthead h1 {
+-    font-size: 24px;
+-    margin: 5px 0;
++  #world {
++    inset: 48px 0 0;
++  }
++  .masthead {
++    top: 14px;
++    left: 12px;
+   }
+-  .masthead p {
++  .masthead > span {
+     display: none;
+   }
+-  .masthead .eyebrow {
+-    font-size: 8px;
++  .masthead h1 {
++    font-size: 20px;
++    margin: 0;
+   }
+-  .panel {
+-    padding: 11px 14px;
++  .tools {
++    top: 5px;
++    bottom: auto;
++    right: 10px;
++    left: auto;
++    gap: 5px;
+   }
+-  .panel-kicker {
+-    font-size: 8px;
++  .tools button {
++    padding: 0 9px;
++    font-size: 14px;
+   }
+-  .counters {
+-    margin: 10px 0;
++  .tools #undo {
++    padding: 0 10px;
+   }
+-  .counters strong {
+-    font-size: 22px;
++  .panel {
++    padding: 10px;
+   }
+-  .counters small {
+-    font-size: 7px;
++  .score-strip {
++    margin-bottom: 5px;
++    line-height: 1.3;
+   }
+-  .cargo {
+-    margin-bottom: 10px;
++  .score-strip b {
++    font-size: 16px;
+   }
+-  .cargo p {
+-    font-size: 10px;
++  .boat-summary {
++    padding: 5px 7px;
++    margin-bottom: 6px;
+   }
+-  .slots {
+-    margin: 7px 0;
++  .situation {
++    padding: 5px 7px;
++    margin-bottom: 8px;
++    line-height: 1.3;
+   }
+-  .location h2 {
+-    font-size: 18px;
+-    margin-bottom: 6px;
++  .situation strong {
++    font-size: 14px;
+   }
+-  .instruction {
+-    font-size: 10px;
++  .situation p {
++    margin-top: 3px;
++  }
++  .local-context h2 {
++    font-size: 20px;
++    margin-bottom: 6px;
+   }
+   .action {
++    padding: 6px 8px;
+     min-height: 44px;
+-    padding: 6px 10px;
++    line-height: 1.25;
+   }
+   .action b {
+-    font-size: 11px;
++    font-size: 14px;
+   }
+   .action small {
+-    font-size: 9px;
+-  }
+-  .preview p {
+-    font-size: 10px;
+-  }
+-  .map-key {
+-    bottom: 66px;
+-    font-size: 8px;
+-    flex-direction: column;
+-    gap: 5px;
++    margin-top: 3px;
++    line-height: 1.25;
+   }
+-  .island-label {
+-    font-size: 6px;
+-    letter-spacing: 1px;
++  .action-guide {
++    margin: 7px 0;
++    line-height: 1.3;
+   }
+-  .sea-label {
+-    font-size: 7px;
++  #travel-actions {
++    margin-top: 9px;
+   }
+-  .panel-foot {
+-    font-size: 10px;
++  #travel-actions h3 {
++    margin-bottom: 5px;
+   }
+-  .tools button {
+-    font-size: 14px;
++  .route-row {
++    grid-template-columns: minmax(0, 1fr) 60px;
++    gap: 5px;
+   }
+-  .tools span {
+-    font-size: 11px;
++  .action-list {
++    gap: 6px;
+   }
+-}
+-@media (max-width: 700px) {
+-  .game {
+-    height: auto;
+-    min-height: 100svh;
+-    display: block;
+-    overflow: visible;
++  .map-target {
++    padding: 5px 6px;
++    gap: 4px;
++    max-width: 164px;
+   }
+-  #seascape {
+-    height: 52svh;
+-    min-height: 340px;
++  .map-state,
++  .map-target b {
++    font-size: 14px;
++    line-height: 1.15;
+   }
+-  .panel {
+-    border-left: 0;
+-    padding: 22px;
+-    overflow: visible;
++  .map-symbol {
++    font-size: 17px;
+   }
+-  .masthead {
+-    top: 17px;
+-    left: 20px;
++  .preview-card {
++    padding: 8px;
++    gap: 6px;
+   }
+-  .masthead h1 {
+-    font-size: 27px;
++  .preview-head h3 {
++    font-size: 18px;
+   }
+-  .masthead p {
+-    font-size: 13px;
++  .panel.selecting #controls {
++    display: none;
+   }
+-  .tools {
+-    left: 18px;
+-    bottom: 35px;
++  .panel.selecting {
++    grid-template-rows: auto minmax(0, 1fr);
+   }
+-  .tools button {
+-    padding: 0 14px;
++  .passenger-options button span {
++    display: inline;
++    margin: 0;
+   }
+-  .map-key {
+-    bottom: 90px;
+-    left: 20px;
+-    font-size: 9px;
++  .passenger-options button span::before {
++    content: ' · ';
+   }
+-  .portrait-note {
+-    display: block;
+-    position: absolute;
+-    bottom: 9px;
+-    left: 18px;
+-    right: 18px;
+-    color: #e6ead2;
+-    font-size: 9px;
++  .passenger-options {
++    margin-bottom: 7px;
+   }
+-  .island-label {
+-    font-size: 6px;
++  .preview-scroll p {
++    line-height: 1.35;
+   }
+-  .sea-label {
+-    display: none;
++  .preview-scroll p + p {
++    margin-top: 6px;
+   }
+-  .counters {
+-    margin: 18px 0;
++  .panel.selecting .score-strip {
++    margin-bottom: 4px;
+   }
+-  .cargo {
+-    margin-bottom: 18px;
++  .panel.selecting .boat-summary {
++    margin-bottom: 5px;
+   }
+-}
+-@media (prefers-reduced-motion: reduce) {
+-  * {
+-    scroll-behavior: auto !important;
++  .panel.selecting .situation {
++    padding: 4px 6px;
+   }
+ }
+-.panel,
+-.tools {
+-  user-select: none;
+-}
+-.instruction,
+-.action small,
+-.counters small,
+-.location .eyebrow,
+-.deadline,
+-.preview-head .eyebrow {
+-  color: #596e60;
+-}
+-@media (max-height: 480px) and (min-width: 701px) {
+-  #world {
+-    inset: 54px 0 16px;
+-  }
+-  .island-label {
+-    display: none;
++@media (max-width: 700px) {
++  .game {
++    display: block;
++    height: auto;
++    min-height: 100svh;
++    overflow: visible;
+   }
+-  .sea-label {
+-    bottom: 24%;
+-    left: 35%;
++  #seascape {
++    height: 58svh;
++    min-height: 410px;
+   }
+-  .map-key {
+-    bottom: 6px;
+-    flex-direction: row;
++  #world {
++    inset: 52px 0 20px;
+   }
+   .masthead {
+     top: 14px;
++    left: 12px;
+   }
+-  .masthead h1 {
+-    font-size: 20px;
+-  }
+-  .masthead .eyebrow {
++  .masthead > span {
+     display: none;
+   }
++  .masthead h1 {
++    font-size: 22px;
++    margin: 0;
++  }
+   .tools {
+-    top: 10px;
+-    right: 14px;
+-    left: auto;
++    top: 5px;
+     bottom: auto;
+-    gap: 6px;
++    right: 10px;
++    left: auto;
++    gap: 5px;
+   }
+   .tools button {
+-    min-width: 44px;
+-    padding: 0 10px;
++    padding: 0 8px;
+   }
+   .tools span {
+     display: none;
+   }
+-  .sea-label {
+-    display: none;
+-  }
+-}
+-@media (max-height: 480px) and (min-width: 701px) {
+-  .selecting .action-list,
+-  .selecting .instruction {
+-    display: none;
+-  }
+-  .selecting .location .eyebrow {
+-    display: none;
+-  }
+-  .selecting .location h2 {
+-    font-size: 15px;
+-    margin: 3px 0;
+-  }
+-  .selecting .cargo {
+-    padding: 7px 10px;
+-    margin-bottom: 6px;
+-  }
+-  .selecting .counters {
+-    margin: 8px 0;
+-  }
+-  .selecting .cargo p {
+-    font-size: 9px;
+-  }
+-  .selecting .preview {
+-    margin-top: 5px;
+-  }
+-  .selecting .preview h3 {
+-    font-size: 16px;
+-    margin: 5px 0;
+-  }
+-  .selecting .passenger-options {
+-    margin: 4px 0;
+-  }
+-  .selecting .preview-head .eyebrow {
+-    font-size: 7px;
+-  }
+-  .selecting .forecast-button {
+-    margin-top: 10px;
+-  }
+-}
+-/* The experiment keeps the same miniature and adds only its decision cues. */
+-.route-row {
+-  display: grid;
+-  grid-template-columns: minmax(0, 1fr) 58px;
+-  gap: 4px;
+-}
+-.inspect-route {
+-  border: 1px solid #c5cdb7;
+-  border-radius: 7px;
+-  background: #ece8d7;
+-  font-size: 10px;
+-  min-width: 44px;
+-}
+-.voyage-note {
+-  font-size: 11px;
+-  line-height: 1.6;
+-  color: #5b4938;
+-  background: #eee1c8;
+-  border-left: 3px solid #aa6844;
+-  padding: 9px 10px;
+-  margin: -10px 0 18px;
+-}
+-.voyage-note p {
+-  font-size: 10px;
+-  color: #53695b;
+-  margin-top: 3px;
+-}
+-.cove-picker {
+-  display: grid;
+-  gap: 5px;
+-  margin-top: 18px;
+-  color: #53695b;
+-  font-size: 11px;
+-}
+-.cove-picker select {
+-  font: inherit;
+-  color: #29434a;
+-  background: #fffaee;
+-  border: 1px solid #b7c4ae;
+-  border-radius: 5px;
+-  min-height: 44px;
+-  width: 100%;
+-  padding: 7px;
+-}
+-select:focus-visible {
+-  outline: 3px solid #af5d36;
+-  outline-offset: 2px;
+-}
+-.pier-tag {
+-  position: absolute;
+-  transform: translate(-50%, -100%);
+-  pointer-events: none;
+-  font-size: 9px;
+-  font-weight: 700;
+-  letter-spacing: 0.5px;
+-  padding: 5px 7px;
+-  border-radius: 5px;
+-  background: #e9edd7ed;
+-  color: #254b49;
+-  box-shadow: 0 2px 5px #163d4c40;
+-  white-space: nowrap;
+-}
+-.pier-tag.low {
+-  background: #f4dfb9ed;
+-  color: #704729;
+-}
+-@media (max-height: 480px) and (min-width: 701px) {
+-  .experiment .counters {
+-    margin: 6px 0;
+-  }
+-  .experiment .cargo {
+-    padding: 7px 10px;
+-    margin-bottom: 8px;
+-  }
+-  .experiment .voyage-note {
+-    font-size: 10px;
+-    padding: 5px 7px;
+-    margin: 0 0 7px;
+-    line-height: 1.45;
+-  }
+-  .experiment .voyage-note p {
+-    font-size: 9px;
+-    margin: 0;
+-  }
+-  .experiment .voyage-note p:last-child {
+-    display: none;
+-  }
+-  .experiment .instruction {
+-    font-size: 9px;
+-    line-height: 1.4;
+-  }
+-  .experiment .action small {
+-    margin-left: 0;
+-    line-height: 1.4;
+-  }
+-  .experiment .route-row {
+-    grid-template-columns: minmax(0, 1fr) 49px;
+-  }
+-  .experiment .inspect-route {
+-    font-size: 9px;
+-  }
+-  .experiment .selecting .voyage-note p {
+-    display: none;
++  .panel {
++    padding: 18px;
++    overflow: visible;
+   }
+-  .experiment .selecting .voyage-note {
+-    margin-bottom: 4px;
++  .map-target {
++    min-width: 105px;
++    max-width: 140px;
++    padding: 5px;
+   }
+-  .experiment .selecting .preview p {
+-    line-height: 1.45;
++  .map-target b,
++  .map-state {
++    font-size: 14px;
+   }
+-  .experiment .pier-tag {
+-    font-size: 7px;
+-    padding: 3px 4px;
+-    letter-spacing: 0;
++  .portrait-note {
++    display: block;
++    position: absolute;
++    bottom: 3px;
++    left: 12px;
++    font-size: 12px;
++    color: #f1eed9;
+   }
+ }
+-@media (max-height: 480px) and (min-width: 701px) {
+-  .experiment .panel-kicker {
+-    display: none;
+-  }
+-  .experiment .slots {
+-    display: none;
+-  }
+-  .experiment .cargo p {
+-    margin-top: 6px;
+-  }
+-  .experiment .location .eyebrow {
+-    display: none;
+-  }
+-  .experiment .location h2 {
+-    margin: 4px 0 6px;
++@media (prefers-reduced-motion: reduce) {
++  * {
++    scroll-behavior: auto !important;
+   }
+ }
+-/* Keep the chosen action and its confirmation together at every viewport. */
+-.experiment .selecting .action-list,
+-.experiment .selecting .instruction {
+-  display: none;
+-}
+diff --git a/src/ui/presentation.ts b/src/ui/presentation.ts
+new file mode 100644
+index 0000000..fb3ddcd
+--- /dev/null
++++ b/src/ui/presentation.ts
+@@ -0,0 +1,221 @@
++import { draft, edgeTo, pierAt, preview, type Action, type State } from '../game/rules';
++import { nodeNames, passengerNames, type Level } from '../levels/level';
++
++const stop = (id: string) => nodeNames[id] ?? id;
++const shortName = (id: string) => passengerNames[id]?.split(' ·')[0] ?? id;
++const verb = (ids: string[], singular: string, plural: string) =>
++  ids.length === 1 ? singular : plural;
++const countActions = (n: number) => `${n} action${n === 1 ? '' : 's'}`;
++
++export function passengerList(ids: string[]): string {
++  const names = ids.map(shortName);
++  if (names.length < 2) return names[0] ?? '';
++  if (names.length === 2) return names.join(' and ');
++  return `${names.slice(0, -1).join(', ')} and ${names.at(-1)}`;
++}
++
++export function actionLabel(s: State, a: Action, l: Level): string {
++  if (a.type === 'move') return `Sail to ${stop(a.to)}`;
++  if (a.type === 'wait') return 'Wait';
++  const who = passengerList(a.passengerIds) || 'passengers';
++  if (a.type === 'board') return `Board ${who}`;
++  return pierAt(s, l)?.isDeliveryPier ? `Deliver ${who}` : `Let ${who} ashore`;
++}
++
++export function passageCopy(s: State, to: string, l: Level): string {
++  if (to === s.boatNodeId) return `You are at ${stop(to)}.`;
++  const edge = edgeTo(s, to, l);
++  if (!edge) return 'No direct passage. Sail to an adjacent stop first.';
++  const need = draft(s, l),
++    depth = edge.baseDepth + s.tideLevel;
++  return `Boat needs depth ${need}. Passage has depth ${depth}: ${depth < need ? 'too shallow' : 'enough depth'}.`;
++}
++
++export function actionCostCopy(l: Level): string {
++  return `Sailing, boarding, unloading and waiting each cost ${countActions(l.rules.actionCost)}. Inspection is free.`;
++}
++
++export function pierSafetyCopy(s: State, pierId: string, l: Level): string {
++  const pier = l.piers.find((p) => p.id === pierId)!;
++  if (s.tideLevel >= pier.elevation) return `${stop(pier.nodeId)} is flooded.`;
++  const flood = l.rules.tide.rises.find((r) => r.afterTurn > s.turn && r.level >= pier.elevation);
++  if (flood) return `${stop(pier.nodeId)} floods in ${countActions(flood.afterTurn - s.turn)}.`;
++  return `${stop(pier.nodeId)} stays safe through all tide rises.`;
++}
++
++function tideCopy(s: State, l: Level): string {
++  const next = l.rules.tide.rises.find((r) => r.afterTurn > s.turn);
++  if (!next) return 'The tide will not rise again.';
++  return next.afterTurn === s.turn + 1
++    ? 'The tide rises after your next action.'
++    : `The tide rises in ${countActions(next.afterTurn - s.turn)}.`;
++}
++
++function waitingFacts(s: State, l: Level): string[] {
++  return l.piers.flatMap((p) => {
++    const ids = s.waitingByPier[p.id] ?? [];
++    if (!ids.length) return [];
++    const futureFlood = l.rules.tide.rises.some(
++      (r) => r.afterTurn > s.turn && r.level >= p.elevation,
++    );
++    const safe = s.tideLevel < p.elevation && !futureFlood;
++    return [
++      `${passengerList(ids)} ${verb(ids, 'waits', 'wait')}${safe ? ' safely' : ''} at ${stop(p.nodeId)}.`,
++    ];
++  });
++}
++
++export function statusCopy(
++  s: State,
++  l: Level,
++): { headline: string; detail: string; urgent: boolean } {
++  if (s.status === 'lost') {
++    const loss = s.lossReason!,
++      pier = l.piers.find((p) => p.id === loss.pierId)!;
++    return {
++      headline: `${stop(pier.nodeId)} flooded with ${passengerList(loss.passengerIds)} still waiting.`,
++      detail: 'Undo earlier moves, or restart to try a different plan.',
++      urgent: true,
++    };
++  }
++  if (s.status === 'won')
++    return {
++      headline: 'Everyone is safely home.',
++      detail: `${s.delivered.length} passengers delivered in ${countActions(s.turn)}.`,
++      urgent: false,
++    };
++  const threatened = l.piers
++    .flatMap((p) => {
++      const ids = (s.waitingByPier[p.id] ?? []).filter((id) =>
++        l.objective.requiredPassengerIds.includes(id),
++      );
++      const rise = l.rules.tide.rises.find((r) => r.afterTurn > s.turn && r.level >= p.elevation);
++      return ids.length && rise ? [{ pier: p, rise }] : [];
++    })
++    .sort((a, b) => a.rise.afterTurn - b.rise.afterTurn)[0];
++  const aboard = s.aboard.length
++      ? `${passengerList(s.aboard)} ${verb(s.aboard, 'is', 'are')} safe aboard.`
++      : '',
++    waiting = waitingFacts(s, l),
++    nextRise = l.rules.tide.rises.find((r) => r.afterTurn > s.turn),
++    immediateTide = nextRise?.afterTurn === s.turn + 1 ? tideCopy(s, l) : '';
++  if (threatened)
++    return {
++      headline: `${stop(threatened.pier.nodeId)} floods in ${countActions(threatened.rise.afterTurn - s.turn)}.`,
++      detail: [
++        immediateTide,
++        aboard,
++        ...waiting.filter((f) => !f.includes(stop(threatened.pier.nodeId))),
++      ]
++        .filter(Boolean)
++        .join(' '),
++      urgent: true,
++    };
++  const delivered = s.delivered.length
++    ? `${passengerList(s.delivered)} ${verb(s.delivered, 'is', 'are')} safe at ${stop(l.piers.find((p) => p.id === l.objective.deliveryPierId)!.nodeId)}.`
++    : '';
++  return {
++    headline: aboard || delivered || waiting.shift() || 'The boat is empty.',
++    detail: [...waiting, delivered && aboard ? delivered : '', immediateTide]
++      .filter(Boolean)
++      .join(' '),
++    urgent: false,
++  };
++}
++
++export function forecastCopy(s: State, l: Level): { headline: string; detail: string } {
++  const next = l.rules.tide.rises.find((r) => r.afterTurn > s.turn),
++    futureTide = next?.level ?? s.tideLevel;
++  return {
++    headline: tideCopy(s, l),
++    detail: l.piers
++      .map((p) => {
++        const ids = s.waitingByPier[p.id] ?? [],
++          title = stop(p.nodeId);
++        if (s.tideLevel >= p.elevation)
++          return `${title} is flooded${ids.length ? `; ${passengerList(ids)} ${verb(ids, 'is', 'are')} waiting there` : ' and empty'}.`;
++        if (futureTide >= p.elevation)
++          return `${title} will flood at the next rise; ${ids.length ? `${passengerList(ids)} ${verb(ids, 'is', 'are')} waiting there` : 'nobody is waiting there'}.`;
++        return `${title} ${next ? 'stays dry at the next rise' : 'is dry'}.`;
++      })
++      .join(' '),
++  };
++}
++
++export function previewCopy(
++  s: State,
++  a: Action,
++  l: Level,
++): { summary: string; consequence: string; error: string | null; requirement: string } {
++  const proposed = preview(s, a, l),
++    n = proposed.state,
++    rise = n.tideLevel > s.tideLevel,
++    pier = pierAt(s, l),
++    summary = `${actionLabel(s, a, l)} · ${countActions(l.rules.actionCost)}.`;
++  if (proposed.error) {
++    const edge = a.type === 'move' ? edgeTo(s, a.to, l) : undefined,
++      plainMoveError =
++        a.type === 'move' &&
++        s.status === 'playing' &&
++        (!edge || edge.baseDepth + s.tideLevel < draft(s, l));
++    return {
++      summary,
++      error: plainMoveError && a.type === 'move' ? passageCopy(s, a.to, l) : proposed.error,
++      consequence: 'Inspection is free. No action has been spent.',
++      requirement: '',
++    };
++  }
++  const requirement =
++    a.type === 'board' || a.type === 'unload'
++      ? `After ${a.type === 'board' ? 'boarding' : 'unloading'}: boat needs depth ${draft(n, l)}.`
++      : a.type === 'move'
++        ? passageCopy(s, a.to, l)
++        : `Boat needs depth ${draft(n, l)}.`;
++  let consequence: string;
++  if (n.status === 'lost') {
++    const loss = n.lossReason!,
++      flooded = l.piers.find((p) => p.id === loss.pierId)!;
++    const order =
++      a.type === 'board'
++        ? `${passengerList(a.passengerIds)} ${verb(a.passengerIds, 'boards', 'board')}${rise ? ', then the tide rises' : ''}. `
++        : rise
++          ? 'The tide rises after this action. '
++          : '';
++    consequence = `${order}${passengerList(loss.passengerIds)} ${verb(loss.passengerIds, 'is', 'are')} still waiting at ${stop(flooded.nodeId)} when it floods. This ends the crossing.`;
++  } else if (n.status === 'won') {
++    consequence = `Everyone is safely home at ${stop(l.piers.find((p) => p.id === l.objective.deliveryPierId)!.nodeId)}.`;
++  } else if (a.type === 'board') {
++    const who = passengerList(a.passengerIds),
++      safety =
++        a.passengerIds.length === 2
++          ? 'Both are'
++          : a.passengerIds.length === 1
++            ? `${who} is`
++            : `All ${a.passengerIds.length} are`;
++    consequence = rise
++      ? `${who} ${verb(a.passengerIds, 'boards', 'board')}, then the tide rises. ${safety} safe aboard.`
++      : `${who} will be aboard.`;
++  } else if (a.type === 'unload') {
++    consequence = pier!.isDeliveryPier
++      ? `${passengerList(a.passengerIds)} will be safe at ${stop(pier!.nodeId)}.`
++      : `${passengerList(a.passengerIds)} will wait at ${stop(pier!.nodeId)}. ${pierSafetyCopy(n, pier!.id, l)}`;
++    if (rise) consequence += ' The tide rises after this action.';
++  } else {
++    consequence =
++      a.type === 'move'
++        ? `One passage to ${stop(a.to)}.`
++        : `The boat stays at ${stop(s.boatNodeId)}.`;
++    if (rise) consequence += ' The tide rises after this action.';
++  }
++  if ((a.type === 'board' || a.type === 'unload') && n.status === 'playing') {
++    const blocked = l.nodes.find((node) => {
++      const edge = edgeTo(n, node.id, l);
++      return edge && edge.baseDepth + n.tideLevel < draft(n, l);
++    });
++    if (blocked) {
++      const edge = edgeTo(n, blocked.id, l)!;
++      consequence += ` Passage to ${stop(blocked.id)} has depth ${edge.baseDepth + n.tideLevel}: too shallow.`;
++    }
++  }
++  return { summary, consequence, requirement, error: null };
++}
+diff --git a/tests/e2e/game.spec.ts b/tests/e2e/game.spec.ts
+index 3aabe43..e328ed4 100644
+--- a/tests/e2e/game.spec.ts
++++ b/tests/e2e/game.spec.ts
+@@ -35,7 +35,7 @@ test('desktop: real rescue, blocked preview, tide undo, terminal undo and restar
+   await shot(page, 'normal-play');
+   const original = await state(page);
+   await page.locator('#forecast-toggle').click();
+-  await expect(page.locator('.forecast-detail')).toContainText('Tide 1 after turn 4');
++  await expect(page.locator('.forecast-detail')).toContainText('The tide rises in 4 actions.');
+   expect(await state(page)).toEqual(original);
+   await page.locator('#forecast-toggle').click();
+   await page.locator('#route-sheep-pier').click();
+@@ -44,10 +44,11 @@ test('desktop: real rescue, blocked preview, tide undo, terminal undo and restar
+   expect(await state(page)).toEqual(original);
+   await action(page, 'route-sheep-pier');
+   await page.locator('#board').click();
+-  await expect(page.locator('#preview')).toContainText('4 / 4 spaces · draft 3');
+-  await expect(page.locator('#preview')).toContainText('Shallow cut blocked');
++  await expect(page.locator('#preview')).toContainText('After boarding: boat needs depth 3.');
++  await expect(page.locator('#preview')).toContainText(
++    'Passage to Shallow Cut has depth 2: too shallow.',
++  );
+   await shot(page, 'loading-preview');
+-  // A double click is still one atomic action; presentation disables all mutation controls.
+   await page.locator('#commit').click({ clickCount: 2 });
+   await expect(page.locator('#undo')).toBeDisabled();
+   await expect(page.locator('#restart')).toBeDisabled();
+@@ -56,7 +57,9 @@ test('desktop: real rescue, blocked preview, tide undo, terminal undo and restar
+   const full = await state(page);
+   await page.locator('#route-cut').click();
+   await expect(page.locator('#commit')).toBeDisabled();
+-  await expect(page.locator('#preview')).toContainText('depth 2 is below draft 3');
++  await expect(page.locator('#preview')).toContainText(
++    'Boat needs depth 3. Passage has depth 2: too shallow.',
++  );
+   expect(await state(page)).toEqual(full);
+   await page.locator('#cancel').click();
+   await action(page, 'route-outer-east');
+@@ -73,7 +76,6 @@ test('desktop: real rescue, blocked preview, tide undo, terminal undo and restar
+     expect(actual.parent).toBe(prior.parent);
+     for (let axis = 0; axis < 3; axis++) {
+       expect(actual.deckLocalFoot[axis]).toBeCloseTo(prior.deckLocalFoot[axis], 8);
+-      // Idle wave phase is cosmetic and is not part of the undo snapshot.
+       expect(Math.abs(actual.position[axis] - prior.position[axis])).toBeLessThan(0.025);
+     }
+   }
+@@ -135,7 +137,9 @@ test('emulated phone landscape: touch preview, double tap guard, tide undo and c
+   }
+   await tapAction('route-sheep-pier');
+   await page.locator('#board').tap();
+-  await expect(page.locator('#preview')).toContainText('Shallow cut blocked');
++  await expect(page.locator('#preview')).toContainText(
++    'Passage to Shallow Cut has depth 2: too shallow.',
++  );
+   await shot(page, 'phone-loading-preview');
+   const bounds = await page.locator('#commit').boundingBox();
+   expect(bounds).not.toBeNull();
+@@ -176,7 +180,7 @@ test('keyboard-only tide-wait witness and subset selection', async ({ page }) =>
+   await key('unload');
+   await expect(page.locator('#passenger-rabbit-1')).toHaveAttribute('aria-pressed', 'true');
+   await key('passenger-rabbit-2');
+-  await expect(page.locator('#preview')).toContainText('1 / 4 spaces · draft 2');
++  await expect(page.locator('#preview')).toContainText('After unloading: boat needs depth 2.');
+   expect((await state(page)).turn).toBe(1);
+   await page.keyboard.press('Escape');
+   await keyAction('board');
+diff --git a/tests/e2e/holding-pier.spec.ts b/tests/e2e/holding-pier.spec.ts
+index cdb33ed..08615ed 100644
+--- a/tests/e2e/holding-pier.spec.ts
++++ b/tests/e2e/holding-pier.spec.ts
+@@ -24,7 +24,7 @@ async function act(p: Page, id: string, touch = false) {
+   await idle(p);
+ }
+ async function tabTo(p: Page, id: string, backwards = false) {
+-  for (let i = 0; i < 32; i++) {
++  for (let i = 0; i < 64; i++) {
+     if ((await p.evaluate(() => document.activeElement?.id)) === id) return;
+     await p.keyboard.press(backwards ? 'Shift+Tab' : 'Tab');
+   }
+@@ -51,13 +51,15 @@ test('Holding Pier: uninterrupted nine-action actual UI rescue and gameplay evid
+   const trace = [await state(page)];
+   await page.waitForTimeout(700);
+   await page.locator('#route-shallows').click();
+-  await expect(page.locator('#preview')).toContainText('depth 1 is below draft 2');
++  await expect(page.locator('#preview')).toContainText(
++    'Boat needs depth 2. Passage has depth 1: too shallow.',
++  );
+   expect(await state(page)).toEqual(trace[0]);
+   await page.waitForTimeout(600);
+   await page.locator('#cancel').click();
+   await page.locator('#unload').click();
+-  await expect(page.locator('#preview')).toContainText('0 / 4 spaces · draft 1');
+-  await expect(page.locator('#preview')).toContainText('Shallow channel open');
++  await expect(page.locator('#preview')).toContainText('After unloading: boat needs depth 1.');
++  await expect(page.locator('#preview')).toContainText('Moss will wait at Stone Pier.');
+   await expect(page.locator('#commit')).toBeInViewport({ ratio: 1 });
+   await shot(page, 'desktop-unloading-preview');
+   await page.waitForTimeout(600);
+@@ -74,8 +76,10 @@ test('Holding Pier: uninterrupted nine-action actual UI rescue and gameplay evid
+   }
+   const before = await state(page);
+   await page.locator('#board').click();
+-  await expect(page.locator('#preview')).toContainText('Turn 4 · tide 1 · 2 / 4 spaces · draft 2');
+-  await expect(page.locator('#preview')).toContainText('The tide rises after this action');
++  await expect(page.locator('#preview')).toContainText('After boarding: boat needs depth 2.');
++  await expect(page.locator('#preview')).toContainText(
++    'Pip and Rue board, then the tide rises. Both are safe aboard.',
++  );
+   expect(await state(page)).toEqual(before);
+   await shot(page, 'desktop-loading-preview');
+   await page.waitForTimeout(900);
+@@ -98,7 +102,7 @@ test('Holding Pier: uninterrupted nine-action actual UI rescue and gameplay evid
+   expect(trace.map((s) => s.turn)).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+   expect(trace.at(-1)).toMatchObject({ status: 'won', turn: 9, tideLevel: 2, aboard: [] });
+   await expect(page.getByText('Everyone home.')).toBeVisible();
+-  await expect(page.locator('[data-pier="harbor-pier"]')).toBeHidden();
++  await expect(page.locator('#map-harbor')).toHaveAttribute('aria-current', 'location');
+   await shot(page, 'desktop-success');
+   expect(errors).toEqual([]);
+   await page.waitForTimeout(900);
+@@ -116,7 +120,6 @@ test('Holding Pier: uninterrupted nine-action actual UI rescue and gameplay evid
+       2,
+     ),
+   );
+-  // The default per-test video is a single continuous capture, with no edits.
+   const video = page.video()!;
+   await page.close();
+   await video.saveAs(`${folder}/raw/uninterrupted-rescue.webm`);
+@@ -154,10 +157,12 @@ test('Holding Pier: unloading Undo, tide Undo, losing alternatives and baseline
+   await page.locator('#restart').click();
+   await act(page, 'route-harbor');
+   await act(page, 'unload');
+-  await expect(page.locator('[data-pier="harbor-pier"]')).toBeHidden();
++  await expect(page.locator('#map-harbor')).toHaveAttribute('aria-current', 'location');
+   await act(page, 'route-stone');
+   await page.locator('#route-shallows').click();
+-  await expect(page.locator('#preview')).toContainText('Rabbit Pier floods');
++  await expect(page.locator('#preview')).toContainText(
++    'still waiting at Rabbit Pier when it floods',
++  );
+   expect((await state(page)).turn).toBe(3);
+   await page.locator('#commit').click();
+   await idle(page);
+@@ -172,7 +177,9 @@ test('Holding Pier: unloading Undo, tide Undo, losing alternatives and baseline
+   expect((await state(page)).turn).toBe(3);
+   await page.locator('#cancel').click();
+   await page.locator('#wait').click();
+-  await expect(page.locator('#preview')).toContainText('Rabbit Pier floods');
++  await expect(page.locator('#preview')).toContainText(
++    'still waiting at Rabbit Pier when it floods',
++  );
+   await page.locator('#commit').click();
+   await idle(page);
+   expect(await state(page)).toMatchObject({ turn: 4, tideLevel: 1, status: 'lost' });
+@@ -229,7 +236,7 @@ test('Holding Pier: phone landscape touch, direct double-tap guard, preview and
+   for (const id of ['route-shallows', 'route-stone', 'board', 'route-harbor', 'unload'])
+     await act(page, id, true);
+   expect(await state(page)).toMatchObject({ status: 'won', turn: 9 });
+-  await expect(page.locator('[data-pier="harbor-pier"]')).toBeHidden();
++  await expect(page.locator('#map-harbor')).toHaveAttribute('aria-current', 'location');
+   await shot(page, 'phone-success');
+   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+   writeFileSync(`${folder}/phone-frame.json`, JSON.stringify(frame, null, 2));
+@@ -272,7 +279,7 @@ for (const [label, width, height] of [
+     await expect(page.locator('#undo')).toBeFocused();
+     await page.keyboard.press('Enter');
+     expect(await state(page)).toMatchObject({ status: 'playing', turn: 8, delivered: [] });
+-    await expect(page.locator('[data-pier="harbor-pier"]')).toBeVisible();
++    await expect(page.locator('#map-harbor')).toHaveAttribute('aria-current', 'location');
+     await keyAct(page, 'unload');
+     expect((await state(page)).status).toBe('won');
+   });
+diff --git a/tests/e2e/navigation.spec.ts b/tests/e2e/navigation.spec.ts
+new file mode 100644
+index 0000000..6b325a7
+--- /dev/null
++++ b/tests/e2e/navigation.spec.ts
+@@ -0,0 +1,288 @@
++import { test, expect, type Page, type Locator } from '@playwright/test';
++import { mkdirSync, writeFileSync } from 'node:fs';
++import { reviewDir } from './evidence';
++
++const state = (page: Page) => page.evaluate(() => (window as any).__LAST_FERRY__.getState());
++const navigation = (page: Page) =>
++  page.evaluate(() => (window as any).__LAST_FERRY__.getNavigationStatus());
++async function idle(page: Page) {
++  await page.waitForFunction(
++    () => !(window as any).__LAST_FERRY__.getRenderStatus().pendingAnimation,
++  );
++}
++async function tabTo(page: Page, id: string, backwards = false) {
++  for (let count = 0; count < 64; count++) {
++    if ((await page.evaluate(() => document.activeElement?.id)) === id) return;
++    await page.keyboard.press(backwards ? 'Shift+Tab' : 'Tab');
++  }
++  throw Error(`Natural Tab navigation did not reach ${id}`);
++}
++async function fullyVisible(page: Page, locator: Locator, touchTarget = true) {
++  await expect(locator).toBeInViewport({ ratio: 1 });
++  const bounds = await locator.boundingBox();
++  const size = page.viewportSize()!;
++  expect(bounds).not.toBeNull();
++  expect(bounds!.x).toBeGreaterThanOrEqual(0);
++  expect(bounds!.y).toBeGreaterThanOrEqual(0);
++  expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(size.width + 0.5);
++  expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(size.height + 0.5);
++  if (touchTarget) {
++    expect(bounds!.width).toBeGreaterThanOrEqual(44);
++    expect(bounds!.height).toBeGreaterThanOrEqual(44);
++  }
++  const clipping = await locator.evaluate((element) => {
++    const rect = element.getBoundingClientRect();
++    const failures: string[] = [];
++    for (let parent = element.parentElement; parent; parent = parent.parentElement) {
++      const style = getComputedStyle(parent);
++      const clip = parent.getBoundingClientRect();
++      if (
++        /(auto|scroll|hidden|clip)/.test(style.overflowY) &&
++        (rect.top < clip.top - 0.5 || rect.bottom > clip.bottom + 0.5)
++      )
++        failures.push(`${parent.className}: vertical clipping`);
++      if (
++        /(auto|scroll|hidden|clip)/.test(style.overflowX) &&
++        (rect.left < clip.left - 0.5 || rect.right > clip.right + 0.5)
++      )
++        failures.push(`${parent.className}: horizontal clipping`);
++    }
++    return failures;
++  });
++  expect(clipping).toEqual([]);
++}
++async function readable(locator: Locator) {
++  const fontSize = await locator.evaluate((element) =>
++    Number.parseFloat(getComputedStyle(element).fontSize),
++  );
++  expect(fontSize).toBeGreaterThanOrEqual(14);
++}
++async function selectedPassage(page: Page, destination: string, edgeId: string) {
++  await expect.poll(async () => (await navigation(page)).selectedDestination).toBe(destination);
++  const view = await navigation(page);
++  expect(
++    view.routes.filter((route: any) => route.highlighted).map((route: any) => route.id),
++  ).toEqual([edgeId]);
++  expect(view.markers.find((marker: any) => marker.id === destination).selected).toBe(true);
++}
++
++for (const [label, width, height, touch] of [
++  ['desktop-navigation', 1440, 900, false],
++  ['phone-navigation', 844, 390, true],
++  ['phone-narrow-navigation', 780, 390, true],
++] as const) {
++  test(`${label}: named map targets, free inspection, readable actions and boundary subsets`, async ({
++    browser,
++  }) => {
++    const context = await browser.newContext({
++      viewport: { width, height },
++      deviceScaleFactor: 1,
++      hasTouch: touch,
++      isMobile: touch,
++    });
++    const page = await context.newPage();
++    const errors: string[] = [];
++    page.on('pageerror', (error) => errors.push(error.message));
++    mkdirSync(reviewDir, { recursive: true });
++    await page.goto('/?cove=holding-pier');
++    await page.waitForFunction(
++      () => ((window as any).__LAST_FERRY__?.getMetrics().frames ?? 0) > 4,
++    );
++    const activate = async (id: string) =>
++      touch ? page.locator(`#${id}`).tap() : page.locator(`#${id}`).click();
++    const transfer = async (id: string) => {
++      await activate(id);
++      await activate('commit');
++      await idle(page);
++    };
++    const sail = async (id: string) => {
++      const before = await state(page);
++      await activate(`map-${id}`);
++      await idle(page);
++      expect((await state(page)).turn).toBe(before.turn + 1);
++      expect((await state(page)).boatNodeId).toBe(id);
++      await expect(page.locator('#commit')).toHaveCount(0);
++    };
++    await expect(page.locator('#status-headline')).toHaveText('Rabbit Pier floods in 4 actions.');
++    await expect(page.locator('#map-harbor')).toHaveAccessibleName('Sail to Harbor');
++    await expect(page.locator('#map-stone')).toHaveAccessibleName('You are at Stone Pier');
++    await expect(page.locator('#map-shallows')).toHaveAccessibleName(/^Sail to Shallows/);
++    await expect(page.locator('#map-rabbit-pier')).toHaveAccessibleName(
++      'Rabbit Pier: no direct passage',
++    );
++    await expect(page.locator('#map-stone')).toHaveAttribute('aria-current', 'location');
++    await expect(page.locator('#map-stone')).toContainText(/here|current/i);
++    await expect(page.locator('#map-shallows')).toContainText(/too shallow/i);
++    await expect(page.locator('#map-rabbit-pier')).toContainText(/no direct passage/i);
++    for (const id of ['harbor', 'stone', 'shallows', 'rabbit-pier']) {
++      await fullyVisible(page, page.locator(`#map-${id}`));
++      await readable(page.locator(`#map-${id}`));
++    }
++    await fullyVisible(page, page.locator('#unload'));
++    await fullyVisible(page, page.locator('#undo'));
++    await readable(page.locator('#unload b'));
++    await readable(page.locator('#route-shallows b'));
++    await readable(page.locator('#status-headline'));
++    const firstNavigation = await navigation(page);
++    expect(firstNavigation.markers.map((marker: any) => [marker.id, marker.status])).toEqual([
++      ['harbor', 'available'],
++      ['stone', 'current'],
++      ['shallows', 'too-shallow'],
++      ['rabbit-pier', 'nonadjacent'],
++    ]);
++    expect(new Set(firstNavigation.markers.map((marker: any) => marker.shape)).size).toBe(4);
++    await page.screenshot({ path: `${reviewDir}/${label}-start.png` });
++    const initial = await state(page);
++    await activate('map-stone');
++    expect(await state(page)).toEqual(initial);
++    await expect(page.locator('#commit')).toHaveCount(0);
++    const frame = await page.evaluate(() => (window as any).__LAST_FERRY__.getFrameStatus());
++    const current = frame.nodes.find((node: any) => node.id === 'stone');
++    const canvas = await page.locator('#world canvas').boundingBox();
++    if (touch) await page.touchscreen.tap(canvas!.x + current.x, canvas!.y + current.y);
++    else await page.mouse.click(canvas!.x + current.x, canvas!.y + current.y);
++    expect(await state(page)).toEqual(initial);
++    await expect(page.locator('#commit')).toHaveCount(0);
++    await activate('map-rabbit-pier');
++    await expect(page.locator('#preview')).toContainText(
++      'No direct passage. Sail to an adjacent stop first.',
++    );
++    await expect(page.locator('#commit')).toBeDisabled();
++    expect((await navigation(page)).routes.filter((route: any) => route.highlighted)).toEqual([]);
++    await activate('cancel');
++    if (!touch) {
++      await page.locator('#map-harbor').hover();
++      await selectedPassage(page, 'harbor', 'harbor-stone');
++      await page.locator('#route-shallows').hover();
++      await selectedPassage(page, 'shallows', 'stone-shallows');
++      expect(await state(page)).toEqual(initial);
++    }
++    await activate('inspect-shallows');
++    await expect(page.locator('#preview')).toContainText(
++      'Boat needs depth 2. Passage has depth 1: too shallow.',
++    );
++    await selectedPassage(page, 'shallows', 'stone-shallows');
++    expect(await state(page)).toEqual(initial);
++    for (const paragraph of await page.locator('#preview p').all()) await readable(paragraph);
++    await page.screenshot({ path: `${reviewDir}/${label}-route-inspection.png` });
++    await activate('cancel');
++    await tabTo(page, 'map-stone');
++    await page.keyboard.press('Shift+Tab');
++    await expect(page.locator('#map-harbor')).toBeFocused();
++    await selectedPassage(page, 'harbor', 'harbor-stone');
++    expect(await state(page)).toEqual(initial);
++    await tabTo(page, 'inspect-shallows');
++    await page.keyboard.press('Enter');
++    await expect(page.locator('#cancel')).toBeFocused();
++    await page.keyboard.press('Escape');
++    await expect(page.locator('#inspect-shallows')).toBeFocused();
++    expect(await state(page)).toEqual(initial);
++    await activate('unload');
++    await expect(page.locator('#preview')).toContainText('After unloading: boat needs depth 1.');
++    await expect(page.locator('#preview')).toContainText(
++      'Moss will wait at Stone Pier. Stone Pier stays safe through all tide rises.',
++    );
++    await fullyVisible(page, page.locator('#commit'));
++    await activate('commit');
++    await idle(page);
++    await sail('shallows');
++    await sail('rabbit-pier');
++    await expect(page.locator('#status-detail')).toContainText(
++      'The tide rises after your next action.',
++    );
++    const dry = await state(page);
++    await expect(page.locator('#map-shallows')).toContainText('Flood warning');
++    await activate('map-shallows');
++    await expect(page.locator('.consequence')).toContainText('This ends the crossing.');
++    await fullyVisible(page, page.locator('.consequence'), false);
++    expect(await state(page)).toEqual(dry);
++    await activate('cancel');
++    await activate('board');
++    await expect(page.locator('#preview')).toContainText(
++      'Pip and Rue board, then the tide rises. Both are safe aboard.',
++    );
++    for (const id of ['passenger-rabbit-1', 'passenger-rabbit-2']) {
++      await fullyVisible(page, page.locator(`#${id}`));
++      await readable(page.locator(`#${id}`));
++    }
++    await activate('passenger-rabbit-2');
++    await expect(page.locator('#preview')).toContainText(
++      'Pip boards, then the tide rises. Rue is still waiting at Rabbit Pier when it floods. This ends the crossing.',
++    );
++    await fullyVisible(page, page.locator('.requirement'), false);
++    await fullyVisible(page, page.locator('.consequence'), false);
++    await page.screenshot({ path: `${reviewDir}/${label}-subset-warning.png` });
++    expect(await state(page)).toEqual(dry);
++    await fullyVisible(page, page.locator('#commit'));
++    await activate('commit');
++    await idle(page);
++    expect(await state(page)).toMatchObject({
++      turn: 4,
++      tideLevel: 1,
++      status: 'lost',
++      lossReason: { passengerIds: ['rabbit-2'] },
++    });
++    await expect(page.locator('.loss')).toContainText('Undo earlier moves, or restart');
++    await activate('undo');
++    expect(await state(page)).toEqual(dry);
++    await activate('board');
++    await expect(page.locator('#preview')).toContainText(
++      'Pip and Rue board, then the tide rises. Both are safe aboard.',
++    );
++    await fullyVisible(page, page.locator('#commit'));
++    await fullyVisible(page, page.locator('.consequence'), false);
++    for (const paragraph of await page.locator('#preview p').all()) await readable(paragraph);
++    await page.screenshot({ path: `${reviewDir}/${label}-critical-boarding.png` });
++    await activate('commit');
++    await idle(page);
++    expect(await state(page)).toMatchObject({
++      turn: 4,
++      tideLevel: 1,
++      status: 'playing',
++      waitingByPier: { 'rabbit-pier': [], 'stone-pier': ['sheep-1'] },
++    });
++    await expect(page.locator('#status-headline')).toHaveText('Pip and Rue are safe aboard.');
++    await expect(page.locator('#status-detail')).toContainText('Moss waits safely at Stone Pier.');
++    await expect(page.locator('#status-headline')).not.toContainText(/flood/i);
++    await page.screenshot({ path: `${reviewDir}/${label}-after-rise.png` });
++    await activate('forecast-toggle');
++    await expect(page.locator('.forecast-detail')).toContainText(
++      'Rabbit Pier is flooded and empty.',
++    );
++    await activate('forecast-toggle');
++    await sail('shallows');
++    await sail('stone');
++    await transfer('board');
++    await sail('harbor');
++    await transfer('unload');
++    expect(await state(page)).toMatchObject({
++      turn: 9,
++      tideLevel: 2,
++      status: 'won',
++      delivered: ['rabbit-1', 'rabbit-2', 'sheep-1'],
++    });
++    await expect(page.locator('#map-harbor')).toHaveAttribute('aria-current', 'location');
++    await fullyVisible(page, page.locator('#undo'));
++    await page.screenshot({ path: `${reviewDir}/${label}-success.png` });
++    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
++      true,
++    );
++    expect(errors).toEqual([]);
++    writeFileSync(
++      `${reviewDir}/${label}-verification.json`,
++      JSON.stringify(
++        {
++          viewport: [width, height],
++          touchEmulation: touch,
++          initialState: initial,
++          startNavigation: firstNavigation,
++          finalState: await state(page),
++          errors,
++        },
++        null,
++        2,
++      ),
++    );
++    await context.close();
++  });
++}
+diff --git a/tests/e2e/refinement.spec.ts b/tests/e2e/refinement.spec.ts
+index e9a763d..9f975f5 100644
+--- a/tests/e2e/refinement.spec.ts
++++ b/tests/e2e/refinement.spec.ts
+@@ -11,9 +11,8 @@ async function ready(p: Page) {
+   await p.goto('/');
+   await p.waitForFunction(() => ((window as any).__LAST_FERRY__?.getMetrics().frames ?? 0) > 3);
+ }
+-// This helper only sends real Tab presses; it never calls focus() or mutates DOM.
+ async function tabTo(p: Page, id: string, backwards = false) {
+-  for (let i = 0; i < 24; i++) {
++  for (let i = 0; i < 64; i++) {
+     if ((await active(p)) === id) return;
+     await p.keyboard.press(backwards ? 'Shift+Tab' : 'Tab');
+   }
+@@ -37,19 +36,19 @@ for (const [name, width, height] of [
+     await page.setViewportSize({ width, height });
+     await ready(page);
+     await tabTo(page, 'route-sheep-pier');
+-    await page.keyboard.press('Shift+Tab');
++    await tabTo(page, 'route-harbor', true);
+     await expect(page.locator('#route-harbor')).toBeFocused();
+     await page.keyboard.press('Enter');
+     await expect(page.locator('#cancel')).toBeFocused();
+     await page.keyboard.press('Escape');
+     await expect(page.locator('#route-harbor')).toBeFocused();
+     expect((await api(page)).turn).toBe(0);
+-    await page.keyboard.press('Tab');
++    await tabTo(page, 'route-sheep-pier');
+     await page.keyboard.press('Enter');
+     await tabTo(page, 'commit');
+     await page.keyboard.press('Enter');
+     await idle(page);
+-    await expect(page.locator('#route-cut')).toBeFocused();
++    expect(await active(page)).toMatch(/^(board|unload|wait|route-)/);
+     if (name === 'phone') await expect(page.locator('.panel')).toHaveJSProperty('scrollTop', 0);
+     await tabTo(page, 'board');
+     await page.keyboard.press('Enter');
+@@ -126,14 +125,14 @@ for (const reduced of [false, true])
+     await page.locator('#unload').click();
+     await page.locator('#passenger-rabbit-1').click();
+     await page.locator('#passenger-rabbit-2').click();
+-    await expect(page.locator('#preview')).toContainText('Unload Moss');
++    await expect(page.locator('#preview')).toContainText('Let Moss ashore');
+     await page.locator('#commit').click();
+     await idle(page);
+     expect((await api(page)).aboard).toEqual(['rabbit-1', 'rabbit-2']);
+     await page.evaluate(() => {
+       (window as any).__deckPhase = 'idle-after-unload';
+     });
+-    await page.waitForTimeout(650); // Deliberate idle-bob sampling interval, not an action wait.
++    await page.waitForTimeout(650);
+     await page.evaluate(() => {
+       (window as any).__deckPhase = 'actions';
+     });
+diff --git a/tests/unit/presentation.test.ts b/tests/unit/presentation.test.ts
+new file mode 100644
+index 0000000..88e255d
+--- /dev/null
++++ b/tests/unit/presentation.test.ts
+@@ -0,0 +1,130 @@
++import { describe, expect, test } from 'vitest';
++import { initial, reduce, type Action, type State } from '../../src/game/rules';
++import { holdingPier, level as baseline, type Level } from '../../src/levels/level';
++import {
++  actionCostCopy,
++  actionLabel,
++  forecastCopy,
++  passageCopy,
++  passengerList,
++  pierSafetyCopy,
++  previewCopy,
++  statusCopy,
++} from '../../src/ui/presentation';
++
++function run(actions: Action[], l: Level = holdingPier): State {
++  return actions.reduce((s, a) => reduce(s, a, l), initial(l));
++}
++
++const atRabbits = () =>
++  run([
++    { type: 'unload', passengerIds: ['sheep-1'] },
++    { type: 'move', to: 'shallows' },
++    { type: 'move', to: 'rabbit-pier' },
++  ]);
++
++describe('plain action and consequence presentation', () => {
++  test('uses passenger names and direct current-depth comparisons', () => {
++    const s = initial(holdingPier);
++    expect(passengerList(['rabbit-1', 'rabbit-2'])).toBe('Pip and Rue');
++    expect(passengerList(['rabbit-1', 'rabbit-2', 'sheep-1'])).toBe('Pip, Rue and Moss');
++    expect(actionLabel(s, { type: 'unload', passengerIds: ['sheep-1'] }, holdingPier)).toBe(
++      'Let Moss ashore',
++    );
++    expect(passageCopy(s, 'shallows', holdingPier)).toBe(
++      'Boat needs depth 2. Passage has depth 1: too shallow.',
++    );
++    expect(passageCopy(s, 'stone', holdingPier)).toBe('You are at Stone Pier.');
++    expect(passageCopy(s, 'rabbit-pier', holdingPier)).toContain('No direct passage');
++    expect(actionCostCopy(holdingPier)).toBe(
++      'Sailing, boarding, unloading and waiting each cost 1 action. Inspection is free.',
++    );
++  });
++
++  test('unloading previews the lighter boat and actual safe waiting place without mutation', () => {
++    const s = initial(holdingPier),
++      before = structuredClone(s);
++    const copy = previewCopy(s, { type: 'unload', passengerIds: ['sheep-1'] }, holdingPier);
++    expect(copy.error).toBeNull();
++    expect(copy.requirement).toBe('After unloading: boat needs depth 1.');
++    expect(copy.consequence).toBe(
++      'Moss will wait at Stone Pier. Stone Pier stays safe through all tide rises.',
++    );
++    expect(s).toEqual(before);
++  });
++
++  test('explains immediate boarding order and distinguishes losing passenger subsets', () => {
++    const s = atRabbits();
++    const both = previewCopy(
++      s,
++      { type: 'board', passengerIds: ['rabbit-1', 'rabbit-2'] },
++      holdingPier,
++    );
++    expect(both.consequence).toBe('Pip and Rue board, then the tide rises. Both are safe aboard.');
++    expect(both.requirement).toBe('After boarding: boat needs depth 2.');
++    const pip = previewCopy(s, { type: 'board', passengerIds: ['rabbit-1'] }, holdingPier);
++    expect(pip.consequence).toBe(
++      'Pip boards, then the tide rises. Rue is still waiting at Rabbit Pier when it floods. This ends the crossing.',
++    );
++    const rue = previewCopy(s, { type: 'board', passengerIds: ['rabbit-2'] }, holdingPier);
++    expect(rue.consequence).toContain('Pip is still waiting at Rabbit Pier');
++    const nobody = previewCopy(s, { type: 'board', passengerIds: [] }, holdingPier);
++    expect(nobody.error).toBe('Select at least one passenger.');
++    expect(nobody.requirement).toBe('');
++    expect(s.turn).toBe(3);
++    expect(s.tideLevel).toBe(0);
++    expect(s.waitingByPier['rabbit-pier']).toHaveLength(2);
++  });
++
++  test('prioritizes the remaining action window, then replaces urgency with rescued-passenger facts', () => {
++    expect(statusCopy(initial(holdingPier), holdingPier)).toMatchObject({
++      headline: 'Rabbit Pier floods in 4 actions.',
++      urgent: true,
++    });
++    const dry = atRabbits();
++    const critical = statusCopy(dry, holdingPier);
++    expect(critical.headline).toBe('Rabbit Pier floods in 1 action.');
++    expect(critical.detail).toContain('The tide rises after your next action.');
++    const rescued = reduce(
++      dry,
++      { type: 'board', passengerIds: ['rabbit-1', 'rabbit-2'] },
++      holdingPier,
++    );
++    const safe = statusCopy(rescued, holdingPier);
++    expect(safe.headline).toBe('Pip and Rue are safe aboard.');
++    expect(safe.detail).toContain('Moss waits safely at Stone Pier.');
++    expect(safe.urgent).toBe(false);
++    const forecast = forecastCopy(rescued, holdingPier);
++    expect(forecast.detail).toContain('Rabbit Pier is flooded and empty.');
++    expect(forecast.detail).not.toContain('Rabbit Pier will flood');
++    const loss = reduce(dry, { type: 'board', passengerIds: ['rabbit-1'] }, holdingPier);
++    expect(statusCopy(loss, holdingPier).detail).toBe(
++      'Undo earlier moves, or restart to try a different plan.',
++    );
++  });
++
++  test('derives timing and safe waiting from authored tide thresholds', () => {
++    const altered = structuredClone(holdingPier);
++    altered.rules.tide.rises[0].afterTurn = 6;
++    expect(statusCopy(initial(altered), altered).headline).toBe('Rabbit Pier floods in 6 actions.');
++    expect(pierSafetyCopy(initial(altered), 'rabbit-pier', altered)).toBe(
++      'Rabbit Pier floods in 6 actions.',
++    );
++    const s = initial(altered);
++    s.turn = 5;
++    expect(forecastCopy(s, altered).headline).toBe('The tide rises after your next action.');
++  });
++
++  test('preserves baseline boarding and exact depth equality information', () => {
++    const s = run([{ type: 'move', to: 'sheep-pier' }], baseline);
++    const copy = previewCopy(s, { type: 'board', passengerIds: ['sheep-1'] }, baseline);
++    expect(copy.error).toBeNull();
++    expect(copy.requirement).toBe('After boarding: boat needs depth 3.');
++    expect(copy.consequence).toMatch(
++      /Moss will be aboard\. Passage to Shallow cut has depth 2: too shallow\./i,
++    );
++    expect(passageCopy(initial(baseline), 'harbor', baseline)).toBe(
++      'Boat needs depth 2. Passage has depth 2: enough depth.',
++    );
++  });
++});

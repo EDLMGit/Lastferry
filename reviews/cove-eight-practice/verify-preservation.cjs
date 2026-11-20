@@ -1,0 +1,24 @@
+const fs = require('node:fs');
+const cp = require('node:child_process');
+const crypto = require('node:crypto');
+const base = 'e3bef3da3f655a4c9671e0500d356a83fe96786b';
+const git = args => cp.execFileSync('git', args, {encoding:'utf8'});
+const digest = text => crypto.createHash('sha256').update(text.replace(/\r\n/g,'\n')).digest('hex');
+const protectedPaths = git(['ls-tree','-r','--name-only',base,'--','data','src/game','src/audio']).trim().split('\n');
+protectedPaths.push(...['src/scene/models.ts','src/scene/wake.ts','src/scene/water.ts','src/scene/motion.ts','src/scene/transitions.ts','src/campaign/progress.ts','src/campaign/story-painter.ts','package.json','package-lock.json']);
+const files = Object.fromEntries(protectedPaths.map(path => {
+  const before = digest(git(['show',base+':'+path]));
+  const after = digest(fs.readFileSync(path,'utf8'));
+  return [path,{before,after,identical:before===after}];
+}));
+const oldRegistry = git(['show',base+':src/campaign/registry.ts']);
+const registry = fs.readFileSync('src/campaign/registry.ts','utf8');
+const journey = text => text.slice(text.indexOf('export type CoveId'),text.indexOf('export const practiceCoves'));
+const originalCatalog = JSON.parse(git(['show',base+':assets/catalog.json']));
+const currentCatalog = JSON.parse(fs.readFileSync('assets/catalog.json','utf8'));
+const oldIds = originalCatalog.entries.map(e=>e.id);
+const ids = currentCatalog.entries.map(e=>e.id);
+const result = {base,normalization:'CRLF to LF only for text comparisons',files,journeyRegistryIdentical:journey(oldRegistry)===journey(registry),catalog:{before:oldIds.length,after:ids.length,identitiesUnchanged:JSON.stringify(oldIds)===JSON.stringify(ids)},noDeployment:true};
+fs.writeFileSync('reviews/cove-eight-practice/preservation.json',JSON.stringify(result,null,2)+'\n');
+if(Object.values(files).some(f=>!f.identical)||!result.journeyRegistryIdentical||!result.catalog.identitiesUnchanged)process.exit(1);
+console.log(`${protectedPaths.length} protected inputs identical; seven-cove Journey definitions identical; ${ids.length} asset IDs retained.`);

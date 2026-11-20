@@ -1,0 +1,1772 @@
+diff --git a/NEXT_TASK.md b/NEXT_TASK.md
+index 105dec9..6513eb0 100644
+--- a/NEXT_TASK.md
++++ b/NEXT_TASK.md
+@@ -1,219 +1,168 @@
+-# Last Ferry — luminous water, unhurried crossings and a musical atmosphere
++# Last Ferry — shallow detail, a light for home, and music that follows the rescue
+ 
+-## Current task and working agreement
++## Working agreement
+ 
+-Continue on m1-first-crossing from reviewed commit **7346b91c23331b7c1e8ad4b147c8fa4006767a89**, preserving newer user work. Read AGENTS.md, the current scene/audio code, docs/ART_DIRECTION.md, docs/ENVIRONMENT.md, docs/TECHNICAL_PLAN.md and reviews/environment/REVIEW.md. Use Node 24.
++Continue on `m1-first-crossing` from reviewed commit **31ad851a97907c8e86aa6f215b78b38caed7c48b**, preserving any newer user work. Use Node 24. Read `AGENTS.md`, this task, `docs/ART_DIRECTION.md`, `docs/ENVIRONMENT.md`, the current audio/scene code, and `reviews/atmosphere/REVIEW.md`.
+ 
+-This is the authorized task following the completed environment pass and advances beyond the original M1 stopping point. Implement this complete milestone, verify it, and perform the established commit/push/draft-PR handoff. Keep PR #1 draft and main unchanged. Make routine art and implementation decisions independently; the user will playtest the result.
++This is the authorized next milestone beyond the original M1 stopping point. Implement it, verify the affected experience, commit normally, push the existing branch, and update draft PR #1. Keep `main` unchanged and the PR draft. The user remains the playtester. Make routine art and implementation decisions independently and deliver one chosen result.
+ 
+-The user likes the rounded routes. The water is better, but the scene still lacks the beautiful, absorbing quality they want. They suggest a slightly slower boat and describe the desired feeling through listening to a beautiful AURORA song.
++The user likes the current music and water direction. Treat the original **“Between the lamps”** composition and the luminous evening cove as accepted foundations. This pass should give the scene more convincing material depth, make Harbor recognizable as home from the start, and let the accompaniment respond gently to the rescue's changing situation.
+ 
+-**The goal is a cove that is pleasurable to watch and listen to while considering a puzzle.** Treat that musical reference as tenderness, air, wonder and a little longing. As a deliberate product decision, this brief also adds one original instrumental proposal alongside the water and pacing changes. Water and travel are the primary work; keep the score to the small arrangement below.
++Use Astra for the visual and musical judgment where it is available in the current workflow. Inspect the rendered result and choose the strongest coherent treatment. Do not spend the milestone producing a menu of proposals for the user to select.
+ 
+-## Creative decision
++## Preserve the accepted experience
+ 
+-Create a **luminous evening cove** within the existing coastal miniature:
++Keep all three coves, Holding Pier as default, progression, contextual controls, compact dialogs, accessible interaction, all puzzle rules and complete Undo. Preserve topology, positions, pier elevations, authored navigation depths, load/draft bands, action costs, tide schedule and boarding/flood event order. Decorative seabed depth must remain separate from navigability.
+ 
+-- Deeper blue-green open water and clearer sea-glass shallows.
+-- One broad, soft region of pearly reflected sky light, gently broken by moving wavelets.
+-- Selective submerged sand/rock detail that makes the shallows look transparent and substantial.
+-- A quiet amber reflection near Harbor, connected to its existing refuge light.
+-- A small ferry that visibly departs, cruises through the light and settles at its destination.
+-- A continuous, spacious instrumental phrase with quiet water ambience, including while the player is idle.
++Keep the accepted rounded courses, steering/docking, travel durations, fading wake, ferry/card placement and transit controls. The last pass already established calmer departures and arrivals; this task does not need another speed change.
+ 
+-Keep land, cabin, passengers, piers, warnings and routes readable. This is a light and material improvement to the accepted miniature, not a change to its composition. A dark night scene, literal aurora spectacle, all-over sparkle or larger prop collection is outside this task.
++Preserve the score's 64 BPM, 80-beat/75-second phrase, existing harmony sequence, recognizable motif, spacious rests and general mix. Add a small compatible accompaniment. Retain intentional audio activation, live mute, the accessible Sound control and the user's preference.
+ 
+-The previous task successfully reduced visual noise. This task needs a clearly visible increase in depth, coherent reflected light and living motion. Recoloring the same flat surface and declaring it more subtle does not meet the goal.
++Watching, listening, opening a dialog and inspecting remain free. The rules contain flood deadlines and allow play beyond the final rise. Do not introduce an overall turn allowance or real-time pressure.
+ 
+-## Preserve the accepted game
++## 1. Make the shallows look like a place beneath the water
+ 
+-Retain the three coves, default Holding Pier, Next cove progression, level selection, contextual controls, accessible compact dialogs, named passengers and complete Undo.
++### Review finding
+ 
+-Keep puzzle topology, node coordinates, pier elevations, route control geometry, capacity/draft bands, authored depths, action costs, tide schedule, flood/boarding event order, winning alternatives and losing consequences unchanged. The rounded canonical courses and docking clearance are accepted. This task changes presentation and sound, not puzzle difficulty or available routes.
++The current open water and connected pearl reflection are a clear improvement. Some coastal margins still read as broad pale halos, and some submerged forms look like soft oval patches. The tide-2 low island especially loses its material identity. Improve the organization of those forms while keeping the calm surface.
+ 
+-Real time remains free: watching water, listening, opening Menu or inspecting a route never spends an action or raises the tide.
++Relevant code: `src/scene/seabed.ts`, `src/scene/water.ts`, `src/scene/water-shader.ts` and `src/scene/shore.ts`. The seabed currently repeats two similarly offset patches around each island and uses a broad distance-based coastal shelf.
+ 
+-## 1. Build water that responds to light
++### Required result
+ 
+-### What the reviewed implementation lacks
++- Shape a narrower, irregular coastal shelf with a clear transition into deeper blue-green water. Vary its width where the island's form suggests sand, a rocky edge or a sheltered pocket. Avoid a uniform pale border around every island.
++- Compose a few recognizable submerged sand tongues and darker stone forms connected to the coast. Two or three useful forms in a visible shallow region are enough. Give them distinct edges, orientation and internal value variation at native phone scale; keep fine grain quiet.
++- Make the low flooded shore retain a recognizable submerged outline and some ground character. At the next tide it should visibly sit deeper beneath the moving surface. Undo must restore the earlier water/ground relationship.
++- Preserve separate reads for the bottom, the water body and reflected sky. Passing wavelets may distort and illuminate the substrate gently without dissolving every form into blur. Keep most open water quiet and deep.
++- Rebalance existing caustics, refraction, absorption and coast brightness together. Increasing all strengths is unlikely to improve depth. The current pearl sheen should remain a deliberate broad feature, and Harbor's warm reflection should stay localized.
+ 
+-src/scene/water.ts currently supplies an opaque color field, coastal masks, very slow color drift and world-cell glints whose brightness changes. It has no wave normals, sun/sky response, reflected environment or visible seabed surface. The scene's standard lights do not automatically illuminate this custom shader.
++Use the existing cached fields and material. You may revise the authored field construction and baked color detail, but do not increase texture resolution or add another water render pass. Keep world-space tide height, the orthographic view direction and correct color-space handling intact. The water remains an inexpensive approximation; do not claim it renders real submerged geometry when it samples a decorative field.
+ 
+-The existing 256×256 coastal mask is useful. Its blue channel represents nearby land elevation, including outside land; it is **not a continuous seabed height field**. Keep its shoreline/bank information, but do not mistake that channel for bathymetry.
++## 2. Improve contact and material distinction on existing assets
+ 
+-### Required visible layers
++Focus on the connections the player watches: ferry to water, pier piles to water, shore to sea, and lighthouse to its warm reflection.
+ 
+-**A. Coherent wavelets.** Use a small number of compatible, low-amplitude normal layers at different scales. They should move slowly enough to feel calm, but visibly change reflected light during an ordinary five-to-ten-second look. Fine detail stays subordinate to the broad movement and must survive native phone scale without crawling or aliasing. Use seamless local normal textures or an economical analytic equivalent. Any flow-map animation must avoid an obvious synchronized reset.
++Give selected pier piles and the lower hull a restrained wet/contact treatment tied to the actual water height. It should move correctly with tide, ferry draft, bobbing and Undo. Check unloaded and loaded states. A permanently painted horizontal stripe that ignores those transforms is insufficient.
+ 
+-Large geometric wave displacement is unnecessary. Keep the gameplay waterline, ferry draft and shore contact stable and controlled by the real tide.
++Use the existing shore/rock wetness as a starting point. Prefer small changes to existing materials, vertex colors or inexpensive local shading. Keep the waterline narrow and legible; avoid a dark outline around every object. Limit special attention to Harbor, the ferry and one vulnerable pier before deciding whether the same treatment helps elsewhere.
+ 
+-**B. Soft reflected light.** Give the shader explicit sky/light parameters coordinated with the scene lighting. Establish a broad pearl-blue sheen, broken into connected soft streaks by the wavelets. Preserve darker, quiet water around it. Highlights should respond coherently to surface orientation and lighting, instead of independently blinking at fixed hashed cells.
++Distinguish a few existing land surfaces: sandy low ground, rougher stone, subdued grass and wet edges. Break the uniform island-top color in broad, purposeful regions. Low Pier can feel exposed and sandy; Harbor can feel established and sheltered. Preserve island silhouettes, crossing clearances, composition and the readable cabin/passenger shapes.
+ 
+-Use an inexpensive painterly sky/environment reflection as the starting architecture. Make its spatial composition readable from the fixed camera: the sheen should occupy a deliberate area of open water, rather than turning the entire surface into equally glossy plastic. Subtle variation in the reflected sky or an authored light field can provide that composition.
++Materials are shared in the current model helpers. Keep wet or emissive changes scoped to their intended meshes; do not accidentally darken houses or illuminate unrelated objects through a shared material. Add geometry only when the visible improvement justifies its cost. Avoid expanding prop density, particle systems or the asset catalog.
+ 
+-**C. Visible shallow depth.** Extend the existing coast/bank data into an explicit, bounded seabed height/color representation, or render a small appropriate substrate. Distinguish deep water, shallow sand/rock, and formerly dry ground submerged by a tide. The actual rendered water height must determine the wet/depth relationship.
++## 3. Give Harbor a persistent identity as home
+ 
+-A compact authored seabed field composited in the shader is acceptable if it visibly conveys depth: a shallow coastal apron, a few irregular sand/rock forms with gentle bottom lighting, color absorption with increasing depth, and distortion tied to the same moving wavelets. Sample the substrate at an estimated point beneath the surface along the orthographic view ray; a small bounded approximation is sufficient. It must remain a separate read beneath the moving surface reflection, rather than another color texture painted directly on the plane.
++### Presentation
+ 
+-Keep reflected-light and submerged-detail strengths independently tunable, so the sheen does not erase the depth. A recognizable shallow form should remain visible under passing ripples and become less visible in deeper water. Weaken distortion at shore contact to avoid smearing dry land. A uniform green tint is insufficient. Do not turn shallow banks into bright painted tracks following route centerlines. Keep decorative depth separate from the reducer's authored navigation depths.
++The destination should be recognizable during ordinary play, including before the first action:
+ 
+-Add restrained moving light patterns beneath selected shallow patches only if they improve the result. Their intensity should fade with depth. Keep the large open areas quiet; full-screen caustic patterning would recreate the noise removed in the previous milestone.
++1. A small, steady warm light in the lighthouse lens, supported by the existing soft glow sprite.
++2. The existing broken amber reflection, visibly connected to that light and kept secondary to the ferry and routes.
++3. A compact **Home** marker within Harbor's existing map label, such as **Harbor · Home**. Include the destination's role in its accessible name without dropping its current passage or location information.
+ 
+-**D. Shore and Harbor contact.** Preserve the continuous shore geometry and exact flood thresholds. Refine the immediate wet edge and selective soft lapping so land feels seated in water. Flooded piers must still look flooded. Avoid tracing every shore with a solid bright rim.
++Keep the cue restrained in size and brightness. Its identity should survive a still frame, muted audio and reduced motion. No extra objective panel is needed. Avoid pulsing rings, bouncing arrows, rotating beams, full-scene bloom or new shadow-casting lights.
+ 
+-Make the Harbor lamp's warmth perceptible in nearby water as a small, elongated, broken reflection. It should belong to the lamp's location and water surface, distort with the same wavelets and remain secondary to the ferry. Let successful delivery gently warm this existing cue. Restore the correct effect on Undo and cancellation.
++Derive the destination from `level.objective.deliveryPierId` and its node. The cue describes the delivery objective; it must not imply that a nonadjacent, shallow or otherwise invalid passage is currently available. Preserve Inspect, focus order, disabled/busy behavior, warning states and the existing route status text. Check label placement at both phone widths, especially while Harbor is the current location.
+ 
+-### Renderer constraints and practical implementation
++### State and effects
+ 
+-Stay within the current Three.js WebGL renderer and ShaderMaterial architecture. Favor one bounded water material and cached local data/textures. Full fluid simulation, an engine migration and a general post-processing stack are unnecessary.
++Separate persistent home-light strength from the transient delivery response. The current `CrossingEffects.reset()` hides the glow and zeroes the lens emissive intensity; resetting an action must instead restore the ordinary home-light baseline. A winning delivery can strengthen the same light briefly, then settle into a warm resting state. Preserve the current visible-unloading timing and exactly-once arrival response. Simply reaching Harbor with passengers aboard is not success.
+ 
+-The current camera is orthographic. Use its constant world-space view direction for reflection/Fresnel calculations, in the same coordinate space as the normals. Do not copy perspective camera-position formulas or perspective depth reconstruction unmodified. On a flat orthographic surface the base view angle is constant; varying normals and a composed reflected-light field supply variation.
++Undo from success restores the appropriate playing appearance; Restart restores the initial baseline. Cancelling/recovering a transition must clear transient effects while preserving destination identity. Reduced motion should use steady states and restrained fades.
+ 
+-Follow Three.js color management deliberately: color textures and scalar/vector data need the appropriate color-space treatment; shader output must use the intended tone-mapping and output conversion once. Audit this before final palette tuning.
++`effects.ts` currently finds the lens by an exact material color, while the glow and water reflection assume a lighthouse-local lamp position. If you touch that model or material, expose a small explicit lens/anchor reference and use it consistently. Keep this a local model/effect connection, not a new asset framework.
+ 
+-The installed Three.js 0.186.1 Reflector supports orthographic cameras, but the bundled Water and Refractor implementations still contain perspective assumptions. Water2 also needs review of its view-direction/refraction path. These are references or building blocks, not automatic replacements for this game's shader.
++## 4. Let the accompaniment follow the rescue
+ 
+-A low-resolution, cached reflection of static landmarks is an optional addition **only if** the basic material is strong and the visual gain merits its measured cost. Start small, exclude routes/UI and transient actors from a static capture, and refresh correctly for cove/camera/viewport/water-height changes. Avoid a full extra scene render every animation frame as the default. Do not leave stale reflections through a tide or Undo.
++### Musical decision
+ 
+-Keep resources bounded and dispose them on teardown. Bundle runtime assets locally and record their provenance. The existing software-rendered frame timings do not establish native-phone performance headroom.
++Treat this as a small secondary experiment within the visual milestone. Make one bounded accompaniment proposal and compare it with the accepted mix. Keep it when it adds a clear, restrained improvement; if it makes the music busy or less inviting, retain the accepted base and explain that decision. Complete the visual and Harbor work either way.
+ 
+-### Tune in the actual game
++Keep “Between the lamps” playing continuously. Add one sparse, soft companion voice whose authored notes fit the existing harmony cells. A little more presence can accompany an approaching occupied-pier deadline; a warmer answering phrase can accompany the journey home. Preserve the gentle character and ample silence. Avoid per-action jingles, drums, ticking, faster tempo or escalating volume while the player thinks.
+ 
+-Keep the small set of artistic parameters together: depth palette, absorption, normal scale/speed/strength, sheen width/strength, warm reflection and shallow-detail contrast. A temporary development-only tuning panel is useful if it makes iteration faster; lil-gui is one option. Select and commit one authored default. Remove/exclude development controls from production.
++Use three playing arrangements, plus quiet terminal handling:
+ 
+-Judge it in Holding Pier and Bellwater, at the actual camera and both phone widths. Make internal comparisons and choose the strongest version without asking the user to art-direct sliders. Inspect motion as well as stills before considering the material complete.
+-
+-## 2. Give the ferry time to inhabit the water
+-
+-All normal moves currently take 780 ms. Longer passages therefore move much faster through the world. Use the accepted canonical path length to choose a modestly longer, deterministic duration.
+-
+-Start with this policy, expressed in milliseconds:
+-
+-    duration = clamp(900 + 150 * canonicalPath.length, 1400, 2400)
+-
+-Calculated against the reviewed paths, this gives approximately:
+-
+-| Passage | Initial target |
++| Committed situation | Arrangement |
+ | --- | --- |
+-| Holding: Shallows → Rabbit Pier | 1.47 s |
+-| Holding: Harbor → Stone Pier | 1.83 s |
+-| Bellwater: Harbor → Bell Pier | 2.04 s |
+-| Bellwater: West → East outer passage | 2.27 s |
+-
+-These are the slower comparison candidate, not proof of the best feel. Also inspect a more restrained candidate, such as clamp(800 + 140 * length, 1200, 2300), on one short and one long passage. Choose the shortest timing that lets departure, a visible cruise and arrival read clearly without feeling like a forced wait. The final range may be materially shorter than the table. Make that choice internally and ship one default; keep opposite directions equal in duration.
+-
+-Give roughly the first and last 18–20% of the journey to gentle departure/arrival, with a steadier middle cruise. Preserve arc-length sampling, exact endpoints, continuous heading and the existing distance-based docking clearance. Change the time-to-distance mapping; do not alter the accepted course to obtain a smoother motion.
+-
+-Retain prompt transfers and Wait. Use a separate, bounded presentation phase for tide changes, initially about 550 ms and capped by the actual action duration, finishing with that action. Do not automatically stretch the water rise to the full longer crossing. Keep any coincident draft response coordinated with it, and keep passengers, shore/contact effects and masks attached to the actual rendered water height throughout.
+-
+-Preserve the existing approximately 30 ms reduced-motion transitions. Under reduced motion, freeze animated normals, reflection distortion, caustics and decorative lapping and suppress the moving wake. Retain static sheen, visible depth, the exact tide state and the brief state transitions.
++| Ordinary planning, including a distant flood deadline or safe passengers waiting on high ground | Accepted base score; companion absent or barely present |
++| A required passenger is still waiting at a pier that will flood in one or two further actions | A restrained, slightly more present chord-compatible companion; the same tempo and calm pulse |
++| All required passengers are aboard or already delivered, with at least one still aboard | A warmer consonant answering phrase, giving the return a sense of relief |
++| Won | Existing visible-delivery resolution, then a quieter continuing home arrangement |
++| Lost | Fade the companion and soften the arrangement gently; preserve continuity and quick recovery through Undo |
+ 
+-Retune the wake for the slower speed. The current 360 ms lifetime will create a much shorter trail when travel slows. Aim for a short, softly spreading disturbance that persists briefly behind the stern, fades naturally after arrival and remains distinct from the dotted course. Bound its length and lifetime; clear it on Undo, Restart and cancellation.
++Author the companion against all ten existing harmony cells and account for the long pad releases that overlap adjacent cells. Use the same small sound palette and shared reverb. Do not introduce a new score per cove. Compare the result with the accepted base at matched listening levels; the new voice should add emotional shape without masking the melody or turning warning states into alarm music.
+ 
+-### Fix the timing integration
++### Derive pressure from the actual state
+ 
+-src/main.ts currently has a hard **1,800 ms fallback**. Simply increasing the world animation duration would truncate the longer journeys.
++Create a small pure derivation from `State` and `Level`, with terminal outcome taking precedence. For each pier holding a required passenger, find the first future authored rise whose level reaches its elevation. The smallest `rise.afterTurn - state.turn` is the relevant occupied-pier deadline. Use the one/two-action window above only while those passengers remain there.
+ 
+-Use one authoritative transition-duration policy for both the animation and its recovery timeout. Derive recovery from the planned duration plus a bounded margin, initially around 1,000 ms. Retain stalled-transition recovery. Completion, error, visibility reconciliation and cancellation must synchronize the committed state and release the lock exactly once.
++The existing `statusCopy()` in `src/ui/presentation.ts` already expresses this logic. Share a small fact helper where appropriate; do not parse display strings or build a solver for music. Never use a witness length, validation search depth, elapsed seconds, total moves spent or a hypothetical optimal solution as the player's remaining budget.
+ 
+-Keep one commitment per input and no queued second move. Slower animation must not affect the action count, tide/event order, previews, rapid-confirm protection or complete Undo. Revise the older ferry-duration guidance in docs/ART_DIRECTION.md so it agrees with the chosen behavior.
+-
+-### Clear the ferry's silhouette
+-
+-Fix these existing presentation cases as part of making transit worth watching:
+-
+-- During movement, the local destination passenger card can cover the ferry. Suppress the transfer card while sailing and use one compact, calm transit status such as “Sailing to Bell Pier.” Preserve keyboard status/focus behavior and restore the appropriate local controls on every completion/recovery path.
+-- At rest, reviews/environment/after/holding-desktop-tide-2.png shows the Harbor card covering part of the loaded ferry cabin. Placement must exclude the projected full ferry/aboard-passenger bounds **after** viewport clamping, as well as the other UI regions. Use another fitting candidate or compact fallback.
+-
+-Preserve the accepted contextual interaction model and touch targets. This is a bounded placement/transit fix.
+-
+-## 3. Compose one continuous original musical atmosphere
+-
+-The current Sound class only plays short action-triggered notes. There is no continuous ambience or score to refine. Create one original, approximately **60–90-second instrumental cue** with a deliberate phrase and seamless return.
+-
+-The musical direction is airy, tender, spacious and gently hopeful. A slow internal pulse around 60–70 BPM can organize it without an audible drum beat. Use soft open harmony, a sparse small motif, long rests and a restrained shared reverb. Let the middle of the phrase become slightly fuller, then return naturally. Author pitches, voicings, durations and rests; random notes or an unchanging arpeggio do not supply a composed cue.
+-
+-Keep the arrangement small:
+-
+-| Layer | Purpose |
+-| --- | --- |
+-| Soft sustained harmonic voices | Give the scene warmth and continuity |
+-| Sparse plucked/bell-like motif | Give the score an identifiable, gentle musical presence |
+-| Quiet air and water | Give the cove a natural sense of space |
+-| Soft travel texture | Connect ferry movement to water; fade at the stop |
+-| Restrained delivery response | Add relief when successful delivery becomes visible |
++Important boundaries:
+ 
+-Use original local synthesis/buffers or appropriately sourced local assets with recorded provenance. The existing Web Audio stack is sufficient for a first musical arrangement: softly filtered voices, bounded polyphony, reusable noise buffers and one modest shared reverb. Keep any generated asset's authoring recipe. External services must not be required during play.
++- Boarding happens before the rise caused by that action. A safe boarding on action 4 or 8 must remove the corresponding threat immediately in the resulting state.
++- Holding Pier's temporary use of safe high ground must not trigger the homeward arrangement while a required passenger still waits there.
++- Bellwater's first rescue removes one deadline; passengers at the other vulnerable pier can still define the next one.
++- First Crossing's required passengers have their own pier deadline. The first tide rise does not automatically make every level musically urgent.
++- Aboard means safe from pier flooding. Delivered means home. Visiting Harbor does not replace unloading.
+ 
+-This milestone needs an audible musical proposal, not an elaborate adaptive-score system. Avoid making cosmetic water brightness pulse on every beat or synchronizing action completion to the music.
++Set the desired arrangement on initialization, successful commit, Undo and Restart. Preview, Inspect, hover, invalid input and idle time leave it unchanged. State reconciliation must be idempotent and must not replay the arrival sound.
+ 
+-### Audio behavior
++Store a terminal target when the action commits, but enter the won resting arrangement only after the existing visible-unloading delivery callback. Recovery or cancellation should settle into the committed terminal arrangement without replaying the delivery event. Apply the same distinction to a loss-specific musical change that would otherwise anticipate the visible tide consequence.
+ 
+-- Start/resume from an intentional game activation or explicit Sound-on gesture, respecting the persisted Sound preference. Handle unavailable audio or a rejected resume gracefully.
+-- Continue the base phrase through thought, inspection, moves, Undo and Restart without restarting or stacking another copy. Musical phase is cosmetic and need not rewind with Undo.
+-- Schedule music against AudioContext time, with a bounded lookahead rather than animation-frame timing. Use owned source nodes, bounded buffers and one scheduler.
+-- Route music, ambience and effects through controlled buses and a master gain. The current Boolean-only mute does not silence already-scheduled nodes. Mute the live mix promptly with a short ramp, including effect tails.
+-- Keep a compact Sound control reachable during transit. Preserve accessible labeling, keyboard/touch use and the persisted preference. A mixer panel is unnecessary.
+-- On page hide/interruption, reconcile action effects and suspend/stop scheduling deliberately. Resume enabled audio cleanly without a backlog of notes or duplicate loops. Clean up owned resources on teardown.
+-- Start movement sound with visible movement and stop it when the ferry stops. Place the delivery resolution at visible successful unloading, not at the initial state commit. Undo/cancellation must clear stale action-specific accents.
+-- Keep music independent of puzzle time. A player may listen indefinitely without a ticking warning or escalating danger.
++### Preserve the musical clock and resource bounds
+ 
+-Current cove changes navigate to a new page. One clean audio startup per page is acceptable; this task does not require a navigation rewrite. Sound preference remains independent of reduced motion, and every puzzle cue remains understandable with sound off.
++Keep one AudioContext, one bounded scheduler and the accepted phrase phase. Apply small gain/timbre changes smoothly; introduce new notes on the next suitable beat within a short window, roughly one or two beats. The player should hear a response during the next crossing instead of waiting for the entire 75-second phrase to loop. Actions and animation must never wait for a musical boundary.
+ 
+-Listen to the actual mix if the available environment supports it. An oscillator starting successfully is not musical acceptance. If the arrangement still resembles alert tones or a generic test drone, improve its timbre/phrase before labeling it finished. If actual listening is unavailable, provide a capture and state that sonic quality awaits listening; do not invent a listening result.
++Keep only the latest desired arrangement. Rapid commits, Undo or Restart must replace obsolete pending accompaniment changes and gently release obsolete notes. They must not queue a sequence of past moods, restart the base phrase or accumulate another scheduler. Musical phase does not rewind with game state.
+ 
+-## 4. Validate the changed experience
++The current implementation lives in `src/audio/atmosphere.ts`; `sound.ts` re-exports it. Existing long harmony tails and delivery notes share a bounded source budget. Keep the addition to one or two overlapping companion voices and reserve room for the accepted base and delivery response. Verify that notes are not silently dropped at busy moments. Do not merely raise the source limit.
+ 
+-Use the existing build/typecheck and unit coverage. Add or adapt focused checks for meaningful new timing/audio lifecycle risks; avoid tests that merely repeat implementation constants.
++Keep adaptive accompaniment on a music-owned bus/category. `delivery()` currently clears action effects; it must not accidentally delete the continuing accompaniment. Use a safe gain-ramp/cancellation strategy, feature-detecting APIs where needed. Store the latest desired state even before audio creation or while muted/hidden, so resuming uses the right arrangement without replaying missed events.
+ 
+-Exercise the real interface for successful rescues in Holding Pier and Bellwater and a shared-renderer First Crossing regression. Cover both rises, tide Undo and terminal Undo, with loaded passengers. Check the longest crossing, reverse travel and a short passage. The longest crossing must finish normally rather than through fallback recovery.
++Retain live mute, intentional resume, page-hide recovery, cancellation and teardown. Maintain audible event timing: travel follows visible motion, and the delivery resolution follows visible unloading. If actual listening is unavailable, retain an actual runtime mix capture and state that the new layer awaits listening. The user has already approved the existing composition.
+ 
+-Cover natural keyboard and emulated touch at 1440×900, 844×390 and 780×390, including a full transit and the reported docked Harbor-card case. Preserve the existing rapid Confirm protection and modal safety. Verify hide/show during a passage and reduced motion. A slower passage may justify a deliberate test-budget adjustment, but never weaken the state, input or visibility assertions to obtain a pass.
++## 5. Refine within a measured render budget
+ 
+-For continuous audio, check initial activation, muted reload, live mute during travel, repeated toggles, Undo/Restart, page hide/show and a full loop boundary. Check that prolonged idle listening leaves game state unchanged and that repeated actions do not accumulate graphs or schedulers. Record which checks establish behavior and which involve actual listening.
++The last report measured about 25% longer median/p95 frame intervals in Windows SwiftShader, with unchanged draw counts and triangles. This is useful evidence of a cost increase in that environment, not proof of a native-phone bottleneck. Its audio context was not created during the samples.
+ 
+-Measure before/after renderer work and frame intervals under the same available environment. Investigate material regressions. Report render-target resolution/pass count and asset size if adding them. Keep software-renderer results distinct from physical-device performance; report untested devices honestly.
++Keep one water draw, the two existing 256×256 RGBA fields, no reflection target and no extra scene pass. Do not add a post-processing stack. Make visual improvements primarily by reshaping and replacing work already present.
+ 
+-### Visual and musical acceptance
++Inspect plausible costs as you touch them. Static seabed-detail math can potentially be baked into the existing field; view/light invariants can potentially be supplied as uniforms. The GPU compiler may already optimize some expressions, so retain changes based on measured results and visual equivalence rather than counting source lines. Preserve orthographic geometry, color conversion and actual tide behavior.
+ 
+-At native phone size, the water must show identifiable shallow depth, a coherent area of reflected light and slow connected surface movement. Routes, passengers and warning text remain easy to read.
++Field construction is a separate CPU startup cost. Independent review found repeated full water construction exceeded 5-second unit budgets in this environment; all errors were timeouts. Inspect the bounded per-texel coast/segment and patch calculations, precompute reusable values, and avoid rebuilding fields during update/Undo. Keep any optimization local and preserve meaningful field samples and invariants. Do not weaken assertions to hide slow setup.
+ 
+-During an unedited crossing, the ferry should visibly cruise through the scene, leave a gentle fading water disturbance and arrive without a snap or covering card. During 30–60 seconds of idle thought, the water and score should remain interesting and calm, without an obvious visual reset or intrusive musical repetition.
++Compare the new result with `31ad851` using the same available browser, viewport, DPR, scene/state and measurement protocol. Measure idle render cost separately from an audio-enabled crossing, and note field construction time separately from steady rendering. Investigate a repeatable regression; use a second matched comparison if the first is noisy or contradictory. Do not introduce an arbitrary universal FPS gate or expand this into a general engine rewrite.
+ 
+-Make this judgment from actual gameplay motion and actual audio where available. A successful build, a still image or a count of tests cannot establish the atmosphere.
++## 6. Verify the changed experience and hand it back
+ 
+-## 5. Evidence and handoff
++Run the normal build/typecheck and relevant existing tests. Add focused tests for the new state derivation and audio lifecycle risks. A test that repeats a tuning constant does not establish visual or musical quality.
+ 
+-Retain a compact set of matching before/after gameplay captures tied to the actual source:
++Cover deadline removal by boarding at the exact boundary, safe temporary unloading, Bellwater's remaining second threat, homeward versus delivered, lost/won Undo, previews having no effect, and long idle leaving simulation and arrangement state unchanged. Exercise rapid state changes during scheduled accompaniment and a phrase boundary with bounded sources and no duplicate scheduler.
+ 
+-- Holding and Bellwater in ordinary play, including a shallow region and open-water sheen.
+-- A flooded low shore at tide 2 and the correct Undo-restored state.
+-- Both phone widths, with route visibility and a clear loaded ferry.
+-- Harbor's warm response at visible delivery.
++Use the real interface for complete Holding Pier and Bellwater rescues, both tide rises and Undo, plus a First Crossing shared-presentation regression. Inspect Harbor from the initial state, while unavailable, while current, during a loaded arrival, at delivery and after Undo/Restart. Check 1440×900, 844×390 and 780×390, natural keyboard, emulated touch, and reduced motion. Retain the accepted modal safety, ferry/card clearance and one-action-per-input behavior.
+ 
+-Capture a short idle-water segment and an uninterrupted short/long crossing segment at original speed. Include an audio-enabled sample long enough to hear the musical phrase and its loop boundary; this can be a separate actual runtime mix capture. A silent rescue video does not verify the soundtrack. Identify whether media is real-time capture or sampled/offline evidence and retain that distinction.
++Choose a compact evidence set tied to the final source:
+ 
+-Use available tools to inspect selected images at native size, motion and sound. Raw media may remain ignored/local if upload is unavailable; clearly report that limitation. Keep historical captures attributed to their original commits.
++- Matched before/after ordinary views of Holding and Bellwater, with a shallow region and Harbor visible.
++- A flooded low shore and its Undo-restored state.
++- Native phone views showing the Home marker, readable routes and the loaded ferry.
++- One uninterrupted original-speed sequence showing idle water, departure, tide/Undo and delivery.
++- An actual audio-enabled sample covering ordinary, near-deadline, homeward and delivery states, including an Undo and some idle listening. Include the loop boundary in this sample or one short separate capture if needed.
+ 
+-Update STATUS, the relevant art/environment/technical notes and the asset ledger. Put a concise review report and selected evidence under a new review directory. State exact source, commands, fresh/reused results, original failures and remaining uncertainties. The prior 38-pass/3-timeout browser run plus three isolated passes remains historical evidence, not a clean new run.
++Listen to the actual runtime mix where tooling permits. Report listening separately from source/scheduler checks. Raw media may remain ignored/local; give precise paths and provenance. Do not relabel silent rescue videos as audio evidence or past captures as new results.
+ 
+-Complete the usual normal commit/push and update draft PR #1. Return final SHA, source/remote equality, main/draft status, changes, verification, selected captures and recording locations. Do not merge or mark the PR ready.
++Preserve original failures. If a bounded exhaustive test needs a larger budget or serial execution in a slow environment, report the original outcome, reason, exact settings and affected rerun. Keep fresh, reused and corrected results distinct. Stop optional testing once the concrete changed risks are covered.
+ 
+-Finish this atmosphere milestone before expanding levels or mechanics. The next playtest should let the user judge the combined water, travel rhythm and sound.
++Update `STATUS.md`, relevant art/environment/audio notes and any asset provenance. Put the implementation review and selected evidence in a new directory such as `reviews/refinement/`. Complete the established normal commit/push and draft-PR update. Return the final SHA, remote equality, main/draft status, concise change summary, actual verification, selected captures, recordings and remaining limits.
+ 
+-## Research references and optional tools
++Success means that the shallow water has recognizable form, the assets feel seated in the scene, Harbor quietly reads as home throughout play, and the accepted music gently follows rescue and relief. Finish this pass before adding levels or mechanics.
+ 
+-Use these as technical explanations, adapting them to the existing renderer. Unity Shader Graph examples and newer Three.js node-material examples are not drop-in GLSL code.
++## Technical references
+ 
+-1. [Aleksandar Gjoreski — Be Water, my friend!](https://aleksandargjoreski.dev/blog/stylized-water-shader/): a Three.js development account connecting normals, reflected/refracted light and absorption.
+-2. [Alexander Ameye — Stylized Water Shader](https://ameye.dev/notes/stylized-water-shader/): useful organization of depth, color, refraction and shore effects; distinguish vertical depth from camera-ray thickness.
+-3. [Catlike Coding — Texture Distortion](https://catlikecoding.com/unity/tutorials/flow/texture-distortion/): flowing texture coordinates and phase blending to hide resets.
+-4. [Three.js — Color Management](https://threejs.org/manual/pages/color-management.html): linear working space, texture roles and custom-shader output conversion.
+-5. [Three.js Reflector orthographic support](https://github.com/mrdoob/three.js/pull/33249) and [Reflector documentation](https://threejs.org/docs/pages/Reflector.html): consult only if adding a justified reflection capture; inspect installed helper code.
+-6. [lil-gui](https://lil-gui.georgealways.com/): optional development-only parameter tuning.
+-7. [Spector.js](https://github.com/BabylonJS/Spector.js): optional WebGL frame inspection if render-pass or shader behavior needs diagnosis.
+-8. [Material Maker](https://www.materialmaker.org/): optional procedural texture authoring/export tool. A reproducible local script is also suitable; installing another editor must not block the task.
+-9. [MDN — Creating and sequencing audio](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Advanced_techniques), [GainNode](https://developer.mozilla.org/en-US/docs/Web/API/GainNode) and [AudioContext.suspend](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/suspend): scheduling, live gain and audio lifecycle.
+-10. [Chrome — Web Audio, Autoplay Policy and Games](https://developer.chrome.com/blog/web-audio-autoplay): activation/resume behavior.
++- [Audiokinetic: music states](https://www.audiokinetic.com/library/2024.1.2_8726/?id=states_tab_music_objects&source=Help) describes state-dependent gain/filter changes at musical boundaries. It is a design reference; implementation stays in the existing Web Audio code.
++- [MDN: setTargetAtTime](https://developer.mozilla.org/en-US/docs/Web/API/AudioParam/setTargetAtTime) explains smooth parameter transitions on the audio clock. Its time constant is not the total fade duration.
++- [MDN: cancelAndHoldAtTime](https://developer.mozilla.org/en-US/docs/Web/API/AudioParam/cancelAndHoldAtTime) documents cancellation and limited browser availability. Use compatible behavior or a fallback.
++- [Three.js: color management](https://threejs.org/manual/pages/color-management.html) remains relevant when changing the cached field or shader output.
+ 
+-Read source licenses before incorporating third-party code or assets and retain required notices. The reference list is guidance, not a request to install every tool.
++Keep useful existing water research in `docs/ENVIRONMENT.md`; this milestone does not require installing another editor, engine or audio middleware.
+diff --git a/README.md b/README.md
+index cb28f50..f917c20 100644
+--- a/README.md
++++ b/README.md
+@@ -1,6 +1,6 @@
+ # Last Ferry — playable coves
+ 
+-Start with **The Holding Pier**, then choose **Next cove** after bringing its neighbors home to continue into **Bellwater Cove**. Bellwater tests changing route depths and two pickup deadlines. First Crossing remains the explicit baseline at `/?cove=first-crossing` and in **Menu → Choose cove**. The atmosphere pass adds luminous water with visible shallow detail, deliberate crossings and an original continuous instrumental cue. See the current [atmosphere review](reviews/atmosphere/REVIEW.md) and developer notes for [Holding Pier](docs/HOLDING_PIER.md), [Bellwater](docs/BELLWATER.md) and the [environment](docs/ENVIRONMENT.md).
++Start with **The Holding Pier**, then choose **Next cove** after bringing its neighbors home to continue into **Bellwater Cove**. Bellwater tests changing route depths and two pickup deadlines. First Crossing remains the explicit baseline at `/?cove=first-crossing` and in **Menu → Choose cove**. The refinement adds more distinct shallow sand and stone, water-height contact, a steady Harbor home light and a sparse rescue-responsive accompaniment to the accepted score and sailing pace. See the current [refinement review](reviews/refinement/REVIEW.md) and developer notes for [Holding Pier](docs/HOLDING_PIER.md), [Bellwater](docs/BELLWATER.md) and the [environment](docs/ENVIRONMENT.md).
+ 
+ Baseline M1 is a playable 3D tutorial cove: rescue Moss the sheep with Pip and Rue already aboard, manage how much depth the loaded ferry needs, and bring everyone to the lighthouse. Time advances only on accepted actions. The scene, sounds and rules run locally in the browser.
+ 
+@@ -44,14 +44,14 @@ PowerShell:
+ ```powershell
+ $env:PLAYWRIGHT_BROWSERS_PATH = Join-Path $PWD '.cache/ms-playwright'
+ npx playwright install chromium
+-$env:LAST_FERRY_REVIEW_DIR = 'reviews/atmosphere'
++$env:LAST_FERRY_REVIEW_DIR = 'reviews/refinement'
+ ```
+ 
+ macOS/Linux:
+ 
+ ```sh
+ PLAYWRIGHT_BROWSERS_PATH=.cache/ms-playwright npx playwright install chromium
+-export LAST_FERRY_REVIEW_DIR=reviews/atmosphere
++export LAST_FERRY_REVIEW_DIR=reviews/refinement
+ ```
+ 
+ Then run:
+@@ -68,15 +68,15 @@ The browser suite defaults to ports 5173 and 4173, launches the development and
+ 
+ `LAST_FERRY_REVIEW_DIR` selects the capture/report folder so new evidence does not overwrite earlier records. `LAST_FERRY_DEV_PORT` and `LAST_FERRY_PRODUCTION_PORT` optionally select isolated servers.
+ 
+-The atmosphere pass uses isolated development/production ports **5180/4180** and stores selected captures and its report under `reviews/atmosphere/`. To use those ports with the browser suite:
++The refinement uses a frozen development source on **5185** for checks and production port **4180**. Selected captures and its report live under `reviews/refinement/`. Ordinary live development can still use **5180**. To use those ports with the browser suite:
+ 
+ ```powershell
+ $env:LAST_FERRY_DEV_PORT = '5180'
+ $env:LAST_FERRY_PRODUCTION_PORT = '4180'
+-$env:LAST_FERRY_REVIEW_DIR = 'reviews/atmosphere'
++$env:LAST_FERRY_REVIEW_DIR = 'reviews/refinement'
+ ```
+ 
+-On macOS/Linux, set the same variables with `export`. If launching the servers separately, use `npm run dev -- --port 5180` and, after building, `npm run preview -- --port 4180`. This workspace reused its existing browser cache at `../.cache/ms-playwright`; a fresh clone can use the project-local cache above. The [atmosphere report](reviews/atmosphere/REVIEW.md) records actual commands, results and source identity.
++On macOS/Linux, set the same variables with `export`. If launching the servers separately, use `npm run dev -- --port 5180` and, after building, `npm run preview -- --port 4180`. This workspace reused its existing browser cache at `../.cache/ms-playwright`; a fresh clone can use the project-local cache above. The [refinement report](reviews/refinement/REVIEW.md) records actual commands, frozen-source ports, results and source identity.
+ 
+ `test:unit` checks the independent application reducer, supplied replays, boundaries, history, locking, sampled ferry clearance in all three coves, both puzzle searches and active-level presentation derived from real preview results. Bellwater retains eight ten-action witnesses and its valid timing alternatives. The separate design verifier checks only the supplied reference model. Browser checks use actual mouse, natural keyboard and emulated touch controls for sailing, free inspection, subsets, both rises, complete Undo, input protection, default entry/Next/Menu and production play. Target viewports are 1440×900, 844×390, 780×390, plus 844×500 and 1024×600 with breakpoint resizes. The report distinguishes passed, failed, inconclusive and not-run checks.
+ 
+@@ -84,7 +84,7 @@ Reproduce the First Crossing detour manually: Sheep Pier → Board Moss → East
+ 
+ ## Evidence and source
+ 
+-See the current [atmosphere review](reviews/atmosphere/REVIEW.md), [capture manifest](reviews/atmosphere/capture-manifest.json), [source identity](reviews/atmosphere/source-manifest.json) and [status](STATUS.md). The review records fresh gameplay captures, exact working-tree source/environment, native-size inspection, original-speed recordings and the actual-runtime full musical phrase. Matched captures in `reviews/atmosphere/before/` retain their original source identity. Raw videos/audio stay local under the review's `raw/` folders, ignored and unavailable in a fresh clone. Versioned screenshots/manifests provide remote evidence. The [environment review](reviews/environment/REVIEW.md), [Bellwater review](reviews/bellwater/REVIEW.md), [prerequisite responsive/input report](reviews/bellwater/phase-a/REVIEW.md) and [contextual interface review](reviews/contextual/REVIEW.md) remain historical evidence of preceding source.
++See the current [refinement review](reviews/refinement/REVIEW.md), [capture manifest](reviews/refinement/capture-manifest.json), [source identity](reviews/refinement/source-manifest.json) and [status](STATUS.md). The review records fresh gameplay captures, exact working-tree source/environment, native-size inspection, original-speed recordings and the actual-runtime full musical phrase. Matched captures in `reviews/refinement/before/` retain their original source identity. Raw videos/audio stay local under the review's `raw/` folders, ignored and unavailable in a fresh clone. Versioned screenshots/manifests provide remote evidence. The [atmosphere review](reviews/atmosphere/REVIEW.md), [environment review](reviews/environment/REVIEW.md), [Bellwater review](reviews/bellwater/REVIEW.md), [prerequisite responsive/input report](reviews/bellwater/phase-a/REVIEW.md) and [contextual interface review](reviews/contextual/REVIEW.md) remain historical evidence of preceding source.
+ 
+ The [navigation review](reviews/navigation/REVIEW.md) preserves the accepted navigation, rule wording and phone-layout pass. The [original Holding Pier review](reviews/holding-pier/REVIEW.md) records its nine-action solution, losing alternatives and exhaustive temporary-holding check. The [M1.1 refinement review](reviews/m1-1/REVIEW.md) preserves earlier phone framing, passenger deck attachment and keyboard work. These are historical records, not captures of the contextual interface.
+ 
+@@ -98,7 +98,7 @@ The preserved [first task](FIRST_TASK.md), [gameplay rules](docs/GAMEPLAY_RULES.
+ 
+ Production meshes and tones are original procedural code, documented in [the asset ledger](docs/ASSET_LEDGER.md). Supplied images under `references/` are concept art only; they are never used as gameplay backgrounds. `PACKAGE_MANIFEST.json` is the historical starter-package manifest, not the current implementation manifest. The selected dependencies follow the official [Vite guide](https://vite.dev/guide/), [Three.js installation](https://threejs.org/manual/pages/installation.html), [Vitest guide](https://vitest.dev/guide/) and [Playwright installation](https://playwright.dev/docs/intro); exact installed versions are locked in `package-lock.json`.
+ 
+-The current task in [NEXT_TASK.md](NEXT_TASK.md) refines water, journey timing and continuous audio across the accepted coves. Puzzle rules, canonical courses and stopping points are preserved. A campaign map, save system, new mechanics, publishing and a large asset catalog remain outside this update.
++The current task in [NEXT_TASK.md](NEXT_TASK.md) refines shallow detail, material contact, Harbor home identity and bounded accompaniment across the accepted coves. Sailing timing and the accepted base score stay unchanged. Puzzle rules, canonical courses and stopping points are preserved. A campaign map, save system, new mechanics, publishing and a large asset catalog remain outside this update.
+ 
+ ## The Holding Pier
+ 
+diff --git a/STATUS.md b/STATUS.md
+index 2cc7691..a7a0fc3 100644
+--- a/STATUS.md
++++ b/STATUS.md
+@@ -1,4 +1,12 @@
+-# Current milestone — Luminous water, unhurried crossings and musical atmosphere
++# Current milestone — Shallow detail, contact and a light for home
++
++2026-10-22: Started clean on `m1-first-crossing` at reviewed `31ad851a97907c8e86aa6f215b78b38caed7c48b`. Read AGENTS and the new parent NEXT_TASK, retained the task in this checkout, and preserved the accepted rules, three coves, score and sailing pace. PR #1 remains draft; main is unchanged. Baseline runtime is copied to an ignored isolated directory for matched evidence while implementation proceeds.
++
++Implementation in progress: narrower authored sand/stone shelves and faster cached field construction; world-height wet contact on the lower ferry and selected piles; broad island material variation; explicit lighthouse lens/anchor with a persistent steady baseline; objective-derived Home map marker; one bounded companion voice driven by required passengers' actual future pier deadlines. Initial typecheck and two focused contact/home checks pass. Fresh native comparisons, affected browser checks, resource/performance measurement and actual runtime mix captures are being collected under `reviews/refinement/`. Original development failures remain recorded rather than relabeled.
++
++## Historical atmosphere handoff
++
++# Luminous water, unhurried crossings and musical atmosphere
+ 
+ 2026-10-22: Started clean on `m1-first-crossing` at reviewed `7346b91c23331b7c1e8ad4b147c8fa4006767a89`. Read the new parent NEXT_TASK and retained it in the checkout. This explicitly authorizes the atmosphere milestone beyond the original M1. Preserve the three accepted coves, canonical courses, gameplay and complete Undo; keep PR #1 draft and main unchanged. No code comments added.
+ 
+diff --git a/docs/ART_DIRECTION.md b/docs/ART_DIRECTION.md
+index f5d5cd1..cb161a6 100644
+--- a/docs/ART_DIRECTION.md
++++ b/docs/ART_DIRECTION.md
+@@ -76,6 +76,10 @@ Honor reduced motion: disable bobbing and decorative loops, minimize travel and
+ 
+ ## Interface and M1 visual acceptance
+ 
++The refinement gives Harbor a persistent, steady lens and soft glow, plus an objective-derived “Home” marker inside its existing map label. Passage status remains independent of the destination role. The visible delivery response strengthens that same light, then settles; Undo and Restart restore its ordinary baseline.
++
++Selected hull surfaces and Harbor/vulnerable-pier piles use scoped materials that compare world-space height with the actual animated water level. Broad sandy, stony and subdued grass regions vary existing island vertex colors without changing silhouettes. Refined coastal shelves and connected sand/stone forms are decorative field samples, separate from authored passage depths. Native gameplay comparisons and any remaining visual limits are recorded in `reviews/refinement/REVIEW.md`.
++
+ Use restrained, keyboard-accessible DOM controls for actions, undo, restart, and state explanations. Provide visible focus, accessible names, and touch targets of at least **44 × 44 CSS pixels**. Canvas targets need equivalent keyboard-operable controls. Show passenger load and tide through the canonical state, not decorative counters.
+ 
+ M1 is visually complete when:
+diff --git a/docs/ASSET_LEDGER.md b/docs/ASSET_LEDGER.md
+index 16fca42..6d3c212 100644
+--- a/docs/ASSET_LEDGER.md
++++ b/docs/ASSET_LEDGER.md
+@@ -26,3 +26,7 @@ Shared environment milestone (2026-10-22): original procedural geometry and mate
+ Atmosphere milestone (2026-10-22): original `seabed.ts` authors one bounded 256×256 linear albedo/height field from shore contours, fixed irregular elliptical sand/rock patches and deterministic low-frequency variation. It is distinct from the retained 256×256 coastal mask. `water-shader.ts` authors compatible analytic normals, composed sky light, view-ray substrate distortion/absorption and the existing lamp's amber reflection. Two RGBA textures total 524,288 bytes, generated once per cove; no downloaded normals, environment maps or reflection captures. Installed Three.js tone/output shader chunks are MIT library code; no third-party shader was copied.
+ 
+ Original cue “Between the lamps” is authored in `src/audio/score.ts` and synthesized by `atmosphere.ts`: 64 BPM, 80 beats/75 seconds, ten open voicings and 21 explicit motif notes/rests. Reproduce with the score's MIDI pitches/durations, two locally generated periodic waves, deterministic 8-second mono filtered-noise buffer (seed `0x52f34321`) and 3.6-second stereo impulse response (seed `0x126abe31`). At 48kHz these reusable PCM buffers total 2,918,400 bytes; no encoded runtime recording is shipped. One shared reverb supports the music; owned action tails allow precise Undo cleanup. The emotional reference was tenderness, air, wonder and longing; no AURORA melody, recording, lyrics or sample was used. No external model, image, font, music, code asset or dependency was added. Actual-runtime media and listening limitations are attributed separately under `reviews/atmosphere/`.
++
++Shallow-detail refinement (2026-10-22): original precomputed contour fields, compact coast-connected sand tongues/angular stone forms and broad linear albedo variations replace the earlier soft patches inside the same two 256x256 RGBA fields. Original island vertex colors and scoped world-height contact materials add restrained sand/stone/grass/wet distinctions without new geometry or assets. The lighthouse model now exposes its existing lens/lamp/anchor and keeps a steady warm baseline. No downloaded textures, added props, reflection target, extra render pass or new dependency.
++
++The bounded accompaniment in `src/audio/arrangement.ts` authors two compatible pitches for each of the ten accepted harmony cells, synthesized through the existing soft palette and music reverb. Early/late notes share pitches with the overlapping neighboring pad cells. The accepted score and buffers remain byte-identical. See `docs/AUDIO.md` for state derivation and playback behavior; actual runtime recordings and listening limitations remain separate in `reviews/refinement/`.
+diff --git a/docs/ENVIRONMENT.md b/docs/ENVIRONMENT.md
+index 02d845b..1e3a0d6 100644
+--- a/docs/ENVIRONMENT.md
++++ b/docs/ENVIRONMENT.md
+@@ -20,10 +20,20 @@ During travel the local passenger card is hidden and a compact “Sailing to …
+ 
+ A softly feathered wake follows the actual stern, widens with age and is bounded to 720ms, 1.8 world units and 31 samples. It stops emitting at arrival and clears on reconciliation/Undo/Restart. Reduced motion keeps 30ms transitions, freezes normal/refraction/lapping time and suppresses wake; static depth and sheen remain.
+ 
++## Shallow detail, contact and home
++
++The shallow-detail refinement retains two 256² RGBA fields and one water draw. Coastal width now varies with island form and sheltered pockets; compact coast-connected sand tongues and angular stone forms replace repeated soft oval patches. Broad material variation is baked into the existing albedo field. Precomputed contour segments, squared-distance rejection and bounded patch tests reduce CPU field setup; fields remain immutable through rendering, preview and Undo. There is no reflection target or additional scene pass.
++
++The ferry's two lower hull surfaces and selected Harbor/vulnerable-pier piles clone their materials and use actual world height against the shared animated water uniform. The narrow contact treatment follows draft, bobbing, tide and Undo without affecting cabin/house materials. Existing island vertices carry broad sand, stone and grass regions; silhouettes and geometry counts remain intact.
++
++The lighthouse model exposes its lens, existing lamp and anchor explicitly. Glow and water reflection share that world anchor. Action reset restores the steady home light; delivery adds its transient response, while terminal Undo restores the playing baseline. The map Home role comes from the level delivery objective and retains current/adjacent/blocked/remote statuses.
++
+ ## Sound and free thought
+ 
+ “Between the lamps” is an original 75-second phrase at 64 BPM. Ten authored open harmonies, 21 sparse motif notes, long rests and a fuller middle return quietly. Reusable air/water and reverb buffers support small synthesized voices. Travel texture follows visible movement; delivery responds during visible unloading. There is no connection between music phase and puzzle turns.
+ 
++The refinement retains one sparse companion proposal that follows committed occupied-pier deadlines and homeward passenger safety. It preserves the accepted score, phrase and sound palette; terminal responses wait for visible consequences. [Audio notes](AUDIO.md) describe all five arrangements, shared harmony-tail pitches, latest-target scheduling and resource bounds. Listening is separate from lifecycle/signal checks and remains explicitly pending in the actual-runtime evidence report.
++
+ Intentional activation respects persisted mute. One AudioContext-time scheduler and owned sources keep the graph bounded. Music, ambience and action effects pass through a live master mute, including scheduled tails. Undo/Restart preserve the base phrase and clear action effects. Hide/interruption suspends scheduling without backlog; teardown releases resources. A compact Sound control stays reachable in transit. Availability, actual-runtime audio evidence and any listening limitation are stated in the review.
+ 
+ ## Verification boundary
+diff --git a/docs/TECHNICAL_PLAN.md b/docs/TECHNICAL_PLAN.md
+index d5b599a..1548d81 100644
+--- a/docs/TECHNICAL_PLAN.md
++++ b/docs/TECHNICAL_PLAN.md
+@@ -95,4 +95,8 @@ Color-management and scheduling references: [Three color management](https://thr
+ 
+ ## Delivery hygiene
+ 
++The shallow-detail refinement shares a pure `game/rescue-facts.ts` occupied-pier deadline between status copy and `audio/arrangement.ts`. This derives only required waiting passengers and future authored rises. Aboard/delivered passengers and terminal status determine homeward/won/lost arrangements; preview and elapsed listening do not change desired state. Main reconciles initialization, commit, Undo and Restart, deferring terminal presentation until visible delivery or completion/recovery. One latest desired arrangement replaces obsolete requests while the original phrase clock continues. See [AUDIO.md](AUDIO.md) for the bounded companion voice and lifecycle contract.
++
++Scoped `scene/contact.ts` clones lower hull and selected pile materials, comparing transformed world height against the existing animated shore-water uniform. `models.ts` explicitly returns lighthouse lens/lamp/anchor; effects reset to persistent home identity rather than extinguishing it. No gameplay coordinate, passage, action timing or navigation calculation reads decorative seabed/contact data. Refined fields retain resolution and pass count; before/after CPU construction, idle rendering and audio-enabled crossing measurements are recorded separately under `reviews/refinement/`.
++
+ Bundle the assets needed for ordinary play rather than relying on hotlinked reference images. Document production asset origins. Keep generated videos and large test outputs out of routine source history unless the user chooses an artifact destination. Keep small review reports and selected actual screenshots with their source revision. Add CI only after the real commands exist and run successfully.
+diff --git a/src/audio/atmosphere.ts b/src/audio/atmosphere.ts
+index f979972..ea11924 100644
+--- a/src/audio/atmosphere.ts
++++ b/src/audio/atmosphere.ts
+@@ -7,9 +7,12 @@ import {
+   phraseSeconds,
+   score,
+ } from './score';
++import { arrangementForState, companionNote, type Arrangement } from './arrangement';
++import type { State } from '../game/rules';
++import type { Level } from '../levels/level';
+ 
+ type OwnedSource = {
+-  kind: 'music' | 'bed' | 'travel' | 'effect';
++  kind: 'music' | 'companion' | 'bed' | 'travel' | 'effect';
+   nodes: AudioNode[];
+   endAt: number | null;
+   gain?: GainNode;
+@@ -51,6 +54,15 @@ export class Sound {
+   private sourcesCreated = 0;
+   private peakOwned = 0;
+   private deliveryCount = 0;
++  private desiredArrangement: Arrangement = 'ordinary';
++  private arrangement: Arrangement = 'ordinary';
++  private pendingTerminal = false;
++  private arrangementBeat = 0;
++  private companionBeat = 0;
++  private companionNotes = 0;
++  private companionDeferrals = 0;
++  private droppedTones = 0;
++  private accompanimentEnabled = true;
+   private contextChanged = () => {
+     const context = this.context;
+     if (!context || this.disposed) return;
+@@ -147,8 +159,7 @@ export class Sound {
+     if (!record || (record.stopping && !immediate)) return;
+     record.stopping = true;
+     if (record.gain) {
+-      record.gain.gain.cancelScheduledValues(now);
+-      record.gain.gain.setValueAtTime(Math.max(0.0001, record.gain.gain.value), now);
++      this.hold(record.gain.gain, now);
+       record.gain.gain.linearRampToValueAtTime(0, now + (immediate ? 0 : 0.045));
+     }
+     try {
+@@ -157,6 +168,70 @@ export class Sound {
+     record.endAt = now + (immediate ? 0 : 0.06);
+     if (immediate) this.release(source);
+   }
++  private hold(parameter: AudioParam, now: number) {
++    if (typeof parameter.cancelAndHoldAtTime === 'function') parameter.cancelAndHoldAtTime(now);
++    else {
++      const value = parameter.value;
++      parameter.cancelScheduledValues(now);
++      parameter.setValueAtTime(value, now);
++    }
++  }
++  reconcileState(state: State, level: Level, deferTerminal = false) {
++    const next = arrangementForState(state, level);
++    const pending = deferTerminal && (next === 'won' || next === 'lost');
++    if (this.desiredArrangement === next && this.pendingTerminal === pending) return;
++    this.desiredArrangement = next;
++    this.pendingTerminal = pending;
++    if (!pending) this.requestArrangement();
++  }
++  settleArrangement() {
++    if (!this.pendingTerminal) return;
++    this.pendingTerminal = false;
++    this.requestArrangement();
++  }
++  setAccompanimentEnabled(enabled: boolean) {
++    if (!import.meta.env.DEV || this.accompanimentEnabled === enabled) return;
++    this.accompanimentEnabled = enabled;
++    this.requestArrangement();
++  }
++  private requestArrangement() {
++    const now = this.context?.currentTime ?? 0;
++    this.arrangementBeat = this.context
++      ? Math.max(0, Math.ceil((now - this.epoch + 0.06) / beatSeconds))
++      : 0;
++    this.companionBeat = this.arrangementBeat;
++    for (const [source, record] of this.owned) if (record.kind === 'companion') this.stop(source);
++  }
++  private pumpCompanion(now: number) {
++    const beat = Math.max(0, Math.ceil((now - this.epoch - 0.06) / beatSeconds));
++    if (this.companionBeat < beat) this.companionBeat = beat;
++    const at = this.epoch + this.companionBeat * beatSeconds;
++    if (at > now + 0.15) return;
++    if (!this.pendingTerminal && this.companionBeat >= this.arrangementBeat) {
++      if (this.arrangement !== this.desiredArrangement) {
++        this.arrangement = this.desiredArrangement;
++        const gain = this.music!.gain;
++        this.hold(gain, now);
++        gain.linearRampToValueAtTime(
++          this.arrangement === 'lost' ? 0.53 : this.arrangement === 'won' ? 0.62 : 0.72,
++          now + 0.8,
++        );
++      }
++    }
++    const note = this.accompanimentEnabled
++      ? companionNote(this.companionBeat, this.arrangement)
++      : null;
++    const companions = [...this.owned.values()].filter((record) => record.kind === 'companion');
++    if (note && companions.length < 2) {
++      this.tone(note.note, Math.max(now, at), note.duration, note.strength, 'companion');
++      this.companionNotes++;
++    } else if (note) {
++      this.companionDeferrals++;
++      this.companionBeat++;
++      return;
++    }
++    this.companionBeat += this.arrangement === 'won' ? 8 : 4;
++  }
+   private clearActions(preserveTravel: boolean) {
+     if (!preserveTravel) this.travelling = false;
+     for (const [source, record] of this.owned)
+@@ -212,25 +287,33 @@ export class Sound {
+     at: number,
+     duration: number,
+     strength: number,
+-    voice: 'pad' | 'motif' | 'delivery',
++    voice: 'pad' | 'motif' | 'delivery' | 'companion',
+   ) {
+     const context = this.context!;
+-    if (this.owned.size > 28) return;
++    if (this.owned.size > 28) {
++      this.droppedTones++;
++      return;
++    }
+     const source = context.createOscillator(),
+       filter = context.createBiquadFilter(),
+       gain = context.createGain(),
+       panner = context.createStereoPanner();
+-    source.setPeriodicWave(voice === 'pad' ? this.padWave! : this.pluckWave!);
++    source.setPeriodicWave(
++      voice === 'pad' || voice === 'companion' ? this.padWave! : this.pluckWave!,
++    );
+     source.frequency.value = frequency(note);
+     source.detune.value = voice === 'pad' ? ((note % 3) - 1) * 3.1 : 0;
+     filter.type = 'lowpass';
+     filter.Q.value = 0.45;
+-    filter.frequency.setValueAtTime(voice === 'pad' ? 800 : voice === 'delivery' ? 1300 : 2400, at);
++    filter.frequency.setValueAtTime(
++      voice === 'pad' ? 800 : voice === 'companion' ? 1100 : voice === 'delivery' ? 1300 : 2400,
++      at,
++    );
+     filter.frequency.exponentialRampToValueAtTime(
+       voice === 'pad' ? 1100 : 750,
+       at + Math.min(duration * 0.7, 2),
+     );
+-    const attack = voice === 'pad' ? 1.6 : 0.018,
++    const attack = voice === 'pad' ? 1.6 : voice === 'companion' ? 0.12 : 0.018,
+       peak = strength * (voice === 'pad' ? 0.035 : voice === 'delivery' ? 0.14 : 0.105),
+       end = at + duration;
+     gain.gain.setValueAtTime(0, at);
+@@ -245,7 +328,7 @@ export class Sound {
+     gain.connect(panner);
+     panner.connect(voice === 'delivery' ? this.effects! : this.music!);
+     this.own(source, {
+-      kind: voice === 'delivery' ? 'effect' : 'music',
++      kind: voice === 'delivery' ? 'effect' : voice === 'companion' ? 'companion' : 'music',
+       nodes: [filter, gain, panner],
+       endAt: end + 0.02,
+       gain,
+@@ -288,6 +371,7 @@ export class Sound {
+         this.cycle++;
+       }
+     }
++    this.pumpCompanion(now);
+   }
+   private stopScheduler() {
+     if (this.scheduler !== null) clearInterval(this.scheduler);
+@@ -445,6 +529,15 @@ export class Sound {
+       travelActive: records.some((record) => record.kind === 'travel' && !record.stopping),
+       arrivalActive: records.some((record) => record.kind === 'effect' && !record.stopping),
+       deliveryCount: this.deliveryCount,
++      desiredArrangement: this.desiredArrangement,
++      arrangement: this.arrangement,
++      pendingTerminal: this.pendingTerminal,
++      accompanimentEnabled: this.accompanimentEnabled,
++      companionSources: records.filter((record) => record.kind === 'companion' && !record.stopping)
++        .length,
++      companionNotes: this.companionNotes,
++      companionDeferrals: this.companionDeferrals,
++      droppedTones: this.droppedTones,
+       masterGain: this.master?.gain.value ?? 0,
+       phrase: score.title,
+       bpm: score.bpm,
+diff --git a/src/main.ts b/src/main.ts
+index ee6b71d..e6ed0e9 100644
+--- a/src/main.ts
++++ b/src/main.ts
+@@ -37,6 +37,7 @@ const level = cove === 'first-crossing' ? baseline : cove === 'bellwater' ? bell
+ const experiment = level.id === 'holding-pier';
+ const isBellwater = level.id === 'bellwater';
+ const { nodeNames, passengerNames } = levelNames(level);
++const homeNodeId = level.piers.find((pier) => pier.id === level.objective.deliveryPierId)!.nodeId;
+ const title = level.id === baseline.id ? 'The First Crossing' : level.title;
+ const app = document.querySelector<HTMLDivElement>('#app')!;
+ app.innerHTML = `<main class="game ${experiment ? 'holding' : isBellwater ? 'bellwater' : 'baseline'}"><section id="seascape" aria-label="${level.title}" aria-busy="false"><div id="world"></div><header class="hud"><div class="identity"><h1>${title}</h1><p id="objective"></p></div><div id="readout" aria-label="Crossing progress"></div><nav class="tools" aria-label="Crossing controls"><button id="undo">↶ Undo</button><button id="wait">Wait <span>· 1 action</span></button><button id="menu">Menu</button><button id="sound-toggle" aria-label="Mute sound" aria-pressed="false">♫</button></nav></header><nav id="map-labels" aria-label="Map stops"></nav><section id="local-context" aria-labelledby="local-heading"></section><button id="status-toggle" aria-haspopup="dialog" aria-label="Open tide and pier forecast"></button><p id="transition-status" role="status" tabindex="-1" hidden>Finishing this action…</p><p class="portrait-note">Turn sideways for a wider view.</p></section><div id="announcement" class="sr-only" role="status" aria-live="polite"></div></main><dialog id="dialog" aria-labelledby="dialog-title"><div id="dialog-content"></div></dialog>`;
+@@ -44,6 +45,7 @@ const $ = (id: string) => document.getElementById(id)!;
+ const session = new Session(level),
+   sound = new Sound(),
+   world = new World($('world'), session.state, level);
++sound.reconcileState(session.state, level);
+ const dialog = $('dialog') as HTMLDialogElement;
+ type DialogMode = 'action' | 'forecast' | 'menu' | 'terminal';
+ let mode: DialogMode | null = null,
+@@ -236,6 +238,7 @@ function finish(id: number, reason: CompletionReason) {
+   clearTimeout(fallback);
+   sound.stopTravel();
+   if (reason !== 'complete') sound.resetActionEffects();
++  sound.settleArrangement();
+   session.finish();
+   render();
+   $('announcement').textContent =
+@@ -247,6 +250,7 @@ function execute(action: Action) {
+   if (session.busy) return;
+   const transaction = session.commit(copy(action));
+   if (!transaction) return;
++  sound.reconcileState(transaction.after, level, true);
+   const plan = world.plan(transaction.before, transaction.after, action);
+   const id = ++transitionSerial;
+   activeTransition = { id, action: copy(action), plan, startedAt: performance.now() };
+@@ -337,13 +341,16 @@ function renderMap() {
+         const loses =
+           status === 'available' &&
+           preview(s, { type: 'move', to: n.id }, level).state.status === 'lost';
+-        const label = current
+-          ? `You are at ${nodeNames[n.id]}`
+-          : !edge
+-            ? `${nodeNames[n.id]}: no direct passage`
+-            : `Sail to ${nodeNames[n.id]}${loses ? '; flood warning' : ''}`;
++        const home = n.id === homeNodeId;
++        const label =
++          (current
++            ? `You are at ${nodeNames[n.id]}`
++            : !edge
++              ? `${nodeNames[n.id]}: no direct passage`
++              : `Sail to ${nodeNames[n.id]}${loses ? '; flood warning' : status === 'too-shallow' ? '; too shallow' : ''}`) +
++          (home ? '; Home, delivery destination' : '');
+         const disabled = session.busy || s.status !== 'playing' ? 'disabled' : '';
+-        return `<div id="stop-${n.id}" class="map-stop" data-adjacent="${!!edge}"><button id="map-${n.id}" class="map-target" data-status="${status}" data-risk="${loses ? 'loss' : 'safe'}" data-destination="${n.id}" ${current ? 'aria-current="location"' : ''} aria-label="${label}" title="${passageCopy(s, n.id, level)}" ${disabled}><span class="map-symbol" aria-hidden="true">${current ? '●' : !edge ? '◇' : status === 'too-shallow' ? '⊘' : loses ? '!' : '○'}</span><span><b>${current || !edge ? nodeNames[n.id] : `Sail to ${nodeNames[n.id]}`}</b><span class="map-state">${current ? 'You are here' : !edge ? 'No direct passage' : status === 'too-shallow' ? 'Too shallow' : loses ? 'Flood warning' : '1 action'}</span></span></button>${edge ? `<button id="inspect-${n.id}" class="inspect-route" data-destination="${n.id}" aria-label="Inspect passage to ${nodeNames[n.id]} for free" ${disabled}>Inspect</button>` : ''}</div>`;
++        return `<div id="stop-${n.id}" class="map-stop" data-adjacent="${!!edge}"><button id="map-${n.id}" class="map-target" data-status="${status}" data-risk="${loses ? 'loss' : 'safe'}" data-destination="${n.id}" ${current ? 'aria-current="location"' : ''} aria-label="${label}" title="${passageCopy(s, n.id, level)}" ${disabled}><span class="map-symbol" aria-hidden="true">${current ? '●' : !edge ? '◇' : status === 'too-shallow' ? '⊘' : loses ? '!' : '○'}</span><span><b>${current || !edge ? nodeNames[n.id] : `Sail to ${nodeNames[n.id]}`}${home ? ' · Home' : ''}</b><span class="map-state">${current ? 'You are here' : !edge ? 'No direct passage' : status === 'too-shallow' ? 'Too shallow' : loses ? 'Flood warning' : '1 action'}</span></span></button>${edge ? `<button id="inspect-${n.id}" class="inspect-route" data-destination="${n.id}" aria-label="Inspect passage to ${nodeNames[n.id]} for free" ${disabled}>Inspect</button>` : ''}</div>`;
+       })
+       .join('');
+   for (const n of level.nodes) {
+@@ -409,6 +416,7 @@ function undo() {
+   if (dialog.open) closeDialog(false);
+   if (session.undo()) {
+     sound.resetActionEffects();
++    sound.reconcileState(session.state, level);
+     world.sync(session.state);
+     render();
+     focusAvailable('undo');
+@@ -420,6 +428,7 @@ function restart() {
+   if (dialog.open) closeDialog(false);
+   if (session.restart()) {
+     sound.resetActionEffects();
++    sound.reconcileState(session.state, level);
+     world.sync(session.state);
+     render();
+     focusAvailable('menu');
+@@ -594,7 +603,10 @@ world.onPresentationStart = (action) => {
+   if (action.type === 'move') sound.startTravel();
+   else if (action.type !== 'unload' || session.state.status !== 'won') sound.play(action.type);
+ };
+-world.onArrival = () => sound.delivery();
++world.onArrival = () => {
++  sound.delivery();
++  sound.settleArrangement();
++};
+ new ResizeObserver(positionMap).observe(world.host);
+ dialog.addEventListener('cancel', (e) => {
+   e.preventDefault();
+@@ -706,6 +718,7 @@ if (import.meta.env.DEV)
+       getMetrics: () => world.metrics(),
+       getAudioStatus: () => sound.presentation(),
+       captureAudioStream: () => sound.captureStream(),
++      setAccompanimentEnabled: (enabled: boolean) => sound.setAccompanimentEnabled(enabled),
+       getTransitionStatus: () =>
+         copy({ active: activeTransition, last: lastTransition, completionCounts }),
+       setTimingCandidate: (candidate: 'slower' | 'restrained') => {
+diff --git a/src/scene/effects.ts b/src/scene/effects.ts
+index c4c9ebb..41c55cc 100644
+--- a/src/scene/effects.ts
++++ b/src/scene/effects.ts
+@@ -1,4 +1,5 @@
+ import * as T from 'three';
++import type { lighthouse } from './models';
+ 
+ export class CrossingEffects {
+   wake: T.Mesh;
+@@ -7,11 +8,12 @@ export class CrossingEffects {
+   emitting = false;
+   arrivalStarted: number | null = null;
+   arrivalIntensity = 0;
++  resting = false;
+   lamp?: T.PointLight;
+   lens?: T.MeshStandardMaterial;
+   lampBase = 0;
+   reduced = false;
+-  constructor(lighthouse: T.Object3D) {
++  constructor(home: ReturnType<typeof lighthouse>) {
+     const geometry = new T.BufferGeometry();
+     geometry.setAttribute(
+       'position',
+@@ -69,25 +71,13 @@ export class CrossingEffects {
+       }),
+     );
+     this.glow.name = 'harbor-lantern-response';
+-    this.glow.position.copy(lighthouse.localToWorld(new T.Vector3(0, 2.6, 0)));
++    this.glow.position.copy(home.anchor.getWorldPosition(new T.Vector3()));
+     this.glow.scale.set(1.8, 1.8, 1);
+     this.glow.userData.excludeFromFrame = true;
+-    this.glow.visible = false;
+-    lighthouse.traverse((object) => {
+-      if (object instanceof T.PointLight) {
+-        this.lamp = object;
+-        this.lampBase = object.intensity;
+-      }
+-      if (
+-        object instanceof T.Mesh &&
+-        object.material instanceof T.MeshStandardMaterial &&
+-        object.material.color.getHexString() === 'f9cb70'
+-      ) {
+-        object.material = object.material.clone();
+-        this.lens = object.material;
+-        this.lens!.emissive.set('#ffd795');
+-      }
+-    });
++    this.lamp = home.lamp;
++    this.lampBase = home.lamp.intensity;
++    this.lens = home.lens.material as T.MeshStandardMaterial;
++    this.reset();
+   }
+   reset() {
+     this.points.length = 0;
+@@ -96,15 +86,29 @@ export class CrossingEffects {
+     this.wake.visible = false;
+     this.arrivalStarted = null;
+     this.arrivalIntensity = 0;
+-    this.glow.visible = false;
+-    this.glow.material.opacity = 0;
++    this.resting = false;
++    this.glow.visible = true;
++    this.glow.material.opacity = 0.08;
+     if (this.lamp) this.lamp.intensity = this.lampBase;
+-    if (this.lens) this.lens.emissiveIntensity = 0;
++    if (this.lens) this.lens.emissiveIntensity = 0.42;
+   }
+   arrive(time: number, reduced: boolean) {
+     if (this.arrivalStarted === null) this.arrivalStarted = time;
+     this.reduced = reduced;
+   }
++  settle(reduced: boolean) {
++    this.reset();
++    this.resting = true;
++    this.reduced = reduced;
++    this.arrivalIntensity = reduced ? 0.45 : 0.27;
++    this.applyLight();
++  }
++  private applyLight() {
++    if (this.lamp) this.lamp.intensity = this.lampBase + this.arrivalIntensity * 2;
++    if (this.lens) this.lens.emissiveIntensity = 0.42 + this.arrivalIntensity;
++    this.glow.visible = true;
++    this.glow.material.opacity = 0.08 + this.arrivalIntensity * 0.26;
++  }
+   update(
+     time: number,
+     position: T.Vector3,
+@@ -168,10 +172,7 @@ export class CrossingEffects {
+     if (this.arrivalStarted !== null) {
+       const elapsed = Math.max(0, time - this.arrivalStarted);
+       this.arrivalIntensity = reduced ? 0.45 : 0.27 + 0.55 * Math.exp(-elapsed / 1100);
+-      if (this.lamp) this.lamp.intensity = this.lampBase + this.arrivalIntensity * 2;
+-      if (this.lens) this.lens.emissiveIntensity = this.arrivalIntensity;
+-      this.glow.visible = true;
+-      this.glow.material.opacity = this.arrivalIntensity * 0.26;
++      this.applyLight();
+     }
+   }
+   presentation() {
+@@ -197,6 +198,7 @@ export class CrossingEffects {
+       },
+       arrival: {
+         active: this.arrivalStarted !== null,
++        resting: this.resting,
+         intensity: this.arrivalIntensity,
+         lampIntensity: this.lamp?.intensity ?? null,
+         emissiveIntensity: this.lens?.emissiveIntensity ?? null,
+diff --git a/src/scene/models.ts b/src/scene/models.ts
+index d1f4829..96c9f5e 100644
+--- a/src/scene/models.ts
++++ b/src/scene/models.ts
+@@ -67,7 +67,6 @@ export function cylinder(
+ export function ferry() {
+   const g = new T.Group();
+   g.name = 'ferry-hull-and-deck';
+-  // Curved, tapered bow; bevels form a painted gunwale above the darker keel.
+   const hull = new T.Shape();
+   hull.moveTo(-0.43, -0.76);
+   hull.quadraticCurveTo(-0.51, 0.25, -0.32, 0.72);
+@@ -87,6 +86,7 @@ export function ferry() {
+     geo.rotateX(Math.PI / 2);
+     geo.translate(0, depth, 0);
+     const m = mesh(geo, color, g, 0, y, 0);
++    if (y < 0) m.name = 'water-contact-hull';
+     m.scale.set(scale, 1, scale);
+   }
+   layer(0.18, -0.19, '#824b35', 0.94);
+@@ -199,7 +199,11 @@ export function lighthouse(parent: T.Object3D, x: number, y: number, z: number)
+   box(g, '#765d44', [0.25, 0.48, 0.08], [0, 0.38, 0.56], 0.1);
+   box(g, '#f0be63', [0.16, 0.28, 0.035], [0.12, 1.48, 0.445], 0.06);
+   cylinder(g, '#a69b7c', 0.64, 0.64, 0.12, [0, 2.26, 0]);
+-  cylinder(g, '#f9cb70', 0.36, 0.36, 0.56, [0, 2.6, 0], 12);
++  const lens = cylinder(g, '#f9cb70', 0.36, 0.36, 0.56, [0, 2.6, 0], 12);
++  lens.name = 'home-lens';
++  lens.material = (lens.material as T.MeshStandardMaterial).clone();
++  lens.material.emissive.set('#ffbf70');
++  lens.material.emissiveIntensity = 0.42;
+   for (let i = 0; i < 8; i++) {
+     const a = (i * Math.PI) / 4;
+     cylinder(g, '#705b43', 0.025, 0.025, 0.62, [Math.sin(a) * 0.4, 2.6, Math.cos(a) * 0.4], 6);
+@@ -212,4 +216,5 @@ export function lighthouse(parent: T.Object3D, x: number, y: number, z: number)
+   const lamp = new T.PointLight('#ffbf62', 2.5, 6, 2);
+   lamp.position.y = 2.6;
+   g.add(lamp);
++  return { group: g, lens, lamp, anchor: lamp };
+ }
+diff --git a/src/scene/seabed.ts b/src/scene/seabed.ts
+index 0886d2f..8bf9341 100644
+--- a/src/scene/seabed.ts
++++ b/src/scene/seabed.ts
+@@ -4,11 +4,53 @@ import { islandCenter, shoreContour, shoreTop } from './shore';
+ 
+ export const seabedHeightRange = new T.Vector2(-2.2, 0.72);
+ 
++export function prepareContour(points: T.Vector2[]) {
++  const segments = points.map((a, i) => {
++    const b = points[(i + 1) % points.length],
++      dx = b.x - a.x,
++      dz = b.y - a.y;
++    return {
++      x: a.x,
++      z: a.y,
++      dx,
++      dz,
++      inverseLength: 1 / Math.max(1e-9, dx * dx + dz * dz),
++      minX: Math.min(a.x, b.x),
++      maxX: Math.max(a.x, b.x),
++      minZ: Math.min(a.y, b.y),
++      maxZ: Math.max(a.y, b.y),
++    };
++  });
++  const bounds = new T.Box2().setFromPoints(points);
++  return {
++    bounds,
++    sample(x: number, z: number) {
++      let squared = Infinity,
++        land = false;
++      for (const s of segments) {
++        const px = x - s.x,
++          pz = z - s.z;
++        if (z >= s.minZ && z < s.maxZ && x < s.x + (s.dx * pz) / s.dz) land = !land;
++        const bx = Math.max(s.minX - x, 0, x - s.maxX),
++          bz = Math.max(s.minZ - z, 0, z - s.maxZ);
++        if (bx * bx + bz * bz >= squared) continue;
++        const t = Math.max(0, Math.min(1, (px * s.dx + pz * s.dz) * s.inverseLength));
++        const qx = px - s.dx * t,
++          qz = pz - s.dz * t;
++        squared = Math.min(squared, qx * qx + qz * qz);
++      }
++      return { distance: Math.sqrt(squared), land };
++    },
++  };
++}
++
++const blend = (value: number) => value * value * (3 - 2 * value);
++const smooth = T.MathUtils.smoothstep;
+ const hash = (x: number, z: number) => {
+-  const value = Math.sin(x * 127.1 + z * 311.7) * 43758.5453;
+-  return value - Math.floor(value);
++  let value = Math.imul(x, 374761393) + Math.imul(z, 668265263);
++  value = Math.imul(value ^ (value >>> 13), 1274126177);
++  return ((value ^ (value >>> 16)) >>> 0) / 4294967295;
+ };
+-const blend = (value: number) => value * value * (3 - 2 * value);
+ function noise(x: number, z: number) {
+   const ix = Math.floor(x),
+     iz = Math.floor(z),
+@@ -20,46 +62,55 @@ function noise(x: number, z: number) {
+     fz,
+   );
+ }
+-function segmentDistance(x: number, z: number, a: T.Vector2, b: T.Vector2) {
+-  const dx = b.x - a.x,
+-    dz = b.y - a.y;
+-  const f = T.MathUtils.clamp(
+-    ((x - a.x) * dx + (z - a.y) * dz) / Math.max(1e-9, dx * dx + dz * dz),
+-    0,
+-    1,
+-  );
+-  return Math.hypot(x - a.x - dx * f, z - a.y - dz * f);
+-}
+-function inside(x: number, z: number, points: T.Vector2[]) {
+-  let odd = false;
+-  for (let i = 0, j = points.length - 1; i < points.length; j = i++) {
+-    const a = points[i],
+-      b = points[j];
+-    if (a.y > z !== b.y > z && x < ((b.x - a.x) * (z - a.y)) / (b.y - a.y) + a.x) odd = !odd;
+-  }
+-  return odd;
+-}
+ 
+ export function createSeabedField(level: Level, bounds: T.Vector4, size = 256) {
+-  const coasts = level.world.islands.map((island) => ({
+-    points: shoreContour(island, 0.98),
+-    top: shoreTop(island),
+-    center: islandCenter(island),
+-  }));
+-  const patches = coasts.flatMap(({ center }, i) => [
+-    {
+-      x: center.x + 0.7,
+-      z: center.y + 2.2,
+-      rx: 1.35,
+-      rz: 0.64,
+-      turn: -0.28 + i * 0.27,
+-      rock: false,
+-    },
+-    { x: center.x - 1.2, z: center.y + 1.65, rx: 0.6, rz: 0.46, turn: 0.6 + i * 0.41, rock: true },
+-  ]);
+-  const sand = new T.Color('#c2bb95'),
+-    ground = new T.Color('#81978b'),
+-    stone = new T.Color('#60786f');
++  const coasts = level.world.islands.map((island, i) => {
++    const points = shoreContour(island, 0.98);
++    return {
++      points,
++      contour: prepareContour(points),
++      top: shoreTop(island),
++      center: islandCenter(island),
++      sandy: island.elevation === 1,
++      phase: i * 1.7,
++    };
++  });
++  const patches = coasts.flatMap((coast, i) => {
++    const front = coast.points.reduce((a, b) => (a.y > b.y ? a : b));
++    const side = coast.points.reduce((a, b) => (a.x > b.x ? a : b));
++    const placements = coast.sandy
++      ? [
++          { x: front.x - 0.48, z: front.y + 0.4, rx: 1.15, rz: 0.38, turn: -0.52, rock: false },
++          { x: side.x - 0.32, z: side.y + 0.28, rx: 0.72, rz: 0.34, turn: 0.65, rock: true },
++          {
++            x: coast.center.x - 0.45,
++            z: coast.center.y + 0.15,
++            rx: 0.8,
++            rz: 0.3,
++            turn: -0.3,
++            rock: true,
++          },
++        ]
++      : [
++          {
++            x: front.x + (i % 2 ? 0.45 : -0.5),
++            z: front.y + 0.35,
++            rx: 0.8,
++            rz: 0.29,
++            turn: i % 2 ? 0.35 : -0.48,
++            rock: i % 2 === 1,
++          },
++          { x: side.x + 0.18, z: side.y + 0.25, rx: 0.6, rz: 0.27, turn: 0.85, rock: true },
++        ];
++    return placements.map((patch) => ({
++      ...patch,
++      cosine: Math.cos(patch.turn),
++      sine: Math.sin(patch.turn),
++    }));
++  });
++  const sand = new T.Color('#c7bb91'),
++    ground = new T.Color('#7b9284'),
++    stone = new T.Color('#536b67');
+   const color = new T.Color(),
+     data = new Uint8Array(size * size * 4);
+   let minimumHeight = Infinity,
+@@ -67,47 +118,60 @@ export function createSeabedField(level: Level, bounds: T.Vector4, size = 256) {
+   const sampleAuthored = (x: number, z: number) => {
+     let height = seabedHeightRange.x,
+       shoreDistance = Infinity,
+-      landColor = 0;
++      landColor = 0,
++      groundStone = 0;
++    const broad = noise(x * 1.15, z * 1.15);
+     for (const coast of coasts) {
+-      let distance = Infinity;
+-      for (let k = 0; k < coast.points.length; k++)
+-        distance = Math.min(
+-          distance,
+-          segmentDistance(x, z, coast.points[k], coast.points[(k + 1) % coast.points.length]),
+-        );
+-      const land = inside(x, z, coast.points);
+-      if (land) landColor = Math.max(landColor, T.MathUtils.smoothstep(distance, 0.08, 0.4) * 0.8);
++      const box = coast.contour.bounds;
++      if (x < box.min.x - 2.5 || x > box.max.x + 2.5 || z < box.min.y - 2.5 || z > box.max.y + 2.5)
++        continue;
++      const { distance, land } = coast.contour.sample(x, z);
+       shoreDistance = Math.min(shoreDistance, distance);
++      const dx = x - coast.center.x,
++        dz = z - coast.center.y;
++      const pocket = smooth(dz - dx * 0.45, -0.3, 1.1);
++      const width = 0.1 + pocket * (coast.sandy ? 0.28 : 0.17) + broad * 0.1;
++      const outside = Math.max(0, distance - width);
+       const candidate = land
+-        ? T.MathUtils.lerp(-0.025, coast.top, T.MathUtils.smoothstep(distance, 0, 0.3))
+-        : -0.025 - distance * 0.24 - distance * distance * 0.07;
++        ? T.MathUtils.lerp(-0.025, coast.top, smooth(distance, 0, 0.3))
++        : -0.025 - distance * 0.8 - outside * outside * 2;
+       height = Math.max(height, candidate);
++      if (land) {
++        const interior = smooth(distance, 0.04, 0.3);
++        const sweep = smooth(dz + dx * 0.42 + (broad - 0.5) * 0.6, -0.45, 0.55);
++        landColor = Math.max(
++          landColor,
++          interior * (coast.sandy ? 0.36 + sweep * 0.58 : 0.18 + sweep * 0.4),
++        );
++        groundStone = Math.max(groundStone, interior * (1 - sweep) * (coast.sandy ? 0.28 : 0.48));
++      }
+     }
+     let sandForm = 0,
+-      rockForm = 0;
++      rockForm = 0,
++      facet = 0;
+     for (const patch of patches) {
+       const dx = x - patch.x,
+         dz = z - patch.z;
+-      const qx = (Math.cos(patch.turn) * dx + Math.sin(patch.turn) * dz) / patch.rx;
+-      const qz = (-Math.sin(patch.turn) * dx + Math.cos(patch.turn) * dz) / patch.rz;
+-      const form = Math.exp(-((qx + Math.sin(qz * 2.7) * 0.18) ** 2 + qz * qz) * 1.8);
+-      if (patch.rock) rockForm = Math.max(rockForm, form);
+-      else sandForm = Math.max(sandForm, form);
++      if (Math.abs(dx) > patch.rx + patch.rz || Math.abs(dz) > patch.rx + patch.rz) continue;
++      const qx = (patch.cosine * dx + patch.sine * dz) / patch.rx;
++      const qz = (-patch.sine * dx + patch.cosine * dz) / patch.rz;
++      const edge = patch.rock
++        ? Math.max(Math.abs(qx) * 0.88 + Math.abs(qz) * 0.35, Math.abs(qz) + qx * 0.16)
++        : Math.abs(qz + qx * qx * 0.24) / Math.max(0.25, 0.85 - qx * 0.32) +
++          Math.pow(Math.abs(qx), 4) * 0.48;
++      const form = 1 - smooth(edge + (broad - 0.5) * 0.12, 0.7, 1.02);
++      if (patch.rock) {
++        rockForm = Math.max(rockForm, form);
++        facet = Math.max(facet, form * smooth(qz + qx * 0.45, -0.1, 0.15));
++      } else sandForm = Math.max(sandForm, form);
+     }
+-    const grain = noise(x * 2.5, z * 2.5);
+-    if (height < -0.025)
+-      height = Math.min(
+-        -0.04,
+-        height + sandForm * 0.065 + rockForm * 0.14 + (noise(x * 0.8, z * 0.8) - 0.5) * 0.025,
+-      );
++    if (height < -0.025) height = Math.min(-0.04, height + sandForm * 0.13 + rockForm * 0.12);
+     height = T.MathUtils.clamp(height, seabedHeightRange.x, seabedHeightRange.y);
+-    const rockEdge = T.MathUtils.smoothstep(rockForm, 0.18, 0.8);
+     color
+       .copy(ground)
+-      .lerp(sand, Math.max(landColor, sandForm * 0.88))
+-      .lerp(stone, rockEdge * 0.88);
+-    const shade = 0.84 + grain * 0.12 + sandForm * 0.1 + rockForm * 0.03;
+-    color.multiplyScalar(shade);
++      .lerp(sand, Math.max(landColor, sandForm * 0.72))
++      .lerp(stone, Math.max(groundStone, rockForm * 0.92));
++    color.multiplyScalar(0.86 + broad * 0.16 + noise(x * 3, z * 3) * 0.025 + facet * 0.16);
+     return {
+       height,
+       color: color.toArray() as [number, number, number],
+diff --git a/src/scene/shore.ts b/src/scene/shore.ts
+index 3da3d20..c7e38d9 100644
+--- a/src/scene/shore.ts
++++ b/src/scene/shore.ts
+@@ -57,9 +57,21 @@ export function buildCoastGeometry(island: Island, style: IslandStyle = 'garden'
+     '#d6c8a3',
+     style === 'reeds' ? '#c4bc91' : style === 'rocky' ? '#98a18a' : '#91a578',
+   ];
++  const exposed = style === 'reeds' || island.elevation <= 1;
++  const sand = new T.Color(exposed ? '#c7bb91' : '#d3c49c'),
++    stone = new T.Color('#8c9b8c'),
++    grass = new T.Color(exposed ? '#a2aa80' : '#91a578');
++  const surfaceColor = (x: number, z: number) => {
++    const sandy = T.MathUtils.smoothstep((z - center.y) * 0.65 + (x - center.x) * 0.24, -0.25, 0.7);
++    const rocky = T.MathUtils.smoothstep((center.x - x) * 0.6 - (z - center.y) * 0.22, 0.1, 1.05);
++    return grass
++      .clone()
++      .lerp(sand, exposed ? 0.6 + sandy * 0.4 : sandy * 0.7)
++      .lerp(stone, rocky * (style === 'rocky' || style === 'crag' ? 0.7 : 0.26));
++  };
+   for (const [ring, [scale, y]] of profile(island).entries()) {
+-    const color = new T.Color(tones[ring]);
+     for (const point of contour) {
++      const color = ring === 3 ? surfaceColor(point.x, point.y) : new T.Color(tones[ring]);
+       positions.push(
+         center.x + (point.x - center.x) * scale,
+         y,
+@@ -79,7 +91,7 @@ export function buildCoastGeometry(island: Island, style: IslandStyle = 'garden'
+       indices.push(a, c, b, b, c, d);
+     }
+   positions.push(center.x, shoreTop(island), center.y);
+-  const topColor = new T.Color(tones[3]);
++  const topColor = surfaceColor(center.x, center.y);
+   colors.push(topColor.r, topColor.g, topColor.b);
+   for (let i = 0; i < count; i++)
+     indices.push(count * 4, count * 3 + ((i + 1) % count), count * 3 + i);
+diff --git a/src/scene/water-shader.ts b/src/scene/water-shader.ts
+index b25215d..e73b44b 100644
+--- a/src/scene/water-shader.ts
++++ b/src/scene/water-shader.ts
+@@ -50,10 +50,10 @@ void main(){
+ vec2 p=world.xz;
+ vec4 coastData=texture2D(coast,clamp((p-field.xy)/field.zw,0.,1.));
+ vec3 n=waveNormal(p);
+-vec3 v=normalize(viewDirection);
++vec3 v=viewDirection;
+ vec4 firstBed=bedAt(p);
+ float initialDepth=clamp(waterY-bedHeight(firstBed),0.,3.);
+-vec2 rayOffset=-v.xz/max(v.y,.25)*initialDepth*.68;
++vec2 rayOffset=-v.xz/max(v.y,.25)*min(initialDepth,.55)*.68;
+ float contactFade=smoothstep(.025,.24,initialDepth);
+ vec2 bedPoint=p+rayOffset+n.xz*distortion*contactFade*min(initialDepth,.9);
+ vec4 bed=bedAt(bedPoint);
+@@ -62,11 +62,10 @@ float thickness=depth/max(v.y,.3);
+ vec3 transmission=exp(-vec3(2.3,1.08,.72)*thickness*absorption);
+ float shallow=exp(-thickness*1.5);
+ vec3 waterBody=mix(deepColor,shallowColor,shallow*.62);
+-vec3 bedLight=bed.rgb*(.86+.16*max(dot(n,normalize(sunDirection)),0.));
+-float detail=(sin(bedPoint.x*4.1+sin(bedPoint.y*2.2))*.5+.5)*(sin(bedPoint.y*3.6-bedPoint.x*.7)*.5+.5);
+-bedLight*=1.+(detail-.4)*shallowContrast*.22;
++vec3 bedLight=bed.rgb*(.86+.16*max(dot(n,sunDirection),0.));
++bedLight=mix(vec3(dot(bedLight,vec3(.2126,.7152,.0722))),bedLight,shallowContrast);
+ float caustic=pow(max(0.,sin(dot(bedPoint,vec2(3.2,1.4))+time*.29)*sin(dot(bedPoint,vec2(-1.6,2.6))-time*.21)),7.);
+-bedLight+=sunColor*caustic*.025*exp(-thickness*3.)*smoothstep(.05,.3,depth);
++bedLight+=sunColor*caustic*.018*exp(-thickness*3.)*smoothstep(.05,.3,depth);
+ vec3 color=waterBody*(1.-transmission*.68)+bedLight*transmission*depthStrength*.66;
+ 
+ vec3 reflected=reflect(-v,n);
+diff --git a/src/scene/water.ts b/src/scene/water.ts
+index 550f368..df33573 100644
+--- a/src/scene/water.ts
++++ b/src/scene/water.ts
+@@ -2,7 +2,7 @@ import * as T from 'three';
+ import type { Level } from '../levels/level';
+ import type { CanonicalPath } from './paths';
+ import { shoreContour } from './shore';
+-import { createSeabedField } from './seabed';
++import { createSeabedField, prepareContour } from './seabed';
+ import { sceneLayout } from './layout';
+ import { waterVertexShader, waterFragmentShader } from './water-shader';
+ 
+@@ -39,7 +39,7 @@ export const waterPresets: Record<'luminous' | 'restrained', WaterTuning> = {
+     sheenStrength: 0.9,
+     depthStrength: 1.05,
+     shallowContrast: 1,
+-    distortion: 0.75,
++    distortion: 0.48,
+     warmStrength: 0.28,
+     warmWidth: 0.24,
+     warmTail: 4.5,
+@@ -64,25 +64,6 @@ export const waterPresets: Record<'luminous' | 'restrained', WaterTuning> = {
+   },
+ };
+ 
+-const distance = (x: number, z: number, a: T.Vector2, b: T.Vector2) => {
+-  const dx = b.x - a.x,
+-    dz = b.y - a.y;
+-  const t = T.MathUtils.clamp(
+-    ((x - a.x) * dx + (z - a.y) * dz) / Math.max(1e-9, dx * dx + dz * dz),
+-    0,
+-    1,
+-  );
+-  return Math.hypot(x - a.x - dx * t, z - a.y - dz * t);
+-};
+-function inside(x: number, z: number, points: T.Vector2[]) {
+-  let odd = false;
+-  for (let i = 0, j = points.length - 1; i < points.length; j = i++) {
+-    const a = points[i],
+-      b = points[j];
+-    if (a.y > z !== b.y > z && x < ((b.x - a.x) * (z - a.y)) / (b.y - a.y) + a.x) odd = !odd;
+-  }
+-  return odd;
+-}
+ export function coastalMask(level: Level, paths: Map<string, CanonicalPath>) {
+   const bounds = new T.Box2();
+   for (const island of level.world.islands)
+@@ -91,7 +72,7 @@ export function coastalMask(level: Level, paths: Map<string, CanonicalPath>) {
+     for (const p of path.points) bounds.expandByPoint(new T.Vector2(p.x, p.z));
+   bounds.expandByScalar(4);
+   const coasts = level.world.islands.map((island) => ({
+-    points: shoreContour(island, 0.98),
++    contour: prepareContour(shoreContour(island, 0.98)),
+     height: island.elevation * 0.18,
+   }));
+   const shallow = level.edges
+@@ -103,6 +84,9 @@ export function coastalMask(level: Level, paths: Map<string, CanonicalPath>) {
+       return points.slice(1).map((b, i) => ({
+         a: new T.Vector2(points[i].x, points[i].z),
+         b: new T.Vector2(b.x, b.z),
++        dx: b.x - points[i].x,
++        dz: b.z - points[i].z,
++        inverseLength: 1 / Math.max(1e-9, (b.x - points[i].x) ** 2 + (b.z - points[i].z) ** 2),
+         strength: edge.baseDepth === 1 ? 1 : 0.5,
+       }));
+     });
+@@ -118,20 +102,21 @@ export function coastalMask(level: Level, paths: Map<string, CanonicalPath>) {
+         landHeight = 0,
+         land = 0,
+         nearestCoast = Number.POSITIVE_INFINITY;
++      const width = 1.2 + 0.3 * Math.sin(x * 0.73 - z * 0.91);
+       for (const segment of shallow) {
+-        const d = distance(x, z, segment.a, segment.b);
+-        const width = 1.2 + 0.3 * Math.sin(x * 0.73 - z * 0.91);
+-        bank = Math.max(bank, Math.exp(-(d * d) / (width * width)) * segment.strength);
++        const px = x - segment.a.x,
++          pz = z - segment.a.y;
++        const t = Math.max(
++          0,
++          Math.min(1, (px * segment.dx + pz * segment.dz) * segment.inverseLength),
++        );
++        const dx = px - segment.dx * t,
++          dz = pz - segment.dz * t;
++        bank = Math.max(bank, Math.exp(-(dx * dx + dz * dz) / (width * width)) * segment.strength);
+       }
+       for (const coast of coasts) {
+-        const isLand = inside(x, z, coast.points);
+-        let d = 100;
+-        for (let k = 0; k < coast.points.length; k++)
+-          d = Math.min(
+-            d,
+-            distance(x, z, coast.points[k], coast.points[(k + 1) % coast.points.length]),
+-          );
+-        shore = Math.max(shore, Math.exp(-(d * d) / 1.1));
++        const { distance: d, land: isLand } = coast.contour.sample(x, z);
++        shore = Math.max(shore, Math.exp(-(d * d) / 0.2));
+         if (d < nearestCoast) {
+           nearestCoast = d;
+           landHeight = coast.height;
+@@ -165,10 +150,7 @@ export class CoastalWater {
+   constructor(level: Level, paths: Map<string, CanonicalPath>) {
+     this.mask = coastalMask(level, paths);
+     this.seabed = createSeabedField(level, this.mask.bounds);
+-    const layout = sceneLayout(level.id),
+-      light = layout.light,
+-      lighthouse = layout.landmarks.find((landmark) => landmark.kind === 'lighthouse')!,
+-      island = level.world.islands.find((island) => island.id === lighthouse.islandId)!;
++    const light = sceneLayout(level.id).light;
+     const material = new T.ShaderMaterial({
+       uniforms: {
+         time: { value: 0 },
+@@ -181,13 +163,7 @@ export class CoastalWater {
+         sunDirection: { value: new T.Vector3(...(light?.sunPosition ?? [-8, 16, 7])).normalize() },
+         skyColor: { value: new T.Color(light?.sky ?? '#fff1dc') },
+         sunColor: { value: new T.Color(light?.sun ?? '#ffe0af') },
+-        lampPosition: {
+-          value: new T.Vector3(
+-            lighthouse.positionXZ[0],
+-            island.elevation * 0.18 + 2.6,
+-            lighthouse.positionXZ[1],
+-          ),
+-        },
++        lampPosition: { value: new T.Vector3() },
+         arrival: { value: 0 },
+         sheenCenter: {
+           value: level.id === 'bellwater' ? new T.Vector2(0.3, 2.8) : new T.Vector2(0.9, 2.2),
+diff --git a/src/scene/world.ts b/src/scene/world.ts
+index b27ea84..2fe458b 100644
+--- a/src/scene/world.ts
++++ b/src/scene/world.ts
+@@ -9,6 +9,7 @@ import { getLevelPaths, type CanonicalPath } from './paths';
+ import { Shores, createReedBeds } from './shore';
+ import { CoastalWater } from './water';
+ import { CrossingEffects } from './effects';
++import { contactMaterial } from './contact';
+ import {
+   journeyTiming,
+   settlingProgress,
+@@ -40,6 +41,8 @@ export class World {
+   shores: Shores;
+   coastalWater: CoastalWater;
+   effects: CrossingEffects;
++  home!: ReturnType<typeof lighthouse>;
++  contactMeshes: T.Mesh<T.BufferGeometry, T.MeshStandardMaterial>[] = [];
+   journeyFrame: { progress: number; distance: number; tangent: T.Vector3 } | null = null;
+   reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+   timing: JourneyTiming = journeyTiming;
+@@ -123,6 +126,12 @@ export class World {
+     this.shadow.receiveShadow = true;
+     this.scene.add(this.shadow);
+     this.shores = new Shores(this.level, this.layout.islandStyles);
++    this.hull.traverse((object) => {
++      if (object instanceof T.Mesh && object.name === 'water-contact-hull') {
++        object.material = contactMaterial(object.material, this.shores.water, 'hull');
++        this.contactMeshes.push(object);
++      }
++    });
+     this.scene.add(this.shores.group, this.shores.contacts);
+     for (const island of this.level.world.islands) this.island(island);
+     for (const p of this.level.piers) {
+@@ -145,7 +154,19 @@ export class World {
+         );
+       for (const px of [x - p.width / 2, x + p.width / 2])
+         for (const pz of [z + 0.02, end]) {
+-          cylinder(this.scene, '#79644a', 0.065, 0.07, 0.83, [px, y - 0.27, pz], 9);
++          const pile = cylinder(this.scene, '#79644a', 0.065, 0.07, 0.83, [px, y - 0.27, pz], 9);
++          if (
++            p.id === this.level.objective.deliveryPierId ||
++            p.id === this.level.piers.find((pier) => pier.elevation < 3)?.id
++          ) {
++            pile.name = `water-contact-${p.id}`;
++            pile.material = contactMaterial(
++              pile.material as T.MeshStandardMaterial,
++              this.shores.water,
++              'pile',
++            );
++            this.contactMeshes.push(pile as T.Mesh<T.BufferGeometry, T.MeshStandardMaterial>);
++          }
+           cylinder(this.scene, '#dbc799', 0.075, 0.075, 0.055, [px, y + 0.17, pz], 9);
+         }
+       box(this.scene, '#b68f5b', [0.35, 0.055, 0.49], [x, y - 0.015, z + 0.25], 0.015);
+@@ -156,8 +177,13 @@ export class World {
+       const island = this.level.world.islands.find((island) => island.id === landmark.islandId)!;
+       const [x, z] = landmark.positionXZ;
+       const y = island.elevation * 0.18;
+-      if (landmark.kind === 'lighthouse') lighthouse(this.scene, x, y, z);
+-      else if (landmark.kind === 'cottage') cottage(this.scene, [x, y, z]);
++      if (landmark.kind === 'lighthouse') {
++        const model = lighthouse(this.scene, x, y, z);
++        const delivery = this.level.piers.find(
++          (pier) => pier.id === this.level.objective.deliveryPierId,
++        )!;
++        if (island.id === delivery.islandId) this.home = model;
++      } else if (landmark.kind === 'cottage') cottage(this.scene, [x, y, z]);
+       else bellLandmark(this.scene, [x, y, z]);
+     }
+     for (const e of this.level.edges) {
+@@ -214,7 +240,7 @@ export class World {
+         cylinder(g, '#eee2bc', 0.025, 0.025, 0.25, [0, 0.28, 0], 7);
+       }
+     }
+-    this.effects = new CrossingEffects(this.scene.getObjectByName('lighthouse')!);
++    this.effects = new CrossingEffects(this.home);
+     this.scene.add(this.effects.wake, this.effects.glow);
+     this.forecast = this.shores.forecast;
+     this.scene.add(this.forecast);
+@@ -492,7 +518,7 @@ export class World {
+     this.shores.update(this.water.position.y);
+     this.setForecast(false, s.tideLevel);
+     if (!preserveEffects) this.effects.reset();
+-    if (s.status === 'won') this.effects.arrive(this.lastTime, this.reduced);
++    if (s.status === 'won' && !preserveEffects) this.effects.settle(this.reduced);
+     this.coastalWater.setHarbor(this.effects.glow.position, this.effects.arrivalIntensity);
+     this.shadow.position.y = this.water.position.y + 0.008;
+     const n = this.level.nodes.find((n) => n.id === s.boatNodeId)!;
+@@ -782,6 +808,17 @@ export class World {
+       shallowSegments: this.coastalWater.mask.shallowSegments,
+       reducedMotion: this.reduced,
+       shores: this.shores.presentation(),
++      contacts: {
++        waterY: this.shores.water.value,
++        meshes: this.contactMeshes.map((mesh) => {
++          const position = mesh.getWorldPosition(new T.Vector3());
++          return {
++            name: mesh.name,
++            worldY: position.y,
++            localWaterY: this.shores.water.value - position.y,
++          };
++        }),
++      },
+       forecast: {
+         visible: this.forecast.visible,
+         tideY: this.shores.forecastY,
+diff --git a/src/ui/presentation.ts b/src/ui/presentation.ts
+index ff15888..69be7c5 100644
+--- a/src/ui/presentation.ts
++++ b/src/ui/presentation.ts
+@@ -1,3 +1,4 @@
++import { occupiedPierDeadline } from '../game/rescue-facts';
+ import { draft, edgeTo, pierAt, preview, type Action, type State } from '../game/rules';
+ import { level as baseline, nodeName, passengerName, type Level } from '../levels/level';
+ 
+@@ -101,15 +102,7 @@ export function statusCopy(
+       detail: `${s.delivered.length} passengers delivered in ${countActions(s.turn)}.`,
+       urgent: false,
+     };
+-  const threatened = l.piers
+-    .flatMap((p) => {
+-      const ids = (s.waitingByPier[p.id] ?? []).filter((id) =>
+-        l.objective.requiredPassengerIds.includes(id),
+-      );
+-      const rise = l.rules.tide.rises.find((r) => r.afterTurn > s.turn && r.level >= p.elevation);
+-      return ids.length && rise ? [{ pier: p, rise }] : [];
+-    })
+-    .sort((a, b) => a.rise.afterTurn - b.rise.afterTurn)[0];
++  const threatened = occupiedPierDeadline(s, l);
+   const aboard = s.aboard.length
+       ? `${passengerList(s.aboard, l)} ${verb(s.aboard, 'is', 'are')} safe aboard.`
+       : '',
+diff --git a/tests/e2e/environment.spec.ts b/tests/e2e/environment.spec.ts
+index 7d80cad..f347b2e 100644
+--- a/tests/e2e/environment.spec.ts
++++ b/tests/e2e/environment.spec.ts
+@@ -119,7 +119,7 @@ async function arrivalIsVisible(page: Page, reduced: boolean) {
+   expect(view.arrival.active).toBe(true);
+   expect(view.arrival.intensity).toBeGreaterThan(0);
+   expect(view.arrival.lampIntensity).toBeGreaterThan(view.arrival.intensity);
+-  expect(view.arrival.emissiveIntensity).toBeCloseTo(view.arrival.intensity, 6);
++  expect(view.arrival.emissiveIntensity).toBeCloseTo(0.42 + view.arrival.intensity, 6);
+   expect(view.arrival.glowVisible).toBe(true);
+   expect(view.arrival.glowOpacity).toBeGreaterThan(0);
+   if (reduced) expect(view.arrival.intensity).toBe(0.45);
+@@ -131,9 +131,9 @@ async function effectsAreClear(page: Page) {
+   expect(view.arrival).toMatchObject({
+     active: false,
+     intensity: 0,
+-    emissiveIntensity: 0,
+-    glowVisible: false,
+-    glowOpacity: 0,
++    emissiveIntensity: 0.42,
++    glowVisible: true,
++    glowOpacity: 0.08,
+   });
+   expect(view.forecast.visible).toBe(false);
+   expect(view.forecast.groups.filter((group: any) => group.visible)).toEqual([]);
+diff --git a/tests/unit/audio.test.ts b/tests/unit/audio.test.ts
+index 2c61913..5c383ac 100644
+--- a/tests/unit/audio.test.ts
++++ b/tests/unit/audio.test.ts
+@@ -1,6 +1,8 @@
+ import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
+ import { Sound } from '../../src/audio/sound';
+ import { phraseSeconds } from '../../src/audio/score';
++import { initial } from '../../src/game/rules';
++import { holdingPier } from '../../src/levels/level';
+ 
+ class Parameter {
+   value = 1;
+@@ -287,6 +289,9 @@ describe('continuous audio ownership and phase', () => {
+     expect(view.contextCount).toBe(1);
+     expect(view.schedulerStarts).toBe(1);
+     expect(view.ambienceSources).toBe(2);
++    expect(view.desiredArrangement).toBe('ordinary');
++    expect(view.arrangement).toBe('ordinary');
++    expect(view.companionNotes).toBe(0);
+   });
+ 
+   test('rejected activation is quiet and retryable, and teardown clears fading action nodes', async () => {
+@@ -343,4 +348,173 @@ describe('continuous audio ownership and phase', () => {
+     });
+     expect(value.presentation().sourceCount).toBeLessThan(12);
+   });
++
++  test('latest desired arrangement survives preactivation, mute, hide and rapid replacements without replay', async () => {
++    const value = sound();
++    const ordinary = initial(holdingPier);
++    const deadline = { ...ordinary, turn: 2 };
++    const homeward = {
++      ...ordinary,
++      aboard: [...holdingPier.objective.requiredPassengerIds],
++      waitingByPier: {},
++    };
++    value.reconcileState(deadline, holdingPier);
++    value.reconcileState(homeward, holdingPier);
++    expect(value.presentation()).toMatchObject({ desiredArrangement: 'homeward', contextCount: 0 });
++    await value.activate();
++    const context = Context.instances[0];
++    expect(value.presentation()).toMatchObject({ arrangement: 'homeward', companionSources: 1 });
++    const phase = value.presentation().phaseSeconds;
++    for (let i = 0; i < 50; i++) {
++      value.reconcileState(deadline, holdingPier);
++      value.reconcileState(homeward, holdingPier);
++    }
++    value.reconcileState(ordinary, holdingPier);
++    for (let i = 0; i < 12; i++) {
++      context.advance(0.1);
++      await vi.advanceTimersByTimeAsync(100);
++    }
++    expect(value.presentation()).toMatchObject({
++      arrangement: 'ordinary',
++      companionSources: 0,
++      deliveryCount: 0,
++      schedulerStarts: 1,
++    });
++    expect(value.presentation().phaseSeconds).toBeGreaterThan(phase);
++    await value.toggle();
++    value.reconcileState(deadline, holdingPier);
++    await value.visibility(true);
++    value.reconcileState(homeward, holdingPier);
++    await value.visibility(false);
++    await value.toggle();
++    for (let i = 0; i < 12; i++) {
++      context.advance(0.1);
++      await vi.advanceTimersByTimeAsync(100);
++    }
++    expect(value.presentation()).toMatchObject({
++      arrangement: 'homeward',
++      contextCount: 1,
++      schedulerCount: 1,
++      deliveryCount: 0,
++    });
++  });
++
++  test('terminal targets wait for visible settlement and delivery does not clear the companion', async () => {
++    const value = sound();
++    const homeward = {
++      ...initial(holdingPier),
++      aboard: [...holdingPier.objective.requiredPassengerIds],
++      waitingByPier: {},
++    };
++    value.reconcileState(homeward, holdingPier);
++    await value.activate();
++    const context = Context.instances[0];
++    value.reconcileState(
++      { ...homeward, status: 'won', aboard: [], delivered: homeward.aboard },
++      holdingPier,
++      true,
++    );
++    for (let i = 0; i < 12; i++) {
++      context.advance(0.1);
++      await vi.advanceTimersByTimeAsync(100);
++    }
++    expect(value.presentation()).toMatchObject({
++      desiredArrangement: 'won',
++      arrangement: 'homeward',
++      pendingTerminal: true,
++    });
++    const companions = value.presentation().companionSources;
++    value.delivery();
++    expect(value.presentation().companionSources).toBe(companions);
++    value.settleArrangement();
++    for (let i = 0; i < 12; i++) {
++      context.advance(0.1);
++      await vi.advanceTimersByTimeAsync(100);
++    }
++    expect(value.presentation()).toMatchObject({
++      arrangement: 'won',
++      pendingTerminal: false,
++      deliveryCount: 1,
++    });
++    value.reconcileState(homeward, holdingPier);
++    for (let i = 0; i < 12; i++) {
++      context.advance(0.1);
++      await vi.advanceTimersByTimeAsync(100);
++    }
++    expect(value.presentation().arrangement).toBe('homeward');
++    value.reconcileState({ ...homeward, status: 'lost' }, holdingPier, true);
++    expect(value.presentation().arrangement).toBe('homeward');
++    value.settleArrangement();
++    value.settleArrangement();
++    for (let i = 0; i < 12; i++) {
++      context.advance(0.1);
++      await vi.advanceTimersByTimeAsync(100);
++    }
++    expect(value.presentation()).toMatchObject({
++      arrangement: 'lost',
++      companionSources: 0,
++      deliveryCount: 1,
++    });
++  });
++
++  test('companion plus travel and delivery remains bounded across the phrase with no dropped tones', async () => {
++    const value = sound();
++    value.reconcileState(
++      {
++        ...initial(holdingPier),
++        aboard: [...holdingPier.objective.requiredPassengerIds],
++        waitingByPier: {},
++      },
++      holdingPier,
++    );
++    await value.activate();
++    value.startTravel();
++    const context = Context.instances[0];
++    for (let step = 0; step < 800; step++) {
++      if (step % 75 === 0) value.delivery();
++      context.advance(0.1);
++      await vi.advanceTimersByTimeAsync(100);
++      expect(value.presentation().companionSources).toBeLessThanOrEqual(2);
++      expect(value.presentation().sourceCount).toBeLessThanOrEqual(29);
++    }
++    expect(value.presentation()).toMatchObject({
++      loopCount: 1,
++      droppedTones: 0,
++      skippedEvents: 0,
++      schedulerStarts: 1,
++      contextCount: 1,
++    });
++    expect(value.presentation().companionNotes).toBeGreaterThan(20);
++  });
++
++  test('rapid changes during active companion notes release obsolete voices without a mood queue', async () => {
++    const value = sound();
++    const deadline = { ...initial(holdingPier), turn: 2 };
++    const homeward = {
++      ...initial(holdingPier),
++      aboard: [...holdingPier.objective.requiredPassengerIds],
++      waitingByPier: {},
++    };
++    await value.activate();
++    const context = Context.instances[0];
++    for (let step = 0; step < 120; step++) {
++      value.reconcileState(step % 2 ? deadline : homeward, holdingPier);
++      context.advance(0.1);
++      await vi.advanceTimersByTimeAsync(100);
++      expect(value.presentation().companionSources).toBeLessThanOrEqual(2);
++    }
++    value.reconcileState(homeward, holdingPier);
++    for (let step = 0; step < 12; step++) {
++      context.advance(0.1);
++      await vi.advanceTimersByTimeAsync(100);
++    }
++    expect(value.presentation()).toMatchObject({
++      desiredArrangement: 'homeward',
++      arrangement: 'homeward',
++      schedulerStarts: 1,
++      droppedTones: 0,
++      companionDeferrals: 0,
++      deliveryCount: 0,
++    });
++  });
+ });
+diff --git a/tests/unit/water.test.ts b/tests/unit/water.test.ts
+index 617967b..543c221 100644
+--- a/tests/unit/water.test.ts
++++ b/tests/unit/water.test.ts
+@@ -1,9 +1,10 @@
+ import { expect, test } from 'vitest';
+-import { NoColorSpace, OrthographicCamera, Vector3 } from 'three';
++import { NoColorSpace, OrthographicCamera, Vector2, Vector3 } from 'three';
+ import { bellwater, holdingPier, level } from '../../src/levels/level';
+ import { getLevelPaths } from '../../src/scene/paths';
+ import { CoastalWater } from '../../src/scene/water';
+ import { islandCenter } from '../../src/scene/shore';
++import { prepareContour } from '../../src/scene/seabed';
+ 
+ test.each([level, holdingPier, bellwater])(
+   '$id decorative seabed represents coast, apron and genuinely deep open water without changing authored data',
+@@ -39,6 +40,15 @@ test('actual water level controls the transition from low ground to submerged gr
+     bellwater.world.islands.find((island) => island.id === 'lighthouse-island')!,
+   );
+   const lowHeight = water.seabed.sampleAuthored(low.x, low.y).height;
++  const fields = [water.mask.texture.image.data, water.seabed.texture.image.data];
++  const snapshots = fields.map((field) => Array.from(field!));
++  const stone = water.seabed.patches.find((patch) => patch.rock && Math.abs(patch.x - low.x) < 1)!;
++  const stoneSample = water.seabed.sampleAuthored(stone.x, stone.z);
++  const sand = water.seabed.patches.find((patch) => !patch.rock && Math.abs(patch.x - low.x) < 2)!;
++  const sandSample = water.seabed.sampleAuthored(sand.x, sand.z);
++  expect(stoneSample.rockForm).toBeGreaterThan(0.8);
++  expect(sandSample.sandForm).toBeGreaterThan(0.8);
++  expect(stoneSample.color[0]).toBeLessThan(sandSample.color[0] * 0.65);
+   const harborHeight = water.seabed.sampleAuthored(harbor.x, harbor.y).height;
+   water.update(0, 5);
+   expect(water.presentation().waterY - lowHeight).toBeLessThan(0);
+@@ -49,6 +59,9 @@ test('actual water level controls the transition from low ground to submerged gr
+   water.update(0, 0);
+   expect(water.presentation().waterY - lowHeight).toBeLessThan(0);
+   expect(water.presentation().time).toBe(0);
++  expect(water.mask.texture.image.data).toBe(fields[0]);
++  expect(water.seabed.texture.image.data).toBe(fields[1]);
++  expect(fields.map((field) => Array.from(field!))).toEqual(snapshots);
+   water.dispose();
+ });
+ 
+@@ -88,3 +101,17 @@ test('water teardown releases each owned material, geometry and texture exactly
+   water.dispose();
+   expect(counts).toEqual([1, 1, 1, 1]);
+ });
++
++test('prepared contour preserves signed coast classification and exact corner/edge distances', () => {
++  const contour = prepareContour([
++    new Vector2(-2, -1),
++    new Vector2(2, -1),
++    new Vector2(2, 1),
++    new Vector2(-2, 1),
++  ]);
++  expect(contour.sample(0, 0)).toEqual({ land: true, distance: 1 });
++  expect(contour.sample(0, 1.3).land).toBe(false);
++  expect(contour.sample(0, 1.3).distance).toBeCloseTo(0.3);
++  expect(contour.sample(3, 2)).toEqual({ land: false, distance: Math.SQRT2 });
++  expect(contour.sample(-2, 0).distance).toBe(0);
++});
+diff --git a/tools/snapshot-evidence.mjs b/tools/snapshot-evidence.mjs
+index 43b7a7e..33279f1 100644
+--- a/tools/snapshot-evidence.mjs
++++ b/tools/snapshot-evidence.mjs
+@@ -49,6 +49,7 @@ const paths = [
+   ...(existsSync(new URL('docs/HOLDING_PIER.md', root)) ? ['docs/HOLDING_PIER.md'] : []),
+   ...(existsSync(new URL('docs/BELLWATER.md', root)) ? ['docs/BELLWATER.md'] : []),
+   ...(existsSync(new URL('docs/ENVIRONMENT.md', root)) ? ['docs/ENVIRONMENT.md'] : []),
++  ...(existsSync(new URL('docs/AUDIO.md', root)) ? ['docs/AUDIO.md'] : []),
+   'tools/snapshot-evidence.mjs',
+   ...(existsSync(new URL('tools/capture-environment.mjs', root))
+     ? ['tools/capture-environment.mjs']
+@@ -59,6 +60,7 @@ const paths = [
+   ...(existsSync(new URL('tools/compare-atmosphere-timing.mjs', root))
+     ? ['tools/compare-atmosphere-timing.mjs']
+     : []),
++  ...walk('tools/').filter((path) => path.includes('refinement')),
+ ].sort();
+ const files = Object.fromEntries(paths.map((p) => [p, digest(readFileSync(new URL(p, root)))]));
+ const sourceHash = digest(JSON.stringify(files));

@@ -1,0 +1,3371 @@
+{
+  "phase": "after",
+  "source": {
+    "head": "31ad851a97907c8e86aa6f215b78b38caed7c48b",
+    "branch": "m1-first-crossing",
+    "workingTree": "M NEXT_TASK.md\n M STATUS.md\n M docs/ART_DIRECTION.md\n M docs/ASSET_LEDGER.md\n M docs/ENVIRONMENT.md\n M docs/TECHNICAL_PLAN.md\n M src/audio/atmosphere.ts\n M src/main.ts\n M src/scene/effects.ts\n M src/scene/models.ts\n M src/scene/seabed.ts\n M src/scene/shore.ts\n M src/scene/water-shader.ts\n M src/scene/water.ts\n M src/scene/world.ts\n M src/ui/presentation.ts\n M tests/e2e/environment.spec.ts\n M tests/unit/audio.test.ts\n M tests/unit/water.test.ts\n M tools/snapshot-evidence.mjs\n?? docs/AUDIO.md\n?? reviews/refinement/\n?? src/audio/arrangement.ts\n?? src/game/rescue-facts.ts\n?? src/scene/contact.ts\n?? tests/e2e/home-refinement.spec.ts\n?? tests/unit/arrangement.test.ts\n?? tests/unit/contact.test.ts\n?? tools/capture-refinement.mjs\n?? tools/compare-refinement-audio.mjs",
+    "root": ".cache/refinement-final",
+    "runtimeHash": "f48aa67712f913a50af4d527e3936e9b568cbfac86ccddf13e79ab44ba0979f2",
+    "toolHash": "dbd34cfd37dee77f35d8f8549c6fbe45c5cf7aa1530fb483f0754601b2912760",
+    "manifest": "after/source-manifest.json"
+  },
+  "startedAt": "2026-10-22T15:51:00.436Z",
+  "measurements": [
+    {
+      "cove": "holding-pier",
+      "kind": "idle, audio not created",
+      "state": {
+        "turn": 0,
+        "tideLevel": 0,
+        "boatNodeId": "stone",
+        "aboard": [
+          "sheep-1"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [],
+          "rabbit-pier": [
+            "rabbit-1",
+            "rabbit-2"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "medianIntervalMs": 100,
+      "p95IntervalMs": 199.89999999999964,
+      "drawCalls": [
+        686
+      ],
+      "triangles": [
+        127022
+      ],
+      "intervalCount": 121,
+      "minimumIntervalMs": 16.59999999999991,
+      "maximumIntervalMs": 383.29999999999995,
+      "renderer": {
+        "frames": 127,
+        "drawCalls": 686,
+        "triangles": 127022,
+        "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "pixelRatio": 1
+      },
+      "audio": {
+        "first": {
+          "muted": false,
+          "activated": false,
+          "hidden": false,
+          "disposed": false,
+          "unavailable": false,
+          "error": null,
+          "contextState": "not-created",
+          "currentTime": 0,
+          "contextCount": 0,
+          "schedulerActive": false,
+          "schedulerCount": 0,
+          "schedulerStarts": 0,
+          "sourceCount": 0,
+          "sourceNodesCreated": 0,
+          "peakOwnedSources": 0,
+          "graphNodeCount": 0,
+          "musicSources": 0,
+          "ambienceSources": 0,
+          "travelRequested": false,
+          "travelActive": false,
+          "arrivalActive": false,
+          "deliveryCount": 0,
+          "desiredArrangement": "ordinary",
+          "arrangement": "ordinary",
+          "pendingTerminal": false,
+          "accompanimentEnabled": true,
+          "companionSources": 0,
+          "companionNotes": 0,
+          "companionDeferrals": 0,
+          "droppedTones": 0,
+          "masterGain": 0,
+          "phrase": "Between the lamps",
+          "bpm": 64,
+          "phraseSeconds": 75,
+          "cueDuration": 75,
+          "phaseSeconds": 0,
+          "loopCount": 0,
+          "scheduledEvents": 0,
+          "skippedEvents": 0,
+          "rms": 0,
+          "peak": 0
+        },
+        "last": {
+          "muted": false,
+          "activated": false,
+          "hidden": false,
+          "disposed": false,
+          "unavailable": false,
+          "error": null,
+          "contextState": "not-created",
+          "currentTime": 0,
+          "contextCount": 0,
+          "schedulerActive": false,
+          "schedulerCount": 0,
+          "schedulerStarts": 0,
+          "sourceCount": 0,
+          "sourceNodesCreated": 0,
+          "peakOwnedSources": 0,
+          "graphNodeCount": 0,
+          "musicSources": 0,
+          "ambienceSources": 0,
+          "travelRequested": false,
+          "travelActive": false,
+          "arrivalActive": false,
+          "deliveryCount": 0,
+          "desiredArrangement": "ordinary",
+          "arrangement": "ordinary",
+          "pendingTerminal": false,
+          "accompanimentEnabled": true,
+          "companionSources": 0,
+          "companionNotes": 0,
+          "companionDeferrals": 0,
+          "droppedTones": 0,
+          "masterGain": 0,
+          "phrase": "Between the lamps",
+          "bpm": 64,
+          "phraseSeconds": 75,
+          "cueDuration": 75,
+          "phaseSeconds": 0,
+          "loopCount": 0,
+          "scheduledEvents": 0,
+          "skippedEvents": 0,
+          "rms": 0,
+          "peak": 0
+        },
+        "maximumSources": 0,
+        "maximumCompanions": 0
+      }
+    },
+    {
+      "cove": "holding-pier",
+      "kind": "audio-enabled short crossing",
+      "state": {
+        "turn": 2,
+        "tideLevel": 0,
+        "boatNodeId": "shallows",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [
+            "sheep-1"
+          ],
+          "rabbit-pier": [
+            "rabbit-1",
+            "rabbit-2"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "medianIntervalMs": 116.59999999999854,
+      "p95IntervalMs": 233.29999999999927,
+      "drawCalls": [
+        684,
+        682,
+        683
+      ],
+      "triangles": [
+        126686,
+        125822,
+        125824,
+        125826,
+        125828,
+        125830
+      ],
+      "intervalCount": 19,
+      "minimumIntervalMs": 16.700000000000728,
+      "maximumIntervalMs": 250,
+      "renderer": {
+        "frames": 197,
+        "drawCalls": 683,
+        "triangles": 125830,
+        "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "pixelRatio": 1
+      },
+      "audio": {
+        "first": {
+          "muted": false,
+          "activated": true,
+          "hidden": false,
+          "disposed": false,
+          "unavailable": false,
+          "error": null,
+          "contextState": "running",
+          "currentTime": 1.48,
+          "contextCount": 1,
+          "schedulerActive": true,
+          "schedulerCount": 1,
+          "schedulerStarts": 1,
+          "sourceCount": 6,
+          "sourceNodesCreated": 6,
+          "peakOwnedSources": 6,
+          "graphNodeCount": 34,
+          "musicSources": 4,
+          "ambienceSources": 2,
+          "travelRequested": false,
+          "travelActive": false,
+          "arrivalActive": false,
+          "deliveryCount": 0,
+          "desiredArrangement": "ordinary",
+          "arrangement": "ordinary",
+          "pendingTerminal": false,
+          "accompanimentEnabled": true,
+          "companionSources": 0,
+          "companionNotes": 0,
+          "companionDeferrals": 0,
+          "droppedTones": 0,
+          "masterGain": 0.6499999761581421,
+          "phrase": "Between the lamps",
+          "bpm": 64,
+          "phraseSeconds": 75,
+          "cueDuration": 75,
+          "phaseSeconds": 1.44,
+          "loopCount": 0,
+          "scheduledEvents": 1,
+          "skippedEvents": 0,
+          "rms": 0.013582559965742739,
+          "peak": 0.03929710388183594
+        },
+        "last": {
+          "muted": false,
+          "activated": true,
+          "hidden": false,
+          "disposed": false,
+          "unavailable": false,
+          "error": null,
+          "contextState": "running",
+          "currentTime": 3.8506666666666667,
+          "contextCount": 1,
+          "schedulerActive": true,
+          "schedulerCount": 1,
+          "schedulerStarts": 1,
+          "sourceCount": 8,
+          "sourceNodesCreated": 9,
+          "peakOwnedSources": 9,
+          "graphNodeCount": 42,
+          "musicSources": 5,
+          "ambienceSources": 2,
+          "travelRequested": false,
+          "travelActive": false,
+          "arrivalActive": false,
+          "deliveryCount": 0,
+          "desiredArrangement": "deadline",
+          "arrangement": "deadline",
+          "pendingTerminal": false,
+          "accompanimentEnabled": true,
+          "companionSources": 1,
+          "companionNotes": 1,
+          "companionDeferrals": 0,
+          "droppedTones": 0,
+          "masterGain": 0.6499999761581421,
+          "phrase": "Between the lamps",
+          "bpm": 64,
+          "phraseSeconds": 75,
+          "cueDuration": 75,
+          "phaseSeconds": 3.8106666666666666,
+          "loopCount": 0,
+          "scheduledEvents": 2,
+          "skippedEvents": 0,
+          "rms": 0.016833225743612113,
+          "peak": 0.037805624306201935
+        },
+        "maximumSources": 9,
+        "maximumCompanions": 1
+      }
+    },
+    {
+      "cove": "bellwater",
+      "kind": "idle, audio not created",
+      "state": {
+        "turn": 0,
+        "tideLevel": 0,
+        "boatNodeId": "harbor",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [
+            "tansy",
+            "lark"
+          ],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "medianIntervalMs": 83.39999999999964,
+      "p95IntervalMs": 166.60000000000036,
+      "drawCalls": [
+        562
+      ],
+      "triangles": [
+        101962
+      ],
+      "intervalCount": 121,
+      "minimumIntervalMs": 16.59999999999991,
+      "maximumIntervalMs": 1200,
+      "renderer": {
+        "frames": 127,
+        "drawCalls": 562,
+        "triangles": 101962,
+        "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "pixelRatio": 1
+      },
+      "audio": {
+        "first": {
+          "muted": false,
+          "activated": false,
+          "hidden": false,
+          "disposed": false,
+          "unavailable": false,
+          "error": null,
+          "contextState": "not-created",
+          "currentTime": 0,
+          "contextCount": 0,
+          "schedulerActive": false,
+          "schedulerCount": 0,
+          "schedulerStarts": 0,
+          "sourceCount": 0,
+          "sourceNodesCreated": 0,
+          "peakOwnedSources": 0,
+          "graphNodeCount": 0,
+          "musicSources": 0,
+          "ambienceSources": 0,
+          "travelRequested": false,
+          "travelActive": false,
+          "arrivalActive": false,
+          "deliveryCount": 0,
+          "desiredArrangement": "ordinary",
+          "arrangement": "ordinary",
+          "pendingTerminal": false,
+          "accompanimentEnabled": true,
+          "companionSources": 0,
+          "companionNotes": 0,
+          "companionDeferrals": 0,
+          "droppedTones": 0,
+          "masterGain": 0,
+          "phrase": "Between the lamps",
+          "bpm": 64,
+          "phraseSeconds": 75,
+          "cueDuration": 75,
+          "phaseSeconds": 0,
+          "loopCount": 0,
+          "scheduledEvents": 0,
+          "skippedEvents": 0,
+          "rms": 0,
+          "peak": 0
+        },
+        "last": {
+          "muted": false,
+          "activated": false,
+          "hidden": false,
+          "disposed": false,
+          "unavailable": false,
+          "error": null,
+          "contextState": "not-created",
+          "currentTime": 0,
+          "contextCount": 0,
+          "schedulerActive": false,
+          "schedulerCount": 0,
+          "schedulerStarts": 0,
+          "sourceCount": 0,
+          "sourceNodesCreated": 0,
+          "peakOwnedSources": 0,
+          "graphNodeCount": 0,
+          "musicSources": 0,
+          "ambienceSources": 0,
+          "travelRequested": false,
+          "travelActive": false,
+          "arrivalActive": false,
+          "deliveryCount": 0,
+          "desiredArrangement": "ordinary",
+          "arrangement": "ordinary",
+          "pendingTerminal": false,
+          "accompanimentEnabled": true,
+          "companionSources": 0,
+          "companionNotes": 0,
+          "companionDeferrals": 0,
+          "droppedTones": 0,
+          "masterGain": 0,
+          "phrase": "Between the lamps",
+          "bpm": 64,
+          "phraseSeconds": 75,
+          "cueDuration": 75,
+          "phaseSeconds": 0,
+          "loopCount": 0,
+          "scheduledEvents": 0,
+          "skippedEvents": 0,
+          "rms": 0,
+          "peak": 0
+        },
+        "maximumSources": 0,
+        "maximumCompanions": 0
+      }
+    },
+    {
+      "cove": "bellwater",
+      "kind": "audio-enabled longest crossing",
+      "state": {
+        "turn": 2,
+        "tideLevel": 0,
+        "boatNodeId": "east-buoy",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [
+            "tansy",
+            "lark"
+          ],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "medianIntervalMs": 100,
+      "p95IntervalMs": 183.20000000000073,
+      "drawCalls": [
+        562,
+        561
+      ],
+      "triangles": [
+        101102,
+        101100,
+        101098,
+        101104,
+        101106
+      ],
+      "intervalCount": 28,
+      "minimumIntervalMs": 16.799999999999272,
+      "maximumIntervalMs": 183.39999999999782,
+      "renderer": {
+        "frames": 204,
+        "drawCalls": 562,
+        "triangles": 101104,
+        "webgl": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "pixelRatio": 1
+      },
+      "audio": {
+        "first": {
+          "muted": false,
+          "activated": true,
+          "hidden": false,
+          "disposed": false,
+          "unavailable": false,
+          "error": null,
+          "contextState": "running",
+          "currentTime": 2.32,
+          "contextCount": 1,
+          "schedulerActive": true,
+          "schedulerCount": 1,
+          "schedulerStarts": 1,
+          "sourceCount": 7,
+          "sourceNodesCreated": 8,
+          "peakOwnedSources": 8,
+          "graphNodeCount": 38,
+          "musicSources": 5,
+          "ambienceSources": 2,
+          "travelRequested": false,
+          "travelActive": false,
+          "arrivalActive": false,
+          "deliveryCount": 0,
+          "desiredArrangement": "ordinary",
+          "arrangement": "ordinary",
+          "pendingTerminal": false,
+          "accompanimentEnabled": true,
+          "companionSources": 0,
+          "companionNotes": 0,
+          "companionDeferrals": 0,
+          "droppedTones": 0,
+          "masterGain": 0.6499999761581421,
+          "phrase": "Between the lamps",
+          "bpm": 64,
+          "phraseSeconds": 75,
+          "cueDuration": 75,
+          "phaseSeconds": 2.28,
+          "loopCount": 0,
+          "scheduledEvents": 2,
+          "skippedEvents": 0,
+          "rms": 0.017733214226592534,
+          "peak": 0.0493788942694664
+        },
+        "last": {
+          "muted": false,
+          "activated": true,
+          "hidden": false,
+          "disposed": false,
+          "unavailable": false,
+          "error": null,
+          "contextState": "running",
+          "currentTime": 5.093333333333334,
+          "contextCount": 1,
+          "schedulerActive": true,
+          "schedulerCount": 1,
+          "schedulerStarts": 1,
+          "sourceCount": 7,
+          "sourceNodesCreated": 11,
+          "peakOwnedSources": 10,
+          "graphNodeCount": 38,
+          "musicSources": 5,
+          "ambienceSources": 2,
+          "travelRequested": false,
+          "travelActive": false,
+          "arrivalActive": false,
+          "deliveryCount": 0,
+          "desiredArrangement": "deadline",
+          "arrangement": "deadline",
+          "pendingTerminal": false,
+          "accompanimentEnabled": true,
+          "companionSources": 0,
+          "companionNotes": 1,
+          "companionDeferrals": 0,
+          "droppedTones": 0,
+          "masterGain": 0.6499999761581421,
+          "phrase": "Between the lamps",
+          "bpm": 64,
+          "phraseSeconds": 75,
+          "cueDuration": 75,
+          "phaseSeconds": 5.053333333333334,
+          "loopCount": 0,
+          "scheduledEvents": 3,
+          "skippedEvents": 0,
+          "rms": 0.016336830519663184,
+          "peak": 0.03776869922876358
+        },
+        "maximumSources": 10,
+        "maximumCompanions": 1
+      }
+    }
+  ],
+  "construction": [
+    {
+      "cove": "holding-pier",
+      "method": "Three sequential CoastalWater constructions with cached canonical paths, disposal after each; synchronous CPU time, no GPU render; distinct from steady frame timings",
+      "samples": [
+        {
+          "ms": 678.2999999970198,
+          "presentation": {
+            "time": 0,
+            "waterY": 0,
+            "arrival": 0,
+            "renderPasses": 1,
+            "reflectionTargets": 0,
+            "dataBytes": 524288,
+            "disposed": false
+          }
+        },
+        {
+          "ms": 643.4000000059605,
+          "presentation": {
+            "time": 0,
+            "waterY": 0,
+            "arrival": 0,
+            "renderPasses": 1,
+            "reflectionTargets": 0,
+            "dataBytes": 524288,
+            "disposed": false
+          }
+        },
+        {
+          "ms": 325.80000001192093,
+          "presentation": {
+            "time": 0,
+            "waterY": 0,
+            "arrival": 0,
+            "renderPasses": 1,
+            "reflectionTargets": 0,
+            "dataBytes": 524288,
+            "disposed": false
+          }
+        }
+      ]
+    },
+    {
+      "cove": "bellwater",
+      "method": "Three sequential CoastalWater constructions with cached canonical paths, disposal after each; synchronous CPU time, no GPU render; distinct from steady frame timings",
+      "samples": [
+        {
+          "ms": 829.1000000089407,
+          "presentation": {
+            "time": 0,
+            "waterY": 0,
+            "arrival": 0,
+            "renderPasses": 1,
+            "reflectionTargets": 0,
+            "dataBytes": 524288,
+            "disposed": false
+          }
+        },
+        {
+          "ms": 571.5999999940395,
+          "presentation": {
+            "time": 0,
+            "waterY": 0,
+            "arrival": 0,
+            "renderPasses": 1,
+            "reflectionTargets": 0,
+            "dataBytes": 524288,
+            "disposed": false
+          }
+        },
+        {
+          "ms": 250.79999999701977,
+          "presentation": {
+            "time": 0,
+            "waterY": 0,
+            "arrival": 0,
+            "renderPasses": 1,
+            "reflectionTargets": 0,
+            "dataBytes": 524288,
+            "disposed": false
+          }
+        }
+      ]
+    }
+  ],
+  "captures": [
+    {
+      "path": "reviews/refinement/after/holding-pier-ordinary.png",
+      "sha256": "d5340013cbc7a713dfd3725827966246cf2bbb2c2821b047f12292b07940e12b",
+      "at": "2026-10-22T15:51:17.035Z",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "input": "Mouse",
+      "state": {
+        "turn": 0,
+        "tideLevel": 0,
+        "boatNodeId": "stone",
+        "aboard": [
+          "sheep-1"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [],
+          "rabbit-pier": [
+            "rabbit-1",
+            "rabbit-2"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "environment": {
+        "waterY": 0,
+        "waterUniformY": 0,
+        "waterTime": 16.3769,
+        "shallowSegments": 34,
+        "reducedMotion": false,
+        "arrival": {
+          "active": false,
+          "resting": false,
+          "intensity": 0,
+          "lampIntensity": 2.5,
+          "emissiveIntensity": 0.42,
+          "glowVisible": true,
+          "glowOpacity": 0.08
+        },
+        "contacts": {
+          "waterY": 0,
+          "meshes": [
+            {
+              "name": "water-contact-hull",
+              "worldY": -0.24620214324952205,
+              "localWaterY": 0.24620214324952205
+            },
+            {
+              "name": "water-contact-hull",
+              "worldY": -0.15620214324952209,
+              "localWaterY": 0.15620214324952209
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": -0.21000000000000002
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": -0.21000000000000002
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": -0.21000000000000002
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": -0.21000000000000002
+            },
+            {
+              "name": "water-contact-rabbit-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.15000000000000002
+            },
+            {
+              "name": "water-contact-rabbit-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.15000000000000002
+            },
+            {
+              "name": "water-contact-rabbit-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.15000000000000002
+            },
+            {
+              "name": "water-contact-rabbit-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.15000000000000002
+            }
+          ]
+        },
+        "forecast": {
+          "visible": false,
+          "tideY": null
+        },
+        "water": {
+          "time": 16.3769,
+          "waterY": 0,
+          "arrival": 0,
+          "renderPasses": 1,
+          "reflectionTargets": 0,
+          "dataBytes": 524288,
+          "disposed": false
+        }
+      }
+    },
+    {
+      "path": "reviews/refinement/after/holding-after-first-rise.png",
+      "sha256": "aeb07ff0c52a40d58e7423ac8330069c7c75152daa28093343136cca01809810",
+      "at": "2026-10-22T15:51:27.839Z",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "input": "Mouse",
+      "state": {
+        "turn": 4,
+        "tideLevel": 1,
+        "boatNodeId": "rabbit-pier",
+        "aboard": [
+          "rabbit-1",
+          "rabbit-2"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [
+            "sheep-1"
+          ],
+          "rabbit-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "environment": {
+        "waterY": 0.18,
+        "waterUniformY": 0.18,
+        "waterTime": 27.276500000000002,
+        "shallowSegments": 34,
+        "reducedMotion": false,
+        "arrival": {
+          "active": false,
+          "resting": false,
+          "intensity": 0,
+          "lampIntensity": 2.5,
+          "emissiveIntensity": 0.42,
+          "glowVisible": true,
+          "glowOpacity": 0.08
+        },
+        "contacts": {
+          "waterY": 0.18,
+          "meshes": [
+            {
+              "name": "water-contact-hull",
+              "worldY": -0.06603859787904173,
+              "localWaterY": 0.24603859787904173
+            },
+            {
+              "name": "water-contact-hull",
+              "worldY": 0.023961402120958264,
+              "localWaterY": 0.15603859787904173
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": -0.030000000000000027
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": -0.030000000000000027
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": -0.030000000000000027
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": -0.030000000000000027
+            },
+            {
+              "name": "water-contact-rabbit-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.33
+            },
+            {
+              "name": "water-contact-rabbit-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.33
+            },
+            {
+              "name": "water-contact-rabbit-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.33
+            },
+            {
+              "name": "water-contact-rabbit-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.33
+            }
+          ]
+        },
+        "forecast": {
+          "visible": false,
+          "tideY": null
+        },
+        "water": {
+          "time": 27.276500000000002,
+          "waterY": 0.18,
+          "arrival": 0,
+          "renderPasses": 1,
+          "reflectionTargets": 0,
+          "dataBytes": 524288,
+          "disposed": false
+        }
+      }
+    },
+    {
+      "path": "reviews/refinement/after/holding-first-rise-undo.png",
+      "sha256": "91ae9a196afbeb86ccaf9b3a823a9a3e11f075844a0a3d50287f71d94cb2f8d3",
+      "at": "2026-10-22T15:51:30.733Z",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "input": "Mouse",
+      "state": {
+        "turn": 3,
+        "tideLevel": 0,
+        "boatNodeId": "rabbit-pier",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [
+            "sheep-1"
+          ],
+          "rabbit-pier": [
+            "rabbit-1",
+            "rabbit-2"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "environment": {
+        "waterY": 0,
+        "waterUniformY": 0,
+        "waterTime": 30.126400000000004,
+        "shallowSegments": 34,
+        "reducedMotion": false,
+        "arrival": {
+          "active": false,
+          "resting": false,
+          "intensity": 0,
+          "lampIntensity": 2.5,
+          "emissiveIntensity": 0.42,
+          "glowVisible": true,
+          "glowOpacity": 0.08
+        },
+        "contacts": {
+          "waterY": 0,
+          "meshes": [
+            {
+              "name": "water-contact-hull",
+              "worldY": -0.16877739124063657,
+              "localWaterY": 0.16877739124063657
+            },
+            {
+              "name": "water-contact-hull",
+              "worldY": -0.07877739124063657,
+              "localWaterY": 0.07877739124063657
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": -0.21000000000000002
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": -0.21000000000000002
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": -0.21000000000000002
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": -0.21000000000000002
+            },
+            {
+              "name": "water-contact-rabbit-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.15000000000000002
+            },
+            {
+              "name": "water-contact-rabbit-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.15000000000000002
+            },
+            {
+              "name": "water-contact-rabbit-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.15000000000000002
+            },
+            {
+              "name": "water-contact-rabbit-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.15000000000000002
+            }
+          ]
+        },
+        "forecast": {
+          "visible": false,
+          "tideY": null
+        },
+        "water": {
+          "time": 30.126400000000004,
+          "waterY": 0,
+          "arrival": 0,
+          "renderPasses": 1,
+          "reflectionTargets": 0,
+          "dataBytes": 524288,
+          "disposed": false
+        }
+      }
+    },
+    {
+      "path": "reviews/refinement/after/holding-flooded-tide-2.png",
+      "sha256": "b1f4836df0c8a0025b6545819fcc5bf0e3a1325decaf8321c508afb4f4090c2b",
+      "at": "2026-10-22T15:51:40.354Z",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "input": "Mouse",
+      "state": {
+        "turn": 8,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "aboard": [
+          "rabbit-1",
+          "rabbit-2",
+          "sheep-1"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [],
+          "rabbit-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "environment": {
+        "waterY": 0.36,
+        "waterUniformY": 0.36,
+        "waterTime": 39.7593,
+        "shallowSegments": 34,
+        "reducedMotion": false,
+        "arrival": {
+          "active": false,
+          "resting": false,
+          "intensity": 0,
+          "lampIntensity": 2.5,
+          "emissiveIntensity": 0.42,
+          "glowVisible": true,
+          "glowOpacity": 0.08
+        },
+        "contacts": {
+          "waterY": 0.36,
+          "meshes": [
+            {
+              "name": "water-contact-hull",
+              "worldY": 0.057637437652918594,
+              "localWaterY": 0.30236256234708137
+            },
+            {
+              "name": "water-contact-hull",
+              "worldY": 0.1476374376529186,
+              "localWaterY": 0.2123625623470814
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": 0.14999999999999997
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": 0.14999999999999997
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": 0.14999999999999997
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": 0.14999999999999997
+            },
+            {
+              "name": "water-contact-rabbit-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.51
+            },
+            {
+              "name": "water-contact-rabbit-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.51
+            },
+            {
+              "name": "water-contact-rabbit-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.51
+            },
+            {
+              "name": "water-contact-rabbit-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.51
+            }
+          ]
+        },
+        "forecast": {
+          "visible": false,
+          "tideY": null
+        },
+        "water": {
+          "time": 39.7593,
+          "waterY": 0.36,
+          "arrival": 0,
+          "renderPasses": 1,
+          "reflectionTargets": 0,
+          "dataBytes": 524288,
+          "disposed": false
+        }
+      }
+    },
+    {
+      "path": "reviews/refinement/after/holding-tide-undo.png",
+      "sha256": "be57eecac5d2a40ea3560edebafe611f5e94d451caebf94b0e33a9a03751b2f6",
+      "at": "2026-10-22T15:51:43.172Z",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "input": "Mouse",
+      "state": {
+        "turn": 7,
+        "tideLevel": 1,
+        "boatNodeId": "stone",
+        "aboard": [
+          "rabbit-1",
+          "rabbit-2",
+          "sheep-1"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [],
+          "rabbit-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "environment": {
+        "waterY": 0.18,
+        "waterUniformY": 0.18,
+        "waterTime": 42.492599999999996,
+        "shallowSegments": 34,
+        "reducedMotion": false,
+        "arrival": {
+          "active": false,
+          "resting": false,
+          "intensity": 0,
+          "lampIntensity": 2.5,
+          "emissiveIntensity": 0.42,
+          "glowVisible": true,
+          "glowOpacity": 0.08
+        },
+        "contacts": {
+          "waterY": 0.18,
+          "meshes": [
+            {
+              "name": "water-contact-hull",
+              "worldY": -0.11936905688710994,
+              "localWaterY": 0.2993690568871099
+            },
+            {
+              "name": "water-contact-hull",
+              "worldY": -0.029369056887109946,
+              "localWaterY": 0.20936905688710994
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": -0.030000000000000027
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": -0.030000000000000027
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": -0.030000000000000027
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": -0.030000000000000027
+            },
+            {
+              "name": "water-contact-rabbit-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.33
+            },
+            {
+              "name": "water-contact-rabbit-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.33
+            },
+            {
+              "name": "water-contact-rabbit-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.33
+            },
+            {
+              "name": "water-contact-rabbit-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.33
+            }
+          ]
+        },
+        "forecast": {
+          "visible": false,
+          "tideY": null
+        },
+        "water": {
+          "time": 42.492599999999996,
+          "waterY": 0.18,
+          "arrival": 0,
+          "renderPasses": 1,
+          "reflectionTargets": 0,
+          "dataBytes": 524288,
+          "disposed": false
+        }
+      }
+    },
+    {
+      "path": "reviews/refinement/after/holding-delivery.png",
+      "sha256": "9a72a74868ec8df034f8ce3693452e0e0ebf011d377409fc2eb4458ef2d8fe7e",
+      "at": "2026-10-22T15:51:48.937Z",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "input": "Mouse",
+      "state": {
+        "turn": 9,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [],
+          "rabbit-pier": []
+        },
+        "delivered": [
+          "rabbit-1",
+          "rabbit-2",
+          "sheep-1"
+        ],
+        "status": "won",
+        "lossReason": null
+      },
+      "environment": {
+        "waterY": 0.36,
+        "waterUniformY": 0.36,
+        "waterTime": 48.2756,
+        "shallowSegments": 34,
+        "reducedMotion": false,
+        "arrival": {
+          "active": true,
+          "resting": false,
+          "intensity": 0.3349518061441372,
+          "lampIntensity": 3.1699036122882744,
+          "emissiveIntensity": 0.7549518061441371,
+          "glowVisible": true,
+          "glowOpacity": 0.16708746959747567
+        },
+        "contacts": {
+          "waterY": 0.36,
+          "meshes": [
+            {
+              "name": "water-contact-hull",
+              "worldY": 0.18948216540687846,
+              "localWaterY": 0.17051783459312153
+            },
+            {
+              "name": "water-contact-hull",
+              "worldY": 0.2794821654068784,
+              "localWaterY": 0.08051783459312156
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": 0.14999999999999997
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": 0.14999999999999997
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": 0.14999999999999997
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": 0.14999999999999997
+            },
+            {
+              "name": "water-contact-rabbit-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.51
+            },
+            {
+              "name": "water-contact-rabbit-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.51
+            },
+            {
+              "name": "water-contact-rabbit-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.51
+            },
+            {
+              "name": "water-contact-rabbit-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.51
+            }
+          ]
+        },
+        "forecast": {
+          "visible": false,
+          "tideY": null
+        },
+        "water": {
+          "time": 48.2756,
+          "waterY": 0.36,
+          "arrival": 0.3349518061441372,
+          "renderPasses": 1,
+          "reflectionTargets": 0,
+          "dataBytes": 524288,
+          "disposed": false
+        }
+      }
+    },
+    {
+      "path": "reviews/refinement/after/bellwater-ordinary.png",
+      "sha256": "1d8d256018af16ad5b1ede5ec4985c78b0845097117615cdc46d6bdbe4c4d064",
+      "at": "2026-10-22T15:52:11.683Z",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "input": "Mouse",
+      "state": {
+        "turn": 0,
+        "tideLevel": 0,
+        "boatNodeId": "harbor",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [
+            "tansy",
+            "lark"
+          ],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "environment": {
+        "waterY": 0,
+        "waterUniformY": 0,
+        "waterTime": 13.843100000000002,
+        "shallowSegments": 78,
+        "reducedMotion": false,
+        "arrival": {
+          "active": false,
+          "resting": false,
+          "intensity": 0,
+          "lampIntensity": 2.5,
+          "emissiveIntensity": 0.42,
+          "glowVisible": true,
+          "glowOpacity": 0.08
+        },
+        "contacts": {
+          "waterY": 0,
+          "meshes": [
+            {
+              "name": "water-contact-hull",
+              "worldY": -0.16256205930614848,
+              "localWaterY": 0.16256205930614848
+            },
+            {
+              "name": "water-contact-hull",
+              "worldY": -0.07256205930614848,
+              "localWaterY": 0.07256205930614848
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": -0.21000000000000002
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": -0.21000000000000002
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": -0.21000000000000002
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": -0.21000000000000002
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.15000000000000002
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.15000000000000002
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.15000000000000002
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.15000000000000002
+            }
+          ]
+        },
+        "forecast": {
+          "visible": false,
+          "tideY": null
+        },
+        "water": {
+          "time": 13.843100000000002,
+          "waterY": 0,
+          "arrival": 0,
+          "renderPasses": 1,
+          "reflectionTargets": 0,
+          "dataBytes": 524288,
+          "disposed": false
+        }
+      }
+    },
+    {
+      "path": "reviews/refinement/after/bellwater-after-second-rise.png",
+      "sha256": "1bd4e1f75d9748e1ef16c8ff46def140d4bbb58b2c5e3e60422920b3723300f9",
+      "at": "2026-10-22T15:52:34.893Z",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "input": "Mouse",
+      "state": {
+        "turn": 8,
+        "tideLevel": 2,
+        "boatNodeId": "bell-pier",
+        "aboard": [
+          "tansy",
+          "lark",
+          "bram"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "environment": {
+        "waterY": 0.36,
+        "waterUniformY": 0.36,
+        "waterTime": 36.9922,
+        "shallowSegments": 78,
+        "reducedMotion": false,
+        "arrival": {
+          "active": false,
+          "resting": false,
+          "intensity": 0,
+          "lampIntensity": 2.5,
+          "emissiveIntensity": 0.42,
+          "glowVisible": true,
+          "glowOpacity": 0.08
+        },
+        "contacts": {
+          "waterY": 0.36,
+          "meshes": [
+            {
+              "name": "water-contact-hull",
+              "worldY": 0.04310088239094445,
+              "localWaterY": 0.31689911760905554
+            },
+            {
+              "name": "water-contact-hull",
+              "worldY": 0.13310088239094445,
+              "localWaterY": 0.22689911760905554
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": 0.14999999999999997
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": 0.14999999999999997
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": 0.14999999999999997
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": 0.14999999999999997
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.51
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.51
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.51
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.51
+            }
+          ]
+        },
+        "forecast": {
+          "visible": false,
+          "tideY": null
+        },
+        "water": {
+          "time": 36.9922,
+          "waterY": 0.36,
+          "arrival": 0,
+          "renderPasses": 1,
+          "reflectionTargets": 0,
+          "dataBytes": 524288,
+          "disposed": false
+        }
+      }
+    },
+    {
+      "path": "reviews/refinement/after/bellwater-second-rise-undo.png",
+      "sha256": "cb3e3a6494fd77045b2f97a76f47dd6ad067ef1ae6be74f8544f4849f794c0d8",
+      "at": "2026-10-22T15:52:37.653Z",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "input": "Mouse",
+      "state": {
+        "turn": 7,
+        "tideLevel": 1,
+        "boatNodeId": "bell-pier",
+        "aboard": [
+          "tansy",
+          "lark"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "environment": {
+        "waterY": 0.18,
+        "waterUniformY": 0.18,
+        "waterTime": 39.775400000000005,
+        "shallowSegments": 78,
+        "reducedMotion": false,
+        "arrival": {
+          "active": false,
+          "resting": false,
+          "intensity": 0,
+          "lampIntensity": 2.5,
+          "emissiveIntensity": 0.42,
+          "glowVisible": true,
+          "glowOpacity": 0.08
+        },
+        "contacts": {
+          "waterY": 0.18,
+          "meshes": [
+            {
+              "name": "water-contact-hull",
+              "worldY": -0.047633964326972644,
+              "localWaterY": 0.22763396432697264
+            },
+            {
+              "name": "water-contact-hull",
+              "worldY": 0.04236603567302735,
+              "localWaterY": 0.13763396432697264
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": -0.030000000000000027
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": -0.030000000000000027
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": -0.030000000000000027
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": -0.030000000000000027
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.33
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.33
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.33
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.33
+            }
+          ]
+        },
+        "forecast": {
+          "visible": false,
+          "tideY": null
+        },
+        "water": {
+          "time": 39.775400000000005,
+          "waterY": 0.18,
+          "arrival": 0,
+          "renderPasses": 1,
+          "reflectionTargets": 0,
+          "dataBytes": 524288,
+          "disposed": false
+        }
+      }
+    },
+    {
+      "path": "reviews/refinement/after/bellwater-loaded-harbor.png",
+      "sha256": "04bb2e2382733c2cade6ef6cfe7ebf6ec217ddefc7d4bec8230f288de738541c",
+      "at": "2026-10-22T15:52:43.297Z",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "input": "Mouse",
+      "state": {
+        "turn": 9,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "aboard": [
+          "tansy",
+          "lark",
+          "bram"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "environment": {
+        "waterY": 0.36,
+        "waterUniformY": 0.36,
+        "waterTime": 45.5252,
+        "shallowSegments": 78,
+        "reducedMotion": false,
+        "arrival": {
+          "active": false,
+          "resting": false,
+          "intensity": 0,
+          "lampIntensity": 2.5,
+          "emissiveIntensity": 0.42,
+          "glowVisible": true,
+          "glowOpacity": 0.08
+        },
+        "contacts": {
+          "waterY": 0.36,
+          "meshes": [
+            {
+              "name": "water-contact-hull",
+              "worldY": 0.05313076098360439,
+              "localWaterY": 0.3068692390163956
+            },
+            {
+              "name": "water-contact-hull",
+              "worldY": 0.1431307609836044,
+              "localWaterY": 0.2168692390163956
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": 0.14999999999999997
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": 0.14999999999999997
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": 0.14999999999999997
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": 0.14999999999999997
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.51
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.51
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.51
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.51
+            }
+          ]
+        },
+        "forecast": {
+          "visible": false,
+          "tideY": null
+        },
+        "water": {
+          "time": 45.5252,
+          "waterY": 0.36,
+          "arrival": 0,
+          "renderPasses": 1,
+          "reflectionTargets": 0,
+          "dataBytes": 524288,
+          "disposed": false
+        }
+      }
+    },
+    {
+      "path": "reviews/refinement/after/bellwater-delivery.png",
+      "sha256": "03d1a817b4bf49f07ff6f4b1c34b90273fb235f89c64d80555250d002ebee988",
+      "at": "2026-10-22T15:52:47.067Z",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "input": "Mouse",
+      "state": {
+        "turn": 10,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": []
+        },
+        "delivered": [
+          "tansy",
+          "lark",
+          "bram"
+        ],
+        "status": "won",
+        "lossReason": null
+      },
+      "environment": {
+        "waterY": 0.36,
+        "waterUniformY": 0.36,
+        "waterTime": 49.2584,
+        "shallowSegments": 78,
+        "reducedMotion": false,
+        "arrival": {
+          "active": true,
+          "resting": false,
+          "intensity": 0.34790294310943615,
+          "lampIntensity": 3.1958058862188725,
+          "emissiveIntensity": 0.7679029431094362,
+          "glowVisible": true,
+          "glowOpacity": 0.1704547652084534
+        },
+        "contacts": {
+          "waterY": 0.36,
+          "meshes": [
+            {
+              "name": "water-contact-hull",
+              "worldY": 0.20773543610414907,
+              "localWaterY": 0.1522645638958509
+            },
+            {
+              "name": "water-contact-hull",
+              "worldY": 0.2977354361041491,
+              "localWaterY": 0.06226456389585089
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": 0.14999999999999997
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": 0.14999999999999997
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": 0.14999999999999997
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": 0.14999999999999997
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.51
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.51
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.51
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.51
+            }
+          ]
+        },
+        "forecast": {
+          "visible": false,
+          "tideY": null
+        },
+        "water": {
+          "time": 49.2584,
+          "waterY": 0.36,
+          "arrival": 0.34790294310943615,
+          "renderPasses": 1,
+          "reflectionTargets": 0,
+          "dataBytes": 524288,
+          "disposed": false
+        }
+      }
+    },
+    {
+      "path": "reviews/refinement/after/bellwater-phone-844-ordinary.png",
+      "sha256": "45cadd467ece56c4e66df672635b1d091abfe46a5b4735f34cd8a6ad68e36980",
+      "at": "2026-10-22T15:53:02.034Z",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "input": "Chromium emulated touch",
+      "state": {
+        "turn": 0,
+        "tideLevel": 0,
+        "boatNodeId": "harbor",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [
+            "tansy",
+            "lark"
+          ],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "environment": {
+        "waterY": 0,
+        "waterUniformY": 0,
+        "waterTime": 2.2536,
+        "shallowSegments": 78,
+        "reducedMotion": false,
+        "arrival": {
+          "active": false,
+          "resting": false,
+          "intensity": 0,
+          "lampIntensity": 2.5,
+          "emissiveIntensity": 0.42,
+          "glowVisible": true,
+          "glowOpacity": 0.08
+        },
+        "contacts": {
+          "waterY": 0,
+          "meshes": [
+            {
+              "name": "water-contact-hull",
+              "worldY": -0.1695099266409822,
+              "localWaterY": 0.1695099266409822
+            },
+            {
+              "name": "water-contact-hull",
+              "worldY": -0.07950992664098219,
+              "localWaterY": 0.07950992664098219
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": -0.21000000000000002
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": -0.21000000000000002
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": -0.21000000000000002
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": -0.21000000000000002
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.15000000000000002
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.15000000000000002
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.15000000000000002
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.15000000000000002
+            }
+          ]
+        },
+        "forecast": {
+          "visible": false,
+          "tideY": null
+        },
+        "water": {
+          "time": 2.2536,
+          "waterY": 0,
+          "arrival": 0,
+          "renderPasses": 1,
+          "reflectionTargets": 0,
+          "dataBytes": 524288,
+          "disposed": false
+        }
+      }
+    },
+    {
+      "path": "reviews/refinement/after/bellwater-phone-844-loaded.png",
+      "sha256": "bf6fd8e14ce9c112967c38f4655d17a5d7e0616e430d9db1321f9b8a8521f580",
+      "at": "2026-10-22T15:53:20.372Z",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "input": "Chromium emulated touch",
+      "state": {
+        "turn": 9,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "aboard": [
+          "tansy",
+          "lark",
+          "bram"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "environment": {
+        "waterY": 0.36,
+        "waterUniformY": 0.36,
+        "waterTime": 20.386200000000002,
+        "shallowSegments": 78,
+        "reducedMotion": false,
+        "arrival": {
+          "active": false,
+          "resting": false,
+          "intensity": 0,
+          "lampIntensity": 2.5,
+          "emissiveIntensity": 0.42,
+          "glowVisible": true,
+          "glowOpacity": 0.08
+        },
+        "contacts": {
+          "waterY": 0.36,
+          "meshes": [
+            {
+              "name": "water-contact-hull",
+              "worldY": 0.039876804817602696,
+              "localWaterY": 0.3201231951823973
+            },
+            {
+              "name": "water-contact-hull",
+              "worldY": 0.1298768048176027,
+              "localWaterY": 0.2301231951823973
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": 0.14999999999999997
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": 0.14999999999999997
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": 0.14999999999999997
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": 0.14999999999999997
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.51
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.51
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.51
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.51
+            }
+          ]
+        },
+        "forecast": {
+          "visible": false,
+          "tideY": null
+        },
+        "water": {
+          "time": 20.386200000000002,
+          "waterY": 0.36,
+          "arrival": 0,
+          "renderPasses": 1,
+          "reflectionTargets": 0,
+          "dataBytes": 524288,
+          "disposed": false
+        }
+      }
+    },
+    {
+      "path": "reviews/refinement/after/bellwater-phone-780-ordinary.png",
+      "sha256": "fde55b23e74655c0a1ea3da20e5247a40343f836d1648f784a4bc01374eb4ecc",
+      "at": "2026-10-22T15:53:23.757Z",
+      "viewport": {
+        "width": 780,
+        "height": 390
+      },
+      "input": "Chromium emulated touch",
+      "state": {
+        "turn": 0,
+        "tideLevel": 0,
+        "boatNodeId": "harbor",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [
+            "tansy",
+            "lark"
+          ],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "environment": {
+        "waterY": 0,
+        "waterUniformY": 0,
+        "waterTime": 2.3369,
+        "shallowSegments": 78,
+        "reducedMotion": false,
+        "arrival": {
+          "active": false,
+          "resting": false,
+          "intensity": 0,
+          "lampIntensity": 2.5,
+          "emissiveIntensity": 0.42,
+          "glowVisible": true,
+          "glowOpacity": 0.08
+        },
+        "contacts": {
+          "waterY": 0,
+          "meshes": [
+            {
+              "name": "water-contact-hull",
+              "worldY": -0.17049646316463085,
+              "localWaterY": 0.17049646316463085
+            },
+            {
+              "name": "water-contact-hull",
+              "worldY": -0.08049646316463087,
+              "localWaterY": 0.08049646316463087
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": -0.21000000000000002
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": -0.21000000000000002
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": -0.21000000000000002
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": -0.21000000000000002
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.15000000000000002
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.15000000000000002
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.15000000000000002
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.15000000000000002
+            }
+          ]
+        },
+        "forecast": {
+          "visible": false,
+          "tideY": null
+        },
+        "water": {
+          "time": 2.3369,
+          "waterY": 0,
+          "arrival": 0,
+          "renderPasses": 1,
+          "reflectionTargets": 0,
+          "dataBytes": 524288,
+          "disposed": false
+        }
+      }
+    },
+    {
+      "path": "reviews/refinement/after/bellwater-phone-780-loaded.png",
+      "sha256": "dd22f3a1467f9642bebab768b063fd8d871f04f73dea34638023df9f3c89af91",
+      "at": "2026-10-22T15:53:42.750Z",
+      "viewport": {
+        "width": 780,
+        "height": 390
+      },
+      "input": "Chromium emulated touch",
+      "state": {
+        "turn": 9,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "aboard": [
+          "tansy",
+          "lark",
+          "bram"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      "environment": {
+        "waterY": 0.36,
+        "waterUniformY": 0.36,
+        "waterTime": 21.2694,
+        "shallowSegments": 78,
+        "reducedMotion": false,
+        "arrival": {
+          "active": false,
+          "resting": false,
+          "intensity": 0,
+          "lampIntensity": 2.5,
+          "emissiveIntensity": 0.42,
+          "glowVisible": true,
+          "glowOpacity": 0.08
+        },
+        "contacts": {
+          "waterY": 0.36,
+          "meshes": [
+            {
+              "name": "water-contact-hull",
+              "worldY": 0.056634475665498674,
+              "localWaterY": 0.3033655243345013
+            },
+            {
+              "name": "water-contact-hull",
+              "worldY": 0.14663447566549867,
+              "localWaterY": 0.21336552433450132
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": 0.14999999999999997
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": 0.14999999999999997
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": 0.14999999999999997
+            },
+            {
+              "name": "water-contact-harbor-pier",
+              "worldY": 0.21000000000000002,
+              "localWaterY": 0.14999999999999997
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.51
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.51
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.51
+            },
+            {
+              "name": "water-contact-low-pier",
+              "worldY": -0.15000000000000002,
+              "localWaterY": 0.51
+            }
+          ]
+        },
+        "forecast": {
+          "visible": false,
+          "tideY": null
+        },
+        "water": {
+          "time": 21.2694,
+          "waterY": 0.36,
+          "arrival": 0,
+          "renderPasses": 1,
+          "reflectionTargets": 0,
+          "dataBytes": 524288,
+          "disposed": false
+        }
+      }
+    }
+  ],
+  "actions": [
+    {
+      "id": "unload",
+      "elapsedMs": 997,
+      "at": "2026-10-22T15:51:19.540Z",
+      "state": {
+        "turn": 1,
+        "tideLevel": 0,
+        "boatNodeId": "stone",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [
+            "sheep-1"
+          ],
+          "rabbit-pier": [
+            "rabbit-1",
+            "rabbit-2"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-shallows",
+      "elapsedMs": 2604,
+      "at": "2026-10-22T15:51:22.147Z",
+      "state": {
+        "turn": 2,
+        "tideLevel": 0,
+        "boatNodeId": "shallows",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [
+            "sheep-1"
+          ],
+          "rabbit-pier": [
+            "rabbit-1",
+            "rabbit-2"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-rabbit-pier",
+      "elapsedMs": 1669,
+      "at": "2026-10-22T15:51:24.002Z",
+      "state": {
+        "turn": 3,
+        "tideLevel": 0,
+        "boatNodeId": "rabbit-pier",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [
+            "sheep-1"
+          ],
+          "rabbit-pier": [
+            "rabbit-1",
+            "rabbit-2"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "board",
+      "elapsedMs": 1301,
+      "at": "2026-10-22T15:51:25.304Z",
+      "state": {
+        "turn": 4,
+        "tideLevel": 1,
+        "boatNodeId": "rabbit-pier",
+        "aboard": [
+          "rabbit-1",
+          "rabbit-2"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [
+            "sheep-1"
+          ],
+          "rabbit-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "board",
+      "elapsedMs": 1046,
+      "at": "2026-10-22T15:51:32.002Z",
+      "state": {
+        "turn": 4,
+        "tideLevel": 1,
+        "boatNodeId": "rabbit-pier",
+        "aboard": [
+          "rabbit-1",
+          "rabbit-2"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [
+            "sheep-1"
+          ],
+          "rabbit-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-shallows",
+      "elapsedMs": 1609,
+      "at": "2026-10-22T15:51:33.613Z",
+      "state": {
+        "turn": 5,
+        "tideLevel": 1,
+        "boatNodeId": "shallows",
+        "aboard": [
+          "rabbit-1",
+          "rabbit-2"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [
+            "sheep-1"
+          ],
+          "rabbit-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-stone",
+      "elapsedMs": 1662,
+      "at": "2026-10-22T15:51:35.284Z",
+      "state": {
+        "turn": 6,
+        "tideLevel": 1,
+        "boatNodeId": "stone",
+        "aboard": [
+          "rabbit-1",
+          "rabbit-2"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [
+            "sheep-1"
+          ],
+          "rabbit-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "board",
+      "elapsedMs": 985,
+      "at": "2026-10-22T15:51:36.273Z",
+      "state": {
+        "turn": 7,
+        "tideLevel": 1,
+        "boatNodeId": "stone",
+        "aboard": [
+          "rabbit-1",
+          "rabbit-2",
+          "sheep-1"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [],
+          "rabbit-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-harbor",
+      "elapsedMs": 1949,
+      "at": "2026-10-22T15:51:38.230Z",
+      "state": {
+        "turn": 8,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "aboard": [
+          "rabbit-1",
+          "rabbit-2",
+          "sheep-1"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [],
+          "rabbit-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-harbor",
+      "elapsedMs": 2070,
+      "at": "2026-10-22T15:51:45.364Z",
+      "state": {
+        "turn": 8,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "aboard": [
+          "rabbit-1",
+          "rabbit-2",
+          "sheep-1"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [],
+          "rabbit-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "unload",
+      "elapsedMs": 1487,
+      "at": "2026-10-22T15:51:46.853Z",
+      "state": {
+        "turn": 9,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "stone-pier": [],
+          "rabbit-pier": []
+        },
+        "delivered": [
+          "rabbit-1",
+          "rabbit-2",
+          "sheep-1"
+        ],
+        "status": "won",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-west-buoy",
+      "elapsedMs": 1620,
+      "at": "2026-10-22T15:52:14.177Z",
+      "state": {
+        "turn": 1,
+        "tideLevel": 0,
+        "boatNodeId": "west-buoy",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [
+            "tansy",
+            "lark"
+          ],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-east-buoy",
+      "elapsedMs": 3072,
+      "at": "2026-10-22T15:52:17.251Z",
+      "state": {
+        "turn": 2,
+        "tideLevel": 0,
+        "boatNodeId": "east-buoy",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [
+            "tansy",
+            "lark"
+          ],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-shallows",
+      "elapsedMs": 1957,
+      "at": "2026-10-22T15:52:19.795Z",
+      "state": {
+        "turn": 1,
+        "tideLevel": 0,
+        "boatNodeId": "shallows",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [
+            "tansy",
+            "lark"
+          ],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-low-pier",
+      "elapsedMs": 1900,
+      "at": "2026-10-22T15:52:21.696Z",
+      "state": {
+        "turn": 2,
+        "tideLevel": 0,
+        "boatNodeId": "low-pier",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [
+            "tansy",
+            "lark"
+          ],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "board",
+      "elapsedMs": 1146,
+      "at": "2026-10-22T15:52:22.844Z",
+      "state": {
+        "turn": 3,
+        "tideLevel": 0,
+        "boatNodeId": "low-pier",
+        "aboard": [
+          "tansy",
+          "lark"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-east-buoy",
+      "elapsedMs": 1797,
+      "at": "2026-10-22T15:52:24.647Z",
+      "state": {
+        "turn": 4,
+        "tideLevel": 1,
+        "boatNodeId": "east-buoy",
+        "aboard": [
+          "tansy",
+          "lark"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-west-buoy",
+      "elapsedMs": 2693,
+      "at": "2026-10-22T15:52:27.370Z",
+      "state": {
+        "turn": 5,
+        "tideLevel": 1,
+        "boatNodeId": "west-buoy",
+        "aboard": [
+          "tansy",
+          "lark"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-harbor",
+      "elapsedMs": 1709,
+      "at": "2026-10-22T15:52:29.162Z",
+      "state": {
+        "turn": 6,
+        "tideLevel": 1,
+        "boatNodeId": "harbor",
+        "aboard": [
+          "tansy",
+          "lark"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-bell-pier",
+      "elapsedMs": 2223,
+      "at": "2026-10-22T15:52:31.391Z",
+      "state": {
+        "turn": 7,
+        "tideLevel": 1,
+        "boatNodeId": "bell-pier",
+        "aboard": [
+          "tansy",
+          "lark"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "board",
+      "elapsedMs": 1295,
+      "at": "2026-10-22T15:52:32.687Z",
+      "state": {
+        "turn": 8,
+        "tideLevel": 2,
+        "boatNodeId": "bell-pier",
+        "aboard": [
+          "tansy",
+          "lark",
+          "bram"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "board",
+      "elapsedMs": 1099,
+      "at": "2026-10-22T15:52:38.946Z",
+      "state": {
+        "turn": 8,
+        "tideLevel": 2,
+        "boatNodeId": "bell-pier",
+        "aboard": [
+          "tansy",
+          "lark",
+          "bram"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-harbor",
+      "elapsedMs": 2186,
+      "at": "2026-10-22T15:52:41.133Z",
+      "state": {
+        "turn": 9,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "aboard": [
+          "tansy",
+          "lark",
+          "bram"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "unload",
+      "elapsedMs": 1429,
+      "at": "2026-10-22T15:52:45.168Z",
+      "state": {
+        "turn": 10,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": []
+        },
+        "delivered": [
+          "tansy",
+          "lark",
+          "bram"
+        ],
+        "status": "won",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-shallows",
+      "elapsedMs": 2269,
+      "at": "2026-10-22T15:53:04.649Z",
+      "state": {
+        "turn": 1,
+        "tideLevel": 0,
+        "boatNodeId": "shallows",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [
+            "tansy",
+            "lark"
+          ],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-low-pier",
+      "elapsedMs": 1951,
+      "at": "2026-10-22T15:53:06.602Z",
+      "state": {
+        "turn": 2,
+        "tideLevel": 0,
+        "boatNodeId": "low-pier",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [
+            "tansy",
+            "lark"
+          ],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "board",
+      "elapsedMs": 1088,
+      "at": "2026-10-22T15:53:07.718Z",
+      "state": {
+        "turn": 3,
+        "tideLevel": 0,
+        "boatNodeId": "low-pier",
+        "aboard": [
+          "tansy",
+          "lark"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-east-buoy",
+      "elapsedMs": 1539,
+      "at": "2026-10-22T15:53:09.260Z",
+      "state": {
+        "turn": 4,
+        "tideLevel": 1,
+        "boatNodeId": "east-buoy",
+        "aboard": [
+          "tansy",
+          "lark"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-west-buoy",
+      "elapsedMs": 2296,
+      "at": "2026-10-22T15:53:11.560Z",
+      "state": {
+        "turn": 5,
+        "tideLevel": 1,
+        "boatNodeId": "west-buoy",
+        "aboard": [
+          "tansy",
+          "lark"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-harbor",
+      "elapsedMs": 1694,
+      "at": "2026-10-22T15:53:13.259Z",
+      "state": {
+        "turn": 6,
+        "tideLevel": 1,
+        "boatNodeId": "harbor",
+        "aboard": [
+          "tansy",
+          "lark"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-bell-pier",
+      "elapsedMs": 2153,
+      "at": "2026-10-22T15:53:15.416Z",
+      "state": {
+        "turn": 7,
+        "tideLevel": 1,
+        "boatNodeId": "bell-pier",
+        "aboard": [
+          "tansy",
+          "lark"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "board",
+      "elapsedMs": 946,
+      "at": "2026-10-22T15:53:16.364Z",
+      "state": {
+        "turn": 8,
+        "tideLevel": 2,
+        "boatNodeId": "bell-pier",
+        "aboard": [
+          "tansy",
+          "lark",
+          "bram"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-harbor",
+      "elapsedMs": 2192,
+      "at": "2026-10-22T15:53:18.557Z",
+      "state": {
+        "turn": 9,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "aboard": [
+          "tansy",
+          "lark",
+          "bram"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-shallows",
+      "elapsedMs": 2223,
+      "at": "2026-10-22T15:53:26.153Z",
+      "state": {
+        "turn": 1,
+        "tideLevel": 0,
+        "boatNodeId": "shallows",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [
+            "tansy",
+            "lark"
+          ],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-low-pier",
+      "elapsedMs": 2688,
+      "at": "2026-10-22T15:53:28.862Z",
+      "state": {
+        "turn": 2,
+        "tideLevel": 0,
+        "boatNodeId": "low-pier",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [
+            "tansy",
+            "lark"
+          ],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "board",
+      "elapsedMs": 1202,
+      "at": "2026-10-22T15:53:30.143Z",
+      "state": {
+        "turn": 3,
+        "tideLevel": 0,
+        "boatNodeId": "low-pier",
+        "aboard": [
+          "tansy",
+          "lark"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-east-buoy",
+      "elapsedMs": 1580,
+      "at": "2026-10-22T15:53:31.740Z",
+      "state": {
+        "turn": 4,
+        "tideLevel": 1,
+        "boatNodeId": "east-buoy",
+        "aboard": [
+          "tansy",
+          "lark"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-west-buoy",
+      "elapsedMs": 2283,
+      "at": "2026-10-22T15:53:34.025Z",
+      "state": {
+        "turn": 5,
+        "tideLevel": 1,
+        "boatNodeId": "west-buoy",
+        "aboard": [
+          "tansy",
+          "lark"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-harbor",
+      "elapsedMs": 1668,
+      "at": "2026-10-22T15:53:35.718Z",
+      "state": {
+        "turn": 6,
+        "tideLevel": 1,
+        "boatNodeId": "harbor",
+        "aboard": [
+          "tansy",
+          "lark"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-bell-pier",
+      "elapsedMs": 2141,
+      "at": "2026-10-22T15:53:37.863Z",
+      "state": {
+        "turn": 7,
+        "tideLevel": 1,
+        "boatNodeId": "bell-pier",
+        "aboard": [
+          "tansy",
+          "lark"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": [
+            "bram"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "board",
+      "elapsedMs": 1088,
+      "at": "2026-10-22T15:53:38.962Z",
+      "state": {
+        "turn": 8,
+        "tideLevel": 2,
+        "boatNodeId": "bell-pier",
+        "aboard": [
+          "tansy",
+          "lark",
+          "bram"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "id": "map-harbor",
+      "elapsedMs": 2172,
+      "at": "2026-10-22T15:53:41.140Z",
+      "state": {
+        "turn": 9,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "aboard": [
+          "tansy",
+          "lark",
+          "bram"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "low-pier": [],
+          "bell-pier": []
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    }
+  ],
+  "recordings": [
+    {
+      "path": "reviews/refinement/after/raw/holding-pier-uninterrupted.webm",
+      "sha256": "06b62effbc26ab54f8553b71d1a5f33d2842bf90e4e995b6fd45da734a1c23f7",
+      "method": "Uninterrupted Playwright actual UI original-speed silent video. Idle, crossing, complete rescue, tide Undo, delivery; Bellwater includes explicit restart after long crossing performance sample. No state injection/cuts/speed change."
+    },
+    {
+      "path": "reviews/refinement/after/raw/bellwater-uninterrupted.webm",
+      "sha256": "22be6ce8beb5a9156ac0d8c587fd69acdd83c4628bd394f60009696b34fdca7c",
+      "method": "Uninterrupted Playwright actual UI original-speed silent video. Idle, crossing, complete rescue, tide Undo, delivery; Bellwater includes explicit restart after long crossing performance sample. No state injection/cuts/speed change."
+    }
+  ],
+  "errors": [],
+  "sourceUnchangedAcrossExecution": true,
+  "environment": {
+    "os": "Windows 11 Pro",
+    "node": "v24.15.0",
+    "browser": "156.0.8078.4",
+    "renderer": "SwiftShader software WebGL; DPR1; no physical-device claim",
+    "baseURL": "http://127.0.0.1:5185"
+  },
+  "finishedAt": "2026-10-22T15:53:43.704Z",
+  "raw": {
+    "path": "reviews/refinement/after/raw/capture-manifest.full.json",
+    "sha256": "dff0062ea1c358cd3b9f52e5b3784f621c203d4ac07809276261ce15bd07471c",
+    "bytes": 1008443
+  }
+}

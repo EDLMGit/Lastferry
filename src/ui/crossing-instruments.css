@@ -1,0 +1,176 @@
+#app #load-toggle,
+#app #status-toggle {
+  box-sizing: border-box;
+  white-space: normal;
+  text-align: left;
+  color: var(--cove-ivory);
+  font-size: 14px;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+#app #load-toggle,
+.gallery-ferry-instrument {
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  width: max-content;
+  padding: 5px 8px;
+  border: 1px solid var(--cove-surface-rim);
+  border-radius: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.gauge-goal, .gauge-pair, .gauge-load, .gauge-water, .gauge-water > span:last-child {
+  display: flex;
+}
+
+.gauge-goal {
+  gap: 5px;
+  align-items: center;
+  padding-bottom: 3px;
+  border-bottom: 1px solid #c8b99266;
+}
+
+.gauge-goal > .cove-glyph {
+  width: 19px;
+  height: 20px;
+  flex: none;
+  color: var(--cove-warm-top);
+}
+
+.gauge-goal > span {
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.gauge-pair {
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+
+.gauge-goal strong {
+  font: bold 15px/1.1 Georgia, serif;
+  color: var(--cove-warm-top);
+}
+
+.gauge-goal > span, .gauge-load, .gauge-water,
+#app #status-toggle .tide-taken,
+#app #status-toggle .tide-passengers {
+  font-weight: 400;
+}
+
+.gauge-load, .gauge-water > span:last-child {
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.deck-plan { width: 59px; height: 24px; }
+.deck-sheer { fill: #102f37; stroke: #afc8b9; stroke-width: 1.6; }
+.deck-stem { fill: none; stroke: #afc8b9; stroke-width: 1.6; }
+.deck-slot { fill: none; stroke: #8ca7a0; stroke-width: 1; }
+.deck-slot.occupied { fill: #f0cd8b; stroke: #ffe2aa; }
+
+.gauge-water {
+  align-items: center;
+  gap: 4px;
+  border-inline-start: 1px solid #c8b99266;
+  padding-inline-start: 5px;
+}
+.gauge-water > span:last-child {
+  gap: 3px;
+}
+.gauge-water .hull-label { color: #ffe2aa; }
+.gauge-water .depth-mark {
+  width: 29px;
+  height: 39px;
+}
+.gauge-water .depth-mark::after {
+  content: '';
+  position: absolute;
+  inset: 0 1px 0 auto;
+  width: 7px;
+  background: repeating-linear-gradient(to top, #e0eee0 0 1px, transparent 1px var(--depth-step));
+}
+.gauge-water .depth-waterline {
+  border: 0;
+  border-top: 2px solid #edfff3;
+  background: #71acac;
+}
+.gauge-water .depth-notch {
+  z-index: 1;
+  height: 10px;
+  width: 15px;
+  background: #ffda96;
+  filter: drop-shadow(0 1px #0e2e35);
+}
+
+#app #status-toggle.cove-panel {
+  display: grid;
+  justify-items: start;
+  gap: 3px;
+  width: max-content;
+  max-width: min(219px, 42vw);
+  padding: 7px 8px;
+  border-radius: 12px;
+}
+
+#app #status-toggle .tide-taken { color: var(--cove-secondary); }
+
+.tide-numbers,
+.tide-countdown {
+  display: flex;
+  align-items: center;
+}
+.tide-numbers { flex-wrap: wrap; gap: 2px 4px; }
+.tide-countdown {
+  gap: 3px;
+  color: var(--cove-warm-top);
+  font-weight: 700;
+}
+.tide-countdown .tide-mark {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+.tide-numbers .tide-taken {
+  border-inline-start: 1px solid #c8b99270;
+  padding-inline-start: 4px;
+}
+#app #status-headline {
+  font-size: 15px;
+  line-height: 1.15;
+}
+
+#app #find-home {
+  min-height: 44px;
+}
+
+@media (min-width: 581px) and (max-width: 1000px) and (max-height: 450px) {
+  #app #load-toggle, #app #status-toggle {
+    translate: var(--reading-x, 0) var(--reading-y, 0);
+  }
+}
+
+@media (min-width: 581px) {
+  #app #crossing-details {
+    --details-left: calc(max(8px, var(--safe-left)) + 183px);
+    --details-top: max(8px, var(--safe-top));
+  }
+}
+
+@media (max-width: 580px) {
+  #app #status-toggle.cove-panel { max-width: min(275px, calc(var(--viewport-width) - max(8px, var(--safe-left)) - max(8px, var(--safe-right)))); }
+  #app #crossing-details {
+    --details-left: max(8px, var(--safe-left));
+    --details-top: calc(max(8px, var(--safe-top)) + 145px);
+  }
+}
+
+#app #crossing-details {
+  box-sizing: border-box;
+  inset: var(--details-top) auto auto var(--details-left);
+  width: min(300px, calc(var(--viewport-width) - var(--details-left) - max(8px, var(--safe-right))));
+  max-height: calc(var(--viewport-height) - var(--details-top) - max(8px, var(--safe-bottom)));
+}

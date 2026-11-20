@@ -1,0 +1,26 @@
+
+> last-ferry@1.0.0 test:e2e
+> playwright test home-play-flow.spec.ts
+
+[WebServer] (node:29848) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] [plugin builtin:vite-reporter] 
+[WebServer] (!) Some chunks are larger than 500 kB after minification. Consider:
+[WebServer] - Using dynamic import() to code-split the application
+[WebServer] - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+[WebServer] - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[WebServer] (node:16472) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 6 tests using 1 worker
+
+(node:43400) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\e2e\home-play-flow.spec.ts:156:1 › integrated cold-touch Home autoplay direct transfers and two actual rescues with runtime audio (22.2s)
+(node:31572) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 2 tests\e2e\home-play-flow.spec.ts:300:1 › native Home and story fit, orientation, Options focus and inactive gameplay (25.3s)
+  ok 3 tests\e2e\home-play-flow.spec.ts:385:1 › first pointer and natural keyboard Play produce score output; mute and fresh final intent survive autoplay (48.9s)
+  ok 4 tests\e2e\home-play-flow.spec.ts:449:1 › checkpoint, invalid-byte recovery, replacement, practice isolation and unavailable storage (21.7s)
+  ok 5 tests\e2e\home-play-flow.spec.ts:515:1 › pending sound Retry and late completion after mute or hide use one owner (17.3s)
+  x  6 tests\e2e\home-play-flow.spec.ts:620:1 › reduced motion, mixed and same-band delivery, repeat input, fullscreen and production root (15.8s)

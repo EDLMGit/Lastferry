@@ -1,0 +1,233 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      ".cache/journey-six.config.ts",
+      "journey-six-coves.spec.ts",
+      "--grep",
+      "legacy Wide"
+    ],
+    "configFile": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\.cache\\journey-six.config.ts",
+    "rootDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/test-results/journey-six-evidence",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 360000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\journey-six-evidence",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "snapshotDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 360000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5295",
+          "headless": true
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../reviews/journey-six-coves/phone/automation-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "journey-six-coves.spec.ts",
+      "file": "journey-six-coves.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "legacy Wide rescue to both authored scenes and actual continuation 390x844",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 360000,
+              "annotations": [
+                {
+                  "type": "captured working tree",
+                  "description": "cd959f33d85986bb6d00664f48e2d4d43c08fc0b5c98c9eaf1aed5e70e97531e"
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 91810,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m350\u001b[39m\nReceived:   \u001b[31m408.337158203125\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m350\u001b[39m\nReceived:   \u001b[31m408.337158203125\u001b[39m\n    at keepRecordedPictures (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\journey-six-support.ts:176:33)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\journey-six-coves.spec.ts:188:9",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\journey-six-support.ts",
+                      "column": 33,
+                      "line": 176
+                    },
+                    "snippet": "\u001b[90m   at \u001b[39mjourney-six-support.ts:176\n\n  174 |         Math.abs(item.timestamp * 1000 - target) < Math.abs(best.timestamp * 1000 - target) ? item : best);\n  175 |       const deltaMs = nearest.timestamp * 1000 - target;\n> 176 |       expect(Math.abs(deltaMs)).toBeLessThan(350);\n      |                                 ^\n  177 |       if (beat === 'begin') expect(before.elapsed + deltaMs).toBeGreaterThanOrEqual(0);\n  178 |       copyFileSync(nearest.path, join(images, name + '.jpg'));\n  179 |       report(images, name + '-frame', { nearest, deltaMs, target, before, after });"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\journey-six-support.ts",
+                        "column": 33,
+                        "line": 176
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m350\u001b[39m\nReceived:   \u001b[31m408.337158203125\u001b[39m\n\n   at journey-six-support.ts:176\n\n  174 |         Math.abs(item.timestamp * 1000 - target) < Math.abs(best.timestamp * 1000 - target) ? item : best);\n  175 |       const deltaMs = nearest.timestamp * 1000 - target;\n> 176 |       expect(Math.abs(deltaMs)).toBeLessThan(350);\n      |                                 ^\n  177 |       if (beat === 'begin') expect(before.elapsed + deltaMs).toBeGreaterThanOrEqual(0);\n  178 |       copyFileSync(nearest.path, join(images, name + '.jpg'));\n  179 |       report(images, name + '-frame', { nearest, deltaMs, target, before, after });\n    at keepRecordedPictures (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\journey-six-support.ts:176:33)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\journey-six-coves.spec.ts:188:9"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T20:58:22.144Z",
+                  "annotations": [
+                    {
+                      "type": "captured working tree",
+                      "description": "cd959f33d85986bb6d00664f48e2d4d43c08fc0b5c98c9eaf1aed5e70e97531e"
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\journey-six-evidence\\journey-six-coves-legacy-W-0a0c8-actual-continuation-390x844\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\journey-six-support.ts",
+                    "column": 33,
+                    "line": 176
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "accccf92fbbee802fc0a-45d0b79dc5d384e031b9",
+          "file": "journey-six-coves.spec.ts",
+          "line": 120,
+          "column": 3
+        },
+        {
+          "title": "legacy Wide rescue to both authored scenes and actual continuation 780x320",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 360000,
+              "annotations": [
+                {
+                  "type": "captured working tree",
+                  "description": "cd959f33d85986bb6d00664f48e2d4d43c08fc0b5c98c9eaf1aed5e70e97531e"
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 63381,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T20:59:55.155Z",
+                  "annotations": [
+                    {
+                      "type": "captured working tree",
+                      "description": "cd959f33d85986bb6d00664f48e2d4d43c08fc0b5c98c9eaf1aed5e70e97531e"
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "accccf92fbbee802fc0a-73aedb3c822248019b2f",
+          "file": "journey-six-coves.spec.ts",
+          "line": 120,
+          "column": 3
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-10T20:58:21.597Z",
+    "duration": 157336.976,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

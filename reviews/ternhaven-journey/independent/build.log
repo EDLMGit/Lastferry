@@ -1,0 +1,35 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> last-ferry@1.0.0 build
+> npm run typecheck && vite build
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> last-ferry@1.0.0 typecheck
+> tsc --noEmit
+
+vite v8.3.4 building client environment for production...
+transforming...
+✓ 113 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                           0.46 kB │ gzip:   0.29 kB
+dist/assets/rabbit-cream-CyaR54Sw.png    27.51 kB
+dist/assets/rabbit-tan-sdGseXXE.png      27.95 kB
+dist/assets/deer-chestnut-BE3YxWvb.png   35.01 kB
+dist/assets/beaver-brown-BXC_A2S1.png    37.11 kB
+dist/assets/rabbit-cream-BXzi6EIZ.png    40.42 kB
+dist/assets/rabbit-tan-OjINE00x.png      42.42 kB
+dist/assets/sheep-wool-q8gmZU0q.png      45.17 kB
+dist/assets/deer-chestnut-iXxuDvin.png   52.03 kB
+dist/assets/beaver-brown-FViSP1Oe.png    64.96 kB
+dist/assets/sheep-wool-BjEjYMMN.png      74.03 kB
+dist/assets/index-Dikbe5yh.css           52.20 kB │ gzip:  11.42 kB
+dist/assets/index-B9n6a55T.js           938.93 kB │ gzip: 260.90 kB
+
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 323ms

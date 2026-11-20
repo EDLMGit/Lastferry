@@ -1,0 +1,651 @@
+{
+  "source": {
+    "checkedAt": "2026-10-23T08:48:26.941Z",
+    "sourceHash": "663bfedd9f03d6063b0544cfb134e533e6b2ea0754200969755cde19e38aca9e",
+    "files": 111,
+    "changed": [],
+    "sourceUnchanged": true
+  },
+  "command": "npx playwright test tests/e2e/victory-mix.spec.ts tests/e2e/transfer-audio.spec.ts tests/e2e/production.spec.ts --config=.cache/victory-mix-playwright.config.ts",
+  "environment": {
+    "node": "v24.15.0",
+    "devPort": 5199,
+    "productionPort": 4186,
+    "browser": "Chromium156.0.8078.4, SwiftShader, DPR1"
+  },
+  "result": {
+    "passed": 6,
+    "failed": 0,
+    "exitCode": 0,
+    "duration": "2.2minutes"
+  },
+  "scenarios": [
+    {
+      "name": "visible-arrival-lifecycle",
+      "result": "passed",
+      "errors": [],
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+        "viewport": {
+          "width": 844,
+          "height": 390
+        },
+        "devicePixelRatio": 1,
+        "reducedMotion": false
+      },
+      "snapshots": [
+        {
+          "label": "harbor-before-delivery",
+          "time": 14,
+          "turn": 8,
+          "status": "playing",
+          "audio": {
+            "arrivalEventCount": 0,
+            "deliveryCount": 0,
+            "arrivalVoicesPlayed": 0,
+            "arrivalVoicesSkipped": 0,
+            "arrivalVoicesReclaimed": 0,
+            "arrivalActive": false,
+            "arrivalSources": 0,
+            "contextState": "running",
+            "contextCount": 1,
+            "schedulerCount": 1,
+            "droppedTones": 0,
+            "victorySettled": false,
+            "victoryGain": 1,
+            "victoryTarget": 1,
+            "arrangementGain": 0.7200000286102295,
+            "arrangementTarget": 0.72,
+            "effectiveMusicTarget": 0.72,
+            "lastVictoryMixChange": null
+          },
+          "secondsAfterArrival": null
+        },
+        {
+          "label": "partial-delivery-no-victory",
+          "time": 15.32,
+          "turn": 9,
+          "status": "playing",
+          "audio": {
+            "arrivalEventCount": 0,
+            "deliveryCount": 0,
+            "arrivalVoicesPlayed": 0,
+            "arrivalVoicesSkipped": 0,
+            "arrivalVoicesReclaimed": 0,
+            "arrivalActive": false,
+            "arrivalSources": 0,
+            "contextState": "running",
+            "contextCount": 1,
+            "schedulerCount": 1,
+            "droppedTones": 0,
+            "victorySettled": false,
+            "victoryGain": 1,
+            "victoryTarget": 1,
+            "arrangementGain": 0.7200000286102295,
+            "arrangementTarget": 0.72,
+            "effectiveMusicTarget": 0.72,
+            "lastVictoryMixChange": null
+          },
+          "secondsAfterArrival": null
+        },
+        {
+          "label": "visible-arrival",
+          "time": 17.061333333333334,
+          "turn": 9,
+          "status": "won",
+          "audio": {
+            "arrivalEventCount": 1,
+            "deliveryCount": 1,
+            "arrivalVoicesPlayed": 3,
+            "arrivalVoicesSkipped": 0,
+            "arrivalVoicesReclaimed": 0,
+            "arrivalActive": true,
+            "arrivalSources": 3,
+            "contextState": "running",
+            "contextCount": 1,
+            "schedulerCount": 1,
+            "droppedTones": 0,
+            "victorySettled": true,
+            "victoryGain": 0.5,
+            "victoryTarget": 0.5,
+            "arrangementGain": 0.6233464479446411,
+            "arrangementTarget": 0.62,
+            "effectiveMusicTarget": 0.31,
+            "lastVictoryMixChange": {
+              "time": 16.370666666666665,
+              "target": 0.5,
+              "duration": 0.2
+            }
+          },
+          "secondsAfterArrival": 0.6906666666666688
+        },
+        {
+          "label": "ten-seconds-after-arrival-with-success-open",
+          "time": 26.397333333333332,
+          "turn": 9,
+          "status": "won",
+          "audio": {
+            "arrivalEventCount": 1,
+            "deliveryCount": 1,
+            "arrivalVoicesPlayed": 3,
+            "arrivalVoicesSkipped": 0,
+            "arrivalVoicesReclaimed": 0,
+            "arrivalActive": false,
+            "arrivalSources": 0,
+            "contextState": "running",
+            "contextCount": 1,
+            "schedulerCount": 1,
+            "droppedTones": 0,
+            "victorySettled": true,
+            "victoryGain": 0.5,
+            "victoryTarget": 0.5,
+            "arrangementGain": 0.6200000047683716,
+            "arrangementTarget": 0.62,
+            "effectiveMusicTarget": 0.31,
+            "lastVictoryMixChange": {
+              "time": 16.370666666666665,
+              "target": 0.5,
+              "duration": 0.2
+            }
+          },
+          "secondsAfterArrival": 10.026666666666667
+        },
+        {
+          "label": "menu-retains-ending",
+          "time": 27.530666666666665,
+          "turn": 9,
+          "status": "won",
+          "audio": {
+            "arrivalEventCount": 1,
+            "deliveryCount": 1,
+            "arrivalVoicesPlayed": 3,
+            "arrivalVoicesSkipped": 0,
+            "arrivalVoicesReclaimed": 0,
+            "arrivalActive": false,
+            "arrivalSources": 0,
+            "contextState": "running",
+            "contextCount": 1,
+            "schedulerCount": 1,
+            "droppedTones": 0,
+            "victorySettled": true,
+            "victoryGain": 0.5,
+            "victoryTarget": 0.5,
+            "arrangementGain": 0.6200000047683716,
+            "arrangementTarget": 0.62,
+            "effectiveMusicTarget": 0.31,
+            "lastVictoryMixChange": {
+              "time": 16.370666666666665,
+              "target": 0.5,
+              "duration": 0.2
+            }
+          },
+          "secondsAfterArrival": 11.16
+        },
+        {
+          "label": "terminal-undo-restored",
+          "time": 28.661333333333335,
+          "turn": 8,
+          "status": "playing",
+          "audio": {
+            "arrivalEventCount": 1,
+            "deliveryCount": 1,
+            "arrivalVoicesPlayed": 3,
+            "arrivalVoicesSkipped": 0,
+            "arrivalVoicesReclaimed": 0,
+            "arrivalActive": false,
+            "arrivalSources": 0,
+            "contextState": "running",
+            "contextCount": 1,
+            "schedulerCount": 1,
+            "droppedTones": 0,
+            "victorySettled": false,
+            "victoryGain": 1,
+            "victoryTarget": 1,
+            "arrangementGain": 0.7200000286102295,
+            "arrangementTarget": 0.72,
+            "effectiveMusicTarget": 0.72,
+            "lastVictoryMixChange": {
+              "time": 27.672,
+              "target": 1,
+              "duration": 0.7
+            }
+          },
+          "secondsAfterArrival": 12.29066666666667
+        },
+        {
+          "label": "redelivery-fresh-duck",
+          "time": 31.232,
+          "turn": 9,
+          "status": "won",
+          "audio": {
+            "arrivalEventCount": 2,
+            "deliveryCount": 2,
+            "arrivalVoicesPlayed": 6,
+            "arrivalVoicesSkipped": 0,
+            "arrivalVoicesReclaimed": 0,
+            "arrivalActive": true,
+            "arrivalSources": 2,
+            "contextState": "running",
+            "contextCount": 1,
+            "schedulerCount": 1,
+            "droppedTones": 0,
+            "victorySettled": true,
+            "victoryGain": 0.5,
+            "victoryTarget": 0.5,
+            "arrangementGain": 0.6200000047683716,
+            "arrangementTarget": 0.62,
+            "effectiveMusicTarget": 0.31,
+            "lastVictoryMixChange": {
+              "time": 29.570666666666668,
+              "target": 0.5,
+              "duration": 0.2
+            }
+          },
+          "secondsAfterArrival": 1.6613333333333316
+        },
+        {
+          "label": "rapid-undo-redelivery-no-accumulation",
+          "time": 33.992,
+          "turn": 9,
+          "status": "won",
+          "audio": {
+            "arrivalEventCount": 3,
+            "deliveryCount": 3,
+            "arrivalVoicesPlayed": 9,
+            "arrivalVoicesSkipped": 0,
+            "arrivalVoicesReclaimed": 0,
+            "arrivalActive": true,
+            "arrivalSources": 2,
+            "contextState": "running",
+            "contextCount": 1,
+            "schedulerCount": 1,
+            "droppedTones": 0,
+            "victorySettled": true,
+            "victoryGain": 0.5,
+            "victoryTarget": 0.5,
+            "arrangementGain": 0.6200000047683716,
+            "arrangementTarget": 0.62,
+            "effectiveMusicTarget": 0.31,
+            "lastVictoryMixChange": {
+              "time": 32.330666666666666,
+              "target": 0.5,
+              "duration": 0.2
+            }
+          },
+          "secondsAfterArrival": 1.6613333333333316
+        },
+        {
+          "label": "next-cove-clears-ending",
+          "time": 0,
+          "turn": 0,
+          "status": "playing",
+          "audio": {
+            "arrivalEventCount": 0,
+            "deliveryCount": 0,
+            "arrivalVoicesPlayed": 0,
+            "arrivalVoicesSkipped": 0,
+            "arrivalVoicesReclaimed": 0,
+            "arrivalActive": false,
+            "arrivalSources": 0,
+            "contextState": "not-created",
+            "contextCount": 0,
+            "schedulerCount": 0,
+            "droppedTones": 0,
+            "victorySettled": false,
+            "victoryGain": null,
+            "victoryTarget": 1,
+            "arrangementGain": null,
+            "arrangementTarget": 0.72,
+            "effectiveMusicTarget": 0.72,
+            "lastVictoryMixChange": null
+          },
+          "secondsAfterArrival": null
+        }
+      ]
+    },
+    {
+      "name": "muted-lazy-recovery",
+      "result": "passed",
+      "errors": [],
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+        "viewport": {
+          "width": 844,
+          "height": 390
+        },
+        "devicePixelRatio": 1,
+        "reducedMotion": true
+      },
+      "snapshots": [
+        {
+          "label": "finished-muted-without-graph",
+          "time": 0,
+          "turn": 9,
+          "status": "won",
+          "audio": {
+            "arrivalEventCount": 1,
+            "deliveryCount": 0,
+            "arrivalVoicesPlayed": 0,
+            "arrivalVoicesSkipped": 0,
+            "arrivalVoicesReclaimed": 0,
+            "arrivalActive": false,
+            "arrivalSources": 0,
+            "contextState": "not-created",
+            "contextCount": 0,
+            "schedulerCount": 0,
+            "droppedTones": 0,
+            "victorySettled": true,
+            "victoryGain": null,
+            "victoryTarget": 0.5,
+            "arrangementGain": null,
+            "arrangementTarget": 0.72,
+            "effectiveMusicTarget": 0.36,
+            "lastVictoryMixChange": {
+              "time": 0,
+              "target": 0.5,
+              "duration": 0.2
+            }
+          },
+          "secondsAfterArrival": null
+        },
+        {
+          "label": "unmute-creates-reduced-graph-without-cue",
+          "time": 0.92,
+          "turn": 9,
+          "status": "won",
+          "audio": {
+            "arrivalEventCount": 1,
+            "deliveryCount": 0,
+            "arrivalVoicesPlayed": 0,
+            "arrivalVoicesSkipped": 0,
+            "arrivalVoicesReclaimed": 0,
+            "arrivalActive": false,
+            "arrivalSources": 0,
+            "contextState": "running",
+            "contextCount": 1,
+            "schedulerCount": 1,
+            "droppedTones": 0,
+            "victorySettled": true,
+            "victoryGain": 0.5,
+            "victoryTarget": 0.5,
+            "arrangementGain": 0.6200000047683716,
+            "arrangementTarget": 0.62,
+            "effectiveMusicTarget": 0.31,
+            "lastVictoryMixChange": {
+              "time": 0,
+              "target": 0.5,
+              "duration": 0.2
+            }
+          },
+          "secondsAfterArrival": null
+        },
+        {
+          "label": "mute-retains-ending-intent",
+          "time": 1.12,
+          "turn": 9,
+          "status": "won",
+          "audio": {
+            "arrivalEventCount": 1,
+            "deliveryCount": 0,
+            "arrivalVoicesPlayed": 0,
+            "arrivalVoicesSkipped": 0,
+            "arrivalVoicesReclaimed": 0,
+            "arrivalActive": false,
+            "arrivalSources": 0,
+            "contextState": "suspended",
+            "contextCount": 1,
+            "schedulerCount": 0,
+            "droppedTones": 0,
+            "victorySettled": true,
+            "victoryGain": 0.5,
+            "victoryTarget": 0.5,
+            "arrangementGain": 0.6200000047683716,
+            "arrangementTarget": 0.62,
+            "effectiveMusicTarget": 0.31,
+            "lastVictoryMixChange": {
+              "time": 0,
+              "target": 0.5,
+              "duration": 0.2
+            }
+          },
+          "secondsAfterArrival": null
+        },
+        {
+          "label": "restart-restores-normal-mix",
+          "time": 2.232,
+          "turn": 0,
+          "status": "playing",
+          "audio": {
+            "arrivalEventCount": 1,
+            "deliveryCount": 0,
+            "arrivalVoicesPlayed": 0,
+            "arrivalVoicesSkipped": 0,
+            "arrivalVoicesReclaimed": 0,
+            "arrivalActive": false,
+            "arrivalSources": 0,
+            "contextState": "running",
+            "contextCount": 1,
+            "schedulerCount": 1,
+            "droppedTones": 0,
+            "victorySettled": false,
+            "victoryGain": 1,
+            "victoryTarget": 1,
+            "arrangementGain": 0.7200000286102295,
+            "arrangementTarget": 0.72,
+            "effectiveMusicTarget": 0.72,
+            "lastVictoryMixChange": {
+              "time": 1.272,
+              "target": 1,
+              "duration": 0.7
+            }
+          },
+          "secondsAfterArrival": null
+        },
+        {
+          "label": "chosen-cove-has-no-stale-ending",
+          "time": 0,
+          "turn": 0,
+          "status": "playing",
+          "audio": {
+            "arrivalEventCount": 0,
+            "deliveryCount": 0,
+            "arrivalVoicesPlayed": 0,
+            "arrivalVoicesSkipped": 0,
+            "arrivalVoicesReclaimed": 0,
+            "arrivalActive": false,
+            "arrivalSources": 0,
+            "contextState": "not-created",
+            "contextCount": 0,
+            "schedulerCount": 0,
+            "droppedTones": 0,
+            "victorySettled": false,
+            "victoryGain": null,
+            "victoryTarget": 1,
+            "arrangementGain": null,
+            "arrangementTarget": 0.72,
+            "effectiveMusicTarget": 0.72,
+            "lastVictoryMixChange": null
+          },
+          "secondsAfterArrival": null
+        }
+      ]
+    },
+    {
+      "name": "hidden-arrival-recovery",
+      "result": "passed",
+      "errors": [],
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+        "viewport": {
+          "width": 844,
+          "height": 390
+        },
+        "devicePixelRatio": 1,
+        "reducedMotion": false
+      },
+      "snapshots": [
+        {
+          "label": "hidden-before-visible-arrival",
+          "time": 14.101333333333333,
+          "turn": 9,
+          "status": "won",
+          "audio": {
+            "arrivalEventCount": 0,
+            "deliveryCount": 0,
+            "arrivalVoicesPlayed": 0,
+            "arrivalVoicesSkipped": 0,
+            "arrivalVoicesReclaimed": 0,
+            "arrivalActive": false,
+            "arrivalSources": 0,
+            "contextState": "suspended",
+            "contextCount": 1,
+            "schedulerCount": 0,
+            "droppedTones": 0,
+            "victorySettled": true,
+            "victoryGain": 0.5034907460212708,
+            "victoryTarget": 0.5,
+            "arrangementGain": 0.7200000286102295,
+            "arrangementTarget": 0.72,
+            "effectiveMusicTarget": 0.36,
+            "lastVictoryMixChange": {
+              "time": 14,
+              "target": 0.5,
+              "duration": 0.2
+            }
+          },
+          "secondsAfterArrival": null
+        },
+        {
+          "label": "recovered-won-no-delayed-cue",
+          "time": 15.885333333333334,
+          "turn": 9,
+          "status": "won",
+          "audio": {
+            "arrivalEventCount": 0,
+            "deliveryCount": 0,
+            "arrivalVoicesPlayed": 0,
+            "arrivalVoicesSkipped": 0,
+            "arrivalVoicesReclaimed": 0,
+            "arrivalActive": false,
+            "arrivalSources": 0,
+            "contextState": "running",
+            "contextCount": 1,
+            "schedulerCount": 1,
+            "droppedTones": 0,
+            "victorySettled": true,
+            "victoryGain": 0.5,
+            "victoryTarget": 0.5,
+            "arrangementGain": 0.6200000047683716,
+            "arrangementTarget": 0.62,
+            "effectiveMusicTarget": 0.31,
+            "lastVictoryMixChange": {
+              "time": 14,
+              "target": 0.5,
+              "duration": 0.2
+            }
+          },
+          "secondsAfterArrival": null
+        },
+        {
+          "label": "genuine-redelivery-after-hidden-recovery",
+          "time": 18.610666666666667,
+          "turn": 9,
+          "status": "won",
+          "audio": {
+            "arrivalEventCount": 1,
+            "deliveryCount": 1,
+            "arrivalVoicesPlayed": 3,
+            "arrivalVoicesSkipped": 0,
+            "arrivalVoicesReclaimed": 0,
+            "arrivalActive": true,
+            "arrivalSources": 3,
+            "contextState": "running",
+            "contextCount": 1,
+            "schedulerCount": 1,
+            "droppedTones": 0,
+            "victorySettled": true,
+            "victoryGain": 0.5,
+            "victoryTarget": 0.5,
+            "arrangementGain": 0.7200000286102295,
+            "arrangementTarget": 0.72,
+            "effectiveMusicTarget": 0.36,
+            "lastVictoryMixChange": {
+              "time": 17.912,
+              "target": 0.5,
+              "duration": 0.2
+            }
+          },
+          "secondsAfterArrival": 0.6986666666666679
+        },
+        {
+          "label": "won-hide-resume-no-replay",
+          "time": 20.541333333333334,
+          "turn": 9,
+          "status": "won",
+          "audio": {
+            "arrivalEventCount": 1,
+            "deliveryCount": 1,
+            "arrivalVoicesPlayed": 3,
+            "arrivalVoicesSkipped": 0,
+            "arrivalVoicesReclaimed": 0,
+            "arrivalActive": false,
+            "arrivalSources": 0,
+            "contextState": "running",
+            "contextCount": 1,
+            "schedulerCount": 1,
+            "droppedTones": 0,
+            "victorySettled": true,
+            "victoryGain": 0.5,
+            "victoryTarget": 0.5,
+            "arrangementGain": 0.6200000047683716,
+            "arrangementTarget": 0.62,
+            "effectiveMusicTarget": 0.31,
+            "lastVictoryMixChange": {
+              "time": 17.912,
+              "target": 0.5,
+              "duration": 0.2
+            }
+          },
+          "secondsAfterArrival": 2.629333333333335
+        },
+        {
+          "label": "recovery-restart-restores-normal",
+          "time": 21.6,
+          "turn": 0,
+          "status": "playing",
+          "audio": {
+            "arrivalEventCount": 1,
+            "deliveryCount": 1,
+            "arrivalVoicesPlayed": 3,
+            "arrivalVoicesSkipped": 0,
+            "arrivalVoicesReclaimed": 0,
+            "arrivalActive": false,
+            "arrivalSources": 0,
+            "contextState": "running",
+            "contextCount": 1,
+            "schedulerCount": 1,
+            "droppedTones": 0,
+            "victorySettled": false,
+            "victoryGain": 1,
+            "victoryTarget": 1,
+            "arrangementGain": 0.7200000286102295,
+            "arrangementTarget": 0.72,
+            "effectiveMusicTarget": 0.72,
+            "lastVictoryMixChange": {
+              "time": 20.64,
+              "target": 1,
+              "duration": 0.7
+            }
+          },
+          "secondsAfterArrival": 3.6880000000000024
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "No speaker or headphone listening was performed.",
+    "Hidden-page behavior uses an explicit document.hidden visibilitychange simulation, not physical Android OS backgrounding.",
+    "Real browser AudioContext interruption is covered in units, not forced by a new browser control.",
+    "Video test outputs are silent; actual runtime audio is retained separately by capture-victory-mix."
+  ]
+}

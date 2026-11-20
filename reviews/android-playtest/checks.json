@@ -1,0 +1,50 @@
+{
+  "testedSource": "56228ef8174b2147aa7f397661f2a6f5801e86d2",
+  "node": "v24.15.0",
+  "productionWeb": {
+    "command": "npm run build -- --outDir .cache/android-playtest/web-final",
+    "types": "passed",
+    "minified": "passed",
+    "warning": "Vite chunk size advisory",
+    "bundles": {
+      "./assets/index-sGVm0XMC.js": "44413b43d0b174d721b8acf73edd0e6122c455f05445e2c6a60a50a26ad4ce98",
+      "./assets/index-C5dm8V2w.css": "f8fdd7e6e87dee18f8efe403e45fc642e7e77b8286b2cbc21c9bce75968a2db0"
+    }
+  },
+  "unit": {
+    "command": "npm run test:unit -- --maxWorkers=1",
+    "files": 66,
+    "tests": 776,
+    "passed": 776,
+    "failed": 0,
+    "skipped": 0,
+    "earlierParallelRun": {
+      "passed": 775,
+      "failed": [
+        {
+          "file": "two-shelters-geometry.test.ts",
+          "test": "candidate transfer soles stay over real pier, short gangway or ferry surfaces at both berth headings",
+          "first": "Error: Test timed out in 30000ms."
+        }
+      ]
+    }
+  },
+  "browser": {
+    "command": "npx playwright test -c reviews/android-playtest/web.config.ts",
+    "viewport": [
+      780,
+      320
+    ],
+    "baseUrl": "http://127.0.0.1:5432",
+    "browser": "156.0.8078.4",
+    "passed": 1,
+    "failed": 0,
+    "seconds": 36.57216,
+    "gameplayErrors": []
+  },
+  "catalog": {
+    "command": "npm run check:assets",
+    "passed": true,
+    "families": 83
+  }
+}

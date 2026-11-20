@@ -1,0 +1,193 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "wide-berth-production.spec.ts"
+    ],
+    "configFile": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\playwright.config.ts",
+    "rootDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "snapshotDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5270",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "deviceScaleFactor": 1,
+          "headless": true,
+          "launchOptions": {
+            "args": [
+              "--use-angle=swiftshader",
+              "--enable-unsafe-swiftshader"
+            ]
+          },
+          "video": {
+            "mode": "on",
+            "size": {
+              "width": 1440,
+              "height": 900
+            }
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "reviews/wide-berth/production/automation-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "wide-berth-production.spec.ts",
+      "file": "wide-berth-production.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "production six-space boat rescue, actual six-option overflow and full-label fit",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 300000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 29559,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.requirement')\nExpected substring: \u001b[32m\"boat has 6 spaces; this group needs 8\"\u001b[39m\nError: strict mode violation: locator('.requirement') resolved to 2 elements:\n    1) <p class=\"requirement\">Boat needs depth 4. Passage has depth 4: enough d…</p> aka getByText('Boat needs depth 4. Passage')\n    2) <p class=\"requirement\">The boat has 6 spaces; this group needs 8.</p> aka getByText('The boat has 6 spaces; this')\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" locator('.requirement') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.requirement')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.requirement')\nExpected substring: \u001b[32m\"boat has 6 spaces; this group needs 8\"\u001b[39m\nError: strict mode violation: locator('.requirement') resolved to 2 elements:\n    1) <p class=\"requirement\">Boat needs depth 4. Passage has depth 4: enough d…</p> aka getByText('Boat needs depth 4. Passage')\n    2) <p class=\"requirement\">The boat has 6 spaces; this group needs 8.</p> aka getByText('The boat has 6 spaces; this')\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" locator('.requirement') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.requirement')\u001b[22m\n\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\wide-berth-production.spec.ts:46:48",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\wide-berth-production.spec.ts",
+                      "column": 48,
+                      "line": 46
+                    },
+                    "snippet": "  44 |     await transfer(page, 'board', undefined, false);\n  45 |     await expect(page.locator('#commit')).toBeDisabled();\n> 46 |     await expect(page.locator('.requirement')).toContainText(\n     |                                                ^\n  47 |       'boat has 6 spaces; this group needs 8',\n  48 |     );\n  49 |     await expect"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\wide-berth-production.spec.ts",
+                        "column": 48,
+                        "line": 46
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.requirement')\nExpected substring: \u001b[32m\"boat has 6 spaces; this group needs 8\"\u001b[39m\nError: strict mode violation: locator('.requirement') resolved to 2 elements:\n    1) <p class=\"requirement\">Boat needs depth 4. Passage has depth 4: enough d…</p> aka getByText('Boat needs depth 4. Passage')\n    2) <p class=\"requirement\">The boat has 6 spaces; this group needs 8.</p> aka getByText('The boat has 6 spaces; this')\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" locator('.requirement') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.requirement')\u001b[22m\n\n\n  44 |     await transfer(page, 'board', undefined, false);\n  45 |     await expect(page.locator('#commit')).toBeDisabled();\n> 46 |     await expect(page.locator('.requirement')).toContainText(\n     |                                                ^\n  47 |       'boat has 6 spaces; this group needs 8',\n  48 |     );\n  49 |     await expect\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\wide-berth-production.spec.ts:46:48"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T18:55:33.502Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\wide-berth-production-prod-f1fb8-overflow-and-full-label-fit\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\wide-berth-production.spec.ts",
+                    "column": 48,
+                    "line": 46
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "b8090cea11de8e08acce-e723ede65439cbf9646d",
+          "file": "wide-berth-production.spec.ts",
+          "line": 18,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-31T18:55:33.043Z",
+    "duration": 31072.684999999998,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,57 @@
+
+Running 18 tests using 1 worker
+
+(node:18448) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\e2e\environment.spec.ts:155:1 › environment: visible curved courses carry the ferry, tangent and fading wake both ways (1.1m)
+  ok  2 tests\e2e\environment.spec.ts:302:1 › environment: shores, free forecast and complete Undo follow both tide boundaries (31.2s)
+  ok  3 tests\e2e\environment.spec.ts:354:1 › environment: interrupted travel, restart and changing cove clear transient effects (9.8s)
+  ok  4 tests\e2e\environment.spec.ts:391:1 › environment: reduced motion keeps calm water, no wake and stable warm arrival (10.5s)
+  ok  5 tests\e2e\fallback.spec.ts:2:1 › fallback completes a stalled presentation without another gameplay action (5.9s)
+  ok  6 tests\e2e\homecoming.spec.ts:259:1 › homecoming desktop: subset and tide Undo, finite cancellation, settled Settings and honest progression (46.1s)
+  ok  7 tests\e2e\homecoming.spec.ts:344:3 › homecoming touch 844x390: arrival, Settings, restoration and reduced stable ending (36.3s)
+  ok  8 tests\e2e\homecoming.spec.ts:344:3 › homecoming touch 780x390: arrival, Settings, restoration and reduced stable ending (37.7s)
+  ok  9 tests\e2e\homecoming.spec.ts:344:3 › homecoming touch 780x320: arrival, Settings, restoration and reduced stable ending (36.3s)
+  ok 10 tests\e2e\homecoming.spec.ts:407:3 › homecoming bellwater: actual rescue and honest Choose a cove (10.1s)
+  ok 11 tests\e2e\homecoming.spec.ts:407:3 › homecoming first-crossing: actual rescue and honest Choose a cove (13.3s)
+  ok 12 tests\e2e\homecoming.spec.ts:440:1 › homecoming settings: natural keyboard, device and persisted Reduced preference, loss has no arrival (15.6s)
+  ok 13 tests\e2e\homecoming.spec.ts:506:1 › homecoming recovery: simulated hide and context loss settle finite motion without replay or resource growth (35.4s)
+  ok 14 tests\e2e\production.spec.ts:4:1 › production bundle: real rescue without debug globals or external assets (17.2s)
+  ok 15 tests\e2e\victory-mix.spec.ts:144:1 › victory mix: visible final arrival, persistent ending, Undo/redelivery and next cove (39.2s)
+  ok 16 tests\e2e\victory-mix.spec.ts:274:1 › victory mix: finish muted before lazy graph, activate ending, mute recovery and Restart (11.1s)
+  ok 17 tests\e2e\victory-mix.spec.ts:355:1 › victory mix: hidden final transition settles silently and won hide/resume retains mix (27.4s)
+  x  18 tests\e2e\water-motion.spec.ts:20:1 › water motion: finite docking, immediate follow-up, tide Undo and mid-crossing device reduction clear correctly (39.9s)
+
+
+  1) tests\e2e\water-motion.spec.ts:20:1 › water motion: finite docking, immediate follow-up, tide Undo and mid-crossing device reduction clear correctly 
+
+    Error: expect(received).toMatchObject(expected)
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "boatNodeId": "harbor",
+    +   "boatNodeId": "cut",
+        "turn": 0,
+      }
+
+      211 |     await idle(page);
+      212 |     await movementClear(page);
+    > 213 |     expect(await state(page)).toMatchObject({ turn: 0, boatNodeId: 'harbor' });
+          |                               ^
+      214 |     await save('first-crossing-smoke', true);
+      215 |     expect(errors).toEqual([]);
+      216 |   } catch (error) {
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\water-motion.spec.ts:213:31
+
+    Error Context: reviews\water-motion\browser-final\raw\water-motion-water-motion--02a7e-e-reduction-clear-correctly\error-context.md
+
+  1 failed
+    tests\e2e\water-motion.spec.ts:20:1 › water motion: finite docking, immediate follow-up, tide Undo and mid-crossing device reduction clear correctly 
+  17 passed (8.2m)
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

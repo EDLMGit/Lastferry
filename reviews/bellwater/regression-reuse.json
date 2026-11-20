@@ -1,0 +1,27 @@
+{
+  "checkedAt": "2026-10-22T08:30:48.121Z",
+  "fullSuiteSourceHash": "157a57a50a953020592f063e468cedee181ddf471cd393be735040e538f74f00",
+  "finalSourceHash": "46db5c9503f1f276aa07e7d5e871fb6dc2717221adb5b2164d268487bc3b7e7f",
+  "sourceFiles": 56,
+  "unchangedFiles": 53,
+  "changedFiles": [
+    "docs/ASSET_LEDGER.md",
+    "src/main.ts",
+    "tests/e2e/bellwater.spec.ts"
+  ],
+  "runtimeDelta": "    if (\n      isBellwater &&\n      !small &&\n      n.id === 'low-pier' &&\n      session.state.boatNodeId === 'east-buoy' &&\n      session.state.aboard.length\n    ) {\n      const head = Math.min(\n        ...world\n          .frameStatus()\n          .passengers.filter((p) => session.state.aboard.includes(p.id))\n          .map((p) => p.top),\n      );\n      point.y = Math.min(point.y, head - group.offsetHeight / 2 - 8);\n    }\n",
+  "mainIdenticalAfterRemovingThisDelta": true,
+  "scope": "Only the desktop Bellwater Low Pier label while the ferry is at East Buoy with passengers aboard. Earlier coves and compact layouts cannot enter this branch.",
+  "otherChanges": {
+    "docs/ASSET_LEDGER.md": "Corrected original-geometry date wording.",
+    "tests/e2e/bellwater.spec.ts": "Added focused DOM/model nonintersection assertion for the observed ear occlusion."
+  },
+  "priorBrowserChecks": {
+    "passed": 37,
+    "failed": 0,
+    "skipped": 0,
+    "source": "full-suite/source-manifest.json",
+    "results": "full-suite/automation-results.json"
+  },
+  "reuse": "28 unaffected First Crossing/Holding/shared regression scenarios retain their actual earlier source. The9 Bellwater scenarios and18 Bellwater PNGs are rerun/recaptured on final source. No earlier capture is relabeled."
+}

@@ -1,0 +1,99 @@
+
+Running 13 tests using 1 worker
+
+(node:40132) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\e2e\phone-playability.spec.ts:181:3 › phone layout 844x390: readable Play and deliberate complete Whole cove (9.1s)
+  ok  2 tests\e2e\phone-playability.spec.ts:181:3 › phone layout 780x320: readable Play and deliberate complete Whole cove (8.9s)
+  ok  3 tests\e2e\phone-playability.spec.ts:181:3 › phone layout 390x844: readable Play and deliberate complete Whole cove (7.3s)
+  ok  4 tests\e2e\phone-playability.spec.ts:181:3 › phone layout 360x740: readable Play and deliberate complete Whole cove (7.2s)
+  x   5 tests\e2e\phone-playability.spec.ts:239:3 › phone rescue 844x390: actual subset/tide Undo, nearby previews and terminal redelivery (11.7s)
+(node:40784) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  6 tests\e2e\phone-playability.spec.ts:239:3 › phone rescue 390x844: actual subset/tide Undo, nearby previews and terminal redelivery (43.0s)
+  x   7 tests\e2e\phone-playability.spec.ts:311:1 › phone camera input: real touch pan, cancellation, mode recovery and marker picking conserve state (13.1s)
+(node:28600) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   8 tests\e2e\phone-playability.spec.ts:446:1 › phone rotation: selected place, open subset and confirmed journey retain state and anchors (3.0m)
+(node:35584) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  9 tests\e2e\phone-playability.spec.ts:512:1 › phone nearby decisions: Wait and losing Sail retain their actual control anchors (24.4s)
+  ok 10 tests\e2e\phone-playability.spec.ts:572:1 › phone fullscreen: real API result, root includes dialogs and external exit preserves subset (9.8s)
+  ok 11 tests\e2e\phone-playability.spec.ts:630:3 › phone fullscreen rejected: labeled mocked fallback leaves play usable (4.1s)
+  ok 12 tests\e2e\phone-playability.spec.ts:630:3 › phone fullscreen unavailable: labeled mocked fallback leaves play usable (3.3s)
+  ok 13 tests\e2e\phone-playability.spec.ts:680:1 › desktop and other coves: keyboard overview, Bellwater outer route, First Crossing and arrival remain coherent (47.4s)
+
+
+  1) tests\e2e\phone-playability.spec.ts:239:3 › phone rescue 844x390: actual subset/tide Undo, nearby previews and terminal redelivery 
+
+    Error: expect(received).toBeLessThan(expected)
+
+    Expected: < 2
+    Received:   22.390625
+
+      271 |         const subset = await rect(page, 'dialog');
+      272 |         expect(Math.abs(subset.left - panel.left)).toBeLessThan(2);
+    > 273 |         expect(Math.abs(subset.top - panel.top)).toBeLessThan(2);
+          |                                                  ^
+      274 |         expect(await stable(page)).toEqual(before);
+      275 |         await save('subset-warning', true);
+      276 |         await press(page, 'passenger-rabbit-2');
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-playability.spec.ts:273:50
+        at observed (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-playability.spec.ts:150:5)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-playability.spec.ts:255:7
+
+    Error Context: test-results\phone-playability-phone-re-a45f8-ews-and-terminal-redelivery\error-context.md
+
+  2) tests\e2e\phone-playability.spec.ts:311:1 › phone camera input: real touch pan, cancellation, mode recovery and marker picking conserve state 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 317
+    Received: 319
+
+      436 |         () => (window as any).__LAST_FERRY__.getMetrics().resources,
+      437 |       );
+    > 438 |       expect(afterResources.geometries).toBe(warmResources.geometries);
+          |                                         ^
+      439 |       expect(afterResources.textures).toBe(warmResources.textures);
+      440 |     });
+      441 |   } finally {
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-playability.spec.ts:438:41
+        at observed (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-playability.spec.ts:150:5)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-playability.spec.ts:324:5
+
+    Error Context: test-results\phone-playability-phone-ca-d9856-rker-picking-conserve-state\error-context.md
+
+  3) tests\e2e\phone-playability.spec.ts:446:1 › phone rotation: selected place, open subset and confirmed journey retain state and anchors 
+
+    Test timeout of 180000ms exceeded.
+
+    Error: browserContext.close: Test ended.
+    Browser logs:
+
+    <launching> C:\Users\ernes\Documents\last-ferry-codex-starter\.cache\ms-playwright\chromium_headless_shell-1248\chrome-headless-shell-win64\chrome-headless-shell.exe --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,AvoidCorsURLLoaderRestartOnRedirect,Translate,AutoDeElevate,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --use-angle=swiftshader --enable-unsafe-swiftshader --user-data-dir=C:\Users\ernes\AppData\Local\Packages\sandbox.{1c1e5c50-8432-425c-b448-484ea9e4045a}\AC\Temp\playwright_chromiumdev_profile-WLWbY7 --remote-debugging-pipe --no-startup-window
+    <launched> pid=45552
+    [pid=45552][err] [1024/201428.446:INFO:CONSOLE:935] "[vite] connecting...", source: http://127.0.0.1:5211/@vite/client (935)
+    [pid=45552][err] [1024/201428.449:INFO:CONSOLE:1048] "[vite] connected.", source: http://127.0.0.1:5211/@vite/client (1048)
+    [pid=45552][err] [1024/201429.357:WARNING:components\leveldb_proto\internal\leveldb_database.cc:102] Unable to open C:\Users\ernes\AppData\Local\Packages\sandbox.{1c1e5c50-8432-425c-b448-484ea9e4045a}\AC\Temp\playwright_chromiumdev_profile-WLWbY7\Default\shared_proto_db\metadata: IO error: C:\Users\ernes\AppData\Local\Packages\sandbox.{1c1e5c50-8432-425c-b448-484ea9e4045a}\AC\Temp\playwright_chromiumdev_profile-WLWbY7\Default\shared_proto_db\metadata/000001.dbtmp: Could not rename file: Access denied. (ChromeMethodBFE: 14::RenameFile::5)
+    [pid=45552][err] [1024/201431.540:WARNING:components\leveldb_proto\internal\leveldb_database.cc:102] Unable to open C:\Users\ernes\AppData\Local\Packages\sandbox.{1c1e5c50-8432-425c-b448-484ea9e4045a}\AC\Temp\playwright_chromiumdev_profile-WLWbY7\Default\shared_proto_db\metadata: IO error: C:\Users\ernes\AppData\Local\Packages\sandbox.{1c1e5c50-8432-425c-b448-484ea9e4045a}\AC\Temp\playwright_chromiumdev_profile-WLWbY7\Default\shared_proto_db\metadata/000001.dbtmp: Could not rename file: Access denied. (ChromeMethodBFE: 14::RenameFile::5)
+    [pid=45552][err] [1024/201433.620:WARNING:components\leveldb_proto\internal\leveldb_database.cc:102] Unable to open C:\Users\ernes\AppData\Local\Packages\sandbox.{1c1e5c50-8432-425c-b448-484ea9e4045a}\AC\Temp\playwright_chromiumdev_profile-WLWbY7\Default\shared_proto_db\metadata: IO error: C:\Users\ernes\AppData\Local\Packages\sandbox.{1c1e5c50-8432-425c-b448-484ea9e4045a}\AC\Temp\playwright_chromiumdev_profile-WLWbY7\Default\shared_proto_db\metadata/000001.dbtmp: Could not rename file: Access denied. (ChromeMethodBFE: 14::RenameFile::5)
+    [pid=45552][err] [1024/201435.698:WARNING:components\leveldb_proto\internal\leveldb_database.cc:102] Unable to open C:\Users\ernes\AppData\Local\Packages\sandbox.{1c1e5c50-8432-425c-b448-484ea9e4045a}\AC\Temp\playwright_chromiumdev_profile-WLWbY7\Default\shared_proto_db\metadata: IO error: C:\Users\ernes\AppData\Local\Packages\sandbox.{1c1e5c50-8432-425c-b448-484ea9e4045a}\AC\Temp\playwright_chromiumdev_profile-WLWbY7\Default\shared_proto_db\metadata/000001.dbtmp: Could not rename file: Access denied. (ChromeMethodBFE: 14::RenameFile::5)
+    [pid=45552] <gracefully close start>
+
+      506 |     });
+      507 |   } finally {
+    > 508 |     await context.close();
+          |     ^
+      509 |   }
+      510 | });
+      511 |
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-playability.spec.ts:508:5
+
+    Error Context: test-results\phone-playability-phone-ro-100c5-ey-retain-state-and-anchors\error-context.md
+
+  3 failed
+    tests\e2e\phone-playability.spec.ts:239:3 › phone rescue 844x390: actual subset/tide Undo, nearby previews and terminal redelivery 
+    tests\e2e\phone-playability.spec.ts:311:1 › phone camera input: real touch pan, cancellation, mode recovery and marker picking conserve state 
+    tests\e2e\phone-playability.spec.ts:446:1 › phone rotation: selected place, open subset and confirmed journey retain state and anchors 
+  10 passed (6.3m)

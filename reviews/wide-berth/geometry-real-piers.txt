@@ -1,0 +1,72 @@
+
+ RUN  v5.0.5 C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry
+
+stdout | tests/unit/wide-clearance.test.ts > Wide Berth occupied real modeled hull clears land and piers at every reachable heading in both directions
+{"harbor-high-quay/reverse/high-quay-pier":{"count":68,"position":[-1.1888888888888969,0,0],"angle":2.205872082863781},"high-quay-wide-berth/forward/high-quay-pier":{"count":51,"position":[1.1955383079356576,0,-0.06641879488531428],"angle":-2.2272375502932196},"high-quay-shell-landing/reverse/shell-landing-pier":{"count":21,"position":[12.812873799628441,0,5],"angle":2.1990588158965236},"outer-buoy-harbor/reverse/harbor-pier":{"count":42,"position":[-10.186036994455657,0,0],"angle":2.1948611921173944}}
+
+ ❯ tests/unit/wide-clearance.test.ts (1 test | 1 failed) 4270ms
+   × Wide Berth occupied real modeled hull clears land and piers at every reachable heading in both directions 4269ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/wide-clearance.test.ts > Wide Berth occupied real modeled hull clears land and piers at every reachable heading in both directions
+AssertionError: expected [ …(30) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "harbor-high-quay/reverse from1.5707963267948966 sample202: high-quay-pier",
++   "harbor-high-quay/reverse from1.5707963267948966 sample203: high-quay-pier",
++   "harbor-high-quay/reverse from1.5707963267948966 sample204: high-quay-pier",
++   "harbor-high-quay/reverse from1.5707963267948966 sample205: high-quay-pier",
++   "harbor-high-quay/reverse from1.5707963267948966 sample206: high-quay-pier",
++   "harbor-high-quay/reverse from1.5707963267948966 sample207: high-quay-pier",
++   "harbor-high-quay/reverse from1.5707963267948966 sample208: high-quay-pier",
++   "harbor-high-quay/reverse from1.5707963267948966 sample209: high-quay-pier",
++   "harbor-high-quay/reverse from1.5707963267948966 sample210: high-quay-pier",
++   "harbor-high-quay/reverse from1.5707963267948966 sample211: high-quay-pier",
++   "harbor-high-quay/reverse from1.5707963267948966 sample212: high-quay-pier",
++   "harbor-high-quay/reverse from1.5707963267948966 sample213: high-quay-pier",
++   "harbor-high-quay/reverse from1.5707963267948966 sample214: high-quay-pier",
++   "harbor-high-quay/reverse from1.5707963267948966 sample215: high-quay-pier",
++   "harbor-high-quay/reverse from1.5707963267948966 sample216: high-quay-pier",
++   "harbor-high-quay/reverse from1.5707963267948966 sample217: high-quay-pier",
++   "harbor-high-quay/reverse from1.5707963267948966 sample218: high-quay-pier",
++   "harbor-high-quay/reverse from1.5707963267948966 sample219: high-quay-pier",
++   "harbor-high-quay/reverse from1.5707963267948966 sample220: high-quay-pier",
++   "harbor-high-quay/reverse from1.5707963267948966 sample221: high-quay-pier",
++   "harbor-high-quay/reverse from1.5707963267948966 sample222: high-quay-pier",
++   "harbor-high-quay/reverse from1.5707963267948966 sample223: high-quay-pier",
++   "harbor-high-quay/reverse from1.5707963267948966 sample224: high-quay-pier",
++   "harbor-high-quay/reverse from1.5707963267948966 sample225: high-quay-pier",
++   "harbor-high-quay/reverse from1.5707963267948966 sample226: high-quay-pier",
++   "harbor-high-quay/reverse from1.5707963267948966 sample227: high-quay-pier",
++   "harbor-high-quay/reverse from1.5707963267948966 sample228: high-quay-pier",
++   "harbor-high-quay/reverse from1.5707963267948966 sample229: high-quay-pier",
++   "harbor-high-quay/reverse from1.5707963267948966 sample230: high-quay-pier",
++   "harbor-high-quay/reverse from1.5707963267948966 sample231: high-quay-pier",
++ ]
+
+ ❯ tests/unit/wide-clearance.test.ts:113:20
+    111|   }
+    112|   if(failures.length)console.log(JSON.stringify(contacts));
+    113|   expect(failures).toEqual([]);expect(margins).toEqual([]);
+       |                    ^
+    114| },20000);
+    115|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  1 failed | 34 passed (35)
+   Start at  19:24:55
+   Duration  4.67s (tests 93%, transform 3%, import 3%, worker 1%)
+
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

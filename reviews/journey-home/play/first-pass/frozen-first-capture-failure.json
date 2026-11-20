@@ -1,0 +1,238 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "-c",
+      "reviews/journey-home/play/config.ts"
+    ],
+    "configFile": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\journey-home\\play\\config.ts",
+    "rootDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/reviews/journey-home/play",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/.cache/journey-home-runner/release",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/reviews/journey-home/play",
+        "testIgnore": [],
+        "testMatch": [
+          "voyage.spec.ts"
+        ],
+        "timeout": 1200000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\.cache\\journey-home-runner\\release",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\journey-home\\play",
+        "snapshotDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\journey-home\\play",
+        "testIgnore": [],
+        "testMatch": "voyage.spec.ts",
+        "timeout": 1200000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5420",
+          "hasTouch": true,
+          "isMobile": true,
+          "deviceScaleFactor": 1,
+          "actionTimeout": 8000,
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "launchOptions": {
+            "ignoreDefaultArgs": [
+              "--autoplay-policy=no-user-gesture-required"
+            ],
+            "args": [
+              "--use-angle=swiftshader",
+              "--enable-unsafe-swiftshader",
+              "--autoplay-policy=document-user-activation-required"
+            ]
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\journey-home\\play\\browser.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "voyage.spec.ts",
+      "file": "voyage.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "fresh Home, every crossing, held supper, credits and independent replay",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 1200000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 240116,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"55a54745a7fae9a9b6dbcb0c2c684c7d6ea19c5507cf371d42df3845c2936d47\"\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"55a54745a7fae9a9b6dbcb0c2c684c7d6ea19c5507cf371d42df3845c2936d47\"\u001b[39m\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\journey-home\\play\\voyage.spec.ts:245:27",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\journey-home\\play\\voyage.spec.ts",
+                      "column": 27,
+                      "line": 245
+                    },
+                    "snippet": "  243 |   await waitForRest(page);\n  244 |   const rest=await page.locator('#story-canvas').evaluate(node=>(node as HTMLCanvasElement).toDataURL());\n> 245 |   expect(hash(sweep)).not.toBe(hash(rest));\n      |                           ^\n  246 |   await page.waitForTimeout(800);\n  247 |   await finishWelcome!();\n  248 |   for(const size of [sizes.portrait,sizes.landscape]){"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\journey-home\\play\\voyage.spec.ts",
+                        "column": 27,
+                        "line": 245
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"55a54745a7fae9a9b6dbcb0c2c684c7d6ea19c5507cf371d42df3845c2936d47\"\u001b[39m\n\n  243 |   await waitForRest(page);\n  244 |   const rest=await page.locator('#story-canvas').evaluate(node=>(node as HTMLCanvasElement).toDataURL());\n> 245 |   expect(hash(sweep)).not.toBe(hash(rest));\n      |                           ^\n  246 |   await page.waitForTimeout(800);\n  247 |   await finishWelcome!();\n  248 |   for(const size of [sizes.portrait,sizes.landscape]){\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\journey-home\\play\\voyage.spec.ts:245:27"
+                    },
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\journey-home\\play\\record.ts",
+                        "column": 32,
+                        "line": 30
+                      },
+                      "message": "Error: cdpSession.send: Target page, context or browser has been closed\n\n   at record.ts:30\n\n  28 |   async function capture() {\n  29 |     const before = Date.now();\n> 30 |     const image = await client.send('Page.captureScreenshot', { format:'jpeg', quality:87, fromSurface:true });\n     |                                ^\n  31 |     const after = Date.now();\n  32 |     const path = join(raw, 'frame-' + String(frames.length).padStart(6,'0') + '.jpg');\n  33 |     writeFileSync(path, Buffer.from(image.data,'base64'));\n    at capture (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\journey-home\\play\\record.ts:30:32)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\journey-home\\play\\record.ts:40:25"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "Playing 1/12 holding-pier\n"
+                    },
+                    {
+                      "text": "Playing 2/12 bellwater\n"
+                    },
+                    {
+                      "text": "Playing 3/12 driftwood-yard\n"
+                    },
+                    {
+                      "text": "Playing 4/12 two-shelters\n"
+                    },
+                    {
+                      "text": "Playing 5/12 wide-berth\n"
+                    },
+                    {
+                      "text": "Playing 6/12 reef-return\n"
+                    },
+                    {
+                      "text": "Playing 7/12 orchard-landing\n"
+                    },
+                    {
+                      "text": "Playing 8/12 ternhaven\n"
+                    },
+                    {
+                      "text": "Playing 9/12 drowned-orchard\n"
+                    },
+                    {
+                      "text": "Playing 10/12 lantern-reach\n"
+                    },
+                    {
+                      "text": "Playing 11/12 far-shore\n"
+                    },
+                    {
+                      "text": "Playing 12/12 last-ferry\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-20T17:50:33.985Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\.cache\\journey-home-runner\\release\\voyage-fresh-Home-every-cr-0c531-dits-and-independent-replay\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\journey-home\\play\\voyage.spec.ts",
+                    "column": 27,
+                    "line": 245
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "0c4f5b804256f2b85751-c342eefe0985629271b7",
+          "file": "voyage.spec.ts",
+          "line": 110,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-20T17:50:33.447Z",
+    "duration": 240840.144,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

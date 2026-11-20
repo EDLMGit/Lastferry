@@ -1,0 +1,58 @@
+{
+  "scope": "Focused water development checks; not final browser or visual acceptance",
+  "environment": "Windows PowerShell, Node 24.15.0; concurrent baseline browser capture during initial run",
+  "initial": {
+    "command": "npm run test:unit -- tests/unit/water.test.ts",
+    "start": "17:42:37 local tool output",
+    "durationSeconds": 23.18,
+    "exitCode": 1,
+    "passed": 3,
+    "failed": 3,
+    "source": "Working tree after first water candidate, before patch-center correction; no frozen source hash was taken. Existing six-test version ran before the added contour/cache assertions.",
+    "failures": "first-crossing, holding-pier and bellwater decorative seabed checks: tests/unit/water.test.ts:22 expected apronSamples.some(sample.height < -0.04 && sample.height > -0.9) to be true; received false.",
+    "cause": "Coast-attached forms were centered so close to shore that their raised height reached the -0.04 cap.",
+    "correction": "Move low sand tongue center from front.y + 0.18 to +0.4; other front form center from +0.12 to +0.35; side stone center from side.x -0.1 to +0.18. Existing assertion retained."
+  },
+  "affectedRerun": {
+    "command": "npm run test:unit -- tests/unit/water.test.ts",
+    "start": "17:43:35 local tool output",
+    "durationSeconds": 2.72,
+    "exitCode": 0,
+    "passed": 7,
+    "failed": 0,
+    "source": "Corrected candidate with added exact contour edge/corner check and field texture identity/content through tide and Undo checks.",
+    "timeoutChanges": "None; default Vitest budget retained."
+  },
+  "typecheck": {
+    "command": "npm run typecheck",
+    "exitCode": 0,
+    "source": "Initial water candidate before test additions"
+  },
+  "visualRefinement": {
+    "basis": "Native actual frozen candidate Holding ordinary/flooded tide2 and Bellwater tide2 inspected. Candidate narrows broad halos but foreground sand tongues stretched and overly pale.",
+    "change": "Bound one-step decorative parallax to .55 world depth; narrow tongue minor axes and reduce offshore sand contribution; preserve flooded interior stone and sand values. Also precompute mask path squared distances and width once per texel.",
+    "command": "npm run test:unit -- tests/unit/water.test.ts; npm run typecheck",
+    "unitPassed": 7,
+    "unitFailed": 0,
+    "durationSeconds": 5.79,
+    "start": "17:47:51 local tool output",
+    "typecheckExitCode": 0,
+    "timeoutChanges": "None"
+  },
+  "finalWaterCandidate": {
+    "basis": "Native frozen Bellwater844 ordinary still had thick coastal rim; narrowed the actual shelf drop before final freeze. Neutral lamp uniform now receives explicit lighthouse anchor from World.",
+    "command": "npm run test:unit -- tests/unit/water.test.ts; npm run typecheck",
+    "unitPassed": 7,
+    "unitFailed": 0,
+    "durationSeconds": 4.47,
+    "start": "17:49:01 local tool output",
+    "typecheckExitCode": 0,
+    "timeoutChanges": "None",
+    "files": {
+      "src/scene/seabed.ts": "67e7140cf48871d3d4f1d3f526e4c0092d745df33ea85cbc958bcb05a3adf7c1",
+      "src/scene/water.ts": "8c189a3f1e641ea1e925e923de57b98faa0c39845b89e74a3b319a530f9f14ad",
+      "src/scene/water-shader.ts": "7e5f976c88546d3f38a18afdd1861ad955ae728ba87c0d278f54d2eff271d0ed",
+      "tests/unit/water.test.ts": "2be6b0290b4ea3a8255b2059dba222499b95722f3749b5709f249e72ebc166a2"
+    }
+  }
+}

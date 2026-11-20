@@ -1,0 +1,326 @@
+{
+  "method": "Replay each retained renderer sample progress through the unchanged accepted production path/heading planner. This establishes angle agreement, not native-GPU smoothness. Original0.85rad-per-sample assertion remains unchanged.",
+  "source": [
+    {
+      "path": "src/scene/paths.ts",
+      "currentSha256": "cb907cdf1a03733e7714cb83d936fe5061c763522b6d76fb518124d8e692f39d",
+      "normalizedIdenticalToAccepted": true
+    },
+    {
+      "path": "src/scene/transitions.ts",
+      "currentSha256": "09b2b8d68a50d6853befa7161a4e4993e45f7ba9868b79c491171026bcf5e447",
+      "normalizedIdenticalToAccepted": true
+    },
+    {
+      "path": "src/scene/motion.ts",
+      "currentSha256": "09850e4c13065dc9fbb3e3fd77d82859c726752e7537c216adbfd1bb2f3422fd",
+      "normalizedIdenticalToAccepted": true
+    }
+  ],
+  "compiler": "v24.15.0 node:module.stripTypeScriptTypes",
+  "route": "shallows-rabbit",
+  "reverse": true,
+  "fromId": "rabbit-pier",
+  "toId": "shallows",
+  "fromAngle": 1.570796326794897,
+  "toAngle": -1.325817663668034,
+  "maxError": 8.881784197001252e-16,
+  "sampledMaximumStep": 0.8512340101471076,
+  "largestSteps": [
+    {
+      "dt": 66.69999999999709,
+      "fromProgress": 0.20676357043224416,
+      "toProgress": 0.24455784324076713,
+      "fromHeading": 1.4538665248482772,
+      "toHeading": 0.6026325147011695,
+      "step": 0.8512340101471076
+    },
+    {
+      "dt": 100,
+      "fromProgress": 0.2634266481061941,
+      "toProgress": 0.32008972578014405,
+      "fromHeading": 0.08729121237326254,
+      "toHeading": -0.5880026035475661,
+      "step": 0.6752938159208286
+    },
+    {
+      "dt": 33.30000000000291,
+      "fromProgress": 0.24455784324076713,
+      "toProgress": 0.2634266481061941,
+      "fromHeading": 0.6026325147011695,
+      "toHeading": 0.08729121237326254,
+      "step": 0.515341302327907
+    },
+    {
+      "dt": 66.59999999999854,
+      "fromProgress": 0.40508434229106893,
+      "toProgress": 0.44282195202191876,
+      "fromHeading": -0.6756322913410973,
+      "toHeading": -0.8293037812540867,
+      "step": 0.1536714899129894
+    },
+    {
+      "dt": 50.099999999998545,
+      "fromProgress": 0.47115349085889374,
+      "toProgress": 0.4995416927735419,
+      "fromHeading": -0.9503447274306556,
+      "toHeading": -1.0732518228763563,
+      "step": 0.12290709544570078
+    },
+    {
+      "dt": 50,
+      "fromProgress": 0.44282195202191876,
+      "toProgress": 0.47115349085889374,
+      "fromHeading": -0.8293037812540867,
+      "toHeading": -0.9503447274306556,
+      "step": 0.12104094617656891
+    }
+  ],
+  "compared": [
+    {
+      "time": 24120.1,
+      "progress": 0.017905532544967358,
+      "observed": 1.570796326794897,
+      "expected": 1.570796326794897,
+      "error": 0
+    },
+    {
+      "time": 24170.1,
+      "progress": 0.04623707138194233,
+      "observed": 1.570796326794897,
+      "expected": 1.570796326794897,
+      "error": 0
+    },
+    {
+      "time": 24186.8,
+      "progress": 0.05569980535349238,
+      "observed": 1.570796326794897,
+      "expected": 1.570796326794897,
+      "error": 0
+    },
+    {
+      "time": 24253.5,
+      "progress": 0.09349407816201741,
+      "observed": 1.570796326794897,
+      "expected": 1.570796326794897,
+      "error": 0
+    },
+    {
+      "time": 24303.4,
+      "progress": 0.12176895392131924,
+      "observed": 1.570796326794897,
+      "expected": 1.570796326794897,
+      "error": 0
+    },
+    {
+      "time": 24386.8,
+      "progress": 0.16902596070139225,
+      "observed": 1.570796326794897,
+      "expected": 1.570796326794897,
+      "error": 0
+    },
+    {
+      "time": 24453.4,
+      "progress": 0.20676357043224416,
+      "observed": 1.4538665248482772,
+      "expected": 1.4538665248482772,
+      "error": 0
+    },
+    {
+      "time": 24520.1,
+      "progress": 0.24455784324076713,
+      "observed": 0.6026325147011695,
+      "expected": 0.6026325147011695,
+      "error": 0
+    },
+    {
+      "time": 24553.4,
+      "progress": 0.2634266481061941,
+      "observed": 0.08729121237326254,
+      "expected": 0.08729121237326254,
+      "error": 0
+    },
+    {
+      "time": 24653.4,
+      "progress": 0.32008972578014405,
+      "observed": -0.5880026035475661,
+      "expected": -0.5880026035475652,
+      "error": -8.881784197001252e-16
+    },
+    {
+      "time": 24703.4,
+      "progress": 0.34842126461711903,
+      "observed": -0.5880026035475687,
+      "expected": -0.5880026035475687,
+      "error": 0
+    },
+    {
+      "time": 24803.4,
+      "progress": 0.40508434229106893,
+      "observed": -0.6756322913410973,
+      "expected": -0.6756322913410973,
+      "error": 0
+    },
+    {
+      "time": 24870,
+      "progress": 0.44282195202191876,
+      "observed": -0.8293037812540867,
+      "expected": -0.8293037812540867,
+      "error": 0
+    },
+    {
+      "time": 24920,
+      "progress": 0.47115349085889374,
+      "observed": -0.9503447274306556,
+      "expected": -0.9503447274306556,
+      "error": 0
+    },
+    {
+      "time": 24970.1,
+      "progress": 0.4995416927735419,
+      "observed": -1.0732518228763563,
+      "expected": -1.0732518228763563,
+      "error": 0
+    },
+    {
+      "time": 25003.4,
+      "progress": 0.5184104976389688,
+      "observed": -1.151847514168951,
+      "expected": -1.151847514168951,
+      "error": 0
+    },
+    {
+      "time": 25036.7,
+      "progress": 0.5372793025043937,
+      "observed": -1.2270448054048977,
+      "expected": -1.2270448054048977,
+      "error": 0
+    },
+    {
+      "time": 25070.1,
+      "progress": 0.5562047704474918,
+      "observed": -1.296463119521321,
+      "expected": -1.296463119521321,
+      "error": 0
+    },
+    {
+      "time": 25120,
+      "progress": 0.5844796462067936,
+      "observed": -1.3258176636680323,
+      "expected": -1.3258176636680323,
+      "error": 0
+    },
+    {
+      "time": 25170.1,
+      "progress": 0.6128678481214418,
+      "observed": -1.3258176636680323,
+      "expected": -1.3258176636680323,
+      "error": 0
+    },
+    {
+      "time": 25220.1,
+      "progress": 0.6411993869584167,
+      "observed": -1.3258176636680323,
+      "expected": -1.3258176636680323,
+      "error": 0
+    },
+    {
+      "time": 25270.1,
+      "progress": 0.6695309257953916,
+      "observed": -1.3258176636680332,
+      "expected": -1.3258176636680332,
+      "error": 0
+    },
+    {
+      "time": 25320.1,
+      "progress": 0.6978624646323667,
+      "observed": -1.3258176636680306,
+      "expected": -1.3258176636680306,
+      "error": 0
+    },
+    {
+      "time": 25370.1,
+      "progress": 0.7261940034693416,
+      "observed": -1.3258176636680323,
+      "expected": -1.3258176636680323,
+      "error": 0
+    },
+    {
+      "time": 25420.1,
+      "progress": 0.7545255423063166,
+      "observed": -1.3258176636680323,
+      "expected": -1.3258176636680323,
+      "error": 0
+    },
+    {
+      "time": 25453.4,
+      "progress": 0.7733943471717436,
+      "observed": -1.3258176636680314,
+      "expected": -1.3258176636680314,
+      "error": 0
+    },
+    {
+      "time": 25470.1,
+      "progress": 0.7828570811432916,
+      "observed": -1.3258176636680288,
+      "expected": -1.3258176636680288,
+      "error": 0
+    },
+    {
+      "time": 25520,
+      "progress": 0.8111319569025934,
+      "observed": -1.325817663668034,
+      "expected": -1.325817663668034,
+      "error": 0
+    },
+    {
+      "time": 25553.4,
+      "progress": 0.8300574248456936,
+      "observed": -1.3258176636680323,
+      "expected": -1.3258176636680323,
+      "error": 0
+    },
+    {
+      "time": 25620.1,
+      "progress": 0.8678516976542164,
+      "observed": -1.3258176636680297,
+      "expected": -1.3258176636680297,
+      "error": 0
+    },
+    {
+      "time": 25653.3,
+      "progress": 0.8866638394419682,
+      "observed": -1.325817663668034,
+      "expected": -1.3258176636680332,
+      "error": -8.881784197001252e-16
+    },
+    {
+      "time": 25703.4,
+      "progress": 0.9150520413566184,
+      "observed": -1.3258176636680323,
+      "expected": -1.3258176636680323,
+      "error": 0
+    },
+    {
+      "time": 25753.4,
+      "progress": 0.9433835801935934,
+      "observed": -1.3258176636680332,
+      "expected": -1.3258176636680332,
+      "error": 0
+    },
+    {
+      "time": 25786.7,
+      "progress": 0.9622523850590183,
+      "observed": -1.325817663668034,
+      "expected": -1.325817663668034,
+      "error": 0
+    },
+    {
+      "time": 25836.7,
+      "progress": 0.9905839238959933,
+      "observed": -1.325817663668035,
+      "expected": -1.325817663668034,
+      "error": -8.881784197001252e-16
+    }
+  ]
+}

@@ -1,0 +1,462 @@
+{
+  "method": "Same actual UI route, 844x390 touch viewport, default game gains and capture pipeline. Every action, planned tide Undo/replay and final arrival occurs live. No game-state injection, replacement audio, normalization or edits. Canvas and actual Web Audio master are captured synchronously; separate full-interface video is silent.",
+  "comparisonLimit": "These are independent uninterrupted runtime takes, not sample-aligned or phase-matched audio. Action scheduling/render frames differ slightly. After has one stale sheep settlement under the unchanged timing policy; both capture all required transfer contexts. First master observations catch different points of the same startup fade, then every completed-action observation is the same settled gain.",
+  "preservation": {
+    "changedRuntimePaths": [
+      "src/audio/arrival.ts",
+      "src/audio/atmosphere.ts",
+      "src/audio/wood.ts"
+    ],
+    "unchangedRuntimeFiles": 40,
+    "preservedMusicFiles": true,
+    "sameSettledMaster": true
+  },
+  "before": {
+    "source": {
+      "kind": "isolated exact commit archive",
+      "head": "a4fc4658103b630a2ae527e8479ff66d7232dff3",
+      "runtimeHash": "383ccdd71958e7668bf936a94ee3398ed38ee83c6f045091f3c2246899824ade",
+      "manifest": "before/source.json",
+      "unchangedThroughout": true
+    },
+    "recording": {
+      "path": "reviews/audio-polish/before/raw/holding-runtime-audio.webm",
+      "sha256": "0ae83e712dca5baac1cabc305d8d7a0ce4c8a2205b260aca0b0ebe3d9978fd60",
+      "bytes": 2649070,
+      "wallSeconds": 28.4925,
+      "streams": [
+        {
+          "index": 0,
+          "codec": "vp9",
+          "type": "video",
+          "width": 844,
+          "height": 390,
+          "packetEndSeconds": 28.298000000000002
+        },
+        {
+          "index": 1,
+          "codec": "opus",
+          "type": "audio",
+          "sampleRate": "48000",
+          "channels": 2,
+          "packetEndSeconds": 28.415
+        }
+      ],
+      "decodePassed": true,
+      "meanDb": -36.6,
+      "peakDb": -22.4,
+      "processing": "No normalization, gain or replacement audio. MediaRecorder receives the existing runtime master stream directly."
+    },
+    "silentInterface": {
+      "path": "reviews/audio-polish/before/raw/holding-full-interface-silent.webm",
+      "sha256": "a8cf97a93fcd4e0e5e9cbe23f57890edd6f492a9bb30a8e27e9c2376a93f4bfc",
+      "audio": false,
+      "decodePassed": true
+    },
+    "route": [
+      {
+        "action": "unload",
+        "location": "stone",
+        "turn": 1,
+        "phaseSecondsAfter": 3.2586666666666666,
+        "playedContacts": 1
+      },
+      {
+        "action": "map-shallows",
+        "location": "stone",
+        "turn": 2,
+        "phaseSecondsAfter": 5.450666666666666,
+        "playedContacts": 0
+      },
+      {
+        "action": "map-rabbit-pier",
+        "location": "shallows",
+        "turn": 3,
+        "phaseSecondsAfter": 7.578666666666666,
+        "playedContacts": 0
+      },
+      {
+        "action": "board",
+        "location": "rabbit-pier",
+        "turn": 4,
+        "phaseSecondsAfter": 9.690666666666667,
+        "playedContacts": 2
+      },
+      {
+        "action": "undo-boundary",
+        "turn": 3,
+        "phaseSecondsAfter": 10.309333333333333
+      },
+      {
+        "action": "board",
+        "location": "rabbit-pier",
+        "turn": 4,
+        "phaseSecondsAfter": 12.218666666666666,
+        "playedContacts": 2
+      },
+      {
+        "action": "map-shallows",
+        "location": "rabbit-pier",
+        "turn": 5,
+        "phaseSecondsAfter": 14.336,
+        "playedContacts": 0
+      },
+      {
+        "action": "map-stone",
+        "location": "shallows",
+        "turn": 6,
+        "phaseSecondsAfter": 16.509333333333334,
+        "playedContacts": 0
+      },
+      {
+        "action": "board",
+        "location": "stone",
+        "turn": 7,
+        "phaseSecondsAfter": 17.890666666666668,
+        "playedContacts": 2
+      },
+      {
+        "action": "map-harbor",
+        "location": "stone",
+        "turn": 8,
+        "phaseSecondsAfter": 20.4,
+        "playedContacts": 0
+      },
+      {
+        "action": "unload",
+        "location": "harbor",
+        "turn": 9,
+        "phaseSecondsAfter": 22.149333333333335,
+        "playedContacts": 1
+      }
+    ],
+    "arrival": {
+      "count": 1,
+      "firstObservedPhaseBracket": [
+        21.869333333333334,
+        21.970666666666666
+      ],
+      "plan": "Baseline fixed A4/F#4/D4 offsets 0/0.32/0.78 seconds",
+      "activeAtEnd": false,
+      "voicesAtEnd": null
+    },
+    "contacts": {
+      "played": 8,
+      "audioSkipped": 0,
+      "peakSources": 2,
+      "staleVisualPhases": []
+    },
+    "budget": {
+      "contexts": 1,
+      "schedulers": 1,
+      "peakOwned": 15,
+      "droppedTones": 0
+    },
+    "master": {
+      "firstObservation": 0.6499999761581421,
+      "lastObservation": 0.6499999761581421,
+      "atEveryCompletedAction": [
+        0.6499999761581421,
+        0.6499999761581421,
+        0.6499999761581421,
+        0.6499999761581421,
+        0.6499999761581421,
+        0.6499999761581421,
+        0.6499999761581421,
+        0.6499999761581421,
+        0.6499999761581421,
+        0.6499999761581421,
+        0.6499999761581421
+      ]
+    },
+    "finalState": {
+      "turn": 9,
+      "tideLevel": 2,
+      "boatNodeId": "harbor",
+      "aboard": [],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "stone-pier": [],
+        "rabbit-pier": []
+      },
+      "delivered": [
+        "rabbit-1",
+        "rabbit-2",
+        "sheep-1"
+      ],
+      "status": "won",
+      "lossReason": null
+    },
+    "environment": {
+      "browser": "156.0.8078.4",
+      "node": "v24.15.0",
+      "platform": "win32",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "dpr": 1,
+      "input": "emulated touch",
+      "renderer": "SwiftShader",
+      "base": "http://127.0.0.1:5195"
+    },
+    "screenshots": [
+      {
+        "path": "reviews/audio-polish/before/phone-start.png",
+        "sha256": "60e1b1a3425c2f73100e62115e68f240d744ef6073ea401b1e1b3a1ee33eda4b"
+      },
+      {
+        "path": "reviews/audio-polish/before/phone-success.png",
+        "sha256": "dea2f477a0922122e6fe13f5f8f2fa7819a0e8bc035d31952ce53f98b85faf6b"
+      }
+    ],
+    "errors": []
+  },
+  "after": {
+    "source": {
+      "kind": "working tree at HEAD plus recorded changes",
+      "head": "a4fc4658103b630a2ae527e8479ff66d7232dff3",
+      "runtimeHash": "d53af122f76cce2e0afdb8fc1177b2d77345fd1d0293bdf4d13958066b944d14",
+      "manifest": "after/source.json",
+      "unchangedThroughout": true
+    },
+    "recording": {
+      "path": "reviews/audio-polish/after/raw/holding-runtime-audio.webm",
+      "sha256": "92757106dd6ac2a976450fb178a203aface2a6b92f0ef7fe64fe3ccae15c15f0",
+      "bytes": 2687229,
+      "wallSeconds": 28.86620000001788,
+      "streams": [
+        {
+          "index": 0,
+          "codec": "vp9",
+          "type": "video",
+          "width": 844,
+          "height": 390,
+          "packetEndSeconds": 28.674
+        },
+        {
+          "index": 1,
+          "codec": "opus",
+          "type": "audio",
+          "sampleRate": "48000",
+          "channels": 2,
+          "packetEndSeconds": 28.793
+        }
+      ],
+      "decodePassed": true,
+      "meanDb": -36.6,
+      "peakDb": -22.6,
+      "processing": "No normalization, gain or replacement audio. MediaRecorder receives the existing runtime master stream directly."
+    },
+    "silentInterface": {
+      "path": "reviews/audio-polish/after/raw/holding-full-interface-silent.webm",
+      "sha256": "a147d07f43d41d0bc600f59aea3ff00a870b446a7532d162dd6c9c1ed8f12020",
+      "audio": false,
+      "decodePassed": true
+    },
+    "route": [
+      {
+        "action": "unload",
+        "location": "stone",
+        "turn": 1,
+        "phaseSecondsAfter": 3.1306666666666665,
+        "playedContacts": 1
+      },
+      {
+        "action": "map-shallows",
+        "location": "stone",
+        "turn": 2,
+        "phaseSecondsAfter": 5.341333333333333,
+        "playedContacts": 0
+      },
+      {
+        "action": "map-rabbit-pier",
+        "location": "shallows",
+        "turn": 3,
+        "phaseSecondsAfter": 7.541333333333333,
+        "playedContacts": 0
+      },
+      {
+        "action": "board",
+        "location": "rabbit-pier",
+        "turn": 4,
+        "phaseSecondsAfter": 9.680000000000001,
+        "playedContacts": 2
+      },
+      {
+        "action": "undo-boundary",
+        "turn": 3,
+        "phaseSecondsAfter": 10.301333333333334
+      },
+      {
+        "action": "board",
+        "location": "rabbit-pier",
+        "turn": 4,
+        "phaseSecondsAfter": 12.210666666666668,
+        "playedContacts": 2
+      },
+      {
+        "action": "map-shallows",
+        "location": "rabbit-pier",
+        "turn": 5,
+        "phaseSecondsAfter": 14.381333333333334,
+        "playedContacts": 0
+      },
+      {
+        "action": "map-stone",
+        "location": "shallows",
+        "turn": 6,
+        "phaseSecondsAfter": 16.69066666666667,
+        "playedContacts": 0
+      },
+      {
+        "action": "board",
+        "location": "stone",
+        "turn": 7,
+        "phaseSecondsAfter": 18.04,
+        "playedContacts": 1
+      },
+      {
+        "action": "map-harbor",
+        "location": "stone",
+        "turn": 8,
+        "phaseSecondsAfter": 20.701333333333334,
+        "playedContacts": 0
+      },
+      {
+        "action": "unload",
+        "location": "harbor",
+        "turn": 9,
+        "phaseSecondsAfter": 22.597333333333335,
+        "playedContacts": 1
+      }
+    ],
+    "arrival": {
+      "count": 1,
+      "firstObservedPhaseBracket": [
+        22.28,
+        22.381333333333334
+      ],
+      "plan": {
+        "time": 22.352,
+        "phase": 22.312,
+        "notes": [
+          {
+            "stage": "opening",
+            "offset": 0,
+            "duration": 1.55,
+            "attack": 0.12,
+            "peak": 0.06,
+            "palette": "pad",
+            "note": 57
+          },
+          {
+            "stage": "answer",
+            "offset": 0.48,
+            "duration": 1.9,
+            "attack": 0.065,
+            "peak": 0.078,
+            "palette": "pluck",
+            "note": 69
+          },
+          {
+            "stage": "settle",
+            "offset": 1.1,
+            "duration": 2.25,
+            "attack": 0.2,
+            "peak": 0.044,
+            "palette": "pad",
+            "note": 66
+          }
+        ]
+      },
+      "activeAtEnd": false,
+      "voicesAtEnd": 0
+    },
+    "contacts": {
+      "played": 7,
+      "audioSkipped": 0,
+      "peakSources": 2,
+      "staleVisualPhases": [
+        {
+          "transfer": 4,
+          "action": "board",
+          "passengerIds": [
+            "sheep-1"
+          ],
+          "stage": "settling",
+          "progress": 0.9294230769460018,
+          "outcome": "stale"
+        }
+      ]
+    },
+    "budget": {
+      "contexts": 1,
+      "schedulers": 1,
+      "peakOwned": 16,
+      "droppedTones": 0
+    },
+    "master": {
+      "firstObservation": 0.23088519275188446,
+      "lastObservation": 0.6499999761581421,
+      "atEveryCompletedAction": [
+        0.6499999761581421,
+        0.6499999761581421,
+        0.6499999761581421,
+        0.6499999761581421,
+        0.6499999761581421,
+        0.6499999761581421,
+        0.6499999761581421,
+        0.6499999761581421,
+        0.6499999761581421,
+        0.6499999761581421,
+        0.6499999761581421
+      ]
+    },
+    "finalState": {
+      "turn": 9,
+      "tideLevel": 2,
+      "boatNodeId": "harbor",
+      "aboard": [],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "stone-pier": [],
+        "rabbit-pier": []
+      },
+      "delivered": [
+        "rabbit-1",
+        "rabbit-2",
+        "sheep-1"
+      ],
+      "status": "won",
+      "lossReason": null
+    },
+    "environment": {
+      "browser": "156.0.8078.4",
+      "node": "v24.15.0",
+      "platform": "win32",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "dpr": 1,
+      "input": "emulated touch",
+      "renderer": "SwiftShader",
+      "base": "http://127.0.0.1:5194"
+    },
+    "screenshots": [
+      {
+        "path": "reviews/audio-polish/after/phone-start.png",
+        "sha256": "d7c0947f855701667777da9b860086fbc542b0da3a23627d98c5971d12721318"
+      },
+      {
+        "path": "reviews/audio-polish/after/phone-success.png",
+        "sha256": "1da0a1ed8c977978587a4d453292a6ca4c26f54426862b00bf1080b3cac4da8f"
+      }
+    ],
+    "errors": []
+  },
+  "nativeImageInspection": "Before/after start and success screenshots inspected at native 844x390; accepted framing and interface unchanged. These stills identify the actual captured game, not a new broad visual campaign.",
+  "listening": "Speaker/headphone listening unavailable. Phone-speaker weight, musical character, perceived balance and subjective improvement are pending user playtest. Decoded levels and event counters are not audible approval.",
+  "retention": "Raw videos and verbose runtime samples are local/ignored; committed metadata and selected screenshots retain hashes and source identity. A fresh clone does not contain raw recordings."
+}

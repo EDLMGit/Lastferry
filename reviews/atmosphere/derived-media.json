@@ -1,0 +1,89 @@
+{
+  "source": {
+    "head": "7346b91c23331b7c1e8ad4b147c8fa4006767a89",
+    "sourceHash": "9315d3d214bb1a07c76557f6e6e89643f7be3a3efc52309e7ad98886db543668",
+    "runtimeHash": "e75642155182dd408e52e5bf5bb062277b6304f52d034f3b2c488332ab82eb28",
+    "sourceManifest": "source-manifest.json"
+  },
+  "screenshots": [
+    {
+      "path": "reviews/atmosphere/after/holding-clear-transit-video-frame.png",
+      "sha256": "5d609a2ebc9756ee2088c830baaf282139fe3c617e051a9ea774881c5f61b2f2",
+      "viewport": [
+        1440,
+        900
+      ],
+      "method": "FFmpeg decode of one actual gameplay frame from the final original-speed Playwright recording",
+      "derivedFrom": {
+        "path": "reviews/atmosphere/after/raw/holding-short-crossing-idle.webm",
+        "sha256": "1e6360728f611bb8fc082711cce585c363fae07fce55129db0146d4c4af5e87f",
+        "timeSeconds": 23.137,
+        "timeMeaning": "Requested accurate seek; first decoded frame at or after seek on 25fps source"
+      },
+      "transformations": "None: native resolution, uncropped, no overlays or image generation",
+      "inspectedAtNativeSize": true
+    }
+  ],
+  "recordings": [
+    {
+      "path": "reviews/atmosphere/before/raw/holding-short-crossing-idle.webm",
+      "sha256": "ad05481f92ce289d1a4d0ab980f8504f08f3af7142031bbc4edfff16f14f00ab",
+      "durationSeconds": 26.92,
+      "sourceHash": null,
+      "runtimeHash": "dd0e930127a11d3bcc6592b7540928c908ba51277ba760b8e80b09d66814869a",
+      "sourceManifest": "before/capture-manifest.json",
+      "phase": "before",
+      "originalSpeed": true,
+      "edited": false,
+      "audio": "Silent Playwright screen recording. Actual runtime audio recorded separately.",
+      "visibleSuccessTailInspected": true
+    },
+    {
+      "path": "reviews/atmosphere/before/raw/bellwater-long-crossing-idle.webm",
+      "sha256": "1c6140098b134a059184aa25053f0d04815d3ba5ede51130ca1e7754180b84d7",
+      "durationSeconds": 39.32,
+      "sourceHash": null,
+      "runtimeHash": "dd0e930127a11d3bcc6592b7540928c908ba51277ba760b8e80b09d66814869a",
+      "sourceManifest": "before/capture-manifest.json",
+      "phase": "before",
+      "originalSpeed": true,
+      "edited": false,
+      "audio": "Silent Playwright screen recording. Actual runtime audio recorded separately.",
+      "visibleSuccessTailInspected": true
+    },
+    {
+      "path": "reviews/atmosphere/after/raw/holding-short-crossing-idle.webm",
+      "sha256": "1e6360728f611bb8fc082711cce585c363fae07fce55129db0146d4c4af5e87f",
+      "durationSeconds": 35.52,
+      "sourceHash": "9315d3d214bb1a07c76557f6e6e89643f7be3a3efc52309e7ad98886db543668",
+      "runtimeHash": "e75642155182dd408e52e5bf5bb062277b6304f52d034f3b2c488332ab82eb28",
+      "sourceManifest": "after/capture-manifest.json",
+      "phase": "after",
+      "originalSpeed": true,
+      "edited": false,
+      "audio": "Silent Playwright screen recording. Actual runtime audio recorded separately.",
+      "visibleSuccessTailInspected": true
+    },
+    {
+      "path": "reviews/atmosphere/after/raw/bellwater-long-crossing-idle.webm",
+      "sha256": "50c9da90a521de2264453874222c4bf46044e013e1eea70b3b5c8b0e540ddd70",
+      "durationSeconds": 42.72,
+      "sourceHash": "9315d3d214bb1a07c76557f6e6e89643f7be3a3efc52309e7ad98886db543668",
+      "runtimeHash": "e75642155182dd408e52e5bf5bb062277b6304f52d034f3b2c488332ab82eb28",
+      "sourceManifest": "after/capture-manifest.json",
+      "phase": "after",
+      "originalSpeed": true,
+      "edited": false,
+      "audio": "Silent Playwright screen recording. Actual runtime audio recorded separately.",
+      "visibleSuccessTailInspected": true
+    }
+  ],
+  "audioManifest": "runtime-music-media.json",
+  "inspection": {
+    "selectedGameplayPNGs": "All 9 before and all 9 final after PNGs inspected at original resolution; the selected transit frame also inspected at 1440x900.",
+    "idleMotion": "Ordered decoded frames spanning 1–9 seconds in each cove before/after; final native 9-second frames inspected.",
+    "travelMotion": "Final Holding loaded Harbor crossing and Bellwater outer passage in both directions decoded in order: card hidden, passengers attached to deck, short soft wake separate from route.",
+    "success": "A frame 0.2 seconds before the end of each original final recording was decoded at native 1440x900: Holding action9 and Bellwater action14 show visible complete success.",
+    "limitations": "Frame inspection supports motion review but does not establish physical-device frame pacing or musical listening acceptance."
+  }
+}

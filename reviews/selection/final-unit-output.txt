@@ -1,0 +1,36 @@
+
+> last-ferry@1.0.0 test:unit
+> vitest run --reporter=default --reporter=json --outputFile=reviews/selection/final-unit-results.json
+
+
+ RUN  v5.0.5 C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry
+
+stdout | tests/unit/holding-pier.test.ts > The Holding Pier uses the actual application reducer > exhaustive reachable states: shortest win nine, no win bypasses sheep holding at Stone
+{"experiment":"holding-pier","canonicalStates":154,"winningStates":1,"bypassWins":0,"shortestActions":9}
+
+ ✓ tests/unit/arrangement.test.ts (5 tests) 15ms
+ ✓ tests/unit/rules.test.ts (15 tests) 20ms
+ ✓ tests/unit/holding-pier.test.ts (3 tests) 34ms
+ ✓ tests/unit/presentation.test.ts (10 tests) 12ms
+ ✓ tests/unit/selection-placement.test.ts (2 tests) 4ms
+ ✓ tests/unit/location.test.ts (6 tests) 10ms
+ ✓ tests/unit/transitions.test.ts (5 tests) 14ms
+stdout | tests/unit/bellwater.test.ts > Bellwater Cove uses the production reducer > complete canonical reachability retains the route and pickup constraints
+{"cove":"bellwater","canonicalStates":403,"winningStates":4,"shortestActions":10,"noShallowWins":0,"bellFirstWins":0,"earlyDeliveryWins":0,"noWaitWins":2,"waitedWins":2,"method":"Production reducer and legalActions, sorted passenger identities and pier keys, turn capped only after the final rise, monotonic path-history flags, no search horizon."}
+
+ ✓ tests/unit/bellwater.test.ts (15 tests) 77ms
+ ✓ tests/unit/contact.test.ts (3 tests) 65ms
+ ✓ tests/unit/audio.test.ts (11 tests) 142ms
+ ✓ tests/unit/paths.test.ts (13 tests) 509ms
+ ✓ tests/unit/water.test.ts (7 tests) 940ms
+   ✓ actual water level controls the transition from low ground to submerged ground while Harbor remains exposed 303ms
+ ✓ tests/unit/clearance.test.ts (6 tests) 1145ms
+   ✓ first-crossing: actual modeled ferry footprint clears all land and pier decks along both directions and yaw turns 477ms
+   ✓ bellwater: actual modeled ferry footprint clears all land and pier decks along both directions and yaw turns 407ms
+
+ Test Files  13 passed (13)
+      Tests  101 passed (101)
+   Start at  19:34:23
+   Duration  1.47s (tests 74%, import 14%, transform 9%, worker 3%)
+
+JSON report written to C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/reviews/selection/final-unit-results.json

@@ -1,0 +1,56 @@
+
+> last-ferry@1.0.0 test:e2e
+> playwright test wide-berth.spec.ts -g earned Driftwood|portrait staging|five-body six-space
+
+
+Running 3 tests using 1 worker
+
+(node:45404) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\e2e\wide-berth.spec.ts:272:1 › earned Driftwood launch and full six-space deep-route rescue with runtime audio (3.8m)
+  ok 2 tests\e2e\wide-berth.spec.ts:332:1 › portrait staging strategy and current-depth shortcut with real full rescue (1.2m)
+  x  3 tests\e2e\wide-berth.spec.ts:385:1 › five-body six-space witness, six waiting choices, overcapacity and usable fallback (1.4m)
+
+
+  1) tests\e2e\wide-berth.spec.ts:385:1 › five-body six-space witness, six waiting choices, overcapacity and usable fallback 
+
+    Error: expect(locator).toBeInViewport() failed
+
+    Locator:  locator('#preview .requirement')
+    Expected: in viewport
+    Received: viewport ratio 0.8848569393157959
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeInViewport" locator('#preview .requirement') with timeout 10000ms
+      - waiting for locator('#preview .requirement')
+        16 × locator resolved to <p class="requirement">The boat has 6 spaces; this group needs 8.</p>
+           - unexpected value "viewport ratio 0.8848569393157959"
+
+
+       at ui.ts:119
+
+      117 | }
+      118 | export async function fullyVisible(page: Page, locator: Locator, touchTarget = true) {
+    > 119 |   await expect(locator).toBeInViewport({ ratio: 1 });
+          |                         ^
+      120 |   const bounds = await locator.boundingBox();
+      121 |   const size = page.viewportSize()!;
+      122 |   expect(bounds).not.toBeNull();
+        at fullyVisible (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\ui.ts:119:25)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\wide-berth.spec.ts:435:13
+
+    Error Context: test-results\wide-berth-five-body-six-s-d6f50-apacity-and-usable-fallback\error-context.md
+
+    Error Context: test-results\wide-berth-five-body-six-s-d6f50-apacity-and-usable-fallback\error-context.md
+
+  Slow test file: tests\e2e\wide-berth.spec.ts (6.4m)
+  Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
+  1 failed
+    tests\e2e\wide-berth.spec.ts:385:1 › five-body six-space witness, six waiting choices, overcapacity and usable fallback 
+  2 passed (6.4m)
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

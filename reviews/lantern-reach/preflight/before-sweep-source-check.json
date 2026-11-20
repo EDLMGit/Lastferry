@@ -1,0 +1,224 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "-c",
+      "reviews/lantern-reach/gameplay.config.ts"
+    ],
+    "configFile": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\lantern-reach\\gameplay.config.ts",
+    "rootDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/reviews/lantern-reach",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/.cache/lantern-reach-gameplay",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/reviews/lantern-reach",
+        "testIgnore": [],
+        "testMatch": [
+          "gameplay.spec.ts"
+        ],
+        "timeout": 420000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\.cache\\lantern-reach-gameplay",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\lantern-reach",
+        "snapshotDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\lantern-reach",
+        "testIgnore": [],
+        "testMatch": "gameplay.spec.ts",
+        "timeout": 420000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5370",
+          "hasTouch": true,
+          "isMobile": true,
+          "deviceScaleFactor": 1,
+          "video": "off",
+          "actionTimeout": 12000,
+          "launchOptions": {
+            "ignoreDefaultArgs": [
+              "--autoplay-policy=no-user-gesture-required"
+            ],
+            "args": [
+              "--use-angle=swiftshader",
+              "--enable-unsafe-swiftshader",
+              "--autoplay-policy=document-user-activation-required"
+            ]
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\lantern-reach\\gameplay\\browser.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "gameplay.spec.ts",
+      "file": "gameplay.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Release touch rescue via shortcut at 390x844",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 420000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 31140,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-18T17:53:14.307Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a8475ef9564cfbc88065-988366e7f1b90b0a36a4",
+          "file": "gameplay.spec.ts",
+          "line": 159,
+          "column": 3
+        },
+        {
+          "title": "Release touch rescue via detour at 780x320",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 420000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 69240,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"ecfebb48dff04493943f4ef9ddd1819e33d382a5caf7c1dc5c071906df6f631e\"\u001b[39m\nReceived: \u001b[31m\"29b232d80259d1ed929d7236803b200c44c6ba207eec091187a97222b98c58c4\"\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"ecfebb48dff04493943f4ef9ddd1819e33d382a5caf7c1dc5c071906df6f631e\"\u001b[39m\nReceived: \u001b[31m\"29b232d80259d1ed929d7236803b200c44c6ba207eec091187a97222b98c58c4\"\u001b[39m\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\lantern-reach\\gameplay.spec.ts:217:36",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\lantern-reach\\gameplay.spec.ts",
+                      "column": 36,
+                      "line": 217
+                    },
+                    "snippet": "  215 |     }\n  216 |     expect(errors).toEqual([]);\n> 217 |     expect(runtimeSource().sha256).toBe(source.sha256);\n      |                                    ^\n  218 |     const tests = Object.fromEntries(['reviews/lantern-reach/gameplay.spec.ts', 'reviews/lantern-reach/gameplay.config.ts', 'tests/e2e/cove-eight-support.ts', 'tests/e2e/large-cove-support.ts', 'tests/e2e/ui.ts', 'tests/e2e/three-lanterns-support.ts'].map(file => [file, hash(readFileSync(file))]));\n  219 |     report(directory('source'), source.sha256, { head: source.head, inputs: source.inputs, sha256: source.sha256, tests, build, browser: browser.version(), node: process.version, os: process.platform, input: 'Chromium touch emulation, DPR 1, SwiftShader' });\n  220 |     report(out, 'actual-route', { source: source.sha256, build, route: route.id, actions: route.actions, timeline, earlyOpening, terminalUndoAndRedelivery: true, errors, time: new Date().toISOString(), stateMethod: 'Production reducer expectations compared to visible release turn, tide, local map/action controls, terminal status and arrival roster. No debug API.' });"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\lantern-reach\\gameplay.spec.ts",
+                        "column": 36,
+                        "line": 217
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"ecfebb48dff04493943f4ef9ddd1819e33d382a5caf7c1dc5c071906df6f631e\"\u001b[39m\nReceived: \u001b[31m\"29b232d80259d1ed929d7236803b200c44c6ba207eec091187a97222b98c58c4\"\u001b[39m\n\n  215 |     }\n  216 |     expect(errors).toEqual([]);\n> 217 |     expect(runtimeSource().sha256).toBe(source.sha256);\n      |                                    ^\n  218 |     const tests = Object.fromEntries(['reviews/lantern-reach/gameplay.spec.ts', 'reviews/lantern-reach/gameplay.config.ts', 'tests/e2e/cove-eight-support.ts', 'tests/e2e/large-cove-support.ts', 'tests/e2e/ui.ts', 'tests/e2e/three-lanterns-support.ts'].map(file => [file, hash(readFileSync(file))]));\n  219 |     report(directory('source'), source.sha256, { head: source.head, inputs: source.inputs, sha256: source.sha256, tests, build, browser: browser.version(), node: process.version, os: process.platform, input: 'Chromium touch emulation, DPR 1, SwiftShader' });\n  220 |     report(out, 'actual-route', { source: source.sha256, build, route: route.id, actions: route.actions, timeline, earlyOpening, terminalUndoAndRedelivery: true, errors, time: new Date().toISOString(), stateMethod: 'Production reducer expectations compared to visible release turn, tide, local map/action controls, terminal status and arrival roster. No debug API.' });\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\lantern-reach\\gameplay.spec.ts:217:36"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-18T17:53:45.546Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\.cache\\lantern-reach-gameplay\\gameplay-Release-touch-rescue-via-detour-at-780x320\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\lantern-reach\\gameplay.spec.ts",
+                    "column": 36,
+                    "line": 217
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "a8475ef9564cfbc88065-43e8caa4361263614bd4",
+          "file": "gameplay.spec.ts",
+          "line": 159,
+          "column": 3
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-18T17:53:13.688Z",
+    "duration": 102153.24,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "levelId": "first-crossing",
+  "id": "missed-sheep-deadline",
+  "purpose": "Failure boundary: at the end of turn 8 the second rise reaches the sheep's still-occupied pier.",
+  "actions": [
+    { "type": "wait" },
+    { "type": "wait" },
+    { "type": "wait" },
+    { "type": "wait" },
+    { "type": "wait" },
+    { "type": "wait" },
+    { "type": "wait" },
+    { "type": "wait" }
+  ],
+  "expected": { "status": "lost", "turn": 8, "tideLevel": 2, "boatNodeId": "cut", "delivered": [], "lossReason": { "code": "PASSENGER_STRANDED", "pierId": "sheep-pier", "passengerIds": ["sheep-1"] } }
+}

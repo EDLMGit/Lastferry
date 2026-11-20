@@ -1,0 +1,90 @@
+{
+  "base": "7efe98654fa3df01fcb8338c6c28e664e5712ca1",
+  "executedAt": "2026-10-22T09:47:16.261Z",
+  "command": "node .cache/audit-environment-data.mjs",
+  "result": "pass",
+  "levels": [
+    {
+      "path": "data/first-crossing.level.json",
+      "allNonRouteControlDataIdentical": true,
+      "stoppingEndpointsIdentical": true,
+      "interiorControlChanges": []
+    },
+    {
+      "path": "data/holding-pier.level.json",
+      "allNonRouteControlDataIdentical": true,
+      "stoppingEndpointsIdentical": true,
+      "interiorControlChanges": []
+    },
+    {
+      "path": "data/bellwater.level.json",
+      "allNonRouteControlDataIdentical": true,
+      "stoppingEndpointsIdentical": true,
+      "interiorControlChanges": [
+        {
+          "edge": "harbor-shallows",
+          "before": [
+            [
+              -5.6,
+              0.5
+            ],
+            [
+              -2.7,
+              1.2
+            ],
+            [
+              0,
+              1.3
+            ]
+          ],
+          "after": [
+            [
+              -5.6,
+              0.5
+            ],
+            [
+              -2.7,
+              2
+            ],
+            [
+              0,
+              1.3
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "unchanged": [
+    {
+      "path": "src/game/rules.ts",
+      "sha256": "aa37c820e121955416e964476de296bfd6b755ac569dcdc958b459884530a44b",
+      "identicalToBase": true
+    },
+    {
+      "path": "src/game/session.ts",
+      "sha256": "96a670a82ceada27f7a0f750b45589b55e621256b97b9b7b26916221e4f3fde9",
+      "identicalToBase": true
+    },
+    {
+      "path": "src/levels/level.ts",
+      "sha256": "ad0f978d63a96157c043484081b83ec363a9c82f165c916ff726e678742bb9a9",
+      "identicalToBase": true
+    },
+    {
+      "path": "docs/GAMEPLAY_RULES.md",
+      "sha256": "372c94bbb29731df1f2299f31b2eadd3153adee0ad2a785f8a6aac20f0b8c7bf",
+      "identicalToBase": true
+    },
+    {
+      "path": "package.json",
+      "sha256": "c8f57d8c320535e0a245aad65e96327c6ab6a952002fd5daf02318c95cce3929",
+      "identicalToBase": true
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "fa75e13e3b5a563e3d99e14d514a205bb521344250c7479861e3e1507731a7f1",
+      "identicalToBase": true
+    }
+  ]
+}

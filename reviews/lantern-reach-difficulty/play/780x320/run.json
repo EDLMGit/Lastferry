@@ -1,0 +1,1048 @@
+{
+  "source": "838d626e8b0904eb87a0d6910ddf84b3df2300a2d6cf15d6f212fce170b26c7c",
+  "build": {
+    "./assets/index-QibhwzqL.js": "fcd480307bcd01826f07137ea018994e74e2cdc2032adc8ef23412d06caa4b36",
+    "./assets/index-BL2fzgv8.css": "57c4d4113b47aa32a9972bb05f9dba1c3b8d2a6b8b9eb9f6d77eca8d1984e936"
+  },
+  "browser": "156.0.8078.4",
+  "width": 780,
+  "height": 320,
+  "route": "signal-first",
+  "correctActions": [
+    {
+      "type": "move",
+      "to": "signal"
+    },
+    {
+      "type": "open-bridge"
+    },
+    {
+      "type": "move",
+      "to": "harbor"
+    },
+    {
+      "type": "unload",
+      "passengerIds": [
+        "flax"
+      ]
+    },
+    {
+      "type": "move",
+      "to": "signal"
+    },
+    {
+      "type": "move",
+      "to": "wick"
+    },
+    {
+      "type": "move",
+      "to": "east-float"
+    },
+    {
+      "type": "board",
+      "passengerIds": [
+        "sorbus"
+      ]
+    },
+    {
+      "type": "move",
+      "to": "wick"
+    },
+    {
+      "type": "board",
+      "passengerIds": [
+        "tallow",
+        "ember"
+      ]
+    },
+    {
+      "type": "move",
+      "to": "signal"
+    },
+    {
+      "type": "move",
+      "to": "harbor"
+    },
+    {
+      "type": "unload",
+      "passengerIds": [
+        "sorbus",
+        "tallow",
+        "ember"
+      ]
+    }
+  ],
+  "mistake": "board-at-six",
+  "mistakeActions": [
+    {
+      "type": "move",
+      "to": "signal"
+    },
+    {
+      "type": "open-bridge"
+    },
+    {
+      "type": "move",
+      "to": "harbor"
+    },
+    {
+      "type": "unload",
+      "passengerIds": [
+        "flax"
+      ]
+    },
+    {
+      "type": "move",
+      "to": "signal"
+    },
+    {
+      "type": "move",
+      "to": "wick"
+    },
+    {
+      "type": "board",
+      "passengerIds": [
+        "tallow",
+        "ember"
+      ]
+    },
+    {
+      "type": "move",
+      "to": "east-float"
+    }
+  ],
+  "sharedOpeningActions": 6,
+  "secondStrategy": {
+    "id": "reserve-room",
+    "states": [
+      {
+        "turn": 1,
+        "tideLevel": 0,
+        "boatNodeId": "wick",
+        "aboard": [
+          "flax",
+          "tallow"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "signal-pier": [],
+          "wick-pier": [
+            "ember"
+          ],
+          "east-pier": [
+            "sorbus"
+          ]
+        },
+        "bridgeOpen": false,
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      {
+        "turn": 2,
+        "tideLevel": 0,
+        "boatNodeId": "east-float",
+        "aboard": [
+          "flax",
+          "tallow"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "signal-pier": [],
+          "wick-pier": [
+            "ember"
+          ],
+          "east-pier": [
+            "sorbus"
+          ]
+        },
+        "bridgeOpen": false,
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      {
+        "turn": 3,
+        "tideLevel": 1,
+        "boatNodeId": "east-float",
+        "aboard": [
+          "flax",
+          "tallow",
+          "sorbus"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "signal-pier": [],
+          "wick-pier": [
+            "ember"
+          ],
+          "east-pier": []
+        },
+        "bridgeOpen": false,
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      {
+        "turn": 4,
+        "tideLevel": 1,
+        "boatNodeId": "south-float",
+        "aboard": [
+          "flax",
+          "tallow",
+          "sorbus"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "signal-pier": [],
+          "wick-pier": [
+            "ember"
+          ],
+          "east-pier": []
+        },
+        "bridgeOpen": false,
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      {
+        "turn": 5,
+        "tideLevel": 1,
+        "boatNodeId": "west-float",
+        "aboard": [
+          "flax",
+          "tallow",
+          "sorbus"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "signal-pier": [],
+          "wick-pier": [
+            "ember"
+          ],
+          "east-pier": []
+        },
+        "bridgeOpen": false,
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      {
+        "turn": 6,
+        "tideLevel": 1,
+        "boatNodeId": "harbor",
+        "aboard": [
+          "flax",
+          "tallow",
+          "sorbus"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "signal-pier": [],
+          "wick-pier": [
+            "ember"
+          ],
+          "east-pier": []
+        },
+        "bridgeOpen": false,
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      },
+      {
+        "turn": 7,
+        "tideLevel": 1,
+        "boatNodeId": "harbor",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "signal-pier": [],
+          "wick-pier": [
+            "ember"
+          ],
+          "east-pier": []
+        },
+        "bridgeOpen": false,
+        "delivered": [
+          "flax",
+          "tallow",
+          "sorbus"
+        ],
+        "status": "playing",
+        "lossReason": null
+      },
+      {
+        "turn": 8,
+        "tideLevel": 2,
+        "boatNodeId": "west-float",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "signal-pier": [],
+          "wick-pier": [
+            "ember"
+          ],
+          "east-pier": []
+        },
+        "bridgeOpen": false,
+        "delivered": [
+          "flax",
+          "tallow",
+          "sorbus"
+        ],
+        "status": "playing",
+        "lossReason": null
+      },
+      {
+        "turn": 9,
+        "tideLevel": 2,
+        "boatNodeId": "south-float",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "signal-pier": [],
+          "wick-pier": [
+            "ember"
+          ],
+          "east-pier": []
+        },
+        "bridgeOpen": false,
+        "delivered": [
+          "flax",
+          "tallow",
+          "sorbus"
+        ],
+        "status": "playing",
+        "lossReason": null
+      },
+      {
+        "turn": 10,
+        "tideLevel": 2,
+        "boatNodeId": "east-float",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "signal-pier": [],
+          "wick-pier": [
+            "ember"
+          ],
+          "east-pier": []
+        },
+        "bridgeOpen": false,
+        "delivered": [
+          "flax",
+          "tallow",
+          "sorbus"
+        ],
+        "status": "playing",
+        "lossReason": null
+      },
+      {
+        "turn": 11,
+        "tideLevel": 2,
+        "boatNodeId": "wick",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "signal-pier": [],
+          "wick-pier": [
+            "ember"
+          ],
+          "east-pier": []
+        },
+        "bridgeOpen": false,
+        "delivered": [
+          "flax",
+          "tallow",
+          "sorbus"
+        ],
+        "status": "playing",
+        "lossReason": null
+      },
+      {
+        "turn": 12,
+        "tideLevel": 3,
+        "boatNodeId": "wick",
+        "aboard": [
+          "ember"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "signal-pier": [],
+          "wick-pier": [],
+          "east-pier": []
+        },
+        "bridgeOpen": false,
+        "delivered": [
+          "flax",
+          "tallow",
+          "sorbus"
+        ],
+        "status": "playing",
+        "lossReason": null
+      },
+      {
+        "turn": 13,
+        "tideLevel": 3,
+        "boatNodeId": "east-float",
+        "aboard": [
+          "ember"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "signal-pier": [],
+          "wick-pier": [],
+          "east-pier": []
+        },
+        "bridgeOpen": false,
+        "delivered": [
+          "flax",
+          "tallow",
+          "sorbus"
+        ],
+        "status": "playing",
+        "lossReason": null
+      },
+      {
+        "turn": 14,
+        "tideLevel": 3,
+        "boatNodeId": "south-float",
+        "aboard": [
+          "ember"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "signal-pier": [],
+          "wick-pier": [],
+          "east-pier": []
+        },
+        "bridgeOpen": false,
+        "delivered": [
+          "flax",
+          "tallow",
+          "sorbus"
+        ],
+        "status": "playing",
+        "lossReason": null
+      },
+      {
+        "turn": 15,
+        "tideLevel": 3,
+        "boatNodeId": "west-float",
+        "aboard": [
+          "ember"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "signal-pier": [],
+          "wick-pier": [],
+          "east-pier": []
+        },
+        "bridgeOpen": false,
+        "delivered": [
+          "flax",
+          "tallow",
+          "sorbus"
+        ],
+        "status": "playing",
+        "lossReason": null
+      },
+      {
+        "turn": 16,
+        "tideLevel": 3,
+        "boatNodeId": "harbor",
+        "aboard": [
+          "ember"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "signal-pier": [],
+          "wick-pier": [],
+          "east-pier": []
+        },
+        "bridgeOpen": false,
+        "delivered": [
+          "flax",
+          "tallow",
+          "sorbus"
+        ],
+        "status": "playing",
+        "lossReason": null
+      },
+      {
+        "turn": 17,
+        "tideLevel": 3,
+        "boatNodeId": "harbor",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "signal-pier": [],
+          "wick-pier": [],
+          "east-pier": []
+        },
+        "bridgeOpen": false,
+        "delivered": [
+          "flax",
+          "tallow",
+          "sorbus",
+          "ember"
+        ],
+        "status": "won",
+        "lossReason": null
+      }
+    ]
+  },
+  "forecastText": "The tide rises in 2 actions.\nWick Landing · Tallow and Ember (2 spaces) · floods in 6 actions.\nLantern Steps · Sorbus (3 spaces) · floods in 2 actions.\n\nLantern Bridge is open.\n\nWick Race flows from Wick Landing to Lantern Steps. After 2 actions, it turns toward Wick Landing.\n\nAfter action 8 · Lantern Steps → Wick Landing · depth 5. Flooding at Lantern Steps.\nAfter action 12 · Wick Landing → Lantern Steps · depth 6. Flooding at Wick Landing.\n\nSail with the current. Your action finishes before the tide changes.\n\nHarbor stays dry at the next rise. Signal Quay is flooded and empty. Wick Landing stays dry at the next rise. Lantern Steps will flood at the next rise; Sorbus is waiting there.\n\nEach accepted action advances the tide schedule. Thinking and inspection do not.",
+  "waiting": {
+    "place": "Lantern Steps",
+    "names": [
+      "Sorbus"
+    ]
+  },
+  "trialStates": [
+    {
+      "turn": 0,
+      "tideLevel": 0,
+      "boatNodeId": "wick",
+      "aboard": [
+        "flax"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": [
+          "tallow",
+          "ember"
+        ],
+        "east-pier": [
+          "sorbus"
+        ]
+      },
+      "bridgeOpen": false,
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 1,
+      "tideLevel": 0,
+      "boatNodeId": "signal",
+      "aboard": [
+        "flax"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": [
+          "tallow",
+          "ember"
+        ],
+        "east-pier": [
+          "sorbus"
+        ]
+      },
+      "bridgeOpen": false,
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 2,
+      "tideLevel": 0,
+      "boatNodeId": "signal",
+      "aboard": [
+        "flax"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": [
+          "tallow",
+          "ember"
+        ],
+        "east-pier": [
+          "sorbus"
+        ]
+      },
+      "bridgeOpen": true,
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 3,
+      "tideLevel": 1,
+      "boatNodeId": "harbor",
+      "aboard": [
+        "flax"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": [
+          "tallow",
+          "ember"
+        ],
+        "east-pier": [
+          "sorbus"
+        ]
+      },
+      "bridgeOpen": true,
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 4,
+      "tideLevel": 1,
+      "boatNodeId": "harbor",
+      "aboard": [],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": [
+          "tallow",
+          "ember"
+        ],
+        "east-pier": [
+          "sorbus"
+        ]
+      },
+      "bridgeOpen": true,
+      "delivered": [
+        "flax"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 5,
+      "tideLevel": 1,
+      "boatNodeId": "signal",
+      "aboard": [],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": [
+          "tallow",
+          "ember"
+        ],
+        "east-pier": [
+          "sorbus"
+        ]
+      },
+      "bridgeOpen": true,
+      "delivered": [
+        "flax"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 6,
+      "tideLevel": 1,
+      "boatNodeId": "wick",
+      "aboard": [],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": [
+          "tallow",
+          "ember"
+        ],
+        "east-pier": [
+          "sorbus"
+        ]
+      },
+      "bridgeOpen": true,
+      "delivered": [
+        "flax"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 7,
+      "tideLevel": 1,
+      "boatNodeId": "wick",
+      "aboard": [
+        "tallow",
+        "ember"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": [],
+        "east-pier": [
+          "sorbus"
+        ]
+      },
+      "bridgeOpen": true,
+      "delivered": [
+        "flax"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 8,
+      "tideLevel": 2,
+      "boatNodeId": "east-float",
+      "aboard": [
+        "tallow",
+        "ember"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": [],
+        "east-pier": [
+          "sorbus"
+        ]
+      },
+      "bridgeOpen": true,
+      "delivered": [
+        "flax"
+      ],
+      "status": "lost",
+      "lossReason": {
+        "code": "PASSENGER_STRANDED",
+        "pierId": "east-pier",
+        "passengerIds": [
+          "sorbus"
+        ]
+      }
+    }
+  ],
+  "winningStates": [
+    {
+      "turn": 1,
+      "tideLevel": 0,
+      "boatNodeId": "signal",
+      "aboard": [
+        "flax"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": [
+          "tallow",
+          "ember"
+        ],
+        "east-pier": [
+          "sorbus"
+        ]
+      },
+      "bridgeOpen": false,
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 2,
+      "tideLevel": 0,
+      "boatNodeId": "signal",
+      "aboard": [
+        "flax"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": [
+          "tallow",
+          "ember"
+        ],
+        "east-pier": [
+          "sorbus"
+        ]
+      },
+      "bridgeOpen": true,
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 3,
+      "tideLevel": 1,
+      "boatNodeId": "harbor",
+      "aboard": [
+        "flax"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": [
+          "tallow",
+          "ember"
+        ],
+        "east-pier": [
+          "sorbus"
+        ]
+      },
+      "bridgeOpen": true,
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 4,
+      "tideLevel": 1,
+      "boatNodeId": "harbor",
+      "aboard": [],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": [
+          "tallow",
+          "ember"
+        ],
+        "east-pier": [
+          "sorbus"
+        ]
+      },
+      "bridgeOpen": true,
+      "delivered": [
+        "flax"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 5,
+      "tideLevel": 1,
+      "boatNodeId": "signal",
+      "aboard": [],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": [
+          "tallow",
+          "ember"
+        ],
+        "east-pier": [
+          "sorbus"
+        ]
+      },
+      "bridgeOpen": true,
+      "delivered": [
+        "flax"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 6,
+      "tideLevel": 1,
+      "boatNodeId": "wick",
+      "aboard": [],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": [
+          "tallow",
+          "ember"
+        ],
+        "east-pier": [
+          "sorbus"
+        ]
+      },
+      "bridgeOpen": true,
+      "delivered": [
+        "flax"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 7,
+      "tideLevel": 1,
+      "boatNodeId": "east-float",
+      "aboard": [],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": [
+          "tallow",
+          "ember"
+        ],
+        "east-pier": [
+          "sorbus"
+        ]
+      },
+      "bridgeOpen": true,
+      "delivered": [
+        "flax"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 8,
+      "tideLevel": 2,
+      "boatNodeId": "east-float",
+      "aboard": [
+        "sorbus"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": [
+          "tallow",
+          "ember"
+        ],
+        "east-pier": []
+      },
+      "bridgeOpen": true,
+      "delivered": [
+        "flax"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 9,
+      "tideLevel": 2,
+      "boatNodeId": "wick",
+      "aboard": [
+        "sorbus"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": [
+          "tallow",
+          "ember"
+        ],
+        "east-pier": []
+      },
+      "bridgeOpen": true,
+      "delivered": [
+        "flax"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 10,
+      "tideLevel": 2,
+      "boatNodeId": "wick",
+      "aboard": [
+        "sorbus",
+        "tallow",
+        "ember"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": [],
+        "east-pier": []
+      },
+      "bridgeOpen": true,
+      "delivered": [
+        "flax"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 11,
+      "tideLevel": 2,
+      "boatNodeId": "signal",
+      "aboard": [
+        "sorbus",
+        "tallow",
+        "ember"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": [],
+        "east-pier": []
+      },
+      "bridgeOpen": true,
+      "delivered": [
+        "flax"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 12,
+      "tideLevel": 3,
+      "boatNodeId": "harbor",
+      "aboard": [
+        "sorbus",
+        "tallow",
+        "ember"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": [],
+        "east-pier": []
+      },
+      "bridgeOpen": true,
+      "delivered": [
+        "flax"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 13,
+      "tideLevel": 3,
+      "boatNodeId": "harbor",
+      "aboard": [],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "signal-pier": [],
+        "wick-pier": [],
+        "east-pier": []
+      },
+      "bridgeOpen": true,
+      "delivered": [
+        "flax",
+        "sorbus",
+        "tallow",
+        "ember"
+      ],
+      "status": "won",
+      "lossReason": null
+    }
+  ],
+  "terminalUndoRedelivery": true,
+  "pageErrors": [],
+  "clock": [
+    {
+      "event": "bridge open",
+      "turn": 2,
+      "epochMs": 1795029973205.1
+    },
+    {
+      "event": "fork",
+      "turn": 6,
+      "epochMs": 1795029979788.9
+    },
+    {
+      "event": "loss",
+      "turn": 8,
+      "epochMs": 1795029991176.9
+    },
+    {
+      "event": "restored choice",
+      "turn": 6,
+      "epochMs": 1795029996152.2
+    },
+    {
+      "event": "Sorbus aboard",
+      "turn": 8,
+      "epochMs": 1795030007520.5
+    },
+    {
+      "event": "arrival",
+      "turn": 13,
+      "epochMs": 1795030037834.2
+    }
+  ],
+  "method": "Per action, compared the release turn, tide, current location and load with production reducer expectations; observed final roster, loss and bridge facts through UI. No debug API."
+}

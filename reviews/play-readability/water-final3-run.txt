@@ -1,0 +1,47 @@
+
+Running 1 test using 1 worker
+
+(node:40796) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Water capture: driftwood-780x320-tide0-overview
+  x  1 tests\e2e\play-readability-water.spec.ts:152:1 › readability water: Driftwood three tides and stable load geography with Bellwater/Wide deep-route smoke (18.8s)
+
+
+  1) tests\e2e\play-readability-water.spec.ts:152:1 › readability water: Driftwood three tides and stable load geography with Bellwater/Wide deep-route smoke 
+
+    TimeoutError: locator.tap: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for locator('#back-to-boat')
+        - locator resolved to <button id="back-to-boat" class="cove-button cove-button--quiet">…</button>
+      - attempting tap action
+        2 × waiting for element to be visible, enabled and stable
+          - element is not visible
+        - retrying tap action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is not visible
+        - retrying tap action
+          - waiting 100ms
+        26 × waiting for element to be visible, enabled and stable
+           - element is not visible
+         - retrying tap action
+           - waiting 500ms
+
+
+       at ui.ts:39
+
+      37 |     await activate(page, current, touch);
+      38 |   }
+    > 39 |   if (touch) await page.locator(`#${id}`).tap();
+         |                                           ^
+      40 |   else await page.locator(`#${id}`).click();
+      41 | }
+      42 | export async function wholeCove(page: Page, touch = false) {
+        at activate (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\ui.ts:39:43)
+        at playView (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\play-readability-water.spec.ts:72:62)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\play-readability-water.spec.ts:183:5
+
+    Error Context: test-results\play-readability-water\play-readability-water-rea-99a7b-water-Wide-deep-route-smoke\error-context.md
+
+  1 failed
+    tests\e2e\play-readability-water.spec.ts:152:1 › readability water: Driftwood three tides and stable load geography with Bellwater/Wide deep-route smoke 

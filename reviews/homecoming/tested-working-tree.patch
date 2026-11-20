@@ -1,0 +1,2417 @@
+diff --git a/NEXT_TASK_HOMECOMING.md b/NEXT_TASK_HOMECOMING.md
+new file mode 100644
+index 0000000..347b989
+--- /dev/null
++++ b/NEXT_TASK_HOMECOMING.md
+@@ -0,0 +1,172 @@
++# Last Ferry — Next task: Harbor homecoming
++
++## Outcome
++
++Make arriving at Harbor feel like a small, calm celebration: a slowly sweeping lighthouse light, a brief acknowledgment from the rescued animals, a restrained arrival composition, and a compact completion card with the appropriate next action and Settings.
++
++The user accepts the sound for now. This is the next presentation pass. Complete it autonomously within the existing architecture, preserve the accepted game, and supply reviewable evidence.
++
++## Source and continuity
++
++- Repository: https://github.com/EDLMGit/Lastferry
++- Branch: `m1-first-crossing`; PR #1 remains draft.
++- Reviewed baseline: `c82ba896e690c82b731f63dc1fba0a6380ef61e1`.
++- That game version is now published at https://last-ferry-playtest.abumech.chatgpt.site with the existing owner-private audience.
++- Read `AGENTS.md`, `docs/PROJECT_STATE.md`, this task, and the applicable scene/UI/audio guidance. Read `reviews/victory-mix/REVIEW.md` for the accepted audio lifecycle.
++- The accompanying `docs/PROJECT_STATE.md` is the compact continuity record. Keep it current with this task's actual outcome; keep detailed implementation history in `STATUS.md` and the review report.
++- Inspect the checkout before work. If newer work exists, preserve it and compare it with this baseline; do not reset the branch to this SHA.
++- This explicitly requested task supersedes historical milestone limits for the features below. Older task files are context, not a combined backlog to implement.
++
++## Creative direction
++
++The arrival should feel like everyone has reached safety. Warm amber light, a small animal gesture and a closer view are enough. Use the accepted dark teal, ivory and warm border treatment. Keep the water and Harbor visible behind the ending.
++
++No confetti, fireworks, bouncing rewards, new score system, achievements, camera orbit, new music or new level belongs in this pass.
++
++### 1. A real, slow lighthouse sweep
++
++- On a completed rescue, introduce one softly visible amber sweep rotating around the lantern, approximately one revolution every 20 seconds. Tune visually if necessary; it should be perceptible and unhurried.
++- Start the sweep at the existing visible-arrival hook or later. The reducer commits won before unloading finishes; that early state change must not begin the celebration. Use won state for persistence and cleanup after the visible start.
++- Rotate the beam or light presentation, not the lighthouse building. The current lantern is an omnidirectional PointLight: rotating that light alone will not create a visible sweep.
++- Integrate a small, inexpensive beam/sweep representation with the current lantern, arrival glow and reflection. Keep its intensity restrained; do not wash out the lighthouse or flicker across the interface.
++- The sweep persists while the authoritative state is won, including when the completion card is closed or Settings is open. Partial delivery, losing states and ordinary play retain the accepted lighting.
++- Exclude decorative beam geometry from picking and camera-fit bounds. Reuse bounded geometry/materials; no shadow-casting spotlight, new water render pass, full-screen bloom or volumetric ray marching.
++- Under reduced motion use a steady warm light, with no rotation or pulsing.
++- Undo, Restart, cove changes and disposal cleanly restore the correct ordinary presentation.
++
++### 2. One brief animal acknowledgment
++
++- Start the distinct celebration only after final disembarkation has finished and passengers have reached their canonical Harbor positions.
++- Rabbits may each make one small hop, slightly staggered. Give sheep a gentler body bob or grounded acknowledgment that reads as heavier.
++- Earlier delivered animals can join once. No animal celebrates while still crossing the gangplank, hovering over the boat, or clipped through the shore.
++- Keep the total finite reaction around 1–1.5 seconds. End in canonical position and rotation; no repeated bouncing.
++- Apply presentation offsets from known resting transforms. Do not mutate passenger state, occupancy, turn count, tide, rules or canonical anchors.
++- This is a visual gesture: retain the accepted wood-contact timing and single victory cue. Do not create extra impact sounds or trigger the cue from individual hops.
++- Reduced motion gives static, settled animals. Enabling it during a celebration settles movement immediately.
++
++### 3. A modest arrival camera move, subject to phone fit
++
++Implement a small Harbor push-in/reframe as a real camera adjustment: target roughly 8–10% magnification over about one second, preserving the current viewing angle. Begin after disembarkation, and allow it to overlap the brief animal reaction.
++
++This is conditional on a good composition. The full lighthouse, rescued animals, ferry and usable completion controls must fit. Reserve space for the actual completion card. Clamp the move or use no zoom at short phone sizes where it cannot fit; document the choice. Do not trade phone usability for a mandatory effect.
++
++Implementation constraints:
++
++- Keep ordinary puzzle framing and sailing pace unchanged.
++- The camera is orthographic. Do not CSS-scale the canvas.
++- Camera changes must update the projection matrix and `CoastalWater.setView(camera)`.
++- `main.ts` currently caches label placement using viewport dimensions only. Invalidate/recompute projected UI for camera changes, or explicitly hide irrelevant map controls during the won composition and restore/reposition them before play resumes.
++- Account for resizing, browser-bar height changes and rotation during the won state.
++- Restore canonical framing before Undo resumes input. No stale marker coordinates, mismatched picking, dragged labels or cumulative zoom after repeated wins.
++- Reduced motion uses the normal stable framing. Changing back to normal motion must not replay the finite arrival.
++- The existing render loop should own the animation. Do not add an independent loop or a growing collection of timeouts.
++
++### 4. A compact, useful completion card
++
++Refine the existing completion dialog in the accepted visual style. Let the Harbor remain the focus and avoid a large wall of text.
++
++- Use a clear title such as “Everyone home” or the existing cove-specific equivalent, with one short supporting line.
++- Make the genuine next action primary. Holding Pier already progresses to Bellwater through **Next cove**: retain that behavior.
++- Bellwater and optional First Crossing have no implemented next chapter. Offer **Choose a cove** rather than inventing a destination, looping under a misleading Next label, or claiming the full planned story is complete.
++- Provide **Settings** directly from the ending. Keep **Undo last action**, **Restart**, and a way to close the card reachable.
++- While won, the ordinary Menu provides **Return to arrival**, reopening the same completion card without replaying effects. Next cove must remain discoverable after Close.
++- Next/Settings/Undo must be usable as soon as the accepted final transfer has completed. The visual celebration is not a new busy state and imposes no extra wait.
++- Closing/reopening the card or visiting Settings must not replay the celebration, reset the beam phase, replay sound or restore ordinary music volume.
++- The loss presentation remains truthful and usable; do not show a victory celebration on a loss.
++- Keyboard focus should land on an appropriate useful action, remain visible and stay within the active dialog. Repeated taps or held keys must not trigger unintended extra actions.
++
++### 5. Small general Settings, shared by play and the ending
++
++Use the existing single native dialog and interface styling; switch its content/view rather than stacking dialogs.
++
++Settings for this pass:
++
++| Setting | Behavior |
++| --- | --- |
++| Sound | Reuse the current master on/off state and existing persistence. Preserve the always-available sound control and accepted audio activation behavior. |
++| Motion | **Follow device** (default) or **Reduced**. Persist the choice locally; safely fall back to Follow device when storage is unavailable or invalid. |
++
++- Make Settings accessible from the ordinary Menu and completion card.
++- Resolve one effective motion preference for the scene and CSS. A manual Reduced choice must reach water, sailing/transfer presentation, new celebration and relevant UI transitions; it must not be a celebration-only switch.
++- Follow device continues to respond to operating-system preference changes. Reduced remains reduced even if the device preference changes.
++- Back returns to the originating menu/ending with sensible focus. Escape from Settings returns one view; Escape/Close from the parent dismisses it. No input leaks through to the map.
++- Visiting or changing Settings does not restart the cove, spend an action, reset the score phrase or change won music ducking.
++- Do not add volume mixers, graphic-quality presets, accounts or a settings framework.
++
++## Protect the accepted audio and lifecycle
++
++The existing visible-arrival event in `world.ts` calls `effects.arrive()` and `onArrival()` once during the winning unload, after roughly 72% of its progress. In `main.ts`, `onArrival` calls:
++
++```ts
++sound.delivery();
++sound.settleArrangement();
++```
++
++Preserve that accepted sound/duck timing and single event. Do not delay it to the end of the camera move or call it again for the completion card or animal reactions. The finite animal/camera presentation begins after canonical disembarkation; it is separate from the audio hook.
++
++Keep `finish()`'s silent arrangement settlement for recovery. Preserve the current score, cue, wood voices, gain values, 200 ms duck and 700 ms restoration policy. Won music stays quieter while won; leaving won restores it through the established audio path. Generic visual cleanup must not clear persistent won audio intent.
++
++Give the new visual presentation a bounded lifecycle:
++
++- A normal visible rescue plays finite camera/animal movement once, then retains the quiet won presentation.
++- Undo/restart/cove change cancels offsets and restores the appropriate framing without altering game rules.
++- Hiding the page or context-loss recovery settles finite movement and prevents catch-up hops, delayed camera jumps or replayed audio on return.
++- Current hidden-page handling only cancels when `session.busy`; the new post-transfer celebration also needs handling after busy becomes false.
++- Dispose owned resources/listeners. Repeated win → Undo → win cycles must not accumulate geometry, listeners, timers or animation work.
++
++## Work order and scope control
++
++1. Inspect current hooks, ending, settings/persistence and phone composition. Record material findings briefly.
++2. Implement the sweep, finite reactions and ending/settings together with cancellation/reduced motion.
++3. Add the small camera move only with correct projected UI and phone-fit behavior. Simplifying or omitting it on a particular viewport is an intentional fallback, not an unfinished feature.
++4. Verify the touched behavior and fix confirmed defects.
++5. Update `docs/PROJECT_STATE.md`, relevant concise documentation, `STATUS.md` and the review report.
++
++Do not silently expand this task with new levels, mechanics, broader island work, more audio polish, hosting changes or unrelated refactors. Further user feedback will be queued for later passes. Preserve existing user changes.
++
++## Acceptance and verification
++
++Run with Node 24. A fresh production build/typecheck and the unit suite must pass. Add targeted tests for real new risks, such as visual reset, resolved motion preference, settings navigation and camera restoration; avoid tests that merely restate animation constants.
++
++Use the real interface for the following focused evidence. A test hook may expose presentation state for assertions but must not replace playing the rescue.
++
++### Core behavior
++
++- Complete all three existing coves through the UI. Verify one celebration per completed rescue, honest progression and no celebration on partial delivery or loss.
++- On Holding Pier, exercise a subset transfer, Undo across a tide rise, final arrival, Settings → Back, Undo from won, and redelivery.
++- Check Undo during the finite celebration and after it has settled; also Restart, Next cove and rapid repeat input.
++- Check hide/resume during arrival and while already won, plus recovery/context-loss handling where tooling permits. Report simulated events as simulated.
++- Preserve the current victory-mix regression checks for one cue, persistent dry/wet reduction, muted completion and restoration. New visuals must not change their accepted timing.
++
++### Motion and interaction
++
++- Verify normal motion, OS reduced motion, manually selected Reduced, persistence across a cove change/reload, and returning to Follow device.
++- Verify natural Tab/Shift+Tab, Enter/Space and Escape for ending → Settings → Back, and touch-emulated controls. Do not call touch emulation a physical-phone result.
++- Confirm selection, markers and picking align after Undo restores the gameplay camera.
++- Keep useful targets at least 44 CSS px with the existing 48 px touch treatment where practical, and essential phone text at least 14 px.
++
++### Viewports and evidence
++
++- Inspect at 1440×900, 844×390 and 780×390; additionally exercise the new ending/settings and zoom fallback at the previously sensitive 780×320 height.
++- Inspect the actual moving arrival and settled composition at native size. Screenshots alone cannot establish sweep speed, camera comfort or cancellation.
++- Capture a compact set under `reviews/homecoming/`: ordinary baseline, visible arrival, settled ending, Settings, restored play after Undo, and reduced-motion ending, including the short phone composition.
++- Keep one uninterrupted real-interface recording showing arrival → Settings → Back → Undo → redelivery, with actual runtime audio if supported. Keep raw media local/ignored by default and state access accurately.
++- Tie evidence to the tested source with the established manifest workflow. Preserve failures, describe fixes and rerun affected checks. Reuse unchanged evidence only with a relevant source comparison.
++- Compare ordinary-play and won-state resource/draw-call behavior if available; investigate any concrete growth or regression. Do not claim hardware smoothness from software rendering. Do not add a large benchmark project.
++
++The review is not complete if phone controls clip, camera/picking remain stale, passengers retain offsets, arrival repeats unexpectedly, or settings lose state/focus. Physical Android perception/performance remains a separate user playtest; unavailable checks must be named rather than marked passed. Do not rerun every historical suite without a concrete reason.
++
++## Git and handoff
++
++Continue on `m1-first-crossing`. Commit and push the finished task, update existing draft PR #1, and leave main unchanged. Do not force-push, merge, mark the PR ready, or deploy a different build/site as part of this local task.
++
++Return:
++
++- Final full GitHub SHA, remote equality, branch/PR draft status and checkout status.
++- What changed, any camera fallback and exact Settings behavior.
++- Fresh verification results, relevant reused evidence, unresolved failures and unperformed checks.
++- Compact report, screenshot manifest and local recording paths.
++- Explicit deployment status: the private Site still contains `c82ba89` unless a separate confirmed publication occurs.
++
++The reviewed new SHA will be published to the same private Site after review. A GitHub push alone does not update the phone build.
++
+diff --git a/docs/ART_DIRECTION.md b/docs/ART_DIRECTION.md
+index e76228b..5e10e68 100644
+--- a/docs/ART_DIRECTION.md
++++ b/docs/ART_DIRECTION.md
+@@ -46,7 +46,7 @@ Use one consistent deep teal surface, warm ivory text and fine sand/brass border
+ 
+ Docked passenger controls sit near the ferry and gangplank: Board points toward the ferry, Let ashore points toward the pier, and Bring home marks Harbor unloading. A short verb accompanies each directional SVG. They open the existing subset preview and never transfer passengers immediately. Names, dock controls and route callouts avoid figures, global controls, one another and opening touches. A selected current place remains inspectable for free. Modal presentation suppresses underlying local cards and dock controls; cancellation retains logical selection and returns focus safely. The dark success panel leaves Harbor and the delivered passengers visible.
+ 
+-The stable full-canvas fit reclaims water behind the HUD while protecting the complete future-loaded route envelope. Use lateral space before shrinking the cove for a corner control; selection itself never pans or zooms. Holding's Stone island uses the existing sparse rocky vocabulary; Harbor stays sheltered and Rabbit Pier retains its cottage. The lantern has a compact pale warm core within an amber surface, darker supports and local warm gallery/tower spill. Depth testing remains enabled; the roof must occlude light normally. No new bloom, rotating beam or global light effect is introduced.
++The stable full-canvas fit reclaims water behind the HUD while protecting the complete future-loaded route envelope. Use lateral space before shrinking the cove for a corner control; selection itself never pans or zooms. Holding's Stone island uses the existing sparse rocky vocabulary; Harbor stays sheltered and Rabbit Pier retains its cottage. The lantern has a compact pale warm core within an amber surface, darker supports and local warm gallery/tower spill. Depth testing remains enabled; the roof must occlude light normally. Ordinary play retains this local illumination. The Harbor homecoming below adds a won-only sweep; no bloom or global lighting change is introduced.
+ 
+ Use a fixed orthographic camera at approximately **55 degrees above the water plane**. Choose the azimuth around the authored cove so every relevant pier and passage is visible. Do not add camera orbit as a required interaction.
+ 
+@@ -120,3 +120,12 @@ The existing Harbor lamp casts a small elongated broken amber reflection. Visibl
+ Actual short/long comparison selected `clamp(800 + 140 × canonical length, 1200, 2300)` milliseconds: approximately 1.34 seconds on Holding's short passage and 2.08 seconds on Bellwater's longest outer passage. The slower candidate added time without a clear readability gain in the captured environment. `src/scene/transitions.ts` owns this shipped policy. Approximately 19% of each end provides departure/arrival; the middle holds a steady distance rate. The canonical courses, docking clearance and exact endpoints remain unchanged. A soft wake spreads behind the stern for at most 720 ms and 1.8 world units. Hide the local transfer card during sailing; at rest exclude the full loaded ferry after viewport clamping.
+ 
+ The original instrumental cue “Between the lamps” is a continuous 75-second phrase at 64 BPM: open sustained harmony, a sparse motif, long rests, a slightly fuller middle and a quiet return. Air/water, a soft travel texture and a restrained visible-delivery response support it. Start from intentional activation, keep a live master mute available during transit, and never advance puzzle time through listening. Actual sonic judgment and capture availability belong in the atmosphere review.
++
++
++## Harbor homecoming
++
++After the visible final arrival, one restrained amber cone sweeps from the lantern over a 20-second turn. Its inexpensive translucent mesh is decorative, excluded from picking and scene-fit bounds; the lighthouse itself stays fixed. Reduced motion keeps the light steady. The accepted cue and persistent quiet won mix retain their existing visible-arrival event.
++
++After canonical disembarkation, rabbits make one small staggered hop and sheep a grounded bob, settling within 1.3 seconds. A one-second orthographic push toward Harbor tries 9% magnification, clamping against the full lighthouse, ferry, passengers and actual compact ending card. At 320-pixel phone height the stable ordinary camera is retained. Reduced motion keeps canonical framing and poses; turning normal motion back on never replays the finite gesture.
++
++The ending uses one short line and a two-column action group. Holding progresses to Bellwater; other coves offer the real cove chooser. Menu can return to the arrival. Shared Settings uses the same native dialog for Sound and Motion, with Follow device or Reduced and Back to its origin. The won composition hides map controls until Undo restores canonical framing and repositions them.
+diff --git a/src/main.ts b/src/main.ts
+index b239514..66a44b9 100644
+--- a/src/main.ts
++++ b/src/main.ts
+@@ -33,6 +33,7 @@ import { waterPresets, type WaterTuning } from './scene/water';
+ import { placeLocalCard, overlaps, type Rectangle } from './ui/placement';
+ import { locationFacts } from './ui/location';
+ import { endpointTargets } from './ui/cove-layout';
++import { MotionPreference, type MotionMode } from './ui/motion-preference';
+ 
+ const cove = new URLSearchParams(location.search).get('cove');
+ const level = cove === 'first-crossing' ? baseline : cove === 'bellwater' ? bellwater : holdingPier;
+@@ -46,14 +47,18 @@ app.innerHTML = `<main class="game ${experiment ? 'holding' : isBellwater ? 'bel
+ const $ = (id: string) => document.getElementById(id)!;
+ const session = new Session(level),
+   sound = new Sound(),
+-  world = new World($('world'), session.state, level);
++  world = new World($('world'), session.state, level),
++  motion = new MotionPreference(matchMedia('(prefers-reduced-motion: reduce)'));
+ sound.reconcileState(session.state, level);
+ const dialog = $('dialog') as HTMLDialogElement;
+-type DialogMode = 'action' | 'forecast' | 'menu' | 'terminal';
++type DialogMode = 'action' | 'forecast' | 'menu' | 'terminal' | 'settings';
+ let mode: DialogMode | null = null,
+   selected: Action | null = null,
+   returnId = '',
+   keyboardInput = false;
++let settingsParent: 'menu' | 'terminal' = 'menu';
++let viewFence: { x: number; y: number; until: number } | null = null;
++let completionSize: { width: number; height: number } | null = null;
+ let locationSelection: string | null = null;
+ let emphasis: string | undefined;
+ let selectionOrigin: { x: number; y: number } | null = null;
+@@ -102,14 +107,37 @@ function renderSound() {
+   control.setAttribute('aria-pressed', String(sound.muted));
+   control.title = `Sound ${sound.muted ? 'off' : 'on'}`;
+   control.textContent = sound.muted ? '♩' : '♫';
++  const settings = $('settings-sound');
++  if (settings) {
++    settings.textContent = `Sound ${sound.muted ? 'off' : 'on'}`;
++    settings.setAttribute('aria-pressed', String(!sound.muted));
++    settings.setAttribute('aria-label', sound.muted ? 'Turn sound on' : 'Turn sound off');
++  }
+ }
+ function toggleSound() {
+   const changed = sound.toggle();
+   renderSound();
+-  if (mode === 'menu') renderDialog();
+   void changed.then(renderSound).catch(renderSound);
+ }
+ 
++function renderMotion() {
++  document.documentElement.dataset.motion = motion.reduced ? 'reduced' : 'normal';
++  const control = $('motion-preference') as HTMLSelectElement | null;
++  if (control) control.value = motion.mode;
++  const status = $('motion-status');
++  if (status)
++    status.textContent =
++      motion.mode === 'reduced'
++        ? 'Reduced motion is on.'
++        : `Following device · ${motion.reduced ? 'reduced' : 'normal'} motion.`;
++}
++world.setReducedMotion(motion.reduced);
++renderMotion();
++const unsubscribeMotion = motion.subscribe((reduced) => {
++  world.setReducedMotion(reduced);
++  renderMotion();
++});
++
+ function available(preferred?: string) {
+   const target = preferred ? $(preferred) : null;
+   if (
+@@ -120,7 +148,8 @@ function available(preferred?: string) {
+   )
+     return target;
+   if (locationSelection && !$('local-context').hidden) return $('local-heading');
+-  return $(`map-${session.state.boatNodeId}`) ?? $('menu');
++  const marker = $(`map-${session.state.boatNodeId}`);
++  return marker?.getClientRects().length ? marker : $('menu');
+ }
+ function focusAvailable(preferred?: string) {
+   available(preferred).focus({ preventScroll: true });
+@@ -150,6 +179,7 @@ function closeDialog(restore = true, fence = false) {
+   dialog.close();
+   mode = null;
+   selected = null;
++  if (session.state.status !== 'won') world.setCompletionBounds(null);
+   world.setForecast(false, session.state.tideLevel);
+   renderLocation();
+   renderDock();
+@@ -170,12 +200,30 @@ function openDialog(next: DialogMode, action?: Action, trigger?: string) {
+   $('dock-actions').hidden = true;
+   $('dock-actions').inert = true;
+   $('selection-leader').innerHTML = '';
+-  (next === 'terminal' ? $('terminal-undo') : $('cancel')).focus();
++  (next === 'terminal'
++    ? ($('next-cove') ?? $('choose-cove') ?? $('terminal-undo'))
++    : $('cancel')
++  ).focus();
+   positionDialog();
+   restoreHighlight();
+ }
+-function header(title: string, eyebrow?: string) {
+-  return `<header class="dialog-head"><div>${eyebrow ? `<p class="eyebrow">${eyebrow}</p>` : ''}<h2 id="dialog-title">${title}</h2></div><button id="cancel" aria-label="Close dialog">×</button></header>`;
++function switchDialog(next: DialogMode, focusId: string) {
++  if (!keyboardInput && lastPointer)
++    viewFence = { x: lastPointer.x, y: lastPointer.y, until: performance.now() + 180 };
++  mode = next;
++  selected = null;
++  renderDialog();
++  $(focusId).focus({ preventScroll: true });
++}
++function openSettings(parent: 'menu' | 'terminal') {
++  settingsParent = parent;
++  switchDialog('settings', 'settings-sound');
++}
++function backFromSettings() {
++  switchDialog(settingsParent, settingsParent === 'terminal' ? 'terminal-settings' : 'settings');
++}
++function header(title: string, eyebrow?: string, closeLabel = 'Close dialog') {
++  return `<header class="dialog-head"><div>${eyebrow ? `<p class="eyebrow">${eyebrow}</p>` : ''}<h2 id="dialog-title">${title}</h2></div><button id="cancel" aria-label="${closeLabel}">×</button></header>`;
+ }
+ function renderDialog() {
+   if (!mode) return;
+@@ -229,27 +277,46 @@ function renderDialog() {
+   } else if (mode === 'menu') {
+     const sheep = level.passengers.find((p) => p.species === 'sheep')!;
+     $('dialog-content').innerHTML =
+-      `${header('Crossing menu')}<div class="dialog-body menu-body"><div class="menu-actions"><button id="restart">Restart crossing</button><button id="sound" aria-pressed="${sound.muted}" aria-label="${sound.muted ? 'Unmute sound' : 'Mute sound'}">Sound ${sound.muted ? 'off' : 'on'}</button></div><label class="cove-picker">Choose cove<select id="cove-picker">${[baseline, holdingPier, bellwater].map((l) => `<option value="${l.id}" ${l.id === level.id ? 'selected' : ''}>${l.title}${l.id === baseline.id ? ' · baseline' : ''}</option>`).join('')}</select></label><details id="help-details"><summary>How to play · actions and depth</summary><p>${actionCostCopy(level)}</p><p>Select a named place, island, pier or landmark to see its options for free. Choose Sail to travel one passage. Select the ferry for its current place. Passenger actions open a subset preview; choose names, then Confirm.</p><p>Boat depth needed: empty = 1; 1–2 spaces = 2; 3–4 spaces = 3. Each rabbit uses 1 space; ${passengerList([sheep.id], level)} uses ${sheep.slots}. A passage must be at least as deep as the boat needs.</p><p>Boarding and unloading happen before the tide rises. Use the status button for the tide and pier forecast. Undo earlier actions or restart to recover from a losing plan.</p><p>Tab and Shift+Tab move between controls; Enter or Space activates them. Escape closes a dialog first; press it again to close the location card. Selection never spends an action.</p></details></div>`;
++      `${header('Crossing menu')}<div class="dialog-body menu-body">${s.status === 'won' ? '<button id="return-arrival">Return to arrival</button>' : ''}<div class="menu-actions"><button id="restart">Restart crossing</button><button id="settings">Settings</button></div><label class="cove-picker">Choose cove<select id="cove-picker">${[baseline, holdingPier, bellwater].map((l) => `<option value="${l.id}" ${l.id === level.id ? 'selected' : ''}>${l.title}${l.id === baseline.id ? ' · baseline' : ''}</option>`).join('')}</select></label><details id="help-details"><summary>How to play · actions and depth</summary><p>${actionCostCopy(level)}</p><p>Select a named place, island, pier or landmark to see its options for free. Choose Sail to travel one passage. Select the ferry for its current place. Passenger actions open a subset preview; choose names, then Confirm.</p><p>Boat depth needed: empty = 1; 1–2 spaces = 2; 3–4 spaces = 3. Each rabbit uses 1 space; ${passengerList([sheep.id], level)} uses ${sheep.slots}. A passage must be at least as deep as the boat needs.</p><p>Boarding and unloading happen before the tide rises. Use the status button for the tide and pier forecast. Undo earlier actions or restart to recover from a losing plan.</p><p>Tab and Shift+Tab move between controls; Enter or Space activates them. Escape closes a dialog first; press it again to close the location card. Selection never spends an action.</p></details></div>`;
+     $('restart').onclick = restart;
+-    $('sound').onclick = toggleSound;
++    $('settings').onclick = () => openSettings('menu');
++    if (s.status === 'won')
++      $('return-arrival').onclick = () =>
++        switchDialog('terminal', experiment ? 'next-cove' : 'choose-cove');
+     ($('cove-picker') as HTMLSelectElement).onchange = (e) => {
+       location.search = `?cove=${(e.target as HTMLSelectElement).value}`;
+     };
++  } else if (mode === 'settings') {
++    $('dialog-content').innerHTML =
++      `${header('Settings', undefined, 'Back to ' + (settingsParent === 'terminal' ? 'arrival' : 'menu'))}<div class="dialog-body settings-body"><div class="settings-row"><span>Sound</span><button id="settings-sound"></button></div><label class="settings-row" for="motion-preference">Motion<select id="motion-preference"><option value="device">Follow device</option><option value="reduced">Reduced</option></select></label><p id="motion-status"></p></div><footer class="dialog-footer"><button id="settings-back">Back</button></footer>`;
++    $('settings-sound').onclick = toggleSound;
++    ($('motion-preference') as HTMLSelectElement).onchange = (event) =>
++      motion.setMode((event.target as HTMLSelectElement).value as MotionMode);
++    $('settings-back').onclick = backFromSettings;
++    renderSound();
++    renderMotion();
+   } else {
+     const f = statusCopy(s, level),
+       won = s.status === 'won',
+       next = won && experiment;
++    dialog.dataset.outcome = won ? 'won' : 'lost';
+     $('dialog-content').innerHTML =
+-      `${header(won ? (isBellwater ? 'Bellwater is safe.' : 'Everyone home.') : 'A turn too late.')}<div class="dialog-body ending ${won ? '' : 'loss'}"><p>${won ? (isBellwater ? `${passengerList(s.delivered, level)} are safe at Harbor. ${s.turn} actions completed.` : `${level.objective.requiredPassengerIds.length} passengers delivered in ${s.turn} actions. All are safe at ${nodeNames[level.piers.find((p) => p.id === level.objective.deliveryPierId)!.nodeId]}.`) : f.headline}</p><p>${next ? 'Further along the coast, two piers still have their lights on.' : won ? 'Undo to revisit the crossing, or restart.' : 'Undo earlier moves, or restart to try a different plan.'}</p></div><footer class="dialog-footer terminal-actions">${next ? '<button id="next-cove">Next cove</button>' : ''}<button id="terminal-undo">↶ Undo last action</button><button id="terminal-restart">Restart</button></footer>`;
++      `${header(won ? (isBellwater ? 'Bellwater is safe.' : 'Everyone home.') : 'A turn too late.')}<div class="dialog-body ending ${won ? '' : 'loss'}"><p>${won ? `${level.objective.requiredPassengerIds.length} passengers safe at Harbor · ${s.turn} actions.` : f.headline}</p>${won ? '' : '<p>Undo earlier moves, or restart to try a different plan.</p>'}</div><footer class="dialog-footer terminal-actions">${won ? `<button id="${next ? 'next-cove' : 'choose-cove'}">${next ? 'Next cove' : 'Choose a cove'}</button><button id="terminal-settings">Settings</button>` : ''}<button id="terminal-undo">↶ Undo last action</button><button id="terminal-restart">Restart</button></footer>`;
+     if (next)
+       $('next-cove').onclick = () => {
+         location.search = '?cove=bellwater';
+       };
++    else if (won) $('choose-cove').onclick = () => switchDialog('menu', 'cove-picker');
++    if (won) $('terminal-settings').onclick = () => openSettings('terminal');
+     $('terminal-undo').onclick = undo;
+     $('terminal-restart').onclick = restart;
+   }
+   $('cancel').onclick = (e) => {
+     e.stopPropagation();
++    if (mode === 'settings') {
++      backFromSettings();
++      return;
++    }
+     closeDialog(true, true);
+     if (closingFence) {
+       closingFence.x = e.clientX;
+@@ -370,6 +437,7 @@ function bindTarget(button: HTMLElement, id: string) {
+ }
+ function renderMap() {
+   const s = session.state;
++  $('map-labels').hidden = s.status === 'won';
+   $('map-labels').innerHTML =
+     '<svg id="map-leaders" aria-hidden="true"></svg>' +
+     level.nodes
+@@ -506,6 +574,9 @@ function render() {
+   $('status-toggle').innerHTML =
+     `<span class="status-symbol" aria-hidden="true">${facts.urgent ? '!' : '≈'}</span><span><strong id="status-headline">${facts.headline}</strong>${facts.detail ? `<span id="status-detail">${facts.detail}</span>` : '<span id="status-detail"></span>'}</span><span class="forecast-label">Forecast</span>`;
+   $('status-toggle').classList.toggle('urgent', facts.urgent);
++  $('status-toggle').hidden = s.status === 'won';
++  $('selection-hint').hidden = s.status === 'won' || !!locationSelection;
++  $('selection-leader').hidden = s.status === 'won';
+   $('status-toggle').onclick = () => openDialog('forecast', undefined, 'status-toggle');
+   renderLocation();
+   renderDock();
+@@ -563,9 +634,42 @@ function positionDialog() {
+   const destination = selected?.type === 'move' ? selected.to : session.state.boatNodeId;
+   const node = level.nodes.find((n) => n.id === destination)!;
+   const point = world.project(node.positionXZ);
+-  dialog.dataset.side = point.x > world.host.clientWidth * 0.5 ? 'left' : 'right';
++  dialog.dataset.side =
++    session.state.status === 'won'
++      ? 'right'
++      : point.x > world.host.clientWidth * 0.5
++        ? 'left'
++        : 'right';
++  if (session.state.status === 'won') {
++    if (mode === 'terminal' && dialog.open) {
++      const rect = dialog.getBoundingClientRect();
++      completionSize = { width: rect.width, height: rect.height };
++    }
++    if (completionSize) {
++      const canvas = world.host.getBoundingClientRect(),
++        inset = innerHeight <= 600 || innerWidth <= 700 ? 8 : 24,
++        right = innerWidth - inset - canvas.left,
++        bottom = innerHeight - inset - canvas.top;
++      world.setCompletionBounds({
++        left: right - Math.min(completionSize.width, innerWidth - 16),
++        right,
++        top: bottom - completionSize.height,
++        bottom,
++      });
++    }
++  }
+ }
+ function positionMap() {
++  if (session.state.status === 'won') {
++    labelLayout.clear();
++    labelLayoutKey = '';
++    dockLayout = null;
++    cardPlacement = null;
++    dockPlacement = null;
++    protectedBounds = [];
++    positionDialog();
++    return;
++  }
+   const host = world.host,
+     canvas = host.getBoundingClientRect();
+   const frame = world.frameStatus();
+@@ -796,7 +900,8 @@ world.onArrival = () => {
+ new ResizeObserver(positionMap).observe(world.host);
+ dialog.addEventListener('cancel', (e) => {
+   e.preventDefault();
+-  closeDialog(true);
++  if (mode === 'settings') backFromSettings();
++  else closeDialog(true);
+ });
+ dialog.addEventListener('click', (e) => e.stopPropagation());
+ dialog.addEventListener('keydown', (e) => {
+@@ -826,7 +931,10 @@ dialog.addEventListener('keydown', (e) => {
+ document.addEventListener(
+   'keydown',
+   (e) => {
+-    if (['Tab', 'Enter', ' ', 'Escape'].includes(e.key)) keyboardInput = true;
++    if (['Tab', 'Enter', ' ', 'Escape'].includes(e.key)) {
++      keyboardInput = true;
++      if (!e.repeat) viewFence = null;
++    }
+     if (e.repeat && ['Enter', ' '].includes(e.key)) {
+       e.preventDefault();
+       e.stopImmediatePropagation();
+@@ -845,6 +953,16 @@ document.addEventListener(
+ document.addEventListener(
+   'pointerdown',
+   (e) => {
++    if (
++      viewFence &&
++      performance.now() < viewFence.until &&
++      Math.hypot(e.clientX - viewFence.x, e.clientY - viewFence.y) <= 24
++    ) {
++      e.preventDefault();
++      e.stopImmediatePropagation();
++      return;
++    }
++    viewFence = null;
+     if (
+       closingFence?.scope === 'dismiss' &&
+       performance.now() < closingFence.until &&
+@@ -867,6 +985,17 @@ document.addEventListener(
+ document.addEventListener(
+   'click',
+   (e) => {
++    if (
++      viewFence &&
++      e.isTrusted &&
++      e.detail > 0 &&
++      performance.now() < viewFence.until &&
++      Math.hypot(e.clientX - viewFence.x, e.clientY - viewFence.y) <= 24
++    ) {
++      e.preventDefault();
++      e.stopImmediatePropagation();
++      return;
++    }
+     const commit = (e.target as Element).closest('#sail, #commit, #board, #unload');
+     if (commit && e.isTrusted && e.detail > 0 && lastPointer?.control !== commit) {
+       e.preventDefault();
+@@ -898,6 +1027,7 @@ document.addEventListener(
+ );
+ document.addEventListener('visibilitychange', () => {
+   sound.visibility(document.hidden);
++  if (document.hidden) world.settleHomecoming();
+   if (document.hidden && session.busy) {
+     const id = activeTransition?.id;
+     world.cancel('visibility');
+@@ -905,6 +1035,8 @@ document.addEventListener('visibilitychange', () => {
+   }
+ });
+ addEventListener('pagehide', () => {
++  unsubscribeMotion();
++  motion.dispose();
+   sound.dispose();
+   world.dispose();
+ });
+@@ -926,6 +1058,8 @@ if (import.meta.env.DEV)
+         hullY: world.hull.position.y,
+       }),
+       getFrameStatus: () => world.frameStatus(),
++      getHomecomingStatus: () => world.homecomingPresentation(),
++      getMotionStatus: () => ({ mode: motion.mode, reduced: motion.reduced }),
+       getTransferStatus: () => world.transferPresentation(),
+       getPickTargetAt: (x: number, y: number) => world.pickAt(x, y),
+       getPickDetailAt: (x: number, y: number) => world.pickDetailAt(x, y),
+diff --git a/src/scene/effects.ts b/src/scene/effects.ts
+index d51fd47..c1e0cf5 100644
+--- a/src/scene/effects.ts
++++ b/src/scene/effects.ts
+@@ -4,6 +4,9 @@ import type { lighthouse } from './models';
+ export class CrossingEffects {
+   wake: T.Mesh;
+   glow: T.Sprite;
++  sweep = new T.Group();
++  sweepPhase = 0;
++  sweepLastTime: number | null = null;
+   points: { position: T.Vector3; time: number }[] = [];
+   emitting = false;
+   arrivalStarted: number | null = null;
+@@ -75,6 +78,35 @@ export class CrossingEffects {
+     this.glow.position.copy(home.anchor.getWorldPosition(new T.Vector3()));
+     this.glow.scale.set(1.1, 1.1, 1);
+     this.glow.userData.excludeFromFrame = true;
++    const beam = new T.Mesh(
++      new T.CylinderGeometry(0.82, 0.035, 4.8, 20, 8, true),
++      new T.ShaderMaterial({
++        transparent: true,
++        depthWrite: false,
++        side: T.DoubleSide,
++        forceSinglePass: true,
++        uniforms: { strength: { value: 0.14 } },
++        vertexShader:
++          'varying vec2 beamUv;void main(){beamUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
++        fragmentShader: `uniform float strength;varying vec2 beamUv;
++          void main(){
++            float reach=smoothstep(0.,.08,beamUv.y)*(1.-smoothstep(.3,1.,beamUv.y));
++            float feather=.45+.55*pow(abs(cos(beamUv.x*6.2831853)),3.);
++            gl_FragColor=vec4(1.,.67,.27,strength*reach*feather);
++            #include <tonemapping_fragment>
++            #include <colorspace_fragment>
++          }`,
++      }),
++    );
++    beam.rotation.z = -Math.PI / 2;
++    beam.position.x = 2.4;
++    beam.name = 'harbor-amber-sweep';
++    beam.raycast = () => {};
++    this.sweep.add(beam);
++    this.sweep.position.copy(home.lens.getWorldPosition(new T.Vector3()));
++    this.sweep.name = 'harbor-homecoming-beam';
++    this.sweep.userData.excludeFromFrame = true;
++    this.sweep.userData.decorative = true;
+     this.lamp = home.lamp;
+     this.lampBase = home.lamp.intensity;
+     this.lens = home.lens.material as T.MeshStandardMaterial;
+@@ -89,6 +121,11 @@ export class CrossingEffects {
+     this.arrivalStarted = null;
+     this.arrivalIntensity = 0;
+     this.resting = false;
++    this.reduced = false;
++    this.sweep.visible = false;
++    this.sweepPhase = 0;
++    this.sweepLastTime = null;
++    this.sweep.rotation.y = 0;
+     this.glow.visible = true;
+     this.glow.material.opacity = 0.08;
+     if (this.lamp) this.lamp.intensity = this.lampBase;
+@@ -97,12 +134,14 @@ export class CrossingEffects {
+   arrive(time: number, reduced: boolean) {
+     if (this.arrivalStarted === null) this.arrivalStarted = time;
+     this.reduced = reduced;
++    this.sweep.visible = true;
+   }
+   settle(reduced: boolean) {
+     this.reset();
+     this.resting = true;
+     this.reduced = reduced;
+     this.arrivalIntensity = reduced ? 0.45 : 0.27;
++    this.sweep.visible = true;
+     this.applyLight();
+   }
+   private applyLight() {
+@@ -176,6 +215,13 @@ export class CrossingEffects {
+       this.arrivalIntensity = reduced ? 0.45 : 0.27 + 0.55 * Math.exp(-elapsed / 1100);
+       this.applyLight();
+     }
++    if (this.sweep.visible) {
++      if (!reduced && this.sweepLastTime !== null)
++        this.sweepPhase +=
++          (Math.min(100, Math.max(0, time - this.sweepLastTime)) / 20000) * Math.PI * 2;
++      this.sweepLastTime = time;
++      this.sweep.rotation.y = reduced ? 0.45 : this.sweepPhase;
++    }
+   }
+   presentation() {
+     const count = this.wake.geometry.drawRange.count;
+@@ -206,6 +252,13 @@ export class CrossingEffects {
+         emissiveIntensity: this.lens?.emissiveIntensity ?? null,
+         glowVisible: this.glow.visible,
+         glowOpacity: this.glow.material.opacity,
++        sweep: {
++          visible: this.sweep.visible,
++          angle: this.sweep.rotation.y,
++          reduced: this.reduced,
++          startedAt: this.arrivalStarted,
++          drawObjects: this.sweep.children.length,
++        },
+       },
+     };
+   }
+diff --git a/src/scene/homecoming.ts b/src/scene/homecoming.ts
+new file mode 100644
+index 0000000..ff47881
+--- /dev/null
++++ b/src/scene/homecoming.ts
+@@ -0,0 +1,81 @@
++export type HomecomingRectangle = {
++  left: number;
++  right: number;
++  top: number;
++  bottom: number;
++};
++
++export type HomecomingPose = {
++  height: number;
++  pitch: number;
++};
++
++export function acknowledgmentPose(
++  species: string,
++  index: number,
++  elapsed: number,
++): HomecomingPose {
++  const start = 100 + index * 140;
++  const duration = species === 'rabbit' ? 520 : 760;
++  const progress = (elapsed - start) / duration;
++  if (progress <= 0 || progress >= 1) return { height: 0, pitch: 0 };
++  const arc = Math.sin(progress * Math.PI);
++  return species === 'rabbit'
++    ? { height: arc * 0.17, pitch: Math.sin(progress * Math.PI * 2) * 0.045 }
++    : { height: arc * 0.035, pitch: Math.sin(progress * Math.PI * 2) * 0.028 };
++}
++
++export class HomecomingTimeline {
++  active = false;
++  finite = false;
++  startedAt: number | null = null;
++  celebrations = 0;
++  settled = false;
++  reason = 'ordinary';
++  start(time: number, reduced: boolean) {
++    if (this.active) return false;
++    this.active = true;
++    this.finite = !reduced;
++    this.startedAt = time;
++    this.celebrations++;
++    this.settled = reduced;
++    this.reason = reduced ? 'reduced-motion' : 'arrival';
++    return true;
++  }
++  update(time: number) {
++    if (this.finite && this.startedAt !== null && time - this.startedAt >= 1300)
++      this.settle('complete');
++  }
++  settle(reason = 'recovery') {
++    if (!this.active) return;
++    this.finite = false;
++    this.settled = true;
++    this.reason = reason;
++  }
++  restore() {
++    this.active = true;
++    this.finite = false;
++    this.startedAt = null;
++    this.settled = true;
++    this.reason = 'restored';
++  }
++  reset() {
++    this.active = false;
++    this.finite = false;
++    this.startedAt = null;
++    this.settled = false;
++    this.reason = 'ordinary';
++  }
++  elapsed(time: number) {
++    return this.startedAt === null ? 0 : Math.max(0, time - this.startedAt);
++  }
++}
++
++export function rectanglesOverlap(a: HomecomingRectangle, b: HomecomingRectangle, gap = 0) {
++  return (
++    a.left < b.right + gap &&
++    a.right > b.left - gap &&
++    a.top < b.bottom + gap &&
++    a.bottom > b.top - gap
++  );
++}
+diff --git a/src/scene/world.ts b/src/scene/world.ts
+index aed66cf..2dcb1cc 100644
+--- a/src/scene/world.ts
++++ b/src/scene/world.ts
+@@ -11,6 +11,12 @@ import { CoastalWater } from './water';
+ import { CrossingEffects } from './effects';
+ import { contactMaterial } from './contact';
+ import { TransferTimeline, type TransferCue } from './transfer';
++import {
++  acknowledgmentPose,
++  HomecomingTimeline,
++  rectanglesOverlap,
++  type HomecomingRectangle,
++} from './homecoming';
+ import {
+   journeyTiming,
+   settlingProgress,
+@@ -57,7 +63,16 @@ export class World {
+   home!: ReturnType<typeof lighthouse>;
+   contactMeshes: T.Mesh<T.BufferGeometry, T.MeshStandardMaterial>[] = [];
+   journeyFrame: { progress: number; distance: number; tangent: T.Vector3 } | null = null;
+-  reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
++  reduced = false;
++  homecoming = new HomecomingTimeline();
++  completionBounds: HomecomingRectangle | null = null;
++  canonicalFrame: HomecomingRectangle | null = null;
++  homecomingCameraFactor = 1;
++  homecomingCameraTarget = 1;
++  homecomingCameraFallback = 'ordinary';
++  homecomingCameraSuppressed = false;
++  cameraRevision = 0;
++  homecomingFocus = new T.Vector2();
+   timing: JourneyTiming = journeyTiming;
+   disposed = false;
+   frameRequest = 0;
+@@ -278,7 +293,7 @@ export class World {
+       this.registerPlace(n.id, 'waypoint', g);
+     }
+     this.effects = new CrossingEffects(this.home);
+-    this.scene.add(this.effects.wake, this.effects.glow);
++    this.scene.add(this.effects.wake, this.effects.glow, this.effects.sweep);
+     this.forecast = this.shores.forecast;
+     this.scene.add(this.forecast);
+     this.boatRoot.add(this.hull);
+@@ -323,9 +338,7 @@ export class World {
+     this.renderer.domElement.addEventListener('webglcontextlost', (ev) => {
+       ev.preventDefault();
+       this.cancel();
+-    });
+-    matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', (e) => {
+-      this.reduced = e.matches;
++      this.settleHomecoming('context-loss');
+     });
+     this.frameRequest = requestAnimationFrame((t) => this.tick(t));
+   }
+@@ -630,8 +643,192 @@ export class World {
+     this.camera.right = centerX + w / scale / 2;
+     this.camera.top = centerY + h / scale / 2;
+     this.camera.bottom = centerY - h / scale / 2;
++    this.canonicalFrame = {
++      left: this.camera.left,
++      right: this.camera.right,
++      top: this.camera.top,
++      bottom: this.camera.bottom,
++    };
++    this.camera.updateProjectionMatrix();
++    this.coastalWater.setView(this.camera);
++    this.cameraRevision++;
++    if (this.homecoming.active) {
++      this.homecomingCameraFactor = 1;
++      this.fitHomecomingCamera();
++      this.applyHomecomingCamera(this.homecomingCameraTarget);
++    }
++  }
++  setReducedMotion(reduced: boolean) {
++    if (this.reduced === reduced) return;
++    this.reduced = reduced;
++    if (reduced) {
++      if (this.transition) this.cancel();
++      this.homecomingCameraSuppressed = true;
++      this.settleHomecoming('reduced-motion');
++      this.restoreCamera();
++    }
++    this.coastalWater.update(this.water.position.y, reduced ? 0 : this.lastTime * 0.001);
++  }
++  setCompletionBounds(bounds: HomecomingRectangle | null) {
++    const previous = this.completionBounds;
++    this.completionBounds = bounds ? { ...bounds } : null;
++    if (
++      this.homecoming.active &&
++      (previous?.left !== bounds?.left ||
++        previous?.right !== bounds?.right ||
++        previous?.top !== bounds?.top ||
++        previous?.bottom !== bounds?.bottom)
++    ) {
++      this.fitHomecomingCamera();
++      if (!this.homecoming.finite) this.applyHomecomingCamera(this.homecomingCameraTarget);
++    }
++  }
++  restoreCamera() {
++    if (!this.canonicalFrame) return;
++    const changed =
++      this.camera.left !== this.canonicalFrame.left ||
++      this.camera.right !== this.canonicalFrame.right ||
++      this.camera.top !== this.canonicalFrame.top ||
++      this.camera.bottom !== this.canonicalFrame.bottom;
++    Object.assign(this.camera, this.canonicalFrame);
++    this.homecomingCameraFactor = 1;
++    if (changed) {
++      this.camera.updateProjectionMatrix();
++      this.coastalWater.setView(this.camera);
++      this.cameraRevision++;
++    }
++  }
++  resetHomecoming() {
++    this.homecoming.reset();
++    this.homecomingCameraSuppressed = false;
++    this.homecomingCameraTarget = 1;
++    this.homecomingCameraFallback = 'ordinary';
++    this.completionBounds = null;
++    this.restoreCamera();
++  }
++  beginHomecoming(time: number) {
++    if (!this.homecoming.start(time, this.reduced)) return;
++    this.homecomingCameraSuppressed = this.reduced;
++    this.fitHomecomingCamera();
++  }
++  private fitHomecomingCamera() {
++    this.homecomingCameraTarget = 1;
++    if (!this.canonicalFrame || !this.homecoming.active) return;
++    if (this.reduced || this.homecomingCameraSuppressed) {
++      this.homecomingCameraFallback = this.reduced ? 'reduced-motion' : 'settled-without-replay';
++      return;
++    }
++    if (this.host.clientHeight <= 320) {
++      this.homecomingCameraFallback = 'short-phone';
++      return;
++    }
++    if (!this.completionBounds) {
++      this.homecomingCameraFallback = 'awaiting-card';
++      return;
++    }
++    this.scene.updateMatrixWorld(true);
++    const boxes = [this.home.group, this.boatRoot, ...this.animals.values()].map((object) =>
++      new T.Box3().setFromObject(object),
++    );
++    for (const box of boxes.slice(2)) box.max.y += 0.2;
++    const harbor = new T.Box3();
++    for (const box of boxes) harbor.union(box);
++    const focus = harbor.getCenter(new T.Vector3()).applyMatrix4(this.camera.matrixWorldInverse);
++    this.homecomingFocus.set(focus.x, focus.y);
++    const candidate = this.camera.clone();
++    const w = this.host.clientWidth,
++      h = this.host.clientHeight;
++    for (const factor of [1.09, 1.07, 1.05, 1.03, 1.015]) {
++      this.assignHomecomingFrame(candidate, factor);
++      candidate.updateProjectionMatrix();
++      const fits = boxes.every((box) => {
++        const points: T.Vector3[] = [];
++        for (const x of [box.min.x, box.max.x])
++          for (const y of [box.min.y, box.max.y])
++            for (const z of [box.min.z, box.max.z])
++              points.push(new T.Vector3(x, y, z).project(candidate));
++        const projected = {
++          left: Math.min(...points.map((point) => ((point.x + 1) * w) / 2)),
++          right: Math.max(...points.map((point) => ((point.x + 1) * w) / 2)),
++          top: Math.min(...points.map((point) => ((1 - point.y) * h) / 2)),
++          bottom: Math.max(...points.map((point) => ((1 - point.y) * h) / 2)),
++        };
++        return (
++          projected.left >= 16 &&
++          projected.right <= w - 16 &&
++          projected.top >= (h <= 600 ? 70 : 104) &&
++          projected.bottom <= h - 16 &&
++          !rectanglesOverlap(projected, this.completionBounds!, 10)
++        );
++      });
++      if (fits) {
++        this.homecomingCameraTarget = factor;
++        this.homecomingCameraFallback = factor === 1.09 ? 'none' : 'clamped-to-fit';
++        return;
++      }
++    }
++    this.homecomingCameraFallback = 'card-or-subject-fit';
++  }
++  private assignHomecomingFrame(camera: T.OrthographicCamera, factor: number) {
++    if (!this.canonicalFrame) return;
++    const base = this.canonicalFrame,
++      width = (base.right - base.left) / factor,
++      height = (base.top - base.bottom) / factor,
++      centerX =
++        this.homecomingFocus.x + ((base.left + base.right) / 2 - this.homecomingFocus.x) / factor,
++      centerY =
++        this.homecomingFocus.y + ((base.top + base.bottom) / 2 - this.homecomingFocus.y) / factor;
++    camera.left = centerX - width / 2;
++    camera.right = centerX + width / 2;
++    camera.top = centerY + height / 2;
++    camera.bottom = centerY - height / 2;
++  }
++  private applyHomecomingCamera(factor: number) {
++    if (factor === this.homecomingCameraFactor) return;
++    this.assignHomecomingFrame(this.camera, factor);
++    this.homecomingCameraFactor = factor;
+     this.camera.updateProjectionMatrix();
+     this.coastalWater.setView(this.camera);
++    this.cameraRevision++;
++  }
++  settleHomecoming(reason = 'recovery') {
++    if (this.homecoming.finite && this.homecomingCameraTarget === 1)
++      this.homecomingCameraSuppressed = true;
++    this.homecoming.settle(reason);
++    for (const [id, animal] of this.animals) {
++      if (!this.state.delivered.includes(id)) continue;
++      animal.position.copy(this.passengerPos(id, this.state));
++      animal.rotation.set(0, 0, 0);
++    }
++    if (this.homecoming.active) {
++      this.fitHomecomingCamera();
++      this.applyHomecomingCamera(this.reduced ? 1 : this.homecomingCameraTarget);
++    }
++  }
++  private updateHomecoming(time: number) {
++    if (!this.homecoming.active || this.state.status !== 'won') return;
++    this.homecoming.update(time);
++    const elapsed = this.homecoming.elapsed(time);
++    for (const [id, animal] of this.animals) {
++      if (!this.state.delivered.includes(id)) continue;
++      animal.position.copy(this.passengerPos(id, this.state));
++      animal.rotation.set(0, 0, 0);
++      if (this.homecoming.finite && !this.reduced) {
++        const passenger = this.level.passengers.find((passenger) => passenger.id === id)!;
++        const pose = acknowledgmentPose(
++          passenger.species,
++          this.level.passengers.indexOf(passenger),
++          elapsed,
++        );
++        animal.position.y += pose.height;
++        animal.rotation.x = pose.pitch;
++      }
++    }
++    if (this.homecomingCameraSuppressed || this.reduced) this.applyHomecomingCamera(1);
++    else {
++      const progress = this.homecoming.finite ? smooth(Math.min(1, elapsed / 1000)) : 1;
++      this.applyHomecomingCamera(1 + (this.homecomingCameraTarget - 1) * progress);
++    }
+   }
+   speciesIndex(id: string) {
+     const passenger = this.level.passengers.find((passenger) => passenger.id === id)!;
+@@ -670,11 +867,17 @@ export class World {
+   }
+   sync(s: State, preserveEffects = false) {
+     this.state = s;
++    if (!preserveEffects) this.resetHomecoming();
+     this.coastalWater.update(s.tideLevel * 0.18, this.reduced ? 0 : this.lastTime * 0.001);
+     this.shores.update(this.water.position.y);
+     this.setForecast(false, s.tideLevel);
+     if (!preserveEffects) this.effects.reset();
+-    if (s.status === 'won' && !preserveEffects) this.effects.settle(this.reduced);
++    if (s.status === 'won' && !preserveEffects) {
++      this.effects.settle(this.reduced);
++      this.homecoming.restore();
++      this.homecomingCameraSuppressed = true;
++      this.homecomingCameraFallback = 'restored';
++    }
+     this.coastalWater.setHarbor(this.effects.glow.position, this.effects.arrivalIntensity);
+     this.shadow.position.y = this.water.position.y + 0.008;
+     const n = this.level.nodes.find((n) => n.id === s.boatNodeId)!;
+@@ -891,7 +1094,7 @@ export class World {
+           g.rotation.y = 0;
+           if (!this.reduced) {
+             g.position.y += Math.sin(t * Math.PI * 4) ** 2 * 0.055;
+-            if (tr.after.delivered.includes(id) && t > 0.72)
++            if (tr.after.status !== 'won' && tr.after.delivered.includes(id) && t > 0.72)
+               g.rotation.x = Math.sin(((t - 0.72) / 0.28) * Math.PI * 2) * 0.12;
+           }
+         } else {
+@@ -910,12 +1113,14 @@ export class World {
+         this.transition = null;
+         this.journeyFrame = null;
+         this.sync(tr.after, true);
++        if (tr.after.status === 'won') this.beginHomecoming(time);
+         tr.done('complete');
+       }
+     } else {
+       this.hull.position.y =
+         this.draftY(this.state) + (this.reduced ? 0 : Math.sin(time * 0.0018) * 0.012);
+     }
++    this.updateHomecoming(time);
+     this.shores.update(this.water.position.y);
+     for (const route of this.routes.values()) route.position.y = this.water.position.y;
+     for (const marker of this.markers.values()) marker.position.y = this.water.position.y + 0.04;
+@@ -973,6 +1178,46 @@ export class World {
+       triangles: this.renderer.info.render.triangles,
+       webgl: this.renderer.getContext().getParameter(this.renderer.getContext().VERSION),
+       pixelRatio: this.renderer.getPixelRatio(),
++      resources: {
++        geometries: this.renderer.info.memory.geometries,
++        textures: this.renderer.info.memory.textures,
++        programs: this.renderer.info.programs?.length ?? 0,
++        sweepObjects: this.effects.sweep.children.length,
++      },
++    };
++  }
++  homecomingPresentation() {
++    return {
++      active: this.homecoming.active,
++      finite: this.homecoming.finite,
++      startedAt: this.homecoming.startedAt,
++      celebrations: this.homecoming.celebrations,
++      settled: this.homecoming.settled,
++      reason: this.homecoming.reason,
++      motionReduced: this.reduced,
++      animalOffsets: [...this.animals].map(([id, animal]) => ({
++        id,
++        position: this.state.delivered.includes(id)
++          ? animal.position.clone().sub(this.passengerPos(id, this.state)).toArray()
++          : [0, 0, 0],
++        rotation: [animal.rotation.x, animal.rotation.y, animal.rotation.z],
++      })),
++      camera: {
++        factor: this.homecomingCameraFactor,
++        targetFactor: this.homecomingCameraTarget,
++        fallback: this.homecomingCameraFallback,
++        revision: this.cameraRevision,
++        base: this.canonicalFrame ? { ...this.canonicalFrame } : null,
++        current: {
++          left: this.camera.left,
++          right: this.camera.right,
++          top: this.camera.top,
++          bottom: this.camera.bottom,
++        },
++        completionBounds: this.completionBounds ? { ...this.completionBounds } : null,
++      },
++      sweep: this.effects.presentation().arrival.sweep,
++      resources: this.metrics().resources,
+     };
+   }
+   environmentPresentation() {
+diff --git a/src/style.css b/src/style.css
+index 405d009..77815e9 100644
+--- a/src/style.css
++++ b/src/style.css
+@@ -291,7 +291,8 @@ dialog::backdrop {
+ }
+ #commit,
+ #next-cove,
+-#terminal-undo {
++#choose-cove,
++dialog[data-outcome='lost'] #terminal-undo {
+   background: #32676b;
+   color: var(--text);
+   border-color: var(--foam);
+@@ -304,6 +305,41 @@ dialog::backdrop {
+ .terminal-actions {
+   flex-wrap: wrap;
+ }
++dialog[data-mode='terminal'][data-outcome='won'] {
++  width: min(344px, calc(100vw - 16px));
++  bottom: 24px;
++}
++dialog[data-mode='terminal'][data-outcome='won'] .terminal-actions {
++  display: grid;
++  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
++}
++.terminal-actions button,
++.settings-body button,
++.settings-row select,
++#settings-back {
++  min-height: 48px;
++  white-space: normal;
++}
++.settings-row {
++  display: grid;
++  grid-template-columns: 72px minmax(0, 1fr);
++  align-items: center;
++  gap: 10px;
++  font-size: 14px;
++}
++.settings-row select {
++  min-width: 0;
++  width: 100%;
++  padding: 8px;
++  border: 1px solid var(--border);
++  border-radius: 5px;
++  color: var(--text);
++  background: var(--surface);
++  font: inherit;
++}
++#motion-status {
++  color: var(--muted);
++}
+ .ending {
+   padding: 6px 0;
+ }
+@@ -717,6 +753,9 @@ details p {
+     inset: auto 8px 8px auto;
+     max-height: calc(100svh - 16px);
+   }
++  dialog[data-mode='terminal'][data-outcome='won'] {
++    bottom: 8px;
++  }
+   dialog[data-side='left'] {
+     left: 8px;
+     right: auto;
+@@ -797,11 +836,9 @@ details p {
+     gap: 10px;
+   }
+ }
+-@media (prefers-reduced-motion: reduce) {
+-  *,
+-  *::before,
+-  *::after {
+-    animation: none !important;
+-    transition: none !important;
+-  }
++html[data-motion='reduced'] *,
++html[data-motion='reduced'] *::before,
++html[data-motion='reduced'] *::after {
++  animation: none !important;
++  transition: none !important;
+ }
+diff --git a/src/ui/motion-preference.ts b/src/ui/motion-preference.ts
+new file mode 100644
+index 0000000..91386a4
+--- /dev/null
++++ b/src/ui/motion-preference.ts
+@@ -0,0 +1,85 @@
++export type MotionMode = 'device' | 'reduced';
++
++type MotionQuery = Pick<MediaQueryList, 'matches' | 'addEventListener' | 'removeEventListener'>;
++type MotionStorage = Pick<Storage, 'getItem' | 'setItem'>;
++type Listener = (reduced: boolean, mode: MotionMode) => void;
++
++export const motionStorageKey = 'last-ferry-motion';
++
++function availableStorage(): MotionStorage | undefined {
++  try {
++    return globalThis.localStorage;
++  } catch {
++    return undefined;
++  }
++}
++
++export class MotionPreference {
++  private currentMode: MotionMode = 'device';
++  private currentReduced: boolean;
++  private readonly listeners = new Set<Listener>();
++  private disposed = false;
++
++  constructor(
++    private readonly query: MotionQuery,
++    private readonly storage: MotionStorage | undefined = availableStorage(),
++  ) {
++    try {
++      if (storage?.getItem(motionStorageKey) === 'reduced') {
++        this.currentMode = 'reduced';
++      }
++    } catch {
++      this.currentMode = 'device';
++    }
++    this.currentReduced = this.resolve();
++    query.addEventListener('change', this.onDeviceChange);
++  }
++
++  get mode(): MotionMode {
++    return this.currentMode;
++  }
++
++  get reduced(): boolean {
++    return this.currentReduced;
++  }
++
++  setMode(mode: MotionMode): void {
++    if (this.disposed) return;
++    const nextMode = mode === 'reduced' ? 'reduced' : 'device';
++    const modeChanged = nextMode !== this.currentMode;
++    this.currentMode = nextMode;
++    try {
++      this.storage?.setItem(motionStorageKey, nextMode);
++    } catch {}
++    this.update(modeChanged);
++  }
++
++  subscribe(listener: Listener): () => void {
++    if (!this.disposed) this.listeners.add(listener);
++    return () => this.listeners.delete(listener);
++  }
++
++  dispose(): void {
++    if (this.disposed) return;
++    this.disposed = true;
++    this.query.removeEventListener('change', this.onDeviceChange);
++    this.listeners.clear();
++  }
++
++  private readonly onDeviceChange = (): void => {
++    this.update(false);
++  };
++
++  private resolve(): boolean {
++    return this.currentMode === 'reduced' || this.query.matches;
++  }
++
++  private update(modeChanged: boolean): void {
++    const reduced = this.resolve();
++    if (!modeChanged && reduced === this.currentReduced) return;
++    this.currentReduced = reduced;
++    for (const listener of this.listeners) {
++      listener(this.currentReduced, this.currentMode);
++    }
++  }
++}
+diff --git a/tests/e2e/homecoming.spec.ts b/tests/e2e/homecoming.spec.ts
+new file mode 100644
+index 0000000..6a352ee
+--- /dev/null
++++ b/tests/e2e/homecoming.spec.ts
+@@ -0,0 +1,587 @@
++import { expect, test, type Page } from '@playwright/test';
++import { mkdirSync, writeFileSync } from 'node:fs';
++import { reviewDir } from './evidence';
++import {
++  act,
++  activate,
++  dialogCycle,
++  fullyVisible,
++  idle,
++  readable,
++  ready,
++  restart,
++  state,
++  tabTo,
++  undo,
++} from './ui';
++
++const holdingApproach = [
++  'unload',
++  'map-shallows',
++  'map-rabbit-pier',
++  'board',
++  'map-shallows',
++  'map-stone',
++  'board',
++  'map-harbor',
++];
++const bellApproach = [
++  'map-shallows',
++  'map-low-pier',
++  'board',
++  'map-east-buoy',
++  'map-west-buoy',
++  'map-harbor',
++  'map-bell-pier',
++  'board',
++  'map-harbor',
++];
++const firstApproach = ['map-sheep-pier', 'board', 'wait', 'wait', 'map-cut', 'map-harbor'];
++const homecoming = (page: Page) =>
++  page.evaluate(() => (window as any).__LAST_FERRY__.getHomecomingStatus());
++const audio = (page: Page) => page.evaluate(() => (window as any).__LAST_FERRY__.getAudioStatus());
++const scene = (page: Page) => page.evaluate(() => (window as any).__LAST_FERRY__.getFrameStatus());
++async function motion(page: Page) {
++  const value = await page.evaluate(() => {
++    const api = (window as any).__LAST_FERRY__;
++    return {
++      status: api.getMotionStatus(),
++      sceneReduced: api.getEnvironmentStatus().reducedMotion,
++      cssMotion: document.documentElement.dataset.motion,
++    };
++  });
++  expect(value.sceneReduced).toBe(value.status.reduced);
++  expect(value.cssMotion).toBe(value.status.reduced ? 'reduced' : 'normal');
++  return value.status;
++}
++
++async function snap(page: Page, label: string, image = false) {
++  mkdirSync(reviewDir, { recursive: true });
++  const value = await page.evaluate((name) => {
++    const api = (window as any).__LAST_FERRY__;
++    return {
++      label: name,
++      at: performance.now(),
++      state: api.getState(),
++      homecoming: api.getHomecomingStatus(),
++      motion: api.getMotionStatus(),
++      audio: api.getAudioStatus(),
++      frame: api.getFrameStatus(),
++      metrics: api.getMetrics(),
++    };
++  }, label);
++  if (image) await page.screenshot({ path: `${reviewDir}/${label}.png` });
++  return value;
++}
++
++async function observed(
++  page: Page,
++  name: string,
++  run: (save: (label: string, image?: boolean) => Promise<any>) => Promise<void>,
++) {
++  const observations: any[] = [],
++    errors: string[] = [];
++  const startedAt = new Date().toISOString();
++  page.on('pageerror', (error) => errors.push(error.message));
++  let outcome = 'incomplete',
++    failure: string | null = null;
++  try {
++    await run(async (label, image = false) => {
++      const value = await snap(page, `${name}-${label}`, image);
++      observations.push(value);
++      return value;
++    });
++    expect(errors).toEqual([]);
++    outcome = 'passed';
++  } catch (error) {
++    outcome = 'failed';
++    failure = error instanceof Error ? error.message : String(error);
++    throw error;
++  } finally {
++    mkdirSync(reviewDir, { recursive: true });
++    writeFileSync(
++      `${reviewDir}/${name}.json`,
++      JSON.stringify(
++        {
++          startedAt,
++          finishedAt: new Date().toISOString(),
++          outcome,
++          failure,
++          environment: await page.evaluate(() => ({
++            userAgent: navigator.userAgent,
++            viewport: { width: innerWidth, height: innerHeight },
++            devicePixelRatio,
++            touch: navigator.maxTouchPoints,
++            osReduced: matchMedia('(prefers-reduced-motion: reduce)').matches,
++          })),
++          errors,
++          observations,
++        },
++        null,
++        2,
++      ),
++    );
++  }
++}
++
++async function approach(page: Page, ids = holdingApproach, touch = false, tideUndo = false) {
++  for (const id of ids) {
++    const before = await state(page);
++    await act(page, id, touch);
++    if (tideUndo && before.turn === 3) {
++      const risen = await state(page);
++      expect(risen).toMatchObject({ tideLevel: 1, status: 'playing' });
++      await undo(page, touch);
++      expect(await state(page)).toEqual(before);
++      await act(page, id, touch);
++      expect(await state(page)).toEqual(risen);
++    }
++  }
++}
++
++async function settled(page: Page) {
++  await expect.poll(async () => (await homecoming(page)).finite).toBe(false);
++  const value = await homecoming(page);
++  expect(value.active).toBe(true);
++  expect(
++    value.animalOffsets.every(
++      (animal: any) =>
++        animal.position.every((n: number) => Math.abs(n) < 1e-7) &&
++        animal.rotation.every((n: number) => Math.abs(n) < 1e-7),
++    ),
++  ).toBe(true);
++  return value;
++}
++
++async function controls(page: Page) {
++  await fullyVisible(page, page.locator('#dialog'), false);
++  const controls = page.locator('#dialog :is(button,select):visible');
++  for (const control of await controls.all()) {
++    await fullyVisible(page, control);
++    await readable(control);
++  }
++  for (const text of await page.locator('#dialog :is(h2,p,label):visible').all())
++    await readable(text);
++  const entries = await controls.evaluateAll((elements) =>
++    elements.map((element) => {
++      const r = element.getBoundingClientRect();
++      return { id: element.id, left: r.left, right: r.right, top: r.top, bottom: r.bottom };
++    }),
++  );
++  for (let a = 0; a < entries.length; a++)
++    for (let b = a + 1; b < entries.length; b++) {
++      const x = entries[a],
++        y = entries[b];
++      expect(
++        Math.min(x.right, y.right) - Math.max(x.left, y.left) <= 0.5 ||
++          Math.min(x.bottom, y.bottom) - Math.max(x.top, y.top) <= 0.5,
++        `${x.id} overlaps ${y.id}`,
++      ).toBe(true);
++    }
++}
++
++async function framing(page: Page) {
++  const value = await scene(page);
++  for (const item of [value.lighthouse, value.boat, ...value.passengers]) {
++    expect(item.left).toBeGreaterThanOrEqual(0);
++    expect(item.top).toBeGreaterThanOrEqual(0);
++    expect(item.right).toBeLessThanOrEqual(value.canvas.width);
++    expect(item.bottom).toBeLessThanOrEqual(value.canvas.height);
++  }
++  const covered = await page.evaluate(() => {
++    const api = (window as any).__LAST_FERRY__,
++      f = api.getFrameStatus(),
++      canvas = document.querySelector('canvas')!.getBoundingClientRect(),
++      panel = document.querySelector('#dialog')!.getBoundingClientRect();
++    return [f.lighthouse, f.boat, ...f.passengers].map((box: any) => ({
++      id: box.id ?? 'landmark/boat',
++      overlapWidth:
++        Math.min(canvas.left + box.right, panel.right) -
++        Math.max(canvas.left + box.left, panel.left),
++      overlapHeight:
++        Math.min(canvas.top + box.bottom, panel.bottom) - Math.max(canvas.top + box.top, panel.top),
++    }));
++  });
++  for (const item of covered)
++    expect(
++      item.overlapWidth <= 0.5 || item.overlapHeight <= 0.5,
++      `${item.id} covered by ending`,
++    ).toBe(true);
++  return value;
++}
++
++async function restoredMap(page: Page, camera: any) {
++  expect((await scene(page)).camera).toEqual(camera);
++  const markers = await page.evaluate(() => {
++    const frame = (window as any).__LAST_FERRY__.getFrameStatus(),
++      canvas = document.querySelector('canvas')!.getBoundingClientRect();
++    return frame.nodes.map((node: any) => {
++      const target = document.querySelector(`#map-${node.id} .map-hit`)!.getBoundingClientRect();
++      return {
++        id: node.id,
++        dx: target.left + target.width / 2 - canvas.left - node.x,
++        dy: target.top + target.height / 2 - canvas.top - node.y,
++      };
++    });
++  });
++  for (const marker of markers) {
++    expect(Math.abs(marker.dx), `${marker.id} horizontal projection`).toBeLessThan(1);
++    expect(Math.abs(marker.dy), `${marker.id} vertical projection`).toBeLessThan(1);
++  }
++  const point = await page.evaluate(() => {
++    const api = (window as any).__LAST_FERRY__,
++      f = api.getFrameStatus(),
++      canvas = document.querySelector('canvas')!,
++      bounds = canvas.getBoundingClientRect();
++    for (const fy of [0.5, 0.25, 0.75, 0.1, 0.9])
++      for (const fx of [0.5, 0.25, 0.75, 0.1, 0.9]) {
++        const x = f.boat.left + (f.boat.right - f.boat.left) * fx,
++          y = f.boat.top + (f.boat.bottom - f.boat.top) * fy;
++        if (
++          api.getPickDetailAt(x, y)?.kind === 'ferry' &&
++          document.elementFromPoint(bounds.left + x, bounds.top + y) === canvas
++        )
++          return { x: bounds.left + x, y: bounds.top + y };
++      }
++    return null;
++  });
++  expect(
++    point,
++    'A visible actual ferry must remain selectable after camera restoration',
++  ).not.toBeNull();
++  const before = await state(page);
++  await page.mouse.click(point!.x, point!.y);
++  await expect(page.locator('#local-context')).toBeVisible();
++  expect(await state(page)).toEqual(before);
++  await page.keyboard.press('Escape');
++}
++
++test('homecoming desktop: subset and tide Undo, finite cancellation, settled Settings and honest progression', async ({
++  page,
++}) => {
++  test.setTimeout(180000);
++  await ready(page, 'holding-pier');
++  await observed(page, 'desktop-holding', async (save) => {
++    await save('ordinary', true);
++    await approach(page, holdingApproach, false, true);
++    const before = await state(page),
++      normalCamera = (await scene(page)).camera;
++    await activate(page, 'unload');
++    await activate(page, 'passenger-rabbit-1');
++    await activate(page, 'passenger-rabbit-2');
++    await activate(page, 'commit');
++    await idle(page);
++    expect(await state(page)).toMatchObject({ status: 'playing', delivered: ['sheep-1'] });
++    expect(await homecoming(page)).toMatchObject({ active: false, celebrations: 0 });
++    await undo(page);
++    expect(await state(page)).toEqual(before);
++    await act(page, 'unload');
++    expect(await homecoming(page)).toMatchObject({ active: true, finite: true, celebrations: 1 });
++    await undo(page);
++    expect(await state(page)).toEqual(before);
++    expect(await homecoming(page)).toMatchObject({ active: false, finite: false });
++    await save('finite-undo-restored');
++    await restoredMap(page, normalCamera);
++    await act(page, 'unload');
++    await save('visible-arrival', true);
++    await settled(page);
++    expect(await homecoming(page)).toMatchObject({ celebrations: 2 });
++    await controls(page);
++    await framing(page);
++    await save('settled-ending', true);
++    await dialogCycle(page, 'next-cove');
++    await tabTo(page, 'terminal-settings');
++    const mutedBeforeSettings = (await audio(page)).muted;
++    await page.keyboard.down('Enter');
++    await page.keyboard.press('Enter');
++    await page.keyboard.up('Enter');
++    await expect(page.locator('#settings-sound')).toBeFocused();
++    expect((await audio(page)).muted).toBe(mutedBeforeSettings);
++    const stableState = await state(page),
++      stableAudio = await audio(page),
++      stableHome = await homecoming(page);
++    await controls(page);
++    await save('settings', true);
++    await dialogCycle(page, 'settings-sound');
++    await page.keyboard.press('Escape');
++    await expect(page.locator('#terminal-settings')).toBeFocused();
++    expect(await state(page)).toEqual(stableState);
++    expect(await audio(page)).toMatchObject({
++      deliveryCount: stableAudio.deliveryCount,
++      arrivalEventCount: stableAudio.arrivalEventCount,
++      victoryTarget: 0.5,
++    });
++    expect((await homecoming(page)).celebrations).toBe(stableHome.celebrations);
++    expect((await homecoming(page)).startedAt).toBe(stableHome.startedAt);
++    expect((await homecoming(page)).sweep.startedAt).toBe(stableHome.sweep.startedAt);
++    await page.keyboard.press('Escape');
++    await expect(page.locator('#dialog')).toBeHidden();
++    await activate(page, 'menu');
++    await activate(page, 'return-arrival');
++    await expect(page.locator('#next-cove')).toBeFocused();
++    expect((await homecoming(page)).celebrations).toBe(2);
++    expect((await homecoming(page)).sweep.startedAt).toBe(stableHome.sweep.startedAt);
++    await undo(page);
++    await restoredMap(page, normalCamera);
++    await save('restored-play', true);
++    await act(page, 'unload');
++    await activate(page, 'next-cove');
++    await page.waitForURL('**/?cove=bellwater');
++    await page.waitForFunction(
++      () => ((window as any).__LAST_FERRY__?.getMetrics().frames ?? 0) > 4,
++    );
++    expect(await state(page)).toMatchObject({ turn: 0, status: 'playing' });
++    expect(await homecoming(page)).toMatchObject({ active: false, finite: false, celebrations: 0 });
++    await save('next-cove');
++  });
++});
++
++for (const [width, height] of [
++  [844, 390],
++  [780, 390],
++  [780, 320],
++])
++  test(`homecoming touch ${width}x${height}: arrival, Settings, restoration and reduced stable ending`, async ({
++    browser,
++  }) => {
++    test.setTimeout(150000);
++    const context = await browser.newContext({
++      viewport: { width, height },
++      deviceScaleFactor: 1,
++      hasTouch: true,
++      isMobile: true,
++    });
++    const page = await context.newPage();
++    await ready(page, 'holding-pier');
++    await observed(page, `phone-${width}x${height}`, async (save) => {
++      await save('ordinary', true);
++      await approach(page, holdingApproach, true);
++      const before = await state(page),
++        normalCamera = (await scene(page)).camera;
++      await act(page, 'unload', true);
++      await save('visible-arrival', true);
++      await controls(page);
++      await settled(page);
++      await framing(page);
++      if (height === 320) expect((await homecoming(page)).camera.factor).toBe(1);
++      await save('settled-ending', true);
++      const celebrationCount = (await homecoming(page)).celebrations;
++      await page.setViewportSize({ width: width === 844 ? 780 : 844, height: 390 });
++      await page.waitForTimeout(200);
++      await framing(page);
++      await controls(page);
++      expect((await homecoming(page)).celebrations).toBe(celebrationCount);
++      await page.setViewportSize({ width, height });
++      await page.waitForTimeout(200);
++      await activate(page, 'terminal-settings', true);
++      await controls(page);
++      await save('settings', true);
++      await page.locator('#motion-preference').selectOption('reduced');
++      await expect.poll(async () => (await motion(page)).reduced).toBe(true);
++      expect((await homecoming(page)).camera.factor).toBe(1);
++      expect((await homecoming(page)).finite).toBe(false);
++      const phase = (await homecoming(page)).sweep.angle;
++      await page.waitForTimeout(250);
++      expect((await homecoming(page)).sweep.angle).toBe(phase);
++      await activate(page, 'settings-back', true);
++      await save('reduced-ending', true);
++      await undo(page, true);
++      expect(await state(page)).toEqual(before);
++      await restoredMap(page, normalCamera);
++      await save('restored-play', true);
++      await act(page, 'unload', true);
++      expect(await homecoming(page)).toMatchObject({
++        active: true,
++        finite: false,
++        motionReduced: true,
++      });
++      await activate(page, 'terminal-restart', true);
++      expect(await state(page)).toMatchObject({ turn: 0, status: 'playing' });
++      expect(await homecoming(page)).toMatchObject({ active: false, finite: false });
++      await save('restarted');
++    });
++    await context.close();
++  });
++
++for (const cove of ['bellwater', 'first-crossing'])
++  test(`homecoming ${cove}: actual rescue and honest Choose a cove`, async ({ page }) => {
++    if (cove === 'bellwater') await page.setViewportSize({ width: 780, height: 320 });
++    await page.emulateMedia({ reducedMotion: 'reduce' });
++    await ready(page, cove);
++    await observed(page, cove, async (save) => {
++      await approach(page, cove === 'bellwater' ? bellApproach : firstApproach);
++      await act(page, 'unload');
++      expect(await state(page)).toMatchObject({
++        status: 'won',
++        turn: cove === 'bellwater' ? 10 : 7,
++      });
++      expect(await homecoming(page)).toMatchObject({
++        active: true,
++        finite: false,
++        celebrations: 1,
++        motionReduced: true,
++      });
++      await expect(page.locator('#choose-cove')).toBeFocused();
++      await expect(page.locator('#next-cove')).toHaveCount(0);
++      await controls(page);
++      await framing(page);
++      await save('ending', true);
++      await activate(page, 'choose-cove');
++      await expect(page.locator('#cove-picker')).toBeVisible();
++      expect(await state(page)).toMatchObject({ status: 'won' });
++      expect((await homecoming(page)).celebrations).toBe(1);
++      await page.keyboard.press('Escape');
++      await undo(page);
++      expect(await state(page)).toMatchObject({ status: 'playing' });
++      expect(await homecoming(page)).toMatchObject({ active: false });
++    });
++  });
++
++test('homecoming settings: natural keyboard, device and persisted Reduced preference, loss has no arrival', async ({
++  page,
++}) => {
++  await page.emulateMedia({ reducedMotion: 'no-preference' });
++  await ready(page, 'holding-pier');
++  await observed(page, 'motion-settings', async (save) => {
++    const initial = await state(page);
++    await tabTo(page, 'menu');
++    await page.keyboard.press('Enter');
++    await tabTo(page, 'settings');
++    await page.keyboard.press('Space');
++    await expect(page.locator('#settings-sound')).toBeFocused();
++    await tabTo(page, 'settings-sound');
++    await page.keyboard.press('Space');
++    expect((await audio(page)).muted).toBe(true);
++    await page.keyboard.press('Space');
++    expect((await audio(page)).muted).toBe(false);
++    await tabTo(page, 'motion-preference');
++    await page.keyboard.press('ArrowDown');
++    await expect.poll(async () => (await motion(page)).reduced).toBe(true);
++    expect(await state(page)).toEqual(initial);
++    await page.emulateMedia({ reducedMotion: 'reduce' });
++    await page.emulateMedia({ reducedMotion: 'no-preference' });
++    expect((await motion(page)).reduced).toBe(true);
++    await page.keyboard.press('Escape');
++    await expect(page.locator('#settings')).toBeFocused();
++    await page.keyboard.press('Escape');
++    await expect(page.locator('#menu')).toBeFocused();
++    await page.reload();
++    await page.waitForFunction(
++      () => ((window as any).__LAST_FERRY__?.getMetrics().frames ?? 0) > 4,
++    );
++    expect((await motion(page)).reduced).toBe(true);
++    await activate(page, 'menu');
++    await page.locator('#cove-picker').selectOption('bellwater');
++    await page.waitForURL('**/?cove=bellwater');
++    await page.waitForFunction(
++      () => ((window as any).__LAST_FERRY__?.getMetrics().frames ?? 0) > 4,
++    );
++    expect((await motion(page)).reduced).toBe(true);
++    await activate(page, 'menu');
++    await activate(page, 'settings');
++    await page.locator('#motion-preference').selectOption('device');
++    expect((await motion(page)).reduced).toBe(false);
++    await page.emulateMedia({ reducedMotion: 'reduce' });
++    await expect.poll(async () => (await motion(page)).reduced).toBe(true);
++    await page.emulateMedia({ reducedMotion: 'no-preference' });
++    await expect.poll(async () => (await motion(page)).reduced).toBe(false);
++    await save('follow-device-restored');
++    await page.keyboard.press('Escape');
++    await page.locator('#cove-picker').selectOption('holding-pier');
++    await page.waitForURL('**/?cove=holding-pier');
++    await page.waitForFunction(
++      () => ((window as any).__LAST_FERRY__?.getMetrics().frames ?? 0) > 4,
++    );
++    await page.emulateMedia({ reducedMotion: 'reduce' });
++    for (let i = 0; i < 4; i++) await act(page, 'wait');
++    expect(await state(page)).toMatchObject({ status: 'lost', turn: 4 });
++    expect(await homecoming(page)).toMatchObject({ active: false, finite: false, celebrations: 0 });
++    expect((await audio(page)).arrivalEventCount).toBe(0);
++    await save('loss-no-celebration');
++    await restart(page);
++    expect(await homecoming(page)).toMatchObject({ active: false, finite: false });
++  });
++});
++
++test('homecoming recovery: simulated hide and context loss settle finite motion without replay or resource growth', async ({
++  page,
++}) => {
++  test.setTimeout(180000);
++  await ready(page, 'holding-pier');
++  await observed(page, 'visual-recovery', async (save) => {
++    await approach(page);
++    const before = await state(page),
++      camera = (await scene(page)).camera;
++    await act(page, 'unload');
++    expect((await homecoming(page)).finite).toBe(true);
++    await page.evaluate(() => {
++      Object.defineProperty(document, 'hidden', { configurable: true, value: true });
++      document.dispatchEvent(new Event('visibilitychange'));
++    });
++    expect((await homecoming(page)).finite).toBe(false);
++    await page.evaluate(() => {
++      Object.defineProperty(document, 'hidden', { configurable: true, value: false });
++      document.dispatchEvent(new Event('visibilitychange'));
++    });
++    await page.waitForTimeout(300);
++    await settled(page);
++    const hidden = await save('simulated-hide-resume');
++    expect(hidden.homecoming.celebrations).toBe(1);
++    expect(hidden.audio).toMatchObject({ arrivalEventCount: 1, victoryTarget: 0.5 });
++    const phase = hidden.homecoming.sweep.angle;
++    await page.waitForTimeout(700);
++    const phaseChange =
++      ((await homecoming(page)).sweep.angle - phase + Math.PI * 2) % (Math.PI * 2);
++    expect(phaseChange).toBeGreaterThan(0);
++    expect(phaseChange).toBeLessThan(0.4);
++    const settledCount = (await homecoming(page)).celebrations;
++    await page.evaluate(() => {
++      Object.defineProperty(document, 'hidden', { configurable: true, value: true });
++      document.dispatchEvent(new Event('visibilitychange'));
++    });
++    await page.waitForTimeout(150);
++    await page.evaluate(() => {
++      Object.defineProperty(document, 'hidden', { configurable: true, value: false });
++      document.dispatchEvent(new Event('visibilitychange'));
++    });
++    expect((await homecoming(page)).celebrations).toBe(settledCount);
++    expect((await homecoming(page)).finite).toBe(false);
++    expect((await audio(page)).victoryTarget).toBe(0.5);
++    await save('simulated-settled-won-hide-resume');
++    await undo(page);
++    expect(await state(page)).toEqual(before);
++    await restoredMap(page, camera);
++    await act(page, 'unload');
++    await page.evaluate(() =>
++      document
++        .querySelector('canvas')!
++        .dispatchEvent(new Event('webglcontextlost', { cancelable: true })),
++    );
++    expect((await homecoming(page)).finite).toBe(false);
++    await page.evaluate(() =>
++      document.querySelector('canvas')!.dispatchEvent(new Event('webglcontextrestored')),
++    );
++    await settled(page);
++    const context = await save('simulated-context-recovery');
++    expect(context.homecoming.celebrations).toBe(2);
++    expect(context.audio).toMatchObject({ arrivalEventCount: 2, victoryTarget: 0.5 });
++    await page.waitForTimeout(300);
++    const priorResources = (await homecoming(page)).resources;
++    expect(priorResources).toBeDefined();
++    await undo(page);
++    await act(page, 'unload');
++    expect((await homecoming(page)).finite).toBe(true);
++    await activate(page, 'terminal-settings');
++    await page.locator('#motion-preference').selectOption('reduced');
++    await settled(page);
++    expect((await homecoming(page)).camera.factor).toBe(1);
++    await page.locator('#motion-preference').selectOption('device');
++    expect((await homecoming(page)).finite).toBe(false);
++    await activate(page, 'settings-back');
++    expect((await homecoming(page)).resources).toEqual(priorResources);
++    expect((await homecoming(page)).celebrations).toBe(3);
++    await save('repeated-win-settled');
++    await restart(page);
++    expect(await homecoming(page)).toMatchObject({ active: false, finite: false });
++  });
++});
+diff --git a/tests/unit/homecoming.test.ts b/tests/unit/homecoming.test.ts
+new file mode 100644
+index 0000000..a5a8369
+--- /dev/null
++++ b/tests/unit/homecoming.test.ts
+@@ -0,0 +1,81 @@
++import { expect, test } from 'vitest';
++import { Group, Vector3 } from 'three';
++import { CrossingEffects } from '../../src/scene/effects';
++import { lighthouse } from '../../src/scene/models';
++import { acknowledgmentPose, HomecomingTimeline } from '../../src/scene/homecoming';
++
++test('an arrival runs once, settles its finite reaction and can start afresh only after reset', () => {
++  const timeline = new HomecomingTimeline();
++  expect(timeline.start(100, false)).toBe(true);
++  expect(timeline.start(200, false)).toBe(false);
++  expect(timeline.celebrations).toBe(1);
++  timeline.update(600);
++  expect(timeline.finite).toBe(true);
++  timeline.update(1500);
++  expect(timeline.finite).toBe(false);
++  expect(timeline.active).toBe(true);
++  expect(timeline.start(1600, false)).toBe(false);
++  timeline.reset();
++  expect(timeline.active).toBe(false);
++  expect(timeline.start(1700, false)).toBe(true);
++  expect(timeline.celebrations).toBe(2);
++});
++
++test('reduced motion and recovery settle without scheduling a later reaction', () => {
++  const timeline = new HomecomingTimeline();
++  timeline.start(100, true);
++  timeline.update(200);
++  expect(timeline.finite).toBe(false);
++  expect(timeline.settled).toBe(true);
++  expect(timeline.start(300, false)).toBe(false);
++  timeline.reset();
++  timeline.start(400, false);
++  timeline.settle('hidden');
++  timeline.update(60000);
++  expect(timeline.finite).toBe(false);
++  expect(timeline.reason).toBe('hidden');
++  timeline.reset();
++  timeline.restore();
++  expect(timeline.startedAt).toBeNull();
++  expect(timeline.finite).toBe(false);
++  expect(timeline.celebrations).toBe(2);
++});
++
++test('rabbit and sheep gestures leave exact resting transforms outside one finite staggered window', () => {
++  const resting = { height: 0, pitch: 0 };
++  for (const species of ['rabbit', 'sheep'])
++    for (const index of [0, 1, 2]) {
++      expect(acknowledgmentPose(species, index, 0)).toEqual(resting);
++      expect(acknowledgmentPose(species, index, 1300)).toEqual(resting);
++      expect(acknowledgmentPose(species, index, 60000)).toEqual(resting);
++    }
++  expect(acknowledgmentPose('rabbit', 0, 360).height).toBeGreaterThan(0.16);
++  expect(acknowledgmentPose('rabbit', 1, 200)).toEqual(resting);
++  expect(acknowledgmentPose('sheep', 0, 480).height).toBeLessThan(0.04);
++});
++
++test('the independent decorative beam remains bounded and static under reduced motion', () => {
++  const home = lighthouse(new Group(), 0, 0, 0),
++    effects = new CrossingEffects(home),
++    boat = new Vector3();
++  expect(effects.sweep.visible).toBe(false);
++  expect(effects.sweep.userData.excludeFromFrame).toBe(true);
++  expect(effects.sweep.children).toHaveLength(1);
++  const building = home.group.rotation.toArray();
++  effects.arrive(0, false);
++  for (let time = 0; time <= 20000; time += 50) effects.update(time, boat, 0, false, 0, false);
++  expect(effects.sweep.rotation.y).toBeCloseTo(Math.PI * 2);
++  expect(home.group.rotation.toArray()).toEqual(building);
++  effects.update(20050, boat, 0, false, 0, true);
++  const steady = effects.sweep.rotation.y;
++  effects.update(80000, boat, 0, false, 0, true);
++  expect(effects.sweep.rotation.y).toBe(steady);
++  expect(effects.sweep.children).toHaveLength(1);
++  effects.reset();
++  expect(effects.sweep.visible).toBe(false);
++  effects.settle(false);
++  effects.update(90000, boat, 0, false, 0, false);
++  effects.update(90050, boat, 0, false, 0, false);
++  expect(effects.sweep.rotation.y).toBeGreaterThan(0);
++  expect(effects.presentation().arrival.active).toBe(false);
++});
+diff --git a/tests/unit/motion-preference.test.ts b/tests/unit/motion-preference.test.ts
+new file mode 100644
+index 0000000..1f346ff
+--- /dev/null
++++ b/tests/unit/motion-preference.test.ts
+@@ -0,0 +1,149 @@
++import { describe, expect, it, vi } from 'vitest';
++import { MotionPreference, motionStorageKey } from '../../src/ui/motion-preference';
++
++function device(initial = false) {
++  let matches = initial;
++  const changes = new Set<EventListenerOrEventListenerObject>();
++  const query = {
++    get matches() {
++      return matches;
++    },
++    addEventListener: vi.fn((_type: string, listener: EventListenerOrEventListenerObject) => {
++      changes.add(listener);
++    }),
++    removeEventListener: vi.fn((_type: string, listener: EventListenerOrEventListenerObject) => {
++      changes.delete(listener);
++    }),
++  };
++  return {
++    query,
++    set(value: boolean) {
++      matches = value;
++      for (const listener of changes) {
++        if (typeof listener === 'function') listener(new Event('change'));
++        else listener.handleEvent(new Event('change'));
++      }
++    },
++    get listenerCount() {
++      return changes.size;
++    },
++  };
++}
++
++function storage(initial?: string) {
++  const values = new Map<string, string>();
++  if (initial !== undefined) values.set(motionStorageKey, initial);
++  return {
++    getItem: (key: string) => values.get(key) ?? null,
++    setItem: (key: string, value: string) => void values.set(key, value),
++  };
++}
++
++describe('shared motion preference', () => {
++  it('follows the device by default and reports effective preference changes once', () => {
++    const os = device();
++    const preference = new MotionPreference(os.query, storage());
++    const listener = vi.fn();
++    preference.subscribe(listener);
++    expect(preference.mode).toBe('device');
++    expect(preference.reduced).toBe(false);
++    os.set(true);
++    os.set(true);
++    os.set(false);
++    expect(listener.mock.calls).toEqual([
++      [true, 'device'],
++      [false, 'device'],
++    ]);
++    expect(os.listenerCount).toBe(1);
++    preference.dispose();
++  });
++
++  it('persists a manual reduction across instances and ignores device changes until follow device is restored', () => {
++    const os = device();
++    const saved = storage();
++    const original = new MotionPreference(os.query, saved);
++    original.setMode('reduced');
++    expect(saved.getItem(motionStorageKey)).toBe('reduced');
++    original.dispose();
++    const restored = new MotionPreference(os.query, saved);
++    const listener = vi.fn();
++    restored.subscribe(listener);
++    expect(restored.mode).toBe('reduced');
++    expect(restored.reduced).toBe(true);
++    os.set(true);
++    os.set(false);
++    expect(listener).not.toHaveBeenCalled();
++    restored.setMode('device');
++    expect(restored.reduced).toBe(false);
++    expect(saved.getItem(motionStorageKey)).toBe('device');
++    os.set(true);
++    expect(listener.mock.calls).toEqual([
++      [false, 'device'],
++      [true, 'device'],
++    ]);
++    restored.dispose();
++  });
++
++  it('reports a changed choice even when both choices currently resolve to reduced', () => {
++    const os = device(true);
++    const preference = new MotionPreference(os.query, storage());
++    const listener = vi.fn();
++    preference.subscribe(listener);
++    preference.setMode('reduced');
++    preference.setMode('reduced');
++    preference.setMode('device');
++    expect(listener.mock.calls).toEqual([
++      [true, 'reduced'],
++      [true, 'device'],
++    ]);
++    preference.dispose();
++  });
++
++  it.each(['', 'normal', 'false', 'REDUCED', '{bad'])(
++    'falls back to follow device for invalid storage %j',
++    (stored) => {
++      const preference = new MotionPreference(device(true).query, storage(stored));
++      expect(preference.mode).toBe('device');
++      expect(preference.reduced).toBe(true);
++      preference.dispose();
++    },
++  );
++
++  it('keeps the choice usable in memory when storage cannot be read or written', () => {
++    const unavailable = {
++      getItem: () => {
++        throw new Error('blocked');
++      },
++      setItem: () => {
++        throw new Error('blocked');
++      },
++    };
++    const preference = new MotionPreference(device().query, unavailable);
++    expect(preference.mode).toBe('device');
++    preference.setMode('reduced');
++    expect(preference.reduced).toBe(true);
++    preference.setMode('device');
++    expect(preference.reduced).toBe(false);
++    preference.dispose();
++  });
++
++  it('unsubscribes and disposes the single device listener without later notifications', () => {
++    const os = device();
++    const preference = new MotionPreference(os.query, storage());
++    const first = vi.fn();
++    const second = vi.fn();
++    const unsubscribe = preference.subscribe(first);
++    preference.subscribe(second);
++    unsubscribe();
++    os.set(true);
++    expect(first).not.toHaveBeenCalled();
++    expect(second).toHaveBeenCalledTimes(1);
++    preference.dispose();
++    preference.dispose();
++    expect(os.listenerCount).toBe(0);
++    expect(os.query.removeEventListener).toHaveBeenCalledTimes(1);
++    os.set(false);
++    preference.setMode('reduced');
++    expect(second).toHaveBeenCalledTimes(1);
++  });
++});
+diff --git a/tools/capture-homecoming.mjs b/tools/capture-homecoming.mjs
+new file mode 100644
+index 0000000..eea5318
+--- /dev/null
++++ b/tools/capture-homecoming.mjs
+@@ -0,0 +1,297 @@
++import { chromium } from '@playwright/test';
++import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
++import { createHash } from 'node:crypto';
++import { execFileSync } from 'node:child_process';
++import { relative, resolve } from 'node:path';
++
++const args = Object.fromEntries(
++  process.argv.slice(2).map((arg) => arg.replace(/^--/, '').split('=')),
++);
++const base = args.base ?? 'http://127.0.0.1:5200';
++const out = args.output ?? 'reviews/homecoming/recording';
++const root = resolve(args.root ?? '.');
++const width = Number(args.width ?? 844),
++  height = Number(args.height ?? 390);
++const hash = (bytes) => createHash('sha256').update(bytes).digest('hex');
++const filesIn = (folder) =>
++  readdirSync(folder, { withFileTypes: true }).flatMap((entry) => {
++    const path = resolve(folder, entry.name);
++    return entry.isDirectory() ? filesIn(path) : [path];
++  });
++const paths = ['src', 'data', 'public']
++  .filter((path) => existsSync(resolve(root, path)))
++  .flatMap((path) => filesIn(resolve(root, path)))
++  .concat(
++    ['index.html', 'package.json', 'package-lock.json', 'vite.config.ts'].map((path) =>
++      resolve(root, path),
++    ),
++  )
++  .sort();
++const snapshot = () =>
++  Object.fromEntries(
++    paths.map((path) => [relative(root, path).replaceAll('\\', '/'), hash(readFileSync(path))]),
++  );
++const files = snapshot();
++const source = {
++  head: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
++  status: execFileSync('git', ['status', '--short'], { encoding: 'utf8' }).trim(),
++  files,
++  hash: hash(JSON.stringify(files)),
++  root,
++  sourceKind: 'working tree',
++  command: [process.execPath, ...process.argv.slice(1)],
++  capturedAt: new Date().toISOString(),
++};
++mkdirSync(`${out}/raw`, { recursive: true });
++writeFileSync(`${out}/source.json`, JSON.stringify(source, null, 2));
++const browser = await chromium.launch({
++  headless: true,
++  args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'],
++});
++const context = await browser.newContext({
++  viewport: { width, height },
++  deviceScaleFactor: 1,
++  hasTouch: true,
++  isMobile: true,
++  recordVideo: { dir: `${out}/raw`, size: { width, height } },
++});
++const page = await context.newPage(),
++  errors = [];
++page.on('pageerror', (error) => errors.push(error.message));
++const result = {
++  sourceHash: source.hash,
++  sourceHead: source.head,
++  startedAt: new Date().toISOString(),
++  actions: [],
++  observations: [],
++  screenshots: [],
++  errors,
++};
++const observe = async (label) => {
++  const value = await page.evaluate((label) => {
++    const api = window.__LAST_FERRY__;
++    return {
++      label,
++      at: performance.now(),
++      state: api.getState(),
++      homecoming: api.getHomecomingStatus(),
++      motion: api.getMotionStatus(),
++      audio: api.getAudioStatus(),
++      metrics: api.getMetrics(),
++      frame: api.getFrameStatus(),
++    };
++  }, label);
++  result.observations.push(value);
++  return value;
++};
++const capture = async (label) => {
++  const path = `${out}/${label}.png`;
++  await page.screenshot({ path });
++  result.screenshots.push({ path, sha256: hash(readFileSync(path)), ...(await observe(label)) });
++};
++const tap = (id) => page.locator(`#${id}`).tap();
++const idle = () =>
++  page.waitForFunction(
++    () => document.querySelector('#seascape').getAttribute('aria-busy') === 'false',
++  );
++const action = async (id) => {
++  const before = await observe(`${id}-before`);
++  await tap(id);
++  if (id.startsWith('map-')) await tap('sail');
++  else await tap('commit');
++  await idle();
++  const after = await observe(`${id}-after`);
++  if (after.state.turn !== before.state.turn + 1)
++    throw Error(`${id} did not advance exactly one action`);
++  result.actions.push({ id, before, after });
++  await page.waitForTimeout(250);
++};
++let video;
++try {
++  await page.goto(`${base}/?cove=holding-pier`);
++  await page.waitForFunction(() => window.__LAST_FERRY__?.getMetrics().frames > 4);
++  await idle();
++  await tap('map-stone');
++  await page.keyboard.press('Escape');
++  await page.evaluate(() => {
++    const api = window.__LAST_FERRY__,
++      scene = document.querySelector('canvas').captureStream(24),
++      audio = api.captureAudioStream();
++    if (!audio || !audio.getAudioTracks().length)
++      throw Error('Runtime master audio capture unavailable');
++    const stream = new MediaStream([...scene.getVideoTracks(), ...audio.getAudioTracks()]);
++    const mimeType = [
++      'video/webm;codecs=vp9,opus',
++      'video/webm;codecs=vp8,opus',
++      'video/webm',
++    ].find((mime) => MediaRecorder.isTypeSupported(mime));
++    if (!mimeType) throw Error('No supported WebM MediaRecorder format');
++    const recorder = new MediaRecorder(stream, {
++      mimeType,
++      videoBitsPerSecond: 1800000,
++      audioBitsPerSecond: 192000,
++    });
++    const recording = {
++      recorder,
++      scene,
++      chunks: [],
++      samples: [],
++      startedAt: performance.now(),
++      running: true,
++      previous: 0,
++      mimeType,
++    };
++    recorder.ondataavailable = (event) => {
++      if (event.data.size) recording.chunks.push(event.data);
++    };
++    const sample = () => {
++      if (!recording.running) return;
++      const now = performance.now();
++      if (now - recording.previous >= 80) {
++        recording.samples.push({
++          wallMs: now - recording.startedAt,
++          state: api.getState(),
++          homecoming: api.getHomecomingStatus(),
++          audio: api.getAudioStatus(),
++          metrics: api.getMetrics(),
++        });
++        recording.previous = now;
++      }
++      requestAnimationFrame(sample);
++    };
++    requestAnimationFrame(sample);
++    recorder.start(500);
++    window.__homecomingRecording = recording;
++  });
++  await capture('ordinary');
++  for (const id of [
++    'unload',
++    'map-shallows',
++    'map-rabbit-pier',
++    'board',
++    'map-shallows',
++    'map-stone',
++    'board',
++    'map-harbor',
++    'unload',
++  ])
++    await action(id);
++  const won = await observe('first-arrival');
++  if (
++    won.state.status !== 'won' ||
++    won.audio.arrivalEventCount !== 1 ||
++    won.homecoming.celebrations !== 1
++  )
++    throw Error(
++      'Actual UI rescue did not produce exactly one visible arrival and finite celebration',
++    );
++  await capture('visible-arrival');
++  await page.waitForFunction(() => !window.__LAST_FERRY__.getHomecomingStatus().finite);
++  await capture('settled-ending');
++  await tap('terminal-settings');
++  await capture('settings');
++  await page.waitForTimeout(2000);
++  await tap('settings-back');
++  await capture('ending-after-settings');
++  await tap('terminal-undo');
++  await idle();
++  const restored = await observe('undo-restored');
++  if (
++    restored.state.status !== 'playing' ||
++    restored.homecoming.active ||
++    restored.homecoming.camera.factor !== 1
++  )
++    throw Error('Terminal Undo left stale homecoming presentation');
++  await capture('restored-play');
++  await page.waitForTimeout(800);
++  await action('unload');
++  await page.waitForFunction(() => !window.__LAST_FERRY__.getHomecomingStatus().finite);
++  await capture('redelivery');
++  await page.waitForTimeout(11000);
++  const end = await observe('redelivery-sweep-held');
++  if (
++    end.audio.arrivalEventCount !== 2 ||
++    end.audio.deliveryCount !== 2 ||
++    end.audio.victoryTarget !== 0.5 ||
++    end.homecoming.celebrations !== 2
++  )
++    throw Error('Redelivery changed accepted sound/event ownership or persistent mix');
++  const exported = await page.evaluate(async () => {
++    const record = window.__homecomingRecording;
++    record.running = false;
++    const stopped = new Promise((resolve) => (record.recorder.onstop = resolve));
++    record.recorder.stop();
++    await stopped;
++    record.scene.getTracks().forEach((track) => track.stop());
++    const blob = new Blob(record.chunks, { type: record.mimeType });
++    const data = await new Promise((resolve) => {
++      const reader = new FileReader();
++      reader.onload = () => resolve(String(reader.result).split(';base64,')[1]);
++      reader.readAsDataURL(blob);
++    });
++    return {
++      data,
++      bytes: blob.size,
++      mimeType: record.mimeType,
++      wallMs: performance.now() - record.startedAt,
++      samples: record.samples,
++    };
++  });
++  const bytes = Buffer.from(exported.data, 'base64');
++  if (bytes.length !== exported.bytes) throw Error('Runtime capture export byte mismatch');
++  const path = `${out}/raw/holding-homecoming-runtime-audio.webm`,
++    samplesPath = `${out}/raw/presentation-samples.json`;
++  writeFileSync(path, bytes);
++  writeFileSync(samplesPath, JSON.stringify(exported.samples, null, 2));
++  result.recording = {
++    path,
++    sha256: hash(bytes),
++    bytes: bytes.length,
++    mimeType: exported.mimeType,
++    wallMs: exported.wallMs,
++    samplesPath,
++    samples: exported.samples.length,
++    audio:
++      'Actual unchanged runtime master capture; export gain 1; no normalization, substitute audio, cuts or time edits.',
++  };
++  result.sourceUnchanged = JSON.stringify(files) === JSON.stringify(snapshot());
++  if (!result.sourceUnchanged) throw Error('Runtime source changed during capture');
++  if (errors.length) throw Error(`Browser errors: ${errors.join('; ')}`);
++  result.outcome = 'passed';
++} catch (error) {
++  result.outcome = 'failed';
++  result.failure = String(error.stack ?? error);
++  process.exitCode = 1;
++} finally {
++  result.environment = {
++    browser: browser.version(),
++    node: process.version,
++    platform: process.platform,
++    viewport: { width, height },
++    dpr: 1,
++    input: 'emulated touch',
++    renderer: 'SwiftShader',
++    base,
++  };
++  result.method =
++    'One uninterrupted real-interface nine-action rescue, Settings → Back → terminal Undo → redelivery with 11-second won hold. Read-only source/presentation diagnostics; no state injection. Native canvas and actual runtime master recorded together. Separate whole-interface Playwright video is silent and shows dialog controls. Software-renderer capture does not establish physical-phone performance or acoustic listening.';
++  video = page.video();
++  await context.close();
++  if (video) {
++    const path = `${out}/raw/holding-homecoming-full-interface-silent.webm`;
++    await video.saveAs(path);
++    result.fullInterfaceVideo = { path, sha256: hash(readFileSync(path)), audio: false };
++  }
++  await browser.close();
++  result.finishedAt = new Date().toISOString();
++  writeFileSync(`${out}/capture.json`, JSON.stringify(result, null, 2));
++  console.log(
++    JSON.stringify({
++      sourceHash: source.hash,
++      outcome: result.outcome,
++      recording: result.recording?.path,
++      fullInterfaceVideo: result.fullInterfaceVideo?.path,
++      failure: result.failure,
++    }),
++  );
++}
+diff --git a/tools/snapshot-evidence.mjs b/tools/snapshot-evidence.mjs
+index 07e53ec..30c1b89 100644
+--- a/tools/snapshot-evidence.mjs
++++ b/tools/snapshot-evidence.mjs
+@@ -8,6 +8,7 @@ const option = (name) => {
+   return i < 0 ? undefined : process.argv[i + 1];
+ };
+ const reviewDir = option('--review-dir') ?? 'reviews/m1';
++const captureDir = option('--captures-from') ?? reviewDir;
+ const git = (...args) => execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim();
+ const gitIdentity = () => {
+   try {
+@@ -43,6 +44,7 @@ const paths = [
+   ...(existsSync(new URL('NEXT_TASK.md', root)) ? ['NEXT_TASK.md'] : []),
+   ...(existsSync(new URL('FOLLOWING_TASK_UI.md', root)) ? ['FOLLOWING_TASK_UI.md'] : []),
+   ...(existsSync(new URL('NEXT_TASK_VICTORY.md', root)) ? ['NEXT_TASK_VICTORY.md'] : []),
++  ...(existsSync(new URL('NEXT_TASK_HOMECOMING.md', root)) ? ['NEXT_TASK_HOMECOMING.md'] : []),
+   'docs/GAMEPLAY_RULES.md',
+   'docs/FIRST_COVE.md',
+   'docs/ART_DIRECTION.md',
+@@ -70,7 +72,8 @@ const paths = [
+       path.includes('audio-polish') ||
+       path.includes('cove-interface') ||
+       path.includes('cove-contrast') ||
+-      path.includes('victory-mix'),
++      path.includes('victory-mix') ||
++      path.includes('homecoming'),
+   ),
+ ].sort();
+ const files = Object.fromEntries(paths.map((p) => [p, digest(readFileSync(new URL(p, root)))]));
+@@ -87,7 +90,7 @@ if (!process.argv.includes('--finalize')) {
+         sourceHash,
+         files,
+         scope:
+-          'Runtime, tests, dependencies, level data and authoritative instructions. Review reports, README and STATUS are metadata outside this hash.',
++          'Runtime, tests, dependencies, level data and authoritative instructions. Review reports, README, STATUS and docs/PROJECT_STATE are continuity metadata outside this hash.',
+       },
+       null,
+       2,
+@@ -100,10 +103,10 @@ if (!process.argv.includes('--finalize')) {
+     throw new Error(
+       'Tested source changed after the snapshot. Repeat affected checks and captures.',
+     );
+-  const captures = readdirSync(new URL(`${reviewDir}/`, root))
++  const captures = readdirSync(new URL(`${captureDir}/`, root))
+     .filter((n) => n.endsWith('.png') && !n.includes('prototype'))
+     .map((name) => {
+-      const path = `${reviewDir}/${name}`,
++      const path = `${captureDir}/${name}`,
+         p = new URL(path, root),
+         b = readFileSync(p);
+       return {

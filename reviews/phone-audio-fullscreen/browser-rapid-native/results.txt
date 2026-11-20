@@ -1,0 +1,31 @@
+
+Running 2 tests using 1 worker
+
+(node:18364) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\e2e\selection.spec.ts:242:1 › selection regression: an explicit new place permits the next trusted Sail inside the previous 180ms fence (1.4s)
+  x  2 tests\e2e\selection.spec.ts:267:1 › selection regression: the arrived dock permits a deliberate local action inside the prior Sail fence (8.5s)
+
+
+  1) tests\e2e\selection.spec.ts:267:1 › selection regression: the arrived dock permits a deliberate local action inside the prior Sail fence 
+
+    Error: expect(received).toHaveLength(expected)
+
+    Expected length: 3
+    Received length: 0
+    Received array:  []
+
+      279 |   const result = { sail, board, trace, gapMs: clicks[2]?.at - clicks[0]?.at, repeatGapMs: clicks[1]?.at - clicks[0]?.at, clicks, arrived, final, modalOpen: await page.locator('#dialog[open]').count() === 1 };
+      280 |   writeFileSync(`${reviewDir}/arrived-local-action-regression.json`, JSON.stringify(result, null, 2));
+    > 281 |   expect(clicks).toHaveLength(3);
+          |                  ^
+      282 |   expect(trace.error).toBeNull();
+      283 |   expect(clicks[0].target).toBe('sail');
+      284 |   expect(clicks[2].target).toBe('board');
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\selection.spec.ts:281:18
+
+    Error Context: test-results\selection-selection-regres-fed88-inside-the-prior-Sail-fence\error-context.md
+
+  1 failed
+    tests\e2e\selection.spec.ts:267:1 › selection regression: the arrived dock permits a deliberate local action inside the prior Sail fence 
+  1 passed (11.4s)

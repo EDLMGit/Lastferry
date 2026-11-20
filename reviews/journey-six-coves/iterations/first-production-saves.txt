@@ -1,0 +1,22 @@
+
+> last-ferry@1.0.0 test:e2e
+> playwright test journey-six-saves.spec.ts --output=.cache/journey-six-save-results
+
+
+Running 11 tests using 1 worker
+
+(node:18900) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\e2e\journey-six-saves.spec.ts:57:3 › production Continue preserves complete-two and restores the new entry (4.9s)
+  ok  2 tests\e2e\journey-six-saves.spec.ts:57:3 › production Continue preserves complete-three and restores the new entry (4.5s)
+  ok  3 tests\e2e\journey-six-saves.spec.ts:57:3 › production Continue preserves pending-launch and restores the new entry (4.3s)
+  ok  4 tests\e2e\journey-six-saves.spec.ts:57:3 › production Continue preserves active-wide and restores the new entry (3.9s)
+  ok  5 tests\e2e\journey-six-saves.spec.ts:57:3 › production Continue preserves complete-four and restores the new entry (17.1s)
+  ok  6 tests\e2e\journey-six-saves.spec.ts:104:3 › earlier scene checkpoint reopens in place without conversion (2.2s)
+  ok  7 tests\e2e\journey-six-saves.spec.ts:104:3 › earlier cove checkpoint reopens in place without conversion (1.1s)
+  ok  8 tests\e2e\journey-six-saves.spec.ts:128:3 › storage denial at last-ferry.journey.v1.before-six-coves preserves the original and allows this visit (3.1s)
+  ok  9 tests\e2e\journey-six-saves.spec.ts:128:3 › storage denial at last-ferry.journey.v1 preserves the original and allows this visit (4.4s)
+  ok 10 tests\e2e\journey-six-saves.spec.ts:149:3 › unreadable or future save is recoverable {unfinished (4.0s)
+  ok 11 tests\e2e\journey-six-saves.spec.ts:149:3 › unreadable or future save is recoverable {"version":2,"future":true} (4.3s)
+
+  11 passed (55.8s)

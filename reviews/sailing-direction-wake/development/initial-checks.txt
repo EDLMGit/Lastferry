@@ -1,0 +1,18 @@
+Development checks before the source freeze, 2026-10-24.
+
+Initial interleaved npm run typecheck failed while wake tests were being migrated:
+tests/unit/wake.test.ts(95,49): TS2339 Property 'length' does not exist on wakeLimits.
+tests/unit/wake.test.ts(97,28), (97,47): TS2339 Property 'joins' does not exist on FerryWake.
+The obsolete strip/length expectations were replaced with released-event safeguards.
+
+Next interleaved npm run typecheck failed while the new browser test was being written:
+tests/e2e/sailing-direction-wake.spec.ts(155,41): TS2345 number | null is not assignable to number.
+tests/e2e/sailing-direction-wake.spec.ts(158,92): TS2571 Object is of type unknown.
+The test now narrows the normal result and types completion totals.
+
+npx vitest run tests/unit/poses.test.ts tests/unit/deck-transfer.test.ts:
+3 passed, 1 failed. Failure at deck-transfer.test.ts:45:
+expected -0 to be +0 // Object.is equality
+The unload final heading at the negative berth was numerically zero. The angular assertion
+now compares to zero at 12 decimal places; no production change was made for this test.
+This original failure is retained separately from subsequent fresh gate results.

@@ -1,0 +1,47 @@
+import { chromium } from '@playwright/test';
+import { createHash } from 'node:crypto';
+import { mkdirSync,readFileSync,writeFileSync } from 'node:fs';
+const out='reviews/phone-playability/performance';
+mkdirSync(out,{recursive:true});
+writeFileSync(`${out}/helper-source.txt`,readFileSync(new URL(import.meta.url)));
+const browser=await chromium.launch({headless:true,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+const result={environment:{node:process.version,browser:browser.version(),renderer:'SwiftShader',viewport:[844,390],dpr:1,method:'One quiet warmed baseline/current-Play/current-Overview comparison. Same UI actions, state and routes. No video, screenshots, geometry arrays or heading-frame sampler. rAF intervals, small transition reads and Chrome Performance counters only.'},runs:[]};
+const summary=values=>{const a=[...values].sort((a,b)=>a-b);return{count:a.length,median:a[Math.floor(a.length*.5)],p95:a[Math.min(a.length-1,Math.floor(a.length*.95))],maximum:Math.max(...a)};};
+for(const[label,base,profile]of[['baseline','http://127.0.0.1:5210','baseline'],['candidate-play','http://127.0.0.1:5211','play'],['candidate-overview','http://127.0.0.1:5211','overview']]){
+ const context=await browser.newContext({viewport:{width:844,height:390},deviceScaleFactor:1,hasTouch:true,isMobile:true,reducedMotion:'no-preference'}),page=await context.newPage(),cdp=await context.newCDPSession(page);
+ await cdp.send('Performance.enable');
+ const idle=()=>page.waitForFunction(()=>document.querySelector('#seascape')?.getAttribute('aria-busy')==='false');
+ const flush=()=>page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+ const whole=async()=>{if(profile!=='baseline'&&(await page.evaluate(()=>window.__LAST_FERRY__.getViewStatus().mode))!=='overview'){await page.locator('#view-toggle').click();await flush();}};
+ const act=async id=>{
+  if(id.startsWith('map-')){
+   if(profile==='overview')await whole();
+   const visible=await page.locator('#'+id).evaluate(e=>{const r=e.getBoundingClientRect();return !e.closest('.offscreen')&&r.left>=0&&r.top>=0&&r.right<=innerWidth&&r.bottom<=innerHeight;});
+   if(!visible)await whole();
+  }
+  if((id==='board'||id==='unload')&&!(await page.locator('#'+id).isVisible()))await page.locator('.map-target[aria-current="location"]').click();
+  await page.locator('#'+id).click();await page.locator(id.startsWith('map-')?'#sail':'#commit').click();
+  if(id.startsWith('map-')&&profile==='play'&&await page.locator('#back-to-boat').isVisible())await page.locator('#back-to-boat').click();
+  await idle();await flush();
+ };
+ try{
+  await page.goto(`${base}/?cove=holding-pier`);await page.waitForFunction(()=>window.__LAST_FERRY__?.getMetrics().frames>6);
+  for(const id of['unload','map-shallows','map-rabbit-pier','board','map-shallows','map-stone','map-shallows','map-stone'])await act(id);
+  await page.waitForTimeout(1500);
+  const idleSample=await page.evaluate(async()=>{const frames=[];let last=await new Promise(requestAnimationFrame);for(let i=0;i<90;i++){const now=await new Promise(requestAnimationFrame);frames.push(now-last);last=now;}return{frames,metrics:window.__LAST_FERRY__.getMetrics()};});
+  const before=await cdp.send('Performance.getMetrics');
+  await page.evaluate(()=>{window.__phonePerf={running:true,frames:[],last:0};function read(time){const s=window.__phonePerf;if(!s.running)return;const t=window.__LAST_FERRY__.getTransitionStatus();if(t.active?.action.type==='move'&&s.last)s.frames.push(time-s.last);s.last=time;requestAnimationFrame(read);}requestAnimationFrame(read);});
+  for(const id of['map-shallows','map-stone'])await act(id);
+  const activeSample=await page.evaluate(()=>{window.__phonePerf.running=false;return{frames:window.__phonePerf.frames,metrics:window.__LAST_FERRY__.getMetrics(),state:window.__LAST_FERRY__.getState(),view:window.__LAST_FERRY__.getViewStatus?.()??null};});
+  const after=await cdp.send('Performance.getMetrics');
+  const counters=Object.fromEntries(['LayoutCount','RecalcStyleCount','LayoutDuration','RecalcStyleDuration','TaskDuration','ScriptDuration'].map(name=>[name,(after.metrics.find(m=>m.name===name)?.value??0)-(before.metrics.find(m=>m.name===name)?.value??0)]));
+  await page.waitForTimeout(1500);const afterMetrics=await page.evaluate(()=>window.__LAST_FERRY__.getMetrics());
+  result.runs.push({label,base,profile,idleSample,activeSample,afterMetrics,counters,idleSummary:summary(idleSample.frames),activeSummary:summary(activeSample.frames)});
+  writeFileSync(`${out}/comparison.json`,JSON.stringify(result,null,2));
+ }catch(error){result.failure=String(error.stack??error);writeFileSync(`${out}/comparison.json`,JSON.stringify(result,null,2));throw error;}finally{await context.close();}
+}
+await browser.close();
+result.helperHash=createHash('sha256').update(readFileSync(new URL(import.meta.url))).digest('hex');
+result.finalStatesEqual=result.runs.every(r=>JSON.stringify(r.activeSample.state)===JSON.stringify(result.runs[0].activeSample.state));
+writeFileSync(`${out}/comparison.json`,JSON.stringify(result,null,2));
+console.log(JSON.stringify(result.runs.map(r=>({label:r.label,idle:r.idleSummary,active:r.activeSummary,counters:r.counters,resources:r.afterMetrics.resources}))));

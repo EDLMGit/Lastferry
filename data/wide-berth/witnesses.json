@@ -1,0 +1,91 @@
+{
+  "levelId": "wide-berth",
+  "witnesses": [
+    {
+      "id": "light-through-beacon",
+      "description": "Put the two sheep ashore at High Quay. Carry two rabbits through Beacon Reef at low water. Return light and use the inner channel to fetch the second rabbit pair, then board the sheep for the deep final crossing.",
+      "actions": [
+        { "type": "board", "passengerIds": ["alder", "clover", "poppy", "wren"] },
+        { "type": "move", "to": "high-quay" },
+        { "type": "unload", "passengerIds": ["alder", "clover"] },
+        { "type": "move", "to": "harbor" },
+        { "type": "unload", "passengerIds": ["poppy", "wren"] },
+        { "type": "move", "to": "high-quay" },
+        { "type": "move", "to": "shell-landing" },
+        { "type": "board", "passengerIds": ["sorrel", "finch"] },
+        { "type": "move", "to": "high-quay" },
+        { "type": "board", "passengerIds": ["alder", "clover"] },
+        { "type": "move", "to": "harbor" },
+        { "type": "unload", "passengerIds": ["sorrel", "finch", "alder", "clover"] }
+      ]
+    },
+    {
+      "id": "bring-the-quay-via-outer",
+      "description": "Send Alder through the first homeward tide. After returning, board the staged four spaces first. Take the deep outer approach to Shell Landing, board its pair before the flood and return with five bodies occupying six spaces.",
+      "actions": [
+        { "type": "board", "passengerIds": ["alder", "clover", "poppy", "wren"] },
+        { "type": "move", "to": "high-quay" },
+        { "type": "unload", "passengerIds": ["clover", "poppy", "wren"] },
+        { "type": "move", "to": "harbor" },
+        { "type": "unload", "passengerIds": ["alder"] },
+        { "type": "move", "to": "high-quay" },
+        { "type": "board", "passengerIds": ["clover", "poppy", "wren"] },
+        { "type": "move", "to": "outer-buoy" },
+        { "type": "move", "to": "shell-landing" },
+        { "type": "board", "passengerIds": ["sorrel", "finch"] },
+        { "type": "move", "to": "outer-buoy" },
+        { "type": "move", "to": "high-quay" },
+        { "type": "move", "to": "harbor" },
+        { "type": "unload", "passengerIds": ["clover", "poppy", "wren", "sorrel", "finch"] }
+      ]
+    }
+  ],
+  "losingAlternatives": [
+    {
+      "id": "park-the-first-group",
+      "description": "High Quay stays dry, but waiting through the first return leaves eight spaces offshore for a single six-space homeward voyage.",
+      "actions": [
+        { "type": "board", "passengerIds": ["alder", "clover", "poppy", "wren"] },
+        { "type": "move", "to": "high-quay" },
+        { "type": "unload", "passengerIds": ["alder", "clover", "poppy", "wren"] },
+        { "type": "wait" }
+      ]
+    },
+    {
+      "id": "one-space-shuttle",
+      "description": "One early rabbit can cross, but seven spaces then need to come home on one six-space voyage.",
+      "actions": [
+        { "type": "board", "passengerIds": ["alder", "clover", "poppy", "wren"] },
+        { "type": "move", "to": "high-quay" },
+        { "type": "unload", "passengerIds": ["alder", "clover", "wren"] },
+        { "type": "move", "to": "harbor" }
+      ]
+    },
+    {
+      "id": "try-the-deep-detour",
+      "description": "From High Quay the Outer Buoy leads to Shell Landing, not Harbor. The full group can sail there, but it still misses the first homeward window.",
+      "actions": [
+        { "type": "board", "passengerIds": ["alder", "clover", "poppy", "wren"] },
+        { "type": "move", "to": "high-quay" },
+        { "type": "move", "to": "outer-buoy" },
+        { "type": "move", "to": "shell-landing" }
+      ]
+    },
+    {
+      "id": "return-a-trip-too-soon",
+      "description": "After the light crossing, waiting at Harbor for the second rise leaves the Shell pair on its flooded landing and misses the outward trip.",
+      "actions": [
+        { "type": "board", "passengerIds": ["alder", "clover", "poppy", "wren"] },
+        { "type": "move", "to": "high-quay" },
+        { "type": "unload", "passengerIds": ["alder", "clover"] },
+        { "type": "move", "to": "harbor" },
+        { "type": "unload", "passengerIds": ["poppy", "wren"] },
+        { "type": "wait" },
+        { "type": "wait" },
+        { "type": "wait" },
+        { "type": "wait" },
+        { "type": "wait" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,190 @@
+{
+  "format": "SHA-256 over LF-normalized UTF-8 source",
+  "hashes": {
+    "data/far-shore.level.json": "5731faf6d7bec324e8fe8e18be95d2a7883de6e41cd0f17c5a12c57d296d1e63",
+    "data/far-shore/witnesses.json": "723d2dcfcecf6de8753e2583947a4ff923d358345311158b52178fee6117da1d",
+    "reviews/far-shore/play/development/level.json": "02e55f653b260971a1211481db4ae4b9273732f6c5acf8d7e6e5b9a14d0fea4e",
+    "reviews/far-shore/development/early-witness.json": "37c6ae637c1291adaad28f9f10fd53df8eba302a2f9f8adda4775cbf3fce4cb7",
+    "src/game/rules.ts": "906e6f4199b60acf18bbfb2c7ac83510d7e91bb344cf8e50b732b21c5d3aa9e3",
+    "reviews/far-shore/proof.mjs": "ce904d8660e5732fcbe4ab094dc8f493f86e6fae6211b739e4280d8de5de3630"
+  },
+  "minimumActions": 13,
+  "masteryTarget": null,
+  "graph": {
+    "states": 241,
+    "transitions": 588,
+    "winningStates": 1,
+    "minimum": 13
+  },
+  "firstChoices": [
+    {
+      "action": {
+        "type": "wait"
+      },
+      "states": 114,
+      "transitions": 261,
+      "winningStates": 0,
+      "minimum": null
+    },
+    {
+      "action": {
+        "type": "move",
+        "to": "harbor"
+      },
+      "states": 73,
+      "transitions": 155,
+      "winningStates": 0,
+      "minimum": null
+    },
+    {
+      "action": {
+        "type": "move",
+        "to": "bank"
+      },
+      "states": 25,
+      "transitions": 52,
+      "winningStates": 0,
+      "minimum": null
+    },
+    {
+      "action": {
+        "type": "board",
+        "passengerIds": [
+          "thistle"
+        ]
+      },
+      "states": 162,
+      "transitions": 397,
+      "winningStates": 1,
+      "minimum": 12
+    },
+    {
+      "action": {
+        "type": "board",
+        "passengerIds": [
+          "button"
+        ]
+      },
+      "states": 134,
+      "transitions": 296,
+      "winningStates": 0,
+      "minimum": null
+    },
+    {
+      "action": {
+        "type": "board",
+        "passengerIds": [
+          "thistle",
+          "button"
+        ]
+      },
+      "states": 107,
+      "transitions": 243,
+      "winningStates": 0,
+      "minimum": null
+    }
+  ],
+  "lighterCompanion": {
+    "turn": 7,
+    "aboard": [
+      "button"
+    ],
+    "at": "rush",
+    "delivered": [
+      "thistle"
+    ],
+    "slotsFree": 5,
+    "slotsWithDeer": 4,
+    "depthWithDeer": 3,
+    "berthDepth": 3,
+    "rejection": null,
+    "continuations": {
+      "states": 42,
+      "transitions": 129,
+      "winningStates": 1,
+      "minimum": 6
+    }
+  },
+  "heavierCompanion": {
+    "turn": 7,
+    "aboard": [
+      "thistle"
+    ],
+    "at": "rush",
+    "delivered": [
+      "button"
+    ],
+    "slotsFree": 4,
+    "slotsWithDeer": 5,
+    "depthWithDeer": 4,
+    "berthDepth": 3,
+    "rejection": "The berth cannot support that load.",
+    "continuations": {
+      "states": 4,
+      "transitions": 3,
+      "winningStates": 0,
+      "minimum": null
+    }
+  },
+  "withoutButtonOnOutboundReach": {
+    "states": 143,
+    "transitions": 329,
+    "winningStates": 0,
+    "minimum": null
+  },
+  "withoutThistleAloneAsFirstDelivery": {
+    "states": 172,
+    "transitions": 412,
+    "winningStates": 0,
+    "minimum": null
+  },
+  "counterfactualOnlyRushBasinOneUnitDeeper": {
+    "turn": 7,
+    "aboard": [
+      "thistle"
+    ],
+    "at": "rush",
+    "delivered": [
+      "button"
+    ],
+    "slotsFree": 4,
+    "slotsWithDeer": 5,
+    "depthWithDeer": 4,
+    "berthDepth": 4,
+    "rejection": null,
+    "continuations": {
+      "states": 42,
+      "transitions": 129,
+      "winningStates": 1,
+      "minimum": 6
+    }
+  },
+  "prototypeWithOneExtraAction": {
+    "witnessActions": 14,
+    "buttonFirst": {
+      "states": 190,
+      "transitions": 458,
+      "winningStates": 1,
+      "minimum": 13
+    }
+  },
+  "mistake": {
+    "turn": 8,
+    "reason": {
+      "code": "PASSENGER_STRANDED",
+      "pierId": "rush-pier",
+      "passengerIds": [
+        "rowan"
+      ]
+    }
+  },
+  "rescue": {
+    "turn": 13,
+    "delivered": [
+      "thistle",
+      "button",
+      "rowan",
+      "peat"
+    ]
+  }
+}

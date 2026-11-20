@@ -1,0 +1,208 @@
+{
+  "task": "ARRIVAL_BUBBLE_01",
+  "headDuringEvidence": "107b18adedc4f59202eb105a35c2d9676d2752ee",
+  "runtimeInputsSHA256": "2cb42ec4e49efbe62d3f4aa07a5e5d3ec00b08985811fc4485f10c7de58cf0ae",
+  "runtimeInputCount": 135,
+  "sourceManifest": "source/2cb42ec4e49efbe62d3f4aa07a5e5d3ec00b08985811fc4485f10c7de58cf0ae.json",
+  "finalTestHashes": {
+    "tests/e2e/arrival-bubble.spec.ts": "b36e27f9137a7d28b05f43a194df0826c7ed63c84f4bf95af4ade19264d21ff3",
+    "tests/e2e/arrival-bubble-support.ts": "bb49ab1827070aef65fe6fe7657264ce332557ce3b5a927671bd293d1da60185",
+    "tests/e2e/arrival-bubble-fixture.html": "1e6e62c119aa964dd27e5290d3fdea99c845b4be122f225d896d2664feb7a13b",
+    "tests/e2e/cove-eight-support.ts": "f24a45dc117da34eba7aea8019ba6df2d80471e15da4b4aa391233fb7a89a082",
+    "tests/e2e/three-lanterns-support.ts": "e676810dd802a0ed6a86365b3f3583dfb728381e302e4e8201109c22a6246492",
+    "tests/e2e/large-cove-support.ts": "ee13748b7b239340738046a7c9ef402f32832718e7c34862f83da888ab60ad96",
+    "tests/e2e/ui.ts": "6c806f239daa9454bf71e8149a3317b0a30eb9191b8614d2f54b2ca02f58a3f4",
+    "playwright.config.ts": "094fceb1a2ce44c9abd77a433c3b9ca6781213a05ddc68ad933a8d36e35b6f99"
+  },
+  "captureDriver": {
+    "path": "recording-driver.ts",
+    "sha256": "364531a4327064ed6c742a29d594d99623d4609ceb9ea64e294eaf5013fbd596",
+    "testFileSHA256DuringCapture": "794fcb5e2e060e47b9e9d0fe37cdc729f3f2c3f652d709d457b65f3f6e82dfd9",
+    "qualification": "Final minified notice case was appended after capture; runtime unchanged."
+  },
+  "node": "v24.15.0",
+  "npm": "11.12.1",
+  "browser": "Chromium 156.0.8078.4",
+  "playwright": "1.64.1",
+  "platform": "win32",
+  "renderer": "ANGLE SwiftShader",
+  "dpr": 1,
+  "viewports": [
+    [
+      390,
+      844
+    ],
+    [
+      780,
+      320
+    ],
+    [
+      320,
+      740
+    ],
+    [
+      1440,
+      900
+    ]
+  ],
+  "input": "Playwright mobile/touch emulation plus normal Tab/Shift+Tab/Enter/Escape",
+  "servers": {
+    "development": 5298,
+    "production": 5285,
+    "before": 5284,
+    "user": 5270,
+    "hmr": false,
+    "watch": null
+  },
+  "configs": {
+    ".cache/arrival-vite.config.ts": "import {defineConfig,mergeConfig} from 'vite';\nimport base from '../vite.config.ts';\nexport default mergeConfig(base,defineConfig({server:{host:'127.0.0.1',port:5298,strictPort:true,hmr:false,watch:null}}));\n",
+    ".cache/arrival-playwright.config.ts": "import {defineConfig} from '@playwright/test';\nimport base from '../playwright.config.ts';\nexport default defineConfig({...base,testDir:'../tests/e2e',testMatch:'arrival-bubble.spec.ts',webServer:undefined,use:{...base.use,baseURL:'http://127.0.0.1:5298',trace:'retain-on-failure'}});\n",
+    ".cache/arrival-record.config.ts": "import {defineConfig} from '@playwright/test';\nimport base from './arrival-playwright.config.ts';\nexport default defineConfig({...base,testDir:'../reviews/arrival-bubble',testMatch:'recording-driver.ts',use:{...base.use,trace:'off'}});\n"
+  },
+  "commands": {
+    "build": "npm run build",
+    "typecheck": "npm run typecheck",
+    "assets": "npm run check:assets",
+    "suite": "set \"PLAYWRIGHT_BROWSERS_PATH=.cache/ms-playwright\"&& set \"LAST_FERRY_REVIEW_DIR=reviews/arrival-bubble\"&& set \"LAST_FERRY_PRODUCTION_PORT=5285\"&& node node_modules/@playwright/test/cli.js test -c .cache/arrival-playwright.config.ts --workers=1",
+    "record": "same environment, node node_modules/@playwright/test/cli.js test -c .cache/arrival-record.config.ts --workers=1",
+    "encode": "node reviews/arrival-bubble/encode-recording.mjs reviews/arrival-bubble/390x844"
+  },
+  "finalBuildAssets": [
+    {
+      "path": "dist/assets/index-BTw6r7z5.css",
+      "sha256": "7f3ddf5ea7153d49b07f93a5e9feb1677da9e5f5e2ce53ec6c3cd03c978e138b"
+    },
+    {
+      "path": "dist/assets/index-nKQpoEle.js",
+      "sha256": "e720078df7235229fb334ad17331b371ce3fef8d5d9e4915257a64629fbfde55"
+    }
+  ],
+  "servedCSS": {
+    "path": "served-arrival-css.txt",
+    "sha256": "ba3250fc427222ce0338b3e8986a6dc186e900e3aa066934bcfc221659bd54a1",
+    "qualification": "Fetched after the final known development server restart; no-watch cache issue and earlier response retained under original-runs."
+  },
+  "resultMapping": [
+    {
+      "id": "portrait-lifecycle",
+      "file": "original-runs/full-batch-cached-css.json",
+      "title": "portrait Ternhaven",
+      "source": "92ada9683bad42248b9e48436f29c9b276954331ddd959fc76845ea730befc00",
+      "qualifier": "Development CSS cache retained pre-spacing style. Logic passed; current final-source presentation repeated in recording.",
+      "status": "passed",
+      "resultSHA256": "dabd20507adb8321978b96dbf91765d645deb1f50598b324cfd8ca5e8008ca49"
+    },
+    {
+      "id": "minified-current1-prior3",
+      "file": "original-runs/full-batch-cached-css.json",
+      "title": "minified short-landscape",
+      "source": "92ada9683bad42248b9e48436f29c9b276954331ddd959fc76845ea730befc00",
+      "qualifier": "Fresh minified bundle; later notice-only CSS and 2px border-height cap are absent/inactive here.",
+      "status": "passed",
+      "resultSHA256": "dabd20507adb8321978b96dbf91765d645deb1f50598b324cfd8ca5e8008ca49"
+    },
+    {
+      "id": "journey-tide-undo-continue",
+      "file": "journey-and-notice-results.json",
+      "title": "actual scored Journey",
+      "source": "9f4ee4b5879a1989bb1dd9bcff3f25f5fbc71009113d8a1ab7f47d0ee03ef6de",
+      "qualifier": "Restarted server; subsequent storage-notice-only CSS absent from this actual arrival.",
+      "status": "passed",
+      "resultSHA256": "cfe0112c736b50fb5de7ca7de524b4ad36f0a1ae2c07a440c8012afe5b25f5f1"
+    },
+    {
+      "id": "desktop-home-write-failure",
+      "file": "original-runs/full-batch-cached-css.json",
+      "title": "desktop confirmed Home",
+      "source": "92ada9683bad42248b9e48436f29c9b276954331ddd959fc76845ea730befc00",
+      "qualifier": "Development served pre-spacing CSS; unchanged acceptance/storage semantics.",
+      "status": "passed",
+      "resultSHA256": "dabd20507adb8321978b96dbf91765d645deb1f50598b324cfd8ca5e8008ca49"
+    },
+    {
+      "id": "six-cast-and-notice-fit",
+      "file": "final-fixture-results.json",
+      "title": "isolated six-neighbor",
+      "source": "2cb42ec4e49efbe62d3f4aa07a5e5d3ec00b08985811fc4485f10c7de58cf0ae",
+      "qualifier": "Explicit isolated renderer specimen; no rescue claim.",
+      "status": "passed",
+      "resultSHA256": "cfb24e457d61ab15ebe4002652914b92d7d948323ddce004204246087bf55eca"
+    },
+    {
+      "id": "image-pending-and-failure",
+      "file": "final-image-fallback-results.json",
+      "title": "isolated initial",
+      "source": "2cb42ec4e49efbe62d3f4aa07a5e5d3ec00b08985811fc4485f10c7de58cf0ae",
+      "qualifier": "Explicit isolated renderer specimen; delayed/failed image resources.",
+      "status": "passed",
+      "resultSHA256": "de692db4458533ed6c173f6e9723f6d238be816752f37bdb376036d644562392"
+    },
+    {
+      "id": "loss-undo",
+      "file": "original-runs/full-batch-cached-css.json",
+      "title": "an actual loss",
+      "source": "92ada9683bad42248b9e48436f29c9b276954331ddd959fc76845ea730befc00",
+      "qualifier": "Unchanged failure UI, rules and recovery; development pre-spacing arrival CSS irrelevant.",
+      "status": "passed",
+      "resultSHA256": "dabd20507adb8321978b96dbf91765d645deb1f50598b324cfd8ca5e8008ca49"
+    },
+    {
+      "id": "final-minified-read-failure",
+      "file": "production-final-results.json",
+      "title": "final minified",
+      "source": "2cb42ec4e49efbe62d3f4aa07a5e5d3ec00b08985811fc4485f10c7de58cf0ae",
+      "qualifier": "Actual nine-action Holding UI rescue; final minified build; malformed best storage and untouched valid Journey.",
+      "status": "passed",
+      "resultSHA256": "d6b4db38aa40e7d74948a584173f2f23a6d44e5e01b705e4aa9f1b267cc17879"
+    }
+  ],
+  "recording": {
+    "result": "recording-results.json",
+    "source": "2cb42ec4e49efbe62d3f4aa07a5e5d3ec00b08985811fc4485f10c7de58cf0ae",
+    "manifest": "390x844/final-arrival-recording.json",
+    "media": "MEDIA.json",
+    "preparation": "First eleven actual UI actions with Reduced selected in shared Settings. Returned to Follow device before capture; device normal motion. No injected game state.",
+    "scope": "Final three natural-speed actions, arrival, Settings/Back, Close, settled Harbor, Menu/Return to arrival."
+  },
+  "limits": [
+    "No physical Android/iOS viewport chrome or device-performance validation.",
+    "Fullscreen entered actual Chromium app root; not a physical phone guarantee.",
+    "Visibility recovery uses synthetic document.hidden events.",
+    "No spoken screen-reader or human listening approval.",
+    "Selected capture retains actual frame gaps; raw WebM/JPEG intermediates are local disposable output.",
+    "Earlier valid behavior cases reused with explicit served-source qualifications; not a single final all-green batch."
+  ],
+  "testHashesBeforeWhitespaceCleanup": {
+    "tests/e2e/arrival-bubble.spec.ts": "608d871c8ae2283d6aa8310a8387accf099d33224100167a9bc8fd6c13d2d096",
+    "tests/e2e/arrival-bubble-support.ts": "4f839c92b36cc1a26a5c411a02a98c24d015f846b2f8c62c5b0f609a217a2c16",
+    "tests/e2e/arrival-bubble-fixture.html": "d2157762607e20c3add2ca1134cf2356932f94d88c412d2279724be27c69dd7b",
+    "tests/e2e/cove-eight-support.ts": "f24a45dc117da34eba7aea8019ba6df2d80471e15da4b4aa391233fb7a89a082",
+    "tests/e2e/three-lanterns-support.ts": "e676810dd802a0ed6a86365b3f3583dfb728381e302e4e8201109c22a6246492",
+    "tests/e2e/large-cove-support.ts": "ee13748b7b239340738046a7c9ef402f32832718e7c34862f83da888ab60ad96",
+    "tests/e2e/ui.ts": "6c806f239daa9454bf71e8149a3317b0a30eb9191b8614d2f54b2ca02f58a3f4",
+    "playwright.config.ts": "094fceb1a2ce44c9abd77a433c3b9ca6781213a05ddc68ad933a8d36e35b6f99"
+  },
+  "formattingCleanup": {
+    "paths": [
+      "reviews/arrival-bubble/before-capture.spec.ts",
+      "reviews/arrival-bubble/build-final.txt",
+      "reviews/arrival-bubble/original-runs/README.md",
+      "reviews/arrival-bubble/original-runs/first-portrait-error.md",
+      "reviews/arrival-bubble/original-runs/journey-cached-css-error.md",
+      "reviews/arrival-bubble/original-runs/notice-clipped-error.md",
+      "reviews/arrival-bubble/original-runs/notice-real-bounds-error.md",
+      "reviews/arrival-bubble/original-runs/second-portrait-error.md",
+      "reviews/arrival-bubble/original-runs/six-cached-css-error.md",
+      "reviews/arrival-bubble/original-runs/six-cast-narrow-error.md",
+      "reviews/arrival-bubble/progress-homecoming-unit-results.txt",
+      "reviews/arrival-bubble/recording-driver.ts",
+      "reviews/arrival-bubble/scoring-integration-typecheck.txt",
+      "reviews/arrival-bubble/scoring-unit-results.txt",
+      "tests/e2e/arrival-bubble-fixture.html",
+      "tests/e2e/arrival-bubble-support.ts",
+      "tests/e2e/arrival-bubble.spec.ts"
+    ],
+    "scope": "Trailing whitespace and EOF blanks only; prior run/source hashes remain historical.",
+    "finalCaptureDriverSHA256": "1d38fbe1e351da1d29770dccc6cb60e39c0f5ec9a48dd4dfd686e1f0d3c26cf8"
+  }
+}

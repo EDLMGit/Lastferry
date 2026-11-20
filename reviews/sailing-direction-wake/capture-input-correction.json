@@ -1,0 +1,25 @@
+{
+  "scope": "Metadata clarification; no runtime, source imagery or action sequence change.",
+  "originals": [
+    {
+      "path": "reviews/sailing-direction-wake/before/844x390/capture.json",
+      "sha256": "ccb07ab26e2d2c2f1f433264e6e622fbf760f6cd10f3c290d1cd80a2e2e5b4d8"
+    },
+    {
+      "path": "reviews/sailing-direction-wake/before-followup/844x390/capture.json",
+      "sha256": "c6925dd527b6b5d05d3b2e2f7830b1581cb930f3c4c3932493954b256e7eb544"
+    },
+    {
+      "path": "reviews/sailing-direction-wake/trial/844x390/capture.json",
+      "sha256": "09b1e6ae2eeaaa1042668635af3bbe8300306e0b24e07b506ed14b3c91d5b0bf"
+    },
+    {
+      "path": "reviews/sailing-direction-wake/after/844x390/capture.json",
+      "sha256": "182eb7b8ec86f09ff9851920ba4ff5d489aa59a6570bed7c68de50eb4144719a"
+    }
+  ],
+  "originalLabel": "emulated touch",
+  "correctDescription": "Touch-enabled mobile context (hasTouch/isMobile true), but the capture helper activates actual UI with Playwright locator.click(), not tap().",
+  "actualTouchChecks": "Focused direction lifecycle and homecoming phone cases use locator.tap(); media preference changes use Playwright media emulation, not physical-device changes.",
+  "futureCaptures": "Helper input label corrected; future manifests carry its updated helper hash."
+}

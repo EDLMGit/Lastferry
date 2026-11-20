@@ -1,0 +1,83 @@
+
+Running 8 tests using 1 worker
+
+(node:30780) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\e2e\homecoming.spec.ts:447:1 › homecoming settings: natural keyboard, device and persisted Reduced preference, loss has no arrival (11.6s)
+  x  2 tests\e2e\homecoming.spec.ts:513:1 › homecoming recovery: simulated hide and context loss settle finite motion without replay or resource growth (23.8s)
+(node:13564) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 3 tests\e2e\production.spec.ts:4:1 › production bundle: real rescue without debug globals or external assets (14.9s)
+  ok 4 tests\e2e\sailing-direction-wake.spec.ts:71:1 › direction: free-water heading, both berths, transfer/tide Undo and winning pose remain paired (40.9s)
+  ok 5 tests\e2e\sailing-direction-wake.spec.ts:221:1 › direction: normal, hidden, device Reduced, recovery and animation failures settle the same planned pose once (23.5s)
+  ok 6 tests\e2e\sailing-direction-wake.spec.ts:325:1 › direction: released crests retain their release data as the next journey turns and tide moves their height (13.3s)
+  ok 7 tests\e2e\transfer-audio.spec.ts:177:1 › transfer audio: real UI normal rescue, subsets, tide Undo/replay and separate Harbor delivery (27.8s)
+  ok 8 tests\e2e\victory-mix.spec.ts:144:1 › victory mix: visible final arrival, persistent ending, Undo/redelivery and next cove (37.5s)
+
+
+  1) tests\e2e\homecoming.spec.ts:513:1 › homecoming recovery: simulated hide and context loss settle finite motion without replay or resource growth 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 8
+    + Received  + 8
+
+      Object {
+    -   "bottom": -3.5685411389099766,
+    -   "left": -8.440640614473521,
+    +   "bottom": -3.5243115899220276,
+    +   "left": -8.400655179277729,
+        "position": Array [
+          0,
+          34,
+          24,
+        ],
+        "projection": Array [
+    -     0.11951018272697603,
+    +     0.12008402425086283,
+          0,
+          0,
+          0,
+          0,
+    -     0.19121629236316168,
+    +     0.19213443880138054,
+          0,
+          0,
+          0,
+          0,
+          -0.02002002002002002,
+          0,
+    -     0.008742502168465715,
+    -     -0.31763679427222,
+    +     0.008784480271523233,
+    +     -0.3228583705091301,
+          -1.002002002002002,
+          1,
+        ],
+    -   "right": 8.294335053407847,
+    -   "top": 6.890818653515877,
+    +   "right": 8.254349618212055,
+    +   "top": 6.885066408509087,
+      }
+
+      219 |
+      220 | async function restoredMap(page: Page, camera: any) {
+    > 221 |   expect((await scene(page)).camera).toEqual(camera);
+          |                                      ^
+      222 |   const markers = await page.evaluate(() => {
+      223 |     const frame = (window as any).__LAST_FERRY__.getFrameStatus(),
+      224 |       canvas = document.querySelector('canvas')!.getBoundingClientRect();
+        at restoredMap (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\homecoming.spec.ts:221:38)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\homecoming.spec.ts:560:5
+        at observed (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\homecoming.spec.ts:96:5)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\homecoming.spec.ts:518:3
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\homecoming-homecoming-reco-a4ff2-t-replay-or-resource-growth\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\homecoming-homecoming-reco-a4ff2-t-replay-or-resource-growth\error-context.md
+
+  1 failed
+    tests\e2e\homecoming.spec.ts:513:1 › homecoming recovery: simulated hide and context loss settle finite motion without replay or resource growth 
+  7 passed (3.3m)

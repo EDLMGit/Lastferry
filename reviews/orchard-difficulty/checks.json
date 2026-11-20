@@ -1,0 +1,95 @@
+{
+  "base": "fc1be94e124ac02ab4562f1083707943d7b4a313",
+  "node": "v24.15.0",
+  "platform": "win32",
+  "productionBundle": {
+    "file": "./assets/index-CQJ88riD.js",
+    "sha256": "a4541d7c754741b96ec117b43b5668a3deb77a8366ef530dbbc583eef8a6c33e"
+  },
+  "levelChanges": [
+    "data/orchard-landing.level.json",
+    "data/orchard-landing/witnesses.json",
+    "src/scene/ferry-profile.ts"
+  ],
+  "catalog": {
+    "families": 80,
+    "identicalIDs": true
+  },
+  "earlierFocusedRunBeforeSeatAdjustment": [
+    {
+      "file": "asset-catalog.test.ts",
+      "passed": 5,
+      "failed": 0
+    },
+    {
+      "file": "optional-tips.test.ts",
+      "passed": 12,
+      "failed": 0
+    },
+    {
+      "file": "passenger-appearance.test.ts",
+      "passed": 18,
+      "failed": 0
+    },
+    {
+      "file": "reef-return.test.ts",
+      "passed": 9,
+      "failed": 0
+    },
+    {
+      "file": "story-progress.test.ts",
+      "passed": 64,
+      "failed": 0
+    },
+    {
+      "file": "wide-berth.test.ts",
+      "passed": 12,
+      "failed": 0
+    },
+    {
+      "file": "wide-clearance.test.ts",
+      "passed": 12,
+      "failed": 0
+    },
+    {
+      "file": "wide-ferry.test.ts",
+      "passed": 39,
+      "failed": 0
+    }
+  ],
+  "finalPuzzleAndCourses": [
+    {
+      "file": "orchard-landing.test.ts",
+      "passed": 7,
+      "failed": 0
+    },
+    {
+      "file": "two-shelters-geometry.test.ts",
+      "passed": 5,
+      "failed": 1
+    }
+  ],
+  "twoSheltersTransferRuns": [
+    {
+      "run": "final-puzzle",
+      "name": "candidate transfer soles stay over real pier, short gangway or ferry surfaces at both berth headings",
+      "status": "failed",
+      "milliseconds": 76063.6987,
+      "error": "Error: Test timed out in 30000ms."
+    },
+    {
+      "run": "two-shelters-rerun",
+      "name": "candidate transfer soles stay over real pier, short gangway or ferry surfaces at both berth headings",
+      "status": "failed",
+      "milliseconds": 75212.33,
+      "error": "Error: Test timed out in 30000ms."
+    },
+    {
+      "run": "two-shelters-quiet",
+      "name": "candidate transfer soles stay over real pier, short gangway or ferry surfaces at both berth headings",
+      "status": "passed",
+      "milliseconds": 8463.649
+    }
+  ],
+  "finalSeating": "seat-checks.json"
+}

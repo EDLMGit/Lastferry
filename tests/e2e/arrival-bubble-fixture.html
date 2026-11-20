@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en" data-motion="reduced">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Arrival renderer fixture — not gameplay</title></head>
+<body><p id="fixture-label" style="position:fixed;top:0;left:0;margin:0;width:100%;text-align:center;font:11px sans-serif;color:#fff;z-index:10">ISOLATED ARRIVAL RENDERER FIXTURE · not a played rescue</p><div id="app" class="cove-kit"><dialog id="dialog" class="cove-panel cove-surface cove-surface--arrival" data-mode="terminal" data-outcome="won" aria-labelledby="dialog-title"><div id="dialog-content"></div></dialog></div>
+<script type="module">
+import '/src/style.css';
+import '/src/ui/cove-ui.css';
+import {arrivalMarkup} from '/src/ui/arrival.ts';
+import {wideBerth,ternhaven,holdingPier} from '/src/levels/level.ts';
+import {initial} from '/src/game/rules.ts';
+import {observePassengerPortraits,setControl} from '/src/ui/cove-ui.ts';
+const query=new URLSearchParams(location.search);
+const level=query.get('cast')==='three'?holdingPier:query.get('cast')==='four'?ternhaven:wideBerth;
+const lanterns=Number(query.get('lanterns')??3);
+const state=initial(level);
+state.status='won';state.turn=14;state.aboard=[];
+state.delivered=[...level.objective.requiredPassengerIds];
+for(const key of Object.keys(state.waitingByPier))state.waitingByPier[key]=[];
+const result={coveId:level.id,revision:1,actions:14,successfulUndos:lanterns===2?1:0,lanterns};
+const root=document.getElementById('dialog-content'),dialog=document.getElementById('dialog');
+observePassengerPortraits(root);
+root.innerHTML=arrivalMarkup({level,state,result,best:lanterns<3?{...result,lanterns:3,successfulUndos:0}:null,forward:{id:'choose-cove',label:'Choose a cove'},policy:'Isolated renderer fixture: no Session, score owner or save write.',notice:query.has('notice')?'This result could not be saved on this device. It remains available for this visit.':''});
+setControl(document.getElementById('cancel'),'close','Close arrival','quiet',true);
+setControl(document.getElementById('terminal-settings'),'settings','Settings','quiet',true);
+function center(){const width=visualViewport?.width??innerWidth,height=visualViewport?.height??innerHeight;document.documentElement.style.setProperty('--viewport-width',width+'px');document.documentElement.style.setProperty('--viewport-height',height+'px');dialog.style.setProperty('--dialog-max-height',(height-24)+'px');const b=dialog.getBoundingClientRect();dialog.style.left=((width-b.width)/2)+'px';dialog.style.top=((height-b.height)/2)+'px';dialog.style.right='auto';dialog.style.bottom='auto';}
+dialog.showModal();center();requestAnimationFrame(center);addEventListener('resize',center);
+document.getElementById('choose-cove').focus();
+window.__ARRIVAL_FIXTURE__={level:level.id,state,result};
+</script></body></html>

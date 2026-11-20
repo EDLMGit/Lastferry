@@ -1,0 +1,28 @@
+{
+  "time": "2026-10-25T09:12:37.117Z",
+  "runtimeHash": "3b034e49033689ad8748ae865fc8c9bfcb5b7480c622f4eb7bc76e3fa3991d59",
+  "checks": [
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "result": "tsc --noEmit passed after final affected browser test edits"
+    },
+    {
+      "command": "npm run check:assets",
+      "exitCode": 0,
+      "result": "Asset catalog valid:71 unique families"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "result": "No whitespace errors; Windows CRLF-to-LF warnings only"
+    }
+  ],
+  "independentReview": "No actionable findings in focused static review of nested icon activation, explicit sound intent, native dialog/focus, keyboard return guard and source-reuse proof. Not new device verification.",
+  "packagingWhitespace": {
+    "command": "git diff --cached --check",
+    "exitCode": 2,
+    "output": "reviews/cove-ui-assets/browser-final/original-focus-failure.md:62: trailing whitespace.\n+  5   | \nreviews/cove-ui-assets/browser-final/original-focus-failure.md:70: trailing whitespace.\n+  13  | \nreviews/cove-ui-assets/browser-final/original-focus-failure.md:91: trailing whitespace.\n+  34  | \nreviews/cove-ui-assets/browser-final/original-focus-failure.md:182: trailing whitespace.\n+  124 | \nreviews/cove-ui-assets/focus-reproduction/unchanged-input/failure-context.md:62: trailing whitespace.\n+  13  | \nreviews/cove-ui-assets/focus-reproduction/unchanged-input/failure-context.md:83: trailing whitespace.\n+  34  | \nreviews/cove-ui-assets/focus-reproduction/unchanged-input/failure-context.md:186: trailing whitespace.\n+  136 | \nreviews/cove-ui-assets/gates/build-final.txt:19: trailing whitespace.\n+[plugin builtin:vite-reporter] \n",
+    "disposition": "Eight trailing spaces belong to verbatim original failure contexts and Vite build output. They are intentionally preserved, not source-code defects. The same check excluding only those three evidence logs passes with exit0."
+  }
+}

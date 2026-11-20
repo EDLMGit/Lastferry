@@ -1,0 +1,290 @@
+{
+  "witness": "high-mixed-first",
+  "actions": [
+    {
+      "type": "move",
+      "to": "refuge"
+    },
+    {
+      "type": "unload",
+      "passengerIds": [
+        "hazel",
+        "bracken"
+      ]
+    },
+    {
+      "type": "move",
+      "to": "reeds"
+    }
+  ],
+  "viewport": [
+    844,
+    390,
+    1
+  ],
+  "visualViewport": [
+    844,
+    390
+  ],
+  "scrollWidth": 844,
+  "state": {
+    "turn": 3,
+    "tideLevel": 0,
+    "boatNodeId": "reeds",
+    "aboard": [],
+    "waitingByPier": {
+      "harbor-pier": [],
+      "low-pier": [],
+      "refuge-pier": [
+        "hazel",
+        "bracken"
+      ],
+      "reeds-pier": [
+        "mica"
+      ]
+    },
+    "delivered": [],
+    "status": "playing",
+    "lossReason": null
+  },
+  "camera": {
+    "mode": "play",
+    "panned": false,
+    "focused": null,
+    "revision": 4,
+    "scale": 44,
+    "usable": {
+      "left": 26,
+      "right": 818,
+      "top": 26,
+      "bottom": 364
+    },
+    "bounds": {
+      "minX": -8.222944259643555,
+      "maxX": 7.216666666666666,
+      "minY": -4.579297614870315,
+      "maxY": 6.68506274223726
+    },
+    "focus": {
+      "x": -0.5031387964884444,
+      "y": 0.8353848141077755
+    },
+    "overviewAvoidance": {
+      "overlap": 0,
+      "displacement": 0
+    }
+  },
+  "boat": {
+    "left": 659.2295968302092,
+    "right": 741.9423051508268,
+    "top": 172.84508406090816,
+    "bottom": 252.73776874807507,
+    "width": 82.7127083206176,
+    "height": 79.8926846871669
+  },
+  "stops": [
+    {
+      "id": "harbor",
+      "endpoint": {
+        "x": 158.13810704549158,
+        "y": 266.3228941503144
+      },
+      "marker": {
+        "x": 134.125,
+        "y": 242.3125,
+        "w": 48,
+        "h": 48
+      },
+      "name": {
+        "x": 190.125,
+        "y": 244.3125,
+        "w": 152.6875,
+        "h": 44
+      },
+      "accessible": "Select Harbor; no direct passage; Home, delivery destination"
+    },
+    {
+      "id": "refuge",
+      "endpoint": {
+        "x": 444.1381070454916,
+        "y": 141.7683484909347
+      },
+      "marker": {
+        "x": 420.125,
+        "y": 117.765625,
+        "w": 48,
+        "h": 48
+      },
+      "name": {
+        "x": 476.125,
+        "y": 119.765625,
+        "w": 108.328125,
+        "h": 44
+      },
+      "accessible": "Select High Refuge; adjacent passage available"
+    },
+    {
+      "id": "low",
+      "endpoint": {
+        "x": 444.1381070454916,
+        "y": 353.5110761118803
+      },
+      "marker": {
+        "x": 420.125,
+        "y": 329.5,
+        "w": 48,
+        "h": 48
+      },
+      "name": {
+        "x": 476.125,
+        "y": 331.5,
+        "w": 110.1875,
+        "h": 44
+      },
+      "accessible": "Select Low Landing; adjacent passage available"
+    },
+    {
+      "id": "reeds",
+      "endpoint": {
+        "x": 699.3381070454915,
+        "y": 228.9565304525005
+      },
+      "marker": {
+        "x": 675.328125,
+        "y": 271.5,
+        "w": 48,
+        "h": 48
+      },
+      "name": {
+        "x": 731.328125,
+        "y": 273.5,
+        "w": 86.53125,
+        "h": 44
+      },
+      "accessible": "Select Reed Pier; current location"
+    }
+  ],
+  "dock": {
+    "x": 639,
+    "y": 76.3125,
+    "w": 139.046875,
+    "h": 48
+  },
+  "dockText": "\nBoard Mica",
+  "card": null,
+  "forecast": "!Reed Pier floods in 1 action.",
+  "nav": {
+    "currentNode": "reeds",
+    "selectedDestination": null,
+    "emphasizedDestination": null,
+    "routes": [
+      {
+        "id": "harbor-low",
+        "nodes": [
+          "harbor",
+          "low"
+        ],
+        "highlighted": false,
+        "dashSize": 0.09,
+        "gapSize": 0.16
+      },
+      {
+        "id": "harbor-refuge",
+        "nodes": [
+          "harbor",
+          "refuge"
+        ],
+        "highlighted": false,
+        "dashSize": 0.09,
+        "gapSize": 0.16
+      },
+      {
+        "id": "low-refuge",
+        "nodes": [
+          "low",
+          "refuge"
+        ],
+        "highlighted": false,
+        "dashSize": 0.09,
+        "gapSize": 0.16
+      },
+      {
+        "id": "low-reeds",
+        "nodes": [
+          "low",
+          "reeds"
+        ],
+        "highlighted": false,
+        "dashSize": 0.09,
+        "gapSize": 0.16
+      },
+      {
+        "id": "refuge-reeds",
+        "nodes": [
+          "refuge",
+          "reeds"
+        ],
+        "highlighted": false,
+        "dashSize": 0.09,
+        "gapSize": 0.16
+      }
+    ],
+    "markers": [
+      {
+        "id": "harbor",
+        "worldPosition": [
+          -6.5,
+          0.04,
+          1.2
+        ],
+        "visible": true,
+        "status": "nonadjacent",
+        "selected": false,
+        "shape": "diamond"
+      },
+      {
+        "id": "refuge",
+        "worldPosition": [
+          0,
+          0.04,
+          -2.8
+        ],
+        "visible": true,
+        "status": "available",
+        "selected": false,
+        "shape": "open ring"
+      },
+      {
+        "id": "low",
+        "worldPosition": [
+          0,
+          0.04,
+          4
+        ],
+        "visible": true,
+        "status": "available",
+        "selected": false,
+        "shape": "open ring"
+      },
+      {
+        "id": "reeds",
+        "worldPosition": [
+          5.8,
+          0.04,
+          0
+        ],
+        "visible": true,
+        "status": "current",
+        "selected": false,
+        "shape": "double ring"
+      }
+    ]
+  },
+  "tips": null,
+  "saved": "{\n  \"version\": 1,\n  \"completed\": [\n    \"holding-pier\",\n    \"bellwater\",\n    \"driftwood-yard\"\n  ],\n  \"acknowledgedScenes\": [\n    \"opening\",\n    \"another-bell\",\n    \"driftwood-light\"\n  ],\n  \"checkpoint\": {\n    \"kind\": \"scene\",\n    \"id\": \"a-wider-deck\"\n  }\n}",
+  "motion": {
+    "mode": "device",
+    "reduced": true
+  },
+  "fullscreen": false
+}

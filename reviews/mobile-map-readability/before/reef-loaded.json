@@ -1,0 +1,288 @@
+{
+  "witness": "gather-before-reef",
+  "actions": [
+    {
+      "type": "unload",
+      "passengerIds": [
+        "heather",
+        "birch"
+      ]
+    },
+    {
+      "type": "move",
+      "to": "wrack"
+    },
+    {
+      "type": "board",
+      "passengerIds": [
+        "dot"
+      ]
+    },
+    {
+      "type": "move",
+      "to": "quay"
+    },
+    {
+      "type": "move",
+      "to": "pool"
+    },
+    {
+      "type": "board",
+      "passengerIds": [
+        "flick"
+      ]
+    },
+    {
+      "type": "move",
+      "to": "quay"
+    },
+    {
+      "type": "board",
+      "passengerIds": [
+        "birch",
+        "heather"
+      ]
+    }
+  ],
+  "viewport": [
+    390,
+    844,
+    1
+  ],
+  "visualViewport": [
+    390,
+    844
+  ],
+  "scrollWidth": 390,
+  "state": {
+    "turn": 8,
+    "tideLevel": 1,
+    "boatNodeId": "quay",
+    "aboard": [
+      "dot",
+      "flick",
+      "heather",
+      "birch"
+    ],
+    "waitingByPier": {
+      "harbor-pier": [],
+      "quay-pier": [],
+      "wrack-pier": [],
+      "pool-pier": []
+    },
+    "delivered": [],
+    "status": "playing",
+    "lossReason": null
+  },
+  "camera": {
+    "mode": "play",
+    "panned": false,
+    "focused": null,
+    "revision": 4,
+    "scale": 44,
+    "usable": {
+      "left": 26,
+      "right": 364,
+      "top": 26,
+      "bottom": 818
+    },
+    "bounds": {
+      "minX": -11.323205501719757,
+      "maxX": 10.085564804470826,
+      "minY": -7.515820944583237,
+      "maxY": 7.463336286947967
+    },
+    "focus": {
+      "x": 0.19860735542430807,
+      "y": 1.7806388434994742
+    },
+    "overviewAvoidance": {
+      "overlap": 0,
+      "displacement": 0
+    }
+  },
+  "boat": {
+    "left": 106.14669010606858,
+    "right": 283.8533098939314,
+    "top": 373.5043555814122,
+    "bottom": 513.158915257621,
+    "width": 177.70661978786282,
+    "height": 139.65455967620875
+  },
+  "stops": [
+    {
+      "id": "harbor",
+      "endpoint": {
+        "x": -139.79070333689893,
+        "y": 462.3688312741083
+      },
+      "marker": null,
+      "name": null,
+      "accessible": "Select Harbor; adjacent passage available; Home, delivery destination"
+    },
+    {
+      "id": "quay",
+      "endpoint": {
+        "x": 191.61570732636574,
+        "y": 464.71759104647884
+      },
+      "marker": {
+        "x": 133.5,
+        "y": 523.15625,
+        "w": 48,
+        "h": 48
+      },
+      "name": {
+        "x": 27.5,
+        "y": 525.15625,
+        "w": 98.046875,
+        "h": 44
+      },
+      "accessible": "Select Cairn Quay; current location"
+    },
+    {
+      "id": "wrack",
+      "endpoint": {
+        "x": 478.80013283914394,
+        "y": 523.8018231193904
+      },
+      "marker": null,
+      "name": null,
+      "accessible": "Select Wrack Pier; adjacent, too shallow"
+    },
+    {
+      "id": "pool",
+      "endpoint": {
+        "x": 285.6695053634683,
+        "y": 720.5061461228323
+      },
+      "marker": {
+        "x": 288,
+        "y": 696.5,
+        "w": 48,
+        "h": 48
+      },
+      "name": {
+        "x": 288,
+        "y": 752.5,
+        "w": 89.390625,
+        "h": 44
+      },
+      "accessible": "Select Shell Pool; adjacent, too shallow"
+    }
+  ],
+  "dock": {
+    "x": 189.71875,
+    "y": 523.15625,
+    "w": 131.90625,
+    "h": 48
+  },
+  "dockText": "\nLet ashore",
+  "card": null,
+  "forecast": "≈Needle Reef to Harbor · turns in 1 action",
+  "nav": {
+    "currentNode": "quay",
+    "selectedDestination": null,
+    "emphasizedDestination": null,
+    "routes": [
+      {
+        "id": "needle-reef",
+        "nodes": [
+          "quay",
+          "harbor"
+        ],
+        "flowFrom": "quay",
+        "highlighted": false,
+        "dashSize": 0.09,
+        "gapSize": 0.16
+      },
+      {
+        "id": "wrack-quay",
+        "nodes": [
+          "wrack",
+          "quay"
+        ],
+        "highlighted": false,
+        "dashSize": 0.09,
+        "gapSize": 0.16
+      },
+      {
+        "id": "quay-pool",
+        "nodes": [
+          "quay",
+          "pool"
+        ],
+        "highlighted": false,
+        "dashSize": 0.09,
+        "gapSize": 0.16
+      },
+      {
+        "id": "pool-harbor",
+        "nodes": [
+          "pool",
+          "harbor"
+        ],
+        "highlighted": false,
+        "dashSize": 0.09,
+        "gapSize": 0.16
+      }
+    ],
+    "markers": [
+      {
+        "id": "harbor",
+        "worldPosition": [
+          -7.5,
+          0.22,
+          -0.4
+        ],
+        "visible": true,
+        "status": "available",
+        "selected": false,
+        "shape": "open ring"
+      },
+      {
+        "id": "quay",
+        "worldPosition": [
+          0,
+          0.22,
+          -1.1
+        ],
+        "visible": true,
+        "status": "current",
+        "selected": false,
+        "shape": "double ring"
+      },
+      {
+        "id": "wrack",
+        "worldPosition": [
+          6.75,
+          0.22,
+          0.65
+        ],
+        "visible": true,
+        "status": "too-shallow",
+        "selected": false,
+        "shape": "crossed ring"
+      },
+      {
+        "id": "pool",
+        "worldPosition": [
+          3.25,
+          0.22,
+          9.24
+        ],
+        "visible": true,
+        "status": "too-shallow",
+        "selected": false,
+        "shape": "crossed ring"
+      }
+    ]
+  },
+  "tips": null,
+  "saved": "{\n  \"version\": 1,\n  \"completed\": [\n    \"holding-pier\",\n    \"bellwater\",\n    \"driftwood-yard\"\n  ],\n  \"acknowledgedScenes\": [\n    \"opening\",\n    \"another-bell\",\n    \"driftwood-light\"\n  ],\n  \"checkpoint\": {\n    \"kind\": \"scene\",\n    \"id\": \"a-wider-deck\"\n  }\n}",
+  "motion": {
+    "mode": "device",
+    "reduced": true
+  },
+  "fullscreen": false
+}

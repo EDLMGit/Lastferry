@@ -1,0 +1,282 @@
+{
+  "source": "c1ed244aef5d0c7f235d111258bc28658ade82086df5427f2228537aafdc783d",
+  "wrong": "low-return-via-buoy",
+  "recoveredStrategy": "low-direct-return",
+  "firstUnwinnableTurn": 9,
+  "recoveredTurn": 8,
+  "timeline": [
+    {
+      "turn": 0,
+      "tideLevel": 0,
+      "boatNodeId": "fork",
+      "aboard": [
+        "juniper",
+        "sedge",
+        "fennel"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "high-pier": [],
+        "low-pier": [],
+        "reeds-pier": [
+          "willow"
+        ]
+      },
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 1,
+      "tideLevel": 0,
+      "boatNodeId": "low",
+      "aboard": [
+        "juniper",
+        "sedge",
+        "fennel"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "high-pier": [],
+        "low-pier": [],
+        "reeds-pier": [
+          "willow"
+        ]
+      },
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 2,
+      "tideLevel": 0,
+      "boatNodeId": "low",
+      "aboard": [
+        "sedge"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "high-pier": [],
+        "low-pier": [
+          "juniper",
+          "fennel"
+        ],
+        "reeds-pier": [
+          "willow"
+        ]
+      },
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 3,
+      "tideLevel": 0,
+      "boatNodeId": "fork",
+      "aboard": [
+        "sedge"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "high-pier": [],
+        "low-pier": [
+          "juniper",
+          "fennel"
+        ],
+        "reeds-pier": [
+          "willow"
+        ]
+      },
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 4,
+      "tideLevel": 1,
+      "boatNodeId": "harbor",
+      "aboard": [
+        "sedge"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "high-pier": [],
+        "low-pier": [
+          "juniper",
+          "fennel"
+        ],
+        "reeds-pier": [
+          "willow"
+        ]
+      },
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 5,
+      "tideLevel": 1,
+      "boatNodeId": "harbor",
+      "aboard": [],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "high-pier": [],
+        "low-pier": [
+          "juniper",
+          "fennel"
+        ],
+        "reeds-pier": [
+          "willow"
+        ]
+      },
+      "delivered": [
+        "sedge"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 6,
+      "tideLevel": 1,
+      "boatNodeId": "fork",
+      "aboard": [],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "high-pier": [],
+        "low-pier": [
+          "juniper",
+          "fennel"
+        ],
+        "reeds-pier": [
+          "willow"
+        ]
+      },
+      "delivered": [
+        "sedge"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 7,
+      "tideLevel": 1,
+      "boatNodeId": "reeds",
+      "aboard": [],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "high-pier": [],
+        "low-pier": [
+          "juniper",
+          "fennel"
+        ],
+        "reeds-pier": [
+          "willow"
+        ]
+      },
+      "delivered": [
+        "sedge"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 8,
+      "tideLevel": 1,
+      "boatNodeId": "reeds",
+      "aboard": [
+        "willow"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "high-pier": [],
+        "low-pier": [
+          "juniper",
+          "fennel"
+        ],
+        "reeds-pier": []
+      },
+      "delivered": [
+        "sedge"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 9,
+      "tideLevel": 1,
+      "boatNodeId": "fork",
+      "aboard": [
+        "willow"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "high-pier": [],
+        "low-pier": [
+          "juniper",
+          "fennel"
+        ],
+        "reeds-pier": []
+      },
+      "delivered": [
+        "sedge"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 10,
+      "tideLevel": 2,
+      "boatNodeId": "low",
+      "aboard": [
+        "willow"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "high-pier": [],
+        "low-pier": [
+          "juniper",
+          "fennel"
+        ],
+        "reeds-pier": []
+      },
+      "delivered": [
+        "sedge"
+      ],
+      "status": "lost",
+      "lossReason": {
+        "code": "PASSENGER_STRANDED",
+        "pierId": "low-pier",
+        "passengerIds": [
+          "juniper",
+          "fennel"
+        ]
+      }
+    }
+  ],
+  "final": {
+    "turn": 13,
+    "tideLevel": 2,
+    "boatNodeId": "harbor",
+    "aboard": [],
+    "waitingByPier": {
+      "harbor-pier": [],
+      "high-pier": [],
+      "low-pier": [],
+      "reeds-pier": []
+    },
+    "delivered": [
+      "sedge",
+      "willow",
+      "juniper",
+      "fennel"
+    ],
+    "status": "won",
+    "lossReason": null
+  },
+  "saved": {
+    "mastery": "{\"version\":1,\"results\":{\"orchard-landing@1\":{\"coveId\":\"orchard-landing\",\"revision\":1,\"actions\":13,\"successfulUndos\":0,\"lanterns\":3}}}",
+    "journey": "{\n  \"version\": 1,\n  \"completed\": [\n    \"holding-pier\"\n  ],\n  \"acknowledgedScenes\": [\n    \"opening\",\n    \"another-bell\"\n  ],\n  \"checkpoint\": {\n    \"kind\": \"cove\",\n    \"id\": \"bellwater\"\n  }\n}\n",
+    "masteryWrites": 0,
+    "journeyWrites": 0
+  }
+}

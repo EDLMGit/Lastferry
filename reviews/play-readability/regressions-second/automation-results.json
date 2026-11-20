@@ -1,0 +1,304 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      ".cache/readability-regressions.config.ts"
+    ],
+    "configFile": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\.cache\\readability-regressions.config.ts",
+    "rootDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "play-readability-regressions.spec.ts"
+        ],
+        "timeout": 240000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "snapshotDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "testIgnore": [],
+        "testMatch": "play-readability-regressions.spec.ts",
+        "timeout": 240000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5282",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "deviceScaleFactor": 1,
+          "headless": true,
+          "actionTimeout": 15000,
+          "navigationTimeout": 20000,
+          "launchOptions": {
+            "args": [
+              "--use-angle=swiftshader",
+              "--enable-unsafe-swiftshader"
+            ]
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "reviews/play-readability/regressions-second/automation-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "play-readability-regressions.spec.ts",
+      "file": "play-readability-regressions.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Bellwater actual rabbit pickup retains free subsets, loaded views and Undo",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 0,
+                  "error": {
+                    "message": "Error: ENOENT: no such file or directory, scandir 'C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\public'",
+                    "stack": "Error: ENOENT: no such file or directory, scandir 'C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\public'\n    at walk (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\play-readability-regressions.spec.ts:24:5)\n    at source (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\play-readability-regressions.spec.ts:31:10)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\play-readability-regressions.spec.ts:53:8",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\play-readability-regressions.spec.ts",
+                      "column": 5,
+                      "line": 24
+                    },
+                    "snippet": "  22 | function source() {\n  23 |   const walk = (directory: string): string[] =>\n> 24 |     readdirSync(directory, { withFileTypes: true }).flatMap((entry) =>\n     |     ^\n  25 |       entry.isDirectory() ? walk(`${directory}/${entry.name}`) : [`${directory}/${entry.name}`],\n  26 |     );\n  27 |   const files = Object.fromEntries("
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\play-readability-regressions.spec.ts",
+                        "column": 5,
+                        "line": 24
+                      },
+                      "message": "Error: ENOENT: no such file or directory, scandir 'C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\public'\n\n  22 | function source() {\n  23 |   const walk = (directory: string): string[] =>\n> 24 |     readdirSync(directory, { withFileTypes: true }).flatMap((entry) =>\n     |     ^\n  25 |       entry.isDirectory() ? walk(`${directory}/${entry.name}`) : [`${directory}/${entry.name}`],\n  26 |     );\n  27 |   const files = Object.fromEntries(\n    at walk (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\play-readability-regressions.spec.ts:24:5)\n    at source (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\play-readability-regressions.spec.ts:31:10)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\play-readability-regressions.spec.ts:53:8"
+                    },
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\play-readability-regressions.spec.ts",
+                        "column": 5,
+                        "line": 24
+                      },
+                      "message": "Error: ENOENT: no such file or directory, scandir 'C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\public'\n\n  22 | function source() {\n  23 |   const walk = (directory: string): string[] =>\n> 24 |     readdirSync(directory, { withFileTypes: true }).flatMap((entry) =>\n     |     ^\n  25 |       entry.isDirectory() ? walk(`${directory}/${entry.name}`) : [`${directory}/${entry.name}`],\n  26 |     );\n  27 |   const files = Object.fromEntries(\n    at walk (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\play-readability-regressions.spec.ts:24:5)\n    at source (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\play-readability-regressions.spec.ts:31:10)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\play-readability-regressions.spec.ts:63:54"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T09:43:39.636Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\play-readability-regressio-d989f-bsets-loaded-views-and-Undo\\error-context.md"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\play-readability-regressio-d989f-bsets-loaded-views-and-Undo\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\play-readability-regressions.spec.ts",
+                    "column": 5,
+                    "line": 24
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "aa8d8f6aa57d6aa0aa11-78606d5d81ca28a09f4c",
+          "file": "play-readability-regressions.spec.ts",
+          "line": 125,
+          "column": 1
+        },
+        {
+          "title": "Wide Berth full-six pickup and staged subset retain native controls and both camera modes",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": -1,
+                  "parallelIndex": -1,
+                  "status": "skipped",
+                  "duration": 0,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T09:43:40.778Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "aa8d8f6aa57d6aa0aa11-f8f6cb22dea43258aa5f",
+          "file": "play-readability-regressions.spec.ts",
+          "line": 174,
+          "column": 1
+        },
+        {
+          "title": "First Crossing initial practice retains its original roster and free inspection",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": -1,
+                  "parallelIndex": -1,
+                  "status": "skipped",
+                  "duration": 0,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T09:43:40.778Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "aa8d8f6aa57d6aa0aa11-f7ca032228b58d7021b3",
+          "file": "play-readability-regressions.spec.ts",
+          "line": 224,
+          "column": 1
+        },
+        {
+          "title": "Home Options preserve natural focus, sound mute and inactive gameplay after phone rotation",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": -1,
+                  "parallelIndex": -1,
+                  "status": "skipped",
+                  "duration": 0,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T09:43:40.778Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "aa8d8f6aa57d6aa0aa11-45b7984fb244de8015c4",
+          "file": "play-readability-regressions.spec.ts",
+          "line": 250,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-01T09:43:39.186Z",
+    "duration": 1604.784,
+    "expected": 0,
+    "skipped": 3,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

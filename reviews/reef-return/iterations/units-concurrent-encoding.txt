@@ -1,0 +1,67 @@
+
+> last-ferry@1.0.0 test:unit
+> vitest run --reporter=dot
+
+
+ RUN  v5.0.5 C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry
+
+··············································································································stdout | tests/unit/wide-berth.test.ts > actual authored Wide Berth > production reachability retains both branches and every surviving first-rise path has carried six
+{"level":"wide-berth","normalizedStates":7620,"terminalWins":1,"terminalLosses":2169,"shortest":13,"maxLoad":6,"maxBodies":5,"firstRiseWithoutSix":0,"bound":26,"cutoffs":0,"method":"Actual legalActions/reduce; membership sorted, turn normalized after final rise10, carried-six history preserved. Bound is search only, never a game limit.","sourceIdentities":{"data/wide-berth.level.json":"c1ab4d0b4877ff957ddbdf11d3acfaff744f2f344807480c632844a79b818128","src/game/rules.ts":"997cfbd1f8d6b77c5bb832dc68d1226c5d9d71c69eb9ab3beefd25a9df8cec0d","src/game/session.ts":"96a670a82ceada27f7a0f750b45589b55e621256b97b9b7b26916221e4f3fde9"}}
+
+······························stdout | tests/unit/bellwater.test.ts > Bellwater Cove uses the production reducer > complete canonical reachability retains the route and pickup constraints
+{"cove":"bellwater","canonicalStates":403,"winningStates":4,"shortestActions":10,"noShallowWins":0,"bellFirstWins":0,"earlyDeliveryWins":0,"noWaitWins":2,"waitedWins":2,"method":"Production reducer and legalActions, sorted passenger identities and pier keys, turn capped only after the final rise, monotonic path-history flags, no search horizon."}
+
+···········································stdout | tests/unit/driftwood-yard.test.ts > Driftwood Yard production level > all normalized reachable wins require temporarily staging Nell, without an artificial move budget
+{"levelId":"driftwood-yard","normalizedStates":246,"wins":1,"shortest":12,"bypassWins":0,"method":"Production legalActions/reduce. Turn normalized only after final rise. No search horizon or gameplay cap."}
+
+·········································stdout | tests/unit/holding-pier.test.ts > The Holding Pier uses the actual application reducer > exhaustive reachable states: shortest win nine, no win bypasses sheep holding at Stone
+{"experiment":"holding-pier","canonicalStates":154,"winningStates":1,"bypassWins":0,"shortestActions":9}
+
+·······································································································································x··································································x···x·xx·······x····················
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/clearance.test.ts > first-crossing: full modeled ferry clears land and piers from all reachable headings, both berth sides and reverse departures
+ FAIL  tests/unit/clearance.test.ts > holding-pier: full modeled ferry clears land and piers from all reachable headings, both berth sides and reverse departures
+ FAIL  tests/unit/clearance.test.ts > bellwater: full modeled ferry clears land and piers from all reachable headings, both berth sides and reverse departures
+ FAIL  tests/unit/clearance.test.ts > driftwood-yard: full modeled ferry clears land and piers from all reachable headings, both berth sides and reverse departures
+ FAIL  tests/unit/clearance.test.ts > two-shelters: full modeled ferry clears land and piers from all reachable headings, both berth sides and reverse departures
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ tests/unit/clearance.test.ts:64:71
+     62|   return Math.hypot(p[0] - a[0] - t * x, p[1] - a[1] - t * z);
+     63| }
+     64| test.each([level, holdingPier, bellwater, driftwoodYard, twoShelters])(
+       |                                                                       ^
+     65|   '$id: full modeled ferry clears land and piers from all reachable he…
+     66|   (level) => {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  tests/unit/two-shelters-geometry.test.ts > candidate transfer soles stay over real pier, short gangway or ferry surfaces at both berth headings
+Error: Test timed out in 30000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ tests/unit/two-shelters-geometry.test.ts:165:1
+    163| });
+    164|
+    165| test('candidate transfer soles stay over real pier, short gangway or f…
+       | ^
+    166|   const failures: string[] = [];
+    167|   const feet = new Map(level.passengers.map((passenger) => {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+
+ Test Files  2 failed | 46 passed (48)
+      Tests  6 failed | 456 passed (462)
+   Start at  20:49:27
+   Duration  62.08s (tests 92%, import 5%, transform 3%)
+
+    Isolate  48 workers spawned · ~1.49s startup each (spawn + environment, per file)
+             at least ~3.28s faster with isolate: false — reuses workers across files instead of one per file
+
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice
