@@ -1,8 +1,14 @@
-# Cove readability · friend playtest
+# Cove readability published · Last Ferry Practice next
+
+**Active task — [LAST_FERRY_PRACTICE_01](NEXT_TASK_LAST_FERRY.md).** Author the unscored Practice candidate for cove twelve. Give the last group one satisfying pickup decision and a short, unhurried sail home together. Codex owns the cast, map, pacing, implementation and tuning. The director reviews what the player can see and feel. After the Practice review, the late coves can join Journey in story order and the final delivery can lead to the supper.
+
+The [private phone playtest](https://last-ferry-playtest.abumech.chatgpt.site/) serves **version 27**, game `29ed5dfb32f976b5de97ddfab0b701b3b3df0989`. Its new ferry and tide signs appear across eight Journey coves and twelve Practice entrances. Nine coves have lantern targets. [Independent review](reviews/cove-readability/INDEPENDENT_REVIEW.md) · [Publication receipt](reviews/cove-readability/deployment-confirmation.json).
+
+## Submitted readability handoff
 
 At first control the player can read the rescue goal, ferry load, local water, actions taken and next named change. The same depth comparison follows the selected crossing or passenger group. The [local Journey](http://127.0.0.1:5400/) starts at Home. [Review and native phone evidence](reviews/cove-readability/REVIEW.md) · [Friend retest](reviews/cove-readability/PLAYTEST.md)
 
-The first landscape prototype covered the lantern and intercepted Shallows. A second check caught the final words of the boarding preview against the commit button. Native frames and original failures accompany the review. The final production build, all 743 unit tests, the asset inventory and the four phone rescues passed. The private Site still serves version 26. The portable local build is available for a fresh-player retest.
+The first landscape prototype covered the lantern and intercepted Shallows. A second check caught the final words of the boarding preview against the commit button. Native frames and original failures accompany the review. The final production build, all 743 unit tests, the asset inventory and the four phone rescues passed. At handoff the private Site served version 26. The portable local build is available for a fresh-player retest.
 
 ## Earlier handoff · Far Shore private playtest and next interface pass
 

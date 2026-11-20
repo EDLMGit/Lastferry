@@ -1,10 +1,10 @@
 # Last Ferry — active task
 
-**Current assignment — [COVE_READABILITY_01](NEXT_TASK_COVE_READABILITY.md).** A first-time player liked the game and found it hard to tell what was happening. Before cove twelve, help a newcomer identify the rescue goal, compare the ferry’s required depth with the water available, and see which pier will flood in how many actions. Local Codex owns the visual design, prototyping, implementation and phone testing. The director reviews whether the world and controls explain the decision. A fresh player supplies the comprehension check.
+**Active task — [LAST_FERRY_PRACTICE_01](NEXT_TASK_LAST_FERRY.md).** Author the unscored Practice candidate for cove twelve. Give the last group one satisfying pickup decision and a short, unhurried sail home together. Codex owns the cast, map, pacing, implementation and tuning. The director reviews what the player can see and feel. After the Practice review, the late coves can join Journey in story order and the final delivery can lead to the supper.
 
-The [private phone playtest](https://last-ferry-playtest.abumech.chatgpt.site/?cove=far-shore) serves version **26**, game `7edba1519e9d856f3dc029bb0d500b4480985149`. Eight Journey coves, twelve Practice entrances and nine scored coves are available. Far Shore, Lantern Reach and Drowned Orchard are unscored Practice candidates. [Independent review](reviews/far-shore/INDEPENDENT_REVIEW.md) · [Receipt](reviews/far-shore/deployment-confirmation.json).
+The [private phone playtest](https://last-ferry-playtest.abumech.chatgpt.site/) serves **version 27**, game `29ed5dfb32f976b5de97ddfab0b701b3b3df0989`. Its new ferry and tide signs appear across eight Journey coves and twelve Practice entrances. Nine coves have lantern targets. [Independent review](reviews/cove-readability/INDEPENDENT_REVIEW.md) · [Publication receipt](reviews/cove-readability/deployment-confirmation.json).
 
-Safely incorporate newer work on `m1-first-crossing`. Local Codex returns its handoff on draft PR #1. ChatGPT reviews and handles private publication.
+Keep the friend’s uncoached retest open while work on cove twelve proceeds. Incorporate current guidance and newer work on `m1-first-crossing`. Local Codex returns a tested handoff on draft PR #1. ChatGPT reviews and handles private publication.
 
 ## Historical audio brief — completed and superseded
 

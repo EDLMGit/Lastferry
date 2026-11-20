@@ -20,7 +20,7 @@ Play starts the illustrated opening. Take the helm enters Holding Pier. After ea
 
 First Crossing is the independent tutorial cove. Its original four-space ferry starts with Pip and Rue aboard, and Moss waits for pickup.
 
-The [private phone playtest](https://last-ferry-playtest.abumech.chatgpt.site/?cove=far-shore) serves version **26**, game `7edba1519e9d856f3dc029bb0d500b4480985149`. Eight Journey coves, twelve Practice entrances and nine scored coves are available. Far Shore, Lantern Reach and Drowned Orchard are unscored Practice candidates. [Independent review](reviews/far-shore/INDEPENDENT_REVIEW.md) · [Receipt](reviews/far-shore/deployment-confirmation.json).
+The [private phone playtest](https://last-ferry-playtest.abumech.chatgpt.site/) serves **version 27**, game `29ed5dfb32f976b5de97ddfab0b701b3b3df0989`. Its new ferry and tide signs appear across eight Journey coves and twelve Practice entrances. Nine coves have lantern targets. [Independent review](reviews/cove-readability/INDEPENDENT_REVIEW.md) · [Publication receipt](reviews/cove-readability/deployment-confirmation.json).
 
 ## Run
 

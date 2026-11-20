@@ -4,7 +4,9 @@
 
 The branch opens a fresh Journey with two painted instruments. At Holding Pier the ferry sign names Harbor, gives rescue progress and distinguishes load, required depth and local water. The tide sign names the waiting group and the first change. Its rising-water symbol repeats at the affected map landing. Inspections can frame that landing or Harbor for free. Crossings show passage and destination depth. A prospective transfer uses the berth depth at commitment. [Phone comparisons and verification](../reviews/cove-readability/REVIEW.md)
 
-Eight Journey coves, twelve Practice entrances and nine scoring identities are available. Fresh-player responses for this build are pending. The existing private Site serves version 26, game `7edba1519e9d856f3dc029bb0d500b4480985149`. [Observer sheet](../reviews/cove-readability/PLAYTEST.md) · [Publication receipt](../reviews/far-shore/deployment-confirmation.json)
+The [private phone build](https://last-ferry-playtest.abumech.chatgpt.site/) now serves **version 27**, game `29ed5dfb32f976b5de97ddfab0b701b3b3df0989`, with eight Journey coves, twelve Practice entrances and nine scoring identities. The portable file can be rebuilt from the same commit. Fresh-player and physical-phone responses are pending. [Observer sheet](../reviews/cove-readability/PLAYTEST.md) · [Independent review](../reviews/cove-readability/INDEPENDENT_REVIEW.md) · [Receipt](../reviews/cove-readability/deployment-confirmation.json)
+
+**[LAST_FERRY_PRACTICE_01](../NEXT_TASK_LAST_FERRY.md) is active.** The next candidate is the final group’s crossing. Codex owns its authoring and playtest. Journey currently ends at Ternhaven. The late-cove integrations and final Journey welcome follow separate review.
 
 ## Far Shore · independent Practice playtest
 

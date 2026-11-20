@@ -1,5 +1,9 @@
 # Last Ferry — The Long Tide
 
+## Final crossing · active Practice work
+
+[Last Ferry](../NEXT_TASK_LAST_FERRY.md) gives the final group a playable, unhurried ride to Harbor. Let everyone return together. Keep the player at the helm through the delivery. The unscored Practice arrival is the review endpoint. The welcome at supper belongs to the Journey conclusion after the late coves have been integrated in order.
+
 ## Current campaign work
 
 Far Shore is the third independent, unscored candidate after Ternhaven. Four neighbors live on either side of Far Reach. The early trip to Harbor sets up a later pickup on the opposite bank. Eight Journey coves, twelve Practice entrances and nine scoring identities ship on this branch. Drowned Orchard, revised Lantern Reach and Far Shore follow Ternhaven in intended story order after acceptance. Last Ferry remains the gentler homecoming. [Playtest review](../reviews/far-shore/REVIEW.md)
