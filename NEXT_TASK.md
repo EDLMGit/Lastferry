@@ -1,10 +1,10 @@
 # Last Ferry — active task
 
-**Active task — [JOURNEY_HOME_01](NEXT_TASK_JOURNEY_HOME.md).** Complete the private review Journey after Ternhaven. Integrate Drowned Orchard, Lantern Reach, Far Shore and Last Ferry in story order, add the authored late scenes and finish at supper and credits. Codex owns the storytelling, implementation, pacing and end-to-end play. Keep the four late coves provisionally unrated while their lantern targets await player feedback. Every successful rescue advances when the player chooses Continue story.
+**Active task — [ANDROID_PLAYTEST_01](NEXT_TASK_ANDROID_PLAYTEST.md).** Local Codex owns the first offline Android package and the proof that an installed update preserves a captain’s progress. Deliver a sideloadable APK and a locally validated test app bundle. The owner and a fresh player can then try the actual game on a physical phone. [Google Play launch plan](docs/GOOGLE_PLAY_LAUNCH.md)
 
-The [private phone playtest](https://last-ferry-playtest.abumech.chatgpt.site/?cove=last-ferry) serves **version 28**, game `a5e1eff68ee93eb2d4cf9814863a3b104fc6a889`. All twelve planned rescues and the separate First Crossing are playable in Practice. Journey currently ends at Ternhaven after eight coves. Nine coves have accepted lantern targets. [Independent review](reviews/last-ferry/INDEPENDENT_REVIEW.md) · [Publication receipt](reviews/last-ferry/deployment-confirmation.json).
+The [private playtest](https://last-ferry-playtest.abumech.chatgpt.site/) serves **version 29**, game `000a1d51bdd5655448471a48d4f88d57a8b7f7b3`. Home → Play connects twelve Journey rescues to supper and credits. There are thirteen Practice entrances and nine scored coves. The four late crossings remain unscored for playtesting. [Independent review](reviews/journey-home/INDEPENDENT_REVIEW.md) · [Publication receipt](reviews/journey-home/deployment-confirmation.json).
 
-Safely incorporate newer work on `m1-first-crossing`. Local Codex returns its handoff on draft PR #1. ChatGPT reviews and handles private publication. Physical-phone performance and the uncoached first-player readability retest remain open.
+Work from `m1-first-crossing` and incorporate newer work safely. Local Codex hands off development through draft PR #1. Game direction reviews the play experience. The owner controls the Play account, signing credentials, pricing and production release.
 
 ## Historical audio brief — completed and superseded
 

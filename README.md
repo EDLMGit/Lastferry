@@ -1,5 +1,7 @@
 # Last Ferry — The Long Tide
 
+[Play the twelve-cove Journey](https://last-ferry-playtest.abumech.chatgpt.site/) · [Android playtest brief](NEXT_TASK_ANDROID_PLAYTEST.md) · [Google Play launch plan](docs/GOOGLE_PLAY_LAUNCH.md)
+
 [Play the full Journey locally](http://127.0.0.1:5420/). Choose **Play** for the opening, or **Continue** to pick up your saved chapter. There are twelve rescues before supper at the lighthouse. [Private playtest review](reviews/journey-home/REVIEW.md)
 
 [Play Last Ferry](http://127.0.0.1:5420/?cove=last-ferry) or choose **Practice → Last Ferry** at Home. Four neighbors are waiting for the evening ferry. You steer the crossing and bring them ashore at the lighthouse. [Gameplay and review](reviews/last-ferry/REVIEW.md)
@@ -24,7 +26,7 @@ Play starts the illustrated opening. Take the helm enters Holding Pier. After ea
 
 First Crossing is the independent tutorial cove. Its original four-space ferry starts with Pip and Rue aboard, and Moss waits for pickup.
 
-The [private phone playtest](https://last-ferry-playtest.abumech.chatgpt.site/?cove=last-ferry) serves **version 28**, game `a5e1eff68ee93eb2d4cf9814863a3b104fc6a889`. On that published build, all twelve rescues and First Crossing are playable in Practice, and Journey ends at Ternhaven after eight coves. Nine coves have accepted lantern targets. [Independent review](reviews/last-ferry/INDEPENDENT_REVIEW.md) · [Publication receipt](reviews/last-ferry/deployment-confirmation.json).
+The [private playtest](https://last-ferry-playtest.abumech.chatgpt.site/) serves **version 29**, game `000a1d51bdd5655448471a48d4f88d57a8b7f7b3`. Home → Play connects twelve Journey rescues to supper and credits. There are thirteen Practice entrances and nine scored coves. The four late crossings remain unscored for playtesting. [Independent review](reviews/journey-home/INDEPENDENT_REVIEW.md) · [Publication receipt](reviews/journey-home/deployment-confirmation.json).
 
 ## Run
 
