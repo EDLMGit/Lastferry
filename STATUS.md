@@ -1,4 +1,8 @@
-# Last Ferry · Journey Home
+# Last Ferry · Android playtest
+
+The signed v2 playtest APK is available through the private handoff. On an offline Android 16 emulator, the v1 captain rescued Pip, Rue and Moss, accepted two lanterns and entered Bellwater. The installed v2 retained that best and checkpoint through a cold relaunch. The test bundle targets API 36. Physical-phone controls, frame pacing, TalkBack, speaker balance and an uncoached first rescue remain for handset playtesting. [Install](reviews/android-playtest/INSTALL.md) · [Results and footage](reviews/android-playtest/REVIEW.md)
+
+## Journey Home
 
 The full twelve-cove Journey now leads from Holding Pier to supper and credits. The four late chapters are unrated, and the player still chooses each departure. Completed Ternhaven saves continue at the orchard after their original bytes are backed up. [Play locally](http://127.0.0.1:5420/) · [Review and gameplay evidence](reviews/journey-home/REVIEW.md)
 
@@ -6,7 +10,7 @@ The fresh production Journey passed all twelve rescues, terminal Undo, a pending
 
 ## Android playtest and publication
 
-**Active task — [ANDROID_PLAYTEST_01](NEXT_TASK_ANDROID_PLAYTEST.md).** Local Codex owns the first offline Android package and the proof that an installed update preserves a captain’s progress. Deliver a sideloadable APK and a locally validated test app bundle. The owner and a fresh player can then try the actual game on a physical phone. [Google Play launch plan](docs/GOOGLE_PLAY_LAUNCH.md)
+The [Android playtest brief](NEXT_TASK_ANDROID_PLAYTEST.md) is complete. The owner and a fresh player can now try the signed APK on a physical phone. [Google Play launch plan](docs/GOOGLE_PLAY_LAUNCH.md)
 
 The [private playtest](https://last-ferry-playtest.abumech.chatgpt.site/) serves **version 29**, game `000a1d51bdd5655448471a48d4f88d57a8b7f7b3`. Home → Play connects twelve Journey rescues to supper and credits. There are thirteen Practice entrances and nine scored coves. The four late crossings remain unscored for playtesting. [Independent review](reviews/journey-home/INDEPENDENT_REVIEW.md) · [Publication receipt](reviews/journey-home/deployment-confirmation.json).
 

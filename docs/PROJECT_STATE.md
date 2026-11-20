@@ -1,12 +1,16 @@
 # Last Ferry — Project state
 
+## Offline Android playtest
+
+The installable Android debug APK runs the twelve-cove Journey at a stable local HTTPS origin. Version 2 preserves the previously installed app’s two-lantern Holding Pier best, Bellwater checkpoint, preferences and original backup after an in-place update and a cold launch. Android progress belongs to the installation. The existing private Site continues to serve version 29. [Install and update](../reviews/android-playtest/INSTALL.md) · [Device proof](../reviews/android-playtest/REVIEW.md)
+
 ## Journey Home · twelve-cove private playtest
 
 The review branch follows the coast through Drowned Orchard, Lantern Reach, Far Shore and Last Ferry. Every rescue advances on Continue story. After the final delivery the captain can still Undo, accept the rescue and linger at supper, or later return to credits. These four crossings are unrated in both entrances. There are twelve Journey chapters, thirteen Practice entrances and nine scored coves. [Local Journey](http://127.0.0.1:5420/) · [Review and evidence](../reviews/journey-home/REVIEW.md)
 
 An exact completed-eight save first returns to Home. An explicit Continue preserves its original bytes in a verified backup before opening the orchard scene. Historical backups and independently earned bests keep their owners. [Private version 29](https://last-ferry-playtest.abumech.chatgpt.site/) now serves game `000a1d51bdd5655448471a48d4f88d57a8b7f7b3`. Physical-handset play and the uncoached first-player readability check remain open. [Publication receipt](../reviews/journey-home/deployment-confirmation.json)
 
-The next developer assignment is the [offline Android playtest](../NEXT_TASK_ANDROID_PLAYTEST.md). Publisher decisions, the Play test tracks and first release are mapped in the [Google Play launch plan](GOOGLE_PLAY_LAUNCH.md).
+The [offline Android commission](../NEXT_TASK_ANDROID_PLAYTEST.md) followed this private Journey review. Publisher decisions, the Play test tracks and first release are mapped in the [Google Play launch plan](GOOGLE_PLAY_LAUNCH.md).
 
 ## Last Ferry · independent Practice playtest
 
