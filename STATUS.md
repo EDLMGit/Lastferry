@@ -1,6 +1,14 @@
-# Lantern Reach published for private playtesting · Far Shore next
+# Far Shore ready for Practice review
 
-**Current assignment — [FAR_SHORE_01](NEXT_TASK_FAR_SHORE.md).** Author, play and tune the independent, unscored Practice candidate for Far Shore, the campaign’s eleventh cove and planned difficulty peak. Local Codex owns the puzzle, prototyping, production implementation and evidence. The director reviews the choices players face. Keep the final rescue and supper for Last Ferry.
+Tide Steps, Far Bank and Rush Landing form a crossing where a successful early Harbor delivery changes which neighbor the boat can take on later. The first prototype allowed a last-minute transfer at Far Bank. Playing it led to an earlier Rush flood, a forecast of the receiving berth’s load limit and a new view across the banks. The release candidate has eight Journey coves, twelve Practice entrances and nine scoring identities. [Review and native gameplay](reviews/far-shore/REVIEW.md)
+
+The final minified phone runs completed the mistaken delivery, eight-step recovery, thirteen-action unscored rescue and terminal Undo/redelivery in both orientations. The production build, 735 unit checks and 83-family inventory passed. [Verification](reviews/far-shore/VERIFICATION.md)
+
+The private Site serves version 25, game `5f28d71566463462b9407e34b0bf236bb05e20c6`. [Publication receipt](reviews/lantern-reach-difficulty/deployment-confirmation.json)
+
+## Earlier handoff · Lantern Reach published for private playtesting · Far Shore next
+
+**Commission — [FAR_SHORE_01](NEXT_TASK_FAR_SHORE.md).** Author, play and tune the independent, unscored Practice candidate for Far Shore, the campaign’s eleventh cove and planned difficulty peak. Local Codex owns the puzzle, prototyping, production implementation and evidence. The director reviews the choices players face. Keep the final rescue and supper for Last Ferry.
 
 The private phone playtest now serves the revised Lantern Reach, game `5f28d71566463462b9407e34b0bf236bb05e20c6`, Site version **25**. The player liked the revision. Eight Journey coves, eleven Practice entrances and nine scored coves are available. Lantern Reach and Drowned Orchard remain unscored while the player can try both. Their Journey integrations follow in story order after acceptance. [Independent review](reviews/lantern-reach-difficulty/INDEPENDENT_REVIEW.md) · [Publication receipt](reviews/lantern-reach-difficulty/deployment-confirmation.json).
 

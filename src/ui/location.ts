@@ -1,4 +1,4 @@
-import { edgeTo, legalActions, passageError, passageFlow, preview, type Action, type State } from '../game/rules';
+import { draft, edgeTo, legalActions, load, passageError, passageFlow, preview, type Action, type State } from '../game/rules';
 import { nodeName, type Level } from '../levels/level';
 import {
   actionLabel,
@@ -36,6 +36,7 @@ export type LocationFacts = {
   boardOptions: string[];
   board: Transfer | null;
   unload: Transfer | null;
+  boardingDepth: string;
   boardLabel: string;
   unloadLabel: string;
   transferNote: string;
@@ -75,6 +76,14 @@ export function locationFacts(s: State, nodeId: string, l: Level, tips = true): 
         : proposed?.error
           ? (text!.error ?? proposed.error)
           : '';
+  let boardingDepth = '';
+  if (current && pier && !flooded && waiting.length === 1 && !board && s.status === 'playing') {
+    const loaded = { ...s, aboard: [...s.aboard, ...waiting] };
+    const depth = l.nodes.find(n => n.id === nodeId)!.baseDepth + s.tideLevel;
+    if (load(loaded, l) <= l.rules.capacity && draft(loaded, l) > depth) {
+      boardingDepth = `Board ${passengerList(waiting, l)} · needs depth ${draft(loaded, l)} · berth ${depth}`;
+    }
+  }
   return {
     id: nodeId,
     name: nodeName(nodeId, l),
@@ -121,6 +130,7 @@ export function locationFacts(s: State, nodeId: string, l: Level, tips = true): 
     boardOptions: current && !flooded ? [...waiting] : [],
     board,
     unload,
+    boardingDepth,
     boardLabel: board ? actionLabel(s, { type: 'board', passengerIds: waiting }, l) : '',
     unloadLabel: unload
       ? pier!.isDeliveryPier

@@ -77,9 +77,9 @@ export function passengerScale(species: string): [number, number, number] {
 }
 function usesSecondAftBerth(level: Level, passenger: Level['passengers'][number]) {
   if (passenger.species === 'beaver') return true;
-  if (level.id !== 'lantern-reach' || passenger.species !== 'rabbit') return false;
+  if (!['lantern-reach', 'far-shore'].includes(level.id) || passenger.species !== 'rabbit') return false;
   const rabbits = level.passengers.filter(p => p.species === 'rabbit').map(p => p.id);
-  return rabbits.sort()[0] === passenger.id;
+  return rabbits.sort()[level.id === 'far-shore' ? 1 : 0] === passenger.id;
 }
 export function deckSeat(level: Level, id: string): Vector3 {
   const passenger = level.passengers.find((p) => p.id === id)!;
@@ -97,7 +97,7 @@ export function deckSeat(level: Level, id: string): Vector3 {
     const [x, z] = passenger.slots === 3 ? [-0.24, 1.43] : passenger.slots === 2 ? [-0.48, -0.525] : [0.52, -0.26];
     return new Vector3(x, wideFerryProfile.deckY, z);
   }
-  if (level.id === 'ternhaven' || level.id === 'drowned-orchard' || level.id === 'lantern-reach') {
+  if (['ternhaven', 'drowned-orchard', 'lantern-reach', 'far-shore'].includes(level.id)) {
     const [x, z] = passenger.slots === 3 ? [-0.24, 1.43]
       : passenger.species === 'sheep' ? [-0.48, -0.525]
         : usesSecondAftBerth(level, passenger) ? [0.48, -0.525] : [0.57, 0.93];
@@ -118,7 +118,7 @@ export function shoreSeat(
   delivered = false,
 ): Vector3 {
   const passenger = level.passengers.find((p) => p.id === id)!;
-  if (level.id === 'ternhaven' || level.id === 'drowned-orchard' || level.id === 'lantern-reach') {
+  if (['ternhaven', 'drowned-orchard', 'lantern-reach', 'far-shore'].includes(level.id)) {
     const [x, z] = passenger.slots === 3 ? [0.8, -0.65]
       : passenger.species === 'sheep' ? [-0.75, -0.65]
         : usesSecondAftBerth(level, passenger) ? [-0.7, 0.3] : [0.65, 0.3];

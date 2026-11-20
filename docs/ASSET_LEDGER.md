@@ -1,5 +1,9 @@
 # Last Ferry asset provenance and history
 
+## Far Shore · four landing compositions
+
+Far Shore places the six-space ferry, two rabbit appearances, wool sheep and deer between the stone Tide Steps, pine-topped Far Bank, low Rush Landing and Harbor light. Fitted gangways use the existing pier kit. The ferry, coast, pier and deer families record their new use in the 83-entry inventory. [Gallery](../asset-gallery.html#far-shore) · [Actual phone gameplay](../reviews/far-shore/REVIEW.md)
+
 ## Lantern Reach · six-space difficulty revision
 
 The cove reuses the six-space ferry, its fitted dock and transfer path, the two rabbit appearances, wool sheep and chestnut deer. Lantern Steps gives Sorbus a supported fourth landing across the current. The original bridge fits the selected beam. Candidate-local berths and four landing silhouettes are authored in the level, scene layout and ferry profile. All 83 family IDs remain. [Asset gallery](../asset-gallery.html#lantern-reach) · [Actual Play evidence](../reviews/lantern-reach-difficulty/REVIEW.md).

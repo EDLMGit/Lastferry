@@ -117,6 +117,15 @@ export function decorateWideIsland(
   return group;
 }
 
+export function decorateFarShoreIsland(group: T.Group, island: Level['world']['islands'][number], style: IslandStyle) {
+  if (style === 'working') {
+    const center = islandCenter(island);
+    pine(group, center.x - 1.27, island.elevation * 0.18, center.y - 0.98, 0.67);
+    return decorateReefIsland(group, { ...island, id: 'quay-island' }, style);
+  }
+  return decorateTernhavenIsland(group, island, style);
+}
+
 export function decorateTernhavenIsland(group: T.Group, island: Level['world']['islands'][number], style: IslandStyle) {
   if (style !== 'spit') return decorateWideIsland(group, island, style);
   const accents = decorateReefIsland(new T.Group(), { ...island, id: 'pool-island' }, style);

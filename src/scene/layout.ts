@@ -22,6 +22,14 @@ export type SceneLayout = {
   };
 };
 const layouts: Record<string, SceneLayout> = {
+  'far-shore': {
+    landmarks: [{ kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-10.15, 1.85] }],
+    islandStyles: { 'lighthouse-island': 'refuge', 'steps-island': 'quay', 'bank-island': 'working', 'rush-island': 'spit' },
+    stonePiers: ['steps-pier'],
+    centeredWaitingPairs: true,
+    cameraPosition: [23, 34, 8],
+    landscapeCameraPosition: [-17, 31, 19],
+  },
   'lantern-reach': {
     landmarks: [
       { kind: 'lighthouse', islandId: 'lighthouse-island', positionXZ: [-9, -5.5] },

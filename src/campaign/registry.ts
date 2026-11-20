@@ -7,6 +7,7 @@ import {
   reefReturn,
   drownedOrchard,
   lanternReach,
+  farShore,
   orchardLanding,
   ternhaven,
   level as firstCrossing,
@@ -274,6 +275,7 @@ export const practiceCoves = [
   ternhaven,
   drownedOrchard,
   lanternReach,
+  farShore,
 ] as const;
 
 export function storyCove(id: string): StoryCove | undefined {

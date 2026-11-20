@@ -2,7 +2,7 @@
 
 ## Current campaign work
 
-[Far Shore](../NEXT_TASK_FAR_SHORE.md) is the next independent Practice candidate. The director’s benchmark is a fair late-game rescue that rewards thinking ahead. Drowned Orchard and the revised Lantern Reach are available together on the phone. Their eventual Journey entries follow Ternhaven in that order. Last Ferry follows Far Shore as the final homecoming.
+Far Shore is the third independent, unscored candidate after Ternhaven. Four neighbors live on either side of Far Reach. The early trip to Harbor sets up a later pickup on the opposite bank. Eight Journey coves, twelve Practice entrances and nine scoring identities ship on this branch. Drowned Orchard, revised Lantern Reach and Far Shore follow Ternhaven in intended story order after acceptance. Last Ferry remains the gentler homecoming. [Playtest review](../reviews/far-shore/REVIEW.md)
 
 ## Lantern Reach · independent Practice
 

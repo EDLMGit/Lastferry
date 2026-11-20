@@ -1368,14 +1368,17 @@ function renderDialog() {
     };
   } else if (mode === 'forecast') {
     const f = forecastCopy(s, level);
+    const berths = f.shoalBerths.map(berth =>
+      `<p><strong>${berth.landing} berth</strong> · ${berth.depths.join(' ')}</p>`
+    ).join('');
     const waiting = f.waitingAtLandings.map(group =>
-      `<li><strong>${group.landing}</strong> · ${group.passengers} (${group.spaces} ${group.spaces === 1 ? 'space' : 'spaces'}) · ${group.deadline}.</li>`
+      `<li><strong>${group.landing}</strong> · ${group.passengers}${berths ? '' : ' (' + group.spaces + (group.spaces === 1 ? ' space)' : ' spaces)')} · ${group.deadline}.</li>`
     ).join('');
     const tideTable = f.schedule.length
       ? '<ol class="current-schedule">' + f.schedule.map(row => `<li><strong>After action ${row.turn}</strong> · ${row.direction} · depth ${row.depth}.${row.floods.length ? ' Flooding at ' + row.floods.join(' and ') + '.' : ''}</li>`).join('') + '</ol>'
       : '';
     $('dialog-content').innerHTML =
-      `${header(level.bridge ? 'Tide and bridge forecast' : f.current ? 'Reef and tide forecast' : 'Tide and pier forecast', 'Inspection · no action spent')}<div class="dialog-body forecast-detail"><strong>${f.headline}</strong>${waiting ? `<ul class="current-schedule" aria-label="Waiting passengers">${waiting}</ul>` : ''}${level.bridge ? `<p>${bridgeStatus(s, level)}</p>` : ''}${f.current ? `<p>${f.current.direction} ${f.current.next}</p>${tideTable}<p>Sail with the current. Your action finishes before the tide changes.</p>` : ''}<p>${f.detail}</p><p>Each accepted action advances the tide schedule. Thinking and inspection do not.</p></div>`;
+      `${header(level.bridge ? 'Tide and bridge forecast' : berths ? 'Tide and berth forecast' : f.current ? 'Reef and tide forecast' : 'Tide and pier forecast', 'Inspection · no action spent')}<div class="dialog-body forecast-detail"><strong>${f.headline}</strong>${berths}${berths && waiting ? '<p>Spaces needed at each landing</p>' : ''}${waiting ? `<ul class="current-schedule" aria-label="Waiting passengers">${waiting}</ul>` : ''}${level.bridge ? `<p>${bridgeStatus(s, level)}</p>` : ''}${f.current ? `<p>${f.current.direction} ${f.current.next}</p>${tideTable}<p>Sail with the current. Your action finishes before the tide changes.</p>` : ''}${berths ? '' : `<p>${f.detail}</p>`}<p>Each accepted action advances the tide schedule. Thinking and inspection do not.</p></div>`;
     world.setForecast(
       true,
       level.rules.tide.rises.find((r) => r.afterTurn > s.turn)?.level ?? s.tideLevel,
@@ -1841,7 +1844,7 @@ function renderDock() {
       session.state.status === 'playing' &&
       !facts.flooded &&
       !!facts.pierId &&
-      !!(facts.board || facts.unload || canOpen);
+      !!(facts.board || facts.unload || facts.boardingDepth || canOpen);
   dock.hidden = !visible;
   dock.inert = !visible;
   if (!visible) return;
@@ -1853,6 +1856,13 @@ function renderDock() {
   owner.className = 'dock-owner';
   owner.textContent = 'At ' + facts.name;
   dock.append(owner);
+  if (facts.boardingDepth) {
+    const unavailable = document.createElement('button');
+    unavailable.id = 'board-unavailable';
+    unavailable.disabled = true;
+    setControl(unavailable, 'board', facts.boardingDepth, 'quiet');
+    dock.append(unavailable);
+  }
   if (canOpen) {
     const open = document.createElement('button');
     open.id = 'open-bridge';

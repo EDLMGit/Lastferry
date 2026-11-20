@@ -54,6 +54,7 @@ import {
   driftwoodYard,
   wideWaterfront,
   decorateWideIsland,
+  decorateFarShoreIsland,
   decorateTernhavenIsland,
   decorateReefIsland,
   decorateOrchardIsland,
@@ -463,6 +464,7 @@ export class World {
     const style = this.layout.islandStyles[island.id] ?? 'garden';
     if (this.level.id === 'orchard-landing' || this.level.id === 'drowned-orchard')
       return decorateOrchardIsland(group, island, style, this.level.id === 'drowned-orchard');
+    if (this.level.id === 'far-shore') return decorateFarShoreIsland(group, island, style);
     if (this.level.id === 'reef-return') return decorateReefIsland(group, island, style);
     if (this.level.id === 'ternhaven' || this.level.id === 'lantern-reach') return decorateTernhavenIsland(group, island, style);
     if (this.level.id === 'wide-berth') {

@@ -1,5 +1,9 @@
 # Last Ferry — difficulty and three-lantern mastery
 
+## Far Shore · unscored Practice
+
+The production minimum is 13 actions. The first trip changes the load that can board at a distant shallow berth. A one-unit deeper berth makes the opposite first pickup viable. Far Shore uses the unrated arrival and preserves earned bests. Scoring awaits a later playtest decision. [Proof and play](../reviews/far-shore/REVIEW.md)
+
 ## Lantern Reach · unscored Practice
 
 The revised six-space cove has a minimum of thirteen actions. Keeping its bridge closed raises the minimum to seventeen. Timing is consequential even with an empty boat and room for a safe-looking pickup. These are design results for a new playtest. [Original demonstration](../reviews/lantern-reach/REVIEW.md) · [Revised proof](../reviews/lantern-reach-difficulty/proof.json). Lantern Reach shares the unrated Practice result and writes no mastery record. The nine accepted scoring identities remain in force.

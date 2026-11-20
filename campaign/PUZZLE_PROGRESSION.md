@@ -1,8 +1,8 @@
 # Puzzle progression — selected campaign direction
 
-## Far Shore · current Practice direction
+## Far Shore · independent Practice playtest
 
-The player responded positively to revised Lantern Reach. Codex now owns [Far Shore](../NEXT_TASK_FAR_SHORE.md), the eleventh cove and the hardest planned rescue. Combine lessons the player already knows into a decision they can anticipate. Keep the last cove as the gentler trip home. The current [private playtest](https://last-ferry-playtest.abumech.chatgpt.site/?cove=lantern-reach) has eight Journey coves, eleven Practice entrances and nine scored coves.
+At Tide Steps, the early Harbor delivery determines which companion must accompany the ferry outward. Anticipating the loaded draft at the receiving berth links two trips before the current turns. Rush Landing's last dry tide supports four spaces. The tested first version left enough time to stage the heavier companion after crossing. The revised deadline makes that choice matter on the home bank. Minimum 13, unscored pending player feedback. [Design and actual play](../reviews/far-shore/REVIEW.md)
 
 ## Lantern Reach difficulty playtest
 

@@ -113,12 +113,22 @@ export function actionCostCopy(l: Level): string {
   return `Sailing, boarding, unloading${l.bridge ? ', opening the bridge' : ''} and waiting each cost ${countActions(l.rules.actionCost)}. Inspection is free.`;
 }
 
+function berthCapacity(l: Level, depth: number) {
+  return l.rules.draftBands.reduce((limit, band) => band.draft <= depth ? band.maxLoad : limit, 0);
+}
+
+function berthLimit(depth: number, l: Level): string {
+  return `depth ${depth}, up to ${berthCapacity(l, depth)} spaces`;
+}
+
 export function pierSafetyCopy(s: State, pierId: string, l: Level): string {
   const pier = l.piers.find((p) => p.id === pierId)!;
   if (s.tideLevel >= pier.elevation) return `${stop(pier.nodeId, l)} is flooded.`;
   const flood = l.rules.tide.rises.find((r) => r.afterTurn > s.turn && r.level >= pier.elevation);
-  if (flood) return `${stop(pier.nodeId, l)} floods in ${countActions(flood.afterTurn - s.turn)}.`;
-  return `${stop(pier.nodeId, l)} stays safe through all tide rises.`;
+  const safety = flood ? `${stop(pier.nodeId, l)} floods in ${countActions(flood.afterTurn - s.turn)}.`
+    : `${stop(pier.nodeId, l)} stays safe through all tide rises.`;
+  const depth = l.nodes.find(node => node.id === pier.nodeId)!.baseDepth + s.tideLevel;
+  return berthCapacity(l, depth) < l.rules.capacity ? `${safety} Berth: ${berthLimit(depth, l)}.` : safety;
 }
 
 function tideCopy(s: State, l: Level): string {
@@ -208,16 +218,34 @@ export function forecastCopy(s: State, l: Level) {
     const floods = l.piers.filter(p => previous < p.elevation && p.elevation <= r.level).map(p => stop(p.nodeId, l));
     return { turn: r.afterTurn, direction: `${stop(phase.from, l)} → ${stop(phase.to, l)}`, depth: edge.baseDepth + r.level, floods };
   }) : [];
+  const shoalBerths = l.piers.flatMap(pier => {
+    const node = l.nodes.find(n => n.id === pier.nodeId)!;
+    if (berthCapacity(l, node.baseDepth + l.rules.tide.initialLevel) >= l.rules.capacity) return [];
+    const dry = s.tideLevel < pier.elevation;
+    const depths = dry ? [`Now: ${berthLimit(node.baseDepth + s.tideLevel, l)}.`] : ['Flooded.'];
+    for (const rise of upcoming) {
+      if (rise.level >= pier.elevation) {
+        if (dry) depths.push(`After action ${rise.afterTurn}: flooded.`);
+        break;
+      }
+      depths.push(`After action ${rise.afterTurn}: ${berthLimit(node.baseDepth + rise.level, l)}.`);
+    }
+    return [{ landing: stop(node.id, l), depths }];
+  });
   return {
     schedule,
-    waitingAtLandings: l.bridge ? l.piers.flatMap(pier => {
+    shoalBerths,
+    waitingAtLandings: l.bridge || shoalBerths.length ? l.piers.flatMap(pier => {
       const ids = s.waitingByPier[pier.id] ?? [];
       if (ids.length === 0) return [];
       const spaces = l.passengers.reduce((total, passenger) => total + (ids.includes(passenger.id) ? passenger.slots : 0), 0);
       const flood = upcoming.find(rise => rise.level >= pier.elevation);
       const deadline = s.tideLevel >= pier.elevation ? 'flooded'
         : flood ? 'floods in ' + countActions(flood.afterTurn - s.turn) : 'stays dry';
-      return [{ landing: stop(pier.nodeId, l), passengers: passengerList(ids, l), spaces, deadline }];
+      const passengers = shoalBerths.length
+        ? ids.map(id => `${passengerName(id, l)} (${l.passengers.find(p => p.id === id)!.slots})`).join(', ')
+        : passengerList(ids, l);
+      return [{ landing: stop(pier.nodeId, l), passengers, spaces, deadline }];
     }) : [],
     headline: tideCopy(s, l),
     current: currentNotice(s, l),

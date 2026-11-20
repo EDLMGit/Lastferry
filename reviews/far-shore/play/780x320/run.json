@@ -1,0 +1,688 @@
+{
+  "source": "79dcf1a51fa26140765c1be75d2325d2f0ab9f13c2b86d97c19249f06587b431",
+  "build": {
+    "./assets/index-BnfVVQKt.js": "1272be7ae76333e09d495ec7d874cf5574ba2b1be911f45406d8712eb173925a",
+    "./assets/index-BL2fzgv8.css": "57c4d4113b47aa32a9972bb05f9dba1c3b8d2a6b8b9eb9f6d77eca8d1984e936"
+  },
+  "browser": "156.0.8078.4",
+  "width": 780,
+  "height": 320,
+  "route": "outward-companion",
+  "actions": [
+    {
+      "type": "board",
+      "passengerIds": [
+        "thistle"
+      ]
+    },
+    {
+      "type": "move",
+      "to": "harbor"
+    },
+    {
+      "type": "unload",
+      "passengerIds": [
+        "thistle"
+      ]
+    },
+    {
+      "type": "move",
+      "to": "steps"
+    },
+    {
+      "type": "board",
+      "passengerIds": [
+        "button"
+      ]
+    },
+    {
+      "type": "move",
+      "to": "bank"
+    },
+    {
+      "type": "move",
+      "to": "rush"
+    },
+    {
+      "type": "board",
+      "passengerIds": [
+        "rowan"
+      ]
+    },
+    {
+      "type": "move",
+      "to": "bank"
+    },
+    {
+      "type": "board",
+      "passengerIds": [
+        "peat"
+      ]
+    },
+    {
+      "type": "move",
+      "to": "steps"
+    },
+    {
+      "type": "move",
+      "to": "harbor"
+    },
+    {
+      "type": "unload",
+      "passengerIds": [
+        "button",
+        "rowan",
+        "peat"
+      ]
+    }
+  ],
+  "mistake": "heavier-companion",
+  "mistakeActions": [
+    {
+      "type": "board",
+      "passengerIds": [
+        "button"
+      ]
+    },
+    {
+      "type": "move",
+      "to": "harbor"
+    },
+    {
+      "type": "unload",
+      "passengerIds": [
+        "button"
+      ]
+    },
+    {
+      "type": "move",
+      "to": "steps"
+    },
+    {
+      "type": "board",
+      "passengerIds": [
+        "thistle"
+      ]
+    },
+    {
+      "type": "move",
+      "to": "bank"
+    },
+    {
+      "type": "move",
+      "to": "rush"
+    },
+    {
+      "type": "wait"
+    }
+  ],
+  "sharedActions": 0,
+  "forecastText": "The tide rises in 6 actions.\n\nRush Landing berth · Now: depth 2, up to 2 spaces. After action 6: depth 3, up to 4 spaces. After action 8: flooded.\n\nSpaces needed at each landing\n\nTide Steps · Thistle (2), Button (1) · floods in 6 actions.\nFar Bank · Peat (1) · stays dry.\nRush Landing · Rowan (3) · floods in 8 actions.\n\nFar Reach flows from Tide Steps to Far Bank. After 6 actions, it turns toward Tide Steps.\n\nAfter action 6 · Far Bank → Tide Steps · depth 3. Flooding at Tide Steps.\nAfter action 8 · Far Bank → Tide Steps · depth 4. Flooding at Rush Landing.\n\nSail with the current. Your action finishes before the tide changes.\n\nEach accepted action advances the tide schedule. Thinking and inspection do not.",
+  "shownLoss": "A turn too late.\nClose dialog\n\nRush Landing flooded with Rowan still waiting.\n\nUndo earlier moves, or restart to try a different plan.\n\nUndo last action\nRestart",
+  "trial": [
+    {
+      "turn": 0,
+      "tideLevel": 0,
+      "boatNodeId": "steps",
+      "aboard": [],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "steps-pier": [
+          "thistle",
+          "button"
+        ],
+        "bank-pier": [
+          "peat"
+        ],
+        "rush-pier": [
+          "rowan"
+        ]
+      },
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 1,
+      "tideLevel": 0,
+      "boatNodeId": "steps",
+      "aboard": [
+        "button"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "steps-pier": [
+          "thistle"
+        ],
+        "bank-pier": [
+          "peat"
+        ],
+        "rush-pier": [
+          "rowan"
+        ]
+      },
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 2,
+      "tideLevel": 0,
+      "boatNodeId": "harbor",
+      "aboard": [
+        "button"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "steps-pier": [
+          "thistle"
+        ],
+        "bank-pier": [
+          "peat"
+        ],
+        "rush-pier": [
+          "rowan"
+        ]
+      },
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 3,
+      "tideLevel": 0,
+      "boatNodeId": "harbor",
+      "aboard": [],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "steps-pier": [
+          "thistle"
+        ],
+        "bank-pier": [
+          "peat"
+        ],
+        "rush-pier": [
+          "rowan"
+        ]
+      },
+      "delivered": [
+        "button"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 4,
+      "tideLevel": 0,
+      "boatNodeId": "steps",
+      "aboard": [],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "steps-pier": [
+          "thistle"
+        ],
+        "bank-pier": [
+          "peat"
+        ],
+        "rush-pier": [
+          "rowan"
+        ]
+      },
+      "delivered": [
+        "button"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 5,
+      "tideLevel": 0,
+      "boatNodeId": "steps",
+      "aboard": [
+        "thistle"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "steps-pier": [],
+        "bank-pier": [
+          "peat"
+        ],
+        "rush-pier": [
+          "rowan"
+        ]
+      },
+      "delivered": [
+        "button"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 6,
+      "tideLevel": 1,
+      "boatNodeId": "bank",
+      "aboard": [
+        "thistle"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "steps-pier": [],
+        "bank-pier": [
+          "peat"
+        ],
+        "rush-pier": [
+          "rowan"
+        ]
+      },
+      "delivered": [
+        "button"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 7,
+      "tideLevel": 1,
+      "boatNodeId": "rush",
+      "aboard": [
+        "thistle"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "steps-pier": [],
+        "bank-pier": [
+          "peat"
+        ],
+        "rush-pier": [
+          "rowan"
+        ]
+      },
+      "delivered": [
+        "button"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 8,
+      "tideLevel": 2,
+      "boatNodeId": "rush",
+      "aboard": [
+        "thistle"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "steps-pier": [],
+        "bank-pier": [
+          "peat"
+        ],
+        "rush-pier": [
+          "rowan"
+        ]
+      },
+      "delivered": [
+        "button"
+      ],
+      "status": "lost",
+      "lossReason": {
+        "code": "PASSENGER_STRANDED",
+        "pierId": "rush-pier",
+        "passengerIds": [
+          "rowan"
+        ]
+      }
+    }
+  ],
+  "winning": [
+    {
+      "turn": 0,
+      "tideLevel": 0,
+      "boatNodeId": "steps",
+      "aboard": [],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "steps-pier": [
+          "thistle",
+          "button"
+        ],
+        "bank-pier": [
+          "peat"
+        ],
+        "rush-pier": [
+          "rowan"
+        ]
+      },
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 1,
+      "tideLevel": 0,
+      "boatNodeId": "steps",
+      "aboard": [
+        "thistle"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "steps-pier": [
+          "button"
+        ],
+        "bank-pier": [
+          "peat"
+        ],
+        "rush-pier": [
+          "rowan"
+        ]
+      },
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 2,
+      "tideLevel": 0,
+      "boatNodeId": "harbor",
+      "aboard": [
+        "thistle"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "steps-pier": [
+          "button"
+        ],
+        "bank-pier": [
+          "peat"
+        ],
+        "rush-pier": [
+          "rowan"
+        ]
+      },
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 3,
+      "tideLevel": 0,
+      "boatNodeId": "harbor",
+      "aboard": [],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "steps-pier": [
+          "button"
+        ],
+        "bank-pier": [
+          "peat"
+        ],
+        "rush-pier": [
+          "rowan"
+        ]
+      },
+      "delivered": [
+        "thistle"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 4,
+      "tideLevel": 0,
+      "boatNodeId": "steps",
+      "aboard": [],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "steps-pier": [
+          "button"
+        ],
+        "bank-pier": [
+          "peat"
+        ],
+        "rush-pier": [
+          "rowan"
+        ]
+      },
+      "delivered": [
+        "thistle"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 5,
+      "tideLevel": 0,
+      "boatNodeId": "steps",
+      "aboard": [
+        "button"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "steps-pier": [],
+        "bank-pier": [
+          "peat"
+        ],
+        "rush-pier": [
+          "rowan"
+        ]
+      },
+      "delivered": [
+        "thistle"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 6,
+      "tideLevel": 1,
+      "boatNodeId": "bank",
+      "aboard": [
+        "button"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "steps-pier": [],
+        "bank-pier": [
+          "peat"
+        ],
+        "rush-pier": [
+          "rowan"
+        ]
+      },
+      "delivered": [
+        "thistle"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 7,
+      "tideLevel": 1,
+      "boatNodeId": "rush",
+      "aboard": [
+        "button"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "steps-pier": [],
+        "bank-pier": [
+          "peat"
+        ],
+        "rush-pier": [
+          "rowan"
+        ]
+      },
+      "delivered": [
+        "thistle"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 8,
+      "tideLevel": 2,
+      "boatNodeId": "rush",
+      "aboard": [
+        "button",
+        "rowan"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "steps-pier": [],
+        "bank-pier": [
+          "peat"
+        ],
+        "rush-pier": []
+      },
+      "delivered": [
+        "thistle"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 9,
+      "tideLevel": 2,
+      "boatNodeId": "bank",
+      "aboard": [
+        "button",
+        "rowan"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "steps-pier": [],
+        "bank-pier": [
+          "peat"
+        ],
+        "rush-pier": []
+      },
+      "delivered": [
+        "thistle"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 10,
+      "tideLevel": 2,
+      "boatNodeId": "bank",
+      "aboard": [
+        "button",
+        "rowan",
+        "peat"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "steps-pier": [],
+        "bank-pier": [],
+        "rush-pier": []
+      },
+      "delivered": [
+        "thistle"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 11,
+      "tideLevel": 2,
+      "boatNodeId": "steps",
+      "aboard": [
+        "button",
+        "rowan",
+        "peat"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "steps-pier": [],
+        "bank-pier": [],
+        "rush-pier": []
+      },
+      "delivered": [
+        "thistle"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 12,
+      "tideLevel": 2,
+      "boatNodeId": "harbor",
+      "aboard": [
+        "button",
+        "rowan",
+        "peat"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "steps-pier": [],
+        "bank-pier": [],
+        "rush-pier": []
+      },
+      "delivered": [
+        "thistle"
+      ],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 13,
+      "tideLevel": 2,
+      "boatNodeId": "harbor",
+      "aboard": [],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "steps-pier": [],
+        "bank-pier": [],
+        "rush-pier": []
+      },
+      "delivered": [
+        "thistle",
+        "button",
+        "rowan",
+        "peat"
+      ],
+      "status": "won",
+      "lossReason": null
+    }
+  ],
+  "successfulUndos": 8,
+  "terminalUndoRedelivery": true,
+  "pageErrors": [],
+  "clock": [
+    {
+      "event": "decisive choice",
+      "turn": 0,
+      "epochMs": 1795174277041.1
+    },
+    {
+      "event": "Rowan cannot board",
+      "turn": 7,
+      "epochMs": 1795174286089.7
+    },
+    {
+      "event": "consequence",
+      "turn": 8,
+      "epochMs": 1795174287643.7
+    },
+    {
+      "event": "restored choice",
+      "turn": 0,
+      "epochMs": 1795174300068.8
+    },
+    {
+      "event": "Rowan can board",
+      "turn": 7,
+      "epochMs": 1795174318560.6
+    },
+    {
+      "event": "Rowan aboard at the flood",
+      "turn": 8,
+      "epochMs": 1795174319942.4001
+    },
+    {
+      "event": "unscored arrival",
+      "turn": 13,
+      "epochMs": 1795174328708.8
+    }
+  ]
+}

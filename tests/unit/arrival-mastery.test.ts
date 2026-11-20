@@ -41,7 +41,7 @@ function backing(raw: string | null = null) {
 describe('accepted Ternhaven arrival scoring', () => {
   test('only Ternhaven target 14 revision 1 joins the eight accepted ratings', () => {
     expect(masteryTargets).toEqual({ ...acceptedBefore, ternhaven: { revision: 1, target: 14 } });
-    expect(practiceCoves).toHaveLength(11);
+    expect(practiceCoves).toHaveLength(12);
     expect(storyCoves).toHaveLength(8);
     expect(storyCoves.at(-1)?.level).toBe(ternhaven);
   });

@@ -1,12 +1,18 @@
 # Last Ferry — Project state
 
+## Far Shore · independent Practice playtest
+
+The Far Shore build adds a twelfth Practice entrance. At Tide Steps the player chooses a passenger for an early delivery. The companion who comes back out on the ferry determines who can board at a shallower berth across the current. Home → Practice and `?cove=far-shore` enter the same four-passenger crossing. The Journey still ends at Ternhaven. Nine coves carry lantern ratings. Drowned Orchard, Lantern Reach and Far Shore await separate promotion decisions. [Play and evidence](../reviews/far-shore/REVIEW.md)
+
+The live private phone build is **Site version 25**, game `5f28d71566463462b9407e34b0bf236bb05e20c6`, with eleven Practice entrances. The additional Far Shore crossing is on the review branch. [Publication receipt](../reviews/lantern-reach-difficulty/deployment-confirmation.json)
+
 ## Lantern Reach · revised Practice candidate for playtest
 
 The six-space ferry starts at Wick. The rabbits here and Sorbus across Wick Race have different pickup windows. Signal Quay's winch floods after action three. When the ferry returns to the rabbits on six, deck space is available, but collecting them uses one of Sorbus’s last two actions. The empty-deck visit and the one-rabbit outer route were proved and played. [Decision, recovery and evidence](../reviews/lantern-reach-difficulty/REVIEW.md)
 
 The reviewed runtime `5f28d71566463462b9407e34b0bf236bb05e20c6` is live at **Site version 25**. Eight Journey coves, eleven Practice entrances and nine scoring identities are available. The revised Lantern Reach and Drowned Orchard remain unscored. [Private phone playtest](https://last-ferry-playtest.abumech.chatgpt.site/?cove=lantern-reach) · [Independent review](../reviews/lantern-reach-difficulty/INDEPENDENT_REVIEW.md) · [Receipt](../reviews/lantern-reach-difficulty/deployment-confirmation.json)
 
-**[FAR_SHORE_01](../NEXT_TASK_FAR_SHORE.md) is active.** Codex owns the next unscored Practice candidate, the campaign's difficulty peak. The player can review the two previous candidates on their phone while development proceeds. Scoring and Journey promotion follow separate acceptance decisions in story order.
+The [Far Shore brief](../NEXT_TASK_FAR_SHORE.md) commissioned the next unscored Practice candidate following the revised Lantern Reach playtest.
 
 ## Earlier direction · Lantern Reach difficulty revision
 
