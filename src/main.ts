@@ -2697,6 +2697,28 @@ function dismissDialogLayer() {
     }
   } else closeDialog(true);
 }
+function dismissMapInspection() {
+  if (!$('crossing-details').hidden) {
+    toggleStatus(false);
+    $('load-toggle').focus({ preventScroll: true });
+  } else if (locationSelection && locationDetails) {
+    $('location-details').click();
+    $('location-details').focus({ preventScroll: true });
+  } else if (locationSelection) {
+    clearLocation(true);
+  } else return false;
+  return true;
+}
+function androidBack() {
+  if (dialog.open) {
+    const heldStory = mode === 'story' && storyPresentation.settled && !($('story-more') as HTMLDetailsElement).open;
+    if (mode === 'journey-end' || heldStory) returnToJourneyTitle();
+    else dismissDialogLayer();
+  } else if (mode === 'journey') return false;
+  else if (!$('zoom-tools').hidden) closeZoom(true);
+  else if (!dismissMapInspection() && !blocked()) openDialog('menu', undefined, 'menu');
+  return true;
+}
 dialog.addEventListener('cancel', (e) => {
   e.preventDefault();
   dismissDialogLayer();
@@ -2758,25 +2780,9 @@ document.addEventListener(
       e.stopImmediatePropagation();
       return;
     }
-    if (e.key === 'Escape' && !dialog.open && !$('crossing-details').hidden) {
+    if (e.key === 'Escape' && !dialog.open && dismissMapInspection()) {
       e.preventDefault();
       e.stopImmediatePropagation();
-      toggleStatus(false);
-      $('load-toggle').focus({ preventScroll: true });
-      return;
-    }
-    if (e.key === 'Escape' && !dialog.open && locationSelection && locationDetails) {
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      $('location-details').click();
-      $('location-details').focus({ preventScroll: true });
-      return;
-    }
-    if (e.key === 'Escape' && !dialog.open && locationSelection) {
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      clearLocation(true);
-      return;
     }
   },
   true,
@@ -2922,6 +2928,14 @@ render();
 scheduleLayout();
 
 if (journey) showHome();
+
+if (location.origin === 'https://appassets.androidplatform.net') {
+  Object.assign(window, { lastFerryAndroidBack: androidBack });
+  requestAnimationFrame(function checkFirstFrame() {
+    if (world.renderer.info.render.calls > 0) document.documentElement.dataset.lastFerryReady = 'true';
+    else if (!pageDisposed) requestAnimationFrame(checkFirstFrame);
+  });
+}
 
 if (import.meta.env.DEV)
   Object.assign(window, {

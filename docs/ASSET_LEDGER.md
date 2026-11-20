@@ -1,5 +1,9 @@
 # Last Ferry asset provenance and history
 
+## Android playtest launcher
+
+The Android launcher uses the original Harbor lighthouse. Its gold linework and dark teal ground are stored as a native vector in the existing `ui.icon.harbor-home` family. The installed game bundles the same rendered game, illustrated scenes, passenger profiles and synthesized score as the web release. [Launcher vector](../android/app/src/main/res/drawable/harbor.xml) · [Original SVG](../cove-ui-package/ui/icons/harbor-home.svg)
+
 ## Journey Home · five illustrations and credits
 
 The existing Words and Light painter adds the returning orchard, last lights, Far Reach, final ferry and supper. Bellwater’s cloth connects the Lantern Reach entry and the table at Harbor. The existing sound owner carries the score and finite effects. The credits reuse the painted panel, button faces and Harbor glyph. The developer gallery takes these five held specimens directly from the registry. The 83-family catalog retains the original scene and control IDs. [Painter](../src/campaign/story-painter.ts) · [Gallery](../asset-gallery.html#story-heading) · [Actual play](../reviews/journey-home/REVIEW.md)
