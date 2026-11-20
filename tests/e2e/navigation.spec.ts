@@ -98,7 +98,8 @@ for (const [label, width, height, touch] of [
     await expect(page.locator('#objective')).toHaveText('Bring all three passengers to Harbor');
     await expect(page.locator('#progress')).toHaveText('Home 0/3');
     await expect(page.locator('#boat-summary')).toHaveText('Depth 2 · 2/4 spaces');
-    await expect(page.locator('#status-headline')).toHaveText('Rabbit Pier floods in 4 actions.');
+    await expect(page.locator('#status-headline')).toHaveText('Rabbit Pier floods');
+    await expect(page.locator('.tide-countdown')).toHaveText('In 4 actions');
     await expect(page.locator('#map-harbor')).toHaveAccessibleName(
       /Select Harbor.*Home, delivery destination/,
     );
@@ -286,9 +287,8 @@ for (const [label, width, height, touch] of [
     await idle(page);
     await sail('shallows');
     await sail('rabbit-pier');
-    await expect(page.locator('#status-detail')).toContainText(
-      'The tide rises after your next action.',
-    );
+    await expect(page.locator('.tide-countdown')).toHaveText('In 1 action');
+    await expect(page.locator('#status-headline')).toHaveText('Rabbit Pier floods');
     const dry = await state(page);
     await hit('map-shallows');
     await expect(page.locator('#local-context')).toContainText('This ends the crossing.');
@@ -345,14 +345,16 @@ for (const [label, width, height, touch] of [
       status: 'playing',
       waitingByPier: { 'rabbit-pier': [], 'stone-pier': ['sheep-1'] },
     });
-    await expect(page.locator('#status-headline')).toHaveText('Pip and Rue are safe aboard.');
-    await expect(page.locator('#status-detail')).toContainText('Moss waits safely at Stone Pier.');
+    await expect(page.locator('.gauge-crew')).toHaveText('Pip and Rue aboard');
+    await expect(page.locator('.tide-countdown')).toHaveText('In 4 actions');
     await expect(page.locator('#status-headline')).not.toContainText(/flood/i);
     await page.screenshot({ path: `${reviewDir}/${label}-after-rise.png` });
     await hit('status-toggle');
     await expect(page.locator('.forecast-detail')).toContainText(
       'Rabbit Pier is flooded and empty.',
     );
+    await expect(page.locator('.forecast-detail')).toContainText('Stone Pier stays dry');
+    expect((await state(page)).waitingByPier['stone-pier']).toEqual(['sheep-1']);
     await hit('cancel');
     await sail('shallows');
     await sail('stone');

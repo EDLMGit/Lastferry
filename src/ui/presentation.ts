@@ -1,4 +1,4 @@
-import { occupiedPierDeadline } from '../game/rescue-facts';
+import { nextWaterChange, occupiedPierDeadline } from '../game/rescue-facts';
 import { bridgeStatus, draft, edgeTo, passageFlow, pierAt, preview, type Action, type State } from '../game/rules';
 import { level as baseline, nodeName, passengerName, type Level } from '../levels/level';
 
@@ -298,6 +298,12 @@ export function previewCopy(
         ? passageCopy(s, a.to, l)
         : `Boat needs depth ${draft(n, l)}.`;
   if (!tips) {
+    const floods = rise ? nextWaterChange(s, l)?.landings.map(landing => landing.name) ?? [] : [];
+    const currentFact = rise ? currentNotice(s, l)?.boundary ?? '' : '';
+    if (a.type === 'board' && floods.length) {
+      const boarding = `${passengerList(a.passengerIds, l)} ${verb(a.passengerIds, 'boards', 'board')}, then the tide rises and floods ${floods.join(' and ')}.`;
+      return { summary, requirement, error: null, consequence: [boarding, currentFact].filter(Boolean).join(' ') };
+    }
     const actionFact = a.type === 'board'
       ? `${passengerList(a.passengerIds, l)} will board.`
       : a.type === 'unload'
@@ -305,8 +311,7 @@ export function previewCopy(
         : a.type === 'move'
           ? `One passage to ${stop(a.to, l)}.`
           : `The boat stays at ${stop(s.boatNodeId, l)}.`;
-    const tideFact = rise ? 'The tide rises after this action.' : '';
-    const currentFact = rise ? currentNotice(s, l)?.boundary ?? '' : '';
+    const tideFact = rise ? `The tide rises after this action${floods.length ? ' and floods ' + floods.join(' and ') : ''}.` : '';
     return { summary, requirement, error: null, consequence: [actionFact, tideFact, currentFact].filter(Boolean).join(' ') };
   }
   let consequence: string;

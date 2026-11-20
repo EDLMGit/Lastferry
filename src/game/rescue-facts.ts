@@ -1,5 +1,5 @@
-import type { State } from './rules';
-import type { Level } from '../levels/level';
+import { passageFlow, type State } from './rules';
+import { nodeName, type Level } from '../levels/level';
 
 export function occupiedPierDeadline(state: State, level: Level) {
   return (
@@ -15,4 +15,23 @@ export function occupiedPierDeadline(state: State, level: Level) {
       })
       .sort((a, b) => a.actions - b.actions)[0] ?? null
   );
+}
+
+export function nextWaterChange(state: State, level: Level) {
+  const rise = level.rules.tide.rises.find(rise => rise.afterTurn > state.turn);
+  if (!rise || state.status !== 'playing') return null;
+  const landings = level.piers
+    .filter(pier => state.tideLevel < pier.elevation && rise.level >= pier.elevation)
+    .map(pier => ({
+      nodeId: pier.nodeId,
+      name: nodeName(pier.nodeId, level),
+      waiting: state.waitingByPier[pier.id] ?? [],
+      winch: pier.id === level.bridge?.signalPierId && !state.bridgeOpen,
+    }));
+  const edge = level.edges.find(edge => edge.current);
+  const flow = edge && passageFlow(edge, rise.level);
+  const current = edge?.current && flow && flow.from !== passageFlow(edge, state.tideLevel)?.from
+    ? { name: edge.current.name, from: nodeName(flow.from, level), to: nodeName(flow.to, level) }
+    : null;
+  return { afterTurn: rise.afterTurn, remaining: rise.afterTurn - state.turn, level: rise.level, landings, current };
 }

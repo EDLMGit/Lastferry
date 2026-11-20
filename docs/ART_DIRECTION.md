@@ -1,5 +1,9 @@
 # Last Ferry — Art Direction
 
+## Painted ferry and tide signs
+
+Use the lighthouse mark for the rescue destination, a brass notch for the hull, a pale horizontal line for available water and the same rising-wave mark at a flooding landing and in its forecast. Keep the signs within their measured touch bounds. Give the painted lettering enough room to wrap. Read the side instrument in landscape and the shorter sign in portrait against real boats, faces and clickable map targets. [Design comparison](../reviews/cove-readability/REVIEW.md)
+
 ## Readable water and tide
 
 The [current interface pass](../NEXT_TASK_COVE_READABILITY.md) places a few persistent readings beside the world they describe. A painted waterline, marked gauge, matching pier symbol, dark teal surfaces and warm ivory/brass details belong to the ferry and harbor. Explore how a side instrument fits landscape and how the same information fits portrait. Preserve the animals, lighthouse, selectable waterways and controls near a tap. Labels and shape carry meaning alongside color. Compare native gameplay frames and listen to a fresh player's account of what they see.

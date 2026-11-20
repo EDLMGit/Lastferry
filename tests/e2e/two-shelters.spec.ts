@@ -128,7 +128,8 @@ test('native candidate Play and Overview plus matched earlier cove', async ({
       'view-toggle',
     ])
       await fullyVisible(page, page.locator('#' + id));
-    await expect(page.locator('#status-toggle')).toContainText('Reed Pier floods in 4 actions');
+    await expect(page.locator('#status-headline')).toContainText('Reed Pier floods');
+    await expect(page.locator('#status-toggle .tide-countdown')).toHaveText('In 4 actions');
     await snap(page, `${width}x${height}-start-play`);
     await wholeCove(page, true);
     for (const node of twoShelters.nodes)

@@ -1,12 +1,18 @@
 # Last Ferry — Project state
 
+## Cove readability · friend retest
+
+The branch opens a fresh Journey with two painted instruments. At Holding Pier the ferry sign names Harbor, gives rescue progress and distinguishes load, required depth and local water. The tide sign names the waiting group and the first change. Its rising-water symbol repeats at the affected map landing. Inspections can frame that landing or Harbor for free. Crossings show passage and destination depth. A prospective transfer uses the berth depth at commitment. [Phone comparisons and verification](../reviews/cove-readability/REVIEW.md)
+
+Eight Journey coves, twelve Practice entrances and nine scoring identities are available. Fresh-player responses for this build are pending. The existing private Site serves version 26, game `7edba1519e9d856f3dc029bb0d500b4480985149`. [Observer sheet](../reviews/cove-readability/PLAYTEST.md) · [Publication receipt](../reviews/far-shore/deployment-confirmation.json)
+
 ## Far Shore · independent Practice playtest
 
 The Far Shore build adds a twelfth Practice entrance. At Tide Steps the player chooses a passenger for an early delivery. The companion who comes back out on the ferry determines who can board at a shallower berth across the current. Home → Practice and `?cove=far-shore` enter the same four-passenger crossing. The Journey still ends at Ternhaven. Nine coves carry lantern ratings. Drowned Orchard, Lantern Reach and Far Shore await separate promotion decisions. [Play and evidence](../reviews/far-shore/REVIEW.md)
 
 The private phone playtest now serves **Site version 26**, game `7edba1519e9d856f3dc029bb0d500b4480985149`. [Play Far Shore](https://last-ferry-playtest.abumech.chatgpt.site/?cove=far-shore) · [Independent review](../reviews/far-shore/INDEPENDENT_REVIEW.md) · [Receipt](../reviews/far-shore/deployment-confirmation.json)
 
-**[COVE_READABILITY_01](../NEXT_TASK_COVE_READABILITY.md) takes priority before cove twelve.** Fresh-player feedback calls for clearer navigation, depth, flood and action information in play. Codex owns the interface pass for early and late coves in both phone orientations. The final homecoming and the three candidates' individual scoring and Journey promotion decisions remain ahead.
+The [readability brief](../NEXT_TASK_COVE_READABILITY.md) followed the Far Shore publication. Fresh-player feedback calls for clearer navigation, depth, flood and action information in play. Codex owns the interface pass for early and late coves in both phone orientations. The final homecoming and the three candidates' individual scoring and Journey promotion decisions remain ahead.
 
 ## Lantern Reach · revised Practice candidate for playtest
 

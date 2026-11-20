@@ -32,7 +32,8 @@ test('native collapsed controls and free nearby inspection', async ({ browser, b
     const page = await ctx.newPage();
     await ready(page, 'holding-pier');
     for (const id of ['load-toggle','wait','menu','sound-toggle','status-toggle','view-toggle','unload']) await fullyVisible(page, page.locator('#' + id));
-    await expect(page.locator('#status-toggle')).toContainText('Rabbit Pier floods in 4 actions');
+    await expect(page.locator('#status-headline')).toContainText('Rabbit Pier floods');
+    await expect(page.locator('#status-toggle .tide-countdown')).toHaveText('In 4 actions');
     await shot(page, `${width}x${height}-start`);
     const before = await state(page);
     const frame = await page.evaluate(() => (window as any).__LAST_FERRY__.getViewStatus());
@@ -114,6 +115,25 @@ test('natural keyboard direct sailing, inline loss and complete recovery', async
     expect(await page.evaluate(()=>document.activeElement?.id)).toBe('undo');
     await ctx.close();
   }
+});
+
+test('ended tide sign reopens the loss result and Undo restores the pending forecast', async ({page}) => {
+  await page.setViewportSize({width:780,height:320});
+  await ready(page,'holding-pier');
+  for(let turn=0;turn<3;turn++) await act(page,'wait');
+  const before=await state(page);
+  await act(page,'wait');
+  await expect(page.locator('#terminal-undo')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#status-toggle')).toHaveAccessibleName('4 actions taken. Crossing ended. Open crossing result.');
+  await activate(page,'status-toggle');
+  await expect(page.locator('#dialog-title')).toHaveText('A turn too late.');
+  await expect(page.locator('#dialog-content')).toContainText('Rabbit Pier flooded with Pip and Rue still waiting.');
+  await activate(page,'terminal-undo');
+  expect(await state(page)).toEqual(before);
+  await expect(page.locator('#status-toggle')).toHaveAccessibleName(/1 action.*Open tide and pier forecast/);
+  await activate(page,'status-toggle');
+  await expect(page.locator('#dialog-title')).toHaveText('Tide and pier forecast');
 });
 
 test('touch inspection, bounded pan, rotation and actual fullscreen preserve state',async({browser,baseURL})=>{

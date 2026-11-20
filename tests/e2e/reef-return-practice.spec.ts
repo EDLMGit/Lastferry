@@ -36,7 +36,8 @@ test('short landscape Practice keeps the pending launch through reef inspection,
     await expect(page.locator('#practice-two-shelters')).toHaveText('Two Shelters');
     await activate(page, 'practice-reef-return', true);
     await expect(page.locator('#seascape')).toHaveAttribute('aria-label', 'Reef Return');
-    await expect(page.locator('#status-toggle')).toContainText('Wrack Pier floods in 3 actions');
+    await expect(page.locator('#status-headline')).toContainText('Wrack Pier floods');
+    await expect(page.locator('#status-toggle .tide-countdown')).toHaveText('In 3 actions');
     await activate(page, 'status-toggle', true);
     await expect(page.locator('.current-schedule')).toContainText('After action 3');
     await expect(page.locator('.current-schedule')).toContainText('After action 9');

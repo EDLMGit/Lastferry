@@ -23,7 +23,7 @@ test('production UI rescue, tide and terminal Undo with no development API', asy
   await activate(page,'board',true);
   for(const button of await page.locator('.passenger-options button').all()) await fullyVisible(page,button);
   await fullyVisible(page,page.locator('#commit'));
-  await expect(page.locator('#preview')).toContainText('The tide rises after this action');
+  await expect(page.locator('#preview')).toContainText('Pip and Rue board, then the tide rises and floods Rabbit Pier.');
   await expect(page.locator('.passenger-options button[aria-pressed="true"]')).toHaveCount(2);
   await shot('844x390-production-boarding');
   await activate(page,'commit',true);

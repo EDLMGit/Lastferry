@@ -1,16 +1,18 @@
 # Last Ferry — the first evening
 
-[Play Far Shore locally](http://127.0.0.1:5390/?cove=far-shore) or open Home → Practice. Thistle and Button are waiting at Tide Steps. The free tide forecast tells you who is across the current and how much the landing there can support. [Playtest review](reviews/far-shore/REVIEW.md)
+[Play the current local Journey](http://127.0.0.1:5400/). For a fresh playtest, choose Play at Home. The ferry sign opens crossing details. The tide sign opens the forecast. Looking around and choosing passengers are free. [Readability review](reviews/cove-readability/REVIEW.md)
 
-**[Play the Journey locally](http://127.0.0.1:5390/)**. The available coast connects eight rescues, ending at Ternhaven. The direct [Wide Berth](http://127.0.0.1:5390/?cove=wide-berth) and [Reef Return](http://127.0.0.1:5390/?cove=reef-return) links open independent Practice.
+[Play Far Shore locally](http://127.0.0.1:5400/?cove=far-shore) or open Home → Practice. Thistle and Button are waiting at Tide Steps. The free tide forecast tells you who is across the current and how much the landing there can support. [Playtest review](reviews/far-shore/REVIEW.md)
 
-[Play Lantern Reach locally](http://127.0.0.1:5390/?cove=lantern-reach). Flax is aboard at Wick Landing. Two rabbits wait at the dock, and Sorbus waits across the race. The tide forecast shows who is ashore, how much room they need and when each landing floods. This six-space Practice cove is unscored.
+**[Play the Journey locally](http://127.0.0.1:5400/)**. The available coast connects eight rescues, ending at Ternhaven. The direct [Wide Berth](http://127.0.0.1:5400/?cove=wide-berth) and [Reef Return](http://127.0.0.1:5400/?cove=reef-return) links open independent Practice.
 
-[Play Drowned Orchard locally](http://127.0.0.1:5390/?cove=drowned-orchard). A later tide has reached Cider Quay. Four new neighbors wait on the orchard side of Pomona Reach. This independent Practice playtest is unscored and leaves Journey progress alone.
+[Play Lantern Reach locally](http://127.0.0.1:5400/?cove=lantern-reach). Flax is aboard at Wick Landing. Two rabbits wait at the dock, and Sorbus waits across the race. The tide forecast shows who is ashore, how much room they need and when each landing floods. This six-space Practice cove is unscored.
 
-[Play Orchard Landing](http://127.0.0.1:5390/?cove=orchard-landing) from a local server or choose it from Home → Practice. Bring Orin, Pomme and Medlar home on the six-space ferry. Practice keeps your Journey checkpoint.
+[Play Drowned Orchard locally](http://127.0.0.1:5400/?cove=drowned-orchard). A later tide has reached Cider Quay. Four new neighbors wait on the orchard side of Pomona Reach. This independent Practice playtest is unscored and leaves Journey progress alone.
 
-[Play Ternhaven](http://127.0.0.1:5390/?cove=ternhaven), the independent Practice entrance to Journey cove eight. Juniper, Sedge and Fennel are aboard at Tern Buoy; Willow waits at Reed Landing. The target is 14 actions. Practice shares earned lanterns and leaves your Journey checkpoint alone. [Design and actual play review](reviews/cove-eight-practice/REVIEW.md)
+[Play Orchard Landing](http://127.0.0.1:5400/?cove=orchard-landing) from a local server or choose it from Home → Practice. Bring Orin, Pomme and Medlar home on the six-space ferry. Practice keeps your Journey checkpoint.
+
+[Play Ternhaven](http://127.0.0.1:5400/?cove=ternhaven), the independent Practice entrance to Journey cove eight. Juniper, Sedge and Fennel are aboard at Tern Buoy; Willow waits at Reed Landing. The target is 14 actions. Practice shares earned lanterns and leaves your Journey checkpoint alone. [Design and actual play review](reviews/cove-eight-practice/REVIEW.md)
 
 Play starts the illustrated opening. Take the helm enters Holding Pier. After each rescue, Continue story accepts that crossing and takes you onward to Bellwater, Driftwood Yard, then Two Shelters. Hazel and Bracken ride the small ferry while Mica waits by the reeds. After Two Shelters, Nell launches her prepared six-space ferry for Wide Berth. Heather and Birch are aboard for Reef Return, where Dot and Flick answer with lights. Beyond the reef, Orin greets the ferry from Orchard Landing. The empty ferry settles at Spring Steps beside waiting Pomme and Medlar. Continue to Orchard Landing enters the seventh puzzle. After Orchard, Willow greets the occupied ferry from Reed Landing. Continue to Ternhaven begins cove eight. Four later Journey coves remain unavailable. [Campaign direction](campaign/CAMPAIGN_DIRECTION.md) · [Story and captions](campaign/STORY_SCENES.md) · [Orchard Journey review](reviews/orchard-journey/REVIEW.md)
 
@@ -31,7 +33,7 @@ npm ci
 npm run dev
 ```
 
-Open the printed local root URL without `?cove=`, normally `http://127.0.0.1:5173/`. To reproduce the local review build at [port 5390](http://127.0.0.1:5390/), run `npm run build` and then `npm run preview -- --port 5390 --strictPort`. No credentials, downloaded art, API account or backend is needed for play.
+Open the printed local root URL without `?cove=`, normally `http://127.0.0.1:5173/`. To reproduce the local review build at [port 5400](http://127.0.0.1:5400/), run `npm run build` and then `npm run preview -- --port 5400 --strictPort`. No credentials, downloaded art, API account or backend is needed for play.
 
 ## Journey checkpoints
 

@@ -1,5 +1,9 @@
 # Last Ferry asset provenance and history
 
+## Cove instruments and rising-water mark
+
+The painted panel, passenger-choice and map-marker families now include the ferry and tide signs. A brass notch marks hull depth against a pale waterline. The original twin-wave symbol connects the tide notice to a specific landing. Both use local CSS and inline vector geometry, alongside the existing lighthouse icon. The 83-family inventory records their sources, runtime use and review. [Gallery](../asset-gallery.html#cove-instruments) · [Native phone frames](../reviews/cove-readability/REVIEW.md)
+
 ## Far Shore · four landing compositions
 
 Far Shore places the six-space ferry, two rabbit appearances, wool sheep and deer between the stone Tide Steps, pine-topped Far Bank, low Rush Landing and Harbor light. Fitted gangways use the existing pier kit. The ferry, coast, pier and deer families record their new use in the 83-entry inventory. [Gallery](../asset-gallery.html#far-shore) · [Actual phone gameplay](../reviews/far-shore/REVIEW.md)

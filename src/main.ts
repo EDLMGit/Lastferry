@@ -3,8 +3,12 @@ import './ui/cove-ui.css';
 import './ui/play-controls.css';
 import './ui/view-controls.css';
 import './ui/mobile-map-controls.css';
+import './ui/crossing-instruments.css';
+import { ferryInstrument, tideInstrument } from './ui/crossing-instruments';
 import { besideOwner, atScreenEdge } from './ui/owned-control';
-import { occupiedPierDeadline } from './game/rescue-facts';
+import { nextWaterChange } from './game/rescue-facts';
+import { waterlineMark } from './ui/tide-mark';
+import './ui/tide-mark.css';
 import {
   controlContent,
   iconMarkup,
@@ -54,7 +58,7 @@ import {
 import { waterPresets, type WaterTuning } from './scene/water';
 import { placeActionCard, placeLocalCard, overlaps, type Rectangle } from './ui/placement';
 import { locationFacts } from './ui/location';
-import { placeCoveTargets, placeCoveNames } from './ui/cove-layout';
+import { endpointTargets, placeCoveTargets, placeCoveNames, type Endpoint } from './ui/cove-layout';
 import { samplePath } from './scene/paths';
 import { MotionPreference, type MotionMode } from './ui/motion-preference';
 import { TipsPreference } from './ui/tips-preference';
@@ -82,6 +86,8 @@ import './campaign/story.css';
 import './campaign/home.css';
 
 import { transferFacts, transferReceipt } from './ui/transfer';
+import { boardingReading, depthReading, readingMarkup } from './ui/depth-reading';
+import './ui/depth-reading.css';
 
 const cove = new URLSearchParams(location.search).get('cove');
 let journey = cove === null ? new JourneyProgress() : null;
@@ -141,7 +147,7 @@ setControl($('menu'), 'menu', 'Menu', 'quiet', true);
 $('wait').setAttribute('aria-label', 'Wait · 1 action');
 $('wait').title = 'Wait · 1 action';
 $('menu').title = 'Menu';
-setControl($('load-toggle'), null, '0/4 · Depth 1', 'quiet');
+$('load-toggle').classList.add('cove-panel', 'cove-surface', 'cove-surface--compact');
 setControl($('close-status'), 'close', 'Close status', 'quiet');
 $('local-context').classList.add('cove-panel', 'cove-surface', 'cove-surface--compact');
 $('status-toggle').classList.add('cove-panel', 'cove-surface', 'cove-surface--compact');
@@ -232,6 +238,8 @@ let viewport = visibleViewport(window.visualViewport, innerWidth, innerHeight);
 let safeBounds: Rectangle = viewport;
 let usableBounds: Rectangle = viewport;
 let overviewObstaclesKey = '';
+let instrumentLayoutKey = '';
+let instrumentViewportKey = '';
 let closingFence: {
   rect: DOMRect;
   until: number;
@@ -1339,8 +1347,10 @@ function renderDialog() {
       a.type === 'board' || a.type === 'unload'
         ? `<div class="passenger-options${level.id === 'reef-return' && ids.length === 4 ? ' reef-manifest' : ''}" role="group" aria-label="Passenger selection">${ids.map((id) => `<button id="passenger-${id}" class="cove-choice" aria-pressed="${a.passengerIds.includes(id)}">${passengerChoiceContent(passengerNames[id].split(' ·')[0], level.passengers.find((p) => p.id === id)!.slots, resolvePassengerAppearance(level, id)?.portraitKey ?? null)}</button>`).join('')}</div>`
         : '';
+    const reading = transfer ? readingMarkup(depthReading(s, level, a)) : '';
+    const requirement = text.error ?? (transfer ? '' : text.requirement);
     $('dialog-content').innerHTML =
-      `${header(transfer ? (a.type === 'board' ? 'Board passengers' : p?.isDeliveryPier ? 'Bring passengers home' : 'Let passengers ashore') : actionLabel(s, a, level), `${nodeNames[a.type === 'move' ? a.to : s.boatNodeId]} · inspection is free`)}<div id="preview" class="dialog-body ${proposed.error || (tips.enabled && proposed.state.status === 'lost') ? 'warning' : ''}" aria-live="polite" aria-atomic="true">${choices}<p class="requirement">${text.error ?? (transfer ? `${transfer.depth} · ${transfer.load}` : text.requirement)}</p>${(transfer ? transfer.detail : text.consequence) ? `<p class="consequence">${transfer ? transfer.detail : text.consequence}</p>` : ''}${!proposed.error && !transfer ? `<p class="preview-result">After this action: Boat ${load(proposed.state, level)}/${level.rules.capacity} spaces · tide ${proposed.state.tideLevel}${s.tideLevel !== proposed.state.tideLevel ? ` (now ${s.tideLevel})` : ''}</p>` : ''}</div><footer class="dialog-footer"><button id="commit" ${proposed.error ? 'disabled' : ''}>${proposed.error ? 'Action unavailable' : transfer ? `${transfer.label} · 1 action` : a.type === 'open-bridge' ? 'Open bridge · 1 action' : 'Confirm · 1 action'}</button></footer>`;
+      `${header(transfer ? (a.type === 'board' ? 'Board passengers' : p?.isDeliveryPier ? 'Bring passengers home' : 'Let passengers ashore') : actionLabel(s, a, level), `${nodeNames[a.type === 'move' ? a.to : s.boatNodeId]} · inspection is free`)}<div id="preview" class="dialog-body ${proposed.error || (tips.enabled && proposed.state.status === 'lost') ? 'warning' : ''}" aria-live="polite" aria-atomic="true">${choices}${reading}${requirement ? `<p class="${transfer ? 'transfer-error' : 'requirement'}">${requirement}</p>` : ''}${(transfer ? transfer.detail : text.consequence) ? `<p class="consequence">${transfer ? transfer.detail : text.consequence}</p>` : ''}${!proposed.error && !transfer ? `<p class="preview-result">After this action: Boat ${load(proposed.state, level)}/${level.rules.capacity} spaces · tide ${proposed.state.tideLevel}${s.tideLevel !== proposed.state.tideLevel ? ` (now ${s.tideLevel})` : ''}</p>` : ''}</div><footer class="dialog-footer"><button id="commit" ${proposed.error ? 'disabled' : ''}>${proposed.error ? 'Action unavailable' : transfer ? `${transfer.label} · 1 action` : a.type === 'open-bridge' ? 'Open bridge · 1 action' : 'Confirm · 1 action'}</button></footer>`;
 
     if (a.type === 'board' || a.type === 'unload')
       for (const id of ids)
@@ -1368,6 +1378,10 @@ function renderDialog() {
     };
   } else if (mode === 'forecast') {
     const f = forecastCopy(s, level);
+    const change = nextWaterChange(s, level);
+    const findLandings = change?.landings.map(pier =>
+      `<button type="button" class="forecast-place" data-find-pier="${pier.nodeId}">${waterlineMark()} Find ${pier.name}</button>`
+    ).join('') ?? '';
     const berths = f.shoalBerths.map(berth =>
       `<p><strong>${berth.landing} berth</strong> · ${berth.depths.join(' ')}</p>`
     ).join('');
@@ -1378,7 +1392,13 @@ function renderDialog() {
       ? '<ol class="current-schedule">' + f.schedule.map(row => `<li><strong>After action ${row.turn}</strong> · ${row.direction} · depth ${row.depth}.${row.floods.length ? ' Flooding at ' + row.floods.join(' and ') + '.' : ''}</li>`).join('') + '</ol>'
       : '';
     $('dialog-content').innerHTML =
-      `${header(level.bridge ? 'Tide and bridge forecast' : berths ? 'Tide and berth forecast' : f.current ? 'Reef and tide forecast' : 'Tide and pier forecast', 'Inspection · no action spent')}<div class="dialog-body forecast-detail"><strong>${f.headline}</strong>${berths}${berths && waiting ? '<p>Spaces needed at each landing</p>' : ''}${waiting ? `<ul class="current-schedule" aria-label="Waiting passengers">${waiting}</ul>` : ''}${level.bridge ? `<p>${bridgeStatus(s, level)}</p>` : ''}${f.current ? `<p>${f.current.direction} ${f.current.next}</p>${tideTable}<p>Sail with the current. Your action finishes before the tide changes.</p>` : ''}${berths ? '' : `<p>${f.detail}</p>`}<p>Each accepted action advances the tide schedule. Thinking and inspection do not.</p></div>`;
+      `${header(level.bridge ? 'Tide and bridge forecast' : berths ? 'Tide and berth forecast' : f.current ? 'Reef and tide forecast' : 'Tide and pier forecast', 'Inspection · no action spent')}<div class="dialog-body forecast-detail"><strong>${f.headline}</strong>${berths}${berths && waiting ? '<p>Spaces needed at each landing</p>' : ''}${waiting ? `<ul class="current-schedule" aria-label="Waiting passengers">${waiting}</ul>` : ''}${level.bridge ? `<p>${bridgeStatus(s, level)}</p>` : ''}${f.current ? `<p>${f.current.direction} ${f.current.next}</p>${tideTable}<p>Sail with the current. Your action finishes before the tide changes.</p>` : ''}${berths ? '' : `<p>${f.detail}</p>`}<p>Each accepted action advances the tide schedule. Thinking and inspection do not.</p>${findLandings}</div>`;
+    for (const find of dialog.querySelectorAll<HTMLButtonElement>('[data-find-pier]')) {
+      find.onclick = () => {
+        closeDialog(false);
+        selectLocation(find.dataset.findPier!);
+      };
+    }
     world.setForecast(
       true,
       level.rules.tide.rises.find((r) => r.afterTurn > s.turn)?.level ?? s.tideLevel,
@@ -1700,6 +1720,7 @@ function bindTarget(button: HTMLElement, id: string) {
 function renderMap() {
   const departure = currentPassageDeparture();
   const s = departure ?? session.state;
+  const change = nextWaterChange(s, level);
   labelDimensions.clear();
   $('map-labels').hidden = s.status === 'won';
   $('map-labels').innerHTML =
@@ -1715,7 +1736,12 @@ function renderMap() {
           loss: ['available', '!', 'adjacent, ' + facts.consequence],
           safe: ['available', '', 'adjacent passage available'],
         }[departure && facts.wouldLose ? 'safe' : facts.status];
-        return `<div id="stop-${n.id}" class="map-stop" data-adjacent="${facts.relation === 'adjacent'}"><button id="map-${n.id}" class="map-target" data-status="${status}" data-risk="${!departure && facts.wouldLose ? 'loss' : 'safe'}" data-destination="${n.id}" aria-expanded="${locationSelection === n.id}" aria-controls="local-context" ${facts.current ? 'aria-current="location"' : ''} aria-label="Select ${facts.name}; ${description}${facts.home ? '; Home, delivery destination' : ''}" title="${description}" ${session.busy || s.status !== 'playing' ? 'disabled' : ''}><span class="map-hit"><span class="map-symbol" aria-hidden="true">${facts.home && facts.status !== 'bridge-closed' ? iconMarkup('harbor-home') : symbol}</span></span><span class="map-name"><b class="cove-name cove-surface cove-surface--compact">${facts.name}${facts.home ? '<span class="map-home cove-objective"> · Home</span>' : ''}</b></span></button></div>`;
+        const floods = change?.landings.some(pier => pier.nodeId === n.id);
+        const deadline = floods ? `Floods in ${change!.remaining} action${change!.remaining === 1 ? '' : 's'}` : '';
+        const ring = facts.home && facts.status !== 'bridge-closed' ? iconMarkup('harbor-home')
+          : floods && ['safe', 'remote', 'current'].includes(facts.status) ? waterlineMark() : symbol;
+        const countdown = floods ? `<span class="map-countdown" aria-hidden="true">${waterlineMark()}${change!.remaining}</span>` : '';
+        return `<div id="stop-${n.id}" class="map-stop" data-next-flood="${!!floods}" data-adjacent="${facts.relation === 'adjacent'}"><button id="map-${n.id}" class="map-target" data-status="${status}" data-risk="${!departure && facts.wouldLose ? 'loss' : 'safe'}" data-destination="${n.id}" aria-expanded="${locationSelection === n.id}" aria-controls="local-context" ${facts.current ? 'aria-current="location"' : ''} aria-label="Select ${facts.name}; ${description}${facts.home ? '; Home, delivery destination' : ''}${deadline ? '; ' + deadline : ''}" title="${[description, deadline].filter(Boolean).join(' · ')}" ${session.busy || s.status !== 'playing' ? 'disabled' : ''}><span class="map-hit"><span class="map-symbol" aria-hidden="true">${ring}</span></span><span class="map-name"><b class="cove-name cove-surface cove-surface--compact">${facts.name}${facts.home ? '<span class="map-home cove-objective"> · Home</span>' : ''}${countdown}</b></span></button></div>`;
       })
       .join('');
   for (const node of level.nodes) bindTarget($(`map-${node.id}`), node.id);
@@ -1767,6 +1793,7 @@ function renderLocation() {
           .join('')}</details>`
       : '';
   const edge = facts.move ? edgeTo(session.state, facts.id, level) : null;
+  const crossing = facts.move ? readingMarkup(depthReading(session.state, level, facts.move)) : '';
   const flow = edge?.current ? currentNotice(session.state, level, edge) : null;
   const loss = facts.wouldLose && facts.move ? preview(session.state, facts.move, level).state.lossReason : null;
   const floodWarning = loss?.code === 'PASSENGER_STRANDED'
@@ -1780,15 +1807,13 @@ function renderLocation() {
     : facts.status === 'against-current' && flow
       ? `Against the current. ${flow.compact}.`
     : !facts.current && !facts.canSail
-      ? edge && edge.baseDepth + session.state.tideLevel < draft(session.state, level)
-        ? 'Needs depth ' + draft(session.state, level) + ' · passage ' + (edge.baseDepth + session.state.tideLevel)
-        : facts.limitation
+      ? facts.status === 'too-shallow' ? '' : facts.limitation
       : floodWarning || (facts.wouldLose ? facts.consequence : flow ? `${flow.direction} ${flow.next}` : facts.consequence);
   const actions = !facts.current && facts.move
     ? '<button id="sail" data-risk="' + (facts.wouldLose ? 'loss' : 'safe') + '" ' + (facts.canSail ? '' : 'disabled') + '>Sail · 1 action</button>'
     : `<span class="current-place">${facts.current ? 'At ' : ''}${facts.name}</span>`;
   card.setAttribute('aria-label', facts.name + ' · free inspection');
-  card.innerHTML = '<div class="location-toolbar">' + actions + '<button id="location-details" aria-expanded="' + locationDetails + '" aria-controls="location-facts">Details</button><button id="close-location" aria-label="Close location card">×</button></div>' + paragraph(reason, facts.wouldLose ? 'location-warning' : 'location-reason') + '<div id="location-facts" ' + (locationDetails ? '' : 'hidden') + '>' + details + routes + '</div>';
+  card.innerHTML = '<div class="location-toolbar">' + actions + '<button id="location-details" aria-expanded="' + locationDetails + '" aria-controls="location-facts">Details</button><button id="close-location" aria-label="Close location card">×</button></div>' + crossing + paragraph(reason, facts.wouldLose ? 'location-warning' : 'location-reason') + '<div id="location-facts" ' + (locationDetails ? '' : 'hidden') + '>' + details + routes + '</div>';
   for (const button of card.querySelectorAll<HTMLButtonElement>('[data-inspect-route]')) {
     setControl(button, null, button.textContent ?? '', 'quiet');
     button.onclick = () => selectLocation(button.dataset.inspectRoute!);
@@ -1856,11 +1881,16 @@ function renderDock() {
   owner.className = 'dock-owner';
   owner.textContent = 'At ' + facts.name;
   dock.append(owner);
+  const singleBoard = facts.waiting.length === 1 && (facts.board || facts.boardingDepth)
+    ? depthReading(session.state, level, { type: 'board', passengerIds: facts.waiting }) : null;
+  const showBoardingDepth = singleBoard && singleBoard.water < level.rules.draftBands.at(-1)!.draft;
   if (facts.boardingDepth) {
     const unavailable = document.createElement('button');
     unavailable.id = 'board-unavailable';
     unavailable.disabled = true;
-    setControl(unavailable, 'board', facts.boardingDepth, 'quiet');
+    setControl(unavailable, 'board', 'Board ' + passengerList(facts.waiting, level), 'quiet');
+    unavailable.insertAdjacentHTML('beforeend', boardingReading(singleBoard!));
+    unavailable.setAttribute('aria-label', facts.boardingDepth);
     dock.append(unavailable);
   }
   if (canOpen) {
@@ -1901,6 +1931,7 @@ function renderDock() {
 
     if (!direct) button.setAttribute('aria-haspopup', 'dialog');
 
+    if (type === 'board' && showBoardingDepth) button.insertAdjacentHTML('beforeend', boardingReading(singleBoard));
     dock.append(button);
     button.onfocus = () => {
       if (keyboardInput && !blocked()) world.frameLocation(session.state.boatNodeId);
@@ -1934,22 +1965,26 @@ function render() {
   const departure = currentPassageDeparture(),
     s = departure ?? session.state,
     p = pierAt(s, level),
-    facts = statusCopy(s, level),
+    instrument = ferryInstrument(s, level),
     objective = objectiveCopy(s, level);
   $('objective').textContent = objective.headline;
-  setControl($('load-toggle'), null, `${load(s, level)}/${level.rules.capacity} · Depth ${draft(s, level)}`, 'quiet');
-  $('load-toggle').setAttribute('aria-label', `${load(s, level)} of ${level.rules.capacity} spaces · boat needs depth ${draft(s, level)} · crossing status`);
+  $('load-toggle').innerHTML = instrument.markup;
+  $('load-toggle').setAttribute('aria-label', instrument.summary);
   $('readout').innerHTML =
     `<strong id="boat-summary">Depth ${draft(s, level)} · ${load(s, level)}/${level.rules.capacity} spaces</strong><span><b data-testid="turn">${String(s.turn).padStart(2, '0')}</b> actions · Tide <b data-testid="tide">${s.tideLevel}</b> · <b id="progress">${objective.progress}</b></span>`;
   if (!$('place-index')) {
     const index = document.createElement('details');
     index.id = 'place-index';
     index.innerHTML = '<summary>Inspect a place</summary><div></div>';
-    $('readout').after(index);
+    const home = document.createElement('button');
+    home.id = 'find-home';
+    $('readout').after(home, index);
   }
   const index = $('place-index');
   if (index.dataset.cove !== level.id) {
     index.dataset.cove = level.id;
+    setControl($('find-home'), 'harbor-home', 'Find ' + instrument.destination, 'quiet');
+    $('find-home').onclick = () => { toggleStatus(false); selectLocation(instrument.homeNode); };
     const list = index.querySelector('div')!;
     list.replaceChildren();
     for (const node of level.nodes) {
@@ -1963,25 +1998,15 @@ function render() {
       list.append(control);
     }
   }
-  const forecast = forecastCopy(s, level);
-  const current = s.status === 'playing' ? forecast.current : null;
-  const headline = departure && current ? current.underway : facts.urgent ? facts.headline : current?.compact ?? forecast.headline;
-  const showDeadline = facts.urgent && !departure;
-  const due = occupiedPierDeadline(s, level);
-  const sharedEvent = showDeadline && due && current && current.turnsIn === due.actions;
-  const concise = sharedEvent
-    ? `<strong>In ${due.actions} action${due.actions === 1 ? '' : 's'}</strong><span>${nodeNames[due.pier.nodeId]} floods · ${current.name} turns</span>`
-    : '';
-  $('status-toggle').innerHTML =
-    `<span class="status-symbol" aria-hidden="true">${showDeadline ? '!' : '≈'}</span><span class="forecast-lines"><strong id="status-headline">${headline}</strong>${showDeadline && current ? `<span class="reef-outlook">${current.compact}</span>` : ''}</span>${concise ? `<span class="forecast-short" aria-hidden="true">${concise}</span>` : ''}`;
-  $('status-toggle').setAttribute('aria-label', current
-    ? departure ? `${current.direction} ${current.underway}.` : `${facts.urgent ? facts.headline + ' ' : ''}${current.direction} ${current.next} Open reef and tide forecast.`
-    : `${headline} Open tide and pier forecast.`);
-  $('status-toggle').classList.toggle('urgent', showDeadline);
+  const tide = tideInstrument(s, level);
+  const crossingEnded = s.status !== 'playing';
+  $('status-toggle').innerHTML = tide.markup;
+  $('status-toggle').setAttribute('aria-label', tide.summary + (crossingEnded ? ' Open crossing result.' : ' Open tide and pier forecast.'));
+  $('status-toggle').classList.toggle('urgent', tide.urgent);
   $('status-toggle').hidden = s.status === 'won';
   $('selection-hint').hidden = s.status === 'won' || !!locationSelection;
   $('selection-leader').hidden = s.status === 'won';
-  $('status-toggle').onclick = () => openDialog('forecast', undefined, 'status-toggle');
+  $('status-toggle').onclick = () => openDialog(crossingEnded ? 'terminal' : 'forecast', undefined, 'status-toggle');
   renderLocation();
   renderDock();
   ($('undo') as HTMLButtonElement).disabled = session.busy || !session.history.length;
@@ -2251,7 +2276,59 @@ function playObstacles(persistentOnly = false) {
     ? '.tools button, #load-toggle, #status-toggle, .view-controls > button'
     : '.tools button, #load-toggle, #crossing-details, #status-toggle, .view-controls > button, #zoom-tools')]
     .filter((element) => !element.hidden && !element.closest('[hidden]') && element.getClientRects().length > 0 && getComputedStyle(element).visibility !== 'hidden')
-    .map((element) => element.getBoundingClientRect());
+    .map((element) => {
+      const rect = element.getBoundingClientRect();
+      if (!persistentOnly || !element.style.getPropertyValue('--reading-x')) return rect;
+      const [x = 0, y = 0] = getComputedStyle(element).translate.split(' ').map(value => Number.parseFloat(value) || 0);
+      return x || y ? new DOMRect(rect.x - x, rect.y - y, rect.width, rect.height) : rect;
+    });
+}
+function fitLandscapeInstruments(bounds: Rectangle, figures: Rectangle[], endpoints: Endpoint[], stage: DOMRect) {
+  const signs = [$('load-toggle'), $('status-toggle')];
+  const viewportKey = [stage.width, stage.height, ...Object.values(bounds)].join(':');
+  if (viewportKey !== instrumentViewportKey) {
+    instrumentViewportKey = viewportKey;
+    for (const sign of signs) {
+      sign.style.removeProperty('--reading-x');
+      sign.style.removeProperty('--reading-y');
+    }
+    instrumentLayoutKey = '';
+  }
+  if (session.busy || world.viewPanned || journeySurface() || !signs[0].firstElementChild) return;
+  const key = [level.id, viewportKey, session.state.turn, session.state.boatNodeId,
+    world.viewMode, world.viewLocation, world.zoomStep, world.cameraRevision, ...signs.map(el => el.offsetHeight)].join(':');
+  if (key === instrumentLayoutKey) return;
+  instrumentLayoutKey = key;
+  for (const sign of signs) {
+    sign.style.removeProperty('--reading-x');
+    sign.style.removeProperty('--reading-y');
+  }
+  if (stage.width <= 580 || stage.width > 1000 || stage.height > 450) return;
+  const local = (element: HTMLElement) => {
+    const r = element.getBoundingClientRect();
+    return { left: r.left - stage.left, right: r.right - stage.left, top: r.top - stage.top, bottom: r.bottom - stage.top };
+  };
+  const fixed = [...document.querySelectorAll<HTMLElement>('.tools button, .view-controls > button')]
+    .filter(el => el.offsetWidth).map(local);
+  const targets = endpointTargets(endpoints.filter(p => p.x >= bounds.left && p.x <= bounds.right &&
+    p.y >= bounds.top && p.y <= bounds.bottom)).map(target => target.bounds);
+  const subjects = [...figures, ...targets];
+  for (const sign of signs) {
+    const r = local(sign);
+    if (figures.some(subject => overlaps(r, subject, 0)) || targets.some(target => overlaps(r, target, -4))) {
+      const horizontal = { left: bounds.left + 8, right: bounds.right - 8, top: r.top, bottom: r.bottom };
+      const vertical = { left: r.left, right: r.right, top: bounds.top + 8, bottom: bounds.bottom - 8 };
+      const anchor: [number, number] = [r.left, r.top];
+      const fit = (band: Rectangle) => placeLocalCard(r.right - r.left, r.bottom - r.top, band,
+        [...fixed, ...subjects], [anchor], anchor, 3);
+      const clear = fit(horizontal) ?? fit(vertical);
+      if (clear) {
+        sign.style.setProperty('--reading-x', clear.left - r.left + 'px');
+        sign.style.setProperty('--reading-y', clear.top - r.top + 'px');
+      }
+    }
+    fixed.push(local(sign));
+  }
 }
 function factsWidth() {
   return locationSelection && locationFacts(session.state, locationSelection, level, tips.enabled).wouldLose ? 320 : 292;
@@ -2290,7 +2367,12 @@ function positionOwnedControls(
     const midpoint = (bounds.top + bounds.bottom) / 2;
     const above = Math.max(bounds.top, ...chrome.filter(r => r.bottom < midpoint).map(r => r.bottom + inset));
     const below = Math.min(bounds.bottom, ...chrome.filter(r => r.top > midpoint).map(r => r.top - inset));
-    local.style.setProperty('--local-max-height', Math.max(96, below - above) + 'px');
+    local.style.setProperty('--local-max-height', bounds.bottom - bounds.top + 'px');
+    if (locationDetails) {
+      const details = $('location-facts');
+      const headerHeight = local.offsetHeight - details.offsetHeight;
+      details.style.maxHeight = Math.max(48, below - above - headerHeight) + 'px';
+    }
     const origin = selectionOrigin && {
       left: selectionOrigin.x - stage.left - 7, right: selectionOrigin.x - stage.left + 7,
       top: selectionOrigin.y - stage.top - 7, bottom: selectionOrigin.y - stage.top + 7,
@@ -2348,8 +2430,10 @@ function positionMap() {
   });
   const boat = atLocal(frame.boat), lighthouse = atLocal(frame.lighthouse);
   const figures = [boat, ...frame.passengers.map(atLocal)];
-  const chrome = playObstacles().map(toLocal), bounds = toLocal(safeBounds);
+  const bounds = toLocal(safeBounds);
   const endpoints = frame.nodes.map(node => ({ id: node.id, x: node.x + ox, y: node.y + oy }));
+  fitLandscapeInstruments(bounds, [...figures, lighthouse], endpoints, stage);
+  const chrome = playObstacles().map(toLocal);
   const markers = placeCoveTargets(endpoints, bounds, chrome, figures);
   const placed = positionOwnedControls(bounds, chrome, figures, markers, stage, boat, lighthouse);
   const nav = $('map-labels');
@@ -2364,7 +2448,7 @@ function positionMap() {
   const focused = keyboardInput ? (document.activeElement as HTMLElement)?.dataset.destination : undefined;
   const current = session.state.boatNodeId;
   const priority = (id: string) => id === focused ? 0 : id === locationSelection ? 1 :
-    id === current ? 2 : id === homeNodeId ? 3 : edgeTo(session.state, id, level) ? 4 : 5;
+    id === current ? 2 : $('stop-' + id)?.dataset.nextFlood === 'true' ? 3 : id === homeNodeId ? 4 : edgeTo(session.state, id, level) ? 5 : 6;
   const labels = markers.flatMap(marker => {
     const group = $('stop-' + marker.id);
     if (!group) return [];

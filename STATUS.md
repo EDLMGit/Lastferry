@@ -1,6 +1,12 @@
-# Far Shore private playtest and next interface pass
+# Cove readability · friend playtest
 
-**Current assignment — [COVE_READABILITY_01](NEXT_TASK_COVE_READABILITY.md).** A first-time player liked the game and found it hard to tell what was happening. Before cove twelve, help a newcomer identify the rescue goal, compare the ferry’s required depth with the water available, and see which pier will flood in how many actions. Local Codex owns the visual design, prototyping, implementation and phone testing. The director reviews whether the world and controls explain the decision. A fresh player supplies the comprehension check.
+At first control the player can read the rescue goal, ferry load, local water, actions taken and next named change. The same depth comparison follows the selected crossing or passenger group. The [local Journey](http://127.0.0.1:5400/) starts at Home. [Review and native phone evidence](reviews/cove-readability/REVIEW.md) · [Friend retest](reviews/cove-readability/PLAYTEST.md)
+
+The first landscape prototype covered the lantern and intercepted Shallows. A second check caught the final words of the boarding preview against the commit button. Native frames and original failures accompany the review. The final production build, all 743 unit tests, the asset inventory and the four phone rescues passed. The private Site still serves version 26. The portable local build is available for a fresh-player retest.
+
+## Earlier handoff · Far Shore private playtest and next interface pass
+
+**Commission — [COVE_READABILITY_01](NEXT_TASK_COVE_READABILITY.md).** A first-time player liked the game and found it hard to tell what was happening. Before cove twelve, help a newcomer identify the rescue goal, compare the ferry’s required depth with the water available, and see which pier will flood in how many actions. Local Codex owns the visual design, prototyping, implementation and phone testing. The director reviews whether the world and controls explain the decision. A fresh player supplies the comprehension check.
 
 The [private phone playtest](https://last-ferry-playtest.abumech.chatgpt.site/?cove=far-shore) serves version **26**, game `7edba1519e9d856f3dc029bb0d500b4480985149`. Eight Journey coves, twelve Practice entrances and nine scored coves are available. Far Shore, Lantern Reach and Drowned Orchard are unscored Practice candidates. [Independent review](reviews/far-shore/INDEPENDENT_REVIEW.md) · [Receipt](reviews/far-shore/deployment-confirmation.json).
 

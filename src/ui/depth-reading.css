@@ -1,0 +1,113 @@
+.depth-mark {
+  display: inline-block;
+  position: relative;
+  flex: none;
+  width: 25px;
+  height: 26px;
+  vertical-align: middle;
+}
+.depth-mark::before,
+.depth-waterline {
+  position: absolute;
+  inset: 0 0 0 6px;
+  border: 1px solid #9cac99;
+  border-radius: 2px;
+  background: #102f37;
+}
+.depth-mark::before {
+  content: '';
+}
+.depth-waterline {
+  top: auto;
+  height: var(--water-line);
+  border-top: 2px solid #d5f3e5;
+  background: repeating-linear-gradient(to top, transparent 0 3px, #b6e0d255 3px 4px) #558d91;
+}
+.depth-notch {
+  position: absolute;
+  left: 0;
+  bottom: var(--hull-line);
+  width: 12px;
+  height: 7px;
+  transform: translateY(50%);
+  background: #f9d99d;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+.depth-reading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  border-left: 2px solid #93c2b9;
+  border-radius: 4px;
+  padding: 4px 7px;
+  color: #fff3dc;
+  background: #10343ce8;
+  font: 400 14px/1.26 'Segoe UI', sans-serif;
+}
+.depth-reading[data-shallow='true'] {
+  border-color: #efc193;
+}
+.depth-lines {
+  min-width: 0;
+  flex: 1;
+}
+.depth-caption, .depth-values {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 9px;
+}
+.depth-caption {
+  color: #c8daca;
+}
+.depth-values {
+  column-gap: 3px;
+}
+.depth-caption strong, .depth-fact b {
+  color: #fff3dc;
+}
+.depth-reading[data-shallow='true'] .depth-caption b, .depth-reading[data-shallow='true'] .depth-caption strong {
+  color: #f7cba0;
+}
+.depth-fact {
+  display: inline-block;
+}
+.depth-fact b {
+  font-variant-numeric: tabular-nums;
+}
+#app #dock-actions button:has(.boarding-reading) {
+  display: grid;
+  grid-template-columns: 19px auto;
+  gap: 1px 5px;
+  padding: 4px 9px;
+}
+.boarding-reading {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font: 400 14px/1.2 'Segoe UI', sans-serif;
+}
+.boarding-reading .depth-mark {
+  width: 19px;
+  height: 16px;
+}
+#app #dock-actions #board-unavailable {
+  color: #fff0cf;
+  border-style: dashed;
+  background: #29444a;
+  opacity: 1;
+}
+@media (orientation: landscape) and (max-height: 360px) {
+  #app #dialog[data-transfer='true'] #dialog-content {
+    padding: 8px;
+    gap: 5px;
+  }
+  #app #dialog[data-transfer='true'] #preview {
+    padding-block: 4px;
+  }
+  #app #dialog[data-transfer='true'] #preview > * + * {
+    margin-top: 5px;
+  }
+}

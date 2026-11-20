@@ -4,6 +4,10 @@ import { holdingPier, orchardLanding, passengerName, ternhaven, twoShelters, wid
 import { deckSeat, ferryProfile, passengerScale } from '../scene/ferry-profile';
 import { passengerModelVariant, resolvePassengerAppearance } from '../game/passenger-appearance';
 import '../ui/cove-ui.css';
+import '../ui/depth-reading.css';
+import '../ui/tide-mark.css';
+import { depthReading, readingMarkup } from '../ui/depth-reading';
+import { waterlineMark } from '../ui/tide-mark';
 import './asset-gallery.css';
 import catalog from '../../assets/catalog.json';
 import {
@@ -155,6 +159,11 @@ farShoreSection.id = 'far-shore';
 farShoreSection.className = reefSection.className;
 farShoreSection.innerHTML = `<h2>Far Shore</h2><p>From the stone Tide Steps, look across Far Reach to the high bank and the reed-lined shallows where Rowan waits. The four passengers share the six-space ferry.</p><p><a href="/?cove=far-shore">Play Far Shore</a> · ${sourceLink('reviews/far-shore/REVIEW.md', 'Phone views and rescue')}</p>`;
 lanternSection.after(farShoreSection);
+const instruments = document.createElement('section');
+instruments.id = 'cove-instruments';
+instruments.className = reefSection.className;
+instruments.innerHTML = `<h2>Cove instruments</h2><p>The brass notch marks the depth the hull needs. The pale line marks the available water.</p>${readingMarkup(depthReading(initial(holdingPier), holdingPier, { type: 'move', to: 'shallows' }))}<p>${waterlineMark()} The tide sign and the affected map landing share this rising-water mark.</p><p><a href="/">Enter the Journey</a> · ${sourceLink('reviews/cove-readability/REVIEW.md', 'Phone comparisons')}</p>`;
+farShoreSection.after(instruments);
 const fullRoster = document.createElement('article');
 fullRoster.id = 'gallery-six-passengers';
 fullRoster.className = 'cove-panel cove-surface gallery-panel panel-specimen gallery-manifest';

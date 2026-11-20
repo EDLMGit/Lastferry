@@ -54,7 +54,8 @@ test('360px portrait offers every named place for free and restores keyboard foc
 
 test('real fullscreen entry and external exit preserve chooser, nearby controls and preferences', async ({ page }) => {
   await openPractice(page, 780, 320);
-  await expect(page.locator('.forecast-short')).toHaveText('In 4 actionsWide Berth floods · Beacon Reef turns');
+  await expect(page.locator('#status-headline')).toHaveText('Wide Berth floods · Beacon Reef turns');
+  await expect(page.locator('.tide-countdown')).toHaveText('In 4 actions');
   await page.locator('#menu').tap();
   await page.locator('#fullscreen').tap();
   await expect.poll(() => page.evaluate(() => document.fullscreenElement?.id)).toBe('app');
