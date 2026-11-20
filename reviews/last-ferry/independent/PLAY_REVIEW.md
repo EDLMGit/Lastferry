@@ -1,0 +1,18 @@
+# Last Ferry · Practice play review
+
+**Ready for an independent playtest.** I opened the native phone frames at `a5e1eff68ee93eb2d4cf9814863a3b104fc6a889` and independently reran the production proof. Both support the gentler final crossing described in the brief.
+
+| Moment | What the player sees |
+| --- | --- |
+| Start | Both phone frames show the empty ferry and both pairs ashore. Two rabbits wait at Lace Landing. A sheep and beaver wait on Quilt Quay. Each shore is labeled, and free inspection lists the passengers’ names. In portrait Harbor appears as an edge marker. In short landscape its named lighthouse marker and reflection are visible, while the load sign covers the tower. |
+| All aboard | The ferry reads 6/6, four passengers aboard and no more tide rises. The animals overlap the cabin more at the first loaded pickup than on the final approach. The portrait turn alongside Harbor separates the cream and tan rabbits, sheep and beaver on deck and includes the lit tower, landing and wake. |
+| Docked | In both sizes the lit tower, four passengers and the separate Bring home button are visible together. The destination still says 0/4 home. Docking leaves the group onboard until the captain chooses to disembark. |
+| Arrival | The unscored portrait card names Pipit, Rill, Mallow and Osier and gives each a distinct figurine. It offers the ordinary Practice actions. |
+
+[Native frame and play index](https://github.com/EDLMGit/Lastferry/blob/a5e1eff68ee93eb2d4cf9814863a3b104fc6a889/reviews/last-ferry/play/README.md)
+
+**Both final legs are safe.** I restored 19 files in a separate local directory, verified each against its exact Git blob ID and ran `node reviews/last-ferry/proof.mjs`. Its output was byte-for-byte identical to the submitted proof. The production reducer reaches 1,057 equivalent configurations through 5,072 legal transitions. Every configuration has a route to rescue. The rabbits-first route fills the ferry on action four and finishes in seven. Taking the larger pair first fills it on action five and finishes in eight. Each is optimal after that specific first pickup. From either pickup shore the loaded boat can sail to Lantern Buoy, then to Harbor. Every reachable full-deck state is past the final tide rise, so an arbitrary number of waits preserves the legal way home. Both route witnesses finish with an explicit unload. [Replayed proof](https://github.com/EDLMGit/Lastferry/blob/a5e1eff68ee93eb2d4cf9814863a3b104fc6a889/reviews/last-ferry/proof.json)
+
+The submitted touch logs cover Home → Practice in normal-motion portrait and direct Practice entry in Reduced Motion landscape. They record both rescues with default Tips, terminal Undo and redelivery, and zero page errors. The portrait media manifest reports 41.714 seconds, 524 delivered and decoded frames with a 0.60-second maximum interval. The 5.93-second excerpt ends at the captain's pause before disembarkation. Physical-device performance, independent player response and speaker listening are still open. [Recording and timings](https://github.com/EDLMGit/Lastferry/blob/a5e1eff68ee93eb2d4cf9814863a3b104fc6a889/reviews/last-ferry/play/MEDIA.json)
+
+For the future Journey homecoming, these four are the arriving group. Earlier rescued residents can welcome them from the refuge. The brief reserves supper, the captain’s place and credits for explicit continuation after the final delivery, at any lantern rating and after Undo. The current eight-cove Journey still ends at Ternhaven. [Final-cove brief](https://github.com/EDLMGit/Lastferry/blob/a5e1eff68ee93eb2d4cf9814863a3b104fc6a889/NEXT_TASK_LAST_FERRY.md)

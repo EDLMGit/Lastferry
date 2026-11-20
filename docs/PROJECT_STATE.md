@@ -4,7 +4,9 @@
 
 The thirteenth Practice entrance opens at Lantern Buoy. Pipit and Rill wait at Lace Landing, with Mallow and Osier across the cut at Quilt Quay. Either first pickup can bring all four home on the six-space ferry. A single rise after action four opens more water at Lace. Once the group is aboard, the player can linger, sail the lamp channel and choose when to bring everyone ashore. [Local Practice](http://127.0.0.1:5410/?cove=last-ferry) · [Review and moving evidence](../reviews/last-ferry/REVIEW.md)
 
-Eight Journey coves still end at Ternhaven. Nine coves have lantern targets. The four later candidates are available through independent Practice. Their story promotions and the supper remain queued for review. The private phone Site serves version 27, game `29ed5dfb32f976b5de97ddfab0b701b3b3df0989`. The friend's earlier readability retest stays open. [Published receipt](../reviews/cove-readability/deployment-confirmation.json) · [Observer sheet](../reviews/cove-readability/PLAYTEST.md)
+The [private phone playtest](https://last-ferry-playtest.abumech.chatgpt.site/?cove=last-ferry) serves **version 28**, game `a5e1eff68ee93eb2d4cf9814863a3b104fc6a889`. The live build has eight Journey coves, thirteen Practice entrances and nine scored coves. The friend’s readability retest and physical Android check remain open. [Independent review](../reviews/last-ferry/INDEPENDENT_REVIEW.md) · [Receipt](../reviews/last-ferry/deployment-confirmation.json) · [Observer sheet](../reviews/cove-readability/PLAYTEST.md)
+
+**[JOURNEY_HOME_01](../NEXT_TASK_JOURNEY_HOME.md) is active.** Connect the four existing late rescues, stage The last lights and A place for the captain, and carry the player from Home to credits. Test both a fresh start and deliberate continuation from a completed-eight save. Keep the four late coves provisionally unrated while evaluating their mastery targets. Credits follow every ordinary final rescue after explicit continuation. Public release remains a separate decision after private playtesting.
 
 ## Cove readability · friend retest
 

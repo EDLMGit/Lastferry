@@ -1,10 +1,10 @@
 # Last Ferry — active task
 
-**Active task — [LAST_FERRY_PRACTICE_01](NEXT_TASK_LAST_FERRY.md).** Author the unscored Practice candidate for cove twelve. Give the last group one satisfying pickup decision and a short, unhurried sail home together. Codex owns the cast, map, pacing, implementation and tuning. The director reviews what the player can see and feel. After the Practice review, the late coves can join Journey in story order and the final delivery can lead to the supper.
+**Active task — [JOURNEY_HOME_01](NEXT_TASK_JOURNEY_HOME.md).** Complete the private review Journey after Ternhaven. Integrate Drowned Orchard, Lantern Reach, Far Shore and Last Ferry in story order, add the authored late scenes and finish at supper and credits. Codex owns the storytelling, implementation, pacing and end-to-end play. Keep the four late coves provisionally unrated while their lantern targets await player feedback. Every successful rescue advances when the player chooses Continue story.
 
-The [private phone playtest](https://last-ferry-playtest.abumech.chatgpt.site/) serves **version 27**, game `29ed5dfb32f976b5de97ddfab0b701b3b3df0989`. Its new ferry and tide signs appear across eight Journey coves and twelve Practice entrances. Nine coves have lantern targets. [Independent review](reviews/cove-readability/INDEPENDENT_REVIEW.md) · [Publication receipt](reviews/cove-readability/deployment-confirmation.json).
+The [private phone playtest](https://last-ferry-playtest.abumech.chatgpt.site/?cove=last-ferry) serves **version 28**, game `a5e1eff68ee93eb2d4cf9814863a3b104fc6a889`. All twelve planned rescues and the separate First Crossing are playable in Practice. Journey currently ends at Ternhaven after eight coves. Nine coves have accepted lantern targets. [Independent review](reviews/last-ferry/INDEPENDENT_REVIEW.md) · [Publication receipt](reviews/last-ferry/deployment-confirmation.json).
 
-Keep the friend’s uncoached retest open while work on cove twelve proceeds. Incorporate current guidance and newer work on `m1-first-crossing`. Local Codex returns a tested handoff on draft PR #1. ChatGPT reviews and handles private publication.
+Safely incorporate newer work on `m1-first-crossing`. Local Codex returns its handoff on draft PR #1. ChatGPT reviews and handles private publication. Physical-phone performance and the uncoached first-player readability retest remain open.
 
 ## Historical audio brief — completed and superseded
 

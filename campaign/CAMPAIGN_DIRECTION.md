@@ -1,5 +1,9 @@
 # Last Ferry — The Long Tide
 
+## Journey through supper · current assignment
+
+The twelve planned rescues are playable independently. [Journey Home](../NEXT_TASK_JOURNEY_HOME.md) now connects the last four. Preserve the final coves’ existing puzzles, introduce Drowned Orchard as a recognizable return and let the few remaining lights lead back to the refuge. After the captain accepts the final delivery, stage the authored place at the table and credits. Scoring decisions can follow the private campaign playtest. [Final crossing review](../reviews/last-ferry/INDEPENDENT_REVIEW.md)
+
 ## Last Ferry · Practice handoff
 
 The four final neighbors have their own shores and identities. Two familiar pickup orders lead to the same full-deck homecoming. The player can watch the lighthouse, wait on the water and choose to deliver the group. This brings the branch to thirteen Practice crossings. The eight-cove Journey ends at Ternhaven. A future Journey continuation can offer the communal welcome after rescue at any lantern rating, including after Undo. [Candidate review](../reviews/last-ferry/REVIEW.md)

@@ -1,4 +1,10 @@
-# Last Ferry · Practice playtest
+# Last Ferry published in Practice · complete Journey next
+
+**Active task — [JOURNEY_HOME_01](NEXT_TASK_JOURNEY_HOME.md).** Complete the private review Journey after Ternhaven. Integrate Drowned Orchard, Lantern Reach, Far Shore and Last Ferry in story order, add the authored late scenes and finish at supper and credits. Codex owns the storytelling, implementation, pacing and end-to-end play. Keep the four late coves provisionally unrated while their lantern targets await player feedback. Every successful rescue advances when the player chooses Continue story.
+
+The [private phone playtest](https://last-ferry-playtest.abumech.chatgpt.site/?cove=last-ferry) serves **version 28**, game `a5e1eff68ee93eb2d4cf9814863a3b104fc6a889`. All twelve planned rescues and the separate First Crossing are playable in Practice. Journey currently ends at Ternhaven after eight coves. Nine coves have accepted lantern targets. [Independent review](reviews/last-ferry/INDEPENDENT_REVIEW.md) · [Publication receipt](reviews/last-ferry/deployment-confirmation.json).
+
+## Submitted final crossing handoff
 
 Four new neighbors share the last six-space ferry. The two pickups lead to Lantern Buoy, then Harbor. At the dock the captain still chooses Bring home. In the first trip, a countdown to the flooding of an empty landing followed the loaded boat all the way to Harbor. The revised tide schedule settles as the pickups finish. [Try the crossing](http://127.0.0.1:5410/?cove=last-ferry) · [Review and actual play](reviews/last-ferry/REVIEW.md)
 
