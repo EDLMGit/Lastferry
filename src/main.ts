@@ -2423,7 +2423,7 @@ function positionOwnedControls(
         dock.dataset.placement = 'edge';
         dock.dataset.layout = 'row';
       }
-      dockPlacement = nearby ?? atScreenEdge(size(dock), bounds, obstacles, subjects);
+      dockPlacement = nearby ?? atScreenEdge(size(dock), bounds, [...obstacles, ...stops], [...figures, lighthouse]);
       position(dock, dockPlacement);
     }
   }
