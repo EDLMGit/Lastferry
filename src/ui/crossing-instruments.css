@@ -9,57 +9,101 @@
   font-variant-numeric: tabular-nums;
 }
 
-#app #load-toggle {
+#app #load-toggle,
+.gallery-ferry-instrument {
   display: grid;
   align-content: start;
-  gap: 5px;
-  width: 154px;
-  padding: 8px 10px;
+  gap: 4px;
+  width: max-content;
+  padding: 5px 8px;
   border: 1px solid var(--cove-surface-rim);
   border-radius: 12px;
+  font-variant-numeric: tabular-nums;
 }
 
-.gauge-goal, .gauge-goal > span, .gauge-load, .gauge-water, .gauge-water > span:last-child {
+.gauge-goal, .gauge-pair, .gauge-load, .gauge-water, .gauge-water > span:last-child {
   display: flex;
 }
 
 .gauge-goal {
-  gap: 7px;
+  gap: 5px;
   align-items: center;
-  padding-bottom: 5px;
-  border-bottom: 1px solid #c8b99270;
+  padding-bottom: 3px;
+  border-bottom: 1px solid #c8b99266;
 }
 
 .gauge-goal > .cove-glyph {
-  width: 22px;
-  height: 24px;
+  width: 19px;
+  height: 20px;
   flex: none;
   color: var(--cove-warm-top);
 }
 
-.gauge-goal > span,
-.gauge-load,
-.gauge-water > span:last-child {
-  flex-direction: column;
-  gap: 1px;
+.gauge-goal > span {
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.gauge-pair {
+  align-items: center;
+  gap: 7px;
   min-width: 0;
 }
 
 .gauge-goal strong {
-  font: bold 16px/1.1 Georgia, serif;
+  font: bold 15px/1.1 Georgia, serif;
   color: var(--cove-warm-top);
 }
 
-.gauge-goal > span > span,
-.gauge-crew,
+.gauge-goal > span, .gauge-load, .gauge-water,
 #app #status-toggle .tide-taken,
 #app #status-toggle .tide-passengers {
   font-weight: 400;
 }
 
+.gauge-load, .gauge-water > span:last-child {
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.deck-plan { width: 59px; height: 24px; }
+.deck-sheer { fill: #102f37; stroke: #afc8b9; stroke-width: 1.6; }
+.deck-stem { fill: none; stroke: #afc8b9; stroke-width: 1.6; }
+.deck-slot { fill: none; stroke: #8ca7a0; stroke-width: 1; }
+.deck-slot.occupied { fill: #f0cd8b; stroke: #ffe2aa; }
+
 .gauge-water {
   align-items: center;
-  gap: 6px;
+  gap: 4px;
+  border-inline-start: 1px solid #c8b99266;
+  padding-inline-start: 5px;
+}
+.gauge-water > span:last-child {
+  gap: 3px;
+}
+.gauge-water .hull-label { color: #ffe2aa; }
+.gauge-water .depth-mark {
+  width: 29px;
+  height: 39px;
+}
+.gauge-water .depth-mark::after {
+  content: '';
+  position: absolute;
+  inset: 0 1px 0 auto;
+  width: 7px;
+  background: repeating-linear-gradient(to top, #e0eee0 0 1px, transparent 1px var(--depth-step));
+}
+.gauge-water .depth-waterline {
+  border: 0;
+  border-top: 2px solid #edfff3;
+  background: #71acac;
+}
+.gauge-water .depth-notch {
+  z-index: 1;
+  height: 10px;
+  width: 15px;
+  background: #ffda96;
+  filter: drop-shadow(0 1px #0e2e35);
 }
 
 #app #status-toggle.cove-panel {
@@ -111,31 +155,22 @@
 
 @media (min-width: 581px) {
   #app #crossing-details {
-    inset: max(8px, var(--safe-top)) auto auto max(170px, calc(var(--safe-left) + 162px));
-    max-height: calc(var(--viewport-height) - 24px);
+    --details-left: calc(max(8px, var(--safe-left)) + 183px);
+    --details-top: max(8px, var(--safe-top));
   }
 }
 
 @media (max-width: 580px) {
-  #app #load-toggle {
-    width: max-content;
-    max-width: calc(var(--viewport-width) - 16px);
-    grid-template-columns: auto auto;
-    gap: 3px 12px;
-    padding: 7px 10px;
-  }
-  .gauge-goal {
-    padding-bottom: 4px;
-    grid-column: 1 / -1;
-    grid-row: 1;
-  }
-  .gauge-goal > span { flex-direction: row; align-items: baseline; gap: 6px; }
-  .gauge-goal > .cove-glyph { width: 18px; height: 20px; }
-  .gauge-load { justify-content: center; grid-column: 1; grid-row: 2; max-width: 143px; }
-  .gauge-water { grid-column: 2; grid-row: 2; border-left: 1px solid #c8b99270; padding-left: 8px; }
-  #app #status-toggle.cove-panel { max-width: min(275px, calc(var(--viewport-width) - 16px)); }
+  #app #status-toggle.cove-panel { max-width: min(275px, calc(var(--viewport-width) - max(8px, var(--safe-left)) - max(8px, var(--safe-right)))); }
   #app #crossing-details {
-    top: max(154px, calc(var(--safe-top) + 146px));
-    max-height: calc(var(--viewport-height) - 224px);
+    --details-left: max(8px, var(--safe-left));
+    --details-top: calc(max(8px, var(--safe-top)) + 145px);
   }
+}
+
+#app #crossing-details {
+  box-sizing: border-box;
+  inset: var(--details-top) auto auto var(--details-left);
+  width: min(300px, calc(var(--viewport-width) - var(--details-left) - max(8px, var(--safe-right))));
+  max-height: calc(var(--viewport-height) - var(--details-top) - max(8px, var(--safe-bottom)));
 }

@@ -224,7 +224,8 @@ async function beginWide(page: Page) {
   await snap(page, 'wide-entry');
   await choose(page, 'board');
   expect(await state(page)).toMatchObject({turn: 1, aboard: ['alder', 'clover', 'poppy', 'wren']});
-  await expect(page.locator('#boat-summary')).toContainText('Depth 4 · 6/6 spaces');
+  await expect(page.locator('#boat-summary')).toHaveText('6 of 6 deck spaces occupied.');
+  await expect(page.locator('#load-toggle')).toHaveAccessibleName(/Boat needs depth 4/);
   await snap(page, 'six-space-pickup');
   await act(page, 'map-high-quay', true);
 }
@@ -564,7 +565,7 @@ test('original profiles, dynamic Help, reduced transfers, keyboard and fullscree
     await page.keyboard.press('Escape');
     for (const cove of ['first-crossing', 'holding-pier', 'bellwater', 'driftwood-yard']) {
       await ready(page, cove);
-      await expect(page.locator('#boat-summary')).toContainText('/4 spaces');
+      await expect(page.locator('#boat-summary')).toContainText('of 4 deck spaces occupied.');
       await activate(page, 'menu', true);
       await page.locator('#help-details summary').tap();
       await expect(page.locator('#help-details')).not.toContainText('5–6 spaces');

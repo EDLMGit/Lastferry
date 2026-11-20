@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { initial, reduce, validate, type Action } from '../../src/game/rules';
 import { farShore, holdingPier, type Level } from '../../src/levels/level';
 import { depthReading } from '../../src/ui/depth-reading';
+import { ferryInstrument } from '../../src/ui/crossing-instruments';
 import { previewCopy } from '../../src/ui/presentation';
 import farPlans from '../../data/far-shore/witnesses.json';
 
@@ -10,6 +11,26 @@ function play(level: Level, actions: Action[]) {
 }
 
 describe('ferry and water at the current, selected and projected locations', () => {
+  it('fills one plank per space and names everyone in the Harbor reading', () => {
+    const harbor = play(holdingPier, [
+      { type: 'unload', passengerIds: ['sheep-1'] }, { type: 'move', to: 'shallows' },
+      { type: 'move', to: 'rabbit-pier' }, { type: 'board', passengerIds: ['rabbit-1', 'rabbit-2'] },
+      { type: 'move', to: 'shallows' }, { type: 'move', to: 'stone' },
+      { type: 'board', passengerIds: ['sheep-1'] }, { type: 'move', to: 'harbor' },
+    ]);
+    const gauge = ferryInstrument(harbor, holdingPier);
+    expect(gauge.markup.match(/class="deck-slot occupied"/g)).toHaveLength(4);
+    expect(gauge.markup).toContain('0/3 home');
+    expect(gauge.summary).toContain('4 of 4 deck spaces occupied. Pip, Rue and Moss aboard. Boat needs depth 3. Water here is 5 deep.');
+    const starting = ferryInstrument(initial(holdingPier), holdingPier);
+    expect(starting.markup.match(/class="deck-slot occupied"/g)).toHaveLength(2);
+    expect(starting.markup.match(/class="deck-slot"/g)).toHaveLength(2);
+    const deer = play(farShore, farPlans.witnesses[0].actions.slice(0, 8) as Action[]);
+    const six = ferryInstrument(deer, farShore);
+    expect(six.markup.match(/class="deck-slot occupied"/g)).toHaveLength(4);
+    expect(six.markup.match(/class="deck-slot"/g)).toHaveLength(2);
+    expect(six.details).toContain('Button and Rowan aboard');
+  });
   it('distinguishes Moss’s current berth from the shallower passage and an equal-depth route', () => {
     const state = initial(holdingPier);
     expect(depthReading(state, holdingPier)).toMatchObject({ scope: 'here', load: 2, capacity: 4, needed: 2, water: 3 });

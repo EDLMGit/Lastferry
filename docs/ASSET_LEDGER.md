@@ -1,5 +1,9 @@
 # Last Ferry asset provenance and history
 
+## Deck plan and berth-depth gauge
+
+The existing painted panel family carries an original top-down ferry drawn in inline SVG. Four or six outlined spaces fill from the production load calculation, including both spaces for sheep and all three for deer. The enlarged water column has a tick for each depth unit, a horizontal waterline and a separate triangular hull pointer. The gallery uses the same component as Play. [Source](../src/ui/crossing-instruments.ts) · [Gallery](../asset-gallery.html#cove-instruments) · [Android playtest](../reviews/android-cove-view/REVIEW.md)
+
 ## Android playtest launcher
 
 The Android launcher uses the original Harbor lighthouse. Its gold linework and dark teal ground are stored as a native vector in the existing `ui.icon.harbor-home` family. The installed game bundles the same rendered game, illustrated scenes, passenger profiles and synthesized score as the web release. [Launcher vector](../android/app/src/main/res/drawable/harbor.xml) · [Original SVG](../cove-ui-package/ui/icons/harbor-home.svg)

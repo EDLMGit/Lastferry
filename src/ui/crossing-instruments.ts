@@ -11,20 +11,34 @@ function crewCaption(ids: string[], level: Level, place: string) {
   return ids.length <= 2 ? passengerList(ids, level) + ' ' + place : ids.length + ' passengers ' + place;
 }
 
+function deckPlan(occupied: number, capacity: number) {
+  const columns = Math.ceil(capacity / 2);
+  const width = (44 - 3 * (columns - 1)) / columns;
+  const slots = Array.from({ length: capacity }, (_, i) => {
+    const x = 10 + Math.floor(i / 2) * (width + 3);
+    const y = 5 + (i % 2) * 11;
+    return `<rect class="deck-slot${i < occupied ? ' occupied' : ''}" x="${x}" y="${y}" width="${width}" height="8" rx="1.5"/>`;
+  });
+  return `<svg class="deck-plan" viewBox="0 0 70 29" aria-hidden="true"><path class="deck-sheer" d="M7 2 H48 Q60 2 68 14.5 Q60 27 48 27 H7 Q3 27 3 23 V6 Q3 2 7 2Z"/><path class="deck-stem" d="M59 10 63 14.5 59 19"/>${slots.join('')}</svg>`;
+}
+
 export function ferryInstrument(state: State, level: Level) {
   const { load, capacity, needed, water } = depthReading(state, level);
   const pier = level.piers.find(p => p.id === level.objective.deliveryPierId)!;
   const destination = nodeName(pier.nodeId, level);
   const total = level.objective.requiredPassengerIds.length;
   const rescued = state.delivered.filter(id => level.objective.requiredPassengerIds.includes(id)).length;
-  const crew = crewCaption(state.aboard, level, 'aboard');
+  const crew = state.aboard.length ? passengerList(state.aboard, level) + ' aboard' : 'Nobody aboard';
   const goal = `Bring everyone to ${destination}`;
-  const summary = `${goal}. ${rescued} of ${total} home. ${crew || 'Empty ferry'}. Load ${load} of ${capacity} spaces. Ferry needs depth ${needed}. Water here is ${water} deep. Open crossing details.`;
+  const spaceReading = `${load} of ${capacity} deck spaces occupied.`;
+  const waterReading = `Boat needs depth ${needed}. Water here is ${water} deep.`;
+  const summary = `${goal}. ${rescued} of ${total} home. ${spaceReading} ${crew}. ${waterReading} Crossing details.`;
   const markup =
-    `<span class="gauge-goal">${iconMarkup('harbor-home')}<span><strong>Bring all ${total} to ${escapeLabel(destination)}</strong><span>${rescued}/${total} home</span></span></span>` +
-    `<span class="gauge-load"><span>Load <b>${load}/${capacity}</b></span>${crew ? `<span class="gauge-crew">${escapeLabel(crew)}</span>` : ''}</span>` +
-    `<span class="gauge-water">${depthMark(needed, water)}<span><span>Needs depth <b>${needed}</b></span><span>Water here <b>${water}</b></span></span></span>`;
-  return { markup, summary, homeNode: pier.nodeId, destination };
+    `<span class="gauge-goal">${iconMarkup('harbor-home')}<strong>${escapeLabel(destination)}</strong><span>${rescued}/${total} home</span></span>` +
+    `<span class="gauge-pair"><span class="gauge-load"><span>Deck <b>${load}/${capacity}</b></span>${deckPlan(load, capacity)}</span>` +
+    `<span class="gauge-water">${depthMark(needed, water)}<span><span class="hull-label">Hull <b>${needed}</b></span><span>Water <b>${water}</b></span></span></span></span>`;
+  const details = `<strong id="boat-summary">${spaceReading}</strong><span class="gauge-crew">${escapeLabel(crew)}</span><span>${waterReading}</span>`;
+  return { markup, summary, details, homeNode: pier.nodeId, destination };
 }
 
 export function tideInstrument(state: State, level: Level) {

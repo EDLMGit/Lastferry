@@ -17,6 +17,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.WindowInsets;
 import android.view.WindowInsetsController;
+import android.view.WindowManager;
 import android.webkit.RenderProcessGoneDetail;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
@@ -40,6 +41,8 @@ public final class MainActivity extends Activity {
     private static final String ORIGIN = "https://" + WebViewAssetLoader.DEFAULT_DOMAIN;
     private static final int HARBOR_COLOR = Color.rgb(22, 61, 71);
     private FrameLayout harbor;
+    private Insets safe = Insets.NONE;
+    private ScrollView recovery;
     private WebView game;
     private View fullscreenView;
     private WebChromeClient.CustomViewCallback fullscreenCallback;
@@ -58,6 +61,11 @@ public final class MainActivity extends Activity {
         super.onCreate(saved);
         harbor = new FrameLayout(this);
         harbor.setBackgroundColor(HARBOR_COLOR);
+        WindowManager.LayoutParams layout = getWindow().getAttributes();
+        layout.layoutInDisplayCutoutMode = Build.VERSION.SDK_INT >= 30
+            ? WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS
+            : WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+        getWindow().setAttributes(layout);
         if (Build.VERSION.SDK_INT >= 30) {
             getWindow().setDecorFitsSystemWindows(false);
         } else {
@@ -66,19 +74,23 @@ public final class MainActivity extends Activity {
                     | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
         }
         harbor.setOnApplyWindowInsetsListener((view, insets) -> {
-            Insets safe;
+            Insets next;
             if (Build.VERSION.SDK_INT >= 30) {
-                safe = insets.getInsets(WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout()
-                    | WindowInsets.Type.mandatorySystemGestures() | WindowInsets.Type.ime());
+                next = insets.getInsets(WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout()
+                    | WindowInsets.Type.systemGestures() | WindowInsets.Type.ime());
             } else {
-                safe = Insets.max(insets.getSystemWindowInsets(), insets.getMandatorySystemGestureInsets());
+                next = Insets.max(insets.getSystemWindowInsets(), insets.getSystemGestureInsets());
                 DisplayCutout cutout = insets.getDisplayCutout();
                 if (cutout != null) {
-                    safe = Insets.max(safe, Insets.of(cutout.getSafeInsetLeft(), cutout.getSafeInsetTop(),
+                    next = Insets.max(next, Insets.of(cutout.getSafeInsetLeft(), cutout.getSafeInsetTop(),
                         cutout.getSafeInsetRight(), cutout.getSafeInsetBottom()));
                 }
             }
-            view.setPadding(safe.left, safe.top, safe.right, safe.bottom);
+            if (!safe.equals(next)) {
+                safe = next;
+                publishInsets();
+                if (recovery != null) recovery.setPadding(safe.left, safe.top, safe.right, safe.bottom);
+            }
             return Build.VERSION.SDK_INT >= 30 ? WindowInsets.CONSUMED
                 : insets.consumeDisplayCutout().consumeSystemWindowInsets().consumeStableInsets();
         });
@@ -92,6 +104,7 @@ public final class MainActivity extends Activity {
 
     private void openGame() {
         harbor.removeAllViews();
+        recovery = null;
         try {
             PackageInfo provider = WebView.getCurrentWebViewPackage();
             if (provider == null || Integer.parseInt(provider.versionName.split("\\.")[0]) < 111) {
@@ -142,6 +155,7 @@ public final class MainActivity extends Activity {
                 public void onPageFinished(WebView view, String url) {
                     if (game != view || !isLocal(Uri.parse(url))) return;
                     pageLoaded = true;
+                    publishInsets();
                     publishVisibility();
                     checkReady();
                 }
@@ -190,6 +204,13 @@ public final class MainActivity extends Activity {
         if (game == null) return;
         game.evaluateJavascript("window.lastFerryAndroidBackground = " + !foreground
             + "; window.lastFerryAndroidVisibility?.(window.lastFerryAndroidBackground)", null);
+    }
+
+    private void publishInsets() {
+        if (game == null) return;
+        game.evaluateJavascript("window.lastFerryAndroidInsets = {top:" + safe.top + ",right:" + safe.right
+            + ",bottom:" + safe.bottom + ",left:" + safe.left + "};"
+            + "window.dispatchEvent(new Event('last-ferry-insets'))", null);
     }
 
     private void checkReady() {
@@ -291,6 +312,8 @@ public final class MainActivity extends Activity {
         releaseGame();
         harbor.removeAllViews();
         ScrollView scroll = new ScrollView(this);
+        recovery = scroll;
+        scroll.setPadding(safe.left, safe.top, safe.right, safe.bottom);
         scroll.setFillViewport(true);
         LinearLayout message = new LinearLayout(this);
         int space = Math.round(24 * getResources().getDisplayMetrics().density);

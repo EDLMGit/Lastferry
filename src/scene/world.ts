@@ -149,6 +149,7 @@ export class World {
   overviewAvoidance = { overlap: 0, displacement: 0 };
   viewBounds: ViewBounds | null = null;
   viewFocus: ViewPoint | null = null;
+  private playAnchor: State | null = null;
   viewScale = 1;
   zoomStep = 0;
   normalScale = 1;
@@ -1003,6 +1004,7 @@ export class World {
     };
   }
   setViewMode(mode: 'play' | 'overview') {
+    this.playAnchor = this.state;
     this.viewMode = mode;
     this.zoomStep = 0;
     this.viewPanned = false;
@@ -1041,12 +1043,12 @@ export class World {
     const node = this.level.nodes.find((node) => node.id === id);
     if (!node) return;
     const screen = this.project(node.positionXZ),
-      usable = this.usableRectangle();
+      usable = this.measuredUsable ?? this.usableRectangle();
     if (
-      screen.x >= usable.left + 36 &&
-      screen.x <= usable.right - 36 &&
-      screen.y >= usable.top + 36 &&
-      screen.y <= usable.bottom - 36
+      screen.x >= usable.left &&
+      screen.x <= usable.right &&
+      screen.y >= usable.top &&
+      screen.y <= usable.bottom
     )
       return;
     const focus = V(node.positionXZ).applyMatrix4(this.camera.matrixWorldInverse);
@@ -1061,6 +1063,8 @@ export class World {
       mode: this.viewMode,
       panned: this.viewPanned,
       focused: this.viewLocation,
+      canReturnToBoat: this.viewMode === 'overview' || this.zoomStep !== 0 || this.viewPanned ||
+        !!this.viewLocation || this.playAnchor?.boatNodeId !== this.state.boatNodeId,
       revision: this.cameraRevision,
       scale: this.viewScale,
       zoomStep: step,
@@ -1156,25 +1160,21 @@ export class World {
       };
     }
     if (!this.storyFraming) {
-      const after = this.neighborhood(this.state.boatNodeId, usable, this.state);
-      const journey = this.transition?.path && this.transition;
-      const before = journey ? this.neighborhood(journey.before.boatNodeId, usable, journey.before) : after;
-      const progress = journey ? smooth(this.journeyFrame?.progress ?? 0) : 1;
-      const normal = phone ? T.MathUtils.lerp(before.scale, after.scale, progress) : overview;
+      const anchor = this.playAnchor ??= this.state;
+      const neighborhood = this.neighborhood(anchor.boatNodeId, usable, anchor);
+      const normal = phone ? neighborhood.scale : overview;
       this.wholeScale = this.planningFrame!.scale;
       const wholeFitsNeighborhood = normal - this.wholeScale < 1;
       this.normalScale = wholeFitsNeighborhood ? this.wholeScale : normal;
       this.viewScale = adjustedScale(this.normalScale, this.wholeScale, this.zoomStep);
       if (automatic && this.viewMode === 'play' && (phone || this.zoomStep > 0)) {
         localFrame = true;
-        focus = wholeFitsNeighborhood ? { ...this.planningFrame!.focus } : {
-          x: T.MathUtils.lerp(before.focus.x, after.focus.x, progress),
-          y: T.MathUtils.lerp(before.focus.y, after.focus.y, progress),
-        };
+        focus = { ...(wholeFitsNeighborhood ? this.planningFrame!.focus : neighborhood.focus) };
         if (this.zoomStep > 0) {
-          const boat = this.activeViewFocus();
+          const node = this.level.nodes.find(node => node.id === anchor.boatNodeId)!;
+          const boat = V(node.positionXZ).applyMatrix4(this.camera.matrixWorldInverse);
           focus.x = T.MathUtils.lerp(focus.x, boat.x, this.zoomStep / 3);
-          focus.y = T.MathUtils.lerp(focus.y, boat.y, this.zoomStep / 3);
+          focus.y = T.MathUtils.lerp(focus.y, boat.y + 0.8, this.zoomStep / 3);
         }
       }
     }
@@ -1289,6 +1289,7 @@ export class World {
     const w = this.host.clientWidth,
       h = this.host.clientHeight;
     if (!w || !h) return;
+    this.playAnchor = this.state;
     this.renderer.setSize(w, h);
     let anchor: T.Vector3 | null = null;
     if (this.viewPanned && this.viewFocus) {
@@ -1779,9 +1780,6 @@ export class World {
   ) {
     this.cancel();
     this.state = after;
-    this.viewPanned = false;
-    this.viewLocation = null;
-    this.viewFocus = null;
     const positions = new Map(
       [...this.animals].map(([id, g]) => [id, g.getWorldPosition(new T.Vector3())]),
     );
@@ -1833,7 +1831,6 @@ export class World {
     };
     if (edgeId && this.level.edges.find((edge) => edge.id === edgeId)?.current)
       this.indicate(before, action.type === 'move' ? action.to : undefined);
-    this.reframeView();
   }
   cancel(reason: CompletionReason = 'cancelled') {
     if (this.transition) {
@@ -2022,7 +2019,6 @@ export class World {
       this.hull.position.y =
         this.draftY(this.state) + (this.reduced ? 0 : Math.sin(time * 0.0018) * 0.012);
     }
-    if (this.transition?.path && this.viewMode === 'play') this.reframeView();
     this.updateHomecoming(time);
     this.shores.update(this.water.position.y);
     for (const route of this.routes.values()) route.position.y = this.water.position.y;

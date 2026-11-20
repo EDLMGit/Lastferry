@@ -23,7 +23,7 @@ export function depthReading(state: State, level: Level, action?: Action) {
 
 export function depthMark(needed: number | null, available: number) {
   const scale = Math.max(6, needed ?? 0, available);
-  return `<span aria-hidden="true" class="depth-mark" style="--water-line:${100 * available / scale}%;--hull-line:${100 * (needed ?? 0) / scale}%"><i class="depth-waterline"></i>${needed === null ? '' : '<i class="depth-notch"></i>'}</span>`;
+  return `<span aria-hidden="true" class="depth-mark" style="--water-line:${100 * available / scale}%;--hull-line:${100 * (needed ?? 0) / scale}%;--depth-step:${100 / scale}%"><i class="depth-waterline"></i>${needed === null ? '' : '<i class="depth-notch"></i>'}</span>`;
 }
 
 type Reading = ReturnType<typeof depthReading>;

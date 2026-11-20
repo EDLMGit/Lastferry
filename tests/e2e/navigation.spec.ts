@@ -97,7 +97,8 @@ for (const [label, width, height, touch] of [
     await expect(page.locator('.inspect-route, .panel, #controls')).toHaveCount(0);
     await expect(page.locator('#objective')).toHaveText('Bring all three passengers to Harbor');
     await expect(page.locator('#progress')).toHaveText('Home 0/3');
-    await expect(page.locator('#boat-summary')).toHaveText('Depth 2 · 2/4 spaces');
+    await expect(page.locator('#boat-summary')).toHaveText('2 of 4 deck spaces occupied.');
+    await expect(page.locator('#load-toggle')).toHaveAccessibleName(/Boat needs depth 2\. Water here is 3 deep/);
     await expect(page.locator('#status-headline')).toHaveText('Rabbit Pier floods');
     await expect(page.locator('.tide-countdown')).toHaveText('In 4 actions');
     await expect(page.locator('#map-harbor')).toHaveAccessibleName(

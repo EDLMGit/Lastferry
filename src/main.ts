@@ -23,7 +23,6 @@ import { level as baseline, holdingPier, levelNames } from './levels/level';
 import {
   bridgeStatus,
   copy,
-  draft,
   edgeTo,
   legalActions,
   load,
@@ -997,7 +996,7 @@ function renderView() {
     label = view.mode === 'overview' ? 'Play view' : 'Whole cove',
     pressed = String(view.mode === 'overview'),
     back = $('back-to-boat'),
-    hideBack = view.mode !== 'overview' && view.zoomStep === 0 && !view.panned && !view.focused;
+    hideBack = !view.canReturnToBoat;
   setControl(toggle, view.mode === 'overview' ? 'back-to-boat' : 'whole-cove', label);
   if (toggle.getAttribute('aria-pressed') !== pressed) toggle.setAttribute('aria-pressed', pressed);
   if (back.hidden !== hideBack) back.hidden = hideBack;
@@ -1027,6 +1026,15 @@ function flushLayout() {
 }
 function updateViewport() {
   viewport = visibleViewport(window.visualViewport, innerWidth, innerHeight);
+  const nativeInsets = (window as Window & { lastFerryAndroidInsets?: Rectangle }).lastFerryAndroidInsets;
+  if (nativeInsets) {
+    const pixelsPerCssPixel = devicePixelRatio * (window.visualViewport?.scale || 1);
+    for (const [side, pixels] of Object.entries(nativeInsets)) {
+      const property = '--safe-' + side;
+      const value = pixels / pixelsPerCssPixel + 'px';
+      if (app.style.getPropertyValue(property) !== value) app.style.setProperty(property, value);
+    }
+  }
   const width = viewport.right - viewport.left,
     height = viewport.bottom - viewport.top;
   for (const [name, value] of [
@@ -1091,7 +1099,7 @@ function updateViewport() {
     bottom: usableBounds.bottom - canvas.top,
   });
   if (!journeySurface()) {
-    const key = [level.id, width, height, canvas.left, canvas.top, ...Object.values(safeBounds), session.state.boatNodeId, world.viewMode].join(':');
+    const key = [level.id, width, height, canvas.left, canvas.top, ...Object.values(safeBounds), world.viewMode].join(':');
     if (overviewObstaclesKey !== key) {
       overviewObstaclesKey = key;
       const rectangles = playObstacles(true)
@@ -1404,7 +1412,7 @@ function renderDialog() {
     for (const find of dialog.querySelectorAll<HTMLButtonElement>('[data-find-pier]')) {
       find.onclick = () => {
         closeDialog(false);
-        selectLocation(find.dataset.findPier!);
+        selectLocation(find.dataset.findPier!, true);
       };
     }
     world.setForecast(
@@ -1611,7 +1619,11 @@ function finish(id: number, reason: CompletionReason) {
     arrivalCelebrationPending = reason === 'complete' && !gameHidden;
   }
   if (session.state.status !== 'playing') openDialog('terminal', undefined, 'undo');
-  else focusAvailable(returnId);
+  else {
+    const target = available(returnId);
+    const offscreen = target.closest('.offscreen') || getComputedStyle(target).visibility === 'hidden';
+    focusAvailable(offscreen ? 'undo' : target.id);
+  }
   positionReceipt();
 }
 function execute(action: Action) {
@@ -1683,7 +1695,7 @@ function clearLocation(restore = false) {
   if (restore || $('local-context').contains(document.activeElement))
     focusAvailable(previous ? `map-${previous}` : undefined);
 }
-function selectLocation(id: string) {
+function selectLocation(id: string, revealOffscreen = false) {
   if (
     blocked() ||
     session.state.status !== 'playing' ||
@@ -1692,11 +1704,11 @@ function selectLocation(id: string) {
     return;
   closingFence = null;
   actionOrigin = null;
+  if (revealOffscreen) world.frameLocation(id);
   if (locationSelection !== id) {
     locationSelection = id;
     locationDetails = false;
     selectionOrigin = !keyboardInput && lastPointer ? { x: lastPointer.x, y: lastPointer.y } : null;
-    world.frameLocation(id);
     renderMap();
     renderLocation();
     renderDock();
@@ -1826,7 +1838,7 @@ function renderLocation() {
   card.innerHTML = '<div class="location-toolbar">' + actions + '<button id="location-details" aria-expanded="' + locationDetails + '" aria-controls="location-facts">Details</button><button id="close-location" aria-label="Close location card">×</button></div>' + crossing + paragraph(reason, facts.wouldLose ? 'location-warning' : 'location-reason') + '<div id="location-facts" ' + (locationDetails ? '' : 'hidden') + '>' + details + routes + '</div>';
   for (const button of card.querySelectorAll<HTMLButtonElement>('[data-inspect-route]')) {
     setControl(button, null, button.textContent ?? '', 'quiet');
-    button.onclick = () => selectLocation(button.dataset.inspectRoute!);
+    button.onclick = () => selectLocation(button.dataset.inspectRoute!, true);
   }
   setControl($('location-details'), null, 'Details', 'quiet');
   $('location-details').onclick = () => {
@@ -1981,7 +1993,7 @@ function render() {
   $('load-toggle').innerHTML = instrument.markup;
   $('load-toggle').setAttribute('aria-label', instrument.summary);
   $('readout').innerHTML =
-    `<strong id="boat-summary">Depth ${draft(s, level)} · ${load(s, level)}/${level.rules.capacity} spaces</strong><span><b data-testid="turn">${String(s.turn).padStart(2, '0')}</b> actions · Tide <b data-testid="tide">${s.tideLevel}</b> · <b id="progress">${objective.progress}</b></span>`;
+    instrument.details + `<span><b data-testid="turn">${String(s.turn).padStart(2, '0')}</b> actions · Tide <b data-testid="tide">${s.tideLevel}</b> · <b id="progress">${objective.progress}</b></span>`;
   if (!$('place-index')) {
     const index = document.createElement('details');
     index.id = 'place-index';
@@ -1994,7 +2006,7 @@ function render() {
   if (index.dataset.cove !== level.id) {
     index.dataset.cove = level.id;
     setControl($('find-home'), 'harbor-home', 'Find ' + instrument.destination, 'quiet');
-    $('find-home').onclick = () => { toggleStatus(false); selectLocation(instrument.homeNode); };
+    $('find-home').onclick = () => { toggleStatus(false); selectLocation(instrument.homeNode, true); };
     const list = index.querySelector('div')!;
     list.replaceChildren();
     for (const node of level.nodes) {
@@ -2003,7 +2015,7 @@ function render() {
       control.dataset.inspectPlace = node.id;
       control.onclick = () => {
         toggleStatus(false);
-        selectLocation(node.id);
+        selectLocation(node.id, true);
       };
       list.append(control);
     }
@@ -2054,7 +2066,6 @@ function undo() {
     sound.resetActionEffects();
     sound.reconcileState(session.state, level);
     world.sync(session.state);
-    world.backToBoat();
     render();
     focusAvailable('undo');
     $('announcement').textContent = `Undid action. ${session.state.turn} actions completed.`;
@@ -2171,10 +2182,10 @@ function positionDialog() {
   }
   if (mode === 'action' && selected && actionAnchor) {
     const key = [
-      viewport.left,
-      viewport.top,
-      viewport.right,
-      viewport.bottom,
+      safeBounds.left,
+      safeBounds.top,
+      safeBounds.right,
+      safeBounds.bottom,
       world.cameraRevision,
     ].join(':');
     if (key !== placementViewportKey) {
@@ -2667,6 +2678,7 @@ const viewportChanged = () => {
   fullscreenSupport.observe('resize');
 };
 addEventListener('resize', viewportChanged);
+addEventListener('last-ferry-insets', scheduleLayout);
 visualViewport?.addEventListener('resize', viewportChanged);
 visualViewport?.addEventListener('scroll', scheduleLayout);
 document.addEventListener('fullscreenchange', () => {
