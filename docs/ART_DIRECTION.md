@@ -2,6 +2,8 @@
 
 ## Painted ferry and tide signs
 
+The compact ferry sign pairs a top-down deck with one slot per space and a ticked depth gauge. An occupied slot is solid, an empty one hollow. The boat’s required depth is a sideways pointer and the local water has a horizontal surface. Keep their numbers next to their shapes. Tapping the sign reveals the full crew and exact readings. The separate tide sign retains actions and the next relevant flood. [Installed comparison and Rush Landing previews](../reviews/android-cove-view/REVIEW.md)
+
 Use the lighthouse mark for the rescue destination, a brass notch for the hull, a pale horizontal line for available water and the same rising-wave mark at a flooding landing and in its forecast. Keep the signs within their measured touch bounds. Give the painted lettering enough room to wrap. Read the side instrument in landscape and the shorter sign in portrait against real boats, faces and clickable map targets. [Design comparison](../reviews/cove-readability/REVIEW.md)
 
 ## Readable water and tide

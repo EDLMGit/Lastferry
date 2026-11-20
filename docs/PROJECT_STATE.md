@@ -1,5 +1,9 @@
 # Last Ferry — Project state
 
+## Installed Android cove view · v0.1.3
+
+The private APK update keeps the existing Android save identity and draws the sea across the app window. The captain can keep a chosen camera view while sailing and undoing a move. One painted deck slot now represents one occupied space, and the waterline and hull pointer share a ticked depth gauge. The installed v0.1.2 comparison, upgrade proof and phone retest are recorded in the [cove-view handoff](../reviews/android-cove-view/REVIEW.md). The web Site continues to serve version 29.
+
 ## Physical-phone findings · Android v0.1.2
 
 The owner's landscape playtest shows visible teal gutters and reports a shifting camera while sailing. They want graphical gauges for depth and occupied deck spaces. The next [Android cove-view brief](../NEXT_TASK_ANDROID_COVE_VIEW.md) covers the full-window world, steady crossings and a compatible update for the current APK. The next handset retest is the point to judge the result.

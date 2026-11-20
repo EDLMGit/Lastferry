@@ -1,0 +1,35 @@
+{
+  "apkSource": "faa3880c13835e1f9d566760bba8cf2b4d5c1e87",
+  "node": "v24.15.0",
+  "build": "npm run build -- --outDir .cache/android-cove-view/web-dist",
+  "typecheck": "passed",
+  "minified": "passed; existing Vite chunk-size advisory",
+  "unit": {
+    "command": "npm run test:unit -- --maxWorkers=1",
+    "files": 66,
+    "passed": 778,
+    "failed": 0,
+    "skipped": 0
+  },
+  "catalog": {
+    "command": "npm run check:assets",
+    "result": "passed",
+    "families": 83
+  },
+  "browser": {
+    "sameMinifiedAssetsAsAPK": true,
+    "receipts": [
+      "web/home-1440x900/result.json",
+      "web/home-780x320/result.json",
+      "web/390x844/holding.json",
+      "web/390x844/rush.json",
+      "web/780x320/holding.json",
+      "web/780x320/rush.json"
+    ]
+  },
+  "originalRuns": [
+    "The opening driver touched Next inside the repeated-input guard. The two desktop/landscape retries waited for each shot and passed.",
+    "An early serial unit and web run were interrupted to free emulator resources. The complete final serial unit run and final web runs are reported above.",
+    "The intermediate archive check rejected a mismatch while the dock placement sources were being edited. The final package audit passed on the frozen source."
+  ]
+}

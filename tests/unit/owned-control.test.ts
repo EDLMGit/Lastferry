@@ -25,3 +25,15 @@ test('a fallback docks to an actual viewport edge clear of the corner controls',
   expect(controls.some(c => overlaps(box,c,2))).toBe(false);
   expect(box.left === bounds.left || box.right === bounds.right || box.bottom === bounds.bottom || box.top === bounds.top).toBe(true);
 });
+
+test('a dock at the edge keeps a usable Harbor marker when the other corners contain controls', () => {
+  const controls = [
+    { left: 8, top: 8, right: 180, bottom: 88 },
+    { left: 535, top: 8, right: 772, bottom: 55 },
+    { left: 8, top: 260, right: 190, bottom: 312 },
+    { left: 568, top: 241, right: 772, bottom: 312 },
+  ];
+  const harbor = { left: 332, top: 228, right: 380, bottom: 276 };
+  const dock = atScreenEdge({ width: 184, height: 128 }, bounds, controls, [boat], [harbor]);
+  expect([...controls, harbor].some(rect => overlaps(dock, rect, 2))).toBe(false);
+});

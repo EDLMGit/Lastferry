@@ -1,10 +1,10 @@
-# Last Ferry · Android playtest
+# Last Ferry · Android cove view v0.1.3
+
+The offline APK update gives scenery the full window, protects phone controls with the reported insets, and keeps landmarks fixed when the ferry moves. Holding Pier and Far Shore exercise occupied deck spaces, the depth gauge and the nearby boarding choice. [Private installation instructions](reviews/android-cove-view/INSTALL.md) · [Matched Harbor frames and installed play](reviews/android-cove-view/REVIEW.md)
+
+## First Android playtest · v0.1.2
 
 The signed v2 playtest APK is available through the private handoff. On an offline Android 16 emulator, the v1 captain rescued Pip, Rue and Moss, accepted two lanterns and entered Bellwater. The installed v2 retained that best and checkpoint through a cold relaunch. The test bundle targets API 36. Physical-phone controls, frame pacing, TalkBack, speaker balance and an uncoached first rescue remain for handset playtesting. [Install](reviews/android-playtest/INSTALL.md) · [Results and footage](reviews/android-playtest/REVIEW.md)
-
-## Next Android build
-
-**Active task — [ANDROID_COVE_VIEW_01](NEXT_TASK_ANDROID_COVE_VIEW.md).** Use the owner's first Android playtest to deliver edge-to-edge scenery, a steady player-controlled camera during crossings, and compact graphical ferry capacity and depth instruments. Return an in-place APK update for v0.1.2. [Android handoff](reviews/android-playtest/REVIEW.md) · [Google Play launch plan](docs/GOOGLE_PLAY_LAUNCH.md)
 
 ## Journey Home
 
