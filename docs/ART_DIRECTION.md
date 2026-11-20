@@ -1,5 +1,9 @@
 # Last Ferry — Art Direction
 
+## Readable water and tide
+
+The [current interface pass](../NEXT_TASK_COVE_READABILITY.md) places a few persistent readings beside the world they describe. A painted waterline, marked gauge, matching pier symbol, dark teal surfaces and warm ivory/brass details belong to the ferry and harbor. Explore how a side instrument fits landscape and how the same information fits portrait. Preserve the animals, lighthouse, selectable waterways and controls near a tap. Labels and shape carry meaning alongside color. Compare native gameplay frames and listen to a fresh player's account of what they see.
+
 ## Drowned Orchard Practice direction · 17 November 2026
 
 Preserve the finished animal/profile family and published Ternhaven scene at `1e3146652f50c88db1ce7d56c6de14e311aab719`, Site version 23. The new [C9 Practice task](../NEXT_TASK_COVE_NINE_PRACTICE.md) reuses recognizable accepted C7 Orchard landmarks and orientation under changed water. Original neighbors remain safe; use a new waiting group from existing species/appearances. Show real usable shores, supported berths and route conditions truthfully, with native phone legibility and no global art/export pass.

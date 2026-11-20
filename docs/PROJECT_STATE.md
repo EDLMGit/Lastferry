@@ -4,7 +4,9 @@
 
 The Far Shore build adds a twelfth Practice entrance. At Tide Steps the player chooses a passenger for an early delivery. The companion who comes back out on the ferry determines who can board at a shallower berth across the current. Home → Practice and `?cove=far-shore` enter the same four-passenger crossing. The Journey still ends at Ternhaven. Nine coves carry lantern ratings. Drowned Orchard, Lantern Reach and Far Shore await separate promotion decisions. [Play and evidence](../reviews/far-shore/REVIEW.md)
 
-The live private phone build is **Site version 25**, game `5f28d71566463462b9407e34b0bf236bb05e20c6`, with eleven Practice entrances. The additional Far Shore crossing is on the review branch. [Publication receipt](../reviews/lantern-reach-difficulty/deployment-confirmation.json)
+The private phone playtest now serves **Site version 26**, game `7edba1519e9d856f3dc029bb0d500b4480985149`. [Play Far Shore](https://last-ferry-playtest.abumech.chatgpt.site/?cove=far-shore) · [Independent review](../reviews/far-shore/INDEPENDENT_REVIEW.md) · [Receipt](../reviews/far-shore/deployment-confirmation.json)
+
+**[COVE_READABILITY_01](../NEXT_TASK_COVE_READABILITY.md) takes priority before cove twelve.** Fresh-player feedback calls for clearer navigation, depth, flood and action information in play. Codex owns the interface pass for early and late coves in both phone orientations. The final homecoming and the three candidates' individual scoring and Journey promotion decisions remain ahead.
 
 ## Lantern Reach · revised Practice candidate for playtest
 

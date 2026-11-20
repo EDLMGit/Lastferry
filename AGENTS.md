@@ -2,11 +2,11 @@
 
 ## Objective
 
-**Current assignment — [FAR_SHORE_01](NEXT_TASK_FAR_SHORE.md).** Author, play and tune the independent, unscored Practice candidate for Far Shore, the campaign’s eleventh cove and planned difficulty peak. Local Codex owns the puzzle, prototyping, production implementation and evidence. The director reviews the choices players face. Keep the final rescue and supper for Last Ferry.
+**Current assignment — [COVE_READABILITY_01](NEXT_TASK_COVE_READABILITY.md).** A first-time player liked the game and found it hard to tell what was happening. Before cove twelve, help a newcomer identify the rescue goal, compare the ferry’s required depth with the water available, and see which pier will flood in how many actions. Local Codex owns the visual design, prototyping, implementation and phone testing. The director reviews whether the world and controls explain the decision. A fresh player supplies the comprehension check.
 
-The private phone playtest now serves the revised Lantern Reach, game `5f28d71566463462b9407e34b0bf236bb05e20c6`, Site version **25**. The player liked the revision. Eight Journey coves, eleven Practice entrances and nine scored coves are available. Lantern Reach and Drowned Orchard remain unscored while the player can try both. Their Journey integrations follow in story order after acceptance. [Independent review](reviews/lantern-reach-difficulty/INDEPENDENT_REVIEW.md) · [Publication receipt](reviews/lantern-reach-difficulty/deployment-confirmation.json).
+The [private phone playtest](https://last-ferry-playtest.abumech.chatgpt.site/?cove=far-shore) serves version **26**, game `7edba1519e9d856f3dc029bb0d500b4480985149`. Eight Journey coves, twelve Practice entrances and nine scored coves are available. Far Shore, Lantern Reach and Drowned Orchard are unscored Practice candidates. [Independent review](reviews/far-shore/INDEPENDENT_REVIEW.md) · [Receipt](reviews/far-shore/deployment-confirmation.json).
 
-Safely incorporate current guidance and later user work on `m1-first-crossing`. Local Codex returns a tested handoff on draft PR #1. ChatGPT reviews and handles private publication.
+Safely incorporate newer work on `m1-first-crossing`. Local Codex returns its handoff on draft PR #1. ChatGPT reviews and handles private publication.
 
 ## Read and preserve the project decisions
 

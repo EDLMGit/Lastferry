@@ -1,10 +1,16 @@
-# Far Shore ready for Practice review
+# Far Shore private playtest and next interface pass
+
+**Current assignment — [COVE_READABILITY_01](NEXT_TASK_COVE_READABILITY.md).** A first-time player liked the game and found it hard to tell what was happening. Before cove twelve, help a newcomer identify the rescue goal, compare the ferry’s required depth with the water available, and see which pier will flood in how many actions. Local Codex owns the visual design, prototyping, implementation and phone testing. The director reviews whether the world and controls explain the decision. A fresh player supplies the comprehension check.
+
+The [private phone playtest](https://last-ferry-playtest.abumech.chatgpt.site/?cove=far-shore) serves version **26**, game `7edba1519e9d856f3dc029bb0d500b4480985149`. Eight Journey coves, twelve Practice entrances and nine scored coves are available. Far Shore, Lantern Reach and Drowned Orchard are unscored Practice candidates. [Independent review](reviews/far-shore/INDEPENDENT_REVIEW.md) · [Receipt](reviews/far-shore/deployment-confirmation.json).
+
+## Submitted Far Shore handoff
 
 Tide Steps, Far Bank and Rush Landing form a crossing where a successful early Harbor delivery changes which neighbor the boat can take on later. The first prototype allowed a last-minute transfer at Far Bank. Playing it led to an earlier Rush flood, a forecast of the receiving berth’s load limit and a new view across the banks. The release candidate has eight Journey coves, twelve Practice entrances and nine scoring identities. [Review and native gameplay](reviews/far-shore/REVIEW.md)
 
 The final minified phone runs completed the mistaken delivery, eight-step recovery, thirteen-action unscored rescue and terminal Undo/redelivery in both orientations. The production build, 735 unit checks and 83-family inventory passed. [Verification](reviews/far-shore/VERIFICATION.md)
 
-The private Site serves version 25, game `5f28d71566463462b9407e34b0bf236bb05e20c6`. [Publication receipt](reviews/lantern-reach-difficulty/deployment-confirmation.json)
+The release state at handoff was version 25. The publication above supersedes it.
 
 ## Earlier handoff · Lantern Reach published for private playtesting · Far Shore next
 
