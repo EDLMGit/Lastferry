@@ -4,7 +4,7 @@ Release candidate scope, 20 November 2026. The twelve-cove Journey ends at the l
 
 ## 1. Put the same voyage on a phone
 
-Local Codex owns [the Android playtest](../NEXT_TASK_ANDROID_PLAYTEST.md). Bundle the production assets in a small offline Android app. Deliver a debug APK a tester can install, a reproducible build, and a demonstrated app update that keeps earned progress. Record the device and Android System WebView version for every result. Use a provisional playtest identity until the publisher chooses the permanent application ID. Plan for a fresh start when moving from the browser or provisional app to the permanent Play app.
+The [first APK](../reviews/android-playtest/INSTALL.md) is available and its installed update preserved an earned save in the Android 16 emulator. The owner's first physical-phone pass found unused screen space, camera movement during sailing, and too much permanent text around the ferry instruments. Local Codex owns the [next sideloadable update](../NEXT_TASK_ANDROID_COVE_VIEW.md). Recheck it on the handset before internal Play distribution. The provisional playtest identity keeps its own progress.
 
 On a physical phone, launch in airplane mode and let a newcomer choose Play. At Holding Pier ask, **“What are you trying to do, and what do you expect to change first?”** Record what they point at before explaining the tide sign. Watch a rescue and Undo. Check the crowded Wide Berth, the moving bridge, rotation, Android Back, interruptions, speaker audio and a return to an earned supper. Try TalkBack on the passenger selection and arrival actions. If the player misses a cue, keep the observation and have Codex fix the smallest cause before the next test.
 

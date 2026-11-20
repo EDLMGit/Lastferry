@@ -1,5 +1,9 @@
 # Last Ferry — Project state
 
+## Physical-phone findings · Android v0.1.2
+
+The owner's landscape playtest shows visible teal gutters and reports a shifting camera while sailing. They want graphical gauges for depth and occupied deck spaces. The next [Android cove-view brief](../NEXT_TASK_ANDROID_COVE_VIEW.md) covers the full-window world, steady crossings and a compatible update for the current APK. The next handset retest is the point to judge the result.
+
 ## Offline Android playtest
 
 The installable Android debug APK runs the twelve-cove Journey at a stable local HTTPS origin. Version 2 preserves the previously installed app’s two-lantern Holding Pier best, Bellwater checkpoint, preferences and original backup after an in-place update and a cold launch. Android progress belongs to the installation. The existing private Site continues to serve version 29. [Install and update](../reviews/android-playtest/INSTALL.md) · [Device proof](../reviews/android-playtest/REVIEW.md)

@@ -2,6 +2,10 @@
 
 The signed v2 playtest APK is available through the private handoff. On an offline Android 16 emulator, the v1 captain rescued Pip, Rue and Moss, accepted two lanterns and entered Bellwater. The installed v2 retained that best and checkpoint through a cold relaunch. The test bundle targets API 36. Physical-phone controls, frame pacing, TalkBack, speaker balance and an uncoached first rescue remain for handset playtesting. [Install](reviews/android-playtest/INSTALL.md) · [Results and footage](reviews/android-playtest/REVIEW.md)
 
+## Next Android build
+
+**Active task — [ANDROID_COVE_VIEW_01](NEXT_TASK_ANDROID_COVE_VIEW.md).** Use the owner's first Android playtest to deliver edge-to-edge scenery, a steady player-controlled camera during crossings, and compact graphical ferry capacity and depth instruments. Return an in-place APK update for v0.1.2. [Android handoff](reviews/android-playtest/REVIEW.md) · [Google Play launch plan](docs/GOOGLE_PLAY_LAUNCH.md)
+
 ## Journey Home
 
 The full twelve-cove Journey now leads from Holding Pier to supper and credits. The four late chapters are unrated, and the player still chooses each departure. Completed Ternhaven saves continue at the orchard after their original bytes are backed up. [Play locally](http://127.0.0.1:5420/) · [Review and gameplay evidence](reviews/journey-home/REVIEW.md)
