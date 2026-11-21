@@ -2,7 +2,7 @@
 
 ## Objective
 
-**Active task — [ANDROID_COVE_VIEW_01](NEXT_TASK_ANDROID_COVE_VIEW.md).** Use the owner's first Android playtest to deliver edge-to-edge scenery, a steady player-controlled camera during crossings, and compact graphical ferry capacity and depth instruments. Return an in-place APK update for v0.1.2. [Android handoff](reviews/android-playtest/REVIEW.md) · [Google Play launch plan](docs/GOOGLE_PLAY_LAUNCH.md)
+**Active task — [ANDROID_RELEASE_REHEARSAL_01](NEXT_TASK_ANDROID_RELEASE_REHEARSAL.md).** Local Codex owns a release-mode Android App Bundle and a proven offline install and update from its generated APKs. Use a temporary rehearsal identity. The owner and friend can keep playing v0.1.3 while this runs. [Phone playtest](reviews/android-cove-view/REVIEW.md) · [Google Play launch plan](docs/GOOGLE_PLAY_LAUNCH.md)
 
 The [private playtest](https://last-ferry-playtest.abumech.chatgpt.site/) serves **version 29**, game `000a1d51bdd5655448471a48d4f88d57a8b7f7b3`. Home → Play connects twelve Journey rescues to supper and credits. There are thirteen Practice entrances and nine scored coves. The four late crossings remain unscored for playtesting. [Independent review](reviews/journey-home/INDEPENDENT_REVIEW.md) · [Publication receipt](reviews/journey-home/deployment-confirmation.json).
 
