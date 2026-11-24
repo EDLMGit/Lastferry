@@ -122,20 +122,30 @@ public final class MainActivity extends Activity {
             settings.setAllowContentAccess(false);
             settings.setMediaPlaybackRequiresUserGesture(true);
             settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
+            game.addJavascriptInterface(new AcceptedSaves(getFilesDir()), "lastFerrySaves");
             WebViewAssetLoader loader = new WebViewAssetLoader.Builder()
                 .addPathHandler("/", new WebViewAssetLoader.AssetsPathHandler(this))
                 .build();
             game.setWebViewClient(new WebViewClient() {
                 @Override
                 public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                    return !isLocal(request.getUrl());
+                    return !request.isForMainFrame() || !isLocal(request.getUrl())
+                        || !"/index.html".equals(request.getUrl().getPath());
                 }
 
                 @Override
                 public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-                    if (isLocal(request.getUrl()) && "GET".equals(request.getMethod())) {
+                    if (isLocal(request.getUrl()) && "GET".equals(request.getMethod())
+                            && (!request.isForMainFrame() || "/index.html".equals(request.getUrl().getPath()))) {
                         WebResourceResponse resource = loader.shouldInterceptRequest(request.getUrl());
-                        if (resource != null) return resource;
+                        if (resource != null) {
+                            if (request.isForMainFrame()) {
+                                // The synchronous save bridge belongs to the bundled game document alone.
+                                resource.setResponseHeaders(Collections.singletonMap("Content-Security-Policy",
+                                    "frame-src 'none'; object-src 'none'; base-uri 'none'"));
+                            }
+                            return resource;
+                        }
                     }
                     return new WebResourceResponse("text/plain", "UTF-8", 404, "Not Found",
                         Collections.emptyMap(), null);
