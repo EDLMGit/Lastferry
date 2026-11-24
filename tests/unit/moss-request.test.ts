@@ -118,23 +118,47 @@ describe('Harbor keepsakes and the detour checkpoint', () => {
     }
   });
 
-  test('a failed detour checkpoint stays provisional; a written but unconfirmed checkpoint retries exactly once', () => {
-    for (const writeBeforeFailure of [true, false]) {
+  test('a failed detour write keeps the original Journey and can retry the same rescue', () => {
+    const storage = memory();
+    const journey = new JourneyProgress(() => storage);
+    journey.replace();
+    journey.acknowledge('opening');
+    const old = storage.values.get(JOURNEY_STORAGE_KEY);
+    const write = storage.setItem.bind(storage);
+    storage.setItem = () => { throw Error('Could not write'); };
+    expect(journey.accept('holding-pier', 'won', true)).toBe(false);
+    expect(journey.snapshot.record?.completed).toEqual([]);
+    expect(storage.values.get(JOURNEY_STORAGE_KEY)).toBe(old);
+    storage.setItem = write;
+    expect(journey.accept('holding-pier', 'won', true)).toBe(true);
+    expect(storage.writes).toHaveLength(3);
+    expect(new JourneyProgress(() => storage).snapshot.record?.checkpoint).toEqual({ kind: 'scene', id: 'another-bell' });
+  });
+
+  test('a durable detour checkpoint completes the same acceptance even when its write or first readback throws', () => {
+    for (const failure of ['write-after-effect', 'first-readback']) {
       const storage = memory();
       const journey = new JourneyProgress(() => storage);
       journey.replace();
       journey.acknowledge('opening');
-      const old = storage.values.get(JOURNEY_STORAGE_KEY);
       const write = storage.setItem.bind(storage);
+      const read = storage.getItem.bind(storage);
+      let failReadback = false;
       storage.setItem = (key, value) => {
-        if (writeBeforeFailure) write(key, value);
-        throw Error('Access failed');
+        write(key, value);
+        if (failure === 'write-after-effect') throw Error('Reported failure after writing');
+        failReadback = true;
       };
-      expect(journey.accept('holding-pier', 'won', true)).toBe(false);
-      expect(journey.snapshot.record?.completed).toEqual([]);
-      if (!writeBeforeFailure) expect(storage.values.get(JOURNEY_STORAGE_KEY)).toBe(old);
-      storage.setItem = write;
+      storage.getItem = key => {
+        if (failReadback) {
+          failReadback = false;
+          throw Error('One transient read failure');
+        }
+        return read(key);
+      };
       expect(journey.accept('holding-pier', 'won', true)).toBe(true);
+      expect(journey.snapshot).toMatchObject({ persistent: true, issue: null, record: { completed: ['holding-pier'] } });
+      expect(journey.accept('holding-pier', 'won', true)).toBe(false);
       expect(storage.writes).toHaveLength(3);
       expect(new JourneyProgress(() => storage).snapshot.record?.checkpoint).toEqual({ kind: 'scene', id: 'another-bell' });
     }

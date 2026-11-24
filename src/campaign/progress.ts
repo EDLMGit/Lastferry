@@ -370,6 +370,14 @@ export class JourneyProgress {
       }
     } catch {
       if (requireSavedCheckpoint) {
+        // A storage provider may apply the write before reporting an error, or
+        // fail the first readback. Confirm the outcome before leaving Undo open.
+        try {
+          if (this.storage?.getItem(JOURNEY_STORAGE_KEY) === raw) {
+            this.current = { kind: 'valid', record, raw, persistent: true, issue: null };
+            return true;
+          }
+        } catch { /* Leave the unconfirmed checkpoint available for a retry. */ }
         this.current.issue = 'Could not save your Bellwater checkpoint. Try the request again, or continue the story for this visit.';
         return false;
       }
