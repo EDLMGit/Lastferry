@@ -3,7 +3,7 @@ type RecordStorage = Pick<Storage, 'getItem' | 'setItem'>;
 interface SaveHost {
   localStorage: RecordStorage;
   lastFerrySaves?: {
-    read(key: string): string | null;
+    read(key: string): string | null | undefined;
     write(key: string, value: string): boolean;
   };
 }
@@ -27,7 +27,8 @@ export function storageForRecord(recordKey: string, host: SaveHost = window): Re
     getItem(key) {
       if (key !== recordKey) return host.localStorage.getItem(key);
       const saved = native.read(key);
-      if (saved === null) return host.localStorage.getItem(key);
+      // Android WebView exposes a null Java String as JavaScript undefined.
+      if (saved == null) return host.localStorage.getItem(key);
       mirror(saved);
       return saved;
     },

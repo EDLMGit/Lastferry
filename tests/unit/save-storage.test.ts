@@ -11,16 +11,17 @@ function storage() {
   };
 }
 
-test('ordinary web saves use the original storage; installed older records and backups keep their bytes', () => {
+test.each([undefined, null])('older records and backups keep their bytes when the native bridge returns %s', missing => {
   const localStorage = storage(), disk = storage();
   const old = ' { "version": 1 }\n';
   localStorage.setItem(JOURNEY_STORAGE_KEY, old);
   expect(storageForRecord(JOURNEY_STORAGE_KEY, { localStorage })).toBe(localStorage);
   const installed = storageForRecord(JOURNEY_STORAGE_KEY, {
     localStorage,
-    lastFerrySaves: { read: disk.getItem, write: (k, v) => { disk.setItem(k, v); return true; } },
+    lastFerrySaves: { read: k => disk.getItem(k) ?? missing, write: (k, v) => { disk.setItem(k, v); return true; } },
   });
   expect(installed.getItem(JOURNEY_STORAGE_KEY)).toBe(old);
+  expect(localStorage.getItem(JOURNEY_STORAGE_KEY)).toBe(old);
   expect(disk.getItem(JOURNEY_STORAGE_KEY)).toBeNull();
   const backupKey = JOURNEY_STORAGE_KEY + '.before-drowned-orchard';
   installed.setItem(backupKey, old);
