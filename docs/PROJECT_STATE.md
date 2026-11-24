@@ -1,8 +1,8 @@
 # Last Ferry — Project state
 
-## Next milestone · local release bundle
+## Next milestone · the first rescue and a reason to return
 
-The owner welcomed the v0.1.3 cove view. Keep this APK for the friend's uncoached Holding Pier retest. The [local release-bundle rehearsal](../NEXT_TASK_ANDROID_RELEASE_REHEARSAL.md) can proceed while physical touch, sound and first-player comprehension are assessed. A Play-delivered install follows publisher setup and selection of the permanent package identity.
+The owner reports that v0.1.3 runs well on their physical phone. They could not readily tell what they had earned, where to see progress, how to return to a cove, or why to take another trip beyond reducing actions. [HARBOR_LOG_01](../NEXT_TASK_HARBOR_LOG.md) commissions a first-cove experiment around these questions. Player observation will inform whether to extend it across the coast. The [release-bundle rehearsal](../NEXT_TASK_ANDROID_RELEASE_REHEARSAL.md) is queued.
 
 ## Installed Android cove view · v0.1.3
 

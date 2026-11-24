@@ -4,7 +4,7 @@ Release candidate scope, 20 November 2026. The twelve-cove Journey ends at the l
 
 ## 1. Put the same voyage on a phone
 
-The [v0.1.3 APK](../reviews/android-cove-view/INSTALL.md) is the private phone playtest. Its emulator receipts cover edge-to-edge layout, a steady sailing camera, and an installed upgrade that preserved six saved values. The owner welcomed the improvement. The friend's uncoached retest can run alongside the [release-mode bundle rehearsal](../NEXT_TASK_ANDROID_RELEASE_REHEARSAL.md).
+The [v0.1.3 APK](../reviews/android-cove-view/INSTALL.md) is the private phone playtest. Its emulator receipts cover edge-to-edge layout, a steady sailing camera, and an installed upgrade that preserved six saved values. The owner reports that the game runs well on their Android and that the reward and reason to replay are unclear. The [Harbor log and Moss's request](../NEXT_TASK_HARBOR_LOG.md) is the active private playtest. Watch whether a player chooses another trip and can name its purpose. Use that result to decide on further game work before the [release-mode bundle rehearsal](../NEXT_TASK_ANDROID_RELEASE_REHEARSAL.md).
 
 On a physical phone, launch in airplane mode and let a newcomer choose Play. At Holding Pier ask, **“What are you trying to do, and what do you expect to change first?”** Record what they point at before explaining the tide sign. Watch a rescue and Undo. Check the crowded Wide Berth, the moving bridge, rotation, Android Back, interruptions, speaker audio and a return to an earned supper. Try TalkBack on the passenger selection and arrival actions. If the player misses a cue, keep the observation and have Codex fix the smallest cause before the next test.
 
