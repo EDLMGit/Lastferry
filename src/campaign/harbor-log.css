@@ -54,9 +54,9 @@
   width: min(660px, calc(var(--viewport-width, 100vw) - 16px));
   border-radius: 15px;
 }
+#app #dialog[data-mode='practice']::backdrop { background: rgb(9 35 39 / 64%); }
 #app #dialog[data-mode='practice'] #dialog-content {
   padding: 0 16px 16px;
-  scrollbar-gutter: stable;
   overscroll-behavior: contain;
 }
 .harbor-log-head {
@@ -76,6 +76,8 @@
   font: normal 27px/1.12 Georgia, serif;
   color: var(--cove-ivory);
 }
+.harbor-log-head > div { min-width: 0; }
+.harbor-log-head #journey-title { flex: 0 0 auto; }
 .harbor-log-head p, .harbor-practice > p, .harbor-empty {
   margin: 4px 0 0;
   color: var(--cove-secondary);
@@ -138,6 +140,11 @@
   .harbor-entry-copy { padding: 8px; gap: 3px; }
   .harbor-entry h3 { font-size: 21px; }
   .harbor-entry .harbor-picture { max-height: 90px; object-fit: cover; object-position: center 58%; }
+}
+@media (max-height: 350px) and (orientation: landscape) {
+  .harbor-entry .harbor-picture { max-height: 78px; }
+  .harbor-entry blockquote { margin: 0 0 3px; font-size: 16px; }
+  .harbor-entry .cove-button { min-height: 44px; }
 }
 @media (max-width: 530px) {
   .harbor-pages { grid-template-columns: minmax(0, 1fr); }

@@ -88,7 +88,7 @@ export function harborLogMarkup(page: HarborPage, mastery: MasteryStore, issue: 
   const requestPage = requestAvailable ? `<article class="harbor-entry harbor-request" id="harbor-moss-page" data-earned="${page.mossEarned}">
     ${page.mossEarned ? mossIllustrationMarkup() : ''}
     <div class="harbor-entry-copy">
-      ${page.mossEarned ? `<h3>${MOSS_ENTRY_TITLE}</h3><p>With the rabbits safe, you came back for Moss.</p>` : `<div class="harbor-author"><img src="${portraitSources['sheep-wool']}" alt="" width="50" height="50"><h3>Moss’s request</h3></div>`}
+      ${page.mossEarned ? `<h3>${MOSS_ENTRY_TITLE}</h3>` : `<div class="harbor-author"><img src="${portraitSources['sheep-wool']}" alt="" width="50" height="50"><h3>Moss’s request</h3></div>`}
       <blockquote>“${MOSS_REQUEST}”</blockquote>
       <button class="cove-button ${page.mossEarned ? 'cove-button--quiet' : 'cove-button--warm'}" id="harbor-take-request">${controlContent('sail', page.mossEarned ? 'Replay Moss’s request' : 'Take Moss’s request')}</button>
     </div>
