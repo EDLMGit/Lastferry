@@ -154,7 +154,12 @@ test('actual scored Journey arrival continues to Bellwater after tide Undo',asyn
   await arrivalResult(page,holdingPier,2,9,1);await expect(page.locator('#continue-story')).toHaveText('Continue to Bellwater');
   await expect(page.locator('#continue-story')).toBeFocused();
   await arrivalFrame(page,'320x740','journey-two');
-  await page.locator('#arrival-details summary').tap();await arrivalFrame(page,'320x740','details',true);await page.locator('#arrival-details summary').tap();
+  await page.locator('#arrival-details summary').tap();await arrivalFrame(page,'320x740','details',true);
+  await page.setViewportSize({width:780,height:320});
+  await arrivalFrame(page,'780x320','journey-details',true);
+  await page.locator('#arrival-details summary').tap();
+  await arrivalFrame(page,'780x320','journey-choices');
+  await page.setViewportSize({width:320,height:740});
   expect((await storage(page)).journey).toBe(checkpoint);await unchangedAcceptance(page,null);
   await dismissAndReopen(page);await unchangedAcceptance(page,null);
   await tabTo(page,'continue-story');await page.keyboard.press('Enter');

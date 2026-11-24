@@ -38,6 +38,7 @@ export async function arrivalResult(page:Page,level:Level,lanterns:number,action
     await expect(tile.locator('button,input')).toHaveCount(0);
   }
   for(const id of ['terminal-restart','terminal-undo','terminal-settings','cancel'])await fullyVisible(page,page.locator('#'+id));
+  await expect(page.locator('#terminal-restart')).toHaveAccessibleName('Replay crossing');
   await fullyVisible(page,page.locator('#continue-story, #next-cove, #choose-cove'));
   await expect(page.locator('#terminal-restart [data-icon]')).toHaveAttribute('data-icon','replay');
   await expect(page.locator('#terminal-undo [data-icon]')).toHaveAttribute('data-icon','undo');
@@ -55,6 +56,7 @@ export async function arrivalMeasure(page:Page,expanded=false){
       const style=getComputedStyle(el),b=el.getBoundingClientRect();
       const closed=el.closest('details:not([open])');
       if(closed&&!el.closest('summary')&&closed!==el)continue;
+      if(el.matches('button > .cove-label') && style.clipPath==='inset(50%)')continue;
       if(!b.width||!b.height||style.display==='inline'||style.visibility==='hidden'||el.closest('.sr-only'))continue;
       if(el.clientWidth>0&&el.scrollWidth>el.clientWidth+1)failures.push((el.id||el.className)+': horizontal overflow');
     }
