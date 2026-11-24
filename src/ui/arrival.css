@@ -134,3 +134,49 @@
   .arrival-content .arrival-lanterns { --arrival-lantern-width: 53px; --arrival-lantern-height: 74px; }
   .cove-kit .arrival-actions .cove-button, #app .arrival-actions .cove-button { padding-inline: 6px; font-size: 15px; gap: 5px; }
 }
+
+.cove-kit .arrival-with-choice,
+.cove-kit .arrival-request-missed {
+  grid-template-areas: 'overview' 'cast' 'result' 'request' 'actions' 'utilities' 'notice';
+}
+.arrival-request-note {
+  grid-area: request;
+  padding: 8px 12px;
+  border-inline-start: 2px solid #e6bd78;
+  background: #193e43;
+  border-radius: 2px 10px 10px 2px;
+  color: #ffefd2;
+  text-align: left;
+  font: normal 15px/1.35 Georgia, serif;
+}
+.arrival-request-note strong, .arrival-request-note q, .arrival-request-note small { display: block; }
+.arrival-request-note strong { margin-bottom: 2px; color: #ffce80; }
+.arrival-request-note small { margin-top: 4px; font: 12px/1.3 system-ui, sans-serif; color: #d3ded5; }
+.arrival-with-choice .arrival-actions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.arrival-with-choice .arrival-utilities { flex-wrap: wrap; gap: 4px; }
+.arrival-with-choice .arrival-utilities .cove-button { padding-inline: 8px; }
+.arrival-with-choice .arrival-utilities #terminal-restart .cove-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.arrival-with-choice .arrival-utilities #terminal-restart { width: 44px; min-width: 44px; }
+.arrival-keepsake { grid-area: cast; min-width: 0; align-self: center; }
+.arrival-keepsake canvas { display: block; width: 100%; height: auto; border-radius: 10px; }
+.arrival-with-keepsake .arrival-result .arrival-lanterns { --arrival-lantern-width: 24px; --arrival-lantern-height: 34px; margin-bottom: 3px; }
+.sailing-request { padding: 8px 12px; background: #183e43; border-left: 2px solid #e6bd78; }
+.sailing-request strong { display: block; color: #ffce80; }
+@media (min-width: 600px) and (orientation: landscape) {
+  .cove-kit .arrival-with-choice, .cove-kit .arrival-request-missed {
+    grid-template-areas: 'cast overview' 'cast result' 'request actions' 'utilities utilities' 'notice notice';
+    align-items: center;
+  }
+  .arrival-with-choice .arrival-cast { --arrival-figure-size: 104px; }
+  .arrival-with-choice .arrival-utilities { gap: 10px; }
+}
+@media (max-width: 599px) {
+  .arrival-with-choice .arrival-cast { --arrival-figure-size: 92px; }
+  .arrival-with-choice .arrival-utilities summary { min-width: 50px; }
+  .arrival-with-choice .arrival-utilities .cove-button { min-height: 44px; }
+}
+@media (max-width: 350px) {
+  .arrival-with-choice .arrival-utilities { column-gap: 2px; }
+  .arrival-with-choice .arrival-utilities .cove-button { min-width: 44px; }
+  .arrival-with-choice .arrival-utilities #terminal-settings { width: 44px; }
+}

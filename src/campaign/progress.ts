@@ -328,21 +328,27 @@ export class JourneyProgress {
     return true;
   }
 
-  accept(id: CoveId, status: string): boolean {
+  accept(id: CoveId, status: string, requireSavedCheckpoint = false): boolean {
     const record = this.current.record;
     if (!record) return false;
     const next = acceptCove(record, id, status);
     if (next === record) return false;
-    this.save(next);
-    return true;
+    return this.save(next, undefined, JOURNEY_LEGACY_BACKUP_KEY, requireSavedCheckpoint);
   }
 
-  private save(record: JourneyRecord, previousRoute?: string, backupKey = JOURNEY_LEGACY_BACKUP_KEY) {
+  private save(record: JourneyRecord, previousRoute?: string, backupKey = JOURNEY_LEGACY_BACKUP_KEY, requireSavedCheckpoint = false) {
     const raw = JSON.stringify(record);
     let persistent = this.current.persistent;
     try {
       if (!this.storage) throw new Error('Storage unavailable');
-      if (this.storage.getItem(JOURNEY_STORAGE_KEY) !== this.current.raw)
+      const stored = this.storage.getItem(JOURNEY_STORAGE_KEY);
+      // A prior attempt may have written the requested checkpoint and failed
+      // only at readback. A retry can safely finish that same handoff.
+      if (requireSavedCheckpoint && stored === raw) {
+        this.current = { kind: 'valid', record, raw, persistent: true, issue: null };
+        return true;
+      }
+      if (stored !== this.current.raw)
         throw new Error('Checkpoint changed');
       if (previousRoute !== undefined) {
         let key = backupKey;
@@ -363,6 +369,10 @@ export class JourneyProgress {
         throw new Error('Checkpoint unavailable');
       }
     } catch {
+      if (requireSavedCheckpoint) {
+        this.current.issue = 'Could not save your Bellwater checkpoint. Try the request again, or continue the story for this visit.';
+        return false;
+      }
       if (backupKey === JOURNEY_DROWNED_ORCHARD_BACKUP_KEY) {
         this.current.issue = 'The next chapter could not be saved safely. Try Continue again, or reload to read the current save.';
         return false;

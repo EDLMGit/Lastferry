@@ -140,7 +140,7 @@ test('minified short-landscape current one-lantern rescue preserves a better acc
   report(directory('780x320'),'production-rescue',{source:source.sha256,timeline,saved:await storage(page)});
 });
 
-test('actual scored Journey arrival advances only through Continue story after tide Undo',async({page})=>{
+test('actual scored Journey arrival continues to Bellwater after tide Undo',async({page})=>{
   const checkpoint=JSON.stringify({version:1,completed:[],acknowledgedScenes:['opening'],checkpoint:{kind:'cove',id:'holding-pier'}},null,2)+'\n';
   await page.setViewportSize({width:320,height:740});await page.emulateMedia({reducedMotion:'reduce'});
   await fixture(page,checkpoint);await page.goto('/');await activate(page,'home-play',true);await idle(page);
@@ -151,7 +151,7 @@ test('actual scored Journey arrival advances only through Continue story after t
     if(before.turn===3){await undo(page,true);expect(await state(page)).toEqual(before);current=await execute(page,holdingPier,action,before);}
     timeline.push(current);
   }
-  await arrivalResult(page,holdingPier,2,9,1);await expect(page.locator('#continue-story')).toHaveText(/Continue story/);
+  await arrivalResult(page,holdingPier,2,9,1);await expect(page.locator('#continue-story')).toHaveText('Continue to Bellwater');
   await expect(page.locator('#continue-story')).toBeFocused();
   await arrivalFrame(page,'320x740','journey-two');
   await page.locator('#arrival-details summary').tap();await arrivalFrame(page,'320x740','details',true);await page.locator('#arrival-details summary').tap();

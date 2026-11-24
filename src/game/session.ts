@@ -1,6 +1,7 @@
 import { copy, initial, reduce, type State, type Action } from './rules';
 import { level as baseline, type Level } from '../levels/level';
 import { resultFor } from './mastery';
+import { rabbitsCameHomeFirst } from './moss-request';
 export class Session {
   state: State;
   history: State[] = [];
@@ -34,6 +35,11 @@ export class Session {
     const result = this.result;
     if (result) this.accepted = true;
     return result;
+  }
+  get fulfillsMossRequest() {
+    // At a committed win, history already includes the rabbit delivery and
+    // excludes every state popped by Undo. The current win alone proves no order.
+    return this.level.id === 'holding-pier' && this.result !== null && rabbitsCameHomeFirst(this.history);
   }
   undo() {
     if (this.busy || !this.history.length) return false;

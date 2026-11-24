@@ -72,6 +72,21 @@
 .deck-slot { fill: none; stroke: #8ca7a0; stroke-width: 1; }
 .deck-slot.occupied { fill: #f0cd8b; stroke: #ffe2aa; }
 
+.instrument-crew {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.instrument-face {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  flex: none;
+}
+.instrument-face + .instrument-face {
+  margin-left: -6px;
+}
+
 .gauge-water {
   align-items: center;
   gap: 4px;

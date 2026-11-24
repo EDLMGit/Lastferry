@@ -6,6 +6,8 @@ import { masteryTargets } from '../game/mastery';
 import { resolvePassengerAppearance } from '../game/passenger-appearance';
 import { arrivalFigureSources, controlContent, escapeLabel } from './cove-ui';
 import { arrivalLanternsMarkup } from './lanterns';
+import { MOSS_ENTRY_TITLE, MOSS_REQUEST } from '../game/moss-request';
+import { mossIllustrationMarkup } from '../campaign/harbor-log';
 import './arrival.css';
 
 export type ArrivalOptions = {
@@ -17,6 +19,9 @@ export type ArrivalOptions = {
   forward: { id: string; label: string };
   policy?: string;
   notice?: string;
+  offerRequest?: boolean;
+  requestFulfilled?: boolean;
+  requestMissed?: boolean;
 };
 
 export function rescuedCast(level: Level, state: State) {
@@ -28,7 +33,7 @@ export function rescuedCast(level: Level, state: State) {
   }));
 }
 
-export function arrivalMarkup({ level, state, result, best, successfulUndos = 0, forward, policy = '', notice = '' }: ArrivalOptions) {
+export function arrivalMarkup({ level, state, result, best, successfulUndos = 0, forward, policy = '', notice = '', offerRequest = false, requestFulfilled = false, requestMissed = false }: ArrivalOptions) {
   const cast = rescuedCast(level, state);
   if (state.status !== 'won' || cast.length !== level.objective.requiredPassengerIds.length) return '';
   const metrics = result ?? { actions: state.turn, successfulUndos };
@@ -39,22 +44,29 @@ export function arrivalMarkup({ level, state, result, best, successfulUndos = 0,
   const criteria = target === null ? '<p>Playtest · no lantern rating.</p>' :
     `<ol><li>Bring everyone home.</li><li>Finish in ${target} actions or fewer.</li><li>Meet that target without a successful Undo.</li></ol><p>Lanterns are cumulative. Every rescue is complete; the others are optional replay goals. Undo is always available.</p>`;
   const previous = best ? `<p id="mastery-best">Best accepted rescue · ${best.lanterns} of 3 lanterns<br>${best.actions} actions · ${best.successfulUndos} ${best.successfulUndos === 1 ? 'Undo' : 'Undos'}</p>` : '<p>No accepted best yet.</p>';
-  return `<section id="arrival-content" class="arrival-content" data-cast-size="${cast.length}" aria-labelledby="dialog-title">
+  const replay = `<button id="terminal-restart" class="cove-button" aria-label="Replay crossing">${controlContent('replay', 'Replay')}</button>`;
+  const requestNote = offerRequest
+    ? `<aside class="arrival-request-note"><strong>Moss’s request</strong><q>${MOSS_REQUEST}</q><small>Taking the request or going Home saves this Journey rescue.</small></aside>`
+    : requestMissed ? '<p class="arrival-request-note">Moss was hoping to wait at Stone Pier until Pip and Rue made it home.</p>' : '';
+  return `<section id="arrival-content" class="arrival-content${offerRequest ? ' arrival-with-choice' : ''}${requestFulfilled ? ' arrival-with-keepsake' : ''}${requestMissed ? ' arrival-request-missed' : ''}" data-cast-size="${cast.length}" aria-labelledby="dialog-title">
     <button id="cancel" class="arrival-close cove-button cove-button--quiet cove-button--icon" aria-label="Close arrival">${controlContent('close', 'Close arrival')}</button>
     <div class="arrival-overview">
-      ${arrivalLanternsMarkup(result)}
-      <header class="arrival-heading"><h2 id="dialog-title">Everyone home.</h2><p>${escapeLabel(level.title)}</p></header>
+      ${requestFulfilled ? '' : arrivalLanternsMarkup(result)}
+      <header class="arrival-heading"><h2 id="dialog-title">${requestFulfilled ? MOSS_ENTRY_TITLE : 'Everyone home.'}</h2><p>${requestFulfilled ? 'Pip and Rue were safe ashore when you came back for Moss.' : escapeLabel(level.title)}</p></header>
     </div>
-    <ul id="arrival-cast" class="arrival-cast" aria-label="Rescued neighbors">${cast.map(({ id, name, appearance }) => {
+    ${requestFulfilled ? `<div class="arrival-keepsake">${mossIllustrationMarkup()}</div>` : ''}
+    <ul id="arrival-cast" class="${requestFulfilled ? 'sr-only' : 'arrival-cast'}" aria-label="Rescued neighbors">${cast.map(({ id, name, appearance }) => {
       const portrait = appearance?.portraitKey ?? null;
       return `<li data-passenger-id="${escapeLabel(id)}" data-appearance="${portrait ?? 'unavailable'}"><span class="arrival-portrait"><span class="arrival-portrait-fallback" aria-hidden="true">${escapeLabel(appearance?.species ?? 'neighbor')}</span>${portrait ? `<img class="cove-portrait-image" src="${escapeLabel(arrivalFigureSources[portrait])}" alt="" width="256" height="256" draggable="false" decoding="async" data-portrait-state="pending">` : ''}</span><span class="arrival-name">${escapeLabel(name)}</span></li>`;
     }).join('')}</ul>
+    ${requestNote}
     <section ${result ? 'id="mastery-result"' : ''} class="arrival-result" data-lanterns="${result?.lanterns ?? 0}" data-actions="${metrics.actions}" data-undos="${metrics.successfulUndos}" aria-label="This rescue">
+      ${requestFulfilled ? arrivalLanternsMarkup(result) : ''}
       <p class="mastery-metrics">${metrics.actions} actions · ${metrics.successfulUndos} ${metrics.successfulUndos === 1 ? 'Undo' : 'Undos'}</p>
       ${better ? '<p class="arrival-best-note">Your better accepted best is kept.</p>' : ''}
     </section>
-    <div class="arrival-actions"><button id="${escapeLabel(forward.id)}" class="cove-button cove-button--warm">${controlContent(forward.id === 'choose-cove' ? 'whole-cove' : 'next-cove', forward.label)}</button><button id="terminal-restart" class="cove-button" aria-label="Replay crossing">${controlContent('replay', 'Replay')}</button></div>
-    <footer class="arrival-utilities"><button id="terminal-undo" class="cove-button cove-button--quiet" aria-label="Undo last action">${controlContent('undo', 'Undo')}</button><details id="arrival-details"><summary><span class="arrival-details-closed">Details</span><span class="arrival-details-open">Hide details</span></summary><div class="arrival-detail-body" tabindex="0" aria-label="Rescue details"><h3>About this rescue</h3>${criteria}${target === null ? '' : previous}${result ? '<p>Continuing, leaving or replaying keeps this result. Until then, Undo can change it. Closing this card or opening Settings keeps it provisional.</p>' : ''}${policy ? `<p>${escapeLabel(policy)}</p>` : ''}</div></details><button id="terminal-settings" class="cove-button cove-button--quiet cove-button--icon" aria-label="Settings">${controlContent('settings', 'Settings')}</button></footer>
+    <div class="arrival-actions"><button id="${escapeLabel(forward.id)}" class="cove-button cove-button--warm">${controlContent(forward.id === 'choose-cove' ? 'whole-cove' : forward.id === 'accept-moss-entry' || forward.id === 'return-harbor' ? 'harbor-home' : 'next-cove', forward.label)}</button>${offerRequest ? `<button id="take-moss-request" class="cove-button">${controlContent('replay', 'Take Moss’s request')}</button>` : replay}</div>
+    <footer class="arrival-utilities"><button id="terminal-undo" class="cove-button cove-button--quiet" aria-label="Undo last action">${controlContent('undo', 'Undo')}</button><details id="arrival-details"><summary><span class="arrival-details-closed">Details</span><span class="arrival-details-open">Hide details</span></summary><div class="arrival-detail-body" tabindex="0" aria-label="Rescue details"><h3>About this rescue</h3>${criteria}${target === null ? '' : previous}${result ? '<p>Continuing, leaving or replaying keeps this result. Until then, Undo can change it. Closing this card or opening Settings keeps it provisional.</p>' : ''}${policy ? `<p>${escapeLabel(policy)}</p>` : ''}</div></details>${offerRequest ? replay : ''}${offerRequest ? `<button id="accept-harbor-home" class="cove-button cove-button--quiet">${controlContent(null, 'Home')}</button>` : ''}<button id="terminal-settings" class="cove-button cove-button--quiet cove-button--icon" aria-label="Settings">${controlContent('settings', 'Settings')}</button></footer>
     ${notice ? `<p class="arrival-storage-notice" role="status">${escapeLabel(notice)}</p>` : ''}
   </section>`;
 }

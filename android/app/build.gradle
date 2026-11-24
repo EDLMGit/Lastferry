@@ -2,7 +2,7 @@ plugins {
     id 'com.android.application'
 }
 
-def playtestVersion = providers.gradleProperty('playtestVersion').orElse('3').get().toInteger()
+def playtestVersion = providers.gradleProperty('playtestVersion').orElse('4').get().toInteger()
 def gameRoot = rootProject.projectDir.parentFile
 def bundledGame = layout.buildDirectory.dir('generated/coveAssets')
 

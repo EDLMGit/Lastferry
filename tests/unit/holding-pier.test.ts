@@ -75,16 +75,17 @@ describe('The Holding Pier uses the actual application reducer', () => {
     const before = run([wait, wait, wait]);
     expect(reduce(before, move('shallows'), level)).toBe(before); // A future rise cannot validate this move.
   });
-  test('exhaustive reachable states: shortest win nine, no win bypasses sheep holding at Stone', () => {
+  test('shortest rescue is nine actions, or twelve when both rabbits arrive while Moss waits at Stone', () => {
     // After the last rise, turns >=8 have identical futures. This is a finite
     // complete search, not a horizon-limited search. Undo only revisits these states.
-    const queue = [{ s: initial(level), held: false }],
+    const queue = [{ s: initial(level), held: false, keptPromise: true }],
       seen = new Set<string>();
     let wins = 0,
       bypasses = 0,
-      shortest = Infinity;
+      shortest = Infinity,
+      shortestRequest = Infinity;
     for (let i = 0; i < queue.length; i++) {
-      const { s, held } = queue[i];
+      const { s, held, keptPromise } = queue[i];
       const key = JSON.stringify([
         Math.min(s.turn, 8),
         s.tideLevel,
@@ -94,6 +95,7 @@ describe('The Holding Pier uses the actual application reducer', () => {
         [...s.delivered].sort(),
         s.status,
         held,
+        keptPromise,
       ]);
       if (seen.has(key)) continue;
       seen.add(key);
@@ -101,17 +103,23 @@ describe('The Holding Pier uses the actual application reducer', () => {
       if (s.status === 'won') {
         wins++;
         shortest = Math.min(shortest, s.turn);
+        if (keptPromise) shortestRequest = Math.min(shortestRequest, s.turn);
         if (!held) bypasses++;
         continue;
       }
       if (s.status === 'lost') continue;
-      for (const a of legalActions(s, level))
+      for (const a of legalActions(s, level)) {
+        const next = reduce(s, a, level);
+        const rabbitArrived = next.delivered.some(id =>
+          (id === 'rabbit-1' || id === 'rabbit-2') && !s.delivered.includes(id));
         queue.push({
-          s: reduce(s, a, level),
+          s: next,
+          keptPromise: keptPromise && (!rabbitArrived || next.waitingByPier['stone-pier'].includes('sheep-1')),
           held:
             held ||
             (s.boatNodeId === 'stone' && a.type === 'unload' && a.passengerIds.includes('sheep-1')),
         });
+      }
     }
     console.log(
       JSON.stringify({
@@ -120,11 +128,13 @@ describe('The Holding Pier uses the actual application reducer', () => {
         winningStates: wins,
         bypassWins: bypasses,
         shortestActions: shortest,
+        shortestRequest,
       }),
     );
     expect(wins).toBeGreaterThan(0);
     expect(bypasses).toBe(0);
     expect(shortest).toBe(9);
+    expect(shortestRequest).toBe(12);
     if (process.env.LAST_FERRY_REVIEW_DIR) {
       mkdirSync(process.env.LAST_FERRY_REVIEW_DIR, { recursive: true });
       writeFileSync(
@@ -135,6 +145,7 @@ describe('The Holding Pier uses the actual application reducer', () => {
             winningStates: wins,
             bypassWins: bypasses,
             shortestActions: shortest,
+            shortestRequest,
             method:
               'Actual reducer and legalActions; turn canonicalized only after final rise, no search horizon.',
           },

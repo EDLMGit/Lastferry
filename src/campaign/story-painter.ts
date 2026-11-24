@@ -1954,6 +1954,22 @@ export function createCoveStoryPainter(canvas: HTMLCanvasElement) {
   }
   return {
     durations,
+    drawHarborMemory(memory: 'lantern' | 'moss') {
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      backdrop(5, 1);
+      tower(W * 0.87, H * 0.53, 0.51);
+      foregroundWater(H * 0.65, 5, { x: W * 0.87, strength: 0.55 });
+      if (memory === 'moss') {
+        boat(W * 0.49, H * 0.70, 1.45, 5, 1);
+      } else {
+        shore(W * 0.47, H * 0.73, W * 0.93);
+        rabbit(W * 0.35, H * 0.76, 1.07, 'tan', { warmth: 0.65, restHand: 1 });
+        rabbit(W * 0.51, H * 0.74, 0.89, 'cream', { head: -0.13 });
+        sheep(W * 0.69, H * 0.75, 1.35);
+        lantern(W * 0.22, H * 0.71, 1.4);
+      }
+      finish(5);
+    },
     resize(width: number, height: number, dpr = 1) {
       W = Math.max(1, width);
       H = Math.max(1, height);
