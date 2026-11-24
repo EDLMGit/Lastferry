@@ -117,6 +117,14 @@ test('first arrival saves Bellwater, opens Moss’s Practice and keeps both resc
   await expect(page.locator('#mastery-result')).toHaveAttribute('data-actions', '12');
   await expect(page.locator('#accept-moss-entry')).toBeVisible();
   await frame(page, '06-moss-arrival');
+  await page.setViewportSize({ width: 320, height: 740 });
+  const heading = page.locator('.arrival-with-keepsake h2');
+  await expect(heading).toHaveText('Moss’s Own Crossing');
+  await expect.poll(async () => heading.evaluate(title =>
+    title.getBoundingClientRect().right <= document.querySelector('.arrival-close')!.getBoundingClientRect().left,
+  )).toBe(true);
+  await frame(page, 'portrait-moss-arrival');
+  await page.setViewportSize({ width: 844, height: 390 });
   expect(await saves(page)).toEqual(accepted);
   await activate(page, 'accept-moss-entry', true);
   const earned = await saves(page);
