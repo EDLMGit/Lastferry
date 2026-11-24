@@ -1,5 +1,9 @@
 # Last Ferry — Project state
 
+## Next milestone · Journey rewards and revisits
+
+The owner took Moss’s request and landed at Home after completing the separate rescue. The current result explicitly routes there. They want to continue the Journey, revisit earned coves through the log and see a visual reward with fewer words. The [active brief](../NEXT_TASK_JOURNEY_REWARDS.md) covers those changes before release preparation.
+
 ## Harbor log · private Android v0.1.4
 
 Holding Pier has two illustrated keepsakes. Rue’s Lantern records the accepted Journey rescue. Moss’s Own Crossing records the captain delivering Pip and Rue while Moss waits at Stone, then returning for him. The first arrival offers Moss’s request alongside Bellwater. Home and the log show the pending destination and the strongest accepted lantern best. The twelve Journey chapters and the separate First Crossing are all available to replay.

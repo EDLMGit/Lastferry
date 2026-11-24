@@ -1,6 +1,6 @@
 # Last Ferry — active task
 
-**Active task — [HARBOR_LOG_01](NEXT_TASK_HARBOR_LOG.md).** Give the first accepted rescue a lasting place at Harbor and make a different rescue plan worth replaying. Deliver one optional request from Moss, immediate access to replay, visible Journey progress and a compatible private Android update. The [release-bundle rehearsal](NEXT_TASK_ANDROID_RELEASE_REHEARSAL.md) is queued behind the player-motivation playtest.
+**Active task — [JOURNEY_REWARDS_01](NEXT_TASK_JOURNEY_REWARDS.md).** Remove the live all-coves Practice mode, keep earned revisits in the Harbor log and let a replayed rescue continue directly into the captain’s saved Journey. Make each new keepsake the focus of its reward screen. Deliver an in-place Android update over v0.1.4. [Current APK evidence](reviews/harbor-log/android-REVIEW.md)
 
 The [private playtest](https://last-ferry-playtest.abumech.chatgpt.site/) serves **version 29**, game `000a1d51bdd5655448471a48d4f88d57a8b7f7b3`. Home → Play connects twelve Journey rescues to supper and credits. There are thirteen Practice entrances and nine scored coves. The four late crossings remain unscored for playtesting. [Independent review](reviews/journey-home/INDEPENDENT_REVIEW.md) · [Publication receipt](reviews/journey-home/deployment-confirmation.json).
 

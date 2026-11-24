@@ -4,7 +4,9 @@ The private Android update adds Rue’s Lantern and Moss’s Own Crossing. Home 
 
 On the offline Android 16 emulator, the in-place update retained the historical captain’s two lanterns and Bellwater checkpoint. A fresh captain took Moss’s request directly at the first arrival. After an immediate force-stop, both pages and the original three-lantern best were still there. Continue opened Another bell and put the captain at the helm of Bellwater on turn zero. [Installed runs and screenshots](reviews/harbor-log/android-REVIEW.md) · [Web playtest and verification](reviews/harbor-log/REVIEW.md) · [Install over v0.1.3](reviews/harbor-log/android-INSTALL.md)
 
-The next design decision depends on watching a player choose what to do after the first rescue. The release-bundle rehearsal is queued behind that observation.
+## Next private build
+
+**Active task — [JOURNEY_REWARDS_01](NEXT_TASK_JOURNEY_REWARDS.md).** Remove the live all-coves Practice mode, keep earned revisits in the Harbor log and let a replayed rescue continue directly into the captain’s saved Journey. Make each new keepsake the focus of its reward screen. Deliver an in-place Android update over v0.1.4. [Current APK evidence](reviews/harbor-log/android-REVIEW.md)
 
 ## Android cove view v0.1.3
 
