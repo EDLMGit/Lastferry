@@ -1,6 +1,6 @@
 # Last Ferry — The Long Tide
 
-[Play the twelve-cove Journey](https://last-ferry-playtest.abumech.chatgpt.site/) · [Update the Android playtest to v0.1.3](reviews/android-cove-view/INSTALL.md) · [Android comparison and save proof](reviews/android-cove-view/REVIEW.md) · [Google Play launch plan](docs/GOOGLE_PLAY_LAUNCH.md)
+[Play the Harbor log build locally](http://127.0.0.1:5421/) · [Update Android from v0.1.3 to v0.1.4](reviews/harbor-log/android-INSTALL.md) · [Moss’s crossing, upgrade proof and web run instructions](reviews/harbor-log/REVIEW.md) · [Google Play launch plan](docs/GOOGLE_PLAY_LAUNCH.md)
 
 [Play the full Journey locally](http://127.0.0.1:5420/). Choose **Play** for the opening, or **Continue** to pick up your saved chapter. There are twelve rescues before supper at the lighthouse. [Private playtest review](reviews/journey-home/REVIEW.md)
 

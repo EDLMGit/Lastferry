@@ -1,10 +1,18 @@
-# Last Ferry · Android cove view v0.1.3
+# Last Ferry · Harbor log v0.1.4
+
+The private Android update adds Rue’s Lantern and Moss’s Own Crossing. Home shows who came home, the Journey rescue count, the next destination and the best earned at Holding Pier. Taking Moss’s request at the first arrival saves the normal Bellwater checkpoint and starts a separate Practice crossing. All thirteen Practice entrances remain available in the log.
+
+[Harbor log handoff and playable checks](reviews/harbor-log/REVIEW.md) · [Install over v0.1.3](reviews/harbor-log/android-INSTALL.md)
+
+The next design decision depends on watching a player choose what to do after the first rescue. The release-bundle rehearsal is queued behind that observation.
+
+## Android cove view v0.1.3
 
 The offline APK update gives scenery the full window, protects phone controls with the reported insets, and keeps landmarks fixed when the ferry moves. Holding Pier and Far Shore exercise occupied deck spaces, the depth gauge and the nearby boarding choice. [Private installation instructions](reviews/android-cove-view/INSTALL.md) · [Matched Harbor frames and installed play](reviews/android-cove-view/REVIEW.md)
 
-## Next Android build and playtest
+## Commission after v0.1.3
 
-**Active task — [HARBOR_LOG_01](NEXT_TASK_HARBOR_LOG.md).** Give the first accepted rescue a lasting place at Harbor and make a different rescue plan worth replaying. Deliver one optional request from Moss, immediate access to replay, visible Journey progress and a compatible private Android update. The [release-bundle rehearsal](NEXT_TASK_ANDROID_RELEASE_REHEARSAL.md) is queued behind the player-motivation playtest.
+The [Harbor log brief](NEXT_TASK_HARBOR_LOG.md) asked what a captain could aim for after the first rescue and how to make that progress visible back at Home.
 
 ## First Android playtest · v0.1.2
 
