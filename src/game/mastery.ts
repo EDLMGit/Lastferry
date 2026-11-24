@@ -1,3 +1,5 @@
+import { storageForRecord } from './save-storage';
+
 export type MasteryTarget = { revision: number; target: number };
 export const masteryTargets: Readonly<Record<string, MasteryTarget>> = {
   'first-crossing': { revision: 1, target: 8 },
@@ -94,7 +96,7 @@ export class MasteryStore {
   private record: MasteryRecord = { version: 1, results: {} };
   private storageIssue: string | null = null;
 
-  constructor(getStorage: () => MasteryStorage = () => window.localStorage) {
+  constructor(getStorage: () => MasteryStorage = () => storageForRecord(MASTERY_STORAGE_KEY)) {
     try {
       this.storage = getStorage();
       const record = parseRecord(this.storage.getItem(MASTERY_STORAGE_KEY));

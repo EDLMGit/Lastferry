@@ -1,5 +1,6 @@
 import type { State } from './rules';
 import type { MasteryStorage } from './mastery';
+import { storageForRecord } from './save-storage';
 
 export const MOSS_REQUEST = 'Take Pip and Rue home first. I can wait at Stone Pier.';
 export const MOSS_ENTRY_TITLE = 'Moss’s Own Crossing';
@@ -31,7 +32,7 @@ export class HarborEntryStore {
   private unsaved = false;
   issue: string | null = null;
 
-  constructor(private getStorage: () => MasteryStorage = () => window.localStorage) {
+  constructor(private getStorage: () => MasteryStorage = () => storageForRecord(HARBOR_LOG_KEY)) {
     try {
       this.entries = new Set(readEntries(this.getStorage().getItem(HARBOR_LOG_KEY)));
     } catch {

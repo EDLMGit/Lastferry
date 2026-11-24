@@ -1,4 +1,5 @@
 import { storyCoves, storyScenes, supperScene, type CoveId, type SceneId } from './registry';
+import { storageForRecord } from '../game/save-storage';
 
 export const JOURNEY_STORAGE_KEY = 'last-ferry.journey.v1';
 export const JOURNEY_LEGACY_BACKUP_KEY = JOURNEY_STORAGE_KEY + '.before-six-coves';
@@ -278,7 +279,7 @@ export class JourneyProgress {
     persistent: true,
   };
 
-  constructor(getStorage: () => JourneyStorage = () => window.localStorage) {
+  constructor(getStorage: () => JourneyStorage = () => storageForRecord(JOURNEY_STORAGE_KEY)) {
     try {
       this.storage = getStorage();
       const raw = this.storage.getItem(JOURNEY_STORAGE_KEY);
