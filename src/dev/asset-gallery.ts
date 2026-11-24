@@ -28,6 +28,8 @@ import type { PortraitKey } from '../game/passenger-appearance';
 import { storyScenes } from '../campaign/registry';
 import { checkpointCopy } from '../campaign/progress';
 import { createCoveStoryPainter } from '../campaign/story-painter';
+import { lanternIllustrationMarkup, mossIllustrationMarkup, paintHarborPictures } from '../campaign/harbor-log';
+import { MOSS_ENTRY_TITLE } from '../game/moss-request';
 import { lanterns, masteryBadgeMarkup, masteryCriteriaMarkup, masteryResultMarkup } from '../ui/lanterns';
 import { arrivalMarkup } from '../ui/arrival';
 import { initial } from '../game/rules';
@@ -222,6 +224,12 @@ const beaverResize = new ResizeObserver(([entry]) => {
 });
 beaverResize.observe(beaverCanvas);
 const storyPainters = new Map<HTMLCanvasElement, ReturnType<typeof createCoveStoryPainter>>();
+const memories = document.createElement('div');
+memories.className = 'story-specimens';
+memories.innerHTML = `<figure>${lanternIllustrationMarkup()}<figcaption>Rue’s Lantern</figcaption></figure>
+  <figure>${mossIllustrationMarkup()}<figcaption>${MOSS_ENTRY_TITLE}</figcaption></figure>`;
+root.querySelector('.story-specimens')!.after(memories);
+paintHarborPictures(memories);
 const storyResize = new ResizeObserver((entries) => {
   for (const entry of entries) {
     const canvas = entry.target as HTMLCanvasElement,

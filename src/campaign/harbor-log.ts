@@ -18,7 +18,7 @@ function picture(memory: 'lantern' | 'moss', description: string) {
   return `<canvas class="harbor-picture" data-memory="${memory}" width="440" height="210" role="img" aria-label="${description}"></canvas>`;
 }
 
-function lanternIllustrationMarkup() {
+export function lanternIllustrationMarkup() {
   return picture('lantern', 'Rue’s lantern glows beside Rue, Pip and Moss at the lighthouse landing.');
 }
 
