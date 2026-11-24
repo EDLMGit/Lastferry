@@ -2,7 +2,7 @@
 
 The private Android update adds Rue’s Lantern and Moss’s Own Crossing. Home shows who came home, the Journey rescue count, the next destination and the best earned at Holding Pier. Taking Moss’s request at the first arrival saves the normal Bellwater checkpoint and starts a separate Practice crossing. All thirteen Practice entrances remain available in the log.
 
-[Harbor log handoff and playable checks](reviews/harbor-log/REVIEW.md) · [Install over v0.1.3](reviews/harbor-log/android-INSTALL.md)
+On the offline Android 16 emulator, the in-place update retained the historical captain’s two lanterns and Bellwater checkpoint. A fresh captain took Moss’s request directly at the first arrival. After an immediate force-stop, both pages and the original three-lantern best were still there. Continue opened Another bell and put the captain at the helm of Bellwater on turn zero. [Installed runs and screenshots](reviews/harbor-log/android-REVIEW.md) · [Web playtest and verification](reviews/harbor-log/REVIEW.md) · [Install over v0.1.3](reviews/harbor-log/android-INSTALL.md)
 
 The next design decision depends on watching a player choose what to do after the first rescue. The release-bundle rehearsal is queued behind that observation.
 

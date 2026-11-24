@@ -2,7 +2,7 @@
 
 Home shows the captain what came back from Holding Pier. Rue’s Lantern brings Pip, Rue and Moss together at the lighthouse. Moss’s Own Crossing shows him aboard the ferry on the trip the captain made for him. The log keeps both illustrations, the strongest lantern rating, the current Journey count and the next destination. From the same log the captain can replay a completed cove, take the request, or enter any of the thirteen Practice crossings.
 
-The private Android APK uses game source `29de344c886375b0524ed25026188993de7bb1eb`, on `m1-first-crossing`. The branch was clean when pulled from the v0.1.3 handoff to the commissioned baseline `4058ac58cc7c3aff531629e6fcf3f2afc4f0782c`. Subsequent handoff changes contain tests, evidence and documentation. [Install instructions](android-INSTALL.md) · [Android package identity and digests](android-package.json)
+The private Android APK uses game source `b768be9ea0659240226aec957bc567c20772f343`, on `m1-first-crossing`. The branch was clean when pulled from the v0.1.3 handoff to the commissioned baseline `4058ac58cc7c3aff531629e6fcf3f2afc4f0782c`. [Install instructions](android-INSTALL.md) · [Android package identity and digests](android-package.json)
 
 ## What the captain can do
 
@@ -24,11 +24,17 @@ The current Journey record supplies its accepted chapters, including the four un
 
 The in-place upgrade uses the same package name, local origin and certificate. The older Android profile had already earned two lanterns and reached Bellwater before this update. Its original Journey, best, preferences and backup were compared byte for byte. A separate emulator user supplies the fresh Journey. [Older save provenance](android-baseline.json) · [Installed upgrade](android-install.json) · [Native device walkthrough](android-REVIEW.md)
 
+The fresh captain took Moss’s request with Details open on a 320×740 viewport, earned the second page and immediately force-stopped the app. Offline relaunch showed both pages and the original three-lantern best. Continue opened Another bell and put the captain at the helm on turn zero. [Cold Home](android-cold-home.png) · [Cold Harbor log](android-cold-log.png) · [Bellwater helm](android-bellwater-helm.png) · [Device receipt](android-play.json)
+
 Review found that a successful checkpoint write followed by a single failed verification read could leave Undo open on a rescue that was already saved. The shipping build rereads the expected bytes before deciding whether to enter the detour. A genuine failed write leaves the result available for another attempt. The Harbor entry store also merges earned entries on a retry and preserves unrecognized records.
+
+On an earlier APK we force-stopped the app as soon as the earned Home card appeared. WebView had reported a successful save, but the next launch was missing Moss’s entry. The final Android shell synchronously writes the accepted Journey, lantern and Harbor log records to three private atomic files. A cold launch restores any stale WebView copy from the confirmed file. The old v0.1.3 values continue to supply each record until its first native write. During the upgrade test, WebView returned a missing Java string to JavaScript as `undefined`. Both `null` and `undefined` now read the original bytes. The ordinary web build still uses browser storage.
 
 ## Reproduce the web checks
 
-Use Node 24 in the repository. Start the production preview in one terminal.
+For the portable build, extract `Last-Ferry-0.1.4-web.zip`, run `python -m http.server 5422 --bind 127.0.0.1` from the directory containing `index.html`, and open [the local game](http://127.0.0.1:5422/).
+
+To reproduce from source, use Node 24 in the repository. Start the production preview in one terminal.
 
 ```powershell
 npm ci
@@ -44,15 +50,21 @@ $env:LAST_FERRY_PRODUCTION_PORT='5421'
 $env:LAST_FERRY_REVIEW_DIR='.cache/harbor-shipping'
 $env:HARBOR_FRAMES='reviews/harbor-log/web'
 npm run test:e2e -- harbor-log.spec.ts --output=.cache/harbor-shipping-browser
-npm run test:unit -- --maxWorkers=1
+npm run test:unit -- --maxWorkers=1 --testTimeout=20000
 npm run check:assets
 ```
 
 The production browser checks run in touch-enabled Chromium with reduced motion and read the rendered controls. The 844×390 and 780×320 frames are emulated landscape, alongside 320×740 and 390×844 portrait checks and a 1440×900 desktop rescue. The Android screenshots come from the installed app on an Android 16 SDK phone emulator. [Browser environment and served bundle hashes](web/build.json)
 
-The final production build and TypeScript check passed. All 786 unit tests across 67 files and all five Harbor log production-browser tests passed. The asset catalog validated 83 families. The 13 files in the portable web ZIP match the signed APK’s game files byte for byte, including the JS and CSS fetched by the browser tests. The APK SHA-256 is `595285d47abeabe5ce1907564f8718e7efb8b71617b77e134aa599b23f6211e2`. [Verification receipt](web/verification.json)
+The final production build and TypeScript check passed. All five Harbor log production-browser tests passed. The asset catalog validated 83 families. All 13 files served by the playtest URL match both the portable web ZIP and the signed APK byte for byte. The APK SHA-256 is `103563516239937f4a7c821a435b6e98d8ce7692fce7c680ec56ed87e61c540d`. [Verification receipt](web/verification.json)
+
+All 790 unit tests in 68 files passed. Under concurrent emulator and browser load the Two Shelters geometry sweep exceeded its default five-second limit. The full suite passed with a twenty-second limit and the same assertions. The subsequent phone title adjustment changed only CSS and its browser test.
 
 Early browser drivers tapped a covered control during the game’s 180 ms touch-through guard, or advanced before a single-passenger transfer had registered. The final driver leaves time between separate taps and verifies each committed turn.
+
+An additional real-interface regression opened Details at the first arrival on a 320×740 screen. The panel originally covered the two voyage buttons. It now occupies the space above them. The 320×740 and 780×320 checks verified button hit targets with Details open and closed, tide Undo and keyboard continuation. [Focused regression](../../tests/e2e/arrival-bubble.spec.ts)
+
+The 320-pixel Android capture also showed the Close button covering the end of the optional reward’s title. On narrow screens the title now wraps above Moss’s illustration. The browser test measures the title’s right edge against the button and captures the result. [Portrait reward](web/portrait-moss-arrival.png)
 
 ## Voluntary playtest
 

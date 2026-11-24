@@ -1,28 +1,33 @@
 {
-  "runtime": "29de344c886375b0524ed25026188993de7bb1eb",
+  "runtime": "b768be9ea0659240226aec957bc567c20772f343",
   "build": "npm run build (TypeScript and Vite production)",
   "tests": {
-    "first arrival saves Bellwater, opens Mossâ€™s Practice and keeps both rescues on return": "passed",
+    "first arrival saves Bellwater, opens Moss’s Practice and keeps both rescues on return": "passed",
     "Undo can discard the rabbit delivery and unloading rabbits from the shared boat earns no entry": "passed",
-    "a fresh Practice captain can independently earn Mossâ€™s entry without starting the Journey": "passed",
+    "a fresh Practice captain can independently earn Moss’s entry without starting the Journey": "passed",
     "all twelve story chapters count at supper and First Crossing stays a separate Practice": "passed",
     "one failed checkpoint readback still accepts the rescue and lanterns before Practice": "passed"
   },
   "stats": {
-    "startTime": "2026-11-24T18:23:06.822Z",
-    "duration": 106515.408,
+    "startTime": "2026-11-24T18:36:06.676Z",
+    "duration": 105241.65299999999,
     "expected": 5,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0
   },
   "unit": {
-    "passed": 786,
-    "files": 67,
-    "command": "npm run test:unit -- --maxWorkers=1"
+    "passed": 790,
+    "files": 68,
+    "command": "npm run test:unit -- --maxWorkers=1 --testTimeout=20000",
+    "source": "c41554825a3d7b23c3d22d8d7dda212945bdce01",
+    "subsequentChanges": [
+      "src/ui/arrival.css",
+      "tests/e2e/harbor-log.spec.ts"
+    ]
   },
   "catalogFamilies": 83,
-  "webZipSha256": "bb5fc3574fcaf1ad027e332271f0c0d3ce957220667bbd59581543b7fd5fbaff",
+  "webZipSha256": "b767b85d0f8933fead476f00b4aa71929fb2913338c9cfa8d5b5dba0c66ffb36",
   "archiveFilesComparedToApk": 13,
   "screenshotSha256": {
     "01-helm.png": "c16bfb0171f98de84b774175a3aaf853678e31661197b99fc2204093802dd8ed",
@@ -37,6 +42,7 @@
     "desktop-helm.png": "783a5b76fa43826a82405ea7a4a967bc3f8e3b8ba52961cd9eade1376c29b65f",
     "desktop-shared-boat-result.png": "70bbbbbc54f3b504be514998051240237a1c806fbd22666d89b59d75bba17b38",
     "portrait-first-choice.png": "b78ce6f3d0ab28ddca5580bd16dbbdef43860fbcd6f3fb85d545443b33eb6dd2",
+    "portrait-moss-arrival.png": "44473dded784fd196b039b89e84e0a49f418ee179aadce458547fdd410eb86de",
     "portrait-practice-log.png": "76d3fdaa06aea7c1b0681b8d34f1558d8371a57d396ebd1053b7f643f2f4dac4"
   }
 }

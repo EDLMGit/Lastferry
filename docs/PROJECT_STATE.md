@@ -6,7 +6,7 @@ Holding Pier has two illustrated keepsakes. Rue’s Lantern records the accepted
 
 The local web build and in-place Android playtest have a [source-pinned handoff](../reviews/harbor-log/REVIEW.md). The hosted private Site remains on version 29. A voluntary first-arrival playtest will inform the decision on further requests and the [release rehearsal](../NEXT_TASK_ANDROID_RELEASE_REHEARSAL.md).
 
-## Next milestone · the first rescue and a reason to return
+## Commission after v0.1.3 · the first rescue and a reason to return
 
 The owner reports that v0.1.3 runs well on their physical phone. They could not readily tell what they had earned, where to see progress, how to return to a cove, or why to take another trip beyond reducing actions. [HARBOR_LOG_01](../NEXT_TASK_HARBOR_LOG.md) commissions a first-cove experiment around these questions. Player observation will inform whether to extend it across the coast. The [release-bundle rehearsal](../NEXT_TASK_ANDROID_RELEASE_REHEARSAL.md) is queued.
 
