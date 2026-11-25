@@ -2,6 +2,7 @@ import { describe, expect, test } from 'vitest';
 import { harborLogMarkup } from '../../src/campaign/harbor-log';
 import { acceptCove, acknowledgeScene, newJourney } from '../../src/campaign/progress';
 import { MasteryStore, resultFor } from '../../src/game/mastery';
+import { MOSS_REQUEST } from '../../src/game/moss-request';
 
 function storedBests(...coves: string[]) {
   const values = new Map<string, string>();
@@ -28,6 +29,7 @@ describe('Harbor log revisit access', () => {
       storedBests('first-crossing', 'holding-pier', 'orchard-landing'), null);
     expect(markup).toContain('0 of 12 coves rescued');
     expect(markup).toContain('Moss’s Own Crossing');
+    expect(markup).toContain(`<blockquote>“${MOSS_REQUEST}”</blockquote>`);
     expect(markup).toContain('Rue’s Lantern');
     expect(markup).toContain('data-saved-best="orchard-landing"');
     expect(markup).toContain('data-practice="first-crossing"');
@@ -41,6 +43,7 @@ describe('Harbor log revisit access', () => {
     const markup = harborLogMarkup({ record, holdingRescued: true, mossEarned: false }, storedBests(), null);
     expect(markup).toContain('1 of 12 coves rescued');
     expect(markup).toContain('id="harbor-take-request"');
+    expect(markup).toContain(`<blockquote>“${MOSS_REQUEST}”</blockquote>`);
     expect(markup).toContain('data-practice="holding-pier"');
     expect(markup).not.toContain('data-practice="bellwater"');
   });

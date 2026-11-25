@@ -2,7 +2,7 @@ import type { State } from './rules';
 import type { MasteryStorage } from './mastery';
 import { storageForRecord, writeConfirmed } from './save-storage';
 
-export const MOSS_REQUEST = 'Take Pip and Rue home first. I can wait at Stone Pier.';
+export const MOSS_REQUEST = 'Leave me at Stone Pier. Take Pip and Rue home, then come back for me.';
 export const MOSS_ENTRY_TITLE = 'Moss’s Own Crossing';
 export const HARBOR_LOG_KEY = 'last-ferry.harbor-log.v1';
 

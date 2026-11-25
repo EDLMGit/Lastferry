@@ -54,10 +54,14 @@ describe('Moss’s request as a promise about the surviving trip', () => {
 
   test('separate unloads qualify only if Moss waits at Stone for both', () => {
     const session = new Session(holdingPier);
-    play(session, [...firstDelivery.slice(0, -1), unload([rabbits[0]]), { type: 'wait' }, unload([rabbits[1]]), ...returnForMoss]);
+    play(session, [...firstDelivery.slice(0, -1), unload([rabbits[1]]), { type: 'wait' }, unload([rabbits[0]]), ...returnForMoss]);
     expect(session.fulfillsMossRequest).toBe(true);
     session.restart();
     play(session, [...route.slice(0, -1), unload([rabbits[0]]), move('stone'), unload(moss), move('harbor'), unload([rabbits[1]]), ...returnForMoss]);
+    expect(session.result).not.toBeNull();
+    expect(session.fulfillsMossRequest).toBe(false);
+    session.restart();
+    play(session, [...firstDelivery.slice(0, -1), unload([rabbits[0]]), move('stone'), board(moss), move('harbor'), unload([rabbits[1]]), unload(moss)]);
     expect(session.result).not.toBeNull();
     expect(session.fulfillsMossRequest).toBe(false);
   });

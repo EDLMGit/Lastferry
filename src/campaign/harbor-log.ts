@@ -89,7 +89,7 @@ export function harborLogMarkup(page: HarborPage, mastery: MasteryStore, issue: 
     ${page.mossEarned ? mossIllustrationMarkup() : ''}
     <div class="harbor-entry-copy">
       ${page.mossEarned ? `<h3>${MOSS_ENTRY_TITLE}</h3>` : `<div class="harbor-author"><img src="${portraitSources['sheep-wool']}" alt="" width="50" height="50"><h3>Moss’s request</h3></div>`}
-      ${page.mossEarned ? '<p>You came back for Moss after Pip and Rue were safe.</p>' : `<blockquote>“${MOSS_REQUEST}”</blockquote>`}
+      <blockquote>“${MOSS_REQUEST}”</blockquote>
       ${mayRevisitHolding ? `<button class="cove-button ${page.mossEarned ? 'cove-button--quiet' : 'cove-button--warm'}" id="harbor-take-request">${controlContent('sail', page.mossEarned ? 'Revisit Moss’s request' : 'Take Moss’s request')}</button>` : ''}
     </div>
   </article>` : '';
