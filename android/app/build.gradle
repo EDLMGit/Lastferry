@@ -28,6 +28,7 @@ dependencies {
 
 def buildGame = tasks.register('buildCoveAssets', Exec) {
     workingDir gameRoot
+    environment 'VITE_LAST_FERRY_QA', '0'
     commandLine 'node', new File(gameRoot, 'node_modules/vite/bin/vite.js'), 'build',
         '--outDir', bundledGame.get().asFile.absolutePath, '--emptyOutDir'
 }

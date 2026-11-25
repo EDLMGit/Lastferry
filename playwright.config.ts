@@ -21,6 +21,7 @@ export default defineConfig({
   webServer: [
     {
       command: `npm run dev -- --port ${devPort}`,
+      env: { VITE_LAST_FERRY_QA: '1' },
       url: `http://127.0.0.1:${devPort}`,
       reuseExistingServer: true,
     },
