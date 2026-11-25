@@ -4,10 +4,11 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { Action } from '../../src/game/rules';
 import { resultFor } from '../../src/game/mastery';
+import { MOSS_REQUEST } from '../../src/game/moss-request';
 import { storyCoves, supperScene } from '../../src/campaign/registry';
 import { productionURL } from './evidence';
 import { simpleAction } from './large-cove-support';
-import { activate, fullyVisible, idle, undo } from './ui';
+import { activate, fullyVisible, idle, readable, undo } from './ui';
 import { fixture, skipStory, witness } from './three-lanterns-support';
 
 test.use({ hasTouch: true, isMobile: true, reducedMotion: 'reduce', viewport: { width: 844, height: 390 }, video: 'off' });
@@ -43,21 +44,44 @@ async function frame(page: Page, name: string) {
   await page.screenshot({ path: join(proofDir, name + '.png') });
 }
 
-async function checkReward(page: Page, keepsake: 'rue' | 'moss', primary: string) {
+async function checkArrival(page: Page, card: 'rue' | 'moss' | 'ordinary', primary: string) {
   const panel = page.locator('#arrival-content');
-  await expect(panel).toHaveAttribute('data-keepsake', keepsake);
-  await expect(page.locator('#dialog-title')).toHaveText(keepsake === 'rue' ? 'Rue’s Lantern' : 'Moss’s Own Crossing');
-  const picture = panel.locator('.arrival-keepsake canvas');
-  await expect(picture).toHaveAttribute('data-memory', keepsake === 'rue' ? 'lantern' : 'moss');
+  await expect(panel).toHaveAttribute('data-keepsake', card === 'ordinary' ? '' : card);
+  const titles = { rue: 'Rue’s Lantern', moss: 'Moss’s Own Crossing', ordinary: 'Everyone home.' };
+  await expect(page.locator('#dialog-title')).toHaveText(titles[card]);
+  const picture = panel.locator(card === 'ordinary' ? '#arrival-cast' : '.arrival-keepsake canvas');
+  if (card !== 'ordinary') await expect(picture).toHaveAttribute('data-memory', card === 'rue' ? 'lantern' : 'moss');
+  const count = panel.locator('.arrival-lantern-count');
+  await expect(count).toHaveText(card === 'moss' ? '1/3 lanterns' : '3/3 lanterns');
+  const offer = panel.locator('.arrival-invitation');
+  if (card !== 'moss') {
+    await expect(offer).toHaveAccessibleName('Moss');
+    await expect(offer.locator('#arrival-request-line')).toHaveText('“' + MOSS_REQUEST + '”');
+    await expect(offer.locator('.arrival-page-reward')).toHaveText('Earn a Harbor log page');
+    await expect(offer.getByRole('button')).toHaveAccessibleName(card === 'ordinary' ? 'Replay for Moss' : 'Replay Holding Pier for Moss');
+    await page.locator('#' + primary).focus();
+    await page.keyboard.press('Tab');
+    await expect(offer.getByRole('button')).toBeFocused();
+    await page.keyboard.press('Shift+Tab');
+    await expect(page.locator('#' + primary)).toBeFocused();
+  }
   for (const size of [{ width: 320, height: 740 }, { width: 780, height: 320 }]) {
     await page.setViewportSize(size);
     await fullyVisible(page, picture, false);
+    await fullyVisible(page, count, false);
+    await readable(count);
     await fullyVisible(page, page.locator('#' + primary));
     await fullyVisible(page, page.locator('#terminal-undo'));
     await fullyVisible(page, page.locator('#arrival-details > summary'));
-    if (keepsake === 'rue') await fullyVisible(page, page.locator('#take-moss-request'));
+    if (card !== 'moss') {
+      await fullyVisible(page, offer.getByRole('button'));
+      for (const part of ['#arrival-request-line', '.arrival-page-reward']) {
+        await fullyVisible(page, offer.locator(part), false);
+        await readable(offer.locator(part));
+      }
+    }
     expect(await page.locator('#dialog-content').evaluate(el => el.scrollTop)).toBe(0);
-    await frame(page, keepsake + '-' + size.width + 'x' + size.height);
+    await frame(page, card + '-' + size.width + 'x' + size.height);
   }
   await page.setViewportSize({ width: 844, height: 390 });
 }
@@ -119,7 +143,7 @@ test('first choice and illustrated reward continue straight to Another bell and 
   await start(page);
   await sail(page, ordinary);
   await expect(page.locator('#continue-story')).toHaveText('Continue to Bellwater');
-  await checkReward(page, 'rue', 'continue-story');
+  await checkArrival(page, 'rue', 'continue-story');
   await tap(page, 'take-moss-request');
   const accepted = await snapshots(page);
   expect(accepted.journey).toMatchObject({ completed: ['holding-pier'], checkpoint: { kind: 'scene', id: 'another-bell' } });
@@ -130,11 +154,21 @@ test('first choice and illustrated reward continue straight to Another bell and 
   await expect(page.getByTestId('turn')).toHaveText('07');
   await expect(page.getByTestId('tide')).toHaveText('1');
   await sail(page, requested.slice(7));
-  await checkReward(page, 'moss', 'continue-journey');
-  await page.locator('#arrival-details summary').tap();
+  await checkArrival(page, 'moss', 'continue-journey');
+  const details = page.locator('#arrival-details summary');
+  await details.focus();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#continue-journey')).toBeHidden();
+  await page.keyboard.press('Shift+Tab');
+  await expect(page.locator('#terminal-undo')).toBeFocused();
   await expect(page.locator('#arrival-details')).toContainText(/12 actions/);
+  await expect(page.locator('#mastery-best')).toContainText('3 of 3 lanterns');
+  await frame(page, 'moss-details-best');
   expect(await snapshots(page)).toEqual(accepted);
-  await page.locator('#arrival-details summary').tap();
+  await page.keyboard.press('Tab');
+  await expect(details).toBeFocused();
+  await page.keyboard.press('Space');
+  await expect(page.locator('#continue-journey')).toBeVisible();
   await tap(page, 'cancel');
   expect(await snapshots(page)).toEqual(accepted);
   await page.waitForTimeout(250);
@@ -172,6 +206,33 @@ test('first choice and illustrated reward continue straight to Another bell and 
   expect(errors).toEqual([]);
 });
 
+test('continuing from Rue leaves Moss available on the log and the ordinary Holding Pier arrival', async ({ page }) => {
+  await start(page);
+  await sail(page, ordinary);
+  await expect(page.locator('#dialog-title')).toHaveText('Rue’s Lantern');
+  await tap(page, 'continue-story');
+  await expect(page.locator('#dialog-title')).toHaveText('Another bell');
+  await tap(page, 'story-continue');
+  await expect(page.locator('#seascape')).toHaveAttribute('aria-label', 'Bellwater Cove');
+  await expect(page.getByTestId('turn')).toHaveText('00');
+  await page.reload();
+  await openLog(page);
+  await expect(page.locator('#harbor-moss-page')).toContainText(MOSS_REQUEST);
+  await expect(page.locator('#harbor-take-request')).toBeVisible();
+  await tap(page, 'journey-title');
+  await tap(page, 'home-new');
+  await tap(page, 'journey-replace-confirm');
+  await skipStory(page);
+  await tap(page, 'story-continue');
+  await sail(page, ordinary);
+  await expect(page.locator('#continue-story')).toHaveText('Continue to Bellwater');
+  await checkArrival(page, 'ordinary', 'continue-story');
+  await tap(page, 'take-moss-request');
+  await expect(page.getByTestId('turn')).toHaveText('00');
+  await expect(page.locator('#objective')).toContainText(MOSS_REQUEST);
+  expect((await snapshots(page)).journey.checkpoint).toEqual({ kind: 'scene', id: 'another-bell' });
+});
+
 test('a later captain can retry a missed request and resume their own earned chapter', async ({ page }) => {
   const record = laterCove(2);
   await fixture(page, JSON.stringify(record));
@@ -182,6 +243,7 @@ test('a later captain can retry a missed request and resume their own earned cha
   // Unload the rabbits before Moss from the same boat, a nonqualifying win.
   await sail(page, [...ordinary.slice(0, -1), { type: 'unload', passengerIds: ['rabbit-1', 'rabbit-2'] }, { type: 'unload', passengerIds: ['sheep-1'] }]);
   await expect(page.locator('#retry-moss-request')).toHaveText('Try Moss’s request again');
+  await expect(page.locator('#arrival-request-line')).toHaveText('Moss needs to be at Stone Pier when each rabbit reaches Harbor.');
   await expect(page.locator('#continue-journey')).toContainText(/Driftwood/);
   await tap(page, 'retry-moss-request');
   expect((await snapshots(page)).best).toMatchObject({ actions: 10, lanterns: 1 });
