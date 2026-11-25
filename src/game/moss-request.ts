@@ -1,6 +1,6 @@
 import type { State } from './rules';
 import type { MasteryStorage } from './mastery';
-import { storageForRecord } from './save-storage';
+import { storageForRecord, writeConfirmed } from './save-storage';
 
 export const MOSS_REQUEST = 'Take Pip and Rue home first. I can wait at Stone Pier.';
 export const MOSS_ENTRY_TITLE = 'Moss’s Own Crossing';
@@ -57,15 +57,17 @@ export class HarborEntryStore {
   }
 
   retry() {
-    if (!this.unsaved && !this.issue) return;
+    if (this.unsaved || this.issue) this.refresh();
+  }
+
+  refresh() {
     try {
       const storage = this.getStorage();
       const saved = readEntries(storage.getItem(HARBOR_LOG_KEY));
       for (const id of saved) this.entries.add(id);
       if ([...this.entries].some(id => !saved.includes(id))) {
         const raw = JSON.stringify({ version: 1, entries: [...this.entries].sort() });
-        storage.setItem(HARBOR_LOG_KEY, raw);
-        if (storage.getItem(HARBOR_LOG_KEY) !== raw) throw new Error('Harbor entry unavailable');
+        writeConfirmed(storage, HARBOR_LOG_KEY, raw);
       }
       this.unsaved = false;
       this.issue = null;

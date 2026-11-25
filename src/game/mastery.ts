@@ -1,4 +1,4 @@
-import { storageForRecord } from './save-storage';
+import { storageForRecord, writeConfirmed } from './save-storage';
 
 export type MasteryTarget = { revision: number; target: number };
 export const masteryTargets: Readonly<Record<string, MasteryTarget>> = {
@@ -92,27 +92,15 @@ function parseRecord(raw: string | null): MasteryRecord | null {
 }
 
 export class MasteryStore {
-  private storage: MasteryStorage | null = null;
   private record: MasteryRecord = { version: 1, results: {} };
   private storageIssue: string | null = null;
 
-  constructor(getStorage: () => MasteryStorage = () => storageForRecord(MASTERY_STORAGE_KEY)) {
-    try {
-      this.storage = getStorage();
-      const record = parseRecord(this.storage.getItem(MASTERY_STORAGE_KEY));
-      if (!record) {
-        this.storage = null;
-        this.storageIssue = 'Saved lantern results could not be read. New results last for this visit.';
-        return;
-      }
-      this.record = record;
-    } catch {
-      this.unavailable();
-    }
+  constructor(private getStorage: () => MasteryStorage = () => storageForRecord(MASTERY_STORAGE_KEY)) {
+    this.sync();
   }
 
   get persistent() {
-    return this.storage !== null;
+    return this.storageIssue === null;
   }
 
   get issue() {
@@ -128,34 +116,42 @@ export class MasteryStore {
 
   accept(result: MasteryResult | null): boolean {
     if (!validResult(result) || result.revision !== masteryTargets[result.coveId].revision) return false;
-    if (this.storage) {
-      try {
-        const saved = parseRecord(this.storage.getItem(MASTERY_STORAGE_KEY));
-        if (!saved) throw new Error('Unusable lantern results');
+    return this.sync(result);
+  }
+
+  retry() {
+    if (this.storageIssue) this.sync();
+  }
+
+  private sync(result?: MasteryResult) {
+    let storage: MasteryStorage | undefined;
+    let saved: MasteryRecord | null = null;
+    try {
+      storage = this.getStorage();
+      saved = parseRecord(storage.getItem(MASTERY_STORAGE_KEY));
+      if (saved) {
         for (const [key, stored] of Object.entries(saved.results)) {
           if (better(stored, this.record.results[key])) this.record.results[key] = stored;
         }
-      } catch {
-        this.unavailable();
-      }
+        this.storageIssue = null;
+      } else this.storageIssue = 'Saved lantern results could not be read. New results last for this visit.';
+    } catch {
+      this.unavailable();
     }
-    const key = resultKey(result);
-    if (!better(result, this.record.results[key])) return false;
-    this.record.results[key] = { ...result };
-    if (this.storage) {
+    const improved = !!result && better(result, this.record.results[resultKey(result)]);
+    if (result && improved) this.record.results[resultKey(result)] = { ...result };
+    if (storage && saved && Object.entries(this.record.results).some(([key, local]) => better(local, saved.results[key]))) {
       try {
         const raw = JSON.stringify(this.record);
-        this.storage.setItem(MASTERY_STORAGE_KEY, raw);
-        if (this.storage.getItem(MASTERY_STORAGE_KEY) !== raw) throw new Error('Lantern results unavailable');
+        writeConfirmed(storage, MASTERY_STORAGE_KEY, raw);
       } catch {
         this.unavailable();
       }
     }
-    return true;
+    return improved;
   }
 
   private unavailable() {
-    this.storage = null;
     this.storageIssue = 'Lantern results last for this visit. Saving is unavailable on this device.';
   }
 }

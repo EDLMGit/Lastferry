@@ -1,7 +1,8 @@
 import { storyCoves, storyScenes, supperScene, type CoveId, type SceneId } from './registry';
-import { storageForRecord } from '../game/save-storage';
+import { storageForRecord, writeConfirmed } from '../game/save-storage';
 
 export const JOURNEY_STORAGE_KEY = 'last-ferry.journey.v1';
+const refreshIssue = 'The saved Journey could not be read. The last known checkpoint is available for this visit.';
 export const JOURNEY_LEGACY_BACKUP_KEY = JOURNEY_STORAGE_KEY + '.before-six-coves';
 export const JOURNEY_ORCHARD_BACKUP_KEY = JOURNEY_STORAGE_KEY + '.before-orchard';
 export const JOURNEY_TERNHAVEN_BACKUP_KEY = JOURNEY_STORAGE_KEY + '.before-ternhaven';
@@ -282,12 +283,7 @@ export class JourneyProgress {
   constructor(getStorage: () => JourneyStorage = () => storageForRecord(JOURNEY_STORAGE_KEY)) {
     try {
       this.storage = getStorage();
-      const raw = this.storage.getItem(JOURNEY_STORAGE_KEY);
-      if (raw === null) return;
-      const result = parseJourney(raw);
-      this.current = result.valid
-        ? { kind: 'valid', record: result.record, raw, issue: null, persistent: true }
-        : { kind: 'invalid', record: null, raw, issue: result.issue, persistent: true };
+      this.readCheckpoint();
     } catch {
       this.storage = null;
       this.current.persistent = false;
@@ -297,6 +293,35 @@ export class JourneyProgress {
 
   get snapshot(): JourneySnapshot {
     return { ...this.current, record: this.current.record ? copy(this.current.record) : null };
+  }
+
+  // A second tab can advance the Journey while this captain is on a revisit.
+  // Keep the visit-only fallback authoritative when storage was unavailable.
+  refresh(): boolean {
+    if (!this.current.persistent) return false;
+    try {
+      return this.readCheckpoint();
+    } catch {
+      this.current.issue = refreshIssue;
+      return false;
+    }
+  }
+
+  private readCheckpoint() {
+    if (!this.storage) return false;
+    const raw = this.storage.getItem(JOURNEY_STORAGE_KEY);
+    if (raw === this.current.raw) {
+      if (this.current.issue === refreshIssue) this.current.issue = null;
+      return false;
+    }
+    if (raw === null) this.current = { kind: 'empty', record: null, raw, persistent: true, issue: null };
+    else {
+      const result = parseJourney(raw);
+      this.current = result.valid
+        ? { kind: 'valid', record: result.record, raw, issue: null, persistent: true }
+        : { kind: 'invalid', record: null, raw, issue: result.issue, persistent: true };
+    }
+    return true;
   }
 
   replace(): JourneyRecord {
@@ -365,21 +390,10 @@ export class JourneyProgress {
         if (this.storage.getItem(JOURNEY_STORAGE_KEY) !== previousRoute)
           throw new Error('Checkpoint changed during backup');
       }
-      this.storage.setItem(JOURNEY_STORAGE_KEY, raw);
-      if (this.storage.getItem(JOURNEY_STORAGE_KEY) !== raw) {
-        throw new Error('Checkpoint unavailable');
-      }
+      writeConfirmed(this.storage, JOURNEY_STORAGE_KEY, raw);
     } catch {
       if (requireSavedCheckpoint) {
-        // A storage provider may apply the write before reporting an error, or
-        // fail the first readback. Confirm the outcome before leaving Undo open.
-        try {
-          if (this.storage?.getItem(JOURNEY_STORAGE_KEY) === raw) {
-            this.current = { kind: 'valid', record, raw, persistent: true, issue: null };
-            return true;
-          }
-        } catch { /* Leave the unconfirmed checkpoint available for a retry. */ }
-        this.current.issue = 'Could not save your Bellwater checkpoint. Try the request again, or continue the story for this visit.';
+        this.current.issue = 'Could not save your next Journey checkpoint. Try again, or continue the story for this visit.';
         return false;
       }
       if (backupKey === JOURNEY_DROWNED_ORCHARD_BACKUP_KEY) {

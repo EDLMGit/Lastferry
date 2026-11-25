@@ -1,5 +1,16 @@
 type RecordStorage = Pick<Storage, 'getItem' | 'setItem'>;
 
+/** Some storage providers report failure after committing the write. */
+export function writeConfirmed(storage: RecordStorage, key: string, value: string) {
+  try {
+    storage.setItem(key, value);
+    if (storage.getItem(key) === value) return;
+  } catch {
+    // Confirm exact bytes once more before reporting an unsaved result.
+  }
+  if (storage.getItem(key) !== value) throw new Error('Result could not be saved.');
+}
+
 interface SaveHost {
   localStorage: RecordStorage;
   lastFerrySaves?: {

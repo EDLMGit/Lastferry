@@ -80,6 +80,8 @@ describe('Harbor keepsakes and the detour checkpoint', () => {
     a.keep('rue-lantern');
     expect(a.mossEarned).toBe(false);
     b.keep('moss-own-crossing');
+    a.refresh();
+    expect(a.mossEarned).toBe(true);
     a.keep('moss-own-crossing');
     b.keep('moss-own-crossing');
     expect(storage.writes).toEqual([HARBOR_LOG_KEY, HARBOR_LOG_KEY]);

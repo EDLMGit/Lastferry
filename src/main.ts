@@ -70,7 +70,6 @@ import {
   practiceCoves,
   storyScenes,
   scenePredecessor,
-  supperScene,
   type SceneId,
 } from './campaign/registry';
 import {
@@ -82,6 +81,7 @@ import {
 } from './campaign/progress';
 import { StoryPresentation, restoredHarbor } from './campaign/presentation';
 import { StoryView } from './campaign/story-view';
+import { canRevisit, returnDestination } from './campaign/revisit';
 import './campaign/story.css';
 
 import './campaign/home.css';
@@ -91,13 +91,16 @@ import { transferFacts, transferReceipt } from './ui/transfer';
 import { boardingReading, depthReading, readingMarkup } from './ui/depth-reading';
 import './ui/depth-reading.css';
 
-const cove = new URLSearchParams(location.search).get('cove');
-let journey = cove === null ? new JourneyProgress() : null;
+const qaBuild = import.meta.env.VITE_LAST_FERRY_QA === '1';
+const journey = new JourneyProgress();
 const mastery = new MasteryStore();
 const harborEntries = new HarborEntryStore();
+const linkedId = new URLSearchParams(location.search).get('cove');
+const linkedCove = linkedId && (qaBuild || earnedRevisit(linkedId))
+  ? practiceCoves.find(entry => entry.id === linkedId) : null;
 let sailingMossRequest = false;
 let campaignPlay = false;
-let level = practiceCoves.find((entry) => entry.id === cove) ?? holdingPier;
+let level = linkedCove || holdingPier;
 let experiment = level.id === 'holding-pier';
 let isBellwater = level.id === 'bellwater';
 let { nodeNames, passengerNames } = levelNames(level);
@@ -305,8 +308,8 @@ function homeCheckpointNotice(record: JourneyRecord, newEntry: SceneId | null) {
 }
 
 function continueSavedJourney() {
-  const freshEntry = journey?.continueAvailableContent();
-  if (!freshEntry && legacyContinuationScene(journey?.snapshot.record)) {
+  const freshEntry = journey.continueAvailableContent();
+  if (!freshEntry && legacyContinuationScene(journey.snapshot.record)) {
     showHome('home-play');
     return;
   }
@@ -327,8 +330,34 @@ function masteryNotice() {
   return mastery.issue ? `<p class="mastery-notice" role="status">${mastery.issue}</p>` : '';
 }
 
-function visitPractice(next: typeof level, mossRequest = false) {
-  if (session.busy) return;
+function renderSaveNotice(notice: HTMLElement, story = false) {
+  const issues = [!journey.snapshot.persistent ? 'Journey progress lasts for this visit only.' : '', mastery.issue, harborEntries.issue].filter(Boolean);
+  if (!issues.length) {
+    notice.remove();
+    return;
+  }
+  notice.textContent = issues.join(' ');
+  if (!mastery.issue && !harborEntries.issue) return;
+  const retry = document.createElement('button');
+  if (story) retry.id = 'retry-rescue-save';
+  setControl(retry, null, 'Retry saving', 'quiet');
+  notice.append(' ', retry);
+  retry.onclick = () => {
+    mastery.retry();
+    harborEntries.retry();
+    renderSaveNotice(notice, story);
+    if (!notice.isConnected) (story ? $('story-continue') : $('journey-return'))?.focus({ preventScroll: true });
+    scheduleLayout();
+  };
+}
+
+function earnedRevisit(id: string) {
+  journey.refresh();
+  return canRevisit(id, journey.snapshot.record, !!mastery.best('first-crossing'));
+}
+
+function startRevisit(next: typeof level, mossRequest = false) {
+  if (session.busy || (!qaBuild && !earnedRevisit(next.id))) return;
   startPlayable(next, false, mossRequest);
   if (new URLSearchParams(location.search).has('cove')) {
     const address = new URL(location.href);
@@ -337,9 +366,17 @@ function visitPractice(next: typeof level, mossRequest = false) {
   }
 }
 
+function leaveCoveLink() {
+  const url = new URL(location.href);
+  if (!url.searchParams.has('cove')) return;
+  url.searchParams.delete('cove');
+  history.replaceState(null, '', url);
+}
+
 function harborPage() {
-  harborEntries.retry();
-  const record = journey?.snapshot.record ?? null;
+  harborEntries.refresh();
+  mastery.retry();
+  const record = journey.snapshot.record ?? null;
   return {
     record,
     holdingRescued: harborEntries.holdingRescued || !!record?.completed.includes('holding-pier'),
@@ -348,6 +385,7 @@ function harborPage() {
 }
 
 function showHome(focusId?: string) {
+  leaveCoveLink();
   clearReceipt();
 
   storyPresentation.cancel();
@@ -368,7 +406,7 @@ function showHome(focusId?: string) {
 
   setHomeVisible(true);
 
-  const snapshot = journey?.snapshot;
+  const snapshot = journey.snapshot;
 
   const checkpoint = snapshot?.record?.checkpoint;
 
@@ -392,7 +430,7 @@ function showHome(focusId?: string) {
 
   homeSurface.innerHTML = `<header id="home-title"><h1>Last Ferry</h1><p>The Long Tide</p></header>
     <nav id="home-menu" aria-label="Home"><p class="home-notice">${destination ? `Next · ${destination}<br>` : ''}${notice}${snapshot && !snapshot.persistent ? ' Progress lasts only for this visit.' : ''}${snapshot?.issue && (invalid || newEntry) ? ` ${snapshot.issue}` : ''}</p>
-    <button id="home-play">${label}</button><div class="home-secondary"><button id="home-options">Options</button>${card ? '' : '<button id="home-practice">Harbor log &amp; Practice</button>'}</div>
+    <button id="home-play">${label}</button><div class="home-secondary"><button id="home-options">Options</button>${card ? '' : '<button id="home-practice">Harbor log</button>'}</div>
     <div class="home-secondary"><button id="home-sound"></button>${checkpoint ? '<button id="home-new">New journey</button>' : ''}</div>
     ${masteryNotice()}${harborEntries.issue ? `<p class="mastery-notice" role="status">${harborEntries.issue}</p>` : ''}</nav>${card}`;
   paintHarborPictures(homeSurface);
@@ -471,23 +509,22 @@ function returnToJourneyTitle() {
 
   if (!app.classList.contains('home-screen')) mountCove(holdingPier);
   keepRescue(departing);
-  journey ??= new JourneyProgress();
-  history.replaceState(null, '', location.pathname);
   showHome(mode === 'practice' ? 'home-practice' : undefined);
 }
 function beginJourney() {
-  if (journey?.snapshot.record?.completed.includes('holding-pier')) harborEntries.keep('rue-lantern');
-  journey?.replace();
+  if (journey.snapshot.record?.completed.includes('holding-pier')) harborEntries.keep('rue-lantern');
+  journey.replace();
   resumeJourney(false);
 }
 function resumeJourney(restored = true) {
-  const checkpoint = journey?.snapshot.record?.checkpoint;
+  leaveCoveLink();
+  const checkpoint = journey.snapshot.record?.checkpoint;
   if (!checkpoint) return;
   campaignPlay = true;
   if (checkpoint.kind === 'complete') {
     if (restored) {
       const destination = storyCoves.find(
-        (entry) => entry.id === checkpointCove(journey!.snapshot.record!),
+        (entry) => entry.id === checkpointCove(journey.snapshot.record!),
       )!.level;
       mountCove(destination);
       world.sync(restoredHarbor(destination));
@@ -546,22 +583,39 @@ function continueStory() {
     return;
   }
   const id = storyId;
-  if (!journey?.acknowledge(id)) return;
+  if (!journey.acknowledge(id)) return;
   resumeJourney(false);
 }
-function acceptStoryCove(destination: 'story' | 'moss' | 'home' = 'story') {
+function acceptStoryCove(destination: 'story' | 'moss' | 'revisit' | 'home' = 'story') {
   if (!campaignPlay || session.busy || session.state.status !== 'won') return;
   const entry = storyCoves.find((candidate) => candidate.id === level.id);
-  if (!entry || !journey) return;
-  if (!journey.accept(entry.id, session.state.status, destination === 'moss')) {
-    renderDialog();
+  if (!entry) return;
+  if (!journey.accept(entry.id, session.state.status, destination === 'moss' || destination === 'revisit')) {
+    switchDialog('terminal', 'continue-story');
     return;
   }
   if (entry.id === 'holding-pier') harborEntries.keep('rue-lantern');
   keepRescue();
-  if (destination === 'moss') visitPractice(holdingPier, true);
+  if (destination === 'moss') startRevisit(holdingPier, true);
+  else if (destination === 'revisit') startRevisit(entry.level);
   else if (destination === 'home') returnToJourneyTitle();
   else resumeJourney(false);
+}
+
+function continueAfterRevisit() {
+  if (campaignPlay || mode !== 'terminal' || session.busy || session.state.status !== 'won') return;
+  if (journey.refresh()) {
+    renderDialog();
+    return;
+  }
+  keepRescue();
+  const destination = returnDestination(journey.snapshot.record);
+  if (destination.kind === 'journey') {
+    continueSavedJourney();
+  } else {
+    returnToJourneyTitle();
+    if (destination.kind === 'log') showJourney('practice', 'dialog-title');
+  }
 }
 function renderStoryStatus() {
   if (mode !== 'story' || !storyId) return;
@@ -685,7 +739,7 @@ function mountCove(next: typeof level) {
 
 function renderJourneyDialog() {
   storyView = null;
-  const snapshot = journey?.snapshot;
+  const snapshot = journey.snapshot;
   const checkpointNotice = snapshot?.persistent === false
     ? 'Journey progress lasts for this visit only.'
     : 'Progress is saved between coves. An unfinished cove starts again.';
@@ -702,8 +756,8 @@ function renderJourneyDialog() {
       checkpoint?.kind === 'cove'
         ? storyCoves.find((entry) => entry.id === checkpoint.id)!.level.title
         : null;
-    body = `<p class="journey-subtitle">The Long Tide</p><p>${checkpointNotice}</p>${destination ? `<p>Continue at ${destination}, from its beginning.</p>` : ''}${snapshot?.kind === 'invalid' ? `<p role="alert">${snapshot.issue} Start a new journey to replace it, or play Practice without changing it.</p>` : ''}${notice}`;
-    actions = `${snapshot?.record ? `<button id="journey-continue">Continue journey${checkpoint?.kind === 'cove' ? ' · from cove start' : ''}</button>` : ''}<button id="journey-new">New journey</button><button id="journey-practice">Practice</button><button id="journey-settings">Options</button>`;
+    body = `<p class="journey-subtitle">The Long Tide</p><p>${checkpointNotice}</p>${destination ? `<p>Continue at ${destination}, from its beginning.</p>` : ''}${snapshot?.kind === 'invalid' ? `<p role="alert">${snapshot.issue} Start a new journey to replace it, or view your Harbor log.</p>` : ''}${notice}`;
+    actions = `${snapshot?.record ? `<button id="journey-continue">Continue journey${checkpoint?.kind === 'cove' ? ' · from cove start' : ''}</button>` : ''}<button id="journey-new">New journey</button><button id="journey-practice">Harbor log</button><button id="journey-settings">Options</button>`;
   } else if ((mode === 'story' || mode === 'transcript') && storyId) {
     renderIllustratedStory(mode === 'transcript');
     return;
@@ -712,11 +766,11 @@ function renderJourneyDialog() {
     paintHarborPictures(dialog);
     $('journey-title').onclick = returnToJourneyTitle;
     const request = $('harbor-take-request');
-    if (request) request.onclick = () => visitPractice(holdingPier, true);
+    if (request) request.onclick = () => startRevisit(holdingPier, true);
     const replay = $('harbor-replay-holding');
-    if (replay) replay.onclick = () => visitPractice(holdingPier);
+    if (replay) replay.onclick = () => startRevisit(holdingPier);
     for (const button of dialog.querySelectorAll<HTMLButtonElement>('[data-practice]'))
-      button.onclick = () => visitPractice(practiceCoves.find(entry => entry.id === button.dataset.practice)!);
+      button.onclick = () => startRevisit(practiceCoves.find(entry => entry.id === button.dataset.practice)!);
     return;
   } else if (mode === 'replace') {
     heading = 'Start a new journey?';
@@ -726,8 +780,8 @@ function renderJourneyDialog() {
   } else if (mode === 'return-title') {
     heading = 'Return home?';
 
-    body = campaignPlay && experiment && session.result
-      ? '<p>Returning Home accepts Holding Pier’s rescue. Your Harbor log will keep Pip, Rue and Moss together. Continue will open the story at Bellwater.</p>'
+    body = campaignPlay && session.state.status === 'won'
+      ? `<p>Returning Home accepts the rescue at ${level.title} and saves the next Journey chapter.</p>`
       : `<p>This crossing will start again from its beginning. Its moves and Undo history are only kept while you play.</p>${session.result ? '<p>Returning home keeps this rescue’s lantern result.</p>' : ''}<p>${checkpointNotice}</p>`;
     actions =
       '<button id="journey-return-cancel">Keep playing</button><button id="journey-return-confirm">Return home</button>';
@@ -735,7 +789,7 @@ function renderJourneyDialog() {
     heading = 'Credits';
     body = `<div class="credits-bill"><div class="credits-title">${iconMarkup('harbor-home')}<p>Last Ferry <span>The Long Tide</span></p></div><dl><div><dt>Game direction</dt><dd>The Last Ferry project</dd></div><div><dt>Development</dt><dd>Built with OpenAI Codex</dd></div><div><dt>3D rendering</dt><dd>Three.js contributors</dd></div></dl><p class="credits-thanks">Thank you for bringing everyone home.</p></div>` + notice;
     actions =
-      '<button id="journey-practice">Replay coves</button><button id="journey-settings">Settings</button><button id="journey-title">Home</button>';
+      '<button id="journey-practice">Harbor log</button><button id="journey-settings">Settings</button><button id="journey-title">Home</button>';
   }
   $('dialog-content').innerHTML =
     `<header class="dialog-head${mode === 'story' ? ' sr-only' : ''}"><h2 id="dialog-title">${heading}</h2></header><div class="dialog-body journey-copy">${body}</div><footer class="dialog-footer journey-actions">${actions}</footer>`;
@@ -762,7 +816,7 @@ function renderJourneyDialog() {
   on('journey-title', returnToJourneyTitle);
 
   on('journey-return-confirm', () => {
-    if (campaignPlay && experiment && session.result) acceptStoryCove('home');
+    if (campaignPlay && session.state.status === 'won') acceptStoryCove('home');
     else returnToJourneyTitle();
   });
 
@@ -800,15 +854,12 @@ function renderIllustratedStory(transcript: boolean) {
       button.textContent ?? '',
       button.id === 'story-continue' ? 'warm' : 'quiet',
     );
-  if (journey?.snapshot.persistent === false || mastery.issue) {
+  if (!journey.snapshot.persistent || mastery.issue || harborEntries.issue) {
     const notice = document.createElement('p');
     notice.className = 'story-storage-notice';
     notice.setAttribute('role', 'status');
-    notice.textContent = [
-      journey?.snapshot.persistent === false ? 'Journey progress lasts for this visit only.' : '',
-      mastery.issue ?? '',
-    ].filter(Boolean).join(' ');
     $('story-continue').parentElement!.append(notice);
+    renderSaveNotice(notice, true);
   }
   storyView = new StoryView($('story-canvas') as HTMLCanvasElement);
   storyUiKey = '';
@@ -1276,7 +1327,7 @@ function openDialog(next: DialogMode, action?: Action, trigger?: string) {
   $('dock-actions').inert = true;
   $('selection-leader').innerHTML = '';
   (next === 'terminal'
-    ? ($('continue-story') ?? $('accept-moss-entry') ?? $('return-harbor') ?? $('next-cove') ?? $('choose-cove') ?? $('terminal-undo'))
+    ? ($('continue-story') ?? $('continue-journey') ?? $('terminal-undo'))
     : $('cancel')
   ).focus();
   positionDialog();
@@ -1337,7 +1388,7 @@ function celebrateArrival() {
   if (!arrivalCelebrationPending) return;
   arrivalCelebrationPending = false;
   if (motion.reduced || gameHidden) return;
-  for (const element of dialog.querySelectorAll<HTMLElement>('.arrival-overview, .arrival-cast'))
+  for (const element of dialog.querySelectorAll<HTMLElement>('.arrival-overview, .arrival-cast, .arrival-keepsake'))
     arrivalAnimations.push(element.animate(
       [{ opacity: 0.6, transform: 'translateY(6px)' }, { opacity: 1, transform: 'translateY(0)' }],
       { duration: 450, easing: 'ease-out' },
@@ -1457,6 +1508,7 @@ function renderDialog() {
       level.rules.tide.rises.find((r) => r.afterTurn > s.turn)?.level ?? s.tideLevel,
     );
   } else if (mode === 'menu') {
+    const qaPicker = qaBuild && !campaignPlay ? `<label class="cove-picker">QA crossing<select id="cove-picker">${practiceCoves.map(cove => `<option value="${cove.id}" ${cove.id === level.id ? 'selected' : ''}>${cove.title}</option>`).join('')}</select></label>` : '';
     const passengerCosts = level.passengers
       .map(
         (p) =>
@@ -1464,18 +1516,24 @@ function renderDialog() {
       )
       .join('; ');
     $('dialog-content').innerHTML =
-      `${header('Crossing menu')}<div class="dialog-body menu-body">${s.status === 'won' ? '<button id="return-arrival">Return to arrival</button>' : ''}<div class="menu-actions"><button id="restart">Restart crossing</button><button id="settings">Settings</button></div><label class="cove-picker">Choose cove<select id="cove-picker">${practiceCoves.map((l) => `<option value="${l.id}" ${l.id === level.id ? 'selected' : ''}>${l.title}${l.id === baseline.id ? ' · baseline' : ''}</option>`).join('')}</select></label><details id="help-details"><summary>How to play · actions and depth</summary><p>${actionCostCopy(level)}</p><p>Select a named place, island, pier or landmark to see its options for free. Choose Sail to travel one passage. Select the ferry for its current place. A named single-passenger action acts directly. For several passengers, choose names in the nearby chooser, then use its named action. Select your current place for free transfer details. The chooser shows the selected load and depth. Tips in Settings adds predicted outcomes and warnings before losing actions. Tips starts Off. Route depths, currents, pier deadlines and the forecast are always available.</p><p>Boat depth needed: ${draftBandsCopy(level)}. ${passengerCosts}. A passage must be at least as deep as the boat needs.</p><p>Boarding and unloading happen before the tide rises. Use the status button for the tide and pier forecast. Undo earlier actions or restart to recover from a losing plan.</p><p>Tab and Shift+Tab move between controls; Enter or Space activates them. Escape closes a dialog first; press it again to close the location card. Selection never spends an action.</p></details></div>`;
+      `${header('Crossing menu')}<div class="dialog-body menu-body">${s.status === 'won' ? '<button id="return-arrival">Return to arrival</button>' : ''}<div class="menu-actions"><button id="restart">Restart crossing</button><button id="settings">Settings</button></div>${qaPicker}<details id="help-details"><summary>How to play · actions and depth</summary><p>${actionCostCopy(level)}</p><p>Select a named place, island, pier or landmark to see its options for free. Choose Sail to travel one passage. Select the ferry for its current place. A named single-passenger action acts directly. For several passengers, choose names in the nearby chooser, then use its named action. Select your current place for free transfer details. The chooser shows the selected load and depth. Tips in Settings adds predicted outcomes and warnings before losing actions. Tips starts Off. Route depths, currents, pier deadlines and the forecast are always available.</p><p>Boat depth needed: ${draftBandsCopy(level)}. ${passengerCosts}. A passage must be at least as deep as the boat needs.</p><p>Boarding and unloading happen before the tide rises. Use the status button for the tide and pier forecast. Undo earlier actions or restart to recover from a losing plan.</p><p>Tab and Shift+Tab move between controls; Enter or Space activates them. Escape closes a dialog first; press it again to close the location card. Selection never spends an action.</p></details></div>`;
 
     $('restart').onclick = restart;
     if (sailingMossRequest) {
       document.querySelector('.menu-body')!.insertAdjacentHTML('afterbegin',
         `<p class="sailing-request"><strong>Moss’s request</strong> “${MOSS_REQUEST}”</p>`);
     }
+    if (mastery.issue || harborEntries.issue) {
+      const notice = document.createElement('p');
+      notice.setAttribute('role', 'status');
+      document.querySelector('.menu-body')!.prepend(notice);
+      renderSaveNotice(notice);
+    }
     const rating = Object.hasOwn(masteryTargets, level.id) ? masteryTargets[level.id] : null;
     document.querySelector('.menu-body')!.insertAdjacentHTML(
       'beforeend', rating
         ? masteryCriteriaMarkup(rating.target, level.title) + masteryNotice()
-        : '<p class="mastery-unrated">Playtest · no lantern rating</p>',
+        : '<p class="mastery-unrated">This rescue has no lantern rating.</p>',
     );
 
     {
@@ -1487,16 +1545,12 @@ function renderDialog() {
       $('settings').closest('.menu-actions')!.after(returnButton);
       returnButton.onclick = () => showJourney('return-title', 'journey-return-cancel');
       const policy = document.createElement('p');
-      policy.textContent = 'Practice does not change your journey.' +
-        (rating ? ' Continuing, leaving or restarting after a rescue keeps its lantern result.' : '');
+      policy.textContent = 'Your Journey will resume at its saved chapter.';
       if (campaignPlay) {
-        const storagePolicy = journey?.snapshot.persistent
+        const storagePolicy = journey.snapshot.persistent
           ? 'Progress is saved between coves. An unfinished cove starts again.'
           : 'Journey progress lasts for this visit only.';
-        policy.textContent = storagePolicy + (experiment && s.status === 'won'
-          ? ' At arrival, continue to Bellwater, take Moss’s request, or accept the rescue and go Home.'
-          : ' Continue story after arrival to advance.') +
-          (rating ? ' Continuing, leaving or restarting keeps the lantern result.' : ' This crossing has no lantern rating.');
+        policy.textContent = storagePolicy + ' Continue after arrival to advance.';
       }
       returnButton.after(policy);
     }
@@ -1509,13 +1563,12 @@ function renderDialog() {
       $('return-arrival').onclick = () =>
         switchDialog(
           'terminal',
-          campaignPlay ? 'continue-story' : session.fulfillsMossRequest ? 'accept-moss-entry' : sailingMossRequest ? 'return-harbor' : experiment ? 'next-cove' : 'choose-cove',
+          campaignPlay ? 'continue-story' : 'continue-journey',
         );
-    if (campaignPlay) $('cove-picker').closest('label')!.remove();
     if ($('cove-picker'))
       ($('cove-picker') as HTMLSelectElement).onchange = (e) => {
         const next = practiceCoves.find(entry => entry.id === (e.target as HTMLSelectElement).value);
-        if (next) visitPractice(next);
+        if (next) startRevisit(next);
       };
   } else if (mode === 'settings') {
     $('dialog-content').innerHTML =
@@ -1544,9 +1597,7 @@ function renderDialog() {
     renderSound();
     renderMotion();
   } else {
-    const f = statusCopy(s, level),
-      won = s.status === 'won',
-      next = won && experiment;
+    const f = statusCopy(s, level), won = s.status === 'won';
     dialog.dataset.outcome = won ? 'won' : 'lost';
     const lossTitle = s.lossReason ? {
       PASSENGER_STRANDED: 'A turn too late.',
@@ -1555,48 +1606,36 @@ function renderDialog() {
       RETURN_DEPTH: 'No way to lighten the boat.',
     }[s.lossReason.code] : '';
     if (won) {
-      let policy = '';
-      if (campaignPlay) {
-        const progress = journey!.snapshot;
-        const record = progress.record!;
-        if (record.checkpoint.kind === 'cove') {
-          const next = acceptCove(record, record.checkpoint.id, s.status);
-          const handoff = next.checkpoint.kind === 'scene' && next.checkpoint.id === supperScene
-            ? 'Continue story to join the others at supper.'
-            : `Next crossing: ${storyCoves.find((entry) => entry.id === checkpointCove(next))!.level.title}.`;
-          policy = `${handoff} Undo stays available until you accept this rescue. ${progress.persistent ? 'Reloading restarts this cove.' : 'Progress lasts for this visit only.'}`;
-        }
-      } else policy = 'Practice does not change your journey.';
+      if (!campaignPlay) journey.refresh();
+      if (experiment) harborEntries.refresh();
+      const { record, issue } = journey.snapshot;
+      const next = campaignPlay && record?.checkpoint.kind === 'cove'
+        ? acceptCove(record, record.checkpoint.id, s.status) : record;
       const requestFulfilled = session.fulfillsMossRequest;
-      const offerRequest = campaignPlay && experiment;
-      const forward = campaignPlay ? { id: 'continue-story', label: offerRequest ? 'Continue to Bellwater' : 'Continue story' }
-        : requestFulfilled ? { id: 'accept-moss-entry', label: 'Keep page & go Home' }
-        : sailingMossRequest ? { id: 'return-harbor', label: 'Return Home' }
-        : next ? { id: 'next-cove', label: 'Next cove' }
-        : { id: 'choose-cove', label: 'Choose a cove' };
+      const keepsake = requestFulfilled && !harborEntries.mossEarned ? 'moss'
+        : campaignPlay && experiment && !harborEntries.holdingRescued ? 'rue' : undefined;
+      const offerRequest = campaignPlay && experiment && !requestFulfilled && !harborEntries.mossEarned;
+      const forward = { id: campaignPlay ? 'continue-story' : 'continue-journey', label: returnDestination(next).label };
       $('dialog-content').innerHTML = arrivalMarkup({
         level, state: s, result: session.result, best: mastery.best(level.id),
-        successfulUndos: session.successfulUndos, forward, policy, offerRequest, requestFulfilled,
+        successfulUndos: session.successfulUndos, forward, keepsake, offerRequest,
         requestMissed: sailingMossRequest && !requestFulfilled,
-        notice: [mastery.issue, harborEntries.issue, offerRequest ? journey?.snapshot.issue : null].filter(Boolean).join(' '),
+        notice: [mastery.issue, harborEntries.issue, issue].filter(Boolean).join(' '),
       });
-      if (requestFulfilled) paintHarborPictures($('arrival-content'));
+      if (keepsake) paintHarborPictures($('arrival-content'));
       $('arrival-content').dataset.celebrationId = String(arrivalCelebrationId);
-      $(forward.id).onclick = campaignPlay ? () => acceptStoryCove()
-        : requestFulfilled || sailingMossRequest ? returnToJourneyTitle
-        : next ? () => visitPractice(practiceCoves.find(entry => entry.id === 'bellwater')!)
-        : () => switchDialog('menu', 'cove-picker');
-      $('terminal-settings').onclick = () => openSettings('terminal');
-      if (offerRequest) {
-        $('take-moss-request').onclick = () => acceptStoryCove('moss');
-        $('accept-harbor-home').onclick = () => acceptStoryCove('home');
-      }
+      $(forward.id).onclick = campaignPlay ? () => acceptStoryCove() : continueAfterRevisit;
+      if ($('terminal-settings')) $('terminal-settings').onclick = () => openSettings('terminal');
+      if (offerRequest) $('take-moss-request').onclick = () => acceptStoryCove('moss');
+      if ($('retry-moss-request')) $('retry-moss-request').onclick = () => startRevisit(holdingPier, true);
+      if ($('accept-harbor-home')) $('accept-harbor-home').onclick = campaignPlay
+        ? () => acceptStoryCove('home') : returnToJourneyTitle;
     } else {
       $('dialog-content').innerHTML =
         `${header(lossTitle)}<div class="dialog-body ending loss"><p>${f.headline}</p><p>${f.detail}</p></div><footer class="dialog-footer terminal-actions"><button id="terminal-undo">Undo last action</button><button id="terminal-restart">Restart</button></footer>`;
     }
     $('terminal-undo').onclick = undo;
-    $('terminal-restart').onclick = restart;
+    if ($('terminal-restart')) $('terminal-restart').onclick = restart;
   }
   const controls: [string, CoveIcon | null, string | null, CoveFace, boolean?][] = [
     ['cancel', 'close', $('cancel').getAttribute('aria-label'), 'quiet', true],
@@ -1610,8 +1649,6 @@ function renderDialog() {
     ['settings', 'settings', 'Settings', 'quiet'],
     ['settings-back', null, 'Back', 'quiet'],
     ['return-arrival', 'harbor-home', 'Return to arrival', 'warm'],
-    ['next-cove', 'next-cove', 'Next cove', 'warm'],
-    ['choose-cove', 'whole-cove', 'Choose a cove', 'warm'],
     ['terminal-settings', 'settings', 'Settings', 'quiet', true],
     ['terminal-undo', 'undo', s.status === 'won' ? 'Undo' : 'Undo last action', 'quiet'],
     ['terminal-restart', s.status === 'won' ? 'replay' : null, s.status === 'won' ? 'Replay' : 'Restart', s.status === 'won' ? 'action' : 'quiet'],
@@ -2131,6 +2168,10 @@ function undo() {
 }
 function restart() {
   if (session.busy) return;
+  if (campaignPlay && session.state.status === 'won') {
+    acceptStoryCove('revisit');
+    return;
+  }
 
   clearReceipt();
 
@@ -3017,7 +3058,7 @@ updateViewport();
 render();
 scheduleLayout();
 
-if (journey) showHome();
+if (!linkedCove) showHome();
 
 if (location.origin === 'https://appassets.androidplatform.net') {
   activityHidden = (window as Window & { lastFerryAndroidBackground?: boolean }).lastFerryAndroidBackground === true;
@@ -3048,13 +3089,13 @@ if (import.meta.env.DEV)
       getState: () => copy(session.state),
       getCampaignStatus: () =>
         copy({
-          entry: journey ? 'journey' : 'direct',
+          entry: linkedCove ? 'direct' : 'journey',
           active: campaignPlay,
           level: level.id,
           mode,
           scene: storyId,
           settled: storyPresentation.settled,
-          progress: journey?.snapshot ?? null,
+          progress: journey.snapshot,
         }),
       getStoryStatus: () =>
         copy({
