@@ -29,7 +29,7 @@ export function masteryResultMarkup(current: MasteryResult, best: MasteryResult 
 }
 
 export function masteryBadgeMarkup(best: MasteryResult | null, knownRescued = false, scored = true) {
-  if (!scored) return '<span class="mastery-badge mastery-unrated">Playtest · no lantern rating</span>';
+  if (!scored) return `<span class="mastery-badge mastery-unrated">${knownRescued ? 'Rescued' : 'Story crossing'} · no lantern rating</span>`;
   if (!best) return `<span class="mastery-badge mastery-unrated">${knownRescued ? 'Rescued · not yet rated' : 'Not yet rated'}</span>`;
   return `<span class="mastery-badge" role="img" aria-label="Best · ${best.lanterns} of 3 lanterns · ${metrics(best)}">${lanterns(best.lanterns)}<span aria-hidden="true">${best.lanterns} of 3</span></span>`;
 }

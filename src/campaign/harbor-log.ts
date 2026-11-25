@@ -2,8 +2,9 @@ import { holdingPier, level as firstCrossing, type Level } from '../levels/level
 import { masteryTargets, type MasteryResult, type MasteryStore } from '../game/mastery';
 import { MOSS_ENTRY_TITLE, MOSS_REQUEST } from '../game/moss-request';
 import { controlContent, escapeLabel, portraitSources } from '../ui/cove-ui';
-import { masteryBadgeMarkup, masteryCriteriaMarkup } from '../ui/lanterns';
+import { masteryBadgeMarkup } from '../ui/lanterns';
 import { legacyContinuationScene, type JourneyRecord } from './progress';
+import { canRevisit } from './revisit';
 import { storyCoves, storyScenes } from './registry';
 import { createCoveStoryPainter } from './story-painter';
 import './harbor-log.css';
@@ -64,47 +65,49 @@ export function homeHarborCard(page: HarborPage, best: MasteryResult | null) {
   </button>`;
 }
 
-function practiceRow(entry: Level, completed: readonly string[], mastery: MasteryStore) {
-  const rescued = completed.includes(entry.id);
+function revisitRow(entry: Level, best: MasteryResult | null) {
   const scored = Object.hasOwn(masteryTargets, entry.id);
-  const action = rescued ? 'Replay' : 'Practice';
   return `<button class="cove-button cove-button--quiet practice-row" data-practice="${entry.id}" id="practice-${entry.id}">
-    <span class="practice-title">${action} · ${escapeLabel(entry.title)}</span>
-    ${masteryBadgeMarkup(mastery.best(entry.id), rescued, scored)}
+    <span class="practice-title">Revisit · ${escapeLabel(entry.title)}</span>
+    ${masteryBadgeMarkup(best, true, scored)}
   </button>`;
 }
 
 export function harborLogMarkup(page: HarborPage, mastery: MasteryStore, issue: string | null) {
   const completed = page.record?.completed ?? [];
   const best = mastery.best('holding-pier');
-  const requestAvailable = page.holdingRescued || page.mossEarned || !!best;
+  const standaloneBest = mastery.best(firstCrossing.id);
+  const mayRevisitHolding = canRevisit('holding-pier', page.record, !!standaloneBest);
   const destination = nextHarborDestination(page.record);
   const lanternPage = page.holdingRescued ? `<article class="harbor-entry" id="harbor-lantern-page">
     ${lanternIllustrationMarkup()}
     <div class="harbor-entry-copy"><h3>Rue’s Lantern</h3><p>Pip, Rue and Moss are home from Holding Pier.</p>
     ${best ? `<div class="harbor-entry-best">Best rescue ${masteryBadgeMarkup(best)}</div>` : ''}
-    <button class="cove-button cove-button--quiet" id="harbor-replay-holding">${controlContent('replay', 'Replay Holding Pier')}</button></div>
+    ${mayRevisitHolding ? `<button class="cove-button cove-button--quiet" id="harbor-replay-holding">${controlContent('replay', 'Revisit Holding Pier')}</button>` : ''}</div>
   </article>` : '';
-  const requestPage = requestAvailable ? `<article class="harbor-entry harbor-request" id="harbor-moss-page" data-earned="${page.mossEarned}">
+  const requestPage = mayRevisitHolding || page.mossEarned ? `<article class="harbor-entry harbor-request" id="harbor-moss-page" data-earned="${page.mossEarned}">
     ${page.mossEarned ? mossIllustrationMarkup() : ''}
     <div class="harbor-entry-copy">
       ${page.mossEarned ? `<h3>${MOSS_ENTRY_TITLE}</h3>` : `<div class="harbor-author"><img src="${portraitSources['sheep-wool']}" alt="" width="50" height="50"><h3>Moss’s request</h3></div>`}
-      <blockquote>“${MOSS_REQUEST}”</blockquote>
-      <button class="cove-button ${page.mossEarned ? 'cove-button--quiet' : 'cove-button--warm'}" id="harbor-take-request">${controlContent('sail', page.mossEarned ? 'Replay Moss’s request' : 'Take Moss’s request')}</button>
+      ${page.mossEarned ? '<p>You came back for Moss after Pip and Rue were safe.</p>' : `<blockquote>“${MOSS_REQUEST}”</blockquote>`}
+      ${mayRevisitHolding ? `<button class="cove-button ${page.mossEarned ? 'cove-button--quiet' : 'cove-button--warm'}" id="harbor-take-request">${controlContent('sail', page.mossEarned ? 'Revisit Moss’s request' : 'Take Moss’s request')}</button>` : ''}
     </div>
   </article>` : '';
   const notices = [mastery.issue, issue].filter(Boolean).map(text =>
     `<p class="mastery-notice" role="status">${escapeLabel(text!)}</p>`).join('');
+  const revisits = storyCoves.filter(cove => completed.includes(cove.id));
+  const olderBests = storyCoves.filter(cove => !completed.includes(cove.id)).flatMap(cove => {
+    const saved = mastery.best(cove.id);
+    return saved ? [`<li data-saved-best="${cove.id}"><span>${escapeLabel(cove.level.title)}</span>${masteryBadgeMarkup(saved)}</li>`] : [];
+  });
   return `<header class="harbor-log-head"><div><h2 id="dialog-title" tabindex="-1">Harbor log</h2><p>${progressText(page.record)}${destination ? ` · Next stop · ${escapeLabel(destination)}` : ''}</p></div>
     <button id="journey-title" class="cove-button cove-button--quiet">${controlContent('harbor-home', 'Home')}</button></header>
     ${notices}
     ${lanternPage || requestPage ? `<div class="harbor-pages">${lanternPage}${requestPage}</div>` : '<p class="harbor-empty">Your first page awaits the rescue at Holding Pier.</p>'}
-    <section class="harbor-practice" aria-labelledby="harbor-practice-title"><h3 id="harbor-practice-title">Practice coves</h3>
-      <p>Revisit any crossing. Your Journey stays where you left it.</p>
-      ${masteryCriteriaMarkup()}
-      <h4>Journey chapters</h4>
-      <div class="harbor-crossings">${storyCoves.map(cove => practiceRow(cove.level, completed, mastery)).join('')}</div>
-      <h4>Separate practice crossing</h4>
-      <div class="harbor-crossings">${practiceRow(firstCrossing, completed, mastery)}</div>
-    </section>`;
+    ${revisits.length ? `<section class="harbor-practice" aria-label="Rescued Journey coves"><h3>Rescued coves</h3>
+      <div class="harbor-crossings">${revisits.map(cove => revisitRow(cove.level, mastery.best(cove.id))).join('')}</div></section>` : ''}
+    ${standaloneBest ? `<section class="harbor-practice" aria-label="Separate crossing"><h3>Separate crossing</h3>
+      <div class="harbor-crossings">${revisitRow(firstCrossing, standaloneBest)}</div></section>` : ''}
+    ${olderBests.length ? `<section class="harbor-practice"><h3>Earlier lantern bests</h3>
+      <ul class="harbor-saved-bests">${olderBests.join('')}</ul></section>` : ''}`;
 }

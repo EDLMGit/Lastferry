@@ -37,9 +37,10 @@ describe('unscored Practice compatibility', () => {
     expect(masteryTargets['orchard-landing']).toEqual({ target: 13, revision: 1 });
   });
 
-  test('an unscored row describes a playtest rather than an unearned accepted rating', () => {
+  test('an unscored crossing shows its story rescue status', () => {
     const markup = masteryBadgeMarkup(null, false, false);
-    expect(markup).toContain('Playtest · no lantern rating');
+    expect(markup).toContain('Story crossing · no lantern rating');
+    expect(masteryBadgeMarkup(null, true, false)).toContain('Rescued · no lantern rating');
     expect(markup).not.toContain('<svg');
     expect(markup).not.toContain('Not yet rated');
     expect(masteryBadgeMarkup(null)).toContain('Not yet rated');

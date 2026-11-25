@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import plans from '../../data/ternhaven/witnesses.json';
 import { practiceCoves, storyCoves } from '../../src/campaign/registry';
-import { ternhaven, wideBerth, type Level, passengerName } from '../../src/levels/level';
+import { holdingPier, ternhaven, wideBerth, type Level, passengerName } from '../../src/levels/level';
 import { initial, type Action, type State } from '../../src/game/rules';
 import { Session } from '../../src/game/session';
 import { resultFor, masteryTargets } from '../../src/game/mastery';
@@ -124,6 +124,26 @@ describe('arrival presentation from real level identities', () => {
     expect(markup).not.toContain('class="arrival-lantern"');
     expect(markup).not.toContain('keeps this result');
     expect(markup).toContain('class="arrival-storage-notice" role="status">Storage is unavailable.');
+  });
+
+  test.each([
+    ['rue', 'Rue’s Lantern', 'lantern'],
+    ['moss', 'Moss’s Own Crossing', 'moss'],
+  ] as const)('the new %s keepsake leads with its picture and puts rescue metrics in Details', (keepsake, title, memory) => {
+    const markup = arrivalMarkup({
+      level: holdingPier, state: fixture(holdingPier), keepsake, offerRequest: keepsake === 'rue',
+      result: resultFor(holdingPier.id, keepsake === 'rue' ? 9 : 12, 0), best: resultFor(holdingPier.id, 9, 0),
+      forward: { id: 'continue-journey', label: 'Continue to Bellwater' },
+    });
+    const [main, details] = markup.split('<details id="arrival-details">');
+    expect(main).toContain(`data-memory="${memory}"`);
+    expect(main).toContain(`<h2 id="dialog-title">${title}</h2>`);
+    expect(main).toContain('Continue to Bellwater');
+    expect(main.includes('Take Moss’s request')).toBe(keepsake === 'rue');
+    expect(main.includes('class="arrival-lanterns"')).toBe(keepsake === 'rue');
+    expect(main).not.toContain('mastery-metrics');
+    expect(details).toContain('class="mastery-metrics"');
+    expect(details).toContain('Best accepted rescue · 3 of 3 lanterns');
   });
 
   test('Replay uses a distinct original decorative icon inside a semantic named action', () => {
