@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { productionURL } from './evidence';
 import { act } from './ui';
+import { fixture } from './three-lanterns-support';
+import { resultFor } from '../../src/game/mastery';
 test('production bundle: real rescue without debug globals or external assets', async ({
   page,
 }) => {
@@ -10,6 +12,10 @@ test('production bundle: real rescue without debug globals or external assets', 
   page.on('request', (r) => {
     if (!r.url().startsWith(productionURL)) external.push(r.url());
   });
+  // First Crossing is an earned standalone revisit for returning captains.
+  await fixture(page, undefined, JSON.stringify({
+    version: 1, results: { 'first-crossing@1': resultFor('first-crossing', 8, 0) },
+  }));
   await page.goto(`${productionURL}/?cove=first-crossing`);
   await expect(page.locator('canvas')).toBeVisible();
   expect(await page.evaluate(() => typeof (window as any).__LAST_FERRY__)).toBe('undefined');
