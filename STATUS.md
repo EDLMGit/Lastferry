@@ -1,4 +1,10 @@
-# Last Ferry · Journey rewards v0.1.5
+# Last Ferry · Moss’s invitation v0.1.6
+
+Moss now tells the captain what to do on the optional Holding Pier replay and names the reward before they choose. His illustrated page shows the current trip’s lantern count. **Continue to Bellwater** leads into *Another bell*. A captain who takes the direct route can find the same wish in the Harbor log. [Phone build, recorded trip and verification](reviews/moss-invitation/REVIEW.md)
+
+The installed Android update preserved the v0.1.5 captain’s pending Driftwood story, two pages and both three-lantern bests. On a fresh profile the direct choice reached Bellwater on turn zero. The matching production browser build passed nine playthrough checks and the unit suite passed all 802 tests. [Upgrade receipt](reviews/moss-invitation/android-upgrade.json) · [Browser results](reviews/moss-invitation/web/verification.json)
+
+## Journey rewards v0.1.5
 
 On the first rescue, Rue’s Lantern offers Bellwater or Moss’s request. After Moss’s solo trip the captain can keep his page and open the saved story with one tap. Later revisits return to the captain’s current destination, including supper. A finished Journey returns to the Harbor log. The log opens rescued coves and preserves older lantern bests. Captains with a saved First Crossing best can still revisit that separate crossing.
 

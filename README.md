@@ -1,12 +1,12 @@
 # Last Ferry — The Long Tide
 
-[Play Journey rewards locally](http://127.0.0.1:5421/) · [Install Android v0.1.5 over v0.1.4](reviews/journey-rewards/android-INSTALL.md) · [Journey rewards walkthrough and verification](reviews/journey-rewards/REVIEW.md)
+[Play locally](http://127.0.0.1:5421/) · [Install Android v0.1.6 over v0.1.5](reviews/moss-invitation/android-INSTALL.md) · [Watch Moss’s invitation and earned page](reviews/moss-invitation/REVIEW.md)
 
-Start at Home. Each rescued Journey cove earns a revisit in the Harbor log. At Holding Pier you can take Moss’s request as soon as Rue sets down her lantern. When you bring Moss home, his illustrated page opens the way to your next chapter.
+At Holding Pier, Moss asks you to leave him at Stone Pier, take Pip and Rue home, then come back for him. You can play his crossing for an illustrated Harbor log page or continue to Bellwater and take his request from the log later. Each scored arrival shows the lanterns earned on that trip. Open **Details** to see your best accepted rescue.
 
 ## Earlier builds and playtest records
 
-[v0.1.4 Harbor log and Android upgrade](reviews/harbor-log/REVIEW.md) · [Google Play launch plan](docs/GOOGLE_PLAY_LAUNCH.md)
+[v0.1.5 Journey rewards and earned revisits](reviews/journey-rewards/REVIEW.md) · [v0.1.4 Harbor log and Android upgrade](reviews/harbor-log/REVIEW.md) · [Google Play launch plan](docs/GOOGLE_PLAY_LAUNCH.md)
 
 [Play the full Journey locally](http://127.0.0.1:5420/). Choose **Play** for the opening, or **Continue** to pick up your saved chapter. There are twelve rescues before supper at the lighthouse. [Private playtest review](reviews/journey-home/REVIEW.md)
 

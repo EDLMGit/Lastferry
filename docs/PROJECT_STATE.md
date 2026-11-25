@@ -1,5 +1,9 @@
 # Last Ferry — Project state
 
+## Moss’s invitation · v0.1.6
+
+The Holding Pier arrival groups Moss’s own words, the optional replay and the page it earns. Both the first keepsake and the ordinary homecoming offer the choice. Scored cards show the current trip’s lanterns beside the artwork, including on Moss’s earned page. A captain who continues directly can take the request from the Harbor log later. Game direction will review the private Android and phone-browser builds before release preparation. [Commission](../NEXT_TASK_MOSS_INVITATION.md) · [Playthrough and upgrade evidence](../reviews/moss-invitation/REVIEW.md)
+
 ## Journey rewards and earned revisits · v0.1.5
 
 The Android update and matching web game use the captain’s saved Journey for revisit access and the destination after a rescue. The Harbor log keeps earlier keepsakes and lantern records. The next release decision follows the owner’s playtest of the direct handoff. [Playback and build evidence](../reviews/journey-rewards/REVIEW.md)
