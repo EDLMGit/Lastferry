@@ -1,10 +1,16 @@
-# Last Ferry · Harbor log v0.1.4
+# Last Ferry · Journey rewards v0.1.5
+
+On the first rescue, Rue’s Lantern offers Bellwater or Moss’s request. After Moss’s solo trip the captain can keep his page and open the saved story with one tap. Later revisits return to the captain’s current destination, including supper. A finished Journey returns to the Harbor log. The log opens rescued coves and preserves older lantern bests. Captains with a saved First Crossing best can still revisit that separate crossing.
+
+[Journey rewards handoff](reviews/journey-rewards/REVIEW.md) · [Private Android install](reviews/journey-rewards/android-INSTALL.md)
+
+## Harbor log v0.1.4
 
 The private Android update adds Rue’s Lantern and Moss’s Own Crossing. Home shows who came home, the Journey rescue count, the next destination and the best earned at Holding Pier. Taking Moss’s request at the first arrival saves the normal Bellwater checkpoint and starts a separate Practice crossing. All thirteen Practice entrances remain available in the log.
 
 On the offline Android 16 emulator, the in-place update retained the historical captain’s two lanterns and Bellwater checkpoint. A fresh captain took Moss’s request directly at the first arrival. After an immediate force-stop, both pages and the original three-lantern best were still there. Continue opened Another bell and put the captain at the helm of Bellwater on turn zero. [Installed runs and screenshots](reviews/harbor-log/android-REVIEW.md) · [Web playtest and verification](reviews/harbor-log/REVIEW.md) · [Install over v0.1.3](reviews/harbor-log/android-INSTALL.md)
 
-## Next private build
+## Commission after v0.1.4
 
 **Active task — [JOURNEY_REWARDS_01](NEXT_TASK_JOURNEY_REWARDS.md).** Remove the live all-coves Practice mode, keep earned revisits in the Harbor log and let a replayed rescue continue directly into the captain’s saved Journey. Make each new keepsake the focus of its reward screen. Deliver an in-place Android update over v0.1.4. [Current APK evidence](reviews/harbor-log/android-REVIEW.md)
 

@@ -1,6 +1,10 @@
 # Last Ferry — Project state
 
-## Next milestone · Journey rewards and revisits
+## Journey rewards and earned revisits · v0.1.5
+
+The Android update and matching web game use the captain’s saved Journey for revisit access and the destination after a rescue. The Harbor log keeps earlier keepsakes and lantern records. The next release decision follows the owner’s playtest of the direct handoff. [Playback and build evidence](../reviews/journey-rewards/REVIEW.md)
+
+## Commission after v0.1.4
 
 The owner took Moss’s request and landed at Home after completing the separate rescue. The current result explicitly routes there. They want to continue the Journey, revisit earned coves through the log and see a visual reward with fewer words. The [active brief](../NEXT_TASK_JOURNEY_REWARDS.md) covers those changes before release preparation.
 

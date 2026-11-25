@@ -1,6 +1,12 @@
 # Last Ferry — The Long Tide
 
-[Play the Harbor log build locally](http://127.0.0.1:5421/) · [Update Android from v0.1.3 to v0.1.4](reviews/harbor-log/android-INSTALL.md) · [Moss’s crossing, upgrade proof and web run instructions](reviews/harbor-log/REVIEW.md) · [Google Play launch plan](docs/GOOGLE_PLAY_LAUNCH.md)
+[Play Journey rewards locally](http://127.0.0.1:5421/) · [Install Android v0.1.5 over v0.1.4](reviews/journey-rewards/android-INSTALL.md) · [Journey rewards walkthrough and verification](reviews/journey-rewards/REVIEW.md)
+
+Start at Home. Each rescued Journey cove earns a revisit in the Harbor log. At Holding Pier you can take Moss’s request as soon as Rue sets down her lantern. When you bring Moss home, his illustrated page opens the way to your next chapter.
+
+## Earlier builds and playtest records
+
+[v0.1.4 Harbor log and Android upgrade](reviews/harbor-log/REVIEW.md) · [Google Play launch plan](docs/GOOGLE_PLAY_LAUNCH.md)
 
 [Play the full Journey locally](http://127.0.0.1:5420/). Choose **Play** for the opening, or **Continue** to pick up your saved chapter. There are twelve rescues before supper at the lighthouse. [Private playtest review](reviews/journey-home/REVIEW.md)
 
