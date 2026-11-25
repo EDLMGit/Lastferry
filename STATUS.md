@@ -2,7 +2,7 @@
 
 On the first rescue, Rue’s Lantern offers Bellwater or Moss’s request. After Moss’s solo trip the captain can keep his page and open the saved story with one tap. Later revisits return to the captain’s current destination, including supper. A finished Journey returns to the Harbor log. The log opens rescued coves and preserves older lantern bests. Captains with a saved First Crossing best can still revisit that separate crossing.
 
-[Journey rewards handoff](reviews/journey-rewards/REVIEW.md) · [Private Android install](reviews/journey-rewards/android-INSTALL.md)
+On the offline Android 16 emulator, the signed update preserved both v0.1.4 keepsakes and the pending Driftwood scene. On a fresh profile, the captain kept Moss’s page, entered Bellwater, force-stopped, then revisited Holding Pier from the log. [Uninterrupted installed trip](reviews/journey-rewards/android-moss-to-bellwater.mp4) · [Journey rewards handoff](reviews/journey-rewards/REVIEW.md) · [Private Android install](reviews/journey-rewards/android-INSTALL.md)
 
 ## Harbor log v0.1.4
 

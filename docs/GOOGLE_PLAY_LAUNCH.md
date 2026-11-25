@@ -1,10 +1,10 @@
 # Last Ferry · Google Play launch plan
 
-Release candidate scope, 20 November 2026. The twelve-cove Journey ends at the lighthouse table. The v0.1.4 playtest includes thirteen freely selectable Practice crossings. For the live game, the Harbor log will offer earned revisits, including the old First Crossing record for captains who have it. Nine coves award lanterns. Keep Drowned Orchard, Lantern Reach, Far Shore and Last Ferry unscored for this playtest. The release decision on those four belongs to game direction after observing players. Every player who brings the final group home can reach supper and credits.
+The twelve-cove Journey ends at the lighthouse table. In v0.1.5 the Harbor log offers earned revisits, including First Crossing for captains who already have its lantern record. Nine coves award lanterns. Keep Drowned Orchard, Lantern Reach, Far Shore and Last Ferry unscored for this playtest. The release decision on those four belongs to game direction after observing players. Every player who brings the final group home can reach supper and credits.
 
 ## 1. Put the same voyage on a phone
 
-The [v0.1.4 handoff](../reviews/harbor-log/android-REVIEW.md) proves the keepsakes and the saved Bellwater handoff. The owner’s playtest exposed a forced visit to Home after Moss’s reward. The [Journey rewards brief](../NEXT_TASK_JOURNEY_REWARDS.md) now precedes release packaging. Confirm direct story continuation and review the illustrated reward cards on the phone.
+The owner’s v0.1.4 playtest exposed a forced visit to Home after Moss’s reward. The v0.1.5 playtest gives each new keepsake an illustrated arrival and continues directly to the saved story. The release-bundle rehearsal follows the owner’s playtest of this handoff. [Journey rewards](../reviews/journey-rewards/REVIEW.md)
 
 On a physical phone, launch in airplane mode and let a newcomer choose Play. At Holding Pier ask, **“What are you trying to do, and what do you expect to change first?”** Record what they point at before explaining the tide sign. Watch a rescue and Undo. Check the crowded Wide Berth, the moving bridge, rotation, Android Back, interruptions, speaker audio and a return to an earned supper. Try TalkBack on the passenger selection and arrival actions. If the player misses a cue, keep the observation and have Codex fix the smallest cause before the next test.
 

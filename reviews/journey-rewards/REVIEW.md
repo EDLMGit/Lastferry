@@ -4,6 +4,19 @@ The owner’s v0.1.4 playtest ended Moss’s trip at Home. This update gives the
 
 The game source is `89a05f41a8f96a0c4f2f2b2045d9dca077de3269` on `m1-first-crossing`. The clean v0.1.4 handoff was fast-forwarded to the commission at `a5baf15857f0631cb0eb86c08c645f44361fab09`. [Brief](../../NEXT_TASK_JOURNEY_REWARDS.md) · [Install over v0.1.4](android-INSTALL.md) · [Signed package identity](android-package.json)
 
+## Watch the installed Journey
+
+The uninterrupted 12.87-second Android recording begins with Moss aboard at Harbor and 11 actions taken. The captain taps **Bring Moss home**, sees **Moss’s Own Crossing**, taps **Continue to Bellwater**, and watches *Another bell*. The last tap enters Bellwater with zero actions used. Android’s touch indicator shows the inputs. The recording is silent. [Watch the original 800×1850 recording](android-moss-to-bellwater.mp4) · [Installed run and saved checkpoints](android-fresh.json)
+
+The v0.1.4 captain earned both pages by playing the shipped APK and continued past Bellwater. The in-place update preserved those records, the stronger lantern best, and the pending Driftwood story. A separate fresh profile on v0.1.5 could enter only the Journey from the finale link. After the first detour that captain could reopen Holding Pier from the log. [Installed upgrade and play evidence](android-REVIEW.md)
+
+The upgraded captain deliberately missed the request, retried it and completed the qualifying route again. The repeat showed the ordinary rescue result. Its destination opened *A light at the yard*, then Driftwood Yard at turn zero. Both earlier three-lantern bests and both keepsakes remained intact. [Later captain’s run](android-later.json)
+
+| Android reward | 320×740 portrait | 780×320 landscape |
+| --- | --- | --- |
+| Rue’s Lantern | [Portrait](android-rue-portrait.png) | [Short landscape](android-rue-landscape.png) |
+| Moss’s Own Crossing | [Portrait](android-moss-portrait.png) | [Short landscape](android-moss-landscape.png) |
+
 ## What changed for a captain
 
 - The first Journey rescue shows Rue, Pip and Moss at Harbor. Its two choices accept the rescue. **Continue to Bellwater** opens the next scene. **Take Moss’s request** saves the same checkpoint and opens Holding Pier for his trip.
