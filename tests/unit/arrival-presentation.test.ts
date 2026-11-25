@@ -5,6 +5,7 @@ import { holdingPier, ternhaven, wideBerth, type Level, passengerName } from '..
 import { initial, type Action, type State } from '../../src/game/rules';
 import { Session } from '../../src/game/session';
 import { resultFor, masteryTargets } from '../../src/game/mastery';
+import { MOSS_REQUEST } from '../../src/game/moss-request';
 import { resolvePassengerAppearance } from '../../src/game/passenger-appearance';
 import { arrivalMarkup, rescuedCast } from '../../src/ui/arrival';
 import { arrivalLanternsMarkup, masteryBadgeMarkup } from '../../src/ui/lanterns';
@@ -97,6 +98,8 @@ describe('arrival presentation from real level identities', () => {
     const crown = arrivalLanternsMarkup(current);
     expect(crown.match(/data-lit="true"/g)).toHaveLength(count);
     expect(crown).toContain(`aria-label="This rescue · ${count} of 3 lanterns"`);
+    expect(markup).toContain(`class="arrival-lantern-count" aria-hidden="true">${count}/3 lanterns</span>`);
+    expect(markup.match(/This rescue · /g)).toHaveLength(1);
     expect(markup).toContain('Best accepted rescue · 3 of 3 lanterns');
     expect(markup.match(/class="mastery-metrics"/g)).toHaveLength(1);
     expect(masteryBadgeMarkup(best)).not.toContain('arrival-lantern');
@@ -122,6 +125,7 @@ describe('arrival presentation from real level identities', () => {
       forward: { id: 'choose-cove', label: 'Choose a cove' }, notice: 'Storage is unavailable.' });
     expect(markup).toContain('Rescued · no lantern rating');
     expect(markup).not.toContain('class="arrival-lantern"');
+    expect(markup).not.toContain('/3 lanterns');
     expect(markup).not.toContain('keeps this result');
     expect(markup).toContain('class="arrival-storage-notice" role="status">Storage is unavailable.');
   });
@@ -139,11 +143,32 @@ describe('arrival presentation from real level identities', () => {
     expect(main).toContain(`data-memory="${memory}"`);
     expect(main).toContain(`<h2 id="dialog-title">${title}</h2>`);
     expect(main).toContain('Continue to Bellwater');
-    expect(main.includes('Take Moss’s request')).toBe(keepsake === 'rue');
-    expect(main.includes('class="arrival-lanterns"')).toBe(keepsake === 'rue');
+    expect(main.includes('Replay Holding Pier for Moss')).toBe(keepsake === 'rue');
+    expect(main).toContain(`>${keepsake === 'rue' ? 3 : 1}/3 lanterns</span>`);
     expect(main).not.toContain('mastery-metrics');
     expect(details).toContain('class="mastery-metrics"');
     expect(details).toContain('Best accepted rescue · 3 of 3 lanterns');
+  });
+
+  test.each([undefined, 'rue'] as const)('Holding offer groups the speaker, wish, replay and page for the %s arrival', keepsake => {
+    const markup = arrivalMarkup({ level: holdingPier, state: fixture(holdingPier), keepsake, offerRequest: true,
+      result: resultFor(holdingPier.id, 9, 0), best: null, forward: { id: 'continue-story', label: 'Continue to Bellwater' } });
+    const invitation = markup.match(/<section class="arrival-invitation".*?<\/section>/s)?.[0];
+    expect(invitation).toContain('id="arrival-speaker">Moss</strong>');
+    expect(invitation).toContain(portraitSources['sheep-wool']);
+    expect(invitation).toContain(`id="arrival-request-line">“${MOSS_REQUEST}”</p>`);
+    expect(invitation).toContain('id="take-moss-request"');
+    expect(invitation).toContain(keepsake ? 'Replay Holding Pier for Moss' : 'Replay for Moss');
+    expect(invitation).toContain('Earn a Harbor log page');
+    expect(markup.split('<section class="arrival-invitation"')[0]).toContain('Continue to Bellwater');
+  });
+
+  test('a missed request explains the position needed at each delivery', () => {
+    const markup = arrivalMarkup({ level: holdingPier, state: fixture(holdingPier), requestMissed: true,
+      result: resultFor(holdingPier.id, 9, 0), best: null, forward: { id: 'continue-journey', label: 'Continue to Bellwater' } });
+    expect(markup).toContain('Moss needs to be at Stone Pier when each rabbit reaches Harbor.');
+    expect(markup).toContain('id="retry-moss-request" aria-describedby="arrival-request-line"');
+    expect(markup).not.toContain('id="take-moss-request"');
   });
 
   test('Replay uses a distinct original decorative icon inside a semantic named action', () => {

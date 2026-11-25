@@ -16,7 +16,7 @@ export function arrivalLanternsMarkup(current: MasteryResult | null) {
   if (!current) return '<p class="arrival-unrated">Rescued · no lantern rating</p>';
   return `<div class="arrival-lanterns" role="img" aria-label="This rescue · ${current.lanterns} of 3 lanterns" data-lanterns="${current.lanterns}">${[1, 2, 3].map(index =>
     resultLanternSource.replace('<svg ', `<svg class="arrival-lantern" data-lit="${index <= current.lanterns}" data-lantern="${index}" `),
-  ).join('')}</div>`;
+  ).join('')}<span class="arrival-lantern-count" aria-hidden="true">${current.lanterns}/3 lanterns</span></div>`;
 }
 
 function metrics(result: MasteryResult) {
