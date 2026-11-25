@@ -183,6 +183,7 @@
 .arrival-utilities details { border-left: 1px solid #99ae924a; }
 .arrival-details-open, #arrival-details[open] .arrival-details-closed { display: none; }
 #arrival-details[open] .arrival-details-open { display: inline; }
+.arrival-content:has(#arrival-details[open]) :is(.arrival-actions, .arrival-invitation) { visibility: hidden; }
 .arrival-detail-body {
   position: absolute; z-index: 2; inset: 9px 9px 58px;
   overflow: auto; overscroll-behavior: contain; padding: 15px;
