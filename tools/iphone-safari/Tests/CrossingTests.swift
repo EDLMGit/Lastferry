@@ -27,7 +27,9 @@ final class CrossingTests: XCTestCase {
 
     func button(_ name: String, prefix: Bool = false) -> XCUIElement {
         let test = prefix ? "label BEGINSWITH[c] %@" : "label ==[c] %@"
-        return web.buttons.matching(NSPredicate(format: test, name)).firstMatch
+        // MobileSafari exposes aria-pressed buttons as switches and the tide
+        // button with aria-haspopup as Other. Both retain their accessible name.
+        return web.descendants(matching: .any).matching(NSPredicate(format: test, name)).firstMatch
     }
 
     func tap(_ name: String, prefix: Bool = false) {
@@ -125,18 +127,15 @@ final class CrossingTests: XCTestCase {
             if button("Next").waitForExistence(timeout: 3) { tap("Next") }
         }
         tap("Take the helm")
-        turn(0)
+        tap("Let Moss ashore")
+        Thread.sleep(forTimeInterval: 1.5)
         measureScene("02-holding-portrait", landscape: false)
         XCUIDevice.shared.orientation = .landscapeLeft
         Thread.sleep(forTimeInterval: 2)
-        turn(0)
         measureScene("03-holding-landscape", landscape: true)
         XCUIDevice.shared.orientation = .portrait
         Thread.sleep(forTimeInterval: 2)
-        turn(0)
         measureScene("04-holding-returned-portrait", landscape: false)
-
-        tap("Let Moss ashore")
         turn(1)
         sail("Shallows", turn: 2)
         sail("Rabbit Pier", turn: 3)
