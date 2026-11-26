@@ -1,0 +1,420 @@
+{
+  "level": "lantern-reach",
+  "sha256": {
+    "data/lantern-reach.level.json": "57e2dc8ed441735b2f6302f36dfaa5d62f666a582d253f02f2aed22ad0d74a23",
+    "data/lantern-reach/witnesses.json": "cda263f8f49bee38e748428694bdebc70ebf253e37a50ddc1e985c51e8a3f86d",
+    "src/game/rules.ts": "dd49589a34e86c768f4bb14f2be8889e496c25702624169fc3e0590ceabb334b",
+    "src/levels/level.ts": "dcf6a1325794eb6ca2dca51023cffaf781efbc1c5f2b7df9cd2c95a46b17f955"
+  },
+  "lastScheduledRise": 4,
+  "firstActions": [
+    {
+      "action": {
+        "type": "wait"
+      },
+      "minimumTotalActions": null
+    },
+    {
+      "action": {
+        "type": "move",
+        "to": "wick"
+      },
+      "minimumTotalActions": 6
+    },
+    {
+      "action": {
+        "type": "open-bridge"
+      },
+      "minimumTotalActions": null
+    },
+    {
+      "action": {
+        "type": "unload",
+        "passengerIds": [
+          "flax"
+        ]
+      },
+      "minimumTotalActions": null
+    }
+  ],
+  "unrestricted": {
+    "minimumAdditionalActions": 6,
+    "witness": [
+      {
+        "type": "move",
+        "to": "wick"
+      },
+      {
+        "type": "board",
+        "passengerIds": [
+          "tallow",
+          "ember"
+        ]
+      },
+      {
+        "type": "move",
+        "to": "signal"
+      },
+      {
+        "type": "open-bridge"
+      },
+      {
+        "type": "move",
+        "to": "harbor"
+      },
+      {
+        "type": "unload",
+        "passengerIds": [
+          "flax",
+          "tallow",
+          "ember"
+        ]
+      }
+    ],
+    "states": 258,
+    "transitions": 893,
+    "wins": 2,
+    "losses": 11
+  },
+  "noOpening": {
+    "minimumAdditionalActions": 7,
+    "witness": [
+      {
+        "type": "move",
+        "to": "wick"
+      },
+      {
+        "type": "board",
+        "passengerIds": [
+          "tallow",
+          "ember"
+        ]
+      },
+      {
+        "type": "move",
+        "to": "east-float"
+      },
+      {
+        "type": "move",
+        "to": "south-float"
+      },
+      {
+        "type": "move",
+        "to": "west-float"
+      },
+      {
+        "type": "move",
+        "to": "harbor"
+      },
+      {
+        "type": "unload",
+        "passengerIds": [
+          "flax",
+          "tallow",
+          "ember"
+        ]
+      }
+    ],
+    "states": 96,
+    "transitions": 306,
+    "wins": 1,
+    "losses": 7
+  },
+  "noShortcutCrossing": {
+    "minimumAdditionalActions": 7,
+    "witness": [
+      {
+        "type": "move",
+        "to": "wick"
+      },
+      {
+        "type": "board",
+        "passengerIds": [
+          "tallow",
+          "ember"
+        ]
+      },
+      {
+        "type": "move",
+        "to": "east-float"
+      },
+      {
+        "type": "move",
+        "to": "south-float"
+      },
+      {
+        "type": "move",
+        "to": "west-float"
+      },
+      {
+        "type": "move",
+        "to": "harbor"
+      },
+      {
+        "type": "unload",
+        "passengerIds": [
+          "flax",
+          "tallow",
+          "ember"
+        ]
+      }
+    ],
+    "states": 152,
+    "transitions": 517,
+    "wins": 1,
+    "losses": 10
+  },
+  "noCurrentCrossing": {
+    "minimumAdditionalActions": 6,
+    "witness": [
+      {
+        "type": "move",
+        "to": "wick"
+      },
+      {
+        "type": "board",
+        "passengerIds": [
+          "tallow",
+          "ember"
+        ]
+      },
+      {
+        "type": "move",
+        "to": "signal"
+      },
+      {
+        "type": "open-bridge"
+      },
+      {
+        "type": "move",
+        "to": "harbor"
+      },
+      {
+        "type": "unload",
+        "passengerIds": [
+          "flax",
+          "tallow",
+          "ember"
+        ]
+      }
+    ],
+    "states": 192,
+    "transitions": 641,
+    "wins": 1,
+    "losses": 11
+  },
+  "openedFirst": {
+    "minimumAdditionalActions": null,
+    "witness": null,
+    "states": 5,
+    "transitions": 4,
+    "wins": 0,
+    "losses": 4
+  },
+  "mistake": [
+    {
+      "turn": 1,
+      "tide": 0,
+      "location": "signal",
+      "bridgeOpen": true,
+      "route": null,
+      "action": {
+        "type": "open-bridge"
+      },
+      "status": "playing"
+    },
+    {
+      "turn": 2,
+      "tide": 1,
+      "location": "wick",
+      "bridgeOpen": true,
+      "route": "wick-channel",
+      "action": {
+        "type": "move",
+        "to": "wick"
+      },
+      "status": "lost"
+    }
+  ],
+  "replays": [
+    {
+      "id": "open-shortcut",
+      "facts": [
+        {
+          "turn": 1,
+          "tide": 0,
+          "location": "wick",
+          "bridgeOpen": false,
+          "route": "wick-channel",
+          "action": {
+            "type": "move",
+            "to": "wick"
+          },
+          "status": "playing"
+        },
+        {
+          "turn": 2,
+          "tide": 1,
+          "location": "wick",
+          "bridgeOpen": false,
+          "route": null,
+          "action": {
+            "type": "board",
+            "passengerIds": [
+              "tallow",
+              "ember"
+            ]
+          },
+          "status": "playing"
+        },
+        {
+          "turn": 3,
+          "tide": 1,
+          "location": "signal",
+          "bridgeOpen": false,
+          "route": "wick-channel",
+          "action": {
+            "type": "move",
+            "to": "signal"
+          },
+          "status": "playing"
+        },
+        {
+          "turn": 4,
+          "tide": 2,
+          "location": "signal",
+          "bridgeOpen": true,
+          "route": null,
+          "action": {
+            "type": "open-bridge"
+          },
+          "status": "playing"
+        },
+        {
+          "turn": 5,
+          "tide": 2,
+          "location": "harbor",
+          "bridgeOpen": true,
+          "route": "bridge-cut",
+          "action": {
+            "type": "move",
+            "to": "harbor"
+          },
+          "status": "playing"
+        },
+        {
+          "turn": 6,
+          "tide": 2,
+          "location": "harbor",
+          "bridgeOpen": true,
+          "route": null,
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "flax",
+              "tallow",
+              "ember"
+            ]
+          },
+          "status": "won"
+        }
+      ]
+    },
+    {
+      "id": "outer-detour",
+      "facts": [
+        {
+          "turn": 1,
+          "tide": 0,
+          "location": "wick",
+          "bridgeOpen": false,
+          "route": "wick-channel",
+          "action": {
+            "type": "move",
+            "to": "wick"
+          },
+          "status": "playing"
+        },
+        {
+          "turn": 2,
+          "tide": 1,
+          "location": "wick",
+          "bridgeOpen": false,
+          "route": null,
+          "action": {
+            "type": "board",
+            "passengerIds": [
+              "tallow",
+              "ember"
+            ]
+          },
+          "status": "playing"
+        },
+        {
+          "turn": 3,
+          "tide": 1,
+          "location": "east-float",
+          "bridgeOpen": false,
+          "route": "wick-race",
+          "action": {
+            "type": "move",
+            "to": "east-float"
+          },
+          "status": "playing"
+        },
+        {
+          "turn": 4,
+          "tide": 2,
+          "location": "south-float",
+          "bridgeOpen": false,
+          "route": "outer-east",
+          "action": {
+            "type": "move",
+            "to": "south-float"
+          },
+          "status": "playing"
+        },
+        {
+          "turn": 5,
+          "tide": 2,
+          "location": "west-float",
+          "bridgeOpen": false,
+          "route": "outer-west",
+          "action": {
+            "type": "move",
+            "to": "west-float"
+          },
+          "status": "playing"
+        },
+        {
+          "turn": 6,
+          "tide": 2,
+          "location": "harbor",
+          "bridgeOpen": false,
+          "route": "outer-home",
+          "action": {
+            "type": "move",
+            "to": "harbor"
+          },
+          "status": "playing"
+        },
+        {
+          "turn": 7,
+          "tide": 2,
+          "location": "harbor",
+          "bridgeOpen": false,
+          "route": null,
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "flax",
+              "tallow",
+              "ember"
+            ]
+          },
+          "status": "won"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,152 @@
+
+> last-ferry@1.0.0 test:unit
+> vitest run --maxWorkers=1 tests/unit/story-presentation.test.ts tests/unit/story-progress.test.ts
+
+
+ RUN  v5.0.5 C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry
+
+ ❯ tests/unit/story-progress.test.ts (27 tests | 1 failed) 13ms
+   ❯ authored story registry (2)
+     × all opening copy and the connective beat remain available without sound or motion 4ms
+ ❯ tests/unit/story-presentation.test.ts (7 tests | 5 failed) 10ms
+   ❯ bounded optional story motion (7)
+     × the render clock drives authored opening progress and holds its endpoint without acknowledging a checkpoint 4ms
+     × Skip and background settling reach the same endpoint once with no delayed render work 1ms
+     × Reduced Motion and restored pending scenes begin at their authored endpoints 0ms
+     × the shorter Harbor scene owns its own interval without inheriting opening time 1ms
+     × out of order timestamps cannot reverse an in-progress acknowledgment 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/story-presentation.test.ts > bounded optional story motion > the render clock drives authored opening progress and holds its endpoint without acknowledging a checkpoint
+AssertionError: expected 6000 to be 1600 // Object.is equality
+
+- Expected
++ Received
+
+- 1600
++ 6000
+
+ ❯ tests/unit/story-presentation.test.ts:41:40
+     39|     expect(presentation.settled).toBe(false);
+     40|     presentation.update(100 + 1600);
+     41|     expect(presentation.frame.elapsed).toBe(1600);
+       |                                        ^
+     42|     presentation.update(100 + storyScenes.opening.duration - 1);
+     43|     expect(changed).not.toHaveBeenCalled();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  tests/unit/story-presentation.test.ts > bounded optional story motion > Skip and background settling reach the same endpoint once with no delayed render work
+AssertionError: expected 6000 to be undefined // Object.is equality
+
+- Expected:
+undefined
+
++ Received:
+6000
+
+ ❯ tests/unit/story-presentation.test.ts:62:40
+     60|     expect(presentation.settled).toBe(true);
+     61|     expect(changed).toHaveBeenCalledTimes(1);
+     62|     expect(presentation.frame.elapsed).toBe(storyScenes.opening.durati…
+       |                                        ^
+     63|     presentation.settle();
+     64|     presentation.update(120000);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  tests/unit/story-presentation.test.ts > bounded optional story motion > Reduced Motion and restored pending scenes begin at their authored endpoints
+AssertionError: expected 6000 to be undefined // Object.is equality
+
+- Expected:
+undefined
+
++ Received:
+6000
+
+ ❯ tests/unit/story-presentation.test.ts:72:40
+     70|     presentation.start('opening', true, 0);
+     71|     expect(presentation.settled).toBe(true);
+     72|     expect(presentation.frame.elapsed).toBe(storyScenes.opening.durati…
+       |                                        ^
+     73|     presentation.start('another-bell', true, 200);
+     74|     expect(presentation.frame).toMatchObject({ elapsed: 4000, settled:…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  tests/unit/story-presentation.test.ts > bounded optional story motion > the shorter Harbor scene owns its own interval without inheriting opening time
+AssertionError: expected "vi.fn()" to not be called at all, but actually been called 1 times
+
+Received:
+
+  1st vi.fn() call:
+
+    Array []
+
+
+Number of calls: 1
+
+ ❯ tests/unit/story-presentation.test.ts:85:25
+     83|     presentation.update(8000);
+     84|     expect(presentation.settled).toBe(false);
+     85|     expect(changed).not.toHaveBeenCalled();
+       |                         ^
+     86|     expect(presentation.frame.elapsed).toBe(1000);
+     87|     presentation.update(11000);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  tests/unit/story-presentation.test.ts > bounded optional story motion > out of order timestamps cannot reverse an in-progress acknowledgment
+AssertionError: expected 6000 to be 1500 // Object.is equality
+
+- Expected
++ Received
+
+- 1500
++ 6000
+
+ ❯ tests/unit/story-presentation.test.ts:108:40
+    106|     presentation.update(1600);
+    107|     presentation.update(1200);
+    108|     expect(presentation.frame.elapsed).toBe(1500);
+       |                                        ^
+    109|   });
+    110| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+
+ FAIL  tests/unit/story-progress.test.ts > authored story registry > all opening copy and the connective beat remain available without sound or motion
+AssertionError: expected undefined to deeply equal [ …(3) ]
+
+- Expected:
+[
+  "Your first evening alone at the helm.",
+  "The tide will be high tonight.",
+  "Bring everyone to the lighthouse.",
+]
+
++ Received:
+undefined
+
+ ❯ tests/unit/story-progress.test.ts:75:42
+     73|   test('all opening copy and the connective beat remain available with…
+     74|     expect(Object.keys(storyScenes)).toEqual(['opening', 'another-bell…
+     75|     expect(storyScenes.opening.captions).toEqual([
+       |                                          ^
+     76|       'Your first evening alone at the helm.',
+     77|       'The tide will be high tonight.',
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  6 failed | 28 passed (34)
+   Start at  23:18:05
+   Duration  398ms (transform 44%, import 31%, tests 18%, worker 6%)
+
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

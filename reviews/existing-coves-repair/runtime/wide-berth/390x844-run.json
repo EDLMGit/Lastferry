@@ -1,0 +1,433 @@
+{
+  "plan": "light-through-beacon",
+  "practiceSaveByteExact": true,
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "dpr": 1,
+  "browser": "156.0.8078.4",
+  "builtGame": false,
+  "node": "v24.15.0",
+  "terminalUndo": true,
+  "errors": [],
+  "events": [
+    {
+      "action": {
+        "type": "board",
+        "passengerIds": [
+          "alder",
+          "clover",
+          "poppy",
+          "wren"
+        ]
+      },
+      "after": {
+        "turn": 1,
+        "tideLevel": 0,
+        "boatNodeId": "wide-berth",
+        "aboard": [
+          "alder",
+          "clover",
+          "poppy",
+          "wren"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "high-quay-pier": [],
+          "wide-berth-pier": [],
+          "shell-landing-pier": [
+            "sorrel",
+            "finch"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "action": {
+        "type": "move",
+        "to": "high-quay"
+      },
+      "after": {
+        "turn": 2,
+        "tideLevel": 0,
+        "boatNodeId": "high-quay",
+        "aboard": [
+          "alder",
+          "clover",
+          "poppy",
+          "wren"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "high-quay-pier": [],
+          "wide-berth-pier": [],
+          "shell-landing-pier": [
+            "sorrel",
+            "finch"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "action": {
+        "type": "unload",
+        "passengerIds": [
+          "alder",
+          "clover"
+        ]
+      },
+      "after": {
+        "turn": 3,
+        "tideLevel": 0,
+        "boatNodeId": "high-quay",
+        "aboard": [
+          "poppy",
+          "wren"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "high-quay-pier": [
+            "alder",
+            "clover"
+          ],
+          "wide-berth-pier": [],
+          "shell-landing-pier": [
+            "sorrel",
+            "finch"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "wrong": "wait",
+      "outcome": {
+        "code": "RETURN_CAPACITY",
+        "edgeId": "harbor-high-quay",
+        "passengerIds": [
+          "alder",
+          "clover",
+          "poppy",
+          "wren",
+          "sorrel",
+          "finch"
+        ],
+        "offshoreSlots": 8,
+        "homewardTrips": 1
+      },
+      "restored": {
+        "turn": 3,
+        "tideLevel": 0,
+        "boatNodeId": "high-quay",
+        "aboard": [
+          "poppy",
+          "wren"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "high-quay-pier": [
+            "alder",
+            "clover"
+          ],
+          "wide-berth-pier": [],
+          "shell-landing-pier": [
+            "sorrel",
+            "finch"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "action": {
+        "type": "move",
+        "to": "harbor"
+      },
+      "after": {
+        "turn": 4,
+        "tideLevel": 1,
+        "boatNodeId": "harbor",
+        "aboard": [
+          "poppy",
+          "wren"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "high-quay-pier": [
+            "alder",
+            "clover"
+          ],
+          "wide-berth-pier": [],
+          "shell-landing-pier": [
+            "sorrel",
+            "finch"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "action": {
+        "type": "unload",
+        "passengerIds": [
+          "poppy",
+          "wren"
+        ]
+      },
+      "after": {
+        "turn": 5,
+        "tideLevel": 1,
+        "boatNodeId": "harbor",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "high-quay-pier": [
+            "alder",
+            "clover"
+          ],
+          "wide-berth-pier": [],
+          "shell-landing-pier": [
+            "sorrel",
+            "finch"
+          ]
+        },
+        "delivered": [
+          "poppy",
+          "wren"
+        ],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "action": {
+        "type": "move",
+        "to": "high-quay"
+      },
+      "after": {
+        "turn": 6,
+        "tideLevel": 1,
+        "boatNodeId": "high-quay",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "high-quay-pier": [
+            "alder",
+            "clover"
+          ],
+          "wide-berth-pier": [],
+          "shell-landing-pier": [
+            "sorrel",
+            "finch"
+          ]
+        },
+        "delivered": [
+          "poppy",
+          "wren"
+        ],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "action": {
+        "type": "move",
+        "to": "shell-landing"
+      },
+      "after": {
+        "turn": 7,
+        "tideLevel": 1,
+        "boatNodeId": "shell-landing",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "high-quay-pier": [
+            "alder",
+            "clover"
+          ],
+          "wide-berth-pier": [],
+          "shell-landing-pier": [
+            "sorrel",
+            "finch"
+          ]
+        },
+        "delivered": [
+          "poppy",
+          "wren"
+        ],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "action": {
+        "type": "board",
+        "passengerIds": [
+          "sorrel",
+          "finch"
+        ]
+      },
+      "after": {
+        "turn": 8,
+        "tideLevel": 1,
+        "boatNodeId": "shell-landing",
+        "aboard": [
+          "sorrel",
+          "finch"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "high-quay-pier": [
+            "alder",
+            "clover"
+          ],
+          "wide-berth-pier": [],
+          "shell-landing-pier": []
+        },
+        "delivered": [
+          "poppy",
+          "wren"
+        ],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "action": {
+        "type": "move",
+        "to": "high-quay"
+      },
+      "after": {
+        "turn": 9,
+        "tideLevel": 1,
+        "boatNodeId": "high-quay",
+        "aboard": [
+          "sorrel",
+          "finch"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "high-quay-pier": [
+            "alder",
+            "clover"
+          ],
+          "wide-berth-pier": [],
+          "shell-landing-pier": []
+        },
+        "delivered": [
+          "poppy",
+          "wren"
+        ],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "action": {
+        "type": "board",
+        "passengerIds": [
+          "alder",
+          "clover"
+        ]
+      },
+      "after": {
+        "turn": 10,
+        "tideLevel": 2,
+        "boatNodeId": "high-quay",
+        "aboard": [
+          "sorrel",
+          "finch",
+          "alder",
+          "clover"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "high-quay-pier": [],
+          "wide-berth-pier": [],
+          "shell-landing-pier": []
+        },
+        "delivered": [
+          "poppy",
+          "wren"
+        ],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "action": {
+        "type": "move",
+        "to": "harbor"
+      },
+      "after": {
+        "turn": 11,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "aboard": [
+          "sorrel",
+          "finch",
+          "alder",
+          "clover"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "high-quay-pier": [],
+          "wide-berth-pier": [],
+          "shell-landing-pier": []
+        },
+        "delivered": [
+          "poppy",
+          "wren"
+        ],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "action": {
+        "type": "unload",
+        "passengerIds": [
+          "sorrel",
+          "finch",
+          "alder",
+          "clover"
+        ]
+      },
+      "after": {
+        "turn": 12,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "high-quay-pier": [],
+          "wide-berth-pier": [],
+          "shell-landing-pier": []
+        },
+        "delivered": [
+          "poppy",
+          "wren",
+          "sorrel",
+          "finch",
+          "alder",
+          "clover"
+        ],
+        "status": "won",
+        "lossReason": null
+      }
+    }
+  ]
+}

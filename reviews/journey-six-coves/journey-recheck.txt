@@ -1,0 +1,44 @@
+
+> last-ferry@1.0.0 test:e2e
+> playwright test --config .cache/journey-six.config.ts journey-six-coves.spec.ts --grep legacy Wide
+
+
+Running 2 tests using 1 worker
+
+(node:36668) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\e2e\journey-six-coves.spec.ts:120:3 › legacy Wide rescue to both authored scenes and actual continuation 390x844 (1.5m)
+(node:35272) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 2 tests\e2e\journey-six-coves.spec.ts:120:3 › legacy Wide rescue to both authored scenes and actual continuation 780x320 (1.1m)
+
+
+  1) tests\e2e\journey-six-coves.spec.ts:120:3 › legacy Wide rescue to both authored scenes and actual continuation 390x844 
+
+    Error: expect(received).toBeLessThan(expected)
+
+    Expected: < 350
+    Received:   408.337158203125
+
+       at journey-six-support.ts:176
+
+      174 |         Math.abs(item.timestamp * 1000 - target) < Math.abs(best.timestamp * 1000 - target) ? item : best);
+      175 |       const deltaMs = nearest.timestamp * 1000 - target;
+    > 176 |       expect(Math.abs(deltaMs)).toBeLessThan(350);
+          |                                 ^
+      177 |       if (beat === 'begin') expect(before.elapsed + deltaMs).toBeGreaterThanOrEqual(0);
+      178 |       copyFileSync(nearest.path, join(images, name + '.jpg'));
+      179 |       report(images, name + '-frame', { nearest, deltaMs, target, before, after });
+        at keepRecordedPictures (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\journey-six-support.ts:176:33)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\journey-six-coves.spec.ts:188:9
+
+    Error Context: test-results\journey-six-evidence\journey-six-coves-legacy-W-0a0c8-actual-continuation-390x844\error-context.md
+
+  1 failed
+    tests\e2e\journey-six-coves.spec.ts:120:3 › legacy Wide rescue to both authored scenes and actual continuation 390x844 
+  1 passed (2.6m)
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+npm notice To update run: npm install -g npm@12.2.2
+npm notice

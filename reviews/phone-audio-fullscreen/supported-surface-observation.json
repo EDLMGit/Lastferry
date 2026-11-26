@@ -1,0 +1,74 @@
+{
+  "recordedAt": "2026-10-24T22:26:28.615Z",
+  "source": {
+    "hostedGame": "e78819974a0487440e439ef87d24ba4bb1c2f454",
+    "hostedVersion": 9,
+    "siteSource": "03720726f2d92cda0d5d66efb6749ccc755d22ee",
+    "candidate": "291fb4fa24d02dbab84dfe6eca2abc5c29b6d411 plus recorded corrective working tree",
+    "candidateAsset": "index-CgaLhiYG.js"
+  },
+  "surface": "Signed-in ChatGPT in-app browser on Windows; actual native UI actions and tab screenshots, not Android emulation or a physical phone.",
+  "hosted": {
+    "url": "https://last-ferry-playtest.abumech.chatgpt.site/",
+    "initial": {
+      "state": "Holding won at9actions, sound muted, arrival dialog",
+      "app": [
+        1806,
+        1244
+      ]
+    },
+    "entry": {
+      "via": "Settings fullscreen button",
+      "label": "Exit fullscreen",
+      "app": [
+        2560,
+        1440
+      ],
+      "dialogBounds": {
+        "left": 2136,
+        "top": 997.609375,
+        "right": 2536,
+        "bottom": 1340
+      },
+      "ax": "Settings and controls remain present",
+      "pixels": "Existing Settings dialog absent; fullscreen scene covers it",
+      "errors": []
+    },
+    "isolation": [
+      "Escape returned to arrival then closed dialog without exiting the fullscreen view in this controlled surface.",
+      "Opening Menu after fullscreen entry showed the dialog visibly on top.",
+      "Its visible Exit fullscreen control restored1806x1244.",
+      "Restored original9-action arrival/nonfullscreen/sound-muted state; no puzzle action changed."
+    ]
+  },
+  "candidate": {
+    "url": "http://127.0.0.1:4192/?cove=holding-pier",
+    "actualEntry": "Menu firstentry and Settings reentry both show dialog visibly above fullscreen scene",
+    "appOrdinary": [
+      1280,
+      720
+    ],
+    "appFullscreen": [
+      2560,
+      1440
+    ],
+    "exit": "Visible native game Exit control restores ordinary app bounds with same dialog contents",
+    "audio": "First ordinary Menu click changed UI to Sound is playing; this UI observation alone is not an audio-output or speaker claim.",
+    "cleanup": "Exited fullscreen and closed agent-created local tab; published game tab left intact."
+  },
+  "mechanism": "Fullscreen root is inserted later in the ordered top layer than an already-open modal. A targeted native close/showModal on actual entry reorders the same modal without using app render/close helpers. Primary spec references and headless hit-test/pixel checks are in the report.",
+  "limits": [
+    "No Android request was observed. Native API rejection is not established on this supported surface; actual hosted entry succeeds.",
+    "Read-only browser evaluation facade does not expose navigator/policy/fullscreen API fields. Its undefined/null results are NOT interpreted as actual browser capabilities.",
+    "Screenshots were inspected in the CUA tool output; they were not exported as repository image files. Repository screenshots are separately captured and identified by browser run/source.",
+    "No change made to Site headers, audience, hosting or published version."
+  ],
+  "finalCandidate": {
+    "verifiedAt": "2026-10-24T22:49:23.316Z",
+    "asset": "index-t90O8zhn.js",
+    "runtimeHash": "d76f3ea86d53f8affc7c1984f5737caca5819e63f46d191ed41a8e2e3c110c55",
+    "method": "Fresh agent-created actual IAB tab to final production port4192, native Menu/Fullscreen/Exit actions and full tab screenshot.",
+    "result": "Open Menu visibly retained on firstactualentry; visible Exit control returns to ordinary view. Temporary tab closed; original hosted user tab unchanged.",
+    "source": "291fb4fa24d02dbab84dfe6eca2abc5c29b6d411 plus final recorded corrective working-tree source"
+  }
+}

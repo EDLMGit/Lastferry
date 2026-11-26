@@ -1,0 +1,192 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "-c",
+      "reviews/cove-nine-practice/gameplay.config.ts",
+      "-g",
+      "Tempting legal"
+    ],
+    "configFile": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-nine-practice\\gameplay.config.ts",
+    "rootDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/reviews/cove-nine-practice",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/.cache/drowned-gameplay",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/reviews/cove-nine-practice",
+        "testIgnore": [],
+        "testMatch": [
+          "gameplay.spec.ts"
+        ],
+        "timeout": 360000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\.cache\\drowned-gameplay",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-nine-practice",
+        "snapshotDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-nine-practice",
+        "testIgnore": [],
+        "testMatch": "gameplay.spec.ts",
+        "timeout": 360000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5360",
+          "hasTouch": true,
+          "isMobile": true,
+          "deviceScaleFactor": 1,
+          "video": "off",
+          "actionTimeout": 10000,
+          "launchOptions": {
+            "ignoreDefaultArgs": [
+              "--autoplay-policy=no-user-gesture-required"
+            ],
+            "args": [
+              "--use-angle=swiftshader",
+              "--enable-unsafe-swiftshader",
+              "--autoplay-policy=document-user-activation-required"
+            ]
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\.cache\\c9-drygame\\browser.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "gameplay.spec.ts",
+      "file": "gameplay.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Tempting legal branch, actual Undo recovery and second rescue",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 360000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 52211,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"a95536ad9007d2c7be8fff3af45009d46fbd33cf09f57aa1f3395c4297e9e2de\"\u001b[39m\nReceived: \u001b[31m\"d850d86e759692abdce47d2ebf6b84cdefa4b2227a18f6ddf9299dc4ab3e9dba\"\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"a95536ad9007d2c7be8fff3af45009d46fbd33cf09f57aa1f3395c4297e9e2de\"\u001b[39m\nReceived: \u001b[31m\"d850d86e759692abdce47d2ebf6b84cdefa4b2227a18f6ddf9299dc4ab3e9dba\"\u001b[39m\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-nine-practice\\gameplay.spec.ts:153:35",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-nine-practice\\gameplay.spec.ts",
+                      "column": 35,
+                      "line": 153
+                    },
+                    "snippet": "  151 |   await unscored(page,level,winner.actions.length,alt.actions.length-alt.recoveryToTurn);\n  152 |   await capture(page,'recovery','rescued');expect(await storage(page)).toEqual(saved);\n> 153 |   expect(snapshotSource().sha256).toBe(source.sha256);\n      |                                   ^\n  154 |   report(directory('recovery'),'actual-undo',{source:source.sha256,branch:alt.id,timeline:chain,recoveryFrom:chain.at(-1),restored:chain[alt.recoveryToTurn],winner:winner.id,final:now,saved});\n  155 | });\n  156 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-nine-practice\\gameplay.spec.ts",
+                        "column": 35,
+                        "line": 153
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"a95536ad9007d2c7be8fff3af45009d46fbd33cf09f57aa1f3395c4297e9e2de\"\u001b[39m\nReceived: \u001b[31m\"d850d86e759692abdce47d2ebf6b84cdefa4b2227a18f6ddf9299dc4ab3e9dba\"\u001b[39m\n\n  151 |   await unscored(page,level,winner.actions.length,alt.actions.length-alt.recoveryToTurn);\n  152 |   await capture(page,'recovery','rescued');expect(await storage(page)).toEqual(saved);\n> 153 |   expect(snapshotSource().sha256).toBe(source.sha256);\n      |                                   ^\n  154 |   report(directory('recovery'),'actual-undo',{source:source.sha256,branch:alt.id,timeline:chain,recoveryFrom:chain.at(-1),restored:chain[alt.recoveryToTurn],winner:winner.id,final:now,saved});\n  155 | });\n  156 |\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-nine-practice\\gameplay.spec.ts:153:35"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-18T06:56:02.038Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\.cache\\drowned-gameplay\\gameplay-Tempting-legal-br-7717d--recovery-and-second-rescue\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-nine-practice\\gameplay.spec.ts",
+                    "column": 35,
+                    "line": 153
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "a8475ef9564cfbc88065-3f5abef91c9fc082e357",
+          "file": "gameplay.spec.ts",
+          "line": 128,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-18T06:56:01.439Z",
+    "duration": 54105.186,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

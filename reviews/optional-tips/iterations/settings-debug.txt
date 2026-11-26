@@ -1,0 +1,38 @@
+
+> last-ferry@1.0.0 test:e2e
+> playwright test optional-tips.spec.ts --grep shared Tips
+
+[WebServer] (node:29440) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:28916) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:28780) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+(node:464) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  pw:api => browserType.launch started +0ms
+  pw:api <= browserType.launch succeeded +1s
+  pw:api => browser.newContext started +2ms
+  pw:api <= browser.newContext succeeded +25ms
+  pw:api => browserContext.addInitScript started +2ms
+  pw:api <= browserContext.addInitScript succeeded +0ms
+  pw:api => browserContext.newPage started +1ms
+  pw:api <= browserContext.newPage succeeded +478ms
+  pw:api => page.goto started +1ms
+  pw:api navigating to "http://127.0.0.1:5270/", waiting until "load" +1ms
+  pw:api   "commit" event fired +7s
+  pw:api   navigated to "http://127.0.0.1:5270/" +0ms
+  pw:api <= page.goto failed +3s
+  pw:api => browserContext.close started +4ms
+  pw:api <= browserContext.close succeeded +7ms
+  pw:api => browser.close started +12ms
+  pw:api <= browser.close succeeded +103ms
+  x  1 tests\e2e\optional-tips.spec.ts:175:1 › shared Tips keyboard access, persistence and blocked storage (10.5s)
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+npm notice To update run: npm install -g npm@12.2.2
+npm notice

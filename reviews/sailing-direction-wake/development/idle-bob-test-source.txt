@@ -1,0 +1,187 @@
+import { expect, test } from 'vitest';
+import { Box3, MathUtils, Mesh, Plane, Vector3 } from 'three';
+import { animal, ferry } from '../../src/scene/models';
+import { settlingProgress } from '../../src/scene/transitions';
+import {
+  bridgeBowOffset,
+  deckEntryZ,
+  firstRabbitDeckZ,
+  sampleDeckTransfer,
+  transferHeading,
+} from '../../src/scene/deck-transfer';
+
+const boat = ferry();
+boat.updateMatrixWorld(true);
+const obstacles = boat.children
+  .filter(
+    (object): object is Mesh =>
+      object instanceof Mesh &&
+      ((object.position.z <= -0.15 && object.position.y >= 0.38 && object.position.y <= 0.85) ||
+        (Math.abs(object.position.x) === 0.46 && object.position.y >= 0.38)),
+  )
+  .map((object) => {
+    const position = object.geometry.getAttribute('position'),
+      indices = object.geometry.index,
+      planes: Plane[] = [];
+    for (let i = 0; i < (indices?.count ?? position.count); i += 3) {
+      const vertices = [0, 1, 2].map((j) =>
+        new Vector3()
+          .fromBufferAttribute(position, indices ? indices.getX(i + j) : i + j)
+          .applyMatrix4(object.matrixWorld),
+      );
+      planes.push(new Plane().setFromCoplanarPoints(vertices[0], vertices[1], vertices[2]));
+    }
+    return { at: object.position.toArray(), box: new Box3().setFromObject(object), planes };
+  });
+const figures = [0, 1, 2].map((id) => {
+  const species = id === 2 ? 'sheep' : 'rabbit',
+    figure = animal(species, id === 1 ? 1 : 0),
+    vertices: Vector3[] = [];
+  figure.scale.set(
+    species === 'rabbit' ? 1.25 : 1.15,
+    species === 'rabbit' ? 1.65 : 1.5,
+    species === 'rabbit' ? 1.25 : 1.15,
+  );
+  figure.updateMatrixWorld(true);
+  figure.traverse((object) => {
+    if (!(object instanceof Mesh)) return;
+    const position = object.geometry.getAttribute('position');
+    for (let i = 0; i < position.count; i++)
+      vertices.push(
+        new Vector3().fromBufferAttribute(position, i).applyMatrix4(object.matrixWorld),
+      );
+  });
+  return vertices;
+});
+const axis = new Vector3(0, 1, 0),
+  smooth = (t: number) => t * t * (3 - 2 * t);
+
+test.each([Math.PI / 2, -Math.PI / 2].flatMap((heading) => [-0.012, 0.012].map((bob) => ({ heading, bob }))))(
+  'sampled modeled transfer with retained idle bob $bob at berth $heading',
+  ({ heading, bob }) => {
+    const failures: string[] = [];
+    expect(obstacles.length).toBeGreaterThan(8);
+    for (const scenario of [
+      {
+        name: 'holding-unload',
+        board: false,
+        ids: [2],
+        pierY: 0.54,
+        width: 0.8,
+        before: -0.045,
+        after: 0.03,
+        water: 0,
+        tide: 0,
+      },
+      {
+        name: 'holding-board',
+        board: true,
+        ids: [2],
+        pierY: 0.54,
+        width: 0.8,
+        before: -0.045,
+        after: -0.12,
+        water: 0.18,
+        tide: 0,
+      },
+      {
+        name: 'rabbit-boundary',
+        board: true,
+        ids: [0, 1],
+        pierY: 0.18,
+        width: 0.9,
+        before: 0.03,
+        after: -0.045,
+        water: 0,
+        tide: 0.18,
+      },
+      {
+        name: 'harbor-unload',
+        board: false,
+        ids: [0, 1, 2],
+        pierY: 0.54,
+        width: 0.6,
+        before: -0.12,
+        after: 0.03,
+        water: 0.36,
+        tide: 0,
+      },
+    ]) {
+      for (const id of scenario.ids) {
+        const anchor = new Vector3(
+            ...([
+              [-0.22, 0.26, firstRabbitDeckZ],
+              [0.22, 0.26, 0.3],
+              [0, 0.26, 0.69],
+            ][id] as [number, number, number]),
+          ),
+          offset = id === 2 ? 0 : id === 0 ? -0.07 : 0.07,
+          bridge = new Vector3(
+            MathUtils.clamp(
+              Math.sin(heading) * bridgeBowOffset + offset,
+              -scenario.width / 2,
+              scenario.width / 2,
+            ),
+            scenario.pierY - 0.005,
+            -0.44,
+          ),
+          land = new Vector3(offset, scenario.pierY + 0.025, -1.95),
+          waiting = new Vector3(
+            id === 2 ? 0 : id === 0 ? -0.21 : 0.21,
+            scenario.pierY - 0.005,
+            -1.02,
+          ),
+          initial = anchor
+            .clone()
+            .applyAxisAngle(axis, heading)
+            .add(new Vector3(0, scenario.water + scenario.before + bob, 0));
+        expect(Math.abs(bridge.x)).toBeLessThanOrEqual(scenario.width / 2);
+        for (let i = 0; i <= 100; i++) {
+          const t = i / 100,
+            k = smooth(t),
+            duration = scenario.name === 'harbor-unload' ? 900 : 520,
+            settled = smooth(
+              settlingProgress(t * duration, { duration, tideDuration: Math.min(duration, 550) }),
+            ),
+            hullY =
+              scenario.water +
+              scenario.tide * settled +
+              scenario.before + bob * (1 - settled) + (scenario.after - scenario.before) * settled,
+            world = (point: Vector3) =>
+              point
+                .clone()
+                .applyAxisAngle(axis, heading)
+                .add(new Vector3(0, hullY, 0)),
+            gate = world(new Vector3(Math.sign(heading) * 0.51, 0.26, deckEntryZ)),
+            corridor = world(new Vector3(0, 0.26, deckEntryZ)),
+            position = sampleDeckTransfer(
+              scenario.board,
+              scenario.board ? waiting : initial,
+              bridge,
+              gate,
+              corridor,
+              land,
+              scenario.board ? world(anchor) : waiting,
+              k,
+            );
+          position.y += Math.sin(t * Math.PI * 4) ** 2 * 0.055;
+          position.y -= hullY;
+          position.applyAxisAngle(axis, -heading);
+          const yaw = transferHeading(scenario.board, heading, k) - heading;
+          for (const vertex of figures[id]) {
+            const point = vertex.clone().applyAxisAngle(axis, yaw).add(position);
+            for (const obstacle of obstacles)
+              if (
+                obstacle.box.containsPoint(point) &&
+                obstacle.planes.every((plane) => plane.distanceToPoint(point) < -1e-7)
+              ) {
+                if (failures.length < 20)
+                  failures.push(`${scenario.name}/${id}/${t}: ${obstacle.at.join(',')}`);
+              }
+          }
+        }
+      }
+    }
+    expect(failures).toEqual([]);
+  },
+);

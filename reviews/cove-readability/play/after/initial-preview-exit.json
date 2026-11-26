@@ -1,0 +1,381 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "reviews/cove-readability/play/config.ts"
+    ],
+    "configFile": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play\\config.ts",
+    "rootDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/reviews/cove-readability/play",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/.cache/cove-readability-tests/after",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/reviews/cove-readability/play",
+        "testIgnore": [],
+        "testMatch": [
+          "readability.spec.ts"
+        ],
+        "timeout": 360000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\.cache\\cove-readability-tests\\after",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play",
+        "snapshotDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play",
+        "testIgnore": [],
+        "testMatch": "readability.spec.ts",
+        "timeout": 360000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5400",
+          "hasTouch": true,
+          "isMobile": true,
+          "deviceScaleFactor": 1,
+          "actionTimeout": 12000,
+          "launchOptions": {
+            "ignoreDefaultArgs": [
+              "--autoplay-policy=no-user-gesture-required"
+            ],
+            "args": [
+              "--use-angle=swiftshader",
+              "--enable-unsafe-swiftshader",
+              "--autoplay-policy=document-user-activation-required"
+            ]
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play\\after\\browser.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "readability.spec.ts",
+      "file": "readability.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Fresh Journey to Holding rescue 390x844",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 360000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1158,
+                  "error": {
+                    "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:5400/\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:5400/\", waiting until \"load\"\u001b[22m\n",
+                    "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:5400/\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:5400/\", waiting until \"load\"\u001b[22m\n\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play\\readability.spec.ts:118:16",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play\\readability.spec.ts",
+                      "column": 16,
+                      "line": 118
+                    },
+                    "snippet": "  116 |     const film = stage!=='before' && width===390 && process.env.COVE_READABILITY_RECORD !== '0';\n  117 |     if (film) await listenToOutput(page);\n> 118 |     await page.goto('/');\n      |                ^\n  119 |     const build = await servedBuild(page);\n  120 |     if(stage==='before') expect(build).toEqual(baseline.build);\n  121 |     const fresh = await storage(page);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play\\readability.spec.ts",
+                        "column": 16,
+                        "line": 118
+                      },
+                      "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:5400/\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:5400/\", waiting until \"load\"\u001b[22m\n\n\n  116 |     const film = stage!=='before' && width===390 && process.env.COVE_READABILITY_RECORD !== '0';\n  117 |     if (film) await listenToOutput(page);\n> 118 |     await page.goto('/');\n      |                ^\n  119 |     const build = await servedBuild(page);\n  120 |     if(stage==='before') expect(build).toEqual(baseline.build);\n  121 |     const fresh = await storage(page);\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play\\readability.spec.ts:118:16"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-20T14:53:54.416Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\.cache\\cove-readability-tests\\after\\readability-Fresh-Journey-to-Holding-rescue-390x844\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play\\readability.spec.ts",
+                    "column": 16,
+                    "line": 118
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "62c2c003f56c091293ed-3b4e4241cf80475959af",
+          "file": "readability.spec.ts",
+          "line": 110,
+          "column": 3
+        },
+        {
+          "title": "Fresh Journey to Holding rescue 780x320",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 360000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1135,
+                  "error": {
+                    "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:5400/\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:5400/\", waiting until \"load\"\u001b[22m\n",
+                    "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:5400/\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:5400/\", waiting until \"load\"\u001b[22m\n\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play\\readability.spec.ts:118:16",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play\\readability.spec.ts",
+                      "column": 16,
+                      "line": 118
+                    },
+                    "snippet": "  116 |     const film = stage!=='before' && width===390 && process.env.COVE_READABILITY_RECORD !== '0';\n  117 |     if (film) await listenToOutput(page);\n> 118 |     await page.goto('/');\n      |                ^\n  119 |     const build = await servedBuild(page);\n  120 |     if(stage==='before') expect(build).toEqual(baseline.build);\n  121 |     const fresh = await storage(page);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play\\readability.spec.ts",
+                        "column": 16,
+                        "line": 118
+                      },
+                      "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:5400/\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:5400/\", waiting until \"load\"\u001b[22m\n\n\n  116 |     const film = stage!=='before' && width===390 && process.env.COVE_READABILITY_RECORD !== '0';\n  117 |     if (film) await listenToOutput(page);\n> 118 |     await page.goto('/');\n      |                ^\n  119 |     const build = await servedBuild(page);\n  120 |     if(stage==='before') expect(build).toEqual(baseline.build);\n  121 |     const fresh = await storage(page);\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play\\readability.spec.ts:118:16"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-20T14:53:56.109Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\.cache\\cove-readability-tests\\after\\readability-Fresh-Journey-to-Holding-rescue-780x320\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play\\readability.spec.ts",
+                    "column": 16,
+                    "line": 118
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "62c2c003f56c091293ed-caab72da7189bcb5a7d4",
+          "file": "readability.spec.ts",
+          "line": 110,
+          "column": 3
+        },
+        {
+          "title": "Far Shore same turn, different companion 390x844",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 360000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1137,
+                  "error": {
+                    "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:5400/?cove=far-shore\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:5400/?cove=far-shore\", waiting until \"load\"\u001b[22m\n",
+                    "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:5400/?cove=far-shore\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:5400/?cove=far-shore\", waiting until \"load\"\u001b[22m\n\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play\\readability.spec.ts:221:16",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play\\readability.spec.ts",
+                      "column": 16,
+                      "line": 221
+                    },
+                    "snippet": "  219 |     await page.setViewportSize({width,height});\n  220 |     await page.emulateMedia({reducedMotion:width===780?'reduce':'no-preference'});\n> 221 |     await page.goto('/?cove=far-shore');\n      |                ^\n  222 |     const build = await servedBuild(page);\n  223 |     if(stage==='before') expect(build).toEqual(baseline.build);\n  224 |     const saved = await storage(page);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play\\readability.spec.ts",
+                        "column": 16,
+                        "line": 221
+                      },
+                      "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:5400/?cove=far-shore\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:5400/?cove=far-shore\", waiting until \"load\"\u001b[22m\n\n\n  219 |     await page.setViewportSize({width,height});\n  220 |     await page.emulateMedia({reducedMotion:width===780?'reduce':'no-preference'});\n> 221 |     await page.goto('/?cove=far-shore');\n      |                ^\n  222 |     const build = await servedBuild(page);\n  223 |     if(stage==='before') expect(build).toEqual(baseline.build);\n  224 |     const saved = await storage(page);\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play\\readability.spec.ts:221:16"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-20T14:53:57.785Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\.cache\\cove-readability-tests\\after\\readability-Far-Shore-same-turn-different-companion-390x844\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play\\readability.spec.ts",
+                    "column": 16,
+                    "line": 221
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "62c2c003f56c091293ed-e48700f54e65b6196b33",
+          "file": "readability.spec.ts",
+          "line": 215,
+          "column": 3
+        },
+        {
+          "title": "Far Shore same turn, different companion 780x320",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 360000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1155,
+                  "error": {
+                    "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:5400/?cove=far-shore\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:5400/?cove=far-shore\", waiting until \"load\"\u001b[22m\n",
+                    "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:5400/?cove=far-shore\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:5400/?cove=far-shore\", waiting until \"load\"\u001b[22m\n\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play\\readability.spec.ts:221:16",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play\\readability.spec.ts",
+                      "column": 16,
+                      "line": 221
+                    },
+                    "snippet": "  219 |     await page.setViewportSize({width,height});\n  220 |     await page.emulateMedia({reducedMotion:width===780?'reduce':'no-preference'});\n> 221 |     await page.goto('/?cove=far-shore');\n      |                ^\n  222 |     const build = await servedBuild(page);\n  223 |     if(stage==='before') expect(build).toEqual(baseline.build);\n  224 |     const saved = await storage(page);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play\\readability.spec.ts",
+                        "column": 16,
+                        "line": 221
+                      },
+                      "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:5400/?cove=far-shore\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:5400/?cove=far-shore\", waiting until \"load\"\u001b[22m\n\n\n  219 |     await page.setViewportSize({width,height});\n  220 |     await page.emulateMedia({reducedMotion:width===780?'reduce':'no-preference'});\n> 221 |     await page.goto('/?cove=far-shore');\n      |                ^\n  222 |     const build = await servedBuild(page);\n  223 |     if(stage==='before') expect(build).toEqual(baseline.build);\n  224 |     const saved = await storage(page);\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play\\readability.spec.ts:221:16"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-20T14:53:59.443Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\.cache\\cove-readability-tests\\after\\readability-Far-Shore-same-turn-different-companion-780x320\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play\\readability.spec.ts",
+                    "column": 16,
+                    "line": 221
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "62c2c003f56c091293ed-45384af40adfbd5483b9",
+          "file": "readability.spec.ts",
+          "line": 215,
+          "column": 3
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-20T14:53:53.801Z",
+    "duration": 6948.012000000001,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 4,
+    "flaky": 0
+  }
+}

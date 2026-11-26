@@ -1,0 +1,68 @@
+[
+  {
+    "ProcessId": 46776,
+    "ParentProcessId": 9324,
+    "Name": "pwsh.exe",
+    "CommandLine": "C:\\Users\\ernes\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe -Command \"try { [Console]::OutputEncoding=[System.Text.Encoding]::UTF8 } catch {}\n$env:PLAYWRIGHT_BROWSERS_PATH='../.cache/ms-playwright'; $env:LAST_FERRY_DEV_PORT='5270'; $env:LAST_FERRY_PRODUCTION_PORT='5276'; $env:LAST_FERRY_REVIEW_DIR='reviews/wide-berth/recovery'; npm run test:e2e -- wide-berth.spec.ts --grep 'launch repeated handoff' *> reviews/wide-berth/gates/browser-recovery.txt; Get-Content reviews/wide-berth/gates/browser-recovery.txt\""
+  },
+  {
+    "ProcessId": 24688,
+    "ParentProcessId": 46776,
+    "Name": "conhost.exe",
+    "CommandLine": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+  },
+  {
+    "ProcessId": 48904,
+    "ParentProcessId": 46776,
+    "Name": "node.exe",
+    "CommandLine": "\"C:\\Program Files\\nodejs\\node.exe\" \"C:\\Program Files\\nodejs/node_modules/npm/bin/npm-cli.js\" run test:e2e -- wide-berth.spec.ts --grep \"launch repeated handoff\""
+  },
+  {
+    "ProcessId": 8664,
+    "ParentProcessId": 48904,
+    "Name": "cmd.exe",
+    "CommandLine": "C:\\WINDOWS\\system32\\cmd.exe /d /s /c playwright test wide-berth.spec.ts --grep ^^^\"launch^^^ repeated^^^ handoff^^^\""
+  },
+  {
+    "ProcessId": 5312,
+    "ParentProcessId": 8664,
+    "Name": "node.exe",
+    "CommandLine": "\"node\"   \"C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\node_modules\\.bin\\\\..\\@playwright\\test\\cli.js\" test wide-berth.spec.ts --grep \"launch repeated handoff\""
+  },
+  {
+    "ProcessId": 9984,
+    "ParentProcessId": 5312,
+    "Name": "node.exe",
+    "CommandLine": "\"C:\\Program Files\\nodejs\\node.exe\" C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js"
+  },
+  {
+    "ProcessId": 21360,
+    "ParentProcessId": 9984,
+    "Name": "chrome-headless-shell.exe",
+    "CommandLine": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\.cache\\ms-playwright\\chromium_headless_shell-1248\\chrome-headless-shell-win64\\chrome-headless-shell.exe --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,AvoidCorsURLLoaderRestartOnRedirect,Translate,AutoDeElevate,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --use-angle=swiftshader --enable-unsafe-swiftshader --autoplay-policy=document-user-activation-required --user-data-dir=C:\\Users\\ernes\\AppData\\Local\\Packages\\sandbox.{65d0be53-cecf-41a1-a20f-d60ac669303d}\\AC\\Temp\\playwright_chromiumdev_profile-KKLLwZ --remote-debugging-pipe --no-startup-window"
+  },
+  {
+    "ProcessId": 5764,
+    "ParentProcessId": 21360,
+    "Name": "chrome-headless-shell.exe",
+    "CommandLine": "\"C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\.cache\\ms-playwright\\chromium_headless_shell-1248\\chrome-headless-shell-win64\\chrome-headless-shell.exe\" --type=gpu-process --gpu-recent-crash-count=0 --no-sandbox --disable-breakpad --headless --use-angle=swiftshader --enable-unsafe-swiftshader --gpu-preferences=WAAAAAAAAADgAAAEAAAAAAAAAAAAAGAAQAAAAAAAAAADAAAAAAAAADgAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAKAAAAAAAAAAoAAAAAAAAAAgAAAAAAAAAEAAAAAIAAAABAAAAAAAAAAgAAAAAAAAACAAAAAAAAAA= --field-trial-handle=1452,i,12182918815328115688,718921714830917340,262144 --enable-features=CDPScreenshotNewSurface --disable-features=AimEnabled,AutoDeElevate,AvoidCorsURLLoaderRestartOnRedirect,AvoidUnnecessaryBeforeUnloadCheckSync,BlockOriginHeaderModificationOnRedirect,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,NetworkTimeServiceQuerying,OptimizationHints,PaintHolding,ThirdPartyStoragePartitioning,Translate,msEdgeUpdateLaunchServicesPreferredVersion,msForceBrowserSignIn --variations-seed-version --pseudonymization-salt-handle=1456,i,8794534242459051435,286623141905607071,4 --trace-process-track-uuid=3190708988185955192 --enable-logging=handle --log-file=1500 --mojo-platform-channel-handle=1396 /prefetch:2"
+  },
+  {
+    "ProcessId": 26152,
+    "ParentProcessId": 21360,
+    "Name": "chrome-headless-shell.exe",
+    "CommandLine": "\"C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\.cache\\ms-playwright\\chromium_headless_shell-1248\\chrome-headless-shell-win64\\chrome-headless-shell.exe\" --type=utility --utility-sub-type=network.mojom.NetworkService --lang=en-US --service-sandbox-type=none --no-sandbox --use-angle=swiftshader --mute-audio --headless=old --field-trial-handle=1452,i,12182918815328115688,718921714830917340,262144 --enable-features=CDPScreenshotNewSurface --disable-features=AimEnabled,AutoDeElevate,AvoidCorsURLLoaderRestartOnRedirect,AvoidUnnecessaryBeforeUnloadCheckSync,BlockOriginHeaderModificationOnRedirect,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,NetworkTimeServiceQuerying,OptimizationHints,PaintHolding,ThirdPartyStoragePartitioning,Translate,msEdgeUpdateLaunchServicesPreferredVersion,msForceBrowserSignIn --variations-seed-version --pseudonymization-salt-handle=1456,i,8794534242459051435,286623141905607071,4 --trace-process-track-uuid=3190708989122997041 --enable-logging=handle --log-file=2088 --mojo-platform-channel-handle=2052 /prefetch:11"
+  },
+  {
+    "ProcessId": 9516,
+    "ParentProcessId": 21360,
+    "Name": "chrome-headless-shell.exe",
+    "CommandLine": "\"C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\.cache\\ms-playwright\\chromium_headless_shell-1248\\chrome-headless-shell-win64\\chrome-headless-shell.exe\" --type=renderer --headless=old --no-sandbox --autoplay-policy=document-user-activation-required --disable-back-forward-cache --disable-background-timer-throttling --disable-breakpad --force-color-profile=srgb --remote-debugging-pipe --allow-pre-commit-input --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --video-capture-use-gpu-memory-buffer --lang=en-US --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=4 --launch-time-ticks=84449922071 --field-trial-handle=1452,i,12182918815328115688,718921714830917340,262144 --enable-features=CDPScreenshotNewSurface --disable-features=AimEnabled,AutoDeElevate,AvoidCorsURLLoaderRestartOnRedirect,AvoidUnnecessaryBeforeUnloadCheckSync,BlockOriginHeaderModificationOnRedirect,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,NetworkTimeServiceQuerying,OptimizationHints,PaintHolding,ThirdPartyStoragePartitioning,Translate,msEdgeUpdateLaunchServicesPreferredVersion,msForceBrowserSignIn --variations-seed-version --pseudonymization-salt-handle=1456,i,8794534242459051435,286623141905607071,4 --trace-process-track-uuid=3190708990060038890 --enable-logging=handle --log-file=2704 --mojo-platform-channel-handle=2700 /prefetch:1"
+  },
+  {
+    "ProcessId": 45348,
+    "ParentProcessId": 21360,
+    "Name": "chrome-headless-shell.exe",
+    "CommandLine": "\"C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\.cache\\ms-playwright\\chromium_headless_shell-1248\\chrome-headless-shell-win64\\chrome-headless-shell.exe\" --type=utility --utility-sub-type=audio.mojom.AudioService --lang=en-US --service-sandbox-type=audio --no-sandbox --use-angle=swiftshader --mute-audio --headless=old --field-trial-handle=1452,i,12182918815328115688,718921714830917340,262144 --enable-features=CDPScreenshotNewSurface --disable-features=AimEnabled,AutoDeElevate,AvoidCorsURLLoaderRestartOnRedirect,AvoidUnnecessaryBeforeUnloadCheckSync,BlockOriginHeaderModificationOnRedirect,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,NetworkTimeServiceQuerying,OptimizationHints,PaintHolding,ThirdPartyStoragePartitioning,Translate,msEdgeUpdateLaunchServicesPreferredVersion,msForceBrowserSignIn --variations-seed-version --pseudonymization-salt-handle=1456,i,8794534242459051435,286623141905607071,4 --trace-process-track-uuid=3190708990997080739 --enable-logging=handle --log-file=2816 --mojo-platform-channel-handle=2680 /prefetch:12"
+  }
+]

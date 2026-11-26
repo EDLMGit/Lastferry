@@ -1,0 +1,59 @@
+
+Running 6 tests using 1 worker
+
+(node:20200) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\e2e\phone-audio-fullscreen.spec.ts:418:3 › phone audio cold holding-pier: first completed touch starts sustained real output (4.6s)
+  ok 2 tests\e2e\phone-audio-fullscreen.spec.ts:418:3 › phone audio cold first-crossing: first completed touch starts sustained real output (5.4s)
+  ok 3 tests\e2e\phone-audio-fullscreen.spec.ts:489:3 › phone controlled resume resolve: Retry owns newer pending request and Mute wins late completion (3.4s)
+  ok 4 tests\e2e\phone-audio-fullscreen.spec.ts:615:1 › phone controlled held Space: auto-repeat cannot replace the original Retry intent after late running (2.9s)
+(node:9496) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  5 tests\e2e\selection.spec.ts:242:1 › selection regression: an explicit new place permits the next trusted Sail inside the previous 180ms fence (1.4s)
+(node:53540) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  6 tests\e2e\selection.spec.ts:267:1 › selection regression: the arrived dock permits a deliberate local action inside the prior Sail fence (1.8s)
+
+
+  1) tests\e2e\selection.spec.ts:242:1 › selection regression: an explicit new place permits the next trusted Sail inside the previous 180ms fence 
+
+    Error: The new intentional Sail must exercise the still-live old fence
+
+    expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 180
+    Received:    180.69999998807907
+
+      257 |   expect(clicks.every((click: any) => click.trusted)).toBe(true);
+      258 |   expect(clicks.map((click: any) => click.target)).toEqual(['sail', 'map-rabbit-pier', 'sail']);
+    > 259 |   expect(result.gapMs, 'The new intentional Sail must exercise the still-live old fence').toBeLessThanOrEqual(180);
+          |                                                                                           ^
+      260 |   expect(result.final.state).toMatchObject({ turn: 3, boatNodeId: 'rabbit-pier' });
+      261 |   expect(result.final.history).toBe(3);
+      262 |   expect((await selection(page)).selectedId).toBeNull();
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\selection.spec.ts:259:91
+
+    Error Context: test-results\selection-selection-regres-9c0df-de-the-previous-180ms-fence\error-context.md
+
+  2) tests\e2e\selection.spec.ts:267:1 › selection regression: the arrived dock permits a deliberate local action inside the prior Sail fence 
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 180
+    Received:    622.5
+
+      287 |   expect(clicks[2].snapshot).toEqual(arrived);
+      288 |   expect(clicks.every((click: any) => click.trusted)).toBe(true);
+    > 289 |   expect(result.gapMs).toBeLessThanOrEqual(180);
+          |                        ^
+      290 |   await expect(page.locator('#commit')).toBeVisible();
+      291 |   await expect(page.locator('#cancel')).toBeFocused();
+      292 |   expect(result.final).toEqual(arrived);
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\selection.spec.ts:289:24
+
+    Error Context: test-results\selection-selection-regres-fed88-inside-the-prior-Sail-fence\error-context.md
+
+  2 failed
+    tests\e2e\selection.spec.ts:242:1 › selection regression: an explicit new place permits the next trusted Sail inside the previous 180ms fence 
+    tests\e2e\selection.spec.ts:267:1 › selection regression: the arrived dock permits a deliberate local action inside the prior Sail fence 
+  4 passed (25.1s)

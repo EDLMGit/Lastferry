@@ -1,0 +1,952 @@
+{
+  "outcome": "passed",
+  "source": {
+    "head": "c5f4ae110973aa352d15028ba9d8c857a4270f6b",
+    "runtimeHash": "e622af75a2dce1400b263978ee985087da2269b0f31e64930157f4058396c1db",
+    "kind": "isolated git archive",
+    "sourceUnchanged": true,
+    "manifest": "source.json",
+    "manifestSha256": "9e94ede7c9167a0efbc831fc81012f274847ac60b8fa21d6ad360a38b0ebf603"
+  },
+  "environment": {
+    "browser": "156.0.8078.4",
+    "node": "v24.15.0",
+    "platform": "win32",
+    "viewport": {
+      "width": 844,
+      "height": 390
+    },
+    "dpr": 1,
+    "input": "emulated touch",
+    "renderer": "SwiftShader",
+    "base": "http://127.0.0.1:5198"
+  },
+  "command": [
+    "C:\\Program Files\\nodejs\\node.exe",
+    "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tools\\capture-victory-mix.mjs",
+    "--base=http://127.0.0.1:5198",
+    "--root=.cache/victory-baseline-c5f4ae1",
+    "--revision=c5f4ae110973aa352d15028ba9d8c857a4270f6b",
+    "--output=reviews/victory-mix/before"
+  ],
+  "originalCapture": {
+    "path": "reviews/victory-mix/before/raw/capture.json",
+    "sha256": "f6344a6e528efa40860c249307b443f0013508ce032edc1384865425716f8afc"
+  },
+  "recording": {
+    "path": "reviews/victory-mix/before/raw/holding-runtime-audio.webm",
+    "sha256": "63c097327e4a1a293ff0e5f21cec4bd6665d35874f008f2f9370bcda38771515",
+    "wallMs": 86134.60000002384,
+    "bytes": 6918220,
+    "mimeType": "video/webm;codecs=vp9,opus",
+    "samples": 672,
+    "trace": {
+      "path": "reviews/victory-mix/before/raw/runtime-samples.json",
+      "sha256": "42914bc3623f119b9976ff7c1532895af7923f2b7e02be3147660d0a47d00b57"
+    },
+    "graph": {
+      "path": "reviews/victory-mix/before/raw/audio-graph.json",
+      "sha256": "c691ae4d3f40f97861c645a5319d0de1ae5a3ae0c7d2afadc577b2e6d129c890"
+    }
+  },
+  "fullInterfaceVideo": {
+    "path": "reviews/victory-mix/before/raw/holding-full-interface-silent.webm",
+    "sha256": "45e93d732c521d4ddec52d6f2aba920f115484d473175b3d72daf2e28e8813be",
+    "audio": false
+  },
+  "method": "One uninterrupted real UI rescue with two terminal Undo/redeliveries at observed score phases. Actual canvas.captureStream video and existing runtime master Web Audio stream recorded together by MediaRecorder through the final 11-second won hold. No game-state injection, score-clock adjustment, audio substitution, normalization, export gain or time editing. Separate silent full-interface video covers that session and the subsequent Next cove navigation. Native gain/connect wrappers only observe calls and preserve original audio operations.",
+  "playbackLevels": {
+    "exportedFrom": "Sound.captureStream(): unchanged runtime master gain output",
+    "masterTarget": 0.65,
+    "effectsBus": 0.34,
+    "ambienceBus": 0.11,
+    "normalization": false,
+    "exportGain": 1,
+    "note": "Music attenuation and arrival synthesis may differ by source version as the authored change under test; media playback/export adds no gain adjustment."
+  },
+  "listening": "No speaker/headphone acoustic listening capability established in this workflow. Captured runtime master is retained for human comparison at unchanged playback volume. Source/gain/counter observations cannot establish subjective recognition or Android balance.",
+  "diagnosis": {
+    "scope": "Actual contributor Chromium runtime reproduction, not independent review or physical Android.",
+    "committedWonBeforeVisibleArrival": {
+      "label": "first-committed-won",
+      "wallMs": 19453,
+      "state": {
+        "turn": 9,
+        "status": "won",
+        "boatNodeId": "harbor"
+      },
+      "audioTime": 19.490666666666666,
+      "phase": 19.450666666666667,
+      "deliveryCount": 0,
+      "arrivalVoicesPlayed": 0,
+      "arrivalVoicesSkipped": 0,
+      "arrivalVoicesReclaimed": 0,
+      "arrivalSources": 0,
+      "arrangement": "homeward",
+      "pendingTerminal": true,
+      "lastArrival": null,
+      "permanentGains": [
+        {
+          "id": "GainNode-1",
+          "value": 0.6499999761581421
+        },
+        {
+          "id": "GainNode-2",
+          "value": 0.7200000286102295
+        },
+        {
+          "id": "GainNode-3",
+          "value": 0.10999999940395355
+        },
+        {
+          "id": "GainNode-4",
+          "value": 0.3400000035762787
+        },
+        {
+          "id": "GainNode-5",
+          "value": 0.30000001192092896
+        },
+        {
+          "id": "GainNode-6",
+          "value": 0.3400000035762787
+        }
+      ]
+    },
+    "firstObservedArrival": {
+      "label": "first-visible-arrival",
+      "wallMs": 20099.80000001192,
+      "state": {
+        "turn": 9,
+        "status": "won",
+        "boatNodeId": "harbor"
+      },
+      "audioTime": 20.130666666666666,
+      "phase": 20.090666666666667,
+      "deliveryCount": 1,
+      "arrivalVoicesPlayed": 3,
+      "arrivalVoicesSkipped": 0,
+      "arrivalVoicesReclaimed": 0,
+      "arrivalSources": 3,
+      "arrangement": "homeward",
+      "pendingTerminal": false,
+      "lastArrival": {
+        "time": 20.122666666666667,
+        "phase": 20.082666666666668,
+        "notes": [
+          {
+            "stage": "opening",
+            "offset": 0,
+            "duration": 1.55,
+            "attack": 0.12,
+            "peak": 0.06,
+            "palette": "pad",
+            "note": 59
+          },
+          {
+            "stage": "answer",
+            "offset": 0.48,
+            "duration": 1.9,
+            "attack": 0.065,
+            "peak": 0.078,
+            "palette": "pluck",
+            "note": 69
+          },
+          {
+            "stage": "settle",
+            "offset": 1.1,
+            "duration": 2.25,
+            "attack": 0.2,
+            "peak": 0.044,
+            "palette": "pad",
+            "note": 66
+          }
+        ]
+      },
+      "permanentGains": [
+        {
+          "id": "GainNode-1",
+          "value": 0.6499999761581421
+        },
+        {
+          "id": "GainNode-2",
+          "value": 0.7200000286102295
+        },
+        {
+          "id": "GainNode-3",
+          "value": 0.10999999940395355
+        },
+        {
+          "id": "GainNode-4",
+          "value": 0.3400000035762787
+        },
+        {
+          "id": "GainNode-5",
+          "value": 0.30000001192092896
+        },
+        {
+          "id": "GainNode-6",
+          "value": 0.3400000035762787
+        }
+      ]
+    },
+    "musicAutomationAtFirstArrival": [
+      {
+        "id": "GainNode-2",
+        "operation": "cancelAndHoldAtTime",
+        "values": [
+          20.610666666666667
+        ],
+        "at": 20.610666666666667,
+        "currentValue": 0.7200000286102295
+      },
+      {
+        "id": "GainNode-2",
+        "operation": "linearRampToValueAtTime",
+        "values": [
+          0.62,
+          21.410666666666668
+        ],
+        "at": 20.610666666666667,
+        "currentValue": 0.7200000286102295
+      }
+    ],
+    "initialRouting": [
+      {
+        "from": "GainNode-2",
+        "to": "GainNode-1",
+        "at": 0
+      },
+      {
+        "from": "GainNode-2",
+        "to": "GainNode-5",
+        "at": 0
+      },
+      {
+        "from": "GainNode-5",
+        "to": "ConvolverNode-7",
+        "at": 0
+      },
+      {
+        "from": "ConvolverNode-7",
+        "to": "GainNode-6",
+        "at": 0
+      },
+      {
+        "from": "GainNode-6",
+        "to": "GainNode-1",
+        "at": 0
+      },
+      {
+        "from": "GainNode-3",
+        "to": "GainNode-1",
+        "at": 0
+      },
+      {
+        "from": "GainNode-4",
+        "to": "GainNode-1",
+        "at": 0
+      },
+      {
+        "from": "GainNode-1",
+        "to": "AnalyserNode-8",
+        "at": 0
+      },
+      {
+        "from": "AnalyserNode-8",
+        "to": "AudioDestinationNode-9",
+        "at": 0
+      }
+    ],
+    "conclusion": "All three real visible final-unload events invoked one cue and all three arrival voices. No skipped/reclaimed voices or score drops were observed. The first won arrangement reduction began 0.488 seconds after the cue, .72 to .62 over .8 seconds. Masking is plausible; no acoustic listening establishes a cause for every reported device session."
+  },
+  "arrivals": [
+    {
+      "label": "ordinary-arrival-after",
+      "wallMs": 20387.70000001788,
+      "state": {
+        "turn": 9,
+        "status": "won",
+        "boatNodeId": "harbor"
+      },
+      "audioTime": 20.421333333333333,
+      "phase": 20.381333333333334,
+      "deliveryCount": 1,
+      "arrivalVoicesPlayed": 3,
+      "arrivalVoicesSkipped": 0,
+      "arrivalVoicesReclaimed": 0,
+      "arrivalSources": 3,
+      "arrangement": "homeward",
+      "pendingTerminal": false,
+      "lastArrival": {
+        "time": 20.122666666666667,
+        "phase": 20.082666666666668,
+        "notes": [
+          {
+            "stage": "opening",
+            "offset": 0,
+            "duration": 1.55,
+            "attack": 0.12,
+            "peak": 0.06,
+            "palette": "pad",
+            "note": 59
+          },
+          {
+            "stage": "answer",
+            "offset": 0.48,
+            "duration": 1.9,
+            "attack": 0.065,
+            "peak": 0.078,
+            "palette": "pluck",
+            "note": 69
+          },
+          {
+            "stage": "settle",
+            "offset": 1.1,
+            "duration": 2.25,
+            "attack": 0.2,
+            "peak": 0.044,
+            "palette": "pad",
+            "note": 66
+          }
+        ]
+      },
+      "permanentGains": [
+        {
+          "id": "GainNode-1",
+          "value": 0.6499999761581421
+        },
+        {
+          "id": "GainNode-2",
+          "value": 0.7200000286102295
+        },
+        {
+          "id": "GainNode-3",
+          "value": 0.10999999940395355
+        },
+        {
+          "id": "GainNode-4",
+          "value": 0.3400000035762787
+        },
+        {
+          "id": "GainNode-5",
+          "value": 0.30000001192092896
+        },
+        {
+          "id": "GainNode-6",
+          "value": 0.3400000035762787
+        }
+      ]
+    },
+    {
+      "label": "dense-arrival-after",
+      "wallMs": 47203.30000001192,
+      "state": {
+        "turn": 9,
+        "status": "won",
+        "boatNodeId": "harbor"
+      },
+      "audioTime": 47.24,
+      "phase": 47.2,
+      "deliveryCount": 2,
+      "arrivalVoicesPlayed": 6,
+      "arrivalVoicesSkipped": 0,
+      "arrivalVoicesReclaimed": 0,
+      "arrivalSources": 3,
+      "arrangement": "homeward",
+      "pendingTerminal": false,
+      "lastArrival": {
+        "time": 46.970666666666666,
+        "phase": 46.93066666666667,
+        "notes": [
+          {
+            "stage": "opening",
+            "offset": 0,
+            "duration": 1.55,
+            "attack": 0.12,
+            "peak": 0.06,
+            "palette": "pad",
+            "note": 62
+          },
+          {
+            "stage": "answer",
+            "offset": 0.48,
+            "duration": 1.9,
+            "attack": 0.065,
+            "peak": 0.078,
+            "palette": "pluck",
+            "note": 67
+          },
+          {
+            "stage": "settle",
+            "offset": 1.1,
+            "duration": 2.25,
+            "attack": 0.2,
+            "peak": 0.044,
+            "palette": "pad",
+            "note": 66
+          }
+        ]
+      },
+      "permanentGains": [
+        {
+          "id": "GainNode-1",
+          "value": 0.6499999761581421
+        },
+        {
+          "id": "GainNode-2",
+          "value": 0.7200000286102295
+        },
+        {
+          "id": "GainNode-3",
+          "value": 0.10999999940395355
+        },
+        {
+          "id": "GainNode-4",
+          "value": 0.3400000035762787
+        },
+        {
+          "id": "GainNode-5",
+          "value": 0.30000001192092896
+        },
+        {
+          "id": "GainNode-6",
+          "value": 0.3400000035762787
+        }
+      ]
+    },
+    {
+      "label": "phrase-return-arrival-after",
+      "wallMs": 74935.60000002384,
+      "state": {
+        "turn": 9,
+        "status": "won",
+        "boatNodeId": "harbor"
+      },
+      "audioTime": 74.97066666666667,
+      "phase": 74.93066666666667,
+      "deliveryCount": 3,
+      "arrivalVoicesPlayed": 9,
+      "arrivalVoicesSkipped": 0,
+      "arrivalVoicesReclaimed": 0,
+      "arrivalSources": 3,
+      "arrangement": "won",
+      "pendingTerminal": false,
+      "lastArrival": {
+        "time": 74.68,
+        "phase": 74.64,
+        "notes": [
+          {
+            "stage": "opening",
+            "offset": 0,
+            "duration": 1.55,
+            "attack": 0.12,
+            "peak": 0.06,
+            "palette": "pad",
+            "note": 62
+          },
+          {
+            "stage": "answer",
+            "offset": 0.48,
+            "duration": 1.9,
+            "attack": 0.065,
+            "peak": 0.078,
+            "palette": "pluck",
+            "note": 69
+          },
+          {
+            "stage": "settle",
+            "offset": 1.1,
+            "duration": 2.25,
+            "attack": 0.2,
+            "peak": 0.044,
+            "palette": "pad",
+            "note": 66
+          }
+        ]
+      },
+      "permanentGains": [
+        {
+          "id": "GainNode-1",
+          "value": 0.6499999761581421
+        },
+        {
+          "id": "GainNode-2",
+          "value": 0.6246649622917175
+        },
+        {
+          "id": "GainNode-3",
+          "value": 0.10999999940395355
+        },
+        {
+          "id": "GainNode-4",
+          "value": 0.3400000035762787
+        },
+        {
+          "id": "GainNode-5",
+          "value": 0.30000001192092896
+        },
+        {
+          "id": "GainNode-6",
+          "value": 0.3400000035762787
+        }
+      ]
+    }
+  ],
+  "settledHolds": [
+    {
+      "label": "ordinary-arrival-held-11s",
+      "wallMs": 32252.100000023842,
+      "state": {
+        "turn": 9,
+        "status": "won",
+        "boatNodeId": "harbor"
+      },
+      "audioTime": 32.29066666666667,
+      "phase": 32.25066666666667,
+      "deliveryCount": 1,
+      "arrivalVoicesPlayed": 3,
+      "arrivalVoicesSkipped": 0,
+      "arrivalVoicesReclaimed": 0,
+      "arrivalSources": 0,
+      "arrangement": "won",
+      "pendingTerminal": false,
+      "lastArrival": {
+        "time": 20.122666666666667,
+        "phase": 20.082666666666668,
+        "notes": [
+          {
+            "stage": "opening",
+            "offset": 0,
+            "duration": 1.55,
+            "attack": 0.12,
+            "peak": 0.06,
+            "palette": "pad",
+            "note": 59
+          },
+          {
+            "stage": "answer",
+            "offset": 0.48,
+            "duration": 1.9,
+            "attack": 0.065,
+            "peak": 0.078,
+            "palette": "pluck",
+            "note": 69
+          },
+          {
+            "stage": "settle",
+            "offset": 1.1,
+            "duration": 2.25,
+            "attack": 0.2,
+            "peak": 0.044,
+            "palette": "pad",
+            "note": 66
+          }
+        ]
+      },
+      "permanentGains": [
+        {
+          "id": "GainNode-1",
+          "value": 0.6499999761581421
+        },
+        {
+          "id": "GainNode-2",
+          "value": 0.6200000047683716
+        },
+        {
+          "id": "GainNode-3",
+          "value": 0.10999999940395355
+        },
+        {
+          "id": "GainNode-4",
+          "value": 0.3400000035762787
+        },
+        {
+          "id": "GainNode-5",
+          "value": 0.30000001192092896
+        },
+        {
+          "id": "GainNode-6",
+          "value": 0.3400000035762787
+        }
+      ],
+      "secondsAfterArrival": 12.168
+    },
+    {
+      "label": "dense-arrival-held-11s",
+      "wallMs": 58216.60000002384,
+      "state": {
+        "turn": 9,
+        "status": "won",
+        "boatNodeId": "harbor"
+      },
+      "audioTime": 58.25066666666667,
+      "phase": 58.21066666666667,
+      "deliveryCount": 2,
+      "arrivalVoicesPlayed": 6,
+      "arrivalVoicesSkipped": 0,
+      "arrivalVoicesReclaimed": 0,
+      "arrivalSources": 0,
+      "arrangement": "won",
+      "pendingTerminal": false,
+      "lastArrival": {
+        "time": 46.970666666666666,
+        "phase": 46.93066666666667,
+        "notes": [
+          {
+            "stage": "opening",
+            "offset": 0,
+            "duration": 1.55,
+            "attack": 0.12,
+            "peak": 0.06,
+            "palette": "pad",
+            "note": 62
+          },
+          {
+            "stage": "answer",
+            "offset": 0.48,
+            "duration": 1.9,
+            "attack": 0.065,
+            "peak": 0.078,
+            "palette": "pluck",
+            "note": 67
+          },
+          {
+            "stage": "settle",
+            "offset": 1.1,
+            "duration": 2.25,
+            "attack": 0.2,
+            "peak": 0.044,
+            "palette": "pad",
+            "note": 66
+          }
+        ]
+      },
+      "permanentGains": [
+        {
+          "id": "GainNode-1",
+          "value": 0.6499999761581421
+        },
+        {
+          "id": "GainNode-2",
+          "value": 0.6200000047683716
+        },
+        {
+          "id": "GainNode-3",
+          "value": 0.10999999940395355
+        },
+        {
+          "id": "GainNode-4",
+          "value": 0.3400000035762787
+        },
+        {
+          "id": "GainNode-5",
+          "value": 0.30000001192092896
+        },
+        {
+          "id": "GainNode-6",
+          "value": 0.3400000035762787
+        }
+      ],
+      "secondsAfterArrival": 11.280000000000001
+    },
+    {
+      "label": "phrase-return-arrival-held-11s",
+      "wallMs": 85950.40000000596,
+      "state": {
+        "turn": 9,
+        "status": "won",
+        "boatNodeId": "harbor"
+      },
+      "audioTime": 85.98133333333334,
+      "phase": 10.941333333333333,
+      "deliveryCount": 3,
+      "arrivalVoicesPlayed": 9,
+      "arrivalVoicesSkipped": 0,
+      "arrivalVoicesReclaimed": 0,
+      "arrivalSources": 0,
+      "arrangement": "won",
+      "pendingTerminal": false,
+      "lastArrival": {
+        "time": 74.68,
+        "phase": 74.64,
+        "notes": [
+          {
+            "stage": "opening",
+            "offset": 0,
+            "duration": 1.55,
+            "attack": 0.12,
+            "peak": 0.06,
+            "palette": "pad",
+            "note": 62
+          },
+          {
+            "stage": "answer",
+            "offset": 0.48,
+            "duration": 1.9,
+            "attack": 0.065,
+            "peak": 0.078,
+            "palette": "pluck",
+            "note": 69
+          },
+          {
+            "stage": "settle",
+            "offset": 1.1,
+            "duration": 2.25,
+            "attack": 0.2,
+            "peak": 0.044,
+            "palette": "pad",
+            "note": 66
+          }
+        ]
+      },
+      "permanentGains": [
+        {
+          "id": "GainNode-1",
+          "value": 0.6499999761581421
+        },
+        {
+          "id": "GainNode-2",
+          "value": 0.6200000047683716
+        },
+        {
+          "id": "GainNode-3",
+          "value": 0.10999999940395355
+        },
+        {
+          "id": "GainNode-4",
+          "value": 0.3400000035762787
+        },
+        {
+          "id": "GainNode-5",
+          "value": 0.30000001192092896
+        },
+        {
+          "id": "GainNode-6",
+          "value": 0.3400000035762787
+        }
+      ],
+      "secondsAfterArrival": 11.301333333333332
+    }
+  ],
+  "restorations": [
+    {
+      "label": "dense-arrival-undo-restored",
+      "wallMs": 36829.20000001788,
+      "state": {
+        "turn": 8,
+        "status": "playing",
+        "boatNodeId": "harbor"
+      },
+      "audioTime": 36.861333333333334,
+      "phase": 36.821333333333335,
+      "deliveryCount": 1,
+      "arrivalVoicesPlayed": 3,
+      "arrivalVoicesSkipped": 0,
+      "arrivalVoicesReclaimed": 0,
+      "arrivalSources": 0,
+      "arrangement": "homeward",
+      "pendingTerminal": false,
+      "lastArrival": {
+        "time": 20.122666666666667,
+        "phase": 20.082666666666668,
+        "notes": [
+          {
+            "stage": "opening",
+            "offset": 0,
+            "duration": 1.55,
+            "attack": 0.12,
+            "peak": 0.06,
+            "palette": "pad",
+            "note": 59
+          },
+          {
+            "stage": "answer",
+            "offset": 0.48,
+            "duration": 1.9,
+            "attack": 0.065,
+            "peak": 0.078,
+            "palette": "pluck",
+            "note": 69
+          },
+          {
+            "stage": "settle",
+            "offset": 1.1,
+            "duration": 2.25,
+            "attack": 0.2,
+            "peak": 0.044,
+            "palette": "pad",
+            "note": 66
+          }
+        ]
+      },
+      "permanentGains": [
+        {
+          "id": "GainNode-1",
+          "value": 0.6499999761581421
+        },
+        {
+          "id": "GainNode-2",
+          "value": 0.7171173095703125
+        },
+        {
+          "id": "GainNode-3",
+          "value": 0.10999999940395355
+        },
+        {
+          "id": "GainNode-4",
+          "value": 0.3400000035762787
+        },
+        {
+          "id": "GainNode-5",
+          "value": 0.30000001192092896
+        },
+        {
+          "id": "GainNode-6",
+          "value": 0.3400000035762787
+        }
+      ]
+    },
+    {
+      "label": "phrase-return-arrival-undo-restored",
+      "wallMs": 59488.80000001192,
+      "state": {
+        "turn": 8,
+        "status": "playing",
+        "boatNodeId": "harbor"
+      },
+      "audioTime": 59.52,
+      "phase": 59.480000000000004,
+      "deliveryCount": 2,
+      "arrivalVoicesPlayed": 6,
+      "arrivalVoicesSkipped": 0,
+      "arrivalVoicesReclaimed": 0,
+      "arrivalSources": 0,
+      "arrangement": "homeward",
+      "pendingTerminal": false,
+      "lastArrival": {
+        "time": 46.970666666666666,
+        "phase": 46.93066666666667,
+        "notes": [
+          {
+            "stage": "opening",
+            "offset": 0,
+            "duration": 1.55,
+            "attack": 0.12,
+            "peak": 0.06,
+            "palette": "pad",
+            "note": 62
+          },
+          {
+            "stage": "answer",
+            "offset": 0.48,
+            "duration": 1.9,
+            "attack": 0.065,
+            "peak": 0.078,
+            "palette": "pluck",
+            "note": 67
+          },
+          {
+            "stage": "settle",
+            "offset": 1.1,
+            "duration": 2.25,
+            "attack": 0.2,
+            "peak": 0.044,
+            "palette": "pad",
+            "note": 66
+          }
+        ]
+      },
+      "permanentGains": [
+        {
+          "id": "GainNode-1",
+          "value": 0.6499999761581421
+        },
+        {
+          "id": "GainNode-2",
+          "value": 0.7173347473144531
+        },
+        {
+          "id": "GainNode-3",
+          "value": 0.10999999940395355
+        },
+        {
+          "id": "GainNode-4",
+          "value": 0.3400000035762787
+        },
+        {
+          "id": "GainNode-5",
+          "value": 0.30000001192092896
+        },
+        {
+          "id": "GainNode-6",
+          "value": 0.3400000035762787
+        }
+      ]
+    },
+    {
+      "label": "next-cove",
+      "wallMs": 0,
+      "state": {
+        "turn": 0,
+        "status": "playing",
+        "boatNodeId": "harbor"
+      },
+      "audioTime": 1.88,
+      "phase": 1.7999999999999998,
+      "deliveryCount": 0,
+      "arrivalVoicesPlayed": 0,
+      "arrivalVoicesSkipped": 0,
+      "arrivalVoicesReclaimed": 0,
+      "arrivalSources": 0,
+      "arrangement": "ordinary",
+      "pendingTerminal": false,
+      "lastArrival": null,
+      "permanentGains": [
+        {
+          "id": "GainNode-1",
+          "value": 0.6499999761581421
+        },
+        {
+          "id": "GainNode-2",
+          "value": 0.7200000286102295
+        },
+        {
+          "id": "GainNode-3",
+          "value": 0.10999999940395355
+        },
+        {
+          "id": "GainNode-4",
+          "value": 0.3400000035762787
+        },
+        {
+          "id": "GainNode-5",
+          "value": 0.30000001192092896
+        },
+        {
+          "id": "GainNode-6",
+          "value": 0.3400000035762787
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "deliveryCount": 3,
+    "arrivalVoicesPlayed": 9,
+    "arrivalVoicesSkipped": 0,
+    "arrivalVoicesReclaimed": 0,
+    "transferPlayed": 7,
+    "contextCount": 1,
+    "schedulerCount": 1,
+    "droppedTones": 0
+  },
+  "mediaVerification": {
+    "ffmpegRuntimeDecodeExit": 0,
+    "ffmpegFullInterfaceDecodeExit": 0,
+    "codec": "VP9 / Opus 48000 Hz stereo",
+    "nativeScreenshotInspection": [
+      "phone-start.png",
+      "phone-success.png"
+    ]
+  },
+  "errors": []
+}

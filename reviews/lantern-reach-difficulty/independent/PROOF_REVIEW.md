@@ -1,0 +1,16 @@
+# Lantern Reach production proof review
+
+**The revised Practice puzzle is ready for player review.** At `5f28d71566463462b9407e34b0bf236bb05e20c6`, I reproduced a minimum of **13 actions** with the bridge available and **17** when it stays closed throughout. Both committed routes rescued all four neighbors through the production Session. Lantern Reach has no registered mastery target. The two runs and their terminal Undo/redelivery runs all returned a null mastery result. The route lengths provide evidence for any later scoring discussion. Player feedback on the revised difficulty remains open.
+
+| Production search | Reachable states | Legal transitions | Minimum |
+| --- | ---: | ---: | ---: |
+| Shipped initial state and rules | 3,170 | 8,618 | 13 |
+| Same start, forbid opening the bridge | 2,113 | 5,928 | 17 |
+| Same map, start with bridge open | 2,718 | 7,900 | 12 |
+
+**The decision at Wick.** At the end of turn six on the signal route, Flax is home, the bridge is open and the ferry is empty beside Tallow and Ember. Sorbus’s landing floods after action eight. Wick stays dry through the pickup on action twelve. Of six legal actions at turn six, only sailing straight to Sorbus preserves a win. Sail on seven, board on eight and the tide turns with him safe aboard. Boarding either rabbit or both uses the sailing action. After boarding both on seven, all six legal successors strand Sorbus on eight, including arriving at his landing. In the committed losing path, two Undos restored the exact turn-six state. I completed the recovery in 13 final actions.
+
+The winch’s timing changes an actual pickup decision. A developer-only run starting with the bridge open returns the empty ferry to Wick on turn five. It can then collect both rabbits, sail to the Steps and board Sorbus on eight. The 17-action closed-bridge witness follows a different rescue plan. Taking one rabbit with Flax leaves three spaces for Sorbus on the first outward visit. The ferry delivers those three passengers by the outer floats and returns for the second rabbit on action twelve.
+
+**Reproduction.** I fetched and verified 19 exact Git blobs, then executed `node --experimental-transform-types reviews/lantern-reach-difficulty/proof.mjs` under Node 24.22.3. The 65,909-byte output exactly matched the committed proof, SHA-256 `41b9346f81c4083f94c10025250d60ad5a6bd2242d53b43a3d7f00638d48e39f`. The search uses production legal actions and the reducer, including bridge state and every legal transfer subset. It preserves exact time until the final rise on action twelve, then merges equivalent states. A separate fresh Session replay checked preview/commit agreement, passenger conservation, each winning witness, full terminal Undo/redelivery, the six losing successors and the two-Undo recovery. This review covers mechanical behavior. Phone control and layout evidence is recorded separately. [Game proof](https://github.com/EDLMGit/Lastferry/blob/5f28d71566463462b9407e34b0bf236bb05e20c6/reviews/lantern-reach-difficulty/proof.mjs) · [Committed witnesses](https://github.com/EDLMGit/Lastferry/blob/5f28d71566463462b9407e34b0bf236bb05e20c6/data/lantern-reach/witnesses.json) · [Scoring identities](https://github.com/EDLMGit/Lastferry/blob/5f28d71566463462b9407e34b0bf236bb05e20c6/src/game/mastery.ts)
+

@@ -1,0 +1,72 @@
+
+ RUN  v5.0.5 C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry
+
+stdout | tests/unit/wide-clearance.test.ts > Wide Berth occupied real modeled hull clears land and piers at every reachable heading in both directions
+{"harbor-high-quay/reverse/high-quay-pier/mesh17":{"count":42,"position":[-1.1888888888888969,0,0],"angle":2.205872082863781},"high-quay-wide-berth/forward/high-quay-pier/mesh17":{"count":30,"position":[1.1955383079356576,0,-0.06641879488531428],"angle":-2.2272375502932196},"high-quay-wide-berth/forward/high-quay-pier/mesh0":{"count":21,"position":[1.2827803356953953,0,-0.07126557420529972],"angle":-2.589820217734646},"high-quay-shell-landing/reverse/shell-landing-pier/mesh17":{"count":13,"position":[12.812873799628441,0,5],"angle":2.1990588158965236},"outer-buoy-harbor/reverse/harbor-pier/mesh17":{"count":24,"position":[-10.203254922193297,0,0],"angle":2.2623043696521523}}
+
+ ❯ tests/unit/wide-clearance.test.ts (1 test | 1 failed) 629ms
+   × Wide Berth occupied real modeled hull clears land and piers at every reachable heading in both directions 628ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/wide-clearance.test.ts > Wide Berth occupied real modeled hull clears land and piers at every reachable heading in both directions
+AssertionError: expected [ …(30) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "harbor-high-quay/reverse from1.5707963267948966 sample202: high-quay-pier/mesh17",
++   "harbor-high-quay/reverse from1.5707963267948966 sample203: high-quay-pier/mesh17",
++   "harbor-high-quay/reverse from1.5707963267948966 sample204: high-quay-pier/mesh17",
++   "harbor-high-quay/reverse from1.5707963267948966 sample205: high-quay-pier/mesh17",
++   "harbor-high-quay/reverse from1.5707963267948966 sample206: high-quay-pier/mesh17",
++   "harbor-high-quay/reverse from1.5707963267948966 sample207: high-quay-pier/mesh17",
++   "harbor-high-quay/reverse from1.5707963267948966 sample208: high-quay-pier/mesh17",
++   "harbor-high-quay/reverse from1.5707963267948966 sample209: high-quay-pier/mesh17",
++   "harbor-high-quay/reverse from1.5707963267948966 sample210: high-quay-pier/mesh17",
++   "harbor-high-quay/reverse from1.5707963267948966 sample211: high-quay-pier/mesh17",
++   "harbor-high-quay/reverse from1.5707963267948966 sample212: high-quay-pier/mesh17",
++   "harbor-high-quay/reverse from1.5707963267948966 sample213: high-quay-pier/mesh17",
++   "harbor-high-quay/reverse from1.5707963267948966 sample214: high-quay-pier/mesh17",
++   "harbor-high-quay/reverse from1.5707963267948966 sample215: high-quay-pier/mesh17",
++   "harbor-high-quay/reverse from1.5707963267948966 sample216: high-quay-pier/mesh17",
++   "harbor-high-quay/reverse from1.5707963267948966 sample217: high-quay-pier/mesh17",
++   "harbor-high-quay/reverse from1.5707963267948966 sample218: high-quay-pier/mesh17",
++   "harbor-high-quay/reverse from1.5707963267948966 sample219: high-quay-pier/mesh17",
++   "harbor-high-quay/reverse from1.5707963267948966 sample220: high-quay-pier/mesh17",
++   "harbor-high-quay/reverse from1.5707963267948966 sample221: high-quay-pier/mesh17",
++   "harbor-high-quay/reverse from1.5707963267948966 sample222: high-quay-pier/mesh17",
++   "harbor-high-quay/reverse from1.5707963267948974 sample202: high-quay-pier/mesh17",
++   "harbor-high-quay/reverse from1.5707963267948974 sample203: high-quay-pier/mesh17",
++   "harbor-high-quay/reverse from1.5707963267948974 sample204: high-quay-pier/mesh17",
++   "harbor-high-quay/reverse from1.5707963267948974 sample205: high-quay-pier/mesh17",
++   "harbor-high-quay/reverse from1.5707963267948974 sample206: high-quay-pier/mesh17",
++   "harbor-high-quay/reverse from1.5707963267948974 sample207: high-quay-pier/mesh17",
++   "harbor-high-quay/reverse from1.5707963267948974 sample208: high-quay-pier/mesh17",
++   "harbor-high-quay/reverse from1.5707963267948974 sample209: high-quay-pier/mesh17",
++   "harbor-high-quay/reverse from1.5707963267948974 sample210: high-quay-pier/mesh17",
++ ]
+
+ ❯ tests/unit/wide-clearance.test.ts:118:20
+    116|   }
+    117|   if(failures.length)console.log(JSON.stringify(contacts));
+    118|   expect(failures).toEqual([]);expect(margins).toEqual([]);
+       |                    ^
+    119| },20000);
+    120|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+   Start at  19:26:36
+   Duration  966ms (tests 82%, transform 9%, import 8%, worker 1%)
+
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

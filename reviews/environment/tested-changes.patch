@@ -1,0 +1,2853 @@
+diff --git a/NEXT_TASK.md b/NEXT_TASK.md
+index 3e89733..c3f500f 100644
+--- a/NEXT_TASK.md
++++ b/NEXT_TASK.md
+@@ -1,162 +1,123 @@
+-# Last Ferry — Bellwater Cove
++# Last Ferry — water, shores and smooth journeys
+ 
+ ## Current task and working agreement
+ 
+-Continue on `m1-first-crossing` from the reviewed contextual-interface commit `e9c81d620df5fca0983965e80c348260fb3518e9`, preserving any newer user work. Follow AGENTS.md and the existing authorized Git workflow. PR #1 remains draft; main remains unchanged.
++Continue on `m1-first-crossing` from the reviewed Bellwater commit `7efe98654fa3df01fcb8338c6c28e664e5712ca1`, preserving any newer user work. Follow AGENTS.md and the existing Git workflow. Keep PR #1 draft and main unchanged.
+ 
+-This is the current task after the contextual-interface pass. It explicitly advances beyond the original M1 stopping point. Complete the bounded fixes, one new authored cove, its modest environmental identity, and the verification/handoff described here. Do not stop after the first fix to request another task.
++This is the authorized task after Bellwater. It advances beyond the original M1 stopping point. Complete the shared route/environment work and verification below, then perform the usual commit/push/draft-PR handoff. Do not stop after the route change to request another task.
+ 
+-## Product decision
++The user likes the new map overall and notices that the dotted travel paths have sharp, straight-segment turns. Proceed with the planned visual milestone across **Holding Pier and Bellwater**, preserving **First Crossing** as a playable regression case. The intended result is a visibly more composed coastal miniature with smoother journeys and convincing water/shore contact through the existing tides.
+ 
+-Keep Holding Pier as the introductory puzzle and preserve its solution. Build **Bellwater Cove**, a second main puzzle with a different planning problem, using the existing rules and controls.
++## Preserve the game we have
+ 
+-The next larger milestone after Bellwater is a shared environment pass across the two main coves: water, shallows, shore contact, lighting and restrained arrival detail. Do not undertake that broader visual overhaul in this task. Bellwater still needs enough authored scenery to feel like a new place and explain its routes.
++Keep the existing puzzles, default Holding Pier entry, Next cove progression, Menu selection, named residents and complete Undo. Preserve capacity, load/draft bands, base depths, action costs, tide schedule, boarding/flood event order, previews, successful alternatives and failed-plan consequences. Keep the current contextual controls, compact dialogs, callouts and recent responsive/input protections.
+ 
+-We are testing puzzle variety before adding another mechanic. Bellwater's difficulty and enjoyment are hypotheses for the user's playtest; neither its action count nor a solver proves them.
++Keep graph nodes and their coordinates, connections, pier locations and flood elevations fixed. Interior route-control geometry may be adjusted where necessary for smoothness, clearance and separation; this is presentation geometry, never a shortcut, new junction or changed action cost. Keep the current overall cove compositions. Decorative coastline refinements should stay inside the validated land/clearance envelope; include any protruding new rock or scenery in actual clearance checks.
+ 
+-## A. Resolve the bounded responsive issue first
++No additional cove, mechanic, campaign system, new control scheme or asset-library expansion belongs in this milestone.
+ 
+-An independent review reproduced a local-action-card defect at intermediate landscape heights.
++## A. Give the routes and ferry one coherent curved course
+ 
+-**Reproduction at 844 × 500:** open `/?cove=holding-pier`, let Moss ashore, then try to use the map's Sail to Shallows button. The stretched `#local-context` section covers the button and intercepts its pointer input. At 1024 × 600, the same card stretches into the forecast area.
++### Review findings
+ 
+-**Cause:** compact landscape CSS applies through 600 px height, setting local context to bottom anchoring with no centering transform. `positionMap()` in `src/main.ts` switches to compact positioning only through 480 px, so it supplies desktop inline top/left values between 481 and 600 px. These rules conflict.
++The current dotted routes are literal `edge.waypointsXZ` polylines in `src/scene/world.ts`. `src/scene/motion.ts` linearly interpolates the ferry's position along the same straight segments; only its heading softens near corners. Bellwater's Harbor–Bell passage is the clearest example, especially when highlighted after the second rise.
+ 
+-Use a consistent layout condition and clear stale inline positioning when compact layout owns the card. Keep the card at its intended content height and prevent overlap with route targets or forecast. A review-browser-only change from the JavaScript 480 px condition to 600 px restored the nine-action Holding Pier rescue at both sizes; this is a candidate direction, not a committed fix or a complete regression result.
++There is also a strict interior intersection between `harbor-shallows` and `harbor-bell` near X = −3.190769, Z = 1.081538. It lies away from their shared Harbor endpoint and can imply an extra junction. The current hull-clearance test does not check edge/edge crossings; the independent design validator's crossing check is specific to First Crossing.
+ 
+-Retain a focused regression that performs the real unloading and sailing actions at 844 × 500, checks local controls/forecast at 1024 × 600, and exercises a resize across the breakpoint. Preserve the existing 1440 × 900, 844 × 390 and 780 × 390 layouts and the baseline cove.
++### Required implementation
+ 
+-Before content work, run the relevant current interaction checks. The independent Linux/Chromium 141 review also encountered input/capture timeouts in the broad suite, whereas the contributor reported a full pass in Chromium 156. In particular, recheck rapid Confirm taps on the baseline phone boarding card and loss → Undo → safe boarding under reduced motion. Investigate any reproducible failure; do not weaken state assertions, add arbitrary sleeps or silently relabel the independent full run as passed. A timeout alone is not proof of a gameplay defect.
++Create a small, cached canonical path representation per edge and use it for the visible route, selected/blocked emphasis, ferry position, motion tangent and clearance validation. A bounded local corner-rounding construction is suitable; choose the simplest implementation that satisfies the outcomes below. Inspect spline overshoot explicitly if using interpolating curves.
+ 
+-Repeated Confirm input must commit exactly one action and must not activate a newly exposed background control or open an unintended dialog. Check normal animation and reduced motion, recording input spacing so delayed automation is not misclassified as a rapid double tap. The independent no-recording follow-up passed both production rescues but timed out in all three longer contextual scenarios; it does not establish that recording was the cause or that the full browser suite passed.
++- Preserve exact stopping endpoints. Round interior bends into gentle, deliberate courses. Straight two-point passages may remain straight. A move still ends at one selected stop; never smooth across separate actions into automatic travel through another node.
++- Resolve Bellwater's unmarked crossing through modest interior control-point changes. Check the resulting network for unintended intersections, coincident stretches or contacts with another stop. Shared-node departures must remain clear and separate beyond the actual junction.
++- Keep routes outside land and piers with the modeled ferry's full rotated footprint, including docking turns. Retain the established departure/arrival clearance behavior rather than aligning the hull to a tangent while still against a jetty.
++- Sample by traveled distance or an equivalent stable arc-length approximation. Dashes should have consistent spacing through bends; the ferry should not surge at control points. Preserve the existing brief acceleration/deceleration and responsive journey duration, approximately the current 780 ms for a move.
++- Traverse the same canonical curve in reverse, with the corresponding reversed tangent. Avoid constructing two different courses for opposite directions.
++- Keep heading continuous through interior bends, including angle wrap. Restore the expected stable docked pose at endpoints. Passengers remain attached to the deck throughout travel, draft changes and cancellation.
++- Keep path shape identical for ordinary, highlighted and blocked states. Retain text/shape cues for availability; use restrained emphasis with readable contrast at both phone widths.
++- Keep solid phone label leaders visually distinct from dotted navigable paths. Those leaders identify labels; they are not routes and do not need route-style curves.
+ 
+-## B. Author Bellwater's exact puzzle
++This is a focused shared geometry change, not a general navigation engine or level editor. Cache geometry at level load; avoid rebuilding curves/materials each frame.
+ 
+-Level ID: `bellwater`. Display title: **Bellwater Cove**.
++### Keep shallow-water presentation aligned
+ 
+-The ferry starts empty at Harbor. Two rabbits, **Tansy** and **Lark**, wait at Low Pier. A sheep, **Bram**, waits at Bell Pier. Reuse the existing rabbit/sheep models. These are new neighbors, so the introductory passengers do not become inexplicably stranded again.
++The current shader separately builds shallow bands from raw waypoint segments and has a fixed `shallowSegments[16]` representation. Dense curve samples cannot simply be inserted into that unchanged array. Replace or adapt this with a deliberately bounded representation, such as a small generated mask or bounded approximation suitable for these coves.
+ 
+-Use stable level-local passenger IDs. Add only the small amount of level-owned naming metadata needed for the new residents and locations; preserve Pip, Rue and Moss in the existing coves. Status, action labels, subset warnings, accessible names, forecasts and endings must use the active level's names.
++The shallow presentation should agree with the curved passages and neighboring banks. The reducer's authored depths remain authoritative. Visual water color must never determine legal travel, create a shortcut or suggest a connection absent from the graph.
+ 
+-### Rules retained
++## B. Make the water calm and coastal
+ 
+-- Capacity 4. Each rabbit uses 1 slot; the sheep uses 2.
+-- Draft: empty = 1; load 1–2 = 2; load 3–4 = 3.
+-- Every accepted move across one edge, Board selection, Unload selection or Wait costs one action.
+-- Tide starts at 0, rises to 1 after action 4, then to 2 after action 8. It does not rise further.
+-- Route/basin depth is base depth plus tide. Equality supports the boat.
+-- A pier is dry when tide is strictly below its elevation.
+-- Apply the complete action, then advance the turn/tide and evaluate flooding. Arrival does not include boarding.
+-- Preserve free inspection, actual selected-subset previews, one-activation safe sailing, dangerous-action confirmation, passenger conservation and complete Undo.
+-- Win only after all three required passengers are delivered at Harbor. No new move cap, timer, score requirement or mandatory Wait.
++Retain the art brief's inviting coastal-miniature style and established blue/teal palette. Keep the yellow ferry, red cabin and passenger silhouettes prominent.
+ 
+-### Nodes and piers
++Replace the all-over repeated fine diagonal highlights with **broad color variation and sparse, irregular groups of quiet highlights**. Allow substantial open water to stay visually calm. On phones, the water texture should be clearly subordinate to route dots, focus/selection indicators and passenger silhouettes.
+ 
+-Every stopping basin has base depth 3.
++Give the deeper outer water, shallow passages and shore-adjacent water a coherent relationship. Use a modest authored seabed/bank treatment so shallow regions feel like part of the inlet rather than luminous paint following a route centerline. Support the existing dry, shallow, navigable and flooded states without pretending that every visible patch is a playable path.
+ 
+-| Stop | Pier elevation | Starting passengers / role |
+-| --- | ---: | --- |
+-| Harbor | 3 | Empty; safe delivery destination; ferry starts here |
+-| Shallows | None | Short-route waypoint |
+-| Low Pier | 1 | Tansy and Lark; boarding can complete on action 4 before the rise |
+-| West Buoy | None | Outer-route waypoint |
+-| East Buoy | None | Outer-route waypoint |
+-| Bell Pier | 2 | Bram; boarding can complete on action 8 before the rise |
++Use a small, predictable rendering approach appropriate to the current Three.js app. Slow, low-amplitude surface motion and a few restrained highlights are enough. Favor simple geometry/materials or bounded shaders over fluid simulation, heavy reflections, new post-processing stacks or dependency changes. Evaluate the result at native phone scale, not only enlarged desktop captures.
+ 
+-### Connections
++## C. Design water contact for all three tide states
+ 
+-All six edges are bidirectional. These are the entire route graph; do not add a shortcut during geometry work.
++The current pale shore pieces sit at a fixed initial height and disappear under the first rise. After the second rise, Low Pier's shore becomes isolated reed tips and rocks, while the Bell shore loses its surface below the boulders. Preserve the flooding; improve how it looks.
+ 
+-| Edge | Base depth |
+-| --- | ---: |
+-| Harbor ↔ Shallows | 1 |
+-| Shallows ↔ Low Pier | 1 |
+-| Harbor ↔ West Buoy | 3 |
+-| West Buoy ↔ East Buoy | 3 |
+-| East Buoy ↔ Low Pier | 3 |
+-| Harbor ↔ Bell Pier | 2 |
++For tide 0, 1 and 2, provide coherent **exposed, wet and submerged** treatment:
+ 
+-The two-edge shallow route and three-edge deep route form a loop between Harbor and Low Pier. Bell Pier branches directly from Harbor. There are six stopping nodes, six edges and three islands.
++- Exposed shore has a deliberate sand/rock edge and restrained contact detail where water actually meets it.
++- As water rises, wetness/contact follows the real coast and exposed rocks. Avoid a floating outline around the old dry footprint.
++- Flooded low ground reads as submerged terrain beneath the remaining reeds/rocks. A simple authored color or geometry treatment is sufficient; realistic refraction is unnecessary. Keep a grounded sense of the shore that used to be there.
++- Flooded piers remain unmistakably flooded at the exact rule threshold. Do not raise their elevations or preserve a dry-looking boarding surface to improve the picture.
++- Contact detail remains secondary to routes. Foam and wake must not create dotted outlines that resemble new paths.
+ 
+-### Intended discovery
++Use the actual rendered water height during the existing transition, then settle to the exact state. Undo across either rise must immediately restore the correct shore, water, foam, submerged treatment and ferry state. Restart, level selection and animation cancellation must also clear stale effects.
+ 
+-The return route can differ from the outward route because the water changes. The player must also consider both pickup deadlines and the cost of delivering passengers when passing through Harbor. Communicate the rules and consequences clearly, while leaving the plan for the player to discover.
++The forecast remains a free preview of the real next tide. Any updated shoreline preview must correspond to that tide without changing committed state or obscuring its compact explanation.
+ 
+-Do not add a walkthrough, recommended move, forced highlight sequence or compulsory Wait step. Keep the legitimate alternatives below.
++## D. Refine a few shapes and add restrained travel/arrival detail
+ 
+-## C. Implementation witnesses — keep these out of player-facing instructions
++Preserve each cove's identity. Holding Pier keeps its lighthouse, stone holding point and rabbit shore. Bellwater keeps its triangular inlet, low reed shore and rocky bell landmark.
+ 
+-Two representative ten-action rescues:
++Refine selected shore contours, reed groupings and rock silhouettes. Break the regular ring of identical detail and repeated layered rims where it is most visible. Keep these changes within the existing footprint/clearance constraints and away from passengers, piers, route junctions and labels. Improve grouping and materials rather than increasing prop density.
+ 
+-| Action | Shallow outward / deep return | Deep outward / shallow return |
+-| ---: | --- | --- |
+-| 1 | Harbor → Shallows | Harbor → West Buoy |
+-| 2 | Shallows → Low Pier | West Buoy → East Buoy |
+-| 3 | Board both rabbits | East Buoy → Low Pier |
+-| 4 | Low Pier → East Buoy; tide rises | Board both rabbits; tide rises |
+-| 5 | East Buoy → West Buoy | Low Pier → Shallows |
+-| 6 | West Buoy → Harbor | Shallows → Harbor |
+-| 7 | Harbor → Bell Pier | Harbor → Bell Pier |
+-| 8 | Board Bram; tide rises after boarding | Board Bram; tide rises after boarding |
+-| 9 | Bell Pier → Harbor | Bell Pier → Harbor |
+-| 10 | Deliver everyone | Deliver everyone |
++Tune warm late-afternoon light, matte material response and gentle contact shadows. Keep cabin sides, animals and flooded pier states readable. Preserve the stable orthographic camera and existing framing; make only the small adjustments required by actual new render bounds.
+ 
+-A third valid family takes the shallow route both ways. One Wait before the first shallow return step allows the tide to reach 1. Valid placements include Harbor before departure, Shallows, or Low Pier before or after boarding both rabbits. Boarding the two rabbits separately on actions 3 and 4 also works. Preserve both rabbit-selection orders and these valid alternatives. Longer harmless play after everyone is aboard remains legal.
++Add a **short fading wake** that follows the ferry's actual curved course and stops emitting when travel ends. Keep it visually separate from the navigation line and avoid long-lived trails. Add one restrained **warm Harbor light response on successful delivery**, using the existing lighthouse/refuge. It should make completion feel acknowledged without delaying the next action or creating a new screen.
+ 
+-Meaningful unsuccessful or blocked plans:
++Both effects are presentation only. They must reset correctly on Undo, Restart, level change and cancelled transitions. Reduced motion disables decorative loops/wake movement and presents any arrival response calmly; the existing one-commit input protection must remain independent of animation duration.
+ 
+-- Go to Bell Pier first: the rabbits cannot be boarded before the first rise.
+-- Use the deep outer route in both directions: reach Harbor on action 7, then Bell Pier on action 8, too late to board Bram.
+-- Deliver any rabbit before boarding Bram: the transfer consumes the remaining boarding window.
+-- At Low Pier on action 3 after boarding both rabbits, attempt the shallow return: current depth 1 cannot support draft 2. Inspection must explain the blockage freely; a future rise cannot validate the current move.
++## E. Validate the actual changed renderer and paths
+ 
+-The rules prototype was evaluated with the exact checked-out production reducer at the reviewed commit. Complete legal-action reachability found 121 canonical states, shortest rescue 10, and eight shortest action sequences grouped into the route/timing families above. There were zero wins without shallow-route use, zero wins when first sailing toward Bell Pier, and zero wins with delivery before sheep boarding. Wins exist without Wait.
++Keep verification focused on the risks this task creates. Build/typecheck and run the relevant unit/browser coverage against the implemented source. Existing successful contributor runs establish the starting baseline; they do not validate a changed shared renderer.
+ 
+-These are design checks, not evidence of a playable Bellwater implementation. Counts depend on canonicalization and should not become brittle UI gates. Preserve the actual witness behavior and constraints. The prototype's coordinates and inherited scenery were provisional; author and validate coherent production geometry rather than copying them.
++### Geometry and rule preservation
+ 
+-## D. Make Bellwater a distinct place
++1. Unit-check canonical paths: exact endpoints, finite/valid samples, stable distance progression, reverse traversal of the same geometry and continuous interior position/heading. Check degenerate segments safely; do not add invisible excursions to make a test pass.
++2. Update the existing full-ferry clearance checks to sample the **production curved path and heading**, in both directions for every edge in all three coves. Checking the obsolete polyline or only the boat center is insufficient. Retain required route margin and check newly refined geometry as well as pier decks.
++3. Check actual route geometry for unintended interior crossings/contacts, including the reported Harbor–Bell/Harbor–Shallows case. Compare enough of the real curves to catch overshoot; a check of endpoints alone is insufficient.
++4. Preserve the existing reducer witnesses, tide boundaries, conservation, safe/losing subset consequences and complete Undo. Verify that presentation changes have not altered graph topology, base depths, costs or winning alternatives.
+ 
+-Create a new inlet composition instead of repeating the current straight row of islands:
++### Actual UI and motion
+ 
+-- A low sandy/reed-edged shore for the rabbits.
+-- A higher rocky pickup shore with a small recognizable bell landmark for Bram.
+-- The safe Harbor/lighthouse destination.
+-- A legible shallow channel and a visibly deeper outer route.
+-- A modest change in coast shape, local planting and light/palette, within the existing miniature style.
++- Complete a real-interface rescue in Holding Pier and Bellwater, plus a baseline First Crossing regression using the shared renderer. Include Bellwater's Harbor–Bell journey and at least one outer-route turn in both directions.
++- Inspect actual motion to establish that the ferry follows its visible line and steers smoothly. Include departure/arrival near piers, loaded passengers and the fading wake. A state-only assertion or a still image does not establish smooth motion.
++- Check tide 0, 1 and 2 and Undo across both rises, including Bellwater's submerged low shore and Bell shore. Check terminal Undo and the arrival-effect reset.
++- Retain natural keyboard and emulated-touch access, free inspection, selected-subset dialogs, one accepted action per input and the measured normal/reduced-motion repeat-Confirm protection.
++- Review both main coves at 1440 × 900, 844 × 390 and 780 × 390. Preserve essential text, 44 px targets, passenger silhouettes, named stops, warning fit and label separation. Recheck the intermediate-height placement/resizing affected by scene bounds.
++- Confirm normal default → Next cove → Bellwater and Menu/Restart still reset to the intended scene. Verify one rescue in a production build without debug controls or external runtime assets.
+ 
+-Use existing geometry/material techniques and reusable assets. The bell is a landmark, not a new gameplay system. Keep decorative routes, water highlights and scenery from implying connections or access that the level data does not provide.
++Reuse static geometry/materials where practical. Record before/after draw calls, triangle counts and any measured runtime change under the same environment. Investigate a material regression; do not infer physical-phone frame rates from software-rendered automation or turn this task into speculative performance infrastructure.
+ 
+-Author island footprints, pier positions, camera framing and route waypoints together. Verify actual ferry clearance in both directions along every route. Do not change topology/depths or squeeze paths through land to fit existing decoration.
++## F. Evidence and final handoff
+ 
+-The current renderer hardcodes some lighthouse/house positions and special-cases existing pier IDs. Move only the necessary scenery anchors, names and layout settings into level-owned data or a small explicit scene configuration. Make the six-stop framing and label placement work in Bellwater while preserving both older coves. No generic level editor or broad rendering-framework rewrite is needed.
++Capture matched before/after views using the same state, viewport and framing where practical. Select a compact useful set rather than a large near-duplicate gallery:
+ 
+-Retain the shared water implementation for this milestone, adding the authored shallow/shore treatment the new puzzle needs. The following shared environment milestone will address repetitive ripples, shoreline/water contact across tides and overall atmosphere across the two main coves.
++- Bellwater's highlighted Harbor–Bell course and one outer bend.
++- Holding Pier and Bellwater at their relevant tide states, particularly the submerged shores.
++- Both main coves at phone scale, including the constrained 780 px layout.
++- A clear successful arrival and an Undo-restored state.
+ 
+-## E. Provide a small playable sequence
++Inspect the selected images at native size and use a short uninterrupted actual-play recording to assess route motion, water and wake. Keep raw video local if external upload is unavailable; report that limit honestly. Do not substitute concept art or assert motion quality from screenshots alone.
+ 
+-Make Holding Pier the normal default/new-game entry now that it is the accepted introduction. Keep First Crossing available explicitly through its existing query route and Menu as the baseline cove.
++Update the art/technical notes and asset ledger for the actual changes. Preserve historical captures under their original source identity. Update STATUS and provide a compact review report with exact source/commands/results, evidence paths, environment and remaining uncertainties. Clearly distinguish fresh checks, justified reused results and unverified devices/engines. A shared-renderer change does not inherit the previous label-only rationale for reusing 28 scenarios automatically.
+ 
+-On Holding Pier success, add an accessible **Next cove** action that opens Bellwater. Preserve terminal Undo/Restart. Add Bellwater to Menu and make `/?cove=bellwater` open it directly.
++Complete the normal commit/push and draft PR update. Return the final SHA, source/remote equality, main/draft status, concise changes, verification, representative gameplay screenshots and recording location. Do not merge or mark the PR ready.
+ 
+-A brief transition line is enough: “Further along the coast, two piers still have their lights on.” Show the new cove title and fresh residents. Do not build a campaign map, unlock tree, save system or dialogue framework. Bellwater's completion should acknowledge that its neighbors are safe without pretending the whole game's story is finished.
+-
+-Update baseline-specific tests to request `?cove=first-crossing` explicitly where necessary; keep their original gameplay assertions. Add a small test of default Holding Pier → success → Next cove → Bellwater initial state.
+-
+-## F. Verification and handoff
+-
+-Run build/typecheck and the relevant unit/browser checks against the actual implementation. At minimum establish:
+-
+-1. The responsive fix restores actual mouse/touch actions and keeps local controls clear at 844 × 500 and 1024 × 600, including resizing. Existing desktop and 390 px-high layouts still work.
+-2. Holding Pier and First Crossing retain their rescues, input protection, free inspection, subset consequences and complete Undo. Resolve any reproduced baseline interaction failure before proceeding.
+-3. Bellwater's representative route families win through the real reducer. Its failed alternatives fail for the intended reasons; Wait is not compulsory.
+-4. An actual-UI Bellwater rescue works with mouse, natural keyboard and emulated touch. Check one valid route through production without debug controls.
+-5. Boarding on actions 4 and 8 is safe before the respective rise. Invalid shallow inspection costs no time. Subset previews identify the actual passenger left behind. Undo restores passengers, tide, boat, delivered state and outcome through both rises and terminal state.
+-6. All six destinations, passage highlights, local passenger actions and important warnings are legible at 1440 × 900, 844 × 390 and 780 × 390. Essential consequences and confirmation fit without clipping; retain 14 px essential text and 44 px targets.
+-7. Scene and ferry clearance checks use the new authored geometry, and level-specific naming/scenery does not break the older coves.
+-8. Default entry, Menu selection and the Next cove action load the intended level and reset state correctly.
+-
+-Capture representative actual gameplay: new cove start, blocked shallow return, critical boarding at a rise, changed water/passenger state and completion. Include both phone widths for initial framing and the most constrained preview. Inspect images at native size. Keep an uninterrupted recording locally if supported; no external hosting is required.
+-
+-Update the rule/level documentation, STATUS and a compact review report. Record exact source identity, actual commands/results, environment and remaining uncertainty. Do not treat reference-model results as actual UI evidence or claim fresh checks that were not rerun. Follow the existing normal push/draft-PR handoff workflow and report the final commit. Main stays unchanged.
+-
+-Finish Bellwater before adding further levels or mechanics. The user will playtest it; the next direction after that is the planned shared environment pass.
++The user will playtest the smoother journey and visual feel. Finish this environment milestone before proposing more content or mechanics.
+diff --git a/data/bellwater.level.json b/data/bellwater.level.json
+index 24bbb32..345a182 100644
+--- a/data/bellwater.level.json
++++ b/data/bellwater.level.json
+@@ -101,7 +101,7 @@
+       "bidirectional": true,
+       "waypointsXZ": [
+         [-5.6, 0.5],
+-        [-2.7, 1.2],
++        [-2.7, 2],
+         [0, 1.3]
+       ]
+     },
+diff --git a/docs/ART_DIRECTION.md b/docs/ART_DIRECTION.md
+index a828cf0..1b97d02 100644
+--- a/docs/ART_DIRECTION.md
++++ b/docs/ART_DIRECTION.md
+@@ -88,3 +88,13 @@ M1 is visually complete when:
+ - Mobile landscape, desktop, keyboard use, and reduced motion remain legible and usable.
+ 
+ Resolve these checks directly during implementation. Additional chapters, cinematic sequences, and large prop collections are outside this milestone.
++
++## Shared environment milestone
++
++The later task in `NEXT_TASK.md` refines the accepted Holding Pier and Bellwater compositions, with First Crossing retained as a playable regression case. Keep the ferry, residents, landmarks and named stops prominent. Calm open water, broad blue/teal fields and sparse irregular highlight groups replace the repeated fine diagonal pattern. Authored banks should feel connected to the coast rather than painted along a route centerline.
++
++Use one gentle course for navigation dots and ferry travel. Selected and blocked emphasis retain exactly that course. Solid phone label leaders remain visually distinct from navigable dotted lines. Curve smoothing cannot imply a new junction, create a shortcut or skip a stop.
++
++Across tides 0, 1 and 2, exposed shores give way to wet edges and visible submerged ground. Contact detail follows the rendered waterline and exposed rock, with no floating outline of a flooded island. Flooded boarding surfaces remain visibly submerged at the exact rule threshold. Keep the contact accents quiet and grouped, away from route-like dotted outlines.
++
++Refine coast and rock silhouettes inside the existing clearance envelope. Group reeds and small details instead of increasing density. Preserve the fixed camera and framing. A short fading wake follows travel; one warm Harbor light response acknowledges delivery. Both effects reset on Undo, Restart and cancellation, and remain calm under reduced motion. Assess the result at native phone size and in actual movement before declaring visual acceptance.
+diff --git a/docs/ASSET_LEDGER.md b/docs/ASSET_LEDGER.md
+index fed8bb7..ac1f660 100644
+--- a/docs/ASSET_LEDGER.md
++++ b/docs/ASSET_LEDGER.md
+@@ -20,3 +20,5 @@ M1.1 refines the same original animal meshes: taller silhouettes, wider separate
+ Holding Pier experiment (2026-10-21): reuses these same procedural production meshes and generated sound cues. Three islands and piers come from `data/holding-pier.level.json`; the safe holding pier uses grey stone boards and the rabbit shoreline is lowered to elevation 1. The shallow-water shader now derives its highlighted corridor from authored shallow edges instead of fixed First Crossing coordinates. No downloaded assets, concept-image backgrounds or new licensed materials were added.
+ 
+ Bellwater Cove (2026-10-22): `data/bellwater.level.json` authors a triangular inlet and its six passages. `src/scene/layout.ts` owns the necessary scenery anchors, pier materials, camera and modest local lighting choices, retaining the older coves' settings. `src/scene/scenery.ts` extracts the unchanged cottage and adds original code-built reed clumps and a bronze bell under a timber frame. Low Pier has sandy reed edges; Bell Pier has a rocky pickup shore. Tansy, Lark and Bram reuse the existing rabbit/sheep meshes and deck anchors through species ordering. No external or generated bitmap asset was added. Shared water remains the existing shader; the broader water/shore treatment is deferred to the next milestone. Fresh gameplay evidence is under `reviews/bellwater/`.
++
++Shared environment milestone (2026-10-22): original procedural geometry and materials in `src/scene/paths.ts`, `motion.ts`, `shore.ts`, `water.ts`, `effects.ts` and `world.ts` replace raw route polylines, repeated water highlights and layered coast rims. Bounded corner fillets supply one cached course for drawing and motion. A generated 256×256 data texture describes coastal banks and submerged ground; it is created locally from level geometry, not downloaded or generated concept art. Coast lofts, instanced rock/reed groups, water-height wetness/contact and cached forecast contours retain the validated footprint envelope. A short dynamic stern wake and the existing lighthouse lens/lamp response add restrained travel and arrival detail. Ferry, passenger and landmark models remain the established asset family. No external model, image, font, recording, license or dependency was added. Evidence and matched comparisons are under `reviews/environment/`; historical captures retain their original sources.
+diff --git a/docs/ENVIRONMENT.md b/docs/ENVIRONMENT.md
+new file mode 100644
+index 0000000..12424cc
+--- /dev/null
++++ b/docs/ENVIRONMENT.md
+@@ -0,0 +1,25 @@
++# Water, shores and smooth journeys
++
++This milestone follows Bellwater's accepted puzzle composition. `NEXT_TASK.md` owns the current scope. Holding Pier, Bellwater and the First Crossing regression case retain their stops, pier locations, flood elevations and game rules. Interior route controls are presentation geometry; they create no shortcuts or additional actions.
++
++## Visual and motion contract
++
++One cached course per edge must serve the visible dots, selected/blocked emphasis, boat position, tangent, shallow-water treatment and clearance verification. Exact stopping endpoints are preserved. Interior bends are rounded locally, traversed by approximate arc length in either direction, with the existing brief acceleration and deceleration. The boat clears its pier broadside before steering and returns to its stable endpoint pose. It never continues automatically through a stop.
++
++Broad blue/teal variation and sparse irregular quiet highlights replace the repeated fine diagonal pattern. Shallow banks belong to the inlet rather than a luminous route stripe. Water color remains presentation only; integer depths and the reducer determine legal travel.
++
++Exposed, wet and submerged shore treatments follow the actual rendered water height during transitions and settle to the committed tide. Flooded piers stay flooded at their exact rule threshold. Remaining reeds and rocks sit over visible submerged ground. Contact accents stay secondary and avoid dotted navigation-like outlines. Free forecast shows the actual next tide without altering committed state.
++
++Shore refinements remain within the existing validated land envelope. Selected silhouettes and grouped reeds replace regular detail rings; the miniature's overall compositions, fixed camera and passenger prominence remain. Warm matte light and soft contact shadow support the ferry and animals.
++
++A short fading wake follows actual ferry travel and stops emitting at arrival. A restrained warm Harbor response acknowledges successful unloading. Undo, Restart, level changes and cancelled transitions reset presentation effects. Reduced motion disables moving decorative effects while keeping state feedback and input protection intact.
++
++## Verification boundary
++
++Unit checks cover production curved geometry, exact endpoints, reverse travel, finite/degenerate samples, distance progression, continuous steering, actual full-ferry rotated clearance and network crossings/contacts. Old polylines or boat-center-only checks cannot establish the changed motion's safety. The existing reducer witnesses, losses, subsets, conservation and complete Undo remain required.
++
++Actual UI checks cover all three coves, loaded travel near piers and around outer bends in both directions, both tide rises and restoration, arrival/reset, free inspection, natural keyboard and emulated touch, rapid Confirm protection, phone layouts and the intermediate-height responsive regression. Production play must work without development controls or external assets.
++
++Matched screenshots and a short uninterrupted actual-play recording assess visual and motion quality. Before/after draw calls, triangle counts and frame intervals use the same browser, viewport and measurement protocol. Software-rendered automation does not establish physical-phone frame rates.
++
++Implementation details, actual results, source identities, evidence and remaining limitations are recorded in `reviews/environment/REVIEW.md`. Historical Bellwater evidence remains under its original source; a changed shared renderer receives fresh browser coverage.
+diff --git a/docs/TECHNICAL_PLAN.md b/docs/TECHNICAL_PLAN.md
+index 10db5e2..12c0972 100644
+--- a/docs/TECHNICAL_PLAN.md
++++ b/docs/TECHNICAL_PLAN.md
+@@ -69,6 +69,20 @@ For browser evidence use desktop 1440×900 and a phone-like 844×390 CSS-pixel l
+ 
+ Aim for smooth movement and responsive interaction. Record actual browser, viewport, hardware/runner, and sample method for any performance claim. A working target is 60 fps on the tested desktop and stable interaction on the tested phone configuration; these are goals, not guaranteed support claims. Lower pixel ratio, shadow resolution, or decorative detail where needed. Do not hide a rule/UI problem by labeling it a performance issue.
+ 
++## Shared curved routes and coastal presentation
++
++The environment milestone uses `src/scene/paths.ts` to cache one canonical course per edge at level load. Local quadratic corner fillets trim at most 0.75 world units and 25% of either neighboring span. They stay within each corner's convex envelope. A dense approximation is resampled at no more than 0.05 world-unit intervals with cumulative distances and unwrapped tangent angles. Distance lookup traverses the same geometry in reverse; it does not construct an independent return curve.
++
++`sampleJourney` retains the existing smoothstep acceleration/deceleration, approximately 780ms travel and broadside docking clearance blend. The route line, emphasis, motion, shallow-water field and full-ferry tests consume the canonical course. Interior control changes may separate paths, but graph nodes, pier coordinates, base depths and action costs remain authoritative and fixed. Unit checks independently probe the actual sampled network for crossings, coincident stretches and contacts with unrelated stops.
++
++`src/scene/water.ts` generates a bounded 256×256 RGBA coastal field once per level from the canonical courses and shore contours. This replaces the fixed 16 raw-segment shader array. The field combines broad bank/shore relationships and submerged-ground information; a small shader supplies quiet color variation and sparse highlights. No water color participates in rule validation.
++
++`src/scene/shore.ts` supplies continuous coast geometry, grouped instanced rocks, water-height wetness and cached forecast contours. Rendered water height drives contact detail during transitions, while sync restores exact state immediately for Undo and Restart. The actual new solid geometry is checked within the original validated footprint envelope; full rotated ferry clearance retains both footprint exclusions and the required centerline margin.
++
++`src/scene/effects.ts` holds a short dynamic wake ribbon sampled from the actual stern and a restrained existing-lighthouse response on delivery. Static geometry and materials are reused. Effects reset independently from authoritative state on Undo, Restart, cancellation and level changes. Reduced motion suppresses moving decorative wake detail and presents arrival calmly.
++
++Read-only development inspection may expose actual route buffers, boat transforms, shore uniforms and effect buffers for browser verification. Production excludes these globals. Numeric checks supplement actual-play recordings and native-size visual inspection; neither state snapshots nor software-renderer timings prove physical-device motion quality.
++
+ ## Delivery hygiene
+ 
+ Bundle the assets needed for ordinary play rather than relying on hotlinked reference images. Document production asset origins. Keep generated videos and large test outputs out of routine source history unless the user chooses an artifact destination. Keep small review reports and selected actual screenshots with their source revision. Add CI only after the real commands exist and run successfully.
+diff --git a/src/main.ts b/src/main.ts
+index 1bcbbf9..5ebe944 100644
+--- a/src/main.ts
++++ b/src/main.ts
+@@ -594,6 +594,8 @@ if (import.meta.env.DEV)
+       }),
+       getFrameStatus: () => world.frameStatus(),
+       getNavigationStatus: () => world.navigationPresentation(),
++      getEnvironmentStatus: () => copy(world.environmentPresentation()),
++      getJourneyStatus: () => copy(world.journeyPresentation()),
+       getMetrics: () => world.metrics(),
+     },
+   });
+diff --git a/src/scene/effects.ts b/src/scene/effects.ts
+new file mode 100644
+index 0000000..6d6545e
+--- /dev/null
++++ b/src/scene/effects.ts
+@@ -0,0 +1,195 @@
++import * as T from 'three';
++
++export class CrossingEffects {
++  wake: T.Mesh;
++  glow: T.Sprite;
++  points: { position: T.Vector3; time: number }[] = [];
++  emitting = false;
++  arrivalStarted: number | null = null;
++  arrivalIntensity = 0;
++  lamp?: T.PointLight;
++  lens?: T.MeshStandardMaterial;
++  lampBase = 0;
++  reduced = false;
++  constructor(lighthouse: T.Object3D) {
++    const geometry = new T.BufferGeometry();
++    geometry.setAttribute(
++      'position',
++      new T.Float32BufferAttribute(new Float32Array(32 * 6 * 3), 3).setUsage(T.DynamicDrawUsage),
++    );
++    geometry.setAttribute(
++      'fade',
++      new T.Float32BufferAttribute(new Float32Array(32 * 6), 1).setUsage(T.DynamicDrawUsage),
++    );
++    geometry.setDrawRange(0, 0);
++    this.wake = new T.Mesh(
++      geometry,
++      new T.ShaderMaterial({
++        transparent: true,
++        depthWrite: false,
++        side: T.DoubleSide,
++        vertexShader:
++          'attribute float fade;varying float alpha;void main(){alpha=fade;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
++        fragmentShader: 'varying float alpha;void main(){gl_FragColor=vec4(.70,.83,.77,alpha);}',
++      }),
++    );
++    this.wake.name = 'ferry-wake';
++    this.wake.userData.excludeFromFrame = true;
++    this.wake.frustumCulled = false;
++    this.wake.visible = false;
++    const pixels = new Uint8Array(32 * 32 * 4);
++    for (let y = 0; y < 32; y++)
++      for (let x = 0; x < 32; x++) {
++        const index = (y * 32 + x) * 4;
++        const radius = Math.hypot((x - 15.5) / 16, (y - 15.5) / 16);
++        pixels[index] = pixels[index + 1] = pixels[index + 2] = 255;
++        pixels[index + 3] = Math.round(Math.max(0, 1 - radius) ** 2 * 255);
++      }
++    const texture = new T.DataTexture(pixels, 32, 32, T.RGBAFormat);
++    texture.magFilter = T.LinearFilter;
++    texture.minFilter = T.LinearFilter;
++    texture.needsUpdate = true;
++    this.glow = new T.Sprite(
++      new T.SpriteMaterial({
++        map: texture,
++        color: '#ffcf78',
++        transparent: true,
++        opacity: 0,
++        depthWrite: false,
++      }),
++    );
++    this.glow.name = 'harbor-lantern-response';
++    this.glow.position.copy(lighthouse.localToWorld(new T.Vector3(0, 2.6, 0)));
++    this.glow.scale.set(1.8, 1.8, 1);
++    this.glow.userData.excludeFromFrame = true;
++    this.glow.visible = false;
++    lighthouse.traverse((object) => {
++      if (object instanceof T.PointLight) {
++        this.lamp = object;
++        this.lampBase = object.intensity;
++      }
++      if (
++        object instanceof T.Mesh &&
++        object.material instanceof T.MeshStandardMaterial &&
++        object.material.color.getHexString() === 'f9cb70'
++      ) {
++        object.material = object.material.clone();
++        this.lens = object.material;
++        this.lens!.emissive.set('#ffd795');
++      }
++    });
++  }
++  reset() {
++    this.points.length = 0;
++    this.emitting = false;
++    this.wake.geometry.setDrawRange(0, 0);
++    this.wake.visible = false;
++    this.arrivalStarted = null;
++    this.arrivalIntensity = 0;
++    this.glow.visible = false;
++    this.glow.material.opacity = 0;
++    if (this.lamp) this.lamp.intensity = this.lampBase;
++    if (this.lens) this.lens.emissiveIntensity = 0;
++  }
++  arrive(time: number, reduced: boolean) {
++    if (this.arrivalStarted === null) this.arrivalStarted = time;
++    this.reduced = reduced;
++  }
++  update(
++    time: number,
++    position: T.Vector3,
++    angle: number,
++    moving: boolean,
++    waterY: number,
++    reduced: boolean,
++  ) {
++    this.reduced = reduced;
++    this.emitting = moving && !reduced;
++    if (this.emitting) {
++      const stern = position
++        .clone()
++        .add(new T.Vector3(-Math.sin(angle) * 0.72, 0, -Math.cos(angle) * 0.72));
++      stern.y = waterY + 0.018;
++      if (!this.points.length || stern.distanceTo(this.points.at(-1)!.position) > 0.045)
++        this.points.push({ position: stern, time });
++    }
++    while (this.points.length && time - this.points[0].time > 360) this.points.shift();
++    while (this.points.length > 31) this.points.shift();
++    let length = 0;
++    for (let i = this.points.length - 2; i >= 0; i--) {
++      length += this.points[i].position.distanceTo(this.points[i + 1].position);
++      if (length > 1.55) {
++        this.points.splice(0, i + 1);
++        break;
++      }
++    }
++    if (reduced) this.points.length = 0;
++    const positions = this.wake.geometry.getAttribute('position') as T.BufferAttribute;
++    const fade = this.wake.geometry.getAttribute('fade') as T.BufferAttribute;
++    let count = 0;
++    for (let i = 1; i < this.points.length; i++) {
++      const a = this.points[i - 1],
++        b = this.points[i];
++      const direction = b.position.clone().sub(a.position).setY(0).normalize();
++      const normal = new T.Vector3(-direction.z, 0, direction.x);
++      const widthA = 0.04 + (i / this.points.length) * 0.13,
++        widthB = 0.04 + ((i + 1) / this.points.length) * 0.13;
++      const vertices = [
++        a.position.clone().addScaledVector(normal, widthA),
++        a.position.clone().addScaledVector(normal, -widthA),
++        b.position.clone().addScaledVector(normal, widthB),
++        a.position.clone().addScaledVector(normal, -widthA),
++        b.position.clone().addScaledVector(normal, -widthB),
++        b.position.clone().addScaledVector(normal, widthB),
++      ];
++      for (const [j, vertex] of vertices.entries()) {
++        positions.setXYZ(count, vertex.x, waterY + 0.018, vertex.z);
++        const age = time - (j < 2 || j === 3 ? a.time : b.time);
++        fade.setX(count++, Math.max(0, 1 - age / 360) * 0.18);
++      }
++    }
++    positions.needsUpdate = true;
++    fade.needsUpdate = true;
++    this.wake.geometry.setDrawRange(0, count);
++    this.wake.visible = count > 0;
++    if (this.arrivalStarted !== null) {
++      const elapsed = Math.max(0, time - this.arrivalStarted);
++      this.arrivalIntensity = reduced ? 0.45 : 0.27 + 0.55 * Math.exp(-elapsed / 1100);
++      if (this.lamp) this.lamp.intensity = this.lampBase + this.arrivalIntensity * 2;
++      if (this.lens) this.lens.emissiveIntensity = this.arrivalIntensity;
++      this.glow.visible = true;
++      this.glow.material.opacity = this.arrivalIntensity * 0.26;
++    }
++  }
++  presentation() {
++    const count = this.wake.geometry.drawRange.count;
++    return {
++      wake: {
++        emitting: this.emitting,
++        visible: this.wake.visible,
++        vertices: count,
++        positions: Array.from(
++          (this.wake.geometry.getAttribute('position') as T.BufferAttribute).array.slice(
++            0,
++            count * 3,
++          ),
++        ),
++        opacity: Array.from(
++          (this.wake.geometry.getAttribute('fade') as T.BufferAttribute).array.slice(0, count),
++        ),
++        points: this.points.map((point) => ({
++          position: point.position.toArray(),
++          time: point.time,
++        })),
++      },
++      arrival: {
++        active: this.arrivalStarted !== null,
++        intensity: this.arrivalIntensity,
++        lampIntensity: this.lamp?.intensity ?? null,
++        emissiveIntensity: this.lens?.emissiveIntensity ?? null,
++        glowVisible: this.glow.visible,
++        glowOpacity: this.glow.material.opacity,
++      },
++    };
++  }
++}
+diff --git a/src/scene/motion.ts b/src/scene/motion.ts
+index bff62c8..971be5f 100644
+--- a/src/scene/motion.ts
++++ b/src/scene/motion.ts
+@@ -1,36 +1,28 @@
+ import { MathUtils, Vector3 } from 'three';
+-export function sampleJourney(path: Vector3[], progress: number, fromAngle = Math.PI / 2) {
+-  const k = progress * progress * (3 - 2 * progress);
+-  const lens = path.slice(1).map((p, i) => p.distanceTo(path[i]));
+-  const total = lens.reduce((a, b) => a + b, 0);
+-  let distance = k * total,
+-    idx = 0;
+-  while (idx < lens.length - 1 && distance > lens[idx]) distance -= lens[idx++];
+-  const local = Math.min(1, distance / lens[idx]),
+-    position = new Vector3().lerpVectors(path[idx], path[idx + 1], local);
+-  const direction = path[idx + 1].clone().sub(path[idx]);
+-  let target = Math.atan2(direction.x, direction.z);
+-  if (idx < lens.length - 1 && local > 0.82) {
+-    const next = path[idx + 2].clone().sub(path[idx + 1]),
+-      nextAngle = Math.atan2(next.x, next.z);
+-    target +=
+-      ((Math.atan2(Math.sin(nextAngle - target), Math.cos(nextAngle - target)) * (local - 0.82)) /
+-        0.18) *
+-      0.5;
+-  }
+-  if (idx > 0 && local < 0.18) {
+-    const prev = path[idx].clone().sub(path[idx - 1]),
+-      prevAngle = Math.atan2(prev.x, prev.z);
+-    target +=
+-      Math.atan2(Math.sin(prevAngle - target), Math.cos(prevAngle - target)) *
+-      (1 - local / 0.18) *
+-      0.5;
+-  }
+-  // Clear the jetty broadside before turning; settle broadside before returning.
+-  const clearance = Math.min(k * total, (1 - k) * total);
+-  const turn = MathUtils.clamp((clearance - 0.45) / 0.55, 0, 1);
+-  const blend = turn * turn * (3 - 2 * turn);
+-  const angle =
+-    fromAngle + Math.atan2(Math.sin(target - fromAngle), Math.cos(target - fromAngle)) * blend;
+-  return { position, angle };
++import { buildPath, samplePath, type CanonicalPath } from './paths';
++
++const legacyPaths = new WeakMap<Vector3[], CanonicalPath>();
++
++export function sampleJourney(
++  input: CanonicalPath | Vector3[],
++  progress: number,
++  fromAngle = Math.PI / 2,
++  reverse = false,
++) {
++  let path: CanonicalPath;
++  if (Array.isArray(input)) {
++    const cached = legacyPaths.get(input);
++    path = cached ?? buildPath(input);
++    if (!cached) legacyPaths.set(input, path);
++  } else path = input;
++  const t = Number.isFinite(progress) ? MathUtils.clamp(progress, 0, 1) : 0,
++    eased = t * t * (3 - 2 * t),
++    pose = samplePath(path, eased * path.length, reverse);
++  if (!path.length) return { ...pose, angle: fromAngle };
++  const initial = path.headings[reverse ? path.headings.length - 1 : 0] + (reverse ? Math.PI : 0),
++    winding = Math.round((fromAngle - initial) / (Math.PI * 2)) * Math.PI * 2,
++    clearance = Math.min(pose.distance, path.length - pose.distance),
++    turn = MathUtils.clamp((clearance - 0.45) / 0.55, 0, 1),
++    blend = turn * turn * (3 - 2 * turn);
++  return { ...pose, angle: fromAngle + (pose.angle + winding - fromAngle) * blend };
+ }
+diff --git a/src/scene/paths.ts b/src/scene/paths.ts
+new file mode 100644
+index 0000000..99e0298
+--- /dev/null
++++ b/src/scene/paths.ts
+@@ -0,0 +1,135 @@
++import { Vector3 } from 'three';
++import type { Level } from '../levels/level';
++
++export type CanonicalPath = {
++  points: Vector3[];
++  distances: number[];
++  headings: number[];
++  length: number;
++};
++
++const cache = new WeakMap<Level, Map<string, CanonicalPath>>();
++const gap = 0.05;
++const epsilon = 1e-9;
++
++function atDistance(points: Vector3[], distances: number[], distance: number) {
++  let low = 0,
++    high = distances.length - 1;
++  while (low + 1 < high) {
++    const mid = Math.floor((low + high) / 2);
++    if (distances[mid] <= distance) low = mid;
++    else high = mid;
++  }
++  const span = distances[high] - distances[low];
++  const fraction = span > epsilon ? (distance - distances[low]) / span : 0;
++  return {
++    low,
++    high,
++    fraction,
++    position: new Vector3().lerpVectors(points[low], points[high], fraction),
++  };
++}
++
++function arcLengths(points: Vector3[]) {
++  const distances = [0];
++  for (let i = 1; i < points.length; i++)
++    distances.push(distances[i - 1] + points[i].distanceTo(points[i - 1]));
++  return distances;
++}
++
++export function buildPath(controls: readonly Vector3[]): CanonicalPath {
++  const clean: Vector3[] = [];
++  for (const p of controls) {
++    if (![p.x, p.y, p.z].every(Number.isFinite)) throw new Error('Route controls must be finite.');
++    if (!clean.length || p.distanceTo(clean.at(-1)!) > epsilon) clean.push(p.clone());
++  }
++  if (!clean.length) clean.push(new Vector3());
++  if (clean.length === 1) return { points: clean, distances: [0], headings: [0], length: 0 };
++  const dense = [clean[0].clone()];
++  function line(to: Vector3) {
++    const from = dense.at(-1)!,
++      count = Math.max(1, Math.ceil(from.distanceTo(to) / 0.035));
++    for (let j = 1; j <= count; j++) dense.push(new Vector3().lerpVectors(from, to, j / count));
++  }
++  for (let i = 1; i < clean.length - 1; i++) {
++    const previous = clean[i - 1],
++      corner = clean[i],
++      next = clean[i + 1];
++    const trim = Math.min(0.75, previous.distanceTo(corner) * 0.25, corner.distanceTo(next) * 0.25);
++    const entry = corner.clone().add(previous.clone().sub(corner).normalize().multiplyScalar(trim));
++    const exit = corner.clone().add(next.clone().sub(corner).normalize().multiplyScalar(trim));
++    line(entry);
++    const count = Math.max(16, Math.ceil((trim * 2) / 0.025));
++    for (let j = 1; j <= count; j++) {
++      const t = j / count;
++      dense.push(
++        entry
++          .clone()
++          .multiplyScalar((1 - t) ** 2)
++          .addScaledVector(corner, 2 * t * (1 - t))
++          .addScaledVector(exit, t * t),
++      );
++    }
++  }
++  line(clean.at(-1)!);
++  const denseDistances = arcLengths(dense),
++    total = denseDistances.at(-1)!;
++  const count = Math.max(1, Math.ceil(total / gap));
++  const points = Array.from(
++    { length: count + 1 },
++    (_, i) => atDistance(dense, denseDistances, (total * i) / count).position,
++  );
++  points[0].copy(clean[0]);
++  points[count].copy(clean.at(-1)!);
++  const distances = arcLengths(points),
++    headings: number[] = [];
++  for (let i = 0; i < points.length; i++) {
++    const direction = points[Math.min(i + 1, count)].clone().sub(points[Math.max(0, i - 1)]);
++    const raw = Math.atan2(direction.x, direction.z),
++      last = headings.at(-1);
++    headings.push(
++      last === undefined ? raw : last + Math.atan2(Math.sin(raw - last), Math.cos(raw - last)),
++    );
++  }
++  return { points, distances, headings, length: distances.at(-1)! };
++}
++
++export function getLevelPaths(level: Level): Map<string, CanonicalPath> {
++  let paths = cache.get(level);
++  if (!paths) {
++    paths = new Map(
++      level.edges.map((edge) => [
++        edge.id,
++        buildPath(edge.waypointsXZ.map(([x, z]) => new Vector3(x, 0, z))),
++      ]),
++    );
++    cache.set(level, paths);
++  }
++  return paths;
++}
++
++export function samplePath(path: CanonicalPath, distance: number, reverse = false) {
++  const traveled = Number.isFinite(distance) ? Math.max(0, Math.min(path.length, distance)) : 0;
++  if (path.length <= epsilon)
++    return {
++      position: path.points[0].clone(),
++      tangent: new Vector3(0, 0, reverse ? -1 : 1),
++      angle: reverse ? Math.PI : 0,
++      distance: traveled,
++    };
++  const sample = atDistance(
++    path.points,
++    path.distances,
++    reverse ? path.length - traveled : traveled,
++  );
++  const angle =
++    path.headings[sample.low] +
++    (path.headings[sample.high] - path.headings[sample.low]) * sample.fraction +
++    (reverse ? Math.PI : 0);
++  return {
++    position: sample.position,
++    tangent: new Vector3(Math.sin(angle), 0, Math.cos(angle)),
++    angle,
++    distance: traveled,
++  };
++}
+diff --git a/src/scene/scenery.ts b/src/scene/scenery.ts
+index a55e367..0331fc7 100644
+--- a/src/scene/scenery.ts
++++ b/src/scene/scenery.ts
+@@ -59,33 +59,3 @@ export function bellLandmark(parent: T.Object3D, position: [number, number, numb
+   ball(g, '#d0ab62', [0, 0.63, 0], [0.075, 0.085, 0.075]);
+   return g;
+ }
+-
+-export function reedClump(parent: T.Object3D, x: number, y: number, z: number, phase: number) {
+-  const g = new T.Group();
+-  g.position.set(x, y, z);
+-  parent.add(g);
+-  for (let i = 0; i < 5; i++) {
+-    const angle = phase + i * 2.4;
+-    const height = 0.25 + (i % 3) * 0.08;
+-    const stem = cylinder(
+-      g,
+-      i % 2 ? '#8d9660' : '#647f5e',
+-      0.009,
+-      0.018,
+-      height,
+-      [Math.cos(angle) * 0.065, height / 2, Math.sin(angle) * 0.045],
+-      5,
+-    );
+-    stem.rotation.z = Math.sin(angle) * 0.15;
+-    if (i % 2 === 0)
+-      cylinder(
+-        g,
+-        '#927252',
+-        0.027,
+-        0.027,
+-        0.09,
+-        [Math.cos(angle) * 0.07, height, Math.sin(angle) * 0.045],
+-        6,
+-      );
+-  }
+-}
+diff --git a/src/scene/shore.ts b/src/scene/shore.ts
+new file mode 100644
+index 0000000..3da3d20
+--- /dev/null
++++ b/src/scene/shore.ts
+@@ -0,0 +1,371 @@
++import * as T from 'three';
++import type { Level } from '../levels/level';
++import type { IslandStyle } from './layout';
++
++type Island = Level['world']['islands'][number];
++export const shoreTop = (island: Island) => island.elevation * 0.18 - 0.005;
++export function islandCenter(island: Island) {
++  const points = island.footprintXZ;
++  return new T.Vector2(
++    points.reduce((sum, p) => sum + p[0], 0) / points.length,
++    points.reduce((sum, p) => sum + p[1], 0) / points.length,
++  );
++}
++export function shoreContour(island: Island, scale = 1) {
++  const center = islandCenter(island);
++  const points = island.footprintXZ.map(
++    ([x, z]) => new T.Vector2(center.x + (x - center.x) * scale, center.y + (z - center.y) * scale),
++  );
++  const shape = new T.Shape();
++  const first = points[0].clone().lerp(points[1], 0.5);
++  shape.moveTo(first.x, first.y);
++  for (let i = 1; i <= points.length; i++) {
++    const a = points[i % points.length],
++      b = points[(i + 1) % points.length];
++    const middle = a.clone().lerp(b, 0.5);
++    shape.quadraticCurveTo(a.x, a.y, middle.x, middle.y);
++  }
++  return shape.getPoints(6).slice(0, -1);
++}
++const profile = (island: Island) => [
++  [0.9, -0.16],
++  [0.98, -0.025],
++  [0.94, 0.04],
++  [0.84, shoreTop(island)],
++];
++export function contactScale(island: Island, waterY: number) {
++  const levels = profile(island);
++  if (waterY >= shoreTop(island)) return null;
++  for (let i = 1; i < levels.length; i++)
++    if (waterY <= levels[i][1])
++      return T.MathUtils.lerp(
++        levels[i - 1][0],
++        levels[i][0],
++        T.MathUtils.clamp((waterY - levels[i - 1][1]) / (levels[i][1] - levels[i - 1][1]), 0, 1),
++      );
++  return levels.at(-1)![0];
++}
++export function buildCoastGeometry(island: Island, style: IslandStyle = 'garden') {
++  const contour = shoreContour(island),
++    center = islandCenter(island),
++    positions: number[] = [],
++    colors: number[] = [],
++    indices: number[] = [];
++  const tones = [
++    '#9da58d',
++    '#aab29a',
++    '#d6c8a3',
++    style === 'reeds' ? '#c4bc91' : style === 'rocky' ? '#98a18a' : '#91a578',
++  ];
++  for (const [ring, [scale, y]] of profile(island).entries()) {
++    const color = new T.Color(tones[ring]);
++    for (const point of contour) {
++      positions.push(
++        center.x + (point.x - center.x) * scale,
++        y,
++        center.y + (point.y - center.y) * scale,
++      );
++      colors.push(color.r, color.g, color.b);
++    }
++  }
++  const count = contour.length;
++  for (let ring = 0; ring < 3; ring++)
++    for (let i = 0; i < count; i++) {
++      const next = (i + 1) % count,
++        a = ring * count + i,
++        b = ring * count + next,
++        c = (ring + 1) * count + i,
++        d = (ring + 1) * count + next;
++      indices.push(a, c, b, b, c, d);
++    }
++  positions.push(center.x, shoreTop(island), center.y);
++  const topColor = new T.Color(tones[3]);
++  colors.push(topColor.r, topColor.g, topColor.b);
++  for (let i = 0; i < count; i++)
++    indices.push(count * 4, count * 3 + ((i + 1) % count), count * 3 + i);
++  const geometry = new T.BufferGeometry();
++  geometry.setAttribute('position', new T.Float32BufferAttribute(positions, 3));
++  geometry.setAttribute('color', new T.Float32BufferAttribute(colors, 3));
++  geometry.setIndex(indices);
++  geometry.computeVertexNormals();
++  return geometry;
++}
++export function shoreRockPlacements(island: Island, style: IslandStyle = 'garden') {
++  const center = islandCenter(island),
++    points = island.footprintXZ;
++  const count = style === 'reeds' ? 2 : style === 'rocky' ? 5 : 3;
++  return Array.from({ length: count }, (_, i) => {
++    const a = points[(i * 2 + 1) % points.length],
++      b = points[(i * 2 + 2) % points.length];
++    const radius = style === 'reeds' ? 0.2 + i * 0.035 : 0.29 + (i % 3) * 0.065;
++    return {
++      position: new T.Vector3(
++        center.x + ((a[0] + b[0]) / 2 - center.x) * 0.63,
++        island.elevation * 0.18 + radius * 0.06,
++        center.y + ((a[1] + b[1]) / 2 - center.y) * 0.63,
++      ),
++      scale: new T.Vector3(
++        radius * (i % 2 ? 1.15 : 0.9),
++        radius * (i % 2 ? 0.64 : 0.9),
++        radius * 0.8,
++      ),
++      rotation: new T.Euler(0.13 * i, 0.8 + i * 1.1, 0.1),
++    };
++  });
++}
++export function createShoreRocks(
++  island: Island,
++  style: IslandStyle = 'garden',
++  material?: T.Material,
++) {
++  const placements = shoreRockPlacements(island, style);
++  const geometry = new T.DodecahedronGeometry(1, 0);
++  geometry.setAttribute(
++    'color',
++    new T.Float32BufferAttribute(
++      new Float32Array(geometry.getAttribute('position').count * 3).fill(1),
++      3,
++    ),
++  );
++  const rocks = new T.InstancedMesh(
++    geometry,
++    material ?? new T.MeshStandardMaterial({ roughness: 1 }),
++    placements.length,
++  );
++  rocks.name = `shore-rocks-${island.id}`;
++  rocks.userData.islandId = island.id;
++  rocks.castShadow = true;
++  rocks.receiveShadow = true;
++  const transform = new T.Object3D();
++  placements.forEach((placement, i) => {
++    transform.position.copy(placement.position);
++    transform.rotation.copy(placement.rotation);
++    transform.scale.copy(placement.scale);
++    transform.updateMatrix();
++    rocks.setMatrixAt(i, transform.matrix);
++    rocks.setColorAt(i, new T.Color(i % 2 ? '#89988e' : '#a5ae9b'));
++  });
++  rocks.computeBoundingBox();
++  rocks.computeBoundingSphere();
++  return rocks;
++}
++export function createReedBeds(island: Island) {
++  const center = islandCenter(island),
++    contour = shoreContour(island),
++    stems: T.Matrix4[] = [],
++    heads: T.Matrix4[] = [];
++  const transform = new T.Object3D();
++  for (const patch of [0.12, 0.43, 0.77]) {
++    const index = Math.floor(contour.length * patch);
++    for (let clump = -1; clump <= 1; clump++) {
++      const point = contour[(index + clump * 2 + contour.length) % contour.length];
++      const x = center.x + (point.x - center.x) * 0.74,
++        z = center.y + (point.y - center.y) * 0.74;
++      for (let stem = 0; stem < 5; stem++) {
++        const angle = stem * 2.4 + patch * 8,
++          height = 0.23 + ((stem + clump + 4) % 3) * 0.075;
++        transform.position.set(
++          x + Math.cos(angle) * 0.065,
++          island.elevation * 0.18 + height / 2,
++          z + Math.sin(angle) * 0.045,
++        );
++        transform.rotation.set(0, angle, Math.sin(angle) * 0.13);
++        transform.scale.set(1, height, 1);
++        transform.updateMatrix();
++        stems.push(transform.matrix.clone());
++        if (stem % 2 === 0) {
++          transform.position.y = island.elevation * 0.18 + height;
++          transform.scale.set(1, 1, 1);
++          transform.updateMatrix();
++          heads.push(transform.matrix.clone());
++        }
++      }
++    }
++  }
++  const group = new T.Group();
++  group.name = `reed-beds-${island.id}`;
++  for (const [name, matrices, geometry, color] of [
++    ['stems', stems, new T.CylinderGeometry(0.009, 0.017, 1, 5), '#72885c'],
++    ['seed-heads', heads, new T.CylinderGeometry(0.024, 0.024, 0.09, 6), '#987959'],
++  ] as [string, T.Matrix4[], T.BufferGeometry, string][]) {
++    const mesh = new T.InstancedMesh(
++      geometry,
++      new T.MeshStandardMaterial({ color, roughness: 1 }),
++      matrices.length,
++    );
++    mesh.name = name;
++    matrices.forEach((matrix, i) => mesh.setMatrixAt(i, matrix));
++    mesh.castShadow = true;
++    mesh.receiveShadow = true;
++    mesh.computeBoundingBox();
++    mesh.computeBoundingSphere();
++    group.add(mesh);
++  }
++  return group;
++}
++export class Shores {
++  group = new T.Group();
++  contacts: T.LineSegments;
++  forecast = new T.Group();
++  water = { value: 0 };
++  forecastY: number | null = null;
++  lastY = Number.NaN;
++  entries: {
++    island: Island;
++    mesh: T.Mesh;
++    rocks: T.InstancedMesh;
++    contour: T.Vector2[];
++    center: T.Vector2;
++  }[] = [];
++  constructor(level: Level, styles: Record<string, IslandStyle>) {
++    this.group.name = 'coastal-ground';
++    const material = new T.MeshStandardMaterial({ vertexColors: true, roughness: 1 });
++    material.onBeforeCompile = (shader) => {
++      shader.uniforms.coastWaterY = this.water;
++      shader.vertexShader = shader.vertexShader
++        .replace('#include <common>', '#include <common>\nvarying float coastHeight;')
++        .replace(
++          '#include <worldpos_vertex>',
++          '#include <worldpos_vertex>\nvec4 coastPosition=vec4(transformed,1.);\n#ifdef USE_INSTANCING\ncoastPosition=instanceMatrix*coastPosition;\n#endif\ncoastHeight=(modelMatrix*coastPosition).y;',
++        );
++      shader.fragmentShader = shader.fragmentShader
++        .replace(
++          '#include <common>',
++          '#include <common>\nuniform float coastWaterY;varying float coastHeight;',
++        )
++        .replace(
++          '#include <color_fragment>',
++          '#include <color_fragment>\nfloat wet=1.-smoothstep(coastWaterY+.015,coastWaterY+.12,coastHeight);diffuseColor.rgb=mix(diffuseColor.rgb,diffuseColor.rgb*vec3(.67,.76,.72),wet*.68);',
++        );
++    };
++    material.customProgramCacheKey = () => 'coast-wetness-1';
++    for (const island of level.world.islands) {
++      const style = styles[island.id] ?? 'garden';
++      const mesh = new T.Mesh(buildCoastGeometry(island, style), material);
++      mesh.name = `shore-${island.id}`;
++      mesh.castShadow = true;
++      mesh.receiveShadow = true;
++      const rocks = createShoreRocks(island, style, material);
++      this.group.add(mesh, rocks);
++      this.entries.push({
++        island,
++        mesh,
++        rocks,
++        contour: shoreContour(island),
++        center: islandCenter(island),
++      });
++    }
++    const capacity = this.entries.reduce(
++      (sum, entry) => sum + shoreContour(entry.island).length * 2 + 100,
++      0,
++    );
++    const geometry = new T.BufferGeometry();
++    geometry.setAttribute(
++      'position',
++      new T.Float32BufferAttribute(new Float32Array(capacity * 3), 3).setUsage(T.DynamicDrawUsage),
++    );
++    geometry.setDrawRange(0, 0);
++    this.contacts = new T.LineSegments(
++      geometry,
++      new T.LineBasicMaterial({
++        color: '#b6c9bc',
++        transparent: true,
++        opacity: 0.3,
++        depthWrite: false,
++      }),
++    );
++    this.contacts.name = 'shore-contact';
++    this.contacts.userData.excludeFromFrame = true;
++    this.contacts.frustumCulled = false;
++    this.forecast.name = 'coast-forecast';
++    this.forecast.userData.excludeFromFrame = true;
++    for (const tide of [0, 1, 2]) {
++      const group = new T.Group();
++      group.name = `forecast-tide-${tide}`;
++      for (const { island } of this.entries) {
++        const y = tide * 0.18,
++          scale = contactScale(island, y);
++        if (scale === null) continue;
++        const points = shoreContour(island, scale).map((p) => new T.Vector3(p.x, y + 0.013, p.y));
++        const line = new T.LineLoop(
++          new T.BufferGeometry().setFromPoints(points),
++          new T.LineBasicMaterial({
++            color: '#e9c879',
++            transparent: true,
++            opacity: 0.62,
++            depthWrite: false,
++          }),
++        );
++        line.name = `forecast-${island.id}`;
++        group.add(line);
++      }
++      group.visible = false;
++      this.forecast.add(group);
++    }
++  }
++  update(waterY: number) {
++    if (waterY === this.lastY) return;
++    this.lastY = waterY;
++    this.water.value = waterY;
++    const positions = this.contacts.geometry.getAttribute('position') as T.BufferAttribute;
++    let count = 0;
++    for (const [index, { island, contour, center }] of this.entries.entries()) {
++      const scale = contactScale(island, waterY);
++      if (scale === null) continue;
++      for (let i = 0; i < contour.length; i++) {
++        if ((i + index * 7) % 19 > 3) continue;
++        const a = contour[i],
++          b = contour[(i + 1) % contour.length];
++        positions.setXYZ(
++          count++,
++          center.x + (a.x - center.x) * scale,
++          waterY + 0.012,
++          center.y + (a.y - center.y) * scale,
++        );
++        positions.setXYZ(
++          count++,
++          center.x + (b.x - center.x) * scale,
++          waterY + 0.012,
++          center.y + (b.y - center.y) * scale,
++        );
++      }
++    }
++    positions.needsUpdate = true;
++    this.contacts.geometry.setDrawRange(0, count);
++    this.contacts.visible = count > 0;
++  }
++  preview(visible: boolean, tide: number) {
++    this.forecastY = visible ? tide * 0.18 : null;
++    this.forecast.children.forEach((group, i) => {
++      group.visible = visible && i === tide;
++    });
++  }
++  presentation() {
++    return {
++      waterY: this.water.value,
++      contactVertices: this.contacts.geometry.drawRange.count,
++      contactPositions: Array.from(
++        (this.contacts.geometry.getAttribute('position') as T.BufferAttribute).array.slice(
++          0,
++          this.contacts.geometry.drawRange.count * 3,
++        ),
++      ),
++      forecastY: this.forecastY,
++      islands: this.entries.map(({ island, mesh, rocks }) => ({
++        id: island.id,
++        surfaceY: shoreTop(island),
++        mode:
++          this.water.value >= shoreTop(island)
++            ? 'submerged'
++            : this.water.value > 0.04
++              ? 'wet'
++              : 'exposed',
++        submergedFraction: 1 - ((contactScale(island, this.water.value) ?? 0) / 0.98) ** 2,
++        contactVisible: contactScale(island, this.water.value) !== null,
++        contactScale: contactScale(island, this.water.value),
++        geometryVertices: mesh.geometry.getAttribute('position').count,
++        rockCount: rocks.count,
++      })),
++    };
++  }
++}
+diff --git a/src/scene/water.ts b/src/scene/water.ts
+new file mode 100644
+index 0000000..34385c3
+--- /dev/null
++++ b/src/scene/water.ts
+@@ -0,0 +1,138 @@
++import * as T from 'three';
++import type { Level } from '../levels/level';
++import type { CanonicalPath } from './paths';
++import { shoreContour } from './shore';
++
++const distance = (x: number, z: number, a: T.Vector2, b: T.Vector2) => {
++  const dx = b.x - a.x,
++    dz = b.y - a.y;
++  const t = T.MathUtils.clamp(
++    ((x - a.x) * dx + (z - a.y) * dz) / Math.max(1e-9, dx * dx + dz * dz),
++    0,
++    1,
++  );
++  return Math.hypot(x - a.x - dx * t, z - a.y - dz * t);
++};
++function inside(x: number, z: number, points: T.Vector2[]) {
++  let odd = false;
++  for (let i = 0, j = points.length - 1; i < points.length; j = i++) {
++    const a = points[i],
++      b = points[j];
++    if (a.y > z !== b.y > z && x < ((b.x - a.x) * (z - a.y)) / (b.y - a.y) + a.x) odd = !odd;
++  }
++  return odd;
++}
++export function coastalMask(level: Level, paths: Map<string, CanonicalPath>) {
++  const bounds = new T.Box2();
++  for (const island of level.world.islands)
++    for (const p of island.footprintXZ) bounds.expandByPoint(new T.Vector2(p[0], p[1]));
++  for (const path of paths.values())
++    for (const p of path.points) bounds.expandByPoint(new T.Vector2(p.x, p.z));
++  bounds.expandByScalar(4);
++  const coasts = level.world.islands.map((island) => ({
++    points: shoreContour(island, 0.98),
++    height: island.elevation * 0.18,
++  }));
++  const shallow = level.edges
++    .filter((edge) => edge.baseDepth < 3)
++    .flatMap((edge) => {
++      const points = paths.get(edge.id)!.points.filter((_, i) => i % 5 === 0);
++      const last = paths.get(edge.id)!.points.at(-1)!;
++      if (points.at(-1) !== last) points.push(last);
++      return points.slice(1).map((b, i) => ({
++        a: new T.Vector2(points[i].x, points[i].z),
++        b: new T.Vector2(b.x, b.z),
++        strength: edge.baseDepth === 1 ? 1 : 0.5,
++      }));
++    });
++  const size = 256,
++    data = new Uint8Array(size * size * 4),
++    span = bounds.getSize(new T.Vector2());
++  for (let j = 0; j < size; j++)
++    for (let i = 0; i < size; i++) {
++      const x = bounds.min.x + ((i + 0.5) / size) * span.x,
++        z = bounds.min.y + ((j + 0.5) / size) * span.y;
++      let bank = 0,
++        shore = 0,
++        landHeight = 0,
++        land = 0,
++        nearestCoast = Number.POSITIVE_INFINITY;
++      for (const segment of shallow) {
++        const d = distance(x, z, segment.a, segment.b);
++        const width = 1.2 + 0.3 * Math.sin(x * 0.73 - z * 0.91);
++        bank = Math.max(bank, Math.exp(-(d * d) / (width * width)) * segment.strength);
++      }
++      for (const coast of coasts) {
++        const isLand = inside(x, z, coast.points);
++        let d = 100;
++        for (let k = 0; k < coast.points.length; k++)
++          d = Math.min(
++            d,
++            distance(x, z, coast.points[k], coast.points[(k + 1) % coast.points.length]),
++          );
++        shore = Math.max(shore, Math.exp(-(d * d) / 1.1));
++        if (d < nearestCoast) {
++          nearestCoast = d;
++          landHeight = coast.height;
++        }
++        land = Math.max(land, T.MathUtils.smoothstep(isLand ? d : -d, -0.18, 0.18));
++      }
++      const index = (j * size + i) * 4;
++      data[index] = Math.round(bank * 255);
++      data[index + 1] = Math.round(shore * 255);
++      data[index + 2] = Math.round((landHeight / 0.72) * 255);
++      data[index + 3] = Math.round(land * 255);
++    }
++  const texture = new T.DataTexture(data, size, size, T.RGBAFormat);
++  texture.magFilter = T.LinearFilter;
++  texture.minFilter = T.LinearFilter;
++  texture.needsUpdate = true;
++  return {
++    texture,
++    bounds: new T.Vector4(bounds.min.x, bounds.min.y, span.x, span.y),
++    shallowSegments: shallow.length,
++  };
++}
++export class CoastalWater {
++  mesh: T.Mesh;
++  mask: ReturnType<typeof coastalMask>;
++  constructor(level: Level, paths: Map<string, CanonicalPath>) {
++    this.mask = coastalMask(level, paths);
++    const material = new T.ShaderMaterial({
++      uniforms: {
++        time: { value: 0 },
++        waterY: { value: 0 },
++        coast: { value: this.mask.texture },
++        field: { value: this.mask.bounds },
++      },
++      vertexShader: `varying vec3 world;void main(){world=(modelMatrix*vec4(position,1.)).xyz;gl_Position=projectionMatrix*viewMatrix*vec4(world,1.);}`,
++      fragmentShader: `varying vec3 world;uniform float time;uniform float waterY;uniform sampler2D coast;uniform vec4 field;
++float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
++float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1.,0.)),f.x),mix(hash(i+vec2(0.,1.)),hash(i+vec2(1.,1.)),f.x),f.y);}
++void main(){
++vec2 p=world.xz;vec2 uv=(p-field.xy)/field.zw;vec4 bed=texture2D(coast,clamp(uv,0.,1.));
++float broad=noise(p*.27+vec2(time*.002,0.));
++float banks=clamp(bed.r*.7+bed.g*.4,0.,.9)*(1.-waterY*.65);
++vec3 c=mix(vec3(.135,.315,.382),vec3(.19,.375,.415),broad);
++c=mix(c,vec3(.34,.47,.405),banks);
++float submerged=bed.a*smoothstep(bed.b*.72-.07,bed.b*.72-.005,waterY);
++float depth=max(0.,waterY-bed.b*.72);
++c=mix(c,vec3(.30,.435,.39)*(.92+noise(p*1.3)*.14),submerged*.56*exp(-depth*1.2));
++vec2 cell=floor(p*vec2(.78,.92));vec2 q=fract(p*vec2(.78,.92))-.5;float seed=hash(cell);
++q.x+=sin(q.y*5.+seed*9.)*.11;
++float glint=exp(-pow(q.x*4.,2.)-pow(q.y*30.,2.))*step(.79,seed);
++glint*=.45+.55*pow(sin(time*.24+seed*13.)*.5+.5,2.);
++c+=glint*.037;gl_FragColor=vec4(c,1.);}`,
++    });
++    this.mesh = new T.Mesh(new T.PlaneGeometry(200, 200), material);
++    this.mesh.name = 'coastal-water';
++    this.mesh.rotation.x = -Math.PI / 2;
++    this.mesh.userData.excludeFromFrame = true;
++  }
++  update(waterY: number, time: number) {
++    this.mesh.position.y = waterY;
++    const material = this.mesh.material as T.ShaderMaterial;
++    material.uniforms.waterY.value = waterY;
++    material.uniforms.time.value = time;
++  }
++}
+diff --git a/src/scene/world.ts b/src/scene/world.ts
+index a5d0d07..1a7e22d 100644
+--- a/src/scene/world.ts
++++ b/src/scene/world.ts
+@@ -1,10 +1,14 @@
+ import * as T from 'three';
+ import { level as baseline, type Level } from '../levels/level';
+ import { draft, edgeTo, type State, type Action } from '../game/rules';
+-import { animal, ball, box, cylinder, ferry, lighthouse, mat, mesh, palette, pine } from './models';
++import { animal, ball, box, cylinder, ferry, lighthouse, mat, mesh, pine } from './models';
+ import { sampleJourney } from './motion';
+ import { sceneLayout, type SceneLayout } from './layout';
+-import { bellLandmark, cottage, reedClump } from './scenery';
++import { bellLandmark, cottage } from './scenery';
++import { getLevelPaths, type CanonicalPath } from './paths';
++import { Shores, createReedBeds } from './shore';
++import { CoastalWater } from './water';
++import { CrossingEffects } from './effects';
+ const V = (p: number[], y = 0) => new T.Vector3(p[0], y, p[1]);
+ const smooth = (t: number) => t * t * (3 - 2 * t);
+ export class World {
+@@ -24,6 +28,11 @@ export class World {
+   shadow: T.Mesh;
+   state: State;
+   layout: SceneLayout;
++  paths: Map<string, CanonicalPath>;
++  shores: Shores;
++  coastalWater: CoastalWater;
++  effects: CrossingEffects;
++  journeyFrame: { progress: number; distance: number; tangent: T.Vector3 } | null = null;
+   reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+   transition: null | {
+     before: State;
+@@ -33,7 +42,9 @@ export class World {
+     duration: number;
+     done: () => void;
+     positions: Map<string, T.Vector3>;
+-    path: T.Vector3[];
++    path: CanonicalPath | null;
++    edgeId: string | null;
++    reverse: boolean;
+     fromAngle: number;
+     fromHullY: number;
+   } = null;
+@@ -48,6 +59,7 @@ export class World {
+   ) {
+     this.state = state;
+     this.layout = sceneLayout(this.level.id);
++    this.paths = getLevelPaths(this.level);
+     this.renderer = new T.WebGLRenderer({ antialias: true, alpha: false });
+     this.renderer.setPixelRatio(Math.min(devicePixelRatio, 1.7));
+     this.renderer.shadowMap.enabled = true;
+@@ -62,8 +74,8 @@ export class World {
+     );
+     const light = this.layout.light;
+     this.scene.background = new T.Color(light?.background ?? '#245f70');
+-    this.scene.add(new T.HemisphereLight(light?.sky ?? '#fff1dc', light?.ground ?? '#5f8c9a', 1.8));
+-    const sun = new T.DirectionalLight(light?.sun ?? '#ffe0af', 2.8);
++    this.scene.add(new T.HemisphereLight(light?.sky ?? '#fff1dc', light?.ground ?? '#5f8c9a', 1.9));
++    const sun = new T.DirectionalLight(light?.sun ?? '#ffe0af', 2.4);
+     sun.position.set(...(light?.sunPosition ?? [-8, 16, 7]));
+     sun.castShadow = true;
+     sun.shadow.mapSize.set(2048, 2048);
+@@ -78,41 +90,19 @@ export class World {
+     sun.shadow.normalBias = 0.035;
+     sun.shadow.bias = -0.0003;
+     this.scene.add(sun);
+-    const shallowSegments = this.level.edges
+-      .filter((e) => e.baseDepth < 3)
+-      .flatMap((e) =>
+-        e.waypointsXZ
+-          .slice(1)
+-          .map(
+-            (b, i) =>
+-              new T.Vector4(...([...e.waypointsXZ[i], ...b] as [number, number, number, number])),
+-          ),
+-      );
+-    const shallowCount = shallowSegments.length;
+-    while (shallowSegments.length < 16) shallowSegments.push(new T.Vector4());
+-    const waterMat = new T.ShaderMaterial({
+-      uniforms: {
+-        time: { value: 0 },
+-        shallowSegments: { value: shallowSegments },
+-        shallowCount: { value: shallowCount },
+-      },
+-      vertexShader: `varying vec3 world; void main(){world=(modelMatrix*vec4(position,1.)).xyz;gl_Position=projectionMatrix*viewMatrix*vec4(world,1.);}`,
+-      fragmentShader: `varying vec3 world;uniform float time;uniform vec4 shallowSegments[16];uniform int shallowCount;
+-    float line(vec2 p,vec2 a,vec2 b){vec2 ab=b-a;return length(p-a-clamp(dot(p-a,ab)/dot(ab,ab),0.,1.)*ab);}
+-    void main(){vec2 p=world.xz;float d=100.;for(int i=0;i<16;i++){if(i>=shallowCount)break;vec4 s=shallowSegments[i];d=min(d,line(p,s.xy,s.zw));}
+-    float bank=exp(-d*d/.9)*.7;float n=sin(p.x*1.8+p.y*2.3)*sin(p.y*3.1-p.x*.7);vec3 c=mix(vec3(.12,.31,.38),vec3(.32,.65,.62),clamp(bank+n*.045,0.,1.));float ripple=smoothstep(.94,1.,sin(p.x*16.+p.y*24.+sin(p.x*2.)*2.+time*.7)*sin(p.y*11.-p.x*3.+time*.3));c+=ripple*.10;gl_FragColor=vec4(c,1.);}`,
+-    });
+-    this.water = new T.Mesh(new T.PlaneGeometry(200, 200), waterMat);
+-    this.water.rotation.x = -Math.PI / 2;
++    this.coastalWater = new CoastalWater(this.level, this.paths);
++    this.water = this.coastalWater.mesh;
+     this.scene.add(this.water);
+     this.shadow = new T.Mesh(
+       new T.PlaneGeometry(40, 40),
+-      new T.ShadowMaterial({ color: '#123c41', opacity: 0.2 }),
++      new T.ShadowMaterial({ color: '#123c41', opacity: 0.16 }),
+     );
+     this.shadow.rotation.x = -Math.PI / 2;
+     this.shadow.position.y = 0.008;
+     this.shadow.receiveShadow = true;
+     this.scene.add(this.shadow);
++    this.shores = new Shores(this.level, this.layout.islandStyles);
++    this.scene.add(this.shores.group, this.shores.contacts);
+     for (const island of this.level.world.islands) this.island(island);
+     for (const p of this.level.piers) {
+       const [x, z] = p.positionXZ,
+@@ -150,7 +140,7 @@ export class World {
+       else bellLandmark(this.scene, [x, y, z]);
+     }
+     for (const e of this.level.edges) {
+-      const pts = e.waypointsXZ.map((p) => V(p, 0.035));
++      const pts = this.paths.get(e.id)!.points.map((p) => p.clone().setY(0.035));
+       const geom = new T.BufferGeometry().setFromPoints(pts);
+       const line = new T.Line(
+         geom,
+@@ -203,31 +193,10 @@ export class World {
+         cylinder(g, '#eee2bc', 0.025, 0.025, 0.25, [0, 0.28, 0], 7);
+       }
+     }
+-    for (const island of this.level.world.islands) {
+-      const points = island.footprintXZ;
+-      const cx = points.reduce((n, p) => n + p[0], 0) / points.length,
+-        cz = points.reduce((n, p) => n + p[1], 0) / points.length;
+-      for (let i = 0; i < points.length; i++) {
+-        const a = points[i],
+-          b = points[(i + 1) % points.length];
+-        for (let j = 0; j < 8; j++) {
+-          const t = j / 8,
+-            x = a[0] + (b[0] - a[0]) * t,
+-            z = a[1] + (b[1] - a[1]) * t;
+-          const v = new T.Vector2(x - cx, z - cz).normalize();
+-          const foam = box(
+-            this.scene,
+-            '#a2cfca',
+-            [0.09 + (j % 3) * 0.04, 0.009, 0.025],
+-            [x + v.x * 0.035, 0.025, z + v.y * 0.035],
+-            0.005,
+-          );
+-          foam.rotation.y = Math.atan2(b[0] - a[0], b[1] - a[1]) + Math.PI / 2;
+-        }
+-      }
+-    }
++    this.effects = new CrossingEffects(this.scene.getObjectByName('lighthouse')!);
++    this.scene.add(this.effects.wake, this.effects.glow);
++    this.forecast = this.shores.forecast;
+     this.scene.add(this.forecast);
+-    this.makeForecast();
+     this.boatRoot.add(this.hull);
+     this.scene.add(this.boatRoot);
+     for (const p of this.level.passengers) {
+@@ -329,60 +298,6 @@ export class World {
+       cz = points.reduce((a, p) => a + p[1], 0) / points.length;
+     const height = island.elevation * 0.18;
+     const style = this.layout.islandStyles[island.id] ?? 'garden';
+-    const colors =
+-      style === 'reeds'
+-        ? ['#e5d6ad', '#b8b79b', '#e7d6ac', '#c5bd91']
+-        : style === 'rocky'
+-          ? ['#bdbaa3', '#788d88', '#abb3a1', '#909e86']
+-          : ['#d9c79b', '#86958a', '#e0cfa7', palette.grass];
+-    for (const [scale, y, color] of [
+-      [0.98, -0.15, colors[0]],
+-      [0.94, 0.02, colors[1]],
+-      [0.89, height - 0.18, colors[2]],
+-      [0.83, height - 0.17, colors[3]],
+-    ] as [number, number, string][]) {
+-      const shape = new T.Shape();
+-      const ps = points.map(
+-        (p) => new T.Vector2(cx + (p[0] - cx) * scale, -cz - (p[1] - cz) * scale),
+-      );
+-      const first = ps[0].clone().lerp(ps[1], 0.5);
+-      shape.moveTo(first.x, first.y);
+-      for (let i = 1; i <= ps.length; i++) {
+-        const a = ps[i % ps.length],
+-          b = ps[(i + 1) % ps.length];
+-        const m = a.clone().lerp(b, 0.5);
+-        shape.quadraticCurveTo(a.x, a.y, m.x, m.y);
+-      }
+-      shape.closePath();
+-      const geo = new T.ExtrudeGeometry(shape, {
+-        depth: 0.14,
+-        bevelEnabled: true,
+-        bevelSegments: 3,
+-        bevelSize: 0.015,
+-        bevelThickness: 0.025,
+-        curveSegments: 8,
+-      });
+-      geo.rotateX(-Math.PI / 2);
+-      mesh(geo, color, this.scene, 0, y, 0);
+-    }
+-    for (let i = 0; i < points.length; i++) {
+-      if (style === 'reeds' && i % 2 === 1) continue;
+-      const a = points[i],
+-        b = points[(i + 1) % points.length];
+-      const x = cx + ((a[0] + b[0]) / 2 - cx) * 0.77,
+-        z = cz + ((a[1] + b[1]) / 2 - cz) * 0.77;
+-      const r = mesh(
+-        new T.DodecahedronGeometry(0.4, 0),
+-        i % 2 ? '#748780' : '#929e8c',
+-        this.scene,
+-        x,
+-        height + 0.04,
+-        z,
+-      );
+-      r.scale.set(0.85, 0.7 + (i % 3) * 0.23, 0.75);
+-      if (style === 'reeds') r.scale.multiplyScalar(0.55);
+-      r.rotation.set(i * 0.8, i * 0.9, 0.2);
+-    }
+     if (style === 'crag') {
+       const rock = mesh(
+         new T.DodecahedronGeometry(0.85, 0),
+@@ -397,38 +312,12 @@ export class World {
+       pine(this.scene, 0.7, height, 2.5, 1.05);
+       pine(this.scene, -1.1, height, 2.7, 0.55);
+     } else if (style === 'reeds') {
+-      for (let i = 0; i < points.length; i++) {
+-        const a = points[i],
+-          b = points[(i + 1) % points.length];
+-        for (let j = 0; j < 3; j++) {
+-          const t = (j + 0.5) / 3;
+-          const x = cx + (a[0] + (b[0] - a[0]) * t - cx) * 0.84;
+-          const z = cz + (a[1] + (b[1] - a[1]) * t - cz) * 0.84;
+-          if (Math.abs(x - cx) < 0.5 && z > cz) continue;
+-          reedClump(this.scene, x, height + 0.015, z, i + j * 0.7);
+-        }
+-      }
++      this.scene.add(createReedBeds(island));
+       for (const x of [-0.8, 0.9])
+-        ball(this.scene, '#d9ca9f', [cx + x, height + 0.02, cz], [0.6, 0.075, 0.34]);
++        ball(this.scene, '#c3ba93', [cx + x, height - 0.07, cz], [0.6, 0.045, 0.34]);
+     } else if (style === 'rocky') {
+       pine(this.scene, cx - 1.05, height, cz - 0.35, 0.68);
+       pine(this.scene, cx + 1.02, height, cz - 0.3, 0.43);
+-      for (const [x, z, scale] of [
+-        [-1.04, 0.14, 0.56],
+-        [1.12, 0.27, 0.43],
+-        [-0.65, -0.55, 0.45],
+-      ]) {
+-        const rock = mesh(
+-          new T.DodecahedronGeometry(scale, 0),
+-          '#8b9c94',
+-          this.scene,
+-          cx + x,
+-          height + scale * 0.27,
+-          cz + z,
+-        );
+-        rock.scale.set(1, 0.72, 0.85);
+-        rock.rotation.y = x;
+-      }
+     } else {
+       pine(this.scene, cx - 1.05, height, cz - 0.28, 0.85);
+       pine(this.scene, cx + 0.92, height, cz - 0.55, 0.65);
+@@ -467,22 +356,9 @@ export class World {
+         box(this.scene, '#d1ae74', [0.25, 0.027, 0.027], [x, height + 0.2, cz + 0.78]);
+       }
+   }
+-  makeForecast() {
+-    for (const island of this.level.world.islands) {
+-      const pts = island.footprintXZ.map((p) => V(p, 0.195));
+-      pts.push(pts[0].clone());
+-      const line = new T.Line(
+-        new T.BufferGeometry().setFromPoints(pts),
+-        new T.LineDashedMaterial({ color: '#ffe3a2', dashSize: 0.13, gapSize: 0.09 }),
+-      );
+-      line.computeLineDistances();
+-      this.forecast.add(line);
+-    }
+-    this.forecast.visible = false;
+-  }
+   setForecast(visible: boolean, tide: number) {
+     this.forecast.visible = visible;
+-    this.forecast.position.y = (tide - 1) * 0.18;
++    this.shores.preview(visible, tide);
+   }
+   project(p: number[]) {
+     const v = V(p, 0.06).project(this.camera);
+@@ -528,6 +404,7 @@ export class World {
+           object === this.shadow ||
+           object === this.boatRoot ||
+           object === this.forecast ||
++          object.userData.excludeFromFrame ||
+           [...this.animals.values()].includes(object as T.Group)
+         )
+           continue;
+@@ -586,9 +463,13 @@ export class World {
+   draftY(s: State) {
+     return 0.03 - (draft(s, this.level) - 1) * 0.075;
+   }
+-  sync(s: State) {
++  sync(s: State, preserveEffects = false) {
+     this.state = s;
+-    this.water.position.y = s.tideLevel * 0.18;
++    this.coastalWater.update(s.tideLevel * 0.18, this.reduced ? 0 : this.lastTime * 0.001);
++    this.shores.update(this.water.position.y);
++    this.setForecast(false, s.tideLevel);
++    if (!preserveEffects) this.effects.reset();
++    if (s.status === 'won') this.effects.arrive(this.lastTime, this.reduced);
+     this.shadow.position.y = this.water.position.y + 0.008;
+     const n = this.level.nodes.find((n) => n.id === s.boatNodeId)!;
+     this.boatRoot.position.copy(V(n.positionXZ, s.tideLevel * 0.18));
+@@ -673,13 +554,22 @@ export class World {
+     );
+     for (const [id, g] of this.animals)
+       if (before.aboard.includes(id) && !after.aboard.includes(id)) this.scene.attach(g);
+-    let path: T.Vector3[] = [];
++    let path: CanonicalPath | null = null;
++    let edgeId: string | null = null;
++    let reverse = false;
+     if (action.type === 'move') {
+       const edge = edgeTo(before, action.to, this.level)!;
+-      const points =
+-        edge.nodes[0] === before.boatNodeId ? edge.waypointsXZ : [...edge.waypointsXZ].reverse();
+-      path = points.map((p) => V(p, before.tideLevel * 0.18));
++      edgeId = edge.id;
++      reverse = edge.nodes[0] !== before.boatNodeId;
++      path = this.paths.get(edge.id)!;
+     }
++    this.journeyFrame = path
++      ? {
++          progress: 0,
++          distance: 0,
++          tangent: sampleJourney(path, 0, this.boatRoot.rotation.y, reverse).tangent,
++        }
++      : null;
+     this.transition = {
+       before,
+       after,
+@@ -695,6 +585,8 @@ export class World {
+       done,
+       positions,
+       path,
++      edgeId,
++      reverse,
+       fromAngle: this.boatRoot.rotation.y,
+       fromHullY: this.hull.position.y,
+     };
+@@ -703,6 +595,7 @@ export class World {
+     if (this.transition) {
+       const t = this.transition;
+       this.transition = null;
++      this.journeyFrame = null;
+       this.sync(t.after);
+       this.renderer.render(this.scene, this.camera);
+       t.done();
+@@ -711,8 +604,6 @@ export class World {
+   tick(time: number) {
+     this.frame++;
+     this.lastTime = time;
+-    const waterMat = this.water.material as T.ShaderMaterial;
+-    waterMat.uniforms.time.value = this.reduced ? 0 : time * 0.001;
+     if (this.transition) {
+       const tr = this.transition;
+       const t = Math.min(1, (time - tr.start) / tr.duration),
+@@ -722,10 +613,11 @@ export class World {
+         tr.after.tideLevel * 0.18,
+         k,
+       );
+-      if (tr.path.length) {
+-        const pose = sampleJourney(tr.path, t, tr.fromAngle);
++      if (tr.path) {
++        const pose = sampleJourney(tr.path, t, tr.fromAngle, tr.reverse);
+         this.boatRoot.position.copy(pose.position);
+         this.boatRoot.rotation.y = pose.angle;
++        this.journeyFrame = { progress: t, distance: pose.distance, tangent: pose.tangent };
+       }
+       this.boatRoot.position.y = this.water.position.y;
+       this.hull.position.y = T.MathUtils.lerp(tr.fromHullY, this.draftY(tr.after), k);
+@@ -764,15 +656,29 @@ export class World {
+         }
+       }
+       this.shadow.position.y = this.water.position.y + 0.008;
++      if (tr.after.status === 'won' && t > 0.7) this.effects.arrive(time, this.reduced);
+       if (t === 1) {
+         this.transition = null;
+-        this.sync(tr.after);
++        this.journeyFrame = null;
++        this.sync(tr.after, true);
+         tr.done();
+       }
+     } else {
+       this.hull.position.y =
+         this.draftY(this.state) + (this.reduced ? 0 : Math.sin(time * 0.0018) * 0.012);
+     }
++    this.coastalWater.update(this.water.position.y, this.reduced ? 0 : time * 0.001);
++    this.shores.update(this.water.position.y);
++    for (const route of this.routes.values()) route.position.y = this.water.position.y;
++    for (const marker of this.markers.values()) marker.position.y = this.water.position.y + 0.04;
++    this.effects.update(
++      time,
++      this.boatRoot.position,
++      this.boatRoot.rotation.y,
++      !!this.transition?.path,
++      this.water.position.y,
++      this.reduced,
++    );
+     this.renderer.render(this.scene, this.camera);
+     requestAnimationFrame((t) => this.tick(t));
+   }
+@@ -785,6 +691,60 @@ export class World {
+       pixelRatio: this.renderer.getPixelRatio(),
+     };
+   }
++  environmentPresentation() {
++    const material = this.water.material as T.ShaderMaterial;
++    return {
++      waterY: this.water.position.y,
++      waterUniformY: material.uniforms.waterY.value as number,
++      waterTime: material.uniforms.time.value as number,
++      maskSize: [
++        this.coastalWater.mask.texture.image.width,
++        this.coastalWater.mask.texture.image.height,
++      ],
++      shallowSegments: this.coastalWater.mask.shallowSegments,
++      reducedMotion: this.reduced,
++      shores: this.shores.presentation(),
++      forecast: {
++        visible: this.forecast.visible,
++        tideY: this.shores.forecastY,
++        groups: this.forecast.children.map((group) => ({
++          name: group.name,
++          visible: group.visible,
++          contours: group.children.map((object) => ({
++            name: object.name,
++            positions: Array.from(
++              ((object as T.Line).geometry.getAttribute('position') as T.BufferAttribute).array,
++            ),
++          })),
++        })),
++      },
++      ...this.effects.presentation(),
++    };
++  }
++  journeyPresentation() {
++    const transition = this.transition;
++    return {
++      boatWorldPosition: this.boatRoot.getWorldPosition(new T.Vector3()).toArray(),
++      boatHeading: this.boatRoot.rotation.y,
++      active:
++        transition?.path && this.journeyFrame
++          ? {
++              edgeId: transition.edgeId,
++              reverse: transition.reverse,
++              progress: this.journeyFrame.progress,
++              distance: this.journeyFrame.distance,
++              pathLength: transition.path.length,
++              tangent: this.journeyFrame.tangent.toArray(),
++            }
++          : null,
++      routeBuffers: [...this.routes].map(([id, route]) => ({
++        id,
++        pointsXYZ: Array.from((route.geometry.getAttribute('position') as T.BufferAttribute).array),
++        position: route.position.toArray(),
++        canonicalPoints: this.paths.get(id)!.points.map((point) => point.toArray()),
++      })),
++    };
++  }
+   passengerPresentation() {
+     return [...this.animals].map(([id, g]) => {
+       const position = g.getWorldPosition(new T.Vector3());
+diff --git a/tests/e2e/environment.spec.ts b/tests/e2e/environment.spec.ts
+new file mode 100644
+index 0000000..967cec4
+--- /dev/null
++++ b/tests/e2e/environment.spec.ts
+@@ -0,0 +1,371 @@
++import { test, expect, type Page } from '@playwright/test';
++import { mkdirSync, writeFileSync } from 'node:fs';
++import { reviewDir } from './evidence';
++import { act, ready, state, idle, undo, restart } from './ui';
++
++const environment = (page: Page) =>
++  page.evaluate(() => (window as any).__LAST_FERRY__.getEnvironmentStatus());
++const journey = (page: Page) =>
++  page.evaluate(() => (window as any).__LAST_FERRY__.getJourneyStatus());
++const holding = [
++  'unload',
++  'map-shallows',
++  'map-rabbit-pier',
++  'board',
++  'map-shallows',
++  'map-stone',
++  'board',
++  'map-harbor',
++  'unload',
++];
++const bellwater = [
++  'map-shallows',
++  'map-low-pier',
++  'board',
++  'map-east-buoy',
++  'map-west-buoy',
++  'map-harbor',
++  'map-bell-pier',
++  'board',
++  'map-harbor',
++  'map-west-buoy',
++  'map-east-buoy',
++  'map-west-buoy',
++  'map-harbor',
++  'unload',
++];
++
++function nearestCourse(position: number[], route: any) {
++  let nearest = { distance: Infinity, direction: [0, 0] };
++  const points: number[] = route.pointsXYZ;
++  for (let i = 3; i < points.length; i += 3) {
++    const ax = points[i - 3] + route.position[0],
++      az = points[i - 1] + route.position[2];
++    const dx = points[i] - points[i - 3],
++      dz = points[i + 2] - points[i - 1];
++    const length = Math.hypot(dx, dz);
++    if (!length) continue;
++    const t = Math.max(
++      0,
++      Math.min(1, ((position[0] - ax) * dx + (position[2] - az) * dz) / length ** 2),
++    );
++    const distance = Math.hypot(position[0] - ax - t * dx, position[2] - az - t * dz);
++    if (distance < nearest.distance) nearest = { distance, direction: [dx / length, dz / length] };
++  }
++  return nearest;
++}
++function coastIsAtWater(view: any, tide: number) {
++  expect(view.waterY).toBeCloseTo(tide * 0.18, 6);
++  expect(view.waterUniformY).toBeCloseTo(view.waterY, 6);
++  expect(view.shores.waterY).toBeCloseTo(view.waterY, 6);
++  expect(view.maskSize).toEqual([256, 256]);
++  expect(view.shallowSegments).toBeGreaterThan(16);
++  expect(view.shores.contactVertices).toBeGreaterThan(0);
++  for (let i = 1; i < view.shores.contactPositions.length; i += 3)
++    expect(view.shores.contactPositions[i]).toBeCloseTo(view.waterY + 0.012, 5);
++  for (const island of view.shores.islands) {
++    expect(island.geometryVertices).toBeGreaterThan(20);
++    expect(island.rockCount).toBeGreaterThan(0);
++    if (island.surfaceY <= view.waterY) {
++      expect(island.mode).toBe('submerged');
++      expect(island.contactScale).toBeNull();
++      expect(island.contactVisible).toBe(false);
++      expect(island.submergedFraction).toBe(1);
++    } else {
++      expect(island.mode).toBe(tide ? 'wet' : 'exposed');
++      expect(island.contactScale).toBeGreaterThan(0);
++      expect(island.contactVisible).toBe(true);
++    }
++  }
++}
++async function startSamples(page: Page) {
++  await page.evaluate(() => {
++    const target = window as any;
++    target.__environmentSamples = [];
++    target.__environmentSampling = true;
++    function sample(time: number) {
++      if (!target.__environmentSampling) return;
++      const course = target.__LAST_FERRY__.getJourneyStatus();
++      const view = target.__LAST_FERRY__.getEnvironmentStatus();
++      if (course.active)
++        target.__environmentSamples.push({
++          time,
++          turn: target.__LAST_FERRY__.getState().turn,
++          pose: course.boatWorldPosition,
++          heading: course.boatHeading,
++          active: course.active,
++          routes: course.routeBuffers.map((route: any) => ({
++            id: route.id,
++            position: route.position,
++            y: route.pointsXYZ[1],
++          })),
++          waterY: view.waterY,
++          waterUniformY: view.waterUniformY,
++          wake: view.wake,
++        });
++      requestAnimationFrame(sample);
++    }
++    requestAnimationFrame(sample);
++  });
++}
++async function stopSamples(page: Page) {
++  return page.evaluate(() => {
++    (window as any).__environmentSampling = false;
++    return (window as any).__environmentSamples as any[];
++  });
++}
++async function arrivalIsVisible(page: Page, reduced: boolean) {
++  const view = await environment(page);
++  expect(view.arrival.active).toBe(true);
++  expect(view.arrival.intensity).toBeGreaterThan(0);
++  expect(view.arrival.lampIntensity).toBeGreaterThan(view.arrival.intensity);
++  expect(view.arrival.emissiveIntensity).toBeCloseTo(view.arrival.intensity, 6);
++  expect(view.arrival.glowVisible).toBe(true);
++  expect(view.arrival.glowOpacity).toBeGreaterThan(0);
++  if (reduced) expect(view.arrival.intensity).toBe(0.45);
++  return view;
++}
++async function effectsAreClear(page: Page) {
++  const view = await environment(page);
++  expect(view.wake).toMatchObject({ emitting: false, visible: false, vertices: 0, points: [] });
++  expect(view.arrival).toMatchObject({
++    active: false,
++    intensity: 0,
++    emissiveIntensity: 0,
++    glowVisible: false,
++    glowOpacity: 0,
++  });
++  expect(view.forecast.visible).toBe(false);
++  expect(view.forecast.groups.filter((group: any) => group.visible)).toEqual([]);
++}
++
++test('environment: visible curved courses carry the ferry, tangent and fading wake both ways', async ({
++  page,
++}) => {
++  test.setTimeout(120000);
++  mkdirSync(`${reviewDir}/raw`, { recursive: true });
++  const errors: string[] = [];
++  page.on('pageerror', (error) => errors.push(error.message));
++  await ready(page, 'bellwater');
++  const original = await journey(page);
++  const buffers = new Map<string, any>(
++    original.routeBuffers.map((route: any) => [route.id, route]),
++  );
++  await startSamples(page);
++  for (let i = 0; i < bellwater.length; i++) {
++    await act(page, bellwater[i]);
++    expect((await state(page)).turn).toBe(i + 1);
++    if (i === 3 || i === 8) {
++      await page.locator(i === 3 ? '#inspect-west-buoy' : '#inspect-bell-pier').click();
++      const highlighted = await journey(page);
++      for (const route of highlighted.routeBuffers)
++        expect(route.pointsXYZ).toEqual(buffers.get(route.id).pointsXYZ);
++      await page.locator('#cancel').click();
++    }
++    if (i === 3) {
++      expect((await environment(page)).wake.emitting).toBe(false);
++      await page.waitForFunction(
++        () => !(window as any).__LAST_FERRY__.getEnvironmentStatus().wake.visible,
++      );
++      expect((await state(page)).turn).toBe(4);
++    }
++    expect((await journey(page)).boatHeading).toBeCloseTo(Math.PI / 2, 6);
++  }
++  const samples = await stopSamples(page);
++  expect(samples.length).toBeGreaterThan(20);
++  for (const edge of ['harbor-bell', 'west-east'])
++    for (const reverse of [false, true]) {
++      const crossing = samples.filter(
++        (sample) => sample.active.edgeId === edge && sample.active.reverse === reverse,
++      );
++      expect(crossing.length, `${edge} reverse=${reverse}`).toBeGreaterThanOrEqual(2);
++      expect(crossing.some((sample) => sample.wake.emitting)).toBe(true);
++      expect(crossing.some((sample) => sample.wake.visible && sample.wake.vertices > 0)).toBe(true);
++    }
++  for (const sample of samples) {
++    const route: any = buffers.get(sample.active.edgeId);
++    const nearest = nearestCourse(sample.pose, route);
++    expect(nearest.distance).toBeLessThan(0.0001);
++    expect(sample.pose[1]).toBeCloseTo(sample.waterY, 5);
++    expect(sample.waterUniformY).toBeCloseTo(sample.waterY, 6);
++    for (const visible of sample.routes)
++      expect(visible.y + visible.position[1]).toBeCloseTo(sample.waterY + 0.035, 5);
++    if (sample.active.distance > 1.05 && sample.active.pathLength - sample.active.distance > 1.05) {
++      const sign = sample.active.reverse ? -1 : 1;
++      const aligned =
++        sign *
++        (Math.sin(sample.heading) * nearest.direction[0] +
++          Math.cos(sample.heading) * nearest.direction[1]);
++      expect(aligned).toBeGreaterThan(0.98);
++    }
++    for (let i = 1; i < sample.wake.positions.length; i += 3)
++      expect(sample.wake.positions[i]).toBeCloseTo(sample.waterY + 0.018, 5);
++    for (const point of sample.wake.points)
++      expect(nearestCourse(point.position, route).distance).toBeLessThanOrEqual(0.721);
++    for (const opacity of sample.wake.opacity) {
++      expect(opacity).toBeGreaterThanOrEqual(0);
++      expect(opacity).toBeLessThanOrEqual(0.181);
++    }
++  }
++  for (const turn of new Set(samples.map((sample) => sample.turn))) {
++    const crossing = samples.filter((sample) => sample.turn === turn);
++    for (let i = 1; i < crossing.length; i++) {
++      expect(crossing[i].active.progress).toBeGreaterThanOrEqual(crossing[i - 1].active.progress);
++      expect(crossing[i].active.distance).toBeGreaterThanOrEqual(crossing[i - 1].active.distance);
++    }
++  }
++  expect(await state(page)).toMatchObject({
++    turn: 14,
++    tideLevel: 2,
++    status: 'won',
++    delivered: ['tansy', 'lark', 'bram'],
++  });
++  await arrivalIsVisible(page, false);
++  await page.waitForFunction(
++    () => !(window as any).__LAST_FERRY__.getEnvironmentStatus().wake.visible,
++  );
++  await page.screenshot({ path: `${reviewDir}/environment-journeys-arrival.png` });
++  writeFileSync(
++    `${reviewDir}/environment-journey-samples.json`,
++    JSON.stringify(
++      { source: 'current browser runtime; see source-manifest.json', samples },
++      null,
++      2,
++    ),
++  );
++  await undo(page);
++  await effectsAreClear(page);
++  expect((await state(page)).turn).toBe(13);
++  expect(errors).toEqual([]);
++  const video = page.video();
++  await page.close();
++  if (video) await video.saveAs(`${reviewDir}/raw/environment-journeys.webm`);
++});
++
++test('environment: shores, free forecast and complete Undo follow both tide boundaries', async ({
++  page,
++}) => {
++  await ready(page, 'holding-pier');
++  const initial = await state(page),
++    shores = (await environment(page)).shores;
++  coastIsAtWater(await environment(page), 0);
++  const ordinary = (await journey(page)).routeBuffers;
++  await page.locator('#inspect-shallows').click();
++  expect((await journey(page)).routeBuffers).toEqual(ordinary);
++  expect(await state(page)).toEqual(initial);
++  await page.locator('#cancel').click();
++  await page.locator('#status-toggle').click();
++  const preview = await environment(page);
++  expect(await state(page)).toEqual(initial);
++  expect(preview.waterY).toBe(0);
++  expect(preview.forecast.visible).toBe(true);
++  expect(preview.forecast.tideY).toBe(0.18);
++  const visible = preview.forecast.groups.filter((group: any) => group.visible);
++  expect(visible).toHaveLength(1);
++  expect(visible[0].name).toBe('forecast-tide-1');
++  for (const contour of visible[0].contours)
++    for (let i = 1; i < contour.positions.length; i += 3)
++      expect(contour.positions[i]).toBeCloseTo(0.193, 5);
++  await page.locator('#cancel').click();
++  await effectsAreClear(page);
++  const states = [initial],
++    views = [shores];
++  for (let i = 0; i < holding.length; i++) {
++    await act(page, holding[i]);
++    states.push(await state(page));
++    views.push((await environment(page)).shores);
++    coastIsAtWater(await environment(page), i < 3 ? 0 : i < 7 ? 1 : 2);
++    if (i === 3 || i === 7) {
++      await undo(page);
++      expect(await state(page)).toEqual(states[i]);
++      expect((await environment(page)).shores).toEqual(views[i]);
++      await effectsAreClear(page);
++      await act(page, holding[i]);
++      expect(await state(page)).toEqual(states[i + 1]);
++    }
++  }
++  await arrivalIsVisible(page, false);
++  for (let i = holding.length - 1; i >= 0; i--) {
++    await undo(page);
++    expect(await state(page)).toEqual(states[i]);
++    expect((await environment(page)).shores).toEqual(views[i]);
++    await effectsAreClear(page);
++  }
++  expect(await state(page)).toEqual(initial);
++});
++
++test('environment: interrupted travel, restart and changing cove clear transient effects', async ({
++  page,
++}) => {
++  await ready(page, 'bellwater');
++  await page.locator('#map-west-buoy').click();
++  await page.waitForFunction(
++    () => (window as any).__LAST_FERRY__.getJourneyStatus().active !== null,
++  );
++  await page.evaluate(() => {
++    Object.defineProperty(document, 'hidden', { configurable: true, value: true });
++    document.dispatchEvent(new Event('visibilitychange'));
++  });
++  await idle(page);
++  expect(await state(page)).toMatchObject({ turn: 1, boatNodeId: 'west-buoy' });
++  expect((await journey(page)).active).toBeNull();
++  await effectsAreClear(page);
++  await page.evaluate(() => {
++    Object.defineProperty(document, 'hidden', { configurable: true, value: false });
++  });
++  await undo(page);
++  expect((await state(page)).turn).toBe(0);
++  await effectsAreClear(page);
++  await act(page, 'map-west-buoy');
++  await restart(page);
++  expect(await state(page)).toMatchObject({ turn: 0, boatNodeId: 'harbor' });
++  await effectsAreClear(page);
++  await page.locator('#menu').click();
++  await page.locator('#cove-picker').selectOption('holding-pier');
++  await page.waitForFunction(() => (window as any).__LAST_FERRY__?.getEnvironmentStatus);
++  await idle(page);
++  expect(await state(page)).toMatchObject({ turn: 0, boatNodeId: 'stone', aboard: ['sheep-1'] });
++  await effectsAreClear(page);
++  coastIsAtWater(await environment(page), 0);
++});
++
++test('environment: reduced motion keeps calm water, no wake and stable warm arrival', async ({
++  page,
++}) => {
++  await page.emulateMedia({ reducedMotion: 'reduce' });
++  await ready(page, 'holding-pier');
++  const before = await environment(page);
++  expect(before.reducedMotion).toBe(true);
++  expect(before.waterTime).toBe(0);
++  await startSamples(page);
++  for (const id of holding) {
++    await act(page, id);
++    const view = await environment(page);
++    expect(view.waterTime).toBe(0);
++    expect(view.wake).toMatchObject({ emitting: false, visible: false, vertices: 0, points: [] });
++  }
++  const samples = await stopSamples(page);
++  for (const sample of samples)
++    expect(sample.wake).toMatchObject({ emitting: false, visible: false, vertices: 0, points: [] });
++  expect((await state(page)).status).toBe('won');
++  await arrivalIsVisible(page, true);
++  const observations = await page.evaluate(async () => {
++    const views = [];
++    for (let i = 0; i < 5; i++) {
++      await new Promise(requestAnimationFrame);
++      const view = (window as any).__LAST_FERRY__.getEnvironmentStatus();
++      views.push({ waterTime: view.waterTime, arrival: view.arrival, wake: view.wake });
++    }
++    return views;
++  });
++  for (const view of observations) {
++    expect(view.waterTime).toBe(0);
++    expect(view.arrival.intensity).toBe(0.45);
++    expect(view.wake).toMatchObject({ emitting: false, visible: false, vertices: 0 });
++  }
++  await undo(page);
++  await effectsAreClear(page);
++  await restart(page);
++  expect((await state(page)).turn).toBe(0);
++  await effectsAreClear(page);
++});
+diff --git a/tests/unit/clearance.test.ts b/tests/unit/clearance.test.ts
+index 1355f6e..0e36851 100644
+--- a/tests/unit/clearance.test.ts
++++ b/tests/unit/clearance.test.ts
+@@ -1,8 +1,11 @@
+ import { test, expect } from 'vitest';
+-import { Mesh, Vector3 } from 'three';
++import { InstancedMesh, Matrix4, Mesh, Vector3 } from 'three';
+ import { ferry } from '../../src/scene/models';
+ import { sampleJourney } from '../../src/scene/motion';
++import { getLevelPaths } from '../../src/scene/paths';
+ import { level, holdingPier, bellwater } from '../../src/levels/level';
++import { sceneLayout } from '../../src/scene/layout';
++import { buildCoastGeometry, createReedBeds, createShoreRocks } from '../../src/scene/shore';
+ type P = [number, number];
+ const cross = (a: P, b: P, c: P) => (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]);
+ function convex(points: P[]) {
+@@ -44,6 +47,13 @@ function overlaps(a: P[], b: P[]) {
+     )
+   );
+ }
++function segmentDistance(p: P, a: P, b: P) {
++  const x = b[0] - a[0],
++    z = b[1] - a[1],
++    span = x * x + z * z;
++  const t = span ? Math.max(0, Math.min(1, ((p[0] - a[0]) * x + (p[1] - a[1]) * z) / span)) : 0;
++  return Math.hypot(p[0] - a[0] - t * x, p[1] - a[1] - t * z);
++}
+ test.each([level, holdingPier, bellwater])(
+   '$id: actual modeled ferry footprint clears all land and pier decks along both directions and yaw turns',
+   (level) => {
+@@ -73,14 +83,14 @@ test.each([level, holdingPier, bellwater])(
+         })),
+       ];
+     const failures: string[] = [];
+-    const samples = level.id === 'bellwater' ? 1000 : 100;
++    const marginFailures: string[] = [];
++    const samples = 1000;
++    const paths = getLevelPaths(level);
+     for (const edge of level.edges)
+       for (const reverse of [false, true]) {
+-        const path = (reverse ? [...edge.waypointsXZ].reverse() : edge.waypointsXZ).map(
+-          (p) => new Vector3(p[0], 0, p[1]),
+-        );
++        const path = paths.get(edge.id)!;
+         for (let frame = 0; frame <= samples; frame++) {
+-          const pose = sampleJourney(path, frame / samples);
++          const pose = sampleJourney(path, frame / samples, Math.PI / 2, reverse);
+           const hull = footprint.map(([x, z]) => {
+             const v = new Vector3(x, 0, z)
+               .applyAxisAngle(new Vector3(0, 1, 0), pose.angle)
+@@ -92,8 +102,96 @@ test.each([level, holdingPier, bellwater])(
+               failures.push(
+                 `${edge.id}/${reverse ? 'reverse' : 'forward'} frame ${frame}: ${exclusion.id}`,
+               );
++          const center: P = [pose.position.x, pose.position.z];
++          for (const exclusion of exclusions) {
++            const margin = Math.min(
++              ...exclusion.polygon.map((p, i) =>
++                segmentDistance(center, p, exclusion.polygon[(i + 1) % exclusion.polygon.length]),
++              ),
++            );
++            if (
++              margin < level.world.requiredRouteClearance - 1e-6 ||
++              inside(center, exclusion.polygon)
++            )
++              marginFailures.push(
++                `${edge.id}/${reverse ? 'reverse' : 'forward'} frame ${frame}: ${exclusion.id} margin ${margin}`,
++              );
++          }
+         }
+       }
+     expect(failures).toEqual([]);
++    expect(marginFailures).toEqual([]);
++  },
++);
++
++test.each([level, holdingPier, bellwater])(
++  '$id: actual refined coasts, rocks and reeds stay inside the validated land envelope',
++  (level) => {
++    const failures: string[] = [];
++    for (const island of level.world.islands) {
++      const style = sceneLayout(level.id).islandStyles[island.id] ?? 'garden',
++        coast = buildCoastGeometry(island, style),
++        rocks = createShoreRocks(island, style),
++        polygon = island.footprintXZ as P[];
++      function check(v: Vector3, source: string) {
++        const p: P = [v.x, v.z];
++        if (
++          !inside(p, polygon) &&
++          Math.min(
++            ...polygon.map((a, i) => segmentDistance(p, a, polygon[(i + 1) % polygon.length])),
++          ) > 1e-6
++        )
++          failures.push(`${island.id}/${source}: ${p.join(',')}`);
++      }
++      const positions = coast.getAttribute('position');
++      for (let i = 0; i < positions.count; i++)
++        check(new Vector3().fromBufferAttribute(positions, i), 'coast vertex');
++      const indices = coast.getIndex()!;
++      for (let i = 0; i < indices.count; i += 3) {
++        const triangle = [0, 1, 2].map((j) =>
++          new Vector3().fromBufferAttribute(positions, indices.getX(i + j)),
++        );
++        for (let j = 0; j < 3; j++)
++          for (const t of [0.25, 0.5, 0.75])
++            check(
++              new Vector3().lerpVectors(triangle[j], triangle[(j + 1) % 3], t),
++              'coast triangle',
++            );
++      }
++      const rockPositions = rocks.geometry.getAttribute('position'),
++        matrix = new Matrix4();
++      for (let instance = 0; instance < rocks.count; instance++) {
++        rocks.getMatrixAt(instance, matrix);
++        for (let i = 0; i < rockPositions.count; i++)
++          check(
++            new Vector3().fromBufferAttribute(rockPositions, i).applyMatrix4(matrix),
++            `rock ${instance}`,
++          );
++      }
++      if (style === 'reeds') {
++        const reeds = createReedBeds(island);
++        reeds.updateMatrixWorld(true);
++        const vertex = new Vector3();
++        reeds.traverse((mesh) => {
++          if (!(mesh instanceof InstancedMesh)) return;
++          const positions = mesh.geometry.getAttribute('position');
++          for (let instance = 0; instance < mesh.count; instance++) {
++            mesh.getMatrixAt(instance, matrix);
++            for (let i = 0; i < positions.count; i++)
++              check(
++                vertex
++                  .fromBufferAttribute(positions, i)
++                  .applyMatrix4(matrix)
++                  .applyMatrix4(mesh.matrixWorld),
++                `${mesh.name} ${instance}`,
++              );
++          }
++          mesh.geometry.dispose();
++        });
++      }
++      coast.dispose();
++      rocks.geometry.dispose();
++    }
++    expect(failures).toEqual([]);
+   },
+ );
+diff --git a/tests/unit/paths.test.ts b/tests/unit/paths.test.ts
+new file mode 100644
+index 0000000..214d25e
+--- /dev/null
++++ b/tests/unit/paths.test.ts
+@@ -0,0 +1,238 @@
++import { describe, expect, test } from 'vitest';
++import { Vector3 } from 'three';
++import { bellwater, holdingPier, level, type Level } from '../../src/levels/level';
++import { buildPath, getLevelPaths, samplePath } from '../../src/scene/paths';
++import { sampleJourney } from '../../src/scene/motion';
++
++const point = (x: number, z: number) => new Vector3(x, 0, z);
++const cross = (a: Vector3, b: Vector3, c: Vector3) =>
++  (b.x - a.x) * (c.z - a.z) - (b.z - a.z) * (c.x - a.x);
++function pointDistance(p: Vector3, a: Vector3, b: Vector3) {
++  const d = b.clone().sub(a),
++    span = d.lengthSq();
++  const t = span ? Math.max(0, Math.min(1, p.clone().sub(a).dot(d) / span)) : 0;
++  return p.distanceTo(a.clone().addScaledVector(d, t));
++}
++function segmentDistance(a: Vector3, b: Vector3, c: Vector3, d: Vector3) {
++  if (cross(a, b, c) * cross(a, b, d) < 0 && cross(c, d, a) * cross(c, d, b) < 0) return 0;
++  return Math.min(
++    pointDistance(a, c, d),
++    pointDistance(b, c, d),
++    pointDistance(c, a, b),
++    pointDistance(d, a, b),
++  );
++}
++function networkProblems(l: Level) {
++  const paths = getLevelPaths(l),
++    problems: string[] = [];
++  for (let x = 0; x < l.edges.length; x++) {
++    const edge = l.edges[x],
++      a = paths.get(edge.id)!;
++    let selfContact = false;
++    for (let i = 1; i < a.points.length && !selfContact; i++)
++      for (let j = i + 2; j < a.points.length; j++)
++        if (segmentDistance(a.points[i - 1], a.points[i], a.points[j - 1], a.points[j]) < 0.02) {
++          selfContact = true;
++          break;
++        }
++    if (selfContact) problems.push(`${edge.id} contacts itself`);
++    for (const node of l.nodes.filter((n) => !edge.nodes.includes(n.id))) {
++      const p = point(node.positionXZ[0], node.positionXZ[1]);
++      if (
++        a.points
++          .slice(1)
++          .some((b, i) => pointDistance(p, a.points[i], b) < l.world.requiredRouteClearance)
++      )
++        problems.push(`${edge.id} touches unrelated stop ${node.id}`);
++    }
++    for (let y = x + 1; y < l.edges.length; y++) {
++      const other = l.edges[y],
++        b = paths.get(other.id)!;
++      const shared = l.nodes
++        .filter((n) => edge.nodes.includes(n.id) && other.nodes.includes(n.id))
++        .map((n) => point(n.positionXZ[0], n.positionXZ[1]));
++      let contact = false;
++      for (let i = 1; i < a.points.length && !contact; i++)
++        for (let j = 1; j < b.points.length; j++) {
++          if (
++            shared.some((p) =>
++              [a.points[i - 1], a.points[i], b.points[j - 1], b.points[j]].every(
++                (q) => q.distanceTo(p) <= 0.6,
++              ),
++            )
++          )
++            continue;
++          if (segmentDistance(a.points[i - 1], a.points[i], b.points[j - 1], b.points[j]) < 0.02) {
++            contact = true;
++            break;
++          }
++        }
++      if (contact) problems.push(`${edge.id} contacts ${other.id} away from a shared junction`);
++    }
++  }
++  return problems;
++}
++
++describe('canonical curved courses', () => {
++  test.each([level, holdingPier, bellwater])(
++    '$id caches finite paths with exact endpoints and uniform distance samples',
++    (l) => {
++      const paths = getLevelPaths(l);
++      expect(getLevelPaths(l)).toBe(paths);
++      for (const edge of l.edges) {
++        const path = paths.get(edge.id)!;
++        const from = l.nodes.find((n) => n.id === edge.nodes[0])!,
++          to = l.nodes.find((n) => n.id === edge.nodes[1])!;
++        expect(path.points[0].toArray()).toEqual([from.positionXZ[0], 0, from.positionXZ[1]]);
++        expect(path.points.at(-1)!.toArray()).toEqual([to.positionXZ[0], 0, to.positionXZ[1]]);
++        expect(path.points[0].toArray()).toEqual([
++          edge.waypointsXZ[0][0],
++          0,
++          edge.waypointsXZ[0][1],
++        ]);
++        expect(path.points.at(-1)!.toArray()).toEqual([
++          edge.waypointsXZ.at(-1)![0],
++          0,
++          edge.waypointsXZ.at(-1)![1],
++        ]);
++        expect(path.length).toBeGreaterThan(0);
++        expect(path.points.flatMap((p) => p.toArray()).every(Number.isFinite)).toBe(true);
++        const gaps = path.distances.slice(1).map((d, i) => d - path.distances[i]);
++        expect(Math.max(...gaps)).toBeLessThanOrEqual(0.05001);
++        expect(Math.min(...gaps) / Math.max(...gaps)).toBeGreaterThan(0.985);
++        const before = path.points.map((p) => p.toArray());
++        for (let i = 0; i <= 100; i++) {
++          const distance = (path.length * i) / 100,
++            forward = samplePath(path, distance),
++            reverse = samplePath(path, path.length - distance, true);
++          expect(forward.position.distanceTo(reverse.position)).toBeLessThan(1e-8);
++          expect(forward.tangent.dot(reverse.tangent)).toBeCloseTo(-1, 9);
++          expect(forward.distance).toBeCloseTo(distance, 9);
++        }
++        expect(path.points.map((p) => p.toArray())).toEqual(before);
++      }
++    },
++  );
++
++  test('local rounding stays inside the corner envelope without excursions or heading jumps', () => {
++    const controls = [point(-2, 0), point(0, 0), point(0, 2)],
++      before = controls.map((p) => p.toArray());
++    const path = buildPath(controls);
++    expect(path.points.every((p) => p.x >= -2 && p.x <= 0 && p.z >= 0 && p.z <= 2)).toBe(true);
++    expect(path.points.some((p) => p.x < 0 && p.x > -0.5 && p.z > 0 && p.z < 0.5)).toBe(true);
++    const angles = Array.from(
++      { length: 1001 },
++      (_, i) => samplePath(path, (path.length * i) / 1000).angle,
++    );
++    expect(Math.max(...angles.slice(1).map((a, i) => Math.abs(a - angles[i])))).toBeLessThan(0.04);
++    expect(controls.map((p) => p.toArray())).toEqual(before);
++  });
++
++  test('handles empty, repeated and zero-length controls safely and rejects nonfinite controls', () => {
++    for (const controls of [[], [point(3, 4)], [point(3, 4), point(3, 4)]]) {
++      const path = buildPath(controls);
++      for (const reverse of [false, true]) {
++        const sample = samplePath(path, NaN, reverse);
++        expect(
++          [
++            ...sample.position.toArray(),
++            ...sample.tangent.toArray(),
++            sample.angle,
++            sample.distance,
++          ].every(Number.isFinite),
++        ).toBe(true);
++        expect(path.length).toBe(0);
++      }
++    }
++    expect(buildPath([point(0, 0), point(0, 0), point(1, 0)]).length).toBeCloseTo(1, 9);
++    expect(() => buildPath([point(NaN, 0)])).toThrow('finite');
++  });
++
++  test.each([level, holdingPier, bellwater])(
++    '$id journeys keep eased distance, continuous steering and exact broadside docking in both directions',
++    (l) => {
++      for (const path of getLevelPaths(l).values())
++        for (const reverse of [false, true]) {
++          const poses = Array.from({ length: 1001 }, (_, i) =>
++            sampleJourney(path, i / 1000, Math.PI / 2, reverse),
++          );
++          expect(poses[0].angle).toBe(Math.PI / 2);
++          expect(poses.at(-1)!.angle).toBe(Math.PI / 2);
++          expect(
++            poses[0].position.distanceTo(path.points[reverse ? path.points.length - 1 : 0]),
++          ).toBeLessThan(1e-9);
++          expect(
++            poses.at(-1)!.position.distanceTo(path.points[reverse ? 0 : path.points.length - 1]),
++          ).toBeLessThan(1e-9);
++          for (let i = 1; i < poses.length; i++) {
++            const before = poses[i - 1],
++              after = poses[i],
++              expected = after.distance - before.distance;
++            expect(after.position.distanceTo(before.position) / expected).toBeGreaterThan(0.97);
++            expect(after.position.distanceTo(before.position) / expected).toBeLessThanOrEqual(
++              1.00001,
++            );
++            expect(Math.abs(after.angle - before.angle)).toBeLessThan(0.16);
++            if (Math.min(after.distance, path.length - after.distance) <= 0.45)
++              expect(after.angle).toBe(Math.PI / 2);
++          }
++        }
++    },
++  );
++
++  test('steering stays continuous through the angle wrap and degenerate journeys remain finite', () => {
++    const path = buildPath([point(0, 0), point(0.1, -2), point(-0.1, -4), point(-0.2, -6)]);
++    expect(path.headings.some((a) => a > Math.PI)).toBe(true);
++    for (const reverse of [false, true]) {
++      const poses = Array.from({ length: 1001 }, (_, i) =>
++        sampleJourney(path, i / 1000, Math.PI / 2, reverse),
++      );
++      expect(
++        Math.max(...poses.slice(1).map((p, i) => Math.abs(p.angle - poses[i].angle))),
++      ).toBeLessThan(0.05);
++      for (let i = 0; i < poses.length; i++)
++        expect(
++          poses[i].position.distanceTo(
++            sampleJourney(path, 1 - i / 1000, Math.PI / 2, !reverse).position,
++          ),
++        ).toBeLessThan(1e-8);
++    }
++    const pointPath = buildPath([point(3, 4), point(3, 4)]);
++    expect(sampleJourney(pointPath, NaN, 2.3).angle).toBe(2.3);
++    expect(sampleJourney(pointPath, 0.5).position.toArray()).toEqual([3, 0, 4]);
++    expect(sampleJourney(path, -2).position.distanceTo(path.points[0])).toBe(0);
++    expect(sampleJourney(path, 2).position.distanceTo(path.points.at(-1)!)).toBe(0);
++  });
++
++  test.each([level, holdingPier, bellwater])(
++    '$id actual curved network has no extra junction or unrelated-stop contact',
++    (l) => {
++      expect(networkProblems(l)).toEqual([]);
++    },
++  );
++
++  test('network validation detects strict crossings and coincident stretches', () => {
++    expect(segmentDistance(point(-1, 0), point(1, 0), point(0, -1), point(0, 1))).toBe(0);
++    expect(segmentDistance(point(-1, 0), point(1, 0), point(0, 0), point(2, 0))).toBe(0);
++    const loop = structuredClone(holdingPier);
++    loop.nodes = [
++      { id: 'a', positionXZ: [-2, 0], baseDepth: 3 },
++      { id: 'b', positionXZ: [2, 0], baseDepth: 3 },
++    ];
++    loop.edges = [
++      {
++        id: 'loop',
++        nodes: ['a', 'b'],
++        baseDepth: 3,
++        bidirectional: true,
++        waypointsXZ: [
++          [-2, 0],
++          [2, 2],
++          [-2, 2],
++          [2, 0],
++        ],
++      },
++    ];
++    expect(networkProblems(loop)).toContain('loop contacts itself');
++  });
++});
+diff --git a/tools/capture-environment.mjs b/tools/capture-environment.mjs
+new file mode 100644
+index 0000000..7517292
+--- /dev/null
++++ b/tools/capture-environment.mjs
+@@ -0,0 +1,282 @@
++import { chromium } from '@playwright/test';
++import { readFileSync, writeFileSync, mkdirSync, copyFileSync, readdirSync } from 'node:fs';
++import { fileURLToPath } from 'node:url';
++import { createHash } from 'node:crypto';
++import { execFileSync } from 'node:child_process';
++import os from 'node:os';
++
++const options = Object.fromEntries(
++  process.argv.slice(2).map((arg) => arg.replace(/^--/, '').split('=')),
++);
++const phase = options.phase ?? 'before';
++const base = options.base ?? 'http://127.0.0.1:5178';
++const out = options.output ?? `reviews/environment/${phase}`;
++mkdirSync(`${out}/raw`, { recursive: true });
++const reference = JSON.parse(readFileSync('reviews/bellwater/source-manifest.json', 'utf8'));
++const referenceCaptures = JSON.parse(
++  readFileSync('reviews/bellwater/capture-manifest.json', 'utf8'),
++);
++const referenceRuntimeFiles = Object.keys(reference.files).filter(
++  (path) =>
++    /^(src\/|data\/)/.test(path) ||
++    ['package.json', 'package-lock.json', 'index.html', 'vite.config.ts'].includes(path),
++);
++function filesUnder(directory) {
++  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
++    const path = `${directory}/${entry.name}`;
++    return entry.isDirectory() ? filesUnder(path) : [path];
++  });
++}
++function runtimeSnapshot() {
++  const files = [
++    ...filesUnder('src'),
++    ...filesUnder('data'),
++    'package.json',
++    'package-lock.json',
++    'index.html',
++    'vite.config.ts',
++  ].sort();
++  return Object.fromEntries(
++    files.map((path) => [path, createHash('sha256').update(readFileSync(path)).digest('hex')]),
++  );
++}
++const runtimeHashes = runtimeSnapshot();
++const differences = referenceRuntimeFiles.filter(
++  (path) => runtimeHashes[path] !== reference.files[path],
++);
++const source = {
++  head: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
++  branch: execFileSync('git', ['branch', '--show-current'], { encoding: 'utf8' }).trim(),
++  workingTree: execFileSync('git', ['status', '--short'], { encoding: 'utf8' }).trim(),
++  runtimeHashes,
++  captureToolHash: createHash('sha256')
++    .update(readFileSync(fileURLToPath(import.meta.url)))
++    .digest('hex'),
++  runtimeHash: createHash('sha256').update(JSON.stringify(runtimeHashes)).digest('hex'),
++  referenceSourceHash: reference.sourceHash,
++  differencesFromBellwaterRuntime: differences,
++};
++const browser = await chromium.launch({
++  headless: true,
++  args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'],
++});
++const captures = [],
++  measurements = [],
++  trace = [],
++  errors = [];
++const idle = (page) =>
++  page.waitForFunction(
++    () => document.getElementById('seascape').getAttribute('aria-busy') === 'false',
++  );
++const state = (page) => page.evaluate(() => window.__LAST_FERRY__.getState());
++async function ready(page, cove) {
++  await page.goto(`${base}/?cove=${cove}`);
++  await page.waitForFunction(() => window.__LAST_FERRY__?.getMetrics().frames > 4);
++  await idle(page);
++}
++async function act(page, id) {
++  const prior = await state(page);
++  await page.locator(`#${id}`).click();
++  if (!id.startsWith('map-')) await page.locator('#commit').click();
++  await idle(page);
++  const after = await state(page);
++  if (after.turn !== prior.turn + 1) throw Error(`Action ${id} did not commit once`);
++  trace.push({ id, state: after });
++}
++async function highlight(page, id) {
++  const prior = await state(page);
++  await page.locator(`#inspect-${id}`).click();
++  await page.locator('#cancel').click();
++  await page.waitForFunction(
++    (destination) =>
++      window.__LAST_FERRY__.getNavigationStatus().selectedDestination === destination,
++    id,
++  );
++  if (JSON.stringify(await state(page)) !== JSON.stringify(prior))
++    throw Error('Inspection changed state');
++}
++async function measure(page, cove) {
++  const sample = await page.evaluate(async () => {
++    const intervals = [],
++      metrics = [];
++    let prior = await new Promise(requestAnimationFrame);
++    for (let count = 0; count < 120; count++) {
++      const next = await new Promise(requestAnimationFrame);
++      intervals.push(next - prior);
++      prior = next;
++      metrics.push(window.__LAST_FERRY__.getMetrics());
++    }
++    const sorted = [...intervals].sort((a, b) => a - b);
++    return {
++      intervalsMs: intervals,
++      medianIntervalMs: sorted[60],
++      p95IntervalMs: sorted[Math.ceil(sorted.length * 0.95) - 1],
++      drawCalls: [...new Set(metrics.map((m) => m.drawCalls))],
++      triangles: [...new Set(metrics.map((m) => m.triangles))],
++      renderer: metrics.at(-1),
++      userAgent: navigator.userAgent,
++    };
++  });
++  measurements.push({
++    cove,
++    state: await state(page),
++    viewport: page.viewportSize(),
++    preference: 'normal',
++    dpr: 1,
++    sampleFrames: 120,
++    ...sample,
++  });
++}
++async function capture(page, name, reusedPath) {
++  const path = `${out}/${name}.png`;
++  let reuse = null;
++  if (reusedPath && phase === 'before' && differences.length === 0) {
++    copyFileSync(reusedPath, path);
++    reuse = {
++      path: reusedPath,
++      sourceHash: reference.sourceHash,
++      capture: referenceCaptures.captures.find((capture) => capture.path === reusedPath) ?? null,
++      validation:
++        'All current src/data/package/index/vite runtime hashes exactly match historical captured runtime.',
++    };
++  } else await page.screenshot({ path });
++  captures.push({
++    name,
++    path,
++    capturedAt: new Date().toISOString(),
++    viewport: page.viewportSize(),
++    state: await state(page),
++    metrics: await page.evaluate(() => window.__LAST_FERRY__.getMetrics()),
++    frame: await page.evaluate(() => window.__LAST_FERRY__.getFrameStatus()),
++    navigation: await page.evaluate(() => window.__LAST_FERRY__.getNavigationStatus()),
++    environment: await page.evaluate(() => ({
++      userAgent: navigator.userAgent,
++      dpr: devicePixelRatio,
++      reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches,
++    })),
++    reuse,
++  });
++}
++const desktop = await browser.newContext({
++  viewport: { width: 1440, height: 900 },
++  deviceScaleFactor: 1,
++  reducedMotion: 'no-preference',
++});
++const holding = await desktop.newPage();
++holding.on('pageerror', (error) => errors.push(error.message));
++await ready(holding, 'holding-pier');
++await measure(holding, 'holding-pier');
++await capture(holding, 'holding-desktop-tide-0');
++for (const id of ['unload', 'map-shallows', 'map-rabbit-pier', 'board']) await act(holding, id);
++await capture(holding, 'holding-desktop-tide-1');
++for (const id of ['map-shallows', 'map-stone', 'board', 'map-harbor']) await act(holding, id);
++await capture(holding, 'holding-desktop-tide-2');
++await desktop.close();
++const recording = await browser.newContext({
++  viewport: { width: 1440, height: 900 },
++  deviceScaleFactor: 1,
++  reducedMotion: 'no-preference',
++  recordVideo: { dir: `${out}/raw`, size: { width: 1440, height: 900 } },
++});
++const bell = await recording.newPage();
++bell.on('pageerror', (error) => errors.push(error.message));
++await ready(bell, 'bellwater');
++await measure(bell, 'bellwater');
++for (const id of ['map-shallows', 'map-low-pier', 'board', 'map-east-buoy']) await act(bell, id);
++await highlight(bell, 'west-buoy');
++await capture(bell, 'bellwater-desktop-outer-highlight-tide-1');
++for (const id of ['map-west-buoy', 'map-harbor', 'map-bell-pier', 'board', 'map-harbor'])
++  await act(bell, id);
++await highlight(bell, 'bell-pier');
++await capture(bell, 'bellwater-desktop-harbor-bell-highlight-tide-2');
++for (const id of ['map-west-buoy', 'map-east-buoy', 'map-west-buoy', 'map-harbor', 'unload'])
++  await act(bell, id);
++if ((await state(bell)).status !== 'won') throw Error('Recorded rescue did not finish');
++const video = bell.video();
++await recording.close();
++await video.saveAs(`${out}/raw/bellwater-journeys.webm`);
++for (const width of [844, 780]) {
++  const context = await browser.newContext({
++    viewport: { width, height: 390 },
++    deviceScaleFactor: 1,
++    hasTouch: true,
++    isMobile: true,
++    reducedMotion: 'no-preference',
++  });
++  const phone = await context.newPage();
++  phone.on('pageerror', (error) => errors.push(error.message));
++  await ready(phone, 'holding-pier');
++  await capture(phone, `holding-phone-${width}-initial`);
++  await ready(phone, 'bellwater');
++  await capture(phone, `bellwater-phone-${width}-initial`);
++  if (width === 780) {
++    for (const id of ['map-west-buoy', 'map-east-buoy', 'map-low-pier']) await act(phone, id);
++    await phone.locator('#board').tap();
++    await phone.locator('#passenger-lark').tap();
++    await capture(
++      phone,
++      'bellwater-phone-780-constrained',
++      'reviews/bellwater/bellwater-phone-780-subset-warning.png',
++    );
++  }
++  await context.close();
++}
++await browser.close();
++const runtimeAfter = runtimeSnapshot();
++const sourceUnchanged = JSON.stringify(runtimeHashes) === JSON.stringify(runtimeAfter);
++if (!sourceUnchanged)
++  throw Error(
++    'Runtime source changed during capture; discard this run and repeat against a frozen source.',
++  );
++if (errors.length) throw Error(JSON.stringify(errors));
++writeFileSync(
++  `${out}/capture-manifest.json`,
++  JSON.stringify(
++    {
++      phase,
++      source,
++      sourceUnchangedAcrossExecution: sourceUnchanged,
++      generatedAt: new Date().toISOString(),
++      environment: {
++        os: os.platform(),
++        release: os.release(),
++        arch: os.arch(),
++        node: process.version,
++        browser: browser.version(),
++        renderer:
++          'Headless Chromium SwiftShader software WebGL; no physical-device frame-rate claim',
++        baseURL: base,
++      },
++      measurementProtocol:
++        'Idle turn0 at1440x900, DPR1, no-preference motion.120 consecutive requestAnimationFrame intervals after metrics.frames>4; median/p95 and render calls/triangles. Repeat same protocol after renderer changes.',
++      measurements,
++      captures,
++      trace,
++      errors,
++      recording: {
++        path: `${out}/raw/bellwater-journeys.webm`,
++        actions:
++          '14-action actual-UI Bellwater rescue, with both Harbor–Bell directions and both outer-bend directions; inspection/cancellation free; no state injection or temporal edits.',
++      },
++    },
++    null,
++    2,
++  ),
++);
++console.log(
++  JSON.stringify({
++    phase,
++    captures: captures.length,
++    source: source.head,
++    differences,
++    measurements: measurements.map(
++      ({ cove, medianIntervalMs, p95IntervalMs, drawCalls, triangles }) => ({
++        cove,
++        medianIntervalMs,
++        p95IntervalMs,
++        drawCalls,
++        triangles,
++      }),
++    ),
++  }),
++);
+diff --git a/tools/snapshot-evidence.mjs b/tools/snapshot-evidence.mjs
+index 9cf5f4d..4c36d19 100644
+--- a/tools/snapshot-evidence.mjs
++++ b/tools/snapshot-evidence.mjs
+@@ -48,7 +48,11 @@ const paths = [
+   'docs/ASSET_LEDGER.md',
+   ...(existsSync(new URL('docs/HOLDING_PIER.md', root)) ? ['docs/HOLDING_PIER.md'] : []),
+   ...(existsSync(new URL('docs/BELLWATER.md', root)) ? ['docs/BELLWATER.md'] : []),
++  ...(existsSync(new URL('docs/ENVIRONMENT.md', root)) ? ['docs/ENVIRONMENT.md'] : []),
+   'tools/snapshot-evidence.mjs',
++  ...(existsSync(new URL('tools/capture-environment.mjs', root))
++    ? ['tools/capture-environment.mjs']
++    : []),
+ ].sort();
+ const files = Object.fromEntries(paths.map((p) => [p, digest(readFileSync(new URL(p, root)))]));
+ const sourceHash = digest(JSON.stringify(files));

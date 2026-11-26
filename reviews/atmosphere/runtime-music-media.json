@@ -1,0 +1,65 @@
+{
+  "source": {
+    "head": "7346b91c23331b7c1e8ad4b147c8fa4006767a89",
+    "sourceHash": "243726bfadb6f5e2979b6d9aa6c3c7a4ad76b50660a9789a60d40ecc7b36377c",
+    "sourceManifest": "initial-source-manifest.json",
+    "scope": "Actual runtime at initial formal48 execution. The two corrected test assumptions and later isolated Harbor reflection/DEV tuning hook changes do not change audio sources."
+  },
+  "capture": {
+    "method": "MediaRecorder of actual running AudioContext master destination",
+    "wallDurationMs": 82085.70000000298,
+    "startContextTime": 0.17066666666666666,
+    "endContextTime": 82.25066666666666,
+    "phraseSeconds": 75,
+    "finalLoopCount": 1,
+    "offline": false,
+    "edited": false,
+    "includes": "Music and quiet air/water ambience during free idle; this capture has no travel or delivery event"
+  },
+  "files": [
+    {
+      "path": "reviews/atmosphere/raw/runtime-music-loop.webm",
+      "sha256": "49ad01cd35d2bc0317aeb5170376696c1dee15b32758178041ed2d36856944ae",
+      "bytes": 1321013,
+      "format": "48kHz stereo Opus in WebM",
+      "authoritative": true
+    },
+    {
+      "path": "reviews/atmosphere/raw/runtime-music-loop.mp3",
+      "sha256": "6504f94e19e3f765d2742ca89c863e620c051795ded2198e5e2820a9cd2e9da9",
+      "bytes": 837908,
+      "derivativeOf": "reviews/atmosphere/raw/runtime-music-loop.webm",
+      "command": "ffmpeg -i runtime-music-loop.webm -vn -c:a libmp3lame -q:a 3 runtime-music-loop.mp3",
+      "durationSeconds": 81.984,
+      "format": "48kHz stereo MP3",
+      "transformation": "Full-length transcode; no temporal cuts, speed or mix changes"
+    }
+  ],
+  "measurements": {
+    "sampleCount": 164,
+    "maxOwnedSources": 13,
+    "maxGraphNodes": 63,
+    "rmsRange": [
+      0.005515814824258121,
+      0.02290443869687221
+    ],
+    "sampledPeak": 0.06509460508823395,
+    "contextCount": 1,
+    "schedulerCount": 1,
+    "skippedEvents": 0
+  },
+  "limitations": [
+    "No dedicated listening tool was available. Signal continuity, bounded graph and encoded presence are verified; musical taste, perceived balance and audible seam acceptance require listening.",
+    "Headless Chromium software environment, not physical phone/audio hardware.",
+    "Silent Playwright gameplay videos are separate from this actual runtime audio."
+  ],
+  "finalImplementationComparison": {
+    "sourceHash": "9315d3d214bb1a07c76557f6e6e89643f7be3a3efc52309e7ad98886db543668",
+    "sourceManifest": "source-manifest.json",
+    "audioFilesIdenticalToCapture": [
+      "src/audio/atmosphere.ts",
+      "src/audio/score.ts",
+      "src/audio/sound.ts"
+    ]
+  }
+}

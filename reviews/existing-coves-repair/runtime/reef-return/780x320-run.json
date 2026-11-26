@@ -1,0 +1,363 @@
+{
+  "plan": "relay-through-shell-pool",
+  "practiceSaveByteExact": true,
+  "viewport": {
+    "width": 780,
+    "height": 320
+  },
+  "dpr": 1,
+  "browser": "156.0.8078.4",
+  "builtGame": true,
+  "node": "v24.15.0",
+  "terminalUndo": true,
+  "errors": [],
+  "events": [
+    {
+      "action": {
+        "type": "unload",
+        "passengerIds": [
+          "heather"
+        ]
+      },
+      "after": {
+        "turn": 1,
+        "tideLevel": 0,
+        "boatNodeId": "quay",
+        "aboard": [
+          "birch"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "quay-pier": [
+            "heather"
+          ],
+          "wrack-pier": [
+            "dot"
+          ],
+          "pool-pier": [
+            "flick"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "action": {
+        "type": "move",
+        "to": "wrack"
+      },
+      "after": {
+        "turn": 2,
+        "tideLevel": 0,
+        "boatNodeId": "wrack",
+        "aboard": [
+          "birch"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "quay-pier": [
+            "heather"
+          ],
+          "wrack-pier": [
+            "dot"
+          ],
+          "pool-pier": [
+            "flick"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "action": {
+        "type": "board",
+        "passengerIds": [
+          "dot"
+        ]
+      },
+      "after": {
+        "turn": 3,
+        "tideLevel": 1,
+        "boatNodeId": "wrack",
+        "aboard": [
+          "birch",
+          "dot"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "quay-pier": [
+            "heather"
+          ],
+          "wrack-pier": [],
+          "pool-pier": [
+            "flick"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "action": {
+        "type": "move",
+        "to": "quay"
+      },
+      "after": {
+        "turn": 4,
+        "tideLevel": 1,
+        "boatNodeId": "quay",
+        "aboard": [
+          "birch",
+          "dot"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "quay-pier": [
+            "heather"
+          ],
+          "wrack-pier": [],
+          "pool-pier": [
+            "flick"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "action": {
+        "type": "board",
+        "passengerIds": [
+          "heather"
+        ]
+      },
+      "after": {
+        "turn": 5,
+        "tideLevel": 1,
+        "boatNodeId": "quay",
+        "aboard": [
+          "birch",
+          "dot",
+          "heather"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "quay-pier": [],
+          "wrack-pier": [],
+          "pool-pier": [
+            "flick"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "action": {
+        "type": "move",
+        "to": "harbor"
+      },
+      "after": {
+        "turn": 6,
+        "tideLevel": 1,
+        "boatNodeId": "harbor",
+        "aboard": [
+          "birch",
+          "dot",
+          "heather"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "quay-pier": [],
+          "wrack-pier": [],
+          "pool-pier": [
+            "flick"
+          ]
+        },
+        "delivered": [],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "action": {
+        "type": "unload",
+        "passengerIds": [
+          "heather",
+          "birch",
+          "dot"
+        ]
+      },
+      "after": {
+        "turn": 7,
+        "tideLevel": 1,
+        "boatNodeId": "harbor",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "quay-pier": [],
+          "wrack-pier": [],
+          "pool-pier": [
+            "flick"
+          ]
+        },
+        "delivered": [
+          "heather",
+          "birch",
+          "dot"
+        ],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "action": {
+        "type": "move",
+        "to": "pool"
+      },
+      "after": {
+        "turn": 8,
+        "tideLevel": 1,
+        "boatNodeId": "pool",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "quay-pier": [],
+          "wrack-pier": [],
+          "pool-pier": [
+            "flick"
+          ]
+        },
+        "delivered": [
+          "heather",
+          "birch",
+          "dot"
+        ],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "wrong": "wait",
+      "outcome": {
+        "code": "PASSENGER_STRANDED",
+        "pierId": "pool-pier",
+        "passengerIds": [
+          "flick"
+        ]
+      },
+      "restored": {
+        "turn": 8,
+        "tideLevel": 1,
+        "boatNodeId": "pool",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "quay-pier": [],
+          "wrack-pier": [],
+          "pool-pier": [
+            "flick"
+          ]
+        },
+        "delivered": [
+          "heather",
+          "birch",
+          "dot"
+        ],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "action": {
+        "type": "board",
+        "passengerIds": [
+          "flick"
+        ]
+      },
+      "after": {
+        "turn": 9,
+        "tideLevel": 2,
+        "boatNodeId": "pool",
+        "aboard": [
+          "flick"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "quay-pier": [],
+          "wrack-pier": [],
+          "pool-pier": []
+        },
+        "delivered": [
+          "heather",
+          "birch",
+          "dot"
+        ],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "action": {
+        "type": "move",
+        "to": "harbor"
+      },
+      "after": {
+        "turn": 10,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "aboard": [
+          "flick"
+        ],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "quay-pier": [],
+          "wrack-pier": [],
+          "pool-pier": []
+        },
+        "delivered": [
+          "heather",
+          "birch",
+          "dot"
+        ],
+        "status": "playing",
+        "lossReason": null
+      }
+    },
+    {
+      "action": {
+        "type": "unload",
+        "passengerIds": [
+          "flick"
+        ]
+      },
+      "after": {
+        "turn": 11,
+        "tideLevel": 2,
+        "boatNodeId": "harbor",
+        "aboard": [],
+        "waitingByPier": {
+          "harbor-pier": [],
+          "quay-pier": [],
+          "wrack-pier": [],
+          "pool-pier": []
+        },
+        "delivered": [
+          "heather",
+          "birch",
+          "dot",
+          "flick"
+        ],
+        "status": "won",
+        "lossReason": null
+      }
+    }
+  ]
+}

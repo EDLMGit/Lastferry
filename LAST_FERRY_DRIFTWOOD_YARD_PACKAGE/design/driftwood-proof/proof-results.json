@@ -1,0 +1,1748 @@
+{
+  "baseline": "da1f2686ce6aff8d754e13111447dabb6e1313f0",
+  "node": "v24.22.1",
+  "scope": "Actual unchanged production reducer/Session; mechanical proposal only. No world geometry, rendering, assets, browser or phone validation.",
+  "sourceIdentities": [
+    {
+      "path": "src/game/rules.ts",
+      "sha256": "aa37c820e121955416e964476de296bfd6b755ac569dcdc958b459884530a44b"
+    },
+    {
+      "path": "src/game/session.ts",
+      "sha256": "96a670a82ceada27f7a0f750b45589b55e621256b97b9b7b26916221e4f3fde9"
+    }
+  ],
+  "witnesses": [
+    {
+      "id": "stage-nell-collect-group",
+      "description": "Rescue Nell to the nearby high landing, save both rabbits at the rise, return for Nell and bring all three home together.",
+      "actions": [
+        {
+          "type": "move",
+          "to": "yard"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "nell"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "mooring"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "nell"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "bend"
+        },
+        {
+          "type": "move",
+          "to": "reeds"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "fern",
+            "oat"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "bend"
+        },
+        {
+          "type": "move",
+          "to": "mooring"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "nell"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "nell",
+            "fern",
+            "oat"
+          ]
+        }
+      ],
+      "actionCount": 12,
+      "steps": [
+        {
+          "action": {
+            "type": "move",
+            "to": "yard"
+          },
+          "turn": 1,
+          "tide": 0,
+          "node": "yard",
+          "aboard": [],
+          "load": 0,
+          "draft": 1,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [
+              "nell"
+            ],
+            "mooring-pier": [],
+            "reeds-pier": [
+              "fern",
+              "oat"
+            ]
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "board",
+            "passengerIds": [
+              "nell"
+            ]
+          },
+          "turn": 2,
+          "tide": 0,
+          "node": "yard",
+          "aboard": [
+            "nell"
+          ],
+          "load": 2,
+          "draft": 2,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [],
+            "reeds-pier": [
+              "fern",
+              "oat"
+            ]
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "move",
+            "to": "mooring"
+          },
+          "turn": 3,
+          "tide": 0,
+          "node": "mooring",
+          "aboard": [
+            "nell"
+          ],
+          "load": 2,
+          "draft": 2,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [],
+            "reeds-pier": [
+              "fern",
+              "oat"
+            ]
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "nell"
+            ]
+          },
+          "turn": 4,
+          "tide": 0,
+          "node": "mooring",
+          "aboard": [],
+          "load": 0,
+          "draft": 1,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [
+              "nell"
+            ],
+            "reeds-pier": [
+              "fern",
+              "oat"
+            ]
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "move",
+            "to": "bend"
+          },
+          "turn": 5,
+          "tide": 0,
+          "node": "bend",
+          "aboard": [],
+          "load": 0,
+          "draft": 1,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [
+              "nell"
+            ],
+            "reeds-pier": [
+              "fern",
+              "oat"
+            ]
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "move",
+            "to": "reeds"
+          },
+          "turn": 6,
+          "tide": 0,
+          "node": "reeds",
+          "aboard": [],
+          "load": 0,
+          "draft": 1,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [
+              "nell"
+            ],
+            "reeds-pier": [
+              "fern",
+              "oat"
+            ]
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "board",
+            "passengerIds": [
+              "fern",
+              "oat"
+            ]
+          },
+          "turn": 7,
+          "tide": 1,
+          "node": "reeds",
+          "aboard": [
+            "fern",
+            "oat"
+          ],
+          "load": 2,
+          "draft": 2,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [
+              "nell"
+            ],
+            "reeds-pier": []
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "move",
+            "to": "bend"
+          },
+          "turn": 8,
+          "tide": 1,
+          "node": "bend",
+          "aboard": [
+            "fern",
+            "oat"
+          ],
+          "load": 2,
+          "draft": 2,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [
+              "nell"
+            ],
+            "reeds-pier": []
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "move",
+            "to": "mooring"
+          },
+          "turn": 9,
+          "tide": 1,
+          "node": "mooring",
+          "aboard": [
+            "fern",
+            "oat"
+          ],
+          "load": 2,
+          "draft": 2,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [
+              "nell"
+            ],
+            "reeds-pier": []
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "board",
+            "passengerIds": [
+              "nell"
+            ]
+          },
+          "turn": 10,
+          "tide": 1,
+          "node": "mooring",
+          "aboard": [
+            "fern",
+            "oat",
+            "nell"
+          ],
+          "load": 4,
+          "draft": 3,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [],
+            "reeds-pier": []
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "move",
+            "to": "harbor"
+          },
+          "turn": 11,
+          "tide": 2,
+          "node": "harbor",
+          "aboard": [
+            "fern",
+            "oat",
+            "nell"
+          ],
+          "load": 4,
+          "draft": 3,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [],
+            "reeds-pier": []
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "nell",
+              "fern",
+              "oat"
+            ]
+          },
+          "turn": 12,
+          "tide": 2,
+          "node": "harbor",
+          "aboard": [],
+          "load": 0,
+          "draft": 1,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [],
+            "reeds-pier": []
+          },
+          "delivered": [
+            "nell",
+            "fern",
+            "oat"
+          ],
+          "status": "won",
+          "lossReason": null
+        }
+      ],
+      "fullStateUndo": "passed"
+    },
+    {
+      "id": "stage-nell-deliver-rabbits-first",
+      "description": "Same critical rescue plan, then deliver the rabbits before collecting Nell. This is a different safe delivery order, not a second distinct critical rescue strategy.",
+      "actions": [
+        {
+          "type": "move",
+          "to": "yard"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "nell"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "mooring"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "nell"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "bend"
+        },
+        {
+          "type": "move",
+          "to": "reeds"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "fern",
+            "oat"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "bend"
+        },
+        {
+          "type": "move",
+          "to": "mooring"
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "fern",
+            "oat"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "mooring"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "nell"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "nell"
+          ]
+        }
+      ],
+      "actionCount": 15,
+      "steps": [
+        {
+          "action": {
+            "type": "move",
+            "to": "yard"
+          },
+          "turn": 1,
+          "tide": 0,
+          "node": "yard",
+          "aboard": [],
+          "load": 0,
+          "draft": 1,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [
+              "nell"
+            ],
+            "mooring-pier": [],
+            "reeds-pier": [
+              "fern",
+              "oat"
+            ]
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "board",
+            "passengerIds": [
+              "nell"
+            ]
+          },
+          "turn": 2,
+          "tide": 0,
+          "node": "yard",
+          "aboard": [
+            "nell"
+          ],
+          "load": 2,
+          "draft": 2,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [],
+            "reeds-pier": [
+              "fern",
+              "oat"
+            ]
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "move",
+            "to": "mooring"
+          },
+          "turn": 3,
+          "tide": 0,
+          "node": "mooring",
+          "aboard": [
+            "nell"
+          ],
+          "load": 2,
+          "draft": 2,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [],
+            "reeds-pier": [
+              "fern",
+              "oat"
+            ]
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "nell"
+            ]
+          },
+          "turn": 4,
+          "tide": 0,
+          "node": "mooring",
+          "aboard": [],
+          "load": 0,
+          "draft": 1,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [
+              "nell"
+            ],
+            "reeds-pier": [
+              "fern",
+              "oat"
+            ]
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "move",
+            "to": "bend"
+          },
+          "turn": 5,
+          "tide": 0,
+          "node": "bend",
+          "aboard": [],
+          "load": 0,
+          "draft": 1,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [
+              "nell"
+            ],
+            "reeds-pier": [
+              "fern",
+              "oat"
+            ]
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "move",
+            "to": "reeds"
+          },
+          "turn": 6,
+          "tide": 0,
+          "node": "reeds",
+          "aboard": [],
+          "load": 0,
+          "draft": 1,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [
+              "nell"
+            ],
+            "reeds-pier": [
+              "fern",
+              "oat"
+            ]
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "board",
+            "passengerIds": [
+              "fern",
+              "oat"
+            ]
+          },
+          "turn": 7,
+          "tide": 1,
+          "node": "reeds",
+          "aboard": [
+            "fern",
+            "oat"
+          ],
+          "load": 2,
+          "draft": 2,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [
+              "nell"
+            ],
+            "reeds-pier": []
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "move",
+            "to": "bend"
+          },
+          "turn": 8,
+          "tide": 1,
+          "node": "bend",
+          "aboard": [
+            "fern",
+            "oat"
+          ],
+          "load": 2,
+          "draft": 2,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [
+              "nell"
+            ],
+            "reeds-pier": []
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "move",
+            "to": "mooring"
+          },
+          "turn": 9,
+          "tide": 1,
+          "node": "mooring",
+          "aboard": [
+            "fern",
+            "oat"
+          ],
+          "load": 2,
+          "draft": 2,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [
+              "nell"
+            ],
+            "reeds-pier": []
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "move",
+            "to": "harbor"
+          },
+          "turn": 10,
+          "tide": 1,
+          "node": "harbor",
+          "aboard": [
+            "fern",
+            "oat"
+          ],
+          "load": 2,
+          "draft": 2,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [
+              "nell"
+            ],
+            "reeds-pier": []
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "fern",
+              "oat"
+            ]
+          },
+          "turn": 11,
+          "tide": 2,
+          "node": "harbor",
+          "aboard": [],
+          "load": 0,
+          "draft": 1,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [
+              "nell"
+            ],
+            "reeds-pier": []
+          },
+          "delivered": [
+            "fern",
+            "oat"
+          ],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "move",
+            "to": "mooring"
+          },
+          "turn": 12,
+          "tide": 2,
+          "node": "mooring",
+          "aboard": [],
+          "load": 0,
+          "draft": 1,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [
+              "nell"
+            ],
+            "reeds-pier": []
+          },
+          "delivered": [
+            "fern",
+            "oat"
+          ],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "board",
+            "passengerIds": [
+              "nell"
+            ]
+          },
+          "turn": 13,
+          "tide": 2,
+          "node": "mooring",
+          "aboard": [
+            "nell"
+          ],
+          "load": 2,
+          "draft": 2,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [],
+            "reeds-pier": []
+          },
+          "delivered": [
+            "fern",
+            "oat"
+          ],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "move",
+            "to": "harbor"
+          },
+          "turn": 14,
+          "tide": 2,
+          "node": "harbor",
+          "aboard": [
+            "nell"
+          ],
+          "load": 2,
+          "draft": 2,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [],
+            "reeds-pier": []
+          },
+          "delivered": [
+            "fern",
+            "oat"
+          ],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "nell"
+            ]
+          },
+          "turn": 15,
+          "tide": 2,
+          "node": "harbor",
+          "aboard": [],
+          "load": 0,
+          "draft": 1,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [],
+            "reeds-pier": []
+          },
+          "delivered": [
+            "fern",
+            "oat",
+            "nell"
+          ],
+          "status": "won",
+          "lossReason": null
+        }
+      ],
+      "fullStateUndo": "passed"
+    }
+  ],
+  "losingAlternatives": [
+    {
+      "id": "deliver-nell-immediately",
+      "description": "Going straight home with Nell uses the extra trip needed to board the rabbits before action7.",
+      "actions": [
+        {
+          "type": "move",
+          "to": "yard"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "nell"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "harbor"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "nell"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "mooring"
+        },
+        {
+          "type": "move",
+          "to": "bend"
+        },
+        {
+          "type": "move",
+          "to": "reeds"
+        }
+      ],
+      "steps": [
+        {
+          "action": {
+            "type": "move",
+            "to": "yard"
+          },
+          "turn": 1,
+          "tide": 0,
+          "node": "yard",
+          "aboard": [],
+          "load": 0,
+          "draft": 1,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [
+              "nell"
+            ],
+            "mooring-pier": [],
+            "reeds-pier": [
+              "fern",
+              "oat"
+            ]
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "board",
+            "passengerIds": [
+              "nell"
+            ]
+          },
+          "turn": 2,
+          "tide": 0,
+          "node": "yard",
+          "aboard": [
+            "nell"
+          ],
+          "load": 2,
+          "draft": 2,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [],
+            "reeds-pier": [
+              "fern",
+              "oat"
+            ]
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "move",
+            "to": "harbor"
+          },
+          "turn": 3,
+          "tide": 0,
+          "node": "harbor",
+          "aboard": [
+            "nell"
+          ],
+          "load": 2,
+          "draft": 2,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [],
+            "reeds-pier": [
+              "fern",
+              "oat"
+            ]
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "nell"
+            ]
+          },
+          "turn": 4,
+          "tide": 0,
+          "node": "harbor",
+          "aboard": [],
+          "load": 0,
+          "draft": 1,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [],
+            "reeds-pier": [
+              "fern",
+              "oat"
+            ]
+          },
+          "delivered": [
+            "nell"
+          ],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "move",
+            "to": "mooring"
+          },
+          "turn": 5,
+          "tide": 0,
+          "node": "mooring",
+          "aboard": [],
+          "load": 0,
+          "draft": 1,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [],
+            "reeds-pier": [
+              "fern",
+              "oat"
+            ]
+          },
+          "delivered": [
+            "nell"
+          ],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "move",
+            "to": "bend"
+          },
+          "turn": 6,
+          "tide": 0,
+          "node": "bend",
+          "aboard": [],
+          "load": 0,
+          "draft": 1,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [],
+            "reeds-pier": [
+              "fern",
+              "oat"
+            ]
+          },
+          "delivered": [
+            "nell"
+          ],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "move",
+            "to": "reeds"
+          },
+          "turn": 7,
+          "tide": 1,
+          "node": "reeds",
+          "aboard": [],
+          "load": 0,
+          "draft": 1,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [],
+            "reeds-pier": [
+              "fern",
+              "oat"
+            ]
+          },
+          "delivered": [
+            "nell"
+          ],
+          "status": "lost",
+          "lossReason": {
+            "code": "PASSENGER_STRANDED",
+            "pierId": "reeds-pier",
+            "passengerIds": [
+              "fern",
+              "oat"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "rabbits-first-wait-for-return-depth",
+      "description": "The loaded return is too shallow before the first rise; waiting for it leaves Nell on the low yard.",
+      "actions": [
+        {
+          "type": "move",
+          "to": "mooring"
+        },
+        {
+          "type": "move",
+          "to": "bend"
+        },
+        {
+          "type": "move",
+          "to": "reeds"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "fern",
+            "oat"
+          ]
+        },
+        {
+          "type": "wait"
+        },
+        {
+          "type": "wait"
+        },
+        {
+          "type": "wait"
+        }
+      ],
+      "steps": [
+        {
+          "action": {
+            "type": "move",
+            "to": "mooring"
+          },
+          "turn": 1,
+          "tide": 0,
+          "node": "mooring",
+          "aboard": [],
+          "load": 0,
+          "draft": 1,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [
+              "nell"
+            ],
+            "mooring-pier": [],
+            "reeds-pier": [
+              "fern",
+              "oat"
+            ]
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "move",
+            "to": "bend"
+          },
+          "turn": 2,
+          "tide": 0,
+          "node": "bend",
+          "aboard": [],
+          "load": 0,
+          "draft": 1,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [
+              "nell"
+            ],
+            "mooring-pier": [],
+            "reeds-pier": [
+              "fern",
+              "oat"
+            ]
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "move",
+            "to": "reeds"
+          },
+          "turn": 3,
+          "tide": 0,
+          "node": "reeds",
+          "aboard": [],
+          "load": 0,
+          "draft": 1,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [
+              "nell"
+            ],
+            "mooring-pier": [],
+            "reeds-pier": [
+              "fern",
+              "oat"
+            ]
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "board",
+            "passengerIds": [
+              "fern",
+              "oat"
+            ]
+          },
+          "turn": 4,
+          "tide": 0,
+          "node": "reeds",
+          "aboard": [
+            "fern",
+            "oat"
+          ],
+          "load": 2,
+          "draft": 2,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [
+              "nell"
+            ],
+            "mooring-pier": [],
+            "reeds-pier": []
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "wait"
+          },
+          "turn": 5,
+          "tide": 0,
+          "node": "reeds",
+          "aboard": [
+            "fern",
+            "oat"
+          ],
+          "load": 2,
+          "draft": 2,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [
+              "nell"
+            ],
+            "mooring-pier": [],
+            "reeds-pier": []
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "wait"
+          },
+          "turn": 6,
+          "tide": 0,
+          "node": "reeds",
+          "aboard": [
+            "fern",
+            "oat"
+          ],
+          "load": 2,
+          "draft": 2,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [
+              "nell"
+            ],
+            "mooring-pier": [],
+            "reeds-pier": []
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "wait"
+          },
+          "turn": 7,
+          "tide": 1,
+          "node": "reeds",
+          "aboard": [
+            "fern",
+            "oat"
+          ],
+          "load": 2,
+          "draft": 2,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [
+              "nell"
+            ],
+            "mooring-pier": [],
+            "reeds-pier": []
+          },
+          "delivered": [],
+          "status": "lost",
+          "lossReason": {
+            "code": "PASSENGER_STRANDED",
+            "pierId": "yard-pier",
+            "passengerIds": [
+              "nell"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "only-one-rabbit-at-last-safe-boarding",
+      "description": "Both rabbits must leave the low landing before it floods. A one-rabbit subset at action7 strands the other.",
+      "actions": [
+        {
+          "type": "move",
+          "to": "yard"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "nell"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "mooring"
+        },
+        {
+          "type": "unload",
+          "passengerIds": [
+            "nell"
+          ]
+        },
+        {
+          "type": "move",
+          "to": "bend"
+        },
+        {
+          "type": "move",
+          "to": "reeds"
+        },
+        {
+          "type": "board",
+          "passengerIds": [
+            "fern"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "action": {
+            "type": "move",
+            "to": "yard"
+          },
+          "turn": 1,
+          "tide": 0,
+          "node": "yard",
+          "aboard": [],
+          "load": 0,
+          "draft": 1,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [
+              "nell"
+            ],
+            "mooring-pier": [],
+            "reeds-pier": [
+              "fern",
+              "oat"
+            ]
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "board",
+            "passengerIds": [
+              "nell"
+            ]
+          },
+          "turn": 2,
+          "tide": 0,
+          "node": "yard",
+          "aboard": [
+            "nell"
+          ],
+          "load": 2,
+          "draft": 2,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [],
+            "reeds-pier": [
+              "fern",
+              "oat"
+            ]
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "move",
+            "to": "mooring"
+          },
+          "turn": 3,
+          "tide": 0,
+          "node": "mooring",
+          "aboard": [
+            "nell"
+          ],
+          "load": 2,
+          "draft": 2,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [],
+            "reeds-pier": [
+              "fern",
+              "oat"
+            ]
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "unload",
+            "passengerIds": [
+              "nell"
+            ]
+          },
+          "turn": 4,
+          "tide": 0,
+          "node": "mooring",
+          "aboard": [],
+          "load": 0,
+          "draft": 1,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [
+              "nell"
+            ],
+            "reeds-pier": [
+              "fern",
+              "oat"
+            ]
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "move",
+            "to": "bend"
+          },
+          "turn": 5,
+          "tide": 0,
+          "node": "bend",
+          "aboard": [],
+          "load": 0,
+          "draft": 1,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [
+              "nell"
+            ],
+            "reeds-pier": [
+              "fern",
+              "oat"
+            ]
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "move",
+            "to": "reeds"
+          },
+          "turn": 6,
+          "tide": 0,
+          "node": "reeds",
+          "aboard": [],
+          "load": 0,
+          "draft": 1,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [
+              "nell"
+            ],
+            "reeds-pier": [
+              "fern",
+              "oat"
+            ]
+          },
+          "delivered": [],
+          "status": "playing",
+          "lossReason": null
+        },
+        {
+          "action": {
+            "type": "board",
+            "passengerIds": [
+              "fern"
+            ]
+          },
+          "turn": 7,
+          "tide": 1,
+          "node": "reeds",
+          "aboard": [
+            "fern"
+          ],
+          "load": 1,
+          "draft": 2,
+          "waiting": {
+            "harbor-pier": [],
+            "yard-pier": [],
+            "mooring-pier": [
+              "nell"
+            ],
+            "reeds-pier": [
+              "oat"
+            ]
+          },
+          "delivered": [],
+          "status": "lost",
+          "lossReason": {
+            "code": "PASSENGER_STRANDED",
+            "pierId": "reeds-pier",
+            "passengerIds": [
+              "oat"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "blockedReturn": {
+    "state": {
+      "turn": 4,
+      "tide": 0,
+      "node": "reeds",
+      "aboard": [
+        "fern",
+        "oat"
+      ],
+      "load": 2,
+      "draft": 2,
+      "waiting": {
+        "harbor-pier": [],
+        "yard-pier": [
+          "nell"
+        ],
+        "mooring-pier": [],
+        "reeds-pier": []
+      },
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    "action": {
+      "type": "move",
+      "to": "bend"
+    },
+    "reason": "Too shallow: depth 1 is below draft 2. A lighter load needs less depth. Tide changes after an action.",
+    "stateUnchanged": true
+  },
+  "lastSafeBoarding": {
+    "both": {
+      "turn": 7,
+      "tide": 1,
+      "node": "reeds",
+      "aboard": [
+        "fern",
+        "oat"
+      ],
+      "load": 2,
+      "draft": 2,
+      "waiting": {
+        "harbor-pier": [],
+        "yard-pier": [],
+        "mooring-pier": [
+          "nell"
+        ],
+        "reeds-pier": []
+      },
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    "one": {
+      "turn": 7,
+      "tide": 1,
+      "node": "reeds",
+      "aboard": [
+        "fern"
+      ],
+      "load": 1,
+      "draft": 2,
+      "waiting": {
+        "harbor-pier": [],
+        "yard-pier": [],
+        "mooring-pier": [
+          "nell"
+        ],
+        "reeds-pier": [
+          "oat"
+        ]
+      },
+      "delivered": [],
+      "status": "lost",
+      "lossReason": {
+        "code": "PASSENGER_STRANDED",
+        "pierId": "reeds-pier",
+        "passengerIds": [
+          "oat"
+        ]
+      }
+    }
+  },
+  "boundedSearch": {
+    "horizon": 24,
+    "turnNormalization": "clamp key at last rise, action11; rules retain actual turn",
+    "uniqueStates": 237,
+    "winningStates": 1,
+    "lostStates": 23,
+    "firstWinningSequenceLength": 12,
+    "firstWinningSequence": [
+      {
+        "type": "move",
+        "to": "yard"
+      },
+      {
+        "type": "board",
+        "passengerIds": [
+          "nell"
+        ]
+      },
+      {
+        "type": "move",
+        "to": "mooring"
+      },
+      {
+        "type": "unload",
+        "passengerIds": [
+          "nell"
+        ]
+      },
+      {
+        "type": "move",
+        "to": "bend"
+      },
+      {
+        "type": "move",
+        "to": "reeds"
+      },
+      {
+        "type": "board",
+        "passengerIds": [
+          "fern",
+          "oat"
+        ]
+      },
+      {
+        "type": "move",
+        "to": "bend"
+      },
+      {
+        "type": "move",
+        "to": "mooring"
+      },
+      {
+        "type": "board",
+        "passengerIds": [
+          "nell"
+        ]
+      },
+      {
+        "type": "move",
+        "to": "harbor"
+      },
+      {
+        "type": "unload",
+        "passengerIds": [
+          "fern",
+          "oat",
+          "nell"
+        ]
+      }
+    ],
+    "claim": "Witness feasibility and focused alternatives; no product difficulty/playtime claim."
+  }
+}

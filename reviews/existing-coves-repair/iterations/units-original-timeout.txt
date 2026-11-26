@@ -1,0 +1,42 @@
+
+> last-ferry@1.0.0 test:unit
+> vitest run --reporter=dot
+
+
+ RUN  v5.0.5 C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry
+
+····················································································································································································stdout | tests/unit/bellwater.test.ts > Bellwater Cove uses the production reducer > complete canonical reachability retains the route and pickup constraints
+{"cove":"bellwater","canonicalStates":403,"winningStates":4,"shortestActions":10,"noShallowWins":0,"bellFirstWins":0,"earlyDeliveryWins":0,"noWaitWins":2,"waitedWins":2,"method":"Production reducer and legalActions, sorted passenger identities and pier keys, turn capped only after the final rise, monotonic path-history flags, no search horizon."}
+
+···································stdout | tests/unit/driftwood-yard.test.ts > Driftwood Yard production level > all normalized reachable wins require temporarily staging Nell, without an artificial move budget
+{"levelId":"driftwood-yard","normalizedStates":246,"wins":1,"shortest":12,"bypassWins":0,"method":"Production legalActions/reduce. Turn normalized only after final rise. No search horizon or gameplay cap."}
+
+··········stdout | tests/unit/holding-pier.test.ts > The Holding Pier uses the actual application reducer > exhaustive reachable states: shortest win nine, no win bypasses sheep holding at Stone
+{"experiment":"holding-pier","canonicalStates":154,"winningStates":1,"bypassWins":0,"shortestActions":9}
+
+·············································································································································································································x·····························
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/clearance.test.ts > driftwood-yard: full modeled ferry clears land and piers from all reachable headings, both berth sides and reverse departures
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ tests/unit/clearance.test.ts:64:71
+     62|   return Math.hypot(p[0] - a[0] - t * x, p[1] - a[1] - t * z);
+     63| }
+     64| test.each([level, holdingPier, bellwater, driftwoodYard, twoShelters])(
+       |                                                                       ^
+     65|   '$id: full modeled ferry clears land and piers from all reachable he…
+     66|   (level) => {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 47 passed (48)
+      Tests  1 failed | 459 passed (460)
+   Start at  23:05:44
+   Duration  48.41s (tests 89%, import 7%, worker 2%, transform 2%)
+
+    Isolate  48 workers spawned · ~2.69s startup each (spawn + environment, per file)
+             at least ~5.92s faster with isolate: false — reuses workers across files instead of one per file
+

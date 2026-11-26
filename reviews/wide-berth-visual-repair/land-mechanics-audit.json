@@ -1,0 +1,38 @@
+{
+  "baseline": "45ab9768792ddd3a8dffb67da6c332f8fe2234ff",
+  "nonSpatialLockMatches": true,
+  "currentLevelSha256": "c1ab4d0b4877ff957ddbdf11d3acfaff744f2f344807480c632844a79b818128",
+  "oldPierDefaultConstructionBodyIdenticalAfterWhitespaceNormalization": true,
+  "oldPierDefaultEvidence": "createPier compact argument defaults false, then original construction body; old levels retain original data and calls select false.",
+  "authoredDataBoundsBefore": {
+    "x": [
+      -13.4,
+      18.1
+    ],
+    "z": [
+      -19.5,
+      8
+    ]
+  },
+  "authoredDataBoundsAfter": {
+    "x": [
+      -10.8,
+      14
+    ],
+    "z": [
+      -13.75,
+      5.8
+    ]
+  },
+  "boundsScope": "Node/island data bounds, not rendered image/framing or measured mesh envelope.",
+  "geometryChecks": "land-final-bow.txt: four tests pass after final compact bow/gate change, actual occupied hull/props/land and each pier mesh, both directions/reachable headings, .45 centerline clearance retained; distinctvalidfans; actual per-instance rocks/trees/landmarks vs shore bodies and transfer samples; actual lighthouse/shed lowvertices supported.",
+  "supportModel": "T-shaped pier union plus actual smoothed top contour; narrow central stem, fitted .012board seams, actual below-deck support, frontpilecaps flush withwalkingdeck.",
+  "originalFailures": [
+    "land-first.txt unsupported --minWorkers CLI argument, no tests ran",
+    "land-geometry-first.txt real turn sweep struck Tcrossheads; authoredcourse departure/arrival points now bowaway from shore",
+    "shore-props-first.txt trees/rearrock intersected waiting sheep; shifted realprops clear",
+    "land-second.txt staggered rear rabbit collided lighthousebase and flankrocks; supportedHarborbulb and propsrepositioned",
+    "land-third.txt remainingHarborrockcontact; flankcorrected",
+    "land-fourth.txt frontstaggerchanged to.62 collidedgroundflower; realgrassclumpsshifted; no tolerancereduction"
+  ]
+}

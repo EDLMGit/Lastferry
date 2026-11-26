@@ -1,0 +1,486 @@
+{
+  "id": "two-shelters",
+  "title": "Two Shelters",
+  "rules": {
+    "capacity": 4,
+    "draftBands": [
+      {
+        "maxLoad": 0,
+        "draft": 1
+      },
+      {
+        "maxLoad": 2,
+        "draft": 2
+      },
+      {
+        "maxLoad": 4,
+        "draft": 3
+      }
+    ],
+    "tide": {
+      "initialLevel": 0,
+      "rises": [
+        {
+          "afterTurn": 4,
+          "level": 1
+        },
+        {
+          "afterTurn": 9,
+          "level": 2
+        }
+      ]
+    },
+    "actionCost": 1,
+    "depthFormula": "baseDepth + tideLevel",
+    "pierDryWhen": "tideLevel < elevation",
+    "failureRule": "required passenger waiting at a flooded pier"
+  },
+  "world": {
+    "plane": "XZ",
+    "north": "negative Z",
+    "waterYPerTideLevel": 0.18,
+    "referenceBoatRadius": 0.3,
+    "requiredRouteClearance": 0.45,
+    "clearanceScope": "Actual four-space ferry geometry, both directions and berth headings, including compact shore and pier support.",
+    "presentationNote": "Four compact landings: home lighthouse west, high rocky refuge north, lower timber cottage shelter foreground, reed rabbits east. The two pale shallow channels have deeper stopping pockets.",
+    "suggestedCamera": {
+      "projection": "orthographic",
+      "positionXYZ": [
+        0,
+        34,
+        24
+      ],
+      "targetXYZ": [
+        0,
+        0,
+        -0.3
+      ],
+      "verticalSpan": 12
+    },
+    "islands": [
+      {
+        "id": "lighthouse-island",
+        "elevation": 3,
+        "footprintXZ": [
+          [
+            -8.2,
+            -3.3
+          ],
+          [
+            -5.5,
+            -3.4
+          ],
+          [
+            -4.8,
+            -2.05
+          ],
+          [
+            -5.35,
+            -0.8
+          ],
+          [
+            -7.6,
+            -0.75
+          ],
+          [
+            -8.3,
+            -2
+          ]
+        ]
+      },
+      {
+        "id": "refuge-island",
+        "elevation": 3,
+        "footprintXZ": [
+          [
+            -1.6,
+            -7.05
+          ],
+          [
+            0.65,
+            -7.15
+          ],
+          [
+            1.6,
+            -6.4
+          ],
+          [
+            1.3,
+            -5.1
+          ],
+          [
+            -0.9,
+            -5
+          ],
+          [
+            -1.7,
+            -6
+          ]
+        ]
+      },
+      {
+        "id": "low-island",
+        "elevation": 2,
+        "footprintXZ": [
+          [
+            -1.7,
+            -0.2
+          ],
+          [
+            1,
+            -0.3
+          ],
+          [
+            1.7,
+            0.75
+          ],
+          [
+            1.15,
+            2
+          ],
+          [
+            -1.1,
+            2.05
+          ],
+          [
+            -1.8,
+            0.8
+          ]
+        ]
+      },
+      {
+        "id": "reed-island",
+        "elevation": 1,
+        "footprintXZ": [
+          [
+            4.5,
+            -4.1
+          ],
+          [
+            6.45,
+            -4.2
+          ],
+          [
+            7.35,
+            -3.3
+          ],
+          [
+            6.9,
+            -2.3
+          ],
+          [
+            4.95,
+            -2.25
+          ],
+          [
+            4.15,
+            -3.1
+          ]
+        ]
+      }
+    ]
+  },
+  "nodes": [
+    {
+      "id": "harbor",
+      "baseDepth": 3,
+      "pierId": "harbor-pier",
+      "positionXZ": [
+        -6.5,
+        1.2
+      ]
+    },
+    {
+      "id": "refuge",
+      "baseDepth": 3,
+      "pierId": "refuge-pier",
+      "positionXZ": [
+        0,
+        -2.8
+      ]
+    },
+    {
+      "id": "low",
+      "baseDepth": 3,
+      "pierId": "low-pier",
+      "positionXZ": [
+        0,
+        4
+      ]
+    },
+    {
+      "id": "reeds",
+      "baseDepth": 3,
+      "pierId": "reeds-pier",
+      "positionXZ": [
+        5.8,
+        0
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "harbor-low",
+      "nodes": [
+        "harbor",
+        "low"
+      ],
+      "baseDepth": 3,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [
+          -6.5,
+          1.2
+        ],
+        [
+          -5,
+          3.8
+        ],
+        [
+          -2.6,
+          5.2
+        ],
+        [
+          0,
+          4
+        ]
+      ]
+    },
+    {
+      "id": "harbor-refuge",
+      "nodes": [
+        "harbor",
+        "refuge"
+      ],
+      "baseDepth": 3,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [
+          -6.5,
+          1.2
+        ],
+        [
+          -3.8,
+          0.2
+        ],
+        [
+          -3.8,
+          -2.2
+        ],
+        [
+          0,
+          -2.8
+        ]
+      ]
+    },
+    {
+      "id": "low-refuge",
+      "nodes": [
+        "low",
+        "refuge"
+      ],
+      "baseDepth": 3,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [
+          0,
+          4
+        ],
+        [
+          -2.2,
+          4
+        ],
+        [
+          -2.7,
+          1.8
+        ],
+        [
+          -2.5,
+          -1.2
+        ],
+        [
+          0,
+          -2.8
+        ]
+      ]
+    },
+    {
+      "id": "low-reeds",
+      "nodes": [
+        "low",
+        "reeds"
+      ],
+      "baseDepth": 1,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [
+          0,
+          4
+        ],
+        [
+          2.5,
+          4.5
+        ],
+        [
+          5.8,
+          0
+        ]
+      ]
+    },
+    {
+      "id": "refuge-reeds",
+      "nodes": [
+        "refuge",
+        "reeds"
+      ],
+      "baseDepth": 1,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [
+          0,
+          -2.8
+        ],
+        [
+          3.4,
+          -1.6
+        ],
+        [
+          3.3,
+          0
+        ],
+        [
+          5.8,
+          0
+        ]
+      ]
+    }
+  ],
+  "piers": [
+    {
+      "id": "harbor-pier",
+      "nodeId": "harbor",
+      "elevation": 3,
+      "isDeliveryPier": true,
+      "islandId": "lighthouse-island",
+      "positionXZ": [
+        -6.5,
+        -0.10000000000000009
+      ],
+      "landAnchorXZ": [
+        -6.5,
+        -1.3
+      ],
+      "width": 1.4
+    },
+    {
+      "id": "refuge-pier",
+      "nodeId": "refuge",
+      "elevation": 3,
+      "isDeliveryPier": false,
+      "islandId": "refuge-island",
+      "positionXZ": [
+        0,
+        -4.1
+      ],
+      "landAnchorXZ": [
+        0,
+        -5.3
+      ],
+      "width": 1.4
+    },
+    {
+      "id": "low-pier",
+      "nodeId": "low",
+      "elevation": 2,
+      "isDeliveryPier": false,
+      "islandId": "low-island",
+      "positionXZ": [
+        0,
+        2.7
+      ],
+      "landAnchorXZ": [
+        0,
+        1.5
+      ],
+      "width": 1.4
+    },
+    {
+      "id": "reeds-pier",
+      "nodeId": "reeds",
+      "elevation": 1,
+      "isDeliveryPier": false,
+      "islandId": "reed-island",
+      "positionXZ": [
+        5.8,
+        -1.3
+      ],
+      "landAnchorXZ": [
+        5.8,
+        -2.5
+      ],
+      "width": 1.4
+    }
+  ],
+  "passengers": [
+    {
+      "id": "hazel",
+      "species": "beaver",
+      "slots": 2,
+      "appearance": "beaver-brown"
+    },
+    {
+      "id": "bracken",
+      "species": "beaver",
+      "slots": 2,
+      "appearance": "beaver-brown"
+    },
+    {
+      "id": "mica",
+      "species": "rabbit",
+      "slots": 1,
+      "appearance": "rabbit-cream"
+    }
+  ],
+  "start": {
+    "boatNodeId": "low",
+    "aboard": [
+      "hazel",
+      "bracken"
+    ],
+    "waitingByPier": {
+      "harbor-pier": [],
+      "low-pier": [],
+      "refuge-pier": [],
+      "reeds-pier": [
+        "mica"
+      ]
+    }
+  },
+  "objective": {
+    "deliveryPierId": "harbor-pier",
+    "requiredPassengerIds": [
+      "hazel",
+      "bracken",
+      "mica"
+    ]
+  },
+  "validation": {
+    "searchDepthLimit": 24,
+    "witnessReplays": [
+      "data/two-shelters/witnesses.json"
+    ]
+  },
+  "names": {
+    "nodes": {
+      "harbor": "Harbor",
+      "low": "Low Landing",
+      "refuge": "High Refuge",
+      "reeds": "Reed Pier"
+    },
+    "passengers": {
+      "hazel": "Hazel",
+      "bracken": "Bracken",
+      "mica": "Mica"
+    }
+  }
+}

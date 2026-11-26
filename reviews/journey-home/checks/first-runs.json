@@ -1,0 +1,124 @@
+{
+  "runs": [
+    {
+      "stage": "Original registry and compatibility run",
+      "sourceReportSHA256": "4d61a80d4841cc8ea2b5610a94abdb2a531d5e9d566e578ac23899ed2fa44e51",
+      "passed": 105,
+      "failed": 14,
+      "errors": [
+        {
+          "test": "only Ternhaven target 14 revision 1 joins the eight accepted ratings",
+          "error": "AssertionError: expected [ { id: 'holding-pier', …(3) }, …(11) ] to have a length of 8 but got 12"
+        },
+        {
+          "test": "matching Journey entries reuse the same level identities and the six-person showcase remains complete",
+          "error": "AssertionError: expected [ { id: 'holding-pier', …(3) }, …(11) ] to have a length of 8 but got 12"
+        },
+        {
+          "test": "eight authored story puzzles are registered, with First Crossing practice separate",
+          "error": "AssertionError: expected [ [ 'holding-pier', +0 ], …(11) ] to deeply equal [ [ 'holding-pier', +0 ], …(7) ]"
+        },
+        {
+          "test": "all opening copy and the connective beat remain available without sound or motion",
+          "error": "AssertionError: expected [ 'opening', 'another-bell', …(11) ] to deeply equal [ 'opening', 'another-bell', …(6) ]"
+        },
+        {
+          "test": "all seventeen checkpoints round-trip with coherent accepted completions and scene acknowledgments",
+          "error": "AssertionError: expected [ 'holding-pier', …(16) ] to deeply equal [ 'holding-pier', …(16) ]"
+        },
+        {
+          "test": "before backup preserves primary bytes and offers an honest memory-only continuation",
+          "error": "AssertionError: expected { version: 1, …(3) } to deeply equal { version: 1, …(3) }"
+        },
+        {
+          "test": "during backup preserves primary bytes and offers an honest memory-only continuation",
+          "error": "AssertionError: expected { version: 1, …(3) } to deeply equal { version: 1, …(3) }"
+        },
+        {
+          "test": "silent backup preserves primary bytes and offers an honest memory-only continuation",
+          "error": "AssertionError: expected { version: 1, …(3) } to deeply equal { version: 1, …(3) }"
+        },
+        {
+          "test": "backup throws preserves primary bytes and offers an honest memory-only continuation",
+          "error": "AssertionError: expected { version: 1, …(3) } to deeply equal { version: 1, …(3) }"
+        },
+        {
+          "test": "silent primary preserves primary bytes and offers an honest memory-only continuation",
+          "error": "AssertionError: expected { version: 1, …(3) } to deeply equal { version: 1, …(3) }"
+        },
+        {
+          "test": "primary throws preserves primary bytes and offers an honest memory-only continuation",
+          "error": "AssertionError: expected { version: 1, …(3) } to deeply equal { version: 1, …(3) }"
+        },
+        {
+          "test": "Practice best cannot grant progress; a one-lantern Journey rescue can finish exactly once",
+          "error": "AssertionError: expected { version: 1, …(3) } to deeply equal { version: 1, …(3) }"
+        },
+        {
+          "test": "Practice and the Journey refer to the same authored level and ferry profile",
+          "error": "AssertionError: expected [ Array(12) ] to deeply equal [ [ 'holding-pier', 'opening' ], …(7) ]"
+        },
+        {
+          "test": "Practice and the Journey refer to the same authored level and ferry profile",
+          "error": "AssertionError: expected [ Array(12) ] to deeply equal [ [ 'holding-pier', 'opening' ], …(7) ]"
+        }
+      ]
+    },
+    {
+      "stage": "Added stale-tab and silent-write regressions",
+      "sourceReportSHA256": "4231c69d71b60d0d5ba43e5d4929c2f35728a896db326702d4f050914ee3640c",
+      "passed": 12,
+      "failed": 2,
+      "errors": [
+        {
+          "test": "a stale open chapter cannot roll back a newer saved rescue",
+          "error": "AssertionError: expected '{\"version\":1,\"checkpoint\":{\"kind\":\"co…' to be '{\"version\":1,\"checkpoint\":{\"kind\":\"sc…' // Object.is equality"
+        },
+        {
+          "test": "a silent refusal to save a late chapter is reported as in-session progress",
+          "error": "AssertionError: expected true to be false // Object.is equality"
+        }
+      ]
+    },
+    {
+      "stage": "Development server with scene art in progress",
+      "sourceReportSHA256": "ecc1e04acf5d966c30adf6fb08b91acb75f76094bde700133115b37c292c0545",
+      "passed": 0,
+      "failed": 2,
+      "errors": [
+        {
+          "test": "exact published Ternhaven completion is isolated in Practice and resumes safely at Drowned Orchard",
+          "error": "Error: expect(received).toEqual(expected) // deep equality\n\n- Expected  - 1\n+ Received  + 7\n\n- Array []\n+ Array [\n+   \"lastLightsShot is not defined\",\n+   \"lastLightsShot is not defined\",\n+   \"lastLightsShot is not defined\",\n+   \"lastLightsShot is not defined\",\n+   \"lastLightsShot is not defined\",\n+ ]\n\n  120 |   expect(playing.checkpoint).toEqual({ kind: 'cove', id: 'drowned-orchard' });\n  121 |   expect(playing.acknowledgedScenes).toEqual([...pending.acknowledgedScenes, 'orchard-underwater']);\n> 122 |   expect(errors).toEqual([]);\n      |                  ^\n  123 |   writeFileSync(\n  124 |     dir + '/legacy.json',\n  125 |     JSON.stringify"
+        },
+        {
+          "test": "failed backup readback preserves the old bytes and Home retries on a new explicit gesture",
+          "error": "Error: expect(locator).toHaveAttribute(expected) failed\n\nLocator: locator('.story-picture')\nExpected: \"drowned-orchard\"\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toHaveAttribute\" locator('.story-picture') with timeout 5000ms\n  - waiting for locator('.story-picture')\n\n\n  150 |   expect(await writes(page)).toEqual([backup + '.2']);\n  151 |   await activate(page, 'home-play', true);\n> 152 |   await expect(page.locator('.story-picture')).toHaveAttribute(\n      |                                                ^\n  153 |     'data-illustration',\n  154 |     'drowned-orchard',\n  155 |   );"
+        }
+      ]
+    },
+    {
+      "stage": "Complete production rehearsal and offline opening driver",
+      "sourceReportSHA256": "756b65627606450d3fd15c4a6b2082a5c3b1d2c7f4d072223423c214a75c1c1a",
+      "passed": 2,
+      "failed": 1,
+      "errors": [
+        {
+          "test": "the offline single file plays the opening and reaches the live Holding Pier",
+          "error": "Error: expect(locator).toContainText(expected) failed\n\nLocator: locator('#story-continue')\nExpected substring: \"Take the helm\"\nReceived string:    \"Next\"\nTimeout: 5000ms\n\nCall log:\n  - Expect \"toContainText\" locator('#story-continue') with timeout 5000ms\n  - waiting for locator('#story-continue')\n    14 × locator resolved to <button id=\"story-continue\" class=\"cove-button cove-button--warm\">…</button>\n       - unexpected value \"Next\"\n\n\n  172 |   await activate(page, 'home-play', true);\n  173 |   for (const label of ['Next', 'Next', 'Take the helm']) {\n> 174 |     await expect(page.locator('#story-continue')).toContainText(label);\n      |      "
+        }
+      ]
+    },
+    {
+      "stage": "Offline opening with corrected input and inaccurate accessible name",
+      "sourceReportSHA256": "6097705e5e3db2bd276d58409d92c7feed5ae9394dfa3841ac5d421cf8a80827",
+      "passed": 0,
+      "failed": 1,
+      "errors": [
+        {
+          "test": "the offline single file plays the opening and reaches the live Holding Pier",
+          "error": "Error: expect(locator).toHaveAttribute(expected) failed\n\nLocator:  locator('#seascape')\nExpected: \"Holding Pier\"\nReceived: \"The Holding Pier\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveAttribute\" locator('#seascape') with timeout 5000ms\n  - waiting for locator('#seascape')\n    12 × locator resolved to <section id=\"seascape\" aria-busy=\"false\" aria-label=\"The Holding Pier\">…</section>\n       - unexpected value \"The Holding Pier\"\n\n\n  178 |   }\n  179 |   await idle(page);\n> 180 |   await expect(page.locator('#seascape')).toHaveAttribute('aria-label', 'Holding Pier');\n      |                                           ^\n  181 |   await activate("
+        }
+      ]
+    }
+  ]
+}

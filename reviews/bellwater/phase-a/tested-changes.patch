@@ -1,0 +1,602 @@
+diff --git a/NEXT_TASK.md b/NEXT_TASK.md
+index 0ba048a..3e89733 100644
+--- a/NEXT_TASK.md
++++ b/NEXT_TASK.md
+@@ -1,70 +1,162 @@
+-# Last Ferry — full-width cove and contextual controls
++# Last Ferry — Bellwater Cove
+ 
+-Continue on `m1-first-crossing` from the reviewed navigation pass, commit `95f4ca4b49c65e37414d02c6186774ebf275808c`, or preserve any newer user work on that branch. PR #1 stays draft; main stays unchanged. Follow the existing authorized Git workflow and repository instructions.
++## Current task and working agreement
++
++Continue on `m1-first-crossing` from the reviewed contextual-interface commit `e9c81d620df5fca0983965e80c348260fb3518e9`, preserving any newer user work. Follow AGENTS.md and the existing authorized Git workflow. PR #1 remains draft; main remains unchanged.
++
++This is the current task after the contextual-interface pass. It explicitly advances beyond the original M1 stopping point. Complete the bounded fixes, one new authored cove, its modest environmental identity, and the verification/handoff described here. Do not stop after the first fix to request another task.
+ 
+ ## Product decision
+ 
+-The navigation pass is accepted. Holding Pier is our introductory puzzle. Its challenge, authored values and solution should remain unchanged in this task.
++Keep Holding Pier as the introductory puzzle and preserve its solution. Build **Bellwater Cove**, a second main puzzle with a different planning problem, using the existing rules and controls.
++
++The next larger milestone after Bellwater is a shared environment pass across the two main coves: water, shallows, shore contact, lighting and restrained arrival detail. Do not undertake that broader visual overhaul in this task. Bellwater still needs enough authored scenery to feel like a new place and explain its routes.
++
++We are testing puzzle variety before adding another mechanic. Bellwater's difficulty and enjoyment are hypotheses for the user's playtest; neither its action count nor a solver proves them.
++
++## A. Resolve the bounded responsive issue first
++
++An independent review reproduced a local-action-card defect at intermediate landscape heights.
++
++**Reproduction at 844 × 500:** open `/?cove=holding-pier`, let Moss ashore, then try to use the map's Sail to Shallows button. The stretched `#local-context` section covers the button and intercepts its pointer input. At 1024 × 600, the same card stretches into the forecast area.
++
++**Cause:** compact landscape CSS applies through 600 px height, setting local context to bottom anchoring with no centering transform. `positionMap()` in `src/main.ts` switches to compact positioning only through 480 px, so it supplies desktop inline top/left values between 481 and 600 px. These rules conflict.
++
++Use a consistent layout condition and clear stale inline positioning when compact layout owns the card. Keep the card at its intended content height and prevent overlap with route targets or forecast. A review-browser-only change from the JavaScript 480 px condition to 600 px restored the nine-action Holding Pier rescue at both sizes; this is a candidate direction, not a committed fix or a complete regression result.
++
++Retain a focused regression that performs the real unloading and sailing actions at 844 × 500, checks local controls/forecast at 1024 × 600, and exercises a resize across the breakpoint. Preserve the existing 1440 × 900, 844 × 390 and 780 × 390 layouts and the baseline cove.
++
++Before content work, run the relevant current interaction checks. The independent Linux/Chromium 141 review also encountered input/capture timeouts in the broad suite, whereas the contributor reported a full pass in Chromium 156. In particular, recheck rapid Confirm taps on the baseline phone boarding card and loss → Undo → safe boarding under reduced motion. Investigate any reproducible failure; do not weaken state assertions, add arbitrary sleeps or silently relabel the independent full run as passed. A timeout alone is not proof of a gameplay defect.
++
++Repeated Confirm input must commit exactly one action and must not activate a newly exposed background control or open an unintended dialog. Check normal animation and reduced motion, recording input spacing so delayed automation is not misclassified as a rapid double tap. The independent no-recording follow-up passed both production rescues but timed out in all three longer contextual scenarios; it does not establish that recording was the cause or that the full browser suite passed.
++
++## B. Author Bellwater's exact puzzle
++
++Level ID: `bellwater`. Display title: **Bellwater Cove**.
++
++The ferry starts empty at Harbor. Two rabbits, **Tansy** and **Lark**, wait at Low Pier. A sheep, **Bram**, waits at Bell Pier. Reuse the existing rabbit/sheep models. These are new neighbors, so the introductory passengers do not become inexplicably stranded again.
++
++Use stable level-local passenger IDs. Add only the small amount of level-owned naming metadata needed for the new residents and locations; preserve Pip, Rue and Moss in the existing coves. Status, action labels, subset warnings, accessible names, forecasts and endings must use the active level's names.
++
++### Rules retained
++
++- Capacity 4. Each rabbit uses 1 slot; the sheep uses 2.
++- Draft: empty = 1; load 1–2 = 2; load 3–4 = 3.
++- Every accepted move across one edge, Board selection, Unload selection or Wait costs one action.
++- Tide starts at 0, rises to 1 after action 4, then to 2 after action 8. It does not rise further.
++- Route/basin depth is base depth plus tide. Equality supports the boat.
++- A pier is dry when tide is strictly below its elevation.
++- Apply the complete action, then advance the turn/tide and evaluate flooding. Arrival does not include boarding.
++- Preserve free inspection, actual selected-subset previews, one-activation safe sailing, dangerous-action confirmation, passenger conservation and complete Undo.
++- Win only after all three required passengers are delivered at Harbor. No new move cap, timer, score requirement or mandatory Wait.
++
++### Nodes and piers
++
++Every stopping basin has base depth 3.
++
++| Stop | Pier elevation | Starting passengers / role |
++| --- | ---: | --- |
++| Harbor | 3 | Empty; safe delivery destination; ferry starts here |
++| Shallows | None | Short-route waypoint |
++| Low Pier | 1 | Tansy and Lark; boarding can complete on action 4 before the rise |
++| West Buoy | None | Outer-route waypoint |
++| East Buoy | None | Outer-route waypoint |
++| Bell Pier | 2 | Bram; boarding can complete on action 8 before the rise |
++
++### Connections
++
++All six edges are bidirectional. These are the entire route graph; do not add a shortcut during geometry work.
++
++| Edge | Base depth |
++| --- | ---: |
++| Harbor ↔ Shallows | 1 |
++| Shallows ↔ Low Pier | 1 |
++| Harbor ↔ West Buoy | 3 |
++| West Buoy ↔ East Buoy | 3 |
++| East Buoy ↔ Low Pier | 3 |
++| Harbor ↔ Bell Pier | 2 |
++
++The two-edge shallow route and three-edge deep route form a loop between Harbor and Low Pier. Bell Pier branches directly from Harbor. There are six stopping nodes, six edges and three islands.
++
++### Intended discovery
++
++The return route can differ from the outward route because the water changes. The player must also consider both pickup deadlines and the cost of delivering passengers when passing through Harbor. Communicate the rules and consequences clearly, while leaving the plan for the player to discover.
++
++Do not add a walkthrough, recommended move, forced highlight sequence or compulsory Wait step. Keep the legitimate alternatives below.
++
++## C. Implementation witnesses — keep these out of player-facing instructions
+ 
+-Remove the permanent right sidebar. Give the cove the full play area, retain the successful named map controls, and move the sidebar's remaining functions into contextual buttons and compact dialogs. The player should spend most of a normal turn looking at the miniature cove.
++Two representative ten-action rescues:
+ 
+-Read the current source and review evidence before changing the UI. This is a complete interaction migration, including the functions that currently exist only in the sidebar. A hidden sidebar or a permanently open floating replacement does not satisfy the task.
++| Action | Shallow outward / deep return | Deep outward / shallow return |
++| ---: | --- | --- |
++| 1 | Harbor → Shallows | Harbor → West Buoy |
++| 2 | Shallows → Low Pier | West Buoy → East Buoy |
++| 3 | Board both rabbits | East Buoy → Low Pier |
++| 4 | Low Pier → East Buoy; tide rises | Board both rabbits; tide rises |
++| 5 | East Buoy → West Buoy | Low Pier → Shallows |
++| 6 | West Buoy → Harbor | Shallows → Harbor |
++| 7 | Harbor → Bell Pier | Harbor → Bell Pier |
++| 8 | Board Bram; tide rises after boarding | Board Bram; tide rises after boarding |
++| 9 | Bell Pier → Harbor | Bell Pier → Harbor |
++| 10 | Deliver everyone | Deliver everyone |
+ 
+-## 1. Main play screen
++A third valid family takes the shallow route both ways. One Wait before the first shallow return step allows the tide to reach 1. Valid placements include Harbor before departure, Shallows, or Low Pier before or after boarding both rabbits. Boarding the two rabbits separately on actions 3 and 4 also works. Preserve both rabbit-selection orders and these valid alternatives. Longer harmless play after everyone is aboard remains legal.
+ 
+-- Use the full viewport width for the scene. Reframe the camera and reposition map labels for the available space. Keep the lighthouse, ferry, useful piers, passengers and passages legible at desktop and landscape-phone sizes. Keep labels off important scenery where possible; do not change authored world coordinates to solve UI layout.
+-- Retain named map controls and their meaningful current, available, too-shallow, nonadjacent and flood-warning states. A safe adjacent sailing action remains one activation and one committed action.
+-- Keep a separate, visible Inspect affordance for adjacent destinations so a player can inspect a safe route without sailing. It must work with touch and keyboard; hover alone is insufficient. Blocked destinations open a free explanation. Focus/hover/inspection must continue to highlight the actual passage.
+-- Show a compact objective and progress: “Bring all three passengers to Harbor” and Home 0/3, adapting to each cove's actual state.
+-- Keep the boat's load/required depth and the urgent deadline visible without opening a dialog. For example, “Depth 2 · 2/4 spaces” and “Rabbit Pier floods in 4 actions.” Derive this information from state and replace obsolete danger emphasis when the passengers are safe.
+-- Keep Undo and Wait directly accessible with clear labels. Wait must show its one-action cost and open its actual consequence before commitment. Put Restart, Sound, detailed help and cove selection in a small Menu dialog. The deadline/status control can open the tide and pier forecast.
++Meaningful unsuccessful or blocked plans:
+ 
+-## 2. Local passenger actions
++- Go to Bell Pier first: the rabbits cannot be boarded before the first rise.
++- Use the deep outer route in both directions: reach Harbor on action 7, then Bell Pier on action 8, too late to board Bram.
++- Deliver any rabbit before boarding Bram: the transfer consumes the remaining boarding window.
++- At Low Pier on action 3 after boarding both rabbits, attempt the shallow return: current depth 1 cannot support draft 2. Inspection must explain the blockage freely; a future rise cannot validate the current move.
+ 
+-Place the available passenger actions near the ferry/current pier. A compact bottom action strip is acceptable on short phone screens if it keeps the scene legible. Use concrete action labels such as “Let Moss ashore,” “Board Pip and Rue” and “Bring passengers home.”
++The rules prototype was evaluated with the exact checked-out production reducer at the reviewed commit. Complete legal-action reachability found 121 canonical states, shortest rescue 10, and eight shortest action sequences grouped into the route/timing families above. There were zero wins without shallow-route use, zero wins when first sailing toward Bell Pier, and zero wins with delivery before sheep boarding. Wins exist without Wait.
+ 
+-Activating a passenger action opens one card containing selection, consequence and confirmation. Avoid a chain of separate action-picker and confirmation dialogs. If boarding and unloading are both available, expose both without recommending the puzzle solution.
++These are design checks, not evidence of a playable Bellwater implementation. Counts depend on canonicalization and should not become brittle UI gates. Preserve the actual witness behavior and constraints. The prototype's coordinates and inherited scenery were provisional; author and validate coherent production geometry rather than copying them.
+ 
+-Clicking the current pier or ferry should expose or focus its local actions without spending a turn or offering an invalid move. Remove stale instructions that tell the player to use the former side panel.
++## D. Make Bellwater a distinct place
+ 
+-## 3. Contextual dialogs
++Create a new inlet composition instead of repeating the current straight row of islands:
+ 
+-Use one compact dialog at a time for passenger transfer, passage inspection, Wait, forecast, Menu or terminal feedback. Keep as much useful scene visible as the task permits. On phones, a bounded bottom sheet is acceptable. The normal play screen must not retain an empty panel-sized area.
++- A low sandy/reed-edged shore for the rabbits.
++- A higher rocky pickup shore with a small recognizable bell landmark for Bram.
++- The safe Harbor/lighthouse destination.
++- A legible shallow channel and a visibly deeper outer route.
++- A modest change in coast shape, local planting and light/palette, within the existing miniature style.
+ 
+-The transfer dialog contains:
++Use existing geometry/material techniques and reusable assets. The bell is a landmark, not a new gameplay system. Keep decorative routes, water highlights and scenery from implying connections or access that the level data does not provide.
+ 
+-1. The selected action and passenger choices, including supported subsets.
+-2. Resulting boat load/depth and the relevant route or pier consequence.
+-3. The actual action/tide order where it matters.
+-4. A single clear confirmation and an accessible Cancel/close action.
++Author island footprints, pier positions, camera framing and route waypoints together. Verify actual ferry clearance in both directions along every route. Do not change topology/depths or squeeze paths through land to fit existing decoration.
+ 
+-Continue to derive all consequences from the actual selected preview. Selecting only one rabbit at the critical boundary must name the rabbit left to flood. Selecting both must explain that they board before the rise and are safe aboard. Do not hardcode copy to the successful solution.
++The current renderer hardcodes some lighthouse/house positions and special-cases existing pier IDs. Move only the necessary scenery anchors, names and layout settings into level-owned data or a small explicit scene configuration. Make the six-stop framing and label placement work in Bellwater while preserving both older coves. No generic level editor or broad rendering-framework rewrite is needed.
+ 
+-Inspection and cancellation remain free. Use a brief “Inspection · no action spent” label once rather than repeating it throughout the card. An immediately losing sailing action must retain its explicit warning and confirmation. Ordinary safe sailing must not gain a mandatory dialog.
++Retain the shared water implementation for this milestone, adding the authored shallow/shore treatment the new puzzle needs. The following shared environment milestone will address repetitive ripples, shoreline/water contact across tides and overall atmosphere across the two main coves.
+ 
+-While a dialog is open, prevent background gameplay input and click-through. Supply dialog semantics, predictable initial focus, a usable Tab/Shift+Tab cycle, Escape/Cancel, and focus restoration to its trigger or a valid successor if that trigger disappeared after committing. Prevent double actions during transitions and repeated touch input. Essential consequences and the confirmation must remain fully visible at both 844 × 390 and 780 × 390. Preserve at least 14 px essential text and 44 px interactive targets.
++## E. Provide a small playable sequence
+ 
+-Success and failure use compact result cards with clear recovery controls. Terminal Undo must continue to work and must not be blocked behind an inaccessible modal.
++Make Holding Pier the normal default/new-game entry now that it is the accepted introduction. Keep First Crossing available explicitly through its existing query route and Menu as the baseline cove.
+ 
+-## 4. Scope and implementation
++On Holding Pier success, add an accessible **Next cove** action that opens Bellwater. Preserve terminal Undo/Restart. Add Bellwater to Menu and make `/?cove=bellwater` open it directly.
+ 
+-Preserve both coves, their current entry routes/selection, topology, passenger costs, capacity and draft bands, tide timing, reducer event order, preview semantics and complete Undo. Do not add a new cove, tune difficulty, introduce another mechanic, redesign the characters or change dependencies as part of this pass.
++A brief transition line is enough: “Further along the coast, two piers still have their lights on.” Show the new cove title and fresh residents. Do not build a campaign map, unlock tree, save system or dialogue framework. Bellwater's completion should acknowledge that its neighbors are safe without pretending the whole game's story is finished.
+ 
+-Replace the sidebar flow rather than leaving a second parallel UI path. Organize UI code as needed to keep state, presentation and dialog interaction coherent. Keep the deterministic simulation independent of layout and animation. Avoid speculative UI frameworks or infrastructure.
++Update baseline-specific tests to request `?cove=first-crossing` explicitly where necessary; keep their original gameplay assertions. Add a small test of default Holding Pier → success → Next cove → Bellwater initial state.
+ 
+-## 5. Acceptance and verification
++## F. Verification and handoff
+ 
+-The result should demonstrate the following through the real interface:
++Run build/typecheck and the relevant unit/browser checks against the actual implementation. At minimum establish:
+ 
+-- The full-width initial cove shows the objective, depth/load, urgent deadline and named destinations. Local passenger actions are discoverable without opening a general menu.
+-- Safe map sailing still commits exactly once. Safe and blocked routes can be inspected for free with mouse, keyboard and emulated touch.
+-- Both coves can be completed. Holding Pier retains its nine-action rescue, meaningful losing alternatives and full Undo across unloading, tide rise and terminal state.
+-- Passenger subset changes update the real preview. Both the complete safe boarding message and complete one-rabbit loss message fit, together with confirmation, at the two phone sizes.
+-- Dialog opening, switching and cancellation do not change game state. Keyboard focus behaves correctly and background clicks/touches cannot commit actions through an open or closing dialog.
+-- Wait, forecast, rules, Restart, Sound and cove selection remain reachable. The current boat/pier interaction and any instructions match the new layout.
++1. The responsive fix restores actual mouse/touch actions and keeps local controls clear at 844 × 500 and 1024 × 600, including resizing. Existing desktop and 390 px-high layouts still work.
++2. Holding Pier and First Crossing retain their rescues, input protection, free inspection, subset consequences and complete Undo. Resolve any reproduced baseline interaction failure before proceeding.
++3. Bellwater's representative route families win through the real reducer. Its failed alternatives fail for the intended reasons; Wait is not compulsory.
++4. An actual-UI Bellwater rescue works with mouse, natural keyboard and emulated touch. Check one valid route through production without debug controls.
++5. Boarding on actions 4 and 8 is safe before the respective rise. Invalid shallow inspection costs no time. Subset previews identify the actual passenger left behind. Undo restores passengers, tide, boat, delivered state and outcome through both rises and terminal state.
++6. All six destinations, passage highlights, local passenger actions and important warnings are legible at 1440 × 900, 844 × 390 and 780 × 390. Essential consequences and confirmation fit without clipping; retain 14 px essential text and 44 px targets.
++7. Scene and ferry clearance checks use the new authored geometry, and level-specific naming/scenery does not break the older coves.
++8. Default entry, Menu selection and the Next cove action load the intended level and reset state correctly.
+ 
+-Run build/typecheck, the unit suite and browser checks relevant to this migration. Update affected tests to use the new actual controls and add focused coverage for modal focus and background-input behavior. Keep the existing state, consequence and clipping assertions meaningful; do not weaken them to accommodate the new structure. Stop once the relevant risks are covered.
++Capture representative actual gameplay: new cove start, blocked shallow return, critical boarding at a rise, changed water/passenger state and completion. Include both phone widths for initial framing and the most constrained preview. Inspect images at native size. Keep an uninterrupted recording locally if supported; no external hosting is required.
+ 
+-Capture the actual game at 1440 × 900, 844 × 390 and 780 × 390: initial cove, route inspection, critical boarding, one-rabbit warning, after the tide rise and success. Inspect layout at native size. Retain a short uninterrupted recording locally if supported; no external hosting is required.
++Update the rule/level documentation, STATUS and a compact review report. Record exact source identity, actual commands/results, environment and remaining uncertainty. Do not treat reference-model results as actual UI evidence or claim fresh checks that were not rerun. Follow the existing normal push/draft-PR handoff workflow and report the final commit. Main stays unchanged.
+ 
+-Update STATUS and the review report with source identity, actual commands/results, representative screenshots and any remaining issue. Use the existing authorized branch/PR handoff workflow. Keep PR #1 draft and main unchanged. Report the final commit and distinguish fresh evidence from any reused evidence. Finish this interface milestone before beginning the next cove.
++Finish Bellwater before adding further levels or mechanics. The user will playtest it; the next direction after that is the planned shared environment pass.
+diff --git a/src/main.ts b/src/main.ts
+index ffb4089..3ae92f8 100644
+--- a/src/main.ts
++++ b/src/main.ts
+@@ -123,8 +123,17 @@ function renderDialog() {
+           };
+           renderDialog();
+         };
+-    $('commit').onclick = () => {
+-      if (mode === 'action' && selected && !session.busy) execute(selected);
++    $('commit').onclick = (e) => {
++      if (mode === 'action' && selected && !session.busy) {
++        if (e.isTrusted && e.detail > 0)
++          closingFence = {
++            rect: $('commit').getBoundingClientRect(),
++            until: performance.now() + 180,
++            x: e.clientX,
++            y: e.clientY,
++          };
++        execute(selected);
++      }
+     };
+   } else if (mode === 'forecast') {
+     const f = forecastCopy(s, level);
+@@ -343,7 +352,7 @@ function positionDialog() {
+ }
+ function positionMap() {
+   const host = world.host,
+-    small = matchMedia('(max-height: 480px)').matches;
++    small = matchMedia('(max-height: 600px) and (min-width: 701px)').matches;
+   for (const n of level.nodes) {
+     const group = $(`stop-${n.id}`);
+     if (!group) continue;
+@@ -391,13 +400,36 @@ function positionMap() {
+             .join('')
+         : '';
+   if (!small && innerWidth > 700) {
+-    const point = world.project(
+-      level.nodes.find((n) => n.id === session.state.boatNodeId)!.positionXZ,
+-    );
++    const boat = world.frameStatus().boat;
+     const local = $('local-context'),
+-      half = local.offsetWidth / 2;
+-    local.style.left = `${Math.max(half + 16, Math.min(host.clientWidth - half - 16, point.x))}px`;
+-    local.style.top = `${Math.min(host.offsetTop + host.clientHeight - local.offsetHeight - 10, point.y + host.offsetTop + 58)}px`;
++      width = local.offsetWidth,
++      height = local.offsetHeight,
++      obstacles = [
++        ...document.querySelectorAll<HTMLElement>('.map-stop, .hud, #status-toggle'),
++      ].map((e) => e.getBoundingClientRect()),
++      centerX = (boat.left + boat.right) / 2,
++      centerY = (boat.top + boat.bottom) / 2 + host.offsetTop;
++    const candidates = [
++      [centerX - width / 2, boat.bottom + host.offsetTop + 10],
++      [boat.left - width - 12, centerY - height / 2],
++      [boat.right + 12, centerY - height / 2],
++      [centerX - width / 2, boat.top + host.offsetTop - height - 12],
++    ].map(([x, y]) => ({
++      x: Math.max(16, Math.min(host.clientWidth - width - 16, x)),
++      y: Math.max(host.offsetTop + 8, Math.min(host.offsetTop + host.clientHeight - height - 8, y)),
++    }));
++    const chosen =
++      candidates.find((p) =>
++        obstacles.every(
++          (r) =>
++            p.x + width + 8 <= r.left ||
++            p.x - 8 >= r.right ||
++            p.y + height + 8 <= r.top ||
++            p.y - 8 >= r.bottom,
++        ),
++      ) ?? candidates[0];
++    local.style.left = `${chosen.x + width / 2}px`;
++    local.style.top = `${chosen.y}px`;
+   } else {
+     $('local-context').style.removeProperty('left');
+     $('local-context').style.removeProperty('top');
+diff --git a/src/style.css b/src/style.css
+index db83aca..1a2135f 100644
+--- a/src/style.css
++++ b/src/style.css
+@@ -180,6 +180,7 @@ h1 {
+ }
+ #local-context {
+   position: absolute;
++  width: max-content;
+   transform: translateX(-50%);
+   max-width: 440px;
+   padding: 8px;
+diff --git a/tests/e2e/responsive.spec.ts b/tests/e2e/responsive.spec.ts
+new file mode 100644
+index 0000000..88dd641
+--- /dev/null
++++ b/tests/e2e/responsive.spec.ts
+@@ -0,0 +1,300 @@
++import { test, expect, type Locator, type Page } from '@playwright/test';
++import { mkdirSync, writeFileSync } from 'node:fs';
++import { reviewDir } from './evidence';
++import { activate, act, ready, state, rendered, idle, undo, fullyVisible, readable } from './ui';
++
++async function noOverlap(first: Locator, second: Locator) {
++  const a = await first.boundingBox(),
++    b = await second.boundingBox();
++  expect(a).not.toBeNull();
++  expect(b).not.toBeNull();
++  const width = Math.min(a!.x + a!.width, b!.x + b!.width) - Math.max(a!.x, b!.x);
++  const height = Math.min(a!.y + a!.height, b!.y + b!.height) - Math.max(a!.y, b!.y);
++  const viewport = first.page().viewportSize()!;
++  const detail = {
++    first: first.toString(),
++    second: second.toString(),
++    firstBounds: a,
++    secondBounds: b,
++    width,
++    height,
++    viewport,
++  };
++  if (width > 0.5 && height > 0.5) {
++    await first.page().screenshot({
++      path: `${reviewDir}/responsive-overlap-${viewport.width}x${viewport.height}.png`,
++    });
++    writeFileSync(
++      `${reviewDir}/responsive-overlap-${viewport.width}x${viewport.height}.json`,
++      JSON.stringify(detail, null, 2),
++    );
++  }
++  expect(width <= 0.5 || height <= 0.5, JSON.stringify(detail)).toBe(true);
++}
++
++async function localLayout(page: Page) {
++  const local = page.locator('#local-context');
++  await fullyVisible(page, local, false);
++  await fullyVisible(page, page.locator('#status-toggle'));
++  await readable(page.locator('#local-heading'));
++  const measurements = await local.evaluate((element) => {
++    const rect = element.getBoundingClientRect(),
++      style = getComputedStyle(element);
++    const children = [...element.children].map((child) => child.getBoundingClientRect());
++    const contentHeight =
++      Math.max(...children.map((child) => child.bottom)) -
++      Math.min(...children.map((child) => child.top));
++    const extra = ['paddingTop', 'paddingBottom', 'borderTopWidth', 'borderBottomWidth'].reduce(
++      (sum, property) =>
++        sum + Number.parseFloat(style[property as keyof CSSStyleDeclaration] as string),
++      0,
++    );
++    return {
++      width: innerWidth,
++      height: innerHeight,
++      cardHeight: rect.height,
++      naturalHeight: contentHeight + extra,
++      inlineTop: (element as HTMLElement).style.top,
++      inlineLeft: (element as HTMLElement).style.left,
++    };
++  });
++  expect(measurements.cardHeight).toBeLessThanOrEqual(measurements.naturalHeight + 1);
++  expect(measurements.cardHeight).toBeLessThanOrEqual(120);
++  if (measurements.width > 700 && measurements.height <= 600) {
++    expect(measurements.inlineTop).toBe('');
++    expect(measurements.inlineLeft).toBe('');
++  }
++  await noOverlap(local, page.locator('#status-toggle'));
++  for (const route of await page.locator('#map-labels button').all()) {
++    await fullyVisible(page, route);
++    await noOverlap(local, route);
++  }
++  for (const button of await page.locator('#local-actions button').all()) {
++    await fullyVisible(page, button);
++    await readable(button);
++  }
++  return measurements;
++}
++
++async function resize(page: Page, width: number, height: number) {
++  const frames = await page.evaluate(() => (window as any).__LAST_FERRY__.getMetrics().frames);
++  await page.setViewportSize({ width, height });
++  await page.waitForFunction(
++    (prior) => (window as any).__LAST_FERRY__.getMetrics().frames > prior + 1,
++    frames,
++  );
++}
++
++for (const [width, height] of [
++  [844, 500],
++  [1024, 600],
++] as const) {
++  for (const touch of [false, true]) {
++    const input = touch ? 'touch' : 'mouse';
++    test(`responsive ${width}x${height} ${input}: local card, forecast, breakpoint resize and nine-action rescue`, async ({
++      browser,
++    }) => {
++      const context = await browser.newContext({
++        viewport: { width, height },
++        deviceScaleFactor: 1,
++        hasTouch: touch,
++        isMobile: touch,
++      });
++      const page = await context.newPage();
++      mkdirSync(reviewDir, { recursive: true });
++      await ready(page, 'holding-pier');
++      const layouts = [await localLayout(page)],
++        original = await state(page);
++      await activate(page, 'status-toggle', touch);
++      await expect(page.locator('.forecast-detail')).toContainText('Rabbit Pier');
++      expect(await state(page)).toEqual(original);
++      await activate(page, 'cancel', touch);
++      await act(page, 'unload', touch);
++      expect(await state(page)).toMatchObject({
++        turn: 1,
++        boatNodeId: 'stone',
++        aboard: [],
++        waitingByPier: { 'stone-pier': ['sheep-1'] },
++      });
++      layouts.push(await localLayout(page));
++      await page.screenshot({
++        path: `${reviewDir}/responsive-${width}x${height}-${input}-unloaded.png`,
++      });
++      const afterUnloading = await state(page);
++      await act(page, 'map-shallows', touch);
++      expect(await state(page)).toMatchObject({ turn: 2, boatNodeId: 'shallows' });
++      await expect(page.locator('#dialog')).not.toBeVisible();
++      await undo(page, touch);
++      expect(await state(page)).toEqual(afterUnloading);
++      for (const [nextWidth, nextHeight] of [
++        [844, 480],
++        [844, 481],
++        [1024, 600],
++        [1024, 601],
++        [1440, 900],
++        [1024, 601],
++        [1024, 600],
++        [844, 481],
++        [844, 480],
++        [844, 390],
++        [780, 390],
++        [width, height],
++      ]) {
++        await resize(page, nextWidth, nextHeight);
++        layouts.push(await localLayout(page));
++        expect(await state(page)).toEqual(afterUnloading);
++      }
++      const route = page.locator('#map-shallows');
++      expect(
++        await route.evaluate((element) => {
++          const rect = element.getBoundingClientRect();
++          return document
++            .elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2)
++            ?.closest('button')?.id;
++        }),
++      ).toBe('map-shallows');
++      await act(page, 'map-shallows', touch);
++      expect(await state(page)).toMatchObject({ turn: 2, boatNodeId: 'shallows' });
++      await expect(page.locator('#dialog')).not.toBeVisible();
++      for (const id of [
++        'map-rabbit-pier',
++        'board',
++        'map-shallows',
++        'map-stone',
++        'board',
++        'map-harbor',
++        'unload',
++      ])
++        await act(page, id, touch);
++      expect(await state(page)).toMatchObject({
++        turn: 9,
++        tideLevel: 2,
++        status: 'won',
++        aboard: [],
++        delivered: ['rabbit-1', 'rabbit-2', 'sheep-1'],
++      });
++      await fullyVisible(page, page.locator('#terminal-undo'));
++      writeFileSync(
++        `${reviewDir}/responsive-${width}x${height}-${input}.json`,
++        JSON.stringify(
++          {
++            input,
++            touchEmulation: touch,
++            browser: browser.version(),
++            userAgent: await page.evaluate(() => navigator.userAgent),
++            layouts,
++            initialState: original,
++            afterUnloading,
++            finalState: await state(page),
++          },
++          null,
++          2,
++        ),
++      );
++      await context.close();
++    });
++  }
++}
++
++for (const reduced of [false, true]) {
++  test(`rapid phone Confirm ${reduced ? 'reduced' : 'normal'}: trusted touch spacing, one commit and no background dialog`, async ({
++    browser,
++  }) => {
++    const context = await browser.newContext({
++      viewport: { width: 844, height: 390 },
++      deviceScaleFactor: 1,
++      hasTouch: true,
++      isMobile: true,
++      reducedMotion: reduced ? 'reduce' : 'no-preference',
++    });
++    const page = await context.newPage();
++    mkdirSync(reviewDir, { recursive: true });
++    await ready(page, 'first-crossing');
++    await act(page, 'map-sheep-pier', true);
++    await activate(page, 'board', true);
++    await fullyVisible(page, page.locator('#commit'));
++    const before = await state(page),
++      beforeRender = await rendered(page),
++      bounds = await page.locator('#commit').boundingBox();
++    await page.evaluate(() => {
++      const w = window as any;
++      w.__phaseAInput = [];
++      const record = (event: Event) => {
++        const pointer = event as PointerEvent,
++          target = event.target as Element;
++        w.__phaseAInput.push({
++          type: event.type,
++          at: event.timeStamp,
++          observedAt: performance.now(),
++          trusted: event.isTrusted,
++          target: target.closest('[id]')?.id ?? '',
++          pointerType: pointer.pointerType ?? '',
++          x: pointer.clientX,
++          y: pointer.clientY,
++          turn: w.__LAST_FERRY__.getState().turn,
++          history: w.__LAST_FERRY__.getRenderStatus().historyLength,
++          dialog: document.getElementById('dialog')?.hasAttribute('open'),
++        });
++      };
++      for (const type of ['pointerdown', 'pointerup', 'click'])
++        window.addEventListener(type, record, true);
++    });
++    const x = bounds!.x + bounds!.width / 2,
++      y = bounds!.y + bounds!.height / 2;
++    await page.touchscreen.tap(x, y);
++    if (reduced) await idle(page);
++    await page.touchscreen.tap(x, y);
++    await idle(page);
++    const events = await page.evaluate(() => (window as any).__phaseAInput);
++    const down = events.filter((event: any) => event.type === 'pointerdown'),
++      up = events.filter((event: any) => event.type === 'pointerup');
++    expect(down).toHaveLength(2);
++    expect(up).toHaveLength(2);
++    const spacing = down[1].at - up[0].at;
++    const after = await state(page),
++      afterRender = await rendered(page);
++    writeFileSync(
++      `${reviewDir}/rapid-confirm-${reduced ? 'reduced' : 'normal'}.json`,
++      JSON.stringify(
++        {
++          reducedMotion: reduced,
++          recording: false,
++          input: 'emulated touch',
++          browser: browser.version(),
++          userAgent: await page.evaluate(() => navigator.userAgent),
++          viewport: [844, 390],
++          firstReleaseToSecondPressMs: spacing,
++          events,
++          before,
++          after,
++          historyBefore: beforeRender.historyLength,
++          historyAfter: afterRender.historyLength,
++        },
++        null,
++        2,
++      ),
++    );
++    expect(events.every((event: any) => event.trusted)).toBe(true);
++    expect(down[0]).toMatchObject({ target: 'commit', pointerType: 'touch', turn: 1 });
++    expect(
++      spacing,
++      'The observed touch sequence must be rapid rather than delayed automation',
++    ).toBeGreaterThanOrEqual(0);
++    expect(
++      spacing,
++      'The observed touch sequence must be rapid rather than delayed automation',
++    ).toBeLessThanOrEqual(180);
++    expect(after).toMatchObject({
++      turn: 2,
++      tideLevel: 0,
++      status: 'playing',
++      boatNodeId: 'sheep-pier',
++      aboard: ['rabbit-1', 'rabbit-2', 'sheep-1'],
++      waitingByPier: { 'sheep-pier': [] },
++      delivered: [],
++    });
++    expect(afterRender.historyLength).toBe(beforeRender.historyLength + 1);
++    await expect(page.locator('#dialog')).not.toBeVisible();
++    await context.close();
++  });
++}

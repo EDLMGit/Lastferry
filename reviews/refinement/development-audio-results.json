@@ -1,0 +1,44 @@
+{
+  "environment": "Windows PowerShell; Node v24.15.0; Vitest 5.0.5; existing local install",
+  "command": "npm exec vitest run tests/unit/audio.test.ts tests/unit/arrangement.test.ts tests/unit/presentation.test.ts",
+  "settings": "Default Vitest unit configuration; deterministic mock AudioContext and fake timers; no timeout enlargement or weakened assertions",
+  "sourceProvenance": "Sequential uncommitted development states of src/audio/atmosphere.ts, src/audio/arrangement.ts, src/game/rescue-facts.ts, src/ui/presentation.ts and the named unit tests. No historical snapshot/hash was saved for intermediate states; these records must not be presented as final-source or actual-listening evidence.",
+  "runs": [
+    {
+      "order": 1,
+      "result": "23 passed, 2 failed, 3 files; duration 893ms",
+      "failures": [
+        "latest desired arrangement survives preactivation, mute, hide and rapid replacements without replay",
+        "terminal targets wait for visible settlement and delivery does not clear the companion"
+      ],
+      "cause": "Preactivation requested beat 1 with a provisional epoch, so initial pump remained ordinary and terminal test also began before its expected homeward entry.",
+      "correction": "Before context creation request beat 0; a created context continues to use its actual phase."
+    },
+    {
+      "order": 2,
+      "result": "23 passed, 2 failed, 3 files; duration 596ms",
+      "failures": [
+        "latest desired arrangement survives preactivation, mute, hide and rapid replacements without replay",
+        "terminal targets wait for visible settlement and delivery does not clear the companion"
+      ],
+      "cause": "New tests jumped the fake audio clock by a whole second while advancing the scheduler only once, skipping the next-beat scheduling window; expectations assumed continuous pumping.",
+      "correction": "New lifecycle tests advance twelve 100ms audio-clock and scheduler ticks, matching the real scheduler and allowing the promised one-to-two-beat response. Existing interruption/catch-up tests remain unchanged."
+    },
+    {
+      "order": 3,
+      "result": "25 passed, 3 files; duration 562ms",
+      "scope": "Corrected new lifecycle tests and preactivation fix"
+    },
+    {
+      "order": 4,
+      "result": "25 passed, 3 files; duration 527ms; typecheck exit 0",
+      "scope": "Added late-cell harmonic overlap membership checks and observable companion allocation deferral; formatted affected source"
+    },
+    {
+      "order": 5,
+      "result": "26 passed, 3 files; duration 5.37s",
+      "scope": "Final focused run adds rapid changes during active companion notes and ordinary full-phrase idle assertions; runtime unchanged from run 4"
+    }
+  ],
+  "limits": "No captured stdout files were saved for the first four runs; values transcribed from actual tool outputs. Full suite/browser/runtime/audio captures are separate records. No listening claim."
+}

@@ -1,0 +1,286 @@
+{
+  "state": {
+    "turn": 0,
+    "tideLevel": 0,
+    "boatNodeId": "stone",
+    "aboard": [
+      "sheep-1"
+    ],
+    "waitingByPier": {
+      "harbor-pier": [],
+      "stone-pier": [],
+      "rabbit-pier": [
+        "rabbit-1",
+        "rabbit-2"
+      ]
+    },
+    "delivered": [],
+    "status": "playing",
+    "lossReason": null
+  },
+  "view": {
+    "mode": "play",
+    "panned": false,
+    "focused": null,
+    "revision": 2,
+    "scale": 57.3521594859422,
+    "usable": {
+      "left": 26,
+      "right": 818,
+      "top": 26,
+      "bottom": 364
+    },
+    "bounds": {
+      "minX": -8.079083442687988,
+      "maxX": 7.9327778816223145,
+      "minY": -2.4842987769462925,
+      "maxY": 5.766480343515383
+    },
+    "focus": {
+      "x": 0,
+      "y": 1.5430810962633423
+    },
+    "overviewAvoidance": {
+      "overlap": 0,
+      "displacement": 0
+    }
+  },
+  "render": {
+    "profile": {
+      "id": "four-space",
+      "capacity": 4,
+      "deckY": 0.26,
+      "beam": 1.06,
+      "bow": 1.04,
+      "stern": 0.89,
+      "gateX": 0.51,
+      "gateZ": 0.28,
+      "wake": {
+        "fore": 0.76,
+        "aft": 0.76,
+        "lateral": 0.48
+      },
+      "berthHold": 0.45,
+      "berthTurn": 0.55
+    },
+    "pendingAnimation": false,
+    "historyLength": 0,
+    "poseHistoryLength": 0,
+    "passengers": [
+      {
+        "id": "rabbit-1",
+        "position": [
+          5.79,
+          0.175,
+          -1.02
+        ],
+        "parent": "",
+        "deckLocalFoot": [
+          0.02000000000000135,
+          0.23189854198246562,
+          5.79
+        ]
+      },
+      {
+        "id": "rabbit-2",
+        "position": [
+          6.21,
+          0.175,
+          -1.02
+        ],
+        "parent": "",
+        "deckLocalFoot": [
+          0.02000000000000135,
+          0.23189854198246562,
+          6.21
+        ]
+      },
+      {
+        "id": "sheep-1",
+        "position": [
+          0.69,
+          0.20310145801753438,
+          -0.9999999999999999
+        ],
+        "parent": "deck-anchor-sheep-1",
+        "deckLocalFoot": [
+          0,
+          0.26,
+          0.69
+        ]
+      }
+    ],
+    "boatPosition": [
+      0,
+      0,
+      -1
+    ],
+    "waterY": 0,
+    "hullY": -0.05689854198246562
+  },
+  "navigation": {
+    "currentNode": "stone",
+    "selectedDestination": null,
+    "emphasizedDestination": null,
+    "routes": [
+      {
+        "id": "harbor-stone",
+        "nodes": [
+          "harbor",
+          "stone"
+        ],
+        "highlighted": false,
+        "dashSize": 0.09,
+        "gapSize": 0.16
+      },
+      {
+        "id": "stone-shallows",
+        "nodes": [
+          "stone",
+          "shallows"
+        ],
+        "highlighted": false,
+        "dashSize": 0.09,
+        "gapSize": 0.16
+      },
+      {
+        "id": "shallows-rabbit",
+        "nodes": [
+          "shallows",
+          "rabbit-pier"
+        ],
+        "highlighted": false,
+        "dashSize": 0.09,
+        "gapSize": 0.16
+      }
+    ],
+    "markers": [
+      {
+        "id": "harbor",
+        "worldPosition": [
+          -6,
+          0.04,
+          0
+        ],
+        "status": "available",
+        "selected": false,
+        "shape": "open ring"
+      },
+      {
+        "id": "stone",
+        "worldPosition": [
+          0,
+          0.04,
+          -1
+        ],
+        "status": "current",
+        "selected": false,
+        "shape": "double ring"
+      },
+      {
+        "id": "shallows",
+        "worldPosition": [
+          3,
+          0.04,
+          2
+        ],
+        "status": "too-shallow",
+        "selected": false,
+        "shape": "crossed ring"
+      },
+      {
+        "id": "rabbit-pier",
+        "worldPosition": [
+          6,
+          0.04,
+          0
+        ],
+        "status": "nonadjacent",
+        "selected": false,
+        "shape": "diamond"
+      }
+    ]
+  },
+  "audio": {
+    "scoreOutputRms": 0,
+    "scoreOutputPeak": 0,
+    "scoreRoute": "music dry + reverb -> victory gain -> master",
+    "scoreEffectiveOutputRms": 0,
+    "state": "requested",
+    "requested": false,
+    "running": false,
+    "retryPending": false,
+    "muted": false,
+    "activated": false,
+    "hidden": false,
+    "disposed": false,
+    "unavailable": false,
+    "error": null,
+    "contextState": "not-created",
+    "currentTime": 0,
+    "contextCount": 0,
+    "schedulerActive": false,
+    "schedulerCount": 0,
+    "schedulerStarts": 0,
+    "sourceCount": 0,
+    "sourceNodesCreated": 0,
+    "peakOwnedSources": 0,
+    "graphNodeCount": 0,
+    "musicSources": 0,
+    "ambienceSources": 0,
+    "travelRequested": false,
+    "travelActive": false,
+    "arrivalActive": false,
+    "deliveryCount": 0,
+    "arrivalEventCount": 0,
+    "victorySettled": false,
+    "victoryTarget": 1,
+    "victoryGain": null,
+    "arrangementTarget": 0.72,
+    "arrangementGain": null,
+    "effectiveMusicTarget": 0.72,
+    "lastVictoryMixChange": null,
+    "arrivalSources": 0,
+    "arrivalVoicesPlayed": 0,
+    "arrivalVoicesSkipped": 0,
+    "arrivalVoicesReclaimed": 0,
+    "lastArrival": null,
+    "transferContacts": 0,
+    "transferPlayed": 0,
+    "transferSkipped": 0,
+    "transferSources": 0,
+    "peakTransferSources": 0,
+    "lastTransferContact": null,
+    "storyToken": null,
+    "storyConsumedIds": [],
+    "storyCueCount": 0,
+    "storyPlayed": 0,
+    "storySkipped": 0,
+    "storyRejected": 0,
+    "storyReclaimed": 0,
+    "storySources": 0,
+    "storyOwnedSources": 0,
+    "peakStorySources": 0,
+    "lastStoryCue": null,
+    "desiredArrangement": "ordinary",
+    "arrangement": "ordinary",
+    "pendingTerminal": false,
+    "accompanimentEnabled": true,
+    "companionSources": 0,
+    "companionNotes": 0,
+    "companionDeferrals": 0,
+    "droppedTones": 0,
+    "masterGain": 0,
+    "phrase": "Between the lamps",
+    "bpm": 64,
+    "phraseSeconds": 75,
+    "cueDuration": 75,
+    "phaseSeconds": 0,
+    "loopCount": 0,
+    "scheduledEvents": 0,
+    "skippedEvents": 0,
+    "rms": 0,
+    "peak": 0
+  },
+  "active": ""
+}

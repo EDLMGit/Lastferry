@@ -1,0 +1,50 @@
+
+> last-ferry@1.0.0 test:unit
+> vitest run --maxWorkers=1
+
+
+ RUN  v5.0.5 C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry
+
+ ❯ tests/unit/asset-catalog.test.ts (5 tests | 1 failed) 401ms
+   ❯ canonical asset catalog (5)
+     × keeps actual local sources, provenance, type detail and gallery evidence for each family 90ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/asset-catalog.test.ts > canonical asset catalog > keeps actual local sources, provenance, type detail and gallery evidence for each family
+AssertionError: expected [ …(3) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "ui.story-presentation: missing or outside repository: reviews/story-production/REVIEW.md",
++   "story.illustrations: missing or outside repository: reviews/story-production/REVIEW.md",
++   "audio.story-effects: missing or outside repository: reviews/story-production/REVIEW.md",
++ ]
+
+ ❯ tests/unit/asset-catalog.test.ts:11:46
+      9| describe('canonical asset catalog', () => {
+     10|   it('keeps actual local sources, provenance, type detail and gallery …
+     11|     expect(validateCatalog(catalog(), root)).toEqual([]);
+       |                                              ^
+     12|   });
+     13|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 32 passed (33)
+      Tests  1 failed | 296 passed (297)
+   Start at  23:21:08
+   Duration  10.37s (tests 79%, import 14%, transform 5%, worker 2%)
+
+    Isolate  33 workers spawned · ~119ms startup each (spawn + environment, per file)
+             at least ~3.79s faster with isolate: false — reuses workers across files instead of one per file
+
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

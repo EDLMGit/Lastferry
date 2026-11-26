@@ -1,0 +1,321 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "reviews/cove-readability/play/config.ts"
+    ],
+    "configFile": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play\\config.ts",
+    "rootDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/reviews/cove-readability/play",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/.cache/cove-readability-tests/before",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/reviews/cove-readability/play",
+        "testIgnore": [],
+        "testMatch": [
+          "readability.spec.ts"
+        ],
+        "timeout": 360000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\.cache\\cove-readability-tests\\before",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play",
+        "snapshotDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play",
+        "testIgnore": [],
+        "testMatch": "readability.spec.ts",
+        "timeout": 360000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5401",
+          "hasTouch": true,
+          "isMobile": true,
+          "deviceScaleFactor": 1,
+          "actionTimeout": 12000,
+          "launchOptions": {
+            "ignoreDefaultArgs": [
+              "--autoplay-policy=no-user-gesture-required"
+            ],
+            "args": [
+              "--use-angle=swiftshader",
+              "--enable-unsafe-swiftshader",
+              "--autoplay-policy=document-user-activation-required"
+            ]
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play\\before\\browser.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "readability.spec.ts",
+      "file": "readability.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Fresh Journey to Holding rescue 390x844",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 360000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 8003,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#story-continue')\nExpected substring: \u001b[32m\"Take the helm\"\u001b[39m\nReceived string:    \u001b[31m\"Next\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" locator('#story-continue') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#story-continue')\u001b[22m\n\u001b[2m    14 × locator resolved to <button id=\"story-continue\" class=\"cove-button cove-button--warm\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"Next\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#story-continue')\nExpected substring: \u001b[32m\"Take the helm\"\u001b[39m\nReceived string:    \u001b[31m\"Next\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" locator('#story-continue') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#story-continue')\u001b[22m\n\u001b[2m    14 × locator resolved to <button id=\"story-continue\" class=\"cove-button cove-button--warm\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"Next\"\u001b[22m\n\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play\\readability.spec.ts:70:53",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play\\readability.spec.ts",
+                      "column": 53,
+                      "line": 70
+                    },
+                    "snippet": "  68 |     await activate(page,'home-play',true);\n  69 |     for(const text of ['Next','Next','Take the helm']) {\n> 70 |       await expect(page.locator('#story-continue')).toContainText(text);\n     |                                                     ^\n  71 |       await activate(page,'story-continue',true);\n  72 |     }\n  73 |     let state = initial(holdingPier);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play\\readability.spec.ts",
+                        "column": 53,
+                        "line": 70
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#story-continue')\nExpected substring: \u001b[32m\"Take the helm\"\u001b[39m\nReceived string:    \u001b[31m\"Next\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" locator('#story-continue') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#story-continue')\u001b[22m\n\u001b[2m    14 × locator resolved to <button id=\"story-continue\" class=\"cove-button cove-button--warm\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"Next\"\u001b[22m\n\n\n  68 |     await activate(page,'home-play',true);\n  69 |     for(const text of ['Next','Next','Take the helm']) {\n> 70 |       await expect(page.locator('#story-continue')).toContainText(text);\n     |                                                     ^\n  71 |       await activate(page,'story-continue',true);\n  72 |     }\n  73 |     let state = initial(holdingPier);\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play\\readability.spec.ts:70:53"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-20T14:41:13.255Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\.cache\\cove-readability-tests\\before\\readability-Fresh-Journey-to-Holding-rescue-390x844\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play\\readability.spec.ts",
+                    "column": 53,
+                    "line": 70
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "62c2c003f56c091293ed-3b4e4241cf80475959af",
+          "file": "readability.spec.ts",
+          "line": 54,
+          "column": 3
+        },
+        {
+          "title": "Fresh Journey to Holding rescue 780x320",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 360000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6415,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#story-continue')\nExpected substring: \u001b[32m\"Take the helm\"\u001b[39m\nReceived string:    \u001b[31m\"Next\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" locator('#story-continue') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#story-continue')\u001b[22m\n\u001b[2m    14 × locator resolved to <button id=\"story-continue\" class=\"cove-button cove-button--warm\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"Next\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#story-continue')\nExpected substring: \u001b[32m\"Take the helm\"\u001b[39m\nReceived string:    \u001b[31m\"Next\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" locator('#story-continue') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#story-continue')\u001b[22m\n\u001b[2m    14 × locator resolved to <button id=\"story-continue\" class=\"cove-button cove-button--warm\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"Next\"\u001b[22m\n\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play\\readability.spec.ts:70:53",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play\\readability.spec.ts",
+                      "column": 53,
+                      "line": 70
+                    },
+                    "snippet": "  68 |     await activate(page,'home-play',true);\n  69 |     for(const text of ['Next','Next','Take the helm']) {\n> 70 |       await expect(page.locator('#story-continue')).toContainText(text);\n     |                                                     ^\n  71 |       await activate(page,'story-continue',true);\n  72 |     }\n  73 |     let state = initial(holdingPier);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play\\readability.spec.ts",
+                        "column": 53,
+                        "line": 70
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#story-continue')\nExpected substring: \u001b[32m\"Take the helm\"\u001b[39m\nReceived string:    \u001b[31m\"Next\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" locator('#story-continue') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#story-continue')\u001b[22m\n\u001b[2m    14 × locator resolved to <button id=\"story-continue\" class=\"cove-button cove-button--warm\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"Next\"\u001b[22m\n\n\n  68 |     await activate(page,'home-play',true);\n  69 |     for(const text of ['Next','Next','Take the helm']) {\n> 70 |       await expect(page.locator('#story-continue')).toContainText(text);\n     |                                                     ^\n  71 |       await activate(page,'story-continue',true);\n  72 |     }\n  73 |     let state = initial(holdingPier);\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play\\readability.spec.ts:70:53"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-20T14:41:24.178Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\.cache\\cove-readability-tests\\before\\readability-Fresh-Journey-to-Holding-rescue-780x320\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\reviews\\cove-readability\\play\\readability.spec.ts",
+                    "column": 53,
+                    "line": 70
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "62c2c003f56c091293ed-caab72da7189bcb5a7d4",
+          "file": "readability.spec.ts",
+          "line": 54,
+          "column": 3
+        },
+        {
+          "title": "Far Shore same turn, different companion 390x844",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 360000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 84473,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-20T14:41:31.266Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62c2c003f56c091293ed-e48700f54e65b6196b33",
+          "file": "readability.spec.ts",
+          "line": 122,
+          "column": 3
+        },
+        {
+          "title": "Far Shore same turn, different companion 780x320",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 360000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 66034,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-20T14:42:55.831Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62c2c003f56c091293ed-45384af40adfbd5483b9",
+          "file": "readability.spec.ts",
+          "line": 122,
+          "column": 3
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-20T14:41:12.663Z",
+    "duration": 174312.971,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

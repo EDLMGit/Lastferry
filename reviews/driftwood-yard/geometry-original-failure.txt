@@ -1,0 +1,90 @@
+
+ RUN  v5.0.5 C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry
+
+ ❯ tests/unit/clearance.test.ts (8 tests | 1 failed) 4864ms
+   × driftwood-yard: full modeled ferry clears land and piers from all reachable headings, both berth sides and reverse departures 1832ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/clearance.test.ts > driftwood-yard: full modeled ferry clears land and piers from all reachable headings, both berth sides and reverse departures
+AssertionError: expected [ …(51) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "yard-mooring/reverse from 1.570796326794897 frame 194: mooring-pier",
++   "yard-mooring/reverse from 1.570796326794897 frame 195: mooring-pier",
++   "yard-mooring/reverse from 1.570796326794897 frame 196: mooring-pier",
++   "yard-mooring/reverse from 1.570796326794897 frame 197: mooring-pier",
++   "yard-mooring/reverse from 1.570796326794897 frame 198: mooring-pier",
++   "yard-mooring/reverse from 1.570796326794897 frame 199: mooring-pier",
++   "yard-mooring/reverse from 1.570796326794897 frame 200: mooring-pier",
++   "yard-mooring/reverse from 1.570796326794897 frame 201: mooring-pier",
++   "yard-mooring/reverse from 1.570796326794897 frame 202: mooring-pier",
++   "yard-mooring/reverse from 1.570796326794897 frame 203: mooring-pier",
++   "yard-mooring/reverse from 1.570796326794897 frame 204: mooring-pier",
++   "yard-mooring/reverse from 1.570796326794897 frame 205: mooring-pier",
++   "yard-mooring/reverse from 1.570796326794897 frame 206: mooring-pier",
++   "yard-mooring/reverse from 1.570796326794897 frame 207: mooring-pier",
++   "yard-mooring/reverse from 1.570796326794897 frame 208: mooring-pier",
++   "yard-mooring/reverse from 1.570796326794897 frame 209: mooring-pier",
++   "yard-mooring/reverse from 1.570796326794897 frame 210: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948961 frame 194: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948961 frame 195: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948961 frame 196: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948961 frame 197: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948961 frame 198: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948961 frame 199: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948961 frame 200: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948961 frame 201: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948961 frame 202: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948961 frame 203: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948961 frame 204: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948961 frame 205: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948961 frame 206: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948961 frame 207: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948961 frame 208: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948961 frame 209: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948961 frame 210: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948966 frame 194: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948966 frame 195: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948966 frame 196: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948966 frame 197: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948966 frame 198: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948966 frame 199: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948966 frame 200: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948966 frame 201: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948966 frame 202: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948966 frame 203: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948966 frame 204: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948966 frame 205: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948966 frame 206: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948966 frame 207: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948966 frame 208: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948966 frame 209: mooring-pier",
++   "yard-mooring/reverse from 1.5707963267948966 frame 210: mooring-pier",
++ ]
+
+ ❯ tests/unit/clearance.test.ts:146:22
+    144|         }
+    145|       }
+    146|     expect(failures).toEqual([]);
+       |                      ^
+    147|     expect(marginFailures).toEqual([]);
+    148|   },
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  1 failed | 33 passed (34)
+   Start at  17:27:59
+   Duration  5.17s (tests 96%, import 3%, transform 2%)
+
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

@@ -1,0 +1,52 @@
+plugins {
+    id 'com.android.application'
+}
+
+def playtestVersion = providers.gradleProperty('playtestVersion').orElse('6').get().toInteger()
+def gameRoot = rootProject.projectDir.parentFile
+def bundledGame = layout.buildDirectory.dir('generated/coveAssets')
+
+android {
+    namespace 'com.lastferry.playtest'
+    compileSdk 36
+    buildToolsVersion '36.0.0'
+
+    defaultConfig {
+        applicationId 'com.lastferry.playtest'
+        minSdk 29
+        targetSdk 36
+        versionCode playtestVersion
+        versionName "0.1.${playtestVersion}-playtest"
+    }
+
+    buildTypes {
+        release {
+            applicationIdSuffix '.rehearsal'
+        }
+    }
+
+    sourceSets.main.assets.srcDir(bundledGame)
+}
+
+androidComponents.onVariants(androidComponents.selector().withBuildType('release')) { variant ->
+    def code = providers.gradleProperty('rehearsalVersion').orElse('7').map { it.toInteger() }
+    variant.outputs.each { output ->
+        output.versionCode.set(code)
+        output.versionName.set(code.map { "0.1.6-rehearsal.${it}".toString() })
+    }
+}
+
+dependencies {
+    implementation 'androidx.webkit:webkit:1.13.0'
+}
+
+def buildGame = tasks.register('buildCoveAssets', Exec) {
+    workingDir gameRoot
+    environment 'VITE_LAST_FERRY_QA', '0'
+    commandLine 'node', new File(gameRoot, 'node_modules/vite/bin/vite.js'), 'build',
+        '--outDir', bundledGame.get().asFile.absolutePath, '--emptyOutDir'
+}
+
+tasks.named('preBuild').configure {
+    dependsOn buildGame
+}

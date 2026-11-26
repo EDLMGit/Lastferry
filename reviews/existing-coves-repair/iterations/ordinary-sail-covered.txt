@@ -1,0 +1,57 @@
+
+Running 2 tests using 1 worker
+
+(node:39888) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\e2e\large-cove-rescue.ts:31:5 › reef-return · relay-through-shell-pool · short landscape production (1.1m)
+  x  2 tests\e2e\large-cove-rescue.ts:31:5 › wide-berth · bring-the-quay-via-outer · short landscape production (50.9s)
+
+
+  1) tests\e2e\large-cove-rescue.ts:31:5 › wide-berth · bring-the-quay-via-outer · short landscape production 
+
+    TimeoutError: locator.tap: Timeout 9000ms exceeded.
+    Call log:
+      - waiting for locator('#sail')
+        - locator resolved to <button id="sail" data-risk="safe" class="cove-button" aria-label="Sail to Shell Landing · 1 action">…</button>
+      - attempting tap action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <span aria-hidden="true" class="status-symbol">!</span> from <button id="status-toggle" aria-haspopup="dialog" class="cove-panel cove-surface cove-surface--compact urgent" aria-label="Shell Landing floods in 2 actions. Beacon Reef flows from Harbor to High Quay. After 2 actions, it turns toward Harbor. Open reef and tide forecast.">…</button> subtree intercepts pointer events
+        - retrying tap action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <span aria-hidden="true" class="status-symbol">!</span> from <button id="status-toggle" aria-haspopup="dialog" class="cove-panel cove-surface cove-surface--compact urgent" aria-label="Shell Landing floods in 2 actions. Beacon Reef flows from Harbor to High Quay. After 2 actions, it turns toward Harbor. Open reef and tide forecast.">…</button> subtree intercepts pointer events
+        - retrying tap action
+          - waiting 100ms
+        12 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <span aria-hidden="true" class="status-symbol">!</span> from <button id="status-toggle" aria-haspopup="dialog" class="cove-panel cove-surface cove-surface--compact urgent" aria-label="Shell Landing floods in 2 actions. Beacon Reef flows from Harbor to High Quay. After 2 actions, it turns toward Harbor. Open reef and tide forecast.">…</button> subtree intercepts pointer events
+         - retrying tap action
+           - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+
+
+       at ui.ts:39
+
+      37 |     await activate(page, current, touch);
+      38 |   }
+    > 39 |   if (touch) await page.locator(`#${id}`).tap();
+         |                                           ^
+      40 |   else await page.locator(`#${id}`).click();
+      41 | }
+      42 | export async function wholeCove(page: Page, touch = false) {
+        at activate (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\ui.ts:39:43)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\large-cove-rescue.ts:104:19
+
+    Error Context: .cache\repair-rehearsal-results\wide-berth-production-wide-2cdcb--short-landscape-production\error-context.md
+
+  1 failed
+    tests\e2e\large-cove-rescue.ts:31:5 › wide-berth · bring-the-quay-via-outer · short landscape production 
+  1 passed (2.1m)

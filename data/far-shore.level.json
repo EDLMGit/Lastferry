@@ -1,0 +1,586 @@
+{
+  "id": "far-shore",
+  "title": "Far Shore",
+  "rules": {
+    "capacity": 6,
+    "draftBands": [
+      {
+        "maxLoad": 0,
+        "draft": 1
+      },
+      {
+        "maxLoad": 2,
+        "draft": 2
+      },
+      {
+        "maxLoad": 4,
+        "draft": 3
+      },
+      {
+        "maxLoad": 6,
+        "draft": 4
+      }
+    ],
+    "tide": {
+      "initialLevel": 0,
+      "rises": [
+        {
+          "afterTurn": 6,
+          "level": 1
+        },
+        {
+          "afterTurn": 8,
+          "level": 2
+        }
+      ]
+    },
+    "actionCost": 1,
+    "depthFormula": "baseDepth + tideLevel",
+    "pierDryWhen": "tideLevel < elevation",
+    "failureRule": "required passenger stranded, or required return no longer possible"
+  },
+  "world": {
+    "plane": "XZ",
+    "north": "negative Z",
+    "waterYPerTideLevel": 0.18,
+    "referenceBoatRadius": 0.3,
+    "requiredRouteClearance": 0.45,
+    "clearanceScope": "Actual ferry geometry is checked independently along both directions of each route.",
+    "presentationNote": "The tide steps look across a reversing reach to a far bank and a low rush landing.",
+    "suggestedCamera": {
+      "projection": "orthographic",
+      "positionXYZ": [
+        0,
+        34,
+        24
+      ],
+      "targetXYZ": [
+        0,
+        0,
+        -1
+      ],
+      "verticalSpan": 11
+    },
+    "islands": [
+      {
+        "id": "lighthouse-island",
+        "elevation": 4,
+        "footprintXZ": [
+          [
+            -13.2,
+            2.3
+          ],
+          [
+            -12.6,
+            1.1
+          ],
+          [
+            -11.1,
+            0.45
+          ],
+          [
+            -9.4,
+            0.07
+          ],
+          [
+            -7.9,
+            0.77
+          ],
+          [
+            -7.2,
+            2
+          ],
+          [
+            -7.65,
+            3.3
+          ],
+          [
+            -8.5,
+            3.9
+          ],
+          [
+            -9,
+            4.45
+          ],
+          [
+            -11,
+            4.45
+          ],
+          [
+            -12.4,
+            3.75
+          ]
+        ]
+      },
+      {
+        "id": "steps-island",
+        "elevation": 1,
+        "footprintXZ": [
+          [
+            -9.5,
+            -7
+          ],
+          [
+            -9.2,
+            -8.05
+          ],
+          [
+            -7.85,
+            -8.5
+          ],
+          [
+            -6.5,
+            -8.23
+          ],
+          [
+            -5.6,
+            -8.44
+          ],
+          [
+            -4.7,
+            -7.6
+          ],
+          [
+            -4.55,
+            -6.5
+          ],
+          [
+            -5.1,
+            -5.9
+          ],
+          [
+            -6,
+            -4.95
+          ],
+          [
+            -8,
+            -4.95
+          ],
+          [
+            -8.95,
+            -5.58
+          ]
+        ]
+      },
+      {
+        "id": "bank-island",
+        "elevation": 4,
+        "footprintXZ": [
+          [
+            -0.6,
+            -5.75
+          ],
+          [
+            -0.4,
+            -7.2
+          ],
+          [
+            0.85,
+            -8
+          ],
+          [
+            1.65,
+            -8.7
+          ],
+          [
+            2.95,
+            -8.9
+          ],
+          [
+            3.95,
+            -7.95
+          ],
+          [
+            4.8,
+            -7.4
+          ],
+          [
+            5.1,
+            -6
+          ],
+          [
+            4.3,
+            -4.6
+          ],
+          [
+            3.3,
+            -3.75
+          ],
+          [
+            1.3,
+            -3.75
+          ],
+          [
+            0.15,
+            -4.42
+          ]
+        ]
+      },
+      {
+        "id": "rush-island",
+        "elevation": 2,
+        "footprintXZ": [
+          [
+            2.2,
+            3.35
+          ],
+          [
+            2.8,
+            2.5
+          ],
+          [
+            3.8,
+            2.15
+          ],
+          [
+            5.05,
+            2.53
+          ],
+          [
+            6.4,
+            2.1
+          ],
+          [
+            7.68,
+            2.65
+          ],
+          [
+            7.58,
+            3.5
+          ],
+          [
+            6.9,
+            4.45
+          ],
+          [
+            6,
+            5.45
+          ],
+          [
+            4,
+            5.45
+          ],
+          [
+            3,
+            4.82
+          ]
+        ]
+      }
+    ]
+  },
+  "nodes": [
+    {
+      "id": "harbor",
+      "positionXZ": [
+        -10,
+        7
+      ],
+      "baseDepth": 4,
+      "pierId": "harbor-pier"
+    },
+    {
+      "id": "steps",
+      "positionXZ": [
+        -7,
+        -2.4
+      ],
+      "baseDepth": 4,
+      "pierId": "steps-pier"
+    },
+    {
+      "id": "bank",
+      "positionXZ": [
+        2.3,
+        -1.2
+      ],
+      "baseDepth": 4,
+      "pierId": "bank-pier"
+    },
+    {
+      "id": "rush",
+      "positionXZ": [
+        5,
+        8
+      ],
+      "baseDepth": 2,
+      "pierId": "rush-pier"
+    }
+  ],
+  "edges": [
+    {
+      "id": "home-channel",
+      "nodes": [
+        "harbor",
+        "steps"
+      ],
+      "baseDepth": 2,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [
+          -10,
+          7
+        ],
+        [
+          -12.15,
+          8
+        ],
+        [
+          -14.3,
+          6.4
+        ],
+        [
+          -14.65,
+          2.6
+        ],
+        [
+          -14.1,
+          -0.38
+        ],
+        [
+          -11.8,
+          -1.55
+        ],
+        [
+          -9.1,
+          -1.45
+        ],
+        [
+          -7,
+          -2.4
+        ]
+      ]
+    },
+    {
+      "id": "far-reach",
+      "nodes": [
+        "steps",
+        "bank"
+      ],
+      "baseDepth": 2,
+      "bidirectional": false,
+      "waypointsXZ": [
+        [
+          -7,
+          -2.4
+        ],
+        [
+          -4.75,
+          -1.4
+        ],
+        [
+          -2.25,
+          -0.6
+        ],
+        [
+          0.2,
+          -0.2
+        ],
+        [
+          2.3,
+          -1.2
+        ]
+      ],
+      "current": {
+        "name": "Far Reach",
+        "phases": [
+          {
+            "tideLevel": 0,
+            "from": "steps",
+            "to": "bank"
+          },
+          {
+            "tideLevel": 1,
+            "from": "bank",
+            "to": "steps"
+          },
+          {
+            "tideLevel": 2,
+            "from": "bank",
+            "to": "steps"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rush-wash",
+      "nodes": [
+        "bank",
+        "rush"
+      ],
+      "baseDepth": 3,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [
+          2.3,
+          -1.2
+        ],
+        [
+          4.5,
+          -0.15
+        ],
+        [
+          8,
+          0.25
+        ],
+        [
+          9.5,
+          2.25
+        ],
+        [
+          10,
+          5.65
+        ],
+        [
+          9.35,
+          7.8
+        ],
+        [
+          7.15,
+          9.02
+        ],
+        [
+          5,
+          8
+        ]
+      ]
+    }
+  ],
+  "piers": [
+    {
+      "id": "harbor-pier",
+      "nodeId": "harbor",
+      "islandId": "lighthouse-island",
+      "elevation": 4,
+      "positionXZ": [
+        -10,
+        5.47
+      ],
+      "landAnchorXZ": [
+        -10,
+        3.68
+      ],
+      "width": 1.62,
+      "isDeliveryPier": true
+    },
+    {
+      "id": "steps-pier",
+      "nodeId": "steps",
+      "islandId": "steps-island",
+      "elevation": 1,
+      "positionXZ": [
+        -7,
+        -3.93
+      ],
+      "landAnchorXZ": [
+        -7,
+        -5.72
+      ],
+      "width": 1.62,
+      "isDeliveryPier": false
+    },
+    {
+      "id": "bank-pier",
+      "nodeId": "bank",
+      "islandId": "bank-island",
+      "elevation": 4,
+      "positionXZ": [
+        2.3,
+        -2.73
+      ],
+      "landAnchorXZ": [
+        2.3,
+        -4.52
+      ],
+      "width": 1.62,
+      "isDeliveryPier": false
+    },
+    {
+      "id": "rush-pier",
+      "nodeId": "rush",
+      "islandId": "rush-island",
+      "elevation": 2,
+      "positionXZ": [
+        5,
+        6.47
+      ],
+      "landAnchorXZ": [
+        5,
+        4.68
+      ],
+      "width": 1.62,
+      "isDeliveryPier": false
+    }
+  ],
+  "names": {
+    "nodes": {
+      "harbor": "Harbor",
+      "steps": "Tide Steps",
+      "bank": "Far Bank",
+      "rush": "Rush Landing"
+    },
+    "passengers": {
+      "thistle": "Thistle",
+      "button": "Button",
+      "rowan": "Rowan",
+      "peat": "Peat"
+    }
+  },
+  "passengers": [
+    {
+      "id": "thistle",
+      "species": "sheep",
+      "slots": 2,
+      "appearance": "sheep-wool"
+    },
+    {
+      "id": "button",
+      "species": "rabbit",
+      "slots": 1,
+      "appearance": "rabbit-cream"
+    },
+    {
+      "id": "rowan",
+      "species": "deer",
+      "slots": 3,
+      "appearance": "deer-chestnut"
+    },
+    {
+      "id": "peat",
+      "species": "rabbit",
+      "slots": 1,
+      "appearance": "rabbit-tan"
+    }
+  ],
+  "start": {
+    "boatNodeId": "steps",
+    "aboard": [],
+    "waitingByPier": {
+      "harbor-pier": [],
+      "steps-pier": [
+        "thistle",
+        "button"
+      ],
+      "bank-pier": [
+        "peat"
+      ],
+      "rush-pier": [
+        "rowan"
+      ]
+    }
+  },
+  "objective": {
+    "deliveryPierId": "harbor-pier",
+    "requiredPassengerIds": [
+      "thistle",
+      "button",
+      "rowan",
+      "peat"
+    ]
+  },
+  "validation": {
+    "searchDepthLimit": 0,
+    "witnessReplays": [
+      "data/far-shore/witnesses.json"
+    ]
+  }
+}

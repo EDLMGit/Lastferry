@@ -1,0 +1,88 @@
+{
+  "base": "e3bef3da3f655a4c9671e0500d356a83fe96786b",
+  "node": "v24.15.0",
+  "npm": "11.12.1",
+  "recordedAt": "2026-11-15T10:42:07.979Z",
+  "note": "Observed tool results summarized here; this is not a verbatim terminal log.",
+  "checks": [
+    {
+      "command": "npm run build",
+      "result": "passed",
+      "typecheck": "tsc --noEmit passed within build",
+      "warning": "Vite existing >500 kB main chunk warning; not a physical-device performance result"
+    },
+    {
+      "command": "npm run typecheck",
+      "result": "passed",
+      "originalNewTestErrors": "ORIGINAL_FAILURES.md"
+    },
+    {
+      "command": "npm run check:assets",
+      "result": "passed",
+      "families": 81
+    },
+    {
+      "command": "npm run test:unit -- tests/unit/ternhaven.test.ts tests/unit/wide-ferry.test.ts tests/unit/wide-clearance.test.ts tests/unit/two-shelters-geometry.test.ts tests/unit/mastery.test.ts tests/unit/unscored-practice.test.ts tests/unit/story-progress.test.ts tests/unit/two-shelters-practice.test.ts tests/unit/orchard-progress.test.ts --reporter=json --outputFile=reviews/cove-eight-practice/unit-results.json",
+      "result": "passed",
+      "passed": 226,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "command": "node --experimental-transform-types reviews/cove-eight-practice/audit.mjs > reviews/cove-eight-practice/audit-results.json",
+      "result": "passed",
+      "minimum": 13,
+      "proposedTarget": 14
+    },
+    {
+      "command": "node reviews/cove-eight-practice/verify-preservation.cjs",
+      "result": "passed",
+      "protectedInputs": 41,
+      "sevenJourneyDefinitions": "identical",
+      "priorAssetIds": 81
+    },
+    {
+      "command": "git diff --check",
+      "result": "passed",
+      "note": "Git reports expected CRLF to LF normalization for three text inputs; no whitespace error."
+    }
+  ],
+  "buildOutputs": {
+    "index-Brb746hC.js": {
+      "bytes": 924238,
+      "sha256": "dbc74f6bfad5d3d857967fa1d0a1172aedbac7214547a76291bb2bfc4b943415"
+    },
+    "index-OXeb4GMi.css": {
+      "bytes": 42615,
+      "sha256": "8c5d5ba18c24ba706b170a60592c32adbc5b29896e476218db6599b36b1c480b"
+    }
+  },
+  "catalogSha256": "2b6817afb506fbaaaa6dff8ee854d8cd416c40a73948e12445a05cd298735376",
+  "changedAssetEntries": [
+    "model.ferry",
+    "model.rabbit",
+    "model.sheep",
+    "model.pier-kit",
+    "scenery.rocks",
+    "scenery.reeds",
+    "terrain.coast",
+    "indicator.routes",
+    "motion.transfer",
+    "ui.passenger-portraits",
+    "model.beaver",
+    "model.deer",
+    "ui.mastery-lanterns"
+  ],
+  "deferred": [
+    "Physical Android playtest explicitly deferred by user",
+    "Human difficulty, pacing and listening",
+    "Spoken screen-reader check",
+    "Whole historical browser suite not rerun; focused affected coverage only"
+  ],
+  "deployed": false,
+  "site": {
+    "version": 20,
+    "game": "9c7a05785a021538c996f5dcd4b03415d1a35080",
+    "hosting": "ffc5eebfd8520735b231ffe6fedf1b3a54757f9a"
+  }
+}

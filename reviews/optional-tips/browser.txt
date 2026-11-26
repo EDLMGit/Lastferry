@@ -1,0 +1,67 @@
+
+> last-ferry@1.0.0 test:e2e
+> playwright test optional-tips.spec.ts optional-tips-production.spec.ts
+
+
+Running 6 tests using 1 worker
+
+(node:24732) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\e2e\optional-tips-production.spec.ts:7:1 › built game defaults Tips Off and completes Reef Return after a real loss and Undo (33.1s)
+  ok 2 tests\e2e\optional-tips.spec.ts:20:5 › wide-berth Tips Off and On at 390×844 (2.2m)
+  ok 3 tests\e2e\optional-tips.spec.ts:20:5 › reef-return Tips Off and On at 390×844 (1.8m)
+  ok 4 tests\e2e\optional-tips.spec.ts:20:5 › wide-berth Tips Off and On at 780×320 (50.9s)
+  ok 5 tests\e2e\optional-tips.spec.ts:20:5 › reef-return Tips Off and On at 780×320 (51.6s)
+  x  6 tests\e2e\optional-tips.spec.ts:173:1 › shared Tips keyboard access, persistence and blocked storage (3.0m)
+
+
+  1) tests\e2e\optional-tips.spec.ts:173:1 › shared Tips keyboard access, persistence and blocked storage 
+
+    Test timeout of 180000ms exceeded.
+
+    Error: browserContext.close: Test ended.
+    Browser logs:
+
+    <launching> C:\Users\ernes\Documents\last-ferry-codex-starter\.cache\ms-playwright\chromium_headless_shell-1248\chrome-headless-shell-win64\chrome-headless-shell.exe --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,AvoidCorsURLLoaderRestartOnRedirect,Translate,AutoDeElevate,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --use-angle=swiftshader --enable-unsafe-swiftshader --user-data-dir=C:\Users\ernes\AppData\Local\Packages\openai.codex_2p2nqsd0c76g0\AC\#!sandbox.{d1818880-4c95-4df8-9275-2ae30dd73f31}\Temp\playwright_chromiumdev_profile-Lo8L7V --remote-debugging-pipe --no-startup-window
+    <launched> pid=35404
+    [pid=35404][err] [1107/230630.357:INFO:CONSOLE:11] "Uncaught SecurityError: Failed to read the 'sessionStorage' property from 'Window': Access is denied for this document.", source:  (11)
+    [pid=35404][err] [1107/230630.410:INFO:CONSOLE:935] "[vite] connecting...", source: http://127.0.0.1:5270/@vite/client (935)
+    [pid=35404][err] [1107/230630.432:INFO:CONSOLE:1048] "[vite] connected.", source: http://127.0.0.1:5270/@vite/client (1048)
+    [pid=35404][err] [1107/230839.384:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:260] SharedImageManager::ProduceSkia: Trying to Produce a Skia representation from a non-existent mailbox.
+    [pid=35404][err] [1107/230839.483:INFO:CONSOLE:11] "Uncaught SecurityError: Failed to read the 'sessionStorage' property from 'Window': Access is denied for this document.", source:  (11)
+    [pid=35404][err] [1107/230839.527:INFO:CONSOLE:935] "[vite] connecting...", source: http://127.0.0.1:5270/@vite/client (935)
+    [pid=35404][err] [1107/230839.547:INFO:CONSOLE:1048] "[vite] connected.", source: http://127.0.0.1:5270/@vite/client (1048)
+    [pid=35404][err] [1107/231028.971:INFO:CONSOLE:11] "Uncaught SecurityError: Failed to read the 'sessionStorage' property from 'Window': Access is denied for this document.", source:  (11)
+    [pid=35404][err] [1107/231029.011:INFO:CONSOLE:935] "[vite] connecting...", source: http://127.0.0.1:5270/@vite/client (935)
+    [pid=35404][err] [1107/231029.031:INFO:CONSOLE:1048] "[vite] connected.", source: http://127.0.0.1:5270/@vite/client (1048)
+    [pid=35404][err] [1107/231120.005:INFO:CONSOLE:11] "Uncaught SecurityError: Failed to read the 'sessionStorage' property from 'Window': Access is denied for this document.", source:  (11)
+    [pid=35404][err] [1107/231120.039:INFO:CONSOLE:935] "[vite] connecting...", source: http://127.0.0.1:5270/@vite/client (935)
+    [pid=35404][err] [1107/231120.057:INFO:CONSOLE:1048] "[vite] connected.", source: http://127.0.0.1:5270/@vite/client (1048)
+    [pid=35404][err] [1107/231211.774:INFO:CONSOLE:24] "Uncaught SecurityError: Failed to read the 'sessionStorage' property from 'Window': Access is denied for this document.", source:  (24)
+    [pid=35404][err] [1107/231211.809:INFO:CONSOLE:935] "[vite] connecting...", source: http://127.0.0.1:5270/@vite/client (935)
+    [pid=35404][err] [1107/231211.827:INFO:CONSOLE:1048] "[vite] connected.", source: http://127.0.0.1:5270/@vite/client (1048)
+    [pid=35404][err] [1107/231220.410:INFO:CONSOLE:935] "[vite] connecting...", source: http://127.0.0.1:5270/@vite/client (935)
+    [pid=35404][err] [1107/231220.424:INFO:CONSOLE:1048] "[vite] connected.", source: http://127.0.0.1:5270/@vite/client (1048)
+    [pid=35404] <gracefully close start>
+
+      243 |       expect(await page.evaluate(key => localStorage.getItem(key), journeyKey)).toBe(savedJourney);
+      244 |       expect(await page.evaluate(() => sessionStorage.getItem('unexpected-journey-write'))).toBeNull();
+    > 245 |       report(dir, blockedStorage ? 'blocked-storage' : 'persisted', { preferenceSessionUsable: true, journeyBytesUnchanged: true, keyboard: 'Tab, Shift+Tab, End, Enter, Escape', browser: browser.version() });
+          |       ^
+      246 |     } finally {
+      247 |       await context.close();
+      248 |     }
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\optional-tips.spec.ts:245:7
+
+    Error Context: test-results\optional-tips-shared-Tips--b3b99-istence-and-blocked-storage\error-context.md
+
+  Slow test file: tests\e2e\optional-tips.spec.ts (8.7m)
+  Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
+  1 failed
+    tests\e2e\optional-tips.spec.ts:173:1 › shared Tips keyboard access, persistence and blocked storage 
+  5 passed (9.3m)
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+npm notice To update run: npm install -g npm@12.2.2
+npm notice

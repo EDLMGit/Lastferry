@@ -1,0 +1,59 @@
+{
+  "comparisonBase": "19ac9654b9e974e79effee6d863edf9a2bd08f04",
+  "node": "v24.15.0",
+  "platform": "win32",
+  "build": {
+    "passed": true,
+    "command": "npm run build",
+    "bundle": "assets/index-DqCig2TV.js",
+    "sha256": "140c958e0768401d94acc7f7f255c6fc3b0cf778066ac0a48cc8bc326b34f54e",
+    "warning": "Existing chunk above 500 kB"
+  },
+  "typecheck": {
+    "passed": true,
+    "command": "npm run typecheck"
+  },
+  "assetValidation": {
+    "passed": true,
+    "families": 81,
+    "preservedIDs": 80,
+    "added": [
+      "ui.mastery-lanterns"
+    ]
+  },
+  "protectedPathsUnchanged": [
+    "data",
+    "src/scene",
+    "src/audio",
+    "src/campaign/progress.ts",
+    "src/campaign/registry.ts"
+  ],
+  "unit": {
+    "command": "npm run test:unit -- tests/unit/mastery.test.ts tests/unit/rules.test.ts tests/unit/story-progress.test.ts --maxWorkers=1",
+    "tests": [
+      {
+        "file": "mastery.test.ts",
+        "passed": 44,
+        "failed": 0
+      },
+      {
+        "file": "rules.test.ts",
+        "passed": 15,
+        "failed": 0
+      },
+      {
+        "file": "story-progress.test.ts",
+        "passed": 64,
+        "failed": 0
+      }
+    ]
+  },
+  "existingPracticeIsolation": {
+    "startTime": "2026-11-14T10:38:35.485Z",
+    "duration": 51172.535,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

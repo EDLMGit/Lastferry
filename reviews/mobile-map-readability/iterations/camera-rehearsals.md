@@ -1,0 +1,11 @@
+# Camera rehearsals
+
+The first work-in-progress run passed 12 of 27 checks. Story fixtures created from the World prototype needed the new camera cache and geometry. Two tests still invoked the superseded fixed close-up function. The revised fixtures retain the story-envelope and restoration assertions. View coverage now tests visible passengers, adjacent landings, true corner occupancy, panning bounds and ordered scale choices. [Original output](original-camera-units.txt)
+
+The first neighborhood-fit test still measured 617.17 square pixels of protected-subject overlap in its synthetic corner case. When including another peripheral landing cannot clear the occupied corner, the solver retries the smaller neighborhood.
+
+An actual 844×390 Reed Pier rehearsal showed the northern animals clipped because the first local composition used neighboring water endpoints alone. The revised frame includes the neighboring shore geometry and uses the slack available toward the rest of the cove. One subsequent Reed capture was invalidated by a simultaneous working-tree change. The other three compositions in that exploratory batch passed. [Original rehearsal batch](camera-rehearsal-results.json)
+
+On the first real scale sweep, Two Shelters at 844×390 moved from 32.15 pixels per world unit in Normal to 32.15 in Wide and 33.20 in Whole. Holding Pier went from 40.00 to 40.00 to 45.33. The control now shares the solved Whole-cove scale, uses it for a local scene that already fits, and skips redundant adjustments. Whole cove remains available as a planning command in those cases.
+
+The corrected sweep passed 28 cove/viewport combinations across all seven Practice entries at 844×390, 780×320, 390×844 and 360×740. Headless Chromium loaded each actual root practice URL with touch emulation, DPR 1 and Reduced Motion. The sweep invoked each enabled Zoom button through its DOM click handler, waited two animation frames, and measured the effective camera scale. Each sequence starts at Normal, moves outward to its limit, inward to the closest setting and back outward. Every enabled step changed scale in the requested direction by at least one CSS pixel per world unit. Separate interaction cases exercise physical hit targets through Chromium input. [Measured scale sequences](../scale-sweep.txt)

@@ -1,0 +1,18 @@
+# A wave from Ternhaven — picture review
+
+The original story painter layers the three animals inside the existing six-space ferry's passenger callback, behind its front rail. The red cabin and yellow hull travel together with their deck passengers; the floating daymark and supported reed bank remain separate. Juniper keeps the chestnut coat, short forks and spots; Sedge keeps cream curls and a dark face. Fennel faces the reed bank. Willow looks up, raises her paw clear of her face, then rests it without moving her feet or boarding. No gameplay object, cue owner, camera or model changes to produce the drawing.
+
+The seven-second shot uses one existing restrained ferry-water cue at 0.75s and the established caption treatment at 1.05s. The last 1.1s holds still. Transcript and canvas descriptions describe the pierless buoy, three neighbors aboard, and Willow waiting ashore. The gallery's static endpoint is a design specimen; the captures linked below come from the actual Journey.
+
+| Emulated viewport | Beginning | Acknowledgment | Held |
+| --- | --- | --- | --- |
+| 390×844 | [Approach](lifecycle/390x844/scene-begin.png) | [Raised paw](lifecycle/390x844/scene-greeting.png) | [Settled](lifecycle/390x844/scene-held.png) |
+| 780×320 | [Approach](lifecycle/780x320/scene-begin.png) | [Raised paw](lifecycle/780x320/scene-greeting.png) | [Settled](lifecycle/780x320/scene-held.png) |
+
+Viewed at native sizes: portrait stacks the bank above the boat and places the captions below both. Short landscape groups the characters on the right and reserves the left for the caption. The starting portrait cuts into the outer stern as the boat glides in; all three passengers are visible throughout. The complete hull settles beside the buoy. On desktop, the reeds at the far right extend outside the frame, without clipping Willow or the ferry. The [320px portrait](lifecycle/320x740/scene-held.png) keeps the caption, greeting and handoff within view.
+
+The first actual [portrait](art-first/390x844-greeting.png) and [landscape](art-first/780x320-greeting.png) used the existing story rabbit's muted tan and the launch beaver's raised-paw reach. At these sizes the rabbit blended into the water and Willow's raised paw crossed her cheek. The final shot gives Fennel a warmer coat, enlarges his silhouette slightly, widens Willow's gesture, and increases the water gap between ferry and bank in landscape. The original phone comparisons are internal checkpoints, not final-source evidence.
+
+The [Canvas comparison](canvas-comparison.json) rendered all nine **previous** shots from the exact guidance source and the revised painter in Chromium at 0s, 3.6s and each endpoint in both illustrated canvas sizes. All 54 comparisons were pixel-identical. It separately verified distinct poses in Ternhaven's new artwork and an identical held drawing at 5.9s and 7s. This is a controlled painter comparison, not another gameplay run. Reproduce with Node 24 and the project Playwright Chromium: `node reviews/ternhaven-journey/compare-canvas.mjs`. The initial diagnostic harness tried loading Playwright before selecting the local browser cache, then tried a TypeScript compiler API unavailable in this dependency; neither attempt rendered images. The final harness uses the existing Node 24 type-stripper and local browser. The [shared story presentation tests](story-player.json) passed 20/20, including the added 7s Ternhaven cue, pause/resume, reduced-motion, hold, cancellation and explicit handoff coverage. These tests may also appear in the larger unit run.
+
+These observations describe emulation and authored composition, not physical-phone, human listening, accessibility-reader or aesthetic acceptance.

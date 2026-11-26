@@ -1,0 +1,145 @@
+
+> last-ferry@1.0.0 test:unit
+> vitest run --maxWorkers=2
+
+
+ RUN  v5.0.5 C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry
+
+ ❯ tests/unit/story-staging.test.ts (14 tests | 6 failed) 128ms
+   × actual Moss head meshes acknowledge once without moving deck feet or changing state/history, and clear restores all transforms 45ms
+   × actual safe Harbor acknowledgment is temporary, does not reboard neighbors, and reduced/restored settlement is motionless 20ms
+   × Moss turns toward the orthographic viewer in deck-local coordinates at the Stone berth, then returns to its original heading 17ms
+   × the Harbor close shot protects the full ferry and safe trio above the caption at 320×740 15ms
+   × the Harbor close shot protects the full ferry and safe trio above the caption at 780×320 12ms
+   × the Harbor close shot protects the full ferry and safe trio above the caption at 844×390 13ms
+ ❯ tests/unit/story-framing.test.ts (7 tests | 7 failed) 16ms
+   × opt-in story framing contains the lighthouse roof, hull and aboard silhouette at 780×320 10ms
+   × opt-in story framing contains the lighthouse roof, hull and aboard silhouette at 844×390 1ms
+   × opt-in story framing contains the lighthouse roof, hull and aboard silhouette at 320×740 1ms
+   × opt-in story framing contains the lighthouse roof, hull and aboard silhouette at 390×844 1ms
+   × opt-in story framing contains the lighthouse roof, hull and aboard silhouette at 1440×900 1ms
+   × normal play keeps its original full-network calculation until story framing is explicitly enabled 1ms
+   × arrival camera callbacks cannot zoom beyond a story composition 1ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 13 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/story-framing.test.ts > opt-in story framing contains the lighthouse roof, hull and aboard silhouette at 780×320
+ FAIL  tests/unit/story-framing.test.ts > opt-in story framing contains the lighthouse roof, hull and aboard silhouette at 844×390
+ FAIL  tests/unit/story-framing.test.ts > opt-in story framing contains the lighthouse roof, hull and aboard silhouette at 320×740
+ FAIL  tests/unit/story-framing.test.ts > opt-in story framing contains the lighthouse roof, hull and aboard silhouette at 390×844
+ FAIL  tests/unit/story-framing.test.ts > opt-in story framing contains the lighthouse roof, hull and aboard silhouette at 1440×900
+TypeError: Cannot read properties of undefined (reading 'id')
+ ❯ World.reframeView src/scene/world.ts:1036:22
+    1034|         y: (this.viewBounds.minY + this.viewBounds.maxY) / 2,
+    1035|       };
+    1036|     if (this.profile.id === 'six-space' && phone && this.viewMode === …
+       |                      ^
+    1037|       !this.storyFraming && !this.viewPanned && !this.viewLocation) {
+    1038|       localFrame = true;
+ ❯ World.setUsableRectangle src/scene/world.ts:736:10
+ ❯ fixture tests/unit/story-framing.test.ts:70:9
+ ❯ tests/unit/story-framing.test.ts:98:53
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/13]⎯
+
+ FAIL  tests/unit/story-framing.test.ts > normal play keeps its original full-network calculation until story framing is explicitly enabled
+TypeError: Cannot read properties of undefined (reading 'id')
+ ❯ World.reframeView src/scene/world.ts:1036:22
+    1034|         y: (this.viewBounds.minY + this.viewBounds.maxY) / 2,
+    1035|       };
+    1036|     if (this.profile.id === 'six-space' && phone && this.viewMode === …
+       |                      ^
+    1037|       !this.storyFraming && !this.viewPanned && !this.viewLocation) {
+    1038|       localFrame = true;
+ ❯ World.setUsableRectangle src/scene/world.ts:736:10
+ ❯ fixture tests/unit/story-framing.test.ts:70:9
+ ❯ tests/unit/story-framing.test.ts:118:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/13]⎯
+
+ FAIL  tests/unit/story-framing.test.ts > arrival camera callbacks cannot zoom beyond a story composition
+TypeError: Cannot read properties of undefined (reading 'id')
+ ❯ World.reframeView src/scene/world.ts:1036:22
+    1034|         y: (this.viewBounds.minY + this.viewBounds.maxY) / 2,
+    1035|       };
+    1036|     if (this.profile.id === 'six-space' && phone && this.viewMode === …
+       |                      ^
+    1037|       !this.storyFraming && !this.viewPanned && !this.viewLocation) {
+    1038|       localFrame = true;
+ ❯ World.setUsableRectangle src/scene/world.ts:736:10
+ ❯ fixture tests/unit/story-framing.test.ts:70:9
+ ❯ tests/unit/story-framing.test.ts:133:37
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/13]⎯
+
+ FAIL  tests/unit/story-staging.test.ts > actual Moss head meshes acknowledge once without moving deck feet or changing state/history, and clear restores all transforms
+TypeError: Cannot read properties of undefined (reading 'id')
+ ❯ World.reframeView src/scene/world.ts:1036:22
+    1034|         y: (this.viewBounds.minY + this.viewBounds.maxY) / 2,
+    1035|       };
+    1036|     if (this.profile.id === 'six-space' && phone && this.viewMode === …
+       |                      ^
+    1037|       !this.storyFraming && !this.viewPanned && !this.viewLocation) {
+    1038|       localFrame = true;
+ ❯ World.setUsableRectangle src/scene/world.ts:736:10
+ ❯ fixture tests/unit/story-staging.test.ts:99:9
+ ❯ tests/unit/story-staging.test.ts:191:65
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/13]⎯
+
+ FAIL  tests/unit/story-staging.test.ts > actual safe Harbor acknowledgment is temporary, does not reboard neighbors, and reduced/restored settlement is motionless
+TypeError: Cannot read properties of undefined (reading 'id')
+ ❯ World.reframeView src/scene/world.ts:1036:22
+    1034|         y: (this.viewBounds.minY + this.viewBounds.maxY) / 2,
+    1035|       };
+    1036|     if (this.profile.id === 'six-space' && phone && this.viewMode === …
+       |                      ^
+    1037|       !this.storyFraming && !this.viewPanned && !this.viewLocation) {
+    1038|       localFrame = true;
+ ❯ World.setUsableRectangle src/scene/world.ts:736:10
+ ❯ fixture tests/unit/story-staging.test.ts:99:9
+ ❯ tests/unit/story-staging.test.ts:226:37
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/13]⎯
+
+ FAIL  tests/unit/story-staging.test.ts > Moss turns toward the orthographic viewer in deck-local coordinates at the Stone berth, then returns to its original heading
+TypeError: Cannot read properties of undefined (reading 'id')
+ ❯ World.reframeView src/scene/world.ts:1036:22
+    1034|         y: (this.viewBounds.minY + this.viewBounds.maxY) / 2,
+    1035|       };
+    1036|     if (this.profile.id === 'six-space' && phone && this.viewMode === …
+       |                      ^
+    1037|       !this.storyFraming && !this.viewPanned && !this.viewLocation) {
+    1038|       localFrame = true;
+ ❯ World.setUsableRectangle src/scene/world.ts:736:10
+ ❯ fixture tests/unit/story-staging.test.ts:99:9
+ ❯ tests/unit/story-staging.test.ts:253:27
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/13]⎯
+
+ FAIL  tests/unit/story-staging.test.ts > the Harbor close shot protects the full ferry and safe trio above the caption at 320×740
+ FAIL  tests/unit/story-staging.test.ts > the Harbor close shot protects the full ferry and safe trio above the caption at 780×320
+ FAIL  tests/unit/story-staging.test.ts > the Harbor close shot protects the full ferry and safe trio above the caption at 844×390
+TypeError: Cannot read properties of undefined (reading 'id')
+ ❯ World.reframeView src/scene/world.ts:1036:22
+    1034|         y: (this.viewBounds.minY + this.viewBounds.maxY) / 2,
+    1035|       };
+    1036|     if (this.profile.id === 'six-space' && phone && this.viewMode === …
+       |                      ^
+    1037|       !this.storyFraming && !this.viewPanned && !this.viewLocation) {
+    1038|       localFrame = true;
+ ❯ World.setUsableRectangle src/scene/world.ts:736:10
+ ❯ fixture tests/unit/story-staging.test.ts:99:9
+ ❯ tests/unit/story-staging.test.ts:274:23
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/13]⎯
+
+
+ Test Files  2 failed | 39 passed (41)
+      Tests  13 failed | 374 passed (387)
+   Start at  23:05:55
+   Duration  23.40s (tests 92%, import 5%, transform 2%, worker 1%)
+
+    Isolate  41 workers spawned · ~208ms startup each (spawn + environment, per file)
+             at least ~4.06s faster with isolate: false — reuses workers across files instead of one per file
+

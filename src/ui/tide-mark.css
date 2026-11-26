@@ -1,0 +1,38 @@
+.tide-mark {
+  width: 18px;
+  height: 15px;
+  vertical-align: middle;
+  flex: none;
+  color: #ffda92;
+}
+.map-symbol .tide-mark {
+  width: 14px;
+  height: 12px;
+}
+.map-countdown {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin-inline-start: 4px;
+  padding-inline-start: 4px;
+  border-inline-start: 1px solid #a69266;
+  color: #ffdf9f;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.map-countdown .tide-mark {
+  width: 15px;
+  height: 13px;
+}
+#app .map-stop[data-next-flood='true'] .map-symbol {
+  border-color: #efca86;
+}
+
+.forecast-place {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  margin: 3px 4px 0 0;
+  padding: 5px 10px;
+}

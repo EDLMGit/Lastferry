@@ -1,0 +1,31 @@
+{
+  "recordedFrom": "Root tool execution, final runtime after bounded label-layout cache optimization",
+  "evidenceSource": "a93bed3897586fbfa66ed06e54ee2d9685c87be0 plus recorded phone-playability working-tree changes",
+  "node": "24.15.0",
+  "npm": "11.12.1",
+  "checks": [
+    {
+      "command": "npm run build",
+      "result": "pass",
+      "includes": "npm run typecheck (tsc --noEmit)",
+      "output": "47 modules; index-BCc7XMds.js 749.99 kB / gzip 200.15 kB; index-DZ4rqKYt.css 15.20 kB / gzip 3.72 kB; existing advisory for chunks over 500 kB",
+      "rootExecSession": 27400
+    },
+    {
+      "command": "npm run test:unit -- --maxWorkers=1",
+      "result": "pass",
+      "tests": 188,
+      "files": 27,
+      "durationSeconds": 10.48,
+      "rootExecSession": 27400
+    },
+    {
+      "command": "npm run typecheck",
+      "result": "pass",
+      "stage": "After final evidence-only helper flags and final source snapshot; runtime/tests/build inputs unchanged"
+    }
+  ],
+  "note": "Structured transcription of actual completed root tool output, not a second execution or raw stdout file. Original earlier runs remain separately retained.",
+  "finalRuntimeHash": "0d6bf4dc2707ef88b9b1402fa51e2a7aa23581dc0fce8f60b4aea4f278d91b89",
+  "finalSourceHash": "31764a1ee974c9eb59b0f21cd8d91e1e8632a89efca5321421dcffa1a23764e4"
+}

@@ -1,0 +1,331 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      ".cache/readability-regressions.config.ts"
+    ],
+    "configFile": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\.cache\\readability-regressions.config.ts",
+    "rootDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "play-readability-regressions.spec.ts"
+        ],
+        "timeout": 240000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "snapshotDir": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e",
+        "testIgnore": [],
+        "testMatch": "play-readability-regressions.spec.ts",
+        "timeout": 240000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5282",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "deviceScaleFactor": 1,
+          "headless": true,
+          "actionTimeout": 15000,
+          "navigationTimeout": 20000,
+          "launchOptions": {
+            "args": [
+              "--use-angle=swiftshader",
+              "--enable-unsafe-swiftshader"
+            ]
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "reviews/play-readability/regressions-third/automation-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "play-readability-regressions.spec.ts",
+      "file": "play-readability-regressions.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Bellwater actual rabbit pickup retains free subsets, loaded views and Undo",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 29239,
+                  "error": {
+                    "message": "TimeoutError: locator.tap: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#back-to-boat')\u001b[22m\n\u001b[2m    - locator resolved to <button id=\"back-to-boat\" class=\"cove-button cove-button--quiet\">…</button>\u001b[22m\n\u001b[2m  - attempting tap action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying tap action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying tap action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    26 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying tap action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n",
+                    "stack": "TimeoutError: locator.tap: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#back-to-boat')\u001b[22m\n\u001b[2m    - locator resolved to <button id=\"back-to-boat\" class=\"cove-button cove-button--quiet\">…</button>\u001b[22m\n\u001b[2m  - attempting tap action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying tap action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying tap action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    26 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying tap action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n    at activate (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\ui.ts:39:43)\n    at cameraFrames (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\play-readability-regressions.spec.ts:113:64)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\play-readability-regressions.spec.ts:160:3",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\ui.ts",
+                      "column": 43,
+                      "line": 39
+                    },
+                    "snippet": "\u001b[90m   at \u001b[39mui.ts:39\n\n  37 |     await activate(page, current, touch);\n  38 |   }\n> 39 |   if (touch) await page.locator(`#${id}`).tap();\n     |                                           ^\n  40 |   else await page.locator(`#${id}`).click();\n  41 | }\n  42 | export async function wholeCove(page: Page, touch = false) {"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\ui.ts",
+                        "column": 43,
+                        "line": 39
+                      },
+                      "message": "TimeoutError: locator.tap: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#back-to-boat')\u001b[22m\n\u001b[2m    - locator resolved to <button id=\"back-to-boat\" class=\"cove-button cove-button--quiet\">…</button>\u001b[22m\n\u001b[2m  - attempting tap action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying tap action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying tap action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    26 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying tap action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n   at ui.ts:39\n\n  37 |     await activate(page, current, touch);\n  38 |   }\n> 39 |   if (touch) await page.locator(`#${id}`).tap();\n     |                                           ^\n  40 |   else await page.locator(`#${id}`).click();\n  41 | }\n  42 | export async function wholeCove(page: Page, touch = false) {\n    at activate (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\ui.ts:39:43)\n    at cameraFrames (C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\play-readability-regressions.spec.ts:113:64)\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\play-readability-regressions.spec.ts:160:3"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T09:43:51.128Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\play-readability-regressio-d989f-bsets-loaded-views-and-Undo\\error-context.md"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\play-readability-regressio-d989f-bsets-loaded-views-and-Undo\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\ui.ts",
+                    "column": 43,
+                    "line": 39
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "aa8d8f6aa57d6aa0aa11-78606d5d81ca28a09f4c",
+          "file": "play-readability-regressions.spec.ts",
+          "line": 125,
+          "column": 1
+        },
+        {
+          "title": "Wide Berth full-six pickup and staged subset retain native controls and both camera modes",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 14504,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoMatchObject\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\n\u001b[32m- Expected  - 1\u001b[39m\n\u001b[31m+ Received  + 1\u001b[39m\n\n\u001b[33m@@ -5,8 +5,8 @@\u001b[39m\n\u001b[2m      \"poppy\",\u001b[22m\n\u001b[2m      \"wren\",\u001b[22m\n\u001b[2m    ],\u001b[22m\n\u001b[2m    \"boatNodeId\": \"high-quay\",\u001b[22m\n\u001b[2m    \"status\": \"playing\",\u001b[22m\n\u001b[32m-   \"tideLevel\": 1,\u001b[39m\n\u001b[31m+   \"tideLevel\": 0,\u001b[39m\n\u001b[2m    \"turn\": 4,\u001b[22m\n\u001b[2m  }\u001b[22m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoMatchObject\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\n\u001b[32m- Expected  - 1\u001b[39m\n\u001b[31m+ Received  + 1\u001b[39m\n\n\u001b[33m@@ -5,8 +5,8 @@\u001b[39m\n\u001b[2m      \"poppy\",\u001b[22m\n\u001b[2m      \"wren\",\u001b[22m\n\u001b[2m    ],\u001b[22m\n\u001b[2m    \"boatNodeId\": \"high-quay\",\u001b[22m\n\u001b[2m    \"status\": \"playing\",\u001b[22m\n\u001b[32m-   \"tideLevel\": 1,\u001b[39m\n\u001b[31m+   \"tideLevel\": 0,\u001b[39m\n\u001b[2m    \"turn\": 4,\u001b[22m\n\u001b[2m  }\u001b[22m\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\play-readability-regressions.spec.ts:194:16",
+                    "location": {
+                      "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\play-readability-regressions.spec.ts",
+                      "column": 16,
+                      "line": 194
+                    },
+                    "snippet": "  192 |     await act(page, action.type === 'move' ? `map-${action.to}` : action.type, true);\n  193 |   const full = await state(page);\n> 194 |   expect(full).toMatchObject({\n      |                ^\n  195 |     turn: 4,\n  196 |     tideLevel: 1,\n  197 |     aboard: ['alder', 'clover', 'poppy', 'wren'],"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\play-readability-regressions.spec.ts",
+                        "column": 16,
+                        "line": 194
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoMatchObject\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\n\u001b[32m- Expected  - 1\u001b[39m\n\u001b[31m+ Received  + 1\u001b[39m\n\n\u001b[33m@@ -5,8 +5,8 @@\u001b[39m\n\u001b[2m      \"poppy\",\u001b[22m\n\u001b[2m      \"wren\",\u001b[22m\n\u001b[2m    ],\u001b[22m\n\u001b[2m    \"boatNodeId\": \"high-quay\",\u001b[22m\n\u001b[2m    \"status\": \"playing\",\u001b[22m\n\u001b[32m-   \"tideLevel\": 1,\u001b[39m\n\u001b[31m+   \"tideLevel\": 0,\u001b[39m\n\u001b[2m    \"turn\": 4,\u001b[22m\n\u001b[2m  }\u001b[22m\n\n  192 |     await act(page, action.type === 'move' ? `map-${action.to}` : action.type, true);\n  193 |   const full = await state(page);\n> 194 |   expect(full).toMatchObject({\n      |                ^\n  195 |     turn: 4,\n  196 |     tideLevel: 1,\n  197 |     aboard: ['alder', 'clover', 'poppy', 'wren'],\n    at C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\play-readability-regressions.spec.ts:194:16"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T09:44:22.125Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\play-readability-regressio-21c56-trols-and-both-camera-modes\\error-context.md"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\test-results\\play-readability-regressio-21c56-trols-and-both-camera-modes\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\ernes\\Documents\\last-ferry-codex-starter\\Lastferry\\tests\\e2e\\play-readability-regressions.spec.ts",
+                    "column": 16,
+                    "line": 194
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "aa8d8f6aa57d6aa0aa11-f8f6cb22dea43258aa5f",
+          "file": "play-readability-regressions.spec.ts",
+          "line": 174,
+          "column": 1
+        },
+        {
+          "title": "First Crossing initial practice retains its original roster and free inspection",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7449,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T09:44:38.710Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "aa8d8f6aa57d6aa0aa11-f7ca032228b58d7021b3",
+          "file": "play-readability-regressions.spec.ts",
+          "line": 224,
+          "column": 1
+        },
+        {
+          "title": "Home Options preserve natural focus, sound mute and inactive gameplay after phone rotation",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6399,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-01T09:44:46.330Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "aa8d8f6aa57d6aa0aa11-45b7984fb244de8015c4",
+          "file": "play-readability-regressions.spec.ts",
+          "line": 250,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-01T09:43:50.696Z",
+    "duration": 62762.994999999995,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

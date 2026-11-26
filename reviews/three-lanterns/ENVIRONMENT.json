@@ -1,0 +1,70 @@
+{
+  "source": "source/a7d5fe49691a6c28a0ea7482de8df7554891a8c93bcbedaced4d9dce3fe17f1f.json",
+  "runtimeInputCount": 129,
+  "node": "v24.15.0",
+  "os": "win32",
+  "browser": "156.0.8078.4",
+  "hardware": "Chromium software rendering via SwiftShader, emulated touch phones",
+  "viewports": [
+    [
+      390,
+      844
+    ],
+    [
+      780,
+      320
+    ],
+    [
+      320,
+      740
+    ],
+    [
+      1440,
+      900
+    ]
+  ],
+  "deviceScaleFactor": 1,
+  "normalMotion": "390x844 Orchard sequence and attempt lifecycle",
+  "reducedMotion": "Other rescue checks",
+  "server": {
+    "dev": "http://127.0.0.1:5294",
+    "production": "http://127.0.0.1:5281",
+    "localUserURL": "http://127.0.0.1:5270/",
+    "viteOverride": {
+      "server": {
+        "host": "127.0.0.1",
+        "port": 5294,
+        "strictPort": true,
+        "hmr": false,
+        "watch": null
+      }
+    },
+    "explanation": "Dedicated development capture server merged with vite.config.ts, with file watching disabled during recording."
+  },
+  "playwright": {
+    "base": "playwright.config.ts",
+    "override": {
+      "testDir": "../tests/e2e",
+      "webServer": null,
+      "use": {
+        "baseURL": "http://127.0.0.1:5294",
+        "trace": "retain-on-failure"
+      }
+    },
+    "environment": {
+      "LAST_FERRY_PRODUCTION_PORT": "5281",
+      "LAST_FERRY_REVIEW_DIR": "reviews/three-lanterns",
+      "LAST_FERRY_LANTERNS_RECORD": "1",
+      "PLAYWRIGHT_BROWSERS_PATH": ".cache/ms-playwright"
+    },
+    "command": "node node_modules/@playwright/test/cli.js test -c .cache/lantern-playwright.config.ts three-lanterns.spec.ts --workers=1",
+    "localConfigNote": "The ignored config is the checked-in config with the overrides above. Final automation-results.json was copied from .cache/reviews/three-lanterns, where the custom config resolves its JSON reporter output."
+  },
+  "capture": {
+    "screenshots": "Native CDP Page.captureScreenshot, unchanged pixel dimensions.",
+    "video": "Native CDP Page.startScreencast, JPEG quality 88, everyNthFrame 2. All delivered frames retained in timestamp order.",
+    "audio": "Existing Sound owner master stream captured simultaneously to Opus and encoded to stereo AAC at original playback levels.",
+    "events": "Complete 12-action Orchard rescue, provisional three, menu and Settings return, terminal Undo, redelivery two, successful Restart acceptance, Home Practice showing the accepted best."
+  },
+  "checks": "automation-results.json and release/build.json"
+}

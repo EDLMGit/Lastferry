@@ -1,0 +1,321 @@
+{
+  "baseline": "7e324e88827857469bf348fca311548344d03da6",
+  "at": "2026-10-31T19:15:25.591173+00:00",
+  "inventory": {
+    "beforeCount": 78,
+    "afterCount": 79,
+    "allBaselineIdsRetained": true,
+    "removed": [],
+    "added": [
+      "environment.wide-berth"
+    ],
+    "updated": [
+      {
+        "id": "model.ferry",
+        "changedFields": [
+          "typeSpecific",
+          "acceptance",
+          "consumers",
+          "sources",
+          "gallery",
+          "evidence",
+          "variants",
+          "behaviorToPreserve"
+        ]
+      },
+      {
+        "id": "model.pier-kit",
+        "changedFields": [
+          "acceptance",
+          "sources",
+          "variants",
+          "behaviorToPreserve"
+        ]
+      },
+      {
+        "id": "effect.wake",
+        "changedFields": [
+          "acceptance",
+          "evidence",
+          "behaviorToPreserve"
+        ]
+      },
+      {
+        "id": "motion.transfer",
+        "changedFields": [
+          "acceptance",
+          "evidence",
+          "behaviorToPreserve"
+        ]
+      },
+      {
+        "id": "ui.dialogs",
+        "changedFields": [
+          "evidence",
+          "behaviorToPreserve"
+        ]
+      },
+      {
+        "id": "ui.icon.harbor-home",
+        "changedFields": [
+          "name",
+          "visibleLabel",
+          "typeSpecific"
+        ]
+      },
+      {
+        "id": "ui.component.passenger-choice",
+        "changedFields": [
+          "evidence",
+          "behaviorToPreserve"
+        ]
+      },
+      {
+        "id": "story.illustrations",
+        "changedFields": [
+          "acceptance",
+          "sources",
+          "gallery",
+          "reuseAndOwnership",
+          "variants",
+          "visualSignature"
+        ]
+      }
+    ],
+    "changedFamilySourcesExist": true,
+    "sourcePaths": [
+      "LAST_FERRY_DRIFTWOOD_YARD_PACKAGE/direction/NELL_AND_YARD.md",
+      "LAST_FERRY_STORY_PRODUCTION_PACKAGE/reference/scene-painter.js",
+      "LAST_FERRY_WIDE_BERTH_PACKAGE/direction/LAUNCH_AND_DIFFICULTY.md",
+      "data/wide-berth.level.json",
+      "src/campaign/registry.ts",
+      "src/campaign/story-painter.ts",
+      "src/scene/deck-transfer.ts",
+      "src/scene/effects.ts",
+      "src/scene/ferry-profile.ts",
+      "src/scene/layout.ts",
+      "src/scene/models.ts",
+      "src/scene/pier.ts",
+      "src/scene/scenery.ts",
+      "src/scene/transfer.ts",
+      "src/scene/wake.ts",
+      "src/scene/world.ts"
+    ],
+    "newFamilyProvenance": "Original project code/native JSON composition reusing existing material/model families. Supplied package direction is specification, not gameplay or inherited acceptance.",
+    "gallery": "Actual six-space factory and fixed full-size five-body specimen in src/dev/asset-gallery.ts#wide-ferry; static story endpoints use production painter/registry. Developer gallery is design evidence, not gameplay.",
+    "auditCorrections": [
+      "New waterfront typeSpecific no longer identifies copied Driftwood factory/yard-island.",
+      "Six-space seating documented as full-level species peers sorted by stable ID; original four-space species ordinals retained.",
+      "Six illustration endpoints documented; new launch acceptance explicitly awaits human art/pacing approval.",
+      "Pier/wake/transfer acceptance scoped to historical original variants; wide-profile variants await review."
+    ],
+    "validator": {
+      "command": "npm run check:assets",
+      "result": "pass",
+      "families": 79,
+      "log": "reviews/wide-berth/gates/assets-final.txt"
+    }
+  },
+  "protectedFiles": [
+    {
+      "path": "assets/portraits/beaver-brown.png",
+      "baselineGitBlobSha256": "248a3568b1483c8745c12431a41b57fc2cdb969ac0ad9e1c0accc2505a7ffdc5",
+      "workingTreeSha256": "248a3568b1483c8745c12431a41b57fc2cdb969ac0ad9e1c0accc2505a7ffdc5",
+      "byteExact": true,
+      "textEquivalentAfterCRLFNormalization": true
+    },
+    {
+      "path": "assets/portraits/beaver-brown.svg",
+      "baselineGitBlobSha256": "be9bb4bfe2d8e276ca3c4f55e6a8f499b6369e8c1bbbf6bc71bdabb29c9db49d",
+      "workingTreeSha256": "be9bb4bfe2d8e276ca3c4f55e6a8f499b6369e8c1bbbf6bc71bdabb29c9db49d",
+      "byteExact": true,
+      "textEquivalentAfterCRLFNormalization": true
+    },
+    {
+      "path": "assets/portraits/family-manifest.json",
+      "baselineGitBlobSha256": "b00fb6af649869432f39f0d53c9b1e822c0027b66a0ff4855cc941f142edf6ac",
+      "workingTreeSha256": "aa86f33fa74afd4bf02bc3b9b81ba38c3b9e9499b811bbe4ab9e486c0494d196",
+      "byteExact": false,
+      "textEquivalentAfterCRLFNormalization": true
+    },
+    {
+      "path": "assets/portraits/generation-manifest.json",
+      "baselineGitBlobSha256": "5d82b3518b05f8451fcb779af2dd9a4e14e948e2e5bdfc75f4bfcfcbfaafe23b",
+      "workingTreeSha256": "5d82b3518b05f8451fcb779af2dd9a4e14e948e2e5bdfc75f4bfcfcbfaafe23b",
+      "byteExact": true,
+      "textEquivalentAfterCRLFNormalization": true
+    },
+    {
+      "path": "data/bellwater.level.json",
+      "baselineGitBlobSha256": "a716b3cda50c7fda9d5429a2316576fe2d93aced2287ac281fec5ed8ed8b4de0",
+      "workingTreeSha256": "a716b3cda50c7fda9d5429a2316576fe2d93aced2287ac281fec5ed8ed8b4de0",
+      "byteExact": true,
+      "textEquivalentAfterCRLFNormalization": true
+    },
+    {
+      "path": "data/driftwood-yard.level.json",
+      "baselineGitBlobSha256": "45f87252a9f2c7df359b2bffec117479ab629f2a79754f05f2056700758d6ec5",
+      "workingTreeSha256": "dd555382af06e6856683ebc275e0b60a870858bb65928750914a7792fe1a46f8",
+      "byteExact": false,
+      "textEquivalentAfterCRLFNormalization": true
+    },
+    {
+      "path": "data/first-crossing.level.json",
+      "baselineGitBlobSha256": "403a19ddd7840a52f5706490d6e2f5a35ddf1a38dd20715b602fcc572f6167ab",
+      "workingTreeSha256": "403a19ddd7840a52f5706490d6e2f5a35ddf1a38dd20715b602fcc572f6167ab",
+      "byteExact": true,
+      "textEquivalentAfterCRLFNormalization": true
+    },
+    {
+      "path": "data/holding-pier.level.json",
+      "baselineGitBlobSha256": "80d98e6c3a675eabb81dff75ef2df76b9ac90979d0ac1cbcc06a5603dc8fc81a",
+      "workingTreeSha256": "80d98e6c3a675eabb81dff75ef2df76b9ac90979d0ac1cbcc06a5603dc8fc81a",
+      "byteExact": true,
+      "textEquivalentAfterCRLFNormalization": true
+    },
+    {
+      "path": "src/audio/arrangement.ts",
+      "baselineGitBlobSha256": "370bc490f7dd5cb12a106fd122d2687b27bb51e931f98f7e7770833f52d07313",
+      "workingTreeSha256": "370bc490f7dd5cb12a106fd122d2687b27bb51e931f98f7e7770833f52d07313",
+      "byteExact": true,
+      "textEquivalentAfterCRLFNormalization": true
+    },
+    {
+      "path": "src/audio/arrival.ts",
+      "baselineGitBlobSha256": "2ab014b3dc8f64c507ba855edfa9acd4c2634d87c9ca6b92534043ec6f713f27",
+      "workingTreeSha256": "2ab014b3dc8f64c507ba855edfa9acd4c2634d87c9ca6b92534043ec6f713f27",
+      "byteExact": true,
+      "textEquivalentAfterCRLFNormalization": true
+    },
+    {
+      "path": "src/audio/atmosphere.ts",
+      "baselineGitBlobSha256": "341cfeb88152e02ad95a2d89a57ac682f32aa272eb2dfab22711718dfb633a00",
+      "workingTreeSha256": "341cfeb88152e02ad95a2d89a57ac682f32aa272eb2dfab22711718dfb633a00",
+      "byteExact": true,
+      "textEquivalentAfterCRLFNormalization": true
+    },
+    {
+      "path": "src/audio/score.ts",
+      "baselineGitBlobSha256": "a6188eebfa64b958130a2ff918e4f9f637f58872cf731b4e66d6fd48caefb1f0",
+      "workingTreeSha256": "a6188eebfa64b958130a2ff918e4f9f637f58872cf731b4e66d6fd48caefb1f0",
+      "byteExact": true,
+      "textEquivalentAfterCRLFNormalization": true
+    },
+    {
+      "path": "src/audio/sound.ts",
+      "baselineGitBlobSha256": "35188f551a6898fd642f48bc77c400dcbeed9fd9a0863218f6ffad7efe9d15da",
+      "workingTreeSha256": "35188f551a6898fd642f48bc77c400dcbeed9fd9a0863218f6ffad7efe9d15da",
+      "byteExact": true,
+      "textEquivalentAfterCRLFNormalization": true
+    },
+    {
+      "path": "src/audio/story-effects.ts",
+      "baselineGitBlobSha256": "5b007ddae8f4cd812aafea7c6773a5db8280ef5a40de0622f17f8692e501887a",
+      "workingTreeSha256": "5b007ddae8f4cd812aafea7c6773a5db8280ef5a40de0622f17f8692e501887a",
+      "byteExact": true,
+      "textEquivalentAfterCRLFNormalization": true
+    },
+    {
+      "path": "src/audio/wood.ts",
+      "baselineGitBlobSha256": "c52cdc8e4d69a4a4c992a201eca8e0513225efd6b4260ce6025d5a66820eb777",
+      "workingTreeSha256": "c52cdc8e4d69a4a4c992a201eca8e0513225efd6b4260ce6025d5a66820eb777",
+      "byteExact": true,
+      "textEquivalentAfterCRLFNormalization": true
+    },
+    {
+      "path": "src/game/passenger-appearance.ts",
+      "baselineGitBlobSha256": "a8a8e140b6f1925693432197089bd50c3445d71c74534f272a1b059771330da8",
+      "workingTreeSha256": "a8a8e140b6f1925693432197089bd50c3445d71c74534f272a1b059771330da8",
+      "byteExact": true,
+      "textEquivalentAfterCRLFNormalization": true
+    },
+    {
+      "path": "src/scene/contact.ts",
+      "baselineGitBlobSha256": "2df78646cb214a3f23d8ee82024d67c3ac6ea63d2ef1308b79898601ce3307fa",
+      "workingTreeSha256": "2df78646cb214a3f23d8ee82024d67c3ac6ea63d2ef1308b79898601ce3307fa",
+      "byteExact": true,
+      "textEquivalentAfterCRLFNormalization": true
+    },
+    {
+      "path": "src/scene/deck-transfer.ts",
+      "baselineGitBlobSha256": "cc3e6af5ba7c911eef9589f4584b6677c8604406c507604676759f4947012a14",
+      "workingTreeSha256": "cc3e6af5ba7c911eef9589f4584b6677c8604406c507604676759f4947012a14",
+      "byteExact": true,
+      "textEquivalentAfterCRLFNormalization": true
+    },
+    {
+      "path": "src/scene/homecoming.ts",
+      "baselineGitBlobSha256": "34a8c13d016a98b7f6b46ff2cec1d8b438af01837f940c543c9b181471e7cf33",
+      "workingTreeSha256": "34a8c13d016a98b7f6b46ff2cec1d8b438af01837f940c543c9b181471e7cf33",
+      "byteExact": true,
+      "textEquivalentAfterCRLFNormalization": true
+    },
+    {
+      "path": "src/scene/paths.ts",
+      "baselineGitBlobSha256": "cb907cdf1a03733e7714cb83d936fe5061c763522b6d76fb518124d8e692f39d",
+      "workingTreeSha256": "cb907cdf1a03733e7714cb83d936fe5061c763522b6d76fb518124d8e692f39d",
+      "byteExact": true,
+      "textEquivalentAfterCRLFNormalization": true
+    },
+    {
+      "path": "src/scene/seabed.ts",
+      "baselineGitBlobSha256": "67e7140cf48871d3d4f1d3f526e4c0092d745df33ea85cbc958bcb05a3adf7c1",
+      "workingTreeSha256": "67e7140cf48871d3d4f1d3f526e4c0092d745df33ea85cbc958bcb05a3adf7c1",
+      "byteExact": true,
+      "textEquivalentAfterCRLFNormalization": true
+    },
+    {
+      "path": "src/scene/shore.ts",
+      "baselineGitBlobSha256": "c35393c1e9a11f3202b869c86ca174b585f3e59d3b13a7427c304c16d87da0eb",
+      "workingTreeSha256": "c35393c1e9a11f3202b869c86ca174b585f3e59d3b13a7427c304c16d87da0eb",
+      "byteExact": true,
+      "textEquivalentAfterCRLFNormalization": true
+    },
+    {
+      "path": "src/scene/transfer.ts",
+      "baselineGitBlobSha256": "632c667c6beb64d22032c50863f12efb3211331db455c5dd426ca0209d2c8199",
+      "workingTreeSha256": "632c667c6beb64d22032c50863f12efb3211331db455c5dd426ca0209d2c8199",
+      "byteExact": true,
+      "textEquivalentAfterCRLFNormalization": true
+    },
+    {
+      "path": "src/scene/transitions.ts",
+      "baselineGitBlobSha256": "09b2b8d68a50d6853befa7161a4e4993e45f7ba9868b79c491171026bcf5e447",
+      "workingTreeSha256": "09b2b8d68a50d6853befa7161a4e4993e45f7ba9868b79c491171026bcf5e447",
+      "byteExact": true,
+      "textEquivalentAfterCRLFNormalization": true
+    },
+    {
+      "path": "src/scene/water-shader.ts",
+      "baselineGitBlobSha256": "7e5f976c88546d3f38a18afdd1861ad955ae728ba87c0d278f54d2eff271d0ed",
+      "workingTreeSha256": "7e5f976c88546d3f38a18afdd1861ad955ae728ba87c0d278f54d2eff271d0ed",
+      "byteExact": true,
+      "textEquivalentAfterCRLFNormalization": true
+    },
+    {
+      "path": "src/scene/water.ts",
+      "baselineGitBlobSha256": "8c189a3f1e641ea1e925e923de57b98faa0c39845b89e74a3b319a530f9f14ad",
+      "workingTreeSha256": "8c189a3f1e641ea1e925e923de57b98faa0c39845b89e74a3b319a530f9f14ad",
+      "byteExact": true,
+      "textEquivalentAfterCRLFNormalization": true
+    }
+  ],
+  "allProtectedEquivalent": true,
+  "lighthouse": {
+    "modelsFunctionNormalizedShaBefore": "c89f4bb753f7efd262b00698f7b9ba1064a11b8ae39f15df0f4f4670d9b09692",
+    "modelsFunctionNormalizedShaAfter": "c89f4bb753f7efd262b00698f7b9ba1064a11b8ae39f15df0f4f4670d9b09692",
+    "functionUnchanged": true,
+    "effectsFromPixelsThroughEndUnchanged": true,
+    "effectsSectionShaBefore": "a738edcd209f8b808513eefbdbda0f7618205dc4d5a01231cc5e7130d77751c2",
+    "effectsSectionShaAfter": "a738edcd209f8b808513eefbdbda0f7618205dc4d5a01231cc5e7130d77751c2",
+    "caveat": "effects.ts imports WakeDimensions and passes optional dimensions to FerryWake; entire file is changed, illumination/shader/arrival/reduced sections after pixels initialization are unchanged."
+  },
+  "sailingAndWakeCaveats": [
+    "transitions.ts journeyTiming/action durations/easing byte or newline-equivalent to baseline; no accepted timing retime.",
+    "motion.ts and poses.ts changed to accept profile berth hold/turn distances for larger geometry; original .45/.55 defaults remain. This is a geometric adaptation, not claim that all steering source is unchanged.",
+    "wake.ts changed for actual six-space hull outline/contact and wider crest birth; original contact dimensions and all event lifetime/pool/opacity/color/release logic remain. Tests and native gameplay evidence establish behavior separately.",
+    "World changes include active profile/seats/gangway/shore row and larger-hull transfer path. Source preservation is not proof of native phone behavior or human visual/listening approval."
+  ],
+  "oldFerryOutputAudit": "reviews/wide-berth/original-model-audit.json",
+  "publication": "No deployment. The unchanged live Site receipt/history is owned by PROJECT_STATE, not inferred from Git push."
+}

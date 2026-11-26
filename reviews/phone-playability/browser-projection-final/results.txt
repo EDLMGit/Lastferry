@@ -1,0 +1,74 @@
+
+Running 17 tests using 1 worker
+
+(node:5944) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\e2e\phone-playability.spec.ts:184:3 › phone layout 844x390: readable Play and deliberate complete Whole cove (5.5s)
+  ok  2 tests\e2e\phone-playability.spec.ts:184:3 › phone layout 780x390: readable Play and deliberate complete Whole cove (5.5s)
+  ok  3 tests\e2e\phone-playability.spec.ts:184:3 › phone layout 780x320: readable Play and deliberate complete Whole cove (5.0s)
+  ok  4 tests\e2e\phone-playability.spec.ts:184:3 › phone layout 390x844: readable Play and deliberate complete Whole cove (4.9s)
+  x   5 tests\e2e\phone-playability.spec.ts:184:3 › phone layout 360x740: readable Play and deliberate complete Whole cove (3.6s)
+(node:26524) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  6 tests\e2e\phone-playability.spec.ts:243:3 › phone rescue 844x390: actual subset/tide Undo, nearby previews and terminal redelivery (30.0s)
+  ok  7 tests\e2e\phone-playability.spec.ts:243:3 › phone rescue 390x844: actual subset/tide Undo, nearby previews and terminal redelivery (28.3s)
+  ok  8 tests\e2e\phone-playability.spec.ts:317:1 › phone camera input: real touch pan, cancellation, mode recovery and marker picking conserve state (9.7s)
+  ok  9 tests\e2e\phone-playability.spec.ts:507:1 › phone rotation: selected place, open subset and confirmed journey retain state and anchors (10.7s)
+  ok 10 tests\e2e\phone-playability.spec.ts:574:1 › phone nearby decisions: Wait and losing Sail retain their actual control anchors (10.5s)
+  ok 11 tests\e2e\phone-playability.spec.ts:634:1 › phone fullscreen: real API result, root includes dialogs and external exit preserves subset (6.0s)
+  ok 12 tests\e2e\phone-playability.spec.ts:702:3 › phone fullscreen rejected: labeled mocked fallback leaves play usable (2.4s)
+  ok 13 tests\e2e\phone-playability.spec.ts:702:3 › phone fullscreen unavailable: labeled mocked fallback leaves play usable (2.0s)
+  ok 14 tests\e2e\phone-playability.spec.ts:752:1 › desktop and other coves: keyboard overview, Bellwater outer route, First Crossing and arrival remain coherent (38.7s)
+  ok 15 tests\e2e\phone-playability.spec.ts:789:1 › phone won Overview: closing arrival then Whole cove retains the complete network (22.7s)
+  ok 16 tests\e2e\phone-playability.spec.ts:850:1 › phone synthesized cutout and VisualViewport offsets: general and action surfaces fit the shared safe bounds (7.1s)
+  x  17 tests\e2e\phone-playability.spec.ts:923:1 › phone rendered marker anchors: independent world projection tracks both tide rises, view changes and rotation (21.5s)
+
+
+  1) tests\e2e\phone-playability.spec.ts:184:3 › phone layout 360x740: readable Play and deliberate complete Whole cove 
+
+    Error: expect(received).toBeLessThan(expected)
+
+    Expected: < 2
+    Received:   136.65625
+
+      108 |     const marker = await control.boundingBox();
+      109 |     expect(marker).not.toBeNull();
+    > 110 |     expect(Math.abs(marker!.x + marker!.width / 2 - (node.x + c!.x))).toBeLessThan(2);
+          |                                                                       ^
+      111 |     expect(Math.abs(marker!.y + marker!.height / 2 - (node.y + c!.y))).toBeLessThan(2);
+      112 |   }
+      113 | }
+        at markerAlignment (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-playability.spec.ts:110:71)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-playability.spec.ts:221:9
+        at observed (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-playability.spec.ts:152:5)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-playability.spec.ts:198:7
+
+    Error Context: test-results\phone-playability-phone-la-810b5-iberate-complete-Whole-cove\error-context.md
+
+  2) tests\e2e\phone-playability.spec.ts:923:1 › phone rendered marker anchors: independent world projection tracks both tide rises, view changes and rotation 
+
+    Error: tide2-play harbor actual-world horizontal anchor
+
+    expect(received).toBeLessThan(expected)
+
+    Expected: < 1
+    Received:   76.8750276565552
+
+      990 |             Math.abs(comparison.dx),
+      991 |             `${label} ${comparison.id} actual-world horizontal anchor`,
+    > 992 |           ).toBeLessThan(1);
+          |             ^
+      993 |           expect(
+      994 |             Math.abs(comparison.dy),
+      995 |             `${label} ${comparison.id} actual-world vertical anchor`,
+        at align (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-playability.spec.ts:992:13)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-playability.spec.ts:1031:7
+        at observed (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-playability.spec.ts:152:5)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\phone-playability.spec.ts:937:5
+
+    Error Context: test-results\phone-playability-phone-re-331ca-s-view-changes-and-rotation\error-context.md
+
+  2 failed
+    tests\e2e\phone-playability.spec.ts:184:3 › phone layout 360x740: readable Play and deliberate complete Whole cove 
+    tests\e2e\phone-playability.spec.ts:923:1 › phone rendered marker anchors: independent world projection tracks both tide rises, view changes and rotation 
+  15 passed (3.6m)

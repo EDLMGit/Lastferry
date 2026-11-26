@@ -1,0 +1,91 @@
+{
+  "source": "source/7aa3cec738caca4502b47e6fa24204037f47f0c19e505a4ef43ad716604f9bd6.json",
+  "runtimeInputCount": 129,
+  "node": "v24.15.0",
+  "os": "win32",
+  "browser": "156.0.8078.4",
+  "rendering": "Chromium emulated touch; ANGLE SwiftShader, DPR 1",
+  "viewports": [
+    [
+      390,
+      844
+    ],
+    [
+      780,
+      320
+    ],
+    [
+      320,
+      740
+    ],
+    [
+      1440,
+      900
+    ]
+  ],
+  "normalMotion": "Both principal scene orientations and complete 390x844 Orchard rescue",
+  "reducedMotion": "Production Reef-to-Orchard route, 320px/desktop restored scene and Practice isolation",
+  "server": {
+    "dev": "http://127.0.0.1:5296",
+    "production": "http://127.0.0.1:5282",
+    "localUserURL": "http://127.0.0.1:5270/",
+    "viteOverride": {
+      "server": {
+        "host": "127.0.0.1",
+        "port": 5296,
+        "strictPort": true,
+        "hmr": false,
+        "watch": null
+      }
+    }
+  },
+  "playwright": {
+    "base": "playwright.config.ts",
+    "override": {
+      "testDir": "../tests/e2e",
+      "webServer": null,
+      "use": {
+        "baseURL": "http://127.0.0.1:5296",
+        "trace": "retain-on-failure"
+      }
+    },
+    "environment": {
+      "LAST_FERRY_PRODUCTION_PORT": "5282",
+      "LAST_FERRY_REVIEW_DIR": "reviews/orchard-journey",
+      "LAST_FERRY_ORCHARD_RECORD": "1",
+      "PLAYWRIGHT_BROWSERS_PATH": ".cache/ms-playwright"
+    },
+    "commands": [
+      "node node_modules/@playwright/test/cli.js test -c .cache/orchard-journey-playwright.config.ts orchard-journey.spec.ts --workers=1 --grep-invert minified",
+      "node node_modules/@playwright/test/cli.js test -c .cache/orchard-journey-playwright.config.ts orchard-journey.spec.ts --workers=1 --grep minified"
+    ],
+    "results": [
+      "development-results.json",
+      "production-results.json"
+    ],
+    "configNote": "Ignored config imports the checked-in config, with the documented overrides. Its reporter resolves beneath .cache; the unchanged result JSONs were copied into this review."
+  },
+  "recording": {
+    "driver": "recording-driver.ts",
+    "sha256": "592e26725bdb78ce7a1b28eae05bc5d503bde46b374d3e175fa291ad2156af16",
+    "workingPath": ".cache/orchard-journey-record.spec.ts",
+    "configuration": "Same override, with testDir set to . (the .cache directory). Copy recording-driver.ts verbatim to workingPath before running.",
+    "command": "node node_modules/@playwright/test/cli.js test -c .cache/orchard-journey-record.config.ts orchard-journey-record.spec.ts --workers=1",
+    "result": "recording-results.json",
+    "explanation": "Same actual portrait test and assertions, with simultaneous native still calls omitted. Scene timing is sampled without altering presentation. No runtime or committed browser-test change after the five-case pass.",
+    "capture": "Native CDP Page.startScreencast JPEG quality 88 everyNthFrame 2; all delivered frames retain timestamps. Existing Sound owner master stream captured simultaneously to Opus, encoded AAC without gain adjustment.",
+    "sceneTiming": "390x844/recorded-scene-timing.json",
+    "media": "MEDIA.json"
+  },
+  "stills": {
+    "method": "Native CDP Page.captureScreenshot unchanged dimensions",
+    "source": "Passing development run; artwork identical to the later capture-only run",
+    "timing": "Principal scene.json files retain elapsed time before/after each capture. The acknowledgment images visibly show the raised forehoof; a capture call can take longer than its rendered frame."
+  },
+  "limits": [
+    "Physical Android performance and speaker listening unverified.",
+    "Spoken screen-reader verification not performed.",
+    "Background recovery uses simulated document.hidden/visibilitychange. Fullscreen is real app fullscreenElement.",
+    "Native delivered-frame gaps retained and quantified in MEDIA.json; not a frame-rate benchmark."
+  ]
+}

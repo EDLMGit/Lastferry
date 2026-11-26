@@ -1,0 +1,794 @@
+{
+  "source": "reviews/cove-eight-practice/source/c1ed244aef5d0c7f235d111258bc28658ade82086df5427f2228537aafdc783d.json",
+  "sourceBase": "e3bef3da3f655a4c9671e0500d356a83fe96786b",
+  "method": "Compare actual capture hashes to working bytes, then staged Git blobs; allow only CRLF/LF normalization for text.",
+  "inputs": {
+    "assets/ASSET_ENTRY.template.json": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "c0892f966a8c96537ba2efcf7c56d6c518a3cb5ecfc5ed112617cf67a8a08718"
+    },
+    "assets/portraits/beaver-brown.png": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "248a3568b1483c8745c12431a41b57fc2cdb969ac0ad9e1c0accc2505a7ffdc5"
+    },
+    "assets/portraits/beaver-brown.svg": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "be9bb4bfe2d8e276ca3c4f55e6a8f499b6369e8c1bbbf6bc71bdabb29c9db49d"
+    },
+    "assets/portraits/deer-chestnut.png": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "dd3bef91225cc476f2ae9a437953179ae0525ee738e3840e01426902dfeb7885"
+    },
+    "assets/portraits/deer-chestnut.svg": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "d9ea4b01e50979841a9c842f69561c0a05a0538191cc6e4117434da38125b9e7"
+    },
+    "assets/portraits/deer-manifest.json": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "e68d28ef025752aaa56748db8e6eccfc137831cbc780365eccac94f3bb2fc79a"
+    },
+    "assets/portraits/family-manifest.json": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": true,
+      "indexSHA256": "e4b0d381d7bdf4d733c170a8d1204b66a6a5963a36c88bb110d1d4e3626a3dab"
+    },
+    "assets/portraits/generation-manifest.json": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "5d82b3518b05f8451fcb779af2dd9a4e14e948e2e5bdfc75f4bfcfcbfaafe23b"
+    },
+    "assets/ui/mastery-lantern.svg": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "e110164a4453c077ea436b00a12eac352f9a2546b019c5634ea230eda30b669d"
+    },
+    "cove-panel-package/material/cove-panel-material.css": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "e59cc953bfed3fd833ef617ebe44a915f8d0ffc8bbae44ab496a098969a88a3f"
+    },
+    "cove-panel-package/material/shoreline-corner.svg": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "efa737d2c87821195ed52b5e3571486f8c0c1e8cb50fd0d9a2102583369a7b3f"
+    },
+    "cove-portrait-package/portraits/generation-manifest.json": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "96575b2cf5bd03005005493aad3617d98e0564b4163b6042d6f3af33a0968a85"
+    },
+    "cove-portrait-package/portraits/rabbit-cream.png": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "2f42b09b3e9965f4dc37ea698e9c0380f435e74bc0f7204399d502f176f0a223"
+    },
+    "cove-portrait-package/portraits/rabbit-cream.svg": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "f57cf082e33df647691b6e6b5a08d9d583e72e78d8893b9c3e5ff4c8c5549e20"
+    },
+    "cove-portrait-package/portraits/rabbit-tan.png": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "32254cc48c2203cc219635d4a5e0accf9ae8a9d61e00ac9b98440ee8a3232ed3"
+    },
+    "cove-portrait-package/portraits/rabbit-tan.svg": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "f00c07c657233c27f8606dd2f2406350044b2a616a6b695436bc8fa6d66bb74d"
+    },
+    "cove-portrait-package/portraits/sheep-wool.png": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "34ed63cc740937734402f79fbe681a597de26e07c6e7e4583d87c21e9e22ee96"
+    },
+    "cove-portrait-package/portraits/sheep-wool.svg": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "2c1f46b872580ea5208d6c98b22a2f7412f3378dc0e5d7a3968d0f371a2470b5"
+    },
+    "cove-ui-package/ui/cove-ui.css": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "56631dc45e37fab6ccb1fe860b4df7577c1dafe35619e681d5ee5e359f175182"
+    },
+    "cove-ui-package/ui/icons/back-to-boat.svg": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "56db76b0f59414aa63ed4371e26dc0311bd3dc19e65a00d59f57c34572335c37"
+    },
+    "cove-ui-package/ui/icons/board.svg": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "c6009a49510f6a6fea2c0e099f9d151f37e03187982f0ccd5c95599a0d5b8195"
+    },
+    "cove-ui-package/ui/icons/close.svg": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "dc2c43f37156590e40d6d08a28a05a93405157fc491c7246209775e8b4af53d7"
+    },
+    "cove-ui-package/ui/icons/confirm.svg": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "06acfb9db3d3f76ee2ae4cbad35bccf03194f7400694678cc5a87b085a664982"
+    },
+    "cove-ui-package/ui/icons/cove-icons.svg": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "8004b66b13dc135cd58a955376c9ef672182060c1a57ad2dc33a87e833026fa7"
+    },
+    "cove-ui-package/ui/icons/fullscreen-enter.svg": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "13dc10bb12dcb94ffc1aeca0150df61e53e26ace22b1ee7bfd916e542df08129"
+    },
+    "cove-ui-package/ui/icons/fullscreen-exit.svg": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "ff702ffc25140b92b17656dd7fd9080e4f59341563a9de2bdffbe4efce65dbfb"
+    },
+    "cove-ui-package/ui/icons/harbor-home.svg": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "9fd1d216279ea4bd65a7dd919896e93343b382909056b1cd4b8963ce1055345b"
+    },
+    "cove-ui-package/ui/icons/manifest.json": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "75bc8d6b3dc5d739ea39eda7d5f3b9c0d8275c5c1efb68ec5c6fb6faa63b6cf6"
+    },
+    "cove-ui-package/ui/icons/menu.svg": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "84233f5b68d6bc1afbe6f5564a3077917f642495448ba751e22d2de139af5476"
+    },
+    "cove-ui-package/ui/icons/next-cove.svg": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "1b55b4e2d56a36a7ab7ff75ba41e4f1cbda1dee1ec885ea989939f07a5d7d0c7"
+    },
+    "cove-ui-package/ui/icons/sail.svg": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "a66f42fac7c98d81543b441abba70c4580f89d99b025567d4530fbfa24829f46"
+    },
+    "cove-ui-package/ui/icons/settings.svg": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "4cc33710c9b62401c7b5c032866da6bf055455fdae5b94afa6aab7e8969b020d"
+    },
+    "cove-ui-package/ui/icons/sound-off.svg": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "614759a7abbdd7838801f5fbc28d1c085783988436ee2dc269bc872eb23e3cc3"
+    },
+    "cove-ui-package/ui/icons/sound-on.svg": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "1f9f1c14a857b80f9ddf95575f1362827660f40966c64a3bec8deb75fbb06f9a"
+    },
+    "cove-ui-package/ui/icons/sound-retry.svg": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "d9dd12f082a45fd8e8c884e77db4b3f9b24aba99df8f70c6523b5b03648d7977"
+    },
+    "cove-ui-package/ui/icons/undo.svg": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "3406a19d5b1d11d2cc297cc6e72b7fe2f62809e817d671269e6b5e3467b50278"
+    },
+    "cove-ui-package/ui/icons/unload.svg": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "f23c13b2f6acb26e88f51d514dd6ecc2fc7cacccb004293c02c4aa29d8f3e981"
+    },
+    "cove-ui-package/ui/icons/wait.svg": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "266803fdb702b82afdd0f3bcbe9db5fd0331faaa173c7128b2431d5fe37e94b9"
+    },
+    "cove-ui-package/ui/icons/whole-cove.svg": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "3d054468a811ac89e2e4b988f27913508226e873dd6697f01db83e6015b2c7e5"
+    },
+    "data/bellwater.level.json": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "a716b3cda50c7fda9d5429a2316576fe2d93aced2287ac281fec5ed8ed8b4de0"
+    },
+    "data/bellwater/witnesses.json": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "bccaa47b7c87579a4e661d35046d37c3d41684bf477a63afa852c349625f86c4"
+    },
+    "data/driftwood-yard.level.json": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": true,
+      "indexSHA256": "45f87252a9f2c7df359b2bffec117479ab629f2a79754f05f2056700758d6ec5"
+    },
+    "data/driftwood-yard/witnesses.json": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": true,
+      "indexSHA256": "1aac9d0e677e86f9c8f672778481e4cc844a68e387f0097bb014502c23adff9b"
+    },
+    "data/experiments/holding-pier-solution.json": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "88179ae2c38883dce2a4de89d800f9e5b276a7cbc8a09ae81535e38bac1b952a"
+    },
+    "data/first-crossing.level.json": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "403a19ddd7840a52f5706490d6e2f5a35ddf1a38dd20715b602fcc572f6167ab"
+    },
+    "data/holding-pier.level.json": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "80d98e6c3a675eabb81dff75ef2df76b9ac90979d0ac1cbcc06a5603dc8fc81a"
+    },
+    "data/orchard-landing.level.json": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "f914b014ca903f4df0c3183d893c6b45f21fb7d9442aead2d8b31254ab5f3814"
+    },
+    "data/orchard-landing/witnesses.json": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "6dffede06d6f1f497f74db67c42dea8eeb437d78a3bcf4e1ad9600f0eef31484"
+    },
+    "data/reef-return.level.json": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "4eba067e936849c734d86e9acdfe240d3a0dbe322d872c4657685e51a55982a6"
+    },
+    "data/reef-return/witnesses.json": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "f2a6001bea38d783263a904cc87add99a9d32507feab76031a47d3130ee44a40"
+    },
+    "data/replays/full-boat-detour.json": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "b88cb6c0a2935d2700526e8194fd57b97d436c1922da05a10d209ac1f48674a5"
+    },
+    "data/replays/harbor-first.json": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "27bf293ba908464fb32097a6c92ec632f3611521094160abecb107780ea9e038"
+    },
+    "data/replays/last-safe-boarding.json": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "73386dc35b4b495bcbaddbf8de50e768230b34f7598f67f8c871b3e19535ad31"
+    },
+    "data/replays/missed-sheep-deadline.json": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "372f48fd32380d31189d461ff23ce39606033b3369278b245b4f7fe4ec6603b5"
+    },
+    "data/replays/wait-for-tide.json": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "3dacc1cc212a57ecda08decac203b322d222d5a113ba60f2e4cafc9e01b59a9f"
+    },
+    "data/ternhaven.level.json": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "6819cadaf3c1cdcd826ad687e475ed7cc2f9376f13e816e99e30b20f1735fae7"
+    },
+    "data/ternhaven/witnesses.json": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "6b0793e31b45d545b3a7257e2ec9aea2a04250f1615bc13f64a89741248d25bf"
+    },
+    "data/two-shelters.level.json": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "8ff6796b64038bedd91d5274de3f9296f9afc7829c572253a3292c68b7945832"
+    },
+    "data/two-shelters/witnesses.json": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "7207f2245d64c8970e32c01428e0c73ffe25a5565a10a161545592090b3698df"
+    },
+    "data/wide-berth.level.json": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "cdda825ba5077bd10840687f1a70cfcbd9eeca8cc0b6846003be8ebd4c5625b1"
+    },
+    "data/wide-berth/witnesses.json": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "b1f9a59a04d02ba8f31f96b04699b64a02ed75cc94267d869a50378b11169b13"
+    },
+    "index.html": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "a1ab6c0db245e26518a4c549232e2f1262b62286f980af2f932815121830e909"
+    },
+    "package-lock.json": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "fa75e13e3b5a563e3d99e14d514a205bb521344250c7479861e3e1507731a7f1"
+    },
+    "package.json": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "526b438101549f797af21baac51da620cd2a9dcabe6d05971748286dbe90d6e2"
+    },
+    "src/audio/arrangement.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "370bc490f7dd5cb12a106fd122d2687b27bb51e931f98f7e7770833f52d07313"
+    },
+    "src/audio/arrival.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "2ab014b3dc8f64c507ba855edfa9acd4c2634d87c9ca6b92534043ec6f713f27"
+    },
+    "src/audio/atmosphere.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "341cfeb88152e02ad95a2d89a57ac682f32aa272eb2dfab22711718dfb633a00"
+    },
+    "src/audio/score.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "a6188eebfa64b958130a2ff918e4f9f637f58872cf731b4e66d6fd48caefb1f0"
+    },
+    "src/audio/sound.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "35188f551a6898fd642f48bc77c400dcbeed9fd9a0863218f6ffad7efe9d15da"
+    },
+    "src/audio/story-effects.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "5b007ddae8f4cd812aafea7c6773a5db8280ef5a40de0622f17f8692e501887a"
+    },
+    "src/audio/wood.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "c52cdc8e4d69a4a4c992a201eca8e0513225efd6b4260ce6025d5a66820eb777"
+    },
+    "src/campaign/home.css": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "160378718d08c3e0146e15939714f315048772e34cf6be7c4a7d4e27b1cf216f"
+    },
+    "src/campaign/presentation.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "3d36d41ef36dfc83dac9d8ab3614f66fd9f32f9286ab9cf586c4f8173fa41511"
+    },
+    "src/campaign/progress.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "c71a2ff9a9d340d89d9f875ad5ef85945a620163c8c34b3ccd1d528dddd1ae5d"
+    },
+    "src/campaign/registry.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "3d3d0ea58e8709e59c6327125487f2ed3b0578a56d33eec9df50a0bbeab69288"
+    },
+    "src/campaign/story-painter.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "6f47f519f6fc023e80f442079fe432ce4211c5bb8a5722faf7d6feb1d030b477"
+    },
+    "src/campaign/story-view.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "bf03d4b9d4fd37eae72cd45ea3872b25db66b12082e626bae814e99d47402351"
+    },
+    "src/campaign/story.css": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "5121f0b2874067e59fc5ee9282e86f906e973b1c2a8767bfcfd55eddca5ea3e1"
+    },
+    "src/dev/asset-gallery.css": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "783f9aa177a79b6d3b591f012a6db53cbcd16d5a0c93981cce69638d5184ebf7"
+    },
+    "src/dev/asset-gallery.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": true,
+      "indexSHA256": "27f63ee4184c374a43237bc4c1453469b6ca354cb7ba7a6ff505641d7d0b943d"
+    },
+    "src/game/mastery.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "673b6784ad759b8471e28db4f061f19c2e4b376a35ed27f2394418f6a3da18e8"
+    },
+    "src/game/passenger-appearance.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "ce3ad00e93bc9f4b742898cca78d13523a5146a1665cdce83bdf221e012ca2b7"
+    },
+    "src/game/rescue-facts.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "7b91d4dd8c81999370a6bd324a292d163addef294e0b8eefc4f744ec4baf63c8"
+    },
+    "src/game/rules.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "8a03fd5a31cb2bcea512c2aa645eb554bd1d8a3b9c6818a6a5db7938d3f71453"
+    },
+    "src/game/session.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "0359790f9c7624c90633549e6e74fdfcba3fc3b5fb6964f06d0efebc594c4900"
+    },
+    "src/levels/level.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "8ce065ef2709ab1b89558081cb77924437a99e8712497a8f1d0bf93d58a52a67"
+    },
+    "src/main.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "eada9115aaeb468654f1a2598e249005b699554fd09ad9b116b17b73ef92cb5d"
+    },
+    "src/scene/contact.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "2df78646cb214a3f23d8ee82024d67c3ac6ea63d2ef1308b79898601ce3307fa"
+    },
+    "src/scene/deck-transfer.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "cc3e6af5ba7c911eef9589f4584b6677c8604406c507604676759f4947012a14"
+    },
+    "src/scene/effects.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "2738eb3c42674763da38d5dca53a44bf7a7efdfb77430dc148b848c0b8a2b2e5"
+    },
+    "src/scene/ferry-profile.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": true,
+      "indexSHA256": "639a71a15c8be508ee0edd2fd45f34e4192eed183b9ef344c2db89127423a19b"
+    },
+    "src/scene/homecoming.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "34a8c13d016a98b7f6b46ff2cec1d8b438af01837f940c543c9b181471e7cf33"
+    },
+    "src/scene/layout.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "8ac7ab7671bf9377e866283fd000fde54f57c52e1d2cc6af996efa2600e1c230"
+    },
+    "src/scene/models.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "c63e8405769358875b42b6cafa727a24287a68bb8efc827e5140835245b04ac5"
+    },
+    "src/scene/motion.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "bd07a5d2bed1ad51d888de258d83acd455637b1492c99fd99dd3db48d9dee4b7"
+    },
+    "src/scene/paths.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "cb907cdf1a03733e7714cb83d936fe5061c763522b6d76fb518124d8e692f39d"
+    },
+    "src/scene/pier.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "f6cf7ab5c2464c2f859a7586f6cf9bc1ecc8c8b262fbc3ea2f95cb0be2e77583"
+    },
+    "src/scene/poses.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "932b4f5033f00eb1e49a93092f6cab1ec27392aa01387f4d2f2de773a73660e6"
+    },
+    "src/scene/reef.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "8031db97db9add5466c849cfcdb5a6705efa386933d0d31064e3f671ef0bbe9f"
+    },
+    "src/scene/scenery.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "b1eab1b1a0033c1d0be621a5aec22467cf2391540354c932bef80c1a7c54c193"
+    },
+    "src/scene/seabed.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "0b85bde8d86a95df05daa9e0be7923b1ec726d415338d81832a57330e9be39e4"
+    },
+    "src/scene/shore.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "354405dbdf84835fae54ed94cbb5c8461269fe9f9b4479b9673101a4845a66d7"
+    },
+    "src/scene/story-staging.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "c6626a71b87f0140a7da56707f3004a758e0bf6d1f1c7b0f2f38478a8382f37a"
+    },
+    "src/scene/transfer.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "632c667c6beb64d22032c50863f12efb3211331db455c5dd426ca0209d2c8199"
+    },
+    "src/scene/transitions.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "09b2b8d68a50d6853befa7161a4e4993e45f7ba9868b79c491171026bcf5e447"
+    },
+    "src/scene/two-shelters-seating.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "552f995307f9fe5276de205178168e51261bb5de9a83a2f3deb27b413c11c793"
+    },
+    "src/scene/view.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "39e2f0728a053a461f60f3782707f0f85ddec6a72bf4c909053c0487637fdaab"
+    },
+    "src/scene/wake.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "7de44c537940c4fcce628e3b657039e1241dcd2a39bb8b4f74462665ae63904c"
+    },
+    "src/scene/water-shader.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "dbf6c7842c205cc4d98a3964a138c2f957b8a0de404d21fafdcfea5ed1b4cc57"
+    },
+    "src/scene/water.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "066a9c7b1238c871333a8c747d2f3d3f267cbee103ba15476c88aacea71b4a36"
+    },
+    "src/scene/world.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "127f2562697a7c4e0db468a71d6e2b509266ce8b76d4cf161e978cfdcc95304a"
+    },
+    "src/style.css": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "ad841ecd2276262b2a29254582c078ade9df01961d90fd1abef7773590287ccf"
+    },
+    "src/ui/cove-layout.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "9a93b47e2006fa8f3826aa95a81cb68a183960ebe046e81609b2ef854cbe5e6a"
+    },
+    "src/ui/cove-ui.css": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "3ae91b3ad7f18623a1909337b213e074336b62964acc1873b98ed348cd62f151"
+    },
+    "src/ui/cove-ui.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "c816d7ff8b0b337ab952285663dba971ab7fc0fa066b692e70fd2d6580e25c3e"
+    },
+    "src/ui/fullscreen.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "f380c6ac99f20380faeab8b540f88cb092033b2e22eddd14300d1aef1a91124b"
+    },
+    "src/ui/lanterns.css": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "a7f423fbd42c089ec5cf23d87e5ec088b4b89ea891e1e1330ff47ed7908e904f"
+    },
+    "src/ui/lanterns.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "38238b57bdb65dd217350b9702a4aa913e513b900abec0d096f499b43f4e22c3"
+    },
+    "src/ui/location.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "09e84e92b32941556c7f50361c33f29ad8fd04440d844454e7a8911715f4042d"
+    },
+    "src/ui/mobile-map-controls.css": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "753daf6af5eab25cd2f14e1874428caaf2891ec7870ebd36d8150f4b3ceb98ab"
+    },
+    "src/ui/motion-preference.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "af00e62d546893188ac5f47468182a790ead2c128f7be431358ad36ab0640cf8"
+    },
+    "src/ui/owned-control.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "1af43355543f351737b324efc967a5077e7b77b00857c0506d1f7dbabc136f06"
+    },
+    "src/ui/pan-gesture.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "8027b5b99afb607a338f460a5d0bb8401205d9463bfe70f7dc6e3d345026e9e1"
+    },
+    "src/ui/placement.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "ea8ee58e2a5ebf8077ca52f7647e2ef641a30822ca2e62ea8c0409c1f718c54b"
+    },
+    "src/ui/play-controls.css": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": true,
+      "indexSHA256": "37cc3343863df1e1880cd8b4777ca0b24c88ae5b3eb592d74297ed942e51a2d4"
+    },
+    "src/ui/presentation.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "520814cc4dd696736d44cb79fe4876575673466d7f11adeadf5b1fef1358d4c7"
+    },
+    "src/ui/tips-preference.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "e461641160f9d05f8cd7e37a6663dbdc9fbf39ddd7ddc78f6d73aa03f5eb2668"
+    },
+    "src/ui/transfer.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "24fe3d9712a103daf3761dcf23afa4809c3dd2699913bd32d1a1296e9adc9169"
+    },
+    "src/ui/view-controls.css": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "b6056096fe6933af9c2d70a8e7c68944ad69164338e5d79fa900e5383c31139a"
+    },
+    "src/ui/viewport.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "6067c663d8489418a982c531888c1a46c4576d77d67821430a63719ec4675a1f"
+    },
+    "vite.config.ts": {
+      "captureMatchesWorking": true,
+      "indexMatches": true,
+      "lineEndingOnly": false,
+      "indexSHA256": "42d95c3568be6430b7d1fcc9e5168d3df4736d998cc6f01d20d0d3c554365f26"
+    }
+  },
+  "failures": []
+}

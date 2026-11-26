@@ -1,0 +1,552 @@
+{
+  "id": "last-ferry",
+  "title": "Last Ferry",
+  "rules": {
+    "capacity": 6,
+    "draftBands": [
+      {
+        "maxLoad": 0,
+        "draft": 1
+      },
+      {
+        "maxLoad": 2,
+        "draft": 2
+      },
+      {
+        "maxLoad": 4,
+        "draft": 3
+      },
+      {
+        "maxLoad": 6,
+        "draft": 4
+      }
+    ],
+    "tide": {
+      "initialLevel": 0,
+      "rises": [
+        {
+          "afterTurn": 4,
+          "level": 1
+        }
+      ]
+    },
+    "actionCost": 1,
+    "depthFormula": "baseDepth + tideLevel",
+    "pierDryWhen": "tideLevel < elevation",
+    "failureRule": "required passenger stranded"
+  },
+  "world": {
+    "plane": "XZ",
+    "north": "negative Z",
+    "waterYPerTideLevel": 0.18,
+    "referenceBoatRadius": 0.3,
+    "requiredRouteClearance": 0.45,
+    "clearanceScope": "Actual ferry geometry is checked independently along both directions of each route.",
+    "presentationNote": "Two neighboring landings face the deep water around Lantern Buoy. The lamp channel leads from there to the lighthouse.",
+    "suggestedCamera": {
+      "projection": "orthographic",
+      "positionXYZ": [
+        17,
+        31,
+        22
+      ],
+      "targetXYZ": [
+        0,
+        0,
+        -1
+      ],
+      "verticalSpan": 11
+    },
+    "islands": [
+      {
+        "id": "lighthouse-island",
+        "elevation": 4,
+        "footprintXZ": [
+          [
+            -12.4,
+            -3.25
+          ],
+          [
+            -12.02,
+            -4.65
+          ],
+          [
+            -11.33,
+            -5.54
+          ],
+          [
+            -9.98,
+            -6.23
+          ],
+          [
+            -8.64,
+            -6
+          ],
+          [
+            -7.5,
+            -6.2
+          ],
+          [
+            -6.2,
+            -5.67
+          ],
+          [
+            -5.45,
+            -4.62
+          ],
+          [
+            -5.04,
+            -3.56
+          ],
+          [
+            -5.76,
+            -2.85
+          ],
+          [
+            -6.72,
+            -2.65
+          ],
+          [
+            -7.42,
+            -1.32
+          ],
+          [
+            -7.83,
+            -1.2
+          ],
+          [
+            -9.8,
+            -1.24
+          ],
+          [
+            -10.83,
+            -1.68
+          ],
+          [
+            -11.85,
+            -2.22
+          ]
+        ]
+      },
+      {
+        "id": "lace-island",
+        "elevation": 2,
+        "footprintXZ": [
+          [
+            -3.8,
+            -6
+          ],
+          [
+            -3.5,
+            -6.85
+          ],
+          [
+            -2.45,
+            -7.23
+          ],
+          [
+            -1.5,
+            -7.16
+          ],
+          [
+            -0.4,
+            -7.65
+          ],
+          [
+            0.65,
+            -7.3
+          ],
+          [
+            1.86,
+            -7.44
+          ],
+          [
+            2.28,
+            -6.74
+          ],
+          [
+            1.64,
+            -5.94
+          ],
+          [
+            1.49,
+            -5.13
+          ],
+          [
+            0.52,
+            -4.55
+          ],
+          [
+            0.07,
+            -4.24
+          ],
+          [
+            -1.77,
+            -4.2
+          ],
+          [
+            -2.61,
+            -4.83
+          ],
+          [
+            -3.37,
+            -5.09
+          ]
+        ]
+      },
+      {
+        "id": "quilt-island",
+        "elevation": 4,
+        "footprintXZ": [
+          [
+            3.94,
+            -4.05
+          ],
+          [
+            4,
+            -5.3
+          ],
+          [
+            4.87,
+            -6.4
+          ],
+          [
+            6.15,
+            -6.57
+          ],
+          [
+            7.1,
+            -7.02
+          ],
+          [
+            8.2,
+            -6.8
+          ],
+          [
+            8.84,
+            -5.96
+          ],
+          [
+            9.68,
+            -5.39
+          ],
+          [
+            9.56,
+            -4.23
+          ],
+          [
+            8.78,
+            -3.16
+          ],
+          [
+            8.16,
+            -2.88
+          ],
+          [
+            7.66,
+            -2.24
+          ],
+          [
+            5.66,
+            -2.24
+          ],
+          [
+            4.72,
+            -2.72
+          ]
+        ]
+      }
+    ]
+  },
+  "nodes": [
+    {
+      "id": "harbor",
+      "positionXZ": [
+        -8.7,
+        1.3
+      ],
+      "baseDepth": 4,
+      "pierId": "harbor-pier"
+    },
+    {
+      "id": "lantern",
+      "positionXZ": [
+        -0.8,
+        5.25
+      ],
+      "baseDepth": 4
+    },
+    {
+      "id": "lace",
+      "positionXZ": [
+        -0.8,
+        -1.7
+      ],
+      "baseDepth": 3,
+      "pierId": "lace-pier"
+    },
+    {
+      "id": "quilt",
+      "positionXZ": [
+        6.7,
+        0.3
+      ],
+      "baseDepth": 4,
+      "pierId": "quilt-pier"
+    }
+  ],
+  "edges": [
+    {
+      "id": "lace-run",
+      "nodes": [
+        "lantern",
+        "lace"
+      ],
+      "baseDepth": 4,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [
+          -0.8,
+          5.25
+        ],
+        [
+          -2.8,
+          4.1
+        ],
+        [
+          -3.55,
+          2
+        ],
+        [
+          -3.05,
+          -0.75
+        ],
+        [
+          -0.8,
+          -1.7
+        ]
+      ]
+    },
+    {
+      "id": "quay-run",
+      "nodes": [
+        "lantern",
+        "quilt"
+      ],
+      "baseDepth": 4,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [
+          -0.8,
+          5.25
+        ],
+        [
+          2.1,
+          5.65
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          8.1,
+          5.35
+        ],
+        [
+          9.25,
+          3.75
+        ],
+        [
+          8.85,
+          1.17
+        ],
+        [
+          6.7,
+          0.3
+        ]
+      ]
+    },
+    {
+      "id": "ribbon-cut",
+      "nodes": [
+        "lace",
+        "quilt"
+      ],
+      "baseDepth": 2,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [
+          -0.8,
+          -1.7
+        ],
+        [
+          1.32,
+          -0.57
+        ],
+        [
+          3.02,
+          0.68
+        ],
+        [
+          4.57,
+          1.42
+        ],
+        [
+          6.7,
+          0.3
+        ]
+      ]
+    },
+    {
+      "id": "lamp-channel",
+      "nodes": [
+        "lantern",
+        "harbor"
+      ],
+      "baseDepth": 4,
+      "bidirectional": true,
+      "waypointsXZ": [
+        [
+          -0.8,
+          5.25
+        ],
+        [
+          -3.25,
+          4.9
+        ],
+        [
+          -4.67,
+          3.6
+        ],
+        [
+          -6.38,
+          1.94
+        ],
+        [
+          -8.7,
+          1.3
+        ]
+      ]
+    }
+  ],
+  "piers": [
+    {
+      "id": "harbor-pier",
+      "nodeId": "harbor",
+      "islandId": "lighthouse-island",
+      "elevation": 4,
+      "positionXZ": [
+        -8.7,
+        -0.23
+      ],
+      "landAnchorXZ": [
+        -8.7,
+        -2.02
+      ],
+      "width": 1.62,
+      "isDeliveryPier": true
+    },
+    {
+      "id": "lace-pier",
+      "nodeId": "lace",
+      "islandId": "lace-island",
+      "elevation": 2,
+      "positionXZ": [
+        -0.8,
+        -3.23
+      ],
+      "landAnchorXZ": [
+        -0.8,
+        -5.02
+      ],
+      "width": 1.62,
+      "isDeliveryPier": false
+    },
+    {
+      "id": "quilt-pier",
+      "nodeId": "quilt",
+      "islandId": "quilt-island",
+      "elevation": 4,
+      "positionXZ": [
+        6.7,
+        -1.23
+      ],
+      "landAnchorXZ": [
+        6.7,
+        -3.02
+      ],
+      "width": 1.62,
+      "isDeliveryPier": false
+    }
+  ],
+  "names": {
+    "nodes": {
+      "harbor": "Harbor",
+      "lantern": "Lantern Buoy",
+      "lace": "Lace Landing",
+      "quilt": "Quilt Quay"
+    },
+    "passengers": {
+      "pipit": "Pipit",
+      "rill": "Rill",
+      "mallow": "Mallow",
+      "osier": "Osier"
+    }
+  },
+  "passengers": [
+    {
+      "id": "pipit",
+      "species": "rabbit",
+      "slots": 1,
+      "appearance": "rabbit-cream"
+    },
+    {
+      "id": "rill",
+      "species": "rabbit",
+      "slots": 1,
+      "appearance": "rabbit-tan"
+    },
+    {
+      "id": "mallow",
+      "species": "sheep",
+      "slots": 2,
+      "appearance": "sheep-wool"
+    },
+    {
+      "id": "osier",
+      "species": "beaver",
+      "slots": 2,
+      "appearance": "beaver-brown"
+    }
+  ],
+  "start": {
+    "boatNodeId": "lantern",
+    "aboard": [],
+    "waitingByPier": {
+      "harbor-pier": [],
+      "lace-pier": [
+        "pipit",
+        "rill"
+      ],
+      "quilt-pier": [
+        "mallow",
+        "osier"
+      ]
+    }
+  },
+  "objective": {
+    "deliveryPierId": "harbor-pier",
+    "requiredPassengerIds": [
+      "pipit",
+      "rill",
+      "mallow",
+      "osier"
+    ]
+  },
+  "validation": {
+    "searchDepthLimit": 0,
+    "witnessReplays": [
+      "data/last-ferry/witnesses.json"
+    ]
+  }
+}

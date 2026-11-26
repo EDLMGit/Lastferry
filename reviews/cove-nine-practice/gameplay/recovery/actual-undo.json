@@ -1,0 +1,204 @@
+{
+  "source": "d850d86e759692abdce47d2ebf6b84cdefa4b2227a18f6ddf9299dc4ab3e9dba",
+  "branch": "take-just-sloe",
+  "timeline": [
+    {
+      "turn": 0,
+      "tideLevel": 1,
+      "boatNodeId": "orchard",
+      "aboard": [],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "quay-pier": [],
+        "orchard-pier": [
+          "damson",
+          "brindle"
+        ],
+        "steps-pier": [
+          "burr",
+          "sloe"
+        ]
+      },
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 1,
+      "tideLevel": 1,
+      "boatNodeId": "steps",
+      "aboard": [],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "quay-pier": [],
+        "orchard-pier": [
+          "damson",
+          "brindle"
+        ],
+        "steps-pier": [
+          "burr",
+          "sloe"
+        ]
+      },
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 2,
+      "tideLevel": 1,
+      "boatNodeId": "steps",
+      "aboard": [
+        "sloe"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "quay-pier": [],
+        "orchard-pier": [
+          "damson",
+          "brindle"
+        ],
+        "steps-pier": [
+          "burr"
+        ]
+      },
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 3,
+      "tideLevel": 1,
+      "boatNodeId": "orchard",
+      "aboard": [
+        "sloe"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "quay-pier": [],
+        "orchard-pier": [
+          "damson",
+          "brindle"
+        ],
+        "steps-pier": [
+          "burr"
+        ]
+      },
+      "delivered": [],
+      "status": "playing",
+      "lossReason": null
+    },
+    {
+      "turn": 4,
+      "tideLevel": 1,
+      "boatNodeId": "quay",
+      "aboard": [
+        "sloe"
+      ],
+      "waitingByPier": {
+        "harbor-pier": [],
+        "quay-pier": [],
+        "orchard-pier": [
+          "damson",
+          "brindle"
+        ],
+        "steps-pier": [
+          "burr"
+        ]
+      },
+      "delivered": [],
+      "status": "lost",
+      "lossReason": {
+        "code": "RETURN_CAPACITY",
+        "edgeId": "orchard-quay",
+        "passengerIds": [
+          "damson",
+          "brindle",
+          "burr"
+        ],
+        "offshoreSlots": 7,
+        "homewardTrips": 1
+      }
+    }
+  ],
+  "recoveryFrom": {
+    "turn": 4,
+    "tideLevel": 1,
+    "boatNodeId": "quay",
+    "aboard": [
+      "sloe"
+    ],
+    "waitingByPier": {
+      "harbor-pier": [],
+      "quay-pier": [],
+      "orchard-pier": [
+        "damson",
+        "brindle"
+      ],
+      "steps-pier": [
+        "burr"
+      ]
+    },
+    "delivered": [],
+    "status": "lost",
+    "lossReason": {
+      "code": "RETURN_CAPACITY",
+      "edgeId": "orchard-quay",
+      "passengerIds": [
+        "damson",
+        "brindle",
+        "burr"
+      ],
+      "offshoreSlots": 7,
+      "homewardTrips": 1
+    }
+  },
+  "restored": {
+    "turn": 1,
+    "tideLevel": 1,
+    "boatNodeId": "steps",
+    "aboard": [],
+    "waitingByPier": {
+      "harbor-pier": [],
+      "quay-pier": [],
+      "orchard-pier": [
+        "damson",
+        "brindle"
+      ],
+      "steps-pier": [
+        "burr",
+        "sloe"
+      ]
+    },
+    "delivered": [],
+    "status": "playing",
+    "lossReason": null
+  },
+  "winner": "clear-steps-first",
+  "final": {
+    "turn": 13,
+    "tideLevel": 3,
+    "boatNodeId": "harbor",
+    "aboard": [],
+    "waitingByPier": {
+      "harbor-pier": [],
+      "quay-pier": [],
+      "orchard-pier": [],
+      "steps-pier": []
+    },
+    "delivered": [
+      "burr",
+      "damson",
+      "brindle",
+      "sloe"
+    ],
+    "status": "won",
+    "lossReason": null
+  },
+  "saved": {
+    "mastery": "{\"version\":1,\"results\":{\"orchard-landing@1\":{\"coveId\":\"orchard-landing\",\"revision\":1,\"actions\":13,\"successfulUndos\":0,\"lanterns\":3}}}",
+    "journey": "{\n  \"version\": 1,\n  \"completed\": [\n    \"holding-pier\",\n    \"bellwater\",\n    \"driftwood-yard\",\n    \"two-shelters\",\n    \"wide-berth\",\n    \"reef-return\",\n    \"orchard-landing\"\n  ],\n  \"acknowledgedScenes\": [\n    \"opening\",\n    \"another-bell\",\n    \"driftwood-light\",\n    \"among-the-reeds\",\n    \"a-wider-deck\",\n    \"lights-beyond-the-reef\",\n    \"orchard-paths\"\n  ],\n  \"checkpoint\": {\n    \"kind\": \"scene\",\n    \"id\": \"ternhaven-wave\"\n  }\n}\n",
+    "masteryWrites": 0,
+    "journeyWrites": 0
+  }
+}

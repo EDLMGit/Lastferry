@@ -1,0 +1,20 @@
+
+> last-ferry@1.0.0 test:e2e
+> playwright test wide-berth.spec.ts --grep historical two|original profiles|launch playback|launch repeated
+
+
+Running 4 tests using 1 worker
+
+(node:11316) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\e2e\wide-berth.spec.ts:512:1 › historical two and three boundaries stay read-only then advance fresh and restore recap (8.3s)
+  ok 2 tests\e2e\wide-berth.spec.ts:557:1 › original profiles, dynamic Help, reduced transfers, keyboard and fullscreen lifecycle (20.6s)
+  ok 3 tests\e2e\wide-berth.spec.ts:627:1 › launch playback intent, pause, skip, replay, mute and controlled background recovery (6.6s)
+  ok 4 tests\e2e\wide-berth.spec.ts:691:1 › launch repeated handoff, real Restart and cove-change recovery preserve campaign bytes (22.1s)
+
+  4 passed (59.0s)
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

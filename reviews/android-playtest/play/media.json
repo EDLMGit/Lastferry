@@ -1,0 +1,31 @@
+{
+  "runtime": "56228ef8174b2147aa7f397661f2a6f5801e86d2",
+  "recorder": "Android Emulator console screenrecord (VP9 + guest Vorbis stereo). MP4 produced with libx264 at CRF 21 and AAC 160k. No audio gain, cuts or time changes.",
+  "checks": "Both MP4s decoded fully through ffmpeg -xerror; sampled frames show actual Android controls, delivery and explicit actions.",
+  "video": "390x844, 24 fps",
+  "audio": "Stereo 44100 Hz AAC in delivered MP4",
+  "clips": [
+    {
+      "name": "holding-arrival.mp4",
+      "versionCode": 1,
+      "guestMediaVolume": "5/15",
+      "sourceWebmSha256": "98dd275ae12ceb98529eecfe1c637e38c4c70f0317a2d0448c8a60df7c5577b5",
+      "mp4Sha256": "bb38dff7bb0fbd8d11a14c034921871c50b1e38c42420fede0e3671fae1ea306",
+      "seconds": 9.417,
+      "bytes": 632610,
+      "meanDb": -70.8,
+      "peakDb": -57.1
+    },
+    {
+      "name": "last-ferry-supper.mp4",
+      "versionCode": 2,
+      "guestMediaVolume": "12/15",
+      "sourceWebmSha256": "7ab924cf6842d7e67ef7b6ce498f9a341f57d2e0b375be40373810257b828923",
+      "mp4Sha256": "b73d02eef61089ac6cb3de8a88f9b5375b95576f84e7dcedae0a616dce3a9aef",
+      "seconds": 11.515,
+      "bytes": 603334,
+      "meanDb": -71.4,
+      "peakDb": -55.8
+    }
+  ]
+}

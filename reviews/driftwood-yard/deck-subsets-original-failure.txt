@@ -1,0 +1,54 @@
+
+ RUN  v5.0.5 C:/Users/ernes/Documents/last-ferry-codex-starter/Lastferry
+
+ ❯ tests/unit/driftwood-deck.test.ts (1 test | 1 failed) 13ms
+   × every legal Driftwood aboard subset keeps actual modeled bodies apart on shared anchors 12ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/driftwood-deck.test.ts > every legal Driftwood aboard subset keeps actual modeled bodies apart on shared anchors
+AssertionError: expected [ …(15) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "6:1/2:0.15812815770506858,0.356654766201973,0.3995105244219303",
++   "6:1/2:0.11070348581299186,0.4269700590968132,0.4289266958832741",
++   "6:1/2:0.12625,0.4269700590968132,0.4353354282677174",
++   "6:1/2:0.14179651418700814,0.4269700590968132,0.4289266958832741",
++   "6:1/2:0.07649473778903484,0.4090863084495068,0.43169417306780816",
++   "6:1/2:0.0975237875059247,0.4090863084495068,0.4640465572476387",
++   "6:1/2:0.12625,0.4090863084495068,0.4758883461356163",
++   "6:1/2:0.1549762124940753,0.4090863084495068,0.4640465572476387",
++   "6:1/2:0.05118479028344154,0.38232138265669346,0.3875",
++   "6:1/2:0.061241620853543274,0.38232138265669346,0.4452424690127373",
++   "6:1/2:0.05118479028344154,0.38232138265669346,0.38749999999999996",
++   "6:1/2:0.045,0.35075,0.3875",
++   "6:1/2:0.05588543720543385,0.35075,0.45",
++   "6:1/2:0.045,0.35075,0.38749999999999996",
++   "6:1/2:0.05118479028344154,0.31917861734330655,0.3875",
++ ]
+
+ ❯ tests/unit/driftwood-deck.test.ts:38:20
+     36|     }
+     37|   }
+     38|   expect(failures).toEqual([]);
+       |                    ^
+     39| });
+     40|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+   Start at  17:31:16
+   Duration  298ms (import 53%, transform 31%, tests 11%, worker 5%)
+
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

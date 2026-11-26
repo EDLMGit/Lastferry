@@ -1,0 +1,40 @@
+
+Running 7 tests using 1 worker
+
+(node:41012) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\e2e\mobile-map.spec.ts:214:3 › matched composition reed-pier (23.6s)
+  ok 2 tests\e2e\mobile-map.spec.ts:214:3 › matched composition wide-whole (4.6s)
+  ok 3 tests\e2e\mobile-map.spec.ts:214:3 › matched composition harbor-quay (12.4s)
+  ok 4 tests\e2e\mobile-map.spec.ts:214:3 › matched composition reef-loaded (12.2s)
+  x  5 tests\e2e\mobile-map.spec.ts:243:1 › free whole-cove inspection across remaining Practice coves and desktop (44.5s)
+(node:20428) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 6 tests\e2e\mobile-map.spec.ts:355:3 › actual rescues › Two Shelters continuous pan zoom inspect sail rotate recenter and rescue (42.4s)
+  ok 7 tests\e2e\mobile-map.spec.ts:472:3 › actual rescues › Wide Berth occupied departure, ferry subsets, reef reversal and whole rescue (49.9s)
+
+
+  1) tests\e2e\mobile-map.spec.ts:243:1 › free whole-cove inspection across remaining Practice coves and desktop 
+
+    Error: visible identity for the current landing
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected substring: "Harbor"
+    Received string:    "none "
+
+      136 |     }
+      137 |     if (stop.id === measured.state.boatNodeId && !stop.name)
+    > 138 |       expect(measured.dockText, 'visible identity for the current landing').toContain(
+          |                                                                             ^
+      139 |         nodeName(stop.id, level),
+      140 |       );
+      141 |     const { x, y, w: mw, h: mh } = stop.marker,
+        at associations (C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\mobile-map.spec.ts:138:77)
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\mobile-map.spec.ts:273:7
+
+    Error Context: .cache\mobile-map-results\mobile-map-free-whole-cove-9b69a--Practice-coves-and-desktop\error-context.md
+
+  1 failed
+    tests\e2e\mobile-map.spec.ts:243:1 › free whole-cove inspection across remaining Practice coves and desktop 
+  6 passed (3.2m)

@@ -1,0 +1,34 @@
+
+Running 1 test using 1 worker
+
+(node:39480) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\e2e\play-readability-overview-recovery.spec.ts:7:1 › Whole cove water drag preserves clear framing and Play still pans (5.8s)
+
+
+  1) tests\e2e\play-readability-overview-recovery.spec.ts:7:1 › Whole cove water drag preserves clear framing and Play still pans 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "x": 3.4255044200721794,
+    +   "x": 0.7766226996629522,
+        "y": 2.036394513921924,
+      }
+
+      19 |     const capture=await cdp.send('Page.captureScreenshot',{format:'png',fromSurface:true});writeFileSync(`${reviewDir}/${viewport.width}x${viewport.height}-overview-drag.png`,Buffer.from(capture.data,'base64'));
+      20 |     writeFileSync(`${reviewDir}/${viewport.width}x${viewport.height}-overview-drag.json`,JSON.stringify({source,browser:browser.version(),viewport,before,after,state:await state(page)},null,2));
+    > 21 |     expect(await state(page)).toEqual(initial);expect(after.focus).toEqual(before.focus);expect(after.scale).toEqual(before.scale);
+         |                                                                    ^
+      22 |     await activate(page,'view-toggle',true);
+      23 |     await drag();
+      24 |     expect(await page.evaluate(()=>(window as any).__LAST_FERRY__.getViewStatus().panned)).toBe(true);
+        at C:\Users\ernes\Documents\last-ferry-codex-starter\Lastferry\tests\e2e\play-readability-overview-recovery.spec.ts:21:68
+
+    Error Context: test-results\play-readability\play-readability-overview--4758d-framing-and-Play-still-pans\error-context.md
+
+  1 failed
+    tests\e2e\play-readability-overview-recovery.spec.ts:7:1 › Whole cove water drag preserves clear framing and Play still pans 

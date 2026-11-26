@@ -1,0 +1,86 @@
+{
+  "task": "EXISTING_COVES_REPAIR_01",
+  "model": {
+    "measuredAxes": "Transverse X, total vertical Y including the stack, longitudinal Z. Bounds measured with Three.js Box3.setFromObject on unscaled runtime model.",
+    "fourSpace": [
+      1.0582258236408233,
+      1.5100000032782555,
+      1.8798342800140382
+    ],
+    "sixSpace": [
+      1.850194810628891,
+      2.3220000034570694,
+      3.864700060263276
+    ],
+    "workingDeckLocalY": 0.635,
+    "draftFourFreeboard": 0.44,
+    "previousWideDeckLocalY": 0.26,
+    "previousWideDraftFourFreeboard": 0.065
+  },
+  "iterations": [
+    {
+      "name": "repair-geometry-first",
+      "observation": "Initial new sole and compact brow exposed body/rail clearance, toe support and assumptions tied to the former four extruded slabs.",
+      "counts": "Tests  25 failed | 10 passed (35)",
+      "originalSha256": "4669d200a57ad4929429d2eae861e0534bfba014814e394b5aa112b5df964561",
+      "firstReceived": "+   \"1:alder obstacle\","
+    },
+    {
+      "name": "repair-geometry-second",
+      "observation": "Real hull volume and raised wheelhouse improved the native side view. The pool turn, forward rabbit feet, shore props and transfer banks still needed room.",
+      "counts": "Tests  21 failed | 14 passed (35)",
+      "originalSha256": "31d67db59cb1a68416f1a4814b7b9fc091123558e5fc1f6d26a27db8425136c2",
+      "firstReceived": "+   \"pool-harbor/forward from1.5707963267948961 sample153: pool-pier/mesh10\","
+    },
+    {
+      "name": "repair-fit4",
+      "observation": "Both physical hull routes cleared; the large neighbors brushed a side guard and an outer Reef rabbit foot missed the Wrack approach.",
+      "counts": "Tests  4 failed | 6 passed | 25 skipped (35)",
+      "originalSha256": "36382bd2bc1185ee39fbb6edc7e76831cb22d4d9744959ef0651ddcda6b08976",
+      "firstReceived": "+   \"board:0/1:41:alder obstacle\","
+    },
+    {
+      "name": "repair-fit5",
+      "observation": "The failing body/rail index and overlap bounds identified when an animal rotated beside the inlet gate.",
+      "counts": "Tests  2 failed | 2 passed | 31 skipped (35)",
+      "originalSha256": "158974405dc5db09886a15b0b453f8c986864c6df78347b259e1428b9439a2ca",
+      "firstReceived": "+   \"board:0/1:41:alder obstacle 3 min:-6.881276746376153,0.596415202682209,-0.028277634422135156\","
+    },
+    {
+      "name": "repair-fit6",
+      "observation": "Changing the turning interval cleared the guards, but a rotating rabbit still brushed its neighbor. Some geometry runs also experienced host contention.",
+      "counts": "Tests  2 failed | 2 passed | 31 skipped (35)",
+      "originalSha256": "9cdf08bc4ade2d149d8d9c0ea470108391f2d88afcbf01edfcde937dae73465c",
+      "firstReceived": "+   \"board:0/36:tide0:41:poppy/finch @ -6.425218434832615,0.5964152,-0.30815688728940627/-5.813750000000001,0.5964152,0.22536275946879877\","
+    },
+    {
+      "name": "repair-fit7",
+      "observation": "Forward-seat banks separated the rotating rabbit. A post and the inner Shell Pool footing then needed refitting.",
+      "counts": "Tests  4 failed | 2 passed | 29 skipped (35)",
+      "originalSha256": "3e52841362b7e63f19251dd71c677af05476ad5d27ff49671cbc23c52e90c551",
+      "firstReceived": "+   \"board:0/4:49:poppy obstacle 11 min:-5.813750000000001,0.5900888,-0.7614307223398089\","
+    },
+    {
+      "name": "repair-full",
+      "observation": "Full sampled subset transfers and stable seating passed in both orientations. This run also identified the Wrack turning tip, land prop proximity and a submillimeter mismatch between the stern extremum and axial wake reach.",
+      "counts": "Tests  3 failed | 32 passed (35)",
+      "originalSha256": "d16c7d044f3255da54cbe2e588b38a541c14fa6e272638c72f7e18fb3cb3b6d2",
+      "firstReceived": "+   \"wrack-quay/forward from1.570796326794897 sample251: wrack-pier/mesh10\","
+    },
+    {
+      "name": "repair-last-contacts",
+      "observation": "Returning high-shore seats to the proven approach removed the prop overlap. The remaining two failures were the same outside rabbit toe on Shell Pool.",
+      "counts": "Tests  2 failed | 7 passed | 26 skipped (35)",
+      "originalSha256": "d7a8d6c1a6a23782dbeecc0a1eb80b5fc408d7171774aa31dd48271eca8fdbad",
+      "firstReceived": "+   \"pool-pier:1 unsupported actual foot -0.175/0.21250000000000002\","
+    },
+    {
+      "name": "repair-final-contacts",
+      "observation": "Shell Pool received another 0.06 world units of transverse dock width. Real-body support, prop/hull clearance and contact tests passed.",
+      "counts": "Tests  9 passed | 26 skipped (35)",
+      "originalSha256": "0a4017c9bd4a42235577e9c3776087c8045834d31033ad32371ea2ddd27963f3",
+      "firstReceived": null
+    }
+  ],
+  "coverage": "Final full-suite outcome in ../units.txt. Real meshes, every capacity-legal six-space roster, both headings, draft bands at each dry authored tide, all subset transfer selections and 1,001 samples along each route/heading. Foot and hull checks sample the motion and are not a swept-volume or physical-device proof."
+}
