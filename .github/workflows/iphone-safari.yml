@@ -1,0 +1,56 @@
+name: iPhone Safari crossing
+on:
+  push:
+    branches: [m1-first-crossing]
+    paths:
+      - .github/workflows/iphone-safari.yml
+      - tools/iphone-safari.mjs
+
+permissions:
+  contents: read
+
+jobs:
+  crossing:
+    runs-on: macos-15
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            src
+            data
+            assets
+            campaign
+            cove-ui-package
+            cove-panel-package
+            tools
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Build player assets
+        env:
+          VITE_LAST_FERRY_QA: '0'
+        run: |
+          npm ci --no-audit --no-fund
+          node node_modules/vite/bin/vite.js build
+      - name: Boot iPhone and run MobileSafari
+        run: |
+          sudo xcode-select --switch /Applications/Xcode_16.4.app/Contents/Developer
+          mkdir -p .cache/iphone-safari
+          xcrun simctl list devices available --json > .cache/iphone-safari/devices.json
+          export IPHONE_UDID="$(python3 -c 'import json; d=json.load(open(".cache/iphone-safari/devices.json"))["devices"]; print(next(v["udid"] for r in sorted(d,reverse=True) if "iOS-18-" in r for v in d[r] if v["name"]=="iPhone 16"))')"
+          xcrun simctl boot "$IPHONE_UDID"
+          xcrun simctl bootstatus "$IPHONE_UDID" -b
+          sudo /usr/bin/safaridriver --enable
+          /usr/bin/safaridriver -p 4445 > .cache/iphone-safari/driver.log 2>&1 &
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory dist > .cache/iphone-safari/server.log 2>&1 &
+          node tools/iphone-safari.mjs
+      - name: Save Safari evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: iphone-safari
+          path: .cache/iphone-safari/
+          include-hidden-files: true
+          retention-days: 7
