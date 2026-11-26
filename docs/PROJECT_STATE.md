@@ -1,5 +1,9 @@
 # Last Ferry — Project state
 
+## Local release-bundle rehearsal
+
+The rehearsal wraps the reviewed v0.1.6 game in a separately installed **Last Ferry Rehearsal** app. The owner can continue testing the ordinary playtest while reviewing the local App Bundles and the captain’s offline update. The owner will supply fresh-player observations separately. [Rehearsal and evidence](../reviews/android-release-rehearsal/REVIEW.md) · [Play handoff](GOOGLE_PLAY_LAUNCH.md)
+
 ## Moss’s invitation · v0.1.6
 
 The Holding Pier arrival groups Moss’s own words, the optional replay and the page it earns. Both the first keepsake and the ordinary homecoming offer the choice. Scored cards show the current trip’s lanterns beside the artwork, including on Moss’s earned page. A captain who continues directly can take the request from the Harbor log later. Game direction will review the private Android and phone-browser builds before release preparation. [Commission](../NEXT_TASK_MOSS_INVITATION.md) · [Playthrough and upgrade evidence](../reviews/moss-invitation/REVIEW.md)

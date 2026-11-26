@@ -1,5 +1,7 @@
 # Last Ferry — The Long Tide
 
+[Android release-bundle rehearsal and offline update evidence](reviews/android-release-rehearsal/REVIEW.md)
+
 [Play locally](http://127.0.0.1:5421/) · [Install Android v0.1.6 over v0.1.5](reviews/moss-invitation/android-INSTALL.md) · [Watch Moss’s invitation and earned page](reviews/moss-invitation/REVIEW.md)
 
 At Holding Pier, Moss asks you to leave him at Stone Pier, take Pip and Rue home, then come back for him. You can play his crossing for an illustrated Harbor log page or continue to Bellwater and take his request from the log later. Each scored arrival shows the lanterns earned on that trip. Open **Details** to see your best accepted rescue.

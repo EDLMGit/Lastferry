@@ -1,4 +1,8 @@
-# Last Ferry · Moss’s invitation v0.1.6
+# Last Ferry · Android release-bundle rehearsal
+
+The two signed local release bundles use version codes 7 and 8 under the separate **Last Ferry Rehearsal** identity. Both contain the reviewed v0.1.6 game. On an offline Android 16 emulator, the captain earned Rue’s page and a 3/3 best on code 7. After the in-place update and cold restart on code 8, the Harbor log still held both, Reduced Motion stayed on, and Continue reopened Bellwater at turn zero. [Release packages and installed-device evidence](reviews/android-release-rehearsal/REVIEW.md)
+
+## Moss’s invitation v0.1.6
 
 Moss now tells the captain what to do on the optional Holding Pier replay and names the reward before they choose. His illustrated page shows the current trip’s lantern count. **Continue to Bellwater** leads into *Another bell*. A captain who takes the direct route can find the same wish in the Harbor log. [Phone build, recorded trip and verification](reviews/moss-invitation/REVIEW.md)
 
