@@ -1,6 +1,6 @@
 # Last Ferry · phone playtest
 
-The private browser playtest is live at version 32. The iPhone-sized touch playthrough earned Rue’s page and resumed Bellwater after a reload. The published Home loaded the verified JavaScript and stylesheet. [iPhone verification](reviews/ios-playtest/REVIEW.md) · [Open the playtest](https://last-ferry-playtest.abumech.chatgpt.site/)
+The private browser playtest is live at version 32. Mobile Safari on Apple’s iPhone 16 Simulator kept the 3D cove visible through a rotation, earned Rue’s 3/3 Lantern, and resumed Bellwater at turn zero after Safari quit and reopened. The published Home loaded the verified JavaScript and stylesheet. [iPhone verification and rotation clip](reviews/ios-playtest/REVIEW.md) · [Open the playtest](https://last-ferry-playtest.abumech.chatgpt.site/)
 
 ## Android release-bundle rehearsal
 
