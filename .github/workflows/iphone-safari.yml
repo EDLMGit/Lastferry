@@ -69,7 +69,7 @@ jobs:
           include-hidden-files: true
           retention-days: 7
       - name: Rotate and rescue using native touch
-        timeout-minutes: 6
+        timeout-minutes: 8
         run: |
           set -o pipefail
           xcodebuild test-without-building -project tools/iphone-safari/SafariCrossing.xcodeproj -scheme Crossing \

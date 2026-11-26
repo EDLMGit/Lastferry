@@ -43,6 +43,33 @@ final class CrossingTests: XCTestCase {
         attach(XCTAttachment(screenshot: XCUIScreen.main.screenshot()), name)
     }
 
+    // On a cold Safari launch the accessibility tree can publish the Home button
+    // while the window still displays only the page background. Wait for its
+    // golden face at the actual tappable location in the native screenshot.
+    func waitForPaintedContinue() {
+        let target = button("Continue")
+        let painted = NSPredicate { _, _ in
+            guard target.exists, target.isHittable else { return false }
+            let image = XCUIScreen.main.screenshot().image
+            guard let raster = image.cgImage else { return false }
+            let frame = target.frame
+            let scale = CGFloat(raster.width) / image.size.width
+            let point = CGPoint(x: (frame.minX + frame.width * 0.25) * scale, y: frame.midY * scale)
+            guard let patch = raster.cropping(to: CGRect(origin: point, size: CGSize(width: 4, height: 4))) else { return false }
+            var rgb = [UInt8](repeating: 0, count: 4)
+            rgb.withUnsafeMutableBytes { memory in
+                let context = CGContext(data: memory.baseAddress, width: 1, height: 1, bitsPerComponent: 8,
+                                        bytesPerRow: 4, space: CGColorSpaceCreateDeviceRGB(),
+                                        bitmapInfo: CGBitmapInfo.byteOrder32Big.rawValue | CGImageAlphaInfo.noneSkipLast.rawValue)!
+                context.draw(patch, in: CGRect(x: 0, y: 0, width: 1, height: 1))
+            }
+            return rgb[0] > 170 && rgb[1] > 130 && Int(rgb[0]) - Int(rgb[2]) > 50
+        }
+        XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: painted, object: nil)], timeout: 22),
+                       .completed, "Cold Home must be painted under the Continue touch")
+        screenshot("06-saved-home")
+    }
+
     // Measure pixels after OS composition, including the actual WebGL layer.
     // Exclude the browser chrome and the game's persistent top and bottom controls.
     func measureScene(_ name: String, landscape: Bool) {
@@ -162,12 +189,13 @@ final class CrossingTests: XCTestCase {
 
         safari.terminate()
         safari.open(URL(string: "?return=1", relativeTo: address)!.absoluteURL)
+        waitForPaintedContinue()
         tap("Continue")
         turn(0)
         XCTAssertTrue(button("Select Bell ", prefix: true).exists ||
                       web.descendants(matching: .any).matching(NSPredicate(format: "label CONTAINS[c] 'Bellwater'")).firstMatch.exists,
                       "Cold Safari should resume Bellwater Cove")
-        screenshot("06-restored-bellwater")
+        screenshot("07-restored-bellwater")
         observations.append(["restored": "Bellwater Cove"])
         for frame in observations where frame["sampledColors"] != nil {
             XCTAssertGreaterThan(frame["sampledColors"] as! Int, 150, String(describing: frame))
