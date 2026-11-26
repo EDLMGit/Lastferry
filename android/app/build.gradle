@@ -19,7 +19,21 @@ android {
         versionName "0.1.${playtestVersion}-playtest"
     }
 
+    buildTypes {
+        release {
+            applicationIdSuffix '.rehearsal'
+        }
+    }
+
     sourceSets.main.assets.srcDir(bundledGame)
+}
+
+androidComponents.onVariants(androidComponents.selector().withBuildType('release')) { variant ->
+    def code = providers.gradleProperty('rehearsalVersion').orElse('7').map { it.toInteger() }
+    variant.outputs.each { output ->
+        output.versionCode.set(code)
+        output.versionName.set(code.map { "0.1.6-rehearsal.${it}".toString() })
+    }
 }
 
 dependencies {
