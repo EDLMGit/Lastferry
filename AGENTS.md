@@ -2,9 +2,9 @@
 
 ## Objective
 
-**Active task — [Moss’s invitation at Holding Pier](NEXT_TASK_MOSS_INVITATION.md).** Make the optional Holding Pier replay, Moss’s wish and the illustrated page legible together. Show the current lantern count on the reward card. [v0.1.5 phone evidence](reviews/journey-rewards/android-REVIEW.md)
+**Active task — [ANDROID_RELEASE_REHEARSAL_01](NEXT_TASK_ANDROID_RELEASE_REHEARSAL.md).** Package the reviewed v0.1.6 game as a locally signed release App Bundle. Install two successive device-targeted builds under a separate rehearsal identity and prove that an offline rescue, earned page, lantern best and preference survive the update. A fresh player can try the existing phone build in parallel.
 
-The [private phone playtest](https://last-ferry-playtest.abumech.chatgpt.site/) serves **version 30**, the production web game shipped with Android v0.1.5 from `89a05f41a8f96a0c4f2f2b2045d9dca077de3269`. Journey opens twelve coves through play. The Harbor log offers earned revisits. [Verified package contents](reviews/journey-rewards/android-package.json).
+The [private phone playtest](https://last-ferry-playtest.abumech.chatgpt.site/) serves **version 31**, the game shipped with Android v0.1.6 from `86a4e7b7c2b993630444c696068c1789f13a582d`. All 13 deployed game files match the Android receipt. [Publication record](reviews/moss-invitation/deployment-confirmation.json) · [Phone review](reviews/moss-invitation/android-REVIEW.md).
 
 Work from `m1-first-crossing` and incorporate newer work safely. Local Codex hands off development through draft PR #1. Game direction reviews the play experience. The owner controls the Play account, signing credentials, pricing and production release.
 
