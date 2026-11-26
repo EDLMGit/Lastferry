@@ -81,6 +81,8 @@ final class CrossingTests: XCTestCase {
     func turn(_ n: Int) {
         let name = String(n) + (n == 1 ? " action taken" : " actions taken")
         XCTAssertTrue(button(name, prefix: true).waitForExistence(timeout: 16), "Turn " + String(n))
+        let ready = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == true AND enabled == true"), object: button("Wait · 1 action"))
+        XCTAssertEqual(XCTWaiter.wait(for: [ready], timeout: 15), .completed, "Ferry animation finishes")
         observations.append(["turn": n])
     }
 
@@ -102,8 +104,8 @@ final class CrossingTests: XCTestCase {
     }
 
     func testRealSafariCrossing() {
-        safari.open(address)
-        if !button("Play").waitForExistence(timeout: 6) {
+        safari.activate()
+        if !button("Play").waitForExistence(timeout: 10) {
             for name in ["Continue", "Start Browsing", "Done"] {
                 let intro = safari.buttons[name].firstMatch
                 if intro.exists && intro.isHittable { intro.tap() }
@@ -118,7 +120,10 @@ final class CrossingTests: XCTestCase {
         observations.append(["audioContextRunningAfterTap": soundRunning])
         tap("Play")
         // The opening holds its final handoff until the player taps it.
-        XCTAssertTrue(button("Take the helm").waitForExistence(timeout: 35))
+        for _ in 0..<3 {
+            if button("Take the helm").exists { break }
+            if button("Next").waitForExistence(timeout: 3) { tap("Next") }
+        }
         tap("Take the helm")
         turn(0)
         measureScene("02-holding-portrait", landscape: false)
@@ -166,8 +171,8 @@ final class CrossingTests: XCTestCase {
         screenshot("06-restored-bellwater")
         observations.append(["restored": "Bellwater Cove"])
         for frame in observations where frame["sampledColors"] != nil {
-            XCTAssertGreaterThan(frame["sampledColors"] as! Int, 80, String(describing: frame))
-            XCTAssertLessThan(frame["dominantFraction"] as! Double, 0.75, String(describing: frame))
+            XCTAssertGreaterThan(frame["sampledColors"] as! Int, 150, String(describing: frame))
+            XCTAssertLessThan(frame["dominantFraction"] as! Double, 0.55, String(describing: frame))
         }
         XCTAssertTrue(soundRunning, "The sound control should report a running AudioContext after a trusted touch")
     }

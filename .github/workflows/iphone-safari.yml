@@ -34,25 +34,48 @@ jobs:
         run: |
           npm ci --no-audit --no-fund
           node node_modules/vite/bin/vite.js build
-      - name: Boot iPhone and run MobileSafari
-        env:
-          HOMEBREW_NO_AUTO_UPDATE: '1'
+      - name: Start the iPhone and compile the native UI test
+        timeout-minutes: 5
         run: |
           set -o pipefail
           sudo xcode-select --switch /Applications/Xcode_16.4.app/Contents/Developer
           mkdir -p .cache/iphone-safari
           xcrun simctl list devices available --json > .cache/iphone-safari/devices.json
           export IPHONE_UDID="$(python3 -c 'import json; d=json.load(open(".cache/iphone-safari/devices.json"))["devices"]; print(next(v["udid"] for r in sorted(d,reverse=True) if "iOS-18-" in r for v in d[r] if v["name"]=="iPhone 16"))')"
+          echo "IPHONE_UDID=$IPHONE_UDID" >> "$GITHUB_ENV"
           xcrun simctl boot "$IPHONE_UDID"
-          xcrun simctl bootstatus "$IPHONE_UDID" -b
+          xcodebuild build-for-testing -project tools/iphone-safari/SafariCrossing.xcodeproj -scheme Crossing \
+            -destination 'generic/platform=iOS Simulator' -derivedDataPath "$RUNNER_TEMP/derived" \
+            2>&1 | tee .cache/iphone-safari/build.log
+      - name: Open the production game and capture the iPhone screen
+        if: always() && env.IPHONE_UDID != ''
+        timeout-minutes: 6
+        run: |
           python3 -m http.server 4173 --bind 127.0.0.1 --directory dist > .cache/iphone-safari/server.log 2>&1 &
-          xcrun simctl openurl "$IPHONE_UDID" http://127.0.0.1:4173/
-          command -v xcodegen || brew install xcodegen
-          xcodegen generate --spec tools/iphone-safari/project.yml
-          xcodebuild test -project tools/iphone-safari/SafariCrossing.xcodeproj -scheme Crossing \
-            -destination "id=$IPHONE_UDID" -parallel-testing-enabled NO -maximum-test-execution-time-allowance 360 \
+          xcrun simctl bootstatus "$IPHONE_UDID" -b
+          xcrun simctl openurl "$IPHONE_UDID" http://127.0.0.1:4173/ > .cache/iphone-safari/openurl.log 2>&1 &
+          for n in {1..45}; do
+            grep -q 'GET /assets/.*png' .cache/iphone-safari/server.log && break
+            sleep 2
+          done
+          sleep 5
+          xcrun simctl io "$IPHONE_UDID" screenshot .cache/iphone-safari/safari-launch.png
+      - name: Save independent launch evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: iphone-safari-launch
+          path: .cache/iphone-safari/
+          include-hidden-files: true
+          retention-days: 7
+      - name: Rotate and rescue using native touch
+        timeout-minutes: 6
+        run: |
+          set -o pipefail
+          xcodebuild test-without-building -project tools/iphone-safari/SafariCrossing.xcodeproj -scheme Crossing \
+            -destination "id=$IPHONE_UDID" -parallel-testing-enabled NO -test-timeouts-enabled YES -maximum-test-execution-time-allowance 270 \
             -derivedDataPath "$RUNNER_TEMP/derived" -resultBundlePath "$RUNNER_TEMP/crossing.xcresult" \
-            | tee .cache/iphone-safari/xctest.log
+            2>&1 | tee .cache/iphone-safari/xctest.log
       - name: Extract native screenshots and measurements
         if: always()
         run: |
