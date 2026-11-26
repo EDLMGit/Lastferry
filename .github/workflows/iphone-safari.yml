@@ -4,7 +4,7 @@ on:
     branches: [m1-first-crossing]
     paths:
       - .github/workflows/iphone-safari.yml
-      - tools/iphone-safari.mjs
+      - tools/iphone-safari/**
 
 permissions:
   contents: read
@@ -35,17 +35,30 @@ jobs:
           npm ci --no-audit --no-fund
           node node_modules/vite/bin/vite.js build
       - name: Boot iPhone and run MobileSafari
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: '1'
         run: |
+          set -o pipefail
           sudo xcode-select --switch /Applications/Xcode_16.4.app/Contents/Developer
           mkdir -p .cache/iphone-safari
           xcrun simctl list devices available --json > .cache/iphone-safari/devices.json
           export IPHONE_UDID="$(python3 -c 'import json; d=json.load(open(".cache/iphone-safari/devices.json"))["devices"]; print(next(v["udid"] for r in sorted(d,reverse=True) if "iOS-18-" in r for v in d[r] if v["name"]=="iPhone 16"))')"
           xcrun simctl boot "$IPHONE_UDID"
           xcrun simctl bootstatus "$IPHONE_UDID" -b
-          sudo /usr/bin/safaridriver --enable
-          /usr/bin/safaridriver -p 4445 > .cache/iphone-safari/driver.log 2>&1 &
           python3 -m http.server 4173 --bind 127.0.0.1 --directory dist > .cache/iphone-safari/server.log 2>&1 &
-          node tools/iphone-safari.mjs
+          xcrun simctl openurl "$IPHONE_UDID" http://127.0.0.1:4173/
+          command -v xcodegen || brew install xcodegen
+          xcodegen generate --spec tools/iphone-safari/project.yml
+          xcodebuild test -project tools/iphone-safari/SafariCrossing.xcodeproj -scheme Crossing \
+            -destination "id=$IPHONE_UDID" -parallel-testing-enabled NO -maximum-test-execution-time-allowance 360 \
+            -derivedDataPath "$RUNNER_TEMP/derived" -resultBundlePath "$RUNNER_TEMP/crossing.xcresult" \
+            | tee .cache/iphone-safari/xctest.log
+      - name: Extract native screenshots and measurements
+        if: always()
+        run: |
+          if [ -d "$RUNNER_TEMP/crossing.xcresult" ]; then
+            xcrun xcresulttool export attachments --path "$RUNNER_TEMP/crossing.xcresult" --output-path .cache/iphone-safari/screens
+          fi
       - name: Save Safari evidence
         if: always()
         uses: actions/upload-artifact@v4
