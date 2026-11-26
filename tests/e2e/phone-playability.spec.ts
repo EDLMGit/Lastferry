@@ -776,14 +776,15 @@ for (const scenario of ['rejected', 'unavailable'])
         const original = await stable(page);
         await press(page, 'menu');
         await press(page, 'fullscreen');
-        await expect(page.locator('#view-notice')).toContainText(
+        await expect(page.locator('#fullscreen-feedback')).toContainText(
           /fullscreen|screen|available|supported|could/i,
         );
         expect(await page.evaluate(() => document.fullscreenElement)).toBeNull();
         expect(await stable(page)).toEqual(original);
         await save('notice', true);
         await page.keyboard.press('Escape');
-        await press(page, 'unload');
+        await expect(page.locator('#view-notice')).toBeHidden();
+        await activate(page, 'unload', true);
         await fullyVisible(page, page.locator('#commit'));
         await page.keyboard.press('Escape');
         expect(await stable(page)).toEqual(original);

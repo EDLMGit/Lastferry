@@ -982,13 +982,12 @@ function activateSound() {
 }
 sound.onChange = renderSound;
 
-function notifyView(message: string) {
+function notifyView(message: string, fullscreenFailure = false) {
   clearTimeout(noticeTimer);
-  viewNotice.textContent = message;
-  viewNotice.hidden = false;
   $('announcement').textContent = message;
-  const control = $('fullscreen');
-  if (control && dialog.open) {
+  const control = fullscreenFailure && dialog.open ? $('fullscreen') : null;
+  viewNotice.hidden = !!control;
+  if (control) {
     let feedback = $('fullscreen-feedback');
     if (!feedback) {
       feedback = document.createElement('p');
@@ -998,8 +997,11 @@ function notifyView(message: string) {
     }
     feedback.textContent = message;
     positionDialog();
+  } else {
+    viewNotice.textContent = message;
+    noticeTimer = setTimeout(() => { viewNotice.hidden = true; }, 4500);
   }
-  if (fullscreenSupport.failed) {
+  if (fullscreenFailure) {
     $('fullscreen-support')?.remove();
     const support = document.createElement('button');
     support.id = 'fullscreen-support';
@@ -1042,12 +1044,8 @@ function notifyView(message: string) {
         }, manual);
       else manual();
     };
-    (control && dialog.open ? $('fullscreen-feedback') : viewNotice).append(support);
+    (control ? $('fullscreen-feedback') : viewNotice).append(support);
     positionDialog();
-  } else {
-    noticeTimer = setTimeout(() => {
-      viewNotice.hidden = true;
-    }, 4500);
   }
 }
 function renderFullscreen() {
@@ -1072,7 +1070,7 @@ function toggleFullscreen(event: MouseEvent) {
   const attempt = fullscreenSupport.currentId;
   void requested.then((message) => {
     if (pageDisposed || attempt !== fullscreenSupport.currentId) return;
-    if (message) notifyView(message);
+    if (message) notifyView(message, true);
     else viewNotice.hidden = true;
     renderFullscreen();
     scheduleLayout();
