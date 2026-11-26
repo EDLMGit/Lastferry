@@ -50,6 +50,7 @@ parser.add_argument("code", type=int)
 parser.add_argument("--source", required=True)
 parser.add_argument("--device-spec", required=True, type=Path)
 parser.add_argument("--output", required=True, type=Path)
+parser.add_argument("--signed-bundle", type=Path, help="Reuse a previously signed rehearsal AAB to target another device")
 args = parser.parse_args()
 source = contents("git", "rev-parse", "--verify", args.source + "^{commit}").strip()
 runtime = ["android", "src", "assets", "data", "campaign", "cove-ui-package", "cove-panel-package",
@@ -83,15 +84,21 @@ version = "0.1.6-rehearsal." + str(args.code)
 dest.mkdir(parents=True, exist_ok=True)
 outputs = [name + ".aab", name + ".apks", f"package-{args.code}.json"]
 require(not any((dest / output).exists() for output in outputs), "Choose a fresh destination for this version")
-gradle = Path("android", "gradlew.bat" if os.name == "nt" else "gradlew").resolve()
-run(gradle, "-p", "android", ":app:bundleRelease", "-PrehearsalVersion=" + str(args.code), "--console=plain")
 
 with tempfile.TemporaryDirectory(dir=dest) as work:
     work = Path(work)
     aab = work / (name + ".aab")
     apks = work / (name + ".apks")
-    unsigned = Path("android/app/build/outputs/bundle/release/app-release.aab")
-    run(jarsigner, *signer_args, "-signedjar", aab, unsigned, alias)
+    if args.signed_bundle:
+        prior = json.loads(Path(__file__).with_name(f"package-{args.code}.json").read_text(encoding="utf-8"))
+        require(prior["source"] == source and prior["bundle"]["sha256"] == digest(args.signed_bundle.read_bytes()),
+                "The supplied bundle differs from its pinned rehearsal receipt")
+        shutil.copyfile(args.signed_bundle, aab)
+    else:
+        gradle = Path("android", "gradlew.bat" if os.name == "nt" else "gradlew").resolve()
+        run(gradle, "-p", "android", ":app:bundleRelease", "-PrehearsalVersion=" + str(args.code), "--console=plain")
+        unsigned = Path("android/app/build/outputs/bundle/release/app-release.aab")
+        run(jarsigner, *signer_args, "-signedjar", aab, unsigned, alias)
     verified = contents(jarsigner, "-J-Duser.language=en", "-verify", "-strict", *signer_args, aab, alias)
     require("jar verified." in verified, "AAB signature verification failed")
     cert_info = contents(keytool, "-J-Duser.language=en", "-printcert", "-jarfile", aab)
