@@ -1,4 +1,8 @@
-# Last Ferry · Android release-bundle rehearsal
+# Last Ferry · phone playtest
+
+The private browser playtest is live at version 32. The iPhone-sized touch playthrough earned Rue’s page and resumed Bellwater after a reload. The published Home loaded the verified JavaScript and stylesheet. [iPhone verification](reviews/ios-playtest/REVIEW.md) · [Open the playtest](https://last-ferry-playtest.abumech.chatgpt.site/)
+
+## Android release-bundle rehearsal
 
 The two signed local release bundles use version codes 7 and 8 under the separate **Last Ferry Rehearsal** identity. Both contain the reviewed v0.1.6 game. On an offline Android 16 emulator, the captain earned Rue’s page and a 3/3 best on code 7. After the in-place update and cold restart on code 8, the Harbor log still held both, Reduced Motion stayed on, and Continue reopened Bellwater at turn zero. [Release packages and installed-device evidence](reviews/android-release-rehearsal/REVIEW.md)
 

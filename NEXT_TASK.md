@@ -2,7 +2,7 @@
 
 **Active task — [ANDROID_RELEASE_REHEARSAL_01](NEXT_TASK_ANDROID_RELEASE_REHEARSAL.md).** Package the reviewed v0.1.6 game as a locally signed release App Bundle. Install two successive device-targeted builds under a separate rehearsal identity and prove that an offline rescue, earned page, lantern best and preference survive the update. A fresh player can try the existing phone build in parallel.
 
-The [private phone playtest](https://last-ferry-playtest.abumech.chatgpt.site/) serves **version 31**, the game shipped with Android v0.1.6 from `86a4e7b7c2b993630444c696068c1789f13a582d`. All 13 deployed game files match the Android receipt. [Publication record](reviews/moss-invitation/deployment-confirmation.json) · [Phone review](reviews/moss-invitation/android-REVIEW.md).
+The [private phone playtest](https://last-ferry-playtest.abumech.chatgpt.site/) serves **version 32**. This web update builds on Android v0.1.6 and dismisses fullscreen feedback when the captain leaves Options. [iPhone playtest review](reviews/ios-playtest/REVIEW.md) · [Publication record](reviews/ios-playtest/deployment-confirmation.json)
 
 Work from `m1-first-crossing` and incorporate newer work safely. Local Codex hands off development through draft PR #1. Game direction reviews the play experience. The owner controls the Play account, signing credentials, pricing and production release.
 

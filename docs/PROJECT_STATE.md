@@ -1,5 +1,9 @@
 # Last Ferry — Project state
 
+## Browser playtest on iPhone
+
+The named-viewer playtest serves version 32. Its 13 game files match the verified production build. [iPhone review](../reviews/ios-playtest/REVIEW.md) · [Publication record](../reviews/ios-playtest/deployment-confirmation.json)
+
 ## Local release-bundle rehearsal
 
 The rehearsal wraps the reviewed v0.1.6 game in a separately installed **Last Ferry Rehearsal** app. The owner can continue testing the ordinary playtest while reviewing the local App Bundles and the captain’s offline update. The owner will supply fresh-player observations separately. [Rehearsal and evidence](../reviews/android-release-rehearsal/REVIEW.md) · [Play handoff](GOOGLE_PLAY_LAUNCH.md)
