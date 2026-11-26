@@ -785,8 +785,9 @@ for (const scenario of ['rejected', 'unavailable'])
         await page.keyboard.press('Escape');
         await expect(page.locator('#view-notice')).toBeHidden();
         await activate(page, 'unload', true);
-        await fullyVisible(page, page.locator('#commit'));
-        await page.keyboard.press('Escape');
+        await idle(page);
+        expect((await state(page)).turn).toBe(original.state.turn + 1);
+        await undo(page, true);
         expect(await stable(page)).toEqual(original);
       });
     } finally {
