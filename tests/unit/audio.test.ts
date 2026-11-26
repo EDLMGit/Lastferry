@@ -68,7 +68,7 @@ class Context {
   static pending = false;
   sampleRate = 1000;
   currentTime = 0;
-  state: 'suspended' | 'running' | 'closed' = 'suspended';
+  state: 'suspended' | 'interrupted' | 'running' | 'closed' = 'suspended';
   destination = new Node();
   nodes: Node[] = [];
   sources: Source[] = [];
@@ -605,6 +605,24 @@ describe('continuous audio ownership and phase', () => {
       ambienceSources: 2,
     });
     expect(value.presentation().sourceCount).toBeLessThan(12);
+  });
+
+  test('a tap resumes a WebKit-interrupted context without replaying the interrupted crossing', async () => {
+    const value = sound();
+    await value.activate();
+    const context = Context.instances[0];
+    value.startTravel();
+    context.state = 'interrupted';
+    context.notify();
+    value.delivery();
+    expect(value.presentation()).toMatchObject({
+      state: 'requested', contextState: 'interrupted', schedulerCount: 0, travelActive: false,
+    });
+    await value.activate();
+    expect(context.resumeCalls).toBe(2);
+    expect(value.presentation()).toMatchObject({
+      state: 'running', contextCount: 1, schedulerCount: 1, deliveryCount: 0, travelActive: false,
+    });
   });
 
   test('latest desired arrangement survives preactivation, mute, hide and rapid replacements without replay', async () => {
